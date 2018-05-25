@@ -605,11 +605,6 @@ void Assembler::branchOnCond(Condition c, int branch_offset, bool is_bound) {
   }
 }
 
-// 32-bit Store Multiple - short displacement (12-bits unsigned)
-void Assembler::stm(Register r1, Register r2, const MemOperand& src) {
-  rs_form(STM, r1, r2, src.rb(), src.offset());
-}
-
 // Exception-generating instructions and debugging support.
 // Stops with a non-negative code less than kNumOfWatchedStops support
 // enabling/disabling and a counter feature. See simulator-s390.h .
@@ -643,39 +638,6 @@ void Assembler::nop(int type) {
     default:
       UNIMPLEMENTED();
   }
-}
-
-
-
-// RI1 format: <insn> R1,I2
-//    +--------+----+----+------------------+
-//    | OpCode | R1 |OpCd|        I2        |
-//    +--------+----+----+------------------+
-//    0        8    12   16                31
-#define RI1_FORM_EMIT(name, op) \
-  void Assembler::name(Register r, const Operand& i2) { ri_form(op, r, i2); }
-
-void Assembler::ri_form(Opcode op, Register r1, const Operand& i2) {
-  DCHECK(is_uint12(op));
-  DCHECK(is_uint16(i2.immediate()) || is_int16(i2.immediate()));
-  emit4bytes((op & 0xFF0) * B20 | r1.code() * B20 | (op & 0xF) * B16 |
-             (i2.immediate() & 0xFFFF));
-}
-
-// RI2 format: <insn> M1,I2
-//    +--------+----+----+------------------+
-//    | OpCode | M1 |OpCd|        I2        |
-//    +--------+----+----+------------------+
-//    0        8    12   16                31
-#define RI2_FORM_EMIT(name, op) \
-  void Assembler::name(Condition m, const Operand& i2) { ri_form(op, m, i2); }
-
-void Assembler::ri_form(Opcode op, Condition m1, const Operand& i2) {
-  DCHECK(is_uint12(op));
-  DCHECK(is_uint4(m1));
-  DCHECK(op == BRC ? is_int16(i2.immediate()) : is_uint16(i2.immediate()));
-  emit4bytes((op & 0xFF0) * B20 | m1 * B20 | (op & 0xF) * B16 |
-             (i2.immediate() & 0xFFFF));
 }
 
 // RIE-f format: <insn> R1,R2,I3,I4,I5
@@ -722,45 +684,6 @@ void Assembler::rie_form(Opcode op, Register r1, Register r3,
   emit6bytes(code);
 }
 
-// RS1 format: <insn> R1,R3,D2(B2)
-//    +--------+----+----+----+-------------+
-//    | OpCode | R1 | R3 | B2 |     D2      |
-//    +--------+----+----+----+-------------+
-//    0        8    12   16   20           31
-#define RS1_FORM_EMIT(name, op)                                            \
-  void Assembler::name(Register r1, Register r3, Register b2, Disp d2) {   \
-    rs_form(op, r1, r3, b2, d2);                                           \
-  }                                                                        \
-  void Assembler::name(Register r1, Register r3, const MemOperand& opnd) { \
-    name(r1, r3, opnd.getBaseRegister(), opnd.getDisplacement());          \
-  }
-
-void Assembler::rs_form(Opcode op, Register r1, Register r3, Register b2,
-                        const Disp d2) {
-  DCHECK(is_uint12(d2));
-  emit4bytes(op * B24 | r1.code() * B20 | r3.code() * B16 | b2.code() * B12 |
-             d2);
-}
-
-// RS2 format: <insn> R1,M3,D2(B2)
-//    +--------+----+----+----+-------------+
-//    | OpCode | R1 | M3 | B2 |     D2      |
-//    +--------+----+----+----+-------------+
-//    0        8    12   16   20           31
-#define RS2_FORM_EMIT(name, op)                                             \
-  void Assembler::name(Register r1, Condition m3, Register b2, Disp d2) {   \
-    rs_form(op, r1, m3, b2, d2);                                            \
-  }                                                                         \
-  void Assembler::name(Register r1, Condition m3, const MemOperand& opnd) { \
-    name(r1, m3, opnd.getBaseRegister(), opnd.getDisplacement());           \
-  }
-
-void Assembler::rs_form(Opcode op, Register r1, Condition m3, Register b2,
-                        const Disp d2) {
-  DCHECK(is_uint12(d2));
-  emit4bytes(op * B24 | r1.code() * B20 | m3 * B16 | b2.code() * B12 | d2);
-}
-
 // RSI format: <insn> R1,R3,I2
 //    +--------+----+----+------------------+
 //    | OpCode | R1 | R3 |        RI2       |
@@ -795,33 +718,6 @@ void Assembler::rsl_form(Opcode op, Length l1, Register b2, Disp d2) {
                   (static_cast<uint64_t>(l1)) * B36 |
                   (static_cast<uint64_t>(b2.code())) * B28 |
                   (static_cast<uint64_t>(d2)) * B16 |
-                  (static_cast<uint64_t>(op & 0x00FF));
-  emit6bytes(code);
-}
-
-// RXE format: <insn> R1,D2(X2,B2)
-//    +--------+----+----+----+-------------+--------+--------+
-//    | OpCode | R1 | X2 | B2 |     D2      |////////| OpCode |
-//    +--------+----+----+----+-------------+--------+--------+
-//    0        8    12   16   20            32       40      47
-#define RXE_FORM_EMIT(name, op)                                          \
-  void Assembler::name(Register r1, Register x2, Register b2, Disp d2) { \
-    rxe_form(op, r1, x2, b2, d2);                                        \
-  }                                                                      \
-  void Assembler::name(Register r1, const MemOperand& opnd) {            \
-    name(r1, opnd.getIndexRegister(), opnd.getBaseRegister(),            \
-         opnd.getDisplacement());                                        \
-  }
-
-void Assembler::rxe_form(Opcode op, Register r1, Register x2, Register b2,
-                         Disp d2) {
-  DCHECK(is_uint12(d2));
-  DCHECK(is_uint16(op));
-  uint64_t code = (static_cast<uint64_t>(op & 0xFF00)) * B32 |
-                  (static_cast<uint64_t>(r1.code())) * B36 |
-                  (static_cast<uint64_t>(x2.code())) * B32 |
-                  (static_cast<uint64_t>(b2.code())) * B28 |
-                  (static_cast<uint64_t>(d2 & 0x0FFF)) * B16 |
                   (static_cast<uint64_t>(op & 0x00FF));
   emit6bytes(code);
 }
@@ -1249,10 +1145,6 @@ SS1_FORM_EMIT(ed, ED)
 SS1_FORM_EMIT(mvn, MVN)
 SS1_FORM_EMIT(nc, NC)
 SI_FORM_EMIT(ni, NI)
-RI1_FORM_EMIT(nilh, NILH)
-RI1_FORM_EMIT(nill, NILL)
-RI1_FORM_EMIT(oill, OILL)
-RI1_FORM_EMIT(tmll, TMLL)
 SS1_FORM_EMIT(tr, TR)
 S_FORM_EMIT(ts, TS)
 
@@ -1263,15 +1155,6 @@ S_FORM_EMIT(ts, TS)
 void Assembler::larl(Register r1, Label* l) {
   larl(r1, Operand(branch_offset(l)));
 }
-
-// -----------------
-// Load Instructions
-// -----------------
-// Load Halfword Immediate (32)
-void Assembler::lhi(Register r, const Operand& imm) { ri_form(LHI, r, imm); }
-
-// Load Halfword Immediate (64)
-void Assembler::lghi(Register r, const Operand& imm) { ri_form(LGHI, r, imm); }
 
 // -------------------------
 // Load Logical Instructions
@@ -1284,47 +1167,6 @@ void Assembler::locr(Condition m3, Register r1, Register r2) {
 // Load On Condition R-R (64)
 void Assembler::locgr(Condition m3, Register r1, Register r2) {
   rrf2_form(LOCGR << 16 | m3 * B12 | r1.code() * B4 | r2.code());
-}
-
-// -------------------
-// Branch Instructions
-// -------------------
-// Branch on Count (64)
-// Branch Relative and Save (32)
-void Assembler::bras(Register r, const Operand& opnd) {
-  ri_form(BRAS, r, opnd);
-}
-
-// Branch relative on Condition (32)
-void Assembler::brc(Condition c, const Operand& opnd) { ri_form(BRC, c, opnd); }
-
-// Branch On Count (32)
-void Assembler::brct(Register r1, const Operand& imm) {
-  // BRCT encodes # of halfwords, so divide by 2.
-  int16_t numHalfwords = static_cast<int16_t>(imm.immediate()) / 2;
-  Operand halfwordOp = Operand(numHalfwords);
-  halfwordOp.setBits(16);
-  ri_form(BRCT, r1, halfwordOp);
-}
-
-// Branch On Count (32)
-void Assembler::brctg(Register r1, const Operand& imm) {
-  // BRCTG encodes # of halfwords, so divide by 2.
-  int16_t numHalfwords = static_cast<int16_t>(imm.immediate()) / 2;
-  Operand halfwordOp = Operand(numHalfwords);
-  halfwordOp.setBits(16);
-  ri_form(BRCTG, r1, halfwordOp);
-}
-
-// --------------------
-// Compare Instructions
-// --------------------
-// Compare Halfword Immediate (32)
-void Assembler::chi(Register r, const Operand& opnd) { ri_form(CHI, r, opnd); }
-
-// Compare Halfword Immediate (64)
-void Assembler::cghi(Register r, const Operand& opnd) {
-  ri_form(CGHI, r, opnd);
 }
 
 // ----------------------------
@@ -1401,9 +1243,6 @@ void Assembler::mvc(const MemOperand& opnd1, const MemOperand& opnd2,
 // 32-bit Add Instructions
 // -----------------------
 // Add Halfword Immediate (32)
-void Assembler::ahi(Register r1, const Operand& i2) { ri_form(AHI, r1, i2); }
-
-// Add Halfword Immediate (32)
 void Assembler::ahik(Register r1, Register r3, const Operand& i2) {
   rie_form(AHIK, r1, r3, i2);
 }
@@ -1424,9 +1263,6 @@ void Assembler::asi(const MemOperand& opnd, const Operand& imm) {
 // -----------------------
 // 64-bit Add Instructions
 // -----------------------
-// Add Halfword Immediate (64)
-void Assembler::aghi(Register r1, const Operand& i2) { ri_form(AGHI, r1, i2); }
-
 // Add Halfword Immediate (64)
 void Assembler::aghik(Register r1, Register r3, const Operand& i2) {
   rie_form(AGHIK, r1, r3, i2);
@@ -1496,11 +1332,6 @@ void Assembler::slgrk(Register r1, Register r2, Register r3) {
 // ----------------------------
 // 32-bit Multiply Instructions
 // ----------------------------
-// Multiply Halfword Immediate (32)
-void Assembler::mhi(Register r1, const Operand& opnd) {
-  ri_form(MHI, r1, opnd);
-}
-
 // Multiply Single Register (32)
 void Assembler::msrkc(Register r1, Register r2, Register r3) {
   rrf1_form(MSRKC, r1, r2, r3);
@@ -1509,14 +1340,6 @@ void Assembler::msrkc(Register r1, Register r2, Register r3) {
 // Multiply Single Register (64)
 void Assembler::msgrkc(Register r1, Register r2, Register r3) {
   rrf1_form(MSGRKC, r1, r2, r3);
-}
-
-// ----------------------------
-// 64-bit Multiply Instructions
-// ----------------------------
-// Multiply Halfword Immediate (64)
-void Assembler::mghi(Register r1, const Operand& opnd) {
-  ri_form(MGHI, r1, opnd);
 }
 
 // --------------------
@@ -1565,80 +1388,6 @@ void Assembler::EnsureSpaceFor(int space_needed) {
   }
 }
 
-// Shift Left Single Logical (32)
-void Assembler::sll(Register r1, Register opnd) {
-  DCHECK(opnd != r0);
-  rs_form(SLL, r1, r0, opnd, 0);
-}
-
-// Shift Left Single Logical (32)
-void Assembler::sll(Register r1, const Operand& opnd) {
-  rs_form(SLL, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Left Double Logical (64)
-void Assembler::sldl(Register r1, Register b2, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SLDL, r1, r0, b2, opnd.immediate());
-}
-
-// Shift Right Single Logical (32)
-void Assembler::srl(Register r1, Register opnd) {
-  DCHECK(opnd != r0);
-  rs_form(SRL, r1, r0, opnd, 0);
-}
-
-// Shift Right Double Arith (64)
-void Assembler::srda(Register r1, Register b2, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SRDA, r1, r0, b2, opnd.immediate());
-}
-
-// Shift Right Double Logical (64)
-void Assembler::srdl(Register r1, Register b2, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SRDL, r1, r0, b2, opnd.immediate());
-}
-
-// Shift Right Single Logical (32)
-void Assembler::srl(Register r1, const Operand& opnd) {
-  rs_form(SRL, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Left Single (32)
-void Assembler::sla(Register r1, Register opnd) {
-  DCHECK(opnd != r0);
-  rs_form(SLA, r1, r0, opnd, 0);
-}
-
-// Shift Left Single (32)
-void Assembler::sla(Register r1, const Operand& opnd) {
-  rs_form(SLA, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Right Single (32)
-void Assembler::sra(Register r1, Register opnd) {
-  DCHECK(opnd != r0);
-  rs_form(SRA, r1, r0, opnd, 0);
-}
-
-// Shift Right Single (32)
-void Assembler::sra(Register r1, const Operand& opnd) {
-  rs_form(SRA, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Right Double
-void Assembler::srda(Register r1, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SRDA, r1, r0, r0, opnd.immediate());
-}
-
-// Shift Right Double Logical
-void Assembler::srdl(Register r1, const Operand& opnd) {
-  DCHECK_EQ(r1.code() % 2, 0);
-  rs_form(SRDL, r1, r0, r0, opnd.immediate());
-}
-
 void Assembler::call(Handle<Code> target, RelocInfo::Mode rmode) {
   EnsureSpace ensure_space(this);
 
@@ -1662,16 +1411,6 @@ void Assembler::jump(Handle<Code> target, RelocInfo::Mode rmode,
   brcl(cond, Operand(target_index));
 }
 
-// 32-bit Load Multiple - short displacement (12-bits unsigned)
-void Assembler::lm(Register r1, Register r2, const MemOperand& src) {
-  rs_form(LM, r1, r2, src.rb(), src.offset());
-}
-
-// 32-bit Compare and Swap
-void Assembler::cs(Register r1, Register r2, const MemOperand& src) {
-  rs_form(CS, r1, r2, src.rb(), src.offset());
-}
-
 // Move integer (32)
 void Assembler::mvhi(const MemOperand& opnd1, const Operand& i2) {
   sil_form(MVHI, opnd1.getBaseRegister(), opnd1.getDisplacement(), i2);
@@ -1682,94 +1421,10 @@ void Assembler::mvghi(const MemOperand& opnd1, const Operand& i2) {
   sil_form(MVGHI, opnd1.getBaseRegister(), opnd1.getDisplacement(), i2);
 }
 
-// Insert Immediate (high high)
-void Assembler::iihh(Register r1, const Operand& opnd) {
-  ri_form(IIHH, r1, opnd);
-}
-
-// Insert Immediate (high low)
-void Assembler::iihl(Register r1, const Operand& opnd) {
-  ri_form(IIHL, r1, opnd);
-}
-
-// Insert Immediate (low high)
-void Assembler::iilh(Register r1, const Operand& opnd) {
-  ri_form(IILH, r1, opnd);
-}
-
-// Insert Immediate (low low)
-void Assembler::iill(Register r1, const Operand& opnd) {
-  ri_form(IILL, r1, opnd);
-}
-
 // GPR <-> FPR Instructions
 
 // Floating point instructions
 //
-// Add Register-Storage (LB)
-void Assembler::adb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(ADB, Register::from_code(r1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
-}
-
-// Add Register-Storage (LB)
-void Assembler::aeb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(AEB, Register::from_code(r1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
-}
-
-// Sub Register-Storage (LB)
-void Assembler::seb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(SEB, Register::from_code(r1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
-}
-
-// Divide Register-Storage (LB)
-void Assembler::ddb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(DDB, Register::from_code(r1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
-}
-
-// Divide Register-Storage (LB)
-void Assembler::deb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(DEB, Register::from_code(r1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
-}
-
-// Multiply Register-Storage (LB)
-void Assembler::mdb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(MDB, Register::from_code(r1.code()), opnd.rb(), opnd.rx(),
-           opnd.offset());
-}
-
-// Multiply Register-Storage (LB)
-void Assembler::meeb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(MEEB, Register::from_code(r1.code()), opnd.rb(), opnd.rx(),
-           opnd.offset());
-}
-
-// Subtract Register-Storage (LB)
-void Assembler::sdb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(SDB, Register::from_code(r1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
-}
-
-void Assembler::ceb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(CEB, Register::from_code(r1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
-}
-
-void Assembler::cdb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(CDB, Register::from_code(r1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
-}
-
-// Square Root (LB)
-void Assembler::sqdb(DoubleRegister r1, const MemOperand& opnd) {
-  rxe_form(SQDB, Register::from_code(r1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
-}
-
 // Convert to Fixed point (64<-S)
 void Assembler::cgebr(Condition m, Register r1, DoubleRegister r2) {
   rrfe_form(CGEBR, m, Condition(0), r1, Register::from_code(r2.code()));
@@ -1853,12 +1508,6 @@ void Assembler::cefbr(Condition m3, DoubleRegister r1, Register r2) {
 // Convert to Fixed point (32<-S)
 void Assembler::cfebr(Condition m3, Register r1, DoubleRegister r2) {
   rrfe_form(CFEBR, m3, Condition(0), r1, Register::from_code(r2.code()));
-}
-
-// Load (L <- S)
-void Assembler::ldeb(DoubleRegister d1, const MemOperand& opnd) {
-  rxe_form(LDEB, Register::from_code(d1.code()), opnd.rx(), opnd.rb(),
-           opnd.offset());
 }
 
 // Load FP Integer

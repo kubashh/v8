@@ -2254,7 +2254,7 @@ void TurboAssembler::Div32(Register dst, Register src1, Register src2) {
 #define Generate_DivU32(instr) \
   {                            \
     lr(r0, src1);              \
-    srdl(r0, Operand(32));     \
+    srdl(r0, r0, Operand(32)); \
     instr(r0, src2);           \
     LoadlW(dst, r1);           \
   }
@@ -2328,7 +2328,7 @@ void TurboAssembler::Mod32(Register dst, Register src1, Register src2) {
 #define Generate_ModU32(instr) \
   {                            \
     lr(r0, src1);              \
-    srdl(r0, Operand(32));     \
+    srdl(r0, r0, Operand(32)); \
     instr(r0, src2);           \
     LoadlW(dst, r0);           \
   }
