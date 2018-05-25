@@ -5170,7 +5170,8 @@ wasm::WasmCode* TurbofanWasmCompilationUnit::FinishCompilation(
   // that as a parameter.
   const CodeDesc& desc = job_->compilation_info()->wasm_code_desc()->code_desc;
   wasm::WasmCode* code = wasm_unit_->native_module_->AddCode(
-      desc, job_->compilation_info()->wasm_code_desc()->frame_slot_count,
+      wasm_unit_->isolate_, desc,
+      job_->compilation_info()->wasm_code_desc()->frame_slot_count,
       wasm_unit_->func_index_,
       job_->compilation_info()->wasm_code_desc()->safepoint_table_offset,
       job_->compilation_info()->wasm_code_desc()->handler_table_offset,

@@ -1357,7 +1357,8 @@ Handle<WasmCompiledModule> WasmCompiledModule::New(Isolate* isolate,
   compiled_module->set_weak_owning_instance(isolate->heap()->empty_weak_cell());
   {
     auto native_module =
-        isolate->wasm_engine()->code_manager()->NewNativeModule(*module, env);
+        isolate->wasm_engine()->code_manager()->NewNativeModule(isolate,
+                                                                *module, env);
     Handle<Foreign> native_module_wrapper =
         Managed<wasm::NativeModule>::FromUniquePtr(isolate,
                                                    std::move(native_module));
