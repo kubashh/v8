@@ -54,6 +54,7 @@
 #include "src/messages.h"
 #include "src/objects-body-descriptors-inl.h"
 #include "src/objects/api-callbacks.h"
+#include "src/objects/arguments-inl.h"
 #include "src/objects/bigint.h"
 #include "src/objects/code-inl.h"
 #include "src/objects/compilation-cache-inl.h"
@@ -63,9 +64,12 @@
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-locale.h"
 #endif  // V8_INTL_SUPPORT
+#include "src/objects/js-collection-inl.h"
+#include "src/objects/js-regexp-inl.h"
 #include "src/objects/js-regexp-string-iterator.h"
 #include "src/objects/map.h"
 #include "src/objects/microtask-inl.h"
+#include "src/objects/module-inl.h"
 #include "src/objects/promise-inl.h"
 #include "src/parsing/preparsed-scope-data.h"
 #include "src/property-descriptor.h"
@@ -489,10 +493,9 @@ MaybeHandle<Object> Object::ConvertToIndex(
   return js_len;
 }
 
-bool Object::BooleanValue() {
+bool Object::BooleanValue(Isolate* isolate) {
   if (IsSmi()) return Smi::ToInt(this) != 0;
   DCHECK(IsHeapObject());
-  Isolate* isolate = HeapObject::cast(this)->GetIsolate();
   if (IsBoolean()) return IsTrue(isolate);
   if (IsNullOrUndefined(isolate)) return false;
   if (IsUndetectable()) return false;  // Undetectable object is false.
@@ -802,7 +805,7 @@ MaybeHandle<Object> Object::InstanceOf(Isolate* isolate, Handle<Object> object,
         isolate, result,
         Execution::Call(isolate, inst_of_handler, callable, 1, &object),
         Object);
-    return isolate->factory()->ToBoolean(result->BooleanValue());
+    return isolate->factory()->ToBoolean(result->BooleanValue(isolate));
   }
 
   // The {callable} must have a [[Call]] internal method.
@@ -1633,8 +1636,8 @@ Maybe<bool> Object::SetPropertyWithAccessor(LookupIterator* it,
     // (signalling an exception) or a boolean Oddball.
     RETURN_VALUE_IF_SCHEDULED_EXCEPTION(isolate, Nothing<bool>());
     if (result.is_null()) return Just(true);
-    DCHECK(result->BooleanValue() || should_throw == kDontThrow);
-    return Just(result->BooleanValue());
+    DCHECK(result->BooleanValue(isolate) || should_throw == kDontThrow);
+    return Just(result->BooleanValue(isolate));
   }
 
   // Regular accessor.
@@ -3136,7 +3139,7 @@ VisitorId Map::GetVisitorId(Map* map) {
 
     case LOAD_HANDLER_TYPE:
     case STORE_HANDLER_TYPE:
-      return kVisitStruct;
+      return kVisitDataHandler;
 
     default:
       UNREACHABLE();
@@ -5601,7 +5604,7 @@ Maybe<bool> JSProxy::HasProperty(Isolate* isolate, Handle<JSProxy> proxy,
       isolate, trap_result_obj,
       Execution::Call(isolate, trap, handler, arraysize(args), args),
       Nothing<bool>());
-  bool boolean_trap_result = trap_result_obj->BooleanValue();
+  bool boolean_trap_result = trap_result_obj->BooleanValue(isolate);
   // 9. If booleanTrapResult is false, then:
   if (!boolean_trap_result) {
     MAYBE_RETURN(JSProxy::CheckHasTrap(isolate, name, target), Nothing<bool>());
@@ -5674,7 +5677,7 @@ Maybe<bool> JSProxy::SetProperty(Handle<JSProxy> proxy, Handle<Name> name,
       isolate, trap_result,
       Execution::Call(isolate, trap, handler, arraysize(args), args),
       Nothing<bool>());
-  if (!trap_result->BooleanValue()) {
+  if (!trap_result->BooleanValue(isolate)) {
     RETURN_FAILURE(isolate, should_throw,
                    NewTypeError(MessageTemplate::kProxyTrapReturnedFalsishFor,
                                 trap_name, name));
@@ -5722,7 +5725,7 @@ Maybe<bool> JSProxy::DeletePropertyOrElement(Handle<JSProxy> proxy,
       isolate, trap_result,
       Execution::Call(isolate, trap, handler, arraysize(args), args),
       Nothing<bool>());
-  if (!trap_result->BooleanValue()) {
+  if (!trap_result->BooleanValue(isolate)) {
     RETURN_FAILURE(isolate, should_throw,
                    NewTypeError(MessageTemplate::kProxyTrapReturnedFalsishFor,
                                 trap_name, name));
@@ -7552,7 +7555,7 @@ Maybe<bool> JSProxy::DefineOwnProperty(Isolate* isolate, Handle<JSProxy> proxy,
       Execution::Call(isolate, trap, handler, arraysize(args), args),
       Nothing<bool>());
   // 10. If booleanTrapResult is false, return false.
-  if (!trap_result_obj->BooleanValue()) {
+  if (!trap_result_obj->BooleanValue(isolate)) {
     RETURN_FAILURE(isolate, should_throw,
                    NewTypeError(MessageTemplate::kProxyTrapReturnedFalsishFor,
                                 trap_name, property_name));
@@ -8263,7 +8266,7 @@ Maybe<bool> JSProxy::PreventExtensions(Handle<JSProxy> proxy,
       isolate, trap_result,
       Execution::Call(isolate, trap, handler, arraysize(args), args),
       Nothing<bool>());
-  if (!trap_result->BooleanValue()) {
+  if (!trap_result->BooleanValue(isolate)) {
     RETURN_FAILURE(
         isolate, should_throw,
         NewTypeError(MessageTemplate::kProxyTrapReturnedFalsish, trap_name));
@@ -8375,7 +8378,7 @@ Maybe<bool> JSProxy::IsExtensible(Handle<JSProxy> proxy) {
   // Enforce the invariant.
   Maybe<bool> target_result = JSReceiver::IsExtensible(target);
   MAYBE_RETURN(target_result, Nothing<bool>());
-  if (target_result.FromJust() != trap_result->BooleanValue()) {
+  if (target_result.FromJust() != trap_result->BooleanValue(isolate)) {
     isolate->Throw(
         *factory->NewTypeError(MessageTemplate::kProxyIsExtensibleInconsistent,
                                factory->ToBoolean(target_result.FromJust())));
@@ -8819,8 +8822,8 @@ V8_WARN_UNUSED_RESULT Maybe<bool> FastGetOwnValuesOrEntries(
     count++;
   }
 
-  if (count < values_or_entries->length()) values_or_entries->Shrink(count);
-  *result = values_or_entries;
+  DCHECK_LE(count, values_or_entries->length());
+  *result = FixedArray::ShrinkOrEmpty(values_or_entries, count);
   return Just(true);
 }
 
@@ -8878,8 +8881,8 @@ MaybeHandle<FixedArray> GetOwnValuesOrEntries(Isolate* isolate,
     values_or_entries->set(length, *value);
     length++;
   }
-  if (length < values_or_entries->length()) values_or_entries->Shrink(length);
-  return values_or_entries;
+  DCHECK_LE(length, values_or_entries->length());
+  return FixedArray::ShrinkOrEmpty(values_or_entries, length);
 }
 
 MaybeHandle<FixedArray> JSReceiver::GetOwnValues(Handle<JSReceiver> object,
@@ -10118,8 +10121,18 @@ bool FixedArray::ContainsSortedNumbers() {
   return true;
 }
 
+Handle<FixedArray> FixedArray::ShrinkOrEmpty(Handle<FixedArray> array,
+                                             int new_length) {
+  if (new_length == 0) {
+    return array->GetIsolate()->factory()->empty_fixed_array();
+  } else {
+    array->Shrink(new_length);
+    return array;
+  }
+}
+
 void FixedArray::Shrink(int new_length) {
-  DCHECK(0 <= new_length && new_length <= length());
+  DCHECK(0 < new_length && new_length <= length());
   if (new_length < length()) {
     GetHeap()->RightTrimFixedArray(this, length() - new_length);
   }
@@ -14236,7 +14249,7 @@ const char* AbstractCode::Kind2String(Kind kind) {
 }
 
 #ifdef V8_EMBEDDED_BUILTINS
-bool Code::IsProcessIndependent() {
+bool Code::IsProcessIndependent(Isolate* isolate) {
   constexpr int all_real_modes_mask =
       (1 << (RelocInfo::LAST_REAL_RELOC_MODE + 1)) - 1;
   constexpr int mode_mask =
@@ -14259,8 +14272,22 @@ bool Code::IsProcessIndependent() {
        RelocInfo::ModeMask(RelocInfo::RUNTIME_ENTRY) |
        RelocInfo::ModeMask(RelocInfo::EXTERNAL_REFERENCE)));
 
-  RelocIterator it(this, mode_mask);
-  return it.done();
+  bool is_process_independent = true;
+  for (RelocIterator it(this, mode_mask); !it.done(); it.next()) {
+    if (RelocInfo::IsCodeTarget(it.rinfo()->rmode())) {
+      // Off-heap code targets are later rewritten as pc-relative jumps to the
+      // off-heap instruction stream and are thus process-independent.
+      Address target_address = it.rinfo()->target_address();
+      if (InstructionStream::PcIsOffHeap(isolate, target_address)) continue;
+
+      Code* target = Code::GetCodeFromTargetAddress(target_address);
+      CHECK(target->IsCode());
+      if (Builtins::IsEmbeddedBuiltin(target)) continue;
+    }
+    is_process_independent = false;
+  }
+
+  return is_process_independent;
 }
 #endif
 
@@ -15158,7 +15185,7 @@ Maybe<bool> JSProxy::SetPrototype(Handle<JSProxy> proxy, Handle<Object> value,
       isolate, trap_result,
       Execution::Call(isolate, trap, handler, arraysize(argv), argv),
       Nothing<bool>());
-  bool bool_trap_result = trap_result->BooleanValue();
+  bool bool_trap_result = trap_result->BooleanValue(isolate);
   // 9. If booleanTrapResult is false, return false.
   if (!bool_trap_result) {
     RETURN_FAILURE(
@@ -17984,8 +18011,7 @@ Handle<FixedArray> BaseNameDictionary<Derived, Shape>::IterationIndices(
             array->GetFirstElementAddress());
     std::sort(start, start + array_size, cmp);
   }
-  array->Shrink(array_size);
-  return array;
+  return FixedArray::ShrinkOrEmpty(array, array_size);
 }
 
 template <typename Derived, typename Shape>
