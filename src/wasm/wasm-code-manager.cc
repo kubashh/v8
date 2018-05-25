@@ -67,7 +67,7 @@ constexpr bool kModuleCanAllocateMoreMemory = false;
 void GenerateJumpTrampoline(MacroAssembler* masm, Address target) {
   UseScratchRegisterScope temps(masm);
   Register scratch = temps.AcquireX();
-  __ Mov(scratch, reinterpret_cast<uint64_t>(target));
+  __ Mov(scratch, static_cast<uint64_t>(target));
   __ Br(scratch);
 }
 #undef __
@@ -585,6 +585,7 @@ WasmCode* NativeModule::AddCode(
   // TODO(mtrofin): this is a copy and paste from Code::CopyFrom.
   int mode_mask = RelocInfo::kCodeTargetMask |
                   RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT) |
+                  RelocInfo::ModeMask(RelocInfo::RUNTIME_ENTRY) |
                   RelocInfo::kApplyMask;
   // Needed to find target_object and runtime_entry on X64
 
@@ -604,6 +605,10 @@ WasmCode* NativeModule::AddCode(
       Code* code = Code::cast(*p);
       it.rinfo()->set_target_address(GetLocalAddressFor(handle(code)),
                                      SKIP_WRITE_BARRIER, SKIP_ICACHE_FLUSH);
+    } else if (RelocInfo::IsRuntimeEntry(mode)) {
+      Address p = it.rinfo()->target_runtime_entry(origin);
+      it.rinfo()->set_target_runtime_entry(p, SKIP_WRITE_BARRIER,
+                                           SKIP_ICACHE_FLUSH);
     } else {
       intptr_t delta = ret->instructions().start() - desc.buffer;
       it.rinfo()->apply(delta);
@@ -613,7 +618,6 @@ WasmCode* NativeModule::AddCode(
   // made while iterating over the RelocInfo above.
   Assembler::FlushICache(ret->instructions().start(),
                          ret->instructions().size());
-  ret->Validate();
   return ret;
 }
 
