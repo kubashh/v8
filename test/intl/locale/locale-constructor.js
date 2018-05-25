@@ -10,8 +10,17 @@ assertThrows(() => Intl.Locale('sr'), TypeError);
 // Non-string locale.
 assertThrows(() => new Intl.Locale(5), TypeError);
 
-// Invalid locale.
-assertThrows(() => new Intl.Locale('abcdefghi'), TypeError);
+// Invalid locale string.
+assertThrows(() => new Intl.Locale('abcdefghi'), RangeError);
+
+// Throws only once during construction.
+assertThrows(
+    () => new Intl.Locale('en-US', {
+      get calendar() {
+        throw new Error('foo');
+      }
+    }),
+    Error);
 
 // Options will be force converted into Object.
 assertDoesNotThrow(() => new Intl.Locale('sr', 5));
@@ -29,4 +38,4 @@ assertThrows(
           numeric: 'true',
           numberingSystem: 'roman',
         }),
-    TypeError);
+    RangeError);
