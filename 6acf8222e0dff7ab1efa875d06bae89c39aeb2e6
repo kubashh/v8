@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28287d0e_e5bea4cf",
+        "filename": "src/code-stubs.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-05-28T11:45:31Z",
+      "side": 1,
+      "message": "Out of curiosity, why have you changed this to use \u0027friend\u0027? (The original version looks good to me, and we do not use friends anywhere else in this file.)",
+      "range": {
+        "startLine": 635,
+        "startChar": 2,
+        "endLine": 635,
+        "endChar": 27
+      },
+      "revId": "6acf8222e0dff7ab1efa875d06bae89c39aeb2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
