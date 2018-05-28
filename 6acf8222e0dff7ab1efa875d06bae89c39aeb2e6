@@ -22,6 +22,30 @@
       "revId": "6acf8222e0dff7ab1efa875d06bae89c39aeb2e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16f58863_e87b2de8",
+        "filename": "src/code-stubs.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-05-28T11:48:30Z",
+      "side": 1,
+      "message": "I want to ensure that every use of these stubs goes through the CodeFactory, hence a private constructor. The only allowed use is in the CodeFactory getter. \n\nBut this goes away anyways in the follow-up CL, where these stubs are moved to builtins.",
+      "parentUuid": "28287d0e_e5bea4cf",
+      "range": {
+        "startLine": 635,
+        "startChar": 2,
+        "endLine": 635,
+        "endChar": 27
+      },
+      "revId": "6acf8222e0dff7ab1efa875d06bae89c39aeb2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
