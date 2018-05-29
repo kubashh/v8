@@ -473,11 +473,11 @@ bool NativeModuleDeserializer::ReadCode(uint32_t fn_index, Reader* reader) {
     reader->ReadVector(data);
   }
   WasmCode* ret = native_module_->AddOwnedCode(
-      code_buffer, std::move(reloc_info), reloc_size, std::move(source_pos),
-      source_position_size, Just(fn_index), WasmCode::kFunction,
-      constant_pool_offset, stack_slot_count, safepoint_table_offset,
-      handler_table_offset, std::move(protected_instructions), tier,
-      WasmCode::kNoFlushICache);
+      isolate_, code_buffer, std::move(reloc_info), reloc_size,
+      std::move(source_pos), source_position_size, Just(fn_index),
+      WasmCode::kFunction, constant_pool_offset, stack_slot_count,
+      safepoint_table_offset, handler_table_offset,
+      std::move(protected_instructions), tier, WasmCode::kNoFlushICache);
   native_module_->code_table_[fn_index] = ret;
 
   // Relocate the code.

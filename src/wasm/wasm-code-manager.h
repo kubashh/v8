@@ -222,7 +222,8 @@ const char* GetWasmCodeKindAsString(WasmCode::Kind);
 // WasmCodeManager::Commit.
 class V8_EXPORT_PRIVATE NativeModule final {
  public:
-  WasmCode* AddCode(const CodeDesc& desc, uint32_t frame_count, uint32_t index,
+  WasmCode* AddCode(Isolate* isolate, const CodeDesc& desc,
+                    uint32_t frame_count, uint32_t index,
                     size_t safepoint_table_offset, size_t handler_table_offset,
                     std::unique_ptr<ProtectedInstructions>,
                     Handle<ByteArray> source_position_table,
@@ -310,18 +311,18 @@ class V8_EXPORT_PRIVATE NativeModule final {
   friend class NativeModuleModificationScope;
 
   static base::AtomicNumber<size_t> next_id_;
-  NativeModule(uint32_t num_functions, uint32_t num_imports,
+  NativeModule(Isolate* isolate, uint32_t num_functions, uint32_t num_imports,
                bool can_request_more, VirtualMemory* code_space,
                WasmCodeManager* code_manager, ModuleEnv& env);
 
   WasmCode* AddAnonymousCode(Handle<Code>, WasmCode::Kind kind);
-  Address AllocateForCode(size_t size);
+  Address AllocateForCode(Isolate*, size_t size);
 
   // Primitive for adding code to the native module. All code added to a native
   // module is owned by that module. Various callers get to decide on how the
   // code is obtained (CodeDesc vs, as a point in time, Code*), the kind,
   // whether it has an index or is anonymous, etc.
-  WasmCode* AddOwnedCode(Vector<const byte> orig_instructions,
+  WasmCode* AddOwnedCode(Isolate* isolate, Vector<const byte> orig_instructions,
                          std::unique_ptr<const byte[]> reloc_info,
                          size_t reloc_size,
                          std::unique_ptr<const byte[]> source_pos,
@@ -373,22 +374,18 @@ class V8_EXPORT_PRIVATE NativeModule final {
 
 class V8_EXPORT_PRIVATE WasmCodeManager final {
  public:
-  // The only reason we depend on Isolate is to report native memory used
-  // and held by a GC-ed object. We'll need to mitigate that when we
-  // start sharing wasm heaps.
-  WasmCodeManager(v8::Isolate*, size_t max_committed);
+  explicit WasmCodeManager(size_t max_committed);
   // Create a new NativeModule. The caller is responsible for its
   // lifetime. The native module will be given some memory for code,
   // which will be page size aligned. The size of the initial memory
   // is determined with a heuristic based on the total size of wasm
   // code. The native module may later request more memory.
-  std::unique_ptr<NativeModule> NewNativeModule(const WasmModule& module,
+  std::unique_ptr<NativeModule> NewNativeModule(Isolate* isolate,
+                                                const WasmModule& module,
                                                 ModuleEnv& env);
-  std::unique_ptr<NativeModule> NewNativeModule(size_t memory_estimate,
-                                                uint32_t num_functions,
-                                                uint32_t num_imported_functions,
-                                                bool can_request_more,
-                                                ModuleEnv& env);
+  std::unique_ptr<NativeModule> NewNativeModule(
+      Isolate* isolate, size_t memory_estimate, uint32_t num_functions,
+      uint32_t num_imported_functions, bool can_request_more, ModuleEnv& env);
 
   WasmCode* LookupCode(Address pc) const;
   WasmCode* GetCodeFromStartAddress(Address pc) const;
@@ -402,12 +399,12 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
   friend class NativeModule;
 
   void TryAllocate(size_t size, VirtualMemory*, void* hint = nullptr);
-  bool Commit(Address, size_t);
+  bool Commit(Isolate* isolate, Address, size_t);
   // Currently, we uncommit a whole module, so all we need is account
   // for the freed memory size. We do that in FreeNativeModule.
   // There's no separate Uncommit.
 
-  void FreeNativeModule(NativeModule*);
+  void FreeNativeModule(Isolate*, NativeModule*);
   void Free(VirtualMemory* mem);
   void AssignRanges(Address start, Address end, NativeModule*);
   size_t GetAllocationChunk(const WasmModule& module);
@@ -418,9 +415,6 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
   // worth requesting a GC on memory pressure.
   size_t active_ = 0;
   std::atomic<size_t> remaining_uncommitted_code_space_;
-
-  // TODO(mtrofin): remove the dependency on isolate.
-  v8::Isolate* isolate_;
 
   // Histogram to update with the maximum used code space for each NativeModule.
   Histogram* module_code_size_mb_ = nullptr;

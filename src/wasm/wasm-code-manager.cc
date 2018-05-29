@@ -367,14 +367,14 @@ WasmCode::~WasmCode() {
 
 base::AtomicNumber<size_t> NativeModule::next_id_;
 
-NativeModule::NativeModule(uint32_t num_functions, uint32_t num_imports,
-                           bool can_request_more, VirtualMemory* code_space,
+NativeModule::NativeModule(Isolate* isolate, uint32_t num_functions,
+                           uint32_t num_imports, bool can_request_more,
+                           VirtualMemory* code_space,
                            WasmCodeManager* code_manager, ModuleEnv& env)
     : instance_id(next_id_.Increment(1)),
       code_table_(num_functions),
       num_imported_functions_(num_imports),
-      compilation_state_(NewCompilationState(
-          reinterpret_cast<Isolate*>(code_manager->isolate_), env)),
+      compilation_state_(NewCompilationState(isolate, env)),
       free_code_space_(code_space->address(), code_space->end()),
       wasm_code_manager_(code_manager),
       can_request_more_memory_(can_request_more),
@@ -407,7 +407,7 @@ void NativeModule::ResizeCodeTableForTesting(size_t num_functions,
 }
 
 WasmCode* NativeModule::AddOwnedCode(
-    Vector<const byte> orig_instructions,
+    Isolate* isolate, Vector<const byte> orig_instructions,
     std::unique_ptr<const byte[]> reloc_info, size_t reloc_size,
     std::unique_ptr<const byte[]> source_pos, size_t source_pos_size,
     Maybe<uint32_t> index, WasmCode::Kind kind, size_t constant_pool_offset,
@@ -418,7 +418,8 @@ WasmCode* NativeModule::AddOwnedCode(
   // both allocation and insertion in owned_code_ happen in the same critical
   // section, thus ensuring owned_code_'s elements are rarely if ever moved.
   base::LockGuard<base::Mutex> lock(&allocation_mutex_);
-  Address executable_buffer = AllocateForCode(orig_instructions.size());
+  Address executable_buffer =
+      AllocateForCode(isolate, orig_instructions.size());
   if (executable_buffer == kNullAddress) {
     V8::FatalProcessOutOfMemory(nullptr, "NativeModule::AddOwnedCode");
     UNREACHABLE();
@@ -484,6 +485,7 @@ void NativeModule::SetSharedModuleData(Handle<WasmSharedModuleData> shared) {
 
 WasmCode* NativeModule::AddAnonymousCode(Handle<Code> code,
                                          WasmCode::Kind kind) {
+  Isolate* isolate = code->GetIsolate();
   std::unique_ptr<byte[]> reloc_info;
   if (code->relocation_size() > 0) {
     reloc_info.reset(new byte[code->relocation_size()]);
@@ -504,7 +506,8 @@ WasmCode* NativeModule::AddAnonymousCode(Handle<Code> code,
   int safepoint_table_offset =
       code->has_safepoint_info() ? code->safepoint_table_offset() : 0;
   WasmCode* ret =
-      AddOwnedCode(orig_instructions,      // instructions
+      AddOwnedCode(isolate,
+                   orig_instructions,      // instructions
                    std::move(reloc_info),  // reloc_info
                    static_cast<size_t>(code->relocation_size()),  // reloc_size
                    std::move(source_pos),  // source positions
@@ -548,8 +551,8 @@ WasmCode* NativeModule::AddAnonymousCode(Handle<Code> code,
 }
 
 WasmCode* NativeModule::AddCode(
-    const CodeDesc& desc, uint32_t frame_slots, uint32_t index,
-    size_t safepoint_table_offset, size_t handler_table_offset,
+    Isolate* isolate, const CodeDesc& desc, uint32_t frame_slots,
+    uint32_t index, size_t safepoint_table_offset, size_t handler_table_offset,
     std::unique_ptr<ProtectedInstructions> protected_instructions,
     Handle<ByteArray> source_pos_table, WasmCode::Tier tier) {
   std::unique_ptr<byte[]> reloc_info;
@@ -565,7 +568,7 @@ WasmCode* NativeModule::AddCode(
   }
   TurboAssembler* origin = reinterpret_cast<TurboAssembler*>(desc.origin);
   WasmCode* ret = AddOwnedCode(
-      {desc.buffer, static_cast<size_t>(desc.instr_size)},
+      isolate, {desc.buffer, static_cast<size_t>(desc.instr_size)},
       std::move(reloc_info), static_cast<size_t>(desc.reloc_size),
       std::move(source_pos), static_cast<size_t>(source_pos_table->length()),
       Just(index), WasmCode::kFunction,
@@ -604,14 +607,16 @@ WasmCode* NativeModule::AddCode(
 
 #if V8_TARGET_ARCH_X64 || V8_TARGET_ARCH_S390X || V8_TARGET_ARCH_ARM64
 Address NativeModule::CreateTrampolineTo(Handle<Code> code) {
-  MacroAssembler masm(code->GetIsolate(), nullptr, 0, CodeObjectRequired::kNo);
+  Isolate* isolate = code->GetIsolate();
+  MacroAssembler masm(isolate, nullptr, 0, CodeObjectRequired::kNo);
   Address dest = code->raw_instruction_start();
   GenerateJumpTrampoline(&masm, dest);
   CodeDesc code_desc;
   masm.GetCode(nullptr, &code_desc);
   Vector<const byte> instructions(code_desc.buffer,
                                   static_cast<size_t>(code_desc.instr_size));
-  WasmCode* wasm_code = AddOwnedCode(instructions,           // instructions
+  WasmCode* wasm_code = AddOwnedCode(isolate,
+                                     instructions,           // instructions
                                      nullptr,                // reloc_info
                                      0,                      // reloc_size
                                      nullptr,                // source_pos
@@ -653,7 +658,7 @@ Address NativeModule::GetLocalAddressFor(Handle<Code> code) {
   }
 }
 
-Address NativeModule::AllocateForCode(size_t size) {
+Address NativeModule::AllocateForCode(Isolate* isolate, size_t size) {
   // this happens under a lock assumed by the caller.
   size = RoundUp(size, kCodeAlignment);
   DisjointAllocationPool mem = free_code_space_.Allocate(size);
@@ -701,7 +706,7 @@ Address NativeModule::AllocateForCode(size_t size) {
       Address start = std::max(commit_start, it->address());
       size_t commit_size = static_cast<size_t>(commit_end - start);
       DCHECK(IsAligned(commit_size, AllocatePageSize()));
-      if (!wasm_code_manager_->Commit(start, commit_size)) {
+      if (!wasm_code_manager_->Commit(isolate, start, commit_size)) {
         return kNullAddress;
       }
       committed_code_space_ += commit_size;
@@ -710,7 +715,7 @@ Address NativeModule::AllocateForCode(size_t size) {
 #else
     size_t commit_size = static_cast<size_t>(commit_end - commit_start);
     DCHECK(IsAligned(commit_size, AllocatePageSize()));
-    if (!wasm_code_manager_->Commit(commit_start, commit_size)) {
+    if (!wasm_code_manager_->Commit(isolate, commit_start, commit_size)) {
       return kNullAddress;
     }
     committed_code_space_ += commit_size;
@@ -787,8 +792,9 @@ WasmCode* NativeModule::CloneCode(const WasmCode* original_code,
   DCHECK_EQ(0, original_code->protected_instructions().size());
   std::unique_ptr<ProtectedInstructions> protected_instructions(
       new ProtectedInstructions(0));
+  Isolate* isolate = nullptr;
   WasmCode* ret = AddOwnedCode(
-      original_code->instructions(), std::move(reloc_info),
+      isolate, original_code->instructions(), std::move(reloc_info),
       original_code->reloc_info().size(), std::move(source_pos),
       original_code->source_positions().size(), original_code->index_,
       original_code->kind(), original_code->constant_pool_offset_,
@@ -827,23 +833,23 @@ void NativeModule::ReleaseProtectedInstructions() {
 NativeModule::~NativeModule() {
   TRACE_HEAP("Deleting native module: %p\n", reinterpret_cast<void*>(this));
   // Clear the handle at the beginning of destructor to make it robust against
-  // potential GCs in the rest of the desctructor.
+  // potential GCs in the rest of the destructor.
+  Isolate* isolate = nullptr;
   if (shared_module_data_ != nullptr) {
-    Isolate* isolate = shared_module_data()->GetIsolate();
+    isolate = shared_module_data()->GetIsolate();
     isolate->global_handles()->Destroy(
         reinterpret_cast<Object**>(shared_module_data_));
     shared_module_data_ = nullptr;
   }
-  wasm_code_manager_->FreeNativeModule(this);
+  wasm_code_manager_->FreeNativeModule(isolate, this);
 }
 
-WasmCodeManager::WasmCodeManager(v8::Isolate* isolate, size_t max_committed)
-    : isolate_(isolate) {
+WasmCodeManager::WasmCodeManager(size_t max_committed) {
   DCHECK_LE(max_committed, kMaxWasmCodeMemory);
   remaining_uncommitted_code_space_.store(max_committed);
 }
 
-bool WasmCodeManager::Commit(Address start, size_t size) {
+bool WasmCodeManager::Commit(Isolate* isolate, Address start, size_t size) {
   DCHECK(IsAligned(start, AllocatePageSize()));
   DCHECK(IsAligned(size, AllocatePageSize()));
   // Reserve the size. Use CAS loop to avoid underflow on
@@ -870,13 +876,14 @@ bool WasmCodeManager::Commit(Address start, size_t size) {
     remaining_uncommitted_code_space_.fetch_add(size);
     return false;
   }
-  // This API assumes main thread
-  isolate_->AdjustAmountOfExternalAllocatedMemory(size);
-  if (WouldGCHelp()) {
-    // This API does not assume main thread, and would schedule
-    // a GC if called from a different thread, instead of synchronously
-    // doing one.
-    isolate_->MemoryPressureNotification(MemoryPressureLevel::kCritical);
+  if (isolate) {
+    auto v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
+    if (WouldGCHelp()) {
+      // This API does not assume main thread, and would schedule
+      // a GC if called from a different thread, instead of synchronously
+      // doing one.
+      v8_isolate->MemoryPressureNotification(MemoryPressureLevel::kCritical);
+    }
   }
   return ret;
 }
@@ -928,15 +935,17 @@ size_t WasmCodeManager::GetAllocationChunk(const WasmModule& module) {
 }
 
 std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
+    Isolate* isolate,
+
     const WasmModule& module, ModuleEnv& env) {
   size_t code_size = GetAllocationChunk(module);
   return NewNativeModule(
-      code_size, static_cast<uint32_t>(module.functions.size()),
+      isolate, code_size, static_cast<uint32_t>(module.functions.size()),
       module.num_imported_functions, kModuleCanAllocateMoreMemory, env);
 }
 
 std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
-    size_t size_estimate, uint32_t num_functions,
+    Isolate* isolate, size_t size_estimate, uint32_t num_functions,
     uint32_t num_imported_functions, bool can_request_more, ModuleEnv& env) {
   VirtualMemory mem;
   TryAllocate(size_estimate, &mem);
@@ -945,7 +954,7 @@ std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
     size_t size = mem.size();
     Address end = mem.end();
     std::unique_ptr<NativeModule> ret(
-        new NativeModule(num_functions, num_imported_functions,
+        new NativeModule(isolate, num_functions, num_imported_functions,
                          can_request_more, &mem, this, env));
     TRACE_HEAP("New Module: ID:%zu. Mem: %p,+%zu\n", ret->instance_id,
                reinterpret_cast<void*>(start), size);
@@ -954,7 +963,7 @@ std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
     return ret;
   }
 
-  V8::FatalProcessOutOfMemory(reinterpret_cast<Isolate*>(isolate_),
+  V8::FatalProcessOutOfMemory(reinterpret_cast<Isolate*>(isolate),
                               "WasmCodeManager::NewNativeModule");
   return nullptr;
 }
@@ -1005,7 +1014,8 @@ bool NativeModule::SetExecutable(bool executable) {
   return true;
 }
 
-void WasmCodeManager::FreeNativeModule(NativeModule* native_module) {
+void WasmCodeManager::FreeNativeModule(Isolate* isolate,
+                                       NativeModule* native_module) {
   DCHECK_GE(active_, 1);
   --active_;
   TRACE_HEAP("Freeing %zu\n", native_module->instance_id);
@@ -1023,12 +1033,7 @@ void WasmCodeManager::FreeNativeModule(NativeModule* native_module) {
     module_code_size_mb_->AddSample(static_cast<int>(code_size / MB));
   }
 
-  // No need to tell the GC anything if we're destroying the heap,
-  // which we currently indicate by having the isolate_ as null
-  if (isolate_ == nullptr) return;
   remaining_uncommitted_code_space_.fetch_add(code_size);
-  isolate_->AdjustAmountOfExternalAllocatedMemory(
-      -static_cast<int64_t>(code_size));
 }
 
 // TODO(wasm): We can make this more efficient if needed. For

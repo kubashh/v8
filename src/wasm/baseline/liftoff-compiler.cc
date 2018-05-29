@@ -2003,9 +2003,10 @@ wasm::WasmCode* LiftoffCompilationUnit::FinishCompilation(
           wasm_unit_->isolate_);
 
   wasm::WasmCode* code = wasm_unit_->native_module_->AddCode(
-      desc, asm_.GetTotalFrameSlotCount(), wasm_unit_->func_index_,
-      safepoint_table_offset_, 0, std::move(protected_instructions_),
-      source_positions, wasm::WasmCode::kLiftoff);
+      wasm_unit_->isolate_, desc, asm_.GetTotalFrameSlotCount(),
+      wasm_unit_->func_index_, safepoint_table_offset_, 0,
+      std::move(protected_instructions_), source_positions,
+      wasm::WasmCode::kLiftoff);
 
   return code;
 }
