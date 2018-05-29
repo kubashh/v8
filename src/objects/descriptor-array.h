@@ -44,7 +44,7 @@ class EnumCache : public Tuple2 {
 //   [4]: first value for constants | Smi(1) when not used
 //
 //   [2 + number of descriptors * 3]: start of slack
-class DescriptorArray : public FixedArray {
+class DescriptorArray : public WeakFixedArray {
  public:
   // Returns the number of descriptors in the array.
   inline int number_of_descriptors() const;
@@ -68,10 +68,11 @@ class DescriptorArray : public FixedArray {
   inline Object** GetKeySlot(int descriptor_number);
   inline Object* GetValue(int descriptor_number);
   inline void SetValue(int descriptor_number, Object* value);
-  inline Object** GetValueSlot(int descriptor_number);
+  inline MaybeObject* GetValueOrFieldType(int descriptor_number);
+  inline MaybeObject** GetValueSlot(int descriptor_number);
   static inline int GetValueOffset(int descriptor_number);
-  inline Object** GetDescriptorStartSlot(int descriptor_number);
-  inline Object** GetDescriptorEndSlot(int descriptor_number);
+  inline MaybeObject** GetDescriptorStartSlot(int descriptor_number);
+  inline MaybeObject** GetDescriptorEndSlot(int descriptor_number);
   inline PropertyDetails GetDetails(int descriptor_number);
   inline int GetFieldIndex(int descriptor_number);
   inline FieldType* GetFieldType(int descriptor_number);
@@ -83,7 +84,7 @@ class DescriptorArray : public FixedArray {
   // Accessor for complete descriptor.
   inline void Get(int descriptor_number, Descriptor* desc);
   inline void Set(int descriptor_number, Descriptor* desc);
-  inline void Set(int descriptor_number, Name* key, Object* value,
+  inline void Set(int descriptor_number, Name* key, MaybeObject* value,
                   PropertyDetails details);
   void Replace(int descriptor_number, Descriptor* descriptor);
 

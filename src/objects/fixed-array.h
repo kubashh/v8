@@ -283,6 +283,8 @@ class WeakFixedArray : public HeapObject {
   // Shrink length and insert filler objects.
   void Shrink(int new_length);
 
+  inline MaybeObject** GetFirstElementAddress();
+
   DECL_PRINTER(WeakFixedArray)
   DECL_VERIFIER(WeakFixedArray)
 
@@ -295,11 +297,12 @@ class WeakFixedArray : public HeapObject {
   static const int kMaxLength =
       (FixedArray::kMaxSize - kHeaderSize) / kPointerSize;
 
- private:
+ protected:
   static int OffsetOfElementAt(int index) {
     return kHeaderSize + index * kPointerSize;
   }
 
+ private:
   friend class Heap;
 
   static const int kFirstIndex = 1;

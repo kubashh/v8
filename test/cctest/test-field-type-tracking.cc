@@ -267,7 +267,6 @@ class Expectations {
     Representation expected_representation = representations_[descriptor];
     if (!details.representation().Equals(expected_representation)) return false;
 
-    Object* value = descriptors->GetValue(descriptor);
     Object* expected_value = *values_[descriptor];
     if (details.location() == kField) {
       if (details.kind() == kData) {
@@ -278,6 +277,7 @@ class Expectations {
         UNREACHABLE();
       }
     } else {
+      Object* value = descriptors->GetValue(descriptor);
       // kDescriptor
       if (details.kind() == kData) {
         CHECK(!FLAG_track_constant_fields);

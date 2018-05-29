@@ -8,6 +8,7 @@
 #include "src/frames-inl.h"
 #include "src/frames.h"
 #include "src/objects/api-callbacks.h"
+#include "src/objects/descriptor-array.h"
 #include "src/objects/ordered-hash-table-inl.h"
 
 namespace v8 {
@@ -2497,14 +2498,14 @@ void CodeStubAssembler::EnsureArrayLengthWritable(TNode<Map> map,
 
   int length_index = JSArray::kLengthDescriptorIndex;
 #ifdef DEBUG
-  TNode<Name> maybe_length = CAST(LoadFixedArrayElement(
+  TNode<Name> maybe_length = CAST(LoadWeakFixedArrayElement(
       descriptors, DescriptorArray::ToKeyIndex(length_index)));
   CSA_ASSERT(this,
              WordEqual(maybe_length, LoadRoot(Heap::klength_stringRootIndex)));
 #endif
 
-  TNode<Int32T> details = LoadAndUntagToWord32FixedArrayElement(
-      descriptors, DescriptorArray::ToDetailsIndex(length_index));
+  TNode<Uint32T> details = LoadDetailsByKeyIndex(
+      descriptors, IntPtrConstant(DescriptorArray::ToKeyIndex(length_index)));
   GotoIf(IsSetWord32(details, PropertyDetails::kAttributesReadOnlyMask),
          bailout);
 }
@@ -6942,6 +6943,32 @@ TNode<IntPtrT> CodeStubAssembler::EntryToIndex(TNode<IntPtrT> entry,
                                                field_index));
 }
 
+TNode<Uint32T> CodeStubAssembler::LoadDetailsByKeyIndex(
+    TNode<DescriptorArray> container, TNode<IntPtrT> key_index) {
+  const int kKeyToDetailsOffset =
+      (DescriptorArray::kEntryDetailsIndex - DescriptorArray::kEntryKeyIndex) *
+      kPointerSize;
+  return Unsigned(LoadAndUntagToWord32ArrayElement(
+      container, WeakFixedArray::kHeaderSize, key_index, kKeyToDetailsOffset));
+}
+
+TNode<Object> CodeStubAssembler::LoadValueByKeyIndex(
+    TNode<DescriptorArray> container, TNode<IntPtrT> key_index) {
+  const int kKeyToValueOffset =
+      (DescriptorArray::kEntryValueIndex - DescriptorArray::kEntryKeyIndex) *
+      kPointerSize;
+  return CAST(
+      LoadWeakFixedArrayElement(container, key_index, kKeyToValueOffset));
+}
+
+TNode<MaybeObject> CodeStubAssembler::LoadFieldTypeByKeyIndex(
+    TNode<DescriptorArray> container, TNode<IntPtrT> key_index) {
+  const int kKeyToValueOffset =
+      (DescriptorArray::kEntryValueIndex - DescriptorArray::kEntryKeyIndex) *
+      kPointerSize;
+  return LoadWeakFixedArrayElement(container, key_index, kKeyToValueOffset);
+}
+
 template TNode<IntPtrT> CodeStubAssembler::EntryToIndex<NameDictionary>(
     TNode<IntPtrT>, int);
 template TNode<IntPtrT> CodeStubAssembler::EntryToIndex<GlobalDictionary>(
@@ -7265,8 +7292,8 @@ void CodeStubAssembler::LookupLinear(TNode<Name> unique_name,
                                      TVariable<IntPtrT>* var_name_index,
                                      Label* if_not_found) {
   static_assert(std::is_base_of<FixedArray, Array>::value ||
-                    std::is_base_of<TransitionArray, Array>::value,
-                "T must be a descendant of FixedArray or a TransitionArray");
+                    std::is_base_of<WeakFixedArray, Array>::value,
+                "T must be a descendant of FixedArray or a WeakFixedArray");
   Comment("LookupLinear");
   TNode<IntPtrT> first_inclusive = IntPtrConstant(Array::ToKeyIndex(0));
   TNode<IntPtrT> factor = IntPtrConstant(Array::kEntrySize);
@@ -7289,8 +7316,9 @@ void CodeStubAssembler::LookupLinear(TNode<Name> unique_name,
 template <>
 TNode<Uint32T> CodeStubAssembler::NumberOfEntries<DescriptorArray>(
     TNode<DescriptorArray> descriptors) {
-  return Unsigned(LoadAndUntagToWord32FixedArrayElement(
-      descriptors, IntPtrConstant(DescriptorArray::kDescriptorLengthIndex)));
+  return Unsigned(LoadAndUntagToWord32ArrayElement(
+      descriptors, WeakFixedArray::kHeaderSize,
+      IntPtrConstant(DescriptorArray::kDescriptorLengthIndex)));
 }
 
 template <>
@@ -7344,7 +7372,7 @@ template <typename Array>
 TNode<Name> CodeStubAssembler::GetKey(TNode<Array> array,
                                       TNode<Uint32T> entry_index) {
   static_assert(std::is_base_of<FixedArray, Array>::value ||
-                    std::is_base_of<TransitionArray, Array>::value,
+                    std::is_base_of<WeakFixedArray, Array>::value,
                 "T must be a descendant of FixedArray or a TransitionArray");
   const int key_offset = Array::ToKeyIndex(0) * kPointerSize;
   TNode<MaybeObject> element =
@@ -7361,9 +7389,9 @@ template TNode<Name> CodeStubAssembler::GetKey<TransitionArray>(
 TNode<Uint32T> CodeStubAssembler::DescriptorArrayGetDetails(
     TNode<DescriptorArray> descriptors, TNode<Uint32T> descriptor_number) {
   const int details_offset = DescriptorArray::ToDetailsIndex(0) * kPointerSize;
-  return Unsigned(LoadAndUntagToWord32FixedArrayElement(
-      descriptors, EntryIndexToIndex<DescriptorArray>(descriptor_number),
-      details_offset));
+  return Unsigned(LoadAndUntagToWord32ArrayElement(
+      descriptors, WeakFixedArray::kHeaderSize,
+      EntryIndexToIndex<DescriptorArray>(descriptor_number), details_offset));
 }
 
 template <typename Array>
@@ -7616,27 +7644,23 @@ Node* CodeStubAssembler::GetMethod(Node* context, Node* object,
   return method;
 }
 
-void CodeStubAssembler::LoadPropertyFromFastObject(Node* object, Node* map,
-                                                   Node* descriptors,
-                                                   Node* name_index,
-                                                   Variable* var_details,
-                                                   Variable* var_value) {
+void CodeStubAssembler::LoadPropertyFromFastObject(
+    Node* object, Node* map, TNode<DescriptorArray> descriptors,
+    Node* name_index, Variable* var_details, Variable* var_value) {
   DCHECK_EQ(MachineRepresentation::kWord32, var_details->rep());
   DCHECK_EQ(MachineRepresentation::kTagged, var_value->rep());
 
   Node* details =
-      LoadDetailsByKeyIndex<DescriptorArray>(descriptors, name_index);
+      LoadDetailsByKeyIndex(descriptors, UncheckedCast<IntPtrT>(name_index));
   var_details->Bind(details);
 
   LoadPropertyFromFastObject(object, map, descriptors, name_index, details,
                              var_value);
 }
 
-void CodeStubAssembler::LoadPropertyFromFastObject(Node* object, Node* map,
-                                                   Node* descriptors,
-                                                   Node* name_index,
-                                                   Node* details,
-                                                   Variable* var_value) {
+void CodeStubAssembler::LoadPropertyFromFastObject(
+    Node* object, Node* map, TNode<DescriptorArray> descriptors,
+    Node* name_index, Node* details, Variable* var_value) {
   Comment("[ LoadPropertyFromFastObject");
 
   Node* location = DecodeWord32<PropertyDetails::LocationField>(details);
@@ -7719,7 +7743,7 @@ void CodeStubAssembler::LoadPropertyFromFastObject(Node* object, Node* map,
   BIND(&if_in_descriptor);
   {
     var_value->Bind(
-        LoadValueByKeyIndex<DescriptorArray>(descriptors, name_index));
+        LoadValueByKeyIndex(descriptors, UncheckedCast<IntPtrT>(name_index)));
     Goto(&done);
   }
   BIND(&done);
@@ -7903,7 +7927,7 @@ void CodeStubAssembler::TryGetOwnProperty(
                     &var_entry, if_not_found, if_bailout);
   BIND(&if_found_fast);
   {
-    Node* descriptors = var_meta_storage.value();
+    TNode<DescriptorArray> descriptors = CAST(var_meta_storage.value());
     Node* name_index = var_entry.value();
 
     LoadPropertyFromFastObject(object, map, descriptors, name_index,

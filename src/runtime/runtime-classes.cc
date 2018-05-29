@@ -335,7 +335,7 @@ bool AddDescriptorsByTemplate(
       DCHECK(!details.representation().IsDouble());
     }
     DCHECK(value->FitsRepresentation(details.representation()));
-    descriptors->Set(i, name, value, details);
+    descriptors->Set(i, name, MaybeObject::FromObject(value), details);
   }
 
   map->InitializeDescriptors(*descriptors,

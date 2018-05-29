@@ -447,7 +447,8 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
       current_offset += old_details.field_width_in_words();
     }
     Descriptor d(handle(GetKey(i), isolate_),
-                 handle(old_descriptors_->GetValue(i), isolate_), old_details);
+                 MaybeObjectHandle(old_descriptors_->GetValue(i), isolate_),
+                 old_details);
     new_descriptors->Set(i, &d);
   }
 
@@ -502,7 +503,7 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
           isolate_, instance_type, &next_constness, &next_representation,
           &next_field_type);
 
-      Handle<Object> wrapped_type(Map::WrapFieldType(next_field_type));
+      MaybeObjectHandle wrapped_type(Map::WrapFieldType(next_field_type));
       Descriptor d;
       if (next_kind == kData) {
         d = Descriptor::DataField(key, current_offset, next_attributes,
@@ -555,7 +556,7 @@ Handle<DescriptorArray> MapUpdater::BuildDescriptorArray() {
                     !Map::IsInplaceGeneralizableField(
                         next_constness, next_representation, *next_field_type));
 
-      Handle<Object> wrapped_type(Map::WrapFieldType(next_field_type));
+      MaybeObjectHandle wrapped_type(Map::WrapFieldType(next_field_type));
       Descriptor d;
       if (next_kind == kData) {
         DCHECK_IMPLIES(!FLAG_track_constant_fields, next_constness == kMutable);
