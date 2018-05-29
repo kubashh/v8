@@ -190,7 +190,7 @@ void MacroAssembler::JumpToJSEntry(Register target) {
 }
 
 void TurboAssembler::Jump(intptr_t target, RelocInfo::Mode rmode,
-                          Condition cond, CRegister) {
+                          Condition cond) {
   Label skip;
 
   if (cond != al) b(NegateCondition(cond), &skip);
@@ -203,10 +203,10 @@ void TurboAssembler::Jump(intptr_t target, RelocInfo::Mode rmode,
   bind(&skip);
 }
 
-void TurboAssembler::Jump(Address target, RelocInfo::Mode rmode, Condition cond,
-                          CRegister cr) {
+void TurboAssembler::Jump(Address target, RelocInfo::Mode rmode,
+                          Condition cond) {
   DCHECK(!RelocInfo::IsCodeTarget(rmode));
-  Jump(static_cast<intptr_t>(target), rmode, cond, cr);
+  Jump(static_cast<intptr_t>(target), rmode, cond);
 }
 
 void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
@@ -1043,11 +1043,6 @@ void TurboAssembler::EnterFrame(StackFrame::Type type,
 
   Load(ip, Operand(StackFrame::TypeToMarker(type)));
   PushCommonFrame(ip);
-
-  if (type == StackFrame::INTERNAL) {
-    Move(r1, CodeObject());
-    push(r1);
-  }
 }
 
 int TurboAssembler::LeaveFrame(StackFrame::Type type, int stack_adjustment) {
