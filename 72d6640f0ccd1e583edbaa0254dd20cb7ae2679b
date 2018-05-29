@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28d5407e_648594a4",
+        "filename": "src/async-hooks-wrapper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2018-05-29T15:32:38Z",
+      "side": 1,
+      "message": "Is the objective to model behaviour only, or also performance? Node.js uses internal fields rather than SetPrivate – not sure if there is a practical difference.",
+      "range": {
+        "startLine": 121,
+        "startChar": 4,
+        "endLine": 121,
+        "endChar": 38
+      },
+      "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
