@@ -1781,6 +1781,12 @@ TNode<BoolT> CodeStubAssembler::IsWeakReferenceTo(TNode<MaybeObject> object,
                    BitcastTaggedToWord(value));
 }
 
+TNode<BoolT> CodeStubAssembler::IsStrongReferenceTo(TNode<MaybeObject> object,
+                                                    TNode<Object> value) {
+  return WordEqual(BitcastMaybeObjectToWord(object),
+                   BitcastTaggedToWord(value));
+}
+
 TNode<BoolT> CodeStubAssembler::IsNotWeakReferenceTo(TNode<MaybeObject> object,
                                                      TNode<Object> value) {
   return WordNotEqual(WordAnd(BitcastMaybeObjectToWord(object),
