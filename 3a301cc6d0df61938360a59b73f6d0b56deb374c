@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ef9d98e_a5da8af1",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4826,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-05-30T09:53:56Z",
+      "side": 1,
+      "message": "nit: Since fp_offset is constant and never changed, I think the second DCHECK is pretty obsolete.",
+      "range": {
+        "startLine": 4826,
+        "startChar": 0,
+        "endLine": 4826,
+        "endChar": 41
+      },
+      "revId": "3a301cc6d0df61938360a59b73f6d0b56deb374c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbef469f_f05df301",
+        "filename": "src/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5146,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-05-30T09:53:56Z",
+      "side": 1,
+      "message": "nit: Since fp_offset is constant and never changed, I think the second DCHECK is pretty obsolete.",
+      "range": {
+        "startLine": 5146,
+        "startChar": 0,
+        "endLine": 5146,
+        "endChar": 41
+      },
+      "revId": "3a301cc6d0df61938360a59b73f6d0b56deb374c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
