@@ -524,18 +524,15 @@ TEST(WeakGlobalHandlesScavenge) {
       h2.location(), reinterpret_cast<void*>(&handle_and_id),
       &TestWeakGlobalHandleCallback, v8::WeakCallbackType::kParameter);
 
-  // Scavenge treats weak pointers as normal roots.
+  // Scavenge collects weak pointers.
   CcTest::CollectGarbage(NEW_SPACE);
 
   CHECK((*h1)->IsString());
-  CHECK((*h2)->IsHeapNumber());
 
-  CHECK(!WeakPointerCleared);
-  CHECK(!global_handles->IsNearDeath(h2.location()));
+  CHECK(WeakPointerCleared);
   CHECK(!global_handles->IsNearDeath(h1.location()));
 
   GlobalHandles::Destroy(h1.location());
-  GlobalHandles::Destroy(h2.location());
 }
 
 TEST(WeakGlobalUnmodifiedApiHandlesScavenge) {
@@ -708,8 +705,7 @@ TEST(WeakGlobalHandlesMark) {
   GlobalHandles::Destroy(h1.location());
 }
 
-
-TEST(DeleteWeakGlobalHandle) {
+TEST(DeleteWeakGlobalHandleInScavenge) {
   FLAG_stress_compaction = false;
   FLAG_stress_incremental_marking = false;
   CcTest::InitializeVM();
@@ -733,12 +729,35 @@ TEST(DeleteWeakGlobalHandle) {
                           &TestWeakGlobalHandleCallback,
                           v8::WeakCallbackType::kParameter);
 
-  // Scanvenge does not recognize weak reference.
   CcTest::CollectGarbage(NEW_SPACE);
 
-  CHECK(!WeakPointerCleared);
+  CHECK(WeakPointerCleared);
+}
 
-  // Mark-compact treats weak reference properly.
+TEST(DeleteWeakGlobalHandleInMarkCompact) {
+  FLAG_stress_compaction = false;
+  FLAG_stress_incremental_marking = false;
+  CcTest::InitializeVM();
+  Isolate* isolate = CcTest::i_isolate();
+  Factory* factory = isolate->factory();
+  GlobalHandles* global_handles = isolate->global_handles();
+
+  WeakPointerCleared = false;
+
+  Handle<Object> h;
+
+  {
+    HandleScope scope(isolate);
+
+    Handle<Object> i = factory->NewStringFromStaticChars("fisk");
+    h = global_handles->Create(*i);
+  }
+
+  std::pair<Handle<Object>*, int> handle_and_id(&h, 1234);
+  GlobalHandles::MakeWeak(h.location(), reinterpret_cast<void*>(&handle_and_id),
+                          &TestWeakGlobalHandleCallback,
+                          v8::WeakCallbackType::kParameter);
+
   CcTest::CollectGarbage(OLD_SPACE);
 
   CHECK(WeakPointerCleared);

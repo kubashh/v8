@@ -269,14 +269,14 @@ TEST(PhatomHandlesWithoutCallbacks) {
   CHECK_EQ(0u, isolate->NumberOfPhantomHandleResetsSinceLastCall());
 }
 
-TEST(WeakHandleToUnmodifiedJSObjectSurvivesScavenge) {
+TEST(WeakHandleToJSObjectDiesScavenge) {
   CcTest::InitializeVM();
   WeakHandleTest(
       CcTest::isolate(), &ConstructJSObject, [](FlagAndPersistent* fp) {},
-      []() { CcTest::CollectGarbage(i::NEW_SPACE); }, SurvivalMode::kSurvives);
+      []() { CcTest::CollectGarbage(i::NEW_SPACE); }, SurvivalMode::kDies);
 }
 
-TEST(WeakHandleToUnmodifiedJSObjectDiesOnMarkCompact) {
+TEST(WeakHandleToJSObjectDiesOnMarkCompact) {
   CcTest::InitializeVM();
   WeakHandleTest(
       CcTest::isolate(), &ConstructJSObject, [](FlagAndPersistent* fp) {},

@@ -2140,12 +2140,11 @@ void Heap::Scavenge() {
     RootScavengeVisitor root_scavenge_visitor(this, scavengers[kMainThreadId]);
 
     {
-      // Identify weak unmodified handles. Requires an unmodified graph.
+      // Identify weak active handles. Requires an unmodified graph.
       TRACE_GC(
           tracer(),
           GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_IDENTIFY);
-      isolate()->global_handles()->IdentifyWeakUnmodifiedObjects(
-          &JSObject::IsUnmodifiedApiObject);
+      isolate()->global_handles()->IdentifyNewSpaceActiveRoots();
     }
     {
       // Copy roots.
@@ -2168,20 +2167,16 @@ void Heap::Scavenge() {
       // Scavenge weak global handles.
       TRACE_GC(tracer(),
                GCTracer::Scope::SCAVENGER_SCAVENGE_WEAK_GLOBAL_HANDLES_PROCESS);
-      isolate()->global_handles()->MarkNewSpaceWeakUnmodifiedObjectsPending(
+      isolate()->global_handles()->IdentifyNewSpaceWeakPendingRoots(
           &IsUnscavengedHeapObject);
-      isolate()
-          ->global_handles()
-          ->IterateNewSpaceWeakUnmodifiedRootsForFinalizers(
-              &root_scavenge_visitor);
+      isolate()->global_handles()->IterateNewSpaceWeakRootsForFinalizers(
+          &root_scavenge_visitor);
       scavengers[kMainThreadId]->Process();
 
       DCHECK(copied_list.IsGlobalEmpty());
       DCHECK(promotion_list.IsGlobalEmpty());
-      isolate()
-          ->global_handles()
-          ->IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles(
-              &root_scavenge_visitor, &IsUnscavengedHeapObject);
+      isolate()->global_handles()->IterateNewSpaceWeakRootsForPhantomHandles(
+          &root_scavenge_visitor, &IsUnscavengedHeapObject);
     }
 
     for (int i = 0; i < num_scavenge_tasks; i++) {
@@ -3986,7 +3981,7 @@ void Heap::IterateStrongRoots(RootVisitor* v, VisitMode mode) {
       isolate_->global_handles()->IterateStrongRoots(v);
       break;
     case VISIT_ALL_IN_SCAVENGE:
-      isolate_->global_handles()->IterateNewSpaceStrongAndDependentRoots(v);
+      isolate_->global_handles()->IterateNewSpaceStrongAndActiveRoots(v);
       break;
     case VISIT_ALL_IN_MINOR_MC_MARK:
       // Global handles are processed manually be the minor MC.

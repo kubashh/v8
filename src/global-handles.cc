@@ -644,7 +644,7 @@ void GlobalHandles::IdentifyWeakHandles(WeakSlotCallback should_reset_handle) {
   }
 }
 
-void GlobalHandles::IterateNewSpaceStrongAndDependentRoots(RootVisitor* v) {
+void GlobalHandles::IterateNewSpaceStrongAndActiveRoots(RootVisitor* v) {
   for (Node* node : new_space_nodes_) {
     if (node->IsStrongRetainer() ||
         (node->IsWeakRetainer() && node->is_active())) {
@@ -654,11 +654,11 @@ void GlobalHandles::IterateNewSpaceStrongAndDependentRoots(RootVisitor* v) {
   }
 }
 
-void GlobalHandles::IterateNewSpaceStrongAndDependentRootsAndIdentifyUnmodified(
+void GlobalHandles::IdentifyAndIterateNewSpaceStrongAndActiveRoots(
     RootVisitor* v, size_t start, size_t end) {
   for (size_t i = start; i < end; ++i) {
     Node* node = new_space_nodes_[i];
-    if (node->IsWeak() && !JSObject::IsUnmodifiedApiObject(node->location())) {
+    if (node->IsWeak() && JSObject::IsModifiedApiObject(node->location())) {
       node->set_active(true);
     }
     if (node->IsStrongRetainer() ||
@@ -669,16 +669,15 @@ void GlobalHandles::IterateNewSpaceStrongAndDependentRootsAndIdentifyUnmodified(
   }
 }
 
-void GlobalHandles::IdentifyWeakUnmodifiedObjects(
-    WeakSlotCallback is_unmodified) {
+void GlobalHandles::IdentifyNewSpaceActiveRoots() {
   for (Node* node : new_space_nodes_) {
-    if (node->IsWeak() && !is_unmodified(node->location())) {
+    if (node->IsWeak() && JSObject::IsModifiedApiObject(node->location())) {
       node->set_active(true);
     }
   }
 }
 
-void GlobalHandles::MarkNewSpaceWeakUnmodifiedObjectsPending(
+void GlobalHandles::IdentifyNewSpaceWeakPendingRoots(
     WeakSlotCallbackWithHeap is_dead) {
   for (Node* node : new_space_nodes_) {
     DCHECK(node->is_in_new_space_list());
@@ -691,8 +690,7 @@ void GlobalHandles::MarkNewSpaceWeakUnmodifiedObjectsPending(
   }
 }
 
-void GlobalHandles::IterateNewSpaceWeakUnmodifiedRootsForFinalizers(
-    RootVisitor* v) {
+void GlobalHandles::IterateNewSpaceWeakRootsForFinalizers(RootVisitor* v) {
   for (Node* node : new_space_nodes_) {
     DCHECK(node->is_in_new_space_list());
     if (!node->is_active() && node->IsWeakRetainer() &&
@@ -706,14 +704,14 @@ void GlobalHandles::IterateNewSpaceWeakUnmodifiedRootsForFinalizers(
   }
 }
 
-void GlobalHandles::IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles(
-    RootVisitor* v, WeakSlotCallbackWithHeap should_reset_handle) {
+void GlobalHandles::IterateNewSpaceWeakRootsForPhantomHandles(
+    RootVisitor* v, WeakSlotCallbackWithHeap is_dead) {
   for (Node* node : new_space_nodes_) {
     DCHECK(node->is_in_new_space_list());
     if (!node->is_active() && node->IsWeakRetainer() &&
         (node->state() != Node::PENDING)) {
-      DCHECK(node->IsPhantomResetHandle() || node->IsPhantomCallback());
-      if (should_reset_handle(isolate_->heap(), node->location())) {
+      if (is_dead(isolate_->heap(), node->location())) {
+        DCHECK(node->IsPhantomResetHandle() || node->IsPhantomCallback());
         if (node->IsPhantomResetHandle()) {
           node->MarkPending();
           node->ResetPhantomHandle();
