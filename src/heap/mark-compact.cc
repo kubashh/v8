@@ -4027,9 +4027,8 @@ class GlobalHandlesMarkingItem : public MarkingItem {
     TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.gc"),
                  "GlobalHandlesMarkingItem::Process");
     GlobalHandlesRootMarkingVisitor visitor(task);
-    global_handles_
-        ->IterateNewSpaceStrongAndDependentRootsAndIdentifyUnmodified(
-            &visitor, start_, end_);
+    global_handles_->IdentifyAndIterateNewSpaceStrongAndActiveRoots(
+        &visitor, start_, end_);
   }
 
  private:
@@ -4117,15 +4116,12 @@ void MinorMarkCompactCollector::MarkLiveObjects() {
 
   {
     TRACE_GC(heap()->tracer(), GCTracer::Scope::MINOR_MC_MARK_GLOBAL_HANDLES);
-    isolate()->global_handles()->MarkNewSpaceWeakUnmodifiedObjectsPending(
+    isolate()->global_handles()->IdentifyNewSpaceWeakPendingRoots(
         &IsUnmarkedObjectForYoungGeneration);
-    isolate()
-        ->global_handles()
-        ->IterateNewSpaceWeakUnmodifiedRootsForFinalizers(&root_visitor);
-    isolate()
-        ->global_handles()
-        ->IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles(
-            &root_visitor, &IsUnmarkedObjectForYoungGeneration);
+    isolate()->global_handles()->IterateNewSpaceWeakRootsForFinalizers(
+        &root_visitor);
+    isolate()->global_handles()->IterateNewSpaceWeakRootsForPhantomHandles(
+        &root_visitor, &IsUnmarkedObjectForYoungGeneration);
     ProcessMarkingWorklist();
   }
 }

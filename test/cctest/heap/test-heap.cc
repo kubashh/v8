@@ -524,18 +524,15 @@ TEST(WeakGlobalHandlesScavenge) {
       h2.location(), reinterpret_cast<void*>(&handle_and_id),
       &TestWeakGlobalHandleCallback, v8::WeakCallbackType::kParameter);
 
-  // Scavenge treats weak pointers as normal roots.
+  // Scavenge collects weak pointers.
   CcTest::CollectGarbage(NEW_SPACE);
 
   CHECK((*h1)->IsString());
-  CHECK((*h2)->IsHeapNumber());
 
-  CHECK(!WeakPointerCleared);
-  CHECK(!global_handles->IsNearDeath(h2.location()));
+  CHECK(WeakPointerCleared);
   CHECK(!global_handles->IsNearDeath(h1.location()));
 
   GlobalHandles::Destroy(h1.location());
-  GlobalHandles::Destroy(h2.location());
 }
 
 TEST(WeakGlobalUnmodifiedApiHandlesScavenge) {
@@ -735,11 +732,6 @@ TEST(DeleteWeakGlobalHandle) {
 
   // Scanvenge does not recognize weak reference.
   CcTest::CollectGarbage(NEW_SPACE);
-
-  CHECK(!WeakPointerCleared);
-
-  // Mark-compact treats weak reference properly.
-  CcTest::CollectGarbage(OLD_SPACE);
 
   CHECK(WeakPointerCleared);
 }

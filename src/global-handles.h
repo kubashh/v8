@@ -138,31 +138,20 @@ class GlobalHandles {
   // |should_reset_handle| as pending.
   void IdentifyWeakHandles(WeakSlotCallback should_reset_handle);
 
-  // NOTE: Five ...NewSpace... functions below are used during
-  // scavenge collections and iterate over sets of handles that are
-  // guaranteed to contain all handles holding new space objects (but
-  // may also include old space objects).
-
-  // Iterates over strong and dependent handles. See the note above.
-  void IterateNewSpaceStrongAndDependentRoots(RootVisitor* v);
-
-  // Iterates over strong and dependent handles. See the note above.
-  // Also marks unmodified nodes in the same iteration.
-  void IterateNewSpaceStrongAndDependentRootsAndIdentifyUnmodified(
-      RootVisitor* v, size_t start, size_t end);
-
-  // Marks weak unmodified handles satisfying |is_dead| as pending.
-  void MarkNewSpaceWeakUnmodifiedObjectsPending(
-      WeakSlotCallbackWithHeap is_dead);
-
-  // Iterates over weak unmodified handles. See the note above.
-  void IterateNewSpaceWeakUnmodifiedRootsForFinalizers(RootVisitor* v);
-  void IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles(
-      RootVisitor* v, WeakSlotCallbackWithHeap should_reset_handle);
-
-  // Identify unmodified objects that are in weak state and marks them
-  // unmodified
-  void IdentifyWeakUnmodifiedObjects(WeakSlotCallback is_unmodified);
+  // Iterates over new space handles that are either strong or active.
+  void IterateNewSpaceStrongAndActiveRoots(RootVisitor* v);
+  // Marks weak new space handles to modified API objects as active.
+  void IdentifyNewSpaceActiveRoots();
+  // Fuses IdentifyNewSpaceActiveRoots and IterateNewSpaceStrongAndActiveRoots
+  // into one loop.
+  void IdentifyAndIterateNewSpaceStrongAndActiveRoots(RootVisitor* v,
+                                                      size_t start, size_t end);
+  // Marks weak handles with finalizers as pending if the given predicate is
+  // true for them.
+  void IdentifyNewSpaceWeakPendingRoots(WeakSlotCallbackWithHeap is_dead);
+  void IterateNewSpaceWeakRootsForFinalizers(RootVisitor* v);
+  void IterateNewSpaceWeakRootsForPhantomHandles(
+      RootVisitor* v, WeakSlotCallbackWithHeap is_dead);
 
   // Tear down the global handle structure.
   void TearDown();
