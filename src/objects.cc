@@ -3221,7 +3221,7 @@ void JSObject::PrintInstanceMigration(FILE* file,
   PrintF(file, "\n");
 }
 
-bool JSObject::IsUnmodifiedApiObject(Object** o) {
+bool JSObject::IsModifiedApiObject(Object** o) {
   Object* object = *o;
   if (object->IsSmi()) return false;
   HeapObject* heap_object = HeapObject::cast(object);
@@ -3229,11 +3229,11 @@ bool JSObject::IsUnmodifiedApiObject(Object** o) {
   JSObject* js_object = JSObject::cast(object);
   if (!js_object->WasConstructedFromApiFunction()) return false;
   Object* maybe_constructor = js_object->map()->GetConstructor();
-  if (!maybe_constructor->IsJSFunction()) return false;
+  if (!maybe_constructor->IsJSFunction()) return true;
   JSFunction* constructor = JSFunction::cast(maybe_constructor);
-  if (js_object->elements()->length() != 0) return false;
+  if (js_object->elements()->length() != 0) return true;
 
-  return constructor->initial_map() == heap_object->map();
+  return constructor->initial_map() != heap_object->map();
 }
 
 void HeapObject::HeapObjectShortPrint(std::ostream& os) {  // NOLINT

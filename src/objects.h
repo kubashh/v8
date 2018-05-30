@@ -2290,7 +2290,7 @@ class JSReceiver: public HeapObject {
 // caching.
 class JSObject: public JSReceiver {
  public:
-  static bool IsUnmodifiedApiObject(Object** o);
+  static bool IsModifiedApiObject(Object** o);
 
   static V8_WARN_UNUSED_RESULT MaybeHandle<JSObject> New(
       Handle<JSFunction> constructor, Handle<JSReceiver> new_target,
