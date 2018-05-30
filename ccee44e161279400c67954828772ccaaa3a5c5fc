@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12bec472_d0d0b5e3",
+        "filename": "test/cctest/test-global-handles.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-05-30T23:48:00Z",
+      "side": 0,
+      "message": "Even tested that... :)",
+      "range": {
+        "startLine": 272,
+        "startChar": 5,
+        "endLine": 272,
+        "endChar": 51
+      },
+      "revId": "ccee44e161279400c67954828772ccaaa3a5c5fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

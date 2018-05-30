@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "483ba565_4a0560e1",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-05-30T23:48:00Z",
+      "side": 1,
+      "message": "Not sure we need those tests actually since we have the new ones (which you also adjusted) that should cover the cases. If they are missing out on some then we should add the tests there.",
+      "range": {
+        "startLine": 708,
+        "startChar": 5,
+        "endLine": 708,
+        "endChar": 37
+      },
+      "revId": "b23fa6fe3ae246823b28e3bb40c67df9123c1a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
