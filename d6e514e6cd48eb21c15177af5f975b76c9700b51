@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e293e72_76d51af1",
+        "filename": "test/intl/locale/locale-constructor.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-30T19:09:47Z",
+      "side": 1,
+      "message": "We also need a test that makes sure that we do the spec defined GetOption in the correct order, something like:\n\n  let count \u003d 0;\n  let calendar \u003d -1;\n  let collation \u003d -1;\n  ...\n  \n  new Intl.Locale(\u0027en-US\u0027, { get calendar() { calendar \u003d ++count; return .. }, \n                             get collation() { collation \u003d ++count; return .. },\n                             ...\n                            });\n  assertEquals(1, calendar);\n  assertEquals(2, collation);\n  ...\n\nAnother test is the \n  let desc \u003d Object.getOwnPropertyDescriptor(Intl.Locale.prototype, \"calendar\");\n  assertEquals(Intl.Locale.prototype.calendar, desc.get);\n  assertEquals(undefined, desc.set);\n  assertFalse(desc.enumerable);\n  assertTrue(desc.configurable);\nfor all the different getters.\n\nThese can be done in a follow on CL, no need to block this CL.",
+      "revId": "d6e514e6cd48eb21c15177af5f975b76c9700b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "642200bb_ce23f45a",
+        "filename": "test/intl/locale/locale-constructor.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-30T19:09:47Z",
+      "side": 1,
+      "message": "Can you add tests for all the different getters? To make sure we don\u0027t regress in the future.",
+      "range": {
+        "startLine": 19,
+        "startChar": 10,
+        "endLine": 19,
+        "endChar": 18
+      },
+      "revId": "d6e514e6cd48eb21c15177af5f975b76c9700b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
