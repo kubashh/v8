@@ -22,6 +22,57 @@
       "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0691a7fa_0a5585dd",
+        "filename": "test/mjsunit/async-hooks-chained.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-30T15:58:16Z",
+      "side": 1,
+      "message": "nit: 80 char limit",
+      "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2eef29d_150a3bc0",
+        "filename": "test/mjsunit/async-hooks.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-30T15:58:16Z",
+      "side": 1,
+      "message": "nit: 80 char limit here and below in this file",
+      "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "625f3b67_fdf7069e",
+        "filename": "test/mjsunit/es8/async-await-interleaved.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-05-30T15:58:16Z",
+      "side": 1,
+      "message": "Can you add a comment describing what this check is?",
+      "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
