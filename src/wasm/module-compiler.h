@@ -86,7 +86,7 @@ class AsyncCompileJob {
  public:
   explicit AsyncCompileJob(Isolate* isolate, std::unique_ptr<byte[]> bytes_copy,
                            size_t length, Handle<Context> context,
-                           std::unique_ptr<CompilationResultResolver> resolver);
+                           std::shared_ptr<CompilationResultResolver> resolver);
 
   void Start();
 
@@ -149,7 +149,7 @@ class AsyncCompileJob {
   std::unique_ptr<byte[]> bytes_copy_;
   ModuleWireBytes wire_bytes_;
   Handle<Context> context_;
-  std::unique_ptr<CompilationResultResolver> resolver_;
+  std::shared_ptr<CompilationResultResolver> resolver_;
   std::unique_ptr<WasmModule> module_;
 
   std::vector<DeferredHandles*> deferred_handles_;
