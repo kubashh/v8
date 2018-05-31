@@ -154,6 +154,7 @@ class FunctionCallbackArguments;
 class GlobalHandles;
 
 namespace wasm {
+class CompilationResultResolver;
 class StreamingDecoder;
 }  // namespace wasm
 
@@ -4371,6 +4372,30 @@ class V8_EXPORT WasmCompiledModule : public Object {
   static void CheckCast(Value* obj);
 };
 
+class V8_EXPORT WasmStreaming final {
+ public:
+  WasmStreaming(
+      Isolate* isolate,
+      std::shared_ptr<internal::wasm::CompilationResultResolver> resolver);
+
+  ~WasmStreaming();
+  /**
+   * The buffer passed into OnBytesReceived is owned by the caller.
+   */
+  void OnBytesReceived(const uint8_t* bytes, size_t size);
+  void Finish();
+  /**
+   * Abort streaming compilation. If {exception} has a value, then the promise
+   * associated with streaming compilation is rejected with that value. If
+   * {exception} does not have value, the promise does not get rejected.
+   */
+  void Abort(MaybeLocal<Value> exception);
+
+ private:
+  class WasmStreamingImpl;
+  std::unique_ptr<WasmStreamingImpl> impl;
+};
+
 // TODO(mtrofin): when streaming compilation is done, we can rename this
 // to simply WasmModuleObjectBuilder
 class V8_EXPORT WasmModuleObjectBuilderStreaming final {
@@ -4379,7 +4404,7 @@ class V8_EXPORT WasmModuleObjectBuilderStreaming final {
   /**
    * The buffer passed into OnBytesReceived is owned by the caller.
    */
-  void OnBytesReceived(const uint8_t*, size_t size);
+  void OnBytesReceived(const uint8_t* bytes, size_t size);
   void Finish();
   /**
    * Abort streaming compilation. If {exception} has a value, then the promise
@@ -6583,6 +6608,9 @@ typedef bool (*AllowWasmCodeGenerationCallback)(Local<Context> context,
 // by the embedder. Example: WebAssembly.{compile|instantiate}Streaming ---
 typedef void (*ApiImplementationCallback)(const FunctionCallbackInfo<Value>&);
 
+// --- Callback for WebAssembly.compileStreaming ---
+typedef void (*WasmStreamingCallback)(const FunctionCallbackInfo<Value>&);
+
 // --- Garbage Collection Callbacks ---
 
 /**
@@ -7994,6 +8022,8 @@ class V8_EXPORT Isolate {
   void SetWasmInstanceCallback(ExtensionCallback callback);
 
   void SetWasmCompileStreamingCallback(ApiImplementationCallback callback);
+
+  void SetWasmStreamingCallback(WasmStreamingCallback callback);
 
   /**
   * Check if V8 is dead and therefore unusable.  This is the case after
