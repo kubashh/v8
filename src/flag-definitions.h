@@ -1341,7 +1341,7 @@ DEFINE_NEG_IMPLICATION(single_threaded, wasm_async_compilation)
 // Threading related flags.
 //
 
-DEFINE_BOOL(single_threaded, false, "disable the use of background tasks")
+DEFINE_BOOL(single_threaded, true, "disable the use of background tasks")
 DEFINE_IMPLICATION(single_threaded, single_threaded_gc)
 DEFINE_NEG_IMPLICATION(single_threaded, concurrent_recompilation)
 DEFINE_NEG_IMPLICATION(single_threaded, compiler_dispatcher)
