@@ -75,7 +75,7 @@ void WasmEngine::AsyncInstantiate(
 }
 
 void WasmEngine::AsyncCompile(
-    Isolate* isolate, std::unique_ptr<CompilationResultResolver> resolver,
+    Isolate* isolate, std::shared_ptr<CompilationResultResolver> resolver,
     const ModuleWireBytes& bytes, bool is_shared) {
   if (!FLAG_wasm_async_compilation) {
     // Asynchronous compilation disabled; fall back on synchronous compilation.
@@ -104,7 +104,7 @@ void WasmEngine::AsyncCompile(
   if (FLAG_wasm_test_streaming) {
     std::shared_ptr<StreamingDecoder> streaming_decoder =
         isolate->wasm_engine()->StartStreamingCompilation(
-            isolate, handle(isolate->context()), std::move(resolver));
+            isolate, handle(isolate->context()), resolver);
     streaming_decoder->OnBytesReceived(bytes.module_bytes());
     streaming_decoder->Finish();
     return;
@@ -116,16 +116,15 @@ void WasmEngine::AsyncCompile(
 
   AsyncCompileJob* job =
       CreateAsyncCompileJob(isolate, std::move(copy), bytes.length(),
-                            handle(isolate->context()), std::move(resolver));
+                            handle(isolate->context()), resolver);
   job->Start();
 }
 
 std::shared_ptr<StreamingDecoder> WasmEngine::StartStreamingCompilation(
     Isolate* isolate, Handle<Context> context,
-    std::unique_ptr<CompilationResultResolver> resolver) {
-  AsyncCompileJob* job =
-      CreateAsyncCompileJob(isolate, std::unique_ptr<byte[]>(nullptr), 0,
-                            context, std::move(resolver));
+    std::shared_ptr<CompilationResultResolver> resolver) {
+  AsyncCompileJob* job = CreateAsyncCompileJob(
+      isolate, std::unique_ptr<byte[]>(nullptr), 0, context, resolver);
   return job->CreateStreamingDecoder();
 }
 
@@ -140,9 +139,9 @@ void WasmEngine::Unregister(CancelableTaskManager* task_manager) {
 AsyncCompileJob* WasmEngine::CreateAsyncCompileJob(
     Isolate* isolate, std::unique_ptr<byte[]> bytes_copy, size_t length,
     Handle<Context> context,
-    std::unique_ptr<CompilationResultResolver> resolver) {
-  AsyncCompileJob* job = new AsyncCompileJob(
-      isolate, std::move(bytes_copy), length, context, std::move(resolver));
+    std::shared_ptr<CompilationResultResolver> resolver) {
+  AsyncCompileJob* job = new AsyncCompileJob(isolate, std::move(bytes_copy),
+                                             length, context, resolver);
   // Pass ownership to the unique_ptr in {jobs_}.
   jobs_[job] = std::unique_ptr<AsyncCompileJob>(job);
   return job;
