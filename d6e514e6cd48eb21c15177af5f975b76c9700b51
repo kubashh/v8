@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "287342e7_f9d6b1d9",
+        "filename": "test/intl/locale/locale-constructor.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-01T17:30:15Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4e293e72_76d51af1",
+      "revId": "d6e514e6cd48eb21c15177af5f975b76c9700b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "642200bb_ce23f45a",
         "filename": "test/intl/locale/locale-constructor.js",
         "patchSetId": 4
@@ -39,6 +57,30 @@
       "revId": "d6e514e6cd48eb21c15177af5f975b76c9700b51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b02a510a_338f7e9a",
+        "filename": "test/intl/locale/locale-constructor.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-01T17:30:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "642200bb_ce23f45a",
+      "range": {
+        "startLine": 19,
+        "startChar": 10,
+        "endLine": 19,
+        "endChar": 18
+      },
+      "revId": "d6e514e6cd48eb21c15177af5f975b76c9700b51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
