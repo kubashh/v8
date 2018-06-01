@@ -478,8 +478,6 @@ namespace internal {
   CPP(ConsoleMarkTimeline)                                                     \
   CPP(ConsoleProfile)                                                          \
   CPP(ConsoleProfileEnd)                                                       \
-  CPP(ConsoleTimeline)                                                         \
-  CPP(ConsoleTimelineEnd)                                                      \
   CPP(ConsoleTime)                                                             \
   CPP(ConsoleTimeEnd)                                                          \
   CPP(ConsoleTimeStamp)                                                        \
