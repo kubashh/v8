@@ -161,10 +161,6 @@ class ConsoleDelegate {
                        const ConsoleContext& context) {}
   virtual void ProfileEnd(const ConsoleCallArguments& args,
                           const ConsoleContext& context) {}
-  virtual void Timeline(const ConsoleCallArguments& args,
-                        const ConsoleContext& context) {}
-  virtual void TimelineEnd(const ConsoleCallArguments& args,
-                           const ConsoleContext& context) {}
   virtual void Time(const ConsoleCallArguments& args,
                     const ConsoleContext& context) {}
   virtual void TimeEnd(const ConsoleCallArguments& args,
