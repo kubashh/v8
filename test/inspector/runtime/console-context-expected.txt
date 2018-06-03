@@ -29,11 +29,9 @@ console.context() methods:
     [16] : markTimeline
     [17] : profile
     [18] : profileEnd
-    [19] : timeline
-    [20] : timelineEnd
-    [21] : time
-    [22] : timeEnd
-    [23] : timeStamp
+    [19] : time
+    [20] : timeEnd
+    [21] : timeStamp
 ]
 
 Running test: testDefaultConsoleContext
