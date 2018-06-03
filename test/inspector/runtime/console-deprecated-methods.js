@@ -8,15 +8,11 @@ Protocol.Runtime.onConsoleAPICalled(messageAdded);
 Protocol.Runtime.enable();
 
 var deprecatedMethods = [
-  "console.timeline(\"42\")",
-  "console.timeline(\"42\")",
-  "console.timeline(\"42\")", // three calls should produce one warning message
-  "console.timelineEnd(\"42\")",
   "console.markTimeline(\"42\")",
 ];
 Protocol.Runtime.evaluate({ expression: deprecatedMethods.join(";") });
 
-var messagesLeft = 3;
+var messagesLeft = 1;
 function messageAdded(data)
 {
   var text = data.params.args[0].value;
