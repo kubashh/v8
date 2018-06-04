@@ -155,6 +155,12 @@ assertDoesNotThrow("new Date(0x40000000, 0x40000000, 0x40000000," +
 assertDoesNotThrow("new Date(-0x40000001, -0x40000001, -0x40000001," +
                    "-0x40000001, -0x40000001, -0x40000001, -0x40000001)")
 
+// Test that date as double type is treated as integer type in MakeDay
+// so that the hour should't be changed.
+d = new Date(2018, 1);
+d.setDate(11.2);
+assertEquals(0, d.getHours());
+assertEquals(0, (d.getUTCHours() - d.getTimezoneOffset() / 60) % 24);
 
 // Modified test from WebKit
 // LayoutTests/fast/js/script-tests/date-utc-timeclip.js:
