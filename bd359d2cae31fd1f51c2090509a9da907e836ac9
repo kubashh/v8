@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84ccfd9f_5071d157",
+        "filename": "test/mjsunit/date.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-04T14:09:06Z",
+      "side": 1,
+      "message": "We could also assert the return value of Date.UTC.",
+      "revId": "bd359d2cae31fd1f51c2090509a9da907e836ac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
