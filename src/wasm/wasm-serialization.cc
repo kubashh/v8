@@ -264,7 +264,7 @@ size_t NativeModuleSerializer::MeasureCode(const WasmCode* code) const {
 size_t NativeModuleSerializer::Measure() const {
   size_t size = kHeaderSize;
   uint32_t first_wasm_fn = native_module_->num_imported_functions();
-  uint32_t total_fns = native_module_->function_count();
+  uint32_t total_fns = native_module_->num_functions();
   for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
     size += kCodeHeaderSize;
     size += MeasureCode(native_module_->code(i));
@@ -273,7 +273,7 @@ size_t NativeModuleSerializer::Measure() const {
 }
 
 void NativeModuleSerializer::WriteHeader(Writer* writer) {
-  writer->Write(native_module_->function_count());
+  writer->Write(native_module_->num_functions());
   writer->Write(native_module_->num_imported_functions());
 }
 
@@ -364,7 +364,7 @@ bool NativeModuleSerializer::Write(Writer* writer) {
 
   WriteHeader(writer);
 
-  uint32_t total_fns = native_module_->function_count();
+  uint32_t total_fns = native_module_->num_functions();
   uint32_t first_wasm_fn = native_module_->num_imported_functions();
   for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
     const WasmCode* code = native_module_->code(i);
@@ -422,7 +422,7 @@ bool NativeModuleDeserializer::Read(Reader* reader) {
   read_called_ = true;
 
   if (!ReadHeader(reader)) return false;
-  uint32_t total_fns = native_module_->function_count();
+  uint32_t total_fns = native_module_->num_functions();
   uint32_t first_wasm_fn = native_module_->num_imported_functions();
   for (uint32_t i = first_wasm_fn; i < total_fns; ++i) {
     if (!ReadCode(i, reader)) return false;
@@ -433,7 +433,7 @@ bool NativeModuleDeserializer::Read(Reader* reader) {
 bool NativeModuleDeserializer::ReadHeader(Reader* reader) {
   size_t functions = reader->Read<uint32_t>();
   size_t imports = reader->Read<uint32_t>();
-  return functions == native_module_->function_count() &&
+  return functions == native_module_->num_functions() &&
          imports == native_module_->num_imported_functions();
 }
 
@@ -506,8 +506,8 @@ bool NativeModuleDeserializer::ReadCode(uint32_t fn_index, Reader* reader) {
       case RelocInfo::WASM_CODE_TABLE_ENTRY: {
         DCHECK(FLAG_wasm_tier_up);
         DCHECK(ret->is_liftoff());
-        WasmCode* const* code_table_entry =
-            native_module_->code_table().data() + ret->index();
+        WasmCode** code_table_entry =
+            &native_module_->code_table()[ret->index()];
         iter.rinfo()->set_wasm_code_table_entry(
             reinterpret_cast<Address>(code_table_entry), SKIP_ICACHE_FLUSH);
         break;
