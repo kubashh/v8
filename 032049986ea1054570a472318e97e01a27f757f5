@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ebe50bc_78241f4e",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-04T13:44:23Z",
+      "side": 1,
+      "message": "Final nit: \u0027+ dt\u0027 can move inside the static_cast.",
+      "revId": "032049986ea1054570a472318e97e01a27f757f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
