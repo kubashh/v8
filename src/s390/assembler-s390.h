@@ -646,43 +646,6 @@ class Assembler : public AssemblerBase {
         getfield<uint64_t, 6, 12, 24>(f2) | getfield<uint64_t, 6, 24, 48>(f3));
   }
 
-  inline void ri_format(Opcode opcode, int f1, int f2) {
-    uint32_t op1 = opcode >> 4;
-    uint32_t op2 = opcode & 0xf;
-    emit4bytes(
-        getfield<uint32_t, 4, 0, 8>(op1) | getfield<uint32_t, 4, 8, 12>(f1) |
-        getfield<uint32_t, 4, 12, 16>(op2) | getfield<uint32_t, 4, 16, 32>(f2));
-  }
-
-  inline void rie_1_format(Opcode opcode, int f1, int f2, int f3, int f4) {
-    uint32_t op1 = opcode >> 8;
-    uint32_t op2 = opcode & 0xff;
-    emit6bytes(
-        getfield<uint64_t, 6, 0, 8>(op1) | getfield<uint64_t, 6, 8, 12>(f1) |
-        getfield<uint64_t, 6, 12, 16>(f2) | getfield<uint64_t, 6, 16, 32>(f3) |
-        getfield<uint64_t, 6, 32, 36>(f4) | getfield<uint64_t, 6, 40, 48>(op2));
-  }
-
-  inline void rie_2_format(Opcode opcode, int f1, int f2, int f3, int f4) {
-    uint32_t op1 = opcode >> 8;
-    uint32_t op2 = opcode & 0xff;
-    emit6bytes(
-        getfield<uint64_t, 6, 0, 8>(op1) | getfield<uint64_t, 6, 8, 12>(f1) |
-        getfield<uint64_t, 6, 12, 16>(f2) | getfield<uint64_t, 6, 16, 32>(f3) |
-        getfield<uint64_t, 6, 32, 40>(f4) | getfield<uint64_t, 6, 40, 48>(op2));
-  }
-
-  inline void rie_3_format(Opcode opcode, int f1, int f2, int f3, int f4,
-                           int f5) {
-    uint32_t op1 = opcode >> 8;
-    uint32_t op2 = opcode & 0xff;
-    emit6bytes(
-        getfield<uint64_t, 6, 0, 8>(op1) | getfield<uint64_t, 6, 8, 12>(f1) |
-        getfield<uint64_t, 6, 12, 16>(f2) | getfield<uint64_t, 6, 16, 24>(f3) |
-        getfield<uint64_t, 6, 24, 32>(f4) | getfield<uint64_t, 6, 32, 40>(f5) |
-        getfield<uint64_t, 6, 40, 48>(op2));
-  }
-
 #define DECLARE_S390_RIL_AB_INSTRUCTIONS(name, op_name, op_value) \
   template <class R1>                                             \
   inline void name(R1 r1, const Operand& i2) {                    \
@@ -705,17 +668,6 @@ class Assembler : public AssemblerBase {
   S390_RIL_C_OPCODE_LIST(DECLARE_S390_RIL_C_INSTRUCTIONS)
 #undef DECLARE_S390_RIL_AB_INSTRUCTIONS
 #undef DECLARE_S390_RIL_C_INSTRUCTIONS
-
-  inline void ris_format(Opcode opcode, int f1, int f2, int f3, int f4,
-                         int f5) {
-    uint32_t op1 = opcode >> 8;
-    uint32_t op2 = opcode & 0xff;
-    emit6bytes(
-        getfield<uint64_t, 6, 0, 8>(op1) | getfield<uint64_t, 6, 8, 12>(f1) |
-        getfield<uint64_t, 6, 12, 16>(f2) | getfield<uint64_t, 6, 16, 20>(f3) |
-        getfield<uint64_t, 6, 20, 32>(f4) | getfield<uint64_t, 6, 32, 40>(f5) |
-        getfield<uint64_t, 6, 40, 48>(op2));
-  }
 
 #define DECLARE_S390_RR_INSTRUCTIONS(name, op_name, op_value) \
   inline void name(Register r1, Register r2) {                \
@@ -764,13 +716,6 @@ class Assembler : public AssemblerBase {
   // Special format
   void lzdr(DoubleRegister r1) { rre_format(LZDR, r1.code(), 0); }
 #undef DECLARE_S390_RRE_INSTRUCTIONS
-
-  inline void rrf_format(Opcode opcode, int f1, int f2, int f3, int f4) {
-    emit4bytes(
-        getfield<uint32_t, 4, 0, 16>(opcode) |
-        getfield<uint32_t, 4, 16, 20>(f1) | getfield<uint32_t, 4, 20, 24>(f2) |
-        getfield<uint32_t, 4, 24, 28>(f3) | getfield<uint32_t, 4, 28, 32>(f4));
-  }
 
 #define DECLARE_S390_RX_INSTRUCTIONS(name, op_name, op_value)        \
   template <class R1>                                                \
@@ -836,7 +781,8 @@ class Assembler : public AssemblerBase {
   }
 #undef DECLARE_S390_RXY_INSTRUCTIONS
 
-inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
+
+inline void rsy_format(Opcode op, int f1, int f2, int f3, const int f4) {
   DCHECK(is_int20(f4));
   DCHECK(is_uint16(op));
   uint64_t code = (getfield<uint64_t, 6, 0, 8>(op >> 8) |
@@ -851,7 +797,7 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
 
 #define DECLARE_S390_RSY_A_INSTRUCTIONS(name, op_name, op_value)           \
   void name(Register r1, Register r3, Register b2, Disp d2 = 0) {          \
-    rsy_form(op_name, r1.code(), r3.code(), b2.code(), d2);                \
+    rsy_format(op_name, r1.code(), r3.code(), b2.code(), d2);              \
   }                                                                        \
   void name(Register r1, Register r3, Operand d2) {                        \
     DCHECK_NE(d2.immediate(), 0);                                          \
@@ -865,13 +811,448 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
 
 #define DECLARE_S390_RSY_B_INSTRUCTIONS(name, op_name, op_value)            \
   void name(Register r1, Condition m3, Register b2, Disp d2) {              \
-    rsy_form(op_name, r1.code(), m3, b2.code(), d2);                        \
+    rsy_format(op_name, r1.code(), m3, b2.code(), d2);                      \
   }                                                                         \
   void name(Register r1, Condition m3, const MemOperand& opnd) {            \
     name(r1, m3, opnd.getBaseRegister(), opnd.getDisplacement());           \
   }
   S390_RSY_B_OPCODE_LIST(DECLARE_S390_RSY_B_INSTRUCTIONS);
 #undef DECLARE_S390_RSY_B_INSTRUCTIONS
+
+
+inline void rs_format(Opcode op, int f1, int f2, int f3, const int f4) {
+  DCHECK(is_uint12(d2));
+  uint32_t code = getfield<uint32_t, 4, 0, 8>(op) |
+                  getfield<uint32_t, 4, 8, 12>(f1) |
+                  getfield<uint32_t, 4, 12, 16>(f2) |
+                  getfield<uint32_t, 4, 16, 20>(f3) |
+                  getfield<uint32_t, 4, 20, 32>(f4);
+  emit4bytes(code);
+}
+
+#define DECLARE_S390_RS_A_INSTRUCTIONS(name, op_name, op_value)             \
+  void name(Register r1, Register r3, Register b2, Disp d2) {               \
+    rs_format(op_name, r1.code(), r3.code(), b2.code(), d2);                \
+  }                                                                         \
+  void name(Register r1, Register r3, const MemOperand& opnd) {             \
+    name(r1, r3, opnd.getBaseRegister(), opnd.getDisplacement());           \
+  }
+  S390_RS_A_OPCODE_LIST(DECLARE_S390_RS_A_INSTRUCTIONS);
+#undef DECLARE_S390_RS_A_INSTRUCTIONS
+
+#define DECLARE_S390_RS_B_INSTRUCTIONS(name, op_name, op_value)             \
+  void name(Register r1, Condition m3, Register b2, Disp d2) {              \
+    rs_format(op_name, r1.code(), m3, b2.code(), d2);                       \
+  }                                                                         \
+  void name(Register r1, Condition m3, const MemOperand& opnd) {            \
+    name(r1, m3, opnd.getBaseRegister(), opnd.getDisplacement());           \
+  }
+  S390_RS_B_OPCODE_LIST(DECLARE_S390_RS_B_INSTRUCTIONS);
+#undef DECLARE_S390_RS_B_INSTRUCTIONS
+
+#define DECLARE_S390_RS_SHIFT_FORMAT(name, opcode)                          \
+  void name(Register r1, Register r2, const Operand& opnd =                 \
+            Operand::Zero()) {                                              \
+    DCHECK(opnd != r0);                                                     \
+    rs_format(opcode, r1.code(), r0.code(), r2.code(), opnd.immediate());   \
+  }                                                                         \
+  void name(Register r1, const Operand& opnd) {                             \
+    rs_format(opcode, r1.code(), r0.code(), r0.code(), opnd.immediate());   \
+  }
+  DECLARE_S390_RS_SHIFT_FORMAT(sll, SLL)
+  DECLARE_S390_RS_SHIFT_FORMAT(srl, SRL)
+  DECLARE_S390_RS_SHIFT_FORMAT(sla, SLA)
+  DECLARE_S390_RS_SHIFT_FORMAT(sra, SRA)
+  DECLARE_S390_RS_SHIFT_FORMAT(sldl, SLDL)
+  DECLARE_S390_RS_SHIFT_FORMAT(srda, SRDA)
+  DECLARE_S390_RS_SHIFT_FORMAT(srdl, SRDL)
+#undef DECLARE_S390_RS_SHIFT_FORMAT
+
+
+inline void rxe_format(Opcode op, int f1, int f2, int f3, int f4, int f5 = 0) {
+  DCHECK(is_uint12(f4));
+  DCHECK(is_uint16(op));
+  uint64_t code = (getfield<uint64_t, 6, 0, 8>(op >> 8) |
+                   getfield<uint64_t, 6, 8, 12>(f1) |
+                   getfield<uint64_t, 6, 12, 16>(f2) |
+                   getfield<uint64_t, 6, 16, 20>(f3) |
+                   getfield<uint64_t, 6, 20, 32>(f4 & 0x0fff) |
+                   getfield<uint64_t, 6, 32, 36>(f5) |
+                   getfield<uint64_t, 6, 40, 48>(op & 0xff));
+  emit6bytes(code);
+}
+
+#define DECLARE_S390_RXE_INSTRUCTIONS(name, op_name, op_value)             \
+  void name(Register r1, Register x2, Register b2, Disp d2,                \
+            Condition m3 = static_cast<Condition>(0)) {                    \
+    rxe_format(op_name, r1.code(), x2.code(), b2.code(), d2, m3);          \
+  }                                                                        \
+  template<class _R1Type>                                                  \
+  void name(_R1Type r1, const MemOperand& opnd) {                          \
+    name(Register::from_code(r1.code()), opnd.rx(), opnd.rb(),             \
+         opnd.offset());                                                   \
+  }
+  S390_RXE_OPCODE_LIST(DECLARE_S390_RXE_INSTRUCTIONS);
+#undef DECLARE_S390_RXE_INSTRUCTIONS
+
+
+inline void ri_format(Opcode opcode, int f1, int f2) {
+  uint32_t op1 = opcode >> 4;
+  uint32_t op2 = opcode & 0xf;
+  emit4bytes(getfield<uint32_t, 4, 0, 8>(op1) |
+             getfield<uint32_t, 4, 8, 12>(f1) |
+             getfield<uint32_t, 4, 12, 16>(op2) |
+             getfield<uint32_t, 4, 16, 32>(f2));
+}
+
+#define DECLARE_S390_RI_A_INSTRUCTIONS(name, op_name, op_value)            \
+  void name(Register r, const Operand& i2) {                               \
+    DCHECK(is_uint12(op_name));                                            \
+    DCHECK(is_uint16(i2.immediate()) || is_int16(i2.immediate()));         \
+    ri_format(op_name, r.code(), i2.immediate());                          \
+  }
+  S390_RI_A_OPCODE_LIST(DECLARE_S390_RI_A_INSTRUCTIONS);
+#undef DECLARE_S390_RI_A_INSTRUCTIONS
+
+#define DECLARE_S390_RI_B_INSTRUCTIONS(name, op_name, op_value)            \
+  void name(Register r1, const Operand& imm) {                             \
+    /* 2nd argument encodes # of halfwords, so divide by 2. */             \
+    int16_t numHalfwords = static_cast<int16_t>(imm.immediate()) / 2;      \
+    Operand halfwordOp = Operand(numHalfwords);                            \
+    halfwordOp.setBits(16);                                                \
+    ri_format(op_name, r1.code(), halfwordOp.immediate());                 \
+  }
+  S390_RI_B_OPCODE_LIST(DECLARE_S390_RI_B_INSTRUCTIONS);
+#undef DECLARE_S390_RI_B_INSTRUCTIONS
+
+#define DECLARE_S390_RI_C_INSTRUCTIONS(name, op_name, op_value)            \
+  void name(Condition m, const Operand& i2) {                              \
+    DCHECK(is_uint12(op_name));                                            \
+    DCHECK(is_uint4(m));                                                   \
+    DCHECK(op_name == BRC ?                                                \
+           is_int16(i2.immediate()) : is_uint16(i2.immediate()));          \
+    ri_format(op_name, m, i2.immediate());                                 \
+  }
+  S390_RI_C_OPCODE_LIST(DECLARE_S390_RI_C_INSTRUCTIONS);
+#undef DECLARE_S390_RI_C_INSTRUCTIONS
+
+
+inline void rrf_format(Opcode op, int f1, int f2, int f3, int f4) {
+  uint32_t code = getfield<uint32_t, 4, 0, 16>(op) |
+                  getfield<uint32_t, 4, 16, 20>(f1) |
+                  getfield<uint32_t, 4, 20, 24>(f2) |
+                  getfield<uint32_t, 4, 24, 28>(f3) |
+                  getfield<uint32_t, 4, 28, 32>(f4);
+  emit4bytes(code);
+}
+
+#define DECLARE_S390_RRF_A_INSTRUCTIONS(name, op_name, op_value)           \
+  void name(Register r1, Condition m4, Register r2, Register r3) {         \
+    rrf_format(op_name, r3.code(), m4, r1.code(), r2.code());              \
+  }                                                                        \
+  void name(Register r1, Register r2, Register r3) {                       \
+    name(r1, Condition(0), r2, r3);                                        \
+  }
+  S390_RRF_A_OPCODE_LIST(DECLARE_S390_RRF_A_INSTRUCTIONS);
+#undef DECLARE_S390_RRF_A_INSTRUCTIONS
+
+
+#define DECLARE_S390_RRF_B_INSTRUCTIONS(name, op_name, op_value)           \
+  void name(Register r1, Condition m4, Register r2, Register r3) {         \
+    rrf_format(op_name, r3.code(), m4, r1.code(), r2.code());              \
+  }                                                                        \
+  void name(Register r1, Register r2, Register r3) {                       \
+    name(r1, Condition(0), r2, r3);                                        \
+  }
+  S390_RRF_B_OPCODE_LIST(DECLARE_S390_RRF_B_INSTRUCTIONS);
+#undef DECLARE_S390_RRF_B_INSTRUCTIONS
+
+
+#define DECLARE_S390_RRF_C_INSTRUCTIONS(name, op_name, op_value)           \
+  template <class R1, class R2>                                            \
+  void name(Condition m3, Condition m4, R1 r1, R2 r2) {                    \
+    rrf_format(op_name, m3, m4, r1.code(), r2.code());                     \
+  }                                                                        \
+  template <class R1, class R2>                                            \
+  void name(Condition m3, R1 r1, R2 r2) {                                  \
+    name(m3, Condition(0), r1, r2);                                        \
+  }
+  S390_RRF_C_OPCODE_LIST(DECLARE_S390_RRF_C_INSTRUCTIONS);
+#undef DECLARE_S390_RRF_C_INSTRUCTIONS
+
+
+#define DECLARE_S390_RRF_D_INSTRUCTIONS(name, op_name, op_value)           \
+  template <class R1, class R2>                                            \
+  void name(Condition m3, Condition m4, R1 r1, R2 r2) {                    \
+    rrf_format(op_name, m3, m4, r1.code(), r2.code());                     \
+  }                                                                        \
+  template <class R1, class R2>                                            \
+  void name(Condition m3, R1 r1, R2 r2) {                                  \
+    name(m3, Condition(0), r1, r2);                                        \
+  }
+  S390_RRF_D_OPCODE_LIST(DECLARE_S390_RRF_D_INSTRUCTIONS);
+#undef DECLARE_S390_RRF_D_INSTRUCTIONS
+
+
+#define DECLARE_S390_RRF_E_INSTRUCTIONS(name, op_name, op_value)           \
+  template <class M3, class M4, class R1, class R2>                        \
+  void name(M3 m3, M4 m4, R1 r1, R2 r2) {                                  \
+    rrf_format(op_name, m3, m4, r1.code(), r2.code());                     \
+  }                                                                        \
+  template <class M3, class R1, class R2>                                  \
+  void name(M3 m3, R1 r1, R2 r2) {                                         \
+    name(m3, Condition(0), r1, r2);                                        \
+  }
+  S390_RRF_E_OPCODE_LIST(DECLARE_S390_RRF_E_INSTRUCTIONS);
+#undef DECLARE_S390_RRF_E_INSTRUCTIONS
+
+enum FIDBRA_FLAGS {
+  FIDBRA_CURRENT_ROUNDING_MODE = 0,
+  FIDBRA_ROUND_TO_NEAREST_AWAY_FROM_0 = 1,
+  // ...
+  FIDBRA_ROUND_TOWARD_0 = 5,
+  FIDBRA_ROUND_TOWARD_POS_INF = 6,
+  FIDBRA_ROUND_TOWARD_NEG_INF = 7
+};
+
+
+inline void rsi_format(Opcode op, int f1, int f2, int f3) {
+  DCHECK(is_uint8(op));
+  DCHECK(is_uint16(f3));
+  uint32_t code = getfield<uint32_t, 4, 0, 8>(op) |
+                  getfield<uint32_t, 4, 8, 12>(f1) |
+                  getfield<uint32_t, 4, 12, 16>(f2) |
+                  getfield<uint32_t, 4, 16, 32>(f3);
+  emit4bytes(code);
+}
+
+#define DECLARE_S390_RSI_INSTRUCTIONS(name, op_name, op_value)           \
+  void name(Register r1, Register r3, const Operand& i2) {               \
+    rsi_format(op_name, r1.code(), r3.code(), i2.immediate());           \
+  }
+  S390_RSI_OPCODE_LIST(DECLARE_S390_RSI_INSTRUCTIONS);
+#undef DECLARE_S390_RSI_INSTRUCTIONS
+
+
+inline void rsl_format(Opcode op, uint16_t f1, int f2, int f3, int f4,
+                       int f5) {
+  DCHECK(is_uint16(op));
+  uint64_t code = getfield<uint64_t, 6, 0, 8>(op >> 8) |
+                  getfield<uint64_t, 6, 8, 16>(f1) |
+                  getfield<uint64_t, 6, 16, 20>(f2) |
+                  getfield<uint64_t, 6, 20, 32>(f3) |
+                  getfield<uint64_t, 6, 32, 36>(f4) |
+                  getfield<uint64_t, 6, 36, 40>(f5) |
+                  getfield<uint64_t, 6, 40, 48>(op & 0x00FF);
+  emit6bytes(code);
+}
+
+#define DECLARE_S390_RSL_A_INSTRUCTIONS(name, op_name, op_value)         \
+  void name(const Operand& l1, Register b1, Disp d1) {                   \
+    uint16_t L = static_cast<uint16_t>(l1.immediate() << 8);             \
+    rsl_format(op_name, L, b1.code(), d1, 0, 0);                         \
+  }
+  S390_RSL_A_OPCODE_LIST(DECLARE_S390_RSL_A_INSTRUCTIONS);
+#undef DECLARE_S390_RSL_A_INSTRUCTIONS
+
+#define DECLARE_S390_RSL_B_INSTRUCTIONS(name, op_name, op_value)         \
+  void name(const Operand& l2, Register b2, Disp d2, Register r1,        \
+            Condition m3) {                                              \
+    uint16_t L = static_cast<uint16_t>(l2.immediate());                  \
+    rsl_format(op_name, L, b2.code(), d2, r1.code(), m3);                \
+  }
+  S390_RSL_B_OPCODE_LIST(DECLARE_S390_RSL_B_INSTRUCTIONS);
+#undef DECLARE_S390_RSL_B_INSTRUCTIONS
+
+
+inline void s_format(Opcode op, int f1, int f2) {
+  DCHECK_NE(op & 0xff00, 0);
+  DCHECK(is_uint12(f2));
+  uint32_t code = getfield<uint32_t, 4, 0, 16>(op) |
+                  getfield<uint32_t, 4, 16, 20>(f1) |
+                  getfield<uint32_t, 4, 20, 32>(f2);
+  emit4bytes(code);
+}
+
+#define DECLARE_S390_S_INSTRUCTIONS(name, op_name, op_value)             \
+  void name(Register b1, const Operand& d2) {                            \
+    Opcode op = op_name;                                                 \
+    if ((op & 0xFF00) == 0) {                                            \
+      op = (Opcode)(op << 8);                                            \
+    }                                                                    \
+    s_format(op, b1.code(), d2.immediate());                             \
+  }                                                                      \
+  void name(const MemOperand& opnd) {                                    \
+    Operand d2 = Operand(static_cast<intptr_t>(opnd.getDisplacement())); \
+    name(opnd.getBaseRegister(), d2);                                    \
+  }
+  S390_S_OPCODE_LIST(DECLARE_S390_S_INSTRUCTIONS);
+#undef DECLARE_S390_S_INSTRUCTIONS
+
+
+inline void si_format(Opcode op, int f1, int f2, int f3) {
+  uint32_t code = getfield<uint32_t, 4, 0, 8>(op) |
+                  getfield<uint32_t, 4, 8, 16>(f1) |
+                  getfield<uint32_t, 4, 16, 20>(f2) |
+                  getfield<uint32_t, 4, 20, 32>(f3);
+  emit4bytes(code);
+}
+
+#define DECLARE_S390_SI_INSTRUCTIONS(name, op_name, op_value)            \
+  void name(const Operand& i2, Register b1, Disp d1) {                   \
+    si_format(op_name, i2.immediate(), b1.code(), d1);                   \
+  }                                                                      \
+  void name(const MemOperand& opnd, const Operand& i2) {                 \
+    name(i2, opnd.getBaseRegister(), opnd.getDisplacement());            \
+  }
+  S390_SI_OPCODE_LIST(DECLARE_S390_SI_INSTRUCTIONS);
+#undef DECLARE_S390_SI_INSTRUCTIONS
+
+
+inline void siy_format(Opcode op, int f1, int f2, int f3) {
+  DCHECK(is_uint20(f3) || is_int20(f3));
+  DCHECK(is_uint16(op));
+  DCHECK(is_uint8(f1));
+  uint64_t code = getfield<uint64_t, 6, 0, 8>(op >> 8) |
+                  getfield<uint64_t, 6, 8, 16>(f1) |
+                  getfield<uint64_t, 6, 16, 20>(f2) |
+                  getfield<uint64_t, 6, 20, 32>(f3) |
+                  getfield<uint64_t, 6, 32, 40>(f3 >> 12) |
+                  getfield<uint64_t, 6, 40, 48>(op & 0x00FF);
+  emit6bytes(code);
+}
+
+#define DECLARE_S390_SIY_INSTRUCTIONS(name, op_name, op_value)           \
+  void name(const Operand& i2, Register b1, Disp d1) {                   \
+    siy_format(op_name, i2.immediate(), b1.code(), d1);                  \
+  }                                                                      \
+  void name(const MemOperand& opnd, const Operand& i2) {                 \
+    name(i2, opnd.getBaseRegister(), opnd.getDisplacement());            \
+  }
+  S390_SIY_OPCODE_LIST(DECLARE_S390_SIY_INSTRUCTIONS);
+#undef DECLARE_S390_SIY_INSTRUCTIONS
+
+
+inline void rrs_format(Opcode op, int f1, int f2, int f3, int f4, int f5) {
+  DCHECK(is_uint12(f4));
+  DCHECK(is_uint16(op));
+  uint64_t code = getfield<uint64_t, 6, 0, 8>(op >> 8) |
+                  getfield<uint64_t, 6, 8, 12>(f1) |
+                  getfield<uint64_t, 6, 12, 16>(f2) |
+                  getfield<uint64_t, 6, 16, 20>(f3) |
+                  getfield<uint64_t, 6, 20, 32>(f4) |
+                  getfield<uint64_t, 6, 32, 36>(f5) |
+                  getfield<uint64_t, 6, 40, 48>(op & 0x00FF);
+  emit6bytes(code);
+}
+
+#define DECLARE_S390_RRS_INSTRUCTIONS(name, op_name, op_value)           \
+  void name(Register r1, Register r2, Register b4, Disp d4,              \
+            Condition m3) {                                              \
+    rrs_format(op_name, r1.code(), r2.code(), b4.code(), d4, m3);        \
+  }                                                                      \
+  void name(Register r1, Register r2, Condition m3,                      \
+            const MemOperand& opnd) {                                    \
+    name(r1, r2, opnd.getBaseRegister(), opnd.getDisplacement(), m3);    \
+  }
+  S390_RRS_OPCODE_LIST(DECLARE_S390_RRS_INSTRUCTIONS);
+#undef DECLARE_S390_RRS_INSTRUCTIONS
+
+
+inline void ris_format(Opcode op, int f1, int f2, int f3, int f4, int f5) {
+  DCHECK(is_uint12(f3));
+  DCHECK(is_uint16(op));
+  DCHECK(is_uint8(f5));
+  uint64_t code = getfield<uint64_t, 6, 0, 8>(op >> 8) |
+                  getfield<uint64_t, 6, 8, 12>(f1) |
+                  getfield<uint64_t, 6, 12, 16>(f2) |
+                  getfield<uint64_t, 6, 16, 20>(f3) |
+                  getfield<uint64_t, 6, 20, 32>(f4) |
+                  getfield<uint64_t, 6, 32, 40>(f5) |
+                  getfield<uint64_t, 6, 40, 48>(op & 0x00FF);
+  emit6bytes(code);
+}
+
+#define DECLARE_S390_RIS_INSTRUCTIONS(name, op_name, op_value)           \
+  void name(Register r1, Condition m3, Register b4, Disp d4,             \
+                       const Operand& i2) {                              \
+    ris_format(op_name, r1.code(), m3, b4.code(), d4, i2.immediate());   \
+  }                                                                      \
+  void name(Register r1, const Operand& i2, Condition m3,                \
+                       const MemOperand& opnd) {                         \
+    name(r1, m3, opnd.getBaseRegister(), opnd.getDisplacement(), i2);    \
+  }
+  S390_RIS_OPCODE_LIST(DECLARE_S390_RIS_INSTRUCTIONS);
+#undef DECLARE_S390_RIS_INSTRUCTIONS
+
+
+inline void sil_format(Opcode op, int f1, int f2, int f3) {
+  DCHECK(is_uint12(f2));
+  DCHECK(is_uint16(op));
+  DCHECK(is_uint16(f3));
+  uint64_t code = getfield<uint64_t, 6, 0, 16>(op) |
+                  getfield<uint64_t, 6, 16, 20>(f1) |
+                  getfield<uint64_t, 6, 20, 32>(f2) |
+                  getfield<uint64_t, 6, 32, 48>(f3);
+  emit6bytes(code);
+}
+
+#define DECLARE_S390_SIL_INSTRUCTIONS(name, op_name, op_value)           \
+  void name(Register b1, Disp d1, const Operand& i2) {                   \
+    sil_format(op_name, b1.code(), d1, i2.immediate());                  \
+  }                                                                      \
+  void name(const MemOperand& opnd, const Operand& i2) {                 \
+    name(opnd.getBaseRegister(), opnd.getDisplacement(), i2);            \
+  }
+  S390_SIL_OPCODE_LIST(DECLARE_S390_SIL_INSTRUCTIONS);
+#undef DECLARE_S390_SIL_INSTRUCTIONS
+
+
+inline void rie_1_format(Opcode opcode, int f1, int f2, int f3, int f4) {
+  uint32_t op1 = opcode >> 8;
+  uint32_t op2 = opcode & 0xff;
+  uint64_t code = getfield<uint64_t, 6, 0, 8>(op1) |
+                  getfield<uint64_t, 6, 8, 12>(f1) |
+                  getfield<uint64_t, 6, 12, 16>(f2) |
+                  getfield<uint64_t, 6, 16, 32>(f3) |
+                  getfield<uint64_t, 6, 32, 36>(f4) |
+                  getfield<uint64_t, 6, 40, 48>(op2);
+  emit6bytes(code);
+}
+
+inline void rie_2_format(Opcode opcode, int f1, int f2, int f3, int f4) {
+  uint32_t op1 = opcode >> 8;
+  uint32_t op2 = opcode & 0xff;
+  uint64_t code = getfield<uint64_t, 6, 0, 8>(op1) |
+                  getfield<uint64_t, 6, 8, 12>(f1) |
+                  getfield<uint64_t, 6, 12, 16>(f2) |
+                  getfield<uint64_t, 6, 16, 32>(f3) |
+                  getfield<uint64_t, 6, 32, 40>(f4) |
+                  getfield<uint64_t, 6, 40, 48>(op2);
+  emit6bytes(code);
+}
+
+inline void rie_3_format(Opcode opcode, int f1, int f2, int f3, int f4,
+                         int f5) {
+  uint32_t op1 = opcode >> 8;
+  uint32_t op2 = opcode & 0xff;
+  uint64_t code = getfield<uint64_t, 6, 0, 8>(op1) |
+                  getfield<uint64_t, 6, 8, 12>(f1) |
+                  getfield<uint64_t, 6, 12, 16>(f2) |
+                  getfield<uint64_t, 6, 16, 24>(f3) |
+                  getfield<uint64_t, 6, 24, 32>(f4) |
+                  getfield<uint64_t, 6, 32, 40>(f5) |
+                  getfield<uint64_t, 6, 40, 48>(op2);
+  emit6bytes(code);
+}
+
+#define DECLARE_S390_RIE_D_INSTRUCTIONS(name, op_name, op_value)         \
+  void name(Register r1, Register r3, const Operand& i2) {               \
+    rie_2_format(op_name, r1.code(), r3.code(), i2.immediate(), 0);      \
+  }
+  S390_RIE_D_OPCODE_LIST(DECLARE_S390_RIE_D_INSTRUCTIONS)
+#undef DECLARE_S390_RIE_D_INSTRUCTIONS
+
 
   // Helper for unconditional branch to Label with update to save register
   void b(Register r, Label* l) {
@@ -961,82 +1342,17 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
 
 #define RR2_FORM(name) void name(Condition m1, Register r2)
 
-#define RI1_FORM(name) void name(Register r, const Operand& i)
-
-#define RI2_FORM(name) void name(Condition m, const Operand& i)
-
-#define RIE_FORM(name) void name(Register r1, Register R3, const Operand& i)
-
 #define RIE_F_FORM(name)                                                    \
   void name(Register r1, Register r2, const Operand& i3, const Operand& i4, \
             const Operand& i5)
-
-#define RXE_FORM(name)                            \
-  void name(Register r1, const MemOperand& opnd); \
-  void name(Register r1, Register b2, Register x2, Disp d2)
 
 #define RXF_FORM(name)                                         \
   void name(Register r1, Register r3, const MemOperand& opnd); \
   void name(Register r1, Register r3, Register b2, Register x2, Disp d2)
 
-#define RSI_FORM(name) void name(Register r1, Register r3, const Operand& i)
-
-#define RIS_FORM(name)                                       \
-  void name(Register r1, Condition m3, Register b4, Disp d4, \
-            const Operand& i2);                              \
-  void name(Register r1, const Operand& i2, Condition m3,    \
-            const MemOperand& opnd)
-
-#define SI_FORM(name)                                  \
-  void name(const MemOperand& opnd, const Operand& i); \
-  void name(const Operand& i2, Register b1, Disp d1)
-
-#define SIL_FORM(name)                                \
-  void name(Register b1, Disp d1, const Operand& i2); \
-  void name(const MemOperand& opnd, const Operand& i2)
-
-#define RRF1_FORM(name) void name(Register r1, Register r2, Register r3)
-
-#define RRF2_FORM(name) void name(Condition m1, Register r1, Register r2)
-
-#define RRF3_FORM(name) \
-  void name(Register r3, Condition m4, Register r1, Register r2)
-
-#define RS1_FORM(name)                                         \
-  void name(Register r1, Register r3, const MemOperand& opnd); \
-  void name(Register r1, Register r3, Register b2, Disp d2)
-
-#define RS2_FORM(name)                                          \
-  void name(Register r1, Condition m3, const MemOperand& opnd); \
-  void name(Register r1, Condition m3, Register b2, Disp d2)
-
 #define RSE_FORM(name)                                         \
   void name(Register r1, Register r3, const MemOperand& opnd); \
   void name(Register r1, Register r3, Register b2, Disp d2)
-
-#define RSL_FORM(name)                       \
-  void name(Length l, Register b2, Disp d2); \
-  void name(const MemOperand& opnd)
-
-#define RSY1_FORM(name)                                      \
-  void name(Register r1, Register r3, Register b2, Disp d2); \
-  void name(Register r1, Register r3, const MemOperand& opnd)
-
-#define RSY2_FORM(name)                                       \
-  void name(Register r1, Condition m3, Register b2, Disp d2); \
-  void name(Register r1, Condition m3, const MemOperand& opnd)
-
-#define RRS_FORM(name)                                                     \
-  void name(Register r1, Register r2, Register b4, Disp d4, Condition m3); \
-  void name(Register r1, Register r2, Condition m3, const MemOperand& opnd)
-
-#define S_FORM(name)               \
-  void name(Register b2, Disp d2); \
-  void name(const MemOperand& opnd)
-
-#define SIY_FORM(name)                                \
-  void name(const Operand& i2, Register b1, Disp d1); \
-  void name(const MemOperand& opnd, const Operand& i)
 
 #define SS1_FORM(name)                                                  \
   void name(Register b1, Disp d1, Register b3, Disp d2, Length length); \
@@ -1120,81 +1436,19 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
   }
 
   // S390 instruction sets
-  RXE_FORM(ddb);
   SS1_FORM(ed);
-  RRF2_FORM(fidbr);
-  RI1_FORM(iihh);
-  RI1_FORM(iihl);
-  RI1_FORM(iilh);
-  RI1_FORM(iill);
-  RSY1_FORM(loc);
-  RXE_FORM(mdb);
   SS4_FORM(mvck);
   SSF_FORM(mvcos);
   SS4_FORM(mvcs);
   SS1_FORM(mvn);
   SS1_FORM(nc);
-  SI_FORM(ni);
-  RI1_FORM(nilh);
-  RI1_FORM(nill);
-  RI1_FORM(oill);
-  RXE_FORM(sdb);
-  RS1_FORM(srdl);
-  RI1_FORM(tmll);
   SS1_FORM(tr);
-  S_FORM(ts);
 
   // Load Address Instructions
   void larl(Register r, Label* l);
 
-  // Load Instructions
-  void lhi(Register r, const Operand& imm);
-  void lghi(Register r, const Operand& imm);
-
-  // Load Multiple Instructions
-  void lm(Register r1, Register r2, const MemOperand& src);
-
-  // Load On Condition Instructions
-  void locr(Condition m3, Register r1, Register r2);
-  void locgr(Condition m3, Register r1, Register r2);
-
-  // Store Instructions
-
-  // Store Multiple Instructions
-  void stm(Register r1, Register r2, const MemOperand& src);
-
-  // Compare Instructions
-  void chi(Register r, const Operand& opnd);
-  void cghi(Register r, const Operand& opnd);
-
   // Compare Logical Instructions
-  void cli(const MemOperand& mem, const Operand& imm);
-  void cliy(const MemOperand& mem, const Operand& imm);
   void clc(const MemOperand& opnd1, const MemOperand& opnd2, Length length);
-
-  // Compare and Swap Instructions
-  void cs(Register r1, Register r2, const MemOperand& src);
-
-  // Test Under Mask Instructions
-  void tm(const MemOperand& mem, const Operand& imm);
-  void tmy(const MemOperand& mem, const Operand& imm);
-
-  // Shift Instructions (32)
-  void sll(Register r1, Register opnd);
-  void sll(Register r1, const Operand& opnd);
-  void srl(Register r1, Register opnd);
-  void srl(Register r1, const Operand& opnd);
-  void sra(Register r1, Register opnd);
-  void sra(Register r1, const Operand& opnd);
-  void sla(Register r1, Register opnd);
-  void sla(Register r1, const Operand& opnd);
-
-  // Shift Instructions (64)
-  void srda(Register r1, const Operand& opnd);
-  void srdl(Register r1, const Operand& opnd);
-  void sldl(Register r1, Register b2, const Operand& opnd);
-  void srdl(Register r1, Register b2, const Operand& opnd);
-  void srda(Register r1, Register b2, const Operand& opnd);
 
   // Rotate and Insert Selected Bits
   void risbg(Register dst, Register src, const Operand& startBit,
@@ -1207,112 +1461,8 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
   // Move Character (Mem to Mem)
   void mvc(const MemOperand& opnd1, const MemOperand& opnd2, uint32_t length);
 
-  // Branch Instructions
-  void bras(Register r, const Operand& opnd);
-  void brc(Condition c, const Operand& opnd);
-  void brct(Register r1, const Operand& opnd);
-  void brctg(Register r1, const Operand& opnd);
-
-  // 32-bit Add Instructions
-  void ahi(Register r1, const Operand& opnd);
-  void ahik(Register r1, Register r3, const Operand& opnd);
-  void ark(Register r1, Register r2, Register r3);
-  void asi(const MemOperand&, const Operand&);
-
-  // 64-bit Add Instructions
-  void aghi(Register r1, const Operand& opnd);
-  void aghik(Register r1, Register r3, const Operand& opnd);
-  void agrk(Register r1, Register r2, Register r3);
-  void agsi(const MemOperand&, const Operand&);
-
-  // 32-bit Add Logical Instructions
-  void alrk(Register r1, Register r2, Register r3);
-
-  // 64-bit Add Logical Instructions
-  void algrk(Register r1, Register r2, Register r3);
-
-  // 32-bit Subtract Instructions
-  void srk(Register r1, Register r2, Register r3);
-
-  // 64-bit Subtract Instructions
-  void sgrk(Register r1, Register r2, Register r3);
-
-  // 32-bit Subtract Logical Instructions
-  void slrk(Register r1, Register r2, Register r3);
-
-  // 64-bit Subtract Logical Instructions
-  void slgrk(Register r1, Register r2, Register r3);
-
-  // 32-bit Multiply Instructions
-  void mhi(Register r1, const Operand& opnd);
-  void msrkc(Register r1, Register r2, Register r3);
-  void msgrkc(Register r1, Register r2, Register r3);
-
-  // 64-bit Multiply Instructions
-  void mghi(Register r1, const Operand& opnd);
-
   // Bitwise Instructions (AND / OR / XOR)
-  void nrk(Register r1, Register r2, Register r3);
-  void ngrk(Register r1, Register r2, Register r3);
-  void ork(Register r1, Register r2, Register r3);
-  void ogrk(Register r1, Register r2, Register r3);
-  void xrk(Register r1, Register r2, Register r3);
-  void xgrk(Register r1, Register r2, Register r3);
   void xc(const MemOperand& opnd1, const MemOperand& opnd2, Length length);
-
-  // Floating <-> Fixed Point Conversion Instructions
-  void cdlfbr(Condition m3, Condition m4, DoubleRegister fltReg,
-              Register fixReg);
-  void cdlgbr(Condition m3, Condition m4, DoubleRegister fltReg,
-              Register fixReg);
-  void celgbr(Condition m3, Condition m4, DoubleRegister fltReg,
-              Register fixReg);
-  void celfbr(Condition m3, Condition m4, DoubleRegister fltReg,
-              Register fixReg);
-  void clfdbr(Condition m3, Condition m4, Register fixReg,
-              DoubleRegister fltReg);
-  void clfebr(Condition m3, Condition m4, Register fixReg,
-              DoubleRegister fltReg);
-  void clgdbr(Condition m3, Condition m4, Register fixReg,
-              DoubleRegister fltReg);
-  void clgebr(Condition m3, Condition m4, Register fixReg,
-              DoubleRegister fltReg);
-  void cfdbr(Condition m, Register fixReg, DoubleRegister fltReg);
-  void cgebr(Condition m, Register fixReg, DoubleRegister fltReg);
-  void cgdbr(Condition m, Register fixReg, DoubleRegister fltReg);
-  void cfebr(Condition m3, Register fixReg, DoubleRegister fltReg);
-  void cefbr(Condition m3, DoubleRegister fltReg, Register fixReg);
-
-  // Floating Point Compare Instructions
-  void cdb(DoubleRegister r1, const MemOperand& opnd);
-  void ceb(DoubleRegister r1, const MemOperand& opnd);
-
-  // Floating Point Arithmetic Instructions
-  void adb(DoubleRegister r1, const MemOperand& opnd);
-  void aeb(DoubleRegister r1, const MemOperand& opnd);
-  void sdb(DoubleRegister r1, const MemOperand& opnd);
-  void seb(DoubleRegister r1, const MemOperand& opnd);
-  void mdb(DoubleRegister r1, const MemOperand& opnd);
-  void meeb(DoubleRegister r1, const MemOperand& opnd);
-  void ddb(DoubleRegister r1, const MemOperand& opnd);
-  void deb(DoubleRegister r1, const MemOperand& opnd);
-  void sqdb(DoubleRegister r1, const MemOperand& opnd);
-  void ldeb(DoubleRegister r1, const MemOperand& opnd);
-
-  enum FIDBRA_MASK3 {
-    FIDBRA_CURRENT_ROUNDING_MODE = 0,
-    FIDBRA_ROUND_TO_NEAREST_AWAY_FROM_0 = 1,
-    // ...
-    FIDBRA_ROUND_TOWARD_0 = 5,
-    FIDBRA_ROUND_TOWARD_POS_INF = 6,
-    FIDBRA_ROUND_TOWARD_NEG_INF = 7
-  };
-  void fiebra(DoubleRegister d1, DoubleRegister d2, FIDBRA_MASK3 m3);
-  void fidbra(DoubleRegister d1, DoubleRegister d2, FIDBRA_MASK3 m3);
-
-  // Move integer
-  void mvhi(const MemOperand& opnd1, const Operand& i2);
-  void mvghi(const MemOperand& opnd1, const Operand& i2);
 
   // Exception-generating instructions and debugging support
   void stop(const char* msg, Condition cond = al,
@@ -1515,45 +1665,11 @@ inline void rsy_form(Opcode op, int f1, int f2, int f3, const int f4) {
 
   inline void rr2_form(uint8_t op, Condition m1, Register r2);
 
-  inline void ri_form(Opcode op, Register r1, const Operand& i2);
-  inline void ri_form(Opcode op, Condition m1, const Operand& i2);
-
-  inline void rie_form(Opcode op, Register r1, Register r3, const Operand& i2);
   inline void rie_f_form(Opcode op, Register r1, Register r2, const Operand& i3,
                          const Operand& i4, const Operand& i5);
 
-  inline void ris_form(Opcode op, Register r1, Condition m3, Register b4,
-                       Disp d4, const Operand& i2);
-
-  inline void rrf1_form(Opcode op, Register r1, Register r2, Register r3);
-  inline void rrf1_form(uint32_t x);
-  inline void rrf2_form(uint32_t x);
-  inline void rrf3_form(uint32_t x);
-  inline void rrfe_form(Opcode op, Condition m3, Condition m4, Register r1,
-                        Register r2);
-
-  inline void rrs_form(Opcode op, Register r1, Register r2, Register b4,
-                       Disp d4, Condition m3);
-
-  inline void rs_form(Opcode op, Register r1, Condition m3, Register b2,
-                      const Disp d2);
-  inline void rs_form(Opcode op, Register r1, Register r3, Register b2,
-                      const Disp d2);
-
-  inline void rsi_form(Opcode op, Register r1, Register r3, const Operand& i2);
-  inline void rsl_form(Opcode op, Length l1, Register b2, Disp d2);
-  inline void rxe_form(Opcode op, Register r1, Register x2, Register b2,
-                       Disp d2);
-
   inline void rxf_form(Opcode op, Register r1, Register r3, Register b2,
                        Register x2, Disp d2);
-
-  inline void s_form(Opcode op, Register b1, Disp d2);
-
-  inline void si_form(Opcode op, const Operand& i2, Register b1, Disp d1);
-  inline void siy_form(Opcode op, const Operand& i2, Register b1, Disp d1);
-
-  inline void sil_form(Opcode op, Register b1, Disp d1, const Operand& i2);
 
   inline void ss_form(Opcode op, Length l, Register b1, Disp d1, Register b2,
                       Disp d2);
