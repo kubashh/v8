@@ -810,7 +810,7 @@ void NativeModule::UnpackAndRegisterProtectedInstructions() {
   }
 }
 
-void NativeModule::ReleaseProtectedInstructions() {
+void NativeModule::ReleaseProtectedInstructions() const {
   for (uint32_t i = num_imported_functions(), e = function_count(); i < e;
        ++i) {
     WasmCode* wasm_code = code(i);
