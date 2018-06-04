@@ -533,7 +533,7 @@ const wasm::WasmCode* LazyCompileFunction(
                            CStrVector(func_name.c_str()), func_index,
                            CodeFactory::CEntry(isolate));
   unit.ExecuteCompilation();
-  wasm::WasmCode* wasm_code = unit.FinishCompilation(&thrower);
+  const wasm::WasmCode* wasm_code = unit.FinishCompilation(&thrower);
 
   if (wasm::WasmCode::ShouldBeLogged(isolate)) wasm_code->LogCode(isolate);
 
@@ -1073,7 +1073,7 @@ void FinishCompilationUnits(CompilationState* compilation_state,
     std::unique_ptr<WasmCompilationUnit> unit =
         compilation_state->GetNextExecutedUnit();
     if (unit == nullptr) break;
-    wasm::WasmCode* result = unit->FinishCompilation(thrower);
+    const wasm::WasmCode* result = unit->FinishCompilation(thrower);
 
     if (thrower->error()) {
       compilation_state->Abort();
@@ -1254,7 +1254,7 @@ void CompileSequentially(Isolate* isolate, NativeModule* native_module,
     if (func.imported) continue;  // Imports are compiled at instantiation time.
 
     // Compile the function.
-    wasm::WasmCode* code = WasmCompilationUnit::CompileWasmFunction(
+    const wasm::WasmCode* code = WasmCompilationUnit::CompileWasmFunction(
         native_module, thrower, isolate, wire_bytes, module_env, &func);
     if (code == nullptr) {
       TruncatedUserString<> name(wire_bytes.GetName(&func, module));
@@ -1455,7 +1455,7 @@ class FinishCompileTask : public CancelableTask {
       }
 
       ErrorThrower thrower(compilation_state_->isolate(), "AsyncCompile");
-      wasm::WasmCode* result = unit->FinishCompilation(&thrower);
+      const wasm::WasmCode* result = unit->FinishCompilation(&thrower);
 
       NativeModule* native_module = unit->native_module();
       if (thrower.error()) {

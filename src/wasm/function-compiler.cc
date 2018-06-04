@@ -89,9 +89,9 @@ void WasmCompilationUnit::ExecuteCompilation() {
   }
 }
 
-wasm::WasmCode* WasmCompilationUnit::FinishCompilation(
+const wasm::WasmCode* WasmCompilationUnit::FinishCompilation(
     wasm::ErrorThrower* thrower) {
-  wasm::WasmCode* ret;
+  const wasm::WasmCode* ret;
   switch (mode_) {
     case CompilationMode::kLiftoff:
       ret = liftoff_unit_->FinishCompilation(thrower);
@@ -130,7 +130,7 @@ void WasmCompilationUnit::SwitchMode(CompilationMode new_mode) {
 }
 
 // static
-wasm::WasmCode* WasmCompilationUnit::CompileWasmFunction(
+const wasm::WasmCode* WasmCompilationUnit::CompileWasmFunction(
     wasm::NativeModule* native_module, wasm::ErrorThrower* thrower,
     Isolate* isolate, const wasm::ModuleWireBytes& wire_bytes, ModuleEnv* env,
     const wasm::WasmFunction* function, CompilationMode mode) {

@@ -85,7 +85,7 @@ class TurbofanWasmCompilationUnit {
 
   void ExecuteCompilation();
 
-  wasm::WasmCode* FinishCompilation(wasm::ErrorThrower*);
+  const wasm::WasmCode* FinishCompilation(wasm::ErrorThrower*);
 
  private:
   wasm::WasmCompilationUnit* const wasm_unit_;

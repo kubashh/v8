@@ -70,9 +70,9 @@ class WasmCompilationUnit final {
   ~WasmCompilationUnit();
 
   void ExecuteCompilation();
-  wasm::WasmCode* FinishCompilation(wasm::ErrorThrower* thrower);
+  const wasm::WasmCode* FinishCompilation(wasm::ErrorThrower* thrower);
 
-  static wasm::WasmCode* CompileWasmFunction(
+  static const wasm::WasmCode* CompileWasmFunction(
       wasm::NativeModule* native_module, wasm::ErrorThrower* thrower,
       Isolate* isolate, const wasm::ModuleWireBytes& wire_bytes, ModuleEnv* env,
       const wasm::WasmFunction* function,

@@ -440,7 +440,7 @@ void WasmFunctionCompiler::Build(const byte* start, const byte* end) {
                            CodeFactory::CEntry(isolate(), 1), comp_mode,
                            isolate()->counters(), builder_->lower_simd());
   unit.ExecuteCompilation();
-  wasm::WasmCode* wasm_code = unit.FinishCompilation(&thrower);
+  const wasm::WasmCode* wasm_code = unit.FinishCompilation(&thrower);
   if (wasm::WasmCode::ShouldBeLogged(isolate())) {
     wasm_code->LogCode(isolate());
   }

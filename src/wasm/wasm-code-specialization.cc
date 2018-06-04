@@ -127,7 +127,7 @@ bool CodeSpecialization::ApplyToWholeModule(
   return changed;
 }
 
-bool CodeSpecialization::ApplyToWasmCode(wasm::WasmCode* code,
+bool CodeSpecialization::ApplyToWasmCode(const wasm::WasmCode* code,
                                          ICacheFlushMode icache_flush_mode) {
   DisallowHeapAllocation no_gc;
   DCHECK_EQ(wasm::WasmCode::kFunction, code->kind());

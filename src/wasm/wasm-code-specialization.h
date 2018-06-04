@@ -34,7 +34,7 @@ class CodeSpecialization {
   bool ApplyToWholeModule(NativeModule*, Handle<WasmModuleObject>,
                           ICacheFlushMode = FLUSH_ICACHE_IF_NEEDED);
   // Apply all relocations and patching to one wasm code object.
-  bool ApplyToWasmCode(wasm::WasmCode*,
+  bool ApplyToWasmCode(const wasm::WasmCode*,
                        ICacheFlushMode = FLUSH_ICACHE_IF_NEEDED);
 
  private:

@@ -192,11 +192,7 @@ size_t WasmCode::trap_handler_index() const {
   return static_cast<size_t>(trap_handler_index_);
 }
 
-void WasmCode::set_trap_handler_index(size_t value) {
-  trap_handler_index_ = value;
-}
-
-void WasmCode::RegisterTrapHandlerData() {
+void WasmCode::RegisterTrapHandlerData() const {
   if (kind() != wasm::WasmCode::kFunction) return;
   if (HasTrapHandlerIndex()) return;
 
@@ -209,7 +205,7 @@ void WasmCode::RegisterTrapHandlerData() {
 
   // TODO(eholk): if index is negative, fail.
   CHECK_LE(0, index);
-  set_trap_handler_index(static_cast<size_t>(index));
+  trap_handler_index_ = static_cast<size_t>(index);
 }
 
 bool WasmCode::HasTrapHandlerIndex() const { return trap_handler_index_ >= 0; }
