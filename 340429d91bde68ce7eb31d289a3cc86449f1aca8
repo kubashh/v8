@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c5de2d79_ab28f088",
+        "filename": "src/code-reference.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2018-06-04T12:49:58Z",
+      "side": 1,
+      "message": "As discussed offline, made it a CHECK to fail early.",
+      "parentUuid": "4117bc7d_a734954e",
+      "range": {
+        "startLine": 39,
+        "startChar": 11,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "340429d91bde68ce7eb31d289a3cc86449f1aca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6cdc975_af9bb78c",
         "filename": "src/code-reference.h",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "340429d91bde68ce7eb31d289a3cc86449f1aca8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a7334a7_d1da6e18",
+        "filename": "src/code-reference.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2018-06-04T12:49:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6cdc975_af9bb78c",
+      "range": {
+        "startLine": 43,
+        "startChar": 11,
+        "endLine": 43,
+        "endChar": 24
+      },
+      "revId": "340429d91bde68ce7eb31d289a3cc86449f1aca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
