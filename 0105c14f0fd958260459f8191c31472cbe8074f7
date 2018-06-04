@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edd75855_dbec9ebd",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-04T09:19:42Z",
+      "side": 1,
+      "message": "I\u0027d suggest staying consistent with the other ToInteger conversions above and adding \u0027int dt \u003d FastD2I(date)\u0027 here. That\u0027s also closer to the spec.",
+      "revId": "0105c14f0fd958260459f8191c31472cbe8074f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
