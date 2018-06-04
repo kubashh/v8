@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4117bc7d_a734954e",
+        "filename": "src/code-reference.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-04T12:00:07Z",
+      "side": 1,
+      "message": "nit: Instead of returning an empty handle we should DCHECK_EQ(JS, kind_) instead.",
+      "range": {
+        "startLine": 39,
+        "startChar": 11,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "340429d91bde68ce7eb31d289a3cc86449f1aca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6cdc975_af9bb78c",
+        "filename": "src/code-reference.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-04T12:00:07Z",
+      "side": 1,
+      "message": "nit: Instead of returning {nullptr} we should DCHECK_EQ(WASM, kind_) instead.",
+      "range": {
+        "startLine": 43,
+        "startChar": 11,
+        "endLine": 43,
+        "endChar": 24
+      },
+      "revId": "340429d91bde68ce7eb31d289a3cc86449f1aca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
