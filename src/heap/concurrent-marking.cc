@@ -212,14 +212,6 @@ class ConcurrentMarkingVisitor final
     return size;
   }
 
-  int VisitSlicedString(Map* map, SlicedString* object) {
-    int size = SlicedString::BodyDescriptor::SizeOf(map, object);
-    const SlotSnapshot& snapshot = MakeSlotSnapshot(map, object, size);
-    if (!ShouldVisit(object)) return 0;
-    VisitPointersInSnapshot(object, snapshot);
-    return size;
-  }
-
   int VisitThinString(Map* map, ThinString* object) {
     int size = ThinString::BodyDescriptor::SizeOf(map, object);
     const SlotSnapshot& snapshot = MakeSlotSnapshot(map, object, size);
@@ -329,6 +321,23 @@ class ConcurrentMarkingVisitor final
     TransitionArray::BodyDescriptor::IterateBody(map, array, size, this);
     weak_objects_->transition_arrays.Push(task_id_, array);
     return size;
+  }
+
+  int VisitSlicedString(Map* map, SlicedString* string) {
+    if (!ShouldVisit(string)) return 0;
+    VisitMapPointer(string, string->map_slot());
+    String* parent = string->parent();
+    if (marking_state_.IsBlackOrGrey(parent)) {
+      // Sliced strings with live parents are directly processed here to reduce
+      // the processing time of sliced strings during the main GC pause.
+      Object** slot = HeapObject::RawField(string, SlicedString::kParentOffset);
+      MarkCompactCollector::RecordSlot(string, slot, *slot);
+    } else {
+      // If we do not know about liveness of values of the parent, we have to
+      // process it when we know the liveness of the whole transitive closure.
+      weak_objects_->sliced_strings.Push(task_id_, string);
+    }
+    return SlicedString::BodyDescriptor::SizeOf(map, string);
   }
 
   int VisitWeakCell(Map* map, WeakCell* object) {
@@ -575,6 +584,7 @@ void ConcurrentMarking::Run(int task_id, TaskState* task_state) {
 
     weak_objects_->weak_cells.FlushToGlobal(task_id);
     weak_objects_->transition_arrays.FlushToGlobal(task_id);
+    weak_objects_->sliced_strings.FlushToGlobal(task_id);
     weak_objects_->weak_references.FlushToGlobal(task_id);
     base::AsAtomicWord::Relaxed_Store<size_t>(&task_state->marked_bytes, 0);
     total_marked_bytes_ += marked_bytes;

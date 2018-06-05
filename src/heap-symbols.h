@@ -307,6 +307,7 @@
   F(MC_CLEAR_STORE_BUFFER)                           \
   F(MC_CLEAR_STRING_TABLE)                           \
   F(MC_CLEAR_WEAK_CELLS)                             \
+  F(MC_PROCESS_SLICED_STRINGS)                       \
   F(MC_CLEAR_WEAK_COLLECTIONS)                       \
   F(MC_CLEAR_WEAK_LISTS)                             \
   F(MC_CLEAR_WEAK_REFERENCES)                        \

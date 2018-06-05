@@ -415,6 +415,8 @@ class MajorNonAtomicMarkingState final
 struct WeakObjects {
   Worklist<WeakCell*, 64> weak_cells;
   Worklist<TransitionArray*, 64> transition_arrays;
+  // TODO(leszeks): I don't this this really belongs here...
+  Worklist<SlicedString*, 64> sliced_strings;
   // TODO(marja): For old space, we only need the slot, not the host
   // object. Optimize this by adding a different storage for old space.
   Worklist<std::pair<HeapObject*, HeapObjectReference**>, 64> weak_references;
@@ -616,6 +618,10 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
                                             std::make_pair(object, code));
   }
 
+  void AddSlicedString(SlicedString* string) {
+    weak_objects_.sliced_strings.Push(kMainThread, string);
+  }
+
   Sweeper* sweeper() { return sweeper_; }
 
 #ifdef DEBUG
@@ -718,6 +724,8 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   // We have to remove all encountered weak maps from the list of weak
   // collections when incremental marking is aborted.
   void AbortWeakCollections();
+
+  void ProcessSlicedStrings();
 
   // Goes through the list of encountered weak cells and clears those with
   // dead values. If the value is a dead map and the parent map transitions to
@@ -829,6 +837,7 @@ class MarkingVisitor final
   V8_INLINE int VisitMap(Map* map, Map* object);
   V8_INLINE int VisitNativeContext(Map* map, Context* object);
   V8_INLINE int VisitTransitionArray(Map* map, TransitionArray* object);
+  V8_INLINE int VisitSlicedString(Map* map, SlicedString* object);
   V8_INLINE int VisitWeakCell(Map* map, WeakCell* object);
 
   // ObjectVisitor implementation.

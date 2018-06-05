@@ -418,7 +418,6 @@ void MarkCompactCollector::AddEvacuationCandidate(Page* p) {
   evacuation_candidates_.push_back(p);
 }
 
-
 static void TraceFragmentation(PagedSpace* space) {
   int number_of_pages = space->CountTotalPages();
   intptr_t reserved = (number_of_pages * space->AreaSize());
@@ -487,14 +486,12 @@ void MarkCompactCollector::VerifyMarkbitsAreClean(PagedSpace* space) {
   }
 }
 
-
 void MarkCompactCollector::VerifyMarkbitsAreClean(NewSpace* space) {
   for (Page* p : PageRange(space->first_allocatable_address(), space->top())) {
     CHECK(non_atomic_marking_state()->bitmap(p)->IsClean());
     CHECK_EQ(0, non_atomic_marking_state()->live_bytes(p));
   }
 }
-
 
 void MarkCompactCollector::VerifyMarkbitsAreClean() {
   VerifyMarkbitsAreClean(heap_->old_space());
@@ -526,7 +523,6 @@ void MarkCompactCollector::ClearMarkbitsInNewSpace(NewSpace* space) {
     non_atomic_marking_state()->ClearLiveness(p);
   }
 }
-
 
 void MarkCompactCollector::ClearMarkbits() {
   ClearMarkbitsInPagedSpace(heap_->code_space());
@@ -741,7 +737,6 @@ void MarkCompactCollector::CollectEvacuationCandidates(PagedSpace* space) {
   }
 }
 
-
 void MarkCompactCollector::AbortCompaction() {
   if (compacting_) {
     RememberedSet<OLD_TO_OLD>::ClearAll(heap());
@@ -753,7 +748,6 @@ void MarkCompactCollector::AbortCompaction() {
   }
   DCHECK(evacuation_candidates_.empty());
 }
-
 
 void MarkCompactCollector::Prepare() {
   was_marked_incrementally_ = heap()->incremental_marking()->IsMarking();
@@ -970,9 +964,7 @@ class InternalizedStringTableCleaner : public ObjectVisitor {
     UNREACHABLE();
   }
 
-  int PointersRemoved() {
-    return pointers_removed_;
-  }
+  int PointersRemoved() { return pointers_removed_; }
 
  private:
   Heap* heap_;
@@ -1636,6 +1628,12 @@ void MarkCompactCollector::MarkLiveObjects() {
     }
   }
 
+  {
+    TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_PROCESS_SLICED_STRINGS);
+    ProcessSlicedStrings();
+    ProcessMarkingWorklist();
+  }
+
   if (was_marked_incrementally_) {
     heap()->incremental_marking()->Deactivate();
   }
@@ -1682,6 +1680,7 @@ void MarkCompactCollector::ClearNonLiveReferences() {
 
   DCHECK(weak_objects_.weak_cells.IsGlobalEmpty());
   DCHECK(weak_objects_.transition_arrays.IsGlobalEmpty());
+  DCHECK(weak_objects_.sliced_strings.IsGlobalEmpty());
   DCHECK(weak_objects_.weak_references.IsGlobalEmpty());
   DCHECK(weak_objects_.weak_objects_in_code.IsGlobalEmpty());
 }
@@ -1957,6 +1956,147 @@ void MarkCompactCollector::ClearWeakCells() {
   }
 }
 
+void MarkCompactCollector::ProcessSlicedStrings() {
+  struct Entry {
+    std::vector<SlicedString*> copy_candidates;
+    int size_budget;
+  };
+  std::unordered_map<String*, Entry> copy_candidates;
+
+  bool add_to_list = isolate()->flattenable_sliced_strings().empty();
+
+  SlicedString* sliced_string;
+  while (weak_objects_.sliced_strings.Pop(kMainThread, &sliced_string)) {
+    String* parent = sliced_string->parent();
+    if (add_to_list && !non_atomic_marking_state()->IsBlackOrGrey(parent)) {
+      auto& parent_entry = copy_candidates[parent];
+      if (parent_entry.size_budget == 0) {
+        DCHECK(parent_entry.copy_candidates.empty());
+        DCHECK_GT(parent->length(), 0);
+        parent_entry.size_budget = parent->length();
+      }
+      int length = sliced_string->length();
+      if (parent_entry.size_budget > length) {
+        parent_entry.copy_candidates.push_back(sliced_string);
+        parent_entry.size_budget -= length;
+      } else {
+        parent_entry.size_budget = -1;
+        // Keep the parent of the sliced string alive.
+        Object** slot =
+            HeapObject::RawField(sliced_string, SlicedString::kParentOffset);
+        RecordSlot(sliced_string, slot, *slot);
+        MarkObject(sliced_string, parent);
+      }
+    } else {
+      // Keep the parent of the sliced string alive.
+      Object** slot =
+          HeapObject::RawField(sliced_string, SlicedString::kParentOffset);
+      RecordSlot(sliced_string, slot, *slot);
+      MarkObject(sliced_string, parent);
+    }
+  }
+
+  if (!add_to_list) return;
+
+  for (const auto& kv : copy_candidates) {
+    String* parent = kv.first;
+    const Entry& entry = kv.second;
+    if (entry.size_budget > 0) {
+      for (SlicedString* sliced_string : entry.copy_candidates) {
+        isolate()->flattenable_sliced_strings().push_back(
+            isolate()->global_handles()->Create(sliced_string));
+
+        // Keep the parent of the sliced string alive for now.
+        Object** slot =
+            HeapObject::RawField(sliced_string, SlicedString::kParentOffset);
+        RecordSlot(sliced_string, slot, *slot);
+        MarkObject(sliced_string, parent);
+      }
+    } else {
+      for (SlicedString* sliced_string : entry.copy_candidates) {
+        // Keep the parent of the sliced string alive.
+        Object** slot =
+            HeapObject::RawField(sliced_string, SlicedString::kParentOffset);
+        RecordSlot(sliced_string, slot, *slot);
+        MarkObject(sliced_string, parent);
+      }
+    }
+  }
+
+  if (isolate()->flattenable_sliced_strings().empty()) return;
+
+  class SlicedStringFlatten : public Task {
+   public:
+    explicit SlicedStringFlatten(Isolate* isolate) : isolate_(isolate) {}
+
+    // TODO(leszeks): Move to string.h
+    static Handle<String> Flatten(Handle<SlicedString> sliced_string,
+                                  Isolate* isolate) {
+      int length = sliced_string->length();
+      if (sliced_string->IsOneByteRepresentation()) {
+        Handle<SeqOneByteString> result =
+            isolate->factory()
+                ->NewRawOneByteString(sliced_string->length())
+                .ToHandleChecked();
+        uint8_t* dest = result->GetChars();
+        DisallowHeapAllocation no_gc;
+        String::WriteToFlat(*sliced_string, dest, 0, length);
+        return result;
+      } else {
+        Handle<SeqTwoByteString> result =
+            isolate->factory()->NewRawTwoByteString(length).ToHandleChecked();
+        uc16* dest = result->GetChars();
+        DisallowHeapAllocation no_gc;
+        String::WriteToFlat(*sliced_string, dest, 0, length);
+        return result;
+      }
+    }
+
+    void Run() override {
+      AllowHeapAllocation yes_alloc;
+      HandleScope handle_scope(isolate_);
+      for (Handle<SlicedString>& sliced_string :
+           isolate_->flattenable_sliced_strings()) {
+        Handle<String> flattened = Flatten(sliced_string, isolate_);
+        bool was_internalized = sliced_string->IsInternalizedString();
+
+        DisallowHeapAllocation no_alloc;
+        int old_size = sliced_string->Size();
+        isolate_->heap()->NotifyObjectLayoutChange(*sliced_string, old_size,
+                                                   no_alloc);
+        bool one_byte = flattened->IsOneByteRepresentation();
+        Handle<Map> map =
+            was_internalized
+                ? one_byte ? isolate_->factory()
+                                 ->thin_internalized_one_byte_string_map()
+                           : isolate_->factory()->thin_internalized_string_map()
+                : one_byte ? isolate_->factory()->thin_one_byte_string_map()
+                           : isolate_->factory()->thin_string_map();
+        DCHECK_GE(old_size, ThinString::kSize);
+        sliced_string->synchronized_set_map(*map);
+        ThinString* thin = ThinString::cast(*sliced_string);
+        thin->set_actual(*flattened);
+        Address thin_end = thin->address() + ThinString::kSize;
+        int size_delta = old_size - ThinString::kSize;
+        if (size_delta != 0) {
+          Heap* heap = isolate_->heap();
+          heap->CreateFillerObjectAt(thin_end, size_delta,
+                                     ClearRecordedSlots::kNo);
+        }
+
+        GlobalHandles::Destroy(Handle<Object>::cast(sliced_string).location());
+      }
+    }
+
+   private:
+    Isolate* isolate_;
+  };
+
+  SlicedStringFlatten* task = new SlicedStringFlatten(heap_->isolate());
+  v8::Isolate* isolate = reinterpret_cast<v8::Isolate*>(heap_->isolate());
+  V8::GetCurrentPlatform()->CallOnForegroundThread(isolate, task);
+}
+
 void MarkCompactCollector::ClearWeakReferences() {
   TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_CLEAR_WEAK_REFERENCES);
   std::pair<HeapObject*, HeapObjectReference**> slot;
@@ -1982,6 +2122,7 @@ void MarkCompactCollector::ClearWeakReferences() {
 void MarkCompactCollector::AbortWeakObjects() {
   weak_objects_.weak_cells.Clear();
   weak_objects_.transition_arrays.Clear();
+  weak_objects_.sliced_strings.Clear();
   weak_objects_.weak_references.Clear();
   weak_objects_.weak_objects_in_code.Clear();
 }

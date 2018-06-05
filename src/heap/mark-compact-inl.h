@@ -153,6 +153,25 @@ int MarkingVisitor<fixed_array_mode, retaining_path_mode,
 template <FixedArrayVisitationMode fixed_array_mode,
           TraceRetainingPathMode retaining_path_mode, typename MarkingState>
 int MarkingVisitor<fixed_array_mode, retaining_path_mode,
+                   MarkingState>::VisitSlicedString(Map* map,
+                                                    SlicedString* string) {
+  String* parent = string->parent();
+  if (marking_state()->IsBlackOrGrey(parent)) {
+    // Sliced strings with live parents are directly processed here to reduce
+    // the processing time of sliced strings during the main GC pause.
+    Object** slot = HeapObject::RawField(string, SlicedString::kParentOffset);
+    collector_->RecordSlot(string, slot, *slot);
+  } else {
+    // If we do not know about liveness of values of the parent, we have to
+    // process it when we know the liveness of the whole transitive closure.
+    collector_->AddSlicedString(string);
+  }
+  return SlicedString::BodyDescriptor::SizeOf(map, string);
+}
+
+template <FixedArrayVisitationMode fixed_array_mode,
+          TraceRetainingPathMode retaining_path_mode, typename MarkingState>
+int MarkingVisitor<fixed_array_mode, retaining_path_mode,
                    MarkingState>::VisitWeakCell(Map* map, WeakCell* weak_cell) {
   // Enqueue weak cell in linked list of encountered weak collections.
   // We can ignore weak cells with cleared values because they will always

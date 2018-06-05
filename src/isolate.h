@@ -1384,6 +1384,13 @@ class Isolate : private HiddenFactory {
 
   void SetIdle(bool is_idle);
 
+  std::vector<Handle<SlicedString>>& flattenable_sliced_strings() {
+    return flattenable_sliced_strings_;
+  }
+  const std::vector<Handle<SlicedString>>& flattenable_sliced_strings() const {
+    return flattenable_sliced_strings_;
+  }
+
  protected:
   Isolate();
   bool IsArrayOrObjectOrStringPrototype(Object* object);
@@ -1651,6 +1658,10 @@ class Isolate : private HiddenFactory {
   BasicBlockProfiler* basic_block_profiler_;
 
   std::vector<Object*> partial_snapshot_cache_;
+
+  // TODO(leszeks): This should probably be iterated as-if it were a root,
+  // rather that being a vector of global handles.
+  std::vector<Handle<SlicedString>> flattenable_sliced_strings_;
 
 #ifdef V8_EMBEDDED_BUILTINS
   // Used during builtins compilation to build the builtins constants table,

@@ -41,7 +41,6 @@ void Object::Print() {
   os << std::flush;
 }
 
-
 void Object::Print(std::ostream& os) {  // NOLINT
   if (IsSmi()) {
     os << "Smi: " << std::hex << "0x" << Smi::ToInt(this);
@@ -62,7 +61,6 @@ void HeapObject::PrintHeader(std::ostream& os, const char* id) {  // NOLINT
   if (GetHeap()->InOldSpace(this)) os << " in OldSpace";
   if (!IsMap()) os << "\n - map: " << Brief(map());
 }
-
 
 void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
   InstanceType instance_type = map()->instance_type();
@@ -143,7 +141,7 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
     Fixed##Type##Array::cast(this)->FixedTypedArrayPrint(os);  \
     break;
 
-    TYPED_ARRAYS(PRINT_FIXED_TYPED_ARRAY)
+      TYPED_ARRAYS(PRINT_FIXED_TYPED_ARRAY)
 #undef PRINT_FIXED_TYPED_ARRAY
 
     case FILLER_TYPE:
@@ -277,7 +275,7 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
   case NAME##_TYPE:                        \
     Name::cast(this)->Name##Print(os);     \
     break;
-  STRUCT_LIST(MAKE_STRUCT_CASE)
+      STRUCT_LIST(MAKE_STRUCT_CASE)
 #undef MAKE_STRUCT_CASE
 
     case LOAD_HANDLER_TYPE:
@@ -308,6 +306,8 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
     case SHORT_EXTERNAL_INTERNALIZED_STRING_WITH_ONE_BYTE_DATA_TYPE:
     case SLICED_INTERNALIZED_STRING_TYPE:
     case SLICED_ONE_BYTE_INTERNALIZED_STRING_TYPE:
+    case THIN_INTERNALIZED_STRING_TYPE:
+    case THIN_ONE_BYTE_INTERNALIZED_STRING_TYPE:
     case STRING_TYPE:
     case CONS_STRING_TYPE:
     case EXTERNAL_STRING_TYPE:
@@ -337,17 +337,14 @@ void ByteArray::ByteArrayPrint(std::ostream& os) {  // NOLINT
   os << "byte array, data starts at " << GetDataStartAddress();
 }
 
-
 void BytecodeArray::BytecodeArrayPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "BytecodeArray");
   Disassemble(os);
 }
 
-
 void FreeSpace::FreeSpacePrint(std::ostream& os) {  // NOLINT
   os << "free space, size " << Size();
 }
-
 
 template <class Traits>
 void FixedTypedArray<Traits>::FixedTypedArrayPrint(
@@ -563,7 +560,6 @@ void JSObject::PrintElements(std::ostream& os) {  // NOLINT
   os << "\n }\n";
 }
 
-
 static void JSObjectPrintHeader(std::ostream& os, JSObject* obj,
                                 const char* id) {  // NOLINT
   obj->PrintHeader(os, id);
@@ -590,7 +586,6 @@ static void JSObjectPrintHeader(std::ostream& os, JSObject* obj,
   }
 }
 
-
 static void JSObjectPrintBody(std::ostream& os, JSObject* obj,  // NOLINT
                               bool print_elements = true) {
   os << "\n - properties: ";
@@ -613,7 +608,6 @@ static void JSObjectPrintBody(std::ostream& os, JSObject* obj,  // NOLINT
     os << "\n }\n";
   }
 }
-
 
 void JSObject::JSObjectPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, nullptr);
@@ -716,7 +710,6 @@ void Symbol::SymbolPrint(std::ostream& os) {  // NOLINT
   os << "\n - private: " << is_private();
   os << "\n";
 }
-
 
 void Map::MapPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "Map");
@@ -1088,7 +1081,6 @@ void JSValue::JSValuePrint(std::ostream& os) {  // NOLINT
   JSObjectPrintBody(os, this);
 }
 
-
 void JSMessageObject::JSMessageObjectPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSMessageObject");
   os << "\n - type: " << type();
@@ -1099,7 +1091,6 @@ void JSMessageObject::JSMessageObjectPrint(std::ostream& os) {  // NOLINT
   os << "\n - stack_frames: " << Brief(stack_frames());
   JSObjectPrintBody(os, this);
 }
-
 
 void String::StringPrint(std::ostream& os) {  // NOLINT
   if (!HasOnlyOneByteChars()) {
@@ -1132,7 +1123,6 @@ void String::StringPrint(std::ostream& os) {  // NOLINT
   if (!StringShape(this).IsInternalized()) os << "\"";
 }
 
-
 void Name::NamePrint(std::ostream& os) {  // NOLINT
   if (IsString()) {
     String::cast(this)->StringPrint(os);
@@ -1141,11 +1131,8 @@ void Name::NamePrint(std::ostream& os) {  // NOLINT
   }
 }
 
-
-static const char* const weekdays[] = {
-  "???", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
-};
-
+static const char* const weekdays[] = {"???", "Sun", "Mon", "Tue",
+                                       "Wed", "Thu", "Fri", "Sat"};
 
 void JSDate::JSDatePrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSDate");
@@ -1168,7 +1155,6 @@ void JSDate::JSDatePrint(std::ostream& os) {  // NOLINT
   JSObjectPrintBody(os, this);
 }
 
-
 void JSProxy::JSProxyPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "JSProxy");
   os << "\n - target: ";
@@ -1178,13 +1164,11 @@ void JSProxy::JSProxyPrint(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
-
 void JSSet::JSSetPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSSet");
   os << " - table: " << Brief(table());
   JSObjectPrintBody(os, this);
 }
-
 
 void JSMap::JSMapPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSMap");
@@ -1204,12 +1188,10 @@ void JSSetIterator::JSSetIteratorPrint(std::ostream& os) {  // NOLINT
   JSCollectionIteratorPrint(os);
 }
 
-
 void JSMapIterator::JSMapIteratorPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSMapIterator");
   JSCollectionIteratorPrint(os);
 }
-
 
 void JSWeakMap::JSWeakMapPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSWeakMap");
@@ -1217,13 +1199,11 @@ void JSWeakMap::JSWeakMapPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintBody(os, this);
 }
 
-
 void JSWeakSet::JSWeakSetPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSWeakSet");
   os << "\n - table: " << Brief(table());
   JSObjectPrintBody(os, this);
 }
-
 
 void JSArrayBuffer::JSArrayBufferPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSArrayBuffer");
@@ -1237,7 +1217,6 @@ void JSArrayBuffer::JSArrayBufferPrint(std::ostream& os) {  // NOLINT
   if (is_growable()) os << "\n - growable";
   JSObjectPrintBody(os, this, !was_neutered());
 }
-
 
 void JSTypedArray::JSTypedArrayPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSTypedArray");
@@ -1265,7 +1244,6 @@ void JSDataView::JSDataViewPrint(std::ostream& os) {  // NOLINT
   if (WasNeutered()) os << "\n - neutered";
   JSObjectPrintBody(os, this, !WasNeutered());
 }
-
 
 void JSBoundFunction::JSBoundFunctionPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSBoundFunction");
@@ -1400,7 +1378,6 @@ void SharedFunctionInfo::SharedFunctionInfoPrint(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
-
 void JSGlobalProxy::JSGlobalProxyPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSGlobalProxy");
   if (!GetIsolate()->bootstrapper()->IsActive()) {
@@ -1408,7 +1385,6 @@ void JSGlobalProxy::JSGlobalProxyPrint(std::ostream& os) {  // NOLINT
   }
   JSObjectPrintBody(os, this);
 }
-
 
 void JSGlobalObject::JSGlobalObjectPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSGlobalObject");
@@ -1419,13 +1395,11 @@ void JSGlobalObject::JSGlobalObjectPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintBody(os, this);
 }
 
-
 void Cell::CellPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "Cell");
   os << "\n - value: " << Brief(value());
   os << "\n";
 }
-
 
 void PropertyCell::PropertyCellPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "PropertyCell");
@@ -1477,7 +1451,6 @@ void PropertyCell::PropertyCellPrint(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
-
 void WeakCell::WeakCellPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "WeakCell");
   if (cleared()) {
@@ -1487,7 +1460,6 @@ void WeakCell::WeakCellPrint(std::ostream& os) {  // NOLINT
   }
   os << "\n";
 }
-
 
 void Code::CodePrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "Code");
@@ -1509,7 +1481,6 @@ void Foreign::ForeignPrint(std::ostream& os) {  // NOLINT
   os << "foreign address : " << reinterpret_cast<void*>(foreign_address());
   os << "\n";
 }
-
 
 void AccessorInfo::AccessorInfoPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "AccessorInfo");
@@ -1784,7 +1755,6 @@ void AccessorPair::AccessorPairPrint(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
-
 void AccessCheckInfo::AccessCheckInfoPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "AccessCheckInfo");
   os << "\n - callback: " << Brief(callback());
@@ -1815,7 +1785,6 @@ void InterceptorInfo::InterceptorInfoPrint(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
-
 void FunctionTemplateInfo::FunctionTemplateInfoPrint(
     std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "FunctionTemplateInfo");
@@ -1840,7 +1809,6 @@ void FunctionTemplateInfo::FunctionTemplateInfoPrint(
   os << "\n";
 }
 
-
 void ObjectTemplateInfo::ObjectTemplateInfoPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "ObjectTemplateInfo");
   os << "\n - tag: " << Brief(tag());
@@ -1852,7 +1820,6 @@ void ObjectTemplateInfo::ObjectTemplateInfoPrint(std::ostream& os) {  // NOLINT
   os << "\n - immutable_proto: " << (immutable_proto() ? "true" : "false");
   os << "\n";
 }
-
 
 void AllocationSite::AllocationSitePrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "AllocationSite");
@@ -1877,7 +1844,6 @@ void AllocationSite::AllocationSitePrint(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
-
 void AllocationMemento::AllocationMementoPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "AllocationMemento");
   os << "\n - allocation site: ";
@@ -1887,7 +1853,6 @@ void AllocationMemento::AllocationMementoPrint(std::ostream& os) {  // NOLINT
     os << "<invalid>\n";
   }
 }
-
 
 void Script::ScriptPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "Script");
@@ -2016,7 +1981,6 @@ void DebugInfo::DebugInfoPrint(std::ostream& os) {  // NOLINT
   os << "\n - coverage_info: " << Brief(coverage_info());
 }
 
-
 void StackFrameInfo::StackFrameInfoPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "StackFrame");
   os << "\n - line_number: " << line_number();
@@ -2038,7 +2002,6 @@ static void PrintBitMask(std::ostream& os, uint32_t value) {  // NOLINT
     value >>= 1;
   }
 }
-
 
 void LayoutDescriptor::Print() {
   OFStream os(stdout);

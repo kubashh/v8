@@ -147,6 +147,9 @@ using v8::MemoryPressureLevel;
   V(Map, cons_string_map, ConsStringMap)                                       \
   V(Map, thin_one_byte_string_map, ThinOneByteStringMap)                       \
   V(Map, thin_string_map, ThinStringMap)                                       \
+  V(Map, thin_internalized_one_byte_string_map,                                \
+    ThinInternalizedOneByteStringMap)                                          \
+  V(Map, thin_internalized_string_map, ThinInternalizedStringMap)              \
   V(Map, sliced_string_map, SlicedStringMap)                                   \
   V(Map, sliced_one_byte_string_map, SlicedOneByteStringMap)                   \
   V(Map, external_string_map, ExternalStringMap)                               \
@@ -309,7 +312,6 @@ using v8::MemoryPressureLevel;
   STRONG_ROOT_LIST(V) \
   SMI_ROOT_LIST(V)    \
   V(StringTable, string_table, StringTable)
-
 
 // Heap roots that are known to be immortal immovable, for which we can safely
 // skip write barriers. This list is not complete and has omissions.
@@ -1060,16 +1062,16 @@ class Heap {
     return array_buffer_collector_;
   }
 
-  // ===========================================================================
-  // Root set access. ==========================================================
-  // ===========================================================================
+// ===========================================================================
+// Root set access. ==========================================================
+// ===========================================================================
 
-  // Heap root getters.
+// Heap root getters.
 #define ROOT_ACCESSOR(type, name, camel_name) inline type* name();
   ROOT_LIST(ROOT_ACCESSOR)
 #undef ROOT_ACCESSOR
 
-  // Utility type maps.
+// Utility type maps.
 #define STRUCT_MAP_ACCESSOR(NAME, Name, name) inline Map* name##_map();
   STRUCT_LIST(STRUCT_MAP_ACCESSOR)
 #undef STRUCT_MAP_ACCESSOR
@@ -2536,7 +2538,6 @@ class Heap {
   DISALLOW_COPY_AND_ASSIGN(Heap);
 };
 
-
 class HeapStats {
  public:
   static const int kStartMarker = 0xDECADE00;
@@ -2570,7 +2571,6 @@ class HeapStats {
   char* js_stacktrace;                     // 25
   intptr_t* end_marker;                    // 26
 };
-
 
 class AlwaysAllocateScope {
  public:
@@ -2641,7 +2641,6 @@ class VerifyPointersVisitor : public ObjectVisitor, public RootVisitor {
   Heap* heap_;
 };
 
-
 // Verify that all objects are Smis.
 class VerifySmisVisitor : public RootVisitor {
  public:
@@ -2668,7 +2667,6 @@ class V8_EXPORT_PRIVATE PagedSpaces BASE_EMBEDDED {
   int counter_;
 };
 
-
 class SpaceIterator : public Malloced {
  public:
   explicit SpaceIterator(Heap* heap);
@@ -2679,9 +2677,8 @@ class SpaceIterator : public Malloced {
 
  private:
   Heap* heap_;
-  int current_space_;         // from enum AllocationSpace.
+  int current_space_;  // from enum AllocationSpace.
 };
-
 
 // A HeapIterator provides iteration over the whole heap. It
 // aggregates the specific iterators for the different spaces as
