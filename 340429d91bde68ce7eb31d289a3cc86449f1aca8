@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a961cfa3_e2b163b8",
+        "filename": "src/code-reference.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-05T11:10:15Z",
+      "side": 1,
+      "message": "May I ask what the reason for that decision was?",
+      "parentUuid": "c5de2d79_ab28f088",
+      "range": {
+        "startLine": 39,
+        "startChar": 11,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "340429d91bde68ce7eb31d289a3cc86449f1aca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f6cdc975_af9bb78c",
         "filename": "src/code-reference.h",
         "patchSetId": 4
