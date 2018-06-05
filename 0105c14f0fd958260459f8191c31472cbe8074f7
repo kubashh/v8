@@ -34,6 +34,24 @@
       "revId": "0105c14f0fd958260459f8191c31472cbe8074f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8e5d898d_ec878586",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-05T15:50:28Z",
+      "side": 1,
+      "message": "For posterity: as found by clusterfuzz, your original solution was correct. FastD2I cannot be used if the input may be outside int32_t range.",
+      "parentUuid": "f9f56481_08ee705b",
+      "revId": "0105c14f0fd958260459f8191c31472cbe8074f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
