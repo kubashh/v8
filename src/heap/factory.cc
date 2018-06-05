@@ -577,6 +577,12 @@ Handle<String> Factory::InternalizeOneByteString(
   return InternalizeStringWithKey(&key);
 }
 
+Handle<String> Factory::InternalizeOneByteString(
+    Handle<ExternalOneByteString> string, int from, int length) {
+  ExternalOneByteSubStringKey key(string, from, length);
+  return InternalizeStringWithKey(&key);
+}
+
 Handle<String> Factory::InternalizeTwoByteString(Vector<const uc16> string) {
   TwoByteStringKey key(string, isolate()->heap()->HashSeed());
   return InternalizeStringWithKey(&key);
@@ -859,13 +865,21 @@ Handle<String> Factory::NewOneByteInternalizedString(Vector<const uint8_t> str,
   return result;
 }
 
-Handle<String> Factory::NewOneByteInternalizedSubString(
-    Handle<SeqOneByteString> string, int offset, int length,
-    uint32_t hash_field) {
-  Handle<SeqOneByteString> result =
-      AllocateRawOneByteInternalizedString(length, hash_field);
-  MemCopy(result->GetChars(), string->GetChars() + offset, length);
-  return result;
+Handle<String> Factory::NewOneByteInternalizedSubString(Handle<String> string,
+                                                        int offset, int length,
+                                                        uint32_t hash_field) {
+  if (!FLAG_source_string_slices) {
+    DCHECK(string->IsSeqOneByteString());
+    Handle<SeqOneByteString> result =
+        AllocateRawOneByteInternalizedString(length, hash_field);
+    MemCopy(result->GetChars(),
+            SeqOneByteString::cast(*string)->GetChars() + offset, length);
+    return result;
+  } else {
+    Handle<String> result =
+        NewProperSubString(string, offset, offset + length, hash_field, true);
+    return result;
+  }
 }
 
 Handle<String> Factory::NewTwoByteInternalizedString(Vector<const uc16> str,
@@ -902,6 +916,10 @@ MaybeHandle<Map> GetInternalizedStringMap(Factory* f, Handle<String> string) {
       return f->short_external_one_byte_internalized_string_map();
     case SHORT_EXTERNAL_STRING_WITH_ONE_BYTE_DATA_TYPE:
       return f->short_external_internalized_string_with_one_byte_data_map();
+    case SLICED_STRING_TYPE:
+      return f->sliced_internalized_string_map();
+    case SLICED_ONE_BYTE_STRING_TYPE:
+      return f->sliced_one_byte_internalized_string_map();
     default:
       return MaybeHandle<Map>();  // No match found.
   }
@@ -1164,7 +1182,8 @@ Handle<String> Factory::NewSurrogatePairString(uint16_t lead, uint16_t trail) {
 }
 
 Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
-                                           int end) {
+                                           int end, int hash_field,
+                                           bool internalizing) {
 #if VERIFY_HEAP
   if (FLAG_verify_heap) str->StringVerify();
 #endif
@@ -1173,28 +1192,49 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
   str = String::Flatten(str);
 
   int length = end - begin;
-  if (length <= 0) return empty_string();
-  if (length == 1) {
-    return LookupSingleCharacterStringFromCode(str->Get(begin));
-  }
-  if (length == 2) {
-    // Optimization for 2-byte strings often used as keys in a decompression
-    // dictionary.  Check whether we already have the string in the string
-    // table to prevent creation of many unnecessary strings.
-    uint16_t c1 = str->Get(begin);
-    uint16_t c2 = str->Get(begin + 1);
-    return MakeOrFindTwoCharacterString(isolate(), c1, c2);
+  if (!internalizing) {
+    // For these special cases, if we are internalizing then we should have
+    // already found the short strings in the string table -- otherwise, we'll
+    // build them ourselves anyway. We can't call these methods directly, since
+    // they can add to the string table.
+
+    if (length <= 0) return empty_string();
+    if (length == 1) {
+      return LookupSingleCharacterStringFromCode(str->Get(begin));
+    }
+    if (length == 2) {
+      // Optimization for 2-byte strings often used as keys in a decompression
+      // dictionary.  Check whether we already have the string in the string
+      // table to prevent creation of many unnecessary strings.
+      uint16_t c1 = str->Get(begin);
+      uint16_t c2 = str->Get(begin + 1);
+      return MakeOrFindTwoCharacterString(isolate(), c1, c2);
+    }
   }
 
   if (!FLAG_string_slices || length < SlicedString::kMinLength) {
     if (str->IsOneByteRepresentation()) {
       Handle<SeqOneByteString> result =
-          NewRawOneByteString(length).ToHandleChecked();
+          NewRawOneByteString(length, internalizing ? TENURED : NOT_TENURED)
+              .ToHandleChecked();
       uint8_t* dest = result->GetChars();
       DisallowHeapAllocation no_gc;
       String::WriteToFlat(*str, dest, begin, end);
+      if (internalizing) {
+        result->set_map(*one_byte_internalized_string_map());
+        result->set_hash_field(hash_field);
+        if (length == 1) {
+          // Make sure we still insert into the single character cache.
+          auto code = str->Get(begin);
+          if (code <= String::kMaxOneByteCharCodeU) {
+            single_character_string_cache()->set(code, *result);
+          }
+        }
+      }
       return result;
     } else {
+      // TODO(leszeks): Support two-byte internalized string slices.
+      DCHECK(!internalizing);
       Handle<SeqTwoByteString> result =
           NewRawTwoByteString(length).ToHandleChecked();
       uc16* dest = result->GetChars();
@@ -1215,15 +1255,20 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
     Handle<ThinString> thin = Handle<ThinString>::cast(str);
     str = handle(thin->actual(), isolate());
   }
+  DCHECK(!StringShape(*str).IsIndirect());
 
   DCHECK(str->IsSeqString() || str->IsExternalString());
-  Handle<Map> map = str->IsOneByteRepresentation()
-                        ? sliced_one_byte_string_map()
-                        : sliced_string_map();
-  Handle<SlicedString> slice(SlicedString::cast(New(map, NOT_TENURED)),
-                             isolate());
+  Handle<Map> map =
+      str->IsOneByteRepresentation()
+          ? (internalizing ? sliced_one_byte_internalized_string_map()
+                           : sliced_one_byte_string_map())
+          : (internalizing ? sliced_internalized_string_map()
+                           : sliced_string_map());
+  Handle<SlicedString> slice(
+      SlicedString::cast(New(map, internalizing ? TENURED : NOT_TENURED)),
+      isolate());
 
-  slice->set_hash_field(String::kEmptyHashField);
+  slice->set_hash_field(hash_field);
   slice->set_length(length);
   slice->set_parent(*str);
   slice->set_offset(offset);

@@ -10789,21 +10789,20 @@ String::FlatContent String::GetFlatContent() {
     offset = slice->offset();
     string = slice->parent();
     shape = StringShape(string);
-    DCHECK(shape.representation_tag() != kConsStringTag &&
-           shape.representation_tag() != kSlicedStringTag);
   }
   if (shape.representation_tag() == kThinStringTag) {
     ThinString* thin = ThinString::cast(string);
     string = thin->actual();
     shape = StringShape(string);
     DCHECK(!shape.IsCons());
-    DCHECK(!shape.IsSliced());
   }
+  DCHECK(!shape.IsIndirect());
   if (shape.encoding_tag() == kOneByteStringTag) {
     const uint8_t* start;
     if (shape.representation_tag() == kSeqStringTag) {
       start = SeqOneByteString::cast(string)->GetChars();
     } else {
+      DCHECK(shape.representation_tag() == kExternalStringTag);
       start = ExternalOneByteString::cast(string)->GetChars();
     }
     return FlatContent(start + offset, length);
@@ -10813,6 +10812,7 @@ String::FlatContent String::GetFlatContent() {
     if (shape.representation_tag() == kSeqStringTag) {
       start = SeqTwoByteString::cast(string)->GetChars();
     } else {
+      DCHECK(shape.representation_tag() == kExternalStringTag);
       start = ExternalTwoByteString::cast(string)->GetChars();
     }
     return FlatContent(start + offset, length);
@@ -16430,6 +16430,15 @@ bool SeqOneByteSubStringKey::IsMatch(Object* string) {
   return String::cast(string)->IsOneByteEqualTo(chars);
 }
 
+Handle<String> ExternalOneByteSubStringKey::AsHandle(Isolate* isolate) {
+  return isolate->factory()->NewOneByteInternalizedSubString(
+      string_, from_, length_, HashField());
+}
+
+bool ExternalOneByteSubStringKey::IsMatch(Object* string) {
+  Vector<const uint8_t> chars(string_->GetChars() + from_, length_);
+  return String::cast(string)->IsOneByteEqualTo(chars);
+}
 
 // InternalizedStringKey carries a string/internalized-string object as key.
 class InternalizedStringKey : public StringTableKey {

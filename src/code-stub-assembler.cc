@@ -2957,6 +2957,8 @@ TNode<String> CodeStubAssembler::AllocateSlicedString(
     TNode<Smi> offset) {
   DCHECK(map_root_index == Heap::kSlicedOneByteStringMapRootIndex ||
          map_root_index == Heap::kSlicedStringMapRootIndex);
+  CSA_ASSERT(this, Word32BinaryNot(
+                       IsIndirectStringInstanceType(LoadInstanceType(parent))));
   Node* result = Allocate(SlicedString::kSize);
   DCHECK(Heap::RootIsImmortalImmovable(map_root_index));
   StoreMapNoWriteBarrier(result, map_root_index);

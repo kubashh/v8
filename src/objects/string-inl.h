@@ -248,6 +248,29 @@ class SeqOneByteSubStringKey : public StringTableKey {
   int length_;
 };
 
+class ExternalOneByteSubStringKey : public StringTableKey {
+ public:
+  ExternalOneByteSubStringKey(Handle<ExternalOneByteString> string, int from,
+                              int length)
+      : StringTableKey(StringHasher::HashSequentialString(
+            string->GetChars() + from, length, string->GetHeap()->HashSeed())),
+        string_(string),
+        from_(from),
+        length_(length) {
+    DCHECK_LE(0, length_);
+    DCHECK_LE(from_ + length_, string_->length());
+    DCHECK(string_->IsExternalOneByteString());
+  }
+
+  bool IsMatch(Object* string) override;
+  Handle<String> AsHandle(Isolate* isolate) override;
+
+ private:
+  Handle<ExternalOneByteString> string_;
+  int from_;
+  int length_;
+};
+
 class TwoByteStringKey : public SequentialStringKey<uc16> {
  public:
   explicit TwoByteStringKey(Vector<const uc16> str, uint32_t seed)
@@ -309,6 +332,43 @@ Handle<String> String::Flatten(Handle<String> string, PretenureFlag pretenure) {
   if (string->IsThinString()) {
     string = handle(Handle<ThinString>::cast(string)->actual());
     DCHECK(!string->IsConsString());
+  }
+  if (string->IsSlicedString()) {
+    // We can mutate the sliced string in-place.
+    SlicedString* slice = SlicedString::cast(*string);
+    String* parent = slice->parent();
+    StringShape parent_shape(parent);
+    bool parent_changed = false;
+
+    if (parent_shape.IsThin()) {
+      parent = ThinString::cast(parent)->actual();
+      parent_shape = StringShape(parent);
+      parent_changed = true;
+    } else if (parent_shape.IsCons()) {
+      // Cons strings which are the parent of a sliced string should be flat,
+      // since we only expect them to be indirections to an internalized string.
+      // Other cons strings should have been flat at slice building time.
+      DCHECK(parent->IsFlat());
+      parent = ConsString::cast(parent)->first();
+      parent_shape = StringShape(parent);
+      parent_changed = true;
+    }
+    DCHECK(!parent_shape.IsThin());
+    DCHECK(!parent_shape.IsCons());
+
+    if (parent_shape.IsSliced()) {
+      // This should only happen for sliced strings whose parent was a direct
+      // string, but then got internalized to an internalized sliced string.
+      DCHECK(parent->IsInternalizedString());
+      DCHECK(!StringShape(SlicedString::cast(parent)->parent()).IsIndirect());
+      parent = SlicedString::cast(parent)->parent();
+      parent_changed = true;
+      slice->set_offset(slice->offset() + SlicedString::cast(parent)->offset());
+    }
+    if (parent_changed) {
+      slice->set_parent(parent);
+    }
+    DCHECK(!StringShape(slice->parent()).IsIndirect());
   }
   return string;
 }
