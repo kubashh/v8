@@ -258,7 +258,7 @@ Response buildScopes(v8::debug::ScopeIterator* iterator,
   if (iterator->Done()) return Response::OK();
 
   String16 scriptId = String16::fromInteger(iterator->GetScriptId());
-
+  bool first = true;
   for (; !iterator->Done(); iterator->Advance()) {
     std::unique_ptr<RemoteObject> object;
     Response result = injectedScript->wrapObject(
@@ -274,7 +274,7 @@ Response buildScopes(v8::debug::ScopeIterator* iterator,
         toProtocolStringWithTypeCheck(iterator->GetFunctionDebugName());
     if (!name.isEmpty()) scope->setName(name);
 
-    if (iterator->HasLocationInfo()) {
+    if (first && iterator->HasLocationInfo()) {
       v8::debug::Location start = iterator->GetStartLocation();
       scope->setStartLocation(protocol::Debugger::Location::create()
                                   .setScriptId(scriptId)
@@ -289,6 +289,7 @@ Response buildScopes(v8::debug::ScopeIterator* iterator,
                                 .setColumnNumber(end.GetColumnNumber())
                                 .build());
     }
+    first = false;
     (*scopes)->addItem(std::move(scope));
   }
   return Response::OK();

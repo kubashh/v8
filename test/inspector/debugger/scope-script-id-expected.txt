@@ -1,0 +1,55 @@
+Checks scriptId of scope locations.
+{
+    endLocation : {
+        columnNumber : 24
+        lineNumber : 0
+        scriptId : <scriptId>
+    }
+    name : f3
+    object : {
+        className : Object
+        description : Object
+        objectId : <objectId>
+        type : object
+    }
+    startLocation : {
+        columnNumber : 11
+        lineNumber : 0
+        scriptId : <scriptId>
+    }
+    type : local
+}
+scope location:
+function f3#() {debugger} f3() //# sourceURL=f3.js
+
+function f3() {debugger}# f3() //# sourceURL=f3.js
+
+{
+    name : f2
+    object : {
+        className : Object
+        description : Object
+        objectId : <objectId>
+        type : object
+    }
+    type : closure
+}
+{
+    name : f1
+    object : {
+        className : Object
+        description : Object
+        objectId : <objectId>
+        type : object
+    }
+    type : closure
+}
+{
+    object : {
+        className : global
+        description : global
+        objectId : <objectId>
+        type : object
+    }
+    type : global
+}
