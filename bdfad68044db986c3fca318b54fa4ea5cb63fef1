@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "342cab43_d8c0b2e4",
+        "filename": "test/mjsunit/allocation-site-info.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-05T22:14:04Z",
+      "side": 1,
+      "message": "Why does your patch affect this?",
+      "revId": "bdfad68044db986c3fca318b54fa4ea5cb63fef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
