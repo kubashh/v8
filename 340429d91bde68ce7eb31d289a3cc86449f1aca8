@@ -169,6 +169,30 @@
     },
     {
       "key": {
+        "uuid": "af81ce9a_084cc69f",
+        "filename": "src/code-reference.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-05T18:39:02Z",
+      "side": 1,
+      "message": "Just for the record: If it were up to me I would also go for DCHECK, I only agreed to having a CHECK because that way I could convince Stephan to drop the scary ternary. So to make it crystal clear, my favorite implementation of this getter would be (as I suggested in my very first comment) ...\n\nHandle\u003cCode\u003e as_js_code() const {\n  DCHECK_EQ(JS, kind_);\n  return js_code_;\n}",
+      "parentUuid": "1f0e294e_8db41757",
+      "range": {
+        "startLine": 39,
+        "startChar": 11,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "340429d91bde68ce7eb31d289a3cc86449f1aca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6cdc975_af9bb78c",
         "filename": "src/code-reference.h",
         "patchSetId": 4
