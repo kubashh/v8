@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "1f0e294e_8db41757",
+        "filename": "src/code-reference.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-05T14:38:35Z",
+      "side": 1,
+      "message": "I see. But the same reasoning holds for a good portion (almost all?) of the DCHECK in the system. Clusterfuzz treats DCHECK failures as security bugs by default. Whenever we cast some HeapObject to a more specific type, we only DCHECK that this cast is actually valid, even though hell breaks loose if it would not be.\nMaybe we should discuss this in one of our next code walkthroughs to get a common understanding of this. IMO DCHECKs should be the default, such that these accessors are just field accesses in release builds and can easily be inlined. CHECKs might be used if the code is barely tested or testable (i.e. we don\u0027t trust our tests and fuzzers).",
+      "parentUuid": "c2857b46_9d421cee",
+      "range": {
+        "startLine": 39,
+        "startChar": 11,
+        "endLine": 39,
+        "endChar": 22
+      },
+      "revId": "340429d91bde68ce7eb31d289a3cc86449f1aca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6cdc975_af9bb78c",
         "filename": "src/code-reference.h",
         "patchSetId": 4
