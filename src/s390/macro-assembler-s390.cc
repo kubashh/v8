@@ -378,6 +378,44 @@ void TurboAssembler::Move(DoubleRegister dst, DoubleRegister src) {
   }
 }
 
+// Wrapper around Assembler::mvc (SS-a format)
+void TurboAssembler::MoveCharacter(Register b1, Disp d1, Register b2, Disp d2,
+                                   Length l) {
+  mvc(b1, d1, b2, d2, l - 1);
+}
+void TurboAssembler::MoveCharacter(const MemOperand& opnd1,
+                                   const MemOperand& opnd2, Length length) {
+    MoveCharacter(opnd1.getBaseRegister(), opnd1.getDisplacement(),
+                  opnd2.getBaseRegister(), opnd2.getDisplacement(), length);
+}
+
+// Wrapper around Assembler::clc (SS-a format)
+void TurboAssembler::CompareLogicalCharacter(Register b1, Disp d1,
+                                             Register b2, Disp d2,
+                                             Length l) {
+  clc(b1, d1, b2, d2, l - 1);
+}
+void TurboAssembler::CompareLogicalCharacter(const MemOperand& opnd1,
+                                             const MemOperand& opnd2,
+                                             Length length) {
+    CompareLogicalCharacter(opnd1.getBaseRegister(), opnd1.getDisplacement(),
+                            opnd2.getBaseRegister(), opnd2.getDisplacement(),
+                            length);
+}
+
+// Wrapper around Assembler::xc (SS-a format)
+void TurboAssembler::ExclusiveOrCharacter(Register b1, Disp d1, Register b2,
+                                          Disp d2, Length l) {
+  xc(b1, d1, b2, d2, l - 1);
+}
+void TurboAssembler::ExclusiveOrCharacter(const MemOperand& opnd1,
+                                          const MemOperand& opnd2,
+                                          Length length) {
+    ExclusiveOrCharacter(opnd1.getBaseRegister(), opnd1.getDisplacement(),
+                         opnd2.getBaseRegister(), opnd2.getDisplacement(),
+                         length);
+}
+
 void TurboAssembler::MultiPush(RegList regs, Register location) {
   int16_t num_to_push = base::bits::CountPopulation(regs);
   int16_t stack_offset = num_to_push * kPointerSize;
@@ -700,7 +738,7 @@ void TurboAssembler::ConvertUnsignedIntToDouble(DoubleRegister dst,
 }
 
 void TurboAssembler::ConvertIntToFloat(DoubleRegister dst, Register src) {
-  cefbr(Condition(4), dst, src);
+  cefbra(Condition(4), dst, src);
 }
 
 void TurboAssembler::ConvertUnsignedIntToFloat(DoubleRegister dst,
@@ -2254,7 +2292,7 @@ void TurboAssembler::Div32(Register dst, Register src1, Register src2) {
 #define Generate_DivU32(instr) \
   {                            \
     lr(r0, src1);              \
-    srdl(r0, Operand(32));     \
+    srdl(r0, r0, Operand(32)); \
     instr(r0, src2);           \
     LoadlW(dst, r1);           \
   }
@@ -2328,7 +2366,7 @@ void TurboAssembler::Mod32(Register dst, Register src1, Register src2) {
 #define Generate_ModU32(instr) \
   {                            \
     lr(r0, src1);              \
-    srdl(r0, Operand(32));     \
+    srdl(r0, r0, Operand(32)); \
     instr(r0, src2);           \
     LoadlW(dst, r0);           \
   }

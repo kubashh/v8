@@ -291,7 +291,7 @@ TEST(SixBytes) {
   COMPARE(bctg(r8, MemOperand(sp, 10)), "e380f00a0046   bctg\tr8,10(sp)");
   COMPARE(icy(r2, MemOperand(r3, 2)), "e32030020073   icy\tr2,2(r3)");
   COMPARE(mvc(MemOperand(r9, 9), MemOperand(r3, 15), 10),
-          "d2099009300f   mvc\t9(9,r9),15(r3)");
+          "d20a9009300f   mvc\t9(10,r9),15(r3)");
   COMPARE(nilf(r0, Operand(8000)), "c00b00001f40   nilf\tr0,8000");
   COMPARE(oilf(r9, Operand(1000)), "c09d000003e8   oilf\tr9,1000");
 

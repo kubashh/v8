@@ -232,6 +232,20 @@ class TurboAssembler : public Assembler {
   void Move(Register dst, Register src, Condition cond = al);
   void Move(DoubleRegister dst, DoubleRegister src);
 
+  void MoveCharacter(Register b1, Disp d1, Register b2, Disp d2, Length l);
+  void MoveCharacter(const MemOperand& opnd1, const MemOperand& opnd2,
+                     Length length);
+
+  void CompareLogicalCharacter(Register b1, Disp d1, Register b2, Disp d2,
+                               Length l);
+  void CompareLogicalCharacter(const MemOperand& opnd1, const MemOperand& opnd2,
+                               Length length);
+
+  void ExclusiveOrCharacter(Register b1, Disp d1, Register b2, Disp d2,
+                           Length l);
+  void ExclusiveOrCharacter(const MemOperand& opnd1, const MemOperand& opnd2,
+                           Length length);
+
   void SaveRegisters(RegList registers);
   void RestoreRegisters(RegList registers);
 
