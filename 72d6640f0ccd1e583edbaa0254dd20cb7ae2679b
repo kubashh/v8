@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2d1c4911_3edfecf9",
+        "filename": "src/async-hooks-wrapper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-06-05T08:34:49Z",
+      "side": 1,
+      "message": "My goal with this CL is to model the behaviour only. Also don\u0027t know if there is performance differences between the two possible approaches.",
+      "parentUuid": "28d5407e_648594a4",
+      "range": {
+        "startLine": 121,
+        "startChar": 4,
+        "endLine": 121,
+        "endChar": 38
+      },
+      "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "83654ac1_ee4b5e3d",
         "filename": "src/async-hooks-wrapper.cc",
         "patchSetId": 8
@@ -39,6 +63,24 @@
       "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f857200_ba55bcd1",
+        "filename": "src/async-hooks-wrapper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-06-05T08:34:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83654ac1_ee4b5e3d",
+      "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "f817f861_e38a4ad1",
+        "filename": "test/mjsunit/async-hooks-chained.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-06-05T08:34:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0691a7fa_0a5585dd",
+      "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2eef29d_150a3bc0",
         "filename": "test/mjsunit/async-hooks.js",
         "patchSetId": 8
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "924450d9_f94717c8",
+        "filename": "test/mjsunit/async-hooks.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-06-05T08:34:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2eef29d_150a3bc0",
+      "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "625f3b67_fdf7069e",
         "filename": "test/mjsunit/es8/async-await-interleaved.js",
         "patchSetId": 8
@@ -90,6 +168,24 @@
       "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e89ba034_e32da7b0",
+        "filename": "test/mjsunit/es8/async-await-interleaved.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-06-05T08:34:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "625f3b67_fdf7069e",
+      "revId": "72d6640f0ccd1e583edbaa0254dd20cb7ae2679b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
