@@ -1427,14 +1427,12 @@ class EvacuateRecordOnlyVisitor final : public HeapObjectVisitor {
   Heap* heap_;
 };
 
-bool MarkCompactCollector::IsUnmarkedHeapObject(Object** p) {
+bool MarkCompactCollector::IsUnmarkedHeapObject(Heap* heap, Object** p) {
   Object* o = *p;
   if (!o->IsHeapObject()) return false;
   HeapObject* heap_object = HeapObject::cast(o);
-  return heap_object->GetHeap()
-      ->mark_compact_collector()
-      ->non_atomic_marking_state()
-      ->IsWhite(HeapObject::cast(o));
+  return heap->mark_compact_collector()->non_atomic_marking_state()->IsWhite(
+      heap_object);
 }
 
 void MarkCompactCollector::MarkStringTable(
@@ -2012,11 +2010,11 @@ void MarkCompactCollector::RecordRelocSlot(Code* host, RelocInfo* rinfo,
 
 template <AccessMode access_mode>
 static inline SlotCallbackResult UpdateSlot(
-    MaybeObject** slot, MaybeObject* old, HeapObject* heap_obj,
+    Heap* heap, MaybeObject** slot, MaybeObject* old, HeapObject* heap_obj,
     HeapObjectReferenceType reference_type) {
   MapWord map_word = heap_obj->map_word();
   if (map_word.IsForwardingAddress()) {
-    DCHECK(heap_obj->GetHeap()->InFromSpace(heap_obj) ||
+    DCHECK(heap->InFromSpace(heap_obj) ||
            MarkCompactCollector::IsOnEvacuationCandidate(heap_obj) ||
            Page::FromAddress(heap_obj->address())
                ->IsFlagSet(Page::COMPACTION_WAS_ABORTED));
@@ -2029,7 +2027,7 @@ static inline SlotCallbackResult UpdateSlot(
     } else {
       base::AsAtomicPointer::Release_CompareAndSwap(slot, old, target);
     }
-    DCHECK(!heap_obj->GetHeap()->InFromSpace(target));
+    DCHECK(!heap->InFromSpace(target));
     DCHECK(!MarkCompactCollector::IsOnEvacuationCandidate(target));
   }
   // OLD_TO_OLD slots are always removed after updating.
@@ -2037,27 +2035,30 @@ static inline SlotCallbackResult UpdateSlot(
 }
 
 template <AccessMode access_mode>
-static inline SlotCallbackResult UpdateSlot(MaybeObject** slot) {
+static inline SlotCallbackResult UpdateSlot(Heap* heap, MaybeObject** slot) {
   MaybeObject* obj = base::AsAtomicPointer::Relaxed_Load(slot);
   HeapObject* heap_obj;
   if (obj->ToWeakHeapObject(&heap_obj)) {
-    UpdateSlot<access_mode>(slot, obj, heap_obj, HeapObjectReferenceType::WEAK);
+    UpdateSlot<access_mode>(heap, slot, obj, heap_obj,
+                            HeapObjectReferenceType::WEAK);
   } else if (obj->ToStrongHeapObject(&heap_obj)) {
-    return UpdateSlot<access_mode>(slot, obj, heap_obj,
+    return UpdateSlot<access_mode>(heap, slot, obj, heap_obj,
                                    HeapObjectReferenceType::STRONG);
   }
   return REMOVE_SLOT;
 }
 
 template <AccessMode access_mode>
-static inline SlotCallbackResult UpdateStrongSlot(MaybeObject** maybe_slot) {
+static inline SlotCallbackResult UpdateStrongSlot(Heap* heap,
+                                                  MaybeObject** maybe_slot) {
   DCHECK((*maybe_slot)->IsSmi() || (*maybe_slot)->IsStrongHeapObject());
   Object** slot = reinterpret_cast<Object**>(maybe_slot);
   Object* obj = base::AsAtomicPointer::Relaxed_Load(slot);
   if (obj->IsHeapObject()) {
     HeapObject* heap_obj = HeapObject::cast(obj);
-    return UpdateSlot<access_mode>(maybe_slot, MaybeObject::FromObject(obj),
-                                   heap_obj, HeapObjectReferenceType::STRONG);
+    return UpdateSlot<access_mode>(heap, maybe_slot,
+                                   MaybeObject::FromObject(obj), heap_obj,
+                                   HeapObjectReferenceType::STRONG);
   }
   return REMOVE_SLOT;
 }
@@ -2071,34 +2072,34 @@ class PointersUpdatingVisitor : public ObjectVisitor, public RootVisitor {
   explicit PointersUpdatingVisitor(Heap* heap) : heap_(heap) {}
 
   void VisitPointer(HeapObject* host, Object** p) override {
-    UpdateStrongSlotInternal(p);
+    UpdateStrongSlotInternal(heap_, p);
   }
 
   void VisitPointer(HeapObject* host, MaybeObject** p) override {
-    UpdateSlotInternal(p);
+    UpdateSlotInternal(heap_, p);
   }
 
   void VisitPointers(HeapObject* host, Object** start, Object** end) override {
     for (Object** p = start; p < end; p++) {
-      UpdateStrongSlotInternal(p);
+      UpdateStrongSlotInternal(heap_, p);
     }
   }
 
   void VisitPointers(HeapObject* host, MaybeObject** start,
                      MaybeObject** end) final {
     for (MaybeObject** p = start; p < end; p++) {
-      UpdateSlotInternal(p);
+      UpdateSlotInternal(heap_, p);
     }
   }
 
   void VisitRootPointer(Root root, const char* description,
                         Object** p) override {
-    UpdateStrongSlotInternal(p);
+    UpdateStrongSlotInternal(heap_, p);
   }
 
   void VisitRootPointers(Root root, const char* description, Object** start,
                          Object** end) override {
-    for (Object** p = start; p < end; p++) UpdateStrongSlotInternal(p);
+    for (Object** p = start; p < end; p++) UpdateStrongSlotInternal(heap_, p);
   }
 
   void VisitEmbeddedPointer(Code* host, RelocInfo* rinfo) override {
@@ -2108,25 +2109,27 @@ class PointersUpdatingVisitor : public ObjectVisitor, public RootVisitor {
 
   void VisitCodeTarget(Code* host, RelocInfo* rinfo) override {
     UpdateTypedSlotHelper::UpdateCodeTarget(
-        rinfo, UpdateStrongMaybeObjectSlotInternal);
+        heap_, rinfo, UpdateStrongMaybeObjectSlotInternal);
   }
 
  private:
   static inline SlotCallbackResult UpdateStrongMaybeObjectSlotInternal(
-      MaybeObject** slot) {
+      Heap* heap, MaybeObject** slot) {
     DCHECK(!(*slot)->IsWeakHeapObject());
     DCHECK(!(*slot)->IsClearedWeakHeapObject());
-    return UpdateStrongSlotInternal(reinterpret_cast<Object**>(slot));
+    return UpdateStrongSlotInternal(heap, reinterpret_cast<Object**>(slot));
   }
 
-  static inline SlotCallbackResult UpdateStrongSlotInternal(Object** slot) {
+  static inline SlotCallbackResult UpdateStrongSlotInternal(Heap* heap,
+                                                            Object** slot) {
     DCHECK(!HasWeakHeapObjectTag(*slot));
     return UpdateStrongSlot<AccessMode::NON_ATOMIC>(
-        reinterpret_cast<MaybeObject**>(slot));
+        heap, reinterpret_cast<MaybeObject**>(slot));
   }
 
-  static inline SlotCallbackResult UpdateSlotInternal(MaybeObject** slot) {
-    return UpdateSlot<AccessMode::NON_ATOMIC>(slot);
+  static inline SlotCallbackResult UpdateSlotInternal(Heap* heap,
+                                                      MaybeObject** slot) {
+    return UpdateSlot<AccessMode::NON_ATOMIC>(heap, slot);
   }
 
   Heap* heap_;
@@ -2836,10 +2839,10 @@ class RememberedSetUpdatingItem : public UpdatingItem {
       InvalidatedSlotsFilter filter(chunk_);
       RememberedSet<OLD_TO_OLD>::Iterate(
           chunk_,
-          [&filter](Address slot) {
+          [this, &filter](Address slot) {
             if (!filter.IsValid(slot)) return REMOVE_SLOT;
             return UpdateSlot<AccessMode::NON_ATOMIC>(
-                reinterpret_cast<MaybeObject**>(slot));
+                heap_, reinterpret_cast<MaybeObject**>(slot));
           },
           SlotSet::PREFREE_EMPTY_BUCKETS);
     }
@@ -2865,7 +2868,7 @@ class RememberedSetUpdatingItem : public UpdatingItem {
       RememberedSet<OLD_TO_NEW>::IterateTyped(
           chunk_, [this](SlotType slot_type, Address host_addr, Address slot) {
             return UpdateTypedSlotHelper::UpdateTypedSlot(
-                heap_, slot_type, slot, [this](MaybeObject** slot) {
+                heap_, slot_type, slot, [this](Heap* heap, MaybeObject** slot) {
                   return CheckAndUpdateOldToNewSlot(
                       reinterpret_cast<Address>(slot));
                 });
@@ -3999,7 +4002,8 @@ class PageMarkingItem : public MarkingItem {
         chunk_,
         [this, task](SlotType slot_type, Address host_addr, Address slot) {
           return UpdateTypedSlotHelper::UpdateTypedSlot(
-              heap(), slot_type, slot, [this, task](MaybeObject** slot) {
+              heap(), slot_type, slot,
+              [this, task](Heap* heap, MaybeObject** slot) {
                 return CheckAndMarkObject(task,
                                           reinterpret_cast<Address>(slot));
               });

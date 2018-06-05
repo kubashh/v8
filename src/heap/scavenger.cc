@@ -125,8 +125,8 @@ void Scavenger::ScavengePage(MemoryChunk* page) {
   RememberedSet<OLD_TO_NEW>::IterateTyped(
       page, [this](SlotType type, Address host_addr, Address addr) {
         return UpdateTypedSlotHelper::UpdateTypedSlot(
-            heap_, type, addr, [this](MaybeObject** addr) {
-              return CheckAndScavengeObject(heap(),
+            heap_, type, addr, [this](Heap* heap, MaybeObject** addr) {
+              return CheckAndScavengeObject(heap,
                                             reinterpret_cast<Address>(addr));
             });
       });
