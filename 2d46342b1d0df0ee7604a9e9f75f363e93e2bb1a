@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6204796_f5103792",
+        "filename": "include/v8.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 4381,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-05T13:49:05Z",
+      "side": 1,
+      "message": "Please add documentation for this class.",
+      "range": {
+        "startLine": 4381,
+        "startChar": 16,
+        "endLine": 4381,
+        "endChar": 29
+      },
+      "revId": "2d46342b1d0df0ee7604a9e9f75f363e93e2bb1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81f3bc93_5f0bb4ba",
+        "filename": "include/v8.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 4400,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-05T13:49:05Z",
+      "side": 1,
+      "message": "Nit: use \"*\" for consistency.",
+      "range": {
+        "startLine": 4400,
+        "startChar": 2,
+        "endLine": 4400,
+        "endChar": 4
+      },
+      "revId": "2d46342b1d0df0ee7604a9e9f75f363e93e2bb1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0265d5a_e4550bac",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-05T13:49:05Z",
+      "side": 1,
+      "message": "I think this will leak all function templates and the corresponding Data value with WasmStreaming because of the instantiation cache:\nhttps://cs.chromium.org/chromium/src/v8/src/api-natives.cc?rcl\u003d45c9adae1efe9905a7ec33e8ffa6bbc720a8886e\u0026l\u003d459\n\nInterestingly, if you use Function::New() directly, that one will not cache the instances as it creates non-cachable function template internally.\n\nCould you please add tests for this case and change to Function::New()?\n\nThis is another argument for unique_ptrs instead of shared_ptrs.",
+      "range": {
+        "startLine": 460,
+        "startChar": 54,
+        "endLine": 460,
+        "endChar": 79
+      },
+      "revId": "2d46342b1d0df0ee7604a9e9f75f363e93e2bb1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
