@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "102c282d_5804a6ea",
+        "filename": "test/inspector/runtime/console-deprecated-methods.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-06-05T14:24:28Z",
+      "side": 0,
+      "message": "I believe that we probably would like to remove all timeline methods together - including console.markTimeline.",
+      "revId": "f69527ee49a7e27495589fbc8c2bf0c2f1c36c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
