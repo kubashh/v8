@@ -227,7 +227,7 @@ InspectorTest.Session = class {
     }
   }
 
-  logSourceLocation(location, forceSourceRequest) {
+  logSourceLocation(location, forceSourceRequest, doNotRemoveSourceURL) {
     var scriptId = location.scriptId;
     if (!this._scriptMap || !this._scriptMap.has(scriptId)) {
       InspectorTest.log("setupScriptMap should be called before Protocol.Debugger.enable.");
@@ -246,7 +246,8 @@ InspectorTest.Session = class {
       var line = lines[location.lineNumber];
       line = line.slice(0, location.columnNumber) + '#' + (line.slice(location.columnNumber) || '');
       lines[location.lineNumber] = line;
-      lines = lines.filter(line => line.indexOf('//# sourceURL=') === -1);
+      if (!doNotRemoveSourceURL)
+        lines = lines.filter(line => line.indexOf('//# sourceURL=') === -1);
       InspectorTest.log(lines.slice(Math.max(location.lineNumber - 1, 0), location.lineNumber + 2).join('\n'));
       InspectorTest.log('');
     }
