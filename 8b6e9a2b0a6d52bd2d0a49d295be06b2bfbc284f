@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "53c7a14f_5f8105cb",
+        "filename": "src/global-handles.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-06-06T10:23:46Z",
+      "side": 1,
+      "message": "WeakSlotCallback still exists and is used elsewhere. I just used the existing WeakSlotCallbackWithHeap that was next to it:\nhttps://cs.chromium.org/chromium/src/v8/src/globals.h?l\u003d551\u0026rcl\u003de6c72ebcf1671937656e59a1e4d2a642c52a5374",
+      "parentUuid": "35e91e43_95374234",
+      "range": {
+        "startLine": 141,
+        "startChar": 6,
+        "endLine": 141,
+        "endChar": 30
+      },
+      "revId": "8b6e9a2b0a6d52bd2d0a49d295be06b2bfbc284f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "506d85f0_0f415623",
         "filename": "src/heap/incremental-marking.cc",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "8b6e9a2b0a6d52bd2d0a49d295be06b2bfbc284f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1db716ec_98cf8f23",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-06-06T10:23:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "506d85f0_0f415623",
+      "revId": "8b6e9a2b0a6d52bd2d0a49d295be06b2bfbc284f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "a716ba0f_64441338",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-06-06T10:23:46Z",
+      "side": 1,
+      "message": "Done.\n\nI\u0027ll follow up with a clean up CL that makes InToSpace also static and fixes up all the call sites.",
+      "parentUuid": "4adcbf95_9989fc5a",
+      "range": {
+        "startLine": 2017,
+        "startChar": 16,
+        "endLine": 2017,
+        "endChar": 17
+      },
+      "revId": "8b6e9a2b0a6d52bd2d0a49d295be06b2bfbc284f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b25be32a_8d4b1864",
         "filename": "src/heap/mark-compact.h",
         "patchSetId": 2
@@ -76,6 +142,30 @@
       "writtenOn": "2018-06-06T09:02:52Z",
       "side": 1,
       "message": "If that one would be non-static it would be naturally part of mark-compact-collector. Maybe we shouldn\u0027t use a callback where it is used and directly call the condition.",
+      "range": {
+        "startLine": 689,
+        "startChar": 14,
+        "endLine": 689,
+        "endChar": 34
+      },
+      "revId": "8b6e9a2b0a6d52bd2d0a49d295be06b2bfbc284f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80e695b6_dbcf4057",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-06-06T10:23:46Z",
+      "side": 1,
+      "message": "It\u0027s only called by GlobalHandles::IterateWeakRootsForPhantomHandles and GlobalHandle::IdentifyWeakHandles, which are only ever called with this function.\n\nI could move them out of global-handles.cc into mark-compact.cc and remove the call back.\n\nWDYT?",
+      "parentUuid": "b25be32a_8d4b1864",
       "range": {
         "startLine": 689,
         "startChar": 14,
