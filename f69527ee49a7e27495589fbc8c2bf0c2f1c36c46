@@ -16,6 +16,24 @@
       "revId": "f69527ee49a7e27495589fbc8c2bf0c2f1c36c46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cb1d605_a4c4a465",
+        "filename": "test/inspector/runtime/console-deprecated-methods.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1175237
+      },
+      "writtenOn": "2018-06-06T07:19:25Z",
+      "side": 0,
+      "message": "Sounds good. Would it be best to delete this entire deprecated-methods test too, or just leave the `var deprecatedMethods` array empty so we can add to it later perhaps in the future?\n\nAlso...any ideas on the consistent linux_trusty_blink_rel bot failure?",
+      "parentUuid": "102c282d_5804a6ea",
+      "revId": "f69527ee49a7e27495589fbc8c2bf0c2f1c36c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
