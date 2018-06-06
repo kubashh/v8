@@ -22,6 +22,30 @@
       "revId": "584569e2193b2f5d0522f8869c986a946523c1b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a22a2856_9beda844",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-06-06T14:23:15Z",
+      "side": 1,
+      "message": "Right... sorry",
+      "parentUuid": "058b3dc7_aaab1788",
+      "range": {
+        "startLine": 7,
+        "startChar": 30,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "584569e2193b2f5d0522f8869c986a946523c1b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
