@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35e91e43_95374234",
+        "filename": "src/global-handles.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-06-06T09:02:52Z",
+      "side": 1,
+      "message": "Should we just keep the original name WeakSlotCallback? (here and below)",
+      "range": {
+        "startLine": 141,
+        "startChar": 6,
+        "endLine": 141,
+        "endChar": 30
+      },
+      "revId": "8b6e9a2b0a6d52bd2d0a49d295be06b2bfbc284f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "506d85f0_0f415623",
+        "filename": "src/heap/incremental-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-06-06T09:02:52Z",
+      "side": 1,
+      "message": "We could just make this Function part of IncrementalMarking::ShouldRetainMap which would give you the heap.",
+      "revId": "8b6e9a2b0a6d52bd2d0a49d295be06b2bfbc284f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4adcbf95_9989fc5a",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2017,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-06-06T09:02:52Z",
+      "side": 1,
+      "message": "We could turn the InFromSpace into a static Heap::InFromSpace since it only check the page of the given page.",
+      "range": {
+        "startLine": 2017,
+        "startChar": 16,
+        "endLine": 2017,
+        "endChar": 17
+      },
+      "revId": "8b6e9a2b0a6d52bd2d0a49d295be06b2bfbc284f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b25be32a_8d4b1864",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-06-06T09:02:52Z",
+      "side": 1,
+      "message": "If that one would be non-static it would be naturally part of mark-compact-collector. Maybe we shouldn\u0027t use a callback where it is used and directly call the condition.",
+      "range": {
+        "startLine": 689,
+        "startChar": 14,
+        "endLine": 689,
+        "endChar": 34
+      },
+      "revId": "8b6e9a2b0a6d52bd2d0a49d295be06b2bfbc284f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
