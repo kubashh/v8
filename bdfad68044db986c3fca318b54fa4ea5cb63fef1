@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e00121d4_c09d08f4",
+        "filename": "src/async-hooks-wrapper.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1148031
+      },
+      "writtenOn": "2018-06-06T11:56:23Z",
+      "side": 1,
+      "message": "On \u0027real world\u0027 applications, `int` might overflow quite readily and perhaps even in an long running enough test as well? Since it is not possible to use 64-bit here, maybe use a double here?",
+      "range": {
+        "startLine": 16,
+        "startChar": 2,
+        "endLine": 16,
+        "endChar": 5
+      },
+      "revId": "bdfad68044db986c3fca318b54fa4ea5cb63fef1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "342cab43_d8c0b2e4",
         "filename": "test/mjsunit/allocation-site-info.js",
         "patchSetId": 12
