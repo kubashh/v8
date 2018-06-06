@@ -1010,7 +1010,7 @@ class ModuleDecoderImpl : public Decoder {
     WasmFunctionName func_name(function,
                                wire_bytes.GetNameOrNull(function, module));
     if (FLAG_trace_wasm_decoder || FLAG_trace_wasm_decode_time) {
-      OFStream os(stdout);
+      StdoutStream os;
       os << "Verifying wasm function " << func_name << std::endl;
     }
     FunctionBody body = {
