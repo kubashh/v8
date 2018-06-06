@@ -94,7 +94,7 @@ class ProducedPreParsedScopeData : public ZoneObject {
 
   // Create a ProducedPreParsedScopeData which is just a proxy for a previous
   // produced PreParsedScopeData.
-  ProducedPreParsedScopeData(Handle<PreParsedScopeData> data, Zone* zone);
+  ProducedPreParsedScopeData(PreParsedScopeData* data, Zone* zone);
 
   ProducedPreParsedScopeData* parent() const { return parent_; }
 
@@ -175,7 +175,7 @@ class ProducedPreParsedScopeData : public ZoneObject {
 
   // ProducedPreParsedScopeData can also mask a Handle<PreParsedScopeData>
   // which was produced already earlier. This happens for deeper lazy functions.
-  Handle<PreParsedScopeData> previously_produced_preparsed_scope_data_;
+  PreParsedScopeData* previously_produced_preparsed_scope_data_;
 
   DISALLOW_COPY_AND_ASSIGN(ProducedPreParsedScopeData);
 };

@@ -162,7 +162,8 @@ ProducedPreParsedScopeData::ProducedPreParsedScopeData(
     : parent_(parent),
       byte_data_(new (zone) ByteData(zone)),
       data_for_inner_functions_(zone),
-      bailed_out_(false) {
+      bailed_out_(false),
+      previously_produced_preparsed_scope_data_(nullptr) {
   if (parent != nullptr) {
     parent->data_for_inner_functions_.push_back(this);
   }
@@ -172,8 +173,8 @@ ProducedPreParsedScopeData::ProducedPreParsedScopeData(
 
 // Create a ProducedPreParsedScopeData which is just a proxy for a previous
 // produced PreParsedScopeData.
-ProducedPreParsedScopeData::ProducedPreParsedScopeData(
-    Handle<PreParsedScopeData> data, Zone* zone)
+ProducedPreParsedScopeData::ProducedPreParsedScopeData(PreParsedScopeData* data,
+                                                       Zone* zone)
     : parent_(nullptr),
       byte_data_(nullptr),
       data_for_inner_functions_(zone),
@@ -221,7 +222,7 @@ void ProducedPreParsedScopeData::AddSkippableFunction(
     int num_inner_functions, LanguageMode language_mode,
     bool uses_super_property) {
   DCHECK(FLAG_preparser_scope_analysis);
-  DCHECK(previously_produced_preparsed_scope_data_.is_null());
+  DCHECK_NULL(previously_produced_preparsed_scope_data_);
 
   if (bailed_out_) {
     return;
@@ -241,7 +242,7 @@ void ProducedPreParsedScopeData::AddSkippableFunction(
 void ProducedPreParsedScopeData::SaveScopeAllocationData(
     DeclarationScope* scope) {
   DCHECK(FLAG_preparser_scope_analysis);
-  DCHECK(previously_produced_preparsed_scope_data_.is_null());
+  DCHECK_NULL(previously_produced_preparsed_scope_data_);
   // The data contains a uint32 (reserved space for scope_data_start) and
   // function data items, kSkippableFunctionDataSize each.
   DCHECK_GE(byte_data_->size(), kPlaceholderSize);
@@ -276,10 +277,11 @@ bool ProducedPreParsedScopeData::ContainsInnerFunctions() const {
 
 MaybeHandle<PreParsedScopeData> ProducedPreParsedScopeData::Serialize(
     Isolate* isolate) {
-  if (!previously_produced_preparsed_scope_data_.is_null()) {
+  if (previously_produced_preparsed_scope_data_ != nullptr) {
     DCHECK(!bailed_out_);
     DCHECK_EQ(data_for_inner_functions_.size(), 0);
-    return previously_produced_preparsed_scope_data_;
+    return MaybeHandle<PreParsedScopeData>(
+        previously_produced_preparsed_scope_data_, isolate);
   }
   if (bailed_out_) {
     return MaybeHandle<PreParsedScopeData>();
@@ -528,9 +530,8 @@ ConsumedPreParsedScopeData::GetDataForSkippableFunction(
   if (!child_data->IsPreParsedScopeData()) {
     return nullptr;
   }
-  Handle<PreParsedScopeData> child_data_handle(
-      PreParsedScopeData::cast(child_data));
-  return new (zone) ProducedPreParsedScopeData(child_data_handle, zone);
+  return new (zone)
+      ProducedPreParsedScopeData(PreParsedScopeData::cast(child_data), zone);
 }
 
 void ConsumedPreParsedScopeData::RestoreScopeAllocationData(
