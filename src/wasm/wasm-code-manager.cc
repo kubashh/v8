@@ -240,7 +240,7 @@ void WasmCode::LogCode(Isolate* isolate) const {
 #ifdef ENABLE_DISASSEMBLER
     if (FLAG_print_code || FLAG_print_wasm_code) {
       // TODO(wasm): Use proper log files, here and elsewhere.
-      OFStream os(stdout);
+      StdoutStream os;
       os << "--- Wasm " << (is_liftoff() ? "liftoff" : "turbofan")
          << " code ---\n";
       this->Disassemble(cname.get(), isolate, os);
@@ -286,7 +286,7 @@ void WasmCode::Validate() const {
 }
 
 void WasmCode::Print(Isolate* isolate) const {
-  OFStream os(stdout);
+  StdoutStream os;
   Disassemble(nullptr, isolate, os);
 }
 

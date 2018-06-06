@@ -36,7 +36,7 @@ namespace internal {
 #ifdef OBJECT_PRINT
 
 void Object::Print() {
-  OFStream os(stdout);
+  StdoutStream os;
   this->Print(os);
   os << std::flush;
 }
@@ -921,7 +921,7 @@ void FeedbackCell::FeedbackCellPrint(std::ostream& os) {  // NOLINT
 }
 
 void FeedbackVectorSpec::Print() {
-  OFStream os(stdout);
+  StdoutStream os;
 
   FeedbackVectorSpecPrint(os);
 
@@ -947,7 +947,7 @@ void FeedbackVectorSpec::FeedbackVectorSpecPrint(std::ostream& os) {  // NOLINT
 }
 
 void FeedbackMetadata::Print() {
-  OFStream os(stdout);
+  StdoutStream os;
   FeedbackMetadataPrint(os);
   os << std::flush;
 }
@@ -966,7 +966,7 @@ void FeedbackMetadata::FeedbackMetadataPrint(std::ostream& os) {
 }
 
 void FeedbackVector::Print() {
-  OFStream os(stdout);
+  StdoutStream os;
   FeedbackVectorPrint(os);
   os << std::flush;
 }
@@ -2039,7 +2039,7 @@ static void PrintBitMask(std::ostream& os, uint32_t value) {  // NOLINT
 
 
 void LayoutDescriptor::Print() {
-  OFStream os(stdout);
+  StdoutStream os;
   this->Print(os);
   os << std::flush;
 }
@@ -2088,7 +2088,7 @@ void InterpreterData::InterpreterDataPrint(std::ostream& os) {  // NOLINT
 }
 
 void MaybeObject::Print() {
-  OFStream os(stdout);
+  StdoutStream os;
   this->Print(os);
   os << std::flush;
 }
@@ -2210,7 +2210,7 @@ char* String::ToAsciiArray() {
 }
 
 void DescriptorArray::Print() {
-  OFStream os(stdout);
+  StdoutStream os;
   this->PrintDescriptors(os);
   os << std::flush;
 }
@@ -2249,7 +2249,7 @@ void TransitionsAccessor::PrintOneTransition(std::ostream& os, Name* key,
 }
 
 void TransitionArray::Print() {
-  OFStream os(stdout);
+  StdoutStream os;
   Print(os);
 }
 
@@ -2282,7 +2282,7 @@ void TransitionsAccessor::PrintTransitions(std::ostream& os) {  // NOLINT
 }
 
 void TransitionsAccessor::PrintTransitionTree() {
-  OFStream os(stdout);
+  StdoutStream os;
   os << "map= " << Brief(map_);
   DisallowHeapAllocation no_gc;
   PrintTransitionTree(os, 0, &no_gc);
@@ -2358,7 +2358,7 @@ extern void _v8_internal_Print_Code(void* object) {
   i::wasm::WasmCode* wasm_code =
       isolate->wasm_engine()->code_manager()->LookupCode(address);
   if (wasm_code) {
-    i::OFStream os(stdout);
+    i::StdoutStream os;
     wasm_code->Disassemble(nullptr, isolate, os, address);
     return;
   }
@@ -2377,7 +2377,7 @@ extern void _v8_internal_Print_Code(void* object) {
     return;
   }
 #ifdef ENABLE_DISASSEMBLER
-  i::OFStream os(stdout);
+  i::StdoutStream os;
   code->Disassemble(nullptr, os, address);
 #else   // ENABLE_DISASSEMBLER
   code->Print();
