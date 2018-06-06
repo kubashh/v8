@@ -1943,16 +1943,14 @@ void Heap::CheckNewSpaceExpansionCriteria() {
 }
 
 static bool IsUnscavengedHeapObject(Heap* heap, Object** p) {
-  return heap->InFromSpace(*p) &&
+  return Heap::InFromSpace(*p) &&
          !HeapObject::cast(*p)->map_word().IsForwardingAddress();
 }
 
 class ScavengeWeakObjectRetainer : public WeakObjectRetainer {
  public:
-  explicit ScavengeWeakObjectRetainer(Heap* heap) : heap_(heap) {}
-
   virtual Object* RetainAs(Object* object) {
-    if (!heap_->InFromSpace(object)) {
+    if (!Heap::InFromSpace(object)) {
       return object;
     }
 
@@ -1962,9 +1960,6 @@ class ScavengeWeakObjectRetainer : public WeakObjectRetainer {
     }
     return nullptr;
   }
-
- private:
-  Heap* heap_;
 };
 
 void Heap::EvacuateYoungGeneration() {
@@ -2210,7 +2205,7 @@ void Heap::Scavenge() {
     }
   }
 
-  ScavengeWeakObjectRetainer weak_object_retainer(this);
+  ScavengeWeakObjectRetainer weak_object_retainer;
   ProcessYoungWeakReferences(&weak_object_retainer);
 
   // Set age mark.
@@ -3784,7 +3779,7 @@ class OldToNewSlotVerifyingVisitor : public SlotVerifyingVisitor {
   bool ShouldHaveBeenRecorded(HeapObject* host, MaybeObject* target) override {
     DCHECK_IMPLIES(
         target->IsStrongOrWeakHeapObject() && heap_->InNewSpace(target),
-        heap_->InToSpace(target));
+        Heap::InToSpace(target));
     return target->IsStrongOrWeakHeapObject() && heap_->InNewSpace(target) &&
            !heap_->InNewSpace(host);
   }
