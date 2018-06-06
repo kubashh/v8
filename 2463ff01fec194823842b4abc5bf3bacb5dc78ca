@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e28c9225_7cbf4426",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-06T14:14:38Z",
+      "side": 1,
+      "message": "Nit: Move template instantiations in objects.cc to the end of the file",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "2463ff01fec194823842b4abc5bf3bacb5dc78ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
