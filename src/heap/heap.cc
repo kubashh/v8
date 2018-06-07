@@ -1804,16 +1804,41 @@ bool Heap::PerformGarbageCollection(
     // Register the amount of external allocated memory.
     external_memory_at_last_mark_compact_ = external_memory_;
     external_memory_limit_ = external_memory_ + kExternalAllocationSoftLimit;
-    old_generation_allocation_limit_ =
-        heap_controller()->ComputeOldGenerationAllocationLimit(
-            old_gen_size, max_old_generation_size_, gc_speed, mutator_speed);
+
+    size_t new_limit = heap_controller()->CalculateOldGenerationAllocationLimit(
+        false, old_gen_size, max_old_generation_size_, gc_speed, mutator_speed,
+        new_space()->Capacity(), memory_reducer()->ShouldGrowHeapSlowly(),
+        ShouldOptimizeForMemoryUsage(), ShouldReduceMemory());
+
+    if (new_limit > old_generation_allocation_limit_) {
+      if (FLAG_trace_gc_verbose) {
+        isolate()->PrintWithTimestamp("Grow: old size: %" PRIuS
+                                      " KB, new limit: %" PRIuS " KB\n",
+                                      old_gen_size / KB, new_limit / KB);
+      }
+      old_generation_allocation_limit_ = new_limit;
+    }
+
     CheckIneffectiveMarkCompact(
         old_gen_size, tracer()->AverageMarkCompactMutatorUtilization());
   } else if (HasLowYoungGenerationAllocationRate() &&
              old_generation_size_configured_) {
-    old_generation_allocation_limit_ =
-        heap_controller()->DampenOldGenerationAllocationLimit(
-            old_gen_size, max_old_generation_size_, gc_speed, mutator_speed);
+    size_t new_limit = heap_controller()->CalculateOldGenerationAllocationLimit(
+        true, old_gen_size, max_old_generation_size_, gc_speed, mutator_speed,
+        new_space()->Capacity(), memory_reducer()->ShouldGrowHeapSlowly(),
+        ShouldOptimizeForMemoryUsage(), ShouldReduceMemory());
+
+    if (new_limit < old_generation_allocation_limit_) {
+      if (FLAG_trace_gc_verbose) {
+        isolate()->PrintWithTimestamp(
+            "Dampen: old size: %" PRIuS " KB, old limit: %" PRIuS
+            " KB, "
+            "new limit: %" PRIuS " KB\n",
+            old_gen_size / KB, old_generation_allocation_limit_ / KB,
+            new_limit / KB);
+      }
+      old_generation_allocation_limit_ = new_limit;
+    }
   }
 
   {
@@ -2579,7 +2604,8 @@ void Heap::UnregisterArrayBuffer(JSArrayBuffer* buffer) {
 void Heap::ConfigureInitialOldGenerationSize() {
   if (!old_generation_size_configured_ && tracer()->SurvivalEventsRecorded()) {
     old_generation_allocation_limit_ =
-        Max(heap_controller()->MinimumAllocationLimitGrowingStep(),
+        Max(heap_controller()->MinimumAllocationLimitGrowingStep(
+                ShouldOptimizeForMemoryUsage()),
             static_cast<size_t>(
                 static_cast<double>(old_generation_allocation_limit_) *
                 (tracer()->AverageSurvivalRatio() / 100)));
@@ -4534,7 +4560,7 @@ bool Heap::SetUp() {
 
   store_buffer_ = new StoreBuffer(this);
 
-  heap_controller_ = new HeapController(this);
+  heap_controller_ = new HeapController();
 
   mark_compact_collector_ = new MarkCompactCollector(this);
   incremental_marking_ =
