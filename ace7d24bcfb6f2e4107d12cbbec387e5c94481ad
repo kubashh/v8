@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d1b8406_984108a4",
+        "filename": "src/log.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2038,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-06-07T19:05:28Z",
+      "side": 1,
+      "message": "You are unnecessarily creating a handle here. Just do the comparison like this:\n\ncode_object \u003d\u003d *BUILTIN_CODE(isolate_, InterpreterEntryTrampoline)",
+      "range": {
+        "startLine": 2036,
+        "startChar": 9,
+        "endLine": 2038,
+        "endChar": 68
+      },
+      "revId": "ace7d24bcfb6f2e4107d12cbbec387e5c94481ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
