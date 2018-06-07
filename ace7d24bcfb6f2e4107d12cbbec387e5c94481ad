@@ -22,6 +22,30 @@
       "revId": "ace7d24bcfb6f2e4107d12cbbec387e5c94481ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2264bc7_f3256d79",
+        "filename": "src/log.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2038,
+      "author": {
+        "id": 1240175
+      },
+      "writtenOn": "2018-06-07T20:17:21Z",
+      "side": 1,
+      "message": "Done. Had to make a few more changes since code_object was a `AbstractCode*` and BUILTIN_CODE returns a `Handle\u003cCode\u003e`, and clang complains when comparing pointers of different types.",
+      "parentUuid": "2d1b8406_984108a4",
+      "range": {
+        "startLine": 2036,
+        "startChar": 9,
+        "endLine": 2038,
+        "endChar": 68
+      },
+      "revId": "ace7d24bcfb6f2e4107d12cbbec387e5c94481ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
