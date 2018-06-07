@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e7a80ae_f8486ab2",
+        "filename": "src/heap/heap-controller.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-07T15:25:56Z",
+      "side": 1,
+      "message": "Our style guide recommends to not use bool parameters as they make reading code difficult at the function call-sites: f(true, false, true).\n\nIt is better to use enums. In our case we could have an enum something like:\n\nenum class HeapGrowingMode {\n  kDefault,\n  kConservative,\n  kMinimal\n};\n\nThen we can have a function in Heap that computes the mode based on the heap state:\n - heap_-\u003eShouldReduceMemory() \u003d\u003e mode \u003d\u003d HeapGrowingMode::kMinimal\n - (heap_-\u003ememory_reducer()-\u003eShouldGrowHeapSlowly() ||\n      heap_-\u003eShouldOptimizeForMemoryUsage()) \u003d\u003e mode \u003d\u003d HeapGrowingMode::kConservative\n - otherwise \u003d\u003e mode \u003d\u003d HeapGrowingMode::kDefault.\n\nThis would require us to change the behaviour of MinimumAllocationLimitGrowingStep to select kLowMemoryAllocationLimitGrowingStep both for conservative and minimal mode, which should be fine.",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 26
+      },
+      "revId": "3d3798235a9c382b254203d445958ee09d15c2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f98bb5f_c921a861",
+        "filename": "src/heap/heap-controller.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-07T15:25:56Z",
+      "side": 1,
+      "message": "For simplicity, let\u0027s drop this parameter and do this branch unconditionally for dampening case too.",
+      "range": {
+        "startLine": 111,
+        "startChar": 7,
+        "endLine": 111,
+        "endChar": 19
+      },
+      "revId": "3d3798235a9c382b254203d445958ee09d15c2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
