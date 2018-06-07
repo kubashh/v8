@@ -451,5 +451,92 @@ TEST_F(GCTracerTest, MultithreadedBackgroundScope) {
   EXPECT_LE(0, tracer->current_.scopes[GCTracer::Scope::MC_BACKGROUND_MARKING]);
 }
 
+class MockHistogram {
+ public:
+  static void* CreateHistogram(const char* name, int min, int max,
+                               size_t buckets) {
+    histograms_[name] = std::make_unique<MockHistogram>();
+    return histograms_[name].get();
+  }
+
+  static void AddHistogramSample(void* histogram, int sample) {
+    static_cast<MockHistogram*>(histogram)->samples_.push_back(sample);
+  }
+
+  static MockHistogram* Get(const char* name) {
+    return histograms_[name].get();
+  }
+
+  static void CleanUp() { histograms_.clear(); }
+
+  int Total() {
+    int result = 0;
+    for (int i : samples_) {
+      result += i;
+    }
+    return result;
+  }
+
+  int Count() { return static_cast<int>(samples_.size()); }
+
+ private:
+  std::vector<int> samples_;
+  static std::map<std::string, std::unique_ptr<MockHistogram>> histograms_;
+};
+
+std::map<std::string, std::unique_ptr<MockHistogram>>
+    MockHistogram::histograms_ =
+        std::map<std::string, std::unique_ptr<MockHistogram>>();
+
+TEST_F(GCTracerTest, RecordMarkCompactHistogramsLess50ms) {
+  isolate()->SetCreateHistogramFunction(&MockHistogram::CreateHistogram);
+  isolate()->SetAddHistogramSampleFunction(&MockHistogram::AddHistogramSample);
+  GCTracer* tracer = i_isolate()->heap()->tracer();
+  tracer->ResetForTesting();
+  tracer->current_.scopes[GCTracer::Scope::MC_CLEAR] = 1;
+  tracer->current_.scopes[GCTracer::Scope::MC_EPILOGUE] = 2;
+  tracer->current_.scopes[GCTracer::Scope::MC_EVACUATE] = 3;
+  tracer->current_.scopes[GCTracer::Scope::MC_FINISH] = 4;
+  tracer->current_.scopes[GCTracer::Scope::MC_MARK] = 5;
+  tracer->current_.scopes[GCTracer::Scope::MC_PROLOGUE] = 6;
+  tracer->current_.scopes[GCTracer::Scope::MC_SWEEP] =
+      50 - (1 + 2 + 3 + 4 + 5 + 6) - 1e-6;
+  tracer->RecordMarkCompactHistograms(i_isolate()->counters()->gc_finalize());
+  EXPECT_EQ(0, MockHistogram::Get("V8.GCFinalizeMC.Greater50ms")->Total());
+
+  MockHistogram::CleanUp();
+}
+
+TEST_F(GCTracerTest, RecordMarkCompactHistogramsGreater50ms) {
+  isolate()->SetCreateHistogramFunction(&MockHistogram::CreateHistogram);
+  isolate()->SetAddHistogramSampleFunction(&MockHistogram::AddHistogramSample);
+  GCTracer* tracer = i_isolate()->heap()->tracer();
+  tracer->ResetForTesting();
+  tracer->current_.scopes[GCTracer::Scope::MC_CLEAR] = 1;
+  tracer->current_.scopes[GCTracer::Scope::MC_EPILOGUE] = 2;
+  tracer->current_.scopes[GCTracer::Scope::MC_EVACUATE] = 3;
+  tracer->current_.scopes[GCTracer::Scope::MC_FINISH] = 4;
+  tracer->current_.scopes[GCTracer::Scope::MC_MARK] = 5;
+  tracer->current_.scopes[GCTracer::Scope::MC_PROLOGUE] = 6;
+  tracer->current_.scopes[GCTracer::Scope::MC_SWEEP] =
+      51 - (1 + 2 + 3 + 4 + 5 + 6);
+  tracer->RecordMarkCompactHistograms(i_isolate()->counters()->gc_finalize());
+  EXPECT_EQ(51, MockHistogram::Get("V8.GCFinalizeMC.Greater50ms")->Total());
+  EXPECT_EQ(1,
+            MockHistogram::Get("V8.GCFinalizeMC.Greater50ms.Clear")->Total());
+  EXPECT_EQ(
+      2, MockHistogram::Get("V8.GCFinalizeMC.Greater50ms.Epilogue")->Total());
+  EXPECT_EQ(
+      3, MockHistogram::Get("V8.GCFinalizeMC.Greater50ms.Evacuate")->Total());
+  EXPECT_EQ(4,
+            MockHistogram::Get("V8.GCFinalizeMC.Greater50ms.Finish")->Total());
+  EXPECT_EQ(5, MockHistogram::Get("V8.GCFinalizeMC.Greater50ms.Mark")->Total());
+  EXPECT_EQ(
+      6, MockHistogram::Get("V8.GCFinalizeMC.Greater50ms.Prologue")->Total());
+  EXPECT_EQ(51 - (1 + 2 + 3 + 4 + 5 + 6),
+            MockHistogram::Get("V8.GCFinalizeMC.Greater50ms.Sweep")->Total());
+  MockHistogram::CleanUp();
+}
+
 }  // namespace internal
 }  // namespace v8

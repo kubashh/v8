@@ -1128,6 +1128,21 @@ class RuntimeCallTimerScope {
   HR(incremental_marking_reason, V8.GCIncrementalMarkingReason, 0, 21, 22)     \
   HR(incremental_marking_sum, V8.GCIncrementalMarkingSum, 0, 10000, 101)       \
   HR(mark_compact_reason, V8.GCMarkCompactReason, 0, 21, 22)                   \
+  HR(gc_finalize_greater_50ms, V8.GCFinalizeMC.Greater50ms, 0, 10000, 101)     \
+  HR(gc_finalize_greater_50ms_clear, V8.GCFinalizeMC.Greater50ms.Clear, 0,     \
+     10000, 101)                                                               \
+  HR(gc_finalize_greater_50ms_epilogue, V8.GCFinalizeMC.Greater50ms.Epilogue,  \
+     0, 10000, 101)                                                            \
+  HR(gc_finalize_greater_50ms_evacuate, V8.GCFinalizeMC.Greater50ms.Evacuate,  \
+     0, 10000, 101)                                                            \
+  HR(gc_finalize_greater_50ms_finish, V8.GCFinalizeMC.Greater50ms.Finish, 0,   \
+     10000, 101)                                                               \
+  HR(gc_finalize_greater_50ms_mark, V8.GCFinalizeMC.Greater50ms.Mark, 0,       \
+     10000, 101)                                                               \
+  HR(gc_finalize_greater_50ms_prologue, V8.GCFinalizeMC.Greater50ms.Prologue,  \
+     0, 10000, 101)                                                            \
+  HR(gc_finalize_greater_50ms_sweep, V8.GCFinalizeMC.Greater50ms.Sweep, 0,     \
+     10000, 101)                                                               \
   HR(scavenge_reason, V8.GCScavengeReason, 0, 21, 22)                          \
   HR(young_generation_handling, V8.GCYoungGenerationHandling, 0, 2, 3)         \
   /* Asm/Wasm. */                                                              \

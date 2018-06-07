@@ -1100,5 +1100,38 @@ void GCTracer::AddBackgroundScopeSample(
   }
 }
 
+double GCTracer::MarkCompactDuration() {
+  double result = 0;
+  for (int i = Scope::FIRST_TOP_MC_SCOPE; i <= Scope::LAST_TOP_MC_SCOPE; i++) {
+    result += current_.scopes[i];
+  }
+  return result;
+}
+
+void GCTracer::RecordMarkCompactHistograms(HistogramTimer* gc_timer) {
+  Counters* counters = heap_->isolate()->counters();
+  double mark_compact_duration = MarkCompactDuration();
+
+  if (gc_timer == counters->gc_finalize() && mark_compact_duration > 50) {
+    DCHECK_EQ(Scope::FIRST_TOP_MC_SCOPE, Scope::MC_CLEAR);
+    counters->gc_finalize_greater_50ms()->AddSample(mark_compact_duration);
+    counters->gc_finalize_greater_50ms_clear()->AddSample(
+        static_cast<int>(current_.scopes[Scope::MC_CLEAR]));
+    counters->gc_finalize_greater_50ms_epilogue()->AddSample(
+        static_cast<int>(current_.scopes[Scope::MC_EPILOGUE]));
+    counters->gc_finalize_greater_50ms_evacuate()->AddSample(
+        static_cast<int>(current_.scopes[Scope::MC_EVACUATE]));
+    counters->gc_finalize_greater_50ms_finish()->AddSample(
+        static_cast<int>(current_.scopes[Scope::MC_FINISH]));
+    counters->gc_finalize_greater_50ms_mark()->AddSample(
+        static_cast<int>(current_.scopes[Scope::MC_MARK]));
+    counters->gc_finalize_greater_50ms_prologue()->AddSample(
+        static_cast<int>(current_.scopes[Scope::MC_PROLOGUE]));
+    counters->gc_finalize_greater_50ms_sweep()->AddSample(
+        static_cast<int>(current_.scopes[Scope::MC_SWEEP]));
+    DCHECK_EQ(Scope::FIRST_LAST_MC_SCOPE, Scope::MC_SWEEP);
+  }
+}
+
 }  // namespace internal
 }  // namespace v8
