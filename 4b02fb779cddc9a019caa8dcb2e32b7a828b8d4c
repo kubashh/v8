@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef157207_d83d4ee4",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1583,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-07T14:19:36Z",
+      "side": 1,
+      "message": "Can we just inline this function into IterateAndExtractReferences now?",
+      "range": {
+        "startLine": 1583,
+        "startChar": 21,
+        "endLine": 1583,
+        "endChar": 48
+      },
+      "revId": "4b02fb779cddc9a019caa8dcb2e32b7a828b8d4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
