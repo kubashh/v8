@@ -1558,8 +1558,8 @@ void Module::ModuleVerify() {
 void PrototypeInfo::PrototypeInfoVerify() {
   CHECK(IsPrototypeInfo());
   CHECK(weak_cell()->IsWeakCell() || weak_cell()->IsUndefined(GetIsolate()));
-  if (prototype_users()->IsFixedArrayOfWeakCells()) {
-    FixedArrayOfWeakCells::cast(prototype_users())->FixedArrayVerify();
+  if (prototype_users()->IsWeakArrayList()) {
+    WeakArrayList::cast(prototype_users())->WeakArrayListVerify();
   } else {
     CHECK(prototype_users()->IsSmi());
   }
