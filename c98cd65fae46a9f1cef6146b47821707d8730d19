@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c331bfe1_f178a8f5",
+        "filename": "src/log.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2039,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-06-07T10:38:08Z",
+      "side": 1,
+      "message": "Why do we need to compare InstructionStart? Can\u0027t we just compare code objects themselves?",
+      "range": {
+        "startLine": 2039,
+        "startChar": 6,
+        "endLine": 2039,
+        "endChar": 7
+      },
+      "revId": "c98cd65fae46a9f1cef6146b47821707d8730d19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
