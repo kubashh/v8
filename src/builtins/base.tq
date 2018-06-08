@@ -42,6 +42,7 @@ type FixedTypedArrayBase extends FixedArrayBase generates
 'TNode<FixedTypedArrayBase>';
 type FixedTypedArray extends FixedTypedArrayBase generates
 'TNode<FixedTypedArray>';
+type NumberDictionary extends HeapObject generates 'TNode<NumberDictionary>';
 
 type JSArrayBuffer extends JSObject generates 'TNode<JSArrayBuffer>';
 type JSArrayBufferView extends JSObject generates 'TNode<JSArrayBufferView>';
@@ -67,6 +68,7 @@ const PACKED_ELEMENTS: constexpr ElementsKind = 'PACKED_ELEMENTS';
 const HOLEY_ELEMENTS: constexpr ElementsKind = 'HOLEY_ELEMENTS';
 const PACKED_DOUBLE_ELEMENTS: constexpr ElementsKind = 'PACKED_DOUBLE_ELEMENTS';
 const HOLEY_DOUBLE_ELEMENTS: constexpr ElementsKind = 'HOLEY_DOUBLE_ELEMENTS';
+const DICTIONARY_ELEMENTS: constexpr ElementsKind = 'DICTIONARY_ELEMENTS';
 
 const UINT8_ELEMENTS: constexpr ElementsKind = 'UINT8_ELEMENTS';
 const INT8_ELEMENTS: constexpr ElementsKind = 'INT8_ELEMENTS';
@@ -371,6 +373,9 @@ macro StoreFixedDoubleArrayElementWithSmiIndex(
   StoreFixedDoubleArrayElement(array, index, value, SMI_PARAMETERS);
 }
 
+extern macro LoadNumberDictionaryElement(NumberDictionary, intptr): Object labels NotData, IfHole;
+extern macro StoreNumberDictionaryElement(NumberDictionary, intptr, Object) labels Fail, IfHole;
+
 extern macro IsFastElementsKind(ElementsKind): bool;
 extern macro IsFastSmiOrTaggedElementsKind(ElementsKind): bool;
 extern macro IsFastSmiElementsKind(ElementsKind): bool;
@@ -446,5 +451,6 @@ extern macro IsCallable(HeapObject): bool;
 extern macro IsJSArray(HeapObject): bool;
 extern macro TaggedIsCallable(Object): bool;
 extern macro IsDetachedBuffer(JSArrayBuffer): bool;
+extern macro IsExtensibleMap(Map): bool;
 
 extern macro NumberIsNaN(Number): bool;
