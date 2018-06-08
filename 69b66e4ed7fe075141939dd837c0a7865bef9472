@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eab5e6c3_e90a45e3",
+        "filename": "src/heap/heap-controller.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-08T09:43:46Z",
+      "side": 1,
+      "message": "Please use uint64_t here and below (i.e. keep the old implementation), otherwise this can overflow in 32-bit mode if the factor in 4 and the size is larger than 1GB.",
+      "range": {
+        "startLine": 133,
+        "startChar": 29,
+        "endLine": 133,
+        "endChar": 35
+      },
+      "revId": "69b66e4ed7fe075141939dd837c0a7865bef9472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "202c10ba_aa9bd29c",
+        "filename": "src/heap/heap-controller.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-08T09:43:46Z",
+      "side": 1,
+      "message": "How about \"Heap controller limit:\"?",
+      "range": {
+        "startLine": 142,
+        "startChar": 9,
+        "endLine": 142,
+        "endChar": 29
+      },
+      "revId": "69b66e4ed7fe075141939dd837c0a7865bef9472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19c169a4_d7550a85",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-08T09:43:46Z",
+      "side": 1,
+      "message": "We should set the limit unconditionally. It can be less than the current limit.",
+      "range": {
+        "startLine": 1811,
+        "startChar": 4,
+        "endLine": 1811,
+        "endChar": 55
+      },
+      "revId": "69b66e4ed7fe075141939dd837c0a7865bef9472",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
