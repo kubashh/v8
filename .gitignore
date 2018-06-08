@@ -102,3 +102,4 @@ v8.ignition_dispatches_table.json
 /Default/
 node_modules
 tools/turbolizer/build
+tools/turbolizer/deploy
