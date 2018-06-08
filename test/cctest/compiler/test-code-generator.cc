@@ -380,7 +380,15 @@ class TestEnvironment : public HandleAndZoneScope {
         rng_(CcTest::random_number_generator()),
         supported_reps_({MachineRepresentation::kTagged,
                          MachineRepresentation::kFloat32,
-                         MachineRepresentation::kFloat64}) {
+                         MachineRepresentation::kFloat64}),
+        old_enable_slow_asserts_(FLAG_enable_slow_asserts) {
+#ifdef ENABLE_SLOW_DCHECKS
+    // The "setup" and "teardown" functions are relatively big, and with runtime
+    // assertions enabled they get so big that memory during register allocation
+    // becomes a problem. Temporarily disable such assertions.
+    FLAG_enable_slow_asserts = false;
+#endif
+
     // Create and initialize a single empty block in blocks_.
     InstructionBlock* block = new (main_zone()) InstructionBlock(
         main_zone(), RpoNumber::FromInt(0), RpoNumber::Invalid(),
@@ -574,6 +582,14 @@ class TestEnvironment : public HandleAndZoneScope {
                        kNoCalleeSaved,                 // callee-saved registers
                        kNoCalleeSaved,                 // callee-saved fp
                        CallDescriptor::kNoFlags);      // flags
+  }
+
+  ~TestEnvironment() {
+#ifdef ENABLE_SLOW_DCHECKS
+    FLAG_enable_slow_asserts = old_enable_slow_asserts_;
+#else
+    USE(old_enable_slow_asserts_);
+#endif
   }
 
   int AllocateConstant(Constant constant) {
@@ -933,6 +949,7 @@ class TestEnvironment : public HandleAndZoneScope {
   std::map<MachineRepresentation, std::vector<AllocatedOperand>>
       allocated_slots_;
   int stack_slot_count_;
+  bool old_enable_slow_asserts_;
 };
 
 // static
