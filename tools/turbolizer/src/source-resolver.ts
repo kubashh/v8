@@ -14,9 +14,18 @@ function sourcePositionEq(a, b) {
     a.scriptOffset == b.scriptOffset;
 }
 
-function sourcePositionToStringKey(sourcePosition) {
+function sourcePositionToStringKey(sourcePosition): string {
   if (!sourcePosition) return "undefined";
-  return "" + sourcePosition.inliningId + ":" + sourcePosition.scriptOffset;
+  if (sourcePosition.inliningId && sourcePosition.scriptOffset)
+    return "SP:" + sourcePosition.inliningId + ":" + sourcePosition.scriptOffset;
+  if (sourcePosition.bytecodePosition)
+    return "BCP:" + sourcePosition.bytecodePosition;
+  return "undefined";
+}
+
+function sourcePositionValid(l) {
+  return (typeof l.scriptOffset !== undefined
+          && typeof l.inliningId !== undefined) || typeof l.bytecodePosition != undefined;
 }
 
 interface SourcePosition {
@@ -61,6 +70,7 @@ class SourceResolver {
   phases: Array<Phase>;
   phaseNames: Map<string, number>;
   disassemblyPhase: Phase;
+  sourceLineToBytecodePosition: Array<number>;
 
   constructor() {
     // Maps node ids to source positions.
@@ -255,6 +265,23 @@ class SourceResolver {
     return inliningStack;
   }
 
+  recordOrigins(phase) {
+    if (phase.type != "graph") return;
+    for (const node of phase.data.nodes) {
+      if (node.origin != undefined &&
+          node.origin.bytecodePosition != undefined) {
+        const position = {bytecodePosition: node.origin.bytecodePosition};
+        this.nodePositionMap[node.id] = position;
+        let key = sourcePositionToStringKey(position);
+        if (!this.positionToNodes.has(key)) {
+          this.positionToNodes.set(key, []);
+        }
+        const A = this.positionToNodes.get(key);
+        if (!A.includes(node.id)) A.push("" + node.id);
+      }
+    }
+  }
+
   parsePhases(phases) {
     for (const [phaseId, phase] of Object.entries<Phase>(phases)) {
       if (phase.type == 'disassembly') {
@@ -264,6 +291,7 @@ class SourceResolver {
         this.phaseNames.set(phase.name, this.phases.length);
       } else {
         this.phases.push(phase);
+        this.recordOrigins(phase);
         this.phaseNames.set(phase.name, this.phases.length);
       }
     }
@@ -283,6 +311,17 @@ class SourceResolver {
 
   forEachPhase(f) {
     this.phases.forEach(f);
+  }
+
+  setSourceLineToBytecodePosition(sourceLineToBytecodePosition) {
+    this.sourceLineToBytecodePosition = sourceLineToBytecodePosition;
+  }
+
+  linetoSourcePositions(lineNumber) {
+    if (!this.sourceLineToBytecodePosition) return [];
+    const bytecodePosition = this.sourceLineToBytecodePosition[lineNumber];
+    if (bytecodePosition === undefined) return [];
+    return [{bytecodePosition: bytecodePosition}];
   }
 
   parseSchedule(phase) {
