@@ -226,7 +226,8 @@ window.onload = function () {
           sourceId: -1,
           startPosition: jsonObj.sourcePosition,
           endPosition: jsonObj.sourcePosition + jsonObj.source.length,
-          sourceText: jsonObj.source
+          sourceText: jsonObj.source,
+          backwardsCompatibility: true
         };
       }
 
