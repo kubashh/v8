@@ -22,6 +22,30 @@
       "revId": "72b530cd1b569389157897affcbfe1a76d77b677",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea89b50b_921a22fa",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-08T10:34:00Z",
+      "side": 1,
+      "message": "As discussed offline, let\u0027s go with recording unconditionally.",
+      "parentUuid": "dffb655c_7ed42543",
+      "range": {
+        "startLine": 1115,
+        "startChar": 69,
+        "endLine": 1115,
+        "endChar": 71
+      },
+      "revId": "72b530cd1b569389157897affcbfe1a76d77b677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
