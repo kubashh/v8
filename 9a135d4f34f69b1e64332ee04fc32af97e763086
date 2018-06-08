@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8449ee5_c9943d06",
+        "filename": "src/log.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-06-08T01:34:35Z",
+      "side": 1,
+      "message": "I\u0027m a fan of creating variables in the smallest scope necessary. Besides, this cast will simply fail in debug mode with slow dchecks if the object is a bytecode array. Can we just perform the comparison as\n\nCode::cast(code_object) \u003d\u003d *BUILTIN_CODE(...)",
+      "range": {
+        "startLine": 2014,
+        "startChar": 15,
+        "endLine": 2014,
+        "endChar": 19
+      },
+      "revId": "9a135d4f34f69b1e64332ee04fc32af97e763086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
