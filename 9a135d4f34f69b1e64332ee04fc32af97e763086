@@ -22,6 +22,30 @@
       "revId": "9a135d4f34f69b1e64332ee04fc32af97e763086",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f31b3703_6dc2706b",
+        "filename": "src/log.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1240175
+      },
+      "writtenOn": "2018-06-08T18:21:17Z",
+      "side": 1,
+      "message": "That\u0027s true. I\u0027ll update to `Code::cast(code_object) \u003d\u003d *BUILTIN_CODE(...)` and run tests with DCHECK on, to make sure I\u0027m not missing anything else.\n\nIf we want still declare code in a limited scope to avoid two Code::cast in the if statement, we could declare it inside a block after the case statement (although this feels clunky):\n\n  case AbstractCode::BUILTIN:\n    {\n      Code* code \u003d Code::cast(object);\n      if (code-\u003eis_interpreter_trampoline_builtin() \u0026\u0026\n          code \u003d\u003d *BUILTIN_CODE(isolate_, InterpreterEntryTrampoline)) {\n        return;\n      }\n    }\n    description \u003d\n        isolate_-\u003ebuiltins()-\u003ename(abstract_code-\u003eGetCode()-\u003ebuiltin_index());\n    tag \u003d CodeEventListener::BUILTIN_TAG;\n    break;",
+      "parentUuid": "a8449ee5_c9943d06",
+      "range": {
+        "startLine": 2014,
+        "startChar": 15,
+        "endLine": 2014,
+        "endChar": 19
+      },
+      "revId": "9a135d4f34f69b1e64332ee04fc32af97e763086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
