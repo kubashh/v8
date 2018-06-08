@@ -33,6 +33,25 @@ interface SourcePosition {
   inliningId: number;
 }
 
+interface TurboFanOrigin {
+  phase: string;
+  reducer: string;
+}
+
+interface NodeOrigin {
+  nodeId: number;
+}
+
+interface BytecodePosition {
+  bytecodePosition: number;
+}
+
+type Origin = NodeOrigin | BytecodePosition;
+type TurboFanNodeOrigin = NodeOrigin & TurboFanOrigin;
+type TurboFanBytecodeOrigin = BytecodePosition & TurboFanOrigin;
+
+type AnyPosition = SourcePosition | BytecodePosition;
+
 interface Source {
   sourcePositions: Array<SourcePosition>;
   sourceName: string;
@@ -55,14 +74,8 @@ interface Schedule {
   nodes: Array<any>;
 }
 
-interface NodeOrigin {
-  nodeId: number;
-  phase: string;
-  reducer: string;
-}
-
 class SourceResolver {
-  nodePositionMap: Array<SourcePosition>;
+  nodePositionMap: Array<AnyPosition>;
   sources: Array<Source>;
   inlinings: Array<Inlining>;
   inliningsMap: Map<string, Inlining>;
@@ -70,7 +83,8 @@ class SourceResolver {
   phases: Array<Phase>;
   phaseNames: Map<string, number>;
   disassemblyPhase: Phase;
-  sourceLineToBytecodePosition: Array<number>;
+  lineToSourcePositions: Map<string, Array<AnyPosition>>;
+
 
   constructor() {
     // Maps node ids to source positions.
@@ -89,6 +103,8 @@ class SourceResolver {
     this.phaseNames = new Map();
     // The disassembly phase is stored separately.
     this.disassemblyPhase = undefined;
+    // Maps line numbers to source positions
+    this.lineToSourcePositions = new Map();
   }
 
   setSources(sources, mainBackup) {
@@ -163,7 +179,7 @@ class SourceResolver {
     return nodeIds;
   }
 
-  nodeIdsToSourcePositions(nodeIds) {
+  nodeIdsToSourcePositions(nodeIds): Array<AnyPosition> {
     const sourcePositions = new Map();
     for (const nodeId of nodeIds) {
       let sp = this.nodePositionMap[nodeId];
@@ -313,15 +329,26 @@ class SourceResolver {
     this.phases.forEach(f);
   }
 
-  setSourceLineToBytecodePosition(sourceLineToBytecodePosition) {
-    this.sourceLineToBytecodePosition = sourceLineToBytecodePosition;
+  addAnyPositionToLine(lineNumber:number|String, sourcePosition:AnyPosition) {
+    const lineNumberString = anyToString(lineNumber);
+    if (!this.lineToSourcePositions.has(lineNumberString)) {
+      this.lineToSourcePositions.set(lineNumberString, []);
+    }
+    const A = this.lineToSourcePositions.get(lineNumberString);
+    if (!A.includes(sourcePosition)) A.push(sourcePosition);
   }
 
-  linetoSourcePositions(lineNumber) {
-    if (!this.sourceLineToBytecodePosition) return [];
-    const bytecodePosition = this.sourceLineToBytecodePosition[lineNumber];
-    if (bytecodePosition === undefined) return [];
-    return [{bytecodePosition: bytecodePosition}];
+  setSourceLineToBytecodePosition(sourceLineToBytecodePosition:Array<number>|undefined) {
+    if (!sourceLineToBytecodePosition) return;
+    sourceLineToBytecodePosition.forEach((pos, i) => {
+      this.addAnyPositionToLine(i, {bytecodePosition: pos});
+    });
+  }
+
+  linetoSourcePositions(lineNumber:number|String) {
+    const positions = this.lineToSourcePositions.get(anyToString(lineNumber));
+    if (positions === undefined) return [];
+    return positions;
   }
 
   parseSchedule(phase) {
