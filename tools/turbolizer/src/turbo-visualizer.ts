@@ -231,6 +231,7 @@ window.onload = function () {
       }
 
       sourceResolver.setInlinings(jsonObj.inlinings);
+      sourceResolver.setSourceLineToBytecodePosition(jsonObj.sourceLineToBytecodePosition);
       sourceResolver.setSources(jsonObj.sources, fnc)
       sourceResolver.setNodePositionMap(jsonObj.nodePositions);
       sourceResolver.parsePhases(jsonObj.phases);

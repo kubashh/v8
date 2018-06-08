@@ -122,13 +122,19 @@ class CodeView extends View {
     return ordereList.childNodes as NodeListOf<HTMLElement>;
   }
 
-  onSelectLine(lineNumber, doClear) {
-    const sourcePositions = this.lineToSourcePositions.get(anyToString(lineNumber));
+  onSelectLine(lineNumber:number, doClear:boolean) {
+    const key = anyToString(lineNumber);
     if (doClear) {
       this.selectionHandler.clear();
     }
-    if (!sourcePositions) return;
-    this.selectionHandler.select(sourcePositions, undefined);
+    const sourcePositions = this.lineToSourcePositions.get(key);
+    if (sourcePositions) {
+      this.selectionHandler.select(sourcePositions, undefined);
+    }
+    const bytecodePositions = this.sourceResolver.linetoSourcePositions(lineNumber - 1);
+    if (bytecodePositions !== undefined) {
+      this.selectionHandler.select(bytecodePositions, undefined);
+    }
   }
 
   onSelectSourcePosition(sourcePosition, doClear) {
@@ -255,12 +261,16 @@ class CodeView extends View {
     const view = this;
     const lineNumberElement = document.createElement("div");
     lineNumberElement.classList.add("line-number");
+    lineNumberElement.dataset.lineNumber = lineNumber;
     lineNumberElement.innerText = lineNumber;
     lineNumberElement.onclick = function (e) {
       e.stopPropagation();
       view.onSelectLine(lineNumber, !e.shiftKey);
     }
     lineElement.insertBefore(lineNumberElement, lineElement.firstChild)
+    for (const sourcePosition of this.sourceResolver.linetoSourcePositions(lineNumber - 1)) {
+      view.addHtmlElementToSourcePosition(sourcePosition, lineElement);
+    }
   }
 
   deleteContent() { }
