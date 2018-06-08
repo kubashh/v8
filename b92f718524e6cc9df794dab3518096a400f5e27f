@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c48ae25_04ff92b6",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-08T11:28:14Z",
+      "side": 1,
+      "message": "nit: 80 chars",
+      "revId": "b92f718524e6cc9df794dab3518096a400f5e27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3036bcd_756d1363",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-08T11:28:14Z",
+      "side": 1,
+      "message": "As just discussed offline, please add an assert that the map is unchanged.",
+      "revId": "b92f718524e6cc9df794dab3518096a400f5e27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
