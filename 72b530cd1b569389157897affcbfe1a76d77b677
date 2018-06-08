@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dffb655c_7ed42543",
+        "filename": "src/heap/gc-tracer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-06-08T00:35:39Z",
+      "side": 1,
+      "message": "I guess you have talked about this but why do we only do that MCs \u003e 50ms? You think the overhead is too much? I am asking because we record subphases for marking on UMA too in Oilpan. It\u0027s not that many but still a few.",
+      "range": {
+        "startLine": 1115,
+        "startChar": 69,
+        "endLine": 1115,
+        "endChar": 71
+      },
+      "revId": "72b530cd1b569389157897affcbfe1a76d77b677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
