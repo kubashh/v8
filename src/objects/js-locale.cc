@@ -31,30 +31,6 @@ namespace v8 {
 namespace internal {
 
 namespace {
-
-// Extracts value of a given property key in the Object.
-Maybe<bool> ExtractStringSetting(Isolate* isolate, Handle<JSReceiver> options,
-                                 const char* key, icu::UnicodeString* setting) {
-  v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
-  Handle<String> str = isolate->factory()->NewStringFromAsciiChecked(key);
-
-  // JSReceiver::GetProperty could throw an exception and return an empty
-  // MaybeHandle<Object>().
-  // Returns Nothing<bool> on exception.
-  Handle<Object> object;
-  ASSIGN_RETURN_ON_EXCEPTION_VALUE(
-      isolate, object, JSReceiver::GetProperty(options, str), Nothing<bool>());
-
-  if (object->IsString()) {
-    v8::String::Utf8Value utf8_string(
-        v8_isolate, v8::Utils::ToLocal(Handle<String>::cast(object)));
-    *setting = icu::UnicodeString::fromUTF8(*utf8_string);
-    return Just(true);
-  }
-
-  return Just(false);
-}
-
 // Inserts tags from options into locale string.
 Maybe<bool> InsertOptionsIntoLocale(Isolate* isolate,
                                     Handle<JSReceiver> options,
@@ -70,19 +46,33 @@ Maybe<bool> InsertOptionsIntoLocale(Isolate* isolate,
                                  {"numeric", "kn"},
                                  {"numberingSystem", "nu"}}};
 
-  for (const auto& option_to_bcp47 : kOptionToUnicodeTagMap) {
-    UErrorCode status = U_ZERO_ERROR;
-    icu::UnicodeString value_unicode;
+  Handle<Object> undefined = isolate->factory()->undefined_value();
+  Handle<FixedArray> empty_array = isolate->factory()->empty_fixed_array();
+  Handle<String> service =
+      isolate->factory()->NewStringFromAsciiChecked("locale");
 
-    Maybe<bool> found = ExtractStringSetting(
-        isolate, options, option_to_bcp47.first, &value_unicode);
-    // Return on exception.
-    MAYBE_RETURN(found, Nothing<bool>());
-    if (!found.FromJust()) {
+  for (const auto& option_to_bcp47 : kOptionToUnicodeTagMap) {
+    Handle<String> key_str =
+        isolate->factory()->NewStringFromAsciiChecked(option_to_bcp47.first);
+
+    Handle<Object> value_obj;
+    ASSIGN_RETURN_ON_EXCEPTION_VALUE(
+        isolate, value_obj,
+        Object::GetOption(isolate, options, key_str, Object::OptionType::String,
+                          empty_array, undefined, service),
+        Nothing<bool>());
+
+    if (value_obj->IsUndefined(isolate)) {
       // Skip this key, user didn't specify it in options.
       continue;
     }
-    DCHECK(found.FromJust());
+
+    DCHECK(value_obj->IsString());
+    v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
+    v8::String::Utf8Value utf8_string(
+        v8_isolate, v8::Utils::ToLocal(Handle<String>::cast(value_obj)));
+    icu::UnicodeString value_unicode =
+        icu::UnicodeString::fromUTF8(*utf8_string);
 
     std::string value_string;
     value_unicode.toUTF8String(value_string);
@@ -94,6 +84,7 @@ Maybe<bool> InsertOptionsIntoLocale(Isolate* isolate,
 
     // Overwrite existing, or insert new key-value to the locale string.
     const char* value = uloc_toLegacyType(key, value_string.c_str());
+    UErrorCode status = U_ZERO_ERROR;
     if (value) {
       // TODO(cira): ICU puts artificial limit on locale length, while BCP47
       // doesn't. Switch to C++ API when it's ready.
