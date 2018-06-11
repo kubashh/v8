@@ -46,6 +46,30 @@
       "revId": "3b98ae4cae106a64738041265039b96c1c568776",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0424122f_8b7119e6",
+        "filename": "test/cctest/compiler/test-code-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-06-11T16:35:12Z",
+      "side": 1,
+      "message": "\u003e However, you\u0027re right it\u0027s silly to disable to flag all together for the whole file just because of those two functions. It would be better to disable the flag only during compilation.\n\nI\u0027ve changed things to only disable the flag during compiling setup and teardown only instead of globally for all tests.",
+      "parentUuid": "bb75a393_6d4ef93a",
+      "range": {
+        "startLine": 389,
+        "startChar": 4,
+        "endLine": 389,
+        "endChar": 37
+      },
+      "revId": "3b98ae4cae106a64738041265039b96c1c568776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
