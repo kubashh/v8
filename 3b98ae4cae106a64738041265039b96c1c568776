@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "196cd34d_f280c5d0",
+        "filename": "test/cctest/compiler/test-code-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-06-11T08:40:09Z",
+      "side": 1,
+      "message": "I wonder if this might switch off too much? I seems to affect all tests in this file, not only the\ntwo that have reported problems. Would it be possible to make this switch only on native arm? Could we\nprobe for that before switching the slow asserts off?\n\nOr are you sure that the slow asserts that are run here don\u0027t provide reasonable coverage?",
+      "range": {
+        "startLine": 389,
+        "startChar": 4,
+        "endLine": 389,
+        "endChar": 37
+      },
+      "revId": "3b98ae4cae106a64738041265039b96c1c568776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
