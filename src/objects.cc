@@ -3129,12 +3129,13 @@ VisitorId Map::GetVisitorId(Map* map) {
     case FIXED_FLOAT64_ARRAY_TYPE:
       return kVisitFixedFloat64Array;
 
+    case ALLOCATION_SITE_TYPE:
+      return kVisitAllocationSite;
+
 #define MAKE_STRUCT_CASE(NAME, Name, name) case NAME##_TYPE:
       STRUCT_LIST(MAKE_STRUCT_CASE)
 #undef MAKE_STRUCT_CASE
-      if (instance_type == ALLOCATION_SITE_TYPE) {
-        return kVisitAllocationSite;
-      } else if (instance_type == PROTOTYPE_INFO_TYPE) {
+      if (instance_type == PROTOTYPE_INFO_TYPE) {
         return kVisitPrototypeInfo;
       }
       return kVisitStruct;
@@ -3389,6 +3390,12 @@ void HeapObject::HeapObjectShortPrint(std::ostream& os) {  // NOLINT
     break;
       STRUCT_LIST(MAKE_STRUCT_CASE)
 #undef MAKE_STRUCT_CASE
+    case ALLOCATION_SITE_TYPE: {
+      os << "< AllocationSite";
+      AllocationSite::cast(this)->BriefPrintDetails(os);
+      os << ">";
+      break;
+    }
     case SCOPE_INFO_TYPE: {
       ScopeInfo* scope = ScopeInfo::cast(this);
       os << "<ScopeInfo";
@@ -12924,6 +12931,7 @@ bool CanSubclassHaveInobjectProperties(InstanceType instance_type) {
     case SHARED_FUNCTION_INFO_TYPE:
     case SYMBOL_TYPE:
     case WEAK_CELL_TYPE:
+    case ALLOCATION_SITE_TYPE:
 
 #define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) \
   case FIXED_##TYPE##_ARRAY_TYPE:

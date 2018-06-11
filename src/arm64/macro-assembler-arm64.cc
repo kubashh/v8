@@ -1727,8 +1727,7 @@ void MacroAssembler::AssertUndefinedOrAllocationSite(Register object) {
     AssertNotSmi(object);
     JumpIfRoot(object, Heap::kUndefinedValueRootIndex, &done_checking);
     Ldr(scratch, FieldMemOperand(object, HeapObject::kMapOffset));
-    CompareRoot(scratch, Heap::kAllocationSiteMapRootIndex);
-    Assert(eq, AbortReason::kExpectedUndefinedOrCell);
+    CompareInstanceType(scratch, object, ALLOCATION_SITE_TYPE);
     Bind(&done_checking);
   }
 }

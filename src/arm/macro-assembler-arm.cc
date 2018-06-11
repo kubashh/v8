@@ -2118,8 +2118,7 @@ void MacroAssembler::AssertUndefinedOrAllocationSite(Register object,
     CompareRoot(object, Heap::kUndefinedValueRootIndex);
     b(eq, &done_checking);
     ldr(scratch, FieldMemOperand(object, HeapObject::kMapOffset));
-    CompareRoot(scratch, Heap::kAllocationSiteMapRootIndex);
-    Assert(eq, AbortReason::kExpectedUndefinedOrCell);
+    CompareInstanceType(scratch, object, ALLOCATION_SITE_TYPE);
     bind(&done_checking);
   }
 }

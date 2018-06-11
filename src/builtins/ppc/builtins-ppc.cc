@@ -3129,7 +3129,7 @@ static void CreateArrayDispatchOneArgument(MacroAssembler* masm,
 
     if (FLAG_debug_code) {
       __ LoadP(r8, FieldMemOperand(r5, 0));
-      __ CompareRoot(r8, Heap::kAllocationSiteMapRootIndex);
+      __ CompareRoot(r8, Heap::kAllocationSiteWithWeakNextMapRootIndex);
       __ Assert(eq, AbortReason::kExpectedAllocationSite);
     }
 
