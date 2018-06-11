@@ -215,6 +215,7 @@ using Numeric = UnionT<Number, BigInt>;
 #define ENUM_STRUCT_ELEMENT(NAME, Name, name) k##Name,
 enum class ObjectType {
   kObject,
+  kAllocationSite,
   OBJECT_TYPE_LIST(ENUM_ELEMENT) HEAP_OBJECT_TYPE_LIST(ENUM_ELEMENT)
       STRUCT_LIST(ENUM_STRUCT_ELEMENT)
 };
@@ -275,6 +276,11 @@ HEAP_OBJECT_TEMPLATE_TYPE_LIST(OBJECT_TYPE_TEMPLATE_CASE)
 #undef OBJECT_TYPE_CASE
 #undef OBJECT_TYPE_STRUCT_CASE
 #undef OBJECT_TYPE_TEMPLATE_CASE
+
+template <>
+struct ObjectTypeOf<AllocationSite> {
+  static const ObjectType value = ObjectType::kAllocationSite;
+};
 
 Smi* CheckObjectType(Object* value, Smi* type, String* location);
 
