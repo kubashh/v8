@@ -1299,11 +1299,8 @@ class V8_EXPORT_PRIVATE MemoryAllocator {
 
   static intptr_t GetCommitPageSize();
 
-  explicit MemoryAllocator(Isolate* isolate);
-
-  // Initializes its internal bookkeeping structures.
-  // Max capacity of the total space and executable memory limit.
-  bool SetUp(size_t max_capacity, size_t code_range_size);
+  MemoryAllocator(Isolate* isolate, size_t max_capacity,
+                  size_t code_range_size);
 
   void TearDown();
 
@@ -2531,19 +2528,14 @@ class NewSpace : public SpaceWithLinearArea {
  public:
   typedef PageIterator iterator;
 
-  explicit NewSpace(Heap* heap)
-      : SpaceWithLinearArea(heap, NEW_SPACE),
-        to_space_(heap, kToSpace),
-        from_space_(heap, kFromSpace),
-        reservation_() {}
+  NewSpace(Heap* heap, size_t initial_semispace_capacity,
+           size_t max_semispace_capacity);
 
   ~NewSpace() override { TearDown(); }
 
   inline bool Contains(HeapObject* o);
   inline bool ContainsSlow(Address a);
   inline bool Contains(Object* o);
-
-  bool SetUp(size_t initial_semispace_capacity, size_t max_semispace_capacity);
 
   // Tears down the space.  Heap memory was not allocated by the space, so it
   // is not deallocated here.
@@ -2858,8 +2850,7 @@ class CodeSpace : public PagedSpace {
 class MapSpace : public PagedSpace {
  public:
   // Creates a map space object.
-  MapSpace(Heap* heap, AllocationSpace id)
-      : PagedSpace(heap, id, NOT_EXECUTABLE) {}
+  explicit MapSpace(Heap* heap) : PagedSpace(heap, MAP_SPACE, NOT_EXECUTABLE) {}
 
   int RoundSizeDownToObjectAlignment(int size) override {
     if (base::bits::IsPowerOfTwo(Map::kSize)) {
@@ -2891,7 +2882,7 @@ class ReadOnlySpace : public PagedSpace {
     ReadOnlySpace* space_;
   };
 
-  ReadOnlySpace(Heap* heap, AllocationSpace id, Executability executable);
+  explicit ReadOnlySpace(Heap* heap);
 
   void ClearStringPaddingIfNeeded();
   void MarkAsReadOnly();
@@ -2919,7 +2910,7 @@ class LargeObjectSpace : public Space {
  public:
   typedef LargePageIterator iterator;
 
-  LargeObjectSpace(Heap* heap, AllocationSpace id);
+  explicit LargeObjectSpace(Heap* heap);
   ~LargeObjectSpace() override { TearDown(); }
 
   // Releases internal resources, frees objects in this space.
