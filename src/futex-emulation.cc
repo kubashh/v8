@@ -87,53 +87,57 @@ Object* FutexEmulation::Wait(Isolate* isolate,
   int32_t* p =
       reinterpret_cast<int32_t*>(static_cast<int8_t*>(backing_store) + addr);
 
-  if (*p != value) {
-    return isolate->heap()->not_equal();
-  }
-
-  FutexWaitListNode* node = isolate->futex_wait_list_node();
-
-  node->backing_store_ = backing_store;
-  node->wait_addr_ = addr;
-  node->waiting_ = true;
-
-  bool use_timeout = rel_timeout_ms != V8_INFINITY;
-
-  base::TimeDelta rel_timeout;
-  if (use_timeout) {
-    // Convert to nanoseconds.
-    double rel_timeout_ns = rel_timeout_ms *
-                            base::Time::kNanosecondsPerMicrosecond *
-                            base::Time::kMicrosecondsPerMillisecond;
-    if (rel_timeout_ns >
-        static_cast<double>(std::numeric_limits<int64_t>::max())) {
-      // 2**63 nanoseconds is 292 years. Let's just treat anything greater as
-      // infinite.
-      use_timeout = false;
-    } else {
-      rel_timeout = base::TimeDelta::FromNanoseconds(
-          static_cast<int64_t>(rel_timeout_ns));
-    }
-  }
-
-  base::TimeTicks start_time = base::TimeTicks::Now();
-  base::TimeTicks timeout_time = start_time + rel_timeout;
-  base::TimeTicks current_time = start_time;
-
-  AtomicsWaitWakeHandle stop_handle(isolate);
-
-  isolate->RunAtomicsWaitCallback(AtomicsWaitEvent::kStartWait, array_buffer,
-                                  addr, value, rel_timeout_ms, &stop_handle);
-
-  if (isolate->has_scheduled_exception()) {
-    return isolate->PromoteScheduledException();
-  }
-
+  FutexWaitListNode* node;
   Object* result;
-  AtomicsWaitEvent callback_result = AtomicsWaitEvent::kWokenUp;
+  AtomicsWaitEvent callback_result;
 
   {
     base::LockGuard<base::Mutex> lock_guard(mutex_.Pointer());
+
+    if (*p != value) {
+      return isolate->heap()->not_equal();
+    }
+
+    node = isolate->futex_wait_list_node();
+
+    node->backing_store_ = backing_store;
+    node->wait_addr_ = addr;
+    node->waiting_ = true;
+
+    bool use_timeout = rel_timeout_ms != V8_INFINITY;
+
+    base::TimeDelta rel_timeout;
+    if (use_timeout) {
+      // Convert to nanoseconds.
+      double rel_timeout_ns = rel_timeout_ms *
+                              base::Time::kNanosecondsPerMicrosecond *
+                              base::Time::kMicrosecondsPerMillisecond;
+      if (rel_timeout_ns >
+          static_cast<double>(std::numeric_limits<int64_t>::max())) {
+        // 2**63 nanoseconds is 292 years. Let's just treat anything greater as
+        // infinite.
+        use_timeout = false;
+      } else {
+        rel_timeout = base::TimeDelta::FromNanoseconds(
+            static_cast<int64_t>(rel_timeout_ns));
+      }
+    }
+
+    base::TimeTicks start_time = base::TimeTicks::Now();
+    base::TimeTicks timeout_time = start_time + rel_timeout;
+    base::TimeTicks current_time = start_time;
+
+    AtomicsWaitWakeHandle stop_handle(isolate);
+
+    isolate->RunAtomicsWaitCallback(AtomicsWaitEvent::kStartWait, array_buffer,
+                                    addr, value, rel_timeout_ms, &stop_handle);
+
+    if (isolate->has_scheduled_exception()) {
+      return isolate->PromoteScheduledException();
+    }
+
+    callback_result = AtomicsWaitEvent::kWokenUp;
+
     wait_list_.Pointer()->AddNode(node);
 
     while (true) {
