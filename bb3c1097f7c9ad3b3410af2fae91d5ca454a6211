@@ -16,6 +16,24 @@
       "revId": "bb3c1097f7c9ad3b3410af2fae91d5ca454a6211",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b855eac_403953ce",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1287559
+      },
+      "writtenOn": "2018-06-11T14:38:48Z",
+      "side": 1,
+      "message": "There already exists a function with this name (it calls IterateAndExtractSinglePass). You want to merge these two functions?",
+      "parentUuid": "e20171a7_e1e9ee4e",
+      "revId": "bb3c1097f7c9ad3b3410af2fae91d5ca454a6211",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
