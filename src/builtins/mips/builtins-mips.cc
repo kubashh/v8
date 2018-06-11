@@ -2900,7 +2900,7 @@ void CreateArrayDispatchOneArgument(MacroAssembler* masm,
 
     if (FLAG_debug_code) {
       __ lw(t1, FieldMemOperand(a2, 0));
-      __ LoadRoot(kScratchReg, Heap::kAllocationSiteMapRootIndex);
+      __ LoadRoot(kScratchReg, Heap::kAllocationSiteWithWeakNextMapRootIndex);
       __ Assert(eq, AbortReason::kExpectedAllocationSite, t1,
                 Operand(kScratchReg));
     }
