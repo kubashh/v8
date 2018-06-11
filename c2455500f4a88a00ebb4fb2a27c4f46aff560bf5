@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cd53388_a8e5a046",
+        "filename": "test/cctest/wasm/test-run-wasm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-06-11T11:23:07Z",
+      "side": 0,
+      "message": "We should fix this test \"appropriately\" in the future. Not urgent to do this now, but I would suggest either:\n\ni::FlagScope to enable prototype codes\n\nor\n\nif (WasmOpcodes::IsXXX() \u0026\u0026 !FLAG_XXX) return;",
+      "revId": "c2455500f4a88a00ebb4fb2a27c4f46aff560bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
