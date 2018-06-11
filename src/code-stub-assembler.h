@@ -2044,6 +2044,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<Object> LoadNumberDictionaryElement(TNode<NumberDictionary> dictionary,
                                             TNode<IntPtrT> intptr_index,
                                             Label* not_data, Label* if_hole);
+  void StoreNumberDictionaryElement(TNode<NumberDictionary> dictionary,
+                                    TNode<IntPtrT> intptr_index,
+                                    TNode<Object> value, Label* fail,
+                                    Label* if_hole);
 
   template <class Dictionary>
   void FindInsertionEntry(TNode<Dictionary> dictionary, TNode<Name> key,
