@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c562a9c0_131b6855",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-06-11T17:57:19Z",
+      "side": 1,
+      "message": "If you change the first conditional, then I would change this conditional analogously, i.e.:\n\nif (!function.Has....) return Type::NonInternal()\nswitch ...",
+      "revId": "b69ceefcd0b8b543074d8c3170ee3c4425cf3139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3c65d16_f2bf65ac",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-06-11T17:57:19Z",
+      "side": 1,
+      "message": "And I would even move that into the default case.",
+      "revId": "b69ceefcd0b8b543074d8c3170ee3c4425cf3139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
