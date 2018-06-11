@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f44cc5f1_22559380",
+        "filename": "src/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18865,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-11T08:30:57Z",
+      "side": 1,
+      "message": "Out of curiosity, why is this disallowed? And what does it mean if AsArrayIndex returns false? Maybe you could add a short comment :)",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "704a67a1_c7e39534",
+        "filename": "src/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18883,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-11T08:30:57Z",
+      "side": 1,
+      "message": "Nit: if/else or switch? That\u0027d clarify that type is always either boolean or string.",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8800565c_17b7157c",
+        "filename": "src/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18890,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-11T08:30:57Z",
+      "side": 1,
+      "message": "Nit: I\u0027d just skip this, it\u0027s implicit in the for loop below anyways.\n\nOh I see, does an empty fixed array imply \u0027values \u003d\u003d undefined\u0027? If so, please add a comment. See also below. Is the distinction between an empty `values` and `values \u003d\u003d undefined` ever important?",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "848cae9c_bb5a4e5b",
+        "filename": "src/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18907,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-11T08:30:57Z",
+      "side": 1,
+      "message": "Isn\u0027t this the \u0027If values does not contain an element equal to value\u0027 case and should also throw a RangeError?",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee2d1abe_0fd6eae6",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-11T08:30:57Z",
+      "side": 1,
+      "message": "Would it make sense to replace this string conversion sequence with String::ToCString instead? AFAICT we neither need a UnicodeString nor a std::string.",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbacb237_0e9e0b39",
+        "filename": "test/cctest/test-intl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-11T08:30:57Z",
+      "side": 1,
+      "message": "We should clear_pending_exception() after this.",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
