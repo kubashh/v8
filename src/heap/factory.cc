@@ -1485,6 +1485,9 @@ Handle<Struct> Factory::NewStruct(InstanceType type, PretenureFlag pretenure) {
     break;
     STRUCT_LIST(MAKE_CASE)
 #undef MAKE_CASE
+    case ALLOCATION_SITE_TYPE:
+      UNREACHABLE();
+      break;
     default:
       UNREACHABLE();
   }
