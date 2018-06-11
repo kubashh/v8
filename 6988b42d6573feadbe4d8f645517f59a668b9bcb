@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbd9d414_b5a08043",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-11T14:43:04Z",
+      "side": 1,
+      "message": "I think it\u0027s better to add this to the HEAP_OBJECT_ORDINARY_TYPE_LIST_BASE. This will make the below customizations for AllocationSite unnecessary.",
+      "revId": "6988b42d6573feadbe4d8f645517f59a668b9bcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

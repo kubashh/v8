@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c661b260_70b57b69",
+        "filename": "src/arm/macro-assembler-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2121,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-11T14:43:04Z",
+      "side": 1,
+      "message": "Here and below:\nWe should ensure that we didn\u0027t get both Allocationsite maps here. What we can do instead is to check the object instance type:\n  Cmp(object, ALLOCATION_SITE_TYPE, scratch);\ninstead of two instructions above.",
+      "revId": "db241eab07e6a35c1c2ba6c3a34ae45f089108c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17aa8f93_853375a3",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-11T14:43:04Z",
+      "side": 1,
+      "message": "Please add a \n  TYPE_CHECKER(AllocationSite, ALLOCATION_SITE_TYPE)\nto the other TYPE_CHECKER lines in the beginning of this file instead.",
+      "revId": "db241eab07e6a35c1c2ba6c3a34ae45f089108c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9257470b_1649401c",
+        "filename": "test/unittests/object-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-11T14:43:04Z",
+      "side": 1,
+      "message": "I think you can remove this.",
+      "revId": "db241eab07e6a35c1c2ba6c3a34ae45f089108c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
