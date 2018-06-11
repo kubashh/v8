@@ -224,6 +224,24 @@
     },
     {
       "key": {
+        "uuid": "323ca1fe_0853e9f5",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-11T21:25:42Z",
+      "side": 1,
+      "message": "At this point plain c_str would work, we don\u0027t have utf-8 expectation here. I just think we didn\u0027t know about ToCString method and did this expensive conversion dance.",
+      "parentUuid": "9d3d9f37_dc1633c9",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dbacb237_0e9e0b39",
         "filename": "test/cctest/test-intl.cc",
         "patchSetId": 5
