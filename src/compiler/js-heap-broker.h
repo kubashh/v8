@@ -6,12 +6,39 @@
 #define V8_COMPILER_JS_HEAP_BROKER_H_
 
 #include "src/base/compiler-specific.h"
+#include "src/base/optional.h"
 #include "src/globals.h"
 #include "src/objects.h"
 
 namespace v8 {
 namespace internal {
 namespace compiler {
+
+class JSFunctionHeapData {
+ public:
+  bool HasBuiltinFunctionId() const;
+  BuiltinFunctionId GetBuiltinFunctionId() const;
+
+ private:
+  friend class HeapReference;
+
+  explicit JSFunctionHeapData(Handle<JSFunction> function)
+      : function_(function) {}
+
+  Handle<JSFunction> const function_;
+};
+
+class NumberHeapData {
+ public:
+  double value() const { return value_; }
+
+ private:
+  friend class HeapReference;
+
+  explicit NumberHeapData(double value) : value_(value) {}
+
+  double const value_;
+};
 
 class HeapReferenceType {
  public:
@@ -33,10 +60,43 @@ class HeapReferenceType {
   bool is_callable() const { return flags_ & kCallable; }
   bool is_undetectable() const { return flags_ & kUndetectable; }
 
+  bool IsNumber() const { return instance_type_ == HEAP_NUMBER_TYPE; }
+  bool IsString() const { return instance_type_ < FIRST_NONSTRING_TYPE; }
+  bool IsInternalizedString() const {
+    STATIC_ASSERT(kNotInternalizedTag != 0);
+    return (instance_type_ & (kIsNotStringMask | kIsNotInternalizedMask)) ==
+           (kStringTag | kInternalizedTag);
+  }
+
  private:
   InstanceType const instance_type_;
   OddballType const oddball_type_;
   Flags const flags_;
+};
+
+#define HEAP_BROKER_KIND_LIST(V) \
+  V(JSFunction)                  \
+  V(Number)
+
+class HeapReference {
+ public:
+#define HEAP_KIND_FUNCTIONS_DECL(Name) \
+  bool Is##Name() const;               \
+  Name##HeapData As##Name() const;
+  HEAP_BROKER_KIND_LIST(HEAP_KIND_FUNCTIONS_DECL)
+#undef HEAP_KIND_FUNCTIONS_DECL
+
+  const HeapReferenceType& type() const { return type_; }
+  Handle<Object> value() const { return object_; }
+
+ private:
+  friend class JSHeapBroker;
+
+  HeapReference(Handle<Object> object, const HeapReferenceType& type)
+      : object_(object), type_(type) {}
+
+  Handle<Object> const object_;
+  HeapReferenceType const type_;
 };
 
 class V8_EXPORT_PRIVATE JSHeapBroker : public NON_EXPORTED_BASE(ZoneObject) {
@@ -47,7 +107,9 @@ class V8_EXPORT_PRIVATE JSHeapBroker : public NON_EXPORTED_BASE(ZoneObject) {
     return HeapReferenceTypeFromMap(*map);
   }
 
-  HeapReferenceType HeapReferenceTypeForObject(Handle<HeapObject> object) const;
+  HeapReference HeapReferenceForObject(Handle<Object> object) const;
+
+  static base::Optional<int> TryGetSmi(Handle<Object> object);
 
  private:
   HeapReferenceType HeapReferenceTypeFromMap(Map* map) const;
