@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "383d934f_377d815d",
+        "filename": "src/compiler/graph.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-11T10:50:39Z",
+      "side": 1,
+      "message": "nit: Why not \"StdoutStream()\" instead of \"StdoutStream{}\" everywhere?",
+      "range": {
+        "startLine": 76,
+        "startChar": 28,
+        "endLine": 76,
+        "endChar": 42
+      },
+      "revId": "cc996e19ae4a845f9d7c95d2d8b6328cddd3535c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24682f99_59a015b3",
+        "filename": "src/ostreams.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-11T10:50:39Z",
+      "side": 1,
+      "message": "nit: LOG_TAG",
+      "range": {
+        "startLine": 58,
+        "startChar": 42,
+        "endLine": 58,
+        "endChar": 46
+      },
+      "revId": "cc996e19ae4a845f9d7c95d2d8b6328cddd3535c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ae46cec_394b8ee9",
+        "filename": "src/ostreams.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-11T10:50:39Z",
+      "side": 1,
+      "message": "nit: LOG_TAG",
+      "range": {
+        "startLine": 72,
+        "startChar": 42,
+        "endLine": 72,
+        "endChar": 46
+      },
+      "revId": "cc996e19ae4a845f9d7c95d2d8b6328cddd3535c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
