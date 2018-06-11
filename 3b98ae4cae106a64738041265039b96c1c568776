@@ -22,6 +22,30 @@
       "revId": "3b98ae4cae106a64738041265039b96c1c568776",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb75a393_6d4ef93a",
+        "filename": "test/cctest/compiler/test-code-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-06-11T10:58:45Z",
+      "side": 1,
+      "message": "Hi Michael,\n\nUnless I\u0027m mistaken, the root of the problem is that the register allocator consumes a lot of memory when compiling the \"setup\" and \"teardown\" functions. I think this problem is likely to arise for all platforms without a lot of RAM so I\u0027m not sure about switching this off only on Arm, I assume it can easily be seen for MIPS too.\n\nRegarding the usefulness of the slow asserts, I\u0027m confident we can safely remove them. They\u0027re adding a lot of typechecks which I think are OK to ignore. \"setup\" and \"teardown\" are relatively straightforward functions which allocate and initialize a FixedArray (setup) and fill it with the test results (teardown). The extra assertions add type checks that make sure we are actually accessing a FixedArray, but we\u0027ve just allocated it.\n\n~~~\n// Setup:\nNode* state_out \u003d AllocateFixedArray(PACKED_ELEMENT, __ IntPtrConstant(size));\n\n// Initialize array\n__ StoreFixedArrayElement(state_out, 0, __ AllocateHeapNumber());\n__ StoreFixedArrayElement(state_out, 1, __ AllocateHeapNumber());\n__ StoreFixedArrayElement(state_out, 2. __ AllocateHeapNumber());\n__ StoreFixedArrayElement(state_out, 3, __ AllocateHeapNumber());\n...\n__ StoreFixedArrayElement(state_out, size - 1, __ AllocateHeapNumber());\n\n...\n\n// Teardown:\n\n// Write the test results in the array:\n__ StoreFixedArrayElement(state_out, 0, result0);\n__ StoreFixedArrayElement(state_out, 1, result1);\n__ StoreFixedArrayElement(state_out, 2, result2);\n~~~\n\nHowever, you\u0027re right it\u0027s silly to disable to flag all together for the whole file just because of those two functions. It would be better to disable the flag only during compilation.\n\nThanks for following up!\nPierre",
+      "parentUuid": "196cd34d_f280c5d0",
+      "range": {
+        "startLine": 389,
+        "startChar": 4,
+        "endLine": 389,
+        "endChar": 37
+      },
+      "revId": "3b98ae4cae106a64738041265039b96c1c568776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
