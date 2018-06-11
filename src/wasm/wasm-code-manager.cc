@@ -509,8 +509,7 @@ WasmCode* NativeModule::AddAnonymousCode(Handle<Code> code,
       // limited set of builtins. This code will eventually be completely free
       // of {RelocInfo::CODE_TARGET} relocation entries altogether.
       int builtin_index = call_target->builtin_index();
-      CHECK(builtin_index == Builtins::kAbort ||
-            builtin_index == Builtins::kAllocateHeapNumber ||
+      CHECK(builtin_index == Builtins::kAllocateHeapNumber ||
             builtin_index == Builtins::kArgumentsAdaptorTrampoline ||
             builtin_index == Builtins::kCall_ReceiverIsAny ||
             builtin_index == Builtins::kDoubleToI ||
@@ -587,8 +586,7 @@ WasmCode* NativeModule::AddCode(
       // limited set of builtins. This code will eventually be completely free
       // of {RelocInfo::CODE_TARGET} relocation entries altogether.
       int builtin_index = code->builtin_index();
-      CHECK(builtin_index == Builtins::kAbort ||
-            builtin_index == Builtins::kDoubleToI);
+      CHECK(builtin_index == Builtins::kDoubleToI);
       it.rinfo()->set_target_address(
           GetLocalAddressFor(handle(code, code->GetIsolate())),
           SKIP_WRITE_BARRIER, SKIP_ICACHE_FLUSH);
