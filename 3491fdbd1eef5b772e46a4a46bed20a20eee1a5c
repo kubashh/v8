@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99f3d014_b07cdbc8",
+        "filename": "tools/turbolizer/src/view.ts",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-06-11T10:54:14Z",
+      "side": 1,
+      "message": "e: Event",
+      "range": {
+        "startLine": 37,
+        "startChar": 53,
+        "endLine": 37,
+        "endChar": 54
+      },
+      "revId": "3491fdbd1eef5b772e46a4a46bed20a20eee1a5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
