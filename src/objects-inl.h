@@ -139,6 +139,7 @@ TYPE_CHECKER(WasmModuleObject, WASM_MODULE_TYPE)
 TYPE_CHECKER(WasmTableObject, WASM_TABLE_TYPE)
 TYPE_CHECKER(WeakArrayList, WEAK_ARRAY_LIST_TYPE)
 TYPE_CHECKER(WeakCell, WEAK_CELL_TYPE)
+TYPE_CHECKER(AllocationSite, ALLOCATION_SITE_TYPE)
 
 #ifdef V8_INTL_SUPPORT
 TYPE_CHECKER(JSLocale, JS_INTL_LOCALE_TYPE)
@@ -553,6 +554,8 @@ bool HeapObject::IsStruct() const {
     return true;
     STRUCT_LIST(MAKE_STRUCT_CASE)
 #undef MAKE_STRUCT_CASE
+    case ALLOCATION_SITE_TYPE:
+      return true;
     default:
       return false;
   }
