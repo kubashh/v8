@@ -91,6 +91,13 @@ TEST(Object, StructListOrder) {
 
   STRUCT_LIST(TEST_STRUCT)
 #undef TEST_STRUCT
+
+  current_type = InstanceType::ALLOCATION_SITE_TYPE;
+  current = static_cast<int>(current_type);
+  EXPECT_EQ(last + 1, current) << " ALLOCATION_SITE is not ordered: "
+                               << " last = " << static_cast<InstanceType>(last)
+                               << " vs. current = " << current_type;
+  last = current;
 }
 
 typedef TestWithIsolate ObjectWithIsolate;

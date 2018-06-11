@@ -553,6 +553,8 @@ bool HeapObject::IsStruct() const {
     return true;
     STRUCT_LIST(MAKE_STRUCT_CASE)
 #undef MAKE_STRUCT_CASE
+    case ALLOCATION_SITE_TYPE:
+      return true;
     default:
       return false;
   }
@@ -567,6 +569,14 @@ bool HeapObject::IsStruct() const {
   }
 STRUCT_LIST(MAKE_STRUCT_PREDICATE)
 #undef MAKE_STRUCT_PREDICATE
+
+bool Object::IsAllocationSite() const {
+  return IsHeapObject() && HeapObject::cast(this)->IsAllocationSite();
+}
+
+bool HeapObject::IsAllocationSite() const {
+  return map()->instance_type() == ALLOCATION_SITE_TYPE;
+}
 
 double Object::Number() const {
   DCHECK(IsNumber());

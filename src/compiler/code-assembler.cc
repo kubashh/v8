@@ -1685,6 +1685,12 @@ Smi* CheckObjectType(Object* value, Smi* type, String* location) {
     OBJECT_TYPE_LIST(TYPE_CASE)
     HEAP_OBJECT_TYPE_LIST(TYPE_CASE)
     STRUCT_LIST(TYPE_STRUCT_CASE)
+
+    case ObjectType::kAllocationSite:
+      if (value->IsAllocationSite()) return Smi::FromInt(0);
+      expected = "AllocationSite";
+      break;
+
 #undef TYPE_CASE
 #undef TYPE_STRUCT_CASE
   }
