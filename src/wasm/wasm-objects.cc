@@ -483,8 +483,6 @@ MaybeHandle<JSArrayBuffer> GrowMemoryBuffer(Isolate* isolate,
                              PageAllocator::kReadWrite)) {
         return {};
       }
-      reinterpret_cast<v8::Isolate*>(isolate)
-          ->AdjustAmountOfExternalAllocatedMemory(pages * wasm::kWasmPageSize);
     }
     // NOTE: We must allocate a new array buffer here because the spec
     // assumes that ArrayBuffers do not change size.

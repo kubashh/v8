@@ -29,12 +29,6 @@ void ArrayBufferTracker::RegisterNew(Heap* heap, JSArrayBuffer* buffer) {
     DCHECK_NOT_NULL(tracker);
     tracker->Add(buffer, length);
   }
-
-  // TODO(wez): Remove backing-store from external memory accounting.
-  // We may go over the limit of externally allocated memory here. We call the
-  // api function to trigger a GC in this case.
-  reinterpret_cast<v8::Isolate*>(heap->isolate())
-      ->AdjustAmountOfExternalAllocatedMemory(length);
 }
 
 void ArrayBufferTracker::Unregister(Heap* heap, JSArrayBuffer* buffer) {
@@ -48,9 +42,6 @@ void ArrayBufferTracker::Unregister(Heap* heap, JSArrayBuffer* buffer) {
     DCHECK_NOT_NULL(tracker);
     tracker->Remove(buffer, length);
   }
-
-  // TODO(wez): Remove backing-store from external memory accounting.
-  heap->update_external_memory(-static_cast<intptr_t>(length));
 }
 
 template <typename Callback>
@@ -75,10 +66,6 @@ void LocalArrayBufferTracker::Free(Callback should_free) {
   if (freed_memory > 0) {
     // Update the Space with any freed backing-store bytes.
     space_->DecrementExternalBackingStoreBytes(freed_memory);
-
-    // TODO(wez): Remove backing-store from external memory accounting.
-    space_->heap()->update_external_memory_concurrently_freed(
-        static_cast<intptr_t>(freed_memory));
   }
 }
 
