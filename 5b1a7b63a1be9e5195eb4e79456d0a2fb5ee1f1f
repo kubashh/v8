@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65447c74_24f9f264",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 5121,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-12T08:08:10Z",
+      "side": 1,
+      "message": "Please use the ALLOCATION_TYPE instance type check here.",
+      "revId": "5b1a7b63a1be9e5195eb4e79456d0a2fb5ee1f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "157dfa6f_47413e62",
+        "filename": "src/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 5457,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-12T08:08:10Z",
+      "side": 1,
+      "message": "Please use the ALLOCATION_TYPE instance type check here.",
+      "revId": "5b1a7b63a1be9e5195eb4e79456d0a2fb5ee1f1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
