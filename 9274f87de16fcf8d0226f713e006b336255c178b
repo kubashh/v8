@@ -2,6 +2,216 @@
   "comments": [
     {
       "key": {
+        "uuid": "d1e56c7f_37d87cf5",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2774,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "I think we should also compare instance type here.",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1f22423_4a53cb4f",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3294,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a5a3775_bb835ce0",
+        "filename": "src/builtins/mips/builtins-mips.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2903,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50313c77_fa683f39",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2922,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a2cad80_7605863a",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2927,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "975fe65d_d3416172",
+        "filename": "src/builtins/s390/builtins-s390.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2930,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f1f4378_67af3549",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Spurious change.",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64a807e3_2f6dfac0",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "This case is already handled by \"default:\".",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dca11b6_44507aaa",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 5121,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "This should be GetObjectType(object, scratch, scratch) and the lw(t8...) above should be removed. Otherwise you will load instance type from the meta map.",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff9e957e_44a93529",
+        "filename": "src/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 5457,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Same here, you are comparing instance type of meta map.",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2ece881_3ec353cc",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Is it necessary?",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81b7e224_84d9c4bb",
+        "filename": "src/objects.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3398,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Please remove the space.",
+      "range": {
+        "startLine": 3398,
+        "startChar": 14,
+        "endLine": 3398,
+        "endChar": 15
+      },
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e492cd0f_4084a45b",
         "filename": "test/mkgrokdump/mkgrokdump.cc",
         "patchSetId": 14
@@ -13,6 +223,24 @@
       "writtenOn": "2018-06-12T09:59:19Z",
       "side": 1,
       "message": "nit: you can reuse the same macro from above\n\n  ALLOCATION_SITE_LIST(STRUCT_LIST_CASE);",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95f00817_f9bd8ce4",
+        "filename": "test/mkgrokdump/mkgrokdump.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T11:36:45Z",
+      "side": 1,
+      "message": "Nope, because the allocation site list provides 4 arguments.",
+      "parentUuid": "e492cd0f_4084a45b",
       "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
