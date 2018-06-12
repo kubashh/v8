@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "67b78c99_0efd5d8d",
+        "filename": "src/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18865,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-12T06:52:54Z",
+      "side": 1,
+      "message": "I see, thanks. I would\u0027ve been totally fine with disallowing indices with a brief explanation as well.",
+      "parentUuid": "9ec2b082_176748ba",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "704a67a1_c7e39534",
         "filename": "src/objects.cc",
         "patchSetId": 5
@@ -104,6 +122,24 @@
       "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "04fe6a35_3185d588",
+        "filename": "src/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18890,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-12T06:52:54Z",
+      "side": 1,
+      "message": "Just double-checking again: \u0027Is the distinction between an empty `values` and `values \u003d\u003d undefined` ever important?\u0027 \n\nFor an empty values, according to the spec we\u0027d always throw. For `values \u003d\u003d undefined`, we\u0027d always return `value`. I don\u0027t know whether this is relevant in practice.",
+      "parentUuid": "f80bcb86_90fbae27",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
