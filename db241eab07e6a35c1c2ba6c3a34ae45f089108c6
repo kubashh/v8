@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "92eed441_576c9c88",
+        "filename": "src/arm/macro-assembler-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2121,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T07:29:18Z",
+      "side": 1,
+      "message": "Done,I have replaced it CmpInstanceType",
+      "parentUuid": "c661b260_70b57b69",
+      "revId": "db241eab07e6a35c1c2ba6c3a34ae45f089108c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17aa8f93_853375a3",
         "filename": "src/objects-inl.h",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "e4ae0fa9_ac74809c",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T07:29:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17aa8f93_853375a3",
+      "revId": "db241eab07e6a35c1c2ba6c3a34ae45f089108c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9257470b_1649401c",
         "filename": "test/unittests/object-unittest.cc",
         "patchSetId": 2
@@ -50,6 +86,24 @@
       "revId": "db241eab07e6a35c1c2ba6c3a34ae45f089108c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5991ad1_2a3d3833",
+        "filename": "test/unittests/object-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T07:29:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9257470b_1649401c",
+      "revId": "db241eab07e6a35c1c2ba6c3a34ae45f089108c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
