@@ -4904,6 +4904,11 @@ TNode<BoolT> CodeStubAssembler::IsPromiseSpeciesProtectorCellInvalid() {
   return WordEqual(cell_value, invalid);
 }
 
+TNode<BoolT> CodeStubAssembler::HasIndexedInterceptorMap(TNode<Map> map) {
+  CSA_ASSERT(this, IsMap(map));
+  return IsSetWord32<Map::HasIndexedInterceptorBit>(LoadMapBitField(map));
+}
+
 TNode<BoolT> CodeStubAssembler::IsPrototypeInitialArrayPrototype(
     SloppyTNode<Context> context, SloppyTNode<Map> map) {
   Node* const native_context = LoadNativeContext(context);
@@ -7294,8 +7299,32 @@ TNode<Object> CodeStubAssembler::LoadNumberDictionaryElement(
   TNode<Uint32T> kind = DecodeWord32<PropertyDetails::KindField>(details);
   // TODO(jkummerow): Support accessors without missing?
   GotoIfNot(Word32Equal(kind, Int32Constant(kData)), not_data);
-  // Finally, load athe value.
+  // Finally, load the value.
   return LoadValueByKeyIndex<NumberDictionary>(dictionary, index);
+}
+
+void CodeStubAssembler::StoreNumberDictionaryElement(
+    TNode<NumberDictionary> dictionary, TNode<IntPtrT> intptr_index,
+    TNode<Object> value, Label* fail, Label* if_hole) {
+  TVARIABLE(IntPtrT, var_entry);
+  Label if_found(this);
+  NumberDictionaryLookup(dictionary, intptr_index, &if_found, &var_entry,
+                         if_hole);
+  BIND(&if_found);
+
+  // Check that the value is a data property.
+  TNode<IntPtrT> index = EntryToIndex<NumberDictionary>(var_entry.value());
+  TNode<Uint32T> details =
+      LoadDetailsByKeyIndex<NumberDictionary>(dictionary, index);
+  TNode<Uint32T> kind = DecodeWord32<PropertyDetails::KindField>(details);
+  // TODO(jkummerow): Support accessors without missing?
+  GotoIfNot(Word32Equal(kind, Int32Constant(kData)), fail);
+
+  // Check that the property is writeable.
+  GotoIf(IsSetWord32(details, PropertyDetails::kAttributesReadOnlyMask), fail);
+
+  // Finally, store the value.
+  StoreValueByKeyIndex<NumberDictionary>(dictionary, index, value);
 }
 
 template <class Dictionary>

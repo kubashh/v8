@@ -44,6 +44,7 @@ type FixedTypedArrayBase extends FixedArrayBase generates
 'TNode<FixedTypedArrayBase>';
 type FixedTypedArray extends FixedTypedArrayBase generates
 'TNode<FixedTypedArray>';
+type NumberDictionary extends HeapObject generates 'TNode<NumberDictionary>';
 
 type JSArrayBuffer extends JSObject generates 'TNode<JSArrayBuffer>';
 type JSArrayBufferView extends JSObject generates 'TNode<JSArrayBufferView>';
@@ -69,6 +70,7 @@ const PACKED_ELEMENTS: constexpr ElementsKind = 'PACKED_ELEMENTS';
 const HOLEY_ELEMENTS: constexpr ElementsKind = 'HOLEY_ELEMENTS';
 const PACKED_DOUBLE_ELEMENTS: constexpr ElementsKind = 'PACKED_DOUBLE_ELEMENTS';
 const HOLEY_DOUBLE_ELEMENTS: constexpr ElementsKind = 'HOLEY_DOUBLE_ELEMENTS';
+const DICTIONARY_ELEMENTS: constexpr ElementsKind = 'DICTIONARY_ELEMENTS';
 
 const UINT8_ELEMENTS: constexpr ElementsKind = 'UINT8_ELEMENTS';
 const INT8_ELEMENTS: constexpr ElementsKind = 'INT8_ELEMENTS';
@@ -410,6 +412,9 @@ extern macro UnsafeCastObjectToNumber(Object): Number;
 extern macro UnsafeCastObjectToHeapObject(Object): HeapObject;
 extern macro UnsafeCastObjectToJSArray(Object): JSArray;
 extern macro UnsafeCastObjectToFixedTypedArrayBase(Object): FixedTypedArrayBase;
+extern macro UnsafeCastObjectToNumberDictionary(Object): NumberDictionary;
+extern macro UnsafeCastObjectToJSReceiver(Object): JSReceiver;
+extern macro UnsafeCastObjectToJSObject(Object): JSObject;
 
 macro unsafe_cast<A: type>(n: Number): A;
 unsafe_cast<HeapNumber>(n: Number): HeapNumber {
@@ -442,6 +447,15 @@ unsafe_cast<JSArray>(o: Object): JSArray {
 }
 unsafe_cast<FixedTypedArrayBase>(o: Object): FixedTypedArrayBase {
   return UnsafeCastObjectToFixedTypedArrayBase(o);
+}
+unsafe_cast<NumberDictionary>(o: Object): NumberDictionary {
+  return UnsafeCastObjectToNumberDictionary(o);
+}
+unsafe_cast<JSReceiver>(o: Object): JSReceiver {
+  return UnsafeCastObjectToJSReceiver(o);
+}
+unsafe_cast<JSObject>(o: Object): JSObject {
+  return UnsafeCastObjectToJSObject(o);
 }
 
 extern macro BranchIfFastJSArray(Object, Context): never labels Taken, NotTaken;
@@ -493,6 +507,9 @@ macro StoreFixedDoubleArrayElementWithSmiIndex(
     array: FixedDoubleArray, index: Smi, value: float64) {
   StoreFixedDoubleArrayElement(array, index, value, SMI_PARAMETERS);
 }
+
+extern macro LoadNumberDictionaryElement(NumberDictionary, intptr): Object labels NotData, IfHole;
+extern macro StoreNumberDictionaryElement(NumberDictionary, intptr, Object) labels Fail, IfHole;
 
 extern macro IsFastElementsKind(ElementsKind): bool;
 extern macro IsDoubleElementsKind(ElementsKind): bool;
@@ -568,9 +585,12 @@ macro HasPropertyObject(
 
 extern macro IsCallable(HeapObject): bool;
 extern macro IsJSArray(HeapObject): bool;
+extern macro IsJSProxy(HeapObject): bool;
 extern macro TaggedIsCallable(Object): bool;
 extern macro IsDetachedBuffer(JSArrayBuffer): bool;
 extern macro IsHeapNumber(HeapObject): bool;
+extern macro IsExtensibleMap(Map): bool;
+extern macro HasIndexedInterceptorMap(Map): bool;
 
 // Return true iff number is NaN.
 macro NumberIsNaN(number: Number): bool {
