@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8fb5dd2d_98ee4a37",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-12T11:52:32Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "a22f6556_7e3a4128",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "8c21a9864106c3db961d86f932318319dbc65e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e37dd24_b295a879",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3d18149b_ff116f14",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-12T11:52:32Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "8e37dd24_b295a879",
+      "range": {
+        "startLine": 13,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 33
+      },
+      "revId": "8c21a9864106c3db961d86f932318319dbc65e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27841a98_1ff8b1a5",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "8c21a9864106c3db961d86f932318319dbc65e21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "889a6888_4d87ad2e",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-12T11:52:32Z",
+      "side": 0,
+      "message": "Ack - will bring them back. I think serializer-common.h can also be removed.",
+      "parentUuid": "27841a98_1ff8b1a5",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 29
+      },
+      "revId": "8c21a9864106c3db961d86f932318319dbc65e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
