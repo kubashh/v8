@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b12ea812_448c0ca4",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-12T13:09:38Z",
+      "side": 1,
+      "message": "typo: committed",
+      "range": {
+        "startLine": 1449,
+        "startChar": 44,
+        "endLine": 1449,
+        "endChar": 52
+      },
+      "revId": "cd8a4b64e83d6e67b8b8a8c92aaeb9fe72adcdb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f91b1f7d_2929691d",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-12T13:09:38Z",
+      "side": 1,
+      "message": "typo: amount",
+      "range": {
+        "startLine": 1449,
+        "startChar": 17,
+        "endLine": 1449,
+        "endChar": 23
+      },
+      "revId": "cd8a4b64e83d6e67b8b8a8c92aaeb9fe72adcdb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
