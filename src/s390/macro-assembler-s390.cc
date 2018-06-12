@@ -181,8 +181,6 @@ void TurboAssembler::LookupConstant(Register destination,
 
 void TurboAssembler::LookupExternalReference(Register destination,
                                              ExternalReference reference) {
-  CHECK(reference.address() !=
-        ExternalReference::roots_array_start(isolate()).address());
   CHECK(isolate()->ShouldLoadConstantsFromRootList());
   CHECK(root_array_available_);
 
@@ -406,9 +404,7 @@ void TurboAssembler::Move(Register dst, Handle<HeapObject> value) {
 
 void TurboAssembler::Move(Register dst, ExternalReference reference) {
 #ifdef V8_EMBEDDED_BUILTINS
-  if (root_array_available_ && isolate()->ShouldLoadConstantsFromRootList() &&
-      reference.address() !=
-          ExternalReference::roots_array_start(isolate()).address()) {
+  if (root_array_available_ && isolate()->ShouldLoadConstantsFromRootList()) {
     LookupExternalReference(dst, reference);
     return;
   }

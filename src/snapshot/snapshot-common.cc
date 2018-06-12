@@ -387,6 +387,9 @@ EmbeddedData EmbeddedData::FromIsolate(Isolate* isolate) {
       if (!code->IsProcessIndependent(isolate)) {
         saw_unsafe_builtin = true;
         fprintf(stderr, "%s is not isolate-independent.\n", Builtins::name(i));
+
+        code->Print();
+        CHECK(false);
       }
       if (BuiltinAliasesOffHeapTrampolineRegister(isolate, code)) {
         saw_unsafe_builtin = true;
