@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3815d171_306058eb",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-06-12T14:10:41Z",
+      "side": 1,
+      "message": "Let\u0027s remove this.",
+      "revId": "6cfe8d2857a30afdeee5b0d8d6aea18b1c3e9d73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
