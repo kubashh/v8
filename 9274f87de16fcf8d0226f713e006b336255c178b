@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "829d5850_b3e62fa9",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2774,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1e56c7f_37d87cf5",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1f22423_4a53cb4f",
         "filename": "src/builtins/arm64/builtins-arm64.cc",
         "patchSetId": 14
@@ -33,6 +51,24 @@
       "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7904d23a_d861588f",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3294,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1f22423_4a53cb4f",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "8eb3f8af_b7207a14",
+        "filename": "src/builtins/mips/builtins-mips.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2903,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a5a3775_bb835ce0",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50313c77_fa683f39",
         "filename": "src/builtins/mips64/builtins-mips64.cc",
         "patchSetId": 14
@@ -67,6 +121,24 @@
       "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "555468a9_fd2e1d7e",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2922,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50313c77_fa683f39",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "be2e6047_6eafdcd3",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2927,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a2cad80_7605863a",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "975fe65d_d3416172",
         "filename": "src/builtins/s390/builtins-s390.cc",
         "patchSetId": 14
@@ -101,6 +191,24 @@
       "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69083678_df0223d3",
+        "filename": "src/builtins/s390/builtins-s390.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 2930,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "975fe65d_d3416172",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "dbde12b7_12dea88d",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1724,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f1f4378_67af3549",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64a807e3_2f6dfac0",
         "filename": "src/heap/factory.cc",
         "patchSetId": 14
@@ -135,6 +261,24 @@
       "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10204ca7_6ae73e5c",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64a807e3_2f6dfac0",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "5203b82a_d3463a75",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 5121,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dca11b6_44507aaa",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff9e957e_44a93529",
         "filename": "src/mips64/macro-assembler-mips64.cc",
         "patchSetId": 14
@@ -172,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "ad96e288_fc49dff0",
+        "filename": "src/mips64/macro-assembler-mips64.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 5457,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff9e957e_44a93529",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2ece881_3ec353cc",
         "filename": "src/objects-inl.h",
         "patchSetId": 14
@@ -183,6 +363,24 @@
       "writtenOn": "2018-06-12T11:36:45Z",
       "side": 1,
       "message": "Is it necessary?",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e58033f_1ddbf536",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "I was thinking this could potentially be a breaking change, since with the previous version used to return true for AllocationSite`s. Although non of the tests fail if we return false. So should I remove this special case?",
+      "parentUuid": "c2ece881_3ec353cc",
       "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -209,6 +407,30 @@
       "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9c21cee_0eae558d",
+        "filename": "src/objects.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3398,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81b7e224_84d9c4bb",
+      "range": {
+        "startLine": 3398,
+        "startChar": 14,
+        "endLine": 3398,
+        "endChar": 15
+      },
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -244,6 +466,24 @@
       "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "662fcf4a_bbeddbbb",
+        "filename": "test/mkgrokdump/mkgrokdump.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-06-12T13:50:32Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "95f00817_f9bd8ce4",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
