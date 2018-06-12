@@ -3686,6 +3686,13 @@ void MinorMarkCompactCollector::CollectGarbage() {
       });
 
   heap()->account_external_memory_concurrently_freed();
+  heap()->external_memory_tracker()->clear_class1_memory();
+  // TODO(rbruno) This is just to maitain consistency since we are not
+  // accounting new arrays using AdjustAmountOfExternalAllocatedMemory. It
+  // should be removed when we start using the external memory tracker for heap
+  // sizing purposes.
+  heap()->update_external_memory(
+      heap()->external_memory_tracker()->class1_memory());
 }
 
 void MinorMarkCompactCollector::MakeIterable(

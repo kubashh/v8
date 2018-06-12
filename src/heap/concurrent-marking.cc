@@ -29,8 +29,10 @@ namespace internal {
 class ConcurrentMarkingState final
     : public MarkingStateBase<ConcurrentMarkingState, AccessMode::ATOMIC> {
  public:
-  explicit ConcurrentMarkingState(LiveBytesMap* live_bytes)
-      : live_bytes_(live_bytes) {}
+  explicit ConcurrentMarkingState(LiveBytesMap* live_bytes,
+                                  uint64_t* class1_external_memory)
+      : live_bytes_(live_bytes),
+        class1_external_memory_(class1_external_memory) {}
 
   Bitmap* bitmap(const MemoryChunk* chunk) {
     return Bitmap::FromAddress(chunk->address() + MemoryChunk::kHeaderSize);
@@ -40,11 +42,16 @@ class ConcurrentMarkingState final
     (*live_bytes_)[chunk] += by;
   }
 
+  void IncrementClass1ExternalMemory(uint64_t bytes) {
+    *class1_external_memory_ += bytes;
+  }
+
   // The live_bytes and SetLiveBytes methods of the marking state are
   // not used by the concurrent marker.
 
  private:
   LiveBytesMap* live_bytes_;
+  uint64_t* class1_external_memory_;
 };
 
 // Helper class for storing in-object slot addresses and values.
@@ -76,11 +83,12 @@ class ConcurrentMarkingVisitor final
   explicit ConcurrentMarkingVisitor(ConcurrentMarking::MarkingWorklist* shared,
                                     ConcurrentMarking::MarkingWorklist* bailout,
                                     LiveBytesMap* live_bytes,
+                                    uint64_t* class1_external_memory,
                                     WeakObjects* weak_objects, int task_id)
       : shared_(shared, task_id),
         bailout_(bailout, task_id),
         weak_objects_(weak_objects),
-        marking_state_(live_bytes),
+        marking_state_(live_bytes, class1_external_memory),
         task_id_(task_id) {}
 
   template <typename T>
@@ -174,6 +182,7 @@ class ConcurrentMarkingVisitor final
   }
 
   int VisitJSArrayBuffer(Map* map, JSArrayBuffer* object) {
+    marking_state_.IncrementClass1ExternalMemory(object->allocation_length());
     return VisitJSObjectSubclass(map, object);
   }
 
@@ -533,6 +542,7 @@ void ConcurrentMarking::Run(int task_id, TaskState* task_state) {
   size_t kBytesUntilInterruptCheck = 64 * KB;
   int kObjectsUntilInterrupCheck = 1000;
   ConcurrentMarkingVisitor visitor(shared_, bailout_, &task_state->live_bytes,
+                                   &task_state->class1_external_memory,
                                    weak_objects_, task_id);
   double time_ms;
   size_t marked_bytes = 0;
@@ -681,6 +691,8 @@ void ConcurrentMarking::FlushLiveBytes(
     MajorNonAtomicMarkingState* marking_state) {
   DCHECK_EQ(pending_task_count_, 0);
   for (int i = 1; i <= task_count_; i++) {
+    heap_->external_memory_tracker()->update_class1_memory(
+        task_state_[i].class1_external_memory);
     LiveBytesMap& live_bytes = task_state_[i].live_bytes;
     for (auto pair : live_bytes) {
       // ClearLiveness sets the live bytes to zero.
@@ -691,6 +703,7 @@ void ConcurrentMarking::FlushLiveBytes(
     }
     live_bytes.clear();
     task_state_[i].marked_bytes = 0;
+    task_state_[i].class1_external_memory = 0;
   }
   total_marked_bytes_ = 0;
 }

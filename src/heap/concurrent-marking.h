@@ -90,6 +90,7 @@ class ConcurrentMarking {
     base::AtomicValue<bool> preemption_request;
 
     LiveBytesMap live_bytes;
+    uint64_t class1_external_memory;
     size_t marked_bytes = 0;
     char cache_line_padding[64];
   };

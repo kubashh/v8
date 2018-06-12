@@ -566,6 +566,31 @@ struct CommentStatistic {
 };
 #endif
 
+class ExternalMemoryTracker {
+ public:
+  ExternalMemoryTracker() : current_class1_(0), last_class1_(0) {}
+
+  void clear_class1_memory() {
+    last_class1_ = current_class1_;
+    current_class1_ = 0;
+  }
+  void update_class1_memory(uint64_t delta) { current_class1_ += delta; }
+  uint64_t class1_memory() { return last_class1_; }
+
+ private:
+  // Class 1: memory used by JSArrayBuffers and externalized Strings.
+  std::atomic<uint64_t> current_class1_;
+  uint64_t last_class1_;
+
+  // TODO(rbruno)
+  // Class 2: memory used inside blink rendered that is transitively
+  // reachable from V8.
+
+  // TODO(rbruno)
+  // Class 3: all the memory reported to AdjustAmountOfExternalAllocatedMemory
+  // api call.
+};
+
 class Heap {
  public:
   // Declare all the root indices.  This defines the root list order.
@@ -908,6 +933,7 @@ class Heap {
 
   int64_t external_memory_hard_limit() { return MaxOldGenerationSize() / 2; }
 
+  // TODO(rbruno) this is now class 3 external memory.
   int64_t external_memory() { return external_memory_; }
   void update_external_memory(int64_t delta) { external_memory_ += delta; }
 
@@ -918,6 +944,10 @@ class Heap {
   void account_external_memory_concurrently_freed() {
     external_memory_ -= external_memory_concurrently_freed_;
     external_memory_concurrently_freed_ = 0;
+  }
+
+  ExternalMemoryTracker* external_memory_tracker() {
+    return external_memory_tracker_;
   }
 
   void CompactFixedArraysOfWeakCells();
@@ -2195,6 +2225,8 @@ class Heap {
 
   // The amount of memory that has been freed concurrently.
   std::atomic<intptr_t> external_memory_concurrently_freed_;
+
+  ExternalMemoryTracker* external_memory_tracker_;
 
   // This can be calculated directly from a pointer to the heap; however, it is
   // more expedient to get at the isolate directly from within Heap methods.

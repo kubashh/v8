@@ -282,9 +282,6 @@ MaybeHandle<JSArrayBuffer> NewArrayBuffer(Isolate* isolate, size_t size,
   }
 #endif
 
-  reinterpret_cast<v8::Isolate*>(isolate)
-      ->AdjustAmountOfExternalAllocatedMemory(size);
-
   constexpr bool is_external = false;
   return SetupArrayBuffer(isolate, memory, size, is_external, shared);
 }
