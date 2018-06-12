@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "591a6c16_9bf1d62d",
+        "filename": "src/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 18890,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-12T17:07:56Z",
+      "side": 1,
+      "message": "No there can not be an empty array passed here, as you explain, that would always cause an exception, so it\u0027s fine to leave this as such.",
+      "parentUuid": "04fe6a35_3185d588",
+      "revId": "0aff53831ddfd42ac60d7c01397786b437d597c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "848cae9c_bb5a4e5b",
         "filename": "src/objects.cc",
         "patchSetId": 5
