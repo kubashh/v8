@@ -1077,5 +1077,16 @@ void V8BreakIterator::DeleteBreakIterator(
   GlobalHandles::Destroy(reinterpret_cast<Object**>(data.GetParameter()));
 }
 
+Handle<ArrayList> getAvailableLocales(Isolate* isolate, String service) {
+  Factory* factory = isolate->factory();
+
+  int count = 1;  // need to get the count of locales for this service.
+  Handle<ArrayList> availableLocales = ArrayList::New(isolate, count);
+  // need to add the available locales.
+  Handle<String> localeName = factory->NewStringFromAsciiChecked("en-US");
+  availableLocales->set(0, *localeName);
+  return availableLocales;
+}
+
 }  // namespace internal
 }  // namespace v8
