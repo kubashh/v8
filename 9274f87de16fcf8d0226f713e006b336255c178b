@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e492cd0f_4084a45b",
+        "filename": "test/mkgrokdump/mkgrokdump.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-12T09:59:19Z",
+      "side": 1,
+      "message": "nit: you can reuse the same macro from above\n\n  ALLOCATION_SITE_LIST(STRUCT_LIST_CASE);",
+      "revId": "9274f87de16fcf8d0226f713e006b336255c178b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
