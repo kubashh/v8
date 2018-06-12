@@ -474,6 +474,7 @@ module array {
   type FastPackedSmiElements;
   type FastSmiOrObjectElements;
   type FastDoubleElements;
+  type DictionaryElements;
 
   macro Load<ElementsAccessor : type>(
       context: Context, receiver: Object, index: Smi): Object labels Bailout {
@@ -502,6 +503,15 @@ module array {
     return AllocateHeapNumberWithValue(value);
   }
 
+  Load<DictionaryElements>(
+      context: Context, elements: Object, index: Smi): Object labels Bailout {
+    let dictionary: NumberDictionary = unsafe_cast<NumberDictionary>(elements);
+    let intptr_index: intptr = convert<intptr>(index);
+    let value: Object = LoadNumberDictionaryElement(dictionary, intptr_index)
+    otherwise Bailout, Bailout;
+    return value;
+  }
+
   macro Store<ElementsAccessor : type>(
       context: Context, receiver: Object, index: Smi, value: Object) {
     SetProperty(context, receiver, index, value, kStrict);
@@ -526,6 +536,21 @@ module array {
     // Make sure we do not store signalling NaNs into double arrays.
     let val: float64 = Float64SilenceNaN(convert<float64>(heap_val));
     StoreFixedDoubleArrayElementWithSmiIndex(elems, index, val);
+  }
+
+  Store<DictionaryElements>(
+      context: Context, elements: Object, index: Smi, value: Object) {
+    try {
+      let dictionary: NumberDictionary =
+          unsafe_cast<NumberDictionary>(elements);
+      let intptr_index: intptr = convert<intptr>(index);
+      StoreNumberDictionaryElement(dictionary, intptr_index, value)
+      otherwise Fail, Fail;
+      return;
+    }
+    label Fail {
+      unreachable;
+    }
   }
 
   type CompareBuiltinFn = builtin(Context, Object, Object, Object) => Number;
@@ -587,6 +612,16 @@ module array {
     if (a.length_fast != originalLength) return false;
 
     return true;
+  }
+
+  CanUseSameAccessor<DictionaryElements>(
+      context: Context, receiver: Object, initialReceiverMap: Object,
+      initialReceiverLength: Number): bool {
+    let obj: JSReceiver = unsafe_cast<JSReceiver>(receiver);
+    let map: Map = obj.map;
+
+    if (map != initialReceiverMap) return false;
+    return IsExtensibleMap(map);
   }
 
   CanUseSameAccessor<GenericElementsAccessor>(
@@ -923,6 +958,7 @@ module array {
       // TODO(szuend): Investigate performance tradeoff of skipping this step
       //               for PACKED_* and handling Undefineds during sorting.
       let nofNonUndefined: Smi = PrepareElementsForSort(context, obj, len);
+      assert(a.map == map);
 
       sort_state[kInitialReceiverLengthIdx()] = len;
       sort_state[kElementsIdx()] = a.elements;
@@ -953,9 +989,23 @@ module array {
       let nofNonUndefined: Smi = PrepareElementsForSort(context, obj, len);
 
       sort_state[kInitialReceiverLengthIdx()] = len;
-      sort_state[kElementsIdx()] = obj;
       sort_state[kRandomStateIdx()] = nofNonUndefined;
 
+      // Reload the map, PrepareElementsForSort might have changed the
+      // elements kind.
+      map = obj.map;
+
+      if (map.elements_kind == convert<ElementsKind>(DICTIONARY_ELEMENTS)
+          && IsExtensibleMap(map) && !IsJSProxy(obj)
+          && !HasIndexedInterceptorMap(map)) {
+        let jsobj: JSObject = unsafe_cast<JSObject>(obj);
+        sort_state[kElementsIdx()] = jsobj.elements;
+        ArrayQuickSort<DictionaryElements>(
+            context, sort_state, 0, nofNonUndefined);
+        return receiver;
+      }
+
+      sort_state[kElementsIdx()] = obj;
       ArrayQuickSort<GenericElementsAccessor>(
           context, sort_state, 0, nofNonUndefined);
     }
