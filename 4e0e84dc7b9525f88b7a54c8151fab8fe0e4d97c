@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eef56149_bb4f7ab8",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-12T13:52:42Z",
+      "side": 1,
+      "message": "nit: Should no longer need the reinterpret_cast, types match now.",
+      "range": {
+        "startLine": 944,
+        "startChar": 30,
+        "endLine": 944,
+        "endChar": 57
+      },
+      "revId": "4e0e84dc7b9525f88b7a54c8151fab8fe0e4d97c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db5a8053_ad984331",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-12T13:52:42Z",
+      "side": 1,
+      "message": "nit: This forward declaration should no longer be needed.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 14
+      },
+      "revId": "4e0e84dc7b9525f88b7a54c8151fab8fe0e4d97c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
