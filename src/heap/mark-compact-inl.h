@@ -79,6 +79,18 @@ int MarkingVisitor<fixed_array_mode, retaining_path_mode,
 template <FixedArrayVisitationMode fixed_array_mode,
           TraceRetainingPathMode retaining_path_mode, typename MarkingState>
 int MarkingVisitor<fixed_array_mode, retaining_path_mode,
+                   MarkingState>::VisitJSArrayBuffer(Map* map,
+                                                     JSArrayBuffer* object) {
+  heap_->external_memory_tracker()->update_class1_memory(
+      object->allocation_length());
+  int size = JSArrayBuffer::BodyDescriptor::SizeOf(map, object);
+  JSArrayBuffer::BodyDescriptor::IterateBody(map, object, size, this);
+  return size;
+}
+
+template <FixedArrayVisitationMode fixed_array_mode,
+          TraceRetainingPathMode retaining_path_mode, typename MarkingState>
+int MarkingVisitor<fixed_array_mode, retaining_path_mode,
                    MarkingState>::VisitJSFunction(Map* map,
                                                   JSFunction* object) {
   int size = JSFunction::BodyDescriptorWeak::SizeOf(map, object);

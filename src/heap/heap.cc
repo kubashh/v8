@@ -138,6 +138,7 @@ Heap::Heap()
       external_memory_limit_(kExternalAllocationSoftLimit),
       external_memory_at_last_mark_compact_(0),
       external_memory_concurrently_freed_(0),
+      external_memory_tracker_(nullptr),
       isolate_(nullptr),
       code_range_size_(0),
       // semispace_size_ should be a power of 2 and old_generation_size_ should
@@ -4546,6 +4547,8 @@ bool Heap::SetUp() {
 
   heap_controller_ = new HeapController(this);
 
+  external_memory_tracker_ = new ExternalMemoryTracker();
+
   mark_compact_collector_ = new MarkCompactCollector(this);
   incremental_marking_ =
       new IncrementalMarking(this, mark_compact_collector_->marking_worklist(),
@@ -4798,6 +4801,11 @@ void Heap::TearDown() {
   if (heap_controller_ != nullptr) {
     delete heap_controller_;
     heap_controller_ = nullptr;
+  }
+
+  if (external_memory_tracker_ != nullptr) {
+    delete external_memory_tracker_;
+    external_memory_tracker_ = nullptr;
   }
 
   if (mark_compact_collector_ != nullptr) {
