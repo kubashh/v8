@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc9ddd97_5ec70941",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2018-06-12T21:24:43Z",
+      "side": 0,
+      "message": "These calls always felt error prone to me. I\u0027m glad to see them go!",
+      "revId": "da02f095d3b8baea8eaa27adc3a082d72f877b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
