@@ -13,6 +13,7 @@
 #include "src/api.h"
 #include "src/global-handles.h"
 #include "src/heap/factory.h"
+#include "src/intl.h"
 #include "src/isolate.h"
 #include "src/objects-inl.h"
 #include "src/objects/managed.h"
@@ -1075,6 +1076,60 @@ void V8BreakIterator::DeleteBreakIterator(
   delete reinterpret_cast<icu::BreakIterator*>(data.GetInternalField(0));
   delete reinterpret_cast<icu::UnicodeString*>(data.GetInternalField(1));
   GlobalHandles::Destroy(reinterpret_cast<Object**>(data.GetParameter()));
+}
+
+Handle<ArrayList> getAvailableLocales(Isolate* isolate, IcuService service) {
+  Factory* factory = isolate->factory();
+
+  const icu::Locale* available_locales = nullptr;
+  int32_t count = 0;
+
+  switch (service) {
+    case IcuService::kBreakIterator:
+      available_locales = icu::BreakIterator::getAvailableLocales(count);
+      break;
+    case IcuService::kCollator:
+      available_locales = icu::Collator::getAvailableLocales(count);
+      break;
+    case IcuService::kDateFormat:
+      available_locales = icu::DateFormat::getAvailableLocales(count);
+      break;
+    case IcuService::kNumberFormat:
+      available_locales = icu::NumberFormat::getAvailableLocales(count);
+      break;
+    case IcuService::kPluralRules:
+      // The following TODO came from Runtime_AvailableLocalesOf in
+      //     src/runtime/runtime-intl.cc
+      // TODO(littledan): For PluralRules, filter out locales that
+      // don't support PluralRules.
+      // PluralRules is missing an appropriate getAvailableLocales method,
+      // so we should filter from all locales, but it's not clear how; see
+      // https://ssl.icu-project.org/trac/ticket/12756
+      available_locales = icu::Locale::getAvailableLocales(count);
+      break;
+    default:
+      UNREACHABLE();
+  }
+
+  UErrorCode error = U_ZERO_ERROR;
+  char result[ULOC_FULLNAME_CAPACITY];
+
+  Handle<ArrayList> availableLocales = ArrayList::New(isolate, count);
+  for (int32_t i = 0; i < count; ++i) {
+    const char* icu_name = available_locales[i].getName();
+
+    error = U_ZERO_ERROR;
+    // No need to force strict BCP47 rules.
+    uloc_toLanguageTag(icu_name, result, ULOC_FULLNAME_CAPACITY, FALSE, &error);
+    if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
+      // This shouldn't happen, but lets not break the user.
+      continue;
+    }
+    Handle<String> localeName = factory->NewStringFromAsciiChecked(result);
+    availableLocales = ArrayList::Add(availableLocales, localeName);
+  }
+
+  return availableLocales;
 }
 
 }  // namespace internal
