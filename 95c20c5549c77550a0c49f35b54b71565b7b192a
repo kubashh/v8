@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99203184_81dce8e4",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-12T13:26:47Z",
+      "side": 1,
+      "message": "I would need to think about this potential data race.\nHannes, Michael: is this safe?",
+      "range": {
+        "startLine": 185,
+        "startChar": 49,
+        "endLine": 185,
+        "endChar": 76
+      },
+      "revId": "95c20c5549c77550a0c49f35b54b71565b7b192a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97b077ea_a07f92f8",
+        "filename": "src/heap/concurrent-marking.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-12T13:26:47Z",
+      "side": 1,
+      "message": "Maybe we can call this external_array_buffer_bytes? Or something more descriptive than class1?\n\nI would be fine with having two counters: one for array buffers and one for external strings.\n\nAlternatively: external_memory_owned_by_heap.",
+      "range": {
+        "startLine": 93,
+        "startChar": 13,
+        "endLine": 93,
+        "endChar": 35
+      },
+      "revId": "95c20c5549c77550a0c49f35b54b71565b7b192a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
