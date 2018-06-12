@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a22f6556_7e3a4128",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-12T11:44:30Z",
+      "side": 0,
+      "message": "nit: We use {Graph} in this file, so at least this include is needed.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "8c21a9864106c3db961d86f932318319dbc65e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e37dd24_b295a879",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-12T11:44:30Z",
+      "side": 0,
+      "message": "nit: We use {CallDescriptor} in this file, so at least this include is needed.",
+      "range": {
+        "startLine": 13,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 33
+      },
+      "revId": "8c21a9864106c3db961d86f932318319dbc65e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27841a98_1ff8b1a5",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-12T11:44:30Z",
+      "side": 0,
+      "message": "nit: We use {MachineType} in this file, so at least this include is needed.\n\nOverall I think this header include removal is a little bit too aggressive. How have the files to be removed been chosen? Because most of the dependencies are now just provided implicitly through other headers. This violates IWYU. I vote for bringing back most of the includes, the removal of \"constants-table-builder.h\" makes sense though.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 29
+      },
+      "revId": "8c21a9864106c3db961d86f932318319dbc65e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
