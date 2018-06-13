@@ -269,7 +269,8 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
                                                : kDisableScheduling,
       EnableSerialization enable_serialization = kDisableSerialization,
       PoisoningMitigationLevel poisoning_level =
-          PoisoningMitigationLevel::kDontPoison);
+          PoisoningMitigationLevel::kDontPoison,
+      bool trace_turbo_json = false);
 
   // Visit code for the entire graph with the included schedule.
   bool SelectInstructions();
@@ -438,6 +439,10 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   bool CanUseRootsRegister() const;
 
   Isolate* isolate() const { return sequence()->isolate(); }
+
+  const ZoneVector<std::pair<int, int>>& instr_origins() const {
+    return instr_origins_;
+  }
 
  private:
   friend class OperandGenerator;
@@ -704,6 +709,8 @@ class V8_EXPORT_PRIVATE InstructionSelector final {
   PoisoningMitigationLevel poisoning_level_;
   Frame* frame_;
   bool instruction_selection_failed_;
+  ZoneVector<std::pair<int, int>> instr_origins_;
+  bool record_origins_;
 };
 
 }  // namespace compiler
