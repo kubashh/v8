@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "83faf8d3_3de4861f",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-13T12:12:15Z",
+      "side": 1,
+      "message": "More bailouts mean higher panic level :)",
+      "parentUuid": "34b0e0af_4ab7c96d",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea7f8a88_39a85962",
         "filename": "src/builtins/array.tq",
         "patchSetId": 4
