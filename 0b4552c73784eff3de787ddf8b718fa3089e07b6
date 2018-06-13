@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85048e9f_bf2b0281",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 2960,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2018-06-13T19:14:27Z",
+      "side": 0,
+      "message": "should this be replaced with a dependency on fdio?",
+      "range": {
+        "startLine": 2960,
+        "startChar": 4,
+        "endLine": 2960,
+        "endChar": 60
+      },
+      "revId": "0b4552c73784eff3de787ddf8b718fa3089e07b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
