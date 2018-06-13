@@ -1597,6 +1597,13 @@ struct InstructionSelectionPhase {
   static const char* phase_name() { return "select instructions"; }
 
   void Run(PipelineData* data, Zone* temp_zone, Linkage* linkage) {
+    const char* trace_turbo_json_filename = nullptr;
+    std::unique_ptr<char[]> trace_file_name = GetVisualizerLogFileName(
+        data->info(), FLAG_trace_turbo_path, nullptr, "json");
+    if (data->info()->trace_turbo_json_enabled()) {
+      trace_turbo_json_filename = trace_file_name.get();
+    }
+
     InstructionSelector selector(
         temp_zone, data->graph()->NodeCount(), linkage, data->sequence(),
         data->schedule(), data->source_positions(), data->frame(),
@@ -1613,9 +1620,39 @@ struct InstructionSelectionPhase {
         data->isolate()->serializer_enabled()
             ? InstructionSelector::kEnableSerialization
             : InstructionSelector::kDisableSerialization,
-        data->info()->GetPoisoningMitigationLevel());
+        data->info()->GetPoisoningMitigationLevel(),
+        data->info()->trace_turbo_json_enabled());
     if (!selector.SelectInstructions()) {
       data->set_compilation_failed();
+    }
+    if (data->info()->trace_turbo_json_enabled()) {
+      const int max =
+          static_cast<int>(data->sequence()->LastInstructionIndex());
+      TurboJsonFile json_of(data->info(), std::ios_base::app);
+      json_of << "{\"name\":\"" << phase_name()
+              << "\",\"type\":\"instructions\"";
+      json_of << ", \"nodeIdToInstructionRange\": {";
+      bool need_comma = false;
+      for (size_t i = 0; i < selector.instr_origins().size(); ++i) {
+        std::pair<int, int> offset = selector.instr_origins()[i];
+        if (offset.first == -1) continue;
+        const int first = max - offset.first + 1;
+        const int second = max - offset.second + 1;
+        if (need_comma) json_of << ", ";
+        json_of << "\"" << i << "\": [" << first << ", " << second << "]";
+        need_comma = true;
+      }
+      json_of << "}";
+      json_of << ", \"blockIdtoInstructionRange\": {";
+      need_comma = false;
+      for (auto block : data->sequence()->instruction_blocks()) {
+        if (need_comma) json_of << ", ";
+        json_of << "\"" << block->rpo_number() << "\": [" << block->code_start()
+                << ", " << block->code_end() << "]";
+        need_comma = true;
+      }
+      json_of << "}";
+      json_of << "},\n";
     }
   }
 };
@@ -2321,6 +2358,22 @@ void PipelineImpl::AssembleCode(Linkage* linkage) {
   data->BeginPhaseKind("code generation");
   data->InitializeCodeGenerator(linkage);
   Run<AssembleCodePhase>();
+  if (data->info()->trace_turbo_json_enabled()) {
+    TurboJsonFile json_of(data->info(), std::ios_base::app);
+    json_of << "{\"name\":\""
+            << "code generation"
+            << "\",\"type\":\"instructions\",";
+    json_of << "\"instructionOffsetToPCOffset\": {";
+    bool need_comma = false;
+    for (size_t i = 0; i < data->code_generator()->instr_starts().size(); ++i) {
+      if (need_comma) json_of << ", ";
+      int offset = data->code_generator()->instr_starts()[i];
+      json_of << "\"" << i << "\":" << offset;
+      need_comma = true;
+    }
+    json_of << "}";
+    json_of << "},\n";
+  }
   data->DeleteInstructionZone();
 }
 
@@ -2344,7 +2397,18 @@ Handle<Code> PipelineImpl::FinalizeCode() {
 
   if (info()->trace_turbo_json_enabled()) {
     TurboJsonFile json_of(info(), std::ios_base::app);
-    json_of << "{\"name\":\"disassembly\",\"type\":\"disassembly\",\"data\":\"";
+
+    json_of << "{\"name\":\"disassembly\",\"type\":\"disassembly\",";
+    json_of << "\"blockIdToOffset\": {";
+    bool need_comma = false;
+    for (size_t i = 0; i < data->code_generator()->block_starts().size(); ++i) {
+      if (need_comma) json_of << ", ";
+      int offset = data->code_generator()->block_starts()[i];
+      json_of << "\"" << i << "\":" << offset;
+      need_comma = true;
+    }
+    json_of << "},";
+    json_of << "\"data\":\"";
 #ifdef ENABLE_DISASSEMBLER
     std::stringstream disassembly_stream;
     code->Disassemble(nullptr, disassembly_stream);
