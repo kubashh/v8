@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa8183c5_b5c593d8",
+        "filename": "src/heap/array-buffer-tracker-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-06-13T01:39:05Z",
+      "side": 0,
+      "message": "Unless we change the scheduling also in this CL, which I would not recommend, we need to keep all those calls. Otherwise, there\u0027s nothing that would trigger garbage collections for such memory.",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 18
+      },
+      "revId": "da02f095d3b8baea8eaa27adc3a082d72f877b9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fc9ddd97_5ec70941",
         "filename": "src/wasm/wasm-memory.cc",
         "patchSetId": 3
