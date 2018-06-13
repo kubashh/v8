@@ -22,6 +22,30 @@
       "revId": "0b4552c73784eff3de787ddf8b718fa3089e07b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aec6f6c_58c8368b",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 2960,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2018-06-13T20:10:01Z",
+      "side": 0,
+      "message": "I couldn\u0027t find any dependency on launchpad nor on fdio in the Fuchsia-specific code, so I\u0027d prefer to just remove the dependency, and re-introduce it if we find a need.",
+      "parentUuid": "85048e9f_bf2b0281",
+      "range": {
+        "startLine": 2960,
+        "startChar": 4,
+        "endLine": 2960,
+        "endChar": 60
+      },
+      "revId": "0b4552c73784eff3de787ddf8b718fa3089e07b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
