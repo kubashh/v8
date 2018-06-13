@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34b0e0af_4ab7c96d",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-13T12:10:42Z",
+      "side": 1,
+      "message": "gah, this is quite annoying to read :/ but it makes sense I guess :P",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea7f8a88_39a85962",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-13T12:10:42Z",
+      "side": 1,
+      "message": "I think this name is a bit confusing. How about HasIndexedInterceptorMap(obj) or IsIndexedInterceptorMap(map)?",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6c3169a_520320c1",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4908,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-13T12:10:42Z",
+      "side": 1,
+      "message": "This assertion is not needed, we have typed input.",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
