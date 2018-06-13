@@ -37,6 +37,58 @@
     },
     {
       "key": {
+        "uuid": "c57a8e1b_7eeba979",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-13T13:45:42Z",
+      "side": 1,
+      "message": "I\u0027m suggesting a syntax extension here:\n\n  otherwise Bailout, Bailout!, Bailout!!",
+      "parentUuid": "83faf8d3_3de4861f",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "189334e7_f2f54b0f",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-13T13:45:42Z",
+      "side": 1,
+      "message": "I just realized that we should probably use the GotoIfForceSlowPath switch for Array.prototype.sort as well. (certainly a separate CL)",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0d67a10_902700de",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-13T13:45:42Z",
+      "side": 1,
+      "message": "I\u0027d slightly broaden the check here and make it a mirror of HasSimpleElements (see builtins-array.cc)\n\nIsCustomElementsReceiverInstanceType will cover both checks, JSProxy and Interceptors.",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ea7f8a88_39a85962",
         "filename": "src/builtins/array.tq",
         "patchSetId": 4
@@ -65,6 +117,23 @@
       "writtenOn": "2018-06-13T12:10:42Z",
       "side": 1,
       "message": "This assertion is not needed, we have typed input.",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "171b985e_1441d38d",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2132,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-13T13:45:42Z",
+      "side": 1,
+      "message": "I wonder whether we should reflect in the name that we only support data properties. Maybe BasicStoreNumberDictionaryElement or so?",
       "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
