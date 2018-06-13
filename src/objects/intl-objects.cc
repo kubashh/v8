@@ -13,6 +13,7 @@
 #include "src/api.h"
 #include "src/global-handles.h"
 #include "src/heap/factory.h"
+#include "src/intl.h"
 #include "src/isolate.h"
 #include "src/objects-inl.h"
 #include "src/objects/managed.h"
@@ -1075,6 +1076,117 @@ void V8BreakIterator::DeleteBreakIterator(
   delete reinterpret_cast<icu::BreakIterator*>(data.GetInternalField(0));
   delete reinterpret_cast<icu::UnicodeString*>(data.GetInternalField(1));
   GlobalHandles::Destroy(reinterpret_cast<Object**>(data.GetParameter()));
+}
+
+std::string getShortenedLocale(std::string locale) {
+  // Build the shortened locale; eg, convert xx-Yyyy-ZZ  to xx-ZZ.
+  // Unfortunately, cannot use regex :-( so doing this the hard way.
+  std::string emptyString;
+
+  if (locale.length() != 10 && locale.length() != 11) {
+    return emptyString;
+  }
+  char delim = '-';
+  std::size_t firstLen = locale.find(delim);
+  if (firstLen != 2 && firstLen != 3) {
+    return emptyString;
+  }
+
+  std::size_t secondDelim = locale.find(delim, firstLen + 1);
+  if (secondDelim == std::string::npos) {
+    return emptyString;
+  }
+  std::size_t secondLen = secondDelim - firstLen - 1;
+  if (secondLen != 4) {
+    return emptyString;
+  }
+  std::size_t thirdLen = locale.length() - secondDelim - 1;
+  if (thirdLen != 2) {
+    return emptyString;
+  }
+  std::string firstPart = locale.substr(0, firstLen);
+  std::string secondPart = locale.substr(firstLen + 1, secondLen);
+  std::string thirdPart = locale.substr(firstLen + secondLen + 2);
+
+  for (std::size_t i = 0; i < firstLen; i++) {
+    if (std::islower(firstPart[i]) == 0) {
+      return emptyString;
+    }
+  }
+
+  if (std::isupper(secondPart[0]) == 0) {
+    return emptyString;
+  }
+  for (std::size_t i = 1; i < secondLen; i++) {
+    if (std::islower(secondPart[i]) == 0) {
+      return emptyString;
+    }
+  }
+
+  for (std::size_t i = 0; i < thirdLen; i++) {
+    if (std::isupper(thirdPart[i]) == 0) {
+      return emptyString;
+    }
+  }
+  return std::string(firstPart + delim + thirdPart);
+}
+
+std::set<std::string> getAvailableLocales(IcuService service) {
+  const icu::Locale* available_locales = nullptr;
+  int32_t count = 0;
+
+  switch (service) {
+    case IcuService::kBreakIterator:
+      available_locales = icu::BreakIterator::getAvailableLocales(count);
+      break;
+    case IcuService::kCollator:
+      available_locales = icu::Collator::getAvailableLocales(count);
+      break;
+    case IcuService::kDateFormat:
+      available_locales = icu::DateFormat::getAvailableLocales(count);
+      break;
+    case IcuService::kNumberFormat:
+      available_locales = icu::NumberFormat::getAvailableLocales(count);
+      break;
+    case IcuService::kPluralRules:
+      // The following TODO came from Runtime_AvailableLocalesOf in
+      //     src/runtime/runtime-intl.cc
+      // TODO(littledan): For PluralRules, filter out locales that
+      // don't support PluralRules.
+      // PluralRules is missing an appropriate getAvailableLocales method,
+      // so we should filter from all locales, but it's not clear how; see
+      // https://ssl.icu-project.org/trac/ticket/12756
+      available_locales = icu::Locale::getAvailableLocales(count);
+      break;
+    default:
+      UNREACHABLE();
+  }
+
+  UErrorCode error = U_ZERO_ERROR;
+  char result[ULOC_FULLNAME_CAPACITY];
+
+  std::set<std::string> availableLocales;
+  for (int32_t i = 0; i < count; ++i) {
+    const char* icu_name = available_locales[i].getName();
+
+    error = U_ZERO_ERROR;
+    // No need to force strict BCP47 rules.
+    uloc_toLanguageTag(icu_name, result, ULOC_FULLNAME_CAPACITY, FALSE, &error);
+    if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
+      // This shouldn't happen, but lets not break the user.
+      continue;
+    }
+    std::string locale = std::string(result);
+    availableLocales.insert(locale);
+
+    // TODO(bstell): remove this once ICU to handles this.
+    std::string shortenedLocale = getShortenedLocale(locale);
+    if (!shortenedLocale.empty()) {
+      availableLocales.insert(shortenedLocale);
+    }
+  }
+
+  return availableLocales;
 }
 
 }  // namespace internal
