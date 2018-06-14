@@ -9,12 +9,30 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+base::Optional<ContextHeapReference> ContextHeapReference::previous(
+    const JSHeapBroker* broker) const {
+  AllowHandleDereference allow_handle_dereference;
+  Context* previous = Handle<Context>::cast(object())->previous();
+  if (previous == nullptr) return base::Optional<ContextHeapReference>();
+  return base::Optional<ContextHeapReference>(
+      broker->HeapReferenceForObject(handle(previous, broker->isolate()))
+          .AsContext());
+}
+
+base::Optional<HeapReference> ContextHeapReference::get(
+    const JSHeapBroker* broker, int index) const {
+  AllowHandleDereference allow_handle_dereference;
+  Handle<Object> value(Handle<Context>::cast(object())->get(index),
+                       broker->isolate());
+  return base::Optional<HeapReference>(broker->HeapReferenceForObject(value));
+}
+
 JSHeapBroker::JSHeapBroker(Isolate* isolate) : isolate_(isolate) {}
 
 HeapReferenceType JSHeapBroker::HeapReferenceTypeFromMap(Map* map) const {
   AllowHandleDereference allow_handle_dereference;
   Heap* heap = isolate_->heap();
-  HeapReferenceType::OddballType oddball_type = HeapReferenceType::kUnknown;
+  HeapReferenceType::OddballType oddball_type = HeapReferenceType::kNone;
   if (map->instance_type() == ODDBALL_TYPE) {
     if (map == heap->undefined_map()) {
       oddball_type = HeapReferenceType::kUndefined;
@@ -25,6 +43,7 @@ HeapReferenceType JSHeapBroker::HeapReferenceTypeFromMap(Map* map) const {
     } else if (map == heap->the_hole_map()) {
       oddball_type = HeapReferenceType::kHole;
     } else {
+      oddball_type = HeapReferenceType::kOther;
       DCHECK(map == heap->uninitialized_map() ||
              map == heap->termination_exception_map() ||
              map == heap->arguments_marker_map() ||
