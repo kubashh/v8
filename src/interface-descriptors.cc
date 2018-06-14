@@ -4,8 +4,6 @@
 
 #include "src/interface-descriptors.h"
 
-#include "src/base/platform/mutex.h"
-
 namespace v8 {
 namespace internal {
 
@@ -42,13 +40,10 @@ void CallInterfaceDescriptorData::InitializePlatformIndependent(
 // static
 CallInterfaceDescriptorData* CallDescriptors::call_descriptor_data_ = nullptr;
 size_t CallDescriptors::ref_count_ = 0;
-
-namespace {
-base::LazyMutex call_descriptors_mutex = LAZY_MUTEX_INITIALIZER;
-}
+base::Mutex CallDescriptors::mutex_;
 
 CallDescriptors::CallDescriptors() {
-  base::LockGuard<base::Mutex> lock_scope(call_descriptors_mutex.Pointer());
+  base::LockGuard<base::Mutex> lock_scope(&mutex_);
   if (ref_count_ == 0) {
     DCHECK_NULL(call_descriptor_data_);
     call_descriptor_data_ =
@@ -64,7 +59,7 @@ CallDescriptors::CallDescriptors() {
 }
 
 CallDescriptors::~CallDescriptors() {
-  base::LockGuard<base::Mutex> lock_scope(call_descriptors_mutex.Pointer());
+  base::LockGuard<base::Mutex> lock_scope(&mutex_);
   DCHECK_LE(1, ref_count_);
   --ref_count_;
   if (ref_count_ == 0) {
