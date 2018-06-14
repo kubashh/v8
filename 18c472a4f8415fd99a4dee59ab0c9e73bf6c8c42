@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4da05493_941f4f47",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-14T22:46:42Z",
+      "side": 1,
+      "message": "Please update the commit message according to our guidelines:\nhttps://www.chromium.org/developers/contributing-code#TOC-Writing-commit-descriptions\n\nSomething like:\n\n  [intl] Port getAvailableLocales to C++\n  \n  ...",
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adae7a23_cbe5c2f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-14T22:46:42Z",
+      "side": 1,
+      "message": "Please add a line here referencing this bug https://bugs.chromium.org/p/v8/issues/detail?id\u003d5751 like this:\nBug: v8:5751",
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44647414_f81e1da6",
+        "filename": "test/cctest/test-intl.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-14T22:46:42Z",
+      "side": 1,
+      "message": "I bet this is going to break when the tests are run in munich. \ncira, is there a way to set the locale in ICU?",
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
