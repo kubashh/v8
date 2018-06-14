@@ -128,6 +128,75 @@
     },
     {
       "key": {
+        "uuid": "365dbe01_98467cda",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-06-14T23:42:48Z",
+      "side": 1,
+      "message": "Please drop this. We want the compiler to warn us if a case is not handled above.",
+      "range": {
+        "startLine": 1160,
+        "startChar": 4,
+        "endLine": 1161,
+        "endChar": 20
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a18acc_8c6c5006",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-06-14T23:42:48Z",
+      "side": 1,
+      "message": "You currently have both availableLocales and available_locales in the same function, which is a bit confusing. Please rename this, maybe to \"processed_locales\"?",
+      "range": {
+        "startLine": 1167,
+        "startChar": 24,
+        "endLine": 1167,
+        "endChar": 40
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3eb37d4a_235e783c",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-06-14T23:42:48Z",
+      "side": 1,
+      "message": "simply: std::string locale(result);",
+      "range": {
+        "startLine": 1178,
+        "startChar": 4,
+        "endLine": 1178,
+        "endChar": 45
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "50ae3f23_50d3d213",
         "filename": "src/objects/intl-objects.h",
         "patchSetId": 9
