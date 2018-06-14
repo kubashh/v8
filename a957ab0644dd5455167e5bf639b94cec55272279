@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "29910a99_18fbbc6f",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-14T07:29:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c57a8e1b_7eeba979",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "514c00fb_234b7102",
         "filename": "src/builtins/array.tq",
         "patchSetId": 4
@@ -69,6 +87,24 @@
       "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "528d6f12_b317f9ce",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-14T07:29:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "514c00fb_234b7102",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -89,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "3c91ec5e_e5870985",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-14T07:29:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6ceea79_209d4426",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "322c6183_b754fa3e",
         "filename": "src/builtins/array.tq",
         "patchSetId": 4
@@ -103,6 +157,24 @@
       "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c046a1c0_220af720",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 839,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-14T07:29:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "322c6183_b754fa3e",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -123,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "28e9447d_547e398a",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-14T07:29:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "189334e7_f2f54b0f",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0d67a10_902700de",
         "filename": "src/builtins/array.tq",
         "patchSetId": 4
@@ -134,6 +224,24 @@
       "writtenOn": "2018-06-13T13:45:42Z",
       "side": 1,
       "message": "I\u0027d slightly broaden the check here and make it a mirror of HasSimpleElements (see builtins-array.cc)\n\nIsCustomElementsReceiverInstanceType will cover both checks, JSProxy and Interceptors.",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2a2ea7d_92f5b96d",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-14T07:29:16Z",
+      "side": 1,
+      "message": "HasSimpleElements uses IsCustomElementsReceiverInstanceType under the hood as well, plus an \"HasAccessors\" check. That check iterates the whole NumberDictionary and looks if each property is \"data\" and not an accessor pair.\n\nImo we should be optimistic and just fail during a Load/Store if the property has accessors, instead of checking all properties before hand.",
+      "parentUuid": "f0d67a10_902700de",
       "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -157,6 +265,24 @@
     },
     {
       "key": {
+        "uuid": "fcbccf12_036f6e19",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-14T07:29:16Z",
+      "side": 1,
+      "message": "Replaced with IsCustomElementsReceiverInstanceType.",
+      "parentUuid": "ea7f8a88_39a85962",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6c3169a_520320c1",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 4
@@ -174,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "a5eeb03b_e17bb23c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4908,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-14T07:29:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e6c3169a_520320c1",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "171b985e_1441d38d",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 4
@@ -188,6 +332,24 @@
       "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e41b9512_f45b449a",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2132,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-14T07:29:16Z",
+      "side": 1,
+      "message": "Done, also renamed LoadNumberDictionary to BasicLoadNumberDictionary (same restrictions apply there).",
+      "parentUuid": "171b985e_1441d38d",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
