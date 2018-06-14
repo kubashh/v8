@@ -9,6 +9,10 @@
 #ifndef V8_OBJECTS_INTL_OBJECTS_H_
 #define V8_OBJECTS_INTL_OBJECTS_H_
 
+#include <set>
+#include <string>
+
+#include "src/intl.h"
 #include "src/objects.h"
 #include "unicode/uversion.h"
 
@@ -22,6 +26,9 @@ class SimpleDateFormat;
 
 namespace v8 {
 namespace internal {
+
+std::set<std::string> getAvailableLocales(IcuService service);
+std::string shortenLocale(std::string locale);
 
 template <typename T>
 class Handle;

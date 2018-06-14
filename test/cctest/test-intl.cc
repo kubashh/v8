@@ -7,6 +7,7 @@
 #include "src/builtins/builtins-intl.h"
 #include "src/lookup.h"
 #include "src/objects-inl.h"
+#include "src/objects/intl-objects.h"
 #include "test/cctest/cctest.h"
 
 namespace v8 {
@@ -189,6 +190,24 @@ TEST(GetOptions) {
                .ToHandleChecked();
   CHECK(result->IsBoolean());
   CHECK(result->IsFalse(isolate));
+}
+
+TEST(ShortenLocale) {
+  CHECK(std::string("aa-CC") == shortenLocale(std::string("aa-Bbbb-CC")));
+  CHECK(std::string("aaa-CC") == shortenLocale(std::string("aaa-Bbbb-CC")));
+
+  CHECK(shortenLocale(std::string("aa")).empty());
+  CHECK(shortenLocale(std::string("aaa")).empty());
+  CHECK(shortenLocale(std::string("aaa-")).empty());
+  CHECK(shortenLocale(std::string("aa-CC")).empty());
+  CHECK(shortenLocale(std::string("aa-Bbbb-C")).empty());
+  CHECK(shortenLocale(std::string("aa-Bbbb-CCC")).empty());
+  CHECK(shortenLocale(std::string("aa-Bbb-CC")).empty());
+  CHECK(shortenLocale(std::string("Aa-Bbbb-CC")).empty());
+  CHECK(shortenLocale(std::string("Aaa-Bbbb-CC")).empty());
+  CHECK(shortenLocale(std::string("aa-bbbb-CC")).empty());
+  CHECK(shortenLocale(std::string("aa-bBbb-CC")).empty());
+  CHECK(shortenLocale(std::string("aa-Bbbb-cC")).empty());
 }
 
 }  // namespace internal
