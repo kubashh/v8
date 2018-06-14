@@ -233,7 +233,6 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
       isolate, index, &Builtins::Generate_##Name, Argc, #Name); \
   AddBuiltin(builtins, index++, code);
 #define BUILD_TFC(Name, InterfaceDescriptor, result_size)        \
-  { InterfaceDescriptor##Descriptor descriptor(isolate); }       \
   code = BuildWithCodeStubAssemblerCS(                           \
       isolate, index, &Builtins::Generate_##Name,                \
       CallDescriptors::InterfaceDescriptor, #Name, result_size); \
@@ -245,7 +244,6 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
                                    CallDescriptors::Name, #Name, 1);           \
   AddBuiltin(builtins, index++, code);
 #define BUILD_TFH(Name, InterfaceDescriptor)               \
-  { InterfaceDescriptor##Descriptor descriptor(isolate); } \
   /* Return size for IC builtins/handlers is always 1. */  \
   code = BuildWithCodeStubAssemblerCS(                     \
       isolate, index, &Builtins::Generate_##Name,          \

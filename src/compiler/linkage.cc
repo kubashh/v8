@@ -344,7 +344,7 @@ CallDescriptor* Linkage::GetJSCallDescriptor(Zone* zone, bool is_osr,
 // CallInterfaceDescriptor.
 // TODO(turbofan): cache call descriptors for code stub calls.
 CallDescriptor* Linkage::GetStubCallDescriptor(
-    Isolate* isolate, Zone* zone, const CallInterfaceDescriptor& descriptor,
+    Zone* zone, const CallInterfaceDescriptor& descriptor,
     int stack_parameter_count, CallDescriptor::Flags flags,
     Operator::Properties properties, MachineType return_type,
     size_t return_count, Linkage::ContextSpecification context_spec,
@@ -396,18 +396,18 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
                                 ? MachineType::Pointer()
                                 : MachineType::AnyTagged();
   LinkageLocation target_loc = LinkageLocation::ForAnyRegister(target_type);
-  return new (zone) CallDescriptor(   // --
-      kind,                           // kind
-      target_type,                    // target MachineType
-      target_loc,                     // target location
-      locations.Build(),              // location_sig
-      stack_parameter_count,          // stack_parameter_count
-      properties,                     // properties
-      kNoCalleeSaved,                 // callee-saved registers
-      kNoCalleeSaved,                 // callee-saved fp
-      CallDescriptor::kCanUseRoots |  // flags
-          flags,                      // flags
-      descriptor.DebugName(isolate), descriptor.allocatable_registers());
+  return new (zone) CallDescriptor(          // --
+      kind,                                  // kind
+      target_type,                           // target MachineType
+      target_loc,                            // target location
+      locations.Build(),                     // location_sig
+      stack_parameter_count,                 // stack_parameter_count
+      properties,                            // properties
+      kNoCalleeSaved,                        // callee-saved registers
+      kNoCalleeSaved,                        // callee-saved fp
+      CallDescriptor::kCanUseRoots | flags,  // flags
+      descriptor.DebugName(),                // debug name
+      descriptor.allocatable_registers());
 }
 
 // TODO(ishell): remove this once CallInterfaceDescriptors support
@@ -415,7 +415,7 @@ CallDescriptor* Linkage::GetStubCallDescriptor(
 // static
 CallDescriptor* Linkage::GetAllocateCallDescriptor(Isolate* isolate,
                                                    Zone* zone) {
-  return GetStubCallDescriptor(isolate, zone,
+  return GetStubCallDescriptor(zone,
                                AllocateDescriptor(isolate),  // descriptor
                                0,  // stack_parameter_count
                                CallDescriptor::kCanUseRoots,  // flags
@@ -427,7 +427,7 @@ CallDescriptor* Linkage::GetAllocateCallDescriptor(Isolate* isolate,
 
 // static
 CallDescriptor* Linkage::GetBytecodeDispatchCallDescriptor(
-    Isolate* isolate, Zone* zone, const CallInterfaceDescriptor& descriptor,
+    Zone* zone, const CallInterfaceDescriptor& descriptor,
     int stack_parameter_count) {
   const int register_parameter_count = descriptor.GetRegisterParameterCount();
   const int parameter_count = register_parameter_count + stack_parameter_count;
@@ -464,7 +464,7 @@ CallDescriptor* Linkage::GetBytecodeDispatchCallDescriptor(
       kNoCalleeSaved,                // callee-saved registers
       kNoCalleeSaved,                // callee-saved fp
       kFlags,                        // flags
-      descriptor.DebugName(isolate));
+      descriptor.DebugName());
 }
 
 LinkageLocation Linkage::GetOsrValueLocation(int index) const {

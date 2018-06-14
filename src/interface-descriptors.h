@@ -76,10 +76,7 @@ class PlatformInterfaceDescriptor;
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
  public:
-  CallInterfaceDescriptorData()
-      : register_param_count_(-1),
-        param_count_(-1),
-        allocatable_registers_(0) {}
+  CallInterfaceDescriptorData() = default;
 
   // A copy of the passed in registers and param_representations is made
   // and owned by the CallInterfaceDescriptorData.
@@ -123,12 +120,12 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
   RegList allocatable_registers() const { return allocatable_registers_; }
 
  private:
-  int register_param_count_;
-  int param_count_;
+  int register_param_count_ = -1;
+  int param_count_ = -1;
 
   // Specifying the set of registers that could be used by the register
   // allocator. Currently, it's only used by RecordWrite code stub.
-  RegList allocatable_registers_;
+  RegList allocatable_registers_ = 0;
 
   // The Register params are allocated dynamically by the
   // InterfaceDescriptor, and freed on destruction. This is because static
@@ -137,13 +134,12 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
   std::unique_ptr<Register[]> register_params_;
   std::unique_ptr<MachineType[]> machine_types_;
 
-  PlatformInterfaceDescriptor* platform_specific_descriptor_;
+  PlatformInterfaceDescriptor* platform_specific_descriptor_ = nullptr;
 
   DISALLOW_COPY_AND_ASSIGN(CallInterfaceDescriptorData);
 };
 
-
-class CallDescriptors {
+class V8_EXPORT_PRIVATE CallDescriptors {
  public:
   enum Key {
 #define DEF_ENUM(name, ...) name,
@@ -151,6 +147,34 @@ class CallDescriptors {
 #undef DEF_ENUM
         NUMBER_OF_DESCRIPTORS
   };
+
+  CallDescriptors();
+  ~CallDescriptors();
+
+  CallInterfaceDescriptorData* call_descriptor_data(
+      CallDescriptors::Key key) const {
+    return &call_descriptor_data_[key];
+  }
+
+  static Key GetKey(const CallInterfaceDescriptorData* data) {
+    // If you hold a pointer to {CallInterfaceDescriptorData}, then there must
+    // also be a {CallDescriptors} instance alive, so we can just access the
+    // static {call_descriptor_data_}.
+    DCHECK_NOT_NULL(call_descriptor_data_);
+    ptrdiff_t index = data - call_descriptor_data_;
+    DCHECK_LE(0, index);
+    DCHECK_LT(index, CallDescriptors::NUMBER_OF_DESCRIPTORS);
+    return static_cast<CallDescriptors::Key>(index);
+  }
+
+ private:
+  // {call_descriptor_data_} can be used by any thread as long as {ref_count_}
+  // is >0 (i.e. at least one {CallDescriptors} instance is alive.
+  static CallInterfaceDescriptorData* call_descriptor_data_;
+
+  // {ref_count_} is modified by the constructor and destructor of
+  // {CallDescriptors}, protected by a mutex (defined in the .cc file).
+  static size_t ref_count_;
 };
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
@@ -159,7 +183,11 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
   virtual ~CallInterfaceDescriptor() {}
 
   CallInterfaceDescriptor(Isolate* isolate, CallDescriptors::Key key)
-      : data_(isolate->call_descriptor_data(key)) {}
+      : CallInterfaceDescriptor(isolate->call_descriptors(), key) {}
+
+  CallInterfaceDescriptor(CallDescriptors* call_descriptors,
+                          CallDescriptors::Key key)
+      : data_(call_descriptors->call_descriptor_data(key)) {}
 
   int GetParameterCount() const { return data()->param_count(); }
 
@@ -191,7 +219,7 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
 
   static const Register ContextRegister();
 
-  const char* DebugName(Isolate* isolate) const;
+  const char* DebugName() const;
 
  protected:
   const CallInterfaceDescriptorData* data() const { return data_; }
@@ -206,17 +234,6 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
                                         nullptr);
   }
 
-  void Initialize(Isolate* isolate, CallDescriptors::Key key) {
-    if (!data()->IsInitialized()) {
-      // We should only initialize descriptors on the isolate's main thread.
-      DCHECK(ThreadId::Current().Equals(isolate->thread_id()));
-      CallInterfaceDescriptorData* d = isolate->call_descriptor_data(key);
-      DCHECK(d == data());  // d should be a modifiable pointer to data().
-      InitializePlatformSpecific(d);
-      InitializePlatformIndependent(d);
-    }
-  }
-
   // Initializes |data| using the platform dependent default set of registers.
   // It is intended to be used for TurboFan stubs when particular set of
   // registers does not matter.
@@ -224,14 +241,26 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
       CallInterfaceDescriptorData* data, int register_parameter_count);
 
  private:
+  // {CallDescriptors} is allowed to call the private {Initialize} method.
+  friend class CallDescriptors;
+
   const CallInterfaceDescriptorData* data_;
+
+  void Initialize(CallInterfaceDescriptorData* data) {
+    // The passed pointer should be a modifiable pointer to our own data.
+    DCHECK_EQ(data, data_);
+    DCHECK(!data->IsInitialized());
+    InitializePlatformSpecific(data);
+    InitializePlatformIndependent(data);
+    DCHECK(data->IsInitialized());
+  }
 };
 
-#define DECLARE_DESCRIPTOR_WITH_BASE(name, base)           \
- public:                                                   \
-  explicit name(Isolate* isolate) : base(isolate, key()) { \
-    Initialize(isolate, key());                            \
-  }                                                        \
+#define DECLARE_DESCRIPTOR_WITH_BASE(name, base)                         \
+ public:                                                                 \
+  explicit name(Isolate* isolate) : name(isolate->call_descriptors()) {} \
+  explicit name(CallDescriptors* call_descriptors)                       \
+      : base(call_descriptors, key()) {}                                 \
   static inline CallDescriptors::Key key();
 
 static const int kMaxBuiltinRegisterParams = 5;
@@ -252,7 +281,8 @@ static const int kMaxBuiltinRegisterParams = 5;
     data->InitializePlatformIndependent(kRegisterParams, kStackParams,        \
                                         nullptr);                             \
   }                                                                           \
-  name(Isolate* isolate, CallDescriptors::Key key) : base(isolate, key) {}    \
+  name(CallDescriptors* call_descriptors, CallDescriptors::Key key)           \
+      : base(call_descriptors, key) {}                                        \
                                                                               \
  public:
 
@@ -260,7 +290,8 @@ static const int kMaxBuiltinRegisterParams = 5;
   DECLARE_DESCRIPTOR_WITH_BASE(name, base)                                     \
  protected:                                                                    \
   void InitializePlatformSpecific(CallInterfaceDescriptorData* data) override; \
-  name(Isolate* isolate, CallDescriptors::Key key) : base(isolate, key) {}     \
+  name(CallDescriptors* call_descriptors, CallDescriptors::Key key)            \
+      : base(call_descriptors, key) {}                                         \
                                                                                \
  public:
 

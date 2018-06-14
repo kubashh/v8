@@ -730,7 +730,7 @@ Reduction JSCreateLowering::ReduceNewArrayToStubCall(
     Callable callable = CodeFactory::ArrayNoArgumentConstructor(
         isolate(), elements_kind, override_mode);
     auto call_descriptor = Linkage::GetStubCallDescriptor(
-        isolate(), graph()->zone(), callable.descriptor(), arity + 1,
+        graph()->zone(), callable.descriptor(), arity + 1,
         CallDescriptor::kNeedsFrameState, properties);
     node->ReplaceInput(0, jsgraph()->HeapConstant(callable.code()));
     node->InsertInput(graph()->zone(), 2, type_info);
@@ -742,7 +742,7 @@ Reduction JSCreateLowering::ReduceNewArrayToStubCall(
     Callable callable = CodeFactory::ArraySingleArgumentConstructor(
         isolate(), GetHoleyElementsKind(elements_kind), override_mode);
     auto call_descriptor = Linkage::GetStubCallDescriptor(
-        isolate(), graph()->zone(), callable.descriptor(), arity + 1,
+        graph()->zone(), callable.descriptor(), arity + 1,
         CallDescriptor::kNeedsFrameState, properties);
     node->ReplaceInput(0, jsgraph()->HeapConstant(callable.code()));
     node->InsertInput(graph()->zone(), 2, type_info);
@@ -753,9 +753,8 @@ Reduction JSCreateLowering::ReduceNewArrayToStubCall(
     DCHECK_GT(arity, 1);
     Handle<Code> code = BUILTIN_CODE(isolate(), ArrayNArgumentsConstructor);
     auto call_descriptor = Linkage::GetStubCallDescriptor(
-        isolate(), graph()->zone(),
-        ArrayNArgumentsConstructorDescriptor(isolate()), arity + 1,
-        CallDescriptor::kNeedsFrameState);
+        graph()->zone(), ArrayNArgumentsConstructorDescriptor(isolate()),
+        arity + 1, CallDescriptor::kNeedsFrameState);
     node->ReplaceInput(0, jsgraph()->HeapConstant(code));
     node->InsertInput(graph()->zone(), 2, type_info);
     node->InsertInput(graph()->zone(), 3, jsgraph()->Constant(arity));

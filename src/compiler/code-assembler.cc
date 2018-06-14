@@ -67,7 +67,7 @@ CodeAssemblerState::CodeAssemblerState(
     : CodeAssemblerState(
           isolate, zone,
           Linkage::GetStubCallDescriptor(
-              isolate, zone, descriptor, descriptor.GetStackParameterCount(),
+              zone, descriptor, descriptor.GetStackParameterCount(),
               CallDescriptor::kNoFlags, Operator::kNoProperties,
               MachineType::AnyTagged(), result_size),
           kind, name, poisoning_level, stub_key, builtin_index) {}
@@ -1160,9 +1160,8 @@ Node* CodeAssembler::CallStubN(const CallInterfaceDescriptor& descriptor,
   int stack_parameter_count = argc - descriptor.GetRegisterParameterCount();
   DCHECK_LE(descriptor.GetStackParameterCount(), stack_parameter_count);
   auto call_descriptor = Linkage::GetStubCallDescriptor(
-      isolate(), zone(), descriptor, stack_parameter_count,
-      CallDescriptor::kNoFlags, Operator::kNoProperties,
-      MachineType::AnyTagged(), result_size,
+      zone(), descriptor, stack_parameter_count, CallDescriptor::kNoFlags,
+      Operator::kNoProperties, MachineType::AnyTagged(), result_size,
       pass_context ? Linkage::kPassContext : Linkage::kNoContext);
 
   CallPrologue();
@@ -1179,7 +1178,7 @@ void CodeAssembler::TailCallStubImpl(const CallInterfaceDescriptor& descriptor,
   DCHECK_EQ(descriptor.GetParameterCount(), sizeof...(args));
   size_t result_size = 1;
   auto call_descriptor = Linkage::GetStubCallDescriptor(
-      isolate(), zone(), descriptor, descriptor.GetStackParameterCount(),
+      zone(), descriptor, descriptor.GetStackParameterCount(),
       CallDescriptor::kNoFlags, Operator::kNoProperties,
       MachineType::AnyTagged(), result_size);
 
@@ -1205,9 +1204,8 @@ Node* CodeAssembler::TailCallStubThenBytecodeDispatch(
       sizeof...(args) - descriptor.GetRegisterParameterCount();
   DCHECK_LE(descriptor.GetStackParameterCount(), stack_parameter_count);
   auto call_descriptor = Linkage::GetStubCallDescriptor(
-      isolate(), zone(), descriptor, stack_parameter_count,
-      CallDescriptor::kNoFlags, Operator::kNoProperties,
-      MachineType::AnyTagged(), 0);
+      zone(), descriptor, stack_parameter_count, CallDescriptor::kNoFlags,
+      Operator::kNoProperties, MachineType::AnyTagged(), 0);
 
   Node* nodes[] = {target, args..., context};
   return raw_assembler()->TailCallN(call_descriptor, arraysize(nodes), nodes);
@@ -1227,7 +1225,7 @@ Node* CodeAssembler::TailCallBytecodeDispatch(
     const CallInterfaceDescriptor& descriptor, Node* target, TArgs... args) {
   DCHECK_EQ(descriptor.GetParameterCount(), sizeof...(args));
   auto call_descriptor = Linkage::GetBytecodeDispatchCallDescriptor(
-      isolate(), zone(), descriptor, descriptor.GetStackParameterCount());
+      zone(), descriptor, descriptor.GetStackParameterCount());
 
   Node* nodes[] = {target, args...};
   CHECK_EQ(descriptor.GetParameterCount() + 1, arraysize(nodes));
@@ -1250,7 +1248,7 @@ TNode<Object> CodeAssembler::TailCallJSCode(TNode<Code> code,
   ConstructTrampolineDescriptor descriptor(isolate());
   size_t result_size = 1;
   auto call_descriptor = Linkage::GetStubCallDescriptor(
-      isolate(), zone(), descriptor, descriptor.GetStackParameterCount(),
+      zone(), descriptor, descriptor.GetStackParameterCount(),
       CallDescriptor::kFixedTargetRegister, Operator::kNoProperties,
       MachineType::AnyTagged(), result_size);
 

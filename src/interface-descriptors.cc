@@ -4,6 +4,8 @@
 
 #include "src/interface-descriptors.h"
 
+#include "src/base/platform/mutex.h"
+
 namespace v8 {
 namespace internal {
 
@@ -37,15 +39,46 @@ void CallInterfaceDescriptorData::InitializePlatformIndependent(
   }
 }
 
-const char* CallInterfaceDescriptor::DebugName(Isolate* isolate) const {
-  CallInterfaceDescriptorData* start = isolate->call_descriptor_data(0);
-  size_t index = data_ - start;
-  DCHECK(index < CallDescriptors::NUMBER_OF_DESCRIPTORS);
-  CallDescriptors::Key key = static_cast<CallDescriptors::Key>(index);
+// static
+CallInterfaceDescriptorData* CallDescriptors::call_descriptor_data_ = nullptr;
+size_t CallDescriptors::ref_count_ = 0;
+
+namespace {
+base::LazyMutex call_descriptors_mutex = LAZY_MUTEX_INITIALIZER;
+}
+
+CallDescriptors::CallDescriptors() {
+  base::LockGuard<base::Mutex> lock_scope(call_descriptors_mutex.Pointer());
+  if (ref_count_ == 0) {
+    DCHECK_NULL(call_descriptor_data_);
+    call_descriptor_data_ =
+        new CallInterfaceDescriptorData[NUMBER_OF_DESCRIPTORS];
+// Initialize the interface descriptors ahead of time.
+#define INTERFACE_DESCRIPTOR(name, ...) \
+  name##Descriptor(this).Initialize(    \
+      &call_descriptor_data_[CallDescriptors::name]);
+    INTERFACE_DESCRIPTOR_LIST(INTERFACE_DESCRIPTOR)
+#undef INTERFACE_DESCRIPTOR
+  }
+  ++ref_count_;
+}
+
+CallDescriptors::~CallDescriptors() {
+  base::LockGuard<base::Mutex> lock_scope(call_descriptors_mutex.Pointer());
+  DCHECK_LE(1, ref_count_);
+  --ref_count_;
+  if (ref_count_ == 0) {
+    delete[] call_descriptor_data_;
+    call_descriptor_data_ = nullptr;
+  }
+}
+
+const char* CallInterfaceDescriptor::DebugName() const {
+  CallDescriptors::Key key = CallDescriptors::GetKey(data_);
   switch (key) {
-#define DEF_CASE(NAME, ...)   \
-  case CallDescriptors::NAME: \
-    return #NAME " Descriptor";
+#define DEF_CASE(name, ...)   \
+  case CallDescriptors::name: \
+    return #name " Descriptor";
     INTERFACE_DESCRIPTOR_LIST(DEF_CASE)
 #undef DEF_CASE
     case CallDescriptors::NUMBER_OF_DESCRIPTORS:
