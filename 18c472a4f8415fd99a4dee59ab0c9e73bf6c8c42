@@ -36,6 +36,167 @@
     },
     {
       "key": {
+        "uuid": "d57decb9_3601c9f2",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-14T23:28:49Z",
+      "side": 1,
+      "message": "C++ variable naming:\n\nlocale_in, but even better const std::string\u0026 locale.",
+      "range": {
+        "startLine": 1081,
+        "startChar": 56,
+        "endLine": 1081,
+        "endChar": 64
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c0ac7fb_cc3e3d1b",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-14T23:28:49Z",
+      "side": 1,
+      "message": "C++ function naming:\nRemoveLocaleScriptTag vs remove...",
+      "range": {
+        "startLine": 1081,
+        "startChar": 22,
+        "endLine": 1081,
+        "endChar": 43
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0687a9c4_77c39ce6",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-14T23:28:49Z",
+      "side": 1,
+      "message": "NOTE: can\u0027t use regex, using string operations instead.",
+      "range": {
+        "startLine": 1083,
+        "startChar": 5,
+        "endLine": 1083,
+        "endChar": 68
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f339272_66f36ce5",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-14T23:28:49Z",
+      "side": 1,
+      "message": "You could instead use ICU Locale class, and avoid possible bugs:\n\n// Convert from bcp47 to icu format.\nhttps://github.com/v8/v8/blob/master/src/objects/js-locale.cc#L164\n\nicu_locale \u003d Locale(icu_result);\nconst char* icu_language \u003d icu_locale.getLanguage();\nconst char* icu_region \u003d icu_locale.getRegion();\nnew_locale \u003d Locale(icu_language, icu_region);\n\n// Convert from icu format to bcp47.\nhttps://github.com/v8/v8/blob/master/src/objects/js-locale.cc#L261",
+      "range": {
+        "startLine": 1085,
+        "startChar": 2,
+        "endLine": 1130,
+        "endChar": 52
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50ae3f23_50d3d213",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-14T23:28:49Z",
+      "side": 1,
+      "message": "const IcuService\u0026 service?",
+      "range": {
+        "startLine": 168,
+        "startChar": 51,
+        "endLine": 168,
+        "endChar": 69
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8a1c4ca_8e1f2a26",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-14T23:28:49Z",
+      "side": 1,
+      "message": "This should be:\n\nconst std::string\u0026 locale",
+      "range": {
+        "startLine": 169,
+        "startChar": 43,
+        "endLine": 169,
+        "endChar": 61
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1861abd1_36fde2bf",
+        "filename": "test/cctest/test-intl.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-14T23:28:49Z",
+      "side": 1,
+      "message": "Check C++ naming everywhere.",
+      "range": {
+        "startLine": 195,
+        "startChar": 5,
+        "endLine": 195,
+        "endChar": 24
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "44647414_f81e1da6",
         "filename": "test/cctest/test-intl.cc",
         "patchSetId": 9
@@ -47,6 +208,24 @@
       "writtenOn": "2018-06-14T22:46:42Z",
       "side": 1,
       "message": "I bet this is going to break when the tests are run in munich. \ncira, is there a way to set the locale in ICU?",
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d28d1bcc_c5c66235",
+        "filename": "test/cctest/test-intl.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-14T23:28:49Z",
+      "side": 1,
+      "message": "These tests shouldn\u0027t fail, except if these services are not built with en-US support (which is unlikely).",
+      "parentUuid": "44647414_f81e1da6",
       "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
