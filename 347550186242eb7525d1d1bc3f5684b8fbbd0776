@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb4771bb_c0d13051",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-14T19:08:34Z",
+      "side": 1,
+      "message": "Let\u0027s move this to an anonymous namespace",
+      "revId": "347550186242eb7525d1d1bc3f5684b8fbbd0776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb9ea012_7a29ac12",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-14T19:08:34Z",
+      "side": 1,
+      "message": "nit: !std::islower seems more readable to me.\n\nSame for below",
+      "range": {
+        "startLine": 1111,
+        "startChar": 8,
+        "endLine": 1111,
+        "endChar": 39
+      },
+      "revId": "347550186242eb7525d1d1bc3f5684b8fbbd0776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58abee9b_4e04e009",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-14T19:08:34Z",
+      "side": 1,
+      "message": "Let\u0027s create an Intl class and make this a static member",
+      "revId": "347550186242eb7525d1d1bc3f5684b8fbbd0776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4291dad9_9c2a83e1",
+        "filename": "test/cctest/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-14T19:08:34Z",
+      "side": 1,
+      "message": "This needs to part of the if (v8_enables_i18n_support) block below so that we don\u0027t build icu if it\u0027s not required",
+      "revId": "347550186242eb7525d1d1bc3f5684b8fbbd0776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a02f60_b6683db1",
+        "filename": "test/cctest/test-intl.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-14T19:08:34Z",
+      "side": 1,
+      "message": "We should be testing getAvailableLocales",
+      "revId": "347550186242eb7525d1d1bc3f5684b8fbbd0776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
