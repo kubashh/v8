@@ -1046,7 +1046,7 @@ Type Type::OtherNumberConstant(double value, Zone* zone) {
 Type Type::HeapConstant(const JSHeapBroker* js_heap_broker,
                         Handle<i::Object> value, Zone* zone) {
   return FromTypeBase(HeapConstantType::New(
-      js_heap_broker->HeapReferenceForObject(value), zone));
+      js_heap_broker, js_heap_broker->HeapReferenceForObject(value), zone));
 }
 
 // static
