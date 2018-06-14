@@ -175,6 +175,8 @@ class V8_EXPORT_PRIVATE CallDescriptors {
   // {ref_count_} is modified by the constructor and destructor of
   // {CallDescriptors}, protected by a mutex (defined in the .cc file).
   static size_t ref_count_;
+
+  static base::Mutex mutex_;
 };
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
