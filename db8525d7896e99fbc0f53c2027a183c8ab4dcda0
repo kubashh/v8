@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8056d41_5533e7be",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-06-14T11:36:50Z",
+      "side": 1,
+      "message": "You just need a map check? IsExtensible cannot change.",
+      "revId": "db8525d7896e99fbc0f53c2027a183c8ab4dcda0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
