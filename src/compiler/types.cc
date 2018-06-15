@@ -162,7 +162,7 @@ Type::bitset BitsetType::Lub(HeapReferenceType const& type) {
       return kSymbol;
     case BIGINT_TYPE:
       return kBigInt;
-    case ODDBALL_TYPE: {
+    case ODDBALL_TYPE:
       switch (type.oddball_type()) {
         case HeapReferenceType::kHole:
           return kHole;
@@ -172,11 +172,12 @@ Type::bitset BitsetType::Lub(HeapReferenceType const& type) {
           return kNull;
         case HeapReferenceType::kUndefined:
           return kUndefined;
-        case HeapReferenceType::kUnknown:
+        case HeapReferenceType::kOther:
+        case HeapReferenceType::kAny:
           return kOtherInternal;
+        default:
+          UNREACHABLE();
       }
-      UNREACHABLE();
-    }
     case HEAP_NUMBER_TYPE:
       return kNumber;
     case JS_OBJECT_TYPE:
