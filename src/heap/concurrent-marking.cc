@@ -361,13 +361,15 @@ class ConcurrentMarkingVisitor final
     if (!ShouldVisit(table)) return 0;
     weak_objects_->ephemeron_hash_tables.Push(task_id_, table);
 
-    for (int i = 0; i < table->Capacity(); i++) {
-      HeapObject* key = HeapObject::cast(table->KeyAt(i));
+    if (V8_LIKELY(FLAG_optimize_ephemerons)) {
+      for (int i = 0; i < table->Capacity(); i++) {
+        HeapObject* key = HeapObject::cast(table->KeyAt(i));
 
-      if (marking_state_.IsBlackOrGrey(key)) {
-        Object** value_slot = table->RawFieldOfElementAt(
-            EphemeronHashTable::EntryToValueIndex(i));
-        VisitPointer(table, value_slot);
+        if (marking_state_.IsBlackOrGrey(key)) {
+          Object** value_slot = table->RawFieldOfElementAt(
+              EphemeronHashTable::EntryToValueIndex(i));
+          VisitPointer(table, value_slot);
+        }
       }
     }
 
