@@ -34,6 +34,24 @@
       "revId": "f69527ee49a7e27495589fbc8c2bf0c2f1c36c46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a38002e_ea734278",
+        "filename": "test/inspector/runtime/console-deprecated-methods.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-06-15T14:06:43Z",
+      "side": 0,
+      "message": "You can remove this test all together and maybe all related to deprecation warning logic from v8-console.cc if nobody else uses it.\nYou need to build chromium with your CL applied to src/v8 and check what tests are failing, or you can find this information on try bot: there is link to \"layout_test_results\":\nhttps://test-results.appspot.com/data/layout_results/linux_trusty_blink_rel/30544/layout-test-results/results.html\n\nPart of failing tests can be removed as well, part of them looks suspicious. To land your CL:\n- prepare tests on chromium side by running them with your V8 CL - update tests and expectations,\n- mark tests as [SKIP] or at least [NEEDSMANUALREBASELINE] in TestExpectations file:\nhttps://cs.chromium.org/chromium/src/third_party/WebKit/LayoutTests/TestExpectations?q\u003dTestExpectation+%22%5B+SKIP%22\u0026sq\u003dpackage:chromium\u0026dr\u003dC\u0026l\u003d41\n- land preparation CL,\n- land this V8 CL,\n- after 2-4 days enable tests on chromium side.",
+      "parentUuid": "8cb1d605_a4c4a465",
+      "revId": "f69527ee49a7e27495589fbc8c2bf0c2f1c36c46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
