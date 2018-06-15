@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "950094e2_49323105",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-06-15T10:36:15Z",
+      "side": 1,
+      "message": "Please add a comment describing the meaning of kNone and kAny (the rest is obvious).",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 26,
+        "endChar": 8
+      },
+      "revId": "15a6236c7db77db5e38c116b29363f138117f03b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "465a9ae2_2ead6aef",
+        "filename": "src/compiler/types.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-06-15T10:36:15Z",
+      "side": 1,
+      "message": "Any should have type Any, no? Or at least something that includes the oddballs above, i.e., OtherInternal U Null U Undefined U Boolean.",
+      "range": {
+        "startLine": 176,
+        "startChar": 8,
+        "endLine": 176,
+        "endChar": 36
+      },
+      "revId": "15a6236c7db77db5e38c116b29363f138117f03b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
