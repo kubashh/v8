@@ -16,6 +16,23 @@
       "revId": "db8525d7896e99fbc0f53c2027a183c8ab4dcda0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11be885b_6ac2d56a",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-15T10:51:19Z",
+      "side": 1,
+      "message": "O_o... why not just simply {object}?",
+      "revId": "db8525d7896e99fbc0f53c2027a183c8ab4dcda0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
