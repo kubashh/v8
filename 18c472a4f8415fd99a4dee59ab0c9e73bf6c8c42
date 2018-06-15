@@ -128,6 +128,53 @@
     },
     {
       "key": {
+        "uuid": "c38c8ecc_abd50124",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-06-15T17:27:25Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "7f339272_66f36ce5",
+      "range": {
+        "startLine": 1085,
+        "startChar": 2,
+        "endLine": 1130,
+        "endChar": 52
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e988e88_cd5dd464",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-06-15T17:27:25Z",
+      "side": 1,
+      "message": "actually, just using icu::Locale::getAvailableLocales() may as well fine. Anyway, just in case, keeping the comment would be \u0027good\u0027.  \n\nWill you get rid of \u0027The following TODO came from ....\u0027 once that part is gone in a follow-up CL ?",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1159,
+        "endChar": 12
+      },
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "365dbe01_98467cda",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 9
@@ -295,6 +342,24 @@
       "side": 1,
       "message": "These tests shouldn\u0027t fail, except if these services are not built with en-US support (which is unlikely).",
       "parentUuid": "44647414_f81e1da6",
+      "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9022f6db_dac982db",
+        "filename": "test/cctest/test-intl.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-06-15T17:27:25Z",
+      "side": 1,
+      "message": "+1: What Cira said. \n\nBTW, there\u0027s a way to set the locale in ICU temporarily, but for this test, that is not necessary at all.",
+      "parentUuid": "d28d1bcc_c5c66235",
       "revId": "18c472a4f8415fd99a4dee59ab0c9e73bf6c8c42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
