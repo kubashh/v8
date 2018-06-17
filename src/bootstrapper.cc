@@ -2786,16 +2786,10 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                           Builtins::kConsoleCountReset, 1, false, NONE);
     SimpleInstallFunction(isolate_, console, "assert",
                           Builtins::kFastConsoleAssert, 1, false, NONE);
-    SimpleInstallFunction(isolate_, console, "markTimeline",
-                          Builtins::kConsoleMarkTimeline, 1, false, NONE);
     SimpleInstallFunction(isolate_, console, "profile",
                           Builtins::kConsoleProfile, 1, false, NONE);
     SimpleInstallFunction(isolate_, console, "profileEnd",
                           Builtins::kConsoleProfileEnd, 1, false, NONE);
-    SimpleInstallFunction(isolate_, console, "timeline",
-                          Builtins::kConsoleTimeline, 1, false, NONE);
-    SimpleInstallFunction(isolate_, console, "timelineEnd",
-                          Builtins::kConsoleTimelineEnd, 1, false, NONE);
     SimpleInstallFunction(isolate_, console, "time", Builtins::kConsoleTime, 1,
                           false, NONE);
     SimpleInstallFunction(isolate_, console, "timeEnd",
