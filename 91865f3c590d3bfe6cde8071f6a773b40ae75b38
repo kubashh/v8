@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16ff2bc5_6cceb08f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-18T14:36:31Z",
+      "side": 1,
+      "message": "That\u0027s quite a chatty commit message :P",
+      "revId": "91865f3c590d3bfe6cde8071f6a773b40ae75b38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
