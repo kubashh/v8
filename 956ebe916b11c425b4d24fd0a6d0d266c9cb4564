@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00b4e738_73e1f578",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-18T19:32:12Z",
+      "side": 1,
+      "message": "Generally, in C++ we would return a bool that says whether this succeeded or not, and take an output parameter to store the result. It\u0027s surprising to return the original string without letting the caller know that there was a failure.",
+      "revId": "956ebe916b11c425b4d24fd0a6d0d266c9cb4564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afb33054_248d42ca",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-18T19:32:12Z",
+      "side": 1,
+      "message": "This is great! no more of the string splitting or regexp :)",
+      "revId": "956ebe916b11c425b4d24fd0a6d0d266c9cb4564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2f77614a_6df6875d",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-18T19:32:12Z",
+      "side": 1,
+      "message": "nit: stale todo",
+      "revId": "956ebe916b11c425b4d24fd0a6d0d266c9cb4564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
