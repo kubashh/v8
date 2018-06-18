@@ -1331,7 +1331,7 @@ void CompileNativeModule(Isolate* isolate, ErrorThrower* thrower,
 }
 
 MaybeHandle<WasmModuleObject> CompileToModuleObjectInternal(
-    Isolate* isolate, ErrorThrower* thrower, std::unique_ptr<WasmModule> module,
+    Isolate* isolate, ErrorThrower* thrower, std::shared_ptr<WasmModule> module,
     const ModuleWireBytes& wire_bytes, Handle<Script> asm_js_script,
     Vector<const byte> asm_js_offset_table_bytes) {
   WasmModule* wasm_module = module.get();
@@ -1529,7 +1529,7 @@ class BackgroundCompileTask : public CancelableTask {
 }  // namespace
 
 MaybeHandle<WasmModuleObject> CompileToModuleObject(
-    Isolate* isolate, ErrorThrower* thrower, std::unique_ptr<WasmModule> module,
+    Isolate* isolate, ErrorThrower* thrower, std::shared_ptr<WasmModule> module,
     const ModuleWireBytes& wire_bytes, Handle<Script> asm_js_script,
     Vector<const byte> asm_js_offset_table_bytes) {
   return CompileToModuleObjectInternal(isolate, thrower, std::move(module),
@@ -2909,7 +2909,7 @@ void AsyncCompileJob::FinishCompile() {
   // breakpoints on a (potentially empty) subset of the instances.
   // Create the module object.
   module_object_ = WasmModuleObject::New(
-      isolate_, compiled_module_, export_wrappers, std::move(module_),
+      isolate_, compiled_module_, export_wrappers, module_,
       Handle<SeqOneByteString>::cast(module_bytes), script,
       asm_js_offset_table);
   compiled_module_->GetNativeModule()->SetModuleObject(module_object_);
@@ -3239,9 +3239,8 @@ class AsyncCompileJob::FinishModule : public CompileStep {
     TRACE_COMPILE("(6) Finish module...\n");
     job_->AsyncCompileSucceeded(job_->module_object_);
 
-    WasmModule* module = job_->module_object_->module();
     size_t num_functions =
-        module->functions.size() - module->num_imported_functions;
+        job_->module_->functions.size() - job_->module_->num_imported_functions;
     if (job_->compiled_module_->GetNativeModule()
                 ->compilation_state()
                 ->compile_mode() == CompileMode::kRegular ||
@@ -3320,6 +3319,7 @@ bool AsyncStreamingProcessor::ProcessModuleHeader(Vector<const uint8_t> bytes,
                                                   uint32_t offset) {
   TRACE_STREAMING("Process module header...\n");
   decoder_.StartDecoding(job_->isolate());
+  job_->module_ = decoder_.shared_module();
   decoder_.DecodeModuleHeader(bytes, offset);
   if (!decoder_.ok()) {
     FinishAsyncCompileJobWithError(decoder_.FinishDecoding(false));
@@ -3428,7 +3428,7 @@ void AsyncStreamingProcessor::OnFinishedStream(std::unique_ptr<uint8_t[]> bytes,
                                       job_->bytes_copy_.get() + length);
   ModuleResult result = decoder_.FinishDecoding(false);
   DCHECK(result.ok());
-  job_->module_ = std::move(result.val);
+  DCHECK_EQ(job_->module_, result.val);
   if (job_->DecrementAndCheckFinisherCount()) {
     if (job_->compiled_module_.is_null()) {
       // We are processing a WebAssembly module without code section. We need to
