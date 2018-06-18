@@ -9,6 +9,10 @@
 #ifndef V8_OBJECTS_INTL_OBJECTS_H_
 #define V8_OBJECTS_INTL_OBJECTS_H_
 
+#include <set>
+#include <string>
+
+#include "src/intl.h"
 #include "src/objects.h"
 #include "unicode/uversion.h"
 
@@ -157,6 +161,13 @@ class V8BreakIterator {
 
  private:
   V8BreakIterator();
+};
+
+class IntlUtil {
+ public:
+  static std::set<std::string> GetAvailableLocales(const IcuService& service);
+  static bool RemoveLocaleScriptTag(const std::string& icu_locale,
+                                    std::string* locale_less_script);
 };
 
 }  // namespace internal

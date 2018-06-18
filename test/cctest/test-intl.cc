@@ -7,6 +7,7 @@
 #include "src/builtins/builtins-intl.h"
 #include "src/lookup.h"
 #include "src/objects-inl.h"
+#include "src/objects/intl-objects.h"
 #include "test/cctest/cctest.h"
 
 namespace v8 {
@@ -189,6 +190,61 @@ TEST(GetOptions) {
                .ToHandleChecked();
   CHECK(result->IsBoolean());
   CHECK(result->IsFalse(isolate));
+}
+
+bool ScriptTagWasRemoved(std::string locale, std::string expected) {
+  std::string without_script_tag;
+  bool didShorten =
+      IntlUtil::RemoveLocaleScriptTag(locale, &without_script_tag);
+  return didShorten && expected == without_script_tag;
+}
+
+bool ScriptTagWasNotRemoved(std::string locale) {
+  std::string without_script_tag;
+  bool didShorten =
+      IntlUtil::RemoveLocaleScriptTag(locale, &without_script_tag);
+  return !didShorten && without_script_tag.empty();
+}
+
+TEST(RemoveLocaleScriptTag) {
+  CHECK(ScriptTagWasRemoved("aa_Bbbb_CC", "aa-CC"));
+  CHECK(ScriptTagWasRemoved("aaa_Bbbb_CC", "aaa-CC"));
+
+  CHECK(ScriptTagWasNotRemoved("aa"));
+  CHECK(ScriptTagWasNotRemoved("aaa"));
+  CHECK(ScriptTagWasNotRemoved("aa_CC"));
+  CHECK(ScriptTagWasNotRemoved("aa_Bbbb_C"));
+  CHECK(ScriptTagWasNotRemoved("aa_Bbbb_CCC"));
+  CHECK(ScriptTagWasNotRemoved("aa_Bbb_CC"));
+  CHECK(ScriptTagWasNotRemoved("Aa_Bbbb_CC"));
+  CHECK(ScriptTagWasNotRemoved("Aaa_Bbbb_CC"));
+  CHECK(ScriptTagWasNotRemoved("aa_bbbb_CC"));
+  CHECK(ScriptTagWasNotRemoved("aa_bBbb_CC"));
+  CHECK(ScriptTagWasNotRemoved("aa_Bbbb_cC"));
+  CHECK(ScriptTagWasNotRemoved("1a_Bbbb_CC"));
+  CHECK(ScriptTagWasNotRemoved("aa_B1bb_CC"));
+  CHECK(ScriptTagWasNotRemoved("aa_1bbb_CC"));
+  CHECK(ScriptTagWasNotRemoved("aa_Bbbb_C1"));
+}
+
+TEST(GetAvailableLocales) {
+  std::set<std::string> locales;
+
+  locales = IntlUtil::GetAvailableLocales(IcuService::kBreakIterator);
+  CHECK(locales.count("en-US"));
+  CHECK(!locales.count("abcdefg"));
+
+  locales = IntlUtil::GetAvailableLocales(IcuService::kCollator);
+  CHECK(locales.count("en-US"));
+
+  locales = IntlUtil::GetAvailableLocales(IcuService::kDateFormat);
+  CHECK(locales.count("en-US"));
+
+  locales = IntlUtil::GetAvailableLocales(IcuService::kNumberFormat);
+  CHECK(locales.count("en-US"));
+
+  locales = IntlUtil::GetAvailableLocales(IcuService::kPluralRules);
+  CHECK(locales.count("en-US"));
 }
 
 }  // namespace internal
