@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "cee31078_750228f2",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-18T20:59:14Z",
+      "side": 1,
+      "message": "At this point locale is bcp47 tag. I think icu::Locale::createCanonical takes ICU format, not bcp47.",
+      "range": {
+        "startLine": 1085,
+        "startChar": 57,
+        "endLine": 1085,
+        "endChar": 66
+      },
+      "revId": "956ebe916b11c425b4d24fd0a6d0d266c9cb4564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "afb33054_248d42ca",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 13
