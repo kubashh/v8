@@ -248,6 +248,24 @@
     },
     {
       "key": {
+        "uuid": "3982db0a_dc82d349",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-18T11:01:45Z",
+      "side": 1,
+      "message": "SGTM: only data-properties checks in stores/loads and IsCustomElementsReceiverInstanceType",
+      "parentUuid": "f2a2ea7d_92f5b96d",
+      "revId": "a957ab0644dd5455167e5bf639b94cec55272279",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea7f8a88_39a85962",
         "filename": "src/builtins/array.tq",
         "patchSetId": 4
