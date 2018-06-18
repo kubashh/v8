@@ -36,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "2361ec8a_df1b81e5",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-18T20:01:40Z",
+      "side": 1,
+      "message": "what Sathya said about errors - we don\u0027t know what happened (in case caller wants to know).",
+      "range": {
+        "startLine": 1094,
+        "startChar": 11,
+        "endLine": 1094,
+        "endChar": 17
+      },
+      "revId": "956ebe916b11c425b4d24fd0a6d0d266c9cb4564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f77614a_6df6875d",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 13
@@ -47,6 +70,29 @@
       "writtenOn": "2018-06-18T19:32:12Z",
       "side": 1,
       "message": "nit: stale todo",
+      "revId": "956ebe916b11c425b4d24fd0a6d0d266c9cb4564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af73cbbf_b37ae129",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-18T20:01:40Z",
+      "side": 1,
+      "message": "shortened_locale",
+      "range": {
+        "startLine": 1144,
+        "startChar": 16,
+        "endLine": 1144,
+        "endChar": 31
+      },
       "revId": "956ebe916b11c425b4d24fd0a6d0d266c9cb4564",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
