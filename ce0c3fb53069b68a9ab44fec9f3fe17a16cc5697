@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22d3e304_fda12c49",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-06-19T21:18:47Z",
+      "side": 1,
+      "message": "You can also just replace \u0027_\u0027 with \u0027-\u0027 instead of calling uloc_toLanguageTag() because \u0027shortened locale\u0027 here takes the form of \u0027\u003clang\u003e_\u003cregion\u003e\u0027.",
+      "range": {
+        "startLine": 1147,
+        "startChar": 6,
+        "endLine": 1148,
+        "endChar": 63
+      },
+      "revId": "ce0c3fb53069b68a9ab44fec9f3fe17a16cc5697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
