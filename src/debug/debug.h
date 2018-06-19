@@ -222,7 +222,7 @@ class Debug {
   void OnThrow(Handle<Object> exception);
   void OnPromiseReject(Handle<Object> promise, Handle<Object> value);
   void OnCompileError(Handle<Script> script);
-  void OnAfterCompile(Handle<Script> script);
+  void OnAfterCompile(Handle<Script> script, bool created_by_live_edit = false);
 
   Handle<Context> GetDebugContext();
   void HandleDebugBreak(IgnoreBreakMode ignore_break_mode);
@@ -313,7 +313,7 @@ class Debug {
   // change. stack_changed is true if after editing script on pause stack is
   // changed and client should request stack trace again.
   bool SetScriptSource(Handle<Script> script, Handle<String> source,
-                       bool preview, bool* stack_changed);
+                       bool preview, debug::LiveEditResult* result);
 
   // Threading support.
   char* ArchiveDebug(char* to);
@@ -347,11 +347,6 @@ class Debug {
         base::Relaxed_Load(&thread_local_.current_debug_scope_));
   }
   inline Handle<Context> debug_context() { return debug_context_; }
-
-  void set_live_edit_enabled(bool v) { live_edit_enabled_ = v; }
-  bool live_edit_enabled() const {
-    return FLAG_enable_liveedit && live_edit_enabled_;
-  }
 
   inline bool is_active() const { return is_active_; }
   inline bool is_loaded() const { return !debug_context_.is_null(); }
@@ -439,7 +434,8 @@ class Debug {
 
   void OnException(Handle<Object> exception, Handle<Object> promise);
 
-  void ProcessCompileEvent(bool has_compile_error, Handle<Script> script);
+  void ProcessCompileEvent(bool has_compile_error, Handle<Script> script,
+                           bool created_by_live_edit);
 
   // Find the closest source position for a break point for a given position.
   int FindBreakablePosition(Handle<DebugInfo> debug_info, int source_position);
@@ -499,8 +495,6 @@ class Debug {
   bool hook_on_function_call_;
   // Suppress debug events.
   bool is_suppressed_;
-  // LiveEdit is enabled.
-  bool live_edit_enabled_;
   // Do not trigger debug break events.
   bool break_disabled_;
   // Do not break on break points.

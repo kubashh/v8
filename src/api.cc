@@ -9129,11 +9129,6 @@ v8_inspector::V8Inspector* debug::GetInspector(Isolate* isolate) {
   return reinterpret_cast<i::Isolate*>(isolate)->inspector();
 }
 
-void debug::SetLiveEditEnabled(Isolate* isolate, bool enable) {
-  i::Isolate* internal_isolate = reinterpret_cast<i::Isolate*>(isolate);
-  internal_isolate->debug()->set_live_edit_enabled(enable);
-}
-
 void debug::SetBreakOnNextFunctionCall(Isolate* isolate) {
   reinterpret_cast<i::Isolate*>(isolate)->debug()->SetBreakOnNextFunctionCall();
 }
@@ -9400,11 +9395,12 @@ v8::debug::Location debug::Script::GetSourceLocation(int offset) const {
 }
 
 bool debug::Script::SetScriptSource(v8::Local<v8::String> newSource,
-                                    bool preview, bool* stack_changed) const {
+                                    bool preview,
+                                    debug::LiveEditResult* result) const {
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   i::Isolate* isolate = script->GetIsolate();
   return isolate->debug()->SetScriptSource(
-      script, Utils::OpenHandle(*newSource), preview, stack_changed);
+      script, Utils::OpenHandle(*newSource), preview, result);
 }
 
 bool debug::Script::SetBreakpoint(v8::Local<v8::String> condition,

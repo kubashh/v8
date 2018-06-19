@@ -155,7 +155,8 @@ namespace internal {
   F(ScriptLocationFromLine, 4, 1)               \
   F(ScriptPositionInfo2, 3, 1)                  \
   F(ScriptPositionInfo, 3, 1)                   \
-  F(SetGeneratorScopeVariableValue, 4, 1)
+  F(SetGeneratorScopeVariableValue, 4, 1)       \
+  F(LiveEditPatchScript, 2, 1)
 
 #define FOR_EACH_INTRINSIC_FORIN(F) \
   F(ForInEnumerate, 1, 1)           \
@@ -286,19 +287,6 @@ namespace internal {
   F(CreateArrayLiteral, 4, 1)          \
   F(CreateObjectLiteral, 4, 1)         \
   F(CreateRegExpLiteral, 4, 1)
-
-#define FOR_EACH_INTRINSIC_LIVEEDIT(F)              \
-  F(LiveEditCheckAndDropActivations, 3, 1)          \
-  F(LiveEditCompareStrings, 2, 1)                   \
-  F(LiveEditFindSharedFunctionInfosForScript, 1, 1) \
-  F(LiveEditFixupScript, 2, 1)                      \
-  F(LiveEditFunctionSetScript, 2, 1)                \
-  F(LiveEditFunctionSourceUpdated, 2, 1)            \
-  F(LiveEditGatherCompileInfo, 2, 1)                \
-  F(LiveEditPatchFunctionPositions, 2, 1)           \
-  F(LiveEditReplaceFunctionCode, 2, 1)              \
-  F(LiveEditReplaceRefToNestedFunction, 3, 1)       \
-  F(LiveEditReplaceScript, 3, 1)
 
 #define FOR_EACH_INTRINSIC_MATHS(F) F(GenerateRandomNumbers, 0, 1)
 
@@ -623,7 +611,6 @@ namespace internal {
   FOR_EACH_INTRINSIC_INTERPRETER(F)         \
   FOR_EACH_INTRINSIC_INTL(F)                \
   FOR_EACH_INTRINSIC_LITERALS(F)            \
-  FOR_EACH_INTRINSIC_LIVEEDIT(F)            \
   FOR_EACH_INTRINSIC_MATHS(F)               \
   FOR_EACH_INTRINSIC_MODULE(F)              \
   FOR_EACH_INTRINSIC_NUMBERS(F)             \
