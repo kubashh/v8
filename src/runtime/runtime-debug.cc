@@ -426,10 +426,6 @@ RUNTIME_FUNCTION(Runtime_DebugGetLoadedScripts) {
   Handle<FixedArray> instances;
   {
     DebugScope debug_scope(isolate->debug());
-    if (debug_scope.failed()) {
-      DCHECK(isolate->has_pending_exception());
-      return isolate->heap()->exception();
-    }
     // Fill the script objects.
     instances = isolate->debug()->GetLoadedScripts();
   }
@@ -460,24 +456,6 @@ RUNTIME_FUNCTION(Runtime_FunctionGetInferredName) {
     return JSFunction::cast(f)->shared()->inferred_name();
   }
   return isolate->heap()->empty_string();
-}
-
-
-RUNTIME_FUNCTION(Runtime_GetDebugContext) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(0, args.length());
-  Handle<Context> context;
-  {
-    DebugScope debug_scope(isolate->debug());
-    if (debug_scope.failed()) {
-      DCHECK(isolate->has_pending_exception());
-      return isolate->heap()->exception();
-    }
-    context = isolate->debug()->GetDebugContext();
-  }
-  if (context.is_null()) return isolate->heap()->undefined_value();
-  context->set_security_token(isolate->native_context()->security_token());
-  return context->global_proxy();
 }
 
 
