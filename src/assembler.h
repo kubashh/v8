@@ -543,6 +543,10 @@ class RelocInfo {
     return mode == WASM_CALL || mode == JS_TO_WASM_CALL;
   }
 
+  static inline bool IsOnlyForSerializer(Mode mode) {
+    return mode == EXTERNAL_REFERENCE || mode == OFF_HEAP_TARGET;
+  }
+
   static constexpr int ModeMask(Mode mode) { return 1 << mode; }
 
   // Accessors
