@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f087f0f_018b82fb",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-20T14:45:33Z",
+      "side": 1,
+      "message": "You can use an std::array, which supports 0-sized arrays.",
+      "revId": "c69811b4036f7ac69db93c0123964e47a226e1be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
