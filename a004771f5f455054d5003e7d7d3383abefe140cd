@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "379bdf3d_95755cfd",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-20T16:45:38Z",
+      "side": 1,
+      "message": "Let\u0027s move the private fields down.",
+      "range": {
+        "startLine": 2111,
+        "startChar": 3,
+        "endLine": 2111,
+        "endChar": 11
+      },
+      "revId": "a004771f5f455054d5003e7d7d3383abefe140cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
