@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "c71e1d52_f7a1d241",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-20T14:03:29Z",
+      "side": 1,
+      "message": "nit: Would it make sense to DCHECK_EQ(result_size, descriptor.GetReturnCound()) here as well?",
+      "range": {
+        "startLine": 55,
+        "startChar": 64,
+        "endLine": 55,
+        "endChar": 66
+      },
+      "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c806d46_3626466a",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-20T14:03:29Z",
+      "side": 1,
+      "message": "nit: This comment seems to be slightly out of date now.",
+      "range": {
+        "startLine": 89,
+        "startChar": 5,
+        "endLine": 89,
+        "endChar": 46
+      },
+      "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8b18aed_c9461a97",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-20T14:03:29Z",
+      "side": 1,
+      "message": "nit: Likewise, should be (return_count + parameter_count) now.",
+      "range": {
+        "startLine": 93,
+        "startChar": 5,
+        "endLine": 93,
+        "endChar": 20
+      },
+      "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f0a1f34f_6d22e9c8",
         "filename": "src/interface-descriptors.h",
         "patchSetId": 3
@@ -18,6 +87,121 @@
         "startChar": 17,
         "endLine": 145,
         "endChar": 25
+      },
+      "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb9cea50_0668620a",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-20T14:03:29Z",
+      "side": 1,
+      "message": "nit: s/has/have/",
+      "range": {
+        "startLine": 242,
+        "startChar": 39,
+        "endLine": 242,
+        "endChar": 42
+      },
+      "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "321a89e3_b4054b56",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-20T14:03:29Z",
+      "side": 1,
+      "message": "nit: The names \"result count\" and \"return count\" seem to be used inconsistently. Should we stick with one? I would vote for \"return count\" consistently.",
+      "range": {
+        "startLine": 316,
+        "startChar": 23,
+        "endLine": 316,
+        "endChar": 50
+      },
+      "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f7406ff_2deb53b7",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-20T14:03:29Z",
+      "side": 1,
+      "message": "nit: Likewise.",
+      "range": {
+        "startLine": 326,
+        "startChar": 23,
+        "endLine": 326,
+        "endChar": 50
+      },
+      "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b1e0f0_2deaa2b3",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-20T14:03:29Z",
+      "side": 1,
+      "message": "nit: Is called \"DEFINE_RESULT_AND_PARAMETERS\" now.",
+      "range": {
+        "startLine": 970,
+        "startChar": 7,
+        "endLine": 970,
+        "endChar": 24
+      },
+      "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56688008_c8127c51",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 971,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-20T14:03:29Z",
+      "side": 1,
+      "message": "nit: Is called \"DEFINE_RESULT_AND_PARAMETERS_NO_CONTEXT\" now.",
+      "range": {
+        "startLine": 971,
+        "startChar": 7,
+        "endLine": 971,
+        "endChar": 35
       },
       "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
