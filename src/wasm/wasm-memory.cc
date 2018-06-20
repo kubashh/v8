@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <limits>
+
 #include "src/wasm/wasm-memory.h"
 #include "src/objects-inl.h"
 #include "src/wasm/wasm-engine.h"
@@ -24,9 +26,15 @@ void* TryAllocateBackingStore(WasmMemoryTracker* memory_tracker, Heap* heap,
 #endif
   // We always allocate the largest possible offset into the heap, so the
   // addressable memory after the guard page can be made inaccessible.
+  //
+  // To protect against 32-bit integer overflow issues, we also protect the 2GiB
+  // before the valid part of the memory buffer.
+  size_t const negative_guard_size =
+      RoundUp(-static_cast<int64_t>(std::numeric_limits<int32_t>::min()),
+              CommitPageSize());
   *allocation_length =
       require_full_guard_regions
-          ? RoundUp(kWasmMaxHeapOffset, CommitPageSize())
+          ? RoundUp(kWasmMaxHeapOffset + negative_guard_size, CommitPageSize())
           : RoundUp(
                 base::bits::RoundUpToPowerOfTwo32(static_cast<uint32_t>(size)),
                 kWasmPageSize);
@@ -68,7 +76,10 @@ void* TryAllocateBackingStore(WasmMemoryTracker* memory_tracker, Heap* heap,
     memory_tracker->AddAllocationStatusSample(AllocationStatus::kOtherFailure);
     return nullptr;
   }
-  void* memory = *allocation_base;
+  byte* memory = reinterpret_cast<byte*>(*allocation_base);
+  if (require_full_guard_regions) {
+    memory += negative_guard_size;
+  }
 
   // Make the part we care about accessible.
   if (size > 0) {
