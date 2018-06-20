@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98ed1923_485bf814",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3746,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-20T16:04:02Z",
+      "side": 1,
+      "message": "nit: Curly braces around body if it spans more than one line.",
+      "range": {
+        "startLine": 3745,
+        "startChar": 0,
+        "endLine": 3746,
+        "endChar": 29
+      },
+      "revId": "352a9f8af700b84ea279f9d27dfeb884848cff88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
