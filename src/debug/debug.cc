@@ -1907,11 +1907,15 @@ bool Debug::CanBreakAtEntry(Handle<SharedFunctionInfo> shared) {
 }
 
 bool Debug::SetScriptSource(Handle<Script> script, Handle<String> source,
-                            bool preview, bool* stack_changed) {
-  SaveContext save(isolate_);
+                            bool preview, debug::LiveEditResult* output) {
+  StackFrame::Id frame_id = break_frame_id();
   DebugScope debug_scope(this);
   if (debug_scope.failed()) return false;
   isolate_->set_context(*debug_context());
+
+  if (frame_id != StackFrame::NO_ID) {
+    thread_local_.break_frame_id_ = frame_id;
+  }
 
   set_live_edit_enabled(true);
   Handle<Object> script_wrapper = Script::GetWrapper(script);
@@ -1921,8 +1925,32 @@ bool Debug::SetScriptSource(Handle<Script> script, Handle<String> source,
   Handle<Object> result;
   if (!CallFunction("SetScriptSource", arraysize(argv), argv, false)
            .ToHandle(&result)) {
-    isolate_->OptionalRescheduleException(false);
     set_live_edit_enabled(false);
+    Handle<Object> pending_exception(isolate_->pending_exception(), isolate_);
+    if (pending_exception->IsJSObject()) {
+      Handle<JSObject> exception = Handle<JSObject>::cast(pending_exception);
+      Handle<String> message = Handle<String>::cast(
+          JSReceiver::GetProperty(isolate_, exception, "message")
+              .ToHandleChecked());
+      if (isolate_->factory()
+              ->NewStringFromAsciiChecked("Blocked by functions on stack")
+              ->Equals(*message)) {
+        output->status = debug::LiveEditResult::
+            BLOCKED_BY_FUNCTION_BELOW_NON_DROPPABLE_FRAME;
+      } else {
+        Handle<JSObject> details = Handle<JSObject>::cast(
+            JSReceiver::GetProperty(isolate_, exception, "details")
+                .ToHandleChecked());
+        Handle<String> error = Handle<String>::cast(
+            JSReceiver::GetProperty(isolate_, details, "syntaxErrorMessage")
+                .ToHandleChecked());
+        output->status = debug::LiveEditResult::COMPILE_ERROR;
+        output->line_number = kNoSourcePosition;
+        output->column_number = kNoSourcePosition;
+        output->message = Utils::ToLocal(error);
+      }
+    }
+    isolate_->clear_pending_exception();
     return false;
   }
   set_live_edit_enabled(false);
@@ -1930,7 +1958,8 @@ bool Debug::SetScriptSource(Handle<Script> script, Handle<String> source,
       JSReceiver::GetProperty(isolate_, Handle<JSObject>::cast(result),
                               "stack_modified")
           .ToHandleChecked();
-  *stack_changed = stack_changed_value->IsTrue(isolate_);
+  output->stack_changed = stack_changed_value->IsTrue(isolate_);
+  output->status = debug::LiveEditResult::OK;
   return true;
 }
 

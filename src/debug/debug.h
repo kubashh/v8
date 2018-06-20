@@ -313,7 +313,7 @@ class Debug {
   // change. stack_changed is true if after editing script on pause stack is
   // changed and client should request stack trace again.
   bool SetScriptSource(Handle<Script> script, Handle<String> source,
-                       bool preview, bool* stack_changed);
+                       bool preview, debug::LiveEditResult* result);
 
   // Threading support.
   char* ArchiveDebug(char* to);

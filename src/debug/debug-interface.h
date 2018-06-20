@@ -86,6 +86,24 @@ void BreakRightNow(Isolate* isolate);
 
 bool AllFramesOnStackAreBlackboxed(Isolate* isolate);
 
+struct LiveEditResult {
+  enum Status {
+    OK,
+    COMPILE_ERROR,
+    BLOCKED_BY_RUNNING_GENERATOR,
+    BLOCKED_BY_FUNCTION_ABOVE_BREAK_FRAME,
+    BLOCKED_BY_FUNCTION_BELOW_NON_DROPPABLE_FRAME,
+    BLOCKED_BY_ACTIVE_FUNCTION,
+    BLOCKED_BY_NEW_TARGET_IN_RESTART_FRAME,
+    FRAME_RESTART_IS_NOT_SUPPORTED
+  };
+  Status status = OK;
+  v8::Local<v8::String> message;
+  int line_number = -1;
+  int column_number = -1;
+  bool stack_changed = false;
+};
+
 /**
  * Native wrapper around v8::internal::Script object.
  */
@@ -114,7 +132,7 @@ class V8_EXPORT_PRIVATE Script {
   int GetSourceOffset(const debug::Location& location) const;
   v8::debug::Location GetSourceLocation(int offset) const;
   bool SetScriptSource(v8::Local<v8::String> newSource, bool preview,
-                       bool* stack_changed) const;
+                       LiveEditResult* result) const;
   bool SetBreakpoint(v8::Local<v8::String> condition, debug::Location* location,
                      BreakpointId* id) const;
 };
