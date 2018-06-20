@@ -1097,7 +1097,7 @@ bool FitsShifter(uint32_t imm32, uint32_t* rotate_imm, uint32_t* immed_8,
 // space.  There is no guarantee that the relocated location can be similarly
 // encoded.
 bool MustOutputRelocInfo(RelocInfo::Mode rmode, const Assembler* assembler) {
-  if (rmode == RelocInfo::EXTERNAL_REFERENCE) {
+  if (RelocInfo::IsOnlyForSnapshot(rmode)) {
     if (assembler != nullptr && assembler->predictable_code_size()) return true;
     return assembler->serializer_enabled();
   } else if (RelocInfo::IsNone(rmode)) {
@@ -5137,7 +5137,7 @@ void Assembler::dq(uint64_t value) {
 void Assembler::RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data) {
   if (RelocInfo::IsNone(rmode) ||
       // Don't record external references unless the heap will be serialized.
-      (rmode == RelocInfo::EXTERNAL_REFERENCE && !serializer_enabled() &&
+      (RelocInfo::IsOnlyForSnapshot(rmode) && !serializer_enabled() &&
        !emit_debug_code())) {
     return;
   }

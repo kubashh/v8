@@ -3329,8 +3329,8 @@ void Assembler::dd(Label* label) {
 void Assembler::RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data) {
   DCHECK(!RelocInfo::IsNone(rmode));
   // Don't record external references unless the heap will be serialized.
-  if (rmode == RelocInfo::EXTERNAL_REFERENCE &&
-      !serializer_enabled() && !emit_debug_code()) {
+  if (RelocInfo::IsOnlyForSerializer(rmode) && !serializer_enabled() &&
+      !emit_debug_code()) {
     return;
   }
   RelocInfo rinfo(reinterpret_cast<Address>(pc_), rmode, data, nullptr);

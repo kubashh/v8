@@ -792,7 +792,7 @@ void Assembler::dp(uintptr_t data) {
 void Assembler::RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data) {
   if (RelocInfo::IsNone(rmode) ||
       // Don't record external references unless the heap will be serialized.
-      (rmode == RelocInfo::EXTERNAL_REFERENCE && !serializer_enabled() &&
+      (RelocInfo::IsOnlyForSerializer(rmode) && !serializer_enabled() &&
        !emit_debug_code())) {
     return;
   }
