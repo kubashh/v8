@@ -192,7 +192,8 @@ module array {
   labels Bailout {
     for (let i: Smi = from + 1; i < to; ++i) {
       assert(CanUseSameAccessor<E>(
-          context, receiver, elements, initialReceiverMap, initialReceiverLength));
+          context, receiver, elements, initialReceiverMap,
+          initialReceiverLength));
 
       let element: Object = Load<E>(context, elements, i) otherwise Bailout;
       let j: Smi = i - 1;
@@ -326,7 +327,8 @@ module array {
     // Move pivot element to a place on the left.
     Swap<E>(context, elements, from + 1, third_index, v1) otherwise Bailout;
     assert(CanUseSameAccessor<E>(
-        context, receiver, elements, initialReceiverMap, initialReceiverLength));
+        context, receiver, elements, initialReceiverMap,
+        initialReceiverLength));
 
     return v1;
   }
@@ -397,7 +399,8 @@ module array {
           // smaller than pivot.
           while (order > 0) {
             assert(CanUseSameAccessor<E>(
-                context, receiver, elements, initialReceiverMap, initialReceiverLength));
+                context, receiver, elements, initialReceiverMap,
+                initialReceiverLength));
 
             high_start--;
             if (high_start == idx) {
@@ -430,26 +433,28 @@ module array {
       }
 
       if ((to - high_start) < (low_end - from)) {
-        ArrayQuickSort<E>(context, sortState, high_start, to);
+        let bailed: Smi = ArrayQuickSort<E>(context, sortState, high_start, to);
+        if (bailed != 0) goto Bailout;
+
         to = low_end;
       } else {
-        ArrayQuickSort<E>(context, sortState, from, low_end);
+        let bailed: Smi = ArrayQuickSort<E>(context, sortState, from, low_end);
+        if (bailed != 0) goto Bailout;
+
         from = high_start;
       }
     }
   }
 
+  // Returns -1 iff we bailed to the slow path, 0 otherwise.
   builtin ArrayQuickSort<ElementsAccessor : type>(
-      context: Context, sortState: FixedArray, from: Smi, to: Smi): Object {
+      context: Context, sortState: FixedArray, from: Smi, to: Smi): Smi {
     try {
       ArrayQuickSortImpl<ElementsAccessor>(context, sortState, from, to)
       otherwise Slow;
     }
     label Slow {
-      // Generic version uses Set- and GetProperty, replace elements with
-      // the receiver itself.
-      sortState[kElementsIdx()] = sortState[kReceiverIdx()];
-      ArrayQuickSort<GenericElementsAccessor>(context, sortState, from, to);
+      return SmiConstant(-1);
     }
     return SmiConstant(0);
   }
@@ -457,7 +462,7 @@ module array {
   // The specialization is needed since we would end up in an endless loop
   // when the ElementsAccessor fails and bails to the ElementsAccessor again.
   ArrayQuickSort<GenericElementsAccessor>(
-      context: Context, sortState: FixedArray, from: Smi, to: Smi): Object {
+      context: Context, sortState: FixedArray, from: Smi, to: Smi): Smi {
     try {
       ArrayQuickSortImpl<GenericElementsAccessor>(context, sortState, from, to)
       otherwise Error;
@@ -467,6 +472,18 @@ module array {
       unreachable;
     }
     return SmiConstant(0);
+  }
+
+  macro TryFastArrayQuickSort<ElementsAccessor : type>(
+      context: Context, sortState: FixedArray, from: Smi, to: Smi) {
+    let bailed: Smi =
+        ArrayQuickSort<ElementsAccessor>(context, sortState, from, to);
+    if (bailed != 0) {
+      // Generic version uses Set- and GetProperty, replace elements with
+      // the receiver itself.
+      sortState[kElementsIdx()] = sortState[kReceiverIdx()];
+      ArrayQuickSort<GenericElementsAccessor>(context, sortState, from, to);
+    }
   }
 
   // For compatibility with JSC, we also sort elements inherited from
@@ -531,14 +548,14 @@ module array {
       sort_state[kRandomStateIdx()] = nofNonUndefined;
 
       if (IsDoubleElementsKind(elementsKind)) {
-        ArrayQuickSort<FastDoubleElements>(
+        TryFastArrayQuickSort<FastDoubleElements>(
             context, sort_state, 0, nofNonUndefined);
       } else {
         if (elementsKind == PACKED_SMI_ELEMENTS) {
-          ArrayQuickSort<FastPackedSmiElements>(
+          TryFastArrayQuickSort<FastPackedSmiElements>(
               context, sort_state, 0, nofNonUndefined);
         } else {
-          ArrayQuickSort<FastSmiOrObjectElements>(
+          TryFastArrayQuickSort<FastSmiOrObjectElements>(
               context, sort_state, 0, nofNonUndefined);
         }
       }
@@ -562,7 +579,7 @@ module array {
           !IsCustomElementsReceiverInstanceType(map.instance_type)) {
         let jsobj: JSObject = unsafe_cast<JSObject>(obj);
         sort_state[kElementsIdx()] = jsobj.elements;
-        ArrayQuickSort<DictionaryElements>(
+        TryFastArrayQuickSort<DictionaryElements>(
             context, sort_state, 0, nofNonUndefined);
         return receiver;
       }
