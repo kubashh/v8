@@ -1203,6 +1203,7 @@ namespace internal {
   TFC(WasmCallJavaScript, CallTrampoline, 1)                                   \
   TFC(WasmToNumber, TypeConversion, 1)                                         \
   TFS(WasmStackGuard)                                                          \
+  TFS(WasmGrowMemory, kNumPages)                                               \
   TFS(ThrowWasmTrapUnreachable)                                                \
   TFS(ThrowWasmTrapMemOutOfBounds)                                             \
   TFS(ThrowWasmTrapDivByZero)                                                  \
