@@ -102,10 +102,9 @@ void PartialSerializer::SerializeObject(HeapObject* obj, HowToCode how_to_code,
   }
 
   if (obj->IsJSFunction()) {
-    // Unconditionally reset the JSFunction to its SFI's code, since we can't
-    // serialize optimized code anyway.
+    // Reset the JSFunction to CompileLazy. It will tail-call to the SFI code.
     JSFunction* closure = JSFunction::cast(obj);
-    closure->set_code(closure->shared()->GetCode());
+    closure->set_code(isolate()->builtins()->builtin(Builtins::kCompileLazy));
   }
 
   CheckRehashability(obj);
