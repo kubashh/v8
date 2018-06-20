@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7114c3ef_fa9aee86",
+        "filename": "src/snapshot/partial-serializer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-20T12:57:10Z",
+      "side": 1,
+      "message": "Nit: comment seems outdated now (it\u0027s not unconditionally).",
+      "revId": "22116dd6c884c026225e56dd8e442a660193e729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
