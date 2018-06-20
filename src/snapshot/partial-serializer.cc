@@ -101,13 +101,6 @@ void PartialSerializer::SerializeObject(HeapObject* obj, HowToCode how_to_code,
     }
   }
 
-  if (obj->IsJSFunction()) {
-    // Unconditionally reset the JSFunction to its SFI's code, since we can't
-    // serialize optimized code anyway.
-    JSFunction* closure = JSFunction::cast(obj);
-    closure->set_code(closure->shared()->GetCode());
-  }
-
   CheckRehashability(obj);
 
   // Object has not yet been serialized.  Serialize it here.
