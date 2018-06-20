@@ -13,7 +13,7 @@ Update current script source 'a * b' -> 'a # b'..
         columnNumber : 13
         exceptionId : <exceptionId>
         lineNumber : 1
-        text : Invalid or unexpected token
+        text : Uncaught SyntaxError: Invalid or unexpected token
     }
 }
 TestExpression(2,4) === 8

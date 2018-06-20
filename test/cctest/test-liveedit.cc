@@ -196,5 +196,370 @@ TEST(LiveEditTranslatePosition) {
   CHECK_EQ(LiveEdit::TranslatePosition(changes, 6), 8);
   CHECK_EQ(LiveEdit::TranslatePosition(changes, 8), 8);
 }
+
+TEST(LiveEditCompareScripts) {
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+  v8::Local<v8::Context> context = env.local();
+  const char* src =
+      "function f(evt) { function f2() {} f2(),f3(); function f3() {} } "
+      "function f4() {}";
+  v8::Local<v8::Script> script =
+      v8::Script::Compile(context, v8_str(env->GetIsolate(), src))
+          .ToLocalChecked();
+  script->Run(context).ToLocalChecked();
+  CHECK(CompileRunChecked(env->GetIsolate(), "f()")->IsUndefined());
+
+  i::Handle<i::Script> i_script(
+      i::Script::cast(v8::Utils::OpenHandle(*script)->shared()->script()));
+
+  const char* new_src =
+      "function f(evt) { function f2() { return 1; } return f2() + f3(); "
+      "function f3() { return 2; }  } function f4() {}";
+  i::Handle<i::String> new_source =
+      CcTest::i_isolate()->factory()->NewStringFromAsciiChecked(new_src);
+  debug::LiveEditResult result;
+  LiveEdit::PatchScript(i_script, new_source, &result);
+  CHECK_EQ(result.status, debug::LiveEditResult::OK);
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "f()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           3);
+}
+
+namespace {
+void PatchFunctions(v8::Local<v8::Context> context, const char* source_a,
+                    const char* source_b) {
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::HandleScope scope(isolate);
+  v8::Local<v8::Script> script_a =
+      v8::Script::Compile(context, v8_str(isolate, source_a)).ToLocalChecked();
+  script_a->Run(context).ToLocalChecked();
+  i::Handle<i::Script> i_script_a(
+      i::Script::cast(v8::Utils::OpenHandle(*script_a)->shared()->script()));
+
+  i::Isolate* i_isolate = i_script_a->GetIsolate();
+  debug::LiveEditResult result;
+  LiveEdit::PatchScript(
+      i_script_a, i_isolate->factory()->NewStringFromAsciiChecked(source_b),
+      &result);
+}
+}  // anonymous namespace
+
+TEST(LiveEditPatchFunctions) {
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+  v8::Local<v8::Context> context = env.local();
+  // Check that function is removed from compilation cache.
+  i::FLAG_allow_natives_syntax = true;
+  PatchFunctions(context, "42;", "%AbortJS('')");
+  PatchFunctions(context, "42;", "239;");
+  i::FLAG_allow_natives_syntax = false;
+
+  // Basic test cases.
+  PatchFunctions(context, "42;", "2;");
+  PatchFunctions(context, "42;", "  42;");
+  PatchFunctions(context, "42;", "42;");
+  // Trivial return value change.
+  PatchFunctions(context, "function foo() { return 1; }",
+                 "function foo() { return 42; }");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "foo()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           42);
+  // It is expected, we do not reevaluate top level function.
+  PatchFunctions(context, "var a = 1; function foo() { return a; }",
+                 "var a = 3; function foo() { return a; }");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "foo()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           1);
+  // Throw exception since var b is not defined in original source.
+  PatchFunctions(context, "var a = 1; function foo() { return a; }",
+                 "var b = 4; function foo() { return b; }");
+  {
+    v8::TryCatch try_catch(env->GetIsolate());
+    CompileRun("foo()");
+    CHECK(try_catch.HasCaught());
+  }
+  // But user always can add new variable to function and use it.
+  PatchFunctions(context, "var a = 1; function foo() { return a; }",
+                 "var b = 4; function foo() { var b = 5; return b; }");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "foo()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           5);
+  // But user always can add new variable to function and use it.
+  PatchFunctions(context, "var a = 1; function foo() { return a; }",
+                 "var b = 4; function foo() { var a = 6; return a; }");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "foo()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           6);
+
+  PatchFunctions(context, "var a = 1; function foo() { return a; }",
+                 "var d = (() => ({a:2}))(); function foo() { return d; }");
+  {
+    v8::TryCatch try_catch(env->GetIsolate());
+    CompileRun("foo()");
+    CHECK(try_catch.HasCaught());
+  }
+
+  PatchFunctions(context, "var a = 1; function foo() { return a; }",
+                 "var b = 1; var a = 2; function foo() { return a; }");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "foo()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           1);
+
+  PatchFunctions(context, "var a = 1; function foo() { return a; }",
+                 "var b = 1; var a = 2; function foo() { return b; }");
+  {
+    v8::TryCatch try_catch(env->GetIsolate());
+    CompileRun("foo()");
+    CHECK(try_catch.HasCaught());
+  }
+
+  PatchFunctions(context, "function foo() { var a = 1; return a; }",
+                 "function foo() { var b = 1; return b; }");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "foo()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           1);
+
+  PatchFunctions(context, "var a = 3; function foo() { var a = 1; return a; }",
+                 "function foo() { var b = 1; return a; }");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "foo()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           3);
+
+  PatchFunctions(context, "var a = 3; var c = 7; function foo() { return a; }",
+                 "var b = 5; var a = 3; function foo() { return b; }");
+  {
+    v8::TryCatch try_catch(env->GetIsolate());
+    CompileRun("foo()");
+    CHECK(try_catch.HasCaught());
+  }
+
+  // Add argument.
+  PatchFunctions(context, "function fooArgs(a1, b1) { return a1 + b1; }",
+                 "function fooArgs(a2, b2, c2) { return a2 + b2 + c2; }");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "fooArgs(1,2,3)")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           6);
+
+  i::FLAG_allow_natives_syntax = true;
+  PatchFunctions(context,
+                 "function foo(a, b) { return a + b; }; "
+                 "%OptimizeFunctionOnNextCall(foo); foo(1,2);",
+                 "function foo(a, b) { return a * b; };");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "foo(5,7)")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           35);
+  i::FLAG_allow_natives_syntax = false;
+
+  // Check inner function.
+  PatchFunctions(
+      context,
+      "function foo(a,b) { function op(a,b) { return a + b } return op(a,b); }",
+      "function foo(a,b) { function op(a,b) { return a * b } return op(a,b); "
+      "}");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "foo(8,9)")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           72);
+
+  // Update constructor.
+  PatchFunctions(context,
+                 "class Foo { constructor(a,b) { this.data = a + b; } };",
+                 "class Foo { constructor(a,b) { this.data = a * b; } };");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "new Foo(4,5).data")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           20);
+}
+
+TEST(LiveEditPrettySimilarFeedbackMetadata) {
+  const char* original_source =
+      "function ChooseAnimal(a, b) {\n "
+      "  if (a == 7 && b == 7) {\n"
+      "    return;\n"
+      "  }\n"
+      "  return function Chooser() {\n"
+      "    return 'Cat' + a;\n"
+      "  };\n"
+      "}\n"
+      "var old_closure = ChooseAnimal(2, 3);";
+  const char* updated_source =
+      "function ChooseAnimal(a, b) {\n "
+      "  if (a == 7 && b == 7) {\n"
+      "    return;\n"
+      "  }\n"
+      "  return function Chooser() {\n"
+      "    return 'Capybara' + b;\n"
+      "  };\n"
+      "}\n";
+
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+  v8::Local<v8::Context> context = env.local();
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::Local<v8::Script> script =
+      v8::Script::Compile(context, v8_str(isolate, original_source))
+          .ToLocalChecked();
+  script->Run(context).ToLocalChecked();
+
+  i::Handle<i::Script> i_script(
+      i::Script::cast(v8::Utils::OpenHandle(*script)->shared()->script()));
+
+  i::Isolate* i_isolate = i_script->GetIsolate();
+  debug::LiveEditResult result;
+  LiveEdit::PatchScript(
+      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
+      &result);
+
+  CHECK_EQ(result.status, debug::LiveEditResult::OK);
+  CompileRunChecked(env->GetIsolate(), "var new_closure = ChooseAnimal(3, 4);");
+  v8::Local<v8::String> call_result =
+      CompileRunChecked(env->GetIsolate(), "new_closure()").As<v8::String>();
+  v8::String::Utf8Value new_result_utf8(env->GetIsolate(), call_result);
+  CHECK_NOT_NULL(strstr(*new_result_utf8, "Capybara4"));
+  call_result =
+      CompileRunChecked(env->GetIsolate(), "old_closure()").As<v8::String>();
+  v8::String::Utf8Value old_result_utf8(env->GetIsolate(), call_result);
+  CHECK_NOT_NULL(strstr(*old_result_utf8, "Cat2"));
+}
+
+TEST(LiveEditCompileError) {
+  const char* original_source =
+      "var something1 = 25; \n"
+      " function ChooseAnimal() { return          'Cat';          } \n"
+      " ChooseAnimal.Helper = function() { return 'Help!'; }\n";
+  const char* updated_source =
+      "var something1 = 25; \n"
+      " function ChooseAnimal() { return          'Cap' + ) + 'bara';          "
+      "} \n"
+      " ChooseAnimal.Helper = function() { return 'Help!'; }\n";
+
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+  v8::Local<v8::Context> context = env.local();
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::Local<v8::Script> script =
+      v8::Script::Compile(context, v8_str(isolate, original_source))
+          .ToLocalChecked();
+  script->Run(context).ToLocalChecked();
+
+  i::Handle<i::Script> i_script(
+      i::Script::cast(v8::Utils::OpenHandle(*script)->shared()->script()));
+
+  i::Isolate* i_isolate = i_script->GetIsolate();
+  debug::LiveEditResult result;
+  LiveEdit::PatchScript(
+      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
+      &result);
+  CHECK_EQ(result.status, debug::LiveEditResult::COMPILE_ERROR);
+  CHECK_EQ(result.line_number, 2);
+  CHECK_EQ(result.column_number, 51);
+  v8::String::Utf8Value result_message(env->GetIsolate(), result.message);
+  CHECK_NOT_NULL(
+      strstr(*result_message, "Uncaught SyntaxError: Unexpected token )"));
+
+  {
+    v8::Local<v8::String> result =
+        CompileRunChecked(env->GetIsolate(), "ChooseAnimal()").As<v8::String>();
+    v8::String::Utf8Value new_result_utf8(env->GetIsolate(), result);
+    CHECK_NOT_NULL(strstr(*new_result_utf8, "Cat"));
+  }
+}
+
+TEST(LiveEditUpdateConstLiteral) {
+  const char* original_source = "function foo() { return 'a' + 'b'; }";
+  const char* updated_source = "function foo() { return 'c' + 'b'; }";
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+  v8::Local<v8::Context> context = env.local();
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::Local<v8::Script> script =
+      v8::Script::Compile(context, v8_str(isolate, original_source))
+          .ToLocalChecked();
+  script->Run(context).ToLocalChecked();
+  i::Handle<i::Script> i_script(
+      i::Script::cast(v8::Utils::OpenHandle(*script)->shared()->script()));
+  i::Isolate* i_isolate = i_script->GetIsolate();
+  debug::LiveEditResult result;
+  LiveEdit::PatchScript(
+      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
+      &result);
+  CHECK_EQ(result.status, debug::LiveEditResult::OK);
+  {
+    v8::Local<v8::String> result =
+        CompileRunChecked(env->GetIsolate(), "foo()").As<v8::String>();
+    v8::String::Utf8Value new_result_utf8(env->GetIsolate(), result);
+    CHECK_NOT_NULL(strstr(*new_result_utf8, "cb"));
+  }
+}
+
+TEST(LiveEditFunctionExpression) {
+  const char* original_source =
+      "(function() {\n "
+      "  return 'Cat';\n"
+      "})\n";
+  const char* updated_source =
+      "(function() {\n "
+      "  return 'Capy' + 'bara';\n"
+      "})\n";
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+  v8::Local<v8::Context> context = env.local();
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::Local<v8::Script> script =
+      v8::Script::Compile(context, v8_str(isolate, original_source))
+          .ToLocalChecked();
+  v8::Local<v8::Function> f =
+      script->Run(context).ToLocalChecked().As<v8::Function>();
+  i::Handle<i::Script> i_script(
+      i::Script::cast(v8::Utils::OpenHandle(*script)->shared()->script()));
+  i::Isolate* i_isolate = i_script->GetIsolate();
+  debug::LiveEditResult result;
+  LiveEdit::PatchScript(
+      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
+      &result);
+  CHECK_EQ(result.status, debug::LiveEditResult::OK);
+  {
+    v8::Local<v8::String> result =
+        f->Call(context, context->Global(), 0, nullptr)
+            .ToLocalChecked()
+            .As<v8::String>();
+    v8::String::Utf8Value new_result_utf8(env->GetIsolate(), result);
+    CHECK_NOT_NULL(strstr(*new_result_utf8, "Capybara"));
+  }
+}
+
+TEST(LiveEditSyntaxError) {
+  const char* original_source = "function foo() {}";
+  const char* updated_source = "function foo() { return a # b; }";
+  LocalContext env;
+  v8::HandleScope scope(env->GetIsolate());
+  v8::Local<v8::Context> context = env.local();
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::Local<v8::Script> script =
+      v8::Script::Compile(context, v8_str(isolate, original_source))
+          .ToLocalChecked();
+  script->Run(context).ToLocalChecked();
+  i::Handle<i::Script> i_script(
+      i::Script::cast(v8::Utils::OpenHandle(*script)->shared()->script()));
+  i::Isolate* i_isolate = i_script->GetIsolate();
+  debug::LiveEditResult result;
+  LiveEdit::PatchScript(
+      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
+      &result);
+  CHECK_EQ(result.status, debug::LiveEditResult::COMPILE_ERROR);
+  CHECK_EQ(result.line_number, 1);
+  CHECK_EQ(result.column_number, 26);
+}
 }  // namespace internal
 }  // namespace v8

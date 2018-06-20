@@ -83,7 +83,6 @@ Debug::Debug(Isolate* isolate)
       is_active_(false),
       hook_on_function_call_(false),
       is_suppressed_(false),
-      live_edit_enabled_(false),
       break_disabled_(false),
       break_points_active_(true),
       break_on_exception_(false),
@@ -1903,42 +1902,22 @@ bool Debug::CanBreakAtEntry(Handle<SharedFunctionInfo> shared) {
 }
 
 bool Debug::SetScriptSource(Handle<Script> script, Handle<String> source,
-                            bool preview, bool* stack_changed) {
-  SaveContext save(isolate_);
+                            bool preview, debug::LiveEditResult* result) {
   DebugScope debug_scope(this);
-  if (debug_scope.failed()) return false;
-  isolate_->set_context(*debug_context());
-
-  set_live_edit_enabled(true);
-  Handle<Object> script_wrapper = Script::GetWrapper(script);
-  Handle<Object> argv[] = {script_wrapper, source,
-                           isolate_->factory()->ToBoolean(preview),
-                           isolate_->factory()->NewJSArray(0)};
-  Handle<Object> result;
-  if (!CallFunction("SetScriptSource", arraysize(argv), argv, false)
-           .ToHandle(&result)) {
-    isolate_->OptionalRescheduleException(false);
-    set_live_edit_enabled(false);
-    return false;
-  }
-  set_live_edit_enabled(false);
-  Handle<Object> stack_changed_value =
-      JSReceiver::GetProperty(isolate_, Handle<JSObject>::cast(result),
-                              "stack_modified")
-          .ToHandleChecked();
-  *stack_changed = stack_changed_value->IsTrue(isolate_);
-  return true;
+  LiveEdit::PatchScript(script, source, result);
+  return result->status == debug::LiveEditResult::OK;
 }
 
 void Debug::OnCompileError(Handle<Script> script) {
-  ProcessCompileEvent(true, script);
+  ProcessCompileEvent(true, script, false);
 }
 
-void Debug::OnAfterCompile(Handle<Script> script) {
-  ProcessCompileEvent(false, script);
+void Debug::OnAfterCompile(Handle<Script> script, bool created_by_live_edit) {
+  ProcessCompileEvent(false, script, created_by_live_edit);
 }
 
-void Debug::ProcessCompileEvent(bool has_compile_error, Handle<Script> script) {
+void Debug::ProcessCompileEvent(bool has_compile_error, Handle<Script> script,
+                                bool created_by_live_edit) {
   // Attach the correct debug id to the script. The debug id is used by the
   // inspector to filter scripts by native context.
   script->set_context_data(isolate_->native_context()->debug_context_id());
@@ -1955,9 +1934,8 @@ void Debug::ProcessCompileEvent(bool has_compile_error, Handle<Script> script) {
   DisableBreak no_recursive_break(this);
   AllowJavascriptExecution allow_script(isolate_);
   debug_delegate_->ScriptCompiled(ToApiHandle<debug::Script>(script),
-                                  live_edit_enabled(), has_compile_error);
+                                  created_by_live_edit, has_compile_error);
 }
-
 
 Handle<Context> Debug::GetDebugContext() {
   if (!is_loaded()) return Handle<Context>();
