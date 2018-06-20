@@ -3553,10 +3553,19 @@ class TypedElementsAccessor
 
     // Fast cases for packed numbers kinds where we don't need to allocate.
     if (source->IsJSArray()) {
-      Handle<JSArray> source_array = Handle<JSArray>::cast(source);
-      if (TryCopyElementsFastNumber(isolate->context(), *source_array,
-                                    *destination_ta, length, offset)) {
-        return *isolate->factory()->undefined_value();
+      Handle<JSArray> source_js_array = Handle<JSArray>::cast(source);
+      if (source_js_array->length()->IsNumber()) {
+        size_t current_length;
+        // TODO(me): check result
+        CHECK(TryNumberToSize(source_js_array->length(), &current_length));
+
+        if (length + offset <= current_length) {
+          Handle<JSArray> source_array = Handle<JSArray>::cast(source);
+          if (TryCopyElementsFastNumber(isolate->context(), *source_array,
+                                        *destination_ta, length, offset)) {
+            return *isolate->factory()->undefined_value();
+          }
+        }
       }
     }
     // Final generic case that handles prototype chain lookups, getters, proxies
