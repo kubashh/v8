@@ -143,7 +143,7 @@ class AssemblerBase : public Malloced {
     // Recording reloc info for external references is needed whenever
     // code is serialized, e.g. into the snapshot or as a WASM module.
     // It can be disabled for code that will not survive process destruction.
-    bool record_reloc_info_for_exrefs = true;
+    bool record_reloc_info_for_serialization = true;
     // Enables access to exrefs by computing a delta from the root array.
     // Only valid if code will not survive the process.
     bool enable_root_array_delta_access = false;
@@ -541,6 +541,10 @@ class RelocInfo {
   }
   static inline bool IsWasmPtrReference(Mode mode) {
     return mode == WASM_CALL || mode == JS_TO_WASM_CALL;
+  }
+
+  static inline bool IsOnlyForSerializer(Mode mode) {
+    return mode == EXTERNAL_REFERENCE || mode == OFF_HEAP_TARGET;
   }
 
   static constexpr int ModeMask(Mode mode) { return 1 << mode; }
