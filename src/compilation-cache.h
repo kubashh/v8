@@ -91,7 +91,7 @@ class CompilationCacheScript : public CompilationSubCache {
            Handle<SharedFunctionInfo> function_info);
 
  private:
-  bool HasOrigin(Handle<SharedFunctionInfo> function_info,
+  bool HasOrigin(Isolate* isolate, Handle<SharedFunctionInfo> function_info,
                  MaybeHandle<Object> name, int line_offset, int column_offset,
                  ScriptOriginOptions resource_options);
 
