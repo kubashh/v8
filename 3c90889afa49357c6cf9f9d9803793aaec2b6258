@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5d00efe4_df1d48da",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-20T14:53:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d863f2c1_110c80c2",
+      "revId": "3c90889afa49357c6cf9f9d9803793aaec2b6258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b953dd9_6e578ae6",
         "filename": "src/builtins/array-sort.tq",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "6b470ddc_9b1aab46",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-20T14:53:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b953dd9_6e578ae6",
+      "revId": "3c90889afa49357c6cf9f9d9803793aaec2b6258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e4ec075_aacb8390",
         "filename": "test/mjsunit/regress/regress-crbug-854299.js",
         "patchSetId": 2
@@ -50,6 +86,24 @@
       "revId": "3c90889afa49357c6cf9f9d9803793aaec2b6258",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4836e3ce_f4a1ea0e",
+        "filename": "test/mjsunit/regress/regress-crbug-854299.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-20T14:53:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e4ec075_aacb8390",
+      "revId": "3c90889afa49357c6cf9f9d9803793aaec2b6258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
