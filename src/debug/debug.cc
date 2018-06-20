@@ -1906,71 +1906,22 @@ bool Debug::CanBreakAtEntry(Handle<SharedFunctionInfo> shared) {
 }
 
 bool Debug::SetScriptSource(Handle<Script> script, Handle<String> source,
-                            bool preview, debug::LiveEditResult* output) {
-  StackFrame::Id frame_id = break_frame_id();
+                            bool preview, debug::LiveEditResult* result) {
   DebugScope debug_scope(this);
-  if (debug_scope.failed()) return false;
-  isolate_->set_context(*debug_context());
-
-  if (frame_id != StackFrame::NO_ID) {
-    thread_local_.break_frame_id_ = frame_id;
-  }
-
-  Handle<Object> script_wrapper = Script::GetWrapper(script);
-  Handle<Object> argv[] = {script_wrapper, source,
-                           isolate_->factory()->ToBoolean(preview),
-                           isolate_->factory()->NewJSArray(0)};
-  Handle<Object> result;
-  running_live_edit_ = true;
-  if (!CallFunction("SetScriptSource", arraysize(argv), argv, false)
-           .ToHandle(&result)) {
-    Handle<Object> pending_exception(isolate_->pending_exception(), isolate_);
-    if (pending_exception->IsJSObject()) {
-      Handle<JSObject> exception = Handle<JSObject>::cast(pending_exception);
-      Handle<String> message = Handle<String>::cast(
-          JSReceiver::GetProperty(isolate_, exception, "message")
-              .ToHandleChecked());
-      if (isolate_->factory()
-              ->NewStringFromAsciiChecked("Blocked by functions on stack")
-              ->Equals(*message)) {
-        output->status = debug::LiveEditResult::
-            BLOCKED_BY_FUNCTION_BELOW_NON_DROPPABLE_FRAME;
-      } else {
-        Handle<JSObject> details = Handle<JSObject>::cast(
-            JSReceiver::GetProperty(isolate_, exception, "details")
-                .ToHandleChecked());
-        Handle<String> error = Handle<String>::cast(
-            JSReceiver::GetProperty(isolate_, details, "syntaxErrorMessage")
-                .ToHandleChecked());
-        output->status = debug::LiveEditResult::COMPILE_ERROR;
-        output->line_number = kNoSourcePosition;
-        output->column_number = kNoSourcePosition;
-        output->message = Utils::ToLocal(error);
-      }
-    }
-    isolate_->clear_pending_exception();
-    running_live_edit_ = false;
-    return false;
-  }
-  Handle<Object> stack_changed_value =
-      JSReceiver::GetProperty(isolate_, Handle<JSObject>::cast(result),
-                              "stack_modified")
-          .ToHandleChecked();
-  output->stack_changed = stack_changed_value->IsTrue(isolate_);
-  output->status = debug::LiveEditResult::OK;
-  running_live_edit_ = false;
-  return true;
+  LiveEdit::PatchScript(isolate_, script, source, result);
+  return result->status == debug::LiveEditResult::OK;
 }
 
 void Debug::OnCompileError(Handle<Script> script) {
-  ProcessCompileEvent(true, script);
+  ProcessCompileEvent(true, script, false);
 }
 
-void Debug::OnAfterCompile(Handle<Script> script) {
-  ProcessCompileEvent(false, script);
+void Debug::OnAfterCompile(Handle<Script> script, bool created_by_live_edit) {
+  ProcessCompileEvent(false, script, created_by_live_edit);
 }
 
-void Debug::ProcessCompileEvent(bool has_compile_error, Handle<Script> script) {
+void Debug::ProcessCompileEvent(bool has_compile_error, Handle<Script> script,
+                                bool created_by_live_edit) {
   // Attach the correct debug id to the script. The debug id is used by the
   // inspector to filter scripts by native context.
   script->set_context_data(isolate_->native_context()->debug_context_id());
@@ -1987,9 +1938,8 @@ void Debug::ProcessCompileEvent(bool has_compile_error, Handle<Script> script) {
   DisableBreak no_recursive_break(this);
   AllowJavascriptExecution allow_script(isolate_);
   debug_delegate_->ScriptCompiled(ToApiHandle<debug::Script>(script),
-                                  running_live_edit_, has_compile_error);
+                                  created_by_live_edit, has_compile_error);
 }
-
 
 Handle<Context> Debug::GetDebugContext() {
   if (!is_loaded()) return Handle<Context>();

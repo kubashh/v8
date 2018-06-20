@@ -222,7 +222,7 @@ class Debug {
   void OnThrow(Handle<Object> exception);
   void OnPromiseReject(Handle<Object> promise, Handle<Object> value);
   void OnCompileError(Handle<Script> script);
-  void OnAfterCompile(Handle<Script> script);
+  void OnAfterCompile(Handle<Script> script, bool created_by_live_edit = false);
 
   Handle<Context> GetDebugContext();
   void HandleDebugBreak(IgnoreBreakMode ignore_break_mode);
@@ -434,7 +434,8 @@ class Debug {
 
   void OnException(Handle<Object> exception, Handle<Object> promise);
 
-  void ProcessCompileEvent(bool has_compile_error, Handle<Script> script);
+  void ProcessCompileEvent(bool has_compile_error, Handle<Script> script,
+                           bool created_by_live_edit);
 
   // Find the closest source position for a break point for a given position.
   int FindBreakablePosition(Handle<DebugInfo> debug_info, int source_position);

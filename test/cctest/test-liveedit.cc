@@ -197,8 +197,7 @@ TEST(LiveEditTranslatePosition) {
   CHECK_EQ(LiveEdit::TranslatePosition(changes, 8), 8);
 }
 
-// TODO(kozyatinskiy): enable it with new liveedit implementation.
-DISABLED_TEST(LiveEditCompareScripts) {
+TEST(LiveEditCompareScripts) {
   LocalContext env;
   v8::HandleScope scope(env->GetIsolate());
   v8::Local<v8::Context> context = env.local();
@@ -220,7 +219,7 @@ DISABLED_TEST(LiveEditCompareScripts) {
   i::Handle<i::String> new_source =
       CcTest::i_isolate()->factory()->NewStringFromAsciiChecked(new_src);
   debug::LiveEditResult result;
-  LiveEdit::PatchScript(i_script, new_source, &result);
+  LiveEdit::PatchScript(CcTest::i_isolate(), i_script, new_source, &result);
   CHECK_EQ(result.status, debug::LiveEditResult::OK);
   CHECK_EQ(CompileRunChecked(env->GetIsolate(), "f()")
                ->ToInt32(env->GetIsolate())
@@ -242,13 +241,12 @@ void PatchFunctions(v8::Local<v8::Context> context, const char* source_a,
   i::Isolate* i_isolate = i_script_a->GetIsolate();
   debug::LiveEditResult result;
   LiveEdit::PatchScript(
-      i_script_a, i_isolate->factory()->NewStringFromAsciiChecked(source_b),
-      &result);
+      i_isolate, i_script_a,
+      i_isolate->factory()->NewStringFromAsciiChecked(source_b), &result);
 }
 }  // anonymous namespace
 
-// TODO(kozyatinskiy): enable it with new liveedit implementation.
-DISABLED_TEST(LiveEditPatchFunctions) {
+TEST(LiveEditPatchFunctions) {
   LocalContext env;
   v8::HandleScope scope(env->GetIsolate());
   v8::Local<v8::Context> context = env.local();
@@ -384,8 +382,7 @@ DISABLED_TEST(LiveEditPatchFunctions) {
            20);
 }
 
-// TODO(kozyatinskiy): enable it with new liveedit implementation.
-DISABLED_TEST(LiveEditPrettySimilarFeedbackMetadata) {
+TEST(LiveEditPrettySimilarFeedbackMetadata) {
   const char* original_source =
       "function ChooseAnimal(a, b) {\n "
       "  if (a == 7 && b == 7) {\n"
@@ -421,8 +418,8 @@ DISABLED_TEST(LiveEditPrettySimilarFeedbackMetadata) {
   i::Isolate* i_isolate = i_script->GetIsolate();
   debug::LiveEditResult result;
   LiveEdit::PatchScript(
-      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
-      &result);
+      i_isolate, i_script,
+      i_isolate->factory()->NewStringFromAsciiChecked(updated_source), &result);
 
   CHECK_EQ(result.status, debug::LiveEditResult::OK);
   CompileRunChecked(env->GetIsolate(), "var new_closure = ChooseAnimal(3, 4);");
@@ -436,8 +433,7 @@ DISABLED_TEST(LiveEditPrettySimilarFeedbackMetadata) {
   CHECK_NOT_NULL(strstr(*old_result_utf8, "Cat2"));
 }
 
-// TODO(kozyatinskiy): enable it with new liveedit implementation.
-DISABLED_TEST(LiveEditCompileError) {
+TEST(LiveEditCompileError) {
   const char* original_source =
       "var something1 = 25; \n"
       " function ChooseAnimal() { return          'Cat';          } \n"
@@ -463,8 +459,8 @@ DISABLED_TEST(LiveEditCompileError) {
   i::Isolate* i_isolate = i_script->GetIsolate();
   debug::LiveEditResult result;
   LiveEdit::PatchScript(
-      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
-      &result);
+      i_isolate, i_script,
+      i_isolate->factory()->NewStringFromAsciiChecked(updated_source), &result);
   CHECK_EQ(result.status, debug::LiveEditResult::COMPILE_ERROR);
   CHECK_EQ(result.line_number, 2);
   CHECK_EQ(result.column_number, 51);
@@ -480,8 +476,7 @@ DISABLED_TEST(LiveEditCompileError) {
   }
 }
 
-// TODO(kozyatinskiy): enable it with new liveedit implementation.
-DISABLED_TEST(LiveEditUpdateConstLiteral) {
+TEST(LiveEditUpdateConstLiteral) {
   const char* original_source = "function foo() { return 'a' + 'b'; }";
   const char* updated_source = "function foo() { return 'c' + 'b'; }";
   LocalContext env;
@@ -497,8 +492,8 @@ DISABLED_TEST(LiveEditUpdateConstLiteral) {
   i::Isolate* i_isolate = i_script->GetIsolate();
   debug::LiveEditResult result;
   LiveEdit::PatchScript(
-      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
-      &result);
+      i_isolate, i_script,
+      i_isolate->factory()->NewStringFromAsciiChecked(updated_source), &result);
   CHECK_EQ(result.status, debug::LiveEditResult::OK);
   {
     v8::Local<v8::String> result =
@@ -531,8 +526,8 @@ TEST(LiveEditFunctionExpression) {
   i::Isolate* i_isolate = i_script->GetIsolate();
   debug::LiveEditResult result;
   LiveEdit::PatchScript(
-      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
-      &result);
+      i_isolate, i_script,
+      i_isolate->factory()->NewStringFromAsciiChecked(updated_source), &result);
   CHECK_EQ(result.status, debug::LiveEditResult::OK);
   {
     v8::Local<v8::String> result =
@@ -560,13 +555,11 @@ TEST(LiveEditSyntaxError) {
   i::Isolate* i_isolate = i_script->GetIsolate();
   debug::LiveEditResult result;
   LiveEdit::PatchScript(
-      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
-      &result);
+      i_isolate, i_script,
+      i_isolate->factory()->NewStringFromAsciiChecked(updated_source), &result);
   CHECK_EQ(result.status, debug::LiveEditResult::COMPILE_ERROR);
-  // TODO(kozyatinskiy): should be 1.
-  CHECK_EQ(result.line_number, kNoSourcePosition);
-  // TODO(kozyatinskiy): should be 26.
-  CHECK_EQ(result.column_number, kNoSourcePosition);
+  CHECK_EQ(result.line_number, 1);
+  CHECK_EQ(result.column_number, 26);
 }
 }  // namespace internal
 }  // namespace v8
