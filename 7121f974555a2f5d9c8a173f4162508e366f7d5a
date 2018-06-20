@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff4caeb1_083f7d34",
+        "filename": "src/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-20T11:41:41Z",
+      "side": 1,
+      "message": "this happens to work since has_feedback_vector catches the FlushCompiled case for bytecode, but in general it has an ordering problem between FlushCompiled below and GetCode here. It might fail if shared-\u003eHasAsmWasmData() I think.",
+      "range": {
+        "startLine": 778,
+        "startChar": 37,
+        "endLine": 778,
+        "endChar": 44
+      },
+      "revId": "7121f974555a2f5d9c8a173f4162508e366f7d5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
