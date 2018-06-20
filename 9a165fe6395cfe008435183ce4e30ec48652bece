@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a85ec89_5409aa10",
+        "filename": "src/compiler/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-06-20T10:58:10Z",
+      "side": 1,
+      "message": "This will cause problems with the --trace-turbo-graph flag. The stack pointer is not a general purpose register and has a special code for arm64, and the assertion in RegisterConfiguration::GetGeneralRegisterName will fail (or, in release mode, the access to general_register_names_ will be out of bounds). It looks like that\u0027s the failure you see in the bots.\n\nAn architecture-specific method to get a special register\u0027s name would help here.",
+      "revId": "9a165fe6395cfe008435183ce4e30ec48652bece",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bc7db52_6b33924a",
+        "filename": "src/compiler/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-06-20T10:58:10Z",
+      "side": 1,
+      "message": "Matching the stack pointer should be restricted to certain opcodes only as we can\u0027t encode the stack pointer in all instructions (and we call this method with various opcodes, for example with kArm64Tst).\n\nI\u0027d start with kArm64Cmp, do you expect the stack check to produce something else?",
+      "revId": "9a165fe6395cfe008435183ce4e30ec48652bece",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
