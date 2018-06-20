@@ -4395,8 +4395,6 @@ void Genesis::InitializeGlobal_harmony_array_flat() {
 }
 
 void Genesis::InitializeGlobal_harmony_symbol_description() {
-  if (!FLAG_harmony_symbol_description) return;
-
   // Symbol.prototype.description
   Handle<JSFunction> symbol_fun(native_context()->symbol_function());
   Handle<JSObject> symbol_prototype(
