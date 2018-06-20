@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0a1f34f_6d22e9c8",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-20T13:28:53Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 145,
+        "startChar": 17,
+        "endLine": 145,
+        "endChar": 25
+      },
+      "revId": "43df99e81a0ddaeb8adea65daafcc5d8156e4896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
