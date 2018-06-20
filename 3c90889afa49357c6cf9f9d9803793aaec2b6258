@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e4ec075_aacb8390",
+        "filename": "test/mjsunit/regress/regress-crbug-854299.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-20T12:50:04Z",
+      "side": 1,
+      "message": "This exists already:\n\nFlags: --expose-gc",
+      "revId": "3c90889afa49357c6cf9f9d9803793aaec2b6258",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
