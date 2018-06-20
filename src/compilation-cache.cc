@@ -94,17 +94,18 @@ CompilationCacheScript::CompilationCacheScript(Isolate* isolate)
 // We only re-use a cached function for some script source code if the
 // script originates from the same place. This is to avoid issues
 // when reporting errors, etc.
-bool CompilationCacheScript::HasOrigin(Handle<SharedFunctionInfo> function_info,
+bool CompilationCacheScript::HasOrigin(Isolate* isolate,
+                                       Handle<SharedFunctionInfo> function_info,
                                        MaybeHandle<Object> maybe_name,
                                        int line_offset, int column_offset,
                                        ScriptOriginOptions resource_options) {
   Handle<Script> script =
-      Handle<Script>(Script::cast(function_info->script()), isolate());
+      Handle<Script>(Script::cast(function_info->script()), isolate);
   // If the script name isn't set, the boilerplate script should have
   // an undefined name to have the same origin.
   Handle<Object> name;
   if (!maybe_name.ToHandle(&name)) {
-    return script->name()->IsUndefined(isolate());
+    return script->name()->IsUndefined(isolate);
   }
   // Do the fast bailout checks first.
   if (line_offset != script->line_offset()) return false;
@@ -115,7 +116,7 @@ bool CompilationCacheScript::HasOrigin(Handle<SharedFunctionInfo> function_info,
   if (resource_options.Flags() != script->origin_options().Flags())
     return false;
   // Compare the two name strings for equality.
-  return String::Equals(Handle<String>::cast(name),
+  return String::Equals(isolate, Handle<String>::cast(name),
                         Handle<String>(String::cast(script->name())));
 }
 
@@ -141,8 +142,8 @@ MaybeHandle<SharedFunctionInfo> CompilationCacheScript::Lookup(
     if (probe.ToHandle(&function_info)) {
       // Break when we've found a suitable shared function info that
       // matches the origin.
-      if (HasOrigin(function_info, name, line_offset, column_offset,
-                    resource_options)) {
+      if (HasOrigin(scope.isolate(), function_info, name, line_offset,
+                    column_offset, resource_options)) {
         result = scope.CloseAndEscape(function_info);
       }
     }
@@ -156,8 +157,8 @@ MaybeHandle<SharedFunctionInfo> CompilationCacheScript::Lookup(
 #ifdef DEBUG
     // Since HasOrigin can allocate, we need to protect the SharedFunctionInfo
     // with handles during the call.
-    DCHECK(HasOrigin(function_info, name, line_offset, column_offset,
-                     resource_options));
+    DCHECK(HasOrigin(native_context->GetIsolate(), function_info, name,
+                     line_offset, column_offset, resource_options));
 #endif
     isolate()->counters()->compilation_cache_hits()->Increment();
   } else {

@@ -148,8 +148,8 @@ BUILTIN(StringPrototypeEndsWith) {
   int start = end - search_string->length();
   if (start < 0) return isolate->heap()->false_value();
 
-  str = String::Flatten(str);
-  search_string = String::Flatten(search_string);
+  str = String::Flatten(isolate, str);
+  search_string = String::Flatten(isolate, search_string);
 
   DisallowHeapAllocation no_gc;  // ensure vectors stay valid
   String::FlatContent str_content = str->GetFlatContent();
@@ -219,8 +219,8 @@ BUILTIN(StringPrototypeLocaleCompare) {
   int d = str1->Get(0) - str2->Get(0);
   if (d != 0) return Smi::FromInt(d);
 
-  str1 = String::Flatten(str1);
-  str2 = String::Flatten(str2);
+  str1 = String::Flatten(isolate, str1);
+  str2 = String::Flatten(isolate, str2);
 
   DisallowHeapAllocation no_gc;
   String::FlatContent flat1 = str1->GetFlatContent();
@@ -307,8 +307,9 @@ BUILTIN(StringPrototypeStartsWith) {
     return isolate->heap()->false_value();
   }
 
-  FlatStringReader str_reader(isolate, String::Flatten(str));
-  FlatStringReader search_reader(isolate, String::Flatten(search_string));
+  FlatStringReader str_reader(isolate, String::Flatten(isolate, str));
+  FlatStringReader search_reader(isolate,
+                                 String::Flatten(isolate, search_string));
 
   for (int i = 0; i < search_string->length(); i++) {
     if (str_reader.Get(start + i) != search_reader.Get(i)) {
