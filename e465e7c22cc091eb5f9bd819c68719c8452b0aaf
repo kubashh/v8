@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "af4361a3_a6d1ea8c",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-06-20T17:17:43Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "3aa943ce_e063b8bf",
+      "revId": "e465e7c22cc091eb5f9bd819c68719c8452b0aaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "73d45d3e_ecd53b74",
         "filename": "test/mjsunit/harmony/symbol-description.js",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "e465e7c22cc091eb5f9bd819c68719c8452b0aaf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50199fe5_c53d7570",
+        "filename": "test/mjsunit/harmony/symbol-description.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-06-20T17:17:43Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "73d45d3e_ecd53b74",
+      "revId": "e465e7c22cc091eb5f9bd819c68719c8452b0aaf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
