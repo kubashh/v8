@@ -122,8 +122,8 @@ void BuiltinDeserializerAllocator::InitializeBuiltinFromReservation(
   DCHECK_EQ(chunk.size, chunk.end - chunk.start);
 
   SkipList::Update(chunk.start, chunk.size);
-  isolate()->builtins()->set_builtin(builtin_id,
-                                     HeapObject::FromAddress(chunk.start));
+  Code* code = Code::cast(HeapObject::FromAddress(chunk.start));
+  isolate()->builtins()->set_builtin(builtin_id, code, code->entry());
 
 #ifdef DEBUG
   RegisterCodeObjectReservation(builtin_id);
@@ -174,7 +174,7 @@ void BuiltinDeserializerAllocator::InitializeFromReservations(
     if (i == Builtins::kDeserializeLazy) continue;
 
     if (deserializer()->IsLazyDeserializationEnabled() && Builtins::IsLazy(i)) {
-      builtins->set_builtin(i, deserialize_lazy);
+      builtins->set_builtin(i, deserialize_lazy, deserialize_lazy->entry());
     } else {
       InitializeBuiltinFromReservation(reservation[reservation_index], i);
       reservation_index++;

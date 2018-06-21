@@ -1113,6 +1113,10 @@ class Heap {
     return kRootsBuiltinsOffset;
   }
 
+  static constexpr int roots_to_builtin_entries_offset() {
+    return kRootsBuiltinEntriesOffset;
+  }
+
   Address root_register_addressable_end() {
     return reinterpret_cast<Address>(roots_array_start()) +
            kRootRegisterAddressableEndOffset;
@@ -1221,6 +1225,7 @@ class Heap {
   Code* builtin(int index);
   Address builtin_address(int index);
   void set_builtin(int index, HeapObject* builtin);
+  void set_builtin(int index, Code* builtin, Address entry);
 
   // ===========================================================================
   // Iterators. ================================================================
@@ -2244,11 +2249,17 @@ class Heap {
       ExternalReferenceTable::SizeInBytes();
   Object* builtins_[Builtins::builtin_count];
 
+  // This indirection table is used by builtins to load the code offset instead
+  // of going through a trampoline.
+  static constexpr int kRootsBuiltinEntriesOffset =
+      kRootsBuiltinsOffset + Builtins::builtin_count * sizeof(Address);
+  Address builtin_entries_[Builtins::builtin_count];
+
   // kRootRegister may be used to address any location that starts at the
   // Isolate and ends at this point. Fields past this point are not guaranteed
   // to live at a static offset from kRootRegister.
   static constexpr int kRootRegisterAddressableEndOffset =
-      kRootsBuiltinsOffset + Builtins::builtin_count * kPointerSize;
+      kRootsBuiltinEntriesOffset + Builtins::builtin_count * kPointerSize;
 
   size_t code_range_size_;
   size_t max_semi_space_size_;

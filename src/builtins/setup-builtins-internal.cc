@@ -157,7 +157,7 @@ Code* BuildWithCodeStubAssemblerCS(Isolate* isolate, int32_t builtin_index,
 void SetupIsolateDelegate::AddBuiltin(Builtins* builtins, int index,
                                       Code* code) {
   DCHECK_EQ(index, code->builtin_index());
-  builtins->set_builtin(index, code);
+  builtins->set_builtin(index, code, code->entry());
 }
 
 // static

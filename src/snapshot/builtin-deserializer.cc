@@ -62,7 +62,8 @@ void BuiltinDeserializer::DeserializeEagerBuiltinsAndHandlers() {
       DCHECK_EQ(builtins->builtin(Builtins::kDeserializeLazy),
                 builtins->builtin(i));
     } else {
-      builtins->set_builtin(i, DeserializeBuiltinRaw(i));
+      Code* code = DeserializeBuiltinRaw(i);
+      builtins->set_builtin(i, code, code->entry());
     }
   }
 

@@ -244,6 +244,9 @@ Heap::Heap()
   // Put a dummy entry in the remembered pages so we can find the list the
   // minidump even if there are no real unmapped pages.
   RememberUnmappedPage(kNullAddress, false);
+  for (size_t i = 0; i < Builtins::builtin_count; ++i) {
+    builtin_entries_[i] = Address(nullptr);
+  }
 }
 
 size_t Heap::MaxReserved() {
@@ -3928,6 +3931,13 @@ void Heap::set_builtin(int index, HeapObject* builtin) {
   // The given builtin may be completely uninitialized thus we cannot check its
   // type here.
   builtins_[index] = builtin;
+}
+
+void Heap::set_builtin(int index, Code* builtin, Address entry) {
+  DCHECK(Builtins::IsBuiltinId(index));
+  DCHECK(Internals::HasHeapObjectTag(builtin));
+  builtins_[index] = builtin;
+  builtin_entries_[index] = entry;
 }
 
 void Heap::IterateRoots(RootVisitor* v, VisitMode mode) {

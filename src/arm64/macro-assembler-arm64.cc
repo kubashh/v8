@@ -2021,8 +2021,16 @@ void TurboAssembler::Call(Handle<Code> code, RelocInfo::Mode rmode) {
   if (root_array_available_ && options().isolate_independent_code) {
     UseScratchRegisterScope temps(this);
     Register scratch = temps.AcquireX();
-    IndirectLoadConstant(scratch, code);
-    Add(scratch, scratch, Operand(Code::kHeaderSize - kHeapObjectTag));
+    int builtin_index;
+    if (isolate()->builtins()->IsBuiltinHandle(code, &builtin_index)) {
+      int32_t roots_to_builtins_offset =
+          Heap::roots_to_builtin_entries_offset() +
+          builtin_index * kPointerSize;
+      Ldr(scratch, MemOperand(kRootRegister, roots_to_builtins_offset));
+    } else {
+      IndirectLoadConstant(scratch, code);
+      Add(scratch, scratch, Operand(Code::kHeaderSize - kHeapObjectTag));
+    }
     Call(scratch);
     return;
   } else if (options().inline_offheap_trampolines) {

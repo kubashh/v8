@@ -2895,7 +2895,7 @@ void CreateOffHeapTrampolines(Isolate* isolate) {
     //
     // From this point onwards, some builtin code objects may be unreachable and
     // thus collected by the GC.
-    builtins->set_builtin(i, *trampoline);
+    builtins->set_builtin(i, *trampoline, instruction_start);
 
     if (isolate->logger()->is_listening_to_code_events() ||
         isolate->is_profiling()) {

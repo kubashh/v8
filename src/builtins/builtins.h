@@ -71,6 +71,7 @@ class Builtins {
 
   // Used by BuiltinDeserializer and CreateOffHeapTrampolines in isolate.cc.
   void set_builtin(int index, HeapObject* builtin);
+  void set_builtin(int index, Code* builtin, Address entry);
 
   Code* builtin(int index);
   V8_EXPORT_PRIVATE Handle<Code> builtin_handle(int index);
