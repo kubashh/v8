@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0152252b_56a6deb7",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-06-21T16:39:05Z",
+      "side": 1,
+      "message": "I think 1u \u003c\u003c 31 is safest.",
+      "revId": "53e3f455bc93e56533f5171a673c3f4bbdb21096",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
