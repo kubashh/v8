@@ -16,6 +16,24 @@
       "revId": "94e589370c617b59ae32226588a22db91fd450b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e42e0510_5c2e6901",
+        "filename": "test/js-perf-test/ArraySort/sort-lengths.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-06-21T10:50:09Z",
+      "side": 1,
+      "message": "Added assertions for PackedSmi.",
+      "parentUuid": "ab0dfd04_da50a639",
+      "revId": "94e589370c617b59ae32226588a22db91fd450b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
