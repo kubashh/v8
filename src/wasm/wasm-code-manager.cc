@@ -189,7 +189,6 @@ void WasmCode::Validate() const {
         CHECK(contains(target));
         break;
       }
-      case RelocInfo::WASM_CODE_TABLE_ENTRY:
       case RelocInfo::WASM_CALL:
       case RelocInfo::JS_TO_WASM_CALL:
       case RelocInfo::EXTERNAL_REFERENCE:
