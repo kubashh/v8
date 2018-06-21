@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27edf4c7_80633410",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3560,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-21T09:48:56Z",
+      "side": 1,
+      "message": "Should the condition be \u0027length \u003c\u003d current_length\u0027? offset applies to the destination, not source.\n\nPlease add a in-bounds DCHECK to TryCopyElementsFastNumber for both source and dest.",
+      "revId": "6454874fd21bb2da63b064df46dba335ec024720",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
