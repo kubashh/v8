@@ -22,6 +22,30 @@
       "revId": "cb267dad6afb0cc9855217defd21ef1aa5f78ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa7263e8_46318d55",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-06-21T14:34:24Z",
+      "side": 1,
+      "message": "Will investigate asap and update the bug.",
+      "parentUuid": "1079ee6b_15876927",
+      "range": {
+        "startLine": 510,
+        "startChar": 4,
+        "endLine": 510,
+        "endChar": 52
+      },
+      "revId": "cb267dad6afb0cc9855217defd21ef1aa5f78ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
