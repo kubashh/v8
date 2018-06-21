@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f6512536_ce025e70",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2018-06-21T16:32:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "521a733c_fd5f8264",
+      "revId": "5dde9f39a9b82b4bfa6b83f17fe8c4a96ac9a9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14fb0637_5e480fbc",
         "filename": "src/wasm/wasm-memory.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-06-21T08:56:04Z",
       "side": 1,
       "message": "Do we need to adjust when deallocating as well?",
+      "revId": "5dde9f39a9b82b4bfa6b83f17fe8c4a96ac9a9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a75ae69_297be297",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1144619
+      },
+      "writtenOn": "2018-06-21T16:32:18Z",
+      "side": 1,
+      "message": "No, the allocation information is stored in a hash table that\u0027s keyed by the start of the Wasm memory. When we free this, we look up the associated allocation bas and use that to free. See WasmMemoryTracker::FreeMemoryIfIsWasmMemory later in this file.",
+      "parentUuid": "14fb0637_5e480fbc",
       "revId": "5dde9f39a9b82b4bfa6b83f17fe8c4a96ac9a9e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
