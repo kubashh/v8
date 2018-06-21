@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab0dfd04_da50a639",
+        "filename": "test/js-perf-test/ArraySort/sort-lengths.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-21T09:58:56Z",
+      "side": 1,
+      "message": "Is this packed_smi? Should we assert that? Also below.",
+      "revId": "94e589370c617b59ae32226588a22db91fd450b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
