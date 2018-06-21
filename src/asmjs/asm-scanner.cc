@@ -413,16 +413,13 @@ void AsmJsScanner::ConsumeCompareOrShift(uc32 ch) {
 }
 
 bool AsmJsScanner::IsIdentifierStart(uc32 ch) {
-  return (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || ch == '_' ||
-         ch == '$';
+  return IsInRange(AsciiAlphaToLower(c), 'a', 'z') || ch == '_' || ch == '$';
 }
 
-bool AsmJsScanner::IsIdentifierPart(uc32 ch) {
-  return IsIdentifierStart(ch) || (ch >= '0' && ch <= '9');
-}
+bool AsmJsScanner::IsIdentifierPart(uc32 ch) { return IsAsciiIdentifier(ch); }
 
 bool AsmJsScanner::IsNumberStart(uc32 ch) {
-  return ch == '.' || (ch >= '0' && ch <= '9');
+  return ch == '.' || IsDecimalDigit(ch);
 }
 
 }  // namespace internal
