@@ -127,6 +127,10 @@ void Builtins::set_builtin(int index, HeapObject* builtin) {
   isolate_->heap()->set_builtin(index, builtin);
 }
 
+void Builtins::set_builtin(int index, Code* builtin, Address entry) {
+  isolate_->heap()->set_builtin(index, builtin, entry);
+}
+
 Code* Builtins::builtin(int index) { return isolate_->heap()->builtin(index); }
 
 Handle<Code> Builtins::builtin_handle(int index) {
