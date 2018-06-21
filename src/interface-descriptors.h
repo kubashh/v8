@@ -72,6 +72,7 @@ class PlatformInterfaceDescriptor;
   V(ResumeGenerator)                  \
   V(FrameDropperTrampoline)           \
   V(RunMicrotasks)                    \
+  V(WasmGrowMemory)                   \
   BUILTIN_LIST_TFS(V)
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
@@ -959,6 +960,14 @@ class RunMicrotasksDescriptor final : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS()
   DECLARE_DEFAULT_DESCRIPTOR(RunMicrotasksDescriptor, CallInterfaceDescriptor)
+};
+
+class WasmGrowMemoryDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_RESULT_AND_PARAMETERS_NO_CONTEXT(1 /* result size */, kNumPages)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Int32() /* result */,
+                                    MachineType::Int32() /* kNumPages */)
+  DECLARE_DESCRIPTOR(WasmGrowMemoryDescriptor, CallInterfaceDescriptor)
 };
 
 #define DEFINE_TFS_BUILTIN_DESCRIPTOR(Name, ...)                          \
