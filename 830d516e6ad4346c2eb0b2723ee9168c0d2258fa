@@ -22,6 +22,30 @@
       "revId": "830d516e6ad4346c2eb0b2723ee9168c0d2258fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "266aef24_61574cf4",
+        "filename": "src/assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-21T08:30:12Z",
+      "side": 1,
+      "message": "Ah thanks. Let\u0027s perhaps add OFF_HEAP_TARGETs as well in the comment.",
+      "parentUuid": "14fd3203_44da39d0",
+      "range": {
+        "startLine": 146,
+        "startChar": 9,
+        "endLine": 146,
+        "endChar": 44
+      },
+      "revId": "830d516e6ad4346c2eb0b2723ee9168c0d2258fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
