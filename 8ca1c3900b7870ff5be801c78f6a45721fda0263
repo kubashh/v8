@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d172d974_a6607f97",
+        "filename": "src/arm64/macro-assembler-arm64-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-21T06:04:54Z",
+      "side": 0,
+      "message": "The alternative is to only enable this if dst \u0026 src are not aliased, but imo  an AssertSmi for every SmiUntag is total overkill and will bloat code size and runtime on the bots.",
+      "revId": "8ca1c3900b7870ff5be801c78f6a45721fda0263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
