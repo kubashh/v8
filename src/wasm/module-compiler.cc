@@ -1548,7 +1548,8 @@ void InstanceBuilder::WriteGlobalValue(WasmGlobal& global,
 }
 
 void InstanceBuilder::SanitizeImports() {
-  Handle<SeqOneByteString> module_bytes(module_object_->module_bytes());
+  Handle<SeqOneByteString> module_bytes(module_object_->module_bytes(),
+                                        isolate_);
   for (size_t index = 0; index < module_->import_table.size(); ++index) {
     WasmImport& import = module_->import_table[index];
 
@@ -2283,7 +2284,7 @@ AsyncCompileJob::AsyncCompileJob(
   foreground_task_runner_ = platform->GetForegroundTaskRunner(v8_isolate);
   // The handles for the context and promise must be deferred.
   DeferredHandleScope deferred(isolate);
-  context_ = Handle<Context>(*context);
+  context_ = Handle<Context>(*context, isolate);
   deferred_handles_.push_back(deferred.Detach());
 }
 

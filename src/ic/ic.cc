@@ -256,7 +256,7 @@ bool IC::ShouldRecomputeHandler(Handle<String> name) {
     if (!receiver_map()->IsJSObjectMap()) return false;
     Map* first_map = FirstTargetMap();
     if (first_map == nullptr) return false;
-    Handle<Map> old_map(first_map);
+    Handle<Map> old_map(first_map, isolate());
     if (old_map->is_deprecated()) return true;
     return IsMoreGeneralElementsKindTransition(old_map->elements_kind(),
                                                receiver_map()->elements_kind());
@@ -485,7 +485,7 @@ MaybeHandle<Object> LoadGlobalIC::Load(Handle<Name> name) {
     // Look up in script context table.
     Handle<String> str_name = Handle<String>::cast(name);
     Handle<ScriptContextTable> script_contexts(
-        global->native_context()->script_context_table());
+        global->native_context()->script_context_table(), global->GetIsolate());
 
     ScriptContextTable::LookupResult lookup_result;
     if (ScriptContextTable::Lookup(script_contexts, str_name, &lookup_result)) {
@@ -852,7 +852,8 @@ Handle<Object> LoadIC::ComputeHandler(LookupIterator* lookup) {
               isolate(), holder_lookup == CallOptimization::kHolderIsReceiver);
 
           Handle<Context> context(
-              call_optimization.GetAccessorContext(holder->map()));
+              call_optimization.GetAccessorContext(holder->map()),
+              lookup->isolate());
           Handle<WeakCell> context_cell =
               isolate()->factory()->NewWeakCell(context);
           Handle<WeakCell> data_cell = isolate()->factory()->NewWeakCell(
@@ -1343,7 +1344,7 @@ MaybeHandle<Object> StoreGlobalIC::Store(Handle<Name> name,
   Handle<String> str_name = Handle<String>::cast(name);
   Handle<JSGlobalObject> global = isolate()->global_object();
   Handle<ScriptContextTable> script_contexts(
-      global->native_context()->script_context_table());
+      global->native_context()->script_context_table(), global->GetIsolate());
 
   ScriptContextTable::LookupResult lookup_result;
   if (ScriptContextTable::Lookup(script_contexts, str_name, &lookup_result)) {
@@ -1581,7 +1582,8 @@ MaybeObjectHandle StoreIC::ComputeHandler(LookupIterator* lookup) {
                 holder_lookup == CallOptimization::kHolderIsReceiver);
 
             Handle<Context> context(
-                call_optimization.GetAccessorContext(holder->map()));
+                call_optimization.GetAccessorContext(holder->map()),
+                lookup->isolate());
             Handle<WeakCell> context_cell =
                 isolate()->factory()->NewWeakCell(context);
             Handle<WeakCell> data_cell = isolate()->factory()->NewWeakCell(
@@ -2217,7 +2219,7 @@ RUNTIME_FUNCTION(Runtime_LoadGlobalIC_Slow) {
 
   Handle<Context> native_context = isolate->native_context();
   Handle<ScriptContextTable> script_contexts(
-      native_context->script_context_table());
+      native_context->script_context_table(), isolate);
 
   ScriptContextTable::LookupResult lookup_result;
   if (ScriptContextTable::Lookup(script_contexts, name, &lookup_result)) {
@@ -2333,7 +2335,7 @@ RUNTIME_FUNCTION(Runtime_StoreGlobalIC_Slow) {
   Handle<JSGlobalObject> global = isolate->global_object();
   Handle<Context> native_context = isolate->native_context();
   Handle<ScriptContextTable> script_contexts(
-      native_context->script_context_table());
+      native_context->script_context_table(), isolate);
 
   ScriptContextTable::LookupResult lookup_result;
   if (ScriptContextTable::Lookup(script_contexts, name, &lookup_result)) {
@@ -2470,7 +2472,8 @@ RUNTIME_FUNCTION(Runtime_StoreCallbackProperty) {
   Handle<AccessorInfo> info(
       callback_or_cell->IsWeakCell()
           ? AccessorInfo::cast(WeakCell::cast(*callback_or_cell)->value())
-          : AccessorInfo::cast(*callback_or_cell));
+          : AccessorInfo::cast(*callback_or_cell),
+      isolate);
 
   DCHECK(info->IsCompatibleReceiver(*receiver));
 
