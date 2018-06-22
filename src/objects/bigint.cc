@@ -2496,9 +2496,9 @@ void MutableBigInt::set_64_bits(uint64_t bits) {
 }
 
 #ifdef OBJECT_PRINT
-void BigInt::BigIntPrint(std::ostream& os) {
+void BigInt::BigIntPrint(Isolate* isolate, std::ostream& os) {
   DisallowHeapAllocation no_gc;
-  HeapObject::PrintHeader(os, "BigInt");
+  HeapObject::PrintHeader(isolate, os, "BigInt");
   int len = length();
   os << "\n- length: " << len;
   os << "\n- sign: " << sign();
