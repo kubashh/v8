@@ -1151,5 +1151,68 @@ std::set<std::string> IntlUtil::GetAvailableLocales(const IcuService& service) {
   return locales;
 }
 
+// TODO(bstell): move this to intl-objects.h.
+Handle<String> CanonicalizeLanguageTag_(Isolate* isolate,
+                                        Handle<String> locale);
+
+Handle<String> CanonicalizeLanguageTag(Isolate* isolate,
+                                       Handle<Object> locale) {
+  // This following is the Javascript code.
+  // function canonicalizeLanguageTag(localeID) {
+  //   // null is typeof 'object' so we have to do extra check.
+  //   if ((!IS_STRING(localeID) && !IS_RECEIVER(localeID)) ||
+  //       IS_NULL(localeID)) {
+  //     throw %make_type_error(kLanguageID);
+  //   }
+  //
+  if (!locale->IsJSReceiver() && !locale->IsString()) {
+    // THIS NEEDS HELP
+    //  THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kLanguageID));
+  }
+
+  //   var localeString = TO_STRING(localeID);
+  // MaybeHandle<Object> maybe_locale_str = Object::ToString(isolate, locale);
+  // Handle<Object> locale_str;
+  // if (!maybe_locale_str.ToHandle(&locale_str)) {
+  //  THROW_NEW_ERROR_RETURN_FAILURE(isolate,
+  //                                NewTypeError(MessageTemplate::kLanguageID));
+  //}
+  Handle<String> locale_str;
+  return (CanonicalizeLanguageTag_(isolate, locale_str));
+}
+
+Handle<String> CanonicalizeLanguageTag_(Isolate* isolate,
+                                        Handle<String> locale) {
+  //   // Optimize for the most common case; a 2-letter language code in the
+  //   // canonical form/lowercase that is not one of deprecated codes
+  //   // (in, iw, ji, jw). Don't check for ~70 of 3-letter deprecated language
+  //   // codes. Instead, let them be handled by ICU in the slow path. Besides,
+  //   // fast-track 'fil' (3-letter canonical code).
+  //
+  // HOW DO I DO THIS?
+  //
+  //   if ((!IS_NULL(%regexp_internal_match(/^[a-z]{2}$/, localeString)) &&
+  //       IS_NULL(%regexp_internal_match(/^(in|iw|ji|jw)$/, localeString))) ||
+  //       localeString === "fil") {
+  //     return localeString;
+  //   }
+  //
+  //   if (isStructuallyValidLanguageTag(localeString) === false) {
+  //     throw %make_range_error(kInvalidLanguageTag, localeString);
+  //   }
+  //
+  //   // ECMA 402 6.2.3
+  //   var tag = %CanonicalizeLanguageTag(localeString);
+  //   // TODO(jshin): This should not happen because the structural validity
+  //   // is already checked. If that's the case, remove this.
+  //   if (tag === 'invalid-tag') {
+  //     throw %make_range_error(kInvalidLanguageTag, localeString);
+  //   }
+  //
+  //   return tag;
+  // }
+  return locale;
+}
+
 }  // namespace internal
 }  // namespace v8
