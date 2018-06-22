@@ -997,7 +997,7 @@ class Space : public Malloced {
   base::List<MemoryChunk>& memory_chunk_list() { return memory_chunk_list_; }
 
 #ifdef DEBUG
-  virtual void Print() = 0;
+  virtual void Print(Isolate* isolate) = 0;
 #endif
 
  protected:
@@ -2207,7 +2207,7 @@ class V8_EXPORT_PRIVATE PagedSpace
   void VerifyCountersAfterSweeping();
   void VerifyCountersBeforeConcurrentSweeping();
   // Print meta info and objects in this space.
-  void Print() override;
+  void Print(Isolate* isolate) override;
 
   // Report code object related statistics
   static void ReportCodeStatistics(Isolate* isolate);
@@ -2464,7 +2464,7 @@ class SemiSpace : public Space {
   std::unique_ptr<ObjectIterator> GetObjectIterator() override;
 
 #ifdef DEBUG
-  void Print() override;
+  void Print(Isolate* isolate) override;
   // Validate a range of of addresses in a SemiSpace.
   // The "from" address must be on a page prior to the "to" address,
   // in the linked page order, or it must be earlier on the same page.
@@ -2726,7 +2726,7 @@ class NewSpace : public SpaceWithLinearArea {
 
 #ifdef DEBUG
   // Print the active semispace.
-  void Print() override { to_space_.Print(); }
+  void Print(Isolate* isolate) override { to_space_.Print(isolate); }
 #endif
 
   // Return whether the operation succeeded.
@@ -3004,7 +3004,7 @@ class LargeObjectSpace : public Space {
 #endif
 
 #ifdef DEBUG
-  void Print() override;
+  void Print(Isolate* isolate) override;
 #endif
 
  private:

@@ -1867,7 +1867,7 @@ bool PagedSpace::RefillLinearAllocationAreaFromFreeList(size_t size_in_bytes) {
 }
 
 #ifdef DEBUG
-void PagedSpace::Print() {}
+void PagedSpace::Print(Isolate* isolate) {}
 #endif
 
 #ifdef VERIFY_HEAP
@@ -2595,7 +2595,7 @@ std::unique_ptr<ObjectIterator> SemiSpace::GetObjectIterator() {
 }
 
 #ifdef DEBUG
-void SemiSpace::Print() {}
+void SemiSpace::Print(Isolate* isolate) {}
 #endif
 
 #ifdef VERIFY_HEAP
@@ -3508,11 +3508,11 @@ void LargeObjectSpace::Verify(Isolate* isolate) {
 #endif
 
 #ifdef DEBUG
-void LargeObjectSpace::Print() {
+void LargeObjectSpace::Print(Isolate* isolate) {
   StdoutStream os;
   LargeObjectIterator it(this);
   for (HeapObject* obj = it.Next(); obj != nullptr; obj = it.Next()) {
-    obj->Print(os);
+    obj->Print(isolate, os);
   }
 }
 
