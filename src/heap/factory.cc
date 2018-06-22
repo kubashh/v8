@@ -1631,6 +1631,7 @@ Handle<BytecodeArray> Factory::NewBytecodeArray(
 Handle<FixedTypedArrayBase> Factory::NewFixedTypedArrayWithExternalPointer(
     int length, ExternalArrayType array_type, void* external_pointer,
     PretenureFlag pretenure) {
+  // TODO(7881): Smi length check
   DCHECK(0 <= length && length <= Smi::kMaxValue);
   int size = FixedTypedArrayBase::kHeaderSize;
   HeapObject* result = AllocateRawWithImmortalMap(
@@ -1646,6 +1647,7 @@ Handle<FixedTypedArrayBase> Factory::NewFixedTypedArrayWithExternalPointer(
 Handle<FixedTypedArrayBase> Factory::NewFixedTypedArray(
     size_t length, size_t byte_length, ExternalArrayType array_type,
     bool initialize, PretenureFlag pretenure) {
+  // TODO(7881): Smi length check
   DCHECK(0 <= length && length <= Smi::kMaxValue);
   CHECK(byte_length <= kMaxInt - FixedTypedArrayBase::kDataOffset);
   size_t size =
@@ -3146,6 +3148,7 @@ Handle<JSTypedArray> Factory::NewJSTypedArray(ExternalArrayType type,
   CHECK_EQ(byte_offset % element_size, 0);
 
   CHECK(length <= (std::numeric_limits<size_t>::max() / element_size));
+  // TODO(7881): Smi length check
   CHECK(length <= static_cast<size_t>(Smi::kMaxValue));
   size_t byte_length = length * element_size;
   SetupArrayBufferView(isolate(), obj, buffer, byte_offset, byte_length,
@@ -3178,6 +3181,7 @@ Handle<JSTypedArray> Factory::NewJSTypedArray(ElementsKind elements_kind,
 
   CHECK(number_of_elements <=
         (std::numeric_limits<size_t>::max() / element_size));
+  // TODO(7881): Smi length check
   CHECK(number_of_elements <= static_cast<size_t>(Smi::kMaxValue));
   size_t byte_length = number_of_elements * element_size;
 
