@@ -1151,5 +1151,10 @@ std::set<std::string> IntlUtil::GetAvailableLocales(const IcuService& service) {
   return locales;
 }
 
+Handle<String> CanonicalizeLanguageTag_(Isolate* isolate,
+                                        Handle<String> locale) {
+  return locale;
+}
+
 }  // namespace internal
 }  // namespace v8
