@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d618ae9b_9a429565",
+        "filename": "src/elements.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T09:47:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf53fc1c_6bca0527",
+      "range": {
+        "startLine": 146,
+        "startChar": 22,
+        "endLine": 146,
+        "endChar": 26
+      },
+      "revId": "faaf66f105b4a1820d3d253d5851d27957f9d10f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f28d6872_d8f8b82e",
         "filename": "src/elements.cc",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "faaf66f105b4a1820d3d253d5851d27957f9d10f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "867ea271_0f53c323",
+        "filename": "src/elements.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T09:47:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f28d6872_d8f8b82e",
+      "range": {
+        "startLine": 183,
+        "startChar": 21,
+        "endLine": 183,
+        "endChar": 36
+      },
+      "revId": "faaf66f105b4a1820d3d253d5851d27957f9d10f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "828c3623_a7746a51",
+        "filename": "src/elements.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T09:47:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "896069ac_0a68eb0a",
+      "range": {
+        "startLine": 233,
+        "startChar": 21,
+        "endLine": 233,
+        "endChar": 36
+      },
+      "revId": "faaf66f105b4a1820d3d253d5851d27957f9d10f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a03537b9_c342f960",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 5
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "031ebe51_4fdc6aa3",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T09:47:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a03537b9_c342f960",
+      "range": {
+        "startLine": 1310,
+        "startChar": 0,
+        "endLine": 1311,
+        "endChar": 66
+      },
+      "revId": "faaf66f105b4a1820d3d253d5851d27957f9d10f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e76142a9_f9de4276",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 5
@@ -114,6 +210,30 @@
       "revId": "faaf66f105b4a1820d3d253d5851d27957f9d10f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1d7c193_fc1e730d",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1544,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T09:47:21Z",
+      "side": 1,
+      "message": "Good catch, thanks! There were a few other wrong accesses in wasm, but they got caught by tests so I removed them. Done.",
+      "parentUuid": "e76142a9_f9de4276",
+      "range": {
+        "startLine": 1544,
+        "startChar": 21,
+        "endLine": 1544,
+        "endChar": 38
+      },
+      "revId": "faaf66f105b4a1820d3d253d5851d27957f9d10f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
