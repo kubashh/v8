@@ -290,7 +290,7 @@ void ArmDebugger::Debug() {
             Object* obj = reinterpret_cast<Object*>(value);
             os << arg1 << ": \n";
 #ifdef DEBUG
-            obj->Print(os);
+            obj->Print(sim->isolate_, os);
             os << "\n";
 #else
             os << Brief(obj) << "\n";

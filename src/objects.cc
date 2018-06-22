@@ -4294,7 +4294,7 @@ void MigrateFastToSlow(Handle<JSObject> object, Handle<Map> new_map,
   if (FLAG_trace_normalization) {
     StdoutStream os;
     os << "Object properties have been normalized:\n";
-    object->Print(os);
+    object->Print(isolate, os);
   }
 #endif
 }
@@ -6508,7 +6508,7 @@ Handle<NumberDictionary> JSObject::NormalizeElements(Handle<JSObject> object) {
   if (FLAG_trace_normalization) {
     StdoutStream os;
     os << "Object elements have been normalized:\n";
-    object->Print(os);
+    object->Print(isolate, os);
   }
 #endif
 
@@ -9805,7 +9805,7 @@ Handle<Map> Map::TransitionToDataProperty(Isolate* isolate, Handle<Map> map,
     std::unique_ptr<ScopedVector<char>> buffer;
     if (FLAG_trace_maps) {
       ScopedVector<char> name_buffer(100);
-      name->NameShortPrint(name_buffer);
+      name->NameShortPrint(isolate, name_buffer);
       buffer.reset(new ScopedVector<char>(128));
       SNPrintF(*buffer, "TooManyFastProperties %s", name_buffer.start());
       reason = buffer->start();
@@ -14771,8 +14771,7 @@ void Code::Disassemble(const char* name, std::ostream& os, Address current_pc) {
 }
 #endif  // ENABLE_DISASSEMBLER
 
-
-void BytecodeArray::Disassemble(std::ostream& os) {
+void BytecodeArray::Disassemble(Isolate* isolate, std::ostream& os) {
   os << "Parameter count " << parameter_count() << "\n";
   os << "Frame size " << frame_size() << "\n";
 
@@ -14819,7 +14818,7 @@ void BytecodeArray::Disassemble(std::ostream& os) {
   os << "Constant pool (size = " << constant_pool()->length() << ")\n";
 #ifdef OBJECT_PRINT
   if (constant_pool()->length() > 0) {
-    constant_pool()->Print();
+    constant_pool()->Print(isolate);
   }
 #endif
 
@@ -15837,7 +15836,7 @@ void Dictionary<Derived, Shape>::Print(std::ostream& os) {
     if (!dictionary->ToKey(isolate, i, &k)) continue;
     os << "\n   ";
     if (k->IsString()) {
-      String::cast(k)->StringPrint(os);
+      String::cast(k)->StringPrint(isolate, os);
     } else {
       os << Brief(k);
     }
