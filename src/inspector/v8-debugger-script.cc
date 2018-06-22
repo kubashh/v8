@@ -175,6 +175,7 @@ class ActualScript : public V8DebuggerScript {
       return;
     }
     if (preview) return;
+    m_script.Reset(m_isolate, scope.Escape(result->script));
     m_source = newSource;
     m_hash = String16();
   }
