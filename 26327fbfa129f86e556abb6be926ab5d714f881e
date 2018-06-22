@@ -70,6 +70,30 @@
       "revId": "26327fbfa129f86e556abb6be926ab5d714f881e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59668678_e18cb2ba",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-06-22T20:13:05Z",
+      "side": 1,
+      "message": "We also use it down below in %CanonicalizeLanguageTag after structural validity check with regex per BCP 47.  I\u0027m not sure if its structural validity check is as good as the current regex implementation.",
+      "parentUuid": "2e604d4b_7f378059",
+      "range": {
+        "startLine": 1184,
+        "startChar": 4,
+        "endLine": 1184,
+        "endChar": 22
+      },
+      "revId": "26327fbfa129f86e556abb6be926ab5d714f881e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
