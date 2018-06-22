@@ -401,6 +401,8 @@ class Debug {
   // source position for break points.
   static const int kBreakAtEntryPosition = 0;
 
+  void RemoveBreakInfoAndMaybeFree(Handle<DebugInfo> debug_info);
+
  private:
   explicit Debug(Isolate* isolate);
   ~Debug();
@@ -476,7 +478,6 @@ class Debug {
   typedef std::function<bool(Handle<DebugInfo>)> DebugInfoClearFunction;
   void ClearAllDebugInfos(DebugInfoClearFunction clear_function);
 
-  void RemoveBreakInfoAndMaybeFree(Handle<DebugInfo> debug_info);
   void FindDebugInfo(Handle<DebugInfo> debug_info, DebugInfoListNode** prev,
                      DebugInfoListNode** curr);
   void FreeDebugInfoListNode(DebugInfoListNode* prev, DebugInfoListNode* node);
