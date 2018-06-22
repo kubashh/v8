@@ -16,6 +16,24 @@
       "revId": "c06449662740f4812084b020b0f74c020cdf89e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3430ab1_2b214bae",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-22T14:35:23Z",
+      "side": 1,
+      "message": "Ack, done. Saves a number of static_casts :)",
+      "parentUuid": "0a0e1584_3e5a741d",
+      "revId": "c06449662740f4812084b020b0f74c020cdf89e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
