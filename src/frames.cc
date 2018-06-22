@@ -1050,7 +1050,8 @@ void JavaScriptFrame::GetFunctions(
   std::vector<SharedFunctionInfo*> raw_functions;
   GetFunctions(&raw_functions);
   for (const auto& raw_function : raw_functions) {
-    functions->push_back(Handle<SharedFunctionInfo>(raw_function));
+    functions->push_back(
+        Handle<SharedFunctionInfo>(raw_function, function()->GetIsolate()));
   }
 }
 
@@ -1324,7 +1325,8 @@ int FrameSummary::WasmFrameSummary::SourcePosition() const {
 }
 
 Handle<Script> FrameSummary::WasmFrameSummary::script() const {
-  return handle(wasm_instance()->module_object()->script());
+  return handle(wasm_instance()->module_object()->script(),
+                wasm_instance()->GetIsolate());
 }
 
 Handle<String> FrameSummary::WasmFrameSummary::FunctionName() const {
