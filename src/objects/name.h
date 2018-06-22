@@ -63,8 +63,8 @@ class Name : public HeapObject {
   DECL_CAST(Name)
 
   DECL_PRINTER(Name)
-  void NameShortPrint();
-  int NameShortPrint(Vector<char> str);
+  void NameShortPrint(Isolate* isolate);
+  int NameShortPrint(Isolate* isolate, Vector<char> str);
 
   // Layout description.
   static const int kHashFieldSlot = HeapObject::kHeaderSize;
