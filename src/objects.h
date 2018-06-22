@@ -1015,7 +1015,8 @@ class ZoneForwardList;
 template <class C> inline bool Is(Object* obj);
 
 #ifdef OBJECT_PRINT
-#define DECL_PRINTER(Name) void Name##Print(std::ostream& os);  // NOLINT
+#define DECL_PRINTER(Name) \
+  void Name##Print(Isolate* isolate, std::ostream& os);  // NOLINT
 #else
 #define DECL_PRINTER(Name)
 #endif
@@ -1599,10 +1600,10 @@ class Object {
 
 #ifdef OBJECT_PRINT
   // For our gdb macros, we should perhaps change these in the future.
-  void Print();
+  void Print(Isolate* isolate);
 
   // Prints this object with details.
-  void Print(std::ostream& os);  // NOLINT
+  void Print(Isolate* isolate, std::ostream& os);  // NOLINT
 #else
   void Print() { ShortPrint(); }
   void Print(std::ostream& os) { ShortPrint(os); }  // NOLINT
@@ -1922,7 +1923,8 @@ class HeapObject: public Object {
   // Dispatched behavior.
   void HeapObjectShortPrint(std::ostream& os);  // NOLINT
 #ifdef OBJECT_PRINT
-  void PrintHeader(std::ostream& os, const char* id);  // NOLINT
+  void PrintHeader(Isolate* isolate, std::ostream& os,
+                   const char* id);  // NOLINT
 #endif
   DECL_PRINTER(HeapObject)
   DECL_VERIFIER(HeapObject)
@@ -2752,8 +2754,8 @@ class JSObject: public JSReceiver {
   DECL_PRINTER(JSObject)
   DECL_VERIFIER(JSObject)
 #ifdef OBJECT_PRINT
-  bool PrintProperties(std::ostream& os);  // NOLINT
-  void PrintElements(std::ostream& os);    // NOLINT
+  bool PrintProperties(Isolate* isolate, std::ostream& os);  // NOLINT
+  void PrintElements(Isolate* isolate, std::ostream& os);    // NOLINT
 #endif
 #if defined(DEBUG) || defined(OBJECT_PRINT)
   void PrintTransitions(std::ostream& os);  // NOLINT

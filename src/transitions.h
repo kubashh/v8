@@ -109,7 +109,8 @@ class TransitionsAccessor {
 
 #if DEBUG || OBJECT_PRINT
   void PrintTransitions(std::ostream& os);
-  static void PrintOneTransition(std::ostream& os, Name* key, Map* target);
+  static void PrintOneTransition(Isolate* isolate, std::ostream& os, Name* key,
+                                 Map* target);
   void PrintTransitionTree();
   void PrintTransitionTree(std::ostream& os, int level,
                            DisallowHeapAllocation* no_gc);
@@ -238,8 +239,8 @@ class TransitionArray : public WeakFixedArray {
 
 #if defined(DEBUG) || defined(OBJECT_PRINT)
   // For our gdb macros.
-  void Print();
-  void Print(std::ostream& os);
+  void Print(Isolate* isolate);
+  void Print(Isolate* isolate, std::ostream& os);
 #endif
 
   DECL_PRINTER(TransitionArray)
