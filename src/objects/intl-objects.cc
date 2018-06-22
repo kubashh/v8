@@ -1151,5 +1151,60 @@ std::set<std::string> IntlUtil::GetAvailableLocales(const IcuService& service) {
   return locales;
 }
 
+MaybeHandle<String> IntlUtil::CanonicalizeLanguageTag(Isolate* isolate,
+                                                      Handle<Object> localeID) {
+  // This following is the Javascript code.
+  // function canonicalizeLanguageTag(localeID) {
+  //   // null is typeof 'object' so we have to do extra check.
+  //   if ((!IS_STRING(localeID) && !IS_RECEIVER(localeID)) ||
+  //       IS_NULL(localeID)) {
+  //     throw %make_type_error(kLanguageID);
+  //   }
+  if ((localeID->IsString() || localeID->IsJSReceiver()) &&
+      !localeID->IsNull()) {
+    MaybeHandle<Object> maybe_locale_id_str =
+        Object::ToString(isolate, localeID);
+    Handle<Object> locale_id_str;
+    if (maybe_locale_id_str.ToHandle(&locale_id_str)) {
+      return (CanonicalizeLanguageTag(isolate,
+                                      Handle<String>::cast(locale_id_str)));
+    }
+  }
+  THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kLanguageID), String);
+}
+
+Handle<String> IntlUtil::CanonicalizeLanguageTag(Isolate* isolate,
+                                                 Handle<String> localeID) {
+  //   // Optimize for the most common case; a 2-letter language code in the
+  //   // canonical form/lowercase that is not one of deprecated codes
+  //   // (in, iw, ji, jw). Don't check for ~70 of 3-letter deprecated language
+  //   // codes. Instead, let them be handled by ICU in the slow path. Besides,
+  //   // fast-track 'fil' (3-letter canonical code).
+  //
+  // HOW DO I DO THIS?
+  //
+  //   if ((!IS_NULL(%regexp_internal_match(/^[a-z]{2}$/, localeString)) &&
+  //       IS_NULL(%regexp_internal_match(/^(in|iw|ji|jw)$/, localeString))) ||
+  //       localeString === "fil") {
+  //     return localeString;
+  //   }
+  //
+  //   if (isStructuallyValidLanguageTag(localeString) === false) {
+  //     throw %make_range_error(kInvalidLanguageTag, localeString);
+  //   }
+  //
+  //   // ECMA 402 6.2.3
+  //   var tag = %CanonicalizeLanguageTag(localeString);
+  //   // TODO(jshin): This should not happen because the structural validity
+  //   // is already checked. If that's the case, remove this.
+  //   if (tag === 'invalid-tag') {
+  //     throw %make_range_error(kInvalidLanguageTag, localeString);
+  //   }
+  //
+  //   return tag;
+  // }
+  return localeID;
+}
+
 }  // namespace internal
 }  // namespace v8
