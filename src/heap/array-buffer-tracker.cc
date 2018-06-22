@@ -62,7 +62,8 @@ void LocalArrayBufferTracker::Process(Callback callback) {
   }
   if (moved_memory || freed_memory) {
     // Update the Space with any moved or freed backing-store bytes.
-    space()->DecrementExternalBackingStoreBytes(freed_memory + moved_memory);
+    space()->DecrementExternalBackingStoreBytes(
+        ExternalBackingStoreType::kArrayBuffer, freed_memory + moved_memory);
 
     // TODO(wez): Remove backing-store from external memory accounting.
     page_->heap()->update_external_memory_concurrently_freed(

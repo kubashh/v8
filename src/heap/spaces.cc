@@ -1494,8 +1494,21 @@ void PagedSpace::RefillFreeList() {
 void PagedSpace::MergeCompactionSpace(CompactionSpace* other) {
   base::LockGuard<base::Mutex> guard(mutex());
 
-  IncrementExternalBackingStoreBytes(other->ExternalBackingStoreBytes());
-  other->DecrementExternalBackingStoreBytes(other->ExternalBackingStoreBytes());
+  IncrementExternalBackingStoreBytes(
+      ExternalBackingStoreType::kArrayBuffer,
+      other->ExternalBackingStoreBytes(ExternalBackingStoreType::kArrayBuffer));
+  IncrementExternalBackingStoreBytes(
+      ExternalBackingStoreType::kExternalString,
+      other->ExternalBackingStoreBytes(
+          ExternalBackingStoreType::kExternalString));
+
+  other->DecrementExternalBackingStoreBytes(
+      ExternalBackingStoreType::kArrayBuffer,
+      other->ExternalBackingStoreBytes(ExternalBackingStoreType::kArrayBuffer));
+  other->DecrementExternalBackingStoreBytes(
+      ExternalBackingStoreType::kExternalString,
+      other->ExternalBackingStoreBytes(
+          ExternalBackingStoreType::kExternalString));
 
   DCHECK(identity() == other->identity());
   // Unmerged fields:

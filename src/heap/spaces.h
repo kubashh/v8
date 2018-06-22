@@ -143,7 +143,6 @@ enum FreeMode { kLinkCategory, kDoNotLinkCategory };
 enum class SpaceAccountingMode { kSpaceAccounted, kSpaceUnaccounted };
 
 enum ExternalBackingStoreType {
-  kOther,
   kArrayBuffer,
   kExternalString,
   kNumTypes
@@ -898,7 +897,6 @@ class Space : public Malloced {
         max_committed_(0) {
     external_backing_store_bytes_ =
         new std::atomic<size_t>[ExternalBackingStoreType::kNumTypes];
-    external_backing_store_bytes_[ExternalBackingStoreType::kOther] = 0;
     external_backing_store_bytes_[ExternalBackingStoreType::kArrayBuffer] = 0;
     external_backing_store_bytes_[ExternalBackingStoreType::kExternalString] =
         0;
@@ -945,7 +943,7 @@ class Space : public Malloced {
 
   // Returns amount of off-heap memory in-use by objects in this Space.
   virtual size_t ExternalBackingStoreBytes(
-      ExternalBackingStoreType type = ExternalBackingStoreType::kOther) const {
+      ExternalBackingStoreType type) const {
     return external_backing_store_bytes_[type];
   }
 
@@ -978,14 +976,12 @@ class Space : public Malloced {
     committed_ -= bytes;
   }
 
-  void IncrementExternalBackingStoreBytes(
-      size_t amount,
-      ExternalBackingStoreType type = ExternalBackingStoreType::kOther) {
+  void IncrementExternalBackingStoreBytes(ExternalBackingStoreType type,
+                                          size_t amount) {
     external_backing_store_bytes_[type] += amount;
   }
-  void DecrementExternalBackingStoreBytes(
-      size_t amount,
-      ExternalBackingStoreType type = ExternalBackingStoreType::kOther) {
+  void DecrementExternalBackingStoreBytes(ExternalBackingStoreType type,
+                                          size_t amount) {
     external_backing_store_bytes_[type] -= amount;
   }
 
@@ -2615,8 +2611,7 @@ class NewSpace : public SpaceWithLinearArea {
   }
 
   size_t ExternalBackingStoreBytes(
-      ExternalBackingStoreType type =
-          ExternalBackingStoreType::kOther) const override {
+      ExternalBackingStoreType type) const override {
     DCHECK_EQ(0, from_space_.ExternalBackingStoreBytes(type));
     return to_space_.ExternalBackingStoreBytes(type);
   }
