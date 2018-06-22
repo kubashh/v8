@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db5d5b8a_29b2e253",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-06-22T18:57:22Z",
+      "side": 1,
+      "message": "regex used in isStructurallyValid can be done with ICU regex (Chromium tree uses them in a \nfew places).  v8 already uses ICU so that there\u0027s no issue with that. \n\nA big question is how to cache regex (generate once and use it subsequently) in a v8-sanctioned manner.",
+      "range": {
+        "startLine": 1184,
+        "startChar": 4,
+        "endLine": 1184,
+        "endChar": 22
+      },
+      "revId": "26327fbfa129f86e556abb6be926ab5d714f881e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
