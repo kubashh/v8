@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f25606f_548e5baf",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-22T08:25:52Z",
+      "side": 1,
+      "message": "Let\u0027s add DCHECK that the current counter \u003e\u003d amount",
+      "range": {
+        "startLine": 985,
+        "startChar": 4,
+        "endLine": 985,
+        "endChar": 50
+      },
+      "revId": "1839a8aa1625e74fb42ad250c7489f26705880f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
