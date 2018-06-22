@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6af0617a_b9372a34",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T16:46:52Z",
+      "side": 1,
+      "message": "nit: braces",
+      "range": {
+        "startLine": 871,
+        "startChar": 4,
+        "endLine": 871,
+        "endChar": 6
+      },
+      "revId": "2214d5d0bb047f899a8e153af52b6d121433075d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70c27615_7ded3f7c",
+        "filename": "src/gdb-jit.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T16:46:52Z",
+      "side": 1,
+      "message": "We shouldn\u0027t change this signature",
+      "range": {
+        "startLine": 1855,
+        "startChar": 29,
+        "endLine": 1855,
+        "endChar": 47
+      },
+      "revId": "2214d5d0bb047f899a8e153af52b6d121433075d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4e69c3e_bb98997a",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T16:46:52Z",
+      "side": 1,
+      "message": "we could get rid of this isolate by checking the memory chunk\u0027s owner\u0027s identity directly (plus then we\u0027d get correct support for RO space for free!)",
+      "range": {
+        "startLine": 64,
+        "startChar": 2,
+        "endLine": 64,
+        "endChar": 41
+      },
+      "revId": "2214d5d0bb047f899a8e153af52b6d121433075d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af6681e4_1bd8e95a",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T16:46:52Z",
+      "side": 1,
+      "message": "Do you think it\u0027d be worth (maybe in a cleanup) to have a different DECL_PRINTER macro for isolate and non-isolate prints?",
+      "range": {
+        "startLine": 346,
+        "startChar": 40,
+        "endLine": 346,
+        "endChar": 47
+      },
+      "revId": "2214d5d0bb047f899a8e153af52b6d121433075d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "217c2c81_47044cfd",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-22T16:46:52Z",
+      "side": 1,
+      "message": "nit: pass Isolate into here too?",
+      "range": {
+        "startLine": 724,
+        "startChar": 18,
+        "endLine": 724,
+        "endChar": 37
+      },
+      "revId": "2214d5d0bb047f899a8e153af52b6d121433075d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
