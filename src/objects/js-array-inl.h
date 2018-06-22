@@ -199,11 +199,10 @@ Object* JSTypedArray::length() const {
   return Object::cast(READ_FIELD(this, kLengthOffset));
 }
 
-uint32_t JSTypedArray::length_value() const {
+size_t JSTypedArray::length_value() const {
   if (WasNeutered()) return 0;
-  uint32_t index = 0;
-  CHECK(Object::cast(READ_FIELD(this, kLengthOffset))->ToArrayLength(&index));
-  return index;
+  return static_cast<size_t>(
+      Object::cast(READ_FIELD(this, kLengthOffset))->Number());
 }
 
 void JSTypedArray::set_length(Object* value, WriteBarrierMode mode) {
