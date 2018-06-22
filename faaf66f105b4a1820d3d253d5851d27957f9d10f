@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a03537b9_c342f960",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-22T09:23:27Z",
+      "side": 1,
+      "message": "nit: Curly braces around body if it spans more than one line.",
+      "range": {
+        "startLine": 1310,
+        "startChar": 0,
+        "endLine": 1311,
+        "endChar": 66
+      },
+      "revId": "faaf66f105b4a1820d3d253d5851d27957f9d10f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e76142a9_f9de4276",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1544,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-22T09:23:27Z",
+      "side": 1,
+      "message": "I think it is not guaranteed that this field is set correctly at this point. The field in question is a weak field to the instance and this method is called from the instance finalizer. I would advise to instead pass the Isolate explicitly to the {RemoveFromChain} method. There is only one caller and the Isolate is available there.",
+      "range": {
+        "startLine": 1544,
+        "startChar": 21,
+        "endLine": 1544,
+        "endChar": 38
+      },
+      "revId": "faaf66f105b4a1820d3d253d5851d27957f9d10f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
