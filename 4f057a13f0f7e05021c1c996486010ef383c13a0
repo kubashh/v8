@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a633cb56_3f26633f",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-06-22T16:06:33Z",
+      "side": 1,
+      "message": "This is a question for cira and jungshik. It would be ideal if we can get icu to do this for us.",
+      "revId": "4f057a13f0f7e05021c1c996486010ef383c13a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
