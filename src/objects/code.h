@@ -776,7 +776,7 @@ class BytecodeArray : public FixedArrayBase {
   DECL_PRINTER(BytecodeArray)
   DECL_VERIFIER(BytecodeArray)
 
-  void Disassemble(std::ostream& os);
+  void Disassemble(Isolate* isolate, std::ostream& os);
 
   void CopyBytecodesTo(BytecodeArray* to);
 
