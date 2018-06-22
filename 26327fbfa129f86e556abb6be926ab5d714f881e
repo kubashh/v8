@@ -46,6 +46,30 @@
       "revId": "26327fbfa129f86e556abb6be926ab5d714f881e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e604d4b_7f378059",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1184,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-06-22T19:29:20Z",
+      "side": 1,
+      "message": "How about using ICU uloc_canonicalize instead? This is what ICU claims it\u0027s doing: http://userguide.icu-project.org/locale#TOC-Canonicalization\n\nWe already use this method in Intl.Locale constructor, to canonicalize locale.",
+      "parentUuid": "24472557_9946a01b",
+      "range": {
+        "startLine": 1184,
+        "startChar": 4,
+        "endLine": 1184,
+        "endChar": 22
+      },
+      "revId": "26327fbfa129f86e556abb6be926ab5d714f881e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
