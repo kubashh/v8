@@ -402,7 +402,7 @@ class V8_EXPORT_PRIVATE FeedbackVectorSpec {
 
 #ifdef OBJECT_PRINT
   // For gdb debugging.
-  void Print();
+  void Print(Isolate* isolate);
 #endif  // OBJECT_PRINT
 
   DECL_PRINTER(FeedbackVectorSpec)
@@ -449,7 +449,7 @@ class FeedbackMetadata : public HeapObject {
 
 #ifdef OBJECT_PRINT
   // For gdb debugging.
-  void Print();
+  void Print(Isolate* isolate);
 #endif  // OBJECT_PRINT
 
   DECL_PRINTER(FeedbackMetadata)
