@@ -202,7 +202,6 @@ void PatchFunctions(v8::Local<v8::Context> context, const char* source_a,
                     const char* source_b,
                     v8::debug::LiveEditResult* result = nullptr) {
   v8::Isolate* isolate = context->GetIsolate();
-  v8::HandleScope scope(isolate);
   v8::Local<v8::Script> script_a =
       v8::Script::Compile(context, v8_str(isolate, source_a)).ToLocalChecked();
   script_a->Run(context).ToLocalChecked();
@@ -212,20 +211,21 @@ void PatchFunctions(v8::Local<v8::Context> context, const char* source_a,
   i::Isolate* i_isolate = i_script_a->GetIsolate();
   if (result) {
     LiveEdit::PatchScript(
-        i_script_a, i_isolate->factory()->NewStringFromAsciiChecked(source_b),
+        i_isolate, i_script_a,
+        i_isolate->factory()->NewStringFromAsciiChecked(source_b), false,
         result);
   } else {
     v8::debug::LiveEditResult result;
     LiveEdit::PatchScript(
-        i_script_a, i_isolate->factory()->NewStringFromAsciiChecked(source_b),
+        i_isolate, i_script_a,
+        i_isolate->factory()->NewStringFromAsciiChecked(source_b), false,
         &result);
     CHECK_EQ(result.status, v8::debug::LiveEditResult::OK);
   }
 }
 }  // anonymous namespace
 
-// TODO(kozyatinskiy): enable it with new liveedit implementation.
-DISABLED_TEST(LiveEditPatchFunctions) {
+TEST(LiveEditPatchFunctions) {
   LocalContext env;
   v8::HandleScope scope(env->GetIsolate());
   v8::Local<v8::Context> context = env.local();
@@ -366,7 +366,6 @@ DISABLED_TEST(LiveEditPatchFunctions) {
                ->ToInt32(env->GetIsolate())
                ->Value(),
            20);
-
   // Change inner functions.
   PatchFunctions(
       context,
@@ -416,10 +415,53 @@ DISABLED_TEST(LiveEditPatchFunctions) {
     v8::String::Utf8Value new_result_utf8(env->GetIsolate(), result);
     CHECK_NOT_NULL(strstr(*new_result_utf8, "cb"));
   }
+
+  // Add argument to arrow function.
+  PatchFunctions(context, "f = () => 2", "f = a => a");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "f(3)")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           3);
+
+  // Replace function with not a function.
+  PatchFunctions(context, "f = () => 2", "f = a == 2");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "f(3)")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           2);
+
+  // TODO(kozyatinskiy): should work when we put function into (...).
+  PatchFunctions(context, "f = a => 2", "f = (a => 5)()");
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "f()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           2);
+
+  PatchFunctions(context,
+                 "f2 = null;\n"
+                 "f = () => {\n"
+                 "  f2 = () => 5;\n"
+                 "  return f2();\n"
+                 "}\n"
+                 "f()\n",
+                 "f2 = null;\n"
+                 "f = () => {\n"
+                 "  for (var a = (() => 7)(), b = 0; a < 10; ++a,++b);\n"
+                 "  return b;\n"
+                 "}\n"
+                 "f()\n");
+  // TODO(kozyatinskiy): ditto.
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "f2()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           5);
+  CHECK_EQ(CompileRunChecked(env->GetIsolate(), "f()")
+               ->ToInt32(env->GetIsolate())
+               ->Value(),
+           3);
 }
 
-// TODO(kozyatinskiy): enable it with new liveedit implementation.
-DISABLED_TEST(LiveEditCompileError) {
+TEST(LiveEditCompileError) {
   LocalContext env;
   v8::HandleScope scope(env->GetIsolate());
   v8::Local<v8::Context> context = env.local();
@@ -451,10 +493,8 @@ DISABLED_TEST(LiveEditCompileError) {
   PatchFunctions(context, "function foo() {}",
                  "function foo() { return a # b; }", &result);
   CHECK_EQ(result.status, debug::LiveEditResult::COMPILE_ERROR);
-  // TODO(kozyatinskiy): should be 1.
-  CHECK_EQ(result.line_number, kNoSourcePosition);
-  // TODO(kozyatinskiy): should be 26.
-  CHECK_EQ(result.column_number, kNoSourcePosition);
+  CHECK_EQ(result.line_number, 1);
+  CHECK_EQ(result.column_number, 26);
 }
 
 TEST(LiveEditFunctionExpression) {
@@ -480,7 +520,8 @@ TEST(LiveEditFunctionExpression) {
   i::Isolate* i_isolate = i_script->GetIsolate();
   debug::LiveEditResult result;
   LiveEdit::PatchScript(
-      i_script, i_isolate->factory()->NewStringFromAsciiChecked(updated_source),
+      i_isolate, i_script,
+      i_isolate->factory()->NewStringFromAsciiChecked(updated_source), false,
       &result);
   CHECK_EQ(result.status, debug::LiveEditResult::OK);
   {
