@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ff24252_38efd4f2",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2924,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-06-25T19:48:31Z",
+      "side": 1,
+      "message": "`GetErrorIfPreviousIsValid()` maybe...? I guess that could work.",
+      "revId": "753fe21006e5956ac5f02fc7968fd77b4e0c420d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "293b7e97_82c69373",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 8700,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-06-25T19:48:31Z",
+      "side": 1,
+      "message": "The second test is basically \"make sure the propagated error isn\u0027t used in a false positive situation after the fact.\n\nThere are a few other cases to add:\nasync(a \u003d await \u003d\u003e 1, b \u003d async() \u003d\u003e 2);\nasync(a \u003d await \u003d\u003e 1); b \u003d async() \u003d\u003e 2;\n(async(a \u003d await \u003d\u003e 1), b \u003d async() \u003d\u003e 2);\n\nthese will be in the next patchset",
+      "revId": "753fe21006e5956ac5f02fc7968fd77b4e0c420d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
