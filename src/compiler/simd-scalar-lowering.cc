@@ -806,10 +806,10 @@ void SimdScalarLowering::LowerPack(Node* node, SimdType input_rep_type,
     Node* input = nullptr;
 #if defined(V8_TARGET_BIG_ENDIAN)
     if (i < num_lanes / 2)
-      input = rep_right[i];
+      input = rep_right[num_lanes / 2 - i - 1];
     else
-      input = rep_left[i - num_lanes / 2];
-#else
+      input = rep_left[num_lanes - i - 1];
+#elif defined(V8_TARGET_LITTLE_ENDIAN)
     if (i < num_lanes / 2)
       input = rep_left[i];
     else
@@ -820,9 +820,16 @@ void SimdScalarLowering::LowerPack(Node* node, SimdType input_rep_type,
       input = d_min.Phi(phi_rep, min, input);
     }
     Diamond d_max(graph(), common(), graph()->NewNode(less_op, max, input));
+#if defined(V8_TARGET_BIG_ENDIAN)
+    rep_node[num_lanes - i - 1] = d_max.Phi(phi_rep, max, input);
+    rep_node[num_lanes - i - 1] =
+        is_signed ? rep_node[num_lanes - i - 1]
+                  : FixUpperBits(rep_node[num_lanes - i - 1], shift_val);
+#elif defined(V8_TARGET_LITTLE_ENDIAN)
     rep_node[i] = d_max.Phi(phi_rep, max, input);
     rep_node[i] =
         is_signed ? rep_node[i] : FixUpperBits(rep_node[i], shift_val);
+#endif
   }
   ReplaceNode(node, rep_node, num_lanes);
 }
