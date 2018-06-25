@@ -1534,7 +1534,8 @@ Handle<Script> Factory::NewScript(Handle<String> source, PretenureFlag tenure) {
                                     SKIP_WRITE_BARRIER);
   script->set_flags(0);
   script->set_host_defined_options(*empty_fixed_array());
-  heap->set_script_list(*FixedArrayOfWeakCells::Add(script_list(), script));
+  heap->set_script_list(
+      *FixedArrayOfWeakCells::Add(isolate(), script_list(), script));
   return script;
 }
 
@@ -2683,7 +2684,7 @@ Handle<JSObject> Factory::NewJSObjectWithNullProto(PretenureFlag pretenure) {
       NewJSObject(isolate()->object_function(), pretenure);
   Handle<Map> new_map = Map::Copy(
       isolate(), Handle<Map>(result->map(), isolate()), "ObjectWithNullProto");
-  Map::SetPrototype(new_map, null_value());
+  Map::SetPrototype(isolate(), new_map, null_value());
   JSObject::MigrateToMap(result, new_map);
   return result;
 }
@@ -2736,7 +2737,7 @@ Handle<JSGlobalObject> Factory::NewJSGlobalObject(
   InitializeJSObjectFromMap(global, dictionary, map);
 
   // Create a new map for the global object.
-  Handle<Map> new_map = Map::CopyDropDescriptors(map);
+  Handle<Map> new_map = Map::CopyDropDescriptors(isolate(), map);
   new_map->set_may_have_interesting_symbols(true);
   new_map->set_is_dictionary_map(true);
 
@@ -2787,7 +2788,7 @@ void Factory::InitializeJSObjectBody(Handle<JSObject> obj, Handle<Map> map,
   }
   obj->InitializeBody(*map, start_offset, *undefined_value(), filler);
   if (in_progress) {
-    map->FindRootMap()->InobjectSlackTrackingStep();
+    map->FindRootMap(isolate())->InobjectSlackTrackingStep(isolate());
   }
 }
 
@@ -3438,8 +3439,8 @@ Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfo(
     share->clear_padding();
   }
   // Link into the list.
-  Handle<Object> new_noscript_list =
-      FixedArrayOfWeakCells::Add(noscript_shared_function_infos(), share);
+  Handle<Object> new_noscript_list = FixedArrayOfWeakCells::Add(
+      isolate(), noscript_shared_function_infos(), share);
   isolate()->heap()->set_noscript_shared_function_infos(*new_noscript_list);
 
   DCHECK_EQ(SharedFunctionInfo::kNoDebuggingId, share->debugging_id());
@@ -3787,7 +3788,7 @@ Handle<Map> Factory::CreateSloppyFunctionMap(
   map->set_is_callable(true);
   Handle<JSFunction> empty_function;
   if (maybe_empty_function.ToHandle(&empty_function)) {
-    Map::SetPrototype(map, empty_function);
+    Map::SetPrototype(isolate(), map, empty_function);
   }
 
   //
@@ -3864,7 +3865,7 @@ Handle<Map> Factory::CreateStrictFunctionMap(
   map->set_has_prototype_slot(has_prototype);
   map->set_is_constructor(has_prototype);
   map->set_is_callable(true);
-  Map::SetPrototype(map, empty_function);
+  Map::SetPrototype(isolate(), map, empty_function);
 
   //
   // Setup descriptors array.
@@ -3929,7 +3930,7 @@ Handle<Map> Factory::CreateClassFunctionMap(Handle<JSFunction> empty_function) {
   map->set_is_constructor(true);
   map->set_is_prototype_map(true);
   map->set_is_callable(true);
-  Map::SetPrototype(map, empty_function);
+  Map::SetPrototype(isolate(), map, empty_function);
 
   //
   // Setup descriptors array.
