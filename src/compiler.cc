@@ -1628,7 +1628,7 @@ MaybeHandle<SharedFunctionInfo> Compiler::GetSharedFunctionInfoForScript(
   if (extension == nullptr) {
     bool can_consume_code_cache =
         compile_options == ScriptCompiler::kConsumeCodeCache &&
-        !isolate->debug()->is_loaded();
+        !isolate->debug()->is_active();
     if (can_consume_code_cache) {
       compile_timer.set_consuming_code_cache();
     }
@@ -1719,7 +1719,7 @@ MaybeHandle<JSFunction> Compiler::GetWrappedFunction(
   MaybeHandle<SharedFunctionInfo> maybe_result;
   bool can_consume_code_cache =
       compile_options == ScriptCompiler::kConsumeCodeCache &&
-      !isolate->debug()->is_loaded();
+      !isolate->debug()->is_active();
   if (can_consume_code_cache) {
     compile_timer.set_consuming_code_cache();
     // Then check cached code provided by embedder.
