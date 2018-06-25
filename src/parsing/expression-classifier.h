@@ -289,6 +289,27 @@ class ExpressionClassifier {
     Add(Error(loc, message, kLetPatternProduction, arg));
   }
 
+  Maybe<Error> GetErrorIf(std::function<bool(TargetProduction)> pred,
+                          ErrorKind kind) {
+    SLOW_DCHECK(kind < kUnusedError);
+    auto production = static_cast<TargetProduction>(1 << kind);
+
+    if (!is_valid(production) && pred(production)) {
+      return Just(reported_error(kind));
+    }
+
+    return Nothing<Error>();
+  }
+
+  void RecordError(const Maybe<Error>& error) {
+    if (error.IsJust()) {
+      const Error& e = error.FromJust();
+      SLOW_DCHECK(e.kind != kUnusedError && e.location.IsValid());
+      Add(e);
+      invalid_productions_ |= (1 << e.kind);
+    }
+  }
+
   void Accumulate(ExpressionClassifier* inner, unsigned productions) {
     DCHECK_EQ(inner->reported_errors_, reported_errors_);
     DCHECK_EQ(inner->reported_errors_begin_, reported_errors_end_);
