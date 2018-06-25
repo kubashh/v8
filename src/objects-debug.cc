@@ -1942,7 +1942,7 @@ bool TransitionArray::IsSortedNoDuplicates(Isolate* isolate,
     int cmp = CompareKeys(prev_key, prev_hash, prev_kind, prev_attributes, key,
                           hash, kind, attributes);
     if (cmp >= 0) {
-      Print();
+      Print(isolate);
       return false;
     }
     prev_key = key;
