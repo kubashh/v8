@@ -2918,6 +2918,12 @@ ParserBase<Impl>::ParseAssignmentExpression(bool accept_IN, bool* ok) {
     // "YieldExpression", which is its only use.
     ValidateFormalParameterInitializer(ok);
 
+    // At this point, it's possible that we're parsing a default parameter
+    // initializer of an async arrow function, in which case we need to forbid
+    // `await` if it's occurred.
+    classifier()->MoveToParent(
+        ExpressionClassifier::kAsyncArrowFormalParametersProduction);
+
     Scanner::Location loc(lhs_beg_pos, scanner()->location().end_pos);
     DeclarationScope* scope =
         NewFunctionScope(is_async ? FunctionKind::kAsyncArrowFunction

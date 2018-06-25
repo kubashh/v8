@@ -289,6 +289,25 @@ class ExpressionClassifier {
     Add(Error(loc, message, kLetPatternProduction, arg));
   }
 
+  void MoveToParent(ErrorKind kind) {
+    SLOW_DCHECK(kind < kUnusedError);
+    auto production = static_cast<TargetProduction>(1 << kind);
+
+    // If this is the top-most expression classifier, there is no error,
+    // or if the previous classifier already has the same error, give up.
+    if (reported_errors_begin_ == 0 || is_valid(production) ||
+        !previous_->is_valid(production)) {
+      return;
+    }
+
+    auto error = reported_error(kind);
+    reported_errors_->InsertAt(reported_errors_begin_, error, zone_);
+    previous_->reported_errors_end_++;
+    previous_->invalid_productions_ |= production;
+    reported_errors_begin_++;
+    reported_errors_end_++;
+  }
+
   void Accumulate(ExpressionClassifier* inner, unsigned productions) {
     DCHECK_EQ(inner->reported_errors_, reported_errors_);
     DCHECK_EQ(inner->reported_errors_begin_, reported_errors_end_);
