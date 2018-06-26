@@ -277,3 +277,46 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
 
   assertThrows(instance.exports.main, RangeError);
 })();
+
+(function TierUpAfterDeserialization() {
+  const num_functions = 2000;
+  function GenerateSerializedModule() {
+    const builder = new WasmModuleBuilder();
+    // Add a few functions so it takes some time to compile.
+    const sig = builder.addType(kSig_i_v);
+    const func_indexes = [];
+    for (var i = 0; i < num_functions; ++i) {
+      const fn = builder.addFunction('fun' + i, sig)
+                     .addBody([...wasmI32Const(i)])
+                     .exportFunc();
+      func_indexes.push(fn.index);
+    }
+    builder.addFunction('main', kSig_i_i)
+        .addBody([kExprGetLocal, 0, kExprCallIndirect, sig, kTableZero])
+        .exportFunc();
+    builder.addFunctionTableInit(0, false, func_indexes);
+    var wire_bytes = builder.toBuffer();
+    var module = new WebAssembly.Module(wire_bytes);
+    var buffer = %SerializeWasmModule(module);
+    return [wire_bytes, buffer];
+  }
+  var [wire_bytes, buffer] = GenerateSerializedModule();
+  module = %DeserializeWasmModule(buffer, wire_bytes);
+  var instance = new WebAssembly.Instance(module);
+
+  // Eventually, tier-up should complete for all code.
+  function tier_up_finished() {
+    for (var i = 0; i < num_functions; ++i) {
+      var fn = instance.exports['fun' + i];
+      assertTrue(%IsWasmCode(fn));
+      if (%IsLiftoffFunction(fn)) return false;
+    }
+    return true;
+  }
+  while (!tier_up_finished()) {
+    // Call each function once to trigger lazy tier-up.
+    for (var i = 0; i < num_functions; ++i) {
+      assertEquals(i, instance.exports.main(i));
+    }
+  }
+})();
