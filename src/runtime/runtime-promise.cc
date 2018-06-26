@@ -120,12 +120,6 @@ RUNTIME_FUNCTION(Runtime_AwaitPromisesInit) {
   CONVERT_ARG_HANDLE_CHECKED(JSPromise, throwaway, 2);
   isolate->RunPromiseHook(PromiseHookType::kInit, wrapped_value, outer_promise);
   isolate->RunPromiseHook(PromiseHookType::kInit, throwaway, wrapped_value);
-  // On inspector side we capture async stack trace and store it by
-  // outer_promise->async_task_id when async function is suspended first time.
-  // To use captured stack trace later throwaway promise should have the same
-  // async_task_id as outer_promise since we generate WillHandle and DidHandle
-  // events using throwaway promise.
-  throwaway->set_async_task_id(outer_promise->async_task_id());
   return isolate->heap()->undefined_value();
 }
 

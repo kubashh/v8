@@ -4146,3 +4146,385 @@ TEST(DebugEvaluateNoSideEffect) {
   }
   DisableDebugger(env->GetIsolate());
 }
+
+namespace {
+struct AsyncEvent {
+  v8::debug::DebugAsyncActionType type;
+  int id;
+};
+
+struct BreakEvent {
+  int line_number;
+  int column_number;
+};
+
+struct LogEvent {
+  enum Type { kAsync, kBreak, kMicrotask };
+  Type type;
+  union {
+    AsyncEvent async_event;
+    BreakEvent break_event;
+  };
+
+  LogEvent(v8::debug::DebugAsyncActionType type, int id)
+      : type(kAsync), async_event({type, id}) {}
+  LogEvent(int line_number, int column_number)
+      : type(kBreak), break_event({line_number, column_number}) {}
+  LogEvent() : type(kMicrotask) {}
+};
+
+class AsyncDelegate : public v8::debug::AsyncEventDelegate {
+ public:
+  explicit AsyncDelegate(std::vector<LogEvent>* events) : events_(events) {}
+  void AsyncEventOccurred(v8::debug::DebugAsyncActionType type, int id,
+                          bool is_blackboxed) override {
+    events_->emplace_back(LogEvent{type, id});
+  }
+
+ private:
+  std::vector<LogEvent>* events_;
+};
+
+class StepDelegate : public v8::debug::DebugDelegate {
+ public:
+  explicit StepDelegate(std::vector<LogEvent>* events) : events_(events) {}
+  void BreakProgramRequested(
+      v8::Local<v8::Context> paused_context,
+      const std::vector<v8::debug::BreakpointId>&) override {
+    v8::Isolate* isolate = paused_context->GetIsolate();
+    auto it = v8::debug::StackTraceIterator::Create(isolate, 0);
+    CHECK(!it->Done());
+    v8::debug::Location location = it->GetSourceLocation();
+    events_->emplace_back(
+        LogEvent{location.GetLineNumber(), location.GetColumnNumber()});
+    // StepIn at await goes to next instruction inside current async function,
+    // by calling SetBreakOnNextFunctionCall we emulate single step behavior.
+    v8::debug::PrepareStep(isolate, v8::debug::StepIn);
+    v8::debug::SetBreakOnNextFunctionCall(isolate);
+
+    // We try to add debug microtask after each running js in queue to split
+    // test log by microtasks.
+    isolate->EnqueueMicrotask(&MicrotaskCallback, this);
+  }
+
+ private:
+  static void MicrotaskCallback(void* data) {
+    std::vector<LogEvent>& events = *static_cast<StepDelegate*>(data)->events_;
+    if (events.back().type != LogEvent::kMicrotask) {
+      events.emplace_back(LogEvent{});
+    }
+  }
+  std::vector<LogEvent>* events_;
+};
+
+void PrintLogEvents(const std::vector<LogEvent>& events) {
+  for (const auto& event : events) {
+    if (event.type == LogEvent::kAsync) {
+      switch (event.async_event.type) {
+        case v8::debug::kDebugPromiseThen:
+          fprintf(stderr, "kDebugPromiseThen: %d\n", event.async_event.id);
+          break;
+        case v8::debug::kDebugPromiseCatch:
+          fprintf(stderr, "kDebugPromiseCatch: %d\n", event.async_event.id);
+          break;
+        case v8::debug::kDebugPromiseFinally:
+          fprintf(stderr, "kDebugPromiseFinally: %d\n", event.async_event.id);
+          break;
+        case v8::debug::kDebugWillHandle:
+          fprintf(stderr, "kDebugWillHandle: %d\n", event.async_event.id);
+          break;
+        case v8::debug::kDebugDidHandle:
+          fprintf(stderr, "kDebugDidHandle: %d\n", event.async_event.id);
+          break;
+        case v8::debug::kAsyncFunctionSuspended: {
+          fprintf(stderr, "kAsyncFunctionSuspended: %d\n",
+                  event.async_event.id);
+          break;
+        }
+        case v8::debug::kAsyncFunctionFinished:
+          fprintf(stderr, "kAsyncFunctionFinished: %d\n", event.async_event.id);
+          break;
+        case v8::debug::kAsyncFunctionResumed:
+          fprintf(stderr, "kAsyncFunctionResumed: %d\n", event.async_event.id);
+          break;
+      }
+    } else if (event.type == LogEvent::kBreak) {
+      fprintf(stderr, "break at (%d, %d)\n", event.break_event.line_number,
+              event.break_event.column_number);
+    } else {
+      fprintf(stderr, "microtask\n");
+    }
+  }
+}
+
+void CheckLogEvents(const std::vector<LogEvent>& expected,
+                    std::vector<LogEvent>& actual, bool debug_print = true) {
+  if (debug_print) PrintLogEvents(actual);
+  for (size_t i = 0; i < expected.size(); ++i) {
+    CHECK_LT(i, actual.size());
+    CHECK_EQ(expected[i].type, actual[i].type);
+    if (expected[i].type == LogEvent::kAsync) {
+      CHECK_EQ(expected[i].async_event.type, actual[i].async_event.type);
+      CHECK_EQ(expected[i].async_event.type, actual[i].async_event.type);
+    } else if (expected[i].type == LogEvent::kBreak) {
+      CHECK_EQ(expected[i].break_event.line_number,
+               actual[i].break_event.line_number);
+      CHECK_EQ(expected[i].break_event.column_number,
+               actual[i].break_event.column_number);
+    }
+  }
+  CHECK_EQ(expected.size(), actual.size());
+  actual.clear();
+}
+}  // anonymous namespace
+
+TEST(AsyncFunctionInstrumentation) {
+  LocalContext env;
+  v8::Isolate* isolate = env->GetIsolate();
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  v8::HandleScope scope(isolate);
+  std::vector<LogEvent> events;
+  AsyncDelegate async_delegate(&events);
+  StepDelegate step_delegate(&events);
+  v8::debug::SetAsyncEventDelegate(isolate, &async_delegate);
+  v8::debug::SetDebugDelegate(isolate, &step_delegate);
+  v8::debug::SetBreakOnNextFunctionCall(isolate);
+  // No await - no async instrumentation.
+  CompileRun(v8_str("(async function empty() {})()"));
+  CheckLogEvents({{0, 0}, {0, 27}, {0, 25}, {0, 29}, {}}, events);
+  // Trivial.
+  int empty_call = i_isolate->async_task_count() + 1;
+  CompileRun(v8_str("(async function empty() { await 42; })()"));
+  CheckLogEvents({{0, 0},
+                  {0, 38},
+                  {0, 26},
+                  {v8::debug::kAsyncFunctionSuspended, empty_call},
+                  {0, 26},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, empty_call},
+                  {0, 36},
+                  {v8::debug::kAsyncFunctionFinished, empty_call},
+                  {}},
+                 events);
+  // Reject.
+  int foo_call = i_isolate->async_task_count() + 1;
+  CompileRun(v8_str("(async function foo() { await Promise.reject(); })()"));
+  CheckLogEvents({{0, 0},
+                  {0, 50},
+                  {0, 24},
+                  {0, 38},
+                  {v8::debug::kAsyncFunctionSuspended, foo_call},
+                  {0, 24},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, foo_call},
+                  {0, 48},
+                  {v8::debug::kAsyncFunctionFinished, foo_call},
+                  {}},
+                 events);
+  // Throw.
+  foo_call = i_isolate->async_task_count() + 1;
+  CompileRun(v8_str("(async function foo() { await 1; throw 2; })()"));
+  CheckLogEvents({{0, 0},
+                  {0, 44},
+                  {0, 24},
+                  {v8::debug::kAsyncFunctionSuspended, foo_call},
+                  {0, 24},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, foo_call},
+                  {0, 33},
+                  {0, 42},
+                  {v8::debug::kAsyncFunctionFinished, foo_call},
+                  {}},
+                 events);
+  // Two awaits.
+  foo_call = i_isolate->async_task_count() + 1;
+  CompileRun(v8_str("(async function foo() { await 1; await 2; })()"));
+  CheckLogEvents({{0, 0},
+                  {0, 44},
+                  {0, 24},
+                  {v8::debug::kAsyncFunctionSuspended, foo_call},
+                  {0, 24},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, foo_call},
+                  {0, 33},
+                  {v8::debug::kAsyncFunctionSuspended, foo_call},
+                  {0, 33},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, foo_call},
+                  {0, 42},
+                  {v8::debug::kAsyncFunctionFinished, foo_call},
+                  {}},
+                 events);
+  // Two async functions.
+  int first_boo_call = i_isolate->async_task_count() + 1;
+  foo_call = i_isolate->async_task_count() + 2;
+  int second_boo_call = i_isolate->async_task_count() + 3;
+  CompileRun(
+      v8_str("(async function foo() {\n"
+             "  async function boo() {\n"
+             "    await 1;\n"
+             "    await 2;\n"
+             "  }\n"
+             "  await boo();\n"
+             "  await boo();\n"
+             "})()"));
+  CheckLogEvents({{0, 0},
+                  {7, 2},
+                  {5, 8},
+                  {2, 4},
+                  {v8::debug::kAsyncFunctionSuspended, first_boo_call},
+                  {2, 4},
+                  {v8::debug::kAsyncFunctionSuspended, foo_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, first_boo_call},
+                  {3, 4},
+                  {v8::debug::kAsyncFunctionSuspended, first_boo_call},
+                  {3, 4},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, first_boo_call},
+                  {4, 2},
+                  {v8::debug::kAsyncFunctionFinished, first_boo_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, foo_call},
+                  {6, 8},
+                  {2, 4},
+                  {v8::debug::kAsyncFunctionSuspended, second_boo_call},
+                  {2, 4},
+                  {v8::debug::kAsyncFunctionSuspended, foo_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, second_boo_call},
+                  {3, 4},
+                  {v8::debug::kAsyncFunctionSuspended, second_boo_call},
+                  {3, 4},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, second_boo_call},
+                  {4, 2},
+                  {v8::debug::kAsyncFunctionFinished, second_boo_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, foo_call},
+                  {7, 0},
+                  {v8::debug::kAsyncFunctionFinished, foo_call},
+                  {}},
+                 events);
+  // Two async functions, first call is not awaited.
+  first_boo_call = i_isolate->async_task_count() + 1;
+  second_boo_call = i_isolate->async_task_count() + 2;
+  foo_call = i_isolate->async_task_count() + 3;
+  CompileRun(
+      v8_str("(async function foo() {\n"
+             "  async function boo1() {\n"
+             "    await 1;\n"
+             "    await 2;\n"
+             "  }\n"
+             "  async function boo2() {\n"
+             "    await 1;\n"
+             "    await 2;\n"
+             "  }\n"
+             "  boo1();\n"
+             "  await boo2();\n"
+             "})()"));
+  CheckLogEvents({{0, 0},
+                  {11, 2},
+                  {9, 2},
+                  {2, 4},
+                  {v8::debug::kAsyncFunctionSuspended, first_boo_call},
+                  {2, 4},
+                  {6, 4},
+                  {v8::debug::kAsyncFunctionSuspended, second_boo_call},
+                  {6, 4},
+                  {v8::debug::kAsyncFunctionSuspended, foo_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, first_boo_call},
+                  {3, 4},
+                  {v8::debug::kAsyncFunctionSuspended, first_boo_call},
+                  {3, 4},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, second_boo_call},
+                  {7, 4},
+                  {v8::debug::kAsyncFunctionSuspended, second_boo_call},
+                  {7, 4},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, first_boo_call},
+                  {4, 2},
+                  {v8::debug::kAsyncFunctionFinished, first_boo_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, second_boo_call},
+                  {8, 2},
+                  {v8::debug::kAsyncFunctionFinished, second_boo_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, foo_call},
+                  {11, 0},
+                  {v8::debug::kAsyncFunctionFinished, foo_call},
+                  {}},
+                 events);
+  // Simple recursion.
+  CompileRun(
+      v8_str("async function fib(n) {\n"
+             "  if (n < 2) return await 1;\n"
+             "  return await fib(n - 1) + await fib(n - 2);\n"
+             "}\n"
+             "fib(3)\n"));
+  int third_fib_call = i_isolate->async_task_count() + 1;
+  int second_fib_call = i_isolate->async_task_count() + 2;
+  int first_fib_call = i_isolate->async_task_count() + 3;
+  int fourth_fib_call = i_isolate->async_task_count() + 4;
+  int fifth_fib_call = i_isolate->async_task_count() + 5;
+  CheckLogEvents({{4, 0},
+                  {4, 0},
+                  {1, 2},
+                  {2, 2},
+                  {2, 15},
+                  {1, 2},
+                  {2, 2},
+                  {2, 15},
+                  {1, 2},
+                  {1, 13},
+                  {v8::debug::kAsyncFunctionSuspended, third_fib_call},
+                  {1, 20},
+                  {v8::debug::kAsyncFunctionSuspended, second_fib_call},
+                  {2, 9},
+                  {v8::debug::kAsyncFunctionSuspended, first_fib_call},
+                  {2, 9},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, third_fib_call},
+                  {3, 0},
+                  {v8::debug::kAsyncFunctionFinished, third_fib_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, second_fib_call},
+                  {2, 34},
+                  {1, 2},
+                  {1, 13},
+                  {v8::debug::kAsyncFunctionSuspended, fourth_fib_call},
+                  {1, 20},
+                  {v8::debug::kAsyncFunctionSuspended, second_fib_call},
+                  {2, 28},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, fourth_fib_call},
+                  {3, 0},
+                  {v8::debug::kAsyncFunctionFinished, fourth_fib_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, second_fib_call},
+                  {3, 0},
+                  {v8::debug::kAsyncFunctionFinished, second_fib_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, first_fib_call},
+                  {2, 34},
+                  {1, 2},
+                  {1, 13},
+                  {v8::debug::kAsyncFunctionSuspended, fifth_fib_call},
+                  {1, 20},
+                  {v8::debug::kAsyncFunctionSuspended, first_fib_call},
+                  {2, 28},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, fifth_fib_call},
+                  {3, 0},
+                  {v8::debug::kAsyncFunctionFinished, fifth_fib_call},
+                  {},
+                  {v8::debug::kAsyncFunctionResumed, first_fib_call},
+                  {3, 0},
+                  {v8::debug::kAsyncFunctionFinished, first_fib_call},
+                  {}},
+                 events);
+  v8::debug::SetDebugDelegate(isolate, nullptr);
+  v8::debug::SetAsyncEventDelegate(isolate, nullptr);
+}
