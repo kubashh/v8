@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6577b632_0bf57038",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-26T17:28:50Z",
+      "side": 1,
+      "message": "As discussed: Instead of this, we should just have a weak array of some kind.\nLooks like {WeakArrayList} is the data structure that should be used for this, but it currently lacks compaction.",
+      "revId": "48edcfa5373cec2c1a33e7f85da3fde4271908e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ed9000f_3b2bd398",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-26T17:28:50Z",
+      "side": 1,
+      "message": "This can be removed after addressing the comment below.",
+      "revId": "48edcfa5373cec2c1a33e7f85da3fde4271908e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
