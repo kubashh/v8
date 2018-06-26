@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca58ff9e_6b356dc2",
+        "filename": "src/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3877,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-06-26T08:25:09Z",
+      "side": 1,
+      "message": "NIT: maybe explicit check \"!\u003d 0\" would be easier to read here.",
+      "revId": "c1a85fe8f10e6cf2aea19b52c09abbdfc6f66e8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
