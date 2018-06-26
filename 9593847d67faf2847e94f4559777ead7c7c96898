@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7311641_35fc6741",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-26T11:16:23Z",
+      "side": 1,
+      "message": "Can this check go inside IncrementExternalBackingStoreBytes?\nNit: DCHECK_GE here and below",
+      "range": {
+        "startLine": 1406,
+        "startChar": 2,
+        "endLine": 1406,
+        "endChar": 8
+      },
+      "revId": "9593847d67faf2847e94f4559777ead7c7c96898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "493bd9da_7bcb71f7",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-26T11:16:23Z",
+      "side": 1,
+      "message": "Nit: DCHECK_GE",
+      "range": {
+        "startLine": 999,
+        "startChar": 4,
+        "endLine": 999,
+        "endChar": 11
+      },
+      "revId": "9593847d67faf2847e94f4559777ead7c7c96898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
