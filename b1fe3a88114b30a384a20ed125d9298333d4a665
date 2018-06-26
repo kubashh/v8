@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a7cc348_a067e1e7",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-26T12:17:02Z",
+      "side": 1,
+      "message": "Is the intention to use this function only in the write-barrier (where I can see that it is hard to get the heap)? If so can we rename it more specifically? e.g. FromHeapObjectForWriteBarrier and forbid any use besides the write barrier case?\n\nIf it is intended to be used in general, then it seems too fragile.",
+      "range": {
+        "startLine": 396,
+        "startChar": 6,
+        "endLine": 396,
+        "endChar": 26
+      },
+      "revId": "b1fe3a88114b30a384a20ed125d9298333d4a665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90a25364_0086c707",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-26T12:17:02Z",
+      "side": 1,
+      "message": "Can this be DCHECK?",
+      "range": {
+        "startLine": 401,
+        "startChar": 2,
+        "endLine": 401,
+        "endChar": 13
+      },
+      "revId": "b1fe3a88114b30a384a20ed125d9298333d4a665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c67568c_82745e79",
+        "filename": "src/heap/heap-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-06-26T12:17:02Z",
+      "side": 1,
+      "message": "Can this be DCHECK?",
+      "range": {
+        "startLine": 404,
+        "startChar": 2,
+        "endLine": 404,
+        "endChar": 13
+      },
+      "revId": "b1fe3a88114b30a384a20ed125d9298333d4a665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
