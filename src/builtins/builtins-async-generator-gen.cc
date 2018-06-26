@@ -20,7 +20,11 @@ namespace {
 // closures.
 class AwaitContext {
  public:
-  enum Fields { kGeneratorSlot = Context::MIN_CONTEXT_SLOTS, kLength };
+  enum Fields {
+    kGeneratorSlot = Context::MIN_CONTEXT_SLOTS,
+    kOuterPromise,
+    kLength
+  };
 };
 
 class AsyncGeneratorBuiltinsAssembler : public AsyncBuiltinsAssembler {
@@ -253,13 +257,16 @@ void AsyncGeneratorBuiltinsAssembler::AsyncGeneratorAwait(bool is_catchable) {
   Node* const request = LoadFirstAsyncGeneratorRequestFromQueue(generator);
   CSA_ASSERT(this, IsNotUndefined(request));
 
+  Node* outer_promise =
+      LoadObjectField(request, AsyncGeneratorRequest::kPromiseOffset);
+
   ContextInitializer init_closure_context = [&](Node* context) {
     StoreContextElementNoWriteBarrier(context, AwaitContext::kGeneratorSlot,
                                       generator);
+    StoreContextElementNoWriteBarrier(context, AwaitContext::kOuterPromise,
+                                      outer_promise);
   };
 
-  Node* outer_promise =
-      LoadObjectField(request, AsyncGeneratorRequest::kPromiseOffset);
 
   const int resolve_index = Context::ASYNC_GENERATOR_AWAIT_RESOLVE_SHARED_FUN;
   const int reject_index = Context::ASYNC_GENERATOR_AWAIT_REJECT_SHARED_FUN;
@@ -560,6 +567,8 @@ TF_BUILTIN(AsyncGeneratorYield, AsyncGeneratorBuiltinsAssembler) {
   ContextInitializer init_closure_context = [&](Node* context) {
     StoreContextElementNoWriteBarrier(context, AwaitContext::kGeneratorSlot,
                                       generator);
+    StoreContextElementNoWriteBarrier(context, AwaitContext::kOuterPromise,
+                                      outer_promise);
   };
 
   const int on_resolve = Context::ASYNC_GENERATOR_YIELD_RESOLVE_SHARED_FUN;
@@ -628,14 +637,17 @@ TF_BUILTIN(AsyncGeneratorReturn, AsyncGeneratorBuiltinsAssembler) {
 
   BIND(&perform_await);
 
+  Node* const outer_promise = LoadPromiseFromAsyncGeneratorRequest(req);
+
   ContextInitializer init_closure_context = [&](Node* context) {
     StoreContextElementNoWriteBarrier(context, AwaitContext::kGeneratorSlot,
                                       generator);
+    StoreContextElementNoWriteBarrier(context, AwaitContext::kOuterPromise,
+                                      outer_promise);
   };
 
   SetGeneratorAwaiting(generator);
   Node* const context = Parameter(Descriptor::kContext);
-  Node* const outer_promise = LoadPromiseFromAsyncGeneratorRequest(req);
   Await(context, generator, value, outer_promise, AwaitContext::kLength,
         init_closure_context, var_on_resolve.value(), var_on_reject.value(),
         is_caught);

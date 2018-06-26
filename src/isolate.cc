@@ -3878,6 +3878,15 @@ void Isolate::RunPromiseHookForAsyncEventDelegate(PromiseHookType type,
     async_event_delegate_->AsyncEventOccurred(debug::kDebugWillHandle,
                                               promise->async_task_id(), false);
   } else if (type == PromiseHookType::kAfter) {
+    if (async_function_finished_id_ != 0) {
+      // This hook is called with throwaway promise. This promise should have
+      // no async_task_id.
+      DCHECK_EQ(promise->async_task_id(), 0);
+      async_event_delegate_->AsyncEventOccurred(
+          debug::kAsyncFunctionFinished, async_function_finished_id_, false);
+      async_function_finished_id_ = 0;
+      return;
+    }
     if (!promise->async_task_id()) return;
     async_event_delegate_->AsyncEventOccurred(debug::kDebugDidHandle,
                                               promise->async_task_id(), false);
@@ -3925,6 +3934,14 @@ void Isolate::RunPromiseHookForAsyncEventDelegate(PromiseHookType type,
 void Isolate::OnAsyncFunctionStateChanged(Handle<JSPromise> promise,
                                           debug::DebugAsyncActionType event) {
   if (!async_event_delegate_) return;
+  if (event == debug::kAsyncFunctionFinished) {
+    // This function is called with async function outer_promise as argument.
+    // We will process this event as soon as current microtask is finished.
+    if (!promise->async_task_id()) return;
+    DCHECK_EQ(async_function_finished_id_, 0);
+    async_function_finished_id_ = promise->async_task_id();
+    return;
+  }
   if (!promise->async_task_id()) {
     promise->set_async_task_id(++async_task_count_);
   }
