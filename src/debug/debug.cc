@@ -437,6 +437,7 @@ void Debug::Unload() {
   ClearAllBreakPoints();
   ClearStepping();
   RemoveAllCoverageInfos();
+  ClearAllDebuggerHints();
   RemoveDebugDelegate();
 
   // Return debugger is not loaded.
@@ -735,19 +736,6 @@ int Debug::FindBreakablePosition(Handle<DebugInfo> debug_info,
   }
 }
 
-void Debug::ApplyInstrumentation(Handle<SharedFunctionInfo> shared) {
-  DCHECK(shared->HasBytecodeArray());
-  Handle<DebugInfo> debug_info(GetOrCreateDebugInfo(shared));
-  DCHECK_NE(debug_info->DebugExecutionMode(), isolate_->debug_execution_mode());
-  if (isolate_->debug_execution_mode() == DebugInfo::kBreakpoints) {
-    ClearSideEffectChecks(debug_info);
-    ApplyBreakPoints(debug_info);
-  } else {
-    ClearBreakPoints(debug_info);
-    ApplySideEffectChecks(debug_info);
-  }
-}
-
 void Debug::ApplyBreakPoints(Handle<DebugInfo> debug_info) {
   DisallowHeapAllocation no_gc;
   if (debug_info->CanBreakAtEntry()) {
@@ -807,6 +795,17 @@ void Debug::ClearBreakPoint(Handle<BreakPoint> break_point) {
   }
 }
 
+int Debug::GetFunctionDebuggingId(Handle<JSFunction> function) {
+  Handle<SharedFunctionInfo> shared = handle(function->shared(), isolate_);
+  Handle<DebugInfo> debug_info = GetOrCreateDebugInfo(shared);
+  int id = debug_info->debugging_id();
+  if (id == DebugInfo::kNoDebuggingId) {
+    id = isolate_->heap()->NextDebuggingId();
+    debug_info->set_debugging_id(id);
+  }
+  return id;
+}
+
 bool Debug::SetBreakpointForFunction(Handle<JSFunction> function,
                                      Handle<String> condition, int* id) {
   *id = ++thread_local_.last_breakpoint_id_;
@@ -826,7 +825,7 @@ void Debug::RemoveBreakpoint(int id) {
 void Debug::ClearAllBreakPoints() {
   ClearAllDebugInfos([=](Handle<DebugInfo> info) {
     ClearBreakPoints(info);
-    return info->ClearBreakInfo(isolate_);
+    info->ClearBreakInfo(isolate_);
   });
 }
 
@@ -1253,14 +1252,16 @@ void Debug::PrepareFunctionForDebugExecution(
   if (debug_info->flags() & DebugInfo::kPreparedForDebugExecution) return;
 
   // Make a copy of the bytecode array if available.
-  Handle<Object> maybe_debug_bytecode_array =
+  Handle<Object> maybe_original_bytecode_array =
       isolate_->factory()->undefined_value();
   if (shared->HasBytecodeArray()) {
-    Handle<BytecodeArray> original(shared->GetBytecodeArray(), isolate_);
-    maybe_debug_bytecode_array =
-        isolate_->factory()->CopyBytecodeArray(original);
+    Handle<BytecodeArray> original_bytecode_array =
+        handle(shared->GetBytecodeArray(), isolate_);
+    shared->SetDebugBytecodeArray(
+        *isolate_->factory()->CopyBytecodeArray(original_bytecode_array));
+    maybe_original_bytecode_array = original_bytecode_array;
   }
-  debug_info->set_debug_bytecode_array(*maybe_debug_bytecode_array);
+  debug_info->set_original_bytecode_array(*maybe_original_bytecode_array);
 
   if (debug_info->CanBreakAtEntry()) {
     // Deopt everything in case the function is inlined anywhere.
@@ -1574,9 +1575,13 @@ void Debug::InstallCoverageInfo(Handle<SharedFunctionInfo> shared,
 }
 
 void Debug::RemoveAllCoverageInfos() {
-  ClearAllDebugInfos([=](Handle<DebugInfo> info) {
-    return info->ClearCoverageInfo(isolate_);
-  });
+  ClearAllDebugInfos(
+      [=](Handle<DebugInfo> info) { info->ClearCoverageInfo(isolate_); });
+}
+
+void Debug::ClearAllDebuggerHints() {
+  ClearAllDebugInfos(
+      [=](Handle<DebugInfo> info) { info->set_debugger_hints(0); });
 }
 
 void Debug::FindDebugInfo(Handle<DebugInfo> debug_info,
@@ -1599,7 +1604,8 @@ void Debug::ClearAllDebugInfos(DebugInfoClearFunction clear_function) {
   while (current != nullptr) {
     DebugInfoListNode* next = current->next();
     Handle<DebugInfo> debug_info = current->debug_info();
-    if (clear_function(debug_info)) {
+    clear_function(debug_info);
+    if (debug_info->IsEmpty()) {
       FreeDebugInfoListNode(prev, current);
       current = next;
     } else {
@@ -1610,8 +1616,8 @@ void Debug::ClearAllDebugInfos(DebugInfoClearFunction clear_function) {
 }
 
 void Debug::RemoveBreakInfoAndMaybeFree(Handle<DebugInfo> debug_info) {
-  bool should_unlink = debug_info->ClearBreakInfo(isolate_);
-  if (should_unlink) {
+  debug_info->ClearBreakInfo(isolate_);
+  if (debug_info->IsEmpty()) {
     DebugInfoListNode* prev;
     DebugInfoListNode* node;
     FindDebugInfo(debug_info, &prev, &node);
@@ -1630,10 +1636,11 @@ void Debug::FreeDebugInfoListNode(DebugInfoListNode* prev,
     prev->set_next(node->next());
   }
 
-  // Pack debugger hints back into the SFI::debug_info field.
+  // Pack function_identifier back into the
+  // SFI::function_identifier_or_debug_info field.
   Handle<DebugInfo> debug_info(node->debug_info());
-  debug_info->shared()->set_debug_info(
-      Smi::FromInt(debug_info->debugger_hints()));
+  debug_info->shared()->set_function_identifier_or_debug_info(
+      debug_info->function_identifier());
 
   delete node;
 }
@@ -1859,7 +1866,8 @@ debug::Location GetDebugLocation(Handle<Script> script, int source_position) {
 
 bool Debug::IsBlackboxed(Handle<SharedFunctionInfo> shared) {
   if (!debug_delegate_) return !shared->IsSubjectToDebugging();
-  if (!shared->computed_debug_is_blackboxed()) {
+  Handle<DebugInfo> debug_info = GetOrCreateDebugInfo(shared);
+  if (!debug_info->computed_debug_is_blackboxed()) {
     bool is_blackboxed =
         !shared->IsSubjectToDebugging() || !shared->script()->IsScript();
     if (!is_blackboxed) {
@@ -1875,10 +1883,10 @@ bool Debug::IsBlackboxed(Handle<SharedFunctionInfo> shared) {
       is_blackboxed = debug_delegate_->IsFunctionBlackboxed(
           ToApiHandle<debug::Script>(script), start, end);
     }
-    shared->set_debug_is_blackboxed(is_blackboxed);
-    shared->set_computed_debug_is_blackboxed(true);
+    debug_info->set_debug_is_blackboxed(is_blackboxed);
+    debug_info->set_computed_debug_is_blackboxed(true);
   }
-  return shared->debug_is_blackboxed();
+  return debug_info->debug_is_blackboxed();
 }
 
 bool Debug::AllFramesOnStackAreBlackboxed() {
@@ -2189,6 +2197,27 @@ ReturnValueScope::~ReturnValueScope() {
   debug_->set_return_value(*return_value_);
 }
 
+void Debug::UpdateDebugInfosForExecutionMode() {
+  // Walk all debug infos and update their execution mode if it is different
+  // from the isoalte execution mode.
+  DebugInfoListNode* current = debug_info_list_;
+  while (current != nullptr) {
+    Handle<DebugInfo> debug_info = current->debug_info();
+    if (debug_info->HasDebugBytecodeArray() &&
+        debug_info->DebugExecutionMode() != isolate_->debug_execution_mode()) {
+      DCHECK(debug_info->shared()->HasBytecodeArray());
+      if (isolate_->debug_execution_mode() == DebugInfo::kBreakpoints) {
+        ClearSideEffectChecks(debug_info);
+        ApplyBreakPoints(debug_info);
+      } else {
+        ClearBreakPoints(debug_info);
+        ApplySideEffectChecks(debug_info);
+      }
+    }
+    current = current->next();
+  }
+}
+
 void Debug::StartSideEffectCheckMode() {
   DCHECK(isolate_->debug_execution_mode() != DebugInfo::kSideEffects);
   isolate_->set_debug_execution_mode(DebugInfo::kSideEffects);
@@ -2202,6 +2231,9 @@ void Debug::StartSideEffectCheckMode() {
                            isolate_);
   regexp_match_info_ =
       Handle<RegExpMatchInfo>::cast(isolate_->factory()->CopyFixedArray(array));
+
+  // Update debug infos to have correct execution mode.
+  UpdateDebugInfosForExecutionMode();
 }
 
 void Debug::StopSideEffectCheckMode() {
@@ -2224,6 +2256,9 @@ void Debug::StopSideEffectCheckMode() {
   temporary_objects_.reset();
   isolate_->native_context()->set_regexp_last_match_info(*regexp_match_info_);
   regexp_match_info_ = Handle<RegExpMatchInfo>::null();
+
+  // Update debug infos to have correct execution mode.
+  UpdateDebugInfosForExecutionMode();
 }
 
 void Debug::ApplySideEffectChecks(Handle<DebugInfo> debug_info) {
@@ -2254,11 +2289,12 @@ bool Debug::PerformSideEffectCheck(Handle<JSFunction> function,
       !Compiler::Compile(function, Compiler::KEEP_EXCEPTION)) {
     return false;
   }
-  SharedFunctionInfo::SideEffectState side_effect_state =
-      SharedFunctionInfo::GetSideEffectState(
-          isolate_, handle(function->shared(), isolate_));
+  Handle<SharedFunctionInfo> shared(function->shared(), isolate_);
+  Handle<DebugInfo> debug_info = GetOrCreateDebugInfo(shared);
+  DebugInfo::SideEffectState side_effect_state =
+      debug_info->GetSideEffectState(isolate_);
   switch (side_effect_state) {
-    case SharedFunctionInfo::kHasSideEffects:
+    case DebugInfo::kHasSideEffects:
       if (FLAG_trace_side_effect_free_debug_evaluate) {
         PrintF("[debug-evaluate] Function %s failed side effect check.\n",
                function->shared()->DebugName()->ToCString().get());
@@ -2267,8 +2303,7 @@ bool Debug::PerformSideEffectCheck(Handle<JSFunction> function,
       // Throw an uncatchable termination exception.
       isolate_->TerminateExecution();
       return false;
-    case SharedFunctionInfo::kRequiresRuntimeChecks: {
-      Handle<SharedFunctionInfo> shared(function->shared(), isolate_);
+    case DebugInfo::kRequiresRuntimeChecks: {
       if (!shared->HasBytecodeArray()) {
         return PerformSideEffectCheckForObject(receiver);
       }
@@ -2279,13 +2314,13 @@ bool Debug::PerformSideEffectCheck(Handle<JSFunction> function,
           isolate_->builtins()->builtin(Builtins::kDeserializeLazy)) {
         Snapshot::EnsureBuiltinIsDeserialized(isolate_, shared);
       }
-      GetOrCreateDebugInfo(shared);
       PrepareFunctionForDebugExecution(shared);
+      ApplySideEffectChecks(debug_info);
       return true;
     }
-    case SharedFunctionInfo::kHasNoSideEffect:
+    case DebugInfo::kHasNoSideEffect:
       return true;
-    case SharedFunctionInfo::kNotComputed:
+    case DebugInfo::kNotComputed:
       UNREACHABLE();
       return false;
   }
