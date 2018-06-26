@@ -1007,6 +1007,18 @@ void HeapObject::VerifySmiField(int offset) {
 }
 #endif
 
+ReadOnlyRoots HeapObject::GetReadOnlyRoots() const {
+  return ReadOnlyRoots(
+      MemoryChunk::FromAddress(
+          reinterpret_cast<Address>(const_cast<HeapObject*>(this)))
+          ->heap());
+}
+
+#define ROOT_ACCESSOR(type, name, camel_name) \
+  type* ReadOnlyRoots::name() { return heap_->name(); }
+STRONG_ROOT_LIST(ROOT_ACCESSOR)
+#undef ROOT_ACCESSOR
+
 Heap* HeapObject::GetHeap() const {
   Heap* heap = MemoryChunk::FromAddress(
                    reinterpret_cast<Address>(const_cast<HeapObject*>(this)))
@@ -1713,7 +1725,7 @@ void JSObject::InitializeBody(Map* map, int start_offset,
 }
 
 void Struct::InitializeBody(int object_size) {
-  Object* value = GetHeap()->undefined_value();
+  Object* value = GetReadOnlyRoots().undefined_value();
   for (int offset = kHeaderSize; offset < object_size; offset += kPointerSize) {
     WRITE_FIELD(this, offset, value);
   }
