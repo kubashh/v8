@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "715de326_d849f4f8",
+        "filename": "src/compiler/simd-scalar-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-06-26T19:58:44Z",
+      "side": 1,
+      "message": "I\u0027m not that familiar with this code. It is starting to get hard to follow with the #if\u0027s. Would it be possible to just reverse the rep_node array at the end for big-endian? This could even be done in the ReplaceNode function called below - the indices would be reversed only in that function.",
+      "range": {
+        "startLine": 832,
+        "startChar": 0,
+        "endLine": 833,
+        "endChar": 0
+      },
+      "revId": "02377771cff6db8734afc46ae1927f9dc29f71e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
