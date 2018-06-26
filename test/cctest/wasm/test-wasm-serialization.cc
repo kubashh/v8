@@ -154,9 +154,6 @@ class WasmSerializationTest {
       Handle<WasmModuleObject> module_object =
           maybe_module_object.ToHandleChecked();
 
-      Handle<WasmCompiledModule> compiled_module(
-          module_object->compiled_module());
-      Handle<FixedArray> export_wrappers(module_object->export_wrappers());
       v8::Local<v8::Object> v8_module_obj =
           v8::Utils::ToLocal(Handle<JSObject>::cast(module_object));
       CHECK(v8_module_obj->IsWebAssemblyCompiledModule());
