@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9cb772e8_e03d73ac",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-26T11:13:23Z",
+      "side": 1,
+      "message": "nit: early return\n\n  if (value-\u003eIsJSArray()) return StructureWalk(value);",
+      "revId": "b82aecaf7c34a5fe4dde92c6df1add05ab306bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
