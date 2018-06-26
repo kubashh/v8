@@ -3517,8 +3517,9 @@ void LargeObjectSpace::Verify(Isolate* isolate) {
 void LargeObjectSpace::Print() {
   StdoutStream os;
   LargeObjectIterator it(this);
+  Isolate* isolate = heap()->isolate();
   for (HeapObject* obj = it.Next(); obj != nullptr; obj = it.Next()) {
-    obj->Print(os);
+    obj->Print(isolate, os);
   }
 }
 
