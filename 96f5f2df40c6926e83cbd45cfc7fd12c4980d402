@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c48f367_39f88ce7",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-26T15:13:09Z",
+      "side": 1,
+      "message": "add a TODO here to use different logic for embedded RO space.",
+      "range": {
+        "startLine": 1011,
+        "startChar": 2,
+        "endLine": 1011,
+        "endChar": 8
+      },
+      "revId": "96f5f2df40c6926e83cbd45cfc7fd12c4980d402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5153a206_e0e62cae",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-26T15:13:09Z",
+      "side": 1,
+      "message": "nit: use MemoryChunk::FromHeapObject",
+      "range": {
+        "startLine": 1012,
+        "startChar": 19,
+        "endLine": 1012,
+        "endChar": 30
+      },
+      "revId": "96f5f2df40c6926e83cbd45cfc7fd12c4980d402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b27dec18_0fe5f0a9",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1728,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-26T15:13:09Z",
+      "side": 1,
+      "message": "Awesome.",
+      "range": {
+        "startLine": 1728,
+        "startChar": 18,
+        "endLine": 1728,
+        "endChar": 54
+      },
+      "revId": "96f5f2df40c6926e83cbd45cfc7fd12c4980d402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
