@@ -1038,14 +1038,15 @@ Map* HeapObject::map() const {
 void HeapObject::set_map(Map* value) {
   if (value != nullptr) {
 #ifdef VERIFY_HEAP
-    value->GetHeap()->VerifyObjectLayoutChange(this, value);
+    Heap::FromWritableHeapObject(this)->VerifyObjectLayoutChange(this, value);
 #endif
   }
   set_map_word(MapWord::FromMap(value));
   if (value != nullptr) {
     // TODO(1600) We are passing nullptr as a slot because maps can never be on
     // evacuation candidate.
-    value->GetHeap()->incremental_marking()->RecordWrite(this, nullptr, value);
+    Heap::FromWritableHeapObject(this)->incremental_marking()->RecordWrite(
+        this, nullptr, value);
   }
 }
 
@@ -1057,14 +1058,15 @@ Map* HeapObject::synchronized_map() const {
 void HeapObject::synchronized_set_map(Map* value) {
   if (value != nullptr) {
 #ifdef VERIFY_HEAP
-    value->GetHeap()->VerifyObjectLayoutChange(this, value);
+    Heap::FromWritableHeapObject(this)->VerifyObjectLayoutChange(this, value);
 #endif
   }
   synchronized_set_map_word(MapWord::FromMap(value));
   if (value != nullptr) {
     // TODO(1600) We are passing nullptr as a slot because maps can never be on
     // evacuation candidate.
-    value->GetHeap()->incremental_marking()->RecordWrite(this, nullptr, value);
+    Heap::FromWritableHeapObject(this)->incremental_marking()->RecordWrite(
+        this, nullptr, value);
   }
 }
 
@@ -1073,7 +1075,7 @@ void HeapObject::synchronized_set_map(Map* value) {
 void HeapObject::set_map_no_write_barrier(Map* value) {
   if (value != nullptr) {
 #ifdef VERIFY_HEAP
-    value->GetHeap()->VerifyObjectLayoutChange(this, value);
+    Heap::FromWritableHeapObject(this)->VerifyObjectLayoutChange(this, value);
 #endif
   }
   set_map_word(MapWord::FromMap(value));
@@ -1085,7 +1087,8 @@ void HeapObject::set_map_after_allocation(Map* value, WriteBarrierMode mode) {
     DCHECK_NOT_NULL(value);
     // TODO(1600) We are passing nullptr as a slot because maps can never be on
     // evacuation candidate.
-    value->GetHeap()->incremental_marking()->RecordWrite(this, nullptr, value);
+    Heap::FromWritableHeapObject(this)->incremental_marking()->RecordWrite(
+        this, nullptr, value);
   }
 }
 
@@ -1472,8 +1475,8 @@ Object* WeakCell::value() const { return READ_FIELD(this, kValueOffset); }
 void WeakCell::clear() {
   // Either the garbage collector is clearing the cell or we are simply
   // initializing the root empty weak cell.
-  DCHECK(GetHeap()->gc_state() == Heap::MARK_COMPACT ||
-         this == GetHeap()->empty_weak_cell());
+  DCHECK(Heap::FromWritableHeapObject(this)->gc_state() == Heap::MARK_COMPACT ||
+         this == Heap::FromWritableHeapObject(this)->empty_weak_cell());
   WRITE_FIELD(this, kValueOffset, Smi::kZero);
 }
 
@@ -1483,7 +1486,7 @@ void WeakCell::initialize(HeapObject* val) {
   // We just have to execute the generational barrier here because we never
   // mark through a weak cell and collect evacuation candidates when we process
   // all weak cells.
-  Heap* heap = val->GetHeap();
+  Heap* heap = Heap::FromWritableHeapObject(this);
   WriteBarrierMode mode =
       heap->incremental_marking()->marking_state()->IsBlack(this)
           ? UPDATE_WRITE_BARRIER
@@ -1752,7 +1755,7 @@ void PropertyArray::set(int index, Object* value) {
   DCHECK_LT(index, this->length());
   int offset = kHeaderSize + index * kPointerSize;
   RELAXED_WRITE_FIELD(this, offset, value);
-  WRITE_BARRIER(GetHeap(), this, offset, value);
+  WRITE_BARRIER(Heap::FromWritableHeapObject(this), this, offset, value);
 }
 
 int RegExpMatchInfo::NumberOfCaptureRegisters() {
@@ -1800,7 +1803,7 @@ void RegExpMatchInfo::SetCapture(int i, int value) {
 
 WriteBarrierMode HeapObject::GetWriteBarrierMode(
     const DisallowHeapAllocation& promise) {
-  Heap* heap = GetHeap();
+  Heap* heap = Heap::FromWritableHeapObject(this);
   if (heap->incremental_marking()->IsMarking()) return UPDATE_WRITE_BARRIER;
   if (heap->InNewSpace(this)) return SKIP_WRITE_BARRIER;
   return UPDATE_WRITE_BARRIER;
@@ -1844,7 +1847,8 @@ void PropertyArray::set(int index, Object* value, WriteBarrierMode mode) {
   DCHECK_LT(index, this->length());
   int offset = kHeaderSize + index * kPointerSize;
   RELAXED_WRITE_FIELD(this, offset, value);
-  CONDITIONAL_WRITE_BARRIER(GetHeap(), this, offset, value, mode);
+  CONDITIONAL_WRITE_BARRIER(Heap::FromWritableHeapObject(this), this, offset,
+                            value, mode);
 }
 
 Object** PropertyArray::data_start() {
@@ -2259,8 +2263,10 @@ int FreeSpace::Size() { return size(); }
 
 
 FreeSpace* FreeSpace::next() {
-  DCHECK(map() == GetHeap()->root(Heap::kFreeSpaceMapRootIndex) ||
-         (!GetHeap()->deserialization_complete() && map() == nullptr));
+  DCHECK(map() == Heap::FromWritableHeapObject(this)->root(
+                      Heap::kFreeSpaceMapRootIndex) ||
+         (!Heap::FromWritableHeapObject(this)->deserialization_complete() &&
+          map() == nullptr));
   DCHECK_LE(kNextOffset + kPointerSize, relaxed_read_size());
   return reinterpret_cast<FreeSpace*>(
       Memory::Address_at(address() + kNextOffset));
@@ -2268,8 +2274,10 @@ FreeSpace* FreeSpace::next() {
 
 
 void FreeSpace::set_next(FreeSpace* next) {
-  DCHECK(map() == GetHeap()->root(Heap::kFreeSpaceMapRootIndex) ||
-         (!GetHeap()->deserialization_complete() && map() == nullptr));
+  DCHECK(map() == Heap::FromWritableHeapObject(this)->root(
+                      Heap::kFreeSpaceMapRootIndex) ||
+         (!Heap::FromWritableHeapObject(this)->deserialization_complete() &&
+          map() == nullptr));
   DCHECK_LE(kNextOffset + kPointerSize, relaxed_read_size());
   base::Relaxed_Store(
       reinterpret_cast<base::AtomicWord*>(address() + kNextOffset),
@@ -2278,7 +2286,8 @@ void FreeSpace::set_next(FreeSpace* next) {
 
 
 FreeSpace* FreeSpace::cast(HeapObject* o) {
-  SLOW_DCHECK(!o->GetHeap()->deserialization_complete() || o->IsFreeSpace());
+  SLOW_DCHECK(!Heap::FromWritableHeapObject(o)->deserialization_complete() ||
+              o->IsFreeSpace());
   return reinterpret_cast<FreeSpace*>(o);
 }
 
@@ -2698,7 +2707,8 @@ void SmallOrderedHashTable<Derived>::SetDataEntry(int entry, int relative_index,
   Address entry_offset =
       kHeaderSize + GetDataEntryOffset(entry, relative_index);
   RELAXED_WRITE_FIELD(this, entry_offset, value);
-  WRITE_BARRIER(GetHeap(), this, static_cast<int>(entry_offset), value);
+  WRITE_BARRIER(Heap::FromWritableHeapObject(this), this,
+                static_cast<int>(entry_offset), value);
 }
 
 ACCESSORS(JSGeneratorObject, function, JSFunction, kFunctionOffset)
@@ -3158,7 +3168,7 @@ bool AccessorPair::IsJSAccessor(Object* obj) {
 
 template <typename Derived, typename Shape>
 void Dictionary<Derived, Shape>::ClearEntry(int entry) {
-  Object* the_hole = this->GetHeap()->the_hole_value();
+  Object* the_hole = Heap::FromWritableHeapObject(this)->the_hole_value();
   PropertyDetails details = PropertyDetails::Empty();
   Derived::cast(this)->SetEntry(entry, the_hole, the_hole, details);
 }
