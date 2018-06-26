@@ -49,10 +49,14 @@ class JSObjectWalkVisitor {
  protected:
   V8_WARN_UNUSED_RESULT inline MaybeHandle<JSObject> VisitElementOrProperty(
       Handle<JSObject> object, Handle<JSObject> value) {
-    Handle<AllocationSite> current_site = site_context()->EnterNewScope();
-    MaybeHandle<JSObject> copy_of_value = StructureWalk(value);
-    site_context()->ExitScope(current_site, value);
-    return copy_of_value;
+    // Created nested allocation sites only for array sub literals
+    if (value->IsJSArray()) {
+      Handle<AllocationSite> current_site = site_context()->EnterNewScope();
+      MaybeHandle<JSObject> copy_of_value = StructureWalk(value);
+      site_context()->ExitScope(current_site, value);
+      return copy_of_value;
+    }
+    return StructureWalk(value);
   }
 
   inline ContextObject* site_context() { return site_context_; }
