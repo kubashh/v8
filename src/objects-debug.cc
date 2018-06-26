@@ -924,9 +924,8 @@ void SharedFunctionInfo::SharedFunctionInfoVerify(Isolate* isolate) {
   CHECK(IsSharedFunctionInfo());
 
   VerifyObjectField(kFunctionDataOffset);
-  VerifyObjectField(kDebugInfoOffset);
   VerifyObjectField(kOuterScopeInfoOrFeedbackMetadataOffset);
-  VerifyObjectField(kFunctionIdentifierOffset);
+  VerifyObjectField(kFunctionIdentifierOrDebugInfoOffset);
   VerifyObjectField(kNameOrScopeInfoOffset);
   VerifyObjectField(kScriptOffset);
 
@@ -942,8 +941,8 @@ void SharedFunctionInfo::SharedFunctionInfoVerify(Isolate* isolate) {
         HasBytecodeArray() || HasAsmWasmData() || HasBuiltinId() ||
         HasPreParsedScopeData());
 
-  CHECK(function_identifier()->IsUndefined(isolate) || HasBuiltinFunctionId() ||
-        HasInferredName());
+  CHECK(function_identifier_or_debug_info()->IsUndefined(isolate) ||
+        HasBuiltinFunctionId() || HasInferredName() || HasDebugInfo());
 
   if (!is_compiled()) {
     CHECK(!HasFeedbackMetadata());
@@ -1746,7 +1745,8 @@ void NormalizedMapCache::NormalizedMapCacheVerify(Isolate* isolate) {
 void DebugInfo::DebugInfoVerify(Isolate* isolate) {
   CHECK(IsDebugInfo());
   VerifyPointer(shared());
-  VerifyPointer(debug_bytecode_array());
+  VerifyPointer(function_identifier());
+  VerifyPointer(original_bytecode_array());
   VerifyPointer(break_points());
 }
 
