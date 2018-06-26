@@ -959,24 +959,6 @@ RUNTIME_FUNCTION(Runtime_DeserializeWasmModule) {
   return *module_object;
 }
 
-RUNTIME_FUNCTION(Runtime_ValidateWasmInstancesChain) {
-  HandleScope shs(isolate);
-  DCHECK_EQ(2, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(WasmModuleObject, module_obj, 0);
-  CONVERT_ARG_HANDLE_CHECKED(Smi, instance_count, 1);
-  WasmInstanceObject::ValidateInstancesChainForTesting(isolate, module_obj,
-                                                       instance_count->value());
-  return isolate->heap()->ToBoolean(true);
-}
-
-RUNTIME_FUNCTION(Runtime_ValidateWasmModuleState) {
-  HandleScope shs(isolate);
-  DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(WasmModuleObject, module_obj, 0);
-  WasmModuleObject::ValidateStateForTesting(isolate, module_obj);
-  return isolate->heap()->ToBoolean(true);
-}
-
 RUNTIME_FUNCTION(Runtime_HeapObjectVerify) {
   HandleScope shs(isolate);
   DCHECK_EQ(1, args.length());
