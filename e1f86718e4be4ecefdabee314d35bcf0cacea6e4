@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1aeed765_59faf2a3",
+        "filename": "src/compiler/instruction.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-26T08:37:40Z",
+      "side": 1,
+      "message": "nit: typo ;)",
+      "range": {
+        "startLine": 736,
+        "startChar": 10,
+        "endLine": 736,
+        "endChar": 22
+      },
+      "revId": "e1f86718e4be4ecefdabee314d35bcf0cacea6e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
