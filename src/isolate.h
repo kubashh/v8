@@ -770,6 +770,7 @@ class Isolate : private HiddenFactory {
   }
   void OnAsyncFunctionStateChanged(Handle<JSPromise> promise,
                                    debug::DebugAsyncActionType);
+  int async_task_count() const { return async_task_count_; }
 
   // Re-throw an exception.  This involves no error reporting since error
   // reporting was handled when the exception was thrown originally.
@@ -1685,6 +1686,7 @@ class Isolate : private HiddenFactory {
   debug::AsyncEventDelegate* async_event_delegate_ = nullptr;
   bool promise_hook_or_async_event_delegate_ = false;
   int async_task_count_ = 0;
+  int async_function_finished_id_ = 0;
 
   v8::Isolate::AbortOnUncaughtExceptionCallback
       abort_on_uncaught_exception_callback_;

@@ -652,6 +652,7 @@ void V8Debugger::AsyncEventOccurred(v8::debug::DebugAsyncActionType type,
       asyncTaskScheduledForStack("Promise.finally", task, false);
       if (!isBlackboxed) asyncTaskCandidateForStepping(task, true);
       break;
+    case v8::debug::kAsyncFunctionResumed:
     case v8::debug::kDebugWillHandle:
       asyncTaskStartedForStack(task);
       asyncTaskStartedForStepping(task);
@@ -663,6 +664,9 @@ void V8Debugger::AsyncEventOccurred(v8::debug::DebugAsyncActionType type,
     case v8::debug::kAsyncFunctionSuspended: {
       if (m_asyncTaskStacks.find(task) == m_asyncTaskStacks.end()) {
         asyncTaskScheduledForStack("async function", task, true);
+      } else {
+        asyncTaskFinishedForStack(task);
+        asyncTaskFinishedForStepping(task);
       }
       auto stackIt = m_asyncTaskStacks.find(task);
       if (stackIt != m_asyncTaskStacks.end() && !stackIt->second.expired()) {
@@ -672,6 +676,8 @@ void V8Debugger::AsyncEventOccurred(v8::debug::DebugAsyncActionType type,
       break;
     }
     case v8::debug::kAsyncFunctionFinished:
+      asyncTaskFinishedForStack(task);
+      asyncTaskFinishedForStepping(task);
       asyncTaskCanceledForStack(task);
       break;
   }
