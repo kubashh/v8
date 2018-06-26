@@ -1901,13 +1901,13 @@ bool DescriptorArray::IsSortedNoDuplicates(Isolate* isolate,
   for (int i = 0; i < number_of_descriptors(); i++) {
     Name* key = GetSortedKey(i);
     if (key == current_key) {
-      Print();
+      Print(isolate);
       return false;
     }
     current_key = key;
     uint32_t hash = GetSortedKey(i)->Hash();
     if (hash < current) {
-      Print();
+      Print(isolate);
       return false;
     }
     current = hash;
@@ -1942,7 +1942,7 @@ bool TransitionArray::IsSortedNoDuplicates(Isolate* isolate,
     int cmp = CompareKeys(prev_key, prev_hash, prev_kind, prev_attributes, key,
                           hash, kind, attributes);
     if (cmp >= 0) {
-      Print();
+      Print(isolate);
       return false;
     }
     prev_key = key;
