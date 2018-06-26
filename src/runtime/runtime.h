@@ -137,6 +137,7 @@ namespace internal {
   F(DebugPrepareStepInSuspendedGenerator, 0, 1) \
   F(DebugPushPromise, 1, 1)                     \
   F(DebugAsyncFunctionSuspended, 1, 1)          \
+  F(DebugAsyncFunctionResumed, 1, 1)            \
   F(DebugAsyncFunctionFinished, 2, 1)           \
   F(DebugToggleBlockCoverage, 1, 1)             \
   F(DebugTogglePreciseCoverage, 1, 1)           \

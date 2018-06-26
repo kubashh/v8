@@ -885,6 +885,14 @@ RUNTIME_FUNCTION(Runtime_DebugAsyncFunctionSuspended) {
   return isolate->heap()->undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_DebugAsyncFunctionResumed) {
+  DCHECK_EQ(1, args.length());
+  HandleScope scope(isolate);
+  CONVERT_ARG_HANDLE_CHECKED(JSPromise, promise, 0);
+  isolate->OnAsyncFunctionStateChanged(promise, debug::kAsyncFunctionResumed);
+  return isolate->heap()->undefined_value();
+}
+
 RUNTIME_FUNCTION(Runtime_DebugAsyncFunctionFinished) {
   DCHECK_EQ(2, args.length());
   HandleScope scope(isolate);

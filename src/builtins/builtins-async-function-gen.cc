@@ -37,7 +37,11 @@ namespace {
 // TODO(jgruber): Refactor to reuse code for upcoming async-generators.
 class AwaitContext {
  public:
-  enum Fields { kGeneratorSlot = Context::MIN_CONTEXT_SLOTS, kLength };
+  enum Fields {
+    kGeneratorSlot = Context::MIN_CONTEXT_SLOTS,
+    kOuterPromise,
+    kLength
+  };
 };
 
 }  // anonymous namespace
@@ -68,14 +72,26 @@ void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwaitResumeClosure(
                                  JSGeneratorObject::kResumeModeOffset,
                                  SmiConstant(resume_mode));
 
+  Label after_debug_hook(this), call_debug_hook(this, Label::kDeferred);
+  GotoIf(HasAsyncEventDelegate(), &call_debug_hook);
+  Goto(&after_debug_hook);
+  BIND(&after_debug_hook);
+
   // Resume the {receiver} using our trampoline.
   Callable callable = CodeFactory::ResumeGenerator(isolate());
   CallStub(callable, context, sent_value, generator);
+  Return(UndefinedConstant());
 
   // The resulting Promise is a throwaway, so it doesn't matter what it
   // resolves to. What is important is that we don't end up keeping the
   // whole chain of intermediate Promises alive by returning the return value
   // of ResumeGenerator, as that would create a memory leak.
+
+  BIND(&call_debug_hook);
+  Node* const outer_promise =
+      LoadContextElement(context, AwaitContext::kOuterPromise);
+  CallRuntime(Runtime::kDebugAsyncFunctionResumed, context, outer_promise);
+  Goto(&after_debug_hook);
 }
 
 TF_BUILTIN(AsyncFunctionAwaitRejectClosure, AsyncFunctionBuiltinsAssembler) {
@@ -85,7 +101,6 @@ TF_BUILTIN(AsyncFunctionAwaitRejectClosure, AsyncFunctionBuiltinsAssembler) {
 
   AsyncFunctionAwaitResumeClosure(context, sentError,
                                   JSGeneratorObject::kThrow);
-  Return(UndefinedConstant());
 }
 
 TF_BUILTIN(AsyncFunctionAwaitResolveClosure, AsyncFunctionBuiltinsAssembler) {
@@ -94,7 +109,6 @@ TF_BUILTIN(AsyncFunctionAwaitResolveClosure, AsyncFunctionBuiltinsAssembler) {
   Node* const context = Parameter(Descriptor::kContext);
 
   AsyncFunctionAwaitResumeClosure(context, sentValue, JSGeneratorObject::kNext);
-  Return(UndefinedConstant());
 }
 
 // ES#abstract-ops-async-function-await
@@ -115,6 +129,8 @@ void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwait(
   ContextInitializer init_closure_context = [&](Node* context) {
     StoreContextElementNoWriteBarrier(context, AwaitContext::kGeneratorSlot,
                                       generator);
+    StoreContextElementNoWriteBarrier(context, AwaitContext::kOuterPromise,
+                                      outer_promise);
   };
 
   // TODO(jgruber): AsyncBuiltinsAssembler::Await currently does not reuse
@@ -152,6 +168,8 @@ void AsyncFunctionBuiltinsAssembler::AsyncFunctionAwaitOptimized(
   ContextInitializer init_closure_context = [&](Node* context) {
     StoreContextElementNoWriteBarrier(context, AwaitContext::kGeneratorSlot,
                                       generator);
+    StoreContextElementNoWriteBarrier(context, AwaitContext::kOuterPromise,
+                                      outer_promise);
   };
 
   // TODO(jgruber): AsyncBuiltinsAssembler::Await currently does not reuse

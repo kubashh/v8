@@ -76,6 +76,7 @@ enum DebugAsyncActionType {
   kDebugWillHandle,
   kDebugDidHandle,
   kAsyncFunctionSuspended,
+  kAsyncFunctionResumed,
   kAsyncFunctionFinished
 };
 
