@@ -41,6 +41,7 @@
 #include "src/property-details.h"
 #include "src/property.h"
 #include "src/prototype.h"
+#include "src/roots-inl.h"
 #include "src/transitions-inl.h"
 #include "src/v8memory.h"
 
@@ -257,7 +258,7 @@ bool HeapObject::IsCallable() const { return map()->is_callable(); }
 bool HeapObject::IsConstructor() const { return map()->is_constructor(); }
 
 bool HeapObject::IsModuleInfo() const {
-  return map() == GetHeap()->module_info_map();
+  return map() == GetReadOnlyRoots().module_info_map();
 }
 
 bool HeapObject::IsTemplateInfo() const {
@@ -383,8 +384,8 @@ bool HeapObject::IsEnumCache() const { return IsTuple2(); }
 bool HeapObject::IsFrameArray() const { return IsFixedArrayExact(); }
 
 bool HeapObject::IsArrayList() const {
-  return map() == GetHeap()->array_list_map() ||
-         this == GetHeap()->empty_fixed_array();
+  return map() == GetReadOnlyRoots().array_list_map() ||
+         this == GetReadOnlyRoots().empty_fixed_array();
 }
 
 bool HeapObject::IsRegExpMatchInfo() const { return IsFixedArrayExact(); }
@@ -430,21 +431,21 @@ bool HeapObject::IsDependentCode() const {
 
 bool HeapObject::IsContext() const {
   Map* map = this->map();
-  Heap* heap = GetHeap();
+  ReadOnlyRoots roots = GetReadOnlyRoots();
   return (
-      map == heap->function_context_map() || map == heap->catch_context_map() ||
-      map == heap->with_context_map() || map == heap->native_context_map() ||
-      map == heap->block_context_map() || map == heap->module_context_map() ||
-      map == heap->eval_context_map() || map == heap->script_context_map() ||
-      map == heap->debug_evaluate_context_map());
+      map == roots.function_context_map() || map == roots.catch_context_map() ||
+      map == roots.with_context_map() || map == roots.native_context_map() ||
+      map == roots.block_context_map() || map == roots.module_context_map() ||
+      map == roots.eval_context_map() || map == roots.script_context_map() ||
+      map == roots.debug_evaluate_context_map());
 }
 
 bool HeapObject::IsNativeContext() const {
-  return map() == GetHeap()->native_context_map();
+  return map() == GetReadOnlyRoots().native_context_map();
 }
 
 bool HeapObject::IsScriptContextTable() const {
-  return map() == GetHeap()->script_context_table_map();
+  return map() == GetReadOnlyRoots().script_context_table_map();
 }
 
 template <>
@@ -494,23 +495,23 @@ bool HeapObject::IsDictionary() const {
 }
 
 bool HeapObject::IsGlobalDictionary() const {
-  return map() == GetHeap()->global_dictionary_map();
+  return map() == GetReadOnlyRoots().global_dictionary_map();
 }
 
 bool HeapObject::IsNameDictionary() const {
-  return map() == GetHeap()->name_dictionary_map();
+  return map() == GetReadOnlyRoots().name_dictionary_map();
 }
 
 bool HeapObject::IsNumberDictionary() const {
-  return map() == GetHeap()->number_dictionary_map();
+  return map() == GetReadOnlyRoots().number_dictionary_map();
 }
 
 bool HeapObject::IsSimpleNumberDictionary() const {
-  return map() == GetHeap()->simple_number_dictionary_map();
+  return map() == GetReadOnlyRoots().simple_number_dictionary_map();
 }
 
 bool HeapObject::IsStringTable() const {
-  return map() == GetHeap()->string_table_map();
+  return map() == GetReadOnlyRoots().string_table_map();
 }
 
 bool HeapObject::IsStringSet() const { return IsHashTable(); }
@@ -528,11 +529,11 @@ bool HeapObject::IsMapCache() const { return IsHashTable(); }
 bool HeapObject::IsObjectHashTable() const { return IsHashTable(); }
 
 bool HeapObject::IsOrderedHashSet() const {
-  return map() == GetHeap()->ordered_hash_set_map();
+  return map() == GetReadOnlyRoots().ordered_hash_set_map();
 }
 
 bool HeapObject::IsOrderedHashMap() const {
-  return map() == GetHeap()->ordered_hash_map_map();
+  return map() == GetReadOnlyRoots().ordered_hash_map_map();
 }
 
 bool Object::IsSmallOrderedHashTable() const {
@@ -1007,6 +1008,13 @@ void HeapObject::VerifySmiField(int offset) {
 }
 #endif
 
+ReadOnlyRoots HeapObject::GetReadOnlyRoots() const {
+  // TODO(v8:7464): When RO_SPACE is embedded, this will access a global
+  // variable instead. Although we will still need this logic for non-embedded
+  // builds.
+  return ReadOnlyRoots(MemoryChunk::FromHeapObject(this)->heap());
+}
+
 Heap* HeapObject::GetHeap() const {
   Heap* heap = MemoryChunk::FromAddress(
                    reinterpret_cast<Address>(const_cast<HeapObject*>(this)))
@@ -1167,8 +1175,9 @@ void AllocationSite::Initialize() {
   set_nested_site(Smi::kZero);
   set_pretenure_data(0);
   set_pretenure_create_count(0);
-  set_dependent_code(DependentCode::cast(GetHeap()->empty_fixed_array()),
-                     SKIP_WRITE_BARRIER);
+  set_dependent_code(
+      DependentCode::cast(GetReadOnlyRoots().empty_fixed_array()),
+      SKIP_WRITE_BARRIER);
 }
 
 bool AllocationSite::IsZombie() const {
@@ -1325,7 +1334,7 @@ void JSObject::EnsureCanContainElements(Handle<JSObject> object,
     DCHECK(mode != ALLOW_COPIED_DOUBLE_ELEMENTS);
     bool is_holey = IsHoleyElementsKind(current_kind);
     if (current_kind == HOLEY_ELEMENTS) return;
-    Object* the_hole = object->GetHeap()->the_hole_value();
+    Object* the_hole = object->GetReadOnlyRoots().the_hole_value();
     for (uint32_t i = 0; i < count; ++i) {
       Object* current = *objects++;
       if (current == the_hole) {
@@ -1359,10 +1368,10 @@ void JSObject::EnsureCanContainElements(Handle<JSObject> object,
                                         Handle<FixedArrayBase> elements,
                                         uint32_t length,
                                         EnsureElementsMode mode) {
-  Heap* heap = object->GetHeap();
-  if (elements->map() != heap->fixed_double_array_map()) {
-    DCHECK(elements->map() == heap->fixed_array_map() ||
-           elements->map() == heap->fixed_cow_array_map());
+  ReadOnlyRoots roots = object->GetReadOnlyRoots();
+  if (elements->map() != roots.fixed_double_array_map()) {
+    DCHECK(elements->map() == roots.fixed_array_map() ||
+           elements->map() == roots.fixed_cow_array_map());
     if (mode == ALLOW_COPIED_DOUBLE_ELEMENTS) {
       mode = DONT_ALLOW_DOUBLE_ELEMENTS;
     }
@@ -1394,11 +1403,11 @@ void JSObject::SetMapAndElements(Handle<JSObject> object,
                                  Handle<FixedArrayBase> value) {
   JSObject::MigrateToMap(object, new_map);
   DCHECK((object->map()->has_fast_smi_or_object_elements() ||
-          (*value == object->GetHeap()->empty_fixed_array()) ||
+          (*value == object->GetReadOnlyRoots().empty_fixed_array()) ||
           object->map()->has_fast_string_wrapper_elements()) ==
-         (value->map() == object->GetHeap()->fixed_array_map() ||
-          value->map() == object->GetHeap()->fixed_cow_array_map()));
-  DCHECK((*value == object->GetHeap()->empty_fixed_array()) ||
+         (value->map() == object->GetReadOnlyRoots().fixed_array_map() ||
+          value->map() == object->GetReadOnlyRoots().fixed_cow_array_map()));
+  DCHECK((*value == object->GetReadOnlyRoots().empty_fixed_array()) ||
          (object->map()->has_fast_double_elements() ==
           value->IsFixedDoubleArray()));
   object->set_elements(*value);
@@ -1478,7 +1487,7 @@ void WeakCell::clear() {
   // Either the garbage collector is clearing the cell or we are simply
   // initializing the root empty weak cell.
   DCHECK(Heap::FromWritableHeapObject(this)->gc_state() == Heap::MARK_COMPACT ||
-         this == Heap::FromWritableHeapObject(this)->empty_weak_cell());
+         this == GetReadOnlyRoots().empty_weak_cell());
   WRITE_FIELD(this, kValueOffset, Smi::kZero);
 }
 
@@ -1716,7 +1725,7 @@ void JSObject::InitializeBody(Map* map, int start_offset,
 }
 
 void Struct::InitializeBody(int object_size) {
-  Object* value = GetHeap()->undefined_value();
+  Object* value = GetReadOnlyRoots().undefined_value();
   for (int offset = kHeaderSize; offset < object_size; offset += kPointerSize) {
     WRITE_FIELD(this, offset, value);
   }
@@ -2771,11 +2780,11 @@ ElementsKind JSObject::GetElementsKind() {
   if (ElementsAreSafeToExamine()) {
     Map* map = fixed_array->map();
     if (IsSmiOrObjectElementsKind(kind)) {
-      DCHECK(map == GetHeap()->fixed_array_map() ||
-             map == GetHeap()->fixed_cow_array_map());
+      DCHECK(map == GetReadOnlyRoots().fixed_array_map() ||
+             map == GetReadOnlyRoots().fixed_cow_array_map());
     } else if (IsDoubleElementsKind(kind)) {
       DCHECK(fixed_array->IsFixedDoubleArray() ||
-             fixed_array == GetHeap()->empty_fixed_array());
+             fixed_array == GetReadOnlyRoots().empty_fixed_array());
     } else if (kind == DICTIONARY_ELEMENTS) {
       DCHECK(fixed_array->IsFixedArray());
       DCHECK(fixed_array->IsDictionary());
@@ -2989,13 +2998,14 @@ MaybeHandle<Object> Object::GetPropertyOrElement(Handle<Object> receiver,
 
 
 void JSReceiver::initialize_properties() {
-  DCHECK(!GetHeap()->InNewSpace(GetHeap()->empty_fixed_array()));
+  DCHECK(!GetHeap()->InNewSpace(GetReadOnlyRoots().empty_fixed_array()));
   DCHECK(!GetHeap()->InNewSpace(GetHeap()->empty_property_dictionary()));
   if (map()->is_dictionary_map()) {
     WRITE_FIELD(this, kPropertiesOrHashOffset,
                 GetHeap()->empty_property_dictionary());
   } else {
-    WRITE_FIELD(this, kPropertiesOrHashOffset, GetHeap()->empty_fixed_array());
+    WRITE_FIELD(this, kPropertiesOrHashOffset,
+                GetReadOnlyRoots().empty_fixed_array());
   }
 }
 
@@ -3024,8 +3034,8 @@ PropertyArray* JSReceiver::property_array() const {
   DCHECK(HasFastProperties());
 
   Object* prop = raw_properties_or_hash();
-  if (prop->IsSmi() || prop == GetHeap()->empty_fixed_array()) {
-    return GetHeap()->empty_property_array();
+  if (prop->IsSmi() || prop == GetReadOnlyRoots().empty_fixed_array()) {
+    return GetReadOnlyRoots().empty_property_array();
   }
 
   return PropertyArray::cast(prop);
@@ -3157,7 +3167,7 @@ bool AccessorPair::IsJSAccessor(Object* obj) {
 
 template <typename Derived, typename Shape>
 void Dictionary<Derived, Shape>::ClearEntry(int entry) {
-  Object* the_hole = Heap::FromWritableHeapObject(this)->the_hole_value();
+  Object* the_hole = this->GetReadOnlyRoots().the_hole_value();
   PropertyDetails details = PropertyDetails::Empty();
   Derived::cast(this)->SetEntry(entry, the_hole, the_hole, details);
 }

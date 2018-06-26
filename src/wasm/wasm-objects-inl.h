@@ -69,7 +69,8 @@ wasm::NativeModule* WasmModuleObject::native_module() {
   return managed_native_module()->raw();
 }
 void WasmModuleObject::reset_breakpoint_infos() {
-  WRITE_FIELD(this, kBreakPointInfosOffset, GetHeap()->undefined_value());
+  WRITE_FIELD(this, kBreakPointInfosOffset,
+              GetReadOnlyRoots().undefined_value());
 }
 bool WasmModuleObject::is_asm_js() {
   bool asm_js = module()->origin == wasm::kAsmJsOrigin;
@@ -221,16 +222,16 @@ OPTIONAL_ACCESSORS(WasmDebugInfo, c_wasm_entry_map, Managed<wasm::SignatureMap>,
 
 #undef OPTIONAL_ACCESSORS
 
-#define WCM_OBJECT_OR_WEAK(TYPE, NAME, OFFSET, TYPE_CHECK)   \
-  bool WasmCompiledModule::has_##NAME() const {              \
-    Object* value = READ_FIELD(this, OFFSET);                \
-    return TYPE_CHECK;                                       \
-  }                                                          \
-                                                             \
-  void WasmCompiledModule::reset_##NAME() {                  \
-    WRITE_FIELD(this, OFFSET, GetHeap()->undefined_value()); \
-  }                                                          \
-                                                             \
+#define WCM_OBJECT_OR_WEAK(TYPE, NAME, OFFSET, TYPE_CHECK)           \
+  bool WasmCompiledModule::has_##NAME() const {                      \
+    Object* value = READ_FIELD(this, OFFSET);                        \
+    return TYPE_CHECK;                                               \
+  }                                                                  \
+                                                                     \
+  void WasmCompiledModule::reset_##NAME() {                          \
+    WRITE_FIELD(this, OFFSET, GetReadOnlyRoots().undefined_value()); \
+  }                                                                  \
+                                                                     \
   ACCESSORS_CHECKED2(WasmCompiledModule, NAME, TYPE, OFFSET, TYPE_CHECK, true)
 
 #define WCM_OBJECT(TYPE, NAME, OFFSET) \
