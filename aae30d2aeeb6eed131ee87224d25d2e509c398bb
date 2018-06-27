@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a434613d_6031cf29",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-27T12:32:08Z",
+      "side": 1,
+      "message": "nit (very minor): I would remove the second \"Wasm\" in this name.",
+      "revId": "aae30d2aeeb6eed131ee87224d25d2e509c398bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00912f90_0f2fb9d5",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-27T12:32:08Z",
+      "side": 1,
+      "message": "Why not returning the actual count as a Smi, and asserting in the test? That would give way better error messages.",
+      "revId": "aae30d2aeeb6eed131ee87224d25d2e509c398bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "427620a5_c678d7f8",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-27T12:32:08Z",
+      "side": 1,
+      "message": "Why not just inlining the {FindAllInstances} logic, and avoiding the temporary std::vector?",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 57
+      },
+      "revId": "aae30d2aeeb6eed131ee87224d25d2e509c398bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
