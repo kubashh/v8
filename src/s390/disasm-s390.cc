@@ -577,6 +577,12 @@ bool Decoder::DecodeFourByte(Instruction* instr) {
 
   Opcode opcode = instr->S390OpcodeValue();
   switch (opcode) {
+#define DECODE_RS_A_INSTRUCTIONS(name, opcode_name, opcode_value)  \
+  case opcode_name:                                                \
+    Format(instr, #name "\t'r1,'r2,'d1('r3)");                     \
+    break;
+      S390_RS_A_OPCODE_LIST(DECODE_RS_A_INSTRUCTIONS)
+#undef DECODE_RS_A_INSTRUCTIONS
     case AHI:
       Format(instr, "ahi\t'r1,'i1");
       break;
@@ -630,30 +636,6 @@ bool Decoder::DecodeFourByte(Instruction* instr) {
       break;
     case TMLL:
       Format(instr, "tmll\t'r1,'i1");
-      break;
-    case STM:
-      Format(instr, "stm\t'r1,'r2,'d1('r3)");
-      break;
-    case LM:
-      Format(instr, "lm\t'r1,'r2,'d1('r3)");
-      break;
-    case CS:
-      Format(instr, "cs\t'r1,'r2,'d1('r3)");
-      break;
-    case SLL:
-      Format(instr, "sll\t'r1,'d1('r3)");
-      break;
-    case SRL:
-      Format(instr, "srl\t'r1,'d1('r3)");
-      break;
-    case SLA:
-      Format(instr, "sla\t'r1,'d1('r3)");
-      break;
-    case SRA:
-      Format(instr, "sra\t'r1,'d1('r3)");
-      break;
-    case SLDL:
-      Format(instr, "sldl\t'r1,'d1('r3)");
       break;
     case AGR:
       Format(instr, "agr\t'r5,'r6");
@@ -1035,12 +1017,6 @@ bool Decoder::DecodeFourByte(Instruction* instr) {
       break;
     case STH:
       Format(instr, "sth\t'r1,'d1('r2d,'r3)");
-      break;
-    case SRDA:
-      Format(instr, "srda\t'r1,'d1('r3)");
-      break;
-    case SRDL:
-      Format(instr, "srdl\t'r1,'d1('r3)");
       break;
     case MADBR:
       Format(instr, "madbr\t'f3,'f5,'f6");
