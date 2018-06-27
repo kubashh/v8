@@ -230,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "5176467b_1a0b469a",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:56:10Z",
+      "side": 1,
+      "message": "Right - we could only pack debugger hints if no inferred name exists.\n\nSee also https://crbug.com/v8/6993 for merging builtin_function_id and builtin_id.",
+      "parentUuid": "9ad6199f_ff19015a",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08fab421_03717628",
         "filename": "src/objects/shared-function-info.h",
         "patchSetId": 2
