@@ -212,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "9ad6199f_ff19015a",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-27T14:13:02Z",
+      "side": 1,
+      "message": "Note that function_identifier would still have to exist for the String pointer to the inferred name, which we can\u0027t remove, so we wouldn\u0027t be able to reuse the field for debugger hints.\n\nAlso, builtin_function_id is semantically different to builtin_id, I believe we\u0027d have to get rid of all JS builtins before we could merge them.",
+      "parentUuid": "4017c146_3266253e",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08fab421_03717628",
         "filename": "src/objects/shared-function-info.h",
         "patchSetId": 2
