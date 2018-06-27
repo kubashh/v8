@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d07b4a1b_f9908af9",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-06-27T17:59:46Z",
+      "side": 1,
+      "message": "How do I save this value?",
+      "range": {
+        "startLine": 1189,
+        "startChar": 5,
+        "endLine": 1189,
+        "endChar": 21
+      },
+      "revId": "2d18a3074ec14bed89f0a7592980de400228add7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
