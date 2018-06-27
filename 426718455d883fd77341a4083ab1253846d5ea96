@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c37b58c_533455a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-27T09:57:26Z",
+      "side": 1,
+      "message": "nit: \"avoids\"",
+      "range": {
+        "startLine": 13,
+        "startChar": 12,
+        "endLine": 13,
+        "endChar": 17
+      },
+      "revId": "426718455d883fd77341a4083ab1253846d5ea96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55127987_1ad457db",
+        "filename": "src/ostreams.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-27T09:57:26Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be a \"!\u003d\" comparison in the general case as opposed to the \"\u003c\" comparison?",
+      "range": {
+        "startLine": 160,
+        "startChar": 30,
+        "endLine": 160,
+        "endChar": 31
+      },
+      "revId": "426718455d883fd77341a4083ab1253846d5ea96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4129b84e_1561cc94",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-27T09:57:26Z",
+      "side": 1,
+      "message": "nit: Won\u0027t this print two sets of brackets now?",
+      "range": {
+        "startLine": 611,
+        "startChar": 57,
+        "endLine": 611,
+        "endChar": 58
+      },
+      "revId": "426718455d883fd77341a4083ab1253846d5ea96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dca265df_6e3f39a9",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-27T09:57:26Z",
+      "side": 1,
+      "message": "nit: Likewise.",
+      "range": {
+        "startLine": 613,
+        "startChar": 75,
+        "endLine": 613,
+        "endChar": 76
+      },
+      "revId": "426718455d883fd77341a4083ab1253846d5ea96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
