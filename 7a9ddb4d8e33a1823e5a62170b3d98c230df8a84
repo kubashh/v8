@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c722359_2df82674",
+        "filename": "src/builtins/builtins-async-function-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T07:02:05Z",
+      "side": 1,
+      "message": "This increases the async (generator) function context for everyone for something that looks like a debug feature. Is that okay?",
+      "revId": "7a9ddb4d8e33a1823e5a62170b3d98c230df8a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da5bb309_31308454",
+        "filename": "src/builtins/builtins-async-function-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T07:02:05Z",
+      "side": 1,
+      "message": "We could preserve the old fall-through structure of this function by doing something like the following:\n\n {\n   Label next;\n   GotoIfNot(HasAsyncEventDelegate(), \u0026next);\n   // [...]\n   BIND(\u0026next);\n }\n // Resume and fall through.\n\nMay be a bit simpler, but no strong opinions. Mainly fyi :)",
+      "revId": "7a9ddb4d8e33a1823e5a62170b3d98c230df8a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516e540b_9af23bb8",
+        "filename": "src/builtins/builtins-async-function-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T07:02:05Z",
+      "side": 1,
+      "message": "If the Return does move into this function, please move it below the corresponding comment.",
+      "revId": "7a9ddb4d8e33a1823e5a62170b3d98c230df8a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a9ac345_0af092ce",
+        "filename": "src/builtins/builtins-async-generator-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T07:02:05Z",
+      "side": 1,
+      "message": "Hmm why these changes? Can an async generator ever go through AsyncFunctionBuiltinsAssembler::AsyncFunctionAwait{Reject,Resume}Closure?",
+      "revId": "7a9ddb4d8e33a1823e5a62170b3d98c230df8a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9915b83_b053fe58",
+        "filename": "src/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3883,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T07:02:05Z",
+      "side": 1,
+      "message": "Q: why not? What is an async_task_id?",
+      "revId": "7a9ddb4d8e33a1823e5a62170b3d98c230df8a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79035346_cf692104",
+        "filename": "src/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3941,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T07:02:05Z",
+      "side": 1,
+      "message": "Just checking: 0 is never a valid promise async_task_id?",
+      "revId": "7a9ddb4d8e33a1823e5a62170b3d98c230df8a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "755e5457_15fbfdca",
+        "filename": "src/isolate.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1689,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T07:02:05Z",
+      "side": 1,
+      "message": "Please add a static constexpr kNoAsyncFunctionFinishedId (or a better name).",
+      "revId": "7a9ddb4d8e33a1823e5a62170b3d98c230df8a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

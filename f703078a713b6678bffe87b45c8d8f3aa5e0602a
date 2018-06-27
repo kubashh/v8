@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5370709_63d54795",
+        "filename": "src/runtime/runtime-promise.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T07:02:05Z",
+      "side": 0,
+      "message": "This looks like the only place async_task_id was explained - could you add a comment to js-promise.h?",
+      "revId": "f703078a713b6678bffe87b45c8d8f3aa5e0602a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
