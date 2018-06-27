@@ -170,10 +170,18 @@ class IntlUtil {
   // pa_Guru_IN (language=Panjabi, script=Gurmukhi, country-India) would include
   // pa_IN.
   static std::set<std::string> GetAvailableLocales(const IcuService& service);
+
   // If locale has a script tag then return true and the locale without the
   // script else return false and an empty string
   static bool RemoveLocaleScriptTag(const std::string& icu_locale,
                                     std::string* locale_less_script);
+
+ private:
+  // A regex to parse the language tag.
+  //static std::string language_tag_re;
+
+  // Initializes the language tage regular expressions.
+  static void BuildLanguageTagREs();
 };
 
 }  // namespace internal
