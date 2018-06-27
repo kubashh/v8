@@ -63,7 +63,7 @@ module array {
   }
 
   macro VisitAllElements<FixedArrayType : type>(
-      context: Context, a: JSArray, len: Smi, callbackfn: Callable,
+      context: Context, a: FastJSArray, len: Smi, callbackfn: Callable,
       thisArg: Object): void labels
   Bailout(Smi) {
     let k: Smi = 0;
@@ -103,12 +103,11 @@ module array {
     let k: Smi = 0;
     try {
       let smi_len: Smi = cast<Smi>(len) otherwise Slow;
-      let a: JSArray = cast<JSArray>(o) otherwise Slow;
+      let a: FastJSArray = TaggedToFastJSArray(context, o) otherwise Slow;
       let map: Map = a.map;
 
-      if (!IsPrototypeInitialArrayPrototype(context, map)) goto Slow;
       let elementsKind: ElementsKind = map.elements_kind;
-      if (!IsFastElementsKind(elementsKind)) goto Slow;
+      assert(IsFastElementsKind(elementsKind));
 
       if (IsElementsKindGreaterThan(elementsKind, HOLEY_ELEMENTS)) {
         VisitAllElements<FixedDoubleArray>(
@@ -137,8 +136,7 @@ module array {
       let o: Object = ToObject(context, receiver);
 
       // 2. Let len be ? ToLength(? Get(O, "length")).
-      let len: Number =
-          ToLength_Inline(context, GetProperty(context, o, 'length'));
+      let len: Number = GetLengthProperty(context, o);
 
       // 3. If IsCallable(callbackfn) is false, throw a TypeError exception.
       if (arguments.length == 0) {
