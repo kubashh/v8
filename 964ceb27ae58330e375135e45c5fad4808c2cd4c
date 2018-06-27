@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "801ca2fe_d64c18bf",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-06-27T13:02:39Z",
+      "side": 1,
+      "message": "nit: instrumented",
+      "range": {
+        "startLine": 82,
+        "startChar": 18,
+        "endLine": 82,
+        "endChar": 31
+      },
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
