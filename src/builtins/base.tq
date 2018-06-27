@@ -36,6 +36,7 @@ type Boolean extends Oddball generates 'TNode<Oddball>';
 type JSProxy extends JSReceiver generates 'TNode<JSProxy>';
 type JSObject extends JSReceiver generates 'TNode<JSObject>';
 type JSArray extends JSObject generates 'TNode<JSArray>';
+type FastJSArray extends JSArray generates 'TNode<JSArray>';
 type JSFunction extends JSObject generates 'TNode<JSFunction>';
 type JSBoundFunction extends JSObject generates 'TNode<JSBoundFunction>';
 type Callable = JSFunction|JSBoundFunction|JSProxy;
@@ -293,6 +294,7 @@ extern macro TaggedToJSDataView(Object): JSDataView labels CastError;
 extern macro TaggedToHeapObject(Object): HeapObject labels CastError;
 extern macro TaggedToSmi(Object): Smi labels CastError;
 extern macro TaggedToJSArray(Object): JSArray labels CastError;
+extern macro TaggedToFastJSArray(Context, Object): FastJSArray labels CastError;
 extern macro TaggedToCallable(Object): Callable labels CastError;
 extern macro ConvertFixedArrayBaseToFixedArray(FixedArrayBase):
     FixedArray labels CastError;
@@ -318,6 +320,10 @@ cast<Callable>(o: Object): Callable labels CastError {
 }
 cast<JSArray>(o: Object): JSArray labels CastError {
   return TaggedToJSArray(o) otherwise CastError;
+}
+macro cast<A : type>(context: Context, o: Object): A labels CastError;
+cast<FastJSArray>(c: Context, o: Object): FastJSArray labels CastError {
+  return TaggedToFastJSArray(c, o) otherwise CastError;
 }
 macro cast<A : type>(o: FixedArrayBase): A labels CastError;
 cast<FixedArray>(o: FixedArrayBase): FixedArray labels CastError {
@@ -486,7 +492,7 @@ extern macro UnsafeCastObjectToCallable(Object): Callable;
 extern macro UnsafeCastObjectToSmi(Object): Smi;
 extern macro UnsafeCastObjectToNumber(Object): Number;
 extern macro UnsafeCastObjectToHeapObject(Object): HeapObject;
-extern macro UnsafeCastObjectToJSArray(Object): JSArray;
+extern macro UnsafeCastObjectToJSArray(Object): FastJSArray;
 extern macro UnsafeCastObjectToFixedTypedArrayBase(Object): FixedTypedArrayBase;
 extern macro UnsafeCastObjectToNumberDictionary(Object): NumberDictionary;
 extern macro UnsafeCastObjectToJSReceiver(Object): JSReceiver;
@@ -518,7 +524,7 @@ unsafe_cast<Number>(o: Object): Number {
 unsafe_cast<HeapObject>(o: Object): HeapObject {
   return UnsafeCastObjectToHeapObject(o);
 }
-unsafe_cast<JSArray>(o: Object): JSArray {
+unsafe_cast<FastJSArray>(o: Object): FastJSArray {
   return UnsafeCastObjectToJSArray(o);
 }
 unsafe_cast<FixedTypedArrayBase>(o: Object): FixedTypedArrayBase {
@@ -557,15 +563,16 @@ extern operator '.elements' macro LoadElements(JSObject): FixedArrayBase;
 extern operator '.elements=' macro StoreElements(JSObject, FixedArrayBase);
 
 extern operator '.length' macro LoadTypedArrayLength(JSTypedArray): Smi;
-extern operator '.length' macro LoadJSArrayLength(JSArray): Number;
-extern operator '.length_fast' macro LoadFastJSArrayLength(JSArray): Smi;
+extern operator '.length' macro LoadJSArrayLength(FastJSArray): Smi;
 extern operator '.length=' macro StoreJSArrayLength(JSArray, Smi);
 
 extern operator '.length' macro LoadFixedArrayBaseLength(FixedArrayBase): Smi;
 extern operator '[]' macro LoadFixedArrayElement(FixedArray, intptr): Object;
 extern operator '[]' macro LoadFixedArrayElement(FixedArray, Smi): Object;
+
 extern operator
 '[]' macro LoadFixedArrayElementInt(FixedArray, constexpr int31): Object;
+
 extern operator
 '[]=' macro StoreFixedArrayElement(FixedArray, intptr, Object): void;
 extern operator
@@ -666,6 +673,9 @@ macro HasPropertyObject(
 
 extern macro IsCallable(HeapObject): bool;
 extern macro IsJSArray(HeapObject): bool;
+macro IsFastJSArray(o: Object, c: Context): bool {
+  return BranchIfFastJSArray(o, c) ? true : false;
+}
 extern macro TaggedIsCallable(Object): bool;
 extern macro IsDetachedBuffer(JSArrayBuffer): bool;
 extern macro IsHeapNumber(HeapObject): bool;
