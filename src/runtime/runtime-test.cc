@@ -959,24 +959,6 @@ RUNTIME_FUNCTION(Runtime_DeserializeWasmModule) {
   return *module_object;
 }
 
-RUNTIME_FUNCTION(Runtime_ValidateWasmInstancesChain) {
-  HandleScope shs(isolate);
-  DCHECK_EQ(2, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(WasmModuleObject, module_obj, 0);
-  CONVERT_ARG_HANDLE_CHECKED(Smi, instance_count, 1);
-  WasmInstanceObject::ValidateInstancesChainForTesting(isolate, module_obj,
-                                                       instance_count->value());
-  return isolate->heap()->ToBoolean(true);
-}
-
-RUNTIME_FUNCTION(Runtime_ValidateWasmModuleState) {
-  HandleScope shs(isolate);
-  DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(WasmModuleObject, module_obj, 0);
-  WasmModuleObject::ValidateStateForTesting(isolate, module_obj);
-  return isolate->heap()->ToBoolean(true);
-}
-
 RUNTIME_FUNCTION(Runtime_HeapObjectVerify) {
   HandleScope shs(isolate);
   DCHECK_EQ(1, args.length());
@@ -991,6 +973,23 @@ RUNTIME_FUNCTION(Runtime_HeapObjectVerify) {
     CHECK(object->IsSmi());
   }
 #endif
+  return isolate->heap()->ToBoolean(true);
+}
+
+RUNTIME_FUNCTION(Runtime_WasmValidateWasmInstanceList) {
+  SealHandleScope shs(isolate);
+  DCHECK_EQ(2, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(WasmModuleObject, module_obj, 0);
+  CONVERT_SMI_ARG_CHECKED(expected_instance_count, 1);
+  int actual_instance_count = 0;
+  WeakArrayList* weak_instance_list = module_obj->weak_instance_list();
+  weak_instance_list->Print();
+  for (int i = 0; i < weak_instance_list->length(); ++i) {
+    if (weak_instance_list->Get(i)->IsWeakHeapObject()) {
+      actual_instance_count++;
+    }
+  }
+  CHECK_EQ(expected_instance_count, actual_instance_count);
   return isolate->heap()->ToBoolean(true);
 }
 
