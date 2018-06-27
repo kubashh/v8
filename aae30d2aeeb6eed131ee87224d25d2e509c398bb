@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "65780c0b_39872cca",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-27T12:52:28Z",
+      "side": 1,
+      "message": "Done. Went with \"%WasmGetNumberOfInstances\" to fit with the comment below.",
+      "parentUuid": "a434613d_6031cf29",
+      "revId": "aae30d2aeeb6eed131ee87224d25d2e509c398bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00912f90_0f2fb9d5",
         "filename": "src/runtime/runtime-test.cc",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "aae30d2aeeb6eed131ee87224d25d2e509c398bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79946a24_1ae53255",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-27T12:52:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00912f90_0f2fb9d5",
+      "revId": "aae30d2aeeb6eed131ee87224d25d2e509c398bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "aae30d2aeeb6eed131ee87224d25d2e509c398bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48408b94_ee00fbdc",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-27T12:52:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "427620a5_c678d7f8",
+      "range": {
+        "startLine": 262,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 57
+      },
+      "revId": "aae30d2aeeb6eed131ee87224d25d2e509c398bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
