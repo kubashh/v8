@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "abc3afbd_b4e39c65",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-06-27T10:02:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c37b58c_533455a3",
+      "range": {
+        "startLine": 13,
+        "startChar": 12,
+        "endLine": 13,
+        "endChar": 17
+      },
+      "revId": "426718455d883fd77341a4083ab1253846d5ea96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55127987_1ad457db",
         "filename": "src/ostreams.h",
         "patchSetId": 3
