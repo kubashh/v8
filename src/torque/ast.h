@@ -305,6 +305,7 @@ struct ElementAccessExpression : LocationExpression {
       : LocationExpression(kKind, p), array(a), index(i) {}
   Expression* array;
   Expression* index;
+  std::vector<std::string> labels;
 };
 
 struct FieldAccessExpression : LocationExpression {

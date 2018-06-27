@@ -70,6 +70,7 @@ class ImplementationVisitor : public FileVisitor {
                                         LocationReference reference) {
     Arguments arguments;
     arguments.parameters = {reference.base, reference.index};
+    arguments.labels = LabelsFromIdentifiers(expr->labels);
     return GenerateCall("[]", arguments);
   }
 

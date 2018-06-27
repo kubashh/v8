@@ -144,13 +144,13 @@ module array {
   macro CanUseSameAccessor<ElementsAccessor : type>(
       context: Context, receiver: Object, elements: Object,
       initialReceiverMap: Object, initialReceiverLength: Number): bool {
-    assert(IsJSArray(unsafe_cast<HeapObject>(receiver)));
+    assert(IsFastJSArray(receiver, context));
 
-    let a: JSArray = unsafe_cast<JSArray>(receiver);
+    let a: FastJSArray = unsafe_cast<FastJSArray>(receiver);
     if (a.map != initialReceiverMap) return false;
 
     let originalLength: Smi = unsafe_cast<Smi>(initialReceiverLength);
-    if (a.length_fast != originalLength) return false;
+    if (a.length != originalLength) return false;
 
     if (a.elements != elements) return false;
 
@@ -537,12 +537,12 @@ module array {
     sort_state[kRandomStateIdx()] = Undefined;
 
     try {
-      let a: JSArray = cast<JSArray>(obj) otherwise slow;
+      let a: FastJSArray = cast<FastJSArray>(context, obj) otherwise slow;
       let elementsKind: ElementsKind = map.elements_kind;
       if (!IsFastElementsKind(elementsKind)) goto slow;
 
       // 3. Let len be ? ToLength(? Get(obj, "length")).
-      let len: Smi = a.length_fast;
+      let len: Smi = a.length;
       if (len < 2) return receiver;
 
       // TODO(szuend): Investigate performance tradeoff of skipping this step
@@ -569,8 +569,7 @@ module array {
     }
     label slow {
       // 3. Let len be ? ToLength(? Get(obj, "length")).
-      let len: Number =
-          ToLength_Inline(context, GetProperty(context, obj, 'length'));
+      let len: Number = GetLengthProperty(context, obj);
 
       if (len < 2) return receiver;
       let nofNonUndefined: Smi = PrepareElementsForSort(context, obj, len);
