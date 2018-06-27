@@ -2,6 +2,108 @@
   "comments": [
     {
       "key": {
+        "uuid": "60950eea_ad15dc83",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Nit: maybe_heap_object_or_smi / maybe_debug_info_or_string_or_smi ;)",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08eb91b2_3ff42298",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Nit: ilosate :)",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "585fafb2_75e71691",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2043,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "We could also print the function identifier.",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fc67b50_728a7ea4",
+        "filename": "src/objects/debug-objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Should the function be renamed? I\u0027m confused that HasDebugBytecodeArray checks original_bytecode_array",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7c10e43_62ec453b",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Why this change? Previously, we\u0027d pack debugger_hints back into the SFI when DebugInfo was freed. Oh I see, the field has been removed from the SFI and there\u0027s no other place to store debugger hints.\n\nBut if we end up removing SFI::builtin_function_id, we could pack debugger hints back in the SFI, right? Could you leave a TODO?",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d28f98c0_171f75a4",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Could you add a short comment, why are we setting the DebugBytecodeArray to OriginalBytecodeArray?",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "801ca2fe_d64c18bf",
         "filename": "src/objects/debug-objects.h",
         "patchSetId": 2
@@ -19,6 +121,142 @@
         "endLine": 82,
         "endChar": 31
       },
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef200ddb_7ab5944d",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Why not DECL_INT_ACCESSORS?",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fad97bd1_3677559a",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2fcbcd5_bbbf8050",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "IsDebugInfo?",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c292fe41_1c7a81ee",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Nit: {} braces, and can we assert the returned object is either a Smi or String? Not sure how often this is accessed, but if performance-sensitive it could read:\n\n obj \u003d function_identifier_or_debug_info();\n return obj-\u003eIsDebugInfo() ? /*...*/ : obj;",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4017c146_3266253e",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "By the way - this (BuiltinFunctionId) should be merged with builtin_id() above at some point.\n\nEdit after looking at DebugInfo changes: If we remove it, we could pack debugger_hints into function_identifier.",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "08fab421_03717628",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Nit: Either above DebugInfo functions or below CoverageInfo (DebugInfo/BreakInfo/CoverageInfo are all related).",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "287f7b36_3f2003a2",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Is this right? HasDebugBytecodeArray checks original_bytecode_array(), and DebugBytecodeArray() returns shared()-\u003eGetDebugBytecodeArray. Somehow I find these name / bytecode swaps very confusing.",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cc4f7f1_0f8e85cd",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 1,
+      "message": "Nit: \u0027.\u0027",
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

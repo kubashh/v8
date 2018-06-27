@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d386a6be_7172218a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-27T14:05:41Z",
+      "side": 0,
+      "message": "So instead of lazy-updating DebugInfos, this just does a heap iteration when toggling side-effect mode? Nice.",
+      "revId": "e7f5c5ccc0a7e6b187fcc5b926546d38fe38684f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
