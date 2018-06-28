@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15c17a63_a12a27d8",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-28T11:01:58Z",
+      "side": 1,
+      "message": "nit: rbx \u003d\u003e x2, rcx \u003d\u003e x4",
+      "revId": "0a5ffa18add8a91643a0706ff31f6200d2bd11f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c705be70_457c9476",
+        "filename": "src/builtins/mips/builtins-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1623,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-28T11:01:58Z",
+      "side": 1,
+      "message": "nit: rbx \u003d\u003e a2, rcx \u003d\u003e t0",
+      "revId": "0a5ffa18add8a91643a0706ff31f6200d2bd11f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56740ee6_48109e9d",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-06-28T11:01:58Z",
+      "side": 1,
+      "message": "nit: rbc \u003d\u003e a2, rcx \u003d\u003e a4",
+      "revId": "0a5ffa18add8a91643a0706ff31f6200d2bd11f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
