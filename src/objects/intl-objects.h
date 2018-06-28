@@ -174,6 +174,15 @@ class IntlUtil {
   // script else return false and an empty string
   static bool RemoveLocaleScriptTag(const std::string& icu_locale,
                                     std::string* locale_less_script);
+
+  // Gets the language singleton tag validation regular expression.
+  static std::string GetLanguageSingletonRE();
+
+  // Gets the language tag validation regular expression.
+  static std::string GetLanguageTagRE();
+
+  // Gets the language variant tag validation regular expression.
+  static std::string GetLanguageVariantRE();
 };
 
 }  // namespace internal
