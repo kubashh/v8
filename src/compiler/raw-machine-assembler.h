@@ -734,6 +734,11 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
     return AddNode(machine()->Float64SilenceNaN(), a);
   }
 
+  // SIMD vector operations.
+  Node* S8x16Shuffle(const uint8_t shuffle[kSimd128Size], Node* a, Node* b) {
+    return AddNode(machine()->S8x16Shuffle(shuffle), a, b);
+  }
+
   // Stack operations.
   Node* LoadStackPointer() { return AddNode(machine()->LoadStackPointer()); }
   Node* LoadFramePointer() { return AddNode(machine()->LoadFramePointer()); }
