@@ -46,6 +46,30 @@
       "revId": "2d18a3074ec14bed89f0a7592980de400228add7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fd4c982_e6429c78",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-06-28T18:55:37Z",
+      "side": 1,
+      "message": "I\u0027m new to V8 so a pointer to a working example would be very helpful",
+      "parentUuid": "68b06f95_f025b381",
+      "range": {
+        "startLine": 1189,
+        "startChar": 5,
+        "endLine": 1189,
+        "endChar": 21
+      },
+      "revId": "2d18a3074ec14bed89f0a7592980de400228add7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
