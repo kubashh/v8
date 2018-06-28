@@ -246,6 +246,14 @@
 }],  # 'byteorder == big'
 
 ##############################################################################
+['byteorder == big', {
+  # Until wasm simd lowering is done correctly on big endian, this tests
+  # should skipped.
+  'test-run-wasm-simd/RunWasm_I16x8ConvertI32x4*': [SKIP],
+  'test-run-wasm-simd/RunWasm_I8x16ConvertI16x8*': [SKIP],
+}],  # 'byteorder == big'
+
+##############################################################################
 ['system == windows', {
   # BUG(v8:4573).
   'test-api/MultipleIsolatesOnIndividualThreads': [PASS, NO_VARIANTS],
