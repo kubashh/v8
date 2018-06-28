@@ -502,65 +502,25 @@ bool Decoder::DecodeTwoByte(Instruction* instr) {
 
   Opcode opcode = instr->S390OpcodeValue();
   switch (opcode) {
-    case AR:
-      Format(instr, "ar\t'r1,'r2");
-      break;
-    case SR:
-      Format(instr, "sr\t'r1,'r2");
-      break;
-    case MR:
-      Format(instr, "mr\t'r1,'r2");
-      break;
-    case DR:
-      Format(instr, "dr\t'r1,'r2");
-      break;
-    case OR:
-      Format(instr, "or\t'r1,'r2");
-      break;
-    case NR:
-      Format(instr, "nr\t'r1,'r2");
-      break;
-    case XR:
-      Format(instr, "xr\t'r1,'r2");
-      break;
-    case LR:
-      Format(instr, "lr\t'r1,'r2");
-      break;
-    case CR:
-      Format(instr, "cr\t'r1,'r2");
-      break;
-    case CLR:
-      Format(instr, "clr\t'r1,'r2");
-      break;
-    case BCR:
-      Format(instr, "bcr\t'm1,'r2");
-      break;
-    case LTR:
-      Format(instr, "ltr\t'r1,'r2");
-      break;
-    case ALR:
-      Format(instr, "alr\t'r1,'r2");
-      break;
-    case SLR:
-      Format(instr, "slr\t'r1,'r2");
-      break;
-    case LNR:
-      Format(instr, "lnr\t'r1,'r2");
-      break;
-    case LCR:
-      Format(instr, "lcr\t'r1,'r2");
-      break;
-    case BASR:
-      Format(instr, "basr\t'r1,'r2");
-      break;
-    case LDR:
-      Format(instr, "ldr\t'f1,'f2");
-      break;
+#define DECODE_RR_INSTRUCTIONS(name, opcode_name, opcode_value) \
+  case opcode_name:                                             \
+    if (opcode_name == LDR)                                     \
+      Format(instr, "ldr\t'f1,'f2");                            \
+    else if (opcode_name == BCR)                                \
+      Format(instr, "bcr\t'm1,'r2");                            \
+    else if (opcode_name == OR)                                 \
+      Format(instr, "or\t'r1,'r2");                             \
+    else if (opcode_name == CR)                                 \
+      Format(instr, "cr\t'r1,'r2");                             \
+    else if (opcode_name == MR)                                 \
+      Format(instr, "mr\t'r1,'r2");                             \
+    else                                                        \
+      Format(instr, #name "\t'r1,'r2");                         \
+    break;
+  S390_RR_OPCODE_LIST(DECODE_RR_INSTRUCTIONS)
+#undef DECODE_RR_INSTRUCTIONS
     case BKPT:
       Format(instr, "bkpt");
-      break;
-    case LPR:
-      Format(instr, "lpr\t'r1, 'r2");
       break;
     default:
       return false;
@@ -577,6 +537,12 @@ bool Decoder::DecodeFourByte(Instruction* instr) {
 
   Opcode opcode = instr->S390OpcodeValue();
   switch (opcode) {
+#define DECODE_RS_A_INSTRUCTIONS(name, opcode_name, opcode_value)  \
+  case opcode_name:                                                \
+    Format(instr, #name "\t'r1,'r2,'d1('r3)");                     \
+    break;
+  S390_RS_A_OPCODE_LIST(DECODE_RS_A_INSTRUCTIONS)
+#undef DECODE_RS_A_INSTRUCTIONS
     case AHI:
       Format(instr, "ahi\t'r1,'i1");
       break;
@@ -630,30 +596,6 @@ bool Decoder::DecodeFourByte(Instruction* instr) {
       break;
     case TMLL:
       Format(instr, "tmll\t'r1,'i1");
-      break;
-    case STM:
-      Format(instr, "stm\t'r1,'r2,'d1('r3)");
-      break;
-    case LM:
-      Format(instr, "lm\t'r1,'r2,'d1('r3)");
-      break;
-    case CS:
-      Format(instr, "cs\t'r1,'r2,'d1('r3)");
-      break;
-    case SLL:
-      Format(instr, "sll\t'r1,'d1('r3)");
-      break;
-    case SRL:
-      Format(instr, "srl\t'r1,'d1('r3)");
-      break;
-    case SLA:
-      Format(instr, "sla\t'r1,'d1('r3)");
-      break;
-    case SRA:
-      Format(instr, "sra\t'r1,'d1('r3)");
-      break;
-    case SLDL:
-      Format(instr, "sldl\t'r1,'d1('r3)");
       break;
     case AGR:
       Format(instr, "agr\t'r5,'r6");
@@ -1035,12 +977,6 @@ bool Decoder::DecodeFourByte(Instruction* instr) {
       break;
     case STH:
       Format(instr, "sth\t'r1,'d1('r2d,'r3)");
-      break;
-    case SRDA:
-      Format(instr, "srda\t'r1,'d1('r3)");
-      break;
-    case SRDL:
-      Format(instr, "srdl\t'r1,'d1('r3)");
       break;
     case MADBR:
       Format(instr, "madbr\t'f3,'f5,'f6");

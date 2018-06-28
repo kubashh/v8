@@ -1575,7 +1575,6 @@ typedef uint64_t SixByteInstr;
   V(lcdr, LCDR, 0x23)   /* type = RR    LOAD COMPLEMENT (long HFP)  */         \
   V(hdr, HDR, 0x24)     /* type = RR    HALVE (long HFP)  */                   \
   V(ldxr, LDXR, 0x25) /* type = RR    LOAD ROUNDED (extended to long HFP)  */  \
-  V(lrdr, LRDR, 0x25) /* type = RR    LOAD ROUNDED (extended to long HFP)  */  \
   V(mxr, MXR, 0x26)   /* type = RR    MULTIPLY (extended HFP)  */              \
   V(mxdr, MXDR, 0x27) /* type = RR    MULTIPLY (long to extended HFP)  */      \
   V(ldr, LDR, 0x28)   /* type = RR    LOAD (long)  */                          \
@@ -1591,7 +1590,6 @@ typedef uint64_t SixByteInstr;
   V(lcer, LCER, 0x33) /* type = RR    LOAD COMPLEMENT (short HFP)  */          \
   V(her_z, HER_Z, 0x34) /* type = RR    HALVE (short HFP)  */                  \
   V(ledr, LEDR, 0x35)   /* type = RR    LOAD ROUNDED (long to short HFP)  */   \
-  V(lrer, LRER, 0x35)   /* type = RR    LOAD ROUNDED (long to short HFP)  */   \
   V(axr, AXR, 0x36)     /* type = RR    ADD NORMALIZED (extended HFP)  */      \
   V(sxr, SXR, 0x37)     /* type = RR    SUBTRACT NORMALIZED (extended HFP)  */ \
   V(ler, LER, 0x38)     /* type = RR    LOAD (short)  */                       \
@@ -1599,7 +1597,6 @@ typedef uint64_t SixByteInstr;
   V(aer, AER, 0x3A)     /* type = RR    ADD NORMALIZED (short HFP)  */         \
   V(ser, SER, 0x3B)     /* type = RR    SUBTRACT NORMALIZED (short HFP)  */    \
   V(mder, MDER, 0x3C)   /* type = RR    MULTIPLY (short to long HFP)  */       \
-  V(mer, MER, 0x3C)     /* type = RR    MULTIPLY (short to long HFP)  */       \
   V(der, DER, 0x3D)     /* type = RR    DIVIDE (short HFP)  */                 \
   V(aur, AUR, 0x3E)     /* type = RR    ADD UNNORMALIZED (short HFP)  */       \
   V(sur, SUR, 0x3F)     /* type = RR    SUBTRACT UNNORMALIZED (short HFP)  */
