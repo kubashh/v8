@@ -70,6 +70,29 @@
       "revId": "2d18a3074ec14bed89f0a7592980de400228add7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d258850_cb4f9933",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-06-28T22:36:31Z",
+      "side": 1,
+      "message": "What\u0027s the point of having a class with only static methods and no data member?  \nThey\u0027re only used in intl-objs.cc so far. Why don\u0027t you just put them in cc file directly under anonymous namespace?",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 16
+      },
+      "revId": "2d18a3074ec14bed89f0a7592980de400228add7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
