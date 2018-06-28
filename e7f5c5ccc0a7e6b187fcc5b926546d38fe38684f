@@ -16,6 +16,24 @@
       "revId": "e7f5c5ccc0a7e6b187fcc5b926546d38fe38684f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef49ecee_ede512c2",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1011,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "d386a6be_7172218a",
+      "revId": "e7f5c5ccc0a7e6b187fcc5b926546d38fe38684f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

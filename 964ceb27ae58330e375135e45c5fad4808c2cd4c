@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "79f22d7c_614c7d64",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60950eea_ad15dc83",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08eb91b2_3ff42298",
         "filename": "src/debug/debug.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b47ba0e6_11a8ee14",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2202,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08eb91b2_3ff42298",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f8ffbe2b_5ed074de",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2043,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "585fafb2_75e71691",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fc67b50_728a7ea4",
         "filename": "src/objects/debug-objects-inl.h",
         "patchSetId": 2
@@ -67,6 +121,24 @@
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c3aec41_bfde1488",
+        "filename": "src/objects/debug-objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Renamed to HasInstrummentedBytecodeArray - this specifies whether the associated function has a instrumented bytecode array (and if so the DebugInfo stores the original) - added a comment to the header to clarify.",
+      "parentUuid": "1fc67b50_728a7ea4",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "cf6b8440_8a9c173a",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "As discussed in the comment in shared-function-info.h, we can\u0027t pack debugger_hints in the SFI and still save a slot.",
+      "parentUuid": "b7c10e43_62ec453b",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d28f98c0_171f75a4",
         "filename": "src/objects/debug-objects.cc",
         "patchSetId": 2
@@ -101,6 +191,24 @@
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f02f780_6a835e05",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d28f98c0_171f75a4",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -127,6 +235,30 @@
     },
     {
       "key": {
+        "uuid": "9124ac36_b76c669f",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "801ca2fe_d64c18bf",
+      "range": {
+        "startLine": 82,
+        "startChar": 18,
+        "endLine": 82,
+        "endChar": 31
+      },
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef200ddb_7ab5944d",
         "filename": "src/objects/debug-objects.h",
         "patchSetId": 2
@@ -141,6 +273,24 @@
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95085bea_6d19af16",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef200ddb_7ab5944d",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +311,24 @@
     },
     {
       "key": {
+        "uuid": "2cd8f2b7_da57df61",
+        "filename": "src/objects/debug-objects.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fad97bd1_3677559a",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2fcbcd5_bbbf8050",
         "filename": "src/objects/shared-function-info-inl.h",
         "patchSetId": 2
@@ -178,6 +346,24 @@
     },
     {
       "key": {
+        "uuid": "2888735c_a531f68a",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2fcbcd5_bbbf8050",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c292fe41_1c7a81ee",
         "filename": "src/objects/shared-function-info-inl.h",
         "patchSetId": 2
@@ -192,6 +378,24 @@
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "063b3a4b_52a512d2",
+        "filename": "src/objects/shared-function-info-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c292fe41_1c7a81ee",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -248,6 +452,24 @@
     },
     {
       "key": {
+        "uuid": "38bf7a24_4163fd3d",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Right, given that any function could have an inferred name, we can\u0027t pack debugger hints in here and still save a slot. I\u0027d rather just keep debugger hints in DebugInfo so we only pay the memory cost for debugging if the debugger is enabled (which is the main reason for this change).",
+      "parentUuid": "5176467b_1a0b469a",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08fab421_03717628",
         "filename": "src/objects/shared-function-info.h",
         "patchSetId": 2
@@ -265,6 +487,24 @@
     },
     {
       "key": {
+        "uuid": "a59077dc_cc7d6d6e",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "Done - I wanted the DebugInfo functions clustered with function_identifier... since they are now related.",
+      "parentUuid": "08fab421_03717628",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "287f7b36_3f2003a2",
         "filename": "src/snapshot/code-serializer.cc",
         "patchSetId": 2
@@ -276,6 +516,24 @@
       "writtenOn": "2018-06-27T14:05:41Z",
       "side": 1,
       "message": "Is this right? HasDebugBytecodeArray checks original_bytecode_array(), and DebugBytecodeArray() returns shared()-\u003eGetDebugBytecodeArray. Somehow I find these name / bytecode swaps very confusing.",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bb5ac90_e548638a",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-06-28T07:52:33Z",
+      "side": 1,
+      "message": "As above, renamed function to HasInstrumentedBytecodeArray.",
+      "parentUuid": "287f7b36_3f2003a2",
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
