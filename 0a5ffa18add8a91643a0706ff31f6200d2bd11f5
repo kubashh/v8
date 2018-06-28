@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c1bd8bad_4a872ce6",
+        "filename": "src/builtins/arm64/builtins-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-06-28T17:38:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15c17a63_a12a27d8",
+      "revId": "0a5ffa18add8a91643a0706ff31f6200d2bd11f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c705be70_457c9476",
         "filename": "src/builtins/mips/builtins-mips.cc",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "438f8565_fe94a088",
+        "filename": "src/builtins/mips/builtins-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1623,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-06-28T17:38:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c705be70_457c9476",
+      "revId": "0a5ffa18add8a91643a0706ff31f6200d2bd11f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56740ee6_48109e9d",
         "filename": "src/builtins/mips64/builtins-mips64.cc",
         "patchSetId": 1
@@ -50,6 +86,24 @@
       "revId": "0a5ffa18add8a91643a0706ff31f6200d2bd11f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aac9b617_026312b0",
+        "filename": "src/builtins/mips64/builtins-mips64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-06-28T17:38:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56740ee6_48109e9d",
+      "revId": "0a5ffa18add8a91643a0706ff31f6200d2bd11f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
