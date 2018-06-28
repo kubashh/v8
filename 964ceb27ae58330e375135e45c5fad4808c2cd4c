@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "de0ebe46_e88ca5d2",
+        "filename": "src/objects/debug-objects-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-28T09:46:13Z",
+      "side": 1,
+      "message": "Ack. So HasInstrumentedBytecodeArray refers to the associated function, not the DebugInfo.",
+      "parentUuid": "9c3aec41_bfde1488",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7c10e43_62ec453b",
         "filename": "src/objects/debug-objects.cc",
         "patchSetId": 2
@@ -177,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "c10c99f3_b2dcac1b",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-28T09:46:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cf6b8440_8a9c173a",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d28f98c0_171f75a4",
         "filename": "src/objects/debug-objects.cc",
         "patchSetId": 2
@@ -206,6 +242,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "d28f98c0_171f75a4",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0e9d5999_1a0a3305",
+        "filename": "src/objects/debug-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-28T09:46:13Z",
+      "side": 1,
+      "message": "Just for my understanding: this is now necessary because behavior has switched. If breakpoints exist, the SFI now contains the instrumented bytecode and DebugInfo the original bytecode. Previously this was vice-versa.\n\nSo clearing breakpoints now means we need to reset the bytecode array on the SFI.",
+      "parentUuid": "0f02f780_6a835e05",
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -470,6 +524,24 @@
     },
     {
       "key": {
+        "uuid": "14b6d8bc_d6540bd1",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-28T09:46:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "38bf7a24_4163fd3d",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08fab421_03717628",
         "filename": "src/objects/shared-function-info.h",
         "patchSetId": 2
@@ -499,6 +571,24 @@
       "side": 1,
       "message": "Done - I wanted the DebugInfo functions clustered with function_identifier... since they are now related.",
       "parentUuid": "08fab421_03717628",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d64ad680_1ee1a548",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-28T09:46:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a59077dc_cc7d6d6e",
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -537,6 +627,24 @@
       "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4c5a07a_b9c53c68",
+        "filename": "src/snapshot/code-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-06-28T09:46:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2bb5ac90_e548638a",
+      "revId": "964ceb27ae58330e375135e45c5fad4808c2cd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
