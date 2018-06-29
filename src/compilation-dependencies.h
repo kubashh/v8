@@ -17,52 +17,52 @@ namespace internal {
 // stable maps, constant globals, etc.
 class V8_EXPORT_PRIVATE CompilationDependencies {
  public:
-  CompilationDependencies(Isolate* isolate, Zone* zone)
-      : isolate_(isolate),
-        zone_(zone),
-        object_wrapper_(Handle<Foreign>::null()),
-        aborted_(false) {
-    std::fill_n(groups_, DependentCode::kGroupCount, nullptr);
-  }
+  CompilationDependencies(Isolate* isolate, Zone* zone);
 
-  void Insert(DependentCode::DependencyGroup group, Handle<HeapObject> handle);
-
-  void AssumeInitialMapCantChange(Handle<Map> map) {
-    Insert(DependentCode::kInitialMapChangedGroup, map);
-  }
-  void AssumeFieldOwner(Handle<Map> map) {
-    Insert(DependentCode::kFieldOwnerGroup, map);
-  }
-  void AssumeMapStable(Handle<Map> map);
-  void AssumePrototypeMapsStable(
-      Handle<Map> map,
-      MaybeHandle<JSReceiver> prototype = MaybeHandle<JSReceiver>());
-  void AssumeMapNotDeprecated(Handle<Map> map);
-  void AssumePropertyCell(Handle<PropertyCell> cell) {
-    Insert(DependentCode::kPropertyCellChangedGroup, cell);
-  }
-  void AssumeTenuringDecision(Handle<AllocationSite> site) {
-    Insert(DependentCode::kAllocationSiteTenuringChangedGroup, site);
-  }
-  void AssumeTransitionStable(Handle<AllocationSite> site);
-
-  // Adds stability dependencies on all prototypes of every class in
-  // {receiver_type} up to (and including) the {holder}.
-  void AssumePrototypesStable(Handle<Context> native_context,
-                              std::vector<Handle<Map>> const& receiver_maps,
-                              Handle<JSObject> holder);
-
-  void Commit(Handle<Code> code);
+  V8_WARN_UNUSED_RESULT bool Commit(Handle<Code> code);
   void Rollback();
-  void Abort() { aborted_ = true; }
-  bool HasAborted() const { return aborted_; }
+  void Abort();
+  bool HasAborted() const;
 
-  bool IsEmpty() const {
-    for (int i = 0; i < DependentCode::kGroupCount; i++) {
-      if (groups_[i]) return false;
-    }
-    return true;
-  }
+  // Return the initial map of {function} and record the assumption that it
+  // stays the intial map.
+  Handle<Map> DependOnInitialMap(Handle<JSFunction> function);
+
+  // Record the assumption that {map} stays stable.
+  void DependOnStableMap(Handle<Map> map);
+
+  // Record the assumption that {target_map} can be transitioned to, i.e., that
+  // it does not become deprecated.
+  void DependOnTransition(Handle<Map> target_map);
+
+  // Return the pretenure mode of {site} and record the assumption that it does
+  // not change.
+  PretenureFlag DependOnPretenureMode(Handle<AllocationSite> site);
+
+  // Record the assumption that the field type of a field does not change. The
+  // field is identified by the argument(s).
+  void DependOnFieldType(Handle<Map> map, int descriptor);
+  void DependOnFieldType(const LookupIterator* it);
+
+  // Record the assumption that neither {cell}'s {CellType} changes, nor the
+  // {IsReadOnly()} flag of {cell}'s {PropertyDetails}.
+  void DependOnGlobalProperty(Handle<PropertyCell> cell);
+
+  // Record the assumption that the protector remains valid.
+  void DependOnProtector(Handle<PropertyCell> cell);
+
+  void DependOnElementsKind(Handle<AllocationSite> site);
+
+  // Depend on the stability of (the maps of) all prototypes of every class in
+  // {receiver_type} up to (and including) the {holder}.
+  void DependOnStablePrototypeChains(
+      Handle<Context> native_context,
+      std::vector<Handle<Map>> const& receiver_maps, Handle<JSObject> holder);
+
+  // Like DependOnElementsKind but also applies to all nested allocation sites.
+  void DependOnElementsKinds(Handle<AllocationSite> site);
+
+  class Dependency;  // XXX
 
  private:
   Isolate* isolate_;
@@ -71,9 +71,14 @@ class V8_EXPORT_PRIVATE CompilationDependencies {
   bool aborted_;
   ZoneVector<Handle<HeapObject> >* groups_[DependentCode::kGroupCount];
 
-  DependentCode* Get(Handle<Object> object) const;
-  void Set(Handle<Object> object, Handle<DependentCode> dep);
+  std::list<Dependency*> dependencies_;
+
+  bool IsEmpty() const;
+  void Insert(DependentCode::DependencyGroup group, Handle<HeapObject> handle);
+  void DependOnStablePrototypeChain(Handle<Map> map,
+                                    MaybeHandle<JSReceiver> last_prototype);
 };
+
 }  // namespace internal
 }  // namespace v8
 

@@ -15099,10 +15099,9 @@ bool DependentCode::MarkCodeForDeoptimization(
       }
     } else {
       DCHECK(obj->IsForeign());
-      CompilationDependencies* info =
-          reinterpret_cast<CompilationDependencies*>(
-              Foreign::cast(obj)->foreign_address());
-      info->Abort();
+      auto dependencies = reinterpret_cast<CompilationDependencies*>(
+          Foreign::cast(obj)->foreign_address());
+      dependencies->Abort();
     }
   }
   for (int i = 0; i < count; i++) {

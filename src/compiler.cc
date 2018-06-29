@@ -803,6 +803,7 @@ CompilationJob::Status FinalizeOptimizedCompilationJob(
     if (shared->optimization_disabled()) {
       job->RetryOptimization(BailoutReason::kOptimizationDisabled);
     } else if (compilation_info->dependencies()->HasAborted()) {
+      // XXX use this in case Install fails
       job->RetryOptimization(BailoutReason::kBailedOutDueToDependencyChange);
     } else if (job->FinalizeJob(isolate) == CompilationJob::SUCCEEDED) {
       job->RecordCompilationStats();
