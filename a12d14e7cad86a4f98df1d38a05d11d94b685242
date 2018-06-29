@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4109691_50bf0b5d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T12:31:42Z",
+      "side": 1,
+      "message": "nit: Lets make sure the commit message has a short/concise first line so that it fits nicely into the subject line and separate the rest of the description into the body.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "a12d14e7cad86a4f98df1d38a05d11d94b685242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19beff7e_61f8dc78",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1779,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T12:31:42Z",
+      "side": 1,
+      "message": "nit: Empty newline between function definitions for readability.",
+      "range": {
+        "startLine": 1778,
+        "startChar": 0,
+        "endLine": 1779,
+        "endChar": 73
+      },
+      "revId": "a12d14e7cad86a4f98df1d38a05d11d94b685242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78c8f116_251354dd",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1946,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T12:31:42Z",
+      "side": 1,
+      "message": "nit: Empty newline between function definitions for readability.",
+      "range": {
+        "startLine": 1945,
+        "startChar": 0,
+        "endLine": 1946,
+        "endChar": 53
+      },
+      "revId": "a12d14e7cad86a4f98df1d38a05d11d94b685242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d673cad_ab2cbb52",
+        "filename": "src/objects/js-relative-time-format-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T12:31:42Z",
+      "side": 1,
+      "message": "nit: Please #include \"src/objects/object-macros-undef.h\" here",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 6
+      },
+      "revId": "a12d14e7cad86a4f98df1d38a05d11d94b685242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "038a8587_b9b64149",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T12:31:42Z",
+      "side": 1,
+      "message": "nit: Lets change the signature to take a Handle\u003cJSRelativeTimeFormat\u003e instead. Especially since the current implementation performs a cast anyways and won\u0027t work on arbitrary JSObject arguments anyways.",
+      "range": {
+        "startLine": 41,
+        "startChar": 57,
+        "endLine": 41,
+        "endChar": 77
+      },
+      "revId": "a12d14e7cad86a4f98df1d38a05d11d94b685242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e236f7d7_18304b1a",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T12:31:42Z",
+      "side": 1,
+      "message": "nit: These two methods are somewhat dangerous because they are performing an allocation even though the implicit {this} parameter is unhandlified. I am fine with leaving the signature as is, because the current implementation happens to be GC-safe. But lets at least rename the methods to CamelCase format, as they are more than simple accessors. I\u0027d vote for {StyleAsString} and {NumericAsString} as names.",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 53
+      },
+      "revId": "a12d14e7cad86a4f98df1d38a05d11d94b685242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "766974c9_422d8ea6",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T12:31:42Z",
+      "side": 1,
+      "message": "nit: Please #include \"src/objects/object-macros-undef.h\" here",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 24
+      },
+      "revId": "a12d14e7cad86a4f98df1d38a05d11d94b685242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
