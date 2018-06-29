@@ -477,6 +477,7 @@ TEST(ReconfigureAccessorToNonExistingDataField) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> none_type = FieldType::None(isolate);
   Handle<AccessorPair> pair = CreateAccessorPair(true, true);
@@ -540,9 +541,9 @@ TEST(ReconfigureAccessorToNonExistingDataField) {
 // to a map with a property with None representation.
 TEST(ReconfigureAccessorToNonExistingDataFieldHeavy) {
   CcTest::InitializeVM();
+  v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
-  v8::HandleScope scope(CcTest::isolate());
 
   CompileRun(
       "function getter() { return 1; };"
@@ -652,10 +653,9 @@ static void TestGeneralizeField(int detach_property_at_index,
   // Create new maps by generalizing representation of propX field.
   Handle<Map> field_owner(map->FindFieldOwner(isolate, property_index),
                           isolate);
+  CanonicalHandleScope canonical(isolate);
   CompilationDependencies dependencies(isolate, &zone);
-  CHECK(!dependencies.HasAborted());
-
-  dependencies.AssumeFieldOwner(field_owner);
+  dependencies.DependOnFieldType(map, property_index);
 
   Handle<Map> new_map = Map::ReconfigureProperty(
       isolate, map, property_index, kData, NONE, to.representation, to.type);
@@ -671,21 +671,21 @@ static void TestGeneralizeField(int detach_property_at_index,
     CHECK(map->is_deprecated());
     CHECK_NE(*map, *new_map);
     CHECK_EQ(expected_field_type_dependency && !field_owner->is_deprecated(),
-             dependencies.HasAborted());
+             !dependencies.AreValid());
 
   } else if (expected_deprecation) {
     CHECK(!map->is_stable());
     CHECK(map->is_deprecated());
     CHECK(field_owner->is_deprecated());
     CHECK_NE(*map, *new_map);
-    CHECK(!dependencies.HasAborted());
+    CHECK(dependencies.AreValid());
 
   } else {
     CHECK(!field_owner->is_deprecated());
     CHECK(map->is_stable());  // Map did not change, must be left stable.
     CHECK_EQ(*map, *new_map);
 
-    CHECK_EQ(expected_field_type_dependency, dependencies.HasAborted());
+    CHECK_EQ(expected_field_type_dependency, !dependencies.AreValid());
   }
 
   {
@@ -698,8 +698,6 @@ static void TestGeneralizeField(int detach_property_at_index,
       CHECK(!tmp->is_stable());
     }
   }
-
-  dependencies.Rollback();  // Properly cleanup compilation info.
 
   // Update all deprecated maps and check that they are now the same.
   Handle<Map> updated_map = Map::Update(isolate, map);
@@ -757,6 +755,7 @@ TEST(GeneralizeSmiFieldToDouble) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
   TestGeneralizeField(
@@ -769,6 +768,7 @@ TEST(GeneralizeSmiFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -783,6 +783,7 @@ TEST(GeneralizeDoubleFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -797,6 +798,7 @@ TEST(GeneralizeHeapObjectFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -811,6 +813,7 @@ TEST(GeneralizeHeapObjectFieldToHeapObject) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
   Handle<FieldType> current_type =
@@ -841,6 +844,7 @@ TEST(GeneralizeNoneFieldToSmi) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> none_type = FieldType::None(isolate);
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
@@ -855,6 +859,7 @@ TEST(GeneralizeNoneFieldToDouble) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> none_type = FieldType::None(isolate);
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
@@ -869,6 +874,7 @@ TEST(GeneralizeNoneFieldToHeapObject) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> none_type = FieldType::None(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -884,6 +890,7 @@ TEST(GeneralizeNoneFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> none_type = FieldType::None(isolate);
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
@@ -903,6 +910,7 @@ TEST(GeneralizeFieldWithAccessorProperties) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<AccessorPair> pair = CreateAccessorPair(true, true);
 
@@ -1014,10 +1022,9 @@ static void TestReconfigureDataFieldAttribute_GeneralizeField(
   CHECK(expectations2.Check(*map2));
 
   Zone zone(isolate->allocator(), ZONE_NAME);
-  Handle<Map> field_owner(map->FindFieldOwner(isolate, kSplitProp), isolate);
+  CanonicalHandleScope canonical(isolate);
   CompilationDependencies dependencies(isolate, &zone);
-  CHECK(!dependencies.HasAborted());
-  dependencies.AssumeFieldOwner(field_owner);
+  dependencies.DependOnFieldType(map, kSplitProp);
 
   // Reconfigure attributes of property |kSplitProp| of |map2| to NONE, which
   // should generalize representations in |map1|.
@@ -1036,8 +1043,7 @@ static void TestReconfigureDataFieldAttribute_GeneralizeField(
                               expected.type);
   }
   CHECK(map->is_deprecated());
-  CHECK(!dependencies.HasAborted());
-  dependencies.Rollback();  // Properly cleanup compilation info.
+  CHECK(dependencies.AreValid());
   CHECK_NE(*map, *new_map);
 
   CHECK(!new_map->is_deprecated());
@@ -1099,10 +1105,9 @@ static void TestReconfigureDataFieldAttribute_GeneralizeFieldTrivial(
   CHECK(expectations2.Check(*map2));
 
   Zone zone(isolate->allocator(), ZONE_NAME);
-  Handle<Map> field_owner(map->FindFieldOwner(isolate, kSplitProp), isolate);
+  CanonicalHandleScope canonical(isolate);
   CompilationDependencies dependencies(isolate, &zone);
-  CHECK(!dependencies.HasAborted());
-  dependencies.AssumeFieldOwner(field_owner);
+  dependencies.DependOnFieldType(map, kSplitProp);
 
   // Reconfigure attributes of property |kSplitProp| of |map2| to NONE, which
   // should generalize representations in |map1|.
@@ -1125,8 +1130,7 @@ static void TestReconfigureDataFieldAttribute_GeneralizeFieldTrivial(
   }
   CHECK(!map->is_deprecated());
   CHECK_EQ(*map, *new_map);
-  CHECK_EQ(expected_field_type_dependency, dependencies.HasAborted());
-  dependencies.Rollback();  // Properly cleanup compilation info.
+  CHECK_EQ(expected_field_type_dependency, !dependencies.AreValid());
 
   CHECK(!new_map->is_deprecated());
   CHECK(expectations.Check(*new_map));
@@ -1139,6 +1143,7 @@ TEST(ReconfigureDataFieldAttribute_GeneralizeSmiFieldToDouble) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
   if (FLAG_track_constant_fields) {
@@ -1168,6 +1173,7 @@ TEST(ReconfigureDataFieldAttribute_GeneralizeSmiFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -1199,6 +1205,7 @@ TEST(ReconfigureDataFieldAttribute_GeneralizeDoubleFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -1230,6 +1237,7 @@ TEST(ReconfigureDataFieldAttribute_GeneralizeHeapObjFieldToHeapObj) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
   Handle<FieldType> current_type =
@@ -1325,6 +1333,7 @@ TEST(ReconfigureDataFieldAttribute_GeneralizeHeapObjectFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -1776,10 +1785,9 @@ static void TestReconfigureElementsKind_GeneralizeField(
   CHECK(expectations2.Check(*map2));
 
   Zone zone(isolate->allocator(), ZONE_NAME);
-  Handle<Map> field_owner(map->FindFieldOwner(isolate, kDiffProp), isolate);
+  CanonicalHandleScope canonical(isolate);
   CompilationDependencies dependencies(isolate, &zone);
-  CHECK(!dependencies.HasAborted());
-  dependencies.AssumeFieldOwner(field_owner);
+  dependencies.DependOnFieldType(map, kDiffProp);
 
   // Reconfigure elements kinds of |map2|, which should generalize
   // representations in |map|.
@@ -1797,8 +1805,7 @@ static void TestReconfigureElementsKind_GeneralizeField(
                             expected.representation, expected.type);
 
   CHECK(map->is_deprecated());
-  CHECK(!dependencies.HasAborted());
-  dependencies.Rollback();  // Properly cleanup compilation info.
+  CHECK(dependencies.AreValid());
   CHECK_NE(*map, *new_map);
 
   CHECK(!new_map->is_deprecated());
@@ -1872,10 +1879,9 @@ static void TestReconfigureElementsKind_GeneralizeFieldTrivial(
   CHECK(expectations2.Check(*map2));
 
   Zone zone(isolate->allocator(), ZONE_NAME);
-  Handle<Map> field_owner(map->FindFieldOwner(isolate, kDiffProp), isolate);
+  CanonicalHandleScope canonical(isolate);
   CompilationDependencies dependencies(isolate, &zone);
-  CHECK(!dependencies.HasAborted());
-  dependencies.AssumeFieldOwner(field_owner);
+  dependencies.DependOnFieldType(map, kDiffProp);
 
   // Reconfigure elements kinds of |map2|, which should generalize
   // representations in |map|.
@@ -1896,8 +1902,7 @@ static void TestReconfigureElementsKind_GeneralizeFieldTrivial(
                             expected.representation, expected.type);
   CHECK(!map->is_deprecated());
   CHECK_EQ(*map, *new_map);
-  CHECK(!dependencies.HasAborted());
-  dependencies.Rollback();  // Properly cleanup compilation info.
+  CHECK(dependencies.AreValid());
 
   CHECK(!new_map->is_deprecated());
   CHECK(expectations.Check(*new_map));
@@ -1920,6 +1925,7 @@ TEST(ReconfigureElementsKind_GeneralizeSmiFieldToDouble) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
   if (FLAG_track_constant_fields) {
@@ -1948,6 +1954,7 @@ TEST(ReconfigureElementsKind_GeneralizeSmiFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -1978,6 +1985,7 @@ TEST(ReconfigureElementsKind_GeneralizeDoubleFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -2008,6 +2016,7 @@ TEST(ReconfigureElementsKind_GeneralizeHeapObjFieldToHeapObj) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
   Handle<FieldType> current_type =
@@ -2100,6 +2109,7 @@ TEST(ReconfigureElementsKind_GeneralizeHeapObjectFieldToTagged) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -2134,6 +2144,7 @@ TEST(ReconfigurePropertySplitMapTransitionsOverflow) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
   Expectations expectations(isolate);
@@ -2322,6 +2333,7 @@ TEST(ElementsKindTransitionFromMapOwningDescriptor) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -2351,6 +2363,7 @@ TEST(ElementsKindTransitionFromMapNotOwningDescriptor) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
   Handle<FieldType> value_type =
       FieldType::Class(Map::Create(isolate, 0), isolate);
@@ -2672,6 +2685,7 @@ TEST(TransitionDataFieldToDataField) {
   CcTest::InitializeVM();
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
   Handle<Object> value1 = handle(Smi::kZero, isolate);
@@ -2708,6 +2722,7 @@ TEST(TransitionDataConstantToAnotherDataConstant) {
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
+
   Handle<String> name = factory->empty_string();
   Handle<Map> sloppy_map =
       Map::CopyInitialMap(isolate, isolate->sloppy_function_map());
@@ -2742,6 +2757,7 @@ TEST(TransitionDataConstantToDataField) {
   v8::HandleScope scope(CcTest::isolate());
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
+
   Handle<FieldType> any_type = FieldType::Any(isolate);
 
   Handle<JSFunction> js_func1 =

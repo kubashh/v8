@@ -13,7 +13,19 @@
 namespace v8 {
 namespace internal {
 
-DependentCode* CompilationDependencies::Get(Handle<Object> object) const {
+// TODO(neis):
+// Move helpers to DependentCode.
+// Move parts of DependOnFoo to FooDependency constructor?
+// Shouldn't need descriptor for FieldTypeDependency.
+// Use a ZoneForwardList?
+// In case of installation failure, need to uninstall stuff that already got
+// installed.
+// Make some methods of DependentCode private.
+// Do we use CompilationDependencies after Commit failed?
+
+namespace {
+
+DependentCode* GetDependentCode(Handle<Object> object) {
   if (object->IsMap()) {
     return Handle<Map>::cast(object)->dependent_code();
   } else if (object->IsPropertyCell()) {
@@ -24,9 +36,7 @@ DependentCode* CompilationDependencies::Get(Handle<Object> object) const {
   UNREACHABLE();
 }
 
-
-void CompilationDependencies::Set(Handle<Object> object,
-                                  Handle<DependentCode> dep) {
+void SetDependentCode(Handle<Object> object, Handle<DependentCode> dep) {
   if (object->IsMap()) {
     Handle<Map>::cast(object)->set_dependent_code(*dep);
   } else if (object->IsPropertyCell()) {
@@ -38,106 +48,336 @@ void CompilationDependencies::Set(Handle<Object> object,
   }
 }
 
-
-void CompilationDependencies::Insert(DependentCode::DependencyGroup group,
-                                     Handle<HeapObject> object) {
-  if (groups_[group] == nullptr) {
-    groups_[group] = new (zone_->New(sizeof(ZoneVector<Handle<HeapObject>>)))
-        ZoneVector<Handle<HeapObject>>(zone_);
-  }
-  groups_[group]->push_back(object);
-
-  if (object_wrapper_.is_null()) {
-    // Allocate the wrapper if necessary.
-    object_wrapper_ =
-        isolate_->factory()->NewForeign(reinterpret_cast<Address>(this));
-  }
-
-  // Get the old dependent code list.
-  Handle<DependentCode> old_dependent_code =
-      Handle<DependentCode>(Get(object), isolate_);
-  Handle<DependentCode> new_dependent_code =
-      DependentCode::InsertCompilationDependencies(old_dependent_code, group,
-                                                   object_wrapper_);
-
-  // Set the new dependent code list if the head of the list changed.
-  if (!new_dependent_code.is_identical_to(old_dependent_code)) {
-    Set(object, new_dependent_code);
-  }
+// Always returns true. bool instead of void for convenient use.
+bool InstallDependency(Isolate* isolate, Handle<WeakCell> source,
+                       Handle<HeapObject> target,
+                       DependentCode::DependencyGroup group) {
+  // XXX DCHECK_NOT_NULL(isolate->handle_scope_data()->canonical_scope);
+  Handle<DependentCode> old_deps(GetDependentCode(target), isolate);
+  Handle<DependentCode> new_deps =
+      DependentCode::InsertWeakCode(old_deps, group, source);
+  // Update the list head if necessary.
+  if (!new_deps.equals(old_deps)) SetDependentCode(target, new_deps);
+  return true;
 }
 
+}  // namespace
 
-void CompilationDependencies::Commit(Handle<Code> code) {
-  if (IsEmpty()) return;
+class CompilationDependencies::Dependency : public ZoneObject {
+ public:
+  virtual bool IsValid() const = 0;
+  virtual bool Install(Isolate* isolate, Handle<WeakCell> code) = 0;
+};
 
-  DCHECK(!object_wrapper_.is_null());
-  Handle<WeakCell> cell = Code::WeakCellFor(code);
-  AllowDeferredHandleDereference get_wrapper;
-  for (int i = 0; i < DependentCode::kGroupCount; i++) {
-    ZoneVector<Handle<HeapObject>>* group_objects = groups_[i];
-    if (group_objects == nullptr) continue;
-    DependentCode::DependencyGroup group =
-        static_cast<DependentCode::DependencyGroup>(i);
-    for (size_t j = 0; j < group_objects->size(); j++) {
-      DependentCode* dependent_code = Get(group_objects->at(j));
-      dependent_code->UpdateToFinishedCode(group, *object_wrapper_, *cell);
-    }
-    groups_[i] = nullptr;  // Zone-allocated, no need to delete.
+class InitialMapDependency final : public CompilationDependencies::Dependency {
+ public:
+  InitialMapDependency(Handle<JSFunction> function, Handle<Map> initial_map)
+      : function_(function), initial_map_(initial_map) {
+    DCHECK(IsValid());
   }
+
+  bool IsValid() const override {
+    DisallowHeapAllocation no_heap_allocation;
+    DCHECK(function_->has_initial_map());
+    Handle<Map> initial_map(function_->initial_map(), function_->GetIsolate());
+    return initial_map.equals(initial_map_);
+  }
+
+  bool Install(Isolate* isolate, Handle<WeakCell> code) override {
+    return IsValid() &&
+           InstallDependency(isolate, code, initial_map_,
+                             DependentCode::kInitialMapChangedGroup);
+  }
+
+ private:
+  Handle<JSFunction> function_;
+  Handle<Map> initial_map_;
+};
+
+class StableMapDependency final : public CompilationDependencies::Dependency {
+ public:
+  explicit StableMapDependency(Handle<Map> map) : map_(map) {
+    DCHECK(IsValid());
+  }
+
+  bool IsValid() const override {
+    DisallowHeapAllocation no_heap_allocation;
+    return map_->is_stable();
+  }
+
+  bool Install(Isolate* isolate, Handle<WeakCell> code) override {
+    return IsValid() && InstallDependency(isolate, code, map_,
+                                          DependentCode::kPrototypeCheckGroup);
+  }
+
+ private:
+  Handle<Map> map_;
+};
+
+class TransitionDependency final : public CompilationDependencies::Dependency {
+ public:
+  explicit TransitionDependency(Handle<Map> map) : map_(map) {
+    DCHECK(IsValid());
+  }
+
+  bool IsValid() const override {
+    DisallowHeapAllocation no_heap_allocation;
+    return !map_->is_deprecated();
+  }
+
+  bool Install(Isolate* isolate, Handle<WeakCell> code) override {
+    return IsValid() && InstallDependency(isolate, code, map_,
+                                          DependentCode::kTransitionGroup);
+  }
+
+ private:
+  Handle<Map> map_;
+};
+
+class PretenureModeDependency final
+    : public CompilationDependencies::Dependency {
+ public:
+  PretenureModeDependency(Handle<AllocationSite> site, PretenureFlag mode)
+      : site_(site), mode_(mode) {
+    DCHECK(IsValid());
+  }
+
+  bool IsValid() const override {
+    DisallowHeapAllocation no_heap_allocation;
+    return mode_ == site_->GetPretenureMode();
+  }
+
+  bool Install(Isolate* isolate, Handle<WeakCell> code) override {
+    return IsValid() && InstallDependency(
+                            isolate, code, site_,
+                            DependentCode::kAllocationSiteTenuringChangedGroup);
+  }
+
+ private:
+  Handle<AllocationSite> site_;
+  PretenureFlag mode_;
+};
+
+class FieldTypeDependency final : public CompilationDependencies::Dependency {
+ public:
+  FieldTypeDependency(Handle<Map> owner, int descriptor, Handle<FieldType> type)
+      : owner_(owner), descriptor_(descriptor), type_(type) {
+    DCHECK(IsValid());
+  }
+
+  bool IsValid() const override {
+    DisallowHeapAllocation no_heap_allocation;
+    // XXX Need isolate for this stupid check.
+    // DCHECK_EQ(*owner_, owner_->FindFieldOwner(isolate, descriptor_));
+    return *type_ == owner_->instance_descriptors()->GetFieldType(descriptor_);
+  }
+
+  bool Install(Isolate* isolate, Handle<WeakCell> code) override {
+    return IsValid() && InstallDependency(isolate, code, owner_,
+                                          DependentCode::kFieldOwnerGroup);
+  }
+
+ private:
+  Handle<Map> owner_;
+  int descriptor_;
+  Handle<FieldType> type_;
+};
+
+class GlobalPropertyDependency final
+    : public CompilationDependencies::Dependency {
+ public:
+  GlobalPropertyDependency(Handle<PropertyCell> cell, PropertyCellType type,
+                           bool read_only)
+      : cell_(cell), type_(type), read_only_(read_only) {
+    DCHECK(IsValid());
+  }
+
+  bool IsValid() const override {
+    DisallowHeapAllocation no_heap_allocation;
+    return type_ == cell_->property_details().cell_type() &&
+           read_only_ == cell_->property_details().IsReadOnly();
+  }
+
+  bool Install(Isolate* isolate, Handle<WeakCell> code) override {
+    return IsValid() &&
+           InstallDependency(isolate, code, cell_,
+                             DependentCode::kPropertyCellChangedGroup);
+  }
+
+ private:
+  Handle<PropertyCell> cell_;
+  PropertyCellType type_;
+  bool read_only_;
+};
+
+class ProtectorDependency final : public CompilationDependencies::Dependency {
+ public:
+  explicit ProtectorDependency(Handle<PropertyCell> cell) : cell_(cell) {
+    DCHECK(IsValid());
+  }
+
+  bool IsValid() const override {
+    DisallowHeapAllocation no_heap_allocation;
+    return cell_->value() == Smi::FromInt(Isolate::kProtectorValid);
+  }
+
+  bool Install(Isolate* isolate, Handle<WeakCell> code) override {
+    return IsValid() &&
+           InstallDependency(isolate, code, cell_,
+                             DependentCode::kPropertyCellChangedGroup);
+  }
+
+ private:
+  Handle<PropertyCell> cell_;
+};
+
+class ElementsKindDependency final
+    : public CompilationDependencies::Dependency {
+ public:
+  ElementsKindDependency(Handle<AllocationSite> site, ElementsKind kind)
+      : site_(site), kind_(kind) {
+    DCHECK(IsValid());
+  }
+
+  bool IsValid() const override {
+    DisallowHeapAllocation no_heap_allocation;
+    DCHECK(AllocationSite::ShouldTrack(kind_));
+    ElementsKind kind = site_->PointsToLiteral()
+                            ? site_->boilerplate()->GetElementsKind()
+                            : site_->GetElementsKind();
+    return kind_ == kind;
+  }
+
+  bool Install(Isolate* isolate, Handle<WeakCell> code) override {
+    return IsValid() &&
+           InstallDependency(
+               isolate, code, site_,
+               DependentCode::kAllocationSiteTransitionChangedGroup);
+  }
+
+ private:
+  Handle<AllocationSite> site_;
+  ElementsKind kind_;
+};
+
+CompilationDependencies::CompilationDependencies(Isolate* isolate, Zone* zone)
+    : isolate_(isolate), zone_(zone) {}
+
+Handle<Map> CompilationDependencies::DependOnInitialMap(
+    Handle<JSFunction> function) {
+  Handle<Map> map(function->initial_map(), function->GetIsolate());
+  dependencies_.push_front(new (zone_) InitialMapDependency(function, map));
+  return map;
 }
 
-
-void CompilationDependencies::Rollback() {
-  if (IsEmpty()) return;
-
-  AllowDeferredHandleDereference get_wrapper;
-  // Unregister from all dependent maps if not yet committed.
-  for (int i = 0; i < DependentCode::kGroupCount; i++) {
-    ZoneVector<Handle<HeapObject>>* group_objects = groups_[i];
-    if (group_objects == nullptr) continue;
-    DependentCode::DependencyGroup group =
-        static_cast<DependentCode::DependencyGroup>(i);
-    for (size_t j = 0; j < group_objects->size(); j++) {
-      DependentCode* dependent_code = Get(group_objects->at(j));
-      dependent_code->RemoveCompilationDependencies(group, *object_wrapper_);
-    }
-    groups_[i] = nullptr;  // Zone-allocated, no need to delete.
-  }
-}
-
-
-void CompilationDependencies::AssumeMapNotDeprecated(Handle<Map> map) {
-  DCHECK(!map->is_deprecated());
-  // Do nothing if the map cannot be deprecated.
-  if (map->CanBeDeprecated()) {
-    Insert(DependentCode::kTransitionGroup, map);
-  }
-}
-
-
-void CompilationDependencies::AssumeMapStable(Handle<Map> map) {
-  DCHECK(map->is_stable());
-  // Do nothing if the map cannot transition.
+void CompilationDependencies::DependOnStableMap(Handle<Map> map) {
   if (map->CanTransition()) {
-    Insert(DependentCode::kPrototypeCheckGroup, map);
+    dependencies_.push_front(new (zone_) StableMapDependency(map));
+  } else {
+    DCHECK(map->is_stable());
   }
 }
 
+void CompilationDependencies::DependOnTransition(Handle<Map> target_map) {
+  if (target_map->CanBeDeprecated()) {
+    dependencies_.push_front(new (zone_) TransitionDependency(target_map));
+  } else {
+    DCHECK(!target_map->is_deprecated());
+  }
+}
 
-void CompilationDependencies::AssumePrototypeMapsStable(
-    Handle<Map> map, MaybeHandle<JSReceiver> prototype) {
+PretenureFlag CompilationDependencies::DependOnPretenureMode(
+    Handle<AllocationSite> site) {
+  PretenureFlag mode = site->GetPretenureMode();
+  dependencies_.push_front(new (zone_) PretenureModeDependency(site, mode));
+  return mode;
+}
+
+void CompilationDependencies::DependOnFieldType(Handle<Map> map,
+                                                int descriptor) {
+  Handle<Map> owner(map->FindFieldOwner(isolate_, descriptor), isolate_);
+  Handle<FieldType> type(
+      owner->instance_descriptors()->GetFieldType(descriptor), isolate_);
+  DCHECK(type.equals(
+      handle(map->instance_descriptors()->GetFieldType(descriptor), isolate_)));
+  dependencies_.push_front(new (zone_)
+                               FieldTypeDependency(owner, descriptor, type));
+}
+
+void CompilationDependencies::DependOnFieldType(const LookupIterator* it) {
+  Handle<Map> owner = it->GetFieldOwnerMap();
+  int descriptor = it->GetFieldDescriptorIndex();
+  Handle<FieldType> type = it->GetFieldType();
+  DCHECK(type.equals(
+      handle(it->GetHolder<Map>()->map()->instance_descriptors()->GetFieldType(
+                 descriptor),
+             isolate_)));
+  dependencies_.push_front(new (zone_)
+                               FieldTypeDependency(owner, descriptor, type));
+}
+
+void CompilationDependencies::DependOnGlobalProperty(
+    Handle<PropertyCell> cell) {
+  PropertyCellType type = cell->property_details().cell_type();
+  bool read_only = cell->property_details().IsReadOnly();
+  dependencies_.push_front(new (zone_)
+                               GlobalPropertyDependency(cell, type, read_only));
+}
+
+void CompilationDependencies::DependOnProtector(Handle<PropertyCell> cell) {
+  dependencies_.push_front(new (zone_) ProtectorDependency(cell));
+}
+
+void CompilationDependencies::DependOnElementsKind(
+    Handle<AllocationSite> site) {
+  // Do nothing if the object doesn't have any useful element transitions left.
+  ElementsKind kind = site->PointsToLiteral()
+                          ? site->boilerplate()->GetElementsKind()
+                          : site->GetElementsKind();
+  if (AllocationSite::ShouldTrack(kind)) {
+    dependencies_.push_front(new (zone_) ElementsKindDependency(site, kind));
+  }
+}
+
+bool CompilationDependencies::AreValid() const {
+  for (auto dep : dependencies_) {
+    if (!dep->IsValid()) return false;
+  }
+  return true;
+}
+
+bool CompilationDependencies::Commit(Handle<Code> code) {
+  // Check validity of all dependencies first, such that we can abort before
+  // installing anything.
+  if (!AreValid()) {
+    dependencies_.clear();  // XXX
+    return false;
+  }
+
+  Handle<WeakCell> cell = Code::WeakCellFor(code);
+  for (auto dep : dependencies_) {
+    DCHECK(dep->IsValid());
+    dep->Install(isolate_, cell);
+  }
+  dependencies_.clear();
+
+  return true;
+}
+
+void CompilationDependencies::DependOnStablePrototypeChain(
+    Handle<Map> map, MaybeHandle<JSReceiver> last_prototype) {
   for (PrototypeIterator i(map); !i.IsAtEnd(); i.Advance()) {
     Handle<JSReceiver> const current =
         PrototypeIterator::GetCurrent<JSReceiver>(i);
-    AssumeMapStable(handle(current->map(), isolate_));
+    DependOnStableMap(handle(current->map(), isolate_));
     Handle<JSReceiver> last;
-    if (prototype.ToHandle(&last) && last.is_identical_to(current)) {
+    if (last_prototype.ToHandle(&last) && last.is_identical_to(current)) {
       break;
     }
   }
 }
 
-void CompilationDependencies::AssumePrototypesStable(
+void CompilationDependencies::DependOnStablePrototypeChains(
     Handle<Context> native_context,
     std::vector<Handle<Map>> const& receiver_maps, Handle<JSObject> holder) {
   // Determine actual holder and perform prototype chain checks.
@@ -147,21 +387,20 @@ void CompilationDependencies::AssumePrototypesStable(
     Handle<JSFunction> constructor;
     if (Map::GetConstructorFunction(map, native_context)
             .ToHandle(&constructor)) {
-      map = handle(constructor->initial_map(), holder->GetIsolate());
+      map = handle(constructor->initial_map(), isolate_);
     }
-    AssumePrototypeMapsStable(map, holder);
+    DependOnStablePrototypeChain(map, holder);
   }
 }
 
-void CompilationDependencies::AssumeTransitionStable(
+void CompilationDependencies::DependOnElementsKinds(
     Handle<AllocationSite> site) {
-  // Do nothing if the object doesn't have any useful element transitions left.
-  ElementsKind kind = site->PointsToLiteral()
-                          ? site->boilerplate()->GetElementsKind()
-                          : site->GetElementsKind();
-  if (AllocationSite::ShouldTrack(kind)) {
-    Insert(DependentCode::kAllocationSiteTransitionChangedGroup, site);
+  while (true) {
+    DependOnElementsKind(site);
+    if (!site->nested_site()->IsAllocationSite()) break;
+    site = handle(AllocationSite::cast(site->nested_site()), isolate_);
   }
+  CHECK_EQ(site->nested_site(), Smi::kZero);
 }
 
 }  // namespace internal
