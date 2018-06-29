@@ -1100,6 +1100,7 @@ bool IntlUtil::RemoveLocaleScriptTag(const std::string& icu_locale,
 std::set<std::string> IntlUtil::GetAvailableLocales(const IcuService& service) {
   const icu::Locale* icu_available_locales = nullptr;
   int32_t count = 0;
+  std::set<std::string> locales;
 
   switch (service) {
     case IcuService::kBreakIterator:
@@ -1122,12 +1123,26 @@ std::set<std::string> IntlUtil::GetAvailableLocales(const IcuService& service) {
       // https://ssl.icu-project.org/trac/ticket/12756
       icu_available_locales = icu::Locale::getAvailableLocales(count);
       break;
+    case IcuService::kRelativeDateTimeFormatter: {
+      // ICU RelativeDateTimeFormatter does not provide a getAvailableLocales()
+      // function. We know RelativeDateTimeFormatter depend on both NumberFormat
+      // and PluralRules so we just return the intersction of that two.
+      std::set<std::string> number_format_set(
+          IntlUtil::GetAvailableLocales(IcuService::kNumberFormat));
+      std::set<std::string> plural_rules_set(
+          IntlUtil::GetAvailableLocales(IcuService::kPluralRules));
+      set_intersection(number_format_set.begin(), number_format_set.end(),
+                       plural_rules_set.begin(), plural_rules_set.end(),
+                       std::inserter(locales, locales.begin()));
+      return locales;
+    }
+    default:
+      UNREACHABLE();
   }
 
   UErrorCode error = U_ZERO_ERROR;
   char result[ULOC_FULLNAME_CAPACITY];
 
-  std::set<std::string> locales;
   for (int32_t i = 0; i < count; ++i) {
     const char* icu_name = icu_available_locales[i].getName();
 
