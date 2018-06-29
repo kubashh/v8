@@ -224,6 +224,10 @@ TEST(GetAvailableLocales) {
 
   locales = IntlUtil::GetAvailableLocales(IcuService::kPluralRules);
   CHECK(locales.count("en-US"));
+
+  locales =
+      IntlUtil::GetAvailableLocales(IcuService::kRelativeDateTimeFormatter);
+  CHECK(locales.count("en-US"));
 }
 
 }  // namespace internal

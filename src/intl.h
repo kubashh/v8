@@ -28,7 +28,8 @@ enum class IcuService {
   kCollator,
   kDateFormat,
   kNumberFormat,
-  kPluralRules
+  kPluralRules,
+  kRelativeDateTimeFormatter
 };
 
 const UChar* GetUCharBufferFromFlat(const String::FlatContent& flat,
