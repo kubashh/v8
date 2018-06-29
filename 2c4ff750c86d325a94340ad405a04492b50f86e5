@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a61ffae9_bafed604",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6703,
+      "author": {
+        "id": 1284072
+      },
+      "writtenOn": "2018-06-29T13:00:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "689d3394_6df050ad",
+      "range": {
+        "startLine": 6703,
+        "startChar": 19,
+        "endLine": 6703,
+        "endChar": 21
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96ee6322_9b0f4b6a",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cf9e809_ece8d6f0",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6748,
+      "author": {
+        "id": 1284072
+      },
+      "writtenOn": "2018-06-29T13:00:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96ee6322_9b0f4b6a",
+      "range": {
+        "startLine": 6748,
+        "startChar": 10,
+        "endLine": 6748,
+        "endChar": 25
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "750aea17_0982462d",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6761,
+      "author": {
+        "id": 1284072
+      },
+      "writtenOn": "2018-06-29T13:00:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c623ff8_97b5d794",
+      "range": {
+        "startLine": 6761,
+        "startChar": 45,
+        "endLine": 6761,
+        "endChar": 56
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c5c513ee_714a87b2",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "94608ad9_a2a40d69",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6770,
+      "author": {
+        "id": 1284072
+      },
+      "writtenOn": "2018-06-29T13:00:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5c513ee_714a87b2",
+      "range": {
+        "startLine": 6768,
+        "startChar": 0,
+        "endLine": 6770,
+        "endChar": 79
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0953c93d_fee876ef",
         "filename": "test/mjsunit/compiler/dataview-get.js",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9283a461_ab2042a8",
+        "filename": "test/mjsunit/compiler/dataview-get.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1284072
+      },
+      "writtenOn": "2018-06-29T13:00:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0953c93d_fee876ef",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 0
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
