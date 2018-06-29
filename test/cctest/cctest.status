@@ -245,6 +245,7 @@
   'test-run-wasm-atomics/*': [SKIP],
 }],  # 'byteorder == big'
 
+
 ##############################################################################
 ['system == windows', {
   # BUG(v8:4573).
@@ -419,6 +420,8 @@
   'test-run-wasm-simd/RunWasm_SimdLoadStoreLoad_simd_turbofan': [SKIP],
   'test-run-wasm-simd/RunWasm_SimdLoadStoreLoad_interpreter': [SKIP],
   'test-run-wasm-simd/RunWasm_SimdLoadStoreLoad_simd_lowered': [SKIP],
+  'test-run-wasm-simd/RunWasm_I16x8ConvertI32x4*': [SKIP],
+  'test-run-wasm-simd/RunWasm_I8x16ConvertI16x8*': [SKIP],
 
 }],  # 'arch == mips or arch == mips64'
 
