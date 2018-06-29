@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "689d3394_6df050ad",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6703,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T09:18:56Z",
+      "side": 1,
+      "message": "nit: s/is/if/",
+      "range": {
+        "startLine": 6703,
+        "startChar": 19,
+        "endLine": 6703,
+        "endChar": 21
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96ee6322_9b0f4b6a",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6748,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T09:18:56Z",
+      "side": 1,
+      "message": "nit: I think we should rename this to {vfalse_range} and move it down to around line 6786.",
+      "range": {
+        "startLine": 6748,
+        "startChar": 10,
+        "endLine": 6748,
+        "endChar": 25
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c623ff8_97b5d794",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6761,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T09:18:56Z",
+      "side": 1,
+      "message": "nit: s/byte length/element size/",
+      "range": {
+        "startLine": 6761,
+        "startChar": 45,
+        "endLine": 6761,
+        "endChar": 56
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5c513ee_714a87b2",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6770,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T09:18:56Z",
+      "side": 1,
+      "message": "suggestion: We could avoid the negation and combine these two lines right away into ...\n\nNode* bad_range \u003d graph()-\u003eNewNode(simplified()-\u003eNumberLessThan(),\n                                   byte_length, end_offset);",
+      "range": {
+        "startLine": 6768,
+        "startChar": 0,
+        "endLine": 6770,
+        "endChar": 79
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0953c93d_fee876ef",
+        "filename": "test/mjsunit/compiler/dataview-get.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-06-29T09:18:56Z",
+      "side": 1,
+      "message": "We should make sure there is a test case that has a local exception handler (i.e. have the try-catch block in the same function as the data-view access). In TurboFan we only create exceptional continuations when the exception handler is local to the function. I am thinking along the lines of ...\n\nfunction readInt8Handled(offset) {\n  try {\n    return dataview.getInt8(offset);\n  } catch (e) {\n    return e;\n  }\n}\nassertEquals(values[0], readInt8Handled(0));\nassertEquals(values[0], readInt8Handled(0));\nassertInstanceof(readInt8Handled(128), RangeError);\nassertInstanceof(readInt8Handled(128), RangeError);\nassertOptimized(readInt8Handled);\n%OptimizeFunctionOnNextCall(readInt8Handled);\nassertEquals(values[0], readInt8Handled(0));\nassertInstanceof(readInt8Handled(128), RangeError);\nassertOptimized(readInt8Handled);",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 0
+      },
+      "revId": "2c4ff750c86d325a94340ad405a04492b50f86e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
