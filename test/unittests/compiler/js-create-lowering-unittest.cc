@@ -30,7 +30,10 @@ namespace compiler {
 class JSCreateLoweringTest : public TypedGraphTest {
  public:
   JSCreateLoweringTest()
-      : TypedGraphTest(3), javascript_(zone()), deps_(isolate(), zone()) {}
+      : TypedGraphTest(3),
+        javascript_(zone()),
+        canonical_(isolate()),
+        deps_(isolate(), zone()) {}
   ~JSCreateLoweringTest() override {}
 
  protected:
@@ -62,6 +65,7 @@ class JSCreateLoweringTest : public TypedGraphTest {
 
  private:
   JSOperatorBuilder javascript_;
+  CanonicalHandleScope canonical_;
   CompilationDependencies deps_;
 };
 
