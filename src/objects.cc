@@ -4518,7 +4518,7 @@ Map* Map::FindFieldOwner(Isolate* isolate, int descriptor) const {
   const Map* result = this;
   while (true) {
     Object* back = result->GetBackPointer();
-    if (back->IsUndefined(isolate)) break;
+    if (back->IsUndefined()) break;
     const Map* parent = Map::cast(back);
     if (parent->NumberOfOwnDescriptors() <= descriptor) break;
     result = parent;
@@ -15099,10 +15099,9 @@ bool DependentCode::MarkCodeForDeoptimization(
       }
     } else {
       DCHECK(obj->IsForeign());
-      CompilationDependencies* info =
-          reinterpret_cast<CompilationDependencies*>(
-              Foreign::cast(obj)->foreign_address());
-      info->Abort();
+      auto dependencies = reinterpret_cast<CompilationDependencies*>(
+          Foreign::cast(obj)->foreign_address());
+      dependencies->Abort();
     }
   }
   for (int i = 0; i < count; i++) {
