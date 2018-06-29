@@ -2150,6 +2150,11 @@ class Heap {
               ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND,
               int inobject_properties = 0);
 
+  V8_WARN_UNUSED_RESULT AllocationResult AllocateMapInSpace(
+      InstanceType instance_type, int instance_size, AllocationSpace space,
+      ElementsKind elements_kind = TERMINAL_FAST_ELEMENTS_KIND,
+      int inobject_properties = 0);
+
   // Allocate an uninitialized object.  The memory is non-executable if the
   // hardware and OS allow.  This is the single choke-point for allocations
   // performed by the runtime and should not be bypassed (to extend this to

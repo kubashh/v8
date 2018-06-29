@@ -465,7 +465,8 @@ class V8_EXPORT_PRIVATE Factory {
   // Initializes the fields of a newly created Map. Exposed for tests and
   // heap setup; other code should just call NewMap which takes care of it.
   Map* InitializeMap(Map* map, InstanceType type, int instance_size,
-                     ElementsKind elements_kind, int inobject_properties);
+                     ElementsKind elements_kind, int inobject_properties,
+                     bool extensible);
 
   // Allocate a block of memory in the given space (filled with a filler).
   // Used as a fall-back for generated code when the space is full.

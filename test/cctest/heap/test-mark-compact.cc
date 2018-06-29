@@ -104,9 +104,9 @@ AllocationResult HeapTester::AllocateMapForTest(Isolate* isolate) {
   AllocationResult alloc = heap->AllocateRaw(Map::kSize, MAP_SPACE);
   if (!alloc.To(&obj)) return alloc;
   obj->set_map_after_allocation(heap->meta_map(), SKIP_WRITE_BARRIER);
-  return isolate->factory()->InitializeMap(Map::cast(obj), JS_OBJECT_TYPE,
-                                           JSObject::kHeaderSize,
-                                           TERMINAL_FAST_ELEMENTS_KIND, 0);
+  return isolate->factory()->InitializeMap(
+      Map::cast(obj), JS_OBJECT_TYPE, JSObject::kHeaderSize,
+      TERMINAL_FAST_ELEMENTS_KIND, 0, true);
 }
 
 // This is the same as Factory::NewFixedArray, except it doesn't retry
