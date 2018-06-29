@@ -337,6 +337,7 @@ class ErrorUtils : public AllStatic {
   T(InvalidInOperatorUse, "Cannot use 'in' operator to search for '%' in %")   \
   T(InvalidRegExpExecResult,                                                   \
     "RegExp exec method returned something other than an Object or null")      \
+  T(InvalidUnit, "Invalid unit '%'")                                           \
   T(IteratorResultNotAnObject, "Iterator result % is not an object")           \
   T(IteratorSymbolNonCallable, "Found non-callable @@iterator")                \
   T(IteratorValueNotAnObject, "Iterator value % is not an entry object")       \

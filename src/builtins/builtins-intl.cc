@@ -10,21 +10,24 @@
 #include "src/builtins/builtins-utils.h"
 #include "src/builtins/builtins.h"
 #include "src/date.h"
+#include "src/elements.h"
 #include "src/intl.h"
 #include "src/objects-inl.h"
 #include "src/objects/intl-objects.h"
 #include "src/objects/js-locale-inl.h"
+#include "src/objects/js-relative-time-format-inl.h"
 
 #include "unicode/datefmt.h"
 #include "unicode/decimfmt.h"
 #include "unicode/fieldpos.h"
 #include "unicode/fpositer.h"
 #include "unicode/normalizer2.h"
-#include "unicode/numfmt.h"
+#include "unicode/reldatefmt.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/udat.h"
 #include "unicode/ufieldpositer.h"
 #include "unicode/unistr.h"
+#include "unicode/ureldatefmt.h"
 #include "unicode/ustring.h"
 
 namespace v8 {
@@ -211,11 +214,10 @@ Handle<String> IcuDateFieldIdToDateType(int32_t field_id, Isolate* isolate) {
   }
 }
 
-bool AddElement(Handle<JSArray> array, int index,
-                Handle<String> field_type_string,
-                const icu::UnicodeString& formatted, int32_t begin, int32_t end,
-                Isolate* isolate) {
-  HandleScope scope(isolate);
+Handle<JSObject> AddElement(Handle<JSArray> array, int index,
+                            Handle<String> field_type_string,
+                            const icu::UnicodeString& formatted, int32_t begin,
+                            int32_t end, Isolate* isolate) {
   Factory* factory = isolate->factory();
   Handle<JSObject> element = factory->NewJSObject(isolate->object_function());
   Handle<String> value;
@@ -228,12 +230,13 @@ bool AddElement(Handle<JSArray> array, int index,
       factory->NewStringFromTwoByte(Vector<const uint16_t>(
           reinterpret_cast<const uint16_t*>(field.getBuffer()),
           field.length())),
-      false);
+      Handle<JSObject>());
 
   JSObject::AddProperty(isolate, element, factory->value_string(), value, NONE);
   RETURN_ON_EXCEPTION_VALUE(
-      isolate, JSObject::AddDataElement(array, index, element, NONE), false);
-  return true;
+      isolate, JSObject::AddDataElement(array, index, element, NONE),
+      Handle<JSObject>());
+  return element;
 }
 
 bool cmp_NumberFormatSpan(const NumberFormatSpan& a,
@@ -253,6 +256,7 @@ bool cmp_NumberFormatSpan(const NumberFormatSpan& a,
 
 Object* FormatNumberToParts(Isolate* isolate, icu::NumberFormat* fmt,
                             double number) {
+  HandleScope scope(isolate);
   Factory* factory = isolate->factory();
 
   icu::UnicodeString formatted;
@@ -289,8 +293,9 @@ Object* FormatNumberToParts(Isolate* isolate, icu::NumberFormat* fmt,
         part.field_id == -1
             ? isolate->factory()->literal_string()
             : IcuNumberFieldIdToNumberType(part.field_id, number, isolate);
-    if (!AddElement(result, index, field_type_string, formatted, part.begin_pos,
-                    part.end_pos, isolate)) {
+    if (AddElement(result, index, field_type_string, formatted, part.begin_pos,
+                   part.end_pos, isolate)
+            .is_null()) {
       return isolate->heap()->undefined_value();
     }
     ++index;
@@ -303,6 +308,7 @@ Object* FormatNumberToParts(Isolate* isolate, icu::NumberFormat* fmt,
 Object* FormatDateToParts(Isolate* isolate, icu::DateFormat* format,
                           double date_value) {
   Factory* factory = isolate->factory();
+  HandleScope scope(isolate);
 
   icu::UnicodeString formatted;
   icu::FieldPositionIterator fp_iter;
@@ -322,23 +328,26 @@ Object* FormatDateToParts(Isolate* isolate, icu::DateFormat* format,
     int32_t end_pos = fp.getEndIndex();
 
     if (previous_end_pos < begin_pos) {
-      if (!AddElement(result, index, IcuDateFieldIdToDateType(-1, isolate),
-                      formatted, previous_end_pos, begin_pos, isolate)) {
+      if (AddElement(result, index, IcuDateFieldIdToDateType(-1, isolate),
+                     formatted, previous_end_pos, begin_pos, isolate)
+              .is_null()) {
         return isolate->heap()->undefined_value();
       }
       ++index;
     }
-    if (!AddElement(result, index,
-                    IcuDateFieldIdToDateType(fp.getField(), isolate), formatted,
-                    begin_pos, end_pos, isolate)) {
+    if (AddElement(result, index,
+                   IcuDateFieldIdToDateType(fp.getField(), isolate), formatted,
+                   begin_pos, end_pos, isolate)
+            .is_null()) {
       return isolate->heap()->undefined_value();
     }
     previous_end_pos = end_pos;
     ++index;
   }
   if (previous_end_pos < length) {
-    if (!AddElement(result, index, IcuDateFieldIdToDateType(-1, isolate),
-                    formatted, previous_end_pos, length, isolate)) {
+    if (AddElement(result, index, IcuDateFieldIdToDateType(-1, isolate),
+                   formatted, previous_end_pos, length, isolate)
+            .is_null()) {
       return isolate->heap()->undefined_value();
     }
   }
@@ -638,6 +647,228 @@ BUILTIN(LocalePrototypeToString) {
   CHECK_RECEIVER(JSLocale, locale_holder, "Intl.Locale.prototype.toString");
 
   return locale_holder->locale();
+}
+
+// Intl.RelativeTimeFormat implementation
+BUILTIN(RelativeTimeFormatConstructor) {
+  HandleScope scope(isolate);
+  // http://tc39.github.io/proposal-intl-relative-time/#sec-intl-relativetimeformat-constructor
+  // "1.2.1 Intl.RelativeTimeFormat ([ locales [ , options ]])"
+  // 1. If NewTarget is undefined, throw a TypeError exception.
+  if (args.new_target()->IsUndefined(isolate)) {  // [[Call]]
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kConstructorNotFunction,
+                              isolate->factory()->NewStringFromAsciiChecked(
+                                  "Intl.RelativeTimeFormat")));
+  } else {  // [[Construct]]
+    Handle<JSFunction> target = args.target();
+    Handle<JSReceiver> new_target = Handle<JSReceiver>::cast(args.new_target());
+
+    Handle<JSObject> result;
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, result,
+                                       JSObject::New(target, new_target));
+
+    Handle<Object> locales = args.atOrUndefined(isolate, 1);
+    Handle<Object> options = args.atOrUndefined(isolate, 2);
+
+    // 2. Let relativeTimeFormat be
+    //    ! OrdinaryCreateFromConstructor(NewTarget,
+    //                                    "%RelativeTimeFormatPrototype%").
+    // 3. Return ? InitializeRelativeTimeFormat(relativeTimeFormat, locales,
+    //                                          options).
+    RETURN_RESULT_OR_FAILURE(
+        isolate, JSRelativeTimeFormat::InitializeRelativeTimeFormat(
+                     isolate, Handle<JSRelativeTimeFormat>::cast(result),
+                     locales, options));
+  }
+}
+
+namespace {
+Object* RelativeTimeFormatPrototypeFormatCommon(BuiltinArguments args,
+                                                Isolate* isolate,
+                                                bool to_parts) {
+  HandleScope scope(isolate);
+  Factory* factory = isolate->factory();
+  // 1. Let relativeTimeFormat be the this value.
+  // 2. If Type(relativeTimeFormat) is not Object or relativeTimeFormat does not
+  //    have an [[InitializedRelativeTimeFormat]] internal slot whose value is
+  //    true, throw a TypeError exception.
+  CHECK_RECEIVER(JSRelativeTimeFormat, format_holder,
+                 to_parts ? "Intl.RelativeTimeFormat.prototype.formatToParts"
+                          : "Intl.RelativeTimeFormat.prototype.format");
+  Handle<Object> value_obj = args.atOrUndefined(isolate, 1);
+  Handle<Object> unit_obj = args.atOrUndefined(isolate, 2);
+
+  Handle<String> unit;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, unit,
+                                     Object::ToString(isolate, unit_obj));
+  Handle<Object> value;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, value,
+                                     Object::ToNumber(value_obj));
+
+  // 3. Let value be ? ToNumber(value).
+  // 4. Let unit be ? ToString(unit).
+  // 5. Return ? FormatRelativeTime(relativeTimeFormat, value, unit).
+
+  icu::RelativeDateTimeFormatter* formatter =
+      JSRelativeTimeFormat::UnpackFormatter(isolate, format_holder);
+  if (formatter == nullptr) {
+    // TODO(use a different message)
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewRangeError(MessageTemplate::kLocaleBadParameters));
+  }
+
+  double number = value->Number();
+
+  URelativeDateTimeUnit unitEnum;
+
+  if (unit->IsUtf8EqualTo(CStrVector("second"), true) ||
+      unit->IsUtf8EqualTo(CStrVector("seconds"), true)) {
+    unitEnum = UDAT_REL_UNIT_SECOND;
+  } else if (unit->IsUtf8EqualTo(CStrVector("minute"), true) ||
+             unit->IsUtf8EqualTo(CStrVector("minutes"), true)) {
+    unitEnum = UDAT_REL_UNIT_MINUTE;
+  } else if (unit->IsUtf8EqualTo(CStrVector("hour"), true) ||
+             unit->IsUtf8EqualTo(CStrVector("hours"), true)) {
+    unitEnum = UDAT_REL_UNIT_HOUR;
+  } else if (unit->IsUtf8EqualTo(CStrVector("day"), true) ||
+             unit->IsUtf8EqualTo(CStrVector("days"), true)) {
+    unitEnum = UDAT_REL_UNIT_DAY;
+  } else if (unit->IsUtf8EqualTo(CStrVector("week"), true) ||
+             unit->IsUtf8EqualTo(CStrVector("weeks"), true)) {
+    unitEnum = UDAT_REL_UNIT_WEEK;
+  } else if (unit->IsUtf8EqualTo(CStrVector("month"), true) ||
+             unit->IsUtf8EqualTo(CStrVector("months"), true)) {
+    unitEnum = UDAT_REL_UNIT_MONTH;
+  } else if (unit->IsUtf8EqualTo(CStrVector("quarter"), true) ||
+             unit->IsUtf8EqualTo(CStrVector("quarters"), true)) {
+    unitEnum = UDAT_REL_UNIT_QUARTER;
+  } else if (unit->IsUtf8EqualTo(CStrVector("year"), true) ||
+             unit->IsUtf8EqualTo(CStrVector("years"), true)) {
+    unitEnum = UDAT_REL_UNIT_YEAR;
+  } else {
+    // TODO(use a different message)
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewRangeError(MessageTemplate::kInvalidUnit, unit));
+  }
+
+  UErrorCode status = U_ZERO_ERROR;
+  icu::UnicodeString result;
+  if (format_holder->numeric() == JSRelativeTimeFormat::NUMERIC_ALWAYS) {
+    formatter->formatNumeric(number, unitEnum, result, status);
+  } else {
+    formatter->format(number, unitEnum, result, status);
+  }
+
+  /*
+  if (U_SUCCESS(status)) {
+  }
+  */
+  if (to_parts) {
+    Handle<JSArray> array = factory->NewJSArray(0);
+    icu::UnicodeString integer;
+    icu::FieldPosition pos;
+    formatter->getNumberFormat().format(number, integer, pos, status);
+    int32_t found = result.indexOf(integer);
+
+    if (found < 0) {
+      // Cannot find the formatted integer in the result. Return the whole
+      // result as the only element with literal type.
+      if (AddElement(array,
+                     0,                          // index
+                     factory->literal_string(),  // field_type_string
+                     result,                     // formatted
+                     0,                          // begin
+                     result.length(),            // end
+                     isolate)
+              .is_null()) {
+        return isolate->heap()->undefined_value();
+      }
+    } else {
+      // Found the formatted integer in the result.
+      int index = 0;
+
+      // The type:'literal' element befor the type:'integer' element.
+      if (found > 0) {
+        if (AddElement(array, index++,
+                       factory->literal_string(),  // field_type_string
+                       result,                     // formatted
+                       0,                          // begin
+                       found,                      // end
+                       isolate)
+                .is_null()) {
+          return isolate->heap()->undefined_value();
+        }
+      }
+
+      // The type:'integer' element.
+      Handle<JSObject> integer_element(AddElement(
+          array, index++,
+          factory->NewStringFromAsciiChecked("integer"),  // field_type_string
+          result,                                         // formatted
+          found,                                          // begin
+          found + integer.length(),                       // end
+          isolate));
+      if (integer_element.is_null()) {
+        return isolate->heap()->undefined_value();
+      }
+      JSObject::AddProperty(isolate, integer_element,
+                            factory->NewStringFromAsciiChecked("unit"), unit,
+                            NONE);
+
+      // The type:'literal' element after the type:'integer' element.
+      if (found + integer.length() < result.length()) {
+        if (AddElement(array, index,
+                       factory->literal_string(),  // field_type_string
+                       result, found + integer.length(), result.length(),
+                       isolate)
+                .is_null()) {
+          return isolate->heap()->undefined_value();
+        }
+      }
+    }
+    return *array;
+  } else {
+    RETURN_RESULT_OR_FAILURE(
+        isolate, factory->NewStringFromTwoByte(Vector<const uint16_t>(
+                     reinterpret_cast<const uint16_t*>(result.getBuffer()),
+                     result.length())));
+  }
+}
+}  // namespace
+
+BUILTIN(RelativeTimeFormatPrototypeFormat) {
+  return RelativeTimeFormatPrototypeFormatCommon(args, isolate, false);
+}
+
+BUILTIN(RelativeTimeFormatPrototypeFormatToParts) {
+  return RelativeTimeFormatPrototypeFormatCommon(args, isolate, true);
+}
+
+BUILTIN(RelativeTimeFormatPrototypeResolvedOptions) {
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSRelativeTimeFormat, format_holder,
+                 "Intl.RelativeTimeFormat.prototype.resolvedOptions");
+  Factory* factory = isolate->factory();
+  Handle<JSObject> result = factory->NewJSObject(isolate->object_function());
+  Handle<String> locale(format_holder->locale(), isolate);
+  JSObject::AddProperty(isolate, result,
+                        factory->NewStringFromAsciiChecked("locale"), locale,
+                        NONE);
+  JSObject::AddProperty(isolate, result,
+                        factory->NewStringFromAsciiChecked("style"),
+                        format_holder->style_str(isolate), NONE);
+  JSObject::AddProperty(isolate, result,
+                        factory->NewStringFromAsciiChecked("numeric"),
+                        format_holder->numeric_str(isolate), NONE);
+  return *result;
+}
+
+BUILTIN(RelativeTimeFormatSupportedLocalesOf) {
+  HandleScope scope(isolate);
+  Factory* factory = isolate->factory();
+  Handle<JSArray> result = factory->NewJSArray(0);
+  return *result;
 }
 
 }  // namespace internal
