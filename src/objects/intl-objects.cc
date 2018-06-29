@@ -18,6 +18,7 @@
 #include "src/objects-inl.h"
 #include "src/objects/managed.h"
 #include "src/property-descriptor.h"
+#include "src/runtime/runtime.h"
 #include "unicode/brkiter.h"
 #include "unicode/bytestream.h"
 #include "unicode/calendar.h"
@@ -1149,6 +1150,52 @@ std::set<std::string> IntlUtil::GetAvailableLocales(const IcuService& service) {
   }
 
   return locales;
+}
+
+// Implement the following algorithm
+// https://tc39.github.io/proposal-intl-locale/#sec-canonicalizelocalelist
+Handle<JSArray> IntlUtil::CanonicalizeLocaleList(Isolate* isolate,
+                                                 Handle<Object> locales) {
+  Factory* factory = isolate->factory();
+  // Local scope for temporary handles.
+  HandleScope handle_scope(isolate);
+
+  // 1. If locales is undefined, then
+  //  a. Return a new empty List.
+  // 2. Let seen be a new empty List.
+  Handle<JSArray> seen = factory->NewJSArray(0);
+  if (locales->IsNullOrUndefined(isolate)) {
+    return seen;
+  }
+  // 3. If Type(locales) is String, then
+  //  a. Let O be CreateArrayFromList(« locales »).
+  // 4. Else,
+  //  a. Let O be ? ToObject(locales).
+  // 5. Let len be ? ToLength(? Get(O, "length")).
+  // 6. Let k be 0.
+  // 7. Repeat, while k < len
+  //  a. Let Pk be ToString(k).
+  //  b. Let kPresent be ? HasProperty(O, Pk).
+  //  c. If kPresent is true, then
+  //     i. Let kValue be ? Get(O, Pk).
+  //    ii. If Type(kValue) is not String or Object, throw a TypeError
+  //    exception.
+  //   iii. If Type(kValue) is Object and kValue has an [[InitializedLocale]]
+  //        internal slot, then
+  //      1. Let tag be kValue.[[Locale]].
+  //    iv. Else,
+  //      1. Let tag be ? ToString(kValue).
+  //     v. If IsStructurallyValidLanguageTag(tag) is false, throw a RangeError
+  //        exception.
+  //    vi. Let canonicalizedTag be CanonicalizeLanguageTag(tag).
+  //   vii. If canonicalizedTag is not an element of seen, append
+  //        canonicalizedTag as the last element of seen.
+  //  d. Increase k by 1.
+  // 8. Return seen.
+  //  Handle<String> tag isolate->factory()->NewStringFromAsciiChecked("test");
+  //  auto canonicalizedTag = Runtime_CanonicalizeLanguageTag(1, {tag->raw()},
+  //  isolate);
+  return seen;
 }
 
 }  // namespace internal
