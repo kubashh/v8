@@ -63,6 +63,7 @@
 #include "src/objects/hash-table-inl.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-locale.h"
+#include "src/objects/js-relative-time-format.h"
 #endif  // V8_INTL_SUPPORT
 #include "src/objects/js-collection-inl.h"
 #include "src/objects/js-regexp-inl.h"
@@ -1407,6 +1408,8 @@ int JSObject::GetHeaderSize(InstanceType type,
 #ifdef V8_INTL_SUPPORT
     case JS_INTL_LOCALE_TYPE:
       return JSLocale::kSize;
+    case JS_INTL_RELATIVE_TIME_FORMAT_TYPE:
+      return JSRelativeTimeFormat::kSize;
 #endif  // V8_INTL_SUPPORT
     case WASM_GLOBAL_TYPE:
       return WasmGlobalObject::kSize;
@@ -3101,6 +3104,7 @@ VisitorId Map::GetVisitorId(Map* map) {
     case JS_REGEXP_STRING_ITERATOR_TYPE:
 #ifdef V8_INTL_SUPPORT
     case JS_INTL_LOCALE_TYPE:
+    case JS_INTL_RELATIVE_TIME_FORMAT_TYPE:
 #endif  // V8_INTL_SUPPORT
     case WASM_GLOBAL_TYPE:
     case WASM_MEMORY_TYPE:

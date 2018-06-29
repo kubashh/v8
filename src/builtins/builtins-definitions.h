@@ -1336,7 +1336,13 @@ namespace internal {
   CPP(LocalePrototypeHourCycle)                                  \
   CPP(LocalePrototypeNumeric)                                    \
   CPP(LocalePrototypeNumberingSystem)                            \
-  CPP(LocalePrototypeToString)
+  CPP(LocalePrototypeToString)                                   \
+  /* ecma402 #new proposal */                                    \
+  CPP(RelativeTimeFormatConstructor)                             \
+  CPP(RelativeTimeFormatPrototypeFormat)                         \
+  CPP(RelativeTimeFormatPrototypeFormatToParts)                  \
+  CPP(RelativeTimeFormatPrototypeResolvedOptions)                \
+  CPP(RelativeTimeFormatSupportedLocalesOf)
 #else
 #define BUILTIN_LIST(CPP, API, TFJ, TFC, TFS, TFH, ASM)    \
   BUILTIN_LIST_BASE(CPP, API, TFJ, TFC, TFS, TFH, ASM)     \
