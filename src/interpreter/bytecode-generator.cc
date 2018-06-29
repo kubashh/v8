@@ -2144,7 +2144,7 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
       case ObjectLiteral::Property::CONSTANT:
         UNREACHABLE();
       case ObjectLiteral::Property::MATERIALIZED_LITERAL:
-        DCHECK(!CompileTimeValue::IsCompileTimeValue(property->value()));
+        DCHECK(!property->value()->IsCompileTimeValue());
         V8_FALLTHROUGH;
       case ObjectLiteral::Property::COMPUTED: {
         // It is safe to use [[Put]] here because the boilerplate already
@@ -2333,8 +2333,7 @@ void BytecodeGenerator::BuildArrayLiteralElementsInsertion(
   for (; iter != first_spread_or_end; ++iter, array_index++) {
     Expression* subexpr = *iter;
     DCHECK(!subexpr->IsSpread());
-    if (skip_constants && CompileTimeValue::IsCompileTimeValue(subexpr))
-      continue;
+    if (skip_constants && subexpr->IsCompileTimeValue()) continue;
     if (keyed_store_slot.IsInvalid()) {
       keyed_store_slot = feedback_spec()->AddKeyedStoreICSlot(language_mode());
     }
