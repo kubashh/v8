@@ -1778,34 +1778,38 @@ Handle<Map> Factory::NewMap(InstanceType type, int instance_size,
                             ElementsKind elements_kind,
                             int inobject_properties) {
   STATIC_ASSERT(LAST_JS_OBJECT_TYPE == LAST_TYPE);
-  DCHECK_IMPLIES(Map::IsJSObject(type) &&
-                     !Map::CanHaveFastTransitionableElementsKind(type),
-                 IsDictionaryElementsKind(elements_kind) ||
-                     IsTerminalElementsKind(elements_kind));
+  bool is_js_object = Map::IsJSObject(type);
+  DCHECK_IMPLIES(
+      is_js_object && !Map::CanHaveFastTransitionableElementsKind(type),
+      IsDictionaryElementsKind(elements_kind) ||
+          IsTerminalElementsKind(elements_kind));
   HeapObject* result =
       isolate()->heap()->AllocateRawWithRetryOrFail(Map::kSize, MAP_SPACE);
   result->set_map_after_allocation(*meta_map(), SKIP_WRITE_BARRIER);
   return handle(InitializeMap(Map::cast(result), type, instance_size,
-                              elements_kind, inobject_properties),
+                              elements_kind, inobject_properties,
+                              /* extensible = */ is_js_object),
                 isolate());
 }
 
 Map* Factory::InitializeMap(Map* map, InstanceType type, int instance_size,
-                            ElementsKind elements_kind,
-                            int inobject_properties) {
+                            ElementsKind elements_kind, int inobject_properties,
+                            bool extensible) {
   map->set_instance_type(type);
   map->set_prototype(*null_value(), SKIP_WRITE_BARRIER);
   map->set_constructor_or_backpointer(*null_value(), SKIP_WRITE_BARRIER);
   map->set_instance_size(instance_size);
   if (map->IsJSObjectMap()) {
-    DCHECK(!isolate()->heap()->InReadOnlySpace(map));
     map->SetInObjectPropertiesStartInWords(instance_size / kPointerSize -
                                            inobject_properties);
     DCHECK_EQ(map->GetInObjectProperties(), inobject_properties);
-    map->set_prototype_validity_cell(*invalid_prototype_validity_cell());
   } else {
     DCHECK_EQ(inobject_properties, 0);
     map->set_inobject_properties_start_or_constructor_function_index(0);
+  }
+  if (extensible) {
+    map->set_prototype_validity_cell(*invalid_prototype_validity_cell());
+  } else {
     map->set_prototype_validity_cell(Smi::FromInt(Map::kPrototypeChainValid));
   }
   map->set_dependent_code(DependentCode::cast(*empty_fixed_array()),

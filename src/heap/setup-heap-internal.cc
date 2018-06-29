@@ -85,10 +85,11 @@ const Heap::StructTable Heap::struct_table[] = {
 #undef DATA_HANDLER_ELEMENT
 };
 
-AllocationResult Heap::AllocateMap(InstanceType instance_type,
-                                   int instance_size,
-                                   ElementsKind elements_kind,
-                                   int inobject_properties) {
+AllocationResult Heap::AllocateMapInSpace(InstanceType instance_type,
+                                          int instance_size,
+                                          AllocationSpace space,
+                                          ElementsKind elements_kind,
+                                          int inobject_properties) {
   STATIC_ASSERT(LAST_JS_OBJECT_TYPE == LAST_TYPE);
   bool is_js_object = Map::IsJSObject(instance_type);
   DCHECK_IMPLIES(is_js_object &&
@@ -96,18 +97,15 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
                  IsDictionaryElementsKind(elements_kind) ||
                      IsTerminalElementsKind(elements_kind));
   HeapObject* result = nullptr;
-  // JSObjects have maps with a mutable prototype_validity_cell, so they cannot
-  // go in RO_SPACE.
-  AllocationResult allocation =
-      AllocateRaw(Map::kSize, is_js_object ? MAP_SPACE : RO_SPACE);
+  AllocationResult allocation = AllocateRaw(Map::kSize, space);
   if (!allocation.To(&result)) return allocation;
 
   result->set_map_after_allocation(meta_map(), SKIP_WRITE_BARRIER);
   Map* map = isolate()->factory()->InitializeMap(
       Map::cast(result), instance_type, instance_size, elements_kind,
-      inobject_properties);
-
-  if (!is_js_object) {
+      inobject_properties,
+      /* extensible = */ is_js_object && space != RO_SPACE);
+  if (space == RO_SPACE) {
     // Eagerly initialize the WeakCell cache for the map as it will not be
     // writable in RO_SPACE.
     HandleScope handle_scope(isolate());
@@ -117,6 +115,17 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
   }
 
   return map;
+}
+
+AllocationResult Heap::AllocateMap(InstanceType instance_type,
+                                   int instance_size,
+                                   ElementsKind elements_kind,
+                                   int inobject_properties) {
+  // JSObjects have maps with a mutable prototype_validity_cell, so they cannot
+  // go in RO_SPACE.
+  AllocationSpace space = Map::IsJSObject(instance_type) ? MAP_SPACE : RO_SPACE;
+  return AllocateMapInSpace(instance_type, instance_size, space, elements_kind,
+                            inobject_properties);
 }
 
 AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
@@ -496,8 +505,19 @@ bool Heap::CreateInitialMaps() {
                  code_data_container)
 
     ALLOCATE_MAP(JS_MESSAGE_OBJECT_TYPE, JSMessageObject::kSize, message_object)
-    ALLOCATE_MAP(JS_OBJECT_TYPE, JSObject::kHeaderSize + kPointerSize, external)
-    external_map()->set_is_extensible(false);
+    ALLOCATE_MAP(JS_MESSAGE_OBJECT_TYPE, JSMessageObject::kSize,
+                 message_object) {
+      // The external map is a JSObject, but it is not extensible so allocate
+      // it directly in RO_SPACE.
+      Map* map;
+      if (!AllocateMapInSpace(JS_OBJECT_TYPE,
+                              JSObject::kHeaderSize + kPointerSize, RO_SPACE)
+               .To(&map)) {
+        return false;
+      }
+      set_external_map(map);
+      map->set_is_extensible(false);
+    }
 #undef ALLOCATE_PRIMITIVE_MAP
 #undef ALLOCATE_VARSIZE_MAP
 #undef ALLOCATE_MAP
