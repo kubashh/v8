@@ -174,6 +174,11 @@ class IntlUtil {
   // script else return false and an empty string
   static bool RemoveLocaleScriptTag(const std::string& icu_locale,
                                     std::string* locale_less_script);
+
+  // Implement the following algorithm
+  // https://tc39.github.io/proposal-intl-locale/#sec-canonicalizelocalelist
+  static Handle<JSArray> CanonicalizeLocaleList(Isolate* isolate,
+                                                Handle<Object> locales);
 };
 
 }  // namespace internal
