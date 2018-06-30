@@ -119,12 +119,12 @@ void StubCache::Clear() {
   MaybeObject* empty = MaybeObject::FromObject(
       isolate_->builtins()->builtin(Builtins::kIllegal));
   for (int i = 0; i < kPrimaryTableSize; i++) {
-    primary_[i].key = isolate()->heap()->empty_string();
+    primary_[i].key = ReadOnlyRoots(isolate()).empty_string();
     primary_[i].map = nullptr;
     primary_[i].value = empty;
   }
   for (int j = 0; j < kSecondaryTableSize; j++) {
-    secondary_[j].key = isolate()->heap()->empty_string();
+    secondary_[j].key = ReadOnlyRoots(isolate()).empty_string();
     secondary_[j].map = nullptr;
     secondary_[j].value = empty;
   }

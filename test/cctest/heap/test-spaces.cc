@@ -700,7 +700,8 @@ TEST(ShrinkPageToHighWaterMarkOneWordFiller) {
 
   HeapObject* filler =
       HeapObject::FromAddress(array->address() + array->Size());
-  CHECK_EQ(filler->map(), CcTest::heap()->one_pointer_filler_map());
+  CHECK_EQ(filler->map(),
+           ReadOnlyRoots(CcTest::heap()).one_pointer_filler_map());
 
   size_t shrunk = old_space->ShrinkPageToHighWaterMark(page);
   CHECK_EQ(0u, shrunk);
@@ -727,7 +728,8 @@ TEST(ShrinkPageToHighWaterMarkTwoWordFiller) {
 
   HeapObject* filler =
       HeapObject::FromAddress(array->address() + array->Size());
-  CHECK_EQ(filler->map(), CcTest::heap()->two_pointer_filler_map());
+  CHECK_EQ(filler->map(),
+           ReadOnlyRoots(CcTest::heap()).two_pointer_filler_map());
 
   size_t shrunk = old_space->ShrinkPageToHighWaterMark(page);
   CHECK_EQ(0u, shrunk);

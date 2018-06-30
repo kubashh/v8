@@ -94,7 +94,7 @@ void LogFunctionCompilation(CodeEventListener::LogEventsAndTags tag,
   int column_num = Script::GetColumnNumber(script, shared->StartPosition()) + 1;
   String* script_name = script->name()->IsString()
                             ? String::cast(script->name())
-                            : isolate->heap()->empty_string();
+                            : ReadOnlyRoots(isolate).empty_string();
   CodeEventListener::LogEventsAndTags log_tag =
       Logger::ToNativeByScript(tag, *script);
   PROFILE(isolate, CodeCreateEvent(log_tag, *abstract_code, *shared,
@@ -342,7 +342,7 @@ void InstallBytecodeArray(Handle<BytecodeArray> bytecode_array,
       Script::GetColumnNumber(script, shared_info->StartPosition()) + 1;
   String* script_name = script->name()->IsString()
                             ? String::cast(script->name())
-                            : isolate->heap()->empty_string();
+                            : ReadOnlyRoots(isolate).empty_string();
   CodeEventListener::LogEventsAndTags log_tag = Logger::ToNativeByScript(
       CodeEventListener::INTERPRETED_FUNCTION_TAG, *script);
   PROFILE(isolate, CodeCreateEvent(log_tag, *abstract_code, *shared_info,
@@ -374,7 +374,7 @@ void InstallUnoptimizedCode(UnoptimizedCompilationInfo* compilation_info,
     DCHECK(compilation_info->has_asm_wasm_data());
     shared_info->set_asm_wasm_data(*compilation_info->asm_wasm_data());
     shared_info->set_feedback_metadata(
-        isolate->heap()->empty_feedback_metadata());
+        ReadOnlyRoots(isolate).empty_feedback_metadata());
   }
 
   // Install coverage info on the shared function info.
@@ -1213,7 +1213,8 @@ MaybeHandle<JSArray> Compiler::CompileForLiveEdit(Handle<Script> script) {
   // and restore it at the end of this method.
   Handle<WeakFixedArray> old_function_infos(script->shared_function_infos(),
                                             isolate);
-  script->set_shared_function_infos(isolate->heap()->empty_weak_fixed_array());
+  script->set_shared_function_infos(
+      ReadOnlyRoots(isolate).empty_weak_fixed_array());
 
   // Start a compilation.
   ParseInfo parse_info(isolate, script);

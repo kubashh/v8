@@ -1523,8 +1523,8 @@ void Logger::SuspectReadEvent(Name* name, Object* obj) {
   if (!log_->IsEnabled() || !FLAG_log_suspect) return;
   Log::MessageBuilder msg(log_);
   String* class_name = obj->IsJSObject()
-                       ? JSObject::cast(obj)->class_name()
-                       : isolate_->heap()->empty_string();
+                           ? JSObject::cast(obj)->class_name()
+                           : ReadOnlyRoots(isolate_).empty_string();
   msg << "suspect-read" << kNext << class_name << kNext << name;
   msg.WriteToLogFile();
 }
@@ -2211,7 +2211,7 @@ void ExistingCodeLogger::LogExistingFunction(
     } else {
       CALL_CODE_EVENT_HANDLER(CodeCreateEvent(
           Logger::ToNativeByScript(tag, *script), *code, *shared,
-          isolate_->heap()->empty_string(), line_num, column_num))
+          ReadOnlyRoots(isolate_).empty_string(), line_num, column_num))
     }
   } else if (shared->IsApiFunction()) {
     // API function.
@@ -2227,8 +2227,8 @@ void ExistingCodeLogger::LogExistingFunction(
       CALL_CODE_EVENT_HANDLER(CallbackEvent(shared->DebugName(), entry_point))
     }
   } else {
-    CALL_CODE_EVENT_HANDLER(
-        CodeCreateEvent(tag, *code, *shared, isolate_->heap()->empty_string()))
+    CALL_CODE_EVENT_HANDLER(CodeCreateEvent(
+        tag, *code, *shared, ReadOnlyRoots(isolate_).empty_string()))
   }
 }
 
