@@ -129,7 +129,7 @@ void CopyObjectToObjectElements(Isolate* isolate, FixedArrayBase* from_base,
                                 ElementsKind from_kind, uint32_t from_start,
                                 FixedArrayBase* to_base, ElementsKind to_kind,
                                 uint32_t to_start, int raw_copy_size) {
-  DCHECK(to_base->map() != isolate->heap()->fixed_cow_array_map());
+  DCHECK(to_base->map() != ReadOnlyRoots(isolate).fixed_cow_array_map());
   DisallowHeapAllocation no_allocation;
   int copy_size = raw_copy_size;
   if (raw_copy_size < 0) {
@@ -142,7 +142,7 @@ void CopyObjectToObjectElements(Isolate* isolate, FixedArrayBase* from_base,
       int length = to_base->length() - start;
       if (length > 0) {
         MemsetPointer(FixedArray::cast(to_base)->data_start() + start,
-                      isolate->heap()->the_hole_value(), length);
+                      ReadOnlyRoots(isolate).the_hole_value(), length);
       }
     }
   }
@@ -180,7 +180,7 @@ static void CopyDictionaryToObjectElements(
       int length = to_base->length() - start;
       if (length > 0) {
         MemsetPointer(FixedArray::cast(to_base)->data_start() + start,
-                      isolate->heap()->the_hole_value(), length);
+                      ReadOnlyRoots(isolate).the_hole_value(), length);
       }
     }
   }
@@ -229,7 +229,7 @@ static void CopyDoubleToObjectElements(Isolate* isolate,
       int length = to_base->length() - start;
       if (length > 0) {
         MemsetPointer(FixedArray::cast(to_base)->data_start() + start,
-                      isolate->heap()->the_hole_value(), length);
+                      ReadOnlyRoots(isolate).the_hole_value(), length);
       }
     }
   }
@@ -313,7 +313,7 @@ static void CopySmiToDoubleElements(FixedArrayBase* from_base,
   if (copy_size == 0) return;
   FixedArray* from = FixedArray::cast(from_base);
   FixedDoubleArray* to = FixedDoubleArray::cast(to_base);
-  Object* the_hole = from->GetHeap()->the_hole_value();
+  Object* the_hole = from->GetReadOnlyRoots().the_hole_value();
   for (uint32_t from_end = from_start + static_cast<uint32_t>(copy_size);
        from_start < from_end; from_start++, to_start++) {
     Object* hole_or_smi = from->get(from_start);
@@ -386,7 +386,7 @@ static void CopyObjectToDoubleElements(FixedArrayBase* from_base,
   if (copy_size == 0) return;
   FixedArray* from = FixedArray::cast(from_base);
   FixedDoubleArray* to = FixedDoubleArray::cast(to_base);
-  Object* the_hole = from->GetHeap()->the_hole_value();
+  Object* the_hole = from->GetReadOnlyRoots().the_hole_value();
   for (uint32_t from_end = from_start + copy_size;
        from_start < from_end; from_start++, to_start++) {
     Object* hole_or_object = from->get(from_start);
@@ -888,7 +888,8 @@ class ElementsAccessorBase : public InternalElementsAccessor {
 
       Handle<FixedArrayBase> from_elements(object->elements(),
                                            object->GetIsolate());
-      if (object->elements() == object->GetHeap()->empty_fixed_array() ||
+      if (object->elements() ==
+              object->GetReadOnlyRoots().empty_fixed_array() ||
           IsDoubleElementsKind(from_kind) == IsDoubleElementsKind(to_kind)) {
         // No change is needed to the elements() buffer, the transition
         // only requires a map change.
@@ -1723,8 +1724,8 @@ class DictionaryElementsAccessor
     DisallowHeapAllocation no_gc;
     NumberDictionary* dictionary = NumberDictionary::cast(receiver->elements());
     int capacity = dictionary->Capacity();
-    Object* the_hole = isolate->heap()->the_hole_value();
-    Object* undefined = isolate->heap()->undefined_value();
+    Object* the_hole = ReadOnlyRoots(isolate).the_hole_value();
+    Object* undefined = ReadOnlyRoots(isolate).undefined_value();
 
     // Scan for accessor properties. If accessors are present, then elements
     // must be accessed in order via the slow path.
@@ -1980,7 +1981,7 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
       if (!backing_store->is_the_hole(isolate, entry - 1)) break;
     }
     if (entry == 0) {
-      FixedArray* empty = isolate->heap()->empty_fixed_array();
+      FixedArray* empty = ReadOnlyRoots(isolate).empty_fixed_array();
       // Dynamically ask for the elements kind here since we manually redirect
       // the operations for argument backing stores.
       if (obj->GetElementsKind() == FAST_SLOPPY_ARGUMENTS_ELEMENTS) {
@@ -2147,10 +2148,10 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
     FixedArrayBase* elements = holder->elements();
     Map* map = elements->map();
     if (IsSmiOrObjectElementsKind(KindTraits::Kind)) {
-      DCHECK_NE(map, heap->fixed_double_array_map());
+      DCHECK_NE(map, ReadOnlyRoots(heap).fixed_double_array_map());
     } else if (IsDoubleElementsKind(KindTraits::Kind)) {
-      DCHECK_NE(map, heap->fixed_cow_array_map());
-      if (map == heap->fixed_array_map()) DCHECK_EQ(0, length);
+      DCHECK_NE(map, ReadOnlyRoots(heap).fixed_cow_array_map());
+      if (map == ReadOnlyRoots(heap).fixed_array_map()) DCHECK_EQ(0, length);
     } else {
       UNREACHABLE();
     }
@@ -2234,7 +2235,7 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
     Handle<FixedArrayBase> backing_store(receiver->elements(), isolate);
 
     if (new_length == 0) {
-      receiver->set_elements(heap->empty_fixed_array());
+      receiver->set_elements(ReadOnlyRoots(heap).empty_fixed_array());
       receiver->set_length(Smi::kZero);
       return isolate->factory()->NewJSArrayWithElements(
           backing_store, KindTraits::Kind, delete_count);
@@ -2307,8 +2308,8 @@ class FastElementsAccessor : public ElementsAccessorBase<Subclass, KindTraits> {
     DCHECK(JSObject::PrototypeHasNoElements(isolate, *receiver));
     DisallowHeapAllocation no_gc;
     FixedArrayBase* elements_base = receiver->elements();
-    Object* the_hole = isolate->heap()->the_hole_value();
-    Object* undefined = isolate->heap()->undefined_value();
+    Object* the_hole = ReadOnlyRoots(isolate).the_hole_value();
+    Object* undefined = ReadOnlyRoots(isolate).undefined_value();
     Object* value = *search_value;
 
     // Elements beyond the capacity of the backing store treated as undefined.
@@ -3431,7 +3432,7 @@ class TypedElementsAccessor
     // the hole into undefined.
     if (HoleyPrototypeLookupRequired(isolate, context, source)) return false;
 
-    Object* undefined = isolate->heap()->undefined_value();
+    Object* undefined = ReadOnlyRoots(isolate).undefined_value();
 
     // Fastpath for packed Smi kind.
     if (kind == PACKED_SMI_ELEMENTS) {
@@ -3800,7 +3801,8 @@ class SloppyArgumentsElementsAccessor
     // SloppyDeleteImpl allocates a new dictionary elements store. For making
     // heap verification happy we postpone clearing out the mapped entry.
     if (entry < length) {
-      elements->set_mapped_entry(entry, obj->GetHeap()->the_hole_value());
+      elements->set_mapped_entry(entry,
+                                 obj->GetReadOnlyRoots().the_hole_value());
     }
   }
 
@@ -4036,7 +4038,8 @@ class SlowSloppyArgumentsElementsAccessor
       context->set(context_entry, *value);
 
       // Redefining attributes of an aliased element destroys fast aliasing.
-      elements->set_mapped_entry(entry, isolate->heap()->the_hole_value());
+      elements->set_mapped_entry(entry,
+                                 ReadOnlyRoots(isolate).the_hole_value());
       // For elements that are still writable we re-establish slow aliasing.
       if ((attributes & READ_ONLY) == 0) {
         value = isolate->factory()->NewAliasedArgumentsEntry(context_entry);

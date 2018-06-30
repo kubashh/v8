@@ -292,8 +292,8 @@ KNOWN_MAPS = {
   ("RO_SPACE", 0x0a8c1): (179, "PromiseResolveThenableJobTaskMap"),
   ("RO_SPACE", 0x0a929): (180, "AllocationSiteMap"),
   ("RO_SPACE", 0x0a991): (180, "AllocationSiteMap"),
-  ("MAP_SPACE", 0x02201): (1057, "ExternalMap"),
-  ("MAP_SPACE", 0x02259): (1072, "JSMessageObjectMap"),
+  ("MAP_SPACE", 0x02201): (1072, "JSMessageObjectMap"),
+  ("MAP_SPACE", 0x02259): (1057, "ExternalMap"),
 }
 
 # List of known V8 objects.
@@ -336,15 +336,15 @@ KNOWN_OBJECTS = {
   ("RO_SPACE", 0x054e1): "MinusInfinityValue",
   ("RO_SPACE", 0x054f1): "SelfReferenceMarker",
   ("OLD_SPACE", 0x02211): "EmptyScript",
-  ("OLD_SPACE", 0x02299): "ManyClosuresCell",
-  ("OLD_SPACE", 0x022b9): "NoElementsProtector",
-  ("OLD_SPACE", 0x022e1): "IsConcatSpreadableProtector",
-  ("OLD_SPACE", 0x022f1): "ArraySpeciesProtector",
-  ("OLD_SPACE", 0x02319): "TypedArraySpeciesProtector",
-  ("OLD_SPACE", 0x02341): "PromiseSpeciesProtector",
-  ("OLD_SPACE", 0x02369): "StringLengthProtector",
-  ("OLD_SPACE", 0x02379): "ArrayIteratorProtector",
-  ("OLD_SPACE", 0x023a1): "ArrayBufferNeuteringProtector",
+  ("OLD_SPACE", 0x02959): "NoElementsProtector",
+  ("OLD_SPACE", 0x02981): "IsConcatSpreadableProtector",
+  ("OLD_SPACE", 0x02991): "ArraySpeciesProtector",
+  ("OLD_SPACE", 0x029b9): "TypedArraySpeciesProtector",
+  ("OLD_SPACE", 0x029e1): "PromiseSpeciesProtector",
+  ("OLD_SPACE", 0x02a09): "StringLengthProtector",
+  ("OLD_SPACE", 0x02a19): "ArrayIteratorProtector",
+  ("OLD_SPACE", 0x02a41): "ArrayBufferNeuteringProtector",
+  ("OLD_SPACE", 0x1d911): "ManyClosuresCell",
 }
 
 # List of known V8 Frame Markers.
