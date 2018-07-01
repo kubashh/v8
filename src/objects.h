@@ -21,6 +21,7 @@
 #include "src/flags.h"
 #include "src/messages.h"
 #include "src/property-details.h"
+#include "src/roots.h"
 #include "src/utils.h"
 
 #if V8_TARGET_ARCH_ARM
@@ -554,53 +555,6 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(THIN_STRING_TYPE, ThinString::kSize, thin_string, ThinString)             \
   V(THIN_ONE_BYTE_STRING_TYPE, ThinString::kSize, thin_one_byte_string,       \
     ThinOneByteString)
-
-// A struct is a simple object a set of object-valued fields.  Including an
-// object type in this causes the compiler to generate most of the boilerplate
-// code for the class including allocation and garbage collection routines,
-// casts and predicates.  All you need to define is the class, methods and
-// object verification routines.  Easy, no?
-//
-// Note that for subtle reasons related to the ordering or numerical values of
-// type tags, elements in this list have to be added to the INSTANCE_TYPE_LIST
-// manually.
-#define STRUCT_LIST(V)                                                       \
-  V(ACCESS_CHECK_INFO, AccessCheckInfo, access_check_info)                   \
-  V(ACCESSOR_INFO, AccessorInfo, accessor_info)                              \
-  V(ACCESSOR_PAIR, AccessorPair, accessor_pair)                              \
-  V(ALIASED_ARGUMENTS_ENTRY, AliasedArgumentsEntry, aliased_arguments_entry) \
-  V(ALLOCATION_MEMENTO, AllocationMemento, allocation_memento)               \
-  V(ASYNC_GENERATOR_REQUEST, AsyncGeneratorRequest, async_generator_request) \
-  V(DEBUG_INFO, DebugInfo, debug_info)                                       \
-  V(FUNCTION_TEMPLATE_INFO, FunctionTemplateInfo, function_template_info)    \
-  V(INTERCEPTOR_INFO, InterceptorInfo, interceptor_info)                     \
-  V(INTERPRETER_DATA, InterpreterData, interpreter_data)                     \
-  V(MODULE_INFO_ENTRY, ModuleInfoEntry, module_info_entry)                   \
-  V(MODULE, Module, module)                                                  \
-  V(OBJECT_TEMPLATE_INFO, ObjectTemplateInfo, object_template_info)          \
-  V(PROMISE_CAPABILITY, PromiseCapability, promise_capability)               \
-  V(PROMISE_REACTION, PromiseReaction, promise_reaction)                     \
-  V(PROTOTYPE_INFO, PrototypeInfo, prototype_info)                           \
-  V(SCRIPT, Script, script)                                                  \
-  V(STACK_FRAME_INFO, StackFrameInfo, stack_frame_info)                      \
-  V(TUPLE2, Tuple2, tuple2)                                                  \
-  V(TUPLE3, Tuple3, tuple3)                                                  \
-  V(WASM_DEBUG_INFO, WasmDebugInfo, wasm_debug_info)                         \
-  V(WASM_EXPORTED_FUNCTION_DATA, WasmExportedFunctionData,                   \
-    wasm_exported_function_data)                                             \
-  V(CALLABLE_TASK, CallableTask, callable_task)                              \
-  V(CALLBACK_TASK, CallbackTask, callback_task)                              \
-  V(PROMISE_FULFILL_REACTION_JOB_TASK, PromiseFulfillReactionJobTask,        \
-    promise_fulfill_reaction_job_task)                                       \
-  V(PROMISE_REJECT_REACTION_JOB_TASK, PromiseRejectReactionJobTask,          \
-    promise_reject_reaction_job_task)                                        \
-  V(PROMISE_RESOLVE_THENABLE_JOB_TASK, PromiseResolveThenableJobTask,        \
-    promise_resolve_thenable_job_task)
-
-#define ALLOCATION_SITE_LIST(V)                                     \
-  V(ALLOCATION_SITE, AllocationSite, WithWeakNext, allocation_site) \
-  V(ALLOCATION_SITE, AllocationSite, WithoutWeakNext,               \
-    allocation_site_without_weaknext)
 
 #define DATA_HANDLER_LIST(V)                        \
   V(LOAD_HANDLER, LoadHandler, 1, load_handler1)    \
@@ -1812,6 +1766,8 @@ class HeapObject: public Object {
   // necessarily contain a map pointer.
   inline MapWord map_word() const;
   inline void set_map_word(MapWord map_word);
+
+  inline ReadOnlyRoots GetReadOnlyRoots() const;
 
   // The Heap the object was allocated in. Used also to access Isolate.
 #ifdef DEPRECATE_GET_ISOLATE
