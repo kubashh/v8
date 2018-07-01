@@ -32,7 +32,7 @@ class RegisterValues;
 class TranslatedValue {
  public:
   // Allocation-less getter of the value.
-  // Returns heap()->arguments_marker() if allocation would be
+  // ReturnsReadOnlyRoots( heap()).arguments_marker() if allocation would be
   // necessary to get the value.
   Object* GetRawValue() const;
 
