@@ -40,6 +40,7 @@
 #include "unicode/ucurr.h"
 #include "unicode/unum.h"
 #include "unicode/upluralrules.h"
+#include "unicode/ures.h"
 #include "unicode/uvernum.h"
 #include "unicode/uversion.h"
 
@@ -1100,6 +1101,7 @@ bool IntlUtil::RemoveLocaleScriptTag(const std::string& icu_locale,
 std::set<std::string> IntlUtil::GetAvailableLocales(const IcuService& service) {
   const icu::Locale* icu_available_locales = nullptr;
   int32_t count = 0;
+  std::set<std::string> locales;
 
   switch (service) {
     case IcuService::kBreakIterator:
@@ -1122,12 +1124,53 @@ std::set<std::string> IntlUtil::GetAvailableLocales(const IcuService& service) {
       // https://ssl.icu-project.org/trac/ticket/12756
       icu_available_locales = icu::Locale::getAvailableLocales(count);
       break;
+    case IcuService::kResourceBundle: {
+      UErrorCode status = U_ZERO_ERROR;
+      UEnumeration* en = ures_openAvailableLocales(nullptr, &status);
+      const char* locale_str = nullptr;
+      int32_t length = 0;
+      while (U_SUCCESS(status) &&
+             nullptr != (locale_str = uenum_next(en, &length, &status))) {
+        std::string locale(locale_str, length);
+        std::replace(locale.begin(), locale.end(), '_', '-');
+        locales.insert(locale);
+        std::string shortened_locale;
+        if (IntlUtil::RemoveLocaleScriptTag(locale_str, &shortened_locale)) {
+          std::replace(shortened_locale.begin(), shortened_locale.end(), '_',
+                       '-');
+          locales.insert(shortened_locale);
+        }
+      }
+      uenum_close(en);
+      return locales;
+    }
+    case IcuService::kRelativeDateTimeFormatter: {
+      // ICU RelativeDateTimeFormatter does not provide a getAvailableLocales()
+      // interface. Because RelativeDateTimeFormatter depends on
+      // 1. NumberFormat, 2. PluralRules and 3. ResourceBundle, return the
+      // intersection of these three set.
+      std::set<std::string> number_format_set(
+          IntlUtil::GetAvailableLocales(IcuService::kNumberFormat));
+      std::set<std::string> plural_rules_set(
+          IntlUtil::GetAvailableLocales(IcuService::kPluralRules));
+      std::set<std::string> tmp;
+      set_intersection(number_format_set.begin(), number_format_set.end(),
+                       plural_rules_set.begin(), plural_rules_set.end(),
+                       std::inserter(tmp, tmp.begin()));
+      std::set<std::string> resource_bundle_set(
+          IntlUtil::GetAvailableLocales(IcuService::kResourceBundle));
+      set_intersection(resource_bundle_set.begin(), resource_bundle_set.end(),
+                       tmp.begin(), tmp.end(),
+                       std::inserter(locales, locales.begin()));
+      return locales;
+    }
+    default:
+      UNREACHABLE();
   }
 
   UErrorCode error = U_ZERO_ERROR;
   char result[ULOC_FULLNAME_CAPACITY];
 
-  std::set<std::string> locales;
   for (int32_t i = 0; i < count; ++i) {
     const char* icu_name = icu_available_locales[i].getName();
 
