@@ -62,29 +62,44 @@ class ConstantElementsPair : public Tuple2 {
 
 // Support for handling complex values (array and object literals) that
 // can be fully handled at compile time.
-class CompileTimeValue : public Tuple2 {
+class CompileTimeValue : public Struct {
  public:
-  // This is a special marker used to encode array literals. The value has to be
-  // different from any value possibly returned by
-  // ObjectLiteral::EncodeLiteralType.
-  static const int kArrayLiteralFlag = -1;
+  DECL_BOOLEAN_ACCESSORS(points_to_literal)
+  // Field used to store object/array literal flags
+  DECL_INT_ACCESSORS(type_flag)
 
-  // Get the encoded literal type. This can either be kArrayLiteralFlag or
-  // encoded properties of an ObjectLiteral returned by
-  // ObjectLiteral::EncodeLiteralType.
-  DECL_INT_ACCESSORS(literal_type_flag);
-  // For objects literals a FixedArray is stored whereas for array literals
-  // ConstantElementPair is stored.
-  DECL_ACCESSORS(constant_elements, HeapObject)
+  // store constant_elements of a fixed array or literal
+  DECL_ACCESSORS(constant_elements, FixedArrayBase)
+
+  // allocation for type_flag and points_to_literal
+  DECL_INT_ACCESSORS(flags)
 
   DECL_CAST(CompileTimeValue)
+  // Dispatched behavior.
+  DECL_PRINTER(CompileTimeValue)
+  DECL_VERIFIER(CompileTimeValue)
+  void BriefPrintDetails(std::ostream& os);
 
-  static const int kLiteralTypeFlagOffset = kValue1Offset;
-  static const int kConstantElementsOffset = kValue2Offset;
+#define COMPILE_TIME_VALUE_FIELDS(V)       \
+  V(kFlagsOffset, kPointerSize)            \
+  V(kConstantElementsOffset, kPointerSize) \
+  V(kSize, 0)
+
+  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
+                                COMPILE_TIME_VALUE_FIELDS)
+#undef COMPILE_TIME_VALUE_FIELDS
+
+#define COMPILE_TIME_VALUE_BIT_FIELDS(V, _) \
+  V(TypeBit, bool, 1, _)                    \
+  V(TypeFlagBits, int, 30, _)
+
+  DEFINE_BIT_FIELDS(COMPILE_TIME_VALUE_BIT_FIELDS)
+#undef COMPILE_TIME_VALUE_BIT_FIELDS
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CompileTimeValue);
 };
+
 class ClassBoilerplate : public FixedArray {
  public:
   enum ValueKind { kData, kGetter, kSetter };

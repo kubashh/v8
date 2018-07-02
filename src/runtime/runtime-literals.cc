@@ -394,17 +394,10 @@ struct ObjectBoilerplate {
 };
 
 struct ArrayBoilerplate {
-  static Handle<JSObject> Create(Isolate* isolate,
-                                 Handle<HeapObject> description, int flags,
-                                 PretenureFlag pretenure_flag) {
-    Handle<ConstantElementsPair> elements =
-        Handle<ConstantElementsPair>::cast(description);
+  static Handle<JSObject> Create(
+      Isolate* isolate, Handle<FixedArrayBase> constant_elements_values,
+      ElementsKind constant_elements_kind, PretenureFlag pretenure_flag) {
     // Create the JSArray.
-    ElementsKind constant_elements_kind =
-        static_cast<ElementsKind>(elements->elements_kind());
-
-    Handle<FixedArrayBase> constant_elements_values(elements->constant_values(),
-                                                    isolate);
     Handle<FixedArrayBase> copied_elements_values;
     if (IsDoubleElementsKind(constant_elements_kind)) {
       copied_elements_values = isolate->factory()->CopyFixedDoubleArray(
@@ -449,18 +442,41 @@ struct ArrayBoilerplate {
         copied_elements_values, constant_elements_kind,
         copied_elements_values->length(), pretenure_flag);
   }
+
+  // Called only from top level where array description is ConstantElementsPair
+  static Handle<JSObject> Create(Isolate* isolate,
+                                 Handle<HeapObject> description, int flags,
+                                 PretenureFlag pretenure_flag) {
+    Handle<ConstantElementsPair> elements =
+        Handle<ConstantElementsPair>::cast(description);
+    // Create the JSArray.
+    ElementsKind constant_elements_kind =
+        static_cast<ElementsKind>(elements->elements_kind());
+
+    Handle<FixedArrayBase> constant_elements_values(elements->constant_values(),
+                                                    isolate);
+    return Create(isolate, constant_elements_values, constant_elements_kind,
+                  pretenure_flag);
+  }
 };
 
 Handle<Object> InnerCreateBoilerplate(
     Isolate* isolate, Handle<CompileTimeValue> compile_time_value,
     PretenureFlag pretenure_flag) {
-  int flags = compile_time_value->literal_type_flag();
-  Handle<HeapObject> elements(
-      HeapObject::cast(compile_time_value->constant_elements()), isolate);
-  if (flags == CompileTimeValue::kArrayLiteralFlag) {
-    return ArrayBoilerplate::Create(isolate, elements, flags, pretenure_flag);
+  if (compile_time_value->points_to_literal()) {
+    int flags = compile_time_value->type_flag();
+    Handle<HeapObject> elements(
+        HeapObject::cast(compile_time_value->constant_elements()), isolate);
+    return ObjectBoilerplate::Create(isolate, elements, flags, pretenure_flag);
+  } else {
+    ElementsKind constant_elements_kind =
+        static_cast<ElementsKind>(compile_time_value->type_flag());
+
+    Handle<FixedArrayBase> constant_elements(
+        compile_time_value->constant_elements(), isolate);
+    return ArrayBoilerplate::Create(isolate, constant_elements,
+                                    constant_elements_kind, pretenure_flag);
   }
-  return ObjectBoilerplate::Create(isolate, elements, flags, pretenure_flag);
 }
 
 template <typename Boilerplate>
