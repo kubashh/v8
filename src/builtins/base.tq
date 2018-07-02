@@ -589,7 +589,8 @@ macro StoreFixedDoubleArrayElementWithSmiIndex(
 extern macro BasicLoadNumberDictionaryElement(NumberDictionary, intptr):
     Object labels NotData,
     IfHole;
-extern macro BasicStoreNumberDictionaryElement(NumberDictionary, intptr, Object)
+extern macro BasicStoreNumberDictionaryElement(Context, Object,
+    NumberDictionary, intptr, Object)
 labels Fail, IfHole;
 
 extern macro IsFastElementsKind(ElementsKind): bool;
