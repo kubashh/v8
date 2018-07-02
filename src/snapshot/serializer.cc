@@ -857,24 +857,22 @@ void Serializer<AllocatorT>::ObjectSerializer::VisitRuntimeEntry(
 template <class AllocatorT>
 void Serializer<AllocatorT>::ObjectSerializer::VisitOffHeapTarget(
     Code* host, RelocInfo* rinfo) {
-#ifdef V8_EMBEDDED_BUILTINS
-  {
-    STATIC_ASSERT(EmbeddedData::kTableSize == Builtins::builtin_count);
-    CHECK(Builtins::IsIsolateIndependentBuiltin(host));
-    Address addr = rinfo->target_off_heap_target();
-    CHECK_NE(kNullAddress, addr);
-    CHECK_NOT_NULL(
-        InstructionStream::TryLookupCode(serializer_->isolate(), addr));
-  }
+  if (FLAG_embedded_builtins) {
+    {
+      STATIC_ASSERT(EmbeddedData::kTableSize == Builtins::builtin_count);
+      CHECK(Builtins::IsIsolateIndependentBuiltin(host));
+      Address addr = rinfo->target_off_heap_target();
+      CHECK_NE(kNullAddress, addr);
+      CHECK_NOT_NULL(
+          InstructionStream::TryLookupCode(serializer_->isolate(), addr));
+    }
 
-  int skip = SkipTo(rinfo->target_address_address());
-  sink_->Put(kOffHeapTarget, "OffHeapTarget");
-  sink_->PutInt(skip, "SkipB4OffHeapTarget");
-  sink_->PutInt(host->builtin_index(), "builtin index");
-  bytes_processed_so_far_ += rinfo->target_address_size();
-#else
-  UNREACHABLE();
-#endif
+    int skip = SkipTo(rinfo->target_address_address());
+    sink_->Put(kOffHeapTarget, "OffHeapTarget");
+    sink_->PutInt(skip, "SkipB4OffHeapTarget");
+    sink_->PutInt(host->builtin_index(), "builtin index");
+    bytes_processed_so_far_ += rinfo->target_address_size();
+  }
 }
 
 namespace {

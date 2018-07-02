@@ -13,43 +13,42 @@ namespace internal {
 
 // static
 bool InstructionStream::PcIsOffHeap(Isolate* isolate, Address pc) {
-#ifdef V8_EMBEDDED_BUILTINS
-  const Address start = reinterpret_cast<Address>(isolate->embedded_blob());
-  return start <= pc && pc < start + isolate->embedded_blob_size();
-#else
-  return false;
-#endif
+  if (FLAG_embedded_builtins) {
+    const Address start = reinterpret_cast<Address>(isolate->embedded_blob());
+    return start <= pc && pc < start + isolate->embedded_blob_size();
+  } else {
+    return false;
+  }
 }
 
 // static
 Code* InstructionStream::TryLookupCode(Isolate* isolate, Address address) {
-#ifdef V8_EMBEDDED_BUILTINS
-  if (!PcIsOffHeap(isolate, address)) return nullptr;
+  if (FLAG_embedded_builtins) {
+    if (!PcIsOffHeap(isolate, address)) return nullptr;
 
-  EmbeddedData d = EmbeddedData::FromBlob();
+    EmbeddedData d = EmbeddedData::FromBlob();
 
-  int l = 0, r = Builtins::builtin_count;
-  while (l < r) {
-    const int mid = (l + r) / 2;
-    Address start = d.InstructionStartOfBuiltin(mid);
-    Address end = start + d.InstructionSizeOfBuiltin(mid);
+    int l = 0, r = Builtins::builtin_count;
+    while (l < r) {
+      const int mid = (l + r) / 2;
+      Address start = d.InstructionStartOfBuiltin(mid);
+      Address end = start + d.InstructionSizeOfBuiltin(mid);
 
-    if (address < start) {
-      r = mid;
-    } else if (address >= end) {
-      l = mid + 1;
-    } else {
-      return isolate->builtins()->builtin(mid);
+      if (address < start) {
+        r = mid;
+      } else if (address >= end) {
+        l = mid + 1;
+      } else {
+        return isolate->builtins()->builtin(mid);
+      }
     }
-  }
 
-  UNREACHABLE();
-#else
-  return nullptr;
-#endif
+    UNREACHABLE();
+  } else {
+    return nullptr;
+  }
 }
 
-#ifdef V8_EMBEDDED_BUILTINS
 // static
 void InstructionStream::CreateOffHeapInstructionStream(Isolate* isolate,
                                                        uint8_t** data,
@@ -80,7 +79,6 @@ void InstructionStream::FreeOffHeapInstructionStream(uint8_t* data,
   const uint32_t page_size = static_cast<uint32_t>(AllocatePageSize());
   CHECK(FreePages(data, RoundUp(size, page_size)));
 }
-#endif  // V8_EMBEDDED_BUILTINS
 
 }  // namespace internal
 }  // namespace v8
