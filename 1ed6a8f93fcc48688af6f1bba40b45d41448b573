@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1da16a2f_340c1e03",
+        "filename": "test/mjsunit/regress/regress-crbug-7907.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-02T09:44:37Z",
+      "side": 1,
+      "message": "This lower part lgtm, for the line above please open a bug.",
+      "revId": "1ed6a8f93fcc48688af6f1bba40b45d41448b573",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
