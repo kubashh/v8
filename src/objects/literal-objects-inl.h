@@ -43,10 +43,16 @@ ACCESSORS(ClassBoilerplate, instance_elements_template, Object,
 ACCESSORS(ClassBoilerplate, instance_computed_properties, FixedArray,
           FixedArray::OffsetOfElementAt(kPrototypeComputedPropertiesIndex));
 
-SMI_ACCESSORS(CompileTimeValue, literal_type_flag, kLiteralTypeFlagOffset)
-ACCESSORS(CompileTimeValue, constant_elements, HeapObject,
-          kConstantElementsOffset)
+SMI_ACCESSORS(CompileTimeValue, flags, kFlagsOffset);
 
+ACCESSORS(CompileTimeValue, constant_elements, FixedArrayBase,
+          kConstantElementsOffset);
+
+BIT_FIELD_ACCESSORS(CompileTimeValue, flags, points_to_literal,
+                    CompileTimeValue::TypeBit)
+
+BIT_FIELD_ACCESSORS(CompileTimeValue, flags, type_flag,
+                    CompileTimeValue::TypeFlagBits)
 }  // namespace internal
 }  // namespace v8
 

@@ -60,6 +60,7 @@
 #include "src/objects/debug-objects-inl.h"
 #include "src/objects/frame-array-inl.h"
 #include "src/objects/hash-table-inl.h"
+#include "src/objects/literal-objects-inl.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-locale.h"
 #endif  // V8_INTL_SUPPORT
@@ -3562,6 +3563,11 @@ void Tuple2::BriefPrintDetails(std::ostream& os) {
 void Tuple3::BriefPrintDetails(std::ostream& os) {
   os << " " << Brief(value1()) << ", " << Brief(value2()) << ", "
      << Brief(value3());
+}
+
+void CompileTimeValue::BriefPrintDetails(std::ostream& os) {
+  os << " " << points_to_literal() << ", " << type_flag() << ", "
+     << Brief(constant_elements());
 }
 
 void CallableTask::BriefPrintDetails(std::ostream& os) {

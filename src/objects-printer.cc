@@ -14,6 +14,7 @@
 #include "src/interpreter/bytecodes.h"
 #include "src/objects-inl.h"
 #include "src/objects/debug-objects-inl.h"
+#include "src/objects/literal-objects-inl.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-locale-inl.h"
 #endif  // V8_INTL_SUPPORT
@@ -1677,6 +1678,14 @@ void Tuple3::Tuple3Print(std::ostream& os) {  // NOLINT
   os << "\n - value1: " << Brief(value1());
   os << "\n - value2: " << Brief(value2());
   os << "\n - value3: " << Brief(value3());
+  os << "\n";
+}
+
+void CompileTimeValue::CompileTimeValuePrint(std::ostream& os) {  // NOLINT
+  HeapObject::PrintHeader(os, "CompileTimeValue");
+  os << "\n - points to literal: " << points_to_literal();
+  os << "\n - type flag: " << type_flag();
+  os << "\n - constant elements: " << Brief(constant_elements());
   os << "\n";
 }
 
