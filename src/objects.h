@@ -21,6 +21,7 @@
 #include "src/flags.h"
 #include "src/messages.h"
 #include "src/property-details.h"
+#include "src/roots.h"
 #include "src/utils.h"
 
 #if V8_TARGET_ARCH_ARM
@@ -1834,6 +1835,8 @@ class HeapObject: public Object {
   // necessarily contain a map pointer.
   inline MapWord map_word() const;
   inline void set_map_word(MapWord map_word);
+
+  inline ReadOnlyRoots GetReadOnlyRoots() const;
 
   // The Heap the object was allocated in. Used also to access Isolate.
 #ifdef DEPRECATE_GET_ISOLATE
