@@ -1547,6 +1547,11 @@ void Tuple3::Tuple3Verify(Isolate* isolate) {
   VerifyObjectField(kValue3Offset);
 }
 
+void CompileTimeValue::CompileTimeValueVerify(Isolate* isolate) {
+  CHECK(IsCompileTimeValue());
+  VerifyObjectField(kConstantElementsOffset);
+}
+
 void WasmDebugInfo::WasmDebugInfoVerify(Isolate* isolate) {
   CHECK(IsWasmDebugInfo());
   VerifyObjectField(kInstanceOffset);

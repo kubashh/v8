@@ -17,6 +17,7 @@
 #include "src/isolate.h"
 #include "src/objects/compilation-cache-inl.h"
 #include "src/objects/js-collection-inl.h"
+#include "src/objects/literal-objects-inl.h"
 #include "src/objects/templates.h"
 #include "src/utils.h"
 
@@ -827,8 +828,11 @@ void ObjectStatsCollectorImpl::
       RecordVirtualObjectsForConstantPoolOrEmbeddedObjects(
           array, HeapObject::cast(entry), type);
     }
-  } else if (MatchesConstantElementsPair(object) ||
-             object->IsCompileTimeValue()) {
+  } else if (object->IsCompileTimeValue()) {
+    CompileTimeValue* value = CompileTimeValue::cast(object);
+    RecordVirtualObjectsForConstantPoolOrEmbeddedObjects(
+        value, HeapObject::cast(value->constant_elements()), type);
+  } else if (MatchesConstantElementsPair(object)) {
     Tuple2* tuple = Tuple2::cast(object);
     RecordVirtualObjectsForConstantPoolOrEmbeddedObjects(
         tuple, HeapObject::cast(tuple->value2()), type);
@@ -845,8 +849,7 @@ void ObjectStatsCollectorImpl::RecordVirtualBytecodeArrayDetails(
   FixedArray* constant_pool = FixedArray::cast(bytecode->constant_pool());
   for (int i = 0; i < constant_pool->length(); i++) {
     Object* entry = constant_pool->get(i);
-    if (entry->IsFixedArrayExact() || MatchesConstantElementsPair(entry) ||
-        entry->IsCompileTimeValue()) {
+    if (entry->IsFixedArrayExact() || MatchesConstantElementsPair(entry)) {
       RecordVirtualObjectsForConstantPoolOrEmbeddedObjects(
           constant_pool, HeapObject::cast(entry),
           ObjectStats::EMBEDDED_OBJECT_TYPE);

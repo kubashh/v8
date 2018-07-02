@@ -19,6 +19,7 @@
 #include "src/objects/js-collection-inl.h"
 #include "src/objects/js-promise-inl.h"
 #include "src/objects/js-regexp-inl.h"
+#include "src/objects/literal-objects-inl.h"
 #include "src/profiler/allocation-tracker.h"
 #include "src/profiler/heap-profiler.h"
 #include "src/profiler/heap-snapshot-generator-inl.h"
@@ -881,6 +882,8 @@ void V8HeapExplorer::ExtractReferences(int entry, HeapObject* obj) {
     ExtractPropertyCellReferences(entry, PropertyCell::cast(obj));
   } else if (obj->IsAllocationSite()) {
     ExtractAllocationSiteReferences(entry, AllocationSite::cast(obj));
+  } else if (obj->IsCompileTimeValue()) {
+    ExtractCompileTimeValueReferences(entry, CompileTimeValue::cast(obj));
   } else if (obj->IsFeedbackVector()) {
     ExtractFeedbackVectorReferences(entry, FeedbackVector::cast(obj));
   } else if (obj->IsWeakFixedArray()) {
@@ -1314,6 +1317,13 @@ void V8HeapExplorer::ExtractAllocationSiteReferences(int entry,
   TagObject(site->dependent_code(), "(dependent code)");
   SetInternalReference(site, entry, "dependent_code", site->dependent_code(),
                        AllocationSite::kDependentCodeOffset);
+}
+
+void V8HeapExplorer::ExtractCompileTimeValueReferences(
+    int entry, CompileTimeValue* value) {
+  SetInternalReference(value, entry, "constant_elements",
+                       value->constant_elements(),
+                       CompileTimeValue::kConstantElementsOffset);
 }
 
 class JSArrayBufferDataEntryAllocator : public HeapEntriesAllocator {

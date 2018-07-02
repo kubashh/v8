@@ -399,6 +399,7 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(STACK_FRAME_INFO_TYPE)                                      \
   V(TUPLE2_TYPE)                                                \
   V(TUPLE3_TYPE)                                                \
+  V(COMPILE_TIME_VALUE_TYPE)                                    \
   V(WASM_DEBUG_INFO_TYPE)                                       \
   V(WASM_EXPORTED_FUNCTION_DATA_TYPE)                           \
                                                                 \
@@ -593,6 +594,7 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(STACK_FRAME_INFO, StackFrameInfo, stack_frame_info)                      \
   V(TUPLE2, Tuple2, tuple2)                                                  \
   V(TUPLE3, Tuple3, tuple3)                                                  \
+  V(COMPILE_TIME_VALUE, CompileTimeValue, compile_time_value)                \
   V(WASM_DEBUG_INFO, WasmDebugInfo, wasm_debug_info)                         \
   V(WASM_EXPORTED_FUNCTION_DATA, WasmExportedFunctionData,                   \
     wasm_exported_function_data)                                             \
@@ -791,6 +793,7 @@ enum InstanceType : uint16_t {
   STACK_FRAME_INFO_TYPE,
   TUPLE2_TYPE,
   TUPLE3_TYPE,
+  COMPILE_TIME_VALUE_TYPE,
   WASM_DEBUG_INFO_TYPE,
   WASM_EXPORTED_FUNCTION_DATA_TYPE,
 
@@ -1072,7 +1075,6 @@ template <class C> inline bool Is(Object* obj);
   V(CompilationCacheTable)                     \
   V(ConsString)                                \
   V(ConstantElementsPair)                      \
-  V(CompileTimeValue)                          \
   V(Constructor)                               \
   V(Context)                                   \
   V(CoverageInfo)                              \

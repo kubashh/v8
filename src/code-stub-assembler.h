@@ -70,6 +70,7 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(TrueValue, true_value, True)                                            \
   V(Tuple2Map, tuple2_map, Tuple2Map)                                       \
   V(Tuple3Map, tuple3_map, Tuple3Map)                                       \
+  V(CompileTimeValueMap, compile_time_value_map, CompileTimeValueMap)       \
   V(TypedArraySpeciesProtector, typed_array_species_protector,              \
     TypedArraySpeciesProtector)                                             \
   V(UndefinedValue, undefined_value, Undefined)                             \

@@ -247,21 +247,24 @@ Handle<ConstantElementsPair> Factory::NewConstantElementsPair(
 
 Handle<CompileTimeValue> Factory::NewCompileTimeValue(Expression* expression) {
   DCHECK(expression->IsCompileTimeValue());
-  Handle<CompileTimeValue> result =
-      Handle<CompileTimeValue>::cast(NewStruct(TUPLE2_TYPE, TENURED));
+  Handle<CompileTimeValue> result = Handle<CompileTimeValue>::cast(
+      NewStruct(COMPILE_TIME_VALUE_TYPE, TENURED));
+  result->set_flags(0);
 
   if (expression->IsObjectLiteral()) {
     ObjectLiteral* object_literal = expression->AsObjectLiteral();
     DCHECK(object_literal->is_simple());
     int literalTypeFlag = object_literal->EncodeLiteralType();
-    DCHECK_NE(CompileTimeValue::kArrayLiteralFlag, literalTypeFlag);
-    result->set_literal_type_flag(literalTypeFlag);
+    result->set_points_to_literal(true);
+    result->set_type_flag(literalTypeFlag);
     result->set_constant_elements(*object_literal->constant_properties());
   } else {
     ArrayLiteral* array_literal = expression->AsArrayLiteral();
     DCHECK(array_literal->is_simple());
-    result->set_literal_type_flag(CompileTimeValue::kArrayLiteralFlag);
-    result->set_constant_elements(*array_literal->constant_elements());
+    result->set_points_to_literal(false);
+    Handle<ConstantElementsPair> elem_pair = array_literal->constant_elements();
+    result->set_type_flag(elem_pair->elements_kind());
+    result->set_constant_elements(elem_pair->constant_values());
   }
   return result;
 }
