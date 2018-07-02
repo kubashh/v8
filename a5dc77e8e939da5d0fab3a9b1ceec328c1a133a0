@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7dad140e_149ef545",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4677,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-02T02:48:47Z",
+      "side": 1,
+      "message": "This isn\u0027t required.",
+      "revId": "a5dc77e8e939da5d0fab3a9b1ceec328c1a133a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a882b5b_3763b6d1",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4705,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-02T02:48:47Z",
+      "side": 1,
+      "message": "Nice, this is great!",
+      "revId": "a5dc77e8e939da5d0fab3a9b1ceec328c1a133a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9dd2215_f4ba79b8",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-02T02:48:47Z",
+      "side": 1,
+      "message": "Let\u0027s change this to \u0027ecma402 #sec-intl-relativetimeformat-constructor\u0027 and do similarly for each of the builtin below. \n\nCan you please update the above Locale* Builtins to have comments too? I know this isn\u0027t part of your CL, but it\u0027d be good to clean that up as well.",
+      "range": {
+        "startLine": 1340,
+        "startChar": 5,
+        "endLine": 1340,
+        "endChar": 26
+      },
+      "revId": "a5dc77e8e939da5d0fab3a9b1ceec328c1a133a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b46a1abe_18a80837",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-02T02:48:47Z",
+      "side": 1,
+      "message": "Let\u0027s name this `harmony_intl_relative_time_format`. I know locale doesn\u0027t follow this but I think that was an oversight.",
+      "revId": "a5dc77e8e939da5d0fab3a9b1ceec328c1a133a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fd03839_304f18ef",
+        "filename": "src/messages.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-02T02:48:47Z",
+      "side": 1,
+      "message": "Can you update this error message to be more descriptive?",
+      "revId": "a5dc77e8e939da5d0fab3a9b1ceec328c1a133a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7de47b71_6660299b",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1951,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-02T02:48:47Z",
+      "side": 1,
+      "message": "Please print the other fields in the object as well",
+      "revId": "a5dc77e8e939da5d0fab3a9b1ceec328c1a133a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
