@@ -1079,6 +1079,20 @@ class Isolate : private HiddenFactory {
     date_cache_ = date_cache;
   }
 
+  std::string language_singleton_re() { return language_singleton_re_; }
+
+  std::string language_tag_re() { return language_tag_re_; }
+
+  std::string language_variant_re() { return language_variant_re_; }
+
+  void set_language_tag_res(std::string language_singleton_re,
+                            std::string language_tag_re,
+                            std::string language_variant_re) {
+    language_singleton_re_ = language_singleton_re;
+    language_tag_re_ = language_tag_re;
+    language_variant_re_ = language_variant_re;
+  }
+
   static const int kProtectorValid = 1;
   static const int kProtectorInvalid = 0;
 
@@ -1565,6 +1579,9 @@ class Isolate : private HiddenFactory {
       host_initialize_import_meta_object_callback_;
   base::Mutex rail_mutex_;
   double load_start_time_ms_;
+  std::string language_singleton_re_;
+  std::string language_tag_re_;
+  std::string language_variant_re_;
 
   // Whether the isolate has been created for snapshotting.
   bool serializer_enabled_;

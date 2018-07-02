@@ -1237,5 +1237,75 @@ MaybeHandle<JSReceiver> Intl::UnwrapReceiver(Isolate* isolate,
   return Handle<JSReceiver>::cast(new_receiver);
 }
 
+// TODO(bstell): enable anonymous namespace
+
+void BuildLanguageTagREs(Isolate* isolate) {
+  std::string alpha = "[a-zA-Z]";
+  std::string digit = "[0-9]";
+  std::string alphanum = "(" + alpha + "|" + digit + ")";
+  std::string regular =
+      "(art-lojban|cel-gaulish|no-bok|no-nyn|zh-guoyu|zh-hakka|"
+      "zh-min|zh-min-nan|zh-xiang)";
+  std::string irregular =
+      "(en-GB-oed|i-ami|i-bnn|i-default|i-enochian|i-hak|"
+      "i-klingon|i-lux|i-mingo|i-navajo|i-pwn|i-tao|i-tay|"
+      "i-tsu|sgn-BE-FR|sgn-BE-NL|sgn-CH-DE)";
+  std::string grandfathered = "(" + irregular + "|" + regular + ")";
+  std::string private_use = "(x(-" + alphanum + "{1,8})+)";
+
+  std::string singleton = "(" + digit + "|[A-WY-Za-wy-z])";
+  std::string language_singleton_re = "^" + singleton + "$";
+
+  std::string extension = "(" + singleton + "(-" + alphanum + "{2,8})+)";
+
+  std::string variant = "(" + alphanum + "{5,8}|(" + digit + alphanum + "{3}))";
+  std::string language_variant_re = "^" + variant + "$";
+
+  std::string region = "(" + alpha + "{2}|" + digit + "{3})";
+  std::string script = "(" + alpha + "{4})";
+  std::string ext_lang = "(" + alpha + "{3}(-" + alpha + "{3}){0,2})";
+  std::string language = "(" + alpha + "{2,3}(-" + ext_lang + ")?|" + alpha +
+                         "{4}|" + alpha + "{5,8})";
+  std::string lang_tag = language + "(-" + script + ")?(-" + region + ")?(-" +
+                         variant + ")*(-" + extension + ")*(-" + private_use +
+                         ")?";
+
+  std::string language_tag =
+      "^(" + lang_tag + "|" + private_use + "|" + grandfathered + ")$";
+  std::string language_tag_re = std::string(language_tag);
+
+  isolate->set_language_tag_res(language_singleton_re, language_tag_re,
+                                language_variant_re);
+}
+
+std::string GetLanguageSingletonRE(Isolate* isolate) {
+  std::string language_singleton_re = isolate->language_singleton_re();
+  if (language_singleton_re.empty()) {
+    BuildLanguageTagREs(isolate);
+    language_singleton_re = isolate->language_singleton_re();
+  }
+  return language_singleton_re;
+}
+
+std::string GetLanguageTagRE(Isolate* isolate) {
+  std::string language_tag_re = isolate->language_tag_re();
+  if (language_tag_re.empty()) {
+    BuildLanguageTagREs(isolate);
+    language_tag_re = isolate->language_tag_re();
+  }
+  return language_tag_re;
+}
+
+std::string GetLanguageVariantRE(Isolate* isolate) {
+  std::string language_variant_re = isolate->language_variant_re();
+  if (language_variant_re.empty()) {
+    BuildLanguageTagREs(isolate);
+    language_variant_re = isolate->language_variant_re();
+  }
+  return language_variant_re;
+}
+
+// } TODO(bstell): enable anonymous namespace
+
 }  // namespace internal
 }  // namespace v8
