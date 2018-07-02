@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99bcd2d2_4f6208a4",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-02T14:14:09Z",
+      "side": 1,
+      "message": "suggestion: Shouldn\u0027t we be able to DCHECK(FLAG_embedded_builtins) here instead?",
+      "range": {
+        "startLine": 860,
+        "startChar": 2,
+        "endLine": 860,
+        "endChar": 31
+      },
+      "revId": "eb4f6cac26ea5fcb5b3fb2e224bf4fcdafc844eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
