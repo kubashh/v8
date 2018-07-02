@@ -94,8 +94,8 @@ class PropertyCallbackArguments
     // Here the hole is set as default value.
     // It cannot escape into js as it's removed in Call below.
     values[T::kReturnValueDefaultValueIndex] =
-        isolate->heap()->the_hole_value();
-    values[T::kReturnValueIndex] = isolate->heap()->the_hole_value();
+        ReadOnlyRoots(isolate).the_hole_value();
+    values[T::kReturnValueIndex] = ReadOnlyRoots(isolate).the_hole_value();
     DCHECK(values[T::kHolderIndex]->IsHeapObject());
     DCHECK(values[T::kIsolateIndex]->IsSmi());
   }
@@ -201,8 +201,8 @@ class FunctionCallbackArguments
     // Here the hole is set as default value.
     // It cannot escape into js as it's remove in Call below.
     values[T::kReturnValueDefaultValueIndex] =
-        isolate->heap()->the_hole_value();
-    values[T::kReturnValueIndex] = isolate->heap()->the_hole_value();
+        ReadOnlyRoots(isolate).the_hole_value();
+    values[T::kReturnValueIndex] = ReadOnlyRoots(isolate).the_hole_value();
     DCHECK(values[T::kHolderIndex]->IsHeapObject());
     DCHECK(values[T::kIsolateIndex]->IsSmi());
   }
