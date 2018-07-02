@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc26d2fe_b30ea333",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7519,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-02T12:47:16Z",
+      "side": 1,
+      "message": "This will be inlined at each call-site; I\u0027d prefer handling it like the other exceptional cases (-\u003e jump to a given label). But I\u0027m ok with doing this change in a follow-up since QuickSort is about to be removed anyway.\n\nPlease also mention this behavior in a comment in csa.h.",
+      "revId": "76c3ae0064a889a3dde04e8cfe84e9028cd22d35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
