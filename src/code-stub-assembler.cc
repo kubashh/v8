@@ -7492,10 +7492,11 @@ TNode<Object> CodeStubAssembler::BasicLoadNumberDictionaryElement(
 }
 
 void CodeStubAssembler::BasicStoreNumberDictionaryElement(
+    TNode<Context> context, TNode<Object> receiver,
     TNode<NumberDictionary> dictionary, TNode<IntPtrT> intptr_index,
     TNode<Object> value, Label* fail, Label* if_hole) {
   TVARIABLE(IntPtrT, var_entry);
-  Label if_found(this);
+  Label if_found(this), done(this), read_only(this);
   NumberDictionaryLookup(dictionary, intptr_index, &if_found, &var_entry,
                          if_hole);
   BIND(&if_found);
@@ -7509,8 +7510,17 @@ void CodeStubAssembler::BasicStoreNumberDictionaryElement(
   GotoIfNot(Word32Equal(kind, Int32Constant(kData)), fail);
 
   // Check that the property is writeable.
-  GotoIf(IsSetWord32(details, PropertyDetails::kAttributesReadOnlyMask), fail);
+  GotoIf(IsSetWord32(details, PropertyDetails::kAttributesReadOnlyMask),
+         &read_only);
+  Goto(&done);
 
+  BIND(&read_only);
+  {
+    ThrowTypeError(context, MessageTemplate::kStrictReadOnlyProperty,
+                   intptr_index, Typeof(receiver), receiver);
+  }
+
+  BIND(&done);
   // Finally, store the value.
   StoreValueByKeyIndex<NumberDictionary>(dictionary, index, value);
 }
