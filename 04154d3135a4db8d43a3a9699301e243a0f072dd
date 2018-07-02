@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a19eb8b_b378af60",
+        "filename": "src/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-02T14:41:44Z",
+      "side": 1,
+      "message": "It would be nice to DCHECK that {second_pass_callbacks_task_posted_} is true when entering this method.",
+      "revId": "04154d3135a4db8d43a3a9699301e243a0f072dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
