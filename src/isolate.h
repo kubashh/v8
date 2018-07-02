@@ -8,7 +8,9 @@
 #include <cstddef>
 #include <memory>
 #include <queue>
+#include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "include/v8-inspector.h"
@@ -1079,6 +1081,20 @@ class Isolate : private HiddenFactory {
     date_cache_ = date_cache;
   }
 
+  std::string language_singleton_regex() { return language_singleton_regex_; }
+
+  std::string language_tag_regex() { return language_tag_regex_; }
+
+  std::string language_variant_regex() { return language_variant_regex_; }
+
+  void set_language_tag_regexes(std::string language_singleton_regex,
+                                std::string language_tag_regex,
+                                std::string language_variant_regex) {
+    language_singleton_regex_ = language_singleton_regex;
+    language_tag_regex_ = language_tag_regex;
+    language_variant_regex_ = language_variant_regex;
+  }
+
   static const int kProtectorValid = 1;
   static const int kProtectorInvalid = 0;
 
@@ -1565,6 +1581,9 @@ class Isolate : private HiddenFactory {
       host_initialize_import_meta_object_callback_;
   base::Mutex rail_mutex_;
   double load_start_time_ms_;
+  std::string language_singleton_regex_;
+  std::string language_tag_regex_;
+  std::string language_variant_regex_;
 
   // Whether the isolate has been created for snapshotting.
   bool serializer_enabled_;
