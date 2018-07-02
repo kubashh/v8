@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "201014c3_c15d175f",
+        "filename": "src/objects/literal-objects-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-02T14:09:30Z",
+      "side": 1,
+      "message": "I think this should be points_to_object_literal or so.",
+      "revId": "7436ff3bde99ccecda03977f1d7d3869d20dd17b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
