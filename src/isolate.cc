@@ -4,7 +4,10 @@
 
 #include "src/isolate.h"
 
+#include <asm/ldt.h>
 #include <stdlib.h>
+#include <sys/syscall.h>
+#include <unistd.h>
 
 #include <atomic>
 #include <fstream>  // NOLINT(readability/streams)
@@ -2925,6 +2928,70 @@ void Isolate::PrepareEmbeddedBlobForSerialization() {
 }
 #endif  // V8_EMBEDDED_BUILTINS
 
+namespace {
+int modify_ldt(int func, void* ptr, uint32_t bytecount) {
+  return syscall(__NR_modify_ldt, func, ptr, bytecount);
+}
+
+void initialize_ldt_entry(uint32_t index, uintptr_t base_address) {
+  // The format of the struct is somewhat documented in modify_ldt manpage.
+  // LDT entries themselves are described in table 3.1 of the intel systems
+  // programming manual.
+
+  struct user_desc entry;
+  memset(&entry, 0, sizeof(entry));
+
+  static const uint32_t kNo = 0;
+  static const uint32_t kYes = 1;
+  static const uint32_t kLimit = 0xffffffff;
+  static const uint32_t kData = 0;
+
+  entry.entry_number = index;
+  entry.base_addr = base_address;
+  entry.limit = kLimit;
+  entry.seg_32bit = kYes;
+  entry.contents = kData;
+  entry.read_exec_only = kNo;
+  entry.limit_in_pages = kNo;
+  entry.seg_not_present = kNo;
+  entry.useable = kYes;
+
+  static const int kModifyLdtWrite = 1;
+  CHECK_EQ(0, modify_ldt(kModifyLdtWrite, &entry, sizeof(entry)));
+}
+
+#ifdef V8_TARGET_ARCH_IA32
+void set_fs_selector(uint32_t index) {
+  // Selector format:
+  //
+  //  15                                                 3    2        0
+  //  +--------------------------------------------------+----+--------+
+  //  |          Index                                   | TI |   RPL  |
+  //  +--------------------------------------------------+----+--------+
+  //  TI = Table Indicator: 0 = GDT, 1 = LDT
+  //  RPL = Request privilege level
+
+  static const uint32_t kRequestPrivilegeLevel = 0;
+  static const uint32_t kLocalDescriptorTable = 1 << 2;
+  static const uint32_t kIndexShiftSize = 3;
+
+  uint16_t selector = (index << kIndexShiftSize) | kLocalDescriptorTable |
+                      kRequestPrivilegeLevel;
+  uint16_t result = -1;
+
+  __asm__(
+      "movw %1,%%fs\n"
+      "movw %%fs,%0\n"
+      : "=&r"(result)  // out
+      : "r"(selector)  // in
+      :);              // clobbered
+
+  // Just a sanity check.
+  CHECK_EQ(result, selector);
+}
+#endif
+}  // namespace
+
 bool Isolate::Init(StartupDeserializer* des) {
   TRACE_ISOLATE(init);
 
@@ -3024,6 +3091,12 @@ bool Isolate::Init(StartupDeserializer* des) {
   InitializeThreadLocal();
 
   bootstrapper_->Initialize(create_heap_objects);
+
+#ifdef V8_TARGET_ARCH_IA32
+  uintptr_t roots_ptr = reinterpret_cast<uintptr_t>(heap_.roots_array_start());
+  initialize_ldt_entry(0, roots_ptr);
+  set_fs_selector(0);
+#endif
 
 #ifdef V8_EMBEDDED_BUILTINS
   if (create_heap_objects && serializer_enabled()) {
