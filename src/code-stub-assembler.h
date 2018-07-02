@@ -2161,7 +2161,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<Object> BasicLoadNumberDictionaryElement(
       TNode<NumberDictionary> dictionary, TNode<IntPtrT> intptr_index,
       Label* not_data, Label* if_hole);
-  void BasicStoreNumberDictionaryElement(TNode<NumberDictionary> dictionary,
+  void BasicStoreNumberDictionaryElement(TNode<Context> context,
+                                         TNode<Object> receiver,
+                                         TNode<NumberDictionary> dictionary,
                                          TNode<IntPtrT> intptr_index,
                                          TNode<Object> value, Label* fail,
                                          Label* if_hole);
