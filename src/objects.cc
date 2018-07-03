@@ -14094,7 +14094,6 @@ SafepointEntry Code::GetSafepointEntry(Address pc) {
   return table.FindEntry(pc);
 }
 
-#ifdef V8_EMBEDDED_BUILTINS
 int Code::OffHeapInstructionSize() const {
   DCHECK(is_off_heap_trampoline());
   if (Isolate::CurrentEmbeddedBlob() == nullptr) return raw_instruction_size();
@@ -14116,7 +14115,6 @@ Address Code::OffHeapInstructionEnd() const {
   return d.InstructionStartOfBuiltin(builtin_index()) +
          d.InstructionSizeOfBuiltin(builtin_index());
 }
-#endif
 
 namespace {
 template <typename Code>
@@ -14256,7 +14254,6 @@ const char* AbstractCode::Kind2String(Kind kind) {
   UNREACHABLE();
 }
 
-#ifdef V8_EMBEDDED_BUILTINS
 bool Code::IsIsolateIndependent(Isolate* isolate) {
   constexpr int all_real_modes_mask =
       (1 << (RelocInfo::LAST_REAL_RELOC_MODE + 1)) - 1;
@@ -14296,7 +14293,6 @@ bool Code::IsIsolateIndependent(Isolate* isolate) {
 
   return is_process_independent;
 }
-#endif
 
 Handle<WeakCell> Code::WeakCellFor(Handle<Code> code) {
   DCHECK(code->kind() == OPTIMIZED_FUNCTION);
