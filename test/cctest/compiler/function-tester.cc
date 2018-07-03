@@ -138,6 +138,7 @@ Handle<JSFunction> FunctionTester::ForMachineGraph(Graph* graph,
 }
 
 Handle<JSFunction> FunctionTester::Compile(Handle<JSFunction> function) {
+  CanonicalHandleScope canonical(isolate);
   Handle<SharedFunctionInfo> shared(function->shared(), isolate);
   Zone zone(isolate->allocator(), ZONE_NAME);
   OptimizedCompilationInfo info(&zone, isolate, shared, function);
@@ -153,7 +154,7 @@ Handle<JSFunction> FunctionTester::Compile(Handle<JSFunction> function) {
 
   Handle<Code> code =
       Pipeline::GenerateCodeForTesting(&info, isolate).ToHandleChecked();
-  info.dependencies()->Commit(code);
+  CHECK(info.dependencies()->Commit(code));
   info.context()->native_context()->AddOptimizedCode(*code);
   function->set_code(*code);
   return function;
