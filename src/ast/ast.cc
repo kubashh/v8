@@ -18,6 +18,7 @@
 #include "src/double.h"
 #include "src/elements.h"
 #include "src/objects-inl.h"
+#include "src/objects/literal-objects-inl.h"
 #include "src/objects/literal-objects.h"
 #include "src/objects/map.h"
 #include "src/property-details.h"
@@ -499,17 +500,17 @@ void ObjectLiteral::BuildConstantProperties(Isolate* isolate) {
     }
   }
 
-  Handle<BoilerplateDescription> constant_properties =
-      isolate->factory()->NewBoilerplateDescription(boilerplate_properties_,
-                                                    properties()->length(),
-                                                    index_keys, has_seen_proto);
+  Handle<ObjectBoilerplateDescription> constant_properties =
+      isolate->factory()->NewObjectBoilerplateDescription(
+          boilerplate_properties_, properties()->length(), index_keys,
+          has_seen_proto);
 
   int position = 0;
   for (int i = 0; i < properties()->length(); i++) {
     ObjectLiteral::Property* property = properties()->at(i);
     if (property->IsPrototype()) continue;
 
-    if (static_cast<uint32_t>(position) == boilerplate_properties_ * 2) {
+    if (static_cast<uint32_t>(position) == boilerplate_properties_) {
       DCHECK(property->is_computed_name());
       break;
     }
@@ -533,9 +534,10 @@ void ObjectLiteral::BuildConstantProperties(Isolate* isolate) {
     Handle<Object> value = GetBoilerplateValue(property->value(), isolate);
 
     // Add name, value pair to the fixed array.
-    constant_properties->set(position++, *key);
-    constant_properties->set(position++, *value);
+    constant_properties->set_key_value(position++, *key, *value);
   }
+
+  constant_properties->set_literal_type(EncodeLiteralType());
 
   constant_properties_ = constant_properties;
 }
@@ -643,8 +645,8 @@ void ArrayLiteral::BuildConstantElements(Isolate* isolate) {
   }
 
   // Remember both the literal's constant values as well as the ElementsKind.
-  Handle<ConstantElementsPair> literals =
-      isolate->factory()->NewConstantElementsPair(kind, elements);
+  Handle<ArrayBoilerplateDescription> literals =
+      isolate->factory()->NewArrayBoilerplateDescription(kind, elements);
 
   constant_elements_ = literals;
 }
@@ -667,8 +669,14 @@ Handle<Object> MaterializedLiteral::GetBoilerplateValue(Expression* expression,
   if (expression->IsLiteral()) {
     return expression->AsLiteral()->BuildValue(isolate);
   }
-  if (expression->IsCompileTimeValue()) {
-    return isolate->factory()->NewCompileTimeValue(expression);
+  if (expression->IsCompileTimeValue() && expression->IsObjectLiteral()) {
+    ObjectLiteral* object_literal = expression->AsObjectLiteral();
+    DCHECK(object_literal->is_simple());
+    return object_literal->constant_properties();
+  } else if (expression->IsCompileTimeValue() && expression->IsArrayLiteral()) {
+    ArrayLiteral* array_literal = expression->AsArrayLiteral();
+    DCHECK(array_literal->is_simple());
+    return array_literal->constant_elements();
   }
   return isolate->factory()->uninitialized_value();
 }
