@@ -191,6 +191,7 @@ void OptimizingCompileDispatcher::Stop() {
 
 void OptimizingCompileDispatcher::InstallOptimizedFunctions() {
   HandleScope handle_scope(isolate_);
+  CanonicalHandleScope canonical(isolate_);
 
   for (;;) {
     OptimizedCompilationJob* job = nullptr;
