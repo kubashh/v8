@@ -22,6 +22,30 @@
       "revId": "552fc81512d4e7e9a3dad473fd37bfb73fe26979",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a51e76f5_3b809a58",
+        "filename": "src/roots.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-07-03T14:28:34Z",
+      "side": 1,
+      "message": "It means I meant to write TODO(reorder)... and check the ordering to match where I copied it from before wasting your time. Thanks:)\n\nI\u0027ve gone through them and think I\u0027ve got the ordering back to what it was in heap.h before the last CL.",
+      "parentUuid": "80923ee2_eac1fd4f",
+      "range": {
+        "startLine": 252,
+        "startChar": 5,
+        "endLine": 252,
+        "endChar": 12
+      },
+      "revId": "552fc81512d4e7e9a3dad473fd37bfb73fe26979",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
