@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1ef8c00_d9b9e604",
+        "filename": "src/isolate.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1586,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-03T17:01:22Z",
+      "side": 1,
+      "message": "All of these need to be initialized and cleaned up as well",
+      "revId": "610e196099c7e020787a1691f8bc796d66c3920c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e10bc26_937fbed0",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-03T17:01:22Z",
+      "side": 1,
+      "message": "We want to store the computed regexp, not the string. The regexp creation is the costly part.",
+      "revId": "610e196099c7e020787a1691f8bc796d66c3920c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

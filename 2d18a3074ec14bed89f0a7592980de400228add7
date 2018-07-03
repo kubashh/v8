@@ -141,6 +141,30 @@
       "revId": "2d18a3074ec14bed89f0a7592980de400228add7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b325359_713c4459",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-03T17:01:22Z",
+      "side": 1,
+      "message": "We have this class to namespace these methods. They can\u0027t be in an anonymous namespace because they will be used from other files in the future.",
+      "parentUuid": "db876a47_93623a6c",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 16
+      },
+      "revId": "2d18a3074ec14bed89f0a7592980de400228add7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
