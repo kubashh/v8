@@ -1123,7 +1123,7 @@ class MaterializedLiteral : public Expression {
 
   // If the expression is a literal, return the literal value;
   // if the expression is a materialized literal and is simple return a
-  // compile time value as encoded by CompileTimeValue
+  // compile time value as encoded by Array or Object Boilerplate Description
   // Otherwise, return undefined literal as the placeholder
   // in the object literal boilerplate.
   Handle<Object> GetBoilerplateValue(Expression* expression, Isolate* isolate);
@@ -1277,7 +1277,7 @@ class ObjectLiteral final : public AggregateLiteral {
  public:
   typedef ObjectLiteralProperty Property;
 
-  Handle<BoilerplateDescription> constant_properties() const {
+  Handle<ObjectBoilerplateDescription> constant_properties() const {
     DCHECK(!constant_properties_.is_null());
     return constant_properties_;
   }
@@ -1306,7 +1306,7 @@ class ObjectLiteral final : public AggregateLiteral {
   int InitDepthAndFlags();
 
   // Get the constant properties fixed array, populating it if necessary.
-  Handle<BoilerplateDescription> GetOrBuildConstantProperties(
+  Handle<ObjectBoilerplateDescription> GetOrBuildConstantProperties(
       Isolate* isolate) {
     if (constant_properties_.is_null()) {
       BuildConstantProperties(isolate);
@@ -1382,7 +1382,7 @@ class ObjectLiteral final : public AggregateLiteral {
   }
 
   uint32_t boilerplate_properties_;
-  Handle<BoilerplateDescription> constant_properties_;
+  Handle<ObjectBoilerplateDescription> constant_properties_;
   ZoneList<Property*>* properties_;
 
   class HasElementsField
@@ -1425,7 +1425,7 @@ class AccessorTable
 // for minimizing the work when constructing it at runtime.
 class ArrayLiteral final : public AggregateLiteral {
  public:
-  Handle<ConstantElementsPair> constant_elements() const {
+  Handle<ArrayBoilerplateDescription> constant_elements() const {
     return constant_elements_;
   }
 
@@ -1439,7 +1439,8 @@ class ArrayLiteral final : public AggregateLiteral {
   int InitDepthAndFlags();
 
   // Get the constant elements fixed array, populating it if necessary.
-  Handle<ConstantElementsPair> GetOrBuildConstantElements(Isolate* isolate) {
+  Handle<ArrayBoilerplateDescription> GetOrBuildConstantElements(
+      Isolate* isolate) {
     if (constant_elements_.is_null()) {
       BuildConstantElements(isolate);
     }
@@ -1467,7 +1468,7 @@ class ArrayLiteral final : public AggregateLiteral {
   }
 
   int first_spread_index_;
-  Handle<ConstantElementsPair> constant_elements_;
+  Handle<ArrayBoilerplateDescription> constant_elements_;
   ZoneList<Expression*>* values_;
 };
 
