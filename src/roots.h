@@ -76,11 +76,9 @@ namespace internal {
   V(Map, bytecode_array_map, BytecodeArrayMap)                                 \
   V(Map, code_data_container_map, CodeDataContainerMap)                        \
   V(Map, descriptor_array_map, DescriptorArrayMap)                             \
-  V(Map, external_map, ExternalMap)                                            \
   V(Map, fixed_double_array_map, FixedDoubleArrayMap)                          \
   V(Map, global_dictionary_map, GlobalDictionaryMap)                           \
   V(Map, many_closures_cell_map, ManyClosuresCellMap)                          \
-  V(Map, message_object_map, JSMessageObjectMap)                               \
   V(Map, module_info_map, ModuleInfoMap)                                       \
   V(Map, mutable_heap_number_map, MutableHeapNumberMap)                        \
   V(Map, name_dictionary_map, NameDictionaryMap)                               \
@@ -175,8 +173,6 @@ namespace internal {
   V(FixedTypedArrayBase, empty_fixed_biguint64_array,                          \
     EmptyFixedBigUint64Array)                                                  \
   V(FixedTypedArrayBase, empty_fixed_bigint64_array, EmptyFixedBigInt64Array)  \
-  V(Script, empty_script, EmptyScript)                                         \
-  V(FeedbackCell, many_closures_cell, ManyClosuresCell)                        \
   V(FixedArray, empty_sloppy_arguments_elements, EmptySloppyArgumentsElements) \
   V(NumberDictionary, empty_slow_element_dictionary,                           \
     EmptySlowElementDictionary)                                                \
@@ -185,7 +181,6 @@ namespace internal {
   V(FeedbackMetadata, empty_feedback_metadata, EmptyFeedbackMetadata)          \
   V(PropertyCell, empty_property_cell, EmptyPropertyCell)                      \
   V(WeakCell, empty_weak_cell, EmptyWeakCell)                                  \
-  V(Cell, invalid_prototype_validity_cell, InvalidPrototypeValidityCell)       \
   V(InterceptorInfo, noop_interceptor_info, NoOpInterceptorInfo)               \
   V(WeakFixedArray, empty_weak_fixed_array, EmptyWeakFixedArray)               \
   V(WeakArrayList, empty_weak_array_list, EmptyWeakArrayList)                  \
@@ -196,11 +191,15 @@ namespace internal {
   V(HeapNumber, minus_zero_value, MinusZeroValue)                              \
   V(HeapNumber, minus_infinity_value, MinusInfinityValue)                      \
   /* Marker for self-references during code-generation */                      \
-  V(HeapObject, self_reference_marker, SelfReferenceMarker)                    \
-  /* Indirection lists for isolate-independent builtins */                     \
-  V(FixedArray, builtins_constants_table, BuiltinsConstantsTable)
+  V(HeapObject, self_reference_marker, SelfReferenceMarker)
 
 #define STRONG_MUTABLE_ROOT_LIST(V)                                          \
+  /* Maps */                                                                 \
+  V(Map, message_object_map, JSMessageObjectMap)                             \
+  V(Map, external_map, ExternalMap)                                          \
+  /* Canonical empty values */                                               \
+  V(Script, empty_script, EmptyScript)                                       \
+  V(Cell, invalid_prototype_validity_cell, InvalidPrototypeValidityCell)     \
   /* Protectors */                                                           \
   V(Cell, array_constructor_protector, ArrayConstructorProtector)            \
   V(PropertyCell, no_elements_protector, NoElementsProtector)                \
@@ -248,7 +247,11 @@ namespace internal {
   /* JS Entries */                                                           \
   V(Code, js_entry_code, JsEntryCode)                                        \
   V(Code, js_construct_entry_code, JsConstructEntryCode)                     \
-  V(Code, js_run_microtasks_entry_code, JsRunMicrotasksEntryCode)
+  V(Code, js_run_microtasks_entry_code, JsRunMicrotasksEntryCode)            \
+  /* reorder */                                                              \
+  V(FeedbackCell, many_closures_cell, ManyClosuresCell)                      \
+  /* Indirection lists for isolate-independent builtins */                   \
+  V(FixedArray, builtins_constants_table, BuiltinsConstantsTable)
 
 #define STRONG_ROOT_LIST(V)     \
   STRONG_READ_ONLY_ROOT_LIST(V) \
@@ -271,18 +274,71 @@ namespace internal {
     ConstructStubInvokeDeoptPCOffset)                                          \
   V(Smi, interpreter_entry_return_pc_offset, InterpreterEntryReturnPCOffset)
 
-#define ROOT_LIST(V)  \
-  STRONG_ROOT_LIST(V) \
-  SMI_ROOT_LIST(V)    \
+#define MUTABLE_ROOT_LIST(V)  \
+  STRONG_MUTABLE_ROOT_LIST(V) \
+  SMI_ROOT_LIST(V)            \
   V(StringTable, string_table, StringTable)
 
+#define ROOT_LIST(V)   \
+  MUTABLE_ROOT_LIST(V) \
+  STRONG_READ_ONLY_ROOT_LIST(V)
+
+// A struct is a simple object a set of object-valued fields.  Including an
+// object type in this causes the compiler to generate most of the boilerplate
+// code for the class including allocation and garbage collection routines,
+// casts and predicates.  All you need to define is the class, methods and
+// object verification routines.  Easy, no?
+//
+// Note that for subtle reasons related to the ordering or numerical values of
+// type tags, elements in this list have to be added to the INSTANCE_TYPE_LIST
+// manually.
+#define STRUCT_LIST(V)                                                       \
+  V(ACCESS_CHECK_INFO, AccessCheckInfo, access_check_info)                   \
+  V(ACCESSOR_INFO, AccessorInfo, accessor_info)                              \
+  V(ACCESSOR_PAIR, AccessorPair, accessor_pair)                              \
+  V(ALIASED_ARGUMENTS_ENTRY, AliasedArgumentsEntry, aliased_arguments_entry) \
+  V(ALLOCATION_MEMENTO, AllocationMemento, allocation_memento)               \
+  V(ASYNC_GENERATOR_REQUEST, AsyncGeneratorRequest, async_generator_request) \
+  V(DEBUG_INFO, DebugInfo, debug_info)                                       \
+  V(FUNCTION_TEMPLATE_INFO, FunctionTemplateInfo, function_template_info)    \
+  V(INTERCEPTOR_INFO, InterceptorInfo, interceptor_info)                     \
+  V(INTERPRETER_DATA, InterpreterData, interpreter_data)                     \
+  V(MODULE_INFO_ENTRY, ModuleInfoEntry, module_info_entry)                   \
+  V(MODULE, Module, module)                                                  \
+  V(OBJECT_TEMPLATE_INFO, ObjectTemplateInfo, object_template_info)          \
+  V(PROMISE_CAPABILITY, PromiseCapability, promise_capability)               \
+  V(PROMISE_REACTION, PromiseReaction, promise_reaction)                     \
+  V(PROTOTYPE_INFO, PrototypeInfo, prototype_info)                           \
+  V(SCRIPT, Script, script)                                                  \
+  V(STACK_FRAME_INFO, StackFrameInfo, stack_frame_info)                      \
+  V(TUPLE2, Tuple2, tuple2)                                                  \
+  V(TUPLE3, Tuple3, tuple3)                                                  \
+  V(WASM_DEBUG_INFO, WasmDebugInfo, wasm_debug_info)                         \
+  V(WASM_EXPORTED_FUNCTION_DATA, WasmExportedFunctionData,                   \
+    wasm_exported_function_data)                                             \
+  V(CALLABLE_TASK, CallableTask, callable_task)                              \
+  V(CALLBACK_TASK, CallbackTask, callback_task)                              \
+  V(PROMISE_FULFILL_REACTION_JOB_TASK, PromiseFulfillReactionJobTask,        \
+    promise_fulfill_reaction_job_task)                                       \
+  V(PROMISE_REJECT_REACTION_JOB_TASK, PromiseRejectReactionJobTask,          \
+    promise_reject_reaction_job_task)                                        \
+  V(PROMISE_RESOLVE_THENABLE_JOB_TASK, PromiseResolveThenableJobTask,        \
+    promise_resolve_thenable_job_task)
+
+#define ALLOCATION_SITE_LIST(V)                                     \
+  V(ALLOCATION_SITE, AllocationSite, WithWeakNext, allocation_site) \
+  V(ALLOCATION_SITE, AllocationSite, WithoutWeakNext,               \
+    allocation_site_without_weaknext)
+
 class Heap;
+class Isolate;
 class String;
 class Symbol;
 
 class ReadOnlyRoots {
  public:
   explicit ReadOnlyRoots(Heap* heap) : heap_(heap) {}
+  inline explicit ReadOnlyRoots(Isolate* isolate);
 
 #define ROOT_ACCESSOR(type, name, camel_name) inline class type* name();
   STRONG_READ_ONLY_ROOT_LIST(ROOT_ACCESSOR)
@@ -300,6 +356,16 @@ class ReadOnlyRoots {
   PUBLIC_SYMBOL_LIST(SYMBOL_ACCESSOR)
   WELL_KNOWN_SYMBOL_LIST(SYMBOL_ACCESSOR)
 #undef SYMBOL_ACCESSOR
+
+// Utility type maps.
+#define STRUCT_MAP_ACCESSOR(NAME, Name, name) inline Map* name##_map();
+  STRUCT_LIST(STRUCT_MAP_ACCESSOR)
+#undef STRUCT_MAP_ACCESSOR
+
+#define ALLOCATION_SITE_MAP_ACCESSOR(NAME, Name, Size, name) \
+  inline Map* name##_map();
+  ALLOCATION_SITE_LIST(ALLOCATION_SITE_MAP_ACCESSOR)
+#undef ALLOCATION_SITE_MAP_ACCESSOR
 
  private:
   Heap* heap_;

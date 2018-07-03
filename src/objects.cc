@@ -179,7 +179,7 @@ MaybeHandle<JSReceiver> Object::ToObject(Isolate* isolate,
 MaybeHandle<JSReceiver> Object::ConvertReceiver(Isolate* isolate,
                                                 Handle<Object> object) {
   if (object->IsJSReceiver()) return Handle<JSReceiver>::cast(object);
-  if (*object == isolate->heap()->null_value() ||
+  if (*object == ReadOnlyRoots(isolate).null_value() ||
       object->IsUndefined(isolate)) {
     return isolate->global_proxy();
   }
@@ -1328,7 +1328,7 @@ void JSObject::EnsureWritableFastElements(Handle<JSObject> object) {
          object->HasFastStringWrapperElements());
   FixedArray* raw_elems = FixedArray::cast(object->elements());
   Heap* heap = object->GetHeap();
-  if (raw_elems->map() != heap->fixed_cow_array_map()) return;
+  if (raw_elems->map() != ReadOnlyRoots(heap).fixed_cow_array_map()) return;
   Isolate* isolate = heap->isolate();
   Handle<FixedArray> elems(raw_elems, isolate);
   Handle<FixedArray> writable_elems = isolate->factory()->CopyFixedArrayWithMap(
@@ -2109,7 +2109,7 @@ V8_WARN_UNUSED_RESULT Maybe<bool> FastAssign(
   if (!map->OnlyHasSimpleProperties()) return Just(false);
 
   Handle<JSObject> from = Handle<JSObject>::cast(source);
-  if (from->elements() != isolate->heap()->empty_fixed_array()) {
+  if (from->elements() != ReadOnlyRoots(isolate).empty_fixed_array()) {
     return Just(false);
   }
 
@@ -2264,7 +2264,7 @@ Map* Map::GetPrototypeChainRootMap(Isolate* isolate) const {
         JSFunction::cast(native_context->get(constructor_function_index));
     return constructor_function->initial_map();
   }
-  return isolate->heap()->null_value()->map();
+  return ReadOnlyRoots(isolate).null_value()->map();
 }
 
 // static
@@ -2548,7 +2548,7 @@ Handle<String> String::SlowFlatten(Isolate* isolate, Handle<ConsString> cons,
     result = flat;
   }
   cons->set_first(*result);
-  cons->set_second(isolate->heap()->empty_string());
+  cons->set_second(ReadOnlyRoots(isolate).empty_string());
   DCHECK(result->IsFlat());
   return result;
 }
@@ -2589,20 +2589,27 @@ bool String::MakeExternal(v8::String::ExternalStringResource* resource) {
   // the field caching the address of the backing store.  When we encounter
   // short external strings in generated code, we need to bailout to runtime.
   Map* new_map;
+  ReadOnlyRoots roots(heap);
   if (size < ExternalString::kSize) {
-    new_map = is_internalized
-        ? (is_one_byte
-           ? heap->short_external_internalized_string_with_one_byte_data_map()
-           : heap->short_external_internalized_string_map())
-        : (is_one_byte ? heap->short_external_string_with_one_byte_data_map()
-                       : heap->short_external_string_map());
+    if (is_internalized) {
+      new_map =
+          is_one_byte
+              ? roots
+                    .short_external_internalized_string_with_one_byte_data_map()
+              : roots.short_external_internalized_string_map();
+    } else {
+      new_map = is_one_byte
+                    ? roots.short_external_string_with_one_byte_data_map()
+                    : roots.short_external_string_map();
+    }
   } else {
-    new_map = is_internalized
-        ? (is_one_byte
-           ? heap->external_internalized_string_with_one_byte_data_map()
-           : heap->external_internalized_string_map())
-        : (is_one_byte ? heap->external_string_with_one_byte_data_map()
-                       : heap->external_string_map());
+    new_map =
+        is_internalized
+            ? (is_one_byte
+                   ? roots.external_internalized_string_with_one_byte_data_map()
+                   : roots.external_internalized_string_map())
+            : (is_one_byte ? roots.external_string_with_one_byte_data_map()
+                           : roots.external_string_map());
   }
 
   // Byte size of the external String object.
@@ -2664,14 +2671,15 @@ bool String::MakeExternal(v8::String::ExternalOneByteStringResource* resource) {
   // the field caching the address of the backing store.  When we encounter
   // short external strings in generated code, we need to bailout to runtime.
   Map* new_map;
+  ReadOnlyRoots roots(heap);
   if (size < ExternalString::kSize) {
     new_map = is_internalized
-                  ? heap->short_external_one_byte_internalized_string_map()
-                  : heap->short_external_one_byte_string_map();
+                  ? roots.short_external_one_byte_internalized_string_map()
+                  : roots.short_external_one_byte_string_map();
   } else {
     new_map = is_internalized
-                  ? heap->external_one_byte_internalized_string_map()
-                  : heap->external_one_byte_string_map();
+                  ? roots.external_one_byte_internalized_string_map()
+                  : roots.external_one_byte_string_map();
   }
 
   // Byte size of the external String object.
@@ -3262,6 +3270,7 @@ bool JSObject::IsUnmodifiedApiObject(Object** o) {
 
 void HeapObject::HeapObjectShortPrint(std::ostream& os) {  // NOLINT
   Heap* heap = GetHeap();
+  ReadOnlyRoots roots(heap);
   Isolate* isolate = heap->isolate();
   if (!heap->Contains(this)) {
     os << "!!!INVALID POINTER!!!";
@@ -3385,11 +3394,11 @@ void HeapObject::HeapObjectShortPrint(std::ostream& os) {  // NOLINT
       break;
     case FEEDBACK_CELL_TYPE: {
       os << "<FeedbackCell[";
-      if (map() == heap->no_closures_cell_map()) {
+      if (map() == roots.no_closures_cell_map()) {
         os << "no closures";
-      } else if (map() == heap->one_closure_cell_map()) {
+      } else if (map() == roots.one_closure_cell_map()) {
         os << "one closure";
-      } else if (map() == heap->many_closures_cell_map()) {
+      } else if (map() == roots.many_closures_cell_map()) {
         os << "many closures";
       } else {
         os << "!!!INVALID MAP!!!";
@@ -3736,7 +3745,7 @@ Handle<String> JSReceiver::GetConstructorName(Handle<JSReceiver> receiver) {
       JSFunction* constructor = JSFunction::cast(maybe_constructor);
       String* name = constructor->shared()->DebugName();
       if (name->length() != 0 &&
-          !name->Equals(isolate->heap()->Object_string())) {
+          !name->Equals(ReadOnlyRoots(isolate).Object_string())) {
         return handle(name, isolate);
       }
     } else if (maybe_constructor->IsFunctionTemplateInfo()) {
@@ -5622,9 +5631,9 @@ void JSProxy::Revoke(Handle<JSProxy> proxy) {
   // ES#sec-proxy-revocation-functions
   if (!proxy->IsRevoked()) {
     // 5. Set p.[[ProxyTarget]] to null.
-    proxy->set_target(isolate->heap()->null_value());
+    proxy->set_target(ReadOnlyRoots(isolate).null_value());
     // 6. Set p.[[ProxyHandler]] to null.
-    proxy->set_handler(isolate->heap()->null_value());
+    proxy->set_handler(ReadOnlyRoots(isolate).null_value());
   }
   DCHECK(proxy->IsRevoked());
 }
@@ -6401,7 +6410,7 @@ void JSObject::MigrateSlowToFast(Handle<JSObject> object,
     // Transform the object.
     new_map->SetInObjectUnusedPropertyFields(inobject_props);
     object->synchronized_set_map(*new_map);
-    object->SetProperties(isolate->heap()->empty_fixed_array());
+    object->SetProperties(ReadOnlyRoots(isolate).empty_fixed_array());
     // Check that it really works.
     DCHECK(object->HasFastProperties());
     return;
@@ -6582,8 +6591,9 @@ Object* SetHashAndUpdateProperties(HeapObject* properties, int hash) {
   DCHECK(PropertyArray::HashField::is_valid(hash));
 
   Heap* heap = properties->GetHeap();
-  if (properties == heap->empty_fixed_array() ||
-      properties == heap->empty_property_array() ||
+  ReadOnlyRoots roots(heap);
+  if (properties == roots.empty_fixed_array() ||
+      properties == roots.empty_property_array() ||
       properties == heap->empty_property_dictionary()) {
     return Smi::FromInt(hash);
   }
@@ -6619,7 +6629,7 @@ int GetIdentityHashHelper(Isolate* isolate, JSReceiver* object) {
   }
 
 #ifdef DEBUG
-  FixedArray* empty_fixed_array = isolate->heap()->empty_fixed_array();
+  FixedArray* empty_fixed_array = ReadOnlyRoots(isolate).empty_fixed_array();
   FixedArray* empty_property_dictionary =
       isolate->heap()->empty_property_dictionary();
   DCHECK(properties == empty_fixed_array ||
@@ -6664,7 +6674,7 @@ Object* JSReceiver::GetIdentityHash(Isolate* isolate) {
 
   int hash = GetIdentityHashHelper(isolate, this);
   if (hash == PropertyArray::kNoHashSentinel) {
-    return isolate->heap()->undefined_value();
+    return ReadOnlyRoots(isolate).undefined_value();
   }
 
   return Smi::FromInt(hash);
@@ -6739,7 +6749,7 @@ void JSReceiver::DeleteNormalizedProperty(Handle<JSReceiver> object,
     DCHECK_NE(GlobalDictionary::kNotFound, entry);
 
     auto cell = PropertyCell::InvalidateEntry(isolate, dictionary, entry);
-    cell->set_value(isolate->heap()->the_hole_value());
+    cell->set_value(ReadOnlyRoots(isolate).the_hole_value());
     cell->set_property_details(
         PropertyDetails::Empty(PropertyCellType::kUninitialized));
   } else {
@@ -6871,13 +6881,13 @@ Object* JSReceiver::DefineProperty(Isolate* isolate, Handle<Object> object,
   // 5. ReturnIfAbrupt(desc).
   PropertyDescriptor desc;
   if (!PropertyDescriptor::ToPropertyDescriptor(isolate, attributes, &desc)) {
-    return isolate->heap()->exception();
+    return ReadOnlyRoots(isolate).exception();
   }
   // 6. Let success be DefinePropertyOrThrow(O,key, desc).
   Maybe<bool> success = DefineOwnProperty(
       isolate, Handle<JSReceiver>::cast(object), key, &desc, kThrowOnError);
   // 7. ReturnIfAbrupt(success).
-  MAYBE_RETURN(success, isolate->heap()->exception());
+  MAYBE_RETURN(success, ReadOnlyRoots(isolate).exception());
   CHECK(success.FromJust());
   // 8. Return O.
   return *object;
@@ -7403,7 +7413,7 @@ Maybe<bool> JSArray::DefineOwnProperty(Isolate* isolate, Handle<JSArray> o,
   // 1. Assert: IsPropertyKey(P) is true. ("P" is |name|.)
   // 2. If P is "length", then:
   // TODO(jkummerow): Check if we need slow string comparison.
-  if (*name == isolate->heap()->length_string()) {
+  if (*name == ReadOnlyRoots(isolate).length_string()) {
     // 2a. Return ArraySetLength(A, Desc).
     return ArraySetLength(isolate, o, desc, should_throw);
   }
@@ -8649,7 +8659,8 @@ Maybe<bool> JSObject::PreventExtensionsWithTransition(
     object->set_elements(*new_element_dictionary);
   }
 
-  if (object->elements() != isolate->heap()->empty_slow_element_dictionary()) {
+  if (object->elements() !=
+      ReadOnlyRoots(isolate).empty_slow_element_dictionary()) {
     Handle<NumberDictionary> dictionary(object->element_dictionary(), isolate);
     // Make sure we never go back to the fast case
     object->RequireSlowElements(*dictionary);
@@ -8855,7 +8866,7 @@ V8_WARN_UNUSED_RESULT Maybe<bool> FastGetOwnValuesOrEntries(
       number_of_own_descriptors + number_of_own_elements);
   int count = 0;
 
-  if (object->elements() != isolate->heap()->empty_fixed_array()) {
+  if (object->elements() != ReadOnlyRoots(isolate).empty_fixed_array()) {
     MAYBE_RETURN(object->GetElementsAccessor()->CollectValuesOrEntries(
                      isolate, object, values_or_entries, get_entries, &count,
                      ENUMERABLE_STRINGS),
@@ -10403,7 +10414,8 @@ Handle<ArrayList> ArrayList::Add(Handle<ArrayList> array, Handle<Object> obj1,
 Handle<ArrayList> ArrayList::New(Isolate* isolate, int size) {
   Handle<FixedArray> fixed_array =
       isolate->factory()->NewFixedArray(size + kFirstIndex);
-  fixed_array->set_map_no_write_barrier(isolate->heap()->array_list_map());
+  fixed_array->set_map_no_write_barrier(
+      ReadOnlyRoots(isolate).array_list_map());
   Handle<ArrayList> result = Handle<ArrayList>::cast(fixed_array);
   result->SetLength(0);
   return result;
@@ -10547,8 +10559,8 @@ Handle<DescriptorArray> DescriptorArray::Allocate(Isolate* isolate,
           Heap::kDescriptorArrayMapRootIndex, LengthFor(size), pretenure);
   result->Set(kDescriptorLengthIndex,
               MaybeObject::FromObject(Smi::FromInt(number_of_descriptors)));
-  result->Set(kEnumCacheIndex,
-              MaybeObject::FromObject(isolate->heap()->empty_enum_cache()));
+  result->Set(kEnumCacheIndex, MaybeObject::FromObject(
+                                   ReadOnlyRoots(isolate).empty_enum_cache()));
   return Handle<DescriptorArray>::cast(result);
 }
 
@@ -10567,7 +10579,7 @@ void DescriptorArray::SetEnumCache(Handle<DescriptorArray> descriptors,
                                    Isolate* isolate, Handle<FixedArray> keys,
                                    Handle<FixedArray> indices) {
   EnumCache* enum_cache = descriptors->GetEnumCache();
-  if (enum_cache == isolate->heap()->empty_enum_cache()) {
+  if (enum_cache == ReadOnlyRoots(isolate).empty_enum_cache()) {
     enum_cache = *isolate->factory()->NewEnumCache(keys, indices);
     descriptors->set(kEnumCacheIndex, MaybeObject::FromObject(enum_cache));
   } else {
@@ -13417,7 +13429,7 @@ void Script::InitLineEnds(Handle<Script> script) {
   Object* src_obj = script->source();
   if (!src_obj->IsString()) {
     DCHECK(src_obj->IsUndefined(isolate));
-    script->set_line_ends(isolate->heap()->empty_fixed_array());
+    script->set_line_ends(ReadOnlyRoots(isolate).empty_fixed_array());
   } else {
     DCHECK(src_obj->IsString());
     Handle<String> src(String::cast(src_obj), isolate);
@@ -13744,7 +13756,8 @@ void SharedFunctionInfo::SetScript(Handle<SharedFunctionInfo> shared,
       if (raw->ToWeakHeapObject(&heap_object) && heap_object == *shared) {
         old_script->shared_function_infos()->Set(
             shared->function_literal_id(),
-            HeapObjectReference::Strong(isolate->heap()->undefined_value()));
+            HeapObjectReference::Strong(
+                ReadOnlyRoots(isolate).undefined_value()));
       }
     }
   } else {
@@ -14084,7 +14097,7 @@ void ObjectVisitor::VisitRelocInfo(RelocIterator* it) {
 }
 
 void Code::InvalidateEmbeddedObjects(Heap* heap) {
-  HeapObject* undefined = heap->undefined_value();
+  HeapObject* undefined = ReadOnlyRoots(heap).undefined_value();
   int mode_mask = RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT);
   for (RelocIterator it(this, mode_mask); !it.done(); it.next()) {
     RelocInfo::Mode mode = it.rinfo()->rmode();
@@ -15967,9 +15980,9 @@ bool JSObject::WasConstructedFromApiFunction() {
 }
 
 const char* Symbol::PrivateSymbolToName(Isolate* isolate) const {
-  Heap* heap = isolate->heap();
+  ReadOnlyRoots roots(isolate);
 #define SYMBOL_CHECK_AND_PRINT(name) \
-  if (this == heap->name()) return #name;
+  if (this == roots.name()) return #name;
   PRIVATE_SYMBOL_LIST(SYMBOL_CHECK_AND_PRINT)
 #undef SYMBOL_CHECK_AND_PRINT
   return "UNKNOWN";
@@ -16040,7 +16053,7 @@ class StringSharedKey : public HashTableKey {
     array->set(1, *source_);
     array->set(2, Smi::FromEnum(language_mode_));
     array->set(3, Smi::FromInt(position_));
-    array->set_map(isolate->heap()->fixed_cow_array_map());
+    array->set_map(ReadOnlyRoots(isolate).fixed_cow_array_map());
     return array;
   }
 
@@ -16246,7 +16259,7 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
     STATIC_ASSERT(PromiseReaction::kSize == PromiseReactionJobTask::kSize);
     if (type == PromiseReaction::kFulfill) {
       task->synchronized_set_map(
-          isolate->heap()->promise_fulfill_reaction_job_task_map());
+          ReadOnlyRoots(isolate).promise_fulfill_reaction_job_task_map());
       Handle<PromiseFulfillReactionJobTask>::cast(task)->set_argument(
           *argument);
       Handle<PromiseFulfillReactionJobTask>::cast(task)->set_context(
@@ -16259,7 +16272,7 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
       DisallowHeapAllocation no_gc;
       HeapObject* handler = reaction->reject_handler();
       task->synchronized_set_map(
-          isolate->heap()->promise_reject_reaction_job_task_map());
+          ReadOnlyRoots(isolate).promise_reject_reaction_job_task_map());
       Handle<PromiseRejectReactionJobTask>::cast(task)->set_argument(*argument);
       Handle<PromiseRejectReactionJobTask>::cast(task)->set_context(
           *isolate->native_context());
@@ -16685,8 +16698,8 @@ void HashTable<Derived, Shape>::Rehash() {
     }
   }
   // Wipe deleted entries.
-  Object* the_hole = isolate->heap()->the_hole_value();
-  Object* undefined = isolate->heap()->undefined_value();
+  Object* the_hole = ReadOnlyRoots(isolate).the_hole_value();
+  Object* undefined = ReadOnlyRoots(isolate).undefined_value();
   for (uint32_t current = 0; current < capacity; current++) {
     if (KeyAt(current) == the_hole) {
       set(EntryToIndex(current) + kEntryKeyIndex, undefined);
@@ -17099,7 +17112,7 @@ Handle<String> StringTable::LookupString(Isolate* isolate,
     if (string->IsConsString()) {
       Handle<ConsString> cons = Handle<ConsString>::cast(string);
       cons->set_first(*result);
-      cons->set_second(isolate->heap()->empty_string());
+      cons->set_second(ReadOnlyRoots(isolate).empty_string());
     } else if (string->IsSlicedString()) {
       STATIC_ASSERT(ConsString::kSize == SlicedString::kSize);
       DisallowHeapAllocation no_gc;
@@ -17110,7 +17123,7 @@ Handle<String> StringTable::LookupString(Isolate* isolate,
       string->set_map(*map);
       Handle<ConsString> cons = Handle<ConsString>::cast(string);
       cons->set_first(*result);
-      cons->set_second(isolate->heap()->empty_string());
+      cons->set_second(ReadOnlyRoots(isolate).empty_string());
     }
   }
   return result;
@@ -18051,7 +18064,7 @@ Object* Dictionary<Derived, Shape>::SlowReverseLookup(Object* value) {
     Object* e = dictionary->ValueAt(i);
     if (e == value) return k;
   }
-  return isolate->heap()->undefined_value();
+  return ReadOnlyRoots(isolate).undefined_value();
 }
 
 template <typename Derived, typename Shape>
@@ -18071,7 +18084,7 @@ Object* ObjectHashTableBase<Derived, Shape>::Lookup(Isolate* isolate,
   DCHECK(this->IsKey(isolate, *key));
 
   int entry = this->FindEntry(isolate, key, hash);
-  if (entry == kNotFound) return isolate->heap()->the_hole_value();
+  if (entry == kNotFound) return ReadOnlyRoots(isolate).the_hole_value();
   return this->get(Derived::EntryToIndex(entry) + 1);
 }
 
@@ -18085,7 +18098,7 @@ Object* ObjectHashTableBase<Derived, Shape>::Lookup(Handle<Object> key) {
   // If the object does not have an identity hash, it was never used as a key.
   Object* hash = key->GetHash();
   if (hash->IsUndefined(isolate)) {
-    return isolate->heap()->the_hole_value();
+    return ReadOnlyRoots(isolate).the_hole_value();
   }
   return Lookup(isolate, key, Smi::ToInt(hash));
 }
@@ -18375,7 +18388,7 @@ Object* JSDate::DoGetField(FieldIndex index) {
   }
 
   double time = value()->Number();
-  if (std::isnan(time)) return GetIsolate()->heap()->nan_value();
+  if (std::isnan(time)) return GetReadOnlyRoots().nan_value();
 
   int64_t local_time_ms = date_cache->ToLocal(static_cast<int64_t>(time));
   int days = DateCache::DaysFromTime(local_time_ms);
@@ -18394,7 +18407,7 @@ Object* JSDate::GetUTCField(FieldIndex index,
                             DateCache* date_cache) {
   DCHECK_GE(index, kFirstUTCField);
 
-  if (std::isnan(value)) return GetIsolate()->heap()->nan_value();
+  if (std::isnan(value)) return GetReadOnlyRoots().nan_value();
 
   int64_t time_ms = static_cast<int64_t>(value);
 
@@ -18443,7 +18456,7 @@ Handle<Object> JSDate::SetValue(Handle<JSDate> date, double v) {
 void JSDate::SetValue(Object* value, bool is_value_nan) {
   set_value(value);
   if (is_value_nan) {
-    HeapNumber* nan = GetIsolate()->heap()->nan_value();
+    HeapNumber* nan = GetReadOnlyRoots().nan_value();
     set_cache_stamp(nan, SKIP_WRITE_BARRIER);
     set_year(nan, SKIP_WRITE_BARRIER);
     set_month(nan, SKIP_WRITE_BARRIER);
@@ -18739,9 +18752,9 @@ Handle<PropertyCell> PropertyCell::InvalidateEntry(
   new_cell->set_property_details(details);
   // Old cell is ready for invalidation.
   if (is_the_hole) {
-    cell->set_value(isolate->heap()->undefined_value());
+    cell->set_value(ReadOnlyRoots(isolate).undefined_value());
   } else {
-    cell->set_value(isolate->heap()->the_hole_value());
+    cell->set_value(ReadOnlyRoots(isolate).the_hole_value());
   }
   details = details.set_cell_type(PropertyCellType::kInvalidated);
   cell->set_property_details(details);

@@ -878,7 +878,7 @@ void LiveEdit::FixupScript(Isolate* isolate, Handle<Script> script,
     // We can't use SharedFunctionInfo::SetScript(info, undefined_value()) here,
     // as we severed the link from the Script to the SharedFunctionInfo above.
     Handle<SharedFunctionInfo> info(shared, isolate);
-    info->set_script(isolate->heap()->undefined_value());
+    info->set_script(ReadOnlyRoots(isolate).undefined_value());
     Handle<Object> new_noscript_list = FixedArrayOfWeakCells::Add(
         isolate, isolate->factory()->noscript_shared_function_infos(), info);
     isolate->heap()->SetRootNoScriptSharedFunctionInfos(*new_noscript_list);
@@ -1042,7 +1042,7 @@ Handle<Object> LiveEdit::ChangeScriptSource(Isolate* isolate,
   original_script->set_source(*new_source);
 
   // Drop line ends so that they will be recalculated.
-  original_script->set_line_ends(isolate->heap()->undefined_value());
+  original_script->set_line_ends(ReadOnlyRoots(isolate).undefined_value());
 
   return old_script_object;
 }
