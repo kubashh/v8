@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef38454e_a54510e1",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1783,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-03T13:27:34Z",
+      "side": 1,
+      "message": "nit: This will not hold for the short period of time between step 2 and 3 of the constructor and also for the implicit receiver of the constructor function which is then discarded. You should be able to flush this out locally by placing an explicit GC call into the constructor implementation. Just for local debugging ...\n\nisolate-\u003eheap()-\u003eCollectAllAvailableGarbage(kTesting);\n\nThe GC-stress bots will also flush this out eventually, but only flakeily.\n\nI would vote for keeping these {VerifyObjectField} instead, this is the common approach we take for all the other objects. The verification methods here only check object graph consistency.\n\nSorry for not spotting this earlier in my previous review.",
+      "range": {
+        "startLine": 1782,
+        "startChar": 0,
+        "endLine": 1783,
+        "endChar": 33
+      },
+      "revId": "0fef321127739fb7bd7f7dc939df40d95dd30e73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62400c28_37d8d078",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-03T13:27:34Z",
+      "side": 1,
+      "message": "nit: I\u0027d vote for staying consistenly in the handlified domain here and returning Handle\u003cObject\u003e (or even Handle\u003cJSObject\u003e) here, and only open up the handle at the call-site. It is good to avoid mixing raw pointers and handles to avoid confusion about whether the implementation is handlified or not.",
+      "range": {
+        "startLine": 39,
+        "startChar": 9,
+        "endLine": 39,
+        "endChar": 16
+      },
+      "revId": "0fef321127739fb7bd7f7dc939df40d95dd30e73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
