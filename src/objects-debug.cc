@@ -144,7 +144,7 @@ void HeapObject::HeapObjectVerify(Isolate* isolate) {
     case SIMPLE_NUMBER_DICTIONARY_TYPE:
     case STRING_TABLE_TYPE:
     case EPHEMERON_HASH_TABLE_TYPE:
-    case BOILERPLATE_DESCRIPTION_TYPE:
+    case OBJECT_BOILERPLATE_DESCRIPTION_TYPE:
     case FIXED_ARRAY_TYPE:
     case SCOPE_INFO_TYPE:
     case SCRIPT_CONTEXT_TABLE_TYPE:
@@ -1545,6 +1545,12 @@ void Tuple3::Tuple3Verify(Isolate* isolate) {
   VerifyObjectField(kValue1Offset);
   VerifyObjectField(kValue2Offset);
   VerifyObjectField(kValue3Offset);
+}
+
+void ArrayBoilerplateDescription::ArrayBoilerplateDescriptionVerify(
+    Isolate* isolate) {
+  CHECK(IsArrayBoilerplateDescription());
+  VerifyObjectField(kConstantElementsOffset);
 }
 
 void WasmDebugInfo::WasmDebugInfoVerify(Isolate* isolate) {

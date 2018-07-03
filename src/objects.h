@@ -399,6 +399,7 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(STACK_FRAME_INFO_TYPE)                                      \
   V(TUPLE2_TYPE)                                                \
   V(TUPLE3_TYPE)                                                \
+  V(ARRAY_BOILERPLATE_DESCRIPTION_TYPE)                         \
   V(WASM_DEBUG_INFO_TYPE)                                       \
   V(WASM_EXPORTED_FUNCTION_DATA_TYPE)                           \
                                                                 \
@@ -411,7 +412,7 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(ALLOCATION_SITE_TYPE)                                       \
                                                                 \
   V(FIXED_ARRAY_TYPE)                                           \
-  V(BOILERPLATE_DESCRIPTION_TYPE)                               \
+  V(OBJECT_BOILERPLATE_DESCRIPTION_TYPE)                        \
   V(HASH_TABLE_TYPE)                                            \
   V(ORDERED_HASH_MAP_TYPE)                                      \
   V(ORDERED_HASH_SET_TYPE)                                      \
@@ -593,6 +594,8 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(STACK_FRAME_INFO, StackFrameInfo, stack_frame_info)                      \
   V(TUPLE2, Tuple2, tuple2)                                                  \
   V(TUPLE3, Tuple3, tuple3)                                                  \
+  V(ARRAY_BOILERPLATE_DESCRIPTION, ArrayBoilerplateDescription,              \
+    array_boilerplate_description)                                           \
   V(WASM_DEBUG_INFO, WasmDebugInfo, wasm_debug_info)                         \
   V(WASM_EXPORTED_FUNCTION_DATA, WasmExportedFunctionData,                   \
     wasm_exported_function_data)                                             \
@@ -791,6 +794,7 @@ enum InstanceType : uint16_t {
   STACK_FRAME_INFO_TYPE,
   TUPLE2_TYPE,
   TUPLE3_TYPE,
+  ARRAY_BOILERPLATE_DESCRIPTION_TYPE,
   WASM_DEBUG_INFO_TYPE,
   WASM_EXPORTED_FUNCTION_DATA_TYPE,
 
@@ -803,7 +807,7 @@ enum InstanceType : uint16_t {
   ALLOCATION_SITE_TYPE,
   // FixedArrays.
   FIXED_ARRAY_TYPE,  // FIRST_FIXED_ARRAY_TYPE
-  BOILERPLATE_DESCRIPTION_TYPE,
+  OBJECT_BOILERPLATE_DESCRIPTION_TYPE,
   HASH_TABLE_TYPE,        // FIRST_HASH_TABLE_TYPE
   ORDERED_HASH_MAP_TYPE,  // FIRST_DICTIONARY_TYPE
   ORDERED_HASH_SET_TYPE,
@@ -1056,7 +1060,7 @@ template <class C> inline bool Is(Object* obj);
   V(ArrayList)                                 \
   V(BigInt)                                    \
   V(BigIntWrapper)                             \
-  V(BoilerplateDescription)                    \
+  V(ObjectBoilerplateDescription)              \
   V(Boolean)                                   \
   V(BooleanWrapper)                            \
   V(BreakPoint)                                \
@@ -1071,8 +1075,6 @@ template <class C> inline bool Is(Object* obj);
   V(CodeDataContainer)                         \
   V(CompilationCacheTable)                     \
   V(ConsString)                                \
-  V(ConstantElementsPair)                      \
-  V(CompileTimeValue)                          \
   V(Constructor)                               \
   V(Context)                                   \
   V(CoverageInfo)                              \
