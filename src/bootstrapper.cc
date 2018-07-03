@@ -21,13 +21,16 @@
 #include "src/isolate-inl.h"
 #include "src/objects/api-callbacks.h"
 #include "src/objects/arguments.h"
+#include "src/objects/hash-table-inl.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/intl-objects.h"
 #include "src/objects/js-locale.h"
 #endif  // V8_INTL_SUPPORT
-#include "src/objects/hash-table-inl.h"
 #include "src/objects/js-regexp-string-iterator.h"
 #include "src/objects/js-regexp.h"
+#ifdef V8_INTL_SUPPORT
+#include "src/objects/js-relative-time-format.h"
+#endif  // V8_INTL_SUPPORT
 #include "src/objects/templates.h"
 #include "src/snapshot/natives.h"
 #include "src/snapshot/snapshot.h"
@@ -4658,6 +4661,45 @@ void Genesis::InitializeGlobal_harmony_locale() {
                       Builtins::kLocalePrototypeNumberingSystem, true);
 }
 
+void Genesis::InitializeGlobal_harmony_intl_relative_time_format() {
+  if (!FLAG_harmony_intl_relative_time_format) return;
+  Handle<JSObject> intl = Handle<JSObject>::cast(
+      JSReceiver::GetProperty(
+          isolate(),
+          Handle<JSReceiver>(native_context()->global_object(), isolate()),
+          factory()->InternalizeUtf8String("Intl"))
+          .ToHandleChecked());
+
+  Handle<JSFunction> relative_time_format_fun = InstallFunction(
+      isolate(), intl, "RelativeTimeFormat", JS_INTL_RELATIVE_TIME_FORMAT_TYPE,
+      JSRelativeTimeFormat::kSize, 0, factory()->the_hole_value(),
+      Builtins::kRelativeTimeFormatConstructor);
+  relative_time_format_fun->shared()->set_length(0);
+  relative_time_format_fun->shared()->DontAdaptArguments();
+
+  SimpleInstallFunction(
+      isolate(), relative_time_format_fun, "supportedLocalesOf",
+      Builtins::kRelativeTimeFormatSupportedLocalesOf, 1, false);
+
+  // Setup %RelativeTimeFormatPrototype%.
+  Handle<JSObject> prototype(
+      JSObject::cast(relative_time_format_fun->instance_prototype()),
+      isolate());
+
+  // Install the @@toStringTag property on the {prototype}.
+  JSObject::AddProperty(isolate(), prototype, factory()->to_string_tag_symbol(),
+                        factory()->Object_string(),
+                        static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY));
+
+  SimpleInstallFunction(isolate(), prototype, "format",
+                        Builtins::kRelativeTimeFormatPrototypeFormat, 2, false);
+  SimpleInstallFunction(isolate(), prototype, "formatToParts",
+                        Builtins::kRelativeTimeFormatPrototypeFormatToParts, 2,
+                        false);
+  SimpleInstallFunction(isolate(), prototype, "resolvedOptions",
+                        Builtins::kRelativeTimeFormatPrototypeResolvedOptions,
+                        0, false);
+}
 #endif  // V8_INTL_SUPPORT
 
 Handle<JSFunction> Genesis::CreateArrayBuffer(
