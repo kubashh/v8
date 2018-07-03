@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b6ed3c5c_45b60f7a",
+        "filename": "src/compilation-dependencies.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-07-03T12:38:24Z",
+      "side": 1,
+      "message": "As discussed offline, this should do heap pointer equality check.",
+      "range": {
+        "startLine": 70,
+        "startChar": 11,
+        "endLine": 70,
+        "endChar": 43
+      },
+      "revId": "9bb57adcc286ee617bf5e1bdb95251e7b5511e3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a4f147b1_7bee56d4",
         "filename": "src/compilation-dependencies.h",
         "patchSetId": 10
@@ -42,6 +65,29 @@
         "startChar": 24,
         "endLine": 15,
         "endChar": 47
+      },
+      "revId": "9bb57adcc286ee617bf5e1bdb95251e7b5511e3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2e38d27_e89c9d7d",
+        "filename": "src/compiler-dispatcher/optimizing-compile-dispatcher.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-07-03T12:38:24Z",
+      "side": 1,
+      "message": "As discussed offline, this should be removed (together with the assertion in dependencies).",
+      "range": {
+        "startLine": 194,
+        "startChar": 1,
+        "endLine": 194,
+        "endChar": 42
       },
       "revId": "9bb57adcc286ee617bf5e1bdb95251e7b5511e3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
