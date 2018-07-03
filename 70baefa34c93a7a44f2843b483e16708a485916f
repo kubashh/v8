@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e2d4c0b_8acbec1a",
+        "filename": "src/builtins/builtins-regexp.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-07-03T14:20:23Z",
+      "side": 1,
+      "message": "nit: braces",
+      "range": {
+        "startLine": 113,
+        "startChar": 17,
+        "endLine": 113,
+        "endChar": 18
+      },
+      "revId": "70baefa34c93a7a44f2843b483e16708a485916f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
