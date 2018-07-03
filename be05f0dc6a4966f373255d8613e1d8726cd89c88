@@ -1,0 +1,361 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a126500c_4916dd35",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Could we return something other than the hole here? E.g. undefined. Also, please comment why we bail out when we find a hole (I assume it\u0027s because we\u0027ve prepacked the holey array and a hole can only happen if the user mucks with the array).",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be3f2571_b8cd2237",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "This is just weird :) Let\u0027s return kFailure() consistently on failure, unless there\u0027s a reason to return kSuccess here? Also elsewhere in bailout paths.",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feb5e064_b45de318",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Suggestion: a short comment explaining why we can write into elements directly, skipping prototype iteration.",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d12a3669_fdf71d8f",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Short comment, please.",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cb3a478_c406a3b3",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Do we not write into kBailoutStatus here?",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94dbf217_34ea17ca",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "See also SelectBooleanConstant, might produce better code.",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8615b1a5_48c490f0",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Could we assert IsFixedArray?",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7edaeac8_ca218d17",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Does torque have unary \u0027!\u0027 operators? Could we define that on Booleans? Or, alternatively, define an implicit Boolean-\u003ebool conversion and define it on bools?",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba2db75b_73e4b0ab",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "We could take this opportunity to document each of these fields. It\u0027ll be helpful when we come back to this in years :)",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03cc0736_7419c251",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "This is a function pointer to our compare builtin? Should we group it with Load/Store/CanUseSameAccessor ptrs below?",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a0bb1c5_bb2fe4ad",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "This can still contain either elements or receiver, right?",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3c2e62d_8cb08a82",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "We should think about turning this into a Struct with named offsets, debug print support, and heap verification.",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeeb08ed_9485af1d",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Here and all other SmiMul uses: please use SmiShl instead, we always multiply by a constant power of two. And let\u0027s add a wrapper method that ensures there\u0027s no overflow.",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a6c28ee_38bff743",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1626,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Why not initialize the entire fixed array with zeroes and skip this explicit Undefined initialization? Currently it\u0027s hard to verify we haven\u0027t missed anything.\n\nIf we do stick with it, I\u0027d prefer:\n\n let undef \u003d Undefined;\n sort_state[...] \u003d undef;",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "884f4311_b2655cc3",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Suggestion: extract this sequence into a generic helper method.",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aea855c_f77d3e84",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Maybe extract this ArrayTimSort call outside the elements kind dispatch.",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dac4b2a_62b7e5cf",
+        "filename": "src/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1661,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Does torque support \u0027else if\u0027?",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7a1b4a2_b543a7c7",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Careful - this can return a Number",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d18c9159_6c82305c",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Nit: WithSmiZero",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29362c06_4b43676a",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "Please assert that array is not a FixedDoubleArray. Or, alternatively, add support for double arrays.",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5c2ba4b_a9d7aae0",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T09:37:37Z",
+      "side": 1,
+      "message": "What\u0027s the point of these identity methods?",
+      "revId": "be05f0dc6a4966f373255d8613e1d8726cd89c88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
