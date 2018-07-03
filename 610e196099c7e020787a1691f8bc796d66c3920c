@@ -33,6 +33,24 @@
       "revId": "610e196099c7e020787a1691f8bc796d66c3920c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71d40dbe_62a1b985",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-03T22:28:36Z",
+      "side": 1,
+      "message": "I second that ! :-) \n\nAnd, language_tag_regex is just a single giant const string. I wonder if it\u0027s worth the effort to build it at \u0027build-time\u0027 (using a script or macro) and make it a constexpr instead of a series of std::string\u0027s concatenated at run-time.",
+      "parentUuid": "0e10bc26_937fbed0",
+      "revId": "610e196099c7e020787a1691f8bc796d66c3920c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
