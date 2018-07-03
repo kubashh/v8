@@ -74,6 +74,7 @@
 //         - JSMessageObject
 //         - JSModuleNamespace
 //         - JSLocale  // If V8_INTL_SUPPORT enabled.
+//         - JSRelativeTimeFormat  // If V8_INTL_SUPPORT enabled.
 //         - WasmGlobalObject
 //         - WasmInstanceObject
 //         - WasmMemoryObject
@@ -491,9 +492,10 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(JS_FUNCTION_TYPE)
 
 #ifdef V8_INTL_SUPPORT
-#define INSTANCE_TYPE_LIST(V)       \
-  INSTANCE_TYPE_LIST_BEFORE_INTL(V) \
-  V(JS_INTL_LOCALE_TYPE)            \
+#define INSTANCE_TYPE_LIST(V)          \
+  INSTANCE_TYPE_LIST_BEFORE_INTL(V)    \
+  V(JS_INTL_LOCALE_TYPE)               \
+  V(JS_INTL_RELATIVE_TIME_FORMAT_TYPE) \
   INSTANCE_TYPE_LIST_AFTER_INTL(V)
 #else
 #define INSTANCE_TYPE_LIST(V)       \
@@ -877,6 +879,7 @@ enum InstanceType : uint16_t {
 
 #ifdef V8_INTL_SUPPORT
   JS_INTL_LOCALE_TYPE,
+  JS_INTL_RELATIVE_TIME_FORMAT_TYPE,
 #endif  // V8_INTL_SUPPORT
 
   WASM_GLOBAL_TYPE,
@@ -980,6 +983,7 @@ class FunctionTemplateInfo;
 class JSGlobalObject;
 #ifdef V8_INTL_SUPPORT
 class JSLocale;
+class JSRelativeTimeFormat;
 #endif  // V8_INTL_SUPPORT
 class JSPromise;
 class KeyAccumulator;
@@ -1190,7 +1194,8 @@ template <class C> inline bool Is(Object* obj);
 #ifdef V8_INTL_SUPPORT
 #define HEAP_OBJECT_ORDINARY_TYPE_LIST(V) \
   HEAP_OBJECT_ORDINARY_TYPE_LIST_BASE(V)  \
-  V(JSLocale)
+  V(JSLocale)                             \
+  V(JSRelativeTimeFormat)
 #else
 #define HEAP_OBJECT_ORDINARY_TYPE_LIST(V) HEAP_OBJECT_ORDINARY_TYPE_LIST_BASE(V)
 #endif  // V8_INTL_SUPPORT
