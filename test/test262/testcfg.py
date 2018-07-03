@@ -51,6 +51,7 @@ FEATURE_FLAGS = {
   'Symbol.matchAll': '--harmony-string-matchall',
   'numeric-separator-literal': '--harmony-numeric-separator',
   'Intl.Locale': '--harmony-locale',
+  'Intl.RelativeTimeFormat': '--harmony-intl-relative-time-format',
   'Symbol.prototype.description': '--harmony-symbol-description',
 }
 
