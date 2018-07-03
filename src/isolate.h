@@ -8,8 +8,14 @@
 #include <cstddef>
 #include <memory>
 #include <queue>
+#include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
+
+#ifdef V8_INTL_SUPPORT
+#include <unicode/regex.h>
+#endif  // V8_INTL_SUPPORT
 
 #include "include/v8-inspector.h"
 #include "include/v8.h"
@@ -1079,6 +1085,30 @@ class Isolate : private HiddenFactory {
     date_cache_ = date_cache;
   }
 
+#ifdef V8_INTL_SUPPORT
+  icu::RegexMatcher* language_singleton_regex_matcher() {
+    return language_singleton_regex_matcher_;
+  }
+
+  icu::RegexMatcher* language_tag_regex_matcher() {
+    return language_tag_regex_matcher_;
+  }
+
+  icu::RegexMatcher* language_variant_regex_matcher() {
+    return language_variant_regex_matcher_;
+  }
+
+  void set_language_tag_regexe_matchers(
+      icu::RegexMatcher* language_singleton_regex_matcher,
+      icu::RegexMatcher* language_tag_regex_matcher,
+      icu::RegexMatcher* language_variant_regex_matcher) {
+    // DO I NEED TO CHECK AND DELETE A PREVIOUS VALUE?
+    language_singleton_regex_matcher_ = language_singleton_regex_matcher;
+    language_tag_regex_matcher_ = language_tag_regex_matcher;
+    language_variant_regex_matcher_ = language_variant_regex_matcher;
+  }
+#endif  // V8_INTL_SUPPORT
+
   static const int kProtectorValid = 1;
   static const int kProtectorInvalid = 0;
 
@@ -1564,6 +1594,12 @@ class Isolate : private HiddenFactory {
       host_initialize_import_meta_object_callback_;
   base::Mutex rail_mutex_;
   double load_start_time_ms_;
+
+#ifdef V8_INTL_SUPPORT
+  icu::RegexMatcher* language_singleton_regex_matcher_;
+  icu::RegexMatcher* language_tag_regex_matcher_;
+  icu::RegexMatcher* language_variant_regex_matcher_;
+#endif  // V8_INTL_SUPPORT
 
   // Whether the isolate has been created for snapshotting.
   bool serializer_enabled_;
