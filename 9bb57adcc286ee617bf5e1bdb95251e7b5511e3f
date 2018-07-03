@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f4087e2a_56041ac7",
+        "filename": "src/compilation-dependencies.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-07-03T12:28:47Z",
+      "side": 1,
+      "message": "I\u0027ll try to do that in a followup-CL, together with the other change you suggested.",
+      "parentUuid": "a4f147b1_7bee56d4",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 15,
+        "endChar": 47
+      },
+      "revId": "9bb57adcc286ee617bf5e1bdb95251e7b5511e3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "931376b0_4977ab2d",
         "filename": "src/objects.cc",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-03T10:56:41Z",
       "side": 1,
       "message": "question: It this include still needed?",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 41
+      },
+      "revId": "9bb57adcc286ee617bf5e1bdb95251e7b5511e3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e72facd9_7353453e",
+        "filename": "src/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-07-03T12:28:47Z",
+      "side": 1,
+      "message": "It wasn\u0027t, thanks.",
+      "parentUuid": "931376b0_4977ab2d",
       "range": {
         "startLine": 28,
         "startChar": 0,
