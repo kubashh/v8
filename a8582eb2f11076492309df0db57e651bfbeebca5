@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79bf4cae_3f3cf60f",
+        "filename": "src/optimized-compilation-info.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-03T10:56:41Z",
+      "side": 0,
+      "message": "We should now be able to move this field from {OptimizedCompilationInfo} into {PipelineData} since it is only used inside the TurboFan pipeline AFAICT. I am of course fine with doing this in a separate CL and just leaving a TODO in this one.",
+      "range": {
+        "startLine": 90,
+        "startChar": 6,
+        "endLine": 90,
+        "endChar": 20
+      },
+      "revId": "a8582eb2f11076492309df0db57e651bfbeebca5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
