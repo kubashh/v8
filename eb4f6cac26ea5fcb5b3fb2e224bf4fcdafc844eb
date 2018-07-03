@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e54a6559_0fe18743",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 1212,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T07:37:44Z",
+      "side": 1,
+      "message": "For DefaultEmbeddedBlob / DefaultEmbeddedBlobSize symbols in noembed builds.",
+      "revId": "eb4f6cac26ea5fcb5b3fb2e224bf4fcdafc844eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99bcd2d2_4f6208a4",
         "filename": "src/snapshot/serializer.cc",
         "patchSetId": 3
@@ -22,6 +39,30 @@
       "revId": "eb4f6cac26ea5fcb5b3fb2e224bf4fcdafc844eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce3f1d64_f29bd61b",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-03T07:37:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99bcd2d2_4f6208a4",
+      "range": {
+        "startLine": 860,
+        "startChar": 2,
+        "endLine": 860,
+        "endChar": 31
+      },
+      "revId": "eb4f6cac26ea5fcb5b3fb2e224bf4fcdafc844eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
