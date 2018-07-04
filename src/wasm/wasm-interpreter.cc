@@ -1081,7 +1081,6 @@ class ThreadImpl {
              Handle<WasmInstanceObject> instance_object)
       : codemap_(codemap),
         instance_object_(instance_object),
-        zone_(zone),
         frames_(zone),
         activations_(zone) {}
 
@@ -1241,7 +1240,7 @@ class ThreadImpl {
 
   CodeMap* codemap_;
   Handle<WasmInstanceObject> instance_object_;
-  Zone* zone_;
+  std::unique_ptr<WasmValue[]> stack_;
   WasmValue* stack_start_ = nullptr;  // Start of allocated stack space.
   WasmValue* stack_limit_ = nullptr;  // End of allocated stack space.
   WasmValue* sp_ = nullptr;           // Current stack pointer.
@@ -2580,11 +2579,12 @@ class ThreadImpl {
     size_t requested_size =
         base::bits::RoundUpToPowerOfTwo64((sp_ - stack_start_) + size);
     size_t new_size = Max(size_t{8}, Max(2 * old_size, requested_size));
-    WasmValue* new_stack = zone_->NewArray<WasmValue>(new_size);
-    memcpy(new_stack, stack_start_, old_size * sizeof(*sp_));
-    sp_ = new_stack + (sp_ - stack_start_);
-    stack_start_ = new_stack;
-    stack_limit_ = new_stack + new_size;
+    std::unique_ptr<WasmValue[]> new_stack(new WasmValue[new_size]);
+    memcpy(new_stack.get(), stack_.get(), old_size * sizeof(*sp_));
+    stack_ = std::move(new_stack);
+    sp_ = stack_.get() + (sp_ - stack_start_);
+    stack_start_ = stack_.get();
+    stack_limit_ = stack_.get() + new_size;
   }
 
   sp_t StackHeight() { return sp_ - stack_start_; }
