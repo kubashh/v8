@@ -163,6 +163,30 @@
     },
     {
       "key": {
+        "uuid": "7b6311ee_c0f12bb6",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T19:32:31Z",
+      "side": 1,
+      "message": "Wait. you don\u0027t use char16ptr anywhere. Then, why did you have it in the 1st place? :-)",
+      "parentUuid": "e9eb8458_f3bb1a35",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 6
+      },
+      "revId": "7c160b8d4eba3937a5314670dd64d465303bf46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0d4e84e_3407ccdd",
         "filename": "src/objects/js-relative-time-format.cc",
         "patchSetId": 10
@@ -225,6 +249,29 @@
         "startChar": 2,
         "endLine": 124,
         "endChar": 53
+      },
+      "revId": "7c160b8d4eba3937a5314670dd64d465303bf46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a00fe5c7_c75932bd",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T19:32:31Z",
+      "side": 1,
+      "message": "Should these and other const strings be defined in heap-symbols.h?  You have {long,narrow,short}_str twice in this file.\n\nSee for NFKC and others? \nhttps://cs.chromium.org/search/?q\u003dfile:v8+nfkc_string\u0026sq\u003dpackage:chromium\u0026type\u003dcs",
+      "range": {
+        "startLine": 129,
+        "startChar": 2,
+        "endLine": 131,
+        "endChar": 75
       },
       "revId": "7c160b8d4eba3937a5314670dd64d465303bf46d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
