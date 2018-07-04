@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66a40e79_fb871200",
+        "filename": "src/isolate.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T18:01:29Z",
+      "side": 1,
+      "message": "Do you need this line?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4de88b5_9182cfae",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T18:01:29Z",
+      "side": 1,
+      "message": "You don\u0027t need this line, do you?",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 17
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "364e219e_e8310ce6",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T18:01:29Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 18
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "656d95ff_3af5f093",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T18:01:29Z",
+      "side": 1,
+      "message": "Forward-declare icu::RegexMatcher instead of including this header here. You can include that in cc file. \n\nSee https://cs.chromium.org/chromium/src/components/url_formatter/idn_spoof_checker.h?rcl\u003dced45ea872c91741d5bfe616a7f772aeb4782e38\u0026l\u003d20\nas to how to forward-declare an ICU class.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb014719_5c50508f",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T18:01:29Z",
+      "side": 1,
+      "message": "How about using unique_ptr?",
+      "range": {
+        "startLine": 1105,
+        "startChar": 4,
+        "endLine": 1105,
+        "endChar": 54
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4408f56e_e929c555",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T18:01:29Z",
+      "side": 1,
+      "message": "move this near line 46.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 26
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bab2a38e_1b26274e",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T18:01:29Z",
+      "side": 1,
+      "message": "Pls, delete this line.  You used icu::Regex....",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 24
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0048dc66_fbf77dfb",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-04T18:01:29Z",
+      "side": 1,
+      "message": "icu::UnicodeString ctor taking a |const char*| is not the most efficient when the default encoding is not set to UTF-8 (v8\u0027s copy of ICU does, but ICU on most Linux distros do not). Moreover, that ctro may be declared \u0027explicit\u0027 depending on how ICU is configured when compiling. \n\nUse an explicit ctor like this:\n\nicu::UnicodeString(lang...regex.c_str(), -1, US_INV)\n\nor \n\nicu::UnicodeString::fromUTF8(lang...regex);",
+      "range": {
+        "startLine": 1283,
+        "startChar": 28,
+        "endLine": 1283,
+        "endChar": 60
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
