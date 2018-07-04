@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2275bfe_ee82a8ce",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1561,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T14:34:44Z",
+      "side": 1,
+      "message": "No need to cast, since you inherit. Also add the following test:\n\nCHECK_GE(ObjectBoilerplateDescription::kDescriptionStartIndex, this-\u003elength());",
+      "revId": "585e79e983e99dbcb8f7f7dd58078f24ee8e5700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd3d541b_4e180efd",
+        "filename": "src/objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3374,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T14:34:44Z",
+      "side": 1,
+      "message": "no need for cast here.",
+      "revId": "585e79e983e99dbcb8f7f7dd58078f24ee8e5700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
