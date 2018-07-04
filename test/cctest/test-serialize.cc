@@ -3515,11 +3515,13 @@ UNINITIALIZED_TEST(ReinitializeHashSeedRehashable) {
   delete[] blob.data;
 }
 
-TEST(SerializationMemoryStats) {
+TEST(SerializationStats) {
   FLAG_profile_deserialization = true;
   FLAG_always_opt = false;
   v8::StartupData blob = CreateSnapshotDataBlob();
   delete[] blob.data;
+
+  i::EmbeddedData::PrintStatisticsForTest();
 }
 
 void CheckSFIsAreWeak(WeakFixedArray* sfis, Isolate* isolate) {

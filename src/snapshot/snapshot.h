@@ -104,6 +104,8 @@ class EmbeddedData final {
     return *reinterpret_cast<const size_t*>(data_ + HashOffset());
   }
 
+  static void PrintStatisticsForTest();
+
   // The layout of the blob is as follows:
   //
   // [0]     hash of the remaining blob
@@ -138,6 +140,8 @@ class EmbeddedData final {
     return reinterpret_cast<const uint32_t*>(data_ + LengthsOffset());
   }
   const uint8_t* RawData() const { return data_ + RawDataOffset(); }
+
+  void PrintStatistics() const;
 
   const uint8_t* data_;
   uint32_t size_;
