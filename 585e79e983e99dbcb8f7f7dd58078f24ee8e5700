@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "60df3ae1_755cddf4",
+        "filename": "src/heap/object-stats.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-07-04T16:37:31Z",
+      "side": 1,
+      "message": "Now that we have a separate instance type we should probably provide a separate handler for those records, i.e., we should have RecordVirtualArrayBoilerPlaceDescripton() that records the ArrayBoilerplateDescripton and any constant_elements() hanging off it.\n\nWe should then remove any ArrayBoilerplateDescription handling from the constant pool handling here. In other words, RecordVirtualObjectsForConstantPoolOrEmbeddedObjects should only deal with IsFixedArrayExact() objects.",
+      "range": {
+        "startLine": 822,
+        "startChar": 4,
+        "endLine": 822,
+        "endChar": 31
+      },
+      "revId": "585e79e983e99dbcb8f7f7dd58078f24ee8e5700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2275bfe_ee82a8ce",
         "filename": "src/objects-debug.cc",
         "patchSetId": 10
