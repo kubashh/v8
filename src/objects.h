@@ -168,10 +168,12 @@
 //         - PromiseResolveThenableJobTask
 //       - Module
 //       - ModuleInfoEntry
-//       - PreParsedScopeData
 //     - WeakCell
 //     - FeedbackCell
 //     - FeedbackVector
+//     - UncompiledData
+//       - UncompiledDataWithoutScope
+//       - UncompiledDataWithScope
 //
 // Formats of Object*:
 //  Smi:        [31 bit signed int] 0
@@ -451,6 +453,8 @@ const int kStubMinorKeyBits = kSmiValueSize - kStubMajorKeyBits - 1;
   V(SMALL_ORDERED_HASH_MAP_TYPE)                                \
   V(SMALL_ORDERED_HASH_SET_TYPE)                                \
   V(STORE_HANDLER_TYPE)                                         \
+  V(UNCOMPILED_DATA_WITHOUT_SCOPE_TYPE)                         \
+  V(UNCOMPILED_DATA_WITH_SCOPE_TYPE)                            \
   V(WEAK_CELL_TYPE)                                             \
   V(WEAK_ARRAY_LIST_TYPE)                                       \
                                                                 \
@@ -843,6 +847,8 @@ enum InstanceType : uint16_t {
   SMALL_ORDERED_HASH_MAP_TYPE,
   SMALL_ORDERED_HASH_SET_TYPE,
   STORE_HANDLER_TYPE,
+  UNCOMPILED_DATA_WITHOUT_SCOPE_TYPE,
+  UNCOMPILED_DATA_WITH_SCOPE_TYPE,
   WEAK_CELL_TYPE,
   WEAK_ARRAY_LIST_TYPE,
 
@@ -1014,6 +1020,7 @@ class ModuleInfoEntry;
 class ObjectHashTable;
 class ObjectTemplateInfo;
 class ObjectVisitor;
+class UncompiledData;
 class PropertyCell;
 class PropertyDescriptor;
 class RootVisitor;
@@ -1168,7 +1175,9 @@ template <class C> inline bool Is(Object* obj);
   V(Oddball)                                   \
   V(OrderedHashMap)                            \
   V(OrderedHashSet)                            \
-  V(PreParsedScopeData)                        \
+  V(UncompiledData)                            \
+  V(UncompiledDataWithScope)                   \
+  V(UncompiledDataWithoutScope)                \
   V(PromiseReactionJobTask)                    \
   V(PropertyArray)                             \
   V(PropertyCell)                              \

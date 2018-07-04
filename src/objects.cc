@@ -3127,7 +3127,11 @@ VisitorId Map::GetVisitorId(Map* map) {
     case HEAP_NUMBER_TYPE:
     case MUTABLE_HEAP_NUMBER_TYPE:
     case FEEDBACK_METADATA_TYPE:
+    case UNCOMPILED_DATA_WITHOUT_SCOPE_TYPE:
       return kVisitDataObject;
+
+    case UNCOMPILED_DATA_WITH_SCOPE_TYPE:
+      return kVisitUncompiledDataWithScope;
 
     case BIGINT_TYPE:
       return kVisitBigInt;
@@ -3411,6 +3415,20 @@ void HeapObject::HeapObjectShortPrint(std::ostream& os) {  // NOLINT
 
     TYPED_ARRAYS(TYPED_ARRAY_SHORT_PRINT)
 #undef TYPED_ARRAY_SHORT_PRINT
+
+    case UNCOMPILED_DATA_WITHOUT_SCOPE_TYPE: {
+      UncompiledDataWithoutScope* data = UncompiledDataWithoutScope::cast(this);
+      os << "<UncompiledDataWithoutScope [" << data->start_position() << ", "
+         << data->end_position() << ">";
+      break;
+    }
+
+    case UNCOMPILED_DATA_WITH_SCOPE_TYPE: {
+      UncompiledDataWithScope* data = UncompiledDataWithScope::cast(this);
+      os << "<UncompiledDataWithScope [" << data->start_position() << ", "
+         << data->end_position() << ">";
+      break;
+    }
 
     case SHARED_FUNCTION_INFO_TYPE: {
       SharedFunctionInfo* shared = SharedFunctionInfo::cast(this);
@@ -13685,13 +13703,14 @@ SharedFunctionInfo* SharedFunctionInfo::GlobalIterator::Next() {
 
 void SharedFunctionInfo::SetScript(Handle<SharedFunctionInfo> shared,
                                    Handle<Object> script_object,
-                                   bool reset_preparsed_scope_data) {
+                                   bool reset_uncompiled_data_with_scope) {
   DCHECK_NE(shared->function_literal_id(), FunctionLiteral::kIdTypeInvalid);
   if (shared->script() == *script_object) return;
   Isolate* isolate = shared->GetIsolate();
 
-  if (reset_preparsed_scope_data && shared->HasPreParsedScopeData()) {
-    shared->ClearPreParsedScopeData();
+  if (reset_uncompiled_data_with_scope &&
+      shared->HasUncompiledDataWithScope()) {
+    SharedFunctionInfo::FlushCompiled(isolate, shared);
   }
 
   // Add shared function info to new script's list. If a collection occurs,
@@ -13975,15 +13994,16 @@ void SharedFunctionInfo::DisableOptimization(BailoutReason reason) {
 void SharedFunctionInfo::InitFromFunctionLiteral(
     Handle<SharedFunctionInfo> shared_info, FunctionLiteral* lit,
     bool is_toplevel) {
+  bool needs_position_info = true;
+
   // When adding fields here, make sure DeclarationScope::AnalyzePartially is
   // updated accordingly.
   shared_info->set_internal_formal_parameter_count(lit->parameter_count());
   shared_info->set_function_token_position(lit->function_token_position());
-  shared_info->set_raw_start_position(lit->start_position());
-  shared_info->set_raw_end_position(lit->end_position());
   if (shared_info->scope_info()->HasPositionInfo()) {
     shared_info->scope_info()->SetPositionInfo(lit->start_position(),
                                                lit->end_position());
+    needs_position_info = false;
   }
   shared_info->set_is_declaration(lit->is_declaration());
   shared_info->set_is_named_expression(lit->is_named_expression());
@@ -14019,24 +14039,30 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
     shared_info->set_length(lit->function_length());
     shared_info->set_has_duplicate_parameters(lit->has_duplicate_parameters());
     shared_info->SetExpectedNofPropertiesFromEstimate(lit);
-    DCHECK_NULL(lit->produced_preparsed_scope_data());
+    DCHECK_NULL(lit->produced_uncompiled_data());
+    if (lit->ShouldEagerCompile()) {
+      needs_position_info = false;
+    }
   } else {
+    Isolate* isolate = shared_info->GetIsolate();
     // Set an invalid length for lazy functions. This way we can set the correct
     // value after compiling, but avoid overwriting values set manually by the
     // bootstrapper.
     shared_info->set_length(SharedFunctionInfo::kInvalidLength);
     if (FLAG_preparser_scope_analysis) {
-      ProducedPreParsedScopeData* scope_data =
-          lit->produced_preparsed_scope_data();
+      ProducedUncompiledData* scope_data = lit->produced_uncompiled_data();
       if (scope_data != nullptr) {
-        MaybeHandle<PreParsedScopeData> maybe_data =
-            scope_data->Serialize(shared_info->GetIsolate());
-        if (!maybe_data.is_null()) {
-          Handle<PreParsedScopeData> data = maybe_data.ToHandleChecked();
-          shared_info->set_preparsed_scope_data(*data);
-        }
+        Handle<UncompiledData> data = scope_data->Serialize(isolate);
+        shared_info->set_uncompiled_data(*data);
+        needs_position_info = false;
       }
     }
+  }
+  Isolate* isolate = shared_info->GetIsolate();
+  if (needs_position_info) {
+    shared_info->set_uncompiled_data(
+        *isolate->factory()->NewUncompiledDataWithoutScope(
+            lit->start_position(), lit->end_position()));
   }
 }
 

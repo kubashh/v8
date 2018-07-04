@@ -5,9 +5,9 @@
 (function() {
   function f() {
     {
-      function f() { return 42 }
+      function h() { return 42 }
     }
-    function g() { return f }
+    function g() { return h }
     return g;
   }
 

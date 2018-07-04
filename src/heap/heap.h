@@ -156,6 +156,8 @@ using v8::MemoryPressureLevel;
   V(UndefinedValue)                     \
   V(UninitializedMap)                   \
   V(UninitializedValue)                 \
+  V(UncompiledDataWithoutScopeMap)      \
+  V(UncompiledDataWithScopeMap)         \
   V(WeakCellMap)                        \
   V(WeakFixedArrayMap)                  \
   V(WeakArrayListMap)                   \

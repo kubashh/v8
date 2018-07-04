@@ -418,7 +418,7 @@ Parser::Parser(ParseInfo* info)
       target_stack_(nullptr),
       total_preparse_skipped_(0),
       temp_zoned_(false),
-      consumed_preparsed_scope_data_(info->consumed_preparsed_scope_data()),
+      consumed_uncompiled_data_(info->consumed_uncompiled_data()),
       parameters_end_pos_(info->parameters_end_pos()) {
   // Even though we were passed ParseInfo, we should not store it in
   // Parser - this makes sure that Isolate is not accidentally accessed via
@@ -2579,7 +2579,7 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
   int function_length = -1;
   bool has_duplicate_parameters = false;
   int function_literal_id = GetNextFunctionLiteralId();
-  ProducedPreParsedScopeData* produced_preparsed_scope_data = nullptr;
+  ProducedUncompiledData* produced_uncompiled_data = nullptr;
 
   Zone* outer_zone = zone();
   DeclarationScope* scope;
@@ -2622,7 +2622,7 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
       bookmark.Set();
       LazyParsingResult result = SkipFunction(
           function_name, kind, function_type, scope, &num_parameters,
-          &produced_preparsed_scope_data, is_lazy_inner_function,
+          &produced_uncompiled_data, is_lazy_inner_function,
           is_lazy_top_level_function, CHECK_OK);
 
       if (result == kLazyParsingAborted) {
@@ -2700,7 +2700,7 @@ FunctionLiteral* Parser::ParseFunctionLiteral(
   FunctionLiteral* function_literal = factory()->NewFunctionLiteral(
       function_name, scope, body, expected_property_count, num_parameters,
       function_length, duplicate_parameters, function_type, eager_compile_hint,
-      pos, true, function_literal_id, produced_preparsed_scope_data);
+      pos, true, function_literal_id, produced_uncompiled_data);
   function_literal->set_function_token_position(function_token_pos);
   function_literal->set_suspend_count(suspend_count);
 
@@ -2715,8 +2715,8 @@ Parser::LazyParsingResult Parser::SkipFunction(
     const AstRawString* function_name, FunctionKind kind,
     FunctionLiteral::FunctionType function_type,
     DeclarationScope* function_scope, int* num_parameters,
-    ProducedPreParsedScopeData** produced_preparsed_scope_data,
-    bool is_inner_function, bool may_abort, bool* ok) {
+    ProducedUncompiledData** produced_uncompiled_data, bool is_inner_function,
+    bool may_abort, bool* ok) {
   FunctionState function_state(&function_state_, &scope_, function_scope);
 
   DCHECK_NE(kNoSourcePosition, function_scope->start_position());
@@ -2726,20 +2726,20 @@ Parser::LazyParsingResult Parser::SkipFunction(
                  scanner()->current_token() == Token::ARROW);
 
   // FIXME(marja): There are 2 ways to skip functions now. Unify them.
-  DCHECK_NOT_NULL(consumed_preparsed_scope_data_);
-  if (consumed_preparsed_scope_data_->HasData()) {
+  DCHECK_NOT_NULL(consumed_uncompiled_data_);
+  if (consumed_uncompiled_data_->HasData()) {
     DCHECK(FLAG_preparser_scope_analysis);
     int end_position;
     LanguageMode language_mode;
     int num_inner_functions;
     bool uses_super_property;
-    *produced_preparsed_scope_data =
-        consumed_preparsed_scope_data_->GetDataForSkippableFunction(
+    *produced_uncompiled_data =
+        consumed_uncompiled_data_->GetDataForSkippableFunction(
             main_zone(), function_scope->start_position(), &end_position,
             num_parameters, &num_inner_functions, &uses_super_property,
             &language_mode);
 
-    function_scope->outer_scope()->SetMustUsePreParsedScopeData();
+    function_scope->outer_scope()->SetMustUseUncompiledDataWithScope();
     function_scope->set_is_skipped_function(true);
     function_scope->set_end_position(end_position);
     scanner()->SeekForward(end_position - 1);
@@ -2762,7 +2762,7 @@ Parser::LazyParsingResult Parser::SkipFunction(
 
   PreParser::PreParseResult result = reusable_preparser()->PreParseFunction(
       function_name, kind, function_type, function_scope, is_inner_function,
-      may_abort, use_counts_, produced_preparsed_scope_data, this->script_id());
+      may_abort, use_counts_, produced_uncompiled_data, this->script_id());
 
   // Return immediately if pre-parser decided to abort parsing.
   if (result == PreParser::kPreParseAbort) return kLazyParsingAborted;

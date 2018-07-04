@@ -120,7 +120,7 @@ PreParser::PreParseResult PreParser::PreParseFunction(
     const AstRawString* function_name, FunctionKind kind,
     FunctionLiteral::FunctionType function_type,
     DeclarationScope* function_scope, bool is_inner_function, bool may_abort,
-    int* use_counts, ProducedPreParsedScopeData** produced_preparsed_scope_data,
+    int* use_counts, ProducedUncompiledData** produced_uncompiled_data,
     int script_id) {
   DCHECK_EQ(FUNCTION_SCOPE, function_scope->scope_type());
   use_counts_ = use_counts;
@@ -133,13 +133,12 @@ PreParser::PreParseResult PreParser::PreParseFunction(
 
   // Start collecting data for a new function which might contain skippable
   // functions.
-  std::unique_ptr<ProducedPreParsedScopeData::DataGatheringScope>
-      produced_preparsed_scope_data_scope;
+  std::unique_ptr<ProducedUncompiledData::DataGatheringScope>
+      produced_uncompiled_data_scope;
   if (FLAG_preparser_scope_analysis && !IsArrowFunction(kind)) {
     track_unresolved_variables_ = true;
-    produced_preparsed_scope_data_scope.reset(
-        new ProducedPreParsedScopeData::DataGatheringScope(function_scope,
-                                                           this));
+    produced_uncompiled_data_scope.reset(
+        new ProducedUncompiledData::DataGatheringScope(function_scope, this));
   }
 
   // In the preparser, we use the function literal ids to count how many
@@ -238,7 +237,7 @@ PreParser::PreParseResult PreParser::PreParseFunction(
                                allow_duplicate_parameters,
                                CHECK_OK_VALUE(kPreParseSuccess));
 
-      *produced_preparsed_scope_data = produced_preparsed_scope_data_;
+      *produced_uncompiled_data = produced_uncompiled_data_;
     }
 
     if (is_strict(function_scope->language_mode())) {
@@ -291,15 +290,14 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
 
   // Start collecting data for a new function which might contain skippable
   // functions.
-  std::unique_ptr<ProducedPreParsedScopeData::DataGatheringScope>
-      produced_preparsed_scope_data_scope;
+  std::unique_ptr<ProducedUncompiledData::DataGatheringScope>
+      produced_uncompiled_data_scope;
   if (!function_state_->next_function_is_likely_called() &&
-      produced_preparsed_scope_data_ != nullptr) {
+      produced_uncompiled_data_ != nullptr) {
     DCHECK(FLAG_preparser_scope_analysis);
     DCHECK(track_unresolved_variables_);
-    produced_preparsed_scope_data_scope.reset(
-        new ProducedPreParsedScopeData::DataGatheringScope(function_scope,
-                                                           this));
+    produced_uncompiled_data_scope.reset(
+        new ProducedUncompiledData::DataGatheringScope(function_scope, this));
   }
 
   FunctionState function_state(&function_state_, &scope_, function_scope);
@@ -347,8 +345,8 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
     CheckStrictOctalLiteral(start_position, end_position, CHECK_OK);
   }
 
-  if (produced_preparsed_scope_data_scope) {
-    produced_preparsed_scope_data_scope->MarkFunctionAsSkippable(
+  if (produced_uncompiled_data_scope) {
+    produced_uncompiled_data_scope->MarkFunctionAsSkippable(
         end_position, GetLastFunctionLiteralId() - func_id);
   }
   if (V8_UNLIKELY(FLAG_log_function_events)) {
@@ -395,19 +393,19 @@ PreParserStatement PreParser::BuildParameterInitializationBlock(
   DCHECK(scope()->is_function_scope());
   if (FLAG_preparser_scope_analysis &&
       scope()->AsDeclarationScope()->calls_sloppy_eval() &&
-      produced_preparsed_scope_data_ != nullptr) {
+      produced_uncompiled_data_ != nullptr) {
     // We cannot replicate the Scope structure constructed by the Parser,
     // because we've lost information whether each individual parameter was
     // simple or not. Give up trying to produce data to skip inner functions.
-    if (produced_preparsed_scope_data_->parent() != nullptr) {
+    if (produced_uncompiled_data_->parent() != nullptr) {
       // Lazy parsing started before the current function; the function which
       // cannot contain skippable functions is the parent function. (Its inner
       // functions cannot either; they are implicitly bailed out.)
-      produced_preparsed_scope_data_->parent()->Bailout();
+      produced_uncompiled_data_->parent()->Bailout();
     } else {
       // Lazy parsing started at the current function; it cannot contain
       // skippable functions.
-      produced_preparsed_scope_data_->Bailout();
+      produced_uncompiled_data_->Bailout();
     }
   }
 

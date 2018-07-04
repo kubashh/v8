@@ -741,6 +741,33 @@ StartupData SnapshotCreator::CreateBlob(
 
   isolate->heap()->read_only_space()->ClearStringPaddingIfNeeded();
 
+  if (function_code_handling == FunctionCodeHandling::kClear) {
+    // Clear out re-compilable data from all shared function infos. Any
+    // JSFunctions using these SFIs will have their code pointers reset by the
+    // partial serializer.
+    //
+    // We have to iterate the heap and collect handles to each flushed SFI,
+    // before we disable allocation, since we have to allocate UncompiledDatas
+    // to be able to recompile them.
+    i::HandleScope scope(isolate);
+    std::vector<i::Handle<i::SharedFunctionInfo>> sfis_to_flush;
+
+    i::HeapIterator heap_iterator(isolate->heap());
+    while (i::HeapObject* current_obj = heap_iterator.next()) {
+      if (current_obj->IsSharedFunctionInfo()) {
+        i::SharedFunctionInfo* shared =
+            i::SharedFunctionInfo::cast(current_obj);
+        if (shared->CanFlushCompiled()) {
+          sfis_to_flush.emplace_back(shared, isolate);
+        }
+      }
+    }
+    i::AllowHeapAllocation allocate_for_flush;
+    for (i::Handle<i::SharedFunctionInfo> shared : sfis_to_flush) {
+      i::SharedFunctionInfo::FlushCompiled(isolate, shared);
+    }
+  }
+
   i::DisallowHeapAllocation no_gc_from_here_on;
 
   int num_contexts = num_additional_contexts + 1;
@@ -776,19 +803,12 @@ StartupData SnapshotCreator::CreateBlob(
         fun->feedback_cell()->set_value(isolate->heap()->undefined_value());
         fun->set_code(isolate->builtins()->builtin(i::Builtins::kCompileLazy));
       }
-    }
-
-    // Clear out re-compilable data from all shared function infos. Any
-    // JSFunctions using these SFIs will have their code pointers reset by the
-    // partial serializer.
-    if (current_obj->IsSharedFunctionInfo() &&
-        function_code_handling == FunctionCodeHandling::kClear) {
-      i::SharedFunctionInfo* shared = i::SharedFunctionInfo::cast(current_obj);
-      if (shared->CanFlushCompiled()) {
-        shared->FlushCompiled();
+      if (function_code_handling == FunctionCodeHandling::kClear) {
+        DCHECK(fun->shared()->HasWasmExportedFunctionData() ||
+               fun->shared()->HasBuiltinId() ||
+               fun->shared()->IsApiFunction() ||
+               fun->shared()->HasUncompiledDataWithoutScope());
       }
-      DCHECK(shared->HasWasmExportedFunctionData() || shared->HasBuiltinId() ||
-             shared->IsApiFunction());
     }
   }
 

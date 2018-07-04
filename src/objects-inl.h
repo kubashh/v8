@@ -133,7 +133,8 @@ TYPE_CHECKER(NumberDictionary, NUMBER_DICTIONARY_TYPE)
 TYPE_CHECKER(Oddball, ODDBALL_TYPE)
 TYPE_CHECKER(OrderedHashMap, ORDERED_HASH_MAP_TYPE)
 TYPE_CHECKER(OrderedHashSet, ORDERED_HASH_SET_TYPE)
-TYPE_CHECKER(PreParsedScopeData, TUPLE2_TYPE)
+TYPE_CHECKER(UncompiledDataWithoutScope, UNCOMPILED_DATA_WITHOUT_SCOPE_TYPE)
+TYPE_CHECKER(UncompiledDataWithScope, UNCOMPILED_DATA_WITH_SCOPE_TYPE)
 TYPE_CHECKER(PropertyArray, PROPERTY_ARRAY_TYPE)
 TYPE_CHECKER(PropertyCell, PROPERTY_CELL_TYPE)
 TYPE_CHECKER(PropertyDescriptorObject, FIXED_ARRAY_TYPE)
@@ -165,6 +166,9 @@ TYPE_CHECKER(JSLocale, JS_INTL_LOCALE_TYPE)
 TYPED_ARRAYS(TYPED_ARRAY_TYPE_CHECKER)
 #undef TYPED_ARRAY_TYPE_CHECKER
 
+bool HeapObject::IsUncompiledData() const {
+  return IsUncompiledDataWithoutScope() || IsUncompiledDataWithScope();
+}
 
 bool HeapObject::IsFixedArrayBase() const {
   return IsFixedArray() || IsFixedDoubleArray() || IsFixedTypedArrayBase();

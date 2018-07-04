@@ -20,8 +20,8 @@ class AstValueFactory;
 class AstRawString;
 class Declaration;
 class ParseInfo;
-class PreParsedScopeData;
-class ProducedPreParsedScopeData;
+class UncompiledDataWithScope;
+class ProducedUncompiledData;
 class SloppyBlockFunctionStatement;
 class Statement;
 class StringSet;
@@ -155,18 +155,18 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
 
   Zone* zone() const { return zone_; }
 
-  void SetMustUsePreParsedScopeData() {
-    if (must_use_preparsed_scope_data_) {
+  void SetMustUseUncompiledDataWithScope() {
+    if (must_use_uncompiled_data_with_scope_) {
       return;
     }
-    must_use_preparsed_scope_data_ = true;
+    must_use_uncompiled_data_with_scope_ = true;
     if (outer_scope_) {
-      outer_scope_->SetMustUsePreParsedScopeData();
+      outer_scope_->SetMustUseUncompiledDataWithScope();
     }
   }
 
-  bool must_use_preparsed_scope_data() const {
-    return must_use_preparsed_scope_data_;
+  bool must_use_uncompiled_data_with_scope() const {
+    return must_use_uncompiled_data_with_scope_;
   }
 
   // ---------------------------------------------------------------------------
@@ -504,8 +504,8 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
                          MaybeAssignedFlag maybe_assigned);
 
   // Walk the scope chain to find DeclarationScopes; call
-  // SavePreParsedScopeDataForDeclarationScope for each.
-  void SavePreParsedScopeData();
+  // SaveUncompiledDataForDeclarationScope for each.
+  void SaveUncompiledData();
 
   Zone* zone_;
 
@@ -576,7 +576,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   // True if it holds 'var' declarations.
   bool is_declaration_scope_ : 1;
 
-  bool must_use_preparsed_scope_data_ : 1;
+  bool must_use_uncompiled_data_with_scope_ : 1;
 
   // Create a non-local variable with a given name.
   // These variables are looked up dynamically at runtime.
@@ -911,16 +911,16 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
 
   // Save data describing the context allocation of the variables in this scope
   // and its subscopes (except scopes at the laziness boundary). The data is
-  // saved in produced_preparsed_scope_data_.
-  void SavePreParsedScopeDataForDeclarationScope();
+  // saved in produced_uncompiled_data_.
+  void SaveUncompiledDataForDeclarationScope();
 
-  void set_produced_preparsed_scope_data(
-      ProducedPreParsedScopeData* produced_preparsed_scope_data) {
-    produced_preparsed_scope_data_ = produced_preparsed_scope_data;
+  void set_produced_uncompiled_data(
+      ProducedUncompiledData* produced_uncompiled_data) {
+    produced_uncompiled_data_ = produced_uncompiled_data;
   }
 
-  ProducedPreParsedScopeData* produced_preparsed_scope_data() const {
-    return produced_preparsed_scope_data_;
+  ProducedUncompiledData* produced_uncompiled_data() const {
+    return produced_uncompiled_data_;
   }
 
  private:
@@ -976,7 +976,7 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   Variable* arguments_;
 
   // For producing the scope allocation data during preparsing.
-  ProducedPreParsedScopeData* produced_preparsed_scope_data_;
+  ProducedUncompiledData* produced_uncompiled_data_;
 
   struct RareData : public ZoneObject {
     // Convenience variable; Subclass constructor only

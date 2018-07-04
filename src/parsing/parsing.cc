@@ -62,8 +62,8 @@ bool ParseFunction(ParseInfo* info, Handle<SharedFunctionInfo> shared_info,
   Handle<String> source(String::cast(info->script()->source()), isolate);
   source = String::Flatten(isolate, source);
   isolate->counters()->total_parse_size()->Increment(source->length());
-  std::unique_ptr<Utf16CharacterStream> stream(ScannerStream::For(
-      source, shared_info->StartPosition(), shared_info->EndPosition()));
+  std::unique_ptr<Utf16CharacterStream> stream(
+      ScannerStream::For(source, info->start_position(), info->end_position()));
   info->set_character_stream(std::move(stream));
 
   VMState<PARSER> state(isolate);

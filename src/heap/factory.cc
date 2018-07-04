@@ -2478,9 +2478,25 @@ Handle<ModuleInfo> Factory::NewModuleInfo() {
                                           ModuleInfo::kLength, TENURED);
 }
 
-Handle<PreParsedScopeData> Factory::NewPreParsedScopeData() {
-  Handle<PreParsedScopeData> result =
-      Handle<PreParsedScopeData>::cast(NewStruct(TUPLE2_TYPE, TENURED));
+Handle<UncompiledDataWithoutScope> Factory::NewUncompiledDataWithoutScope(
+    int32_t start_position, int32_t end_position) {
+  Handle<UncompiledDataWithoutScope> result(
+      UncompiledDataWithoutScope::cast(
+          New(uncompiled_data_without_scope_map(), TENURED)),
+      isolate());
+  result->set_start_position(start_position);
+  result->set_end_position(end_position);
+  return result;
+}
+
+Handle<UncompiledDataWithScope> Factory::NewUncompiledDataWithScope(
+    int32_t start_position, int32_t end_position) {
+  Handle<UncompiledDataWithScope> result(
+      UncompiledDataWithScope::cast(
+          New(uncompiled_data_with_scope_map(), TENURED)),
+      isolate());
+  result->set_start_position(start_position);
+  result->set_end_position(end_position);
   result->set_scope_data(PodArray<uint8_t>::cast(*empty_byte_array()));
   result->set_child_data(*empty_fixed_array());
   return result;
@@ -3460,8 +3476,6 @@ Handle<SharedFunctionInfo> Factory::NewSharedFunctionInfo(
     share->set_length(0);
     share->set_internal_formal_parameter_count(0);
     share->set_expected_nof_properties(0);
-    share->set_raw_start_position_and_type(0);
-    share->set_raw_end_position(0);
     share->set_function_token_position(0);
     // All flags default to false or 0.
     share->set_flags(0);

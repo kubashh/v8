@@ -36,7 +36,7 @@ const size_t kUint8Size = 1;
 #endif
 
 const int kPlaceholderSize = kUint32Size;
-const int kSkippableFunctionDataSize = 4 * kUint32Size + 1 * kUint8Size;
+const int kSkippableFunctionDataSize = 2 * kUint32Size + 1 * kUint8Size;
 
 class LanguageField : public BitField8<LanguageMode, 0, 1> {};
 class UsesSuperField : public BitField8<bool, LanguageField::kNext, 1> {};
@@ -46,8 +46,8 @@ STATIC_ASSERT(LanguageModeSize <= LanguageField::kNumValues);
 
 /*
 
-  Internal data format for the backing store of ProducedPreparsedScopeData and
-  PreParsedScopeData::scope_data (on the heap):
+  Internal data format for the backing store of ProducedUncompiledData and
+  UncompiledDataWithScope::scope_data (on the heap):
 
   (Skippable function data:)
   ------------------------------------
@@ -62,8 +62,6 @@ STATIC_ASSERT(LanguageModeSize <= LanguageField::kNumValues);
   (Scope allocation data:)             << scope_data_start points here
   ------------------------------------
   magic value
-  ------------------------------------
-  scope positions
   ------------------------------------
   | scope type << only in debug      |
   | eval                             |
@@ -82,14 +80,14 @@ STATIC_ASSERT(LanguageModeSize <= LanguageField::kNumValues);
   | ...                              |
   ------------------------------------
 
-  PreParsedScopeData::child_data is an array of PreParsedScopeData objects, one
+  UncompiledDataWithScope::child_data is an array of UncompiledData objects, one
   for each skippable inner function.
 
-  ConsumedPreParsedScopeData wraps a PreParsedScopeData and reads data from it.
+  ConsumedUncompiledData wraps a UncompiledDataWithScope and reads data from it.
 
  */
 
-void ProducedPreParsedScopeData::ByteData::WriteUint32(uint32_t data) {
+void ProducedUncompiledData::ByteData::WriteUint32(uint32_t data) {
 #ifdef DEBUG
   // Save expected item size in debug mode.
   backing_store_.push_back(kUint32Size);
@@ -101,7 +99,7 @@ void ProducedPreParsedScopeData::ByteData::WriteUint32(uint32_t data) {
   free_quarters_in_last_byte_ = 0;
 }
 
-void ProducedPreParsedScopeData::ByteData::OverwriteFirstUint32(uint32_t data) {
+void ProducedUncompiledData::ByteData::OverwriteFirstUint32(uint32_t data) {
   auto it = backing_store_.begin();
 #ifdef DEBUG
   // Check that that position already holds an item of the expected size.
@@ -115,7 +113,7 @@ void ProducedPreParsedScopeData::ByteData::OverwriteFirstUint32(uint32_t data) {
   }
 }
 
-void ProducedPreParsedScopeData::ByteData::WriteUint8(uint8_t data) {
+void ProducedUncompiledData::ByteData::WriteUint8(uint8_t data) {
 #ifdef DEBUG
   // Save expected item size in debug mode.
   backing_store_.push_back(kUint8Size);
@@ -124,7 +122,7 @@ void ProducedPreParsedScopeData::ByteData::WriteUint8(uint8_t data) {
   free_quarters_in_last_byte_ = 0;
 }
 
-void ProducedPreParsedScopeData::ByteData::WriteQuarter(uint8_t data) {
+void ProducedUncompiledData::ByteData::WriteQuarter(uint8_t data) {
   DCHECK_LE(data, 3);
   if (free_quarters_in_last_byte_ == 0) {
 #ifdef DEBUG
@@ -142,7 +140,7 @@ void ProducedPreParsedScopeData::ByteData::WriteQuarter(uint8_t data) {
   backing_store_.back() |= (data << shift_amount);
 }
 
-Handle<PodArray<uint8_t>> ProducedPreParsedScopeData::ByteData::Serialize(
+Handle<PodArray<uint8_t>> ProducedUncompiledData::ByteData::Serialize(
     Isolate* isolate) {
   Handle<PodArray<uint8_t>> array = PodArray<uint8_t>::New(
       isolate, static_cast<int>(backing_store_.size()), TENURED);
@@ -157,11 +155,13 @@ Handle<PodArray<uint8_t>> ProducedPreParsedScopeData::ByteData::Serialize(
   return array;
 }
 
-ProducedPreParsedScopeData::ProducedPreParsedScopeData(
-    Zone* zone, ProducedPreParsedScopeData* parent)
+ProducedUncompiledData::ProducedUncompiledData(Zone* zone,
+                                               ProducedUncompiledData* parent)
     : parent_(parent),
       byte_data_(new (zone) ByteData(zone)),
       data_for_inner_functions_(zone),
+      start_position_(kNoSourcePosition),
+      end_position_(kNoSourcePosition),
       bailed_out_(false) {
   if (parent != nullptr) {
     parent->data_for_inner_functions_.push_back(this);
@@ -170,65 +170,67 @@ ProducedPreParsedScopeData::ProducedPreParsedScopeData(
   byte_data_->WriteUint32(0);
 }
 
-// Create a ProducedPreParsedScopeData which is just a proxy for a previous
-// produced PreParsedScopeData.
-ProducedPreParsedScopeData::ProducedPreParsedScopeData(
-    Handle<PreParsedScopeData> data, Zone* zone)
+// Create a ProducedUncompiledData which is just a proxy for a previous
+// produced UncompiledData.
+ProducedUncompiledData::ProducedUncompiledData(Handle<UncompiledData> data,
+                                               Zone* zone)
     : parent_(nullptr),
       byte_data_(nullptr),
       data_for_inner_functions_(zone),
+      start_position_(kNoSourcePosition),
+      end_position_(kNoSourcePosition),
       bailed_out_(false),
-      previously_produced_preparsed_scope_data_(data) {}
+      previously_produced_uncompiled_data_(data) {}
 
-ProducedPreParsedScopeData::DataGatheringScope::DataGatheringScope(
+ProducedUncompiledData::DataGatheringScope::DataGatheringScope(
     DeclarationScope* function_scope, PreParser* preparser)
     : function_scope_(function_scope),
       preparser_(preparser),
-      produced_preparsed_scope_data_(nullptr) {
+      produced_uncompiled_data_(nullptr) {
   if (FLAG_preparser_scope_analysis) {
-    ProducedPreParsedScopeData* parent =
-        preparser->produced_preparsed_scope_data();
+    ProducedUncompiledData* parent = preparser->produced_uncompiled_data();
     Zone* main_zone = preparser->main_zone();
-    produced_preparsed_scope_data_ =
-        new (main_zone) ProducedPreParsedScopeData(main_zone, parent);
-    preparser->set_produced_preparsed_scope_data(
-        produced_preparsed_scope_data_);
-    function_scope->set_produced_preparsed_scope_data(
-        produced_preparsed_scope_data_);
+    produced_uncompiled_data_ =
+        new (main_zone) ProducedUncompiledData(main_zone, parent);
+    preparser->set_produced_uncompiled_data(produced_uncompiled_data_);
+    function_scope->set_produced_uncompiled_data(produced_uncompiled_data_);
   }
 }
 
-ProducedPreParsedScopeData::DataGatheringScope::~DataGatheringScope() {
+ProducedUncompiledData::DataGatheringScope::~DataGatheringScope() {
   if (FLAG_preparser_scope_analysis) {
-    preparser_->set_produced_preparsed_scope_data(
-        produced_preparsed_scope_data_->parent_);
+    preparser_->set_produced_uncompiled_data(
+        produced_uncompiled_data_->parent_);
   }
 }
 
-void ProducedPreParsedScopeData::DataGatheringScope::MarkFunctionAsSkippable(
+void ProducedUncompiledData::DataGatheringScope::MarkFunctionAsSkippable(
     int end_position, int num_inner_functions) {
   DCHECK(FLAG_preparser_scope_analysis);
-  DCHECK_NOT_NULL(produced_preparsed_scope_data_);
-  DCHECK_NOT_NULL(produced_preparsed_scope_data_->parent_);
-  produced_preparsed_scope_data_->parent_->AddSkippableFunction(
+  DCHECK_NOT_NULL(produced_uncompiled_data_);
+  DCHECK_NOT_NULL(produced_uncompiled_data_->parent_);
+  produced_uncompiled_data_->parent_->AddSkippableFunction(
       function_scope_->start_position(), end_position,
       function_scope_->num_parameters(), num_inner_functions,
       function_scope_->language_mode(), function_scope_->NeedsHomeObject());
 }
 
-void ProducedPreParsedScopeData::AddSkippableFunction(
-    int start_position, int end_position, int num_parameters,
-    int num_inner_functions, LanguageMode language_mode,
-    bool uses_super_property) {
+void ProducedUncompiledData::AddSkippableFunction(int start_position,
+                                                  int end_position,
+                                                  int num_parameters,
+                                                  int num_inner_functions,
+                                                  LanguageMode language_mode,
+                                                  bool uses_super_property) {
   DCHECK(FLAG_preparser_scope_analysis);
-  DCHECK(previously_produced_preparsed_scope_data_.is_null());
+  DCHECK(previously_produced_uncompiled_data_.is_null());
 
   if (bailed_out_) {
     return;
   }
 
-  byte_data_->WriteUint32(start_position);
-  byte_data_->WriteUint32(end_position);
+  // TODO(leszeks): Either remove the start/end position parameters, or DCHECK
+  // that they are correct.
+
   byte_data_->WriteUint32(num_parameters);
   byte_data_->WriteUint32(num_inner_functions);
 
@@ -238,15 +240,19 @@ void ProducedPreParsedScopeData::AddSkippableFunction(
   byte_data_->WriteQuarter(language_and_super);
 }
 
-void ProducedPreParsedScopeData::SaveScopeAllocationData(
-    DeclarationScope* scope) {
+void ProducedUncompiledData::SaveScopeData(DeclarationScope* scope) {
   DCHECK(FLAG_preparser_scope_analysis);
-  DCHECK(previously_produced_preparsed_scope_data_.is_null());
+  DCHECK(previously_produced_uncompiled_data_.is_null());
   // The data contains a uint32 (reserved space for scope_data_start) and
   // function data items, kSkippableFunctionDataSize each.
   DCHECK_GE(byte_data_->size(), kPlaceholderSize);
   DCHECK_LE(byte_data_->size(), std::numeric_limits<uint32_t>::max());
   DCHECK_EQ(byte_data_->size() % kSkippableFunctionDataSize, kPlaceholderSize);
+
+  // Save the scope's start and end position regardless of whether we produced
+  // any other data.
+  start_position_ = scope->start_position();
+  end_position_ = scope->end_position();
 
   if (bailed_out_) {
     return;
@@ -264,35 +270,40 @@ void ProducedPreParsedScopeData::SaveScopeAllocationData(
   // For a data integrity check, write a value between data about skipped inner
   // funcs and data about variables.
   byte_data_->WriteUint32(kMagicValue);
-  byte_data_->WriteUint32(scope->start_position());
-  byte_data_->WriteUint32(scope->end_position());
 
   SaveDataForScope(scope);
 }
 
-bool ProducedPreParsedScopeData::ContainsInnerFunctions() const {
+bool ProducedUncompiledData::ContainsInnerFunctions() const {
   return byte_data_->size() > kPlaceholderSize;
 }
 
-MaybeHandle<PreParsedScopeData> ProducedPreParsedScopeData::Serialize(
-    Isolate* isolate) {
-  if (!previously_produced_preparsed_scope_data_.is_null()) {
+Handle<UncompiledData> ProducedUncompiledData::Serialize(Isolate* isolate) {
+  if (!previously_produced_uncompiled_data_.is_null()) {
     DCHECK(!bailed_out_);
     DCHECK_EQ(data_for_inner_functions_.size(), 0);
-    return previously_produced_preparsed_scope_data_;
+    return previously_produced_uncompiled_data_;
   }
+
+  DCHECK_NE(start_position_, kNoSourcePosition);
+  DCHECK_NE(end_position_, kNoSourcePosition);
+
   if (bailed_out_) {
-    return MaybeHandle<PreParsedScopeData>();
+    return isolate->factory()->NewUncompiledDataWithoutScope(start_position_,
+                                                             end_position_);
   }
 
   DCHECK(!ThisOrParentBailedOut());
 
   if (byte_data_->size() <= kPlaceholderSize) {
     // The data contains only the placeholder.
-    return MaybeHandle<PreParsedScopeData>();
+    return isolate->factory()->NewUncompiledDataWithoutScope(start_position_,
+                                                             end_position_);
   }
 
-  Handle<PreParsedScopeData> data = isolate->factory()->NewPreParsedScopeData();
+  Handle<UncompiledDataWithScope> data =
+      isolate->factory()->NewUncompiledDataWithScope(start_position_,
+                                                     end_position_);
 
   Handle<PodArray<uint8_t>> scope_data_array = byte_data_->Serialize(isolate);
   data->set_scope_data(*scope_data_array);
@@ -305,15 +316,8 @@ MaybeHandle<PreParsedScopeData> ProducedPreParsedScopeData::Serialize(
         isolate->factory()->NewFixedArray(child_data_length, TENURED);
     int i = 0;
     for (const auto& item : data_for_inner_functions_) {
-      MaybeHandle<PreParsedScopeData> maybe_child_data =
-          item->Serialize(isolate);
-      if (maybe_child_data.is_null()) {
-        child_array->set(i++, *(isolate->factory()->null_value()));
-      } else {
-        Handle<PreParsedScopeData> child_data =
-            maybe_child_data.ToHandleChecked();
-        child_array->set(i++, *child_data);
-      }
+      Handle<UncompiledData> child_data = item->Serialize(isolate);
+      child_array->set(i++, *child_data);
     }
     data->set_child_data(*child_array);
   }
@@ -321,7 +325,7 @@ MaybeHandle<PreParsedScopeData> ProducedPreParsedScopeData::Serialize(
   return data;
 }
 
-bool ProducedPreParsedScopeData::ScopeNeedsData(Scope* scope) {
+bool ProducedUncompiledData::ScopeNeedsData(Scope* scope) {
   if (scope->scope_type() == ScopeType::FUNCTION_SCOPE) {
     // Default constructors don't need data (they cannot contain inner functions
     // defined by the user). Other functions do.
@@ -343,9 +347,9 @@ bool ProducedPreParsedScopeData::ScopeNeedsData(Scope* scope) {
   return false;
 }
 
-bool ProducedPreParsedScopeData::ScopeIsSkippableFunctionScope(Scope* scope) {
+bool ProducedUncompiledData::ScopeIsSkippableFunctionScope(Scope* scope) {
   // Lazy non-arrow function scopes are skippable. Lazy functions are exactly
-  // those Scopes which have their own ProducedPreParsedScopeData object. This
+  // those Scopes which have their own ProducedUncompiledData object. This
   // logic ensures that the scope allocation data is consistent with the
   // skippable function data (both agree on where the lazy function boundaries
   // are).
@@ -354,10 +358,10 @@ bool ProducedPreParsedScopeData::ScopeIsSkippableFunctionScope(Scope* scope) {
   }
   DeclarationScope* declaration_scope = scope->AsDeclarationScope();
   return !declaration_scope->is_arrow_scope() &&
-         declaration_scope->produced_preparsed_scope_data() != nullptr;
+         declaration_scope->produced_uncompiled_data() != nullptr;
 }
 
-void ProducedPreParsedScopeData::SaveDataForScope(Scope* scope) {
+void ProducedUncompiledData::SaveDataForScope(Scope* scope) {
   DCHECK_NE(scope->end_position(), kNoSourcePosition);
 
   if (!ScopeNeedsData(scope)) {
@@ -391,7 +395,7 @@ void ProducedPreParsedScopeData::SaveDataForScope(Scope* scope) {
   SaveDataForInnerScopes(scope);
 }
 
-void ProducedPreParsedScopeData::SaveDataForVariable(Variable* var) {
+void ProducedUncompiledData::SaveDataForVariable(Variable* var) {
 #ifdef DEBUG
   // Store the variable name in debug mode; this way we can check that we
   // restore data to the correct variable.
@@ -409,7 +413,7 @@ void ProducedPreParsedScopeData::SaveDataForVariable(Variable* var) {
   byte_data_->WriteQuarter(variable_data);
 }
 
-void ProducedPreParsedScopeData::SaveDataForInnerScopes(Scope* scope) {
+void ProducedUncompiledData::SaveDataForInnerScopes(Scope* scope) {
   // Inner scopes are stored in the reverse order, but we'd like to write the
   // data in the logical order. There might be many inner scopes, so we don't
   // want to recurse here.
@@ -418,9 +422,8 @@ void ProducedPreParsedScopeData::SaveDataForInnerScopes(Scope* scope) {
        inner = inner->sibling()) {
     if (ScopeIsSkippableFunctionScope(inner)) {
       // Don't save data about function scopes, since they'll have their own
-      // ProducedPreParsedScopeData where their data is saved.
-      DCHECK_NOT_NULL(
-          inner->AsDeclarationScope()->produced_preparsed_scope_data());
+      // ProducedUncompiledData where their data is saved.
+      DCHECK_NOT_NULL(inner->AsDeclarationScope()->produced_uncompiled_data());
       continue;
     }
     scopes.push_back(inner);
@@ -430,11 +433,11 @@ void ProducedPreParsedScopeData::SaveDataForInnerScopes(Scope* scope) {
   }
 }
 
-ConsumedPreParsedScopeData::ByteData::ReadingScope::ReadingScope(
-    ConsumedPreParsedScopeData* parent)
+ConsumedUncompiledData::ByteData::ReadingScope::ReadingScope(
+    ConsumedUncompiledData* parent)
     : ReadingScope(parent->scope_data_.get(), parent->data_->scope_data()) {}
 
-int32_t ConsumedPreParsedScopeData::ByteData::ReadUint32() {
+int32_t ConsumedUncompiledData::ByteData::ReadUint32() {
   DCHECK_NOT_NULL(data_);
   DCHECK_GE(RemainingBytes(), kUint32Size);
 #ifdef DEBUG
@@ -450,7 +453,7 @@ int32_t ConsumedPreParsedScopeData::ByteData::ReadUint32() {
   return result;
 }
 
-uint8_t ConsumedPreParsedScopeData::ByteData::ReadUint8() {
+uint8_t ConsumedUncompiledData::ByteData::ReadUint8() {
   DCHECK_NOT_NULL(data_);
   DCHECK_GE(RemainingBytes(), kUint8Size);
 #ifdef DEBUG
@@ -461,7 +464,7 @@ uint8_t ConsumedPreParsedScopeData::ByteData::ReadUint8() {
   return data_->get(index_++);
 }
 
-uint8_t ConsumedPreParsedScopeData::ByteData::ReadQuarter() {
+uint8_t ConsumedUncompiledData::ByteData::ReadQuarter() {
   DCHECK_NOT_NULL(data_);
   if (stored_quarters_ == 0) {
     DCHECK_GE(RemainingBytes(), kUint8Size);
@@ -480,15 +483,15 @@ uint8_t ConsumedPreParsedScopeData::ByteData::ReadQuarter() {
   return result;
 }
 
-ConsumedPreParsedScopeData::ConsumedPreParsedScopeData()
+ConsumedUncompiledData::ConsumedUncompiledData()
     : isolate_(nullptr), scope_data_(new ByteData()), child_index_(0) {}
 
-ConsumedPreParsedScopeData::~ConsumedPreParsedScopeData() {}
+ConsumedUncompiledData::~ConsumedUncompiledData() {}
 
-void ConsumedPreParsedScopeData::SetData(Isolate* isolate,
-                                         Handle<PreParsedScopeData> data) {
+void ConsumedUncompiledData::SetData(Isolate* isolate,
+                                     Handle<UncompiledDataWithScope> data) {
   DCHECK_NOT_NULL(isolate);
-  DCHECK(data->IsPreParsedScopeData());
+  DCHECK(data->IsUncompiledDataWithScope());
   isolate_ = isolate;
   data_ = data;
 #ifdef DEBUG
@@ -501,20 +504,12 @@ void ConsumedPreParsedScopeData::SetData(Isolate* isolate,
   scope_data_->SetPosition(kPlaceholderSize);
 }
 
-ProducedPreParsedScopeData*
-ConsumedPreParsedScopeData::GetDataForSkippableFunction(
+ProducedUncompiledData* ConsumedUncompiledData::GetDataForSkippableFunction(
     Zone* zone, int start_position, int* end_position, int* num_parameters,
     int* num_inner_functions, bool* uses_super_property,
     LanguageMode* language_mode) {
-  // The skippable function *must* be the next function in the data. Use the
-  // start position as a sanity check.
   ByteData::ReadingScope reading_scope(this);
   CHECK_GE(scope_data_->RemainingBytes(), kSkippableFunctionDataSize);
-  int start_position_from_data = scope_data_->ReadUint32();
-  CHECK_EQ(start_position, start_position_from_data);
-
-  *end_position = scope_data_->ReadUint32();
-  DCHECK_GT(*end_position, start_position);
   *num_parameters = scope_data_->ReadUint32();
   *num_inner_functions = scope_data_->ReadUint32();
 
@@ -522,21 +517,25 @@ ConsumedPreParsedScopeData::GetDataForSkippableFunction(
   *language_mode = LanguageMode(LanguageField::decode(language_and_super));
   *uses_super_property = UsesSuperField::decode(language_and_super);
 
-  // Retrieve the corresponding PreParsedScopeData and associate it to the
-  // skipped function. If the skipped functions contains inner functions, those
-  // can be skipped when the skipped function is eagerly parsed.
+  // Retrieve the corresponding UncompiledData and associate it to the skipped
+  // function. If the skipped functions contains inner functions, those can be
+  // skipped when the skipped function is eagerly parsed.
   FixedArray* children = data_->child_data();
   CHECK_GT(children->length(), child_index_);
-  Object* child_data = children->get(child_index_++);
-  if (!child_data->IsPreParsedScopeData()) {
-    return nullptr;
-  }
-  Handle<PreParsedScopeData> child_data_handle(
-      PreParsedScopeData::cast(child_data), isolate_);
-  return new (zone) ProducedPreParsedScopeData(child_data_handle, zone);
+  UncompiledData* child_data =
+      UncompiledData::cast(children->get(child_index_++));
+
+  // Load the start and end position from the child data. The skippable function
+  // *must* be the next function in the data. Use the start position as a sanity
+  // check.
+  CHECK_EQ(start_position, child_data->start_position());
+  *end_position = child_data->end_position();
+  DCHECK_GT(*end_position, start_position);
+
+  return new (zone) ProducedUncompiledData(handle(child_data, isolate_), zone);
 }
 
-void ConsumedPreParsedScopeData::RestoreScopeAllocationData(
+void ConsumedUncompiledData::RestoreScopeAllocationData(
     DeclarationScope* scope) {
   DCHECK(FLAG_preparser_scope_analysis);
   DCHECK_EQ(scope->scope_type(), ScopeType::FUNCTION_SCOPE);
@@ -548,8 +547,8 @@ void ConsumedPreParsedScopeData::RestoreScopeAllocationData(
   // Check that we've consumed all inner function data.
   CHECK_EQ(magic_value_from_data, kMagicValue);
 
-  int start_position_from_data = scope_data_->ReadUint32();
-  int end_position_from_data = scope_data_->ReadUint32();
+  int start_position_from_data = data_->start_position();
+  int end_position_from_data = data_->end_position();
   CHECK_EQ(start_position_from_data, scope->start_position());
   CHECK_EQ(end_position_from_data, scope->end_position());
 
@@ -559,7 +558,7 @@ void ConsumedPreParsedScopeData::RestoreScopeAllocationData(
   DCHECK_EQ(scope_data_->RemainingBytes(), 0);
 }
 
-void ConsumedPreParsedScopeData::RestoreData(Scope* scope) {
+void ConsumedUncompiledData::RestoreData(Scope* scope) {
   if (scope->is_declaration_scope() &&
       scope->AsDeclarationScope()->is_skipped_function()) {
     return;
@@ -568,7 +567,7 @@ void ConsumedPreParsedScopeData::RestoreData(Scope* scope) {
   // It's possible that scope is not present in the data at all (since PreParser
   // doesn't create the corresponding scope). In this case, the Scope won't
   // contain any variables for which we need the data.
-  if (!ProducedPreParsedScopeData::ScopeNeedsData(scope)) {
+  if (!ProducedUncompiledData::ScopeNeedsData(scope)) {
     return;
   }
 
@@ -606,7 +605,7 @@ void ConsumedPreParsedScopeData::RestoreData(Scope* scope) {
   RestoreDataForInnerScopes(scope);
 }
 
-void ConsumedPreParsedScopeData::RestoreDataForVariable(Variable* var) {
+void ConsumedUncompiledData::RestoreDataForVariable(Variable* var) {
 #ifdef DEBUG
   const AstRawString* name = var->raw_name();
   bool data_one_byte = scope_data_->ReadUint8();
@@ -640,7 +639,7 @@ void ConsumedPreParsedScopeData::RestoreDataForVariable(Variable* var) {
   }
 }
 
-void ConsumedPreParsedScopeData::RestoreDataForInnerScopes(Scope* scope) {
+void ConsumedUncompiledData::RestoreDataForInnerScopes(Scope* scope) {
   std::vector<Scope*> scopes;
   for (Scope* inner = scope->inner_scope(); inner != nullptr;
        inner = inner->sibling()) {

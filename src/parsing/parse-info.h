@@ -107,9 +107,8 @@ class V8_EXPORT_PRIVATE ParseInfo {
   v8::Extension* extension() const { return extension_; }
   void set_extension(v8::Extension* extension) { extension_ = extension; }
 
-
-  ConsumedPreParsedScopeData* consumed_preparsed_scope_data() {
-    return &consumed_preparsed_scope_data_;
+  ConsumedUncompiledData* consumed_uncompiled_data() {
+    return &consumed_uncompiled_data_;
   }
 
   DeclarationScope* script_scope() const { return script_scope_; }
@@ -275,7 +274,7 @@ class V8_EXPORT_PRIVATE ParseInfo {
 
   //----------- Inputs+Outputs of parsing and scope analysis -----------------
   std::unique_ptr<Utf16CharacterStream> character_stream_;
-  ConsumedPreParsedScopeData consumed_preparsed_scope_data_;
+  ConsumedUncompiledData consumed_uncompiled_data_;
   std::shared_ptr<AstValueFactory> ast_value_factory_;
   const class AstStringConstants* ast_string_constants_;
   const AstRawString* function_name_;

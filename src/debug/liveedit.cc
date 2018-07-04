@@ -827,7 +827,7 @@ void LiveEdit::ReplaceFunctionCode(
 
     // Clear old bytecode. This will trigger self-healing if we do not install
     // new bytecode.
-    shared_info->FlushCompiled();
+    SharedFunctionInfo::FlushCompiled(isolate, shared_info);
     if (new_shared_info->HasInterpreterData()) {
       shared_info->set_interpreter_data(new_shared_info->interpreter_data());
     } else {
@@ -845,12 +845,8 @@ void LiveEdit::ReplaceFunctionCode(
 
   int start_position = compile_info_wrapper.GetStartPosition();
   int end_position = compile_info_wrapper.GetEndPosition();
-  // TODO(cbruni): only store position information on the SFI.
-  shared_info->set_raw_start_position(start_position);
-  shared_info->set_raw_end_position(end_position);
-  if (shared_info->scope_info()->HasPositionInfo()) {
-    shared_info->scope_info()->SetPositionInfo(start_position, end_position);
-  }
+  SharedFunctionInfo::SetPosition(isolate, shared_info, start_position,
+                                  end_position);
 
   FeedbackVectorFixer::PatchFeedbackVector(&compile_info_wrapper, shared_info,
                                            isolate);
@@ -970,6 +966,7 @@ void LiveEdit::PatchFunctionPositions(Handle<JSArray> shared_info_array,
                                       Handle<JSArray> position_change_array) {
   SharedInfoWrapper shared_info_wrapper(shared_info_array);
   Handle<SharedFunctionInfo> info = shared_info_wrapper.GetInfo();
+  Isolate* isolate = shared_info_wrapper.isolate();
 
   int old_function_start = info->StartPosition();
   int new_function_start =
@@ -979,24 +976,20 @@ void LiveEdit::PatchFunctionPositions(Handle<JSArray> shared_info_array,
   int new_function_token_pos = TranslatePosition2(
       info->function_token_position(), position_change_array);
 
-  info->set_raw_start_position(new_function_start);
-  info->set_raw_end_position(new_function_end);
   // TODO(cbruni): Allocate helper ScopeInfo once the position fields are gone
   // on the SFI.
-  if (info->scope_info()->HasPositionInfo()) {
-    info->scope_info()->SetPositionInfo(new_function_start, new_function_end);
-  }
+  SharedFunctionInfo::SetPosition(isolate, info, new_function_start,
+                                  new_function_end);
   info->set_function_token_position(new_function_token_pos);
 
   if (info->HasBytecodeArray()) {
-    TranslateSourcePositionTable(
-        handle(info->GetBytecodeArray(), shared_info_wrapper.isolate()),
-        position_change_array);
+    TranslateSourcePositionTable(handle(info->GetBytecodeArray(), isolate),
+                                 position_change_array);
   }
   if (info->HasBreakInfo()) {
     // Existing break points will be re-applied. Reset the debug info here.
-    shared_info_wrapper.isolate()->debug()->RemoveBreakInfoAndMaybeFree(
-        handle(info->GetDebugInfo(), shared_info_wrapper.isolate()));
+    isolate->debug()->RemoveBreakInfoAndMaybeFree(
+        handle(info->GetDebugInfo(), isolate));
   }
 }
 

@@ -122,7 +122,7 @@ class Expression;
 class IterationStatement;
 class MaterializedLiteral;
 class NestedVariableDeclaration;
-class ProducedPreParsedScopeData;
+class ProducedUncompiledData;
 class Statement;
 
 #define DEF_FORWARD_DECLARATION(type) class type;
@@ -2303,21 +2303,22 @@ class FunctionLiteral final : public Expression {
     return RequiresInstanceFieldsInitializer::decode(bit_field_);
   }
 
-  ProducedPreParsedScopeData* produced_preparsed_scope_data() const {
-    return produced_preparsed_scope_data_;
+  ProducedUncompiledData* produced_uncompiled_data() const {
+    return produced_uncompiled_data_;
   }
 
  private:
   friend class AstNodeFactory;
 
-  FunctionLiteral(
-      Zone* zone, const AstRawString* name, AstValueFactory* ast_value_factory,
-      DeclarationScope* scope, ZoneList<Statement*>* body,
-      int expected_property_count, int parameter_count, int function_length,
-      FunctionType function_type, ParameterFlag has_duplicate_parameters,
-      EagerCompileHint eager_compile_hint, int position, bool has_braces,
-      int function_literal_id,
-      ProducedPreParsedScopeData* produced_preparsed_scope_data = nullptr)
+  FunctionLiteral(Zone* zone, const AstRawString* name,
+                  AstValueFactory* ast_value_factory, DeclarationScope* scope,
+                  ZoneList<Statement*>* body, int expected_property_count,
+                  int parameter_count, int function_length,
+                  FunctionType function_type,
+                  ParameterFlag has_duplicate_parameters,
+                  EagerCompileHint eager_compile_hint, int position,
+                  bool has_braces, int function_literal_id,
+                  ProducedUncompiledData* produced_uncompiled_data = nullptr)
       : Expression(position, kFunctionLiteral),
         expected_property_count_(expected_property_count),
         parameter_count_(parameter_count),
@@ -2329,7 +2330,7 @@ class FunctionLiteral final : public Expression {
         scope_(scope),
         body_(body),
         raw_inferred_name_(ast_value_factory->empty_cons_string()),
-        produced_preparsed_scope_data_(produced_preparsed_scope_data) {
+        produced_uncompiled_data_(produced_uncompiled_data) {
     bit_field_ |= FunctionTypeBits::encode(function_type) |
                   Pretenure::encode(false) |
                   HasDuplicateParameters::encode(has_duplicate_parameters ==
@@ -2364,7 +2365,7 @@ class FunctionLiteral final : public Expression {
   ZoneList<Statement*>* body_;
   const AstConsString* raw_inferred_name_;
   Handle<String> inferred_name_;
-  ProducedPreParsedScopeData* produced_preparsed_scope_data_;
+  ProducedUncompiledData* produced_uncompiled_data_;
 };
 
 // Property is used for passing information
@@ -3166,12 +3167,12 @@ class AstNodeFactory final BASE_EMBEDDED {
       FunctionLiteral::FunctionType function_type,
       FunctionLiteral::EagerCompileHint eager_compile_hint, int position,
       bool has_braces, int function_literal_id,
-      ProducedPreParsedScopeData* produced_preparsed_scope_data = nullptr) {
+      ProducedUncompiledData* produced_uncompiled_data = nullptr) {
     return new (zone_) FunctionLiteral(
         zone_, name, ast_value_factory_, scope, body, expected_property_count,
         parameter_count, function_length, function_type,
         has_duplicate_parameters, eager_compile_hint, position, has_braces,
-        function_literal_id, produced_preparsed_scope_data);
+        function_literal_id, produced_uncompiled_data);
   }
 
   // Creates a FunctionLiteral representing a top-level script, the
