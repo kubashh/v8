@@ -1105,7 +1105,6 @@ void Simulator::EvalTableInit() {
   EvalTable[CGDR] = &Simulator::Evaluate_CGDR;
   EvalTable[CGXR] = &Simulator::Evaluate_CGXR;
   EvalTable[LGDR] = &Simulator::Evaluate_LGDR;
-  EvalTable[MDTR] = &Simulator::Evaluate_MDTR;
   EvalTable[MDTRA] = &Simulator::Evaluate_MDTRA;
   EvalTable[DDTRA] = &Simulator::Evaluate_DDTRA;
   EvalTable[ADTRA] = &Simulator::Evaluate_ADTRA;

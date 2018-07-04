@@ -275,23 +275,15 @@ typedef uint64_t SixByteInstr;
 
 #define S390_RRF_A_OPCODE_LIST(V)                                           \
   V(ipte, IPTE, 0xB221)     /* type = RRF_A INVALIDATE PAGE TABLE ENTRY  */ \
-  V(mdtr, MDTR, 0xB3D0)     /* type = RRF_A MULTIPLY (long DFP)  */         \
   V(mdtra, MDTRA, 0xB3D0)   /* type = RRF_A MULTIPLY (long DFP)  */         \
-  V(ddtr, DDTR, 0xB3D1)     /* type = RRF_A DIVIDE (long DFP)  */           \
   V(ddtra, DDTRA, 0xB3D1)   /* type = RRF_A DIVIDE (long DFP)  */           \
-  V(adtr, ADTR, 0xB3D2)     /* type = RRF_A ADD (long DFP)  */              \
   V(adtra, ADTRA, 0xB3D2)   /* type = RRF_A ADD (long DFP)  */              \
-  V(sdtr, SDTR, 0xB3D3)     /* type = RRF_A SUBTRACT (long DFP)  */         \
   V(sdtra, SDTRA, 0xB3D3)   /* type = RRF_A SUBTRACT (long DFP)  */         \
-  V(mxtr, MXTR, 0xB3D8)     /* type = RRF_A MULTIPLY (extended DFP)  */     \
   V(mxtra, MXTRA, 0xB3D8)   /* type = RRF_A MULTIPLY (extended DFP)  */     \
   V(msrkc, MSRKC, 0xB9FD)   /* type = RRF_A MULTIPLY (32)*/                 \
   V(msgrkc, MSGRKC, 0xB9ED) /* type = RRF_A MULTIPLY (64)*/                 \
-  V(dxtr, DXTR, 0xB3D9)     /* type = RRF_A DIVIDE (extended DFP)  */       \
   V(dxtra, DXTRA, 0xB3D9)   /* type = RRF_A DIVIDE (extended DFP)  */       \
-  V(axtr, AXTR, 0xB3DA)     /* type = RRF_A ADD (extended DFP)  */          \
   V(axtra, AXTRA, 0xB3DA)   /* type = RRF_A ADD (extended DFP)  */          \
-  V(sxtr, SXTR, 0xB3DB)     /* type = RRF_A SUBTRACT (extended DFP)  */     \
   V(sxtra, SXTRA, 0xB3DB)   /* type = RRF_A SUBTRACT (extended DFP)  */     \
   V(ahhhr, AHHHR, 0xB9C8)   /* type = RRF_A ADD HIGH (32)  */               \
   V(shhhr, SHHHR, 0xB9C9)   /* type = RRF_A SUBTRACT HIGH (32)  */          \
@@ -838,9 +830,7 @@ typedef uint64_t SixByteInstr;
   V(llilh, LLILH, 0xA5E) /* type = RI_A  LOAD LOGICAL IMMEDIATE (low high)  */ \
   V(llill, LLILL, 0xA5F) /* type = RI_A  LOAD LOGICAL IMMEDIATE (low low)  */  \
   V(tmlh, TMLH, 0xA70)   /* type = RI_A  TEST UNDER MASK (low high)  */        \
-  V(tmh, TMH, 0xA70)     /* type = RI_A  TEST UNDER MASK HIGH  */              \
   V(tmll, TMLL, 0xA71)   /* type = RI_A  TEST UNDER MASK (low low)  */         \
-  V(tml, TML, 0xA71)     /* type = RI_A  TEST UNDER MASK LOW  */               \
   V(tmhh, TMHH, 0xA72)   /* type = RI_A  TEST UNDER MASK (high high)  */       \
   V(tmhl, TMHL, 0xA73)   /* type = RI_A  TEST UNDER MASK (high low)  */        \
   V(lhi, LHI, 0xA78)     /* type = RI_A  LOAD HALFWORD IMMEDIATE (32)<-16  */  \
@@ -1575,7 +1565,6 @@ typedef uint64_t SixByteInstr;
   V(lcdr, LCDR, 0x23)   /* type = RR    LOAD COMPLEMENT (long HFP)  */         \
   V(hdr, HDR, 0x24)     /* type = RR    HALVE (long HFP)  */                   \
   V(ldxr, LDXR, 0x25) /* type = RR    LOAD ROUNDED (extended to long HFP)  */  \
-  V(lrdr, LRDR, 0x25) /* type = RR    LOAD ROUNDED (extended to long HFP)  */  \
   V(mxr, MXR, 0x26)   /* type = RR    MULTIPLY (extended HFP)  */              \
   V(mxdr, MXDR, 0x27) /* type = RR    MULTIPLY (long to extended HFP)  */      \
   V(ldr, LDR, 0x28)   /* type = RR    LOAD (long)  */                          \
@@ -1591,7 +1580,6 @@ typedef uint64_t SixByteInstr;
   V(lcer, LCER, 0x33) /* type = RR    LOAD COMPLEMENT (short HFP)  */          \
   V(her_z, HER_Z, 0x34) /* type = RR    HALVE (short HFP)  */                  \
   V(ledr, LEDR, 0x35)   /* type = RR    LOAD ROUNDED (long to short HFP)  */   \
-  V(lrer, LRER, 0x35)   /* type = RR    LOAD ROUNDED (long to short HFP)  */   \
   V(axr, AXR, 0x36)     /* type = RR    ADD NORMALIZED (extended HFP)  */      \
   V(sxr, SXR, 0x37)     /* type = RR    SUBTRACT NORMALIZED (extended HFP)  */ \
   V(ler, LER, 0x38)     /* type = RR    LOAD (short)  */                       \
@@ -1599,7 +1587,6 @@ typedef uint64_t SixByteInstr;
   V(aer, AER, 0x3A)     /* type = RR    ADD NORMALIZED (short HFP)  */         \
   V(ser, SER, 0x3B)     /* type = RR    SUBTRACT NORMALIZED (short HFP)  */    \
   V(mder, MDER, 0x3C)   /* type = RR    MULTIPLY (short to long HFP)  */       \
-  V(mer, MER, 0x3C)     /* type = RR    MULTIPLY (short to long HFP)  */       \
   V(der, DER, 0x3D)     /* type = RR    DIVIDE (short HFP)  */                 \
   V(aur, AUR, 0x3E)     /* type = RR    ADD UNNORMALIZED (short HFP)  */       \
   V(sur, SUR, 0x3F)     /* type = RR    SUBTRACT UNNORMALIZED (short HFP)  */
