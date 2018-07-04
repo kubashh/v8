@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6050ae80_6b8449af",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-04T16:04:01Z",
+      "side": 1,
+      "message": "Looks like {stack_start_} can be removed now.",
+      "revId": "531b55459623ec7cd3a8ab24c7751afc6d2aa689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
