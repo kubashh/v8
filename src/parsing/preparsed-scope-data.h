@@ -22,7 +22,7 @@ template <typename T>
 class Handle;
 
 class PreParser;
-class PreParsedScopeData;
+class UncompiledDataWithScope;
 
 /*
 
@@ -58,14 +58,14 @@ class PreParsedScopeData;
   For each Scope:
   - inner_scope_calls_eval_.
 
-  ProducedPreParsedScopeData implements storing the above mentioned data and
-  ConsumedPreParsedScopeData implements restoring it (= setting the context
+  ProducedUncompiledData implements storing the above mentioned data and
+  ConsumedUncompiledData implements restoring it (= setting the context
   allocation status of the variables in a Scope (and its subscopes) based on the
   data).
 
  */
 
-class ProducedPreParsedScopeData : public ZoneObject {
+class ProducedUncompiledData : public ZoneObject {
  public:
   class ByteData : public ZoneObject {
    public:
@@ -88,19 +88,19 @@ class ProducedPreParsedScopeData : public ZoneObject {
     uint8_t free_quarters_in_last_byte_;
   };
 
-  // Create a ProducedPreParsedScopeData object which will collect data as we
+  // Create a ProducedUncompiledData object which will collect data as we
   // parse.
-  ProducedPreParsedScopeData(Zone* zone, ProducedPreParsedScopeData* parent);
+  ProducedUncompiledData(Zone* zone, ProducedUncompiledData* parent);
 
-  // Create a ProducedPreParsedScopeData which is just a proxy for a previous
-  // produced PreParsedScopeData.
-  ProducedPreParsedScopeData(Handle<PreParsedScopeData> data, Zone* zone);
+  // Create a ProducedUncompiledData which is just a proxy for a previous
+  // produced UncompiledData.
+  ProducedUncompiledData(Handle<UncompiledData> data, Zone* zone);
 
-  ProducedPreParsedScopeData* parent() const { return parent_; }
+  ProducedUncompiledData* parent() const { return parent_; }
 
   // For gathering the inner function data and splitting it up according to the
   // laziness boundaries. Each lazy function gets its own
-  // ProducedPreParsedScopeData, and so do all lazy functions inside it.
+  // ProducedUncompiledData, and so do all lazy functions inside it.
   class DataGatheringScope {
    public:
     DataGatheringScope(DeclarationScope* function_scope, PreParser* preparser);
@@ -111,14 +111,14 @@ class ProducedPreParsedScopeData : public ZoneObject {
    private:
     DeclarationScope* function_scope_;
     PreParser* preparser_;
-    ProducedPreParsedScopeData* produced_preparsed_scope_data_;
+    ProducedUncompiledData* produced_uncompiled_data_;
 
     DISALLOW_COPY_AND_ASSIGN(DataGatheringScope);
   };
 
   // Saves the information needed for allocating the Scope's (and its
   // subscopes') variables.
-  void SaveScopeAllocationData(DeclarationScope* scope);
+  void SaveScopeData(DeclarationScope* scope);
 
   // In some cases, PreParser cannot produce the same Scope structure as
   // Parser. If it happens, we're unable to produce the data that would enable
@@ -148,9 +148,9 @@ class ProducedPreParsedScopeData : public ZoneObject {
   bool ContainsInnerFunctions() const;
 
   // If there is data (if the Scope contains skippable inner functions), move
-  // the data into the heap and return a Handle to it; otherwise return a null
-  // MaybeHandle.
-  MaybeHandle<PreParsedScopeData> Serialize(Isolate* isolate);
+  // the data into the heap and return a Handle to it; otherwise return a
+  // scope-less UncompiledData.
+  Handle<UncompiledData> Serialize(Isolate* isolate);
 
   static bool ScopeNeedsData(Scope* scope);
   static bool ScopeIsSkippableFunctionScope(Scope* scope);
@@ -165,22 +165,24 @@ class ProducedPreParsedScopeData : public ZoneObject {
   void SaveDataForVariable(Variable* var);
   void SaveDataForInnerScopes(Scope* scope);
 
-  ProducedPreParsedScopeData* parent_;
+  ProducedUncompiledData* parent_;
 
   ByteData* byte_data_;
-  ZoneChunkList<ProducedPreParsedScopeData*> data_for_inner_functions_;
+  ZoneChunkList<ProducedUncompiledData*> data_for_inner_functions_;
+  int start_position_;
+  int end_position_;
 
   // Whether we've given up producing the data for this function.
   bool bailed_out_;
 
-  // ProducedPreParsedScopeData can also mask a Handle<PreParsedScopeData>
+  // ProducedUncompiledData can also mask a Handle<UncompiledData>
   // which was produced already earlier. This happens for deeper lazy functions.
-  Handle<PreParsedScopeData> previously_produced_preparsed_scope_data_;
+  Handle<UncompiledData> previously_produced_uncompiled_data_;
 
-  DISALLOW_COPY_AND_ASSIGN(ProducedPreParsedScopeData);
+  DISALLOW_COPY_AND_ASSIGN(ProducedUncompiledData);
 };
 
-class ConsumedPreParsedScopeData {
+class ConsumedUncompiledData {
  public:
   class ByteData {
    public:
@@ -196,7 +198,7 @@ class ConsumedPreParsedScopeData {
           : consumed_data_(consumed_data) {
         consumed_data->data_ = data;
       }
-      explicit ReadingScope(ConsumedPreParsedScopeData* parent);
+      explicit ReadingScope(ConsumedUncompiledData* parent);
       ~ReadingScope() { consumed_data_->data_ = nullptr; }
 
      private:
@@ -222,14 +224,14 @@ class ConsumedPreParsedScopeData {
     uint8_t stored_byte_;
   };
 
-  ConsumedPreParsedScopeData();
-  ~ConsumedPreParsedScopeData();
+  ConsumedUncompiledData();
+  ~ConsumedUncompiledData();
 
-  void SetData(Isolate* isolate, Handle<PreParsedScopeData> data);
+  void SetData(Isolate* isolate, Handle<UncompiledDataWithScope> data);
 
   bool HasData() const { return !data_.is_null(); }
 
-  ProducedPreParsedScopeData* GetDataForSkippableFunction(
+  ProducedUncompiledData* GetDataForSkippableFunction(
       Zone* zone, int start_position, int* end_position, int* num_parameters,
       int* num_inner_functions, bool* uses_super_property,
       LanguageMode* language_mode);
@@ -244,13 +246,13 @@ class ConsumedPreParsedScopeData {
   void RestoreDataForInnerScopes(Scope* scope);
 
   Isolate* isolate_;
-  Handle<PreParsedScopeData> data_;
+  Handle<UncompiledDataWithScope> data_;
   std::unique_ptr<ByteData> scope_data_;
   // When consuming the data, these indexes point to the data we're going to
   // consume next.
   int child_index_;
 
-  DISALLOW_COPY_AND_ASSIGN(ConsumedPreParsedScopeData);
+  DISALLOW_COPY_AND_ASSIGN(ConsumedUncompiledData);
 };
 
 }  // namespace internal

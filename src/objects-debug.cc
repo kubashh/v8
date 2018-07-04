@@ -314,6 +314,14 @@ void HeapObject::HeapObjectVerify(Isolate* isolate) {
     case FOREIGN_TYPE:
       Foreign::cast(this)->ForeignVerify(isolate);
       break;
+    case UNCOMPILED_DATA_WITHOUT_SCOPE_TYPE:
+      UncompiledDataWithoutScope::cast(this)->UncompiledDataWithoutScopeVerify(
+          isolate);
+      break;
+    case UNCOMPILED_DATA_WITH_SCOPE_TYPE:
+      UncompiledDataWithScope::cast(this)->UncompiledDataWithScopeVerify(
+          isolate);
+      break;
     case SHARED_FUNCTION_INFO_TYPE:
       SharedFunctionInfo::cast(this)->SharedFunctionInfoVerify(isolate);
       break;
@@ -943,7 +951,7 @@ void SharedFunctionInfo::SharedFunctionInfoVerify(Isolate* isolate) {
 
   CHECK(HasWasmExportedFunctionData() || IsApiFunction() ||
         HasBytecodeArray() || HasAsmWasmData() || HasBuiltinId() ||
-        HasPreParsedScopeData());
+        HasUncompiledDataWithScope() || HasUncompiledDataWithoutScope());
 
   CHECK(function_identifier_or_debug_info()->IsUndefined(isolate) ||
         HasBuiltinFunctionId() || HasInferredName() || HasDebugInfo());
@@ -965,8 +973,6 @@ void SharedFunctionInfo::SharedFunctionInfoVerify(Isolate* isolate) {
     ScopeInfo* info = scope_info();
     CHECK(kind() == info->function_kind());
     CHECK_EQ(kind() == kModule, info->scope_type() == MODULE_SCOPE);
-    CHECK_EQ(raw_start_position(), info->StartPosition());
-    CHECK_EQ(raw_end_position(), info->EndPosition());
   }
 
   if (IsApiFunction()) {
@@ -1751,10 +1757,15 @@ void StackFrameInfo::StackFrameInfoVerify(Isolate* isolate) {
   VerifyPointer(function_name());
 }
 
-void PreParsedScopeData::PreParsedScopeDataVerify(Isolate* isolate) {
-  CHECK(IsPreParsedScopeData());
+void UncompiledDataWithScope::UncompiledDataWithScopeVerify(Isolate* isolate) {
+  CHECK(IsUncompiledDataWithScope());
   CHECK(scope_data()->IsByteArray());
   CHECK(child_data()->IsFixedArray());
+}
+
+void UncompiledDataWithoutScope::UncompiledDataWithoutScopeVerify(
+    Isolate* isolate) {
+  CHECK(IsUncompiledDataWithoutScope());
 }
 
 void InterpreterData::InterpreterDataVerify(Isolate* isolate) {

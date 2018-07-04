@@ -22,7 +22,7 @@ namespace internal {
 // interface as AstNodeFactory, so ParserBase doesn't need to care which one is
 // used.
 
-class ProducedPreParsedScopeData;
+class ProducedUncompiledData;
 
 class PreParserIdentifier {
  public:
@@ -725,8 +725,8 @@ class PreParserFactory {
       FunctionLiteral::FunctionType function_type,
       FunctionLiteral::EagerCompileHint eager_compile_hint, int position,
       bool has_braces, int function_literal_id,
-      ProducedPreParsedScopeData* produced_preparsed_scope_data = nullptr) {
-    DCHECK_NULL(produced_preparsed_scope_data);
+      ProducedUncompiledData* produced_uncompiled_data = nullptr) {
+    DCHECK_NULL(produced_uncompiled_data);
     return PreParserExpression::Default();
   }
 
@@ -942,7 +942,7 @@ class PreParser : public ParserBase<PreParser> {
                               parsing_module, parsing_on_main_thread),
         use_counts_(nullptr),
         track_unresolved_variables_(false),
-        produced_preparsed_scope_data_(nullptr) {}
+        produced_uncompiled_data_(nullptr) {}
 
   static bool IsPreParser() { return true; }
 
@@ -967,16 +967,15 @@ class PreParser : public ParserBase<PreParser> {
       FunctionLiteral::FunctionType function_type,
       DeclarationScope* function_scope, bool track_unresolved_variables,
       bool may_abort, int* use_counts,
-      ProducedPreParsedScopeData** produced_preparser_scope_data,
-      int script_id);
+      ProducedUncompiledData** produced_preparser_scope_data, int script_id);
 
-  ProducedPreParsedScopeData* produced_preparsed_scope_data() const {
-    return produced_preparsed_scope_data_;
+  ProducedUncompiledData* produced_uncompiled_data() const {
+    return produced_uncompiled_data_;
   }
 
-  void set_produced_preparsed_scope_data(
-      ProducedPreParsedScopeData* produced_preparsed_scope_data) {
-    produced_preparsed_scope_data_ = produced_preparsed_scope_data;
+  void set_produced_uncompiled_data(
+      ProducedUncompiledData* produced_uncompiled_data) {
+    produced_uncompiled_data_ = produced_uncompiled_data;
   }
 
  private:
@@ -1003,7 +1002,7 @@ class PreParser : public ParserBase<PreParser> {
   SkipFunction(const AstRawString* name, FunctionKind kind,
                FunctionLiteral::FunctionType function_type,
                DeclarationScope* function_scope, int* num_parameters,
-               ProducedPreParsedScopeData** produced_preparsed_scope_data,
+               ProducedUncompiledData** produced_uncompiled_data,
                bool is_inner_function, bool may_abort, bool* ok) {
     UNREACHABLE();
   }
@@ -1748,7 +1747,7 @@ class PreParser : public ParserBase<PreParser> {
   bool track_unresolved_variables_;
   PreParserLogger log_;
 
-  ProducedPreParsedScopeData* produced_preparsed_scope_data_;
+  ProducedUncompiledData* produced_uncompiled_data_;
 };
 
 PreParserExpression PreParser::SpreadCall(const PreParserExpression& function,

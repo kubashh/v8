@@ -258,6 +258,13 @@ void HeapObject::HeapObjectPrint(Isolate* isolate,
     case CALL_HANDLER_INFO_TYPE:
       CallHandlerInfo::cast(this)->CallHandlerInfoPrint(isolate, os);
       break;
+    case UNCOMPILED_DATA_WITHOUT_SCOPE_TYPE:
+      UncompiledDataWithoutScope::cast(this)->UncompiledDataWithoutScopePrint(
+          os);
+      break;
+    case UNCOMPILED_DATA_WITH_SCOPE_TYPE:
+      UncompiledDataWithScope::cast(this)->UncompiledDataWithScopePrint(os);
+      break;
     case SHARED_FUNCTION_INFO_TYPE:
       SharedFunctionInfo::cast(this)->SharedFunctionInfoPrint(os);
       break;
@@ -2087,8 +2094,19 @@ void LayoutDescriptor::Print(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
-void PreParsedScopeData::PreParsedScopeDataPrint(std::ostream& os) {  // NOLINT
-  HeapObject::PrintHeader(os, "PreParsedScopeData");
+void UncompiledDataWithoutScope::UncompiledDataWithoutScopePrint(
+    std::ostream& os) {  // NOLINT
+  HeapObject::PrintHeader(os, "UncompiledDataWithoutScope");
+  os << "\n - start position: " << start_position();
+  os << "\n - end position: " << end_position();
+  os << "\n";
+}
+
+void UncompiledDataWithScope::UncompiledDataWithScopePrint(
+    std::ostream& os) {  // NOLINT
+  HeapObject::PrintHeader(os, "UncompiledDataWithScope");
+  os << "\n - start position: " << start_position();
+  os << "\n - end position: " << end_position();
   os << "\n - scope_data: " << Brief(scope_data());
   os << "\n - child_data: " << Brief(child_data());
   os << "\n";

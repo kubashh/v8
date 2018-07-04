@@ -23,6 +23,7 @@ class DataHandler;
 class JSArrayBuffer;
 class JSRegExp;
 class JSWeakCollection;
+class UncompiledDataWithScope;
 
 #define TYPED_VISITOR_ID_LIST(V) \
   V(AllocationSite)              \
@@ -59,6 +60,7 @@ class JSWeakCollection;
   V(Symbol)                      \
   V(ThinString)                  \
   V(TransitionArray)             \
+  V(UncompiledDataWithScope)     \
   V(WasmInstanceObject)          \
   V(WeakCell)
 

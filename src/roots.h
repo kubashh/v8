@@ -100,6 +100,8 @@ namespace internal {
   V(Map, small_ordered_hash_map_map, SmallOrderedHashMapMap)                   \
   V(Map, small_ordered_hash_set_map, SmallOrderedHashSetMap)                   \
   V(Map, string_table_map, StringTableMap)                                     \
+  V(Map, uncompiled_data_without_scope_map, UncompiledDataWithoutScopeMap)     \
+  V(Map, uncompiled_data_with_scope_map, UncompiledDataWithScopeMap)           \
   V(Map, weak_fixed_array_map, WeakFixedArrayMap)                              \
   V(Map, weak_array_list_map, WeakArrayListMap)                                \
   V(Map, ephemeron_hash_table_map, EphemeronHashTableMap)                      \

@@ -24,12 +24,12 @@ class ScriptCompiler;
 
 namespace internal {
 
-class ConsumedPreParsedScopeData;
+class ConsumedUncompiledData;
 class ParseInfo;
 class ParserTarget;
 class ParserTargetScope;
 class PendingCompilationErrorHandler;
-class PreParsedScopeData;
+class UncompiledDataWithScope;
 
 class FunctionEntry BASE_EMBEDDED {
  public:
@@ -441,8 +441,8 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
       const AstRawString* function_name, FunctionKind kind,
       FunctionLiteral::FunctionType function_type,
       DeclarationScope* function_scope, int* num_parameters,
-      ProducedPreParsedScopeData** produced_preparsed_scope_data,
-      bool is_inner_function, bool may_abort, bool* ok);
+      ProducedUncompiledData** produced_uncompiled_data, bool is_inner_function,
+      bool may_abort, bool* ok);
 
   Block* BuildParameterInitializationBlock(
       const ParserFormalParameters& parameters, bool* ok);
@@ -1106,7 +1106,7 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   int total_preparse_skipped_;
   bool allow_lazy_;
   bool temp_zoned_;
-  ConsumedPreParsedScopeData* consumed_preparsed_scope_data_;
+  ConsumedUncompiledData* consumed_uncompiled_data_;
 
   // If not kNoSourcePosition, indicates that the first function literal
   // encountered is a dynamic function, see CreateDynamicFunction(). This field

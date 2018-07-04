@@ -734,18 +734,20 @@ TEST(PreParserScopeAnalysis) {
 
       if (inners[inner_ix].bailout == Bailout::BAILOUT_IF_OUTER_SLOPPY &&
           !outers[outer_ix].strict_outer) {
-        CHECK(!shared->HasPreParsedScopeData());
+        CHECK(!shared->HasUncompiledDataWithScope());
         continue;
       }
 
-      CHECK(shared->HasPreParsedScopeData());
-      i::Handle<i::PreParsedScopeData> produced_data_on_heap(
-          i::PreParsedScopeData::cast(shared->preparsed_scope_data()), isolate);
+      CHECK(shared->HasUncompiledDataWithScope());
+      i::Handle<i::UncompiledDataWithScope> produced_data_on_heap(
+          i::UncompiledDataWithScope::cast(
+              shared->uncompiled_data_with_scope()),
+          isolate);
 
       // Parse the lazy function using the scope data.
       i::ParseInfo using_scope_data(isolate, shared);
       using_scope_data.set_lazy_compile();
-      using_scope_data.consumed_preparsed_scope_data()->SetData(
+      using_scope_data.consumed_uncompiled_data()->SetData(
           isolate, produced_data_on_heap);
       CHECK(i::parsing::ParseFunction(&using_scope_data, shared, isolate));
 
@@ -812,7 +814,7 @@ TEST(ProducingAndConsumingByteData) {
   LocalContext env;
 
   i::Zone zone(isolate->allocator(), ZONE_NAME);
-  i::ProducedPreParsedScopeData::ByteData bytes(&zone);
+  i::ProducedUncompiledData::ByteData bytes(&zone);
   // Write some data.
   bytes.WriteUint32(1983);  // This will be overwritten.
   bytes.WriteUint32(2147483647);
@@ -838,8 +840,8 @@ TEST(ProducingAndConsumingByteData) {
   bytes.WriteQuarter(2);
 
   i::Handle<i::PodArray<uint8_t>> data_on_heap = bytes.Serialize(isolate);
-  i::ConsumedPreParsedScopeData::ByteData bytes_for_reading;
-  i::ConsumedPreParsedScopeData::ByteData::ReadingScope reading_scope(
+  i::ConsumedUncompiledData::ByteData bytes_for_reading;
+  i::ConsumedUncompiledData::ByteData::ReadingScope reading_scope(
       &bytes_for_reading, *data_on_heap);
 
   // Read the data back.

@@ -766,7 +766,12 @@ ReturnType BodyDescriptorApply(InstanceType type, T1 p1, T2 p2, T3 p3, T4 p4) {
     case BYTE_ARRAY_TYPE:
     case FREE_SPACE_TYPE:
     case BIGINT_TYPE:
+    case UNCOMPILED_DATA_WITHOUT_SCOPE_TYPE:
       return ReturnType();
+
+    case UNCOMPILED_DATA_WITH_SCOPE_TYPE:
+      return Op::template apply<UncompiledDataWithScope::BodyDescriptor>(
+          p1, p2, p3, p4);
 
 #define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size)                        \
   case FIXED_##TYPE##_ARRAY_TYPE:                                              \

@@ -46,7 +46,8 @@ class JSWeakMap;
 class LoadHandler;
 class ModuleInfo;
 class NewFunctionArgs;
-class PreParsedScopeData;
+class UncompiledDataWithoutScope;
+class UncompiledDataWithScope;
 class PromiseResolveThenableJobTask;
 class RegExpMatchInfo;
 class ScriptContextTable;
@@ -720,7 +721,11 @@ class V8_EXPORT_PRIVATE Factory {
 
   Handle<ModuleInfo> NewModuleInfo();
 
-  Handle<PreParsedScopeData> NewPreParsedScopeData();
+  Handle<UncompiledDataWithoutScope> NewUncompiledDataWithoutScope(
+      int32_t start_position, int32_t end_position);
+
+  Handle<UncompiledDataWithScope> NewUncompiledDataWithScope(
+      int32_t start_position, int32_t end_position);
 
   // Create an External object for V8's external API.
   Handle<JSObject> NewExternal(void* value);

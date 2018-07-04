@@ -4381,7 +4381,7 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
   bool is_lazy_top_level_function =
       can_preparse && impl()->AllowsLazyParsingWithoutUnresolvedVariables();
   bool has_braces = true;
-  ProducedPreParsedScopeData* produced_preparsed_scope_data = nullptr;
+  ProducedUncompiledData* produced_uncompiled_data = nullptr;
   {
     FunctionState function_state(&function_state_, &scope_,
                                  formal_parameters.scope);
@@ -4408,9 +4408,9 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
         LazyParsingResult result = impl()->SkipFunction(
             nullptr, kind, FunctionLiteral::kAnonymousExpression,
             formal_parameters.scope, &dummy_num_parameters,
-            &produced_preparsed_scope_data, false, false, CHECK_OK);
+            &produced_uncompiled_data, false, false, CHECK_OK);
         DCHECK_NE(result, kLazyParsingAborted);
-        DCHECK_NULL(produced_preparsed_scope_data);
+        DCHECK_NULL(produced_uncompiled_data);
         USE(result);
         formal_parameters.scope->ResetAfterPreparsing(ast_value_factory_,
                                                       false);
@@ -4465,7 +4465,7 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
       FunctionLiteral::kNoDuplicateParameters,
       FunctionLiteral::kAnonymousExpression, eager_compile_hint,
       formal_parameters.scope->start_position(), has_braces,
-      function_literal_id, produced_preparsed_scope_data);
+      function_literal_id, produced_uncompiled_data);
 
   function_literal->set_suspend_count(suspend_count);
   function_literal->set_function_token_position(

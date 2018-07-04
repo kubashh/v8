@@ -261,8 +261,8 @@ Scope::Scope(Zone* zone, ScopeType scope_type, Handle<ScopeInfo> scope_info)
   num_heap_slots_ = scope_info->ContextLength();
   DCHECK_LE(Context::MIN_CONTEXT_SLOTS, num_heap_slots_);
   // We don't really need to use the preparsed scope data; this is just to
-  // shorten the recursion in SetMustUsePreParsedScopeData.
-  must_use_preparsed_scope_data_ = true;
+  // shorten the recursion in SetMustUseUncompiledDataWithScope.
+  must_use_uncompiled_data_with_scope_ = true;
 }
 
 DeclarationScope::DeclarationScope(Zone* zone, ScopeType scope_type,
@@ -311,7 +311,7 @@ void DeclarationScope::SetDefaults() {
   should_eager_compile_ = false;
   was_lazily_parsed_ = false;
   is_skipped_function_ = false;
-  produced_preparsed_scope_data_ = nullptr;
+  produced_uncompiled_data_ = nullptr;
 #ifdef DEBUG
   DeclarationScope* outer_declaration_scope =
       outer_scope_ ? outer_scope_->GetDeclarationScope() : nullptr;
@@ -350,7 +350,7 @@ void Scope::SetDefaults() {
 
   is_declaration_scope_ = false;
 
-  must_use_preparsed_scope_data_ = false;
+  must_use_uncompiled_data_with_scope_ = false;
 }
 
 bool Scope::HasSimpleParameters() {
@@ -677,11 +677,11 @@ bool DeclarationScope::Analyze(ParseInfo* info) {
   // The outer scope is never lazy.
   scope->set_should_eager_compile();
 
-  if (scope->must_use_preparsed_scope_data_) {
+  if (scope->must_use_uncompiled_data_with_scope_) {
     DCHECK(FLAG_preparser_scope_analysis);
     DCHECK_EQ(scope->scope_type_, ScopeType::FUNCTION_SCOPE);
     allow_deref.emplace();
-    info->consumed_preparsed_scope_data()->RestoreScopeAllocationData(scope);
+    info->consumed_uncompiled_data()->RestoreScopeAllocationData(scope);
   }
 
   if (!scope->AllocateVariables(info)) return false;
@@ -1522,21 +1522,21 @@ void DeclarationScope::ResetAfterPreparsing(AstValueFactory* ast_value_factory,
   was_lazily_parsed_ = !aborted;
 }
 
-void Scope::SavePreParsedScopeData() {
+void Scope::SaveUncompiledData() {
   DCHECK(FLAG_preparser_scope_analysis);
-  if (ProducedPreParsedScopeData::ScopeIsSkippableFunctionScope(this)) {
-    AsDeclarationScope()->SavePreParsedScopeDataForDeclarationScope();
+  if (ProducedUncompiledData::ScopeIsSkippableFunctionScope(this)) {
+    AsDeclarationScope()->SaveUncompiledDataForDeclarationScope();
   }
 
   for (Scope* scope = inner_scope_; scope != nullptr; scope = scope->sibling_) {
-    scope->SavePreParsedScopeData();
+    scope->SaveUncompiledData();
   }
 }
 
-void DeclarationScope::SavePreParsedScopeDataForDeclarationScope() {
-  if (produced_preparsed_scope_data_ != nullptr) {
+void DeclarationScope::SaveUncompiledDataForDeclarationScope() {
+  if (produced_uncompiled_data_ != nullptr) {
     DCHECK(FLAG_preparser_scope_analysis);
-    produced_preparsed_scope_data_->SaveScopeAllocationData(this);
+    produced_uncompiled_data_->SaveScopeData(this);
   }
 }
 
@@ -1545,9 +1545,8 @@ void DeclarationScope::AnalyzePartially(AstNodeFactory* ast_node_factory) {
   VariableProxy* unresolved = nullptr;
 
   if (!outer_scope_->is_script_scope() ||
-      (FLAG_preparser_scope_analysis &&
-       produced_preparsed_scope_data_ != nullptr &&
-       produced_preparsed_scope_data_->ContainsInnerFunctions())) {
+      (FLAG_preparser_scope_analysis && produced_uncompiled_data_ != nullptr &&
+       produced_uncompiled_data_->ContainsInnerFunctions())) {
     // Try to resolve unresolved variables for this Scope and migrate those
     // which cannot be resolved inside. It doesn't make sense to try to resolve
     // them in the outer Scopes here, because they are incomplete.
@@ -1563,10 +1562,10 @@ void DeclarationScope::AnalyzePartially(AstNodeFactory* ast_node_factory) {
     if (function_ != nullptr) {
       function_ = ast_node_factory->CopyVariable(function_);
     }
+  }
 
-    if (FLAG_preparser_scope_analysis) {
-      SavePreParsedScopeData();
-    }
+  if (FLAG_preparser_scope_analysis && produced_uncompiled_data_ != nullptr) {
+    SaveUncompiledData();
   }
 
 #ifdef DEBUG

@@ -59,6 +59,10 @@ enum class PrimitiveType { kBoolean, kNumber, kString, kSymbol };
   V(NoClosuresCellMap, no_closures_cell_map, NoClosuresCellMap)             \
   V(NullValue, null_value, Null)                                            \
   V(OneClosureCellMap, one_closure_cell_map, OneClosureCellMap)             \
+  V(UncompiledDataWithoutScopeMap, uncompiled_data_without_scope_map,       \
+    UncompiledDataWithoutScopeMap)                                          \
+  V(UncompiledDataWithScopeMap, uncompiled_data_with_scope_map,             \
+    UncompiledDataWithScopeMap)                                             \
   V(PromiseSpeciesProtector, promise_species_protector,                     \
     PromiseSpeciesProtector)                                                \
   V(prototype_string, prototype_string, PrototypeString)                    \
