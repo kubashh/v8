@@ -131,6 +131,8 @@ class EmbeddedData final {
  private:
   EmbeddedData(const uint8_t* data, uint32_t size) : data_(data), size_(size) {}
 
+  void PrintStatistics() const;
+
   const uint32_t* Offsets() const {
     return reinterpret_cast<const uint32_t*>(data_ + OffsetsOffset());
   }
