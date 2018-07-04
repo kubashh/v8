@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6736d945_c60ad6e9",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ea9bfbb_ed1e0797",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b03b8acb_5fa4d134",
         "filename": "src/ast/ast.cc",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1a68a95_96c4ac87",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b03b8acb_5fa4d134",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "4a157ac3_03fbb4eb",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02dceb65_e14554fa",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef862c50_8a940b41",
         "filename": "src/ast/ast.h",
         "patchSetId": 8
@@ -67,6 +121,24 @@
       "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "454462f4_1d97212d",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef862c50_8a940b41",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "58f61fd7_512332ff",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90476dbc_9f7faf82",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da58a5d8_456b1a60",
         "filename": "src/objects-debug.cc",
         "patchSetId": 8
@@ -118,6 +208,24 @@
       "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fda1cbe2_ffe8c4d8",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da58a5d8_456b1a60",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +263,24 @@
     },
     {
       "key": {
+        "uuid": "63a9ed8a_23b65be5",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Already covered by STRUCT_LIST",
+      "parentUuid": "318b3994_36cca870",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc9aa697_dfc95a95",
         "filename": "src/objects-debug.cc",
         "patchSetId": 8
@@ -189,6 +315,24 @@
     },
     {
       "key": {
+        "uuid": "feff54a0_ad9238b9",
+        "filename": "src/objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3365,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "ArrayBoilerplateDescription is part of STRUCT_LIST and hence is handled",
+      "parentUuid": "5fbcbb2f_3608e984",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77c85264_c4614d2f",
         "filename": "src/objects/literal-objects.cc",
         "patchSetId": 8
@@ -203,6 +347,24 @@
       "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39a2a70d_4a36c981",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77c85264_c4614d2f",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -223,6 +385,24 @@
     },
     {
       "key": {
+        "uuid": "936358e8_2536df7d",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60068808_660e7e9c",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aba6a304_1341bd5e",
         "filename": "src/objects/literal-objects.h",
         "patchSetId": 8
@@ -234,6 +414,24 @@
       "writtenOn": "2018-07-04T07:51:51Z",
       "side": 1,
       "message": "you could do the ElementsKind cast directly in the accessor, making things a bit nicer for the callers.",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d50cb4be_ef63466c",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "I started with that but, there is no support for custom data types for SMI_ACCESSORS in objects-macros. I have add them manually.",
+      "parentUuid": "aba6a304_1341bd5e",
       "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -257,6 +455,24 @@
     },
     {
       "key": {
+        "uuid": "145f7142_dae91b76",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "The flags passed to the top level literal by interpreter (interpreter::CreateObjectLiteralFlags) are different from the\nObjectLiteral::EncodeLiteralType, We should merge both of these \nin ObjectBoilerplateDescription, then we can do the suggested change.\nAs discussed offline, deferring until next CL.",
+      "parentUuid": "87bf3213_5d3b6c91",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6452d144_88ebd836",
         "filename": "src/runtime/runtime-literals.cc",
         "patchSetId": 8
@@ -271,6 +487,24 @@
       "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3dd16b5_ae809cb3",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "As discussed offline, deferring until next CL.",
+      "parentUuid": "6452d144_88ebd836",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -291,6 +525,24 @@
     },
     {
       "key": {
+        "uuid": "0dc06b45_8fcb9676",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "726d3821_cc45c6a2",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65a62cfd_21f5f3f5",
         "filename": "src/runtime/runtime-literals.cc",
         "patchSetId": 8
@@ -305,6 +557,24 @@
       "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d15e49f_14213240",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65a62cfd_21f5f3f5",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -343,6 +613,24 @@
     },
     {
       "key": {
+        "uuid": "1a118d09_afafd47a",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "As discussed offline, deferring until next CL.",
+      "parentUuid": "3ce56b72_a7a2a0e9",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "605e98c4_7f783cab",
         "filename": "src/runtime/runtime-literals.cc",
         "patchSetId": 8
@@ -372,6 +660,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "605e98c4_7f783cab",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71608b2b_e1c04bc5",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-04T14:10:04Z",
+      "side": 1,
+      "message": "As discussed offline, deferring until next CL.",
+      "parentUuid": "7c78f7ae_cceb0e60",
       "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
