@@ -1069,6 +1069,8 @@ DEFINE_VALUE_IMPLICATION(runtime_call_stats, runtime_stats, 1)
 #endif
 DEFINE_BOOL_READONLY(embedded_builtins, V8_EMBEDDED_BUILTINS_BOOL,
                      "Embed builtin code into the binary.")
+DEFINE_BOOL(embedded_builtins_statistics, false,
+            "Collect statistics on embedded builtins.")
 DEFINE_BOOL(lazy_deserialization, true,
             "Deserialize code lazily from the snapshot.")
 DEFINE_BOOL(lazy_handler_deserialization, true,
