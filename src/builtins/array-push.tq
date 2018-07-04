@@ -1,0 +1,144 @@
+// Copyright 2018 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+module array {
+  extern macro BuildAppendJSArray(
+      constexpr ElementsKind, JSArray, constexpr Arguments,
+      intptr): Smi labels Bailout(intptr);
+
+  macro FastArrayPushSmiElements(
+      context: Context, array: JSArray, arguments: constexpr Arguments): Smi
+  labels PushDoubles(intptr), PushObjects(intptr), PushDefault(intptr) {
+    try {
+      return BuildAppendJSArray(PACKED_SMI_ELEMENTS, array, arguments, 0)
+      otherwise SmiTransition;
+    }
+    // If the argument is not a smi, then use a heavyweight SetProperty to
+    // transition the array for only the single next element. If the argument is
+    // a smi, the failure is due to some other eason and we should fall back on
+    // the most generic implementation for the rest of the array.
+    label SmiTransition(arg_index: intptr) {
+      let arg: Object = arguments[arg_index];
+      if (TaggedIsSmi(arg)) {
+        goto PushDefault(arg_index);
+      }
+      // TODO(danno): Use the KeyedStoreGeneric stub here when possible,
+      // calling into the runtime to do the elements transition is overkill.
+      SetProperty(context, array, array.length, arg, kStrict);
+
+      // The runtime SetProperty call could have converted the array to
+      // dictionary mode, which must be detected to abort the fast-path.
+      if (array.map.elements_kind == DICTIONARY_ELEMENTS) {
+        goto PushDefault(arg_index + 1);
+      }
+
+      if (!IsNumber(arg)) {
+        goto PushObjects(arg_index + 1);
+      } else {
+        goto PushDoubles(arg_index + 1);
+      }
+    }
+  }
+
+  macro FastArrayPushDoubleElements(
+      context: Context, array: JSArray, arguments: constexpr Arguments,
+      arg_index: intptr): Smi
+  labels PushObjects(intptr), PushDefault(intptr) {
+    try {
+      return BuildAppendJSArray(
+          PACKED_DOUBLE_ELEMENTS, array, arguments, arg_index)
+      otherwise DoubleTransition;
+    }
+    // If the argument is not a double, then use a heavyweight SetProperty to
+    // transition the array for only the single next element. If the argument is
+    // a double, the failure is due to some other reason and we should fall back
+    // on the most generic implementation for the rest of the array.
+    label DoubleTransition(arg_index: intptr) {
+      let arg: Object = arguments[arg_index];
+      if (IsNumber(arg)) {
+        goto PushDefault(arg_index);
+      }
+
+      // TODO(danno): Use the KeyedStoreGeneric stub here when possible,
+      // calling into the runtime to do the elements transition is overkill.
+      SetProperty(context, array, array.length, arg, kStrict);
+
+      // The runtime SetProperty call could have converted the array to
+      // dictionary mode, which must be detected to abort the fast-path.
+      if (array.map.elements_kind == DICTIONARY_ELEMENTS) {
+        goto PushDefault(arg_index + 1);
+      }
+      goto PushObjects(arg_index + 1);
+    }
+  }
+
+  macro FastArrayPushObjectElements(
+      context: Context, array: JSArray, arguments: constexpr Arguments,
+      arg_index: intptr): Smi
+  labels PushDefault(intptr) {
+    return BuildAppendJSArray(PACKED_ELEMENTS, array, arguments, arg_index)
+    otherwise PushDefault;
+  }
+
+  macro FastArrayPushDefault(
+      context: Context, array: JSArray, arguments: constexpr Arguments,
+      arg_index: intptr): Smi {
+    for (let arg: Object of arguments [arg_index: ]) {
+      SetProperty(context, array, array.length, arg, kStrict);
+    }
+    return unsafe_cast<Smi>(array.length);
+  }
+
+  macro FastArrayPush(
+      context: Context, receiver: Object, arguments: constexpr Arguments): Smi
+  labels Bailout {
+    if (!IsFastJSArray(receiver, context)) goto Bailout;
+
+    let array: JSArray = unsafe_cast<JSArray>(receiver);
+    let kind: ElementsKind = EnsureArrayPushable(array.map) otherwise Bailout;
+
+    try {
+      try {
+        try {
+          if (!IsElementsKindGreaterThan(kind, HOLEY_SMI_ELEMENTS)) {
+            return FastArrayPushSmiElements(context, array, arguments)
+            otherwise PushDoubles, PushObjects, PushDefault;
+          } else if (IsElementsKindGreaterThan(kind, HOLEY_ELEMENTS)) {
+            goto PushDoubles(0);
+          }
+          goto PushObjects(0);
+        }
+        label PushDoubles(arg_index: intptr) {
+          return FastArrayPushDoubleElements(
+              context, array, arguments, arg_index)
+          otherwise PushObjects, PushDefault;
+        }
+      }
+      label PushObjects(arg_index: intptr) {
+        return FastArrayPushObjectElements(context, array, arguments, arg_index)
+        otherwise PushDefault;
+      }
+    }
+    label PushDefault(arg_index: intptr) {
+      return FastArrayPushDefault(context, array, arguments, arg_index);
+    }
+  }
+
+  extern macro LoadTargetFromFrame(): JSFunction;
+  extern builtin ArrayPush(Context, JSFunction, Object, int32);
+
+  // https://tc39.github.io/ecma262/#sec-array.prototype.push
+  javascript builtin ArrayPrototypePush(
+      context: Context, receiver: Object, ...arguments): Object {
+    try {
+      return FastArrayPush(context, receiver, arguments) otherwise Slow;
+    }
+    label Slow {}
+
+    // TODO(szuend): Replace CPP and JavaScript builtin with a torque slow-path.
+    tail ArrayPush(
+        context, LoadTargetFromFrame(), Undefined,
+        convert<int32>(arguments.length));
+  }
+}

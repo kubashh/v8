@@ -2720,6 +2720,14 @@ TNode<Smi> CodeStubAssembler::BuildAppendJSArray(ElementsKind kind,
   return var_tagged_length.value();
 }
 
+TNode<Smi> CodeStubAssembler::BuildAppendJSArray(
+    ElementsKind kind, TNode<JSArray> array, CodeStubArguments* args,
+    TNode<IntPtrT> arg_index, Label* bailout,
+    TVariable<IntPtrT>* arg_index_out) {
+  *arg_index_out = arg_index;
+  return BuildAppendJSArray(kind, array, args, arg_index_out, bailout);
+}
+
 void CodeStubAssembler::TryStoreArrayElement(ElementsKind kind,
                                              ParameterMode mode, Label* bailout,
                                              Node* elements, Node* index,

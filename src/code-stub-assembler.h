@@ -1154,6 +1154,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<Smi> BuildAppendJSArray(ElementsKind kind, SloppyTNode<JSArray> array,
                                 CodeStubArguments* args,
                                 TVariable<IntPtrT>* arg_index, Label* bailout);
+  // Wraps above call so its usable from Torque.
+  TNode<Smi> BuildAppendJSArray(ElementsKind kind, TNode<JSArray> array,
+                                CodeStubArguments* args,
+                                TNode<IntPtrT> arg_index, Label* bailout,
+                                TVariable<IntPtrT>* arg_index_out);
   // Pushes value onto the end of array.
   void BuildAppendJSArray(ElementsKind kind, Node* array, Node* value,
                           Label* bailout);
