@@ -1,0 +1,344 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ea9bfbb_ed1e0797",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "nit: constant_properties \u003d\u003e boilerplate",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b03b8acb_5fa4d134",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "nit: rename constant_elements_ \u003d\u003e boilerplate_ and assign directly without the {literals} helper variable",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02dceb65_e14554fa",
+        "filename": "src/ast/ast.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "probably a bit more readable:\n\n  if (..IsCompileTimeValue()) {\n    if (...IsObjectLiteral()) {\n      ...\n    } else {\n      CHECK(...IsArrayLiteral());\n      ...\n    }\n  }",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef862c50_8a940b41",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "please also rename the instance variable.",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5406281_e76d3ffc",
+        "filename": "src/heap/object-stats.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "I have to verify this again later today.",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90476dbc_9f7faf82",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "literl_flags \u003d\u003e literal_flags",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da58a5d8_456b1a60",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "Add a comment for future devs:\n\n  // FixedArray types:",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b84e979a_27f27a6c",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "While we\u0027re at it: add a proper verification function for the object boilerplate description",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "318b3994_36cca870",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "Don\u0027t forget to add a case for ARRAY_BOILERPLATE_DESCRIPTION",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc9aa697_dfc95a95",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1553,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "CHECK(constant_elements()-\u003eIsFixedArrayBase());",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fbcbb2f_3608e984",
+        "filename": "src/objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3365,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "Add a case for ARRAY_BOILERPLATE_DESCRIPTION",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77c85264_c4614d2f",
+        "filename": "src/objects/literal-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "DCHECK_LT(size(), index);\nDCHECK_GE(0, index);",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60068808_660e7e9c",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "just rename to flags, literal_type might be a bit misleading.",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aba6a304_1341bd5e",
+        "filename": "src/objects/literal-objects.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "you could do the ElementsKind cast directly in the accessor, making things a bit nicer for the callers.",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87bf3213_5d3b6c91",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "directly type the description with ObjectBoilerplateDescription and take the flags from the description object.",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6452d144_88ebd836",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "directly type the description with ArrayBoilerplateDescription and take the flags from the description itself.",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "726d3821_cc45c6a2",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "for_with_handle_isolate \u003d\u003e isolate",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65a62cfd_21f5f3f5",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "you can just put a single DCHECK(...IsArray..()) in the else branch",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea3478b7_93ff6b8d",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "no need to pass down the flags if you can extract it directly from the description object.",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "605e98c4_7f783cab",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-04T07:51:51Z",
+      "side": 1,
+      "message": "no need to pass down the elements_kind if you can extract it directly from the description object.",
+      "revId": "01519b3b20d73641b920038c635643d12d97f2ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
