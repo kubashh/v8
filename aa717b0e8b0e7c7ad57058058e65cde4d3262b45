@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ac99c6f_89c12d0c",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-05T13:23:36Z",
+      "side": 1,
+      "message": "see comment below, length might be a HeapNumber on 32-bit platforms.",
+      "revId": "aa717b0e8b0e7c7ad57058058e65cde4d3262b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13ac69a4_9c485f85",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-05T13:23:36Z",
+      "side": 1,
+      "message": "careful, on ia32 you might get a double back for values bigger than 2**30-ish.\n\n uint32_t new_length \u003d ...;\n return *factory-\u003eNewNumberFromUint(new_length);",
+      "revId": "aa717b0e8b0e7c7ad57058058e65cde4d3262b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94cd269c_c5966e16",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-05T13:23:36Z",
+      "side": 1,
+      "message": "maybe introduce a constant on JSArray::kMaxArrayIndex or so",
+      "revId": "aa717b0e8b0e7c7ad57058058e65cde4d3262b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c5956eb_dd02231c",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-05T13:23:36Z",
+      "side": 1,
+      "message": "You could probably drop the \"fast\" path.",
+      "revId": "aa717b0e8b0e7c7ad57058058e65cde4d3262b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
