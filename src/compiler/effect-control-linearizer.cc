@@ -3750,15 +3750,75 @@ Node* EffectControlLinearizer::LowerLoadDataViewElement(Node* node) {
   Node* buffer = node->InputAt(0);
   Node* storage = node->InputAt(1);
   Node* index = node->InputAt(2);
+  Node* is_little_endian = node->InputAt(3);
 
   // We need to keep the {buffer} alive so that the GC will not release the
   // ArrayBuffer (if there's any) as long as we are still operating on it.
   __ Retain(buffer);
 
-  // Perform the actual data view element access.
-  return __ LoadElement(AccessBuilder::ForTypedArrayElement(
-                            element_type, true, LoadSensitivity::kCritical),
-                        storage, index);
+  switch (element_type) {
+    case kExternalUint8Array:  // Fall through.
+    case kExternalInt8Array:
+      return __ LoadElement(AccessBuilder::ForTypedArrayElement(
+                                element_type, true, LoadSensitivity::kCritical),
+                            storage, index);
+
+    case kExternalUint16Array:  // Fall through.
+    case kExternalInt16Array: {
+      Node* b0;
+      Node* b1;
+      Node* result = nullptr;
+
+      auto big_endian = __ MakeLabel();
+      auto done = __ MakeLabel(MachineRepresentation::kWord32);
+
+      __ GotoIfNot(is_little_endian, &big_endian);
+      // Little-endian load.
+      b0 = __ LoadElement(
+          AccessBuilder::ForTypedArrayElement(kExternalUint8Array, true,
+                                              LoadSensitivity::kCritical),
+          storage, index);
+      // Sign-extend the most significant byte by loading it as an Int8.
+      b1 = __ LoadElement(
+          AccessBuilder::ForTypedArrayElement(kExternalInt8Array, true,
+                                              LoadSensitivity::kCritical),
+          storage, __ Int32Add(index, __ Int32Constant(1)));
+
+      // result = (b1 << 8) + b0
+      result = __ Int32Add(__ Word32Shl(b1, __ Int32Constant(8)), b0);
+      __ Goto(&done, result);
+
+      // Big-endian load.
+      __ Bind(&big_endian);
+      // Sign-extend the most significant byte by loading it as an Int8.
+      b0 = __ LoadElement(
+          AccessBuilder::ForTypedArrayElement(kExternalInt8Array, true,
+                                              LoadSensitivity::kCritical),
+          storage, index);
+      b1 = __ LoadElement(
+          AccessBuilder::ForTypedArrayElement(kExternalUint8Array, true,
+                                              LoadSensitivity::kCritical),
+          storage, __ Int32Add(index, __ Int32Constant(1)));
+
+      // result = (b0 << 8) + b1;
+      result = __ Int32Add(__ Word32Shl(b0, __ Int32Constant(8)), b1);
+      __ Goto(&done, result);
+
+      // We're done, return {result}.
+      __ Bind(&done);
+      result = done.PhiAt(0);
+
+      if (element_type == kExternalUint16Array) {
+        // Bit-mask away the higher bits.
+        result = __ Word32And(result, __ Int32Constant(0xFFFF));
+      }
+
+      return result;
+    }
+
+    default:
+      UNREACHABLE();
+  }
 }
 
 Node* EffectControlLinearizer::LowerLoadTypedElement(Node* node) {
