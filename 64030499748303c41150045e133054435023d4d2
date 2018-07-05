@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "253d72e9_41997a09",
+        "filename": "src/builtins/array-push.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-05T10:58:45Z",
+      "side": 1,
+      "message": "Is FastArrayPushGeneric a better name?",
+      "revId": "64030499748303c41150045e133054435023d4d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6711ae41_f14b53cd",
+        "filename": "src/builtins/array-push.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-05T10:58:45Z",
+      "side": 1,
+      "message": "For torque it would probably be nice to have something like an accessor:\n\n  let array:JSArray \u003d GetFastJSArray(receiver, context) otherwise Bailout;",
+      "revId": "64030499748303c41150045e133054435023d4d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
