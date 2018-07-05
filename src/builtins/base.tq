@@ -681,6 +681,8 @@ extern macro IsHeapNumber(HeapObject): bool;
 extern macro IsExtensibleMap(Map): bool;
 extern macro IsCustomElementsReceiverInstanceType(int32): bool;
 extern macro Typeof(Object): Object;
+extern macro IsFastJSArray(Object, Context): bool;
+extern macro IsNumber(Object): bool;
 
 // Return true iff number is NaN.
 macro NumberIsNaN(number: Number): bool {

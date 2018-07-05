@@ -2663,11 +2663,10 @@ void CodeStubAssembler::PossiblyGrowElementsCapacity(
   BIND(&fits);
 }
 
-TNode<Smi> CodeStubAssembler::BuildAppendJSArray(ElementsKind kind,
-                                                 SloppyTNode<JSArray> array,
-                                                 CodeStubArguments* args,
-                                                 TVariable<IntPtrT>* arg_index,
-                                                 Label* bailout) {
+TNode<Smi> CodeStubAssembler::BuildAppendJSArray(
+    ElementsKind kind, SloppyTNode<JSArray> array, CodeStubArguments* args,
+    TNode<IntPtrT> arg_index, Label* bailout,
+    TVariable<IntPtrT>* arg_index_out) {
   CSA_SLOW_ASSERT(this, IsJSArray(array));
   Comment("BuildAppendJSArray: %s", ElementsKindToString(kind));
   Label pre_bailout(this);
@@ -2679,7 +2678,7 @@ TNode<Smi> CodeStubAssembler::BuildAppendJSArray(ElementsKind kind,
   VARIABLE(var_elements, MachineRepresentation::kTagged, LoadElements(array));
 
   // Resize the capacity of the fixed array if it doesn't fit.
-  TNode<IntPtrT> first = arg_index->value();
+  TNode<IntPtrT> first = arg_index;
   Node* growth = IntPtrToParameter(
       IntPtrSub(UncheckedCast<IntPtrT>(args->GetLength(INTPTR_PARAMETERS)),
                 first),
@@ -2712,7 +2711,7 @@ TNode<Smi> CodeStubAssembler::BuildAppendJSArray(ElementsKind kind,
     var_tagged_length = length;
     Node* diff = SmiSub(length, LoadFastJSArrayLength(array));
     StoreObjectFieldNoWriteBarrier(array, JSArray::kLengthOffset, length);
-    *arg_index = IntPtrAdd(arg_index->value(), SmiUntag(diff));
+    *arg_index_out = IntPtrAdd(arg_index, SmiUntag(diff));
     Goto(bailout);
   }
 

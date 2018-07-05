@@ -1150,10 +1150,15 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   void TryStoreArrayElement(ElementsKind kind, ParameterMode mode,
                             Label* bailout, Node* elements, Node* index,
                             Node* value);
-  // Consumes args into the array, and returns tagged new length.
+  // Consumes args into the array (starting at arg_index), and returns
+  // tagged new length. If the macro needs to bailout, it passes the arg_index
+  // where it stopped in the out parameter arg_index_out.
+  // The order of the arguments is important, it is the convention Torque
+  // uses for Label parameters.
   TNode<Smi> BuildAppendJSArray(ElementsKind kind, SloppyTNode<JSArray> array,
                                 CodeStubArguments* args,
-                                TVariable<IntPtrT>* arg_index, Label* bailout);
+                                TNode<IntPtrT> arg_index, Label* bailout,
+                                TVariable<IntPtrT>* arg_index_out);
   // Pushes value onto the end of array.
   void BuildAppendJSArray(ElementsKind kind, Node* array, Node* value,
                           Label* bailout);
