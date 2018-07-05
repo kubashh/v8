@@ -146,25 +146,67 @@ V8_WARN_UNUSED_RESULT static Object* CallJsIntrinsic(
 BUILTIN(ArrayPush) {
   HandleScope scope(isolate);
   Handle<Object> receiver = args.receiver();
-  if (!EnsureJSArrayWithWritableFastElements(isolate, receiver, &args, 1)) {
-    return CallJsIntrinsic(isolate, isolate->array_push(), args);
+  if (EnsureJSArrayWithWritableFastElements(isolate, receiver, &args, 1)) {
+    // Fast Elements Path
+    int to_add = args.length() - 1;
+    Handle<JSArray> array = Handle<JSArray>::cast(receiver);
+    int len = Smi::ToInt(array->length());
+    if (to_add == 0) return Smi::FromInt(len);
+
+    // Currently fixed arrays cannot grow too big, so we should never hit this.
+    DCHECK_LE(to_add, Smi::kMaxValue - Smi::ToInt(array->length()));
+
+    if (!JSArray::HasReadOnlyLength(array)) {
+      ElementsAccessor* accessor = array->GetElementsAccessor();
+      int new_length = accessor->Push(array, &args, to_add);
+      return Smi::FromInt(new_length);
+    }
   }
-  // Fast Elements Path
-  int to_add = args.length() - 1;
-  Handle<JSArray> array = Handle<JSArray>::cast(receiver);
-  int len = Smi::ToInt(array->length());
-  if (to_add == 0) return Smi::FromInt(len);
 
-  // Currently fixed arrays cannot grow too big, so we should never hit this.
-  DCHECK_LE(to_add, Smi::kMaxValue - Smi::ToInt(array->length()));
+  // 1. Let O be ? ToObject(this value).
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, receiver, Object::ToObject(isolate, args.receiver()));
 
-  if (JSArray::HasReadOnlyLength(array)) {
-    return CallJsIntrinsic(isolate, isolate->array_push(), args);
+  // 2. Let len be ? ToLength(? Get(O, "length")).
+  Handle<Object> raw_length_number;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, raw_length_number,
+      Object::GetLengthFromArrayLike(isolate, receiver));
+
+  // 3. Let args be a List whose elements are, in left to right order,
+  //    the arguments that were passed to this function invocation.
+  // 4. Let arg_count be the number of elements in args.
+  int arg_count = args.length() - 1;
+
+  // 5. If len + arg_count > 2^53-1, throw a TypeError exception.
+  double len = raw_length_number->Number();
+  if (arg_count > kMaxSafeInteger - len) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kPushPastSafeLength,
+                              isolate->factory()->NewNumberFromInt(arg_count),
+                              raw_length_number));
   }
 
-  ElementsAccessor* accessor = array->GetElementsAccessor();
-  int new_length = accessor->Push(array, &args, to_add);
-  return Smi::FromInt(new_length);
+  // 6. Repeat, while args is not empty.
+  for (int i = 0; i < arg_count; ++i) {
+    // a. Remove the first element from args and let E be the value of the
+    //    element.
+    // b. Perform ? Set(O, ! ToString(len), E, true).
+    // c. Let len be len+1.
+    RETURN_FAILURE_ON_EXCEPTION(
+        isolate, Object::SetElement(isolate, receiver, len++, args.at(i + 1),
+                                    LanguageMode::kStrict));
+  }
+
+  // 7. Perform ? Set(O, "length", len, true).
+  Handle<Object> final_len = isolate->factory()->NewNumber(len);
+  RETURN_FAILURE_ON_EXCEPTION(
+      isolate,
+      Object::SetProperty(receiver, isolate->factory()->length_string(),
+                          final_len, LanguageMode::kStrict));
+
+  // 8. Return len.
+  return *final_len;
 }
 
 BUILTIN(ArrayPop) {
