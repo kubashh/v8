@@ -16,6 +16,24 @@
       "revId": "531b55459623ec7cd3a8ab24c7751afc6d2aa689",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee352cb8_002a4cf3",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-07-05T08:48:00Z",
+      "side": 1,
+      "message": "I thought about it, but it\u0027s actually a useful helper variable. {stack_start_} is accessed a lot, and I thought replacing it everywhere with stack_.get() makes the code less readable.",
+      "parentUuid": "6050ae80_6b8449af",
+      "revId": "531b55459623ec7cd3a8ab24c7751afc6d2aa689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
