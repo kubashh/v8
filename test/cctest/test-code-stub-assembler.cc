@@ -2082,15 +2082,15 @@ class AppendJSArrayCodeStubAssembler : public CodeStubAssembler {
                          LanguageMode::kSloppy)
         .Check();
     CodeStubArguments args(this, IntPtrConstant(kNumParams));
-    TVariable<IntPtrT> arg_index(this);
+    TVariable<IntPtrT> arg_index_out(this);
     Label bailout(this);
-    arg_index = IntPtrConstant(0);
-    Node* length = BuildAppendJSArray(kind_, HeapConstant(array), &args,
-                                      &arg_index, &bailout);
+    Node* length =
+        BuildAppendJSArray(kind_, HeapConstant(array), &args, IntPtrConstant(0),
+                           &bailout, &arg_index_out);
     Return(length);
 
     BIND(&bailout);
-    Return(SmiTag(IntPtrAdd(arg_index.value(), IntPtrConstant(2))));
+    Return(SmiTag(IntPtrAdd(arg_index_out.value(), IntPtrConstant(2))));
 
     FunctionTester ft(csa_tester->GenerateCode(), kNumParams);
 
