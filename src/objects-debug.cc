@@ -1522,6 +1522,7 @@ void PrototypeInfo::PrototypeInfoVerify(Isolate* isolate) {
   CHECK(IsPrototypeInfo());
   CHECK(weak_cell()->IsWeakCell() || weak_cell()->IsUndefined(isolate));
   if (prototype_users()->IsFixedArrayOfWeakCells()) {
+    WeakArrayList::cast(prototype_users())->WeakArrayListVerify(isolate);
     FixedArrayOfWeakCells::cast(prototype_users())->FixedArrayVerify(isolate);
   } else {
     CHECK(prototype_users()->IsSmi());

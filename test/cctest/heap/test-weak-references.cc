@@ -574,6 +574,87 @@ TEST(Regress7768) {
   CcTest::CollectAllGarbage();
 }
 
+TEST(WeakArrayListWithEmptySlotsBasic) {
+  CcTest::InitializeVM();
+  LocalContext context;
+  Isolate* isolate = CcTest::i_isolate();
+  Factory* factory = isolate->factory();
+  Heap* heap = isolate->heap();
+  HandleScope outer_scope(isolate);
+
+  Handle<WeakArrayList> array(heap->empty_weak_array_list(), isolate);
+
+  // Add some objects into the array.
+  int index = -1;
+  {
+    Handle<FixedArray> obj = factory->NewFixedArray(1);
+    array = WeakArrayListWithEmptySlots::Add(
+        array, MaybeObjectHandle::Weak(obj), &index);
+  }
+  CHECK_EQ(index, 1);
+
+  int empty_index = index;
+  WeakArrayListWithEmptySlots::MarkSlotEmpty(array, empty_index);
+
+  // Even though we have an empty slot, we still add to the end.
+  int last_index = index;
+  int old_capacity = array->capacity();
+  while (!array->IsFull()) {
+    Handle<FixedArray> obj = factory->NewFixedArray(1);
+    array = WeakArrayListWithEmptySlots::Add(
+        array, MaybeObjectHandle::Weak(obj), &index);
+    CHECK_EQ(index, last_index + 1);
+    last_index = index;
+  }
+
+  // The next addition will fill the empty slot.
+  {
+    Handle<FixedArray> obj = factory->NewFixedArray(1);
+    array = WeakArrayListWithEmptySlots::Add(
+        array, MaybeObjectHandle::Weak(obj), &index);
+  }
+  CHECK_EQ(index, empty_index);
+
+  // The next addition will make the arrow grow again.
+  {
+    Handle<FixedArray> obj = factory->NewFixedArray(1);
+    array = WeakArrayListWithEmptySlots::Add(
+        array, MaybeObjectHandle::Weak(obj), &index);
+  }
+  CHECK_GT(array->capacity(), old_capacity);
+
+  // Make multiple slots empty.
+  int empty_index1 = 1;
+  int empty_index2 = 2;
+  WeakArrayListWithEmptySlots::MarkSlotEmpty(array, empty_index1);
+  WeakArrayListWithEmptySlots::MarkSlotEmpty(array, empty_index2);
+
+  // Fill the array (still adding to the end)
+  old_capacity = array->capacity();
+  while (!array->IsFull()) {
+    Handle<FixedArray> obj = factory->NewFixedArray(1);
+    array = WeakArrayListWithEmptySlots::Add(
+        array, MaybeObjectHandle::Weak(obj), &index);
+    CHECK_EQ(index, last_index + 1);
+    last_index = index;
+  }
+
+  // Make sure we use the empty slots in (reverse) order.
+  {
+    Handle<FixedArray> obj = factory->NewFixedArray(1);
+    array = WeakArrayListWithEmptySlots::Add(
+        array, MaybeObjectHandle::Weak(obj), &index);
+  }
+  CHECK_EQ(index, empty_index2);
+
+  {
+    Handle<FixedArray> obj = factory->NewFixedArray(1);
+    array = WeakArrayListWithEmptySlots::Add(
+        array, MaybeObjectHandle::Weak(obj), &index);
+  }
+  CHECK_EQ(index, empty_index1);
+}
+
 }  // namespace heap
 }  // namespace internal
 }  // namespace v8
