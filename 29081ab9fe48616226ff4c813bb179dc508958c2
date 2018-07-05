@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "990fd17a_ecf51a1e",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3773,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-05T15:40:35Z",
+      "side": 1,
+      "message": "nit: The declaration of the {result} local variable can also be moved into the two blocks below now.",
+      "range": {
+        "startLine": 3773,
+        "startChar": 6,
+        "endLine": 3773,
+        "endChar": 29
+      },
+      "revId": "29081ab9fe48616226ff4c813bb179dc508958c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
