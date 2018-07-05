@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e276fa1b_fb144014",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-05T08:38:15Z",
+      "side": 1,
+      "message": "I think you still miss the ARRAY_BOILERPLATE_DESCRIPTION_TYPE case here",
+      "revId": "dac46a8bfb9c112b0bdebbfd78c02586392d52c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e9b2c81_3dc59908",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-05T08:38:15Z",
+      "side": 1,
+      "message": "I think you still miss the ARRAY_BOILERPLATE_DESCRIPTION_TYPE case here",
+      "revId": "dac46a8bfb9c112b0bdebbfd78c02586392d52c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3c1007c_fa349343",
+        "filename": "src/objects/literal-objects-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-05T08:38:15Z",
+      "side": 1,
+      "message": "nice :)",
+      "revId": "dac46a8bfb9c112b0bdebbfd78c02586392d52c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
