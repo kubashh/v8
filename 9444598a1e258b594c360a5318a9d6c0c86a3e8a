@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6ade068_eb26e1c2",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-05T12:50:10Z",
+      "side": 1,
+      "message": "The structure of this function feels a bit opaque, esp. now that the generic path is inline below. Wdyt about moving the generic path into a helper method and keeping the original structure:\n\n if (!EnsureAndSoOn()) return GenericArrayPush();\n Handle\u003cJSArray\u003e array \u003d ...;\n if (HasReadOnlyLength(array)) return GenericArrayPush();\n\n /* fast path goes here */",
+      "revId": "9444598a1e258b594c360a5318a9d6c0c86a3e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3549a41b_62df14c1",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-05T12:50:10Z",
+      "side": 1,
+      "message": "Do we have a constant for the maximal element index somewhere? That\u0027d be more descriptive than kMaxUInt32.",
+      "revId": "9444598a1e258b594c360a5318a9d6c0c86a3e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dedecce7_355a7d29",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-05T12:50:10Z",
+      "side": 1,
+      "message": "I\u0027m a bit surprised the compiler doesn\u0027t complain about all these implicit double-\u003euint32_t casts. Should we make them more explicit?",
+      "revId": "9444598a1e258b594c360a5318a9d6c0c86a3e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adcac9b4_9acaaeb2",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-05T12:50:10Z",
+      "side": 1,
+      "message": "// Must succeed since we always pass a valid key.",
+      "revId": "9444598a1e258b594c360a5318a9d6c0c86a3e8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
