@@ -72,7 +72,7 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // The {is_shared} flag indicates if the bytes backing the module could
   // be shared across threads, i.e. could be concurrently modified.
   void AsyncCompile(Isolate* isolate,
-                    std::unique_ptr<CompilationResultResolver> resolver,
+                    std::shared_ptr<CompilationResultResolver> resolver,
                     const ModuleWireBytes& bytes, bool is_shared);
 
   // Begin an asynchronous instantiation of the given WASM module.
@@ -83,7 +83,7 @@ class V8_EXPORT_PRIVATE WasmEngine {
 
   std::shared_ptr<StreamingDecoder> StartStreamingCompilation(
       Isolate* isolate, Handle<Context> context,
-      std::unique_ptr<CompilationResultResolver> resolver);
+      std::shared_ptr<CompilationResultResolver> resolver);
 
   WasmCodeManager* code_manager() const { return code_manager_.get(); }
 
@@ -112,7 +112,7 @@ class V8_EXPORT_PRIVATE WasmEngine {
   AsyncCompileJob* CreateAsyncCompileJob(
       Isolate* isolate, std::unique_ptr<byte[]> bytes_copy, size_t length,
       Handle<Context> context,
-      std::unique_ptr<CompilationResultResolver> resolver);
+      std::shared_ptr<CompilationResultResolver> resolver);
 
   // We use an AsyncCompileJob as the key for itself so that we can delete the
   // job from the map when it is finished.
