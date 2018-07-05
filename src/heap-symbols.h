@@ -7,6 +7,7 @@
 
 #define INTERNALIZED_STRING_LIST(V)                                \
   V(add_string, "add")                                             \
+  V(always_string, "always")                                       \
   V(anonymous_function_string, "(anonymous function)")             \
   V(anonymous_string, "anonymous")                                 \
   V(apply_string, "apply")                                         \
@@ -19,7 +20,9 @@
   V(ArrayIterator_string, "Array Iterator")                        \
   V(assign_string, "assign")                                       \
   V(async_string, "async")                                         \
+  V(auto_string, "auto")                                           \
   V(await_string, "await")                                         \
+  V(best_fit_string, "best fit")                                   \
   V(BigInt_string, "BigInt")                                       \
   V(bigint_string, "bigint")                                       \
   V(BigInt64Array_string, "BigInt64Array")                         \
@@ -48,6 +51,7 @@
   V(Date_string, "Date")                                           \
   V(date_to_string, "[object Date]")                               \
   V(day_string, "day")                                             \
+  V(days_string, "days")                                           \
   V(dayperiod_string, "dayperiod")                                 \
   V(decimal_string, "decimal")                                     \
   V(default_string, "default")                                     \
@@ -93,6 +97,7 @@
   V(groups_string, "groups")                                       \
   V(has_string, "has")                                             \
   V(hour_string, "hour")                                           \
+  V(hours_string, "hours")                                         \
   V(ignoreCase_string, "ignoreCase")                               \
   V(illegal_access_string, "illegal access")                       \
   V(illegal_argument_string, "illegal argument")                   \
@@ -115,6 +120,10 @@
   V(line_string, "line")                                           \
   V(LinkError_string, "LinkError")                                 \
   V(literal_string, "literal")                                     \
+  V(locale_string, "locale")                                       \
+  V(lookup_string, "lookup")                                       \
+  V(localeMatcher_string, "localeMatcher")                         \
+  V(long_string, "long")                                           \
   V(Map_string, "Map")                                             \
   V(MapIterator_string, "Map Iterator")                            \
   V(message_string, "message")                                     \
@@ -122,12 +131,15 @@
   V(minus_zero_string, "-0")                                       \
   V(minusSign_string, "minusSign")                                 \
   V(minute_string, "minute")                                       \
+  V(minutes_string, "minutes")                                     \
   V(Module_string, "Module")                                       \
   V(month_string, "month")                                         \
+  V(months_string, "months")                                       \
   V(multiline_string, "multiline")                                 \
   V(name_string, "name")                                           \
   V(NaN_string, "NaN")                                             \
   V(nan_string, "nan")                                             \
+  V(narrow_string, "narrow")                                       \
   V(native_string, "native")                                       \
   V(new_target_string, ".new.target")                              \
   V(next_string, "next")                                           \
@@ -141,6 +153,7 @@
   V(Number_string, "Number")                                       \
   V(number_string, "number")                                       \
   V(number_to_string, "[object Number]")                           \
+  V(numeric_string, "numeric")                                     \
   V(Object_string, "Object")                                       \
   V(object_string, "object")                                       \
   V(object_to_string, "[object Object]")                           \
@@ -158,6 +171,8 @@
   V(prototype_string, "prototype")                                 \
   V(proxy_string, "proxy")                                         \
   V(Proxy_string, "Proxy")                                         \
+  V(quarter_string, "quarter")                                     \
+  V(quarters_string, "quarters")                                   \
   V(query_colon_string, "(?:)")                                    \
   V(RangeError_string, "RangeError")                               \
   V(raw_string, "raw")                                             \
@@ -172,7 +187,10 @@
   V(RuntimeError_string, "RuntimeError")                           \
   V(Script_string, "Script")                                       \
   V(script_string, "script")                                       \
+  V(short_string, "short")                                         \
+  V(style_string, "style")                                         \
   V(second_string, "second")                                       \
+  V(seconds_string, "seconds")                                     \
   V(set_space_string, "set ")                                      \
   V(Set_string, "Set")                                             \
   V(set_string, "set")                                             \
@@ -218,10 +236,13 @@
   V(values_string, "values")                                       \
   V(WeakMap_string, "WeakMap")                                     \
   V(WeakSet_string, "WeakSet")                                     \
+  V(week_string, "week")                                           \
+  V(weeks_string, "weeks")                                         \
   V(weekday_string, "weekday")                                     \
   V(will_handle_string, "willHandle")                              \
   V(writable_string, "writable")                                   \
   V(year_string, "year")                                           \
+  V(years_string, "years")                                         \
   V(zero_string, "0")
 
 #define PRIVATE_SYMBOL_LIST(V)         \
