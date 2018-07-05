@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9eddb30_8c16dee0",
+        "filename": "src/heap/object-stats.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-07-05T12:57:42Z",
+      "side": 1,
+      "message": "Remove this one as the stats for regular instance types are recorded automatically.",
+      "range": {
+        "startLine": 816,
+        "startChar": 2,
+        "endLine": 816,
+        "endChar": 19
+      },
+      "revId": "a14b654bbb96f4c60c1b12ca51a928da963476dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9061db53_1c6d6164",
+        "filename": "src/heap/object-stats.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-07-05T12:57:42Z",
+      "side": 1,
+      "message": "nit: sort alphabetically",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 47
+      },
+      "revId": "a14b654bbb96f4c60c1b12ca51a928da963476dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85fa0367_789dc6d0",
+        "filename": "tools/heap-stats/categories.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-07-05T12:57:42Z",
+      "side": 1,
+      "message": "Add ARRAY_BOILERPLATE_DESCRIPTION_ELEMENTS_TYPE ?",
+      "range": {
+        "startLine": 96,
+        "startChar": 7,
+        "endLine": 96,
+        "endChar": 41
+      },
+      "revId": "a14b654bbb96f4c60c1b12ca51a928da963476dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
