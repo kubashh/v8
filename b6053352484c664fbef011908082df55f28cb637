@@ -16,6 +16,24 @@
       "revId": "b6053352484c664fbef011908082df55f28cb637",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04efbf92_1a94555f",
+        "filename": "src/heap/object-stats.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-07-05T13:47:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd330f38_804da71d",
+      "revId": "b6053352484c664fbef011908082df55f28cb637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
