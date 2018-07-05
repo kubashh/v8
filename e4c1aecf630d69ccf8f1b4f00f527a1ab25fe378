@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c095562a_0158c325",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3770,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-05T14:49:26Z",
+      "side": 1,
+      "message": "suggestion: These local variable could be made block local. See the suggestion below.",
+      "range": {
+        "startLine": 3768,
+        "startChar": 0,
+        "endLine": 3770,
+        "endChar": 29
+      },
+      "revId": "e4c1aecf630d69ccf8f1b4f00f527a1ab25fe378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6184e792_a7f6e8e5",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3789,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-05T14:49:26Z",
+      "side": 1,
+      "message": "suggestion: We could indent this into a separate block for readability. I am thinking along the lines of ...\n\n__ GotoIfNot(...);\n{\n  // Little-endian load.\n  Node* b0 \u003d ...\n  [...]\n  __ Goto(\u0026done ...);\n}\n\n__ Bind(\u0026big_endian);\n{\n  // Big-endian load.\n  Node* b0 \u003d ...\n  [...]\n  __ Goto(\u0026done ...);\n}",
+      "range": {
+        "startLine": 3776,
+        "startChar": 0,
+        "endLine": 3789,
+        "endChar": 29
+      },
+      "revId": "e4c1aecf630d69ccf8f1b4f00f527a1ab25fe378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6a878ad_04fcff83",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3814,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-05T14:49:26Z",
+      "side": 1,
+      "message": "suggestion: We could avoid this masking if we chose the load type of the most-significant byte accordingly. For kExternalUint16Array the MSB should be loaded as kExternalUint8Array. WDYT?",
+      "range": {
+        "startLine": 3811,
+        "startChar": 0,
+        "endLine": 3814,
+        "endChar": 7
+      },
+      "revId": "e4c1aecf630d69ccf8f1b4f00f527a1ab25fe378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
