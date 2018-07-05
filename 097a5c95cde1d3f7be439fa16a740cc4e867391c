@@ -1,0 +1,425 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55f84a46_7928c9db",
+        "filename": "src/objects/js-relative-time-format-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "Can this be Foreign?",
+      "range": {
+        "startLine": 25,
+        "startChar": 43,
+        "endLine": 25,
+        "endChar": 49
+      },
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c12d16b8_0ecab017",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "This isn\u0027t required. The constructor builtin (which calls this) will set this up. Only the outermost function (entry point from JS) should create the handlescope to correctly manage the lifetime of objects.",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35a180fe_0eb42fbe",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "Let\u0027s remove step (1) and step (2). I filed a bug to remove this from the spec:\nhttps://github.com/tc39/proposal-intl-relative-time/issues/75",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88e34fe5_7278ed30",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "canonicalizeLocaleList is called from ResolveLocale, so let\u0027s remove this step too.",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40990b80_471521a2",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "Let\u0027s remove all this as well. ResolveLocale calls canonicalizeLocaleList and saves us the trouble of doing all this.",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "542398ef_c2aed039",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "nit: extra space",
+      "range": {
+        "startLine": 80,
+        "startChar": 7,
+        "endLine": 80,
+        "endChar": 8
+      },
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "939fb4ce_c34a07eb",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1baf245b_460a6ce0",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "Let\u0027s remove spurious spec comments. It\u0027s fine to trim down the spec when there aren\u0027t any associated code with it.",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52fb3716_7dfbd728",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/v8/v8/+/1126750 should let you remove all the boilerplate and allocations and simplify this code :)\n\nBoth here and below in this file.",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a9b6c42_1686f0a6",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "Here\u0027s a CL that let\u0027s you use the JavaScript implementation of ResolveLocale:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1127082\n\nThis will unblock you :)",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4d6116b_8e071324",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "nit: Please let\u0027s use descriptive names. Not sure why the spec is terrible :(",
+      "range": {
+        "startLine": 135,
+        "startChar": 17,
+        "endLine": 135,
+        "endChar": 18
+      },
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79a468a5_dc1a4490",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "As mentioned above, lets remove comments that don\u0027t have associated code.",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb2016fb_0e60cf67",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "nit: move down near the line 177 where it\u0027s used",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd3145de_0aa0600c",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "nit: move down to line 206 where this is used",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e82aef9b_693eebfb",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "This is currently not spec compliant. The spec tells us to create a new instance of NumberFormat which will run the NumberFormat constructor.\n\nThe NumberFormat constructor has several observable side effecting behaviors. \nFor ex: In InitializeNumberFormat, we have\n\n  12. Let style be ? GetOption(options, \"style\", \"string\", « \"decimal\", \"percent\", \"currency\" »,  \"decimal\").\n\nwhich looks up the \"style\" key on the options object. If the %ObjectPrototype% was changed to have side effecting style key, we would miss evaluating this side effecting behavior.\n\nFor example:\n  Object.defineProperty(Object.prototype, \"style\", { \n    get: function() { console.log(\"foo\"); } \n  });\n  new Intl.NumberFormat(\u0027en\u0027, {}) // prints \"foo\"  \n\nCurrently, this implementation will not print \"foo\". \n\nI have filed a bug to remove all these side effecting behavior by changing the options object to have a null proto: https://github.com/tc39/proposal-intl-relative-time/issues/76\n\nI\u0027d say let\u0027s keep this behavior for now and change the spec.",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1168b0ba_74f5bdaa",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "Should this throw an error for the null ptr case?",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a2c5b28_6b9ccd1a",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "This is similarly not spec compliant. https://github.com/tc39/proposal-intl-relative-time/issues/76 should cover this as well. \n\nI\u0027d say let\u0027s keep our behavior and change the spec.",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35adb1a1_08b5b498",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "not: TODO(ftang):",
+      "range": {
+        "startLine": 204,
+        "startChar": 5,
+        "endLine": 204,
+        "endChar": 16
+      },
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b3dfc5a_7d25c521",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "Let\u0027s split this into 3 steps.\n(1) Create RelateiveDateTimeFormatter,\n(2) Then check for failure,\n(3) Then create allocate a managed object",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d60e5d3_0dd6f376",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "This is perfect!",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a8530e9_b3b91215",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to have a style() method that returned Style, and then we can remove the default case here and have the compiler error on us if we missed a case? \n\nThe current pair accessor can be changed to this:\n  void set_raw_style(int style);\n  Style style();\n\nThis would mean that you\u0027d have to define the accessor pair yourself, using other macros.\n\nSimilarly for numeric().",
+      "range": {
+        "startLine": 247,
+        "startChar": 10,
+        "endLine": 247,
+        "endChar": 17
+      },
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cb701c8_669126f1",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "Please add comments explaining the enums and the accessors. \n\nnit: Also please add newlines for readability.",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0483054_e1c61041",
+        "filename": "test/intl/relative-time-format/constructor.js",
+        "patchSetId": 14
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-05T14:14:05Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
