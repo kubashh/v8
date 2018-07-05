@@ -33,6 +33,40 @@
       "revId": "64030499748303c41150045e133054435023d4d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ee56d16_c31278c1",
+        "filename": "src/builtins/array-push.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-05T11:52:21Z",
+      "side": 1,
+      "message": "As discussed offline, imo there\u0027s no rush to move the CSA part to torque. Especially this part feels a bit painful.",
+      "revId": "64030499748303c41150045e133054435023d4d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22f0e9ed_9a51584e",
+        "filename": "src/builtins/array-push.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-05T11:52:21Z",
+      "side": 1,
+      "message": "This is the slow path, right? Why not put it into the Slow label?",
+      "revId": "64030499748303c41150045e133054435023d4d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
