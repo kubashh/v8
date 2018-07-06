@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "7351ad93_6950c486",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T18:51:54Z",
+      "side": 1,
+      "message": "\"[Intl] Implement Intl.RelativeTimeFromat\"",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "569caa10_79b688c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T18:51:54Z",
+      "side": 1,
+      "message": "Let\u0027s remove this as it doesn\u0027t say much about the CL",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a0b17fd_5287e0e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T18:51:54Z",
+      "side": 1,
+      "message": "\"Spec: http://tc39.github.io/proposal-intl-relative-time/\"",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "90fde4f0_089d7dbe",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 19
