@@ -8,7 +8,9 @@
 #include <cstddef>
 #include <memory>
 #include <queue>
+#include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include "include/v8-inspector.h"
@@ -31,6 +33,17 @@
 #include "src/objects/debug-objects.h"
 #include "src/runtime/runtime.h"
 #include "src/unicode.h"
+
+#ifdef V8_INTL_SUPPORT
+#include "unicode/uversion.h"  // Define U_ICU_NAMESPACE.
+#endif                         // V8_INTL_SUPPORT
+
+// 'icu' does not work. Use U_ICU_NAMESPACE.
+namespace U_ICU_NAMESPACE {
+
+class RegexMatcher;
+
+}  // namespace U_ICU_NAMESPACE
 
 namespace v8 {
 
@@ -1085,6 +1098,32 @@ class Isolate : private HiddenFactory {
     date_cache_ = date_cache;
   }
 
+#ifdef V8_INTL_SUPPORT
+  icu::RegexMatcher* language_singleton_regexp_matcher() {
+    return language_singleton_regexp_matcher_;
+  }
+
+  icu::RegexMatcher* language_tag_regexp_matcher() {
+    return language_tag_regexp_matcher_;
+  }
+
+  icu::RegexMatcher* language_variant_regexp_matcher() {
+    return language_variant_regexp_matcher_;
+  }
+
+  void set_language_tag_regexp_matchers(
+      icu::RegexMatcher* language_singleton_regexp_matcher,
+      icu::RegexMatcher* language_tag_regexp_matcher,
+      icu::RegexMatcher* language_variant_regexp_matcher) {
+    DCHECK_NULL(language_singleton_regexp_matcher_);
+    DCHECK_NULL(language_tag_regexp_matcher_);
+    DCHECK_NULL(language_variant_regexp_matcher_);
+    language_singleton_regexp_matcher_ = language_singleton_regexp_matcher;
+    language_tag_regexp_matcher_ = language_tag_regexp_matcher;
+    language_variant_regexp_matcher_ = language_variant_regexp_matcher;
+  }
+#endif  // V8_INTL_SUPPORT
+
   static const int kProtectorValid = 1;
   static const int kProtectorInvalid = 0;
 
@@ -1576,6 +1615,12 @@ class Isolate : private HiddenFactory {
       host_initialize_import_meta_object_callback_;
   base::Mutex rail_mutex_;
   double load_start_time_ms_;
+
+#ifdef V8_INTL_SUPPORT
+  icu::RegexMatcher* language_singleton_regexp_matcher_;
+  icu::RegexMatcher* language_tag_regexp_matcher_;
+  icu::RegexMatcher* language_variant_regexp_matcher_;
+#endif  // V8_INTL_SUPPORT
 
   // Whether the isolate has been created for snapshotting.
   bool serializer_enabled_;
