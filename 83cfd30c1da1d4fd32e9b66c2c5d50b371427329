@@ -164,6 +164,24 @@
     },
     {
       "key": {
+        "uuid": "b51108b7_6bfaf63f",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T19:12:35Z",
+      "side": 1,
+      "message": "This is first I\u0027m hearing of git cl lint. I see that these includes are for things not introduced in this CL, so I would remove them from here. I\u0027m happy to fix this up separately; git cl lint doesn\u0027t seem to agree with some of V8\u0027s styles so I wouldn\u0027t recommend using it.",
+      "parentUuid": "806f8476_51df8541",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "516602d4_b8485920",
         "filename": "src/isolate.cc",
         "patchSetId": 8
