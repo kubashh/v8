@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "4468fce8_a603235a",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "Without this CXX obj/torque_generated_initializers/builtins-base-from-dsl-gen.o fails to build",
+      "range": {
+        "startLine": 956,
+        "startChar": 4,
+        "endLine": 956,
+        "endChar": 15
+      },
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58c8abc5_fbe02942",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "Without this CXX obj/v8_init/setup-isolate-full.o fails to compile.",
+      "range": {
+        "startLine": 1441,
+        "startChar": 4,
+        "endLine": 1441,
+        "endChar": 15
+      },
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab9350eb_7feef1dd",
         "filename": "BUILD.gn",
         "patchSetId": 8
@@ -19,6 +65,70 @@
     },
     {
       "key": {
+        "uuid": "f130a901_55297698",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 3089,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "Without this CXX obj/regexp_fuzzer/regexp.o fails to compile.\n\nIs there a better way to solve these compile issues?",
+      "parentUuid": "ab9350eb_7feef1dd",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ce064056_97f5f7b3",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 3569,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "Without this CXX obj/wasm_module_runner/wasm-module-runner.o fails to compile.",
+      "range": {
+        "startLine": 3569,
+        "startChar": 4,
+        "endLine": 3569,
+        "endChar": 15
+      },
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "783cf502_5896925e",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 3652,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "Without this CXX obj/lib_wasm_fuzzer_common/wasm-fuzzer-common.o fails to compile.",
+      "range": {
+        "startLine": 3652,
+        "startChar": 4,
+        "endLine": 3652,
+        "endChar": 15
+      },
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e74ef8bd_8c9a91f2",
         "filename": "src/isolate.cc",
         "patchSetId": 8
@@ -33,6 +143,24 @@
       "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "806f8476_51df8541",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "The \u0027git cl lint\u0027 command asked for this.\n\nI will remove it if you like.",
+      "parentUuid": "e74ef8bd_8c9a91f2",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +187,30 @@
     },
     {
       "key": {
+        "uuid": "e0564fa0_ceb27665",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2747,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "516602d4_b8485920",
+      "range": {
+        "startLine": 2747,
+        "startChar": 28,
+        "endLine": 2747,
+        "endChar": 33
+      },
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "811a4d22_23b163a7",
         "filename": "src/isolate.h",
         "patchSetId": 8
@@ -76,6 +228,24 @@
     },
     {
       "key": {
+        "uuid": "c57d0d90_080cd7d5",
+        "filename": "src/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "The \u0027git cl lint\u0027 command asked for this include.\n\nI can remove it if you would like.",
+      "parentUuid": "811a4d22_23b163a7",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb9b05df_2cc4b820",
         "filename": "src/isolate.h",
         "patchSetId": 8
@@ -90,6 +260,24 @@
       "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2313d3a_4b4ad470",
+        "filename": "src/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "The \u0027git cl lint\u0027 command asked for this include.\n\nI can remove it if you would like.",
+      "parentUuid": "fb9b05df_2cc4b820",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +304,30 @@
     },
     {
       "key": {
+        "uuid": "1366df73_845ff881",
+        "filename": "src/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "Roger wilco.",
+      "parentUuid": "aeee935c_ad1f0134",
+      "range": {
+        "startLine": 1114,
+        "startChar": 24,
+        "endLine": 1114,
+        "endChar": 30
+      },
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "85674c55_1e749b2e",
         "filename": "src/isolate.h",
         "patchSetId": 8
@@ -130,6 +342,24 @@
       "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc6527e4_c2fc1af7",
+        "filename": "src/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85674c55_1e749b2e",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -150,6 +380,24 @@
     },
     {
       "key": {
+        "uuid": "c6ef7ea5_cf35a573",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "The \u0027git cl lint\u0027 command asked for these.\n\nI can remove them if you like.",
+      "parentUuid": "750a3b28_1f0df0f4",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d841c8ea_907000d6",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 8
@@ -167,6 +415,24 @@
     },
     {
       "key": {
+        "uuid": "93f1b964_714e9bb9",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "When this anonymous namespace is enable the build fails with these errors:\n\nintl-objects.cc:1296:20: error: unused function \u0027GetLanguageSingletonRegexMatcher\u0027\n\nintl-objects.cc:1307:20: error: unused function \u0027GetLanguageTagRegexMatcher\u0027\n\nintl-objects.cc:1317:20: error: unused function \u0027GetLanguageVariantRegexMatcher\u0027",
+      "parentUuid": "d841c8ea_907000d6",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a840ea20_10387fd3",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 8
@@ -181,6 +447,24 @@
       "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe796fd2_eb7b7177",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T18:38:18Z",
+      "side": 1,
+      "message": "I do not yet know how to do this so I\u0027d like to do this as a separate CL that I can work on while I am waiting for reviews.",
+      "parentUuid": "a840ea20_10387fd3",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
