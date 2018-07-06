@@ -402,6 +402,30 @@
     },
     {
       "key": {
+        "uuid": "9dd4dc09_0d9fd060",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-06T20:58:51Z",
+      "side": 1,
+      "message": "Well, you can use ICU\u0027s default locale instead of \u0027en\u0027. However, this point is moot because now you can resolve locales. :-)",
+      "parentUuid": "a08f7798_c6a3ac66",
+      "range": {
+        "startLine": 67,
+        "startChar": 35,
+        "endLine": 67,
+        "endChar": 60
+      },
+      "revId": "7c160b8d4eba3937a5314670dd64d465303bf46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce67a439_a1108239",
         "filename": "src/objects/js-relative-time-format.cc",
         "patchSetId": 10
