@@ -1,0 +1,186 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab9350eb_7feef1dd",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 3089,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "Why are all these BUILD changes required now? We were always building with ICU for i8n right?",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e74ef8bd_8c9a91f2",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516602d4_b8485920",
+        "filename": "src/isolate.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2747,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "nit: regexp\n\nhere and below",
+      "range": {
+        "startLine": 2747,
+        "startChar": 28,
+        "endLine": 2747,
+        "endChar": 33
+      },
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "811a4d22_23b163a7",
+        "filename": "src/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb9b05df_2cc4b820",
+        "filename": "src/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeee935c_ad1f0134",
+        "filename": "src/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "nit: regexp \n(here and above)\n\nI understand that icu seems to use RegEx but we use RegExp all over in V8, so let\u0027s be consistent",
+      "range": {
+        "startLine": 1114,
+        "startChar": 24,
+        "endLine": 1114,
+        "endChar": 30
+      },
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85674c55_1e749b2e",
+        "filename": "src/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "No, this is fine. You can add a DCHECK_NULL for each if you want.",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "750a3b28_1f0df0f4",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "Why are these needed?",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d841c8ea_907000d6",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1243,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "Please do this as part of the CL",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a840ea20_10387fd3",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T14:36:03Z",
+      "side": 1,
+      "message": "As Jungshik mentioned, lets make all these a constexpr on the Intl class. Although, I\u0027m not sure if C++11 supports local variables :/ \nIf not, let\u0027s add a TODO for now.",
+      "revId": "83cfd30c1da1d4fd32e9b66c2c5d50b371427329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
