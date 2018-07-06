@@ -10480,6 +10480,52 @@ Handle<WeakArrayList> WeakArrayList::EnsureSpace(Handle<WeakArrayList> array,
   return array;
 }
 
+// static
+// FIXME: add unit tests for this function
+Handle<WeakArrayList> WeakArrayListWithEmptySlots::Add(
+    Handle<WeakArrayList> array, MaybeObjectHandle value, int* assigned_index) {
+  // Can't add SMIs since they're used as placeholders.
+  DCHECK(!value->IsSmi());
+
+  int length = array->length();
+  if (length == 0) {
+    // Uninitialized WeakArrayList; need to initialize empty_slot_index.
+    array = WeakArrayList::EnsureSpace(array, kFirstIndex + 1);
+    set_empty_slot_index(array, kEmptySlotIndex);
+    array->Set(kFirstIndex, *value);
+    array->set_length(kFirstIndex + 1);
+    if (assigned_index != nullptr) *assigned_index = kFirstIndex;
+    return array;
+  }
+
+  // Try to store the new entry if there's room.
+  if (!array->IsFull()) {
+    array->Set(length, *value);
+    array->set_length(length + 1);
+    if (assigned_index != nullptr) *assigned_index = length;
+    return array;
+  }
+
+  // If there are empty slots, use one of them.
+  int empty_slot = Smi::ToInt(empty_slot_index(array));
+  if (empty_slot >= kFirstIndex) {
+    CHECK_LT(empty_slot, array->capacity());
+    int next_empty_slot = Smi::ToInt(array->Get(empty_slot)->ToSmi());
+
+    array->Set(empty_slot, *value);
+    if (assigned_index != nullptr) *assigned_index = empty_slot;
+
+    set_empty_slot_index(array, next_empty_slot);
+    return array;
+  }
+
+  array = WeakArrayList::EnsureSpace(array, length + 1);
+  array->Set(length, *value);
+  array->set_length(length + 1);
+  if (assigned_index != nullptr) *assigned_index = length;
+  return array;
+}
+
 Handle<RegExpMatchInfo> RegExpMatchInfo::ReserveCaptures(
     Handle<RegExpMatchInfo> match_info, int capture_count) {
   DCHECK_GE(match_info->length(), kLastMatchOverhead);
@@ -12574,9 +12620,13 @@ void JSObject::LazyRegisterPrototypeUser(Handle<Map> user, Isolate* isolate) {
     Handle<PrototypeInfo> proto_info =
         Map::GetOrCreatePrototypeInfo(proto, isolate);
     Handle<Object> maybe_registry(proto_info->prototype_users(), isolate);
+    Handle<WeakArrayList> registry =
+        maybe_registry->IsSmi()
+            ? handle(isolate->heap()->empty_weak_array_list(), isolate)
+            : Handle<WeakArrayList>::cast(maybe_registry);
     int slot = 0;
-    Handle<FixedArrayOfWeakCells> new_array = FixedArrayOfWeakCells::Add(
-        isolate, maybe_registry, current_user, &slot);
+    Handle<WeakArrayList> new_array = WeakArrayListWithEmptySlots::Add(
+        registry, MaybeObjectHandle::Weak(current_user), &slot);
     current_user_info->set_registry_slot(slot);
     if (!maybe_registry.is_identical_to(new_array)) {
       proto_info->set_prototype_users(*new_array);
@@ -12606,7 +12656,7 @@ bool JSObject::UnregisterPrototypeUser(Handle<Map> user, Isolate* isolate) {
   if (!user->prototype()->IsJSObject()) {
     Object* users =
         PrototypeInfo::cast(user->prototype_info())->prototype_users();
-    return users->IsFixedArrayOfWeakCells();
+    return users->IsWeakArrayList();
   }
   Handle<JSObject> prototype(JSObject::cast(user->prototype()), isolate);
   Handle<PrototypeInfo> user_info =
@@ -12619,10 +12669,10 @@ bool JSObject::UnregisterPrototypeUser(Handle<Map> user, Isolate* isolate) {
   DCHECK(maybe_proto_info->IsPrototypeInfo());
   Handle<PrototypeInfo> proto_info(PrototypeInfo::cast(maybe_proto_info),
                                    isolate);
-  Object* maybe_registry = proto_info->prototype_users();
-  DCHECK(maybe_registry->IsFixedArrayOfWeakCells());
-  DCHECK(FixedArrayOfWeakCells::cast(maybe_registry)->Get(slot) == *user);
-  FixedArrayOfWeakCells::cast(maybe_registry)->Clear(slot);
+  Handle<WeakArrayList> prototype_users(
+      WeakArrayList::cast(proto_info->prototype_users()), isolate);
+  DCHECK_EQ(prototype_users->Get(slot), HeapObjectReference::Weak(*user));
+  WeakArrayListWithEmptySlots::MarkSlotEmpty(prototype_users, slot);
   if (FLAG_trace_prototype_users) {
     PrintF("Unregistering %p as a user of prototype %p.\n",
            reinterpret_cast<void*>(*user), reinterpret_cast<void*>(*prototype));
@@ -12655,12 +12705,18 @@ void InvalidatePrototypeChainsInternal(Map* map) {
   Object* maybe_proto_info = map->prototype_info();
   if (!maybe_proto_info->IsPrototypeInfo()) return;
   PrototypeInfo* proto_info = PrototypeInfo::cast(maybe_proto_info);
-  FixedArrayOfWeakCells::Iterator iterator(proto_info->prototype_users());
+  WeakArrayList* prototype_users =
+      WeakArrayList::cast(proto_info->prototype_users());
   // For now, only maps register themselves as users.
-  Map* user;
-  while ((user = iterator.Next<Map>()) != nullptr) {
-    // Walk the prototype chain (backwards, towards leaf objects) if necessary.
-    InvalidatePrototypeChainsInternal(user);
+  for (int i = WeakArrayListWithEmptySlots::kFirstIndex;
+       i < prototype_users->length(); ++i) {
+    HeapObject* heap_object;
+    if (prototype_users->Get(i)->ToWeakHeapObject(&heap_object) &&
+        heap_object->IsMap()) {
+      // Walk the prototype chain (backwards, towards leaf objects) if
+      // necessary.
+      InvalidatePrototypeChainsInternal(Map::cast(heap_object));
+    }
   }
 }
 

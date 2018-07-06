@@ -4960,17 +4960,17 @@ void CompactFixedArrayOfWeakCells(Object* object) {
 
 void Heap::CompactFixedArraysOfWeakCells() {
   // Find known FixedArrayOfWeakCells and compact them.
-  HeapIterator iterator(this);
-  for (HeapObject* o = iterator.next(); o != nullptr; o = iterator.next()) {
-    if (o->IsPrototypeInfo()) {
-      Object* prototype_users = PrototypeInfo::cast(o)->prototype_users();
-      if (prototype_users->IsFixedArrayOfWeakCells()) {
-        FixedArrayOfWeakCells* array =
-            FixedArrayOfWeakCells::cast(prototype_users);
-        array->Compact<JSObject::PrototypeRegistryCompactionCallback>();
-      }
-    }
-  }
+  // HeapIterator iterator(this);
+  // for (HeapObject* o = iterator.next(); o != nullptr; o = iterator.next()) {
+  //   if (o->IsPrototypeInfo()) {
+  //     Object* prototype_users = PrototypeInfo::cast(o)->prototype_users();
+  //     if (prototype_users->IsWeakFixedArray()) {
+  //       WeakFixedArray* array =
+  //           FixedArrayOfWeakCells::cast(prototype_users);
+  //       array->Compact<JSObject::PrototypeRegistryCompactionCallback>();
+  //     }
+  //   }
+  // }
   CompactFixedArrayOfWeakCells(noscript_shared_function_infos());
   CompactFixedArrayOfWeakCells(script_list());
   CompactFixedArrayOfWeakCells(weak_stack_trace_list());
