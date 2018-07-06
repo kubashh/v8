@@ -1,0 +1,203 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90fde4f0_089d7dbe",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 4579,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "Looks like this changed in the spec recently:\nhttps://github.com/tc39/proposal-intl-relative-time/pull/77/files\n\nWe can fix this in a follow up CL.",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fc92372_c2dc925b",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "\u0027default\u0027 isn\u0027t required as we handle all the cases already",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd9f4275_72eb0f5c",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "use ASSIGN_RETURN_ON_EXCEPTION",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d3cdc44_38d04d39",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "use ASSIGN_RETURN_ON_EXCEPTION",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b874c33d_c92089eb",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "nit: let\u0027s remove this",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f020074_b8bfcedb",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "MAYBE_RETURN(maybe_found_style, MaybeHandle\u003cJSRelativeTimeFormat\u003e())\n\nhere and below",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "972f66f0_2ddfdf9a",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "Please add a helper similar to getIcuStyle in the anonymous namespace for this. Will make it easier to read",
+      "range": {
+        "startLine": 102,
+        "startChar": 17,
+        "endLine": 105,
+        "endChar": 80
+      },
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ca7ef39_5a42ae05",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "Can this be a enum class? Same for Numeric",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "893198a7_5288daed",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "These comments are great, thanks!",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dc8e808_0ed4a0f3",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "Style requires only 3 bits and Numeric requires only 2 bits but here we\u0027re using 64 bits for each. It\u0027s fine for now but let\u0027s add a TODO here that says we should fold these two fields into a single Flags field and use BIT_FIELD_ACCESSORS to access it.\n\nSimilar to https://cs.chromium.org/chromium/src/v8/src/objects/shared-function-info-inl.h?g\u003d0\u0026l\u003d40",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 63
+      },
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10b49f68_73e66984",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 19
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "Why is this failing?",
+      "revId": "7f66183cee14df53bad97f21973440508d907624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

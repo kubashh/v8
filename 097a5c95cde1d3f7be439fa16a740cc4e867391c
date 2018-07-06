@@ -376,6 +376,24 @@
     },
     {
       "key": {
+        "uuid": "d5d04aa3_5245450d",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "Jungshik, do you know why? Is the JS implementation of resolveLocale broken?",
+      "parentUuid": "44b78f33_6b7a99e5",
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e4d6116b_8e071324",
         "filename": "src/objects/js-relative-time-format.cc",
         "patchSetId": 14
@@ -420,6 +438,30 @@
       "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6373d6e_76a3cead",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "SGTM.",
+      "parentUuid": "2746abe8_23db5d50",
+      "range": {
+        "startLine": 135,
+        "startChar": 17,
+        "endLine": 135,
+        "endChar": 18
+      },
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -785,6 +827,30 @@
       "side": 1,
       "message": "sorry. I am not exactly sure what you are saying here. Could you be more specific or point me to an example of such case.",
       "parentUuid": "6a8530e9_b3b91215",
+      "range": {
+        "startLine": 247,
+        "startChar": 10,
+        "endLine": 247,
+        "endChar": 17
+      },
+      "revId": "097a5c95cde1d3f7be439fa16a740cc4e867391c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54e76ab0_3bb569af",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T15:29:15Z",
+      "side": 1,
+      "message": "Currently you have the macro ACCESSORS that define two methods\n int style(); \n void set_style(int style)\n\nInstead let\u0027s do this: \n  Style style() {\n    Object* value \u003d READ_FIELD(this, offset);\n    int style \u003d Smi::ToInt(value);\n    DCHECK_LE(0, style);\n    DCHECK_GT(STYLE_COUNT, style);\n    return static_cast\u003cStyle\u003e(style);\n  }\n\n  void style(int style) {\n    DCHECK_LE(0, val);\n    DCHECK_GT(STYLE_COUNT, style);\n    \n    int value \u003d static_cast\u003cint\u003e(style)\n    WRITE_FIELD(this, offset, Smi::FromInt(value)); \n  }\n\n(Note: You\u0027d have to add STYLE_COUNT as the last enum)\nSee Intl::Type and it\u0027s helper methods for similar code.\n\nOnce you do this, the compiler can figure out that this switch statement needs 4 cases (the three you have now and UNREACHABLE() for STYLE_COUNT) and we can get rid of the \u0027default\u0027 case. In the future if we add to the enum and forget to add a case here then the compiler will tell us.\n\nPlease do the same below for numeric.",
+      "parentUuid": "939686d5_c63a615a",
       "range": {
         "startLine": 247,
         "startChar": 10,
