@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2b3f7f2d_aef23382",
+        "filename": "src/isolate.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T05:01:21Z",
+      "side": 1,
+      "message": "The \u0027git cl lint\u0027 command asked for this.",
+      "parentUuid": "66a40e79_fb871200",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4de88b5_9182cfae",
         "filename": "src/isolate.h",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f6a2cd3_76e4490c",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T05:01:21Z",
+      "side": 1,
+      "message": "the \u0027git cl lint\u0027 command asked for this include.",
+      "parentUuid": "c4de88b5_9182cfae",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 17
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "009e2676_6244c273",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T05:01:21Z",
+      "side": 1,
+      "message": "the \u0027git cl lint\u0027 command asked for this include.",
+      "parentUuid": "364e219e_e8310ce6",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 18
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "656d95ff_3af5f093",
         "filename": "src/isolate.h",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82b7cee4_745bc3b4",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T05:01:21Z",
+      "side": 1,
+      "message": "Done.\n\nNote: I had to add unicode/uversion.h to get U_ICU_NAMESPACE to work.",
+      "parentUuid": "656d95ff_3af5f093",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "1b2bb12c_dff8b1a9",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T05:01:21Z",
+      "side": 1,
+      "message": "I was curious whether I needed to follow this pattern:\n\n1081   void set_date_cache(DateCache* date_cache) {\n1082     if (date_cache !\u003d date_cache_) {\n1083       delete date_cache_;\n1084     }\n1085     date_cache_ \u003d date_cache;\n1086   }",
+      "parentUuid": "cb014719_5c50508f",
+      "range": {
+        "startLine": 1105,
+        "startChar": 4,
+        "endLine": 1105,
+        "endChar": 54
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4408f56e_e929c555",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 7
@@ -137,6 +257,30 @@
       "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb7cf44e_55da439b",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T05:01:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4408f56e_e929c555",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 26
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "1b0baa07_d1e9f3c4",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T05:01:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bab2a38e_1b26274e",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 24
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0048dc66_fbf77dfb",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 7
@@ -183,6 +351,30 @@
       "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6149b4bc_5117a348",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-06T05:01:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0048dc66_fbf77dfb",
+      "range": {
+        "startLine": 1283,
+        "startChar": 28,
+        "endLine": 1283,
+        "endChar": 60
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
