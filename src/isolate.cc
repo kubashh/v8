@@ -6,10 +6,15 @@
 
 #include <stdlib.h>
 
+#include <algorithm>
 #include <atomic>
 #include <fstream>  // NOLINT(readability/streams)
 #include <sstream>
 #include <unordered_map>
+
+#ifdef V8_INTL_SUPPORT
+#include <unicode/regex.h>
+#endif  // V8_INTL_SUPPORT
 
 #include "src/api.h"
 #include "src/assembler-inl.h"
@@ -2511,6 +2516,11 @@ Isolate::Isolate()
       host_import_module_dynamically_callback_(nullptr),
       host_initialize_import_meta_object_callback_(nullptr),
       load_start_time_ms_(0),
+#ifdef V8_INTL_SUPPORT
+      language_singleton_regex_matcher_(nullptr),
+      language_tag_regex_matcher_(nullptr),
+      language_variant_regex_matcher_(nullptr),
+#endif  // V8_INTL_SUPPORT
       serializer_enabled_(false),
       has_fatal_error_(false),
       initialized_from_snapshot_(false),
@@ -2732,6 +2742,17 @@ Isolate::~Isolate() {
 
   delete date_cache_;
   date_cache_ = nullptr;
+
+#ifdef V8_INTL_SUPPORT
+  delete language_singleton_regex_matcher_;
+  language_singleton_regex_matcher_ = nullptr;
+
+  delete language_tag_regex_matcher_;
+  language_tag_regex_matcher_ = nullptr;
+
+  delete language_variant_regex_matcher_;
+  language_variant_regex_matcher_ = nullptr;
+#endif  // V8_INTL_SUPPORT
 
   delete regexp_stack_;
   regexp_stack_ = nullptr;
