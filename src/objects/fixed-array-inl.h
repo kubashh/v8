@@ -271,6 +271,25 @@ MaybeObject** WeakArrayList::data_start() {
   return HeapObject::RawMaybeWeakField(this, kHeaderSize);
 }
 
+void WeakArrayListWithEmptySlots::MarkSlotEmpty(WeakArrayList* array,
+                                                int index) {
+  DCHECK_GT(index, 0);
+  DCHECK_LT(index, array->capacity());
+  // Chain the empty slots into a linked list (each empty slot contains the
+  // index of the next empty slot).
+  array->Set(index, MaybeObject::FromObject(empty_slot_index(array)));
+  set_empty_slot_index(array, index);
+}
+
+Smi* WeakArrayListWithEmptySlots::empty_slot_index(WeakArrayList* array) {
+  return array->Get(kEmptySlotIndex)->ToSmi();
+}
+
+void WeakArrayListWithEmptySlots::set_empty_slot_index(WeakArrayList* array,
+                                                       int index) {
+  array->Set(kEmptySlotIndex, MaybeObject::FromObject(Smi::FromInt(index)));
+}
+
 Object* FixedArrayOfWeakCells::Get(int index) const {
   Object* raw = FixedArray::cast(this)->get(index + kFirstIndex);
   if (raw->IsSmi()) return raw;
