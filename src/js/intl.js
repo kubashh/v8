@@ -134,6 +134,7 @@ var AVAILABLE_LOCALES = {
   'dateformat': UNDEFINED,
   'breakiterator': UNDEFINED,
   'pluralrules': UNDEFINED,
+  'relativetimeformat': UNDEFINED,
 };
 
 /**
