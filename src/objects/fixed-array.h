@@ -338,8 +338,14 @@ class WeakArrayList : public HeapObject {
 
   bool IsFull();
 
+  void Shrink(int new_length);
+
   DECL_INT_ACCESSORS(capacity)
   DECL_INT_ACCESSORS(length)
+
+  // Get and set the length using acquire loads and release stores.
+  inline int synchronized_length() const;
+  inline void synchronized_set_length(int value);
 
   // Get and set the capacity using acquire loads and release stores.
   inline int synchronized_capacity() const;
@@ -355,15 +361,41 @@ class WeakArrayList : public HeapObject {
   static const int kMaxCapacity =
       (FixedArray::kMaxSize - kHeaderSize) / kPointerSize;
 
+ protected:
+  static Handle<WeakArrayList> EnsureSpace(Handle<WeakArrayList> array,
+                                           int length);
+
  private:
   static int OffsetOfElementAt(int index) {
     return kHeaderSize + index * kPointerSize;
   }
 
-  static Handle<WeakArrayList> EnsureSpace(Handle<WeakArrayList> array,
-                                           int length);
-
   DISALLOW_IMPLICIT_CONSTRUCTORS(WeakArrayList);
+};
+
+// A growing array with an additional API for marking slots "empty". When adding
+// new elements, we reuse the empty slots instead of growing the array.
+class WeakArrayListWithEmptySlots : public WeakArrayList {
+ public:
+  static Handle<WeakArrayList> Add(Handle<WeakArrayList> array,
+                                   MaybeObjectHandle value,
+                                   int* assigned_index);
+
+  static inline void MarkSlotEmpty(WeakArrayList* array, int index);
+
+  typedef void (*CompactionCallback)(HeapObject*, int, int);
+  static void Compact(WeakArrayList* array, CompactionCallback callback);
+
+  static const int kEmptySlotIndex = 0;
+  static const int kFirstIndex = 1;
+
+ private:
+  static inline Smi* empty_slot_index(WeakArrayList* array);
+  static inline void set_empty_slot_index(WeakArrayList* array, int index);
+
+  static void IsSlotEmpty(WeakArrayList* array, int index);
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(WeakArrayListWithEmptySlots);
 };
 
 // Deprecated. Use WeakFixedArray instead.

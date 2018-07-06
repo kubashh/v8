@@ -34,6 +34,7 @@ SYNCHRONIZED_SMI_ACCESSORS(WeakFixedArray, length, kLengthOffset)
 SMI_ACCESSORS(WeakArrayList, capacity, kCapacityOffset)
 SYNCHRONIZED_SMI_ACCESSORS(WeakArrayList, capacity, kCapacityOffset)
 SMI_ACCESSORS(WeakArrayList, length, kLengthOffset)
+SYNCHRONIZED_SMI_ACCESSORS(WeakArrayList, length, kLengthOffset)
 
 Object* FixedArrayBase::unchecked_synchronized_length() const {
   return ACQUIRE_READ_FIELD(this, kLengthOffset);
@@ -269,6 +270,25 @@ void WeakArrayList::Set(int index, MaybeObject* value, WriteBarrierMode mode) {
 
 MaybeObject** WeakArrayList::data_start() {
   return HeapObject::RawMaybeWeakField(this, kHeaderSize);
+}
+
+void WeakArrayListWithEmptySlots::MarkSlotEmpty(WeakArrayList* array,
+                                                int index) {
+  DCHECK_GT(index, 0);
+  DCHECK_LT(index, array->capacity());
+  // Chain the empty slots into a linked list (each empty slot contains the
+  // index of the next empty slot).
+  array->Set(index, MaybeObject::FromObject(empty_slot_index(array)));
+  set_empty_slot_index(array, index);
+}
+
+Smi* WeakArrayListWithEmptySlots::empty_slot_index(WeakArrayList* array) {
+  return array->Get(kEmptySlotIndex)->ToSmi();
+}
+
+void WeakArrayListWithEmptySlots::set_empty_slot_index(WeakArrayList* array,
+                                                       int index) {
+  array->Set(kEmptySlotIndex, MaybeObject::FromObject(Smi::FromInt(index)));
 }
 
 Object* FixedArrayOfWeakCells::Get(int index) const {

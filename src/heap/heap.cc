@@ -2931,11 +2931,20 @@ void Heap::RightTrimWeakFixedArray(WeakFixedArray* object,
                                        elements_to_trim * kPointerSize);
 }
 
+void Heap::RightTrimWeakArrayList(WeakArrayList* object, int elements_to_trim) {
+  // This function is safe to use only at the end of the mark compact
+  // collection: When marking, we record the weak slots, and shrinking
+  // invalidates them.
+  // DCHECK_EQ(gc_state(), MARK_COMPACT);
+  CreateFillerForArray<WeakArrayList>(object, elements_to_trim,
+                                      elements_to_trim * kPointerSize);
+}
+
 template <typename T>
 void Heap::CreateFillerForArray(T* object, int elements_to_trim,
                                 int bytes_to_trim) {
   DCHECK(object->IsFixedArrayBase() || object->IsByteArray() ||
-         object->IsWeakFixedArray());
+         object->IsWeakFixedArray() || object->IsWeakArrayList());
 
   // For now this trick is only applied to objects in new and paged space.
   DCHECK(object->map() != fixed_cow_array_map());
@@ -4959,15 +4968,16 @@ void CompactFixedArrayOfWeakCells(Object* object) {
 }  // anonymous namespace
 
 void Heap::CompactFixedArraysOfWeakCells() {
-  // Find known FixedArrayOfWeakCells and compact them.
+  // Find known WeakArrayListWithEmptySlots and FixedArrayOfWeakCells and
+  // compact them.
   HeapIterator iterator(this);
   for (HeapObject* o = iterator.next(); o != nullptr; o = iterator.next()) {
     if (o->IsPrototypeInfo()) {
       Object* prototype_users = PrototypeInfo::cast(o)->prototype_users();
-      if (prototype_users->IsFixedArrayOfWeakCells()) {
-        FixedArrayOfWeakCells* array =
-            FixedArrayOfWeakCells::cast(prototype_users);
-        array->Compact<JSObject::PrototypeRegistryCompactionCallback>();
+      if (prototype_users->IsWeakArrayList()) {
+        WeakArrayList* array = WeakArrayList::cast(prototype_users);
+        WeakArrayListWithEmptySlots::Compact(
+            array, JSObject::PrototypeRegistryCompactionCallback);
       }
     }
   }
