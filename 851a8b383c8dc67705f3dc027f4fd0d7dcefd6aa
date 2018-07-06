@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "87e0bea2_31136088",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-07-06T07:01:09Z",
+      "side": 1,
+      "message": "No, that was cquery messing with me. Removed.",
+      "parentUuid": "5b515e26_e2da56e8",
+      "revId": "851a8b383c8dc67705f3dc027f4fd0d7dcefd6aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6be1faa0_8eb580e8",
         "filename": "src/builtins/builtins-array.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "851a8b383c8dc67705f3dc027f4fd0d7dcefd6aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cb22873_c424ef37",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-07-06T07:01:09Z",
+      "side": 1,
+      "message": "Renamed so it would not clash with the result of ToObject in the slow-path. Reverted it back to receiver since the slow-path was extracted to GenericArrayPush.",
+      "parentUuid": "6be1faa0_8eb580e8",
+      "revId": "851a8b383c8dc67705f3dc027f4fd0d7dcefd6aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

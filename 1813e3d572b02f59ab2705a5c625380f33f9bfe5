@@ -16,6 +16,24 @@
       "revId": "1813e3d572b02f59ab2705a5c625380f33f9bfe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76c33c28_02bf921f",
+        "filename": "src/js/array.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-07-06T07:01:09Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "74abf2f1_5945645f",
+      "revId": "1813e3d572b02f59ab2705a5c625380f33f9bfe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
