@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "02b5022b_2ad51b43",
+        "filename": "src/isolate.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-06T18:54:08Z",
+      "side": 1,
+      "message": "unique_ptr would take care of this part as well as  manual \u0027delete and setting to nullptr\u0027 in another file nicely, but I don\u0027t know why it\u0027s not used for other members of isolate.",
+      "parentUuid": "1b2bb12c_dff8b1a9",
+      "range": {
+        "startLine": 1105,
+        "startChar": 4,
+        "endLine": 1105,
+        "endChar": 54
+      },
+      "revId": "fbc373aa7a7fb041e2dda5a185ef0996f06fe4cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4408f56e_e929c555",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 7

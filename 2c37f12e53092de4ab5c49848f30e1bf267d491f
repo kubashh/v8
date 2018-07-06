@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3823115b_785a3552",
+        "filename": "src/isolate.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-06T18:54:08Z",
+      "side": 1,
+      "message": "nit: \n\nFollowing the way other ICU header files are included in v8, \nthis should be \"unicode/regex.h\" and go after all \u0027src/*...h\u0027.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 0
+      },
+      "revId": "2c37f12e53092de4ab5c49848f30e1bf267d491f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
