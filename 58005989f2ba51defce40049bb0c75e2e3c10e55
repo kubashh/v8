@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0466230b_41cea8fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-06T21:00:31Z",
+      "side": 1,
+      "message": "Bug: v8:5751",
+      "revId": "58005989f2ba51defce40049bb0c75e2e3c10e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
