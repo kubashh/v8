@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66867c25_d32bc3bc",
+        "filename": "src/objects/js-relative-time-format-inl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-07T20:13:02Z",
+      "side": 1,
+      "message": "TODO comment for using bit field accessor later?",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 0
+      },
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93bbedc6_12888341",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-07T20:13:02Z",
+      "side": 1,
+      "message": "I wonder if it\u0027s possible to avoid creating icu::RelativeDateTimeFormatter twice. Can you just create icu::NumberFormat with |locale|, set group/min int digits and pass it to icu::RelativeDateTimeFormatter ?",
+      "range": {
+        "startLine": 140,
+        "startChar": 2,
+        "endLine": 170,
+        "endChar": 79
+      },
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a94611b7_a5dfd74c",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-07T20:13:02Z",
+      "side": 1,
+      "message": "I don\u0027t see UnicoeString in this file (even a reference/pointer, let alone value).\nPerhaps, you didn\u0027t mean to include this header, did you?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 27
+      },
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
