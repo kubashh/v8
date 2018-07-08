@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "2831678b_883444bf",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-08T06:05:32Z",
+      "side": 1,
+      "message": "It\u0027s https://github.com/tc39/proposal-intl-relative-time/issues/80 . You may want to add a reference to that if you want to.",
+      "parentUuid": "bab3d184_90d23a9e",
+      "range": {
+        "startLine": 161,
+        "startChar": 2,
+        "endLine": 163,
+        "endChar": 44
+      },
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2000e1b6_6e142a0d",
         "filename": "src/objects/js-relative-time-format.cc",
         "patchSetId": 21
