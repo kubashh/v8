@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4669684b_a526af4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T04:22:13Z",
+      "side": 1,
+      "message": "RelativeTimeFormat",
+      "range": {
+        "startLine": 7,
+        "startChar": 22,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66867c25_d32bc3bc",
         "filename": "src/objects/js-relative-time-format-inl.h",
         "patchSetId": 21
@@ -18,6 +41,46 @@
         "startChar": 0,
         "endLine": 24,
         "endChar": 0
+      },
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb16e29d_e1840a26",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T04:22:13Z",
+      "side": 1,
+      "message": "Some of these includes are not required, please clean it up.",
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "239a92b8_cc541cae",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T04:22:13Z",
+      "side": 1,
+      "message": "Let\u0027s separate out the GetDataProperty from the ToString call into two lines.\n\n  \n  Handle\u003cObject\u003e locale_obj \u003d JSObject::GetDataProperty(r, factory-\u003elocale_string());\n  Handle\u003cString\u003e locale;\n  ASSIGN_RETURN_ON_EXCEPTION(...);",
+      "range": {
+        "startLine": 95,
+        "startChar": 1,
+        "endLine": 95,
+        "endChar": 30
       },
       "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -142,6 +205,23 @@
     },
     {
       "key": {
+        "uuid": "19be3ba8_b4e46d1c",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T04:22:13Z",
+      "side": 1,
+      "message": "Any reason to not have all these 4 methods as inline?\nAll of these can be inline methods stored in js-relative-format-inl",
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a94611b7_a5dfd74c",
         "filename": "src/objects/js-relative-time-format.h",
         "patchSetId": 21
@@ -158,6 +238,97 @@
         "startChar": 0,
         "endLine": 17,
         "endChar": 27
+      },
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ff4bc8b_e6c2b536",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T04:22:13Z",
+      "side": 1,
+      "message": "nit: TODO(ftang):",
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3fe0429_4c625e49",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T04:22:13Z",
+      "side": 1,
+      "message": "Sorry I mentioned this as an example for you, let\u0027s remove this \"See .. as example\" line as it will become stale soon.",
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bca792c9_7e89acba",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T04:22:13Z",
+      "side": 1,
+      "message": "nit: I\u0027d structure the comment like this:\n  // TODO(ftang): Style requires only 3 bits and Numeric requires only 2 bits but\n  // here we\u0027re using 64 bits for each. We should fold these two fields into a\n  // single Flags field and use BIT_FIELD_ACCESSORS to access it.\n  //\n  // Style: identifying the relative time format style used.\n  //\n  // ecma402/#sec-properties-of-intl-relativetimeformat-instances",
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbdeee74_4d64f02b",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T04:22:13Z",
+      "side": 1,
+      "message": "Similar to above, I\u0027d structure this like this for readability and consistency.\n  // Numeric: identifying whether numerical descriptions are always used, or\n  // used only when no more specific version is available (e.g., \"1 day ago\" vs\n  // \"yesterday\").\n  //\n  // ecma402/#sec-properties-of-intl-relativetimeformat-instances",
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4cb664d_0b252f25",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T04:22:13Z",
+      "side": 1,
+      "message": "nit: TODO(ftang):",
+      "range": {
+        "startLine": 124,
+        "startChar": 7,
+        "endLine": 124,
+        "endChar": 18
       },
       "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
