@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cb1cefb_80188344",
+        "filename": "src/isolate.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-09T13:48:00Z",
+      "side": 1,
+      "message": "Doesn\u0027t this need to be protected with V8_INTL_SUPPORT too?",
+      "revId": "029b5b5b06d11b7765d56abbaa7ff79f1578e5db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
