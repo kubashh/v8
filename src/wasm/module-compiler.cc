@@ -1117,9 +1117,9 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   //--------------------------------------------------------------------------
   // Reserve the metadata for indirect function tables.
   //--------------------------------------------------------------------------
-  int function_table_count = static_cast<int>(module_->function_tables.size());
-  table_instances_.reserve(module_->function_tables.size());
-  for (int index = 0; index < function_table_count; ++index) {
+  int table_count = static_cast<int>(module_->tables.size());
+  table_instances_.reserve(module_->tables.size());
+  for (int index = 0; index < table_count; ++index) {
     table_instances_.emplace_back();
   }
 
@@ -1137,7 +1137,7 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   //--------------------------------------------------------------------------
   // Initialize the indirect tables.
   //--------------------------------------------------------------------------
-  if (function_table_count > 0) {
+  if (table_count > 0) {
     InitializeTables(instance);
   }
 
@@ -1200,7 +1200,7 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   //--------------------------------------------------------------------------
   // Initialize the indirect function tables.
   //--------------------------------------------------------------------------
-  if (function_table_count > 0) {
+  if (table_count > 0) {
     LoadTableSegments(instance);
   }
 
@@ -1570,8 +1570,7 @@ int InstanceBuilder::ProcessImports(Handle<WasmInstanceObject> instance) {
         }
         uint32_t table_num = import.index;
         DCHECK_EQ(table_num, num_imported_tables);
-        const WasmIndirectFunctionTable& table =
-            module_->function_tables[table_num];
+        const WasmTable& table = module_->tables[table_num];
         TableInstance& table_instance = table_instances_[table_num];
         table_instance.table_object = Handle<WasmTableObject>::cast(value);
         instance->set_table_object(*table_instance.table_object);
@@ -1859,7 +1858,7 @@ bool InstanceBuilder::NeedsWrappers() const {
   for (auto& table_instance : table_instances_) {
     if (!table_instance.js_wrappers.is_null()) return true;
   }
-  for (auto& table : module_->function_tables) {
+  for (auto& table : module_->tables) {
     if (table.exported) return true;
   }
   return false;
@@ -1963,8 +1962,7 @@ void InstanceBuilder::ProcessExports(Handle<WasmInstanceObject> instance) {
       case kExternalTable: {
         // Export a table as a WebAssembly.Table object.
         TableInstance& table_instance = table_instances_[exp.index];
-        const WasmIndirectFunctionTable& table =
-            module_->function_tables[exp.index];
+        const WasmTable& table = module_->tables[exp.index];
         if (table_instance.table_object.is_null()) {
           uint32_t maximum = table.has_maximum_size ? table.maximum_size
                                                     : FLAG_wasm_max_table_size;
@@ -2067,9 +2065,9 @@ void InstanceBuilder::ProcessExports(Handle<WasmInstanceObject> instance) {
 }
 
 void InstanceBuilder::InitializeTables(Handle<WasmInstanceObject> instance) {
-  size_t table_count = module_->function_tables.size();
+  size_t table_count = module_->tables.size();
   for (size_t index = 0; index < table_count; ++index) {
-    const WasmIndirectFunctionTable& table = module_->function_tables[index];
+    const WasmTable& table = module_->tables[index];
     TableInstance& table_instance = table_instances_[index];
 
     if (!instance->has_indirect_function_table()) {
@@ -2082,8 +2080,8 @@ void InstanceBuilder::InitializeTables(Handle<WasmInstanceObject> instance) {
 
 void InstanceBuilder::LoadTableSegments(Handle<WasmInstanceObject> instance) {
   NativeModule* native_module = module_object_->native_module();
-  int function_table_count = static_cast<int>(module_->function_tables.size());
-  for (int index = 0; index < function_table_count; ++index) {
+  int table_count = static_cast<int>(module_->tables.size());
+  for (int index = 0; index < table_count; ++index) {
     TableInstance& table_instance = table_instances_[index];
 
     // TODO(titzer): this does redundant work if there are multiple tables,
