@@ -249,6 +249,30 @@
     },
     {
       "key": {
+        "uuid": "2e3c52b4_39335382",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-09T17:08:23Z",
+      "side": 1,
+      "message": "The spec as written is almost useless. Who wants a zero-padding? I\u0027ve already talked to Dan and he has no idea why the spec is written in such a way. He\u0027s gonna talk to the spec writer and will come back soon.",
+      "parentUuid": "c9900973_85e43324",
+      "range": {
+        "startLine": 161,
+        "startChar": 2,
+        "endLine": 163,
+        "endChar": 44
+      },
+      "revId": "9cc81e7f0a49cf061c2473b72e850aa6c7903c3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2000e1b6_6e142a0d",
         "filename": "src/objects/js-relative-time-format.cc",
         "patchSetId": 21
