@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b4cc69e7_7432478d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-07-10T13:12:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17880a2c_73750dd3",
+      "range": {
+        "startLine": 2074,
+        "startChar": 10,
+        "endLine": 2074,
+        "endChar": 44
+      },
+      "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd00309f_dc6e8250",
         "filename": "test/unittests/wasm/module-decoder-unittest.cc",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "092ac8f1_4aeeac2f",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-07-10T13:12:20Z",
+      "side": 1,
+      "message": "I added comments to each test now which explain them.",
+      "parentUuid": "cd00309f_dc6e8250",
+      "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "eaa5ff33_99762b0b",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-07-10T13:12:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f87c70ab_f8ad15da",
+      "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce3c0696_4f59dc34",
         "filename": "test/unittests/wasm/module-decoder-unittest.cc",
         "patchSetId": 1
@@ -73,6 +133,24 @@
       "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04785e72_e5523a1d",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-07-10T13:12:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce3c0696_4f59dc34",
+      "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
