@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca76e9c3_3688dbae",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-10T02:57:55Z",
+      "side": 1,
+      "message": "Both these should be marked inline",
+      "revId": "69765ad89b475acc9164e0d014040d31b47527ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e93098b_68ebec08",
+        "filename": "src/objects/js-relative-time-format.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-10T02:57:55Z",
+      "side": 1,
+      "message": "both these should be marked inline.",
+      "revId": "69765ad89b475acc9164e0d014040d31b47527ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
