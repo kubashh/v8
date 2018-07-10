@@ -2419,11 +2419,11 @@ class VerboseAccountingAllocator : public AccountingAllocator {
 
   void ZoneCreation(const Zone* zone) override {
     PrintZoneModificationSample(zone, "zonecreation");
-    nesting_deepth_.Increment(1);
+    nesting_deepth_++;
   }
 
   void ZoneDestruction(const Zone* zone) override {
-    nesting_deepth_.Decrement(1);
+    nesting_deepth_--;
     PrintZoneModificationSample(zone, "zonedestruction");
   }
 
@@ -2442,7 +2442,7 @@ class VerboseAccountingAllocator : public AccountingAllocator {
         type, reinterpret_cast<void*>(heap_->isolate()),
         heap_->isolate()->time_millis_since_init(),
         reinterpret_cast<const void*>(zone), zone->name(),
-        zone->allocation_size(), nesting_deepth_.Value());
+        zone->allocation_size(), nesting_deepth_.load());
   }
 
   void PrintMemoryJSON(size_t malloced, size_t pooled) {
@@ -2463,7 +2463,7 @@ class VerboseAccountingAllocator : public AccountingAllocator {
   Heap* heap_;
   base::AtomicNumber<size_t> last_memory_usage_;
   base::AtomicNumber<size_t> last_pool_size_;
-  base::AtomicNumber<size_t> nesting_deepth_;
+  std::atomic<size_t> nesting_deepth_;
   size_t allocation_sample_bytes_, pool_sample_bytes_;
 };
 
