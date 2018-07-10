@@ -1741,12 +1741,16 @@ Node* JSNativeContextSpecialization::InlineApiCall(
   Callable call_api_callback = CodeFactory::CallApiCallback(isolate(), argc);
   CallInterfaceDescriptor call_interface_descriptor =
       call_api_callback.descriptor();
+  CallDescriptor::Flags flags = CallDescriptor::kNeedsFrameState;
+  if (call_handler_info->IsSideEffectFreeCallHandlerInfo()) {
+    flags |= CallDescriptor::kSideEffectFree;
+  }
   auto call_descriptor = Linkage::GetStubCallDescriptor(
       isolate(), graph()->zone(), call_interface_descriptor,
       call_interface_descriptor.GetStackParameterCount() + argc +
           1 /* implicit receiver */,
-      CallDescriptor::kNeedsFrameState, Operator::kNoProperties,
-      MachineType::AnyTagged(), 1, Linkage::kNoContext);
+      flags, Operator::kNoProperties, MachineType::AnyTagged(), 1,
+      Linkage::kNoContext);
 
   Node* data = jsgraph()->Constant(call_data_object);
   ApiFunction function(v8::ToCData<Address>(call_handler_info->callback()));

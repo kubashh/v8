@@ -1026,8 +1026,12 @@ class RepresentationSelector {
     return;
   }
 
-  void VisitCall(Node* node, SimplifiedLowering* lowering) {
+  void VisitCall(Node* node, Truncation truncation,
+                 SimplifiedLowering* lowering) {
     auto call_descriptor = CallDescriptorOf(node->op());
+    if (call_descriptor->SideEffectFree() && truncation.IsUnused()) {
+      return VisitUnused(node);
+    }
     int params = static_cast<int>(call_descriptor->ParameterCount());
     int value_input_count = node->op()->ValueInputCount();
     // Propagate representation information from call descriptor.
@@ -1546,7 +1550,7 @@ class RepresentationSelector {
       case IrOpcode::kPhi:
         return VisitPhi(node, truncation, lowering);
       case IrOpcode::kCall:
-        return VisitCall(node, lowering);
+        return VisitCall(node, truncation, lowering);
 
       //------------------------------------------------------------------
       // JavaScript operators.
