@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87b83bdf_8d9ae59f",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-07-10T12:44:07Z",
+      "side": 1,
+      "message": "You could write \"\u003d default;\". This would make it more obvious that this destructor is not the result of a refactoring which did not delete enough code.",
+      "revId": "002608ff1e1fd30790a4b965a324126b5f74172e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb75b924_acb56e83",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-07-10T12:44:07Z",
+      "side": 1,
+      "message": "I would prefer a newline between the two declarations, even though below {Register} and {Unregister} are not separated by a newline.",
+      "revId": "002608ff1e1fd30790a4b965a324126b5f74172e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
