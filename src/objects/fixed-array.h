@@ -338,6 +338,8 @@ class WeakArrayList : public HeapObject {
 
   bool IsFull();
 
+  void Shrink(int new_length);
+
   DECL_INT_ACCESSORS(capacity)
   DECL_INT_ACCESSORS(length)
 
@@ -355,15 +357,42 @@ class WeakArrayList : public HeapObject {
   static const int kMaxCapacity =
       (FixedArray::kMaxSize - kHeaderSize) / kPointerSize;
 
+ protected:
+  static Handle<WeakArrayList> EnsureSpace(Handle<WeakArrayList> array,
+                                           int length);
+
  private:
   static int OffsetOfElementAt(int index) {
     return kHeaderSize + index * kPointerSize;
   }
 
-  static Handle<WeakArrayList> EnsureSpace(Handle<WeakArrayList> array,
-                                           int length);
-
   DISALLOW_IMPLICIT_CONSTRUCTORS(WeakArrayList);
+};
+
+// A growing array with an additional API for marking slots "empty". When adding
+// new elements, we reuse the empty slots instead of growing the array.
+class PrototypeUsers : public WeakArrayList {
+ public:
+  static Handle<WeakArrayList> Add(Handle<WeakArrayList> array,
+                                   MaybeObjectHandle value,
+                                   int* assigned_index);
+
+  static inline void MarkSlotEmpty(WeakArrayList* array, int index);
+
+  typedef void (*CompactionCallback)(HeapObject*, int, int);
+  static WeakArrayList* Compact(Handle<WeakArrayList> array, Heap* heap,
+                                CompactionCallback callback);
+
+  static const int kEmptySlotIndex = 0;
+  static const int kFirstIndex = 1;
+
+ private:
+  static inline Smi* empty_slot_index(WeakArrayList* array);
+  static inline void set_empty_slot_index(WeakArrayList* array, int index);
+
+  static void IsSlotEmpty(WeakArrayList* array, int index);
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(PrototypeUsers);
 };
 
 // Deprecated. Use WeakFixedArray instead.
