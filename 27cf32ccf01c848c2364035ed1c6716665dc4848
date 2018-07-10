@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17880a2c_73750dd3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-10T12:29:16Z",
+      "side": 1,
+      "message": "If this flag is not set, then we should only get any_func tables anyway. I vote for removing it, or making it a {DCHECK_IMPLIES(table.type !\u003d kWasmAnyFunc, FLAG_...)}.",
+      "range": {
+        "startLine": 2074,
+        "startChar": 10,
+        "endLine": 2074,
+        "endChar": 44
+      },
+      "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd00309f_dc6e8250",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-10T12:29:16Z",
+      "side": 1,
+      "message": "Where is the difference to the previous test?",
+      "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f87c70ab_f8ad15da",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-10T12:29:16Z",
+      "side": 1,
+      "message": "Can you add a one-line comment why this fails?",
+      "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce3c0696_4f59dc34",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-10T12:29:16Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "27cf32ccf01c848c2364035ed1c6716665dc4848",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
