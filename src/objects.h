@@ -2196,10 +2196,7 @@ class JSObject: public JSReceiver {
                           Handle<Name> name, Handle<Object> value,
                           PropertyAttributes attributes);
 
-  V8_WARN_UNUSED_RESULT static Maybe<bool> AddDataElement(
-      Handle<JSObject> receiver, uint32_t index, Handle<Object> value,
-      PropertyAttributes attributes, ShouldThrow should_throw);
-  V8_WARN_UNUSED_RESULT static MaybeHandle<Object> AddDataElement(
+  V8_WARN_UNUSED_RESULT static void AddDataElement(
       Handle<JSObject> receiver, uint32_t index, Handle<Object> value,
       PropertyAttributes attributes);
 
