@@ -22,16 +22,6 @@ CAST_ACCESSOR(PreParsedScopeData)
 ACCESSORS(PreParsedScopeData, scope_data, PodArray<uint8_t>, kScopeDataOffset)
 ACCESSORS(PreParsedScopeData, child_data, FixedArray, kChildDataOffset)
 
-CAST_ACCESSOR(UncompiledData)
-INT32_ACCESSORS(UncompiledData, start_position, kStartPositionOffset)
-INT32_ACCESSORS(UncompiledData, end_position, kEndPositionOffset)
-
-CAST_ACCESSOR(UncompiledDataWithoutPreParsedScope)
-
-CAST_ACCESSOR(UncompiledDataWithPreParsedScope)
-ACCESSORS(UncompiledDataWithPreParsedScope, pre_parsed_scope_data,
-          PreParsedScopeData, kPreParsedScopeDataOffset)
-
 CAST_ACCESSOR(InterpreterData)
 ACCESSORS(InterpreterData, bytecode_array, BytecodeArray, kBytecodeArrayOffset)
 ACCESSORS(InterpreterData, interpreter_trampoline, Code,
@@ -47,6 +37,12 @@ ACCESSORS(SharedFunctionInfo, script, Object, kScriptOffset)
 ACCESSORS(SharedFunctionInfo, function_identifier_or_debug_info, Object,
           kFunctionIdentifierOrDebugInfoOffset)
 
+BIT_FIELD_ACCESSORS(SharedFunctionInfo, raw_start_position_and_type,
+                    is_named_expression,
+                    SharedFunctionInfo::IsNamedExpressionBit)
+BIT_FIELD_ACCESSORS(SharedFunctionInfo, raw_start_position_and_type,
+                    is_toplevel, SharedFunctionInfo::IsTopLevelBit)
+
 INT_ACCESSORS(SharedFunctionInfo, function_literal_id, kFunctionLiteralIdOffset)
 #if V8_SFI_HAS_UNIQUE_ID
 INT_ACCESSORS(SharedFunctionInfo, unique_id, kUniqueIdOffset)
@@ -58,6 +54,9 @@ UINT16_ACCESSORS(SharedFunctionInfo, expected_nof_properties,
                  kExpectedNofPropertiesOffset)
 UINT16_ACCESSORS(SharedFunctionInfo, raw_function_token_offset,
                  kFunctionTokenOffsetOffset)
+INT_ACCESSORS(SharedFunctionInfo, raw_end_position, kEndPositionOffset)
+INT_ACCESSORS(SharedFunctionInfo, raw_start_position_and_type,
+              kStartPositionAndTypeOffset)
 INT_ACCESSORS(SharedFunctionInfo, flags, kFlagsOffset)
 
 bool SharedFunctionInfo::HasSharedName() const {
@@ -134,11 +133,6 @@ BIT_FIELD_ACCESSORS(SharedFunctionInfo, flags, deserialized,
                     SharedFunctionInfo::IsDeserializedBit)
 BIT_FIELD_ACCESSORS(SharedFunctionInfo, flags, has_reported_binary_coverage,
                     SharedFunctionInfo::HasReportedBinaryCoverageBit)
-
-BIT_FIELD_ACCESSORS(SharedFunctionInfo, flags, is_named_expression,
-                    SharedFunctionInfo::IsNamedExpressionBit)
-BIT_FIELD_ACCESSORS(SharedFunctionInfo, flags, is_toplevel,
-                    SharedFunctionInfo::IsTopLevelBit)
 
 bool SharedFunctionInfo::optimization_disabled() const {
   return disable_optimization_reason() != BailoutReason::kNoReason;
@@ -242,64 +236,32 @@ void SharedFunctionInfo::DontAdaptArguments() {
   set_internal_formal_parameter_count(kDontAdaptArgumentsSentinel);
 }
 
+BIT_FIELD_ACCESSORS(SharedFunctionInfo, raw_start_position_and_type,
+                    raw_start_position, SharedFunctionInfo::StartPositionBits)
+
 int SharedFunctionInfo::StartPosition() const {
-  Object* maybe_scope_info = name_or_scope_info();
-  if (maybe_scope_info->IsScopeInfo()) {
-    ScopeInfo* info = ScopeInfo::cast(maybe_scope_info);
-    if (info->HasPositionInfo()) {
-      return info->StartPosition();
-    }
-  } else if (HasUncompiledData()) {
-    // Works with or without scope.
-    return uncompiled_data()->start_position();
-  } else if (IsApiFunction() || HasBuiltinId()) {
-    DCHECK_IMPLIES(HasBuiltinId(), builtin_id() != Builtins::kCompileLazy);
-    return 0;
+  ScopeInfo* info = scope_info();
+  if (!info->HasPositionInfo()) {
+    // TODO(cbruni): use preparsed_scope_data
+    return raw_start_position();
   }
-  return kNoSourcePosition;
+  return info->StartPosition();
 }
 
 int SharedFunctionInfo::EndPosition() const {
-  Object* maybe_scope_info = name_or_scope_info();
-  if (maybe_scope_info->IsScopeInfo()) {
-    ScopeInfo* info = ScopeInfo::cast(maybe_scope_info);
-    if (info->HasPositionInfo()) {
-      return info->EndPosition();
-    }
-  } else if (HasUncompiledData()) {
-    // Works with or without scope.
-    return uncompiled_data()->end_position();
-  } else if (IsApiFunction() || HasBuiltinId()) {
-    DCHECK_IMPLIES(HasBuiltinId(), builtin_id() != Builtins::kCompileLazy);
-    return 0;
+  ScopeInfo* info = scope_info();
+  if (!info->HasPositionInfo()) {
+    // TODO(cbruni): use preparsed_scope_data
+    return raw_end_position();
   }
-  return kNoSourcePosition;
-}
-
-void SharedFunctionInfo::SetPosition(int start_position, int end_position) {
-  Object* maybe_scope_info = name_or_scope_info();
-  if (maybe_scope_info->IsScopeInfo()) {
-    ScopeInfo* info = ScopeInfo::cast(maybe_scope_info);
-    if (info->HasPositionInfo()) {
-      info->SetPositionInfo(start_position, end_position);
-    }
-  } else if (HasUncompiledData()) {
-    if (HasUncompiledDataWithPreParsedScope()) {
-      // Clear out preparsed scope data, since the position setter invalidates
-      // any scope data.
-      ClearPreParsedScopeData();
-    }
-    uncompiled_data()->set_start_position(start_position);
-    uncompiled_data()->set_end_position(end_position);
-  } else {
-    UNREACHABLE();
-  }
+  return info->EndPosition();
 }
 
 Code* SharedFunctionInfo::GetCode() const {
   // ======
   // NOTE: This chain of checks MUST be kept in sync with the equivalent CSA
-  // GetSharedFunctionInfoCode method in code-stub-assembler.cc.
+  // GetSharedFunctionInfoCode method in code-stub-assembler.cc, and the
+  // architecture-specific GetSharedFunctionInfoCode methods in builtins-*.cc.
   // ======
 
   Isolate* isolate = GetIsolate();
@@ -316,9 +278,9 @@ Code* SharedFunctionInfo::GetCode() const {
     // Having a fixed array means we are an asm.js/wasm function.
     DCHECK(HasAsmWasmData());
     return isolate->builtins()->builtin(Builtins::kInstantiateAsmJs);
-  } else if (data->IsUncompiledData()) {
-    // Having uncompiled data (with or without scope) means we need to compile.
-    DCHECK(HasUncompiledData());
+  } else if (data->IsPreParsedScopeData()) {
+    // Having pre-parsed scope data means we need to compile.
+    DCHECK(HasPreParsedScopeData());
     return isolate->builtins()->builtin(Builtins::kCompileLazy);
   } else if (data->IsFunctionTemplateInfo()) {
     // Having a function template info means we are an API function.
@@ -349,6 +311,11 @@ ScopeInfo* SharedFunctionInfo::scope_info() const {
 
 void SharedFunctionInfo::set_scope_info(ScopeInfo* scope_info,
                                         WriteBarrierMode mode) {
+  // TODO(cbruni): this code is no longer necessary once we store the positon
+  // only on the ScopeInfo.
+  if (scope_info->HasPositionInfo()) {
+    scope_info->SetPositionInfo(raw_start_position(), raw_end_position());
+  }
   // Move the existing name onto the ScopeInfo.
   Object* name = name_or_scope_info();
   if (name->IsScopeInfo()) {
@@ -420,7 +387,7 @@ void SharedFunctionInfo::set_feedback_metadata(FeedbackMetadata* value,
 bool SharedFunctionInfo::is_compiled() const {
   Object* data = function_data();
   return data != Smi::FromEnum(Builtins::kCompileLazy) &&
-         !data->IsUncompiledData();
+         !data->IsPreParsedScopeData();
 }
 
 uint16_t SharedFunctionInfo::GetLength() const {
@@ -485,8 +452,7 @@ void SharedFunctionInfo::SetDebugBytecodeArray(BytecodeArray* bytecode) {
 }
 
 void SharedFunctionInfo::set_bytecode_array(BytecodeArray* bytecode) {
-  DCHECK(function_data() == Smi::FromEnum(Builtins::kCompileLazy) ||
-         HasUncompiledData());
+  DCHECK(function_data() == Smi::FromEnum(Builtins::kCompileLazy));
   set_function_data(bytecode);
 }
 
@@ -521,7 +487,7 @@ FixedArray* SharedFunctionInfo::asm_wasm_data() const {
 
 void SharedFunctionInfo::set_asm_wasm_data(FixedArray* data) {
   DCHECK(function_data() == Smi::FromEnum(Builtins::kCompileLazy) ||
-         HasUncompiledData() || HasAsmWasmData());
+         HasAsmWasmData());
   set_function_data(data);
 }
 
@@ -542,72 +508,25 @@ void SharedFunctionInfo::set_builtin_id(int builtin_id) {
   set_function_data(Smi::FromInt(builtin_id), SKIP_WRITE_BARRIER);
 }
 
-bool SharedFunctionInfo::HasUncompiledData() const {
-  return function_data()->IsUncompiledData();
+bool SharedFunctionInfo::HasPreParsedScopeData() const {
+  return function_data()->IsPreParsedScopeData();
 }
 
-UncompiledData* SharedFunctionInfo::uncompiled_data() const {
-  DCHECK(HasUncompiledData());
-  return UncompiledData::cast(function_data());
+PreParsedScopeData* SharedFunctionInfo::preparsed_scope_data() const {
+  DCHECK(HasPreParsedScopeData());
+  return PreParsedScopeData::cast(function_data());
 }
 
-void SharedFunctionInfo::set_uncompiled_data(UncompiledData* uncompiled_data) {
+void SharedFunctionInfo::set_preparsed_scope_data(
+    PreParsedScopeData* preparsed_scope_data) {
   DCHECK(function_data() == Smi::FromEnum(Builtins::kCompileLazy));
-  DCHECK(uncompiled_data->IsUncompiledData());
-  set_function_data(uncompiled_data);
-}
-
-bool SharedFunctionInfo::HasUncompiledDataWithPreParsedScope() const {
-  return function_data()->IsUncompiledDataWithPreParsedScope();
-}
-
-UncompiledDataWithPreParsedScope*
-SharedFunctionInfo::uncompiled_data_with_pre_parsed_scope() const {
-  DCHECK(HasUncompiledDataWithPreParsedScope());
-  return UncompiledDataWithPreParsedScope::cast(function_data());
-}
-
-void SharedFunctionInfo::set_uncompiled_data_with_pre_parsed_scope(
-    UncompiledDataWithPreParsedScope* uncompiled_data_with_pre_parsed_scope) {
-  DCHECK(function_data() == Smi::FromEnum(Builtins::kCompileLazy));
-  DCHECK(uncompiled_data_with_pre_parsed_scope
-             ->IsUncompiledDataWithPreParsedScope());
-  set_function_data(uncompiled_data_with_pre_parsed_scope);
-}
-
-bool SharedFunctionInfo::HasUncompiledDataWithoutPreParsedScope() const {
-  return function_data()->IsUncompiledDataWithoutPreParsedScope();
+  set_function_data(preparsed_scope_data);
 }
 
 void SharedFunctionInfo::ClearPreParsedScopeData() {
-  DCHECK(HasUncompiledDataWithPreParsedScope());
-  UncompiledDataWithPreParsedScope* data =
-      uncompiled_data_with_pre_parsed_scope();
-
-  // Trim off the pre-parsed scope data from the uncompiled data by swapping the
-  // map, leaving only an uncompiled data without pre-parsed scope.
-  DisallowHeapAllocation no_gc;
-  Heap* heap = Heap::FromWritableHeapObject(data);
-
-  // Swap the map.
-  heap->NotifyObjectLayoutChange(data, UncompiledDataWithPreParsedScope::kSize,
-                                 no_gc);
-  STATIC_ASSERT(UncompiledDataWithoutPreParsedScope::kSize <
-                UncompiledDataWithPreParsedScope::kSize);
-  STATIC_ASSERT(UncompiledDataWithoutPreParsedScope::kSize ==
-                UncompiledData::kSize);
-  data->synchronized_set_map(
-      GetReadOnlyRoots().uncompiled_data_without_pre_parsed_scope_map());
-
-  // Fill the remaining space with filler.
-  heap->CreateFillerObjectAt(
-      data->address() + UncompiledDataWithoutPreParsedScope::kSize,
-      UncompiledDataWithPreParsedScope::kSize -
-          UncompiledDataWithoutPreParsedScope::kSize,
-      ClearRecordedSlots::kNo);
-
-  // Ensure that the clear was successful.
-  DCHECK(HasUncompiledDataWithoutPreParsedScope());
+  DCHECK(function_data() == Smi::FromEnum(Builtins::kCompileLazy) ||
+         HasPreParsedScopeData());
+  set_builtin_id(Builtins::kCompileLazy);
 }
 
 bool SharedFunctionInfo::HasWasmExportedFunctionData() const {
@@ -694,49 +613,33 @@ bool SharedFunctionInfo::IsSubjectToDebugging() {
   return IsUserJavaScript() && !HasAsmWasmData();
 }
 
-bool SharedFunctionInfo::CanDiscardCompiled() const {
-  bool can_decompile = (HasBytecodeArray() || HasAsmWasmData() ||
-                        HasUncompiledDataWithPreParsedScope());
+bool SharedFunctionInfo::CanFlushCompiled() const {
+  bool can_decompile =
+      (HasBytecodeArray() || HasAsmWasmData() || HasPreParsedScopeData());
   return can_decompile;
 }
 
-// static
-void SharedFunctionInfo::DiscardCompiled(
-    Isolate* isolate, Handle<SharedFunctionInfo> shared_info) {
-  DCHECK(shared_info->CanDiscardCompiled());
+void SharedFunctionInfo::FlushCompiled() {
+  DisallowHeapAllocation no_gc;
 
-  int start_position = shared_info->StartPosition();
-  int end_position = shared_info->EndPosition();
+  DCHECK(CanFlushCompiled());
 
-  if (shared_info->is_compiled()) {
+  if (is_compiled()) {
     HeapObject* outer_scope_info;
-    if (shared_info->scope_info()->HasOuterScopeInfo()) {
-      outer_scope_info = shared_info->scope_info()->OuterScopeInfo();
+    if (scope_info()->HasOuterScopeInfo()) {
+      outer_scope_info = scope_info()->OuterScopeInfo();
     } else {
-      outer_scope_info = ReadOnlyRoots(isolate).the_hole_value();
+      outer_scope_info = GetReadOnlyRoots().the_hole_value();
     }
     // Raw setter to avoid validity checks, since we're performing the unusual
     // task of decompiling.
-    shared_info->set_raw_outer_scope_info_or_feedback_metadata(
-        outer_scope_info);
+    set_raw_outer_scope_info_or_feedback_metadata(outer_scope_info);
   } else {
-    DCHECK(shared_info->outer_scope_info()->IsScopeInfo() ||
-           shared_info->outer_scope_info()->IsTheHole());
+    DCHECK(outer_scope_info()->IsScopeInfo() ||
+           outer_scope_info()->IsTheHole());
   }
 
-  if (shared_info->HasUncompiledDataWithPreParsedScope()) {
-    // If this is uncompiled data with a pre-parsed scope data, we can just
-    // clear out the scope data and keep the uncompiled data.
-    shared_info->ClearPreParsedScopeData();
-  } else {
-    // Create a new UncompiledData, without pre-parsed scope, and update the
-    // function data to point to it. Use the raw function data setter to avoid
-    // validity checks, since we're performing the unusual task of decompiling.
-    Handle<UncompiledData> data =
-        isolate->factory()->NewUncompiledDataWithoutPreParsedScope(
-            start_position, end_position);
-    shared_info->set_function_data(*data);
-  }
+  set_builtin_id(Builtins::kCompileLazy);
 }
 
 }  // namespace internal

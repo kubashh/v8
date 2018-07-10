@@ -29,11 +29,10 @@ class CommonOperatorReducerTest : public GraphTest {
   Reduction Reduce(
       AdvancedReducer::Editor* editor, Node* node,
       MachineOperatorBuilder::Flags flags = MachineOperatorBuilder::kNoFlags) {
-    JSHeapBroker broker(isolate());
     MachineOperatorBuilder machine(zone(), MachineType::PointerRepresentation(),
                                    flags);
-    CommonOperatorReducer reducer(editor, graph(), &broker, common(), &machine,
-                                  zone());
+    CommonOperatorReducer reducer(isolate(), editor, graph(), common(),
+                                  &machine, zone());
     return reducer.Reduce(node);
   }
 

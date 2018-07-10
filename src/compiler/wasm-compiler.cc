@@ -4083,15 +4083,17 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                             BuildChangeSmiToInt32(value));
   }
 
-  Node* BuildTestHeapObject(Node* value) {
+  Node* BuildTestNotSmi(Node* value) {
+    STATIC_ASSERT(kSmiTag == 0);
+    STATIC_ASSERT(kSmiTagMask == 1);
     return graph()->NewNode(mcgraph()->machine()->WordAnd(), value,
-                            mcgraph()->IntPtrConstant(kHeapObjectTag));
+                            mcgraph()->IntPtrConstant(kSmiTagMask));
   }
 
-  Node* BuildLoadHeapNumberValue(Node* value) {
-    return *effect_ = graph()->NewNode(
-               mcgraph()->machine()->Load(MachineType::Float64()), value,
-               BuildHeapNumberValueIndexConstant(), *effect_, *control_);
+  Node* BuildLoadHeapNumberValue(Node* value, Node* control) {
+    return graph()->NewNode(mcgraph()->machine()->Load(MachineType::Float64()),
+                            value, BuildHeapNumberValueIndexConstant(),
+                            graph()->start(), control);
   }
 
   Node* BuildHeapNumberValueIndexConstant() {
@@ -4137,36 +4139,27 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     MachineOperatorBuilder* machine = mcgraph()->machine();
     CommonOperatorBuilder* common = mcgraph()->common();
 
-    // Check several conditions:
-    //  i32?
-    //  ├─ true: zero?
-    //  │        ├─ true: negative?
-    //  │        │        ├─ true: box
-    //  │        │        └─ false: potentially Smi
-    //  │        └─ false: potentially Smi
-    //  └─ false: box
-    // For potential Smi values, depending on whether Smis are 31 or 32 bit, we
-    // still need to check whether the value fits in a Smi.
-
     Node* effect = *effect_;
     Node* control = *control_;
     Node* value32 = graph()->NewNode(machine->RoundFloat64ToInt32(), value);
-    Node* check_i32 = graph()->NewNode(
+    Node* check_same = graph()->NewNode(
         machine->Float64Equal(), value,
         graph()->NewNode(machine->ChangeInt32ToFloat64(), value32));
-    Node* branch_i32 = graph()->NewNode(common->Branch(), check_i32, control);
+    Node* branch_same = graph()->NewNode(common->Branch(), check_same, control);
 
-    Node* if_i32 = graph()->NewNode(common->IfTrue(), branch_i32);
-    Node* if_not_i32 = graph()->NewNode(common->IfFalse(), branch_i32);
+    Node* if_smi = graph()->NewNode(common->IfTrue(), branch_same);
+    Node* vsmi;
+    Node* if_box = graph()->NewNode(common->IfFalse(), branch_same);
+    Node* vbox;
 
     // We only need to check for -0 if the {value} can potentially contain -0.
     Node* check_zero = graph()->NewNode(machine->Word32Equal(), value32,
                                         mcgraph()->Int32Constant(0));
     Node* branch_zero = graph()->NewNode(common->Branch(BranchHint::kFalse),
-                                         check_zero, if_i32);
+                                         check_zero, if_smi);
 
     Node* if_zero = graph()->NewNode(common->IfTrue(), branch_zero);
-    Node* if_not_zero = graph()->NewNode(common->IfFalse(), branch_zero);
+    Node* if_notzero = graph()->NewNode(common->IfFalse(), branch_zero);
 
     // In case of 0, we need to check the high bits for the IEEE -0 pattern.
     Node* check_negative = graph()->NewNode(
@@ -4177,18 +4170,15 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                                              check_negative, if_zero);
 
     Node* if_negative = graph()->NewNode(common->IfTrue(), branch_negative);
-    Node* if_not_negative =
-        graph()->NewNode(common->IfFalse(), branch_negative);
+    Node* if_notnegative = graph()->NewNode(common->IfFalse(), branch_negative);
 
     // We need to create a box for negative 0.
-    Node* if_smi =
-        graph()->NewNode(common->Merge(2), if_not_zero, if_not_negative);
-    Node* if_box = graph()->NewNode(common->Merge(2), if_not_i32, if_negative);
+    if_smi = graph()->NewNode(common->Merge(2), if_notzero, if_notnegative);
+    if_box = graph()->NewNode(common->Merge(2), if_box, if_negative);
 
     // On 64-bit machines we can just wrap the 32-bit integer in a smi, for
     // 32-bit machines we need to deal with potential overflow and fallback to
     // boxing.
-    Node* vsmi;
     if (SmiValuesAre32Bits()) {
       vsmi = BuildChangeInt32ToSmi(value32);
     } else {
@@ -4210,7 +4200,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     }
 
     // Allocate the box for the {value}.
-    Node* vbox = BuildAllocateHeapNumberWithValue(value, if_box);
+    vbox = BuildAllocateHeapNumberWithValue(value, if_box);
     Node* ebox = *effect_;
 
     Node* merge = graph()->NewNode(common->Merge(2), if_smi, if_box);
@@ -4257,53 +4247,42 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     MachineOperatorBuilder* machine = mcgraph()->machine();
     CommonOperatorBuilder* common = mcgraph()->common();
 
-    // Implement the following decision tree:
-    //  heap object?
-    //  ├─ true: undefined?
-    //  │        ├─ true: f64 const
-    //  │        └─ false: load heap number value
-    //  └─ false: smi to float64
+    Node* check = BuildTestNotSmi(value);
+    Node* branch = graph()->NewNode(common->Branch(BranchHint::kFalse), check,
+                                    graph()->start());
 
-    Node* check_heap_object = BuildTestHeapObject(value);
-    Diamond is_heap_object(graph(), common, check_heap_object,
-                           BranchHint::kFalse);
-    is_heap_object.Chain(*control_);
+    Node* if_not_smi = graph()->NewNode(common->IfTrue(), branch);
 
-    *control_ = is_heap_object.if_true;
-    Node* orig_effect = *effect_;
-
-    Node* undefined_node = *effect_ =
+    Node* vnot_smi;
+    Node* undefined_node =
         LOAD_INSTANCE_FIELD(UndefinedValue, MachineType::TaggedPointer());
     Node* check_undefined =
         graph()->NewNode(machine->WordEqual(), value, undefined_node);
-    Node* effect_tagged = *effect_;
+    Node* branch_undefined = graph()->NewNode(
+        common->Branch(BranchHint::kFalse), check_undefined, if_not_smi);
 
-    Diamond is_undefined(graph(), common, check_undefined, BranchHint::kFalse);
-    is_undefined.Nest(is_heap_object, true);
-
-    *control_ = is_undefined.if_false;
-    Node* vheap_number = BuildLoadHeapNumberValue(value);
-    Node* effect_undefined = *effect_;
-
-    *control_ = is_undefined.merge;
+    Node* if_undefined = graph()->NewNode(common->IfTrue(), branch_undefined);
     Node* vundefined =
         mcgraph()->Float64Constant(std::numeric_limits<double>::quiet_NaN());
-    Node* vtagged = is_undefined.Phi(MachineRepresentation::kFloat64,
-                                     vundefined, vheap_number);
 
-    effect_tagged =
-        graph()->NewNode(mcgraph()->common()->EffectPhi(2), effect_tagged,
-                         effect_undefined, is_undefined.merge);
+    Node* if_not_undefined =
+        graph()->NewNode(common->IfFalse(), branch_undefined);
+    Node* vheap_number = BuildLoadHeapNumberValue(value, if_not_undefined);
 
-    // If input is Smi: just convert to float64.
+    if_not_smi =
+        graph()->NewNode(common->Merge(2), if_undefined, if_not_undefined);
+    vnot_smi = graph()->NewNode(common->Phi(MachineRepresentation::kFloat64, 2),
+                                vundefined, vheap_number, if_not_smi);
+
+    Node* if_smi = graph()->NewNode(common->IfFalse(), branch);
     Node* vfrom_smi = BuildChangeSmiToFloat64(value);
 
-    *control_ = is_heap_object.merge;
-    *effect_ =
-        graph()->NewNode(mcgraph()->common()->EffectPhi(2), effect_tagged,
-                         orig_effect, is_heap_object.merge);
-    return is_heap_object.Phi(MachineRepresentation::kFloat64, vtagged,
-                              vfrom_smi);
+    Node* merge = graph()->NewNode(common->Merge(2), if_not_smi, if_smi);
+    Node* phi =
+        graph()->NewNode(common->Phi(MachineRepresentation::kFloat64, 2),
+                         vnot_smi, vfrom_smi, merge);
+
+    return phi;
   }
 
   Node* ToJS(Node* node, wasm::ValueType type) {

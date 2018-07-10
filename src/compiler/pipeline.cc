@@ -381,7 +381,7 @@ class PipelineData {
         codegen_zone(), frame(), linkage, sequence(), info(), isolate(),
         osr_helper_, start_source_position_, jump_optimization_info_,
         wasm_compilation_data_, info()->GetPoisoningMitigationLevel(),
-        assembler_options_, info_->builtin_index());
+        assembler_options_);
   }
 
   void BeginPhaseKind(const char* phase_kind_name) {
@@ -1023,13 +1023,15 @@ PipelineWasmCompilationJob::ExecuteJobImpl() {
   if (FLAG_wasm_opt || asmjs_origin_) {
     GraphReducer graph_reducer(scope.zone(), data->graph(),
                                data->mcgraph()->Dead());
+    // WASM compilations must *always* be independent of the isolate.
+    Isolate* isolate = nullptr;
     DeadCodeElimination dead_code_elimination(&graph_reducer, data->graph(),
                                               data->common(), scope.zone());
     ValueNumberingReducer value_numbering(scope.zone(), data->graph()->zone());
     MachineOperatorReducer machine_reducer(data->mcgraph(), asmjs_origin_);
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->js_heap_broker(), data->common(),
-                                         data->machine(), scope.zone());
+    CommonOperatorReducer common_reducer(isolate, &graph_reducer, data->graph(),
+                                         data->common(), data->machine(),
+                                         scope.zone());
     AddReducer(data, &graph_reducer, &dead_code_elimination);
     AddReducer(data, &graph_reducer, &machine_reducer);
     AddReducer(data, &graph_reducer, &common_reducer);
@@ -1173,9 +1175,9 @@ struct InliningPhase {
     DeadCodeElimination dead_code_elimination(&graph_reducer, data->graph(),
                                               data->common(), temp_zone);
     CheckpointElimination checkpoint_elimination(&graph_reducer);
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->js_heap_broker(), data->common(),
-                                         data->machine(), temp_zone);
+    CommonOperatorReducer common_reducer(isolate, &graph_reducer, data->graph(),
+                                         data->common(), data->machine(),
+                                         temp_zone);
     JSCallReducer call_reducer(&graph_reducer, data->jsgraph(),
                                data->js_heap_broker(),
                                data->info()->is_bailout_on_uninitialized()
@@ -1279,11 +1281,10 @@ struct TypedLoweringPhase {
     TypedOptimization typed_optimization(&graph_reducer, data->dependencies(),
                                          data->jsgraph(),
                                          data->js_heap_broker());
-    SimplifiedOperatorReducer simple_reducer(&graph_reducer, data->jsgraph(),
-                                             data->js_heap_broker());
+    SimplifiedOperatorReducer simple_reducer(&graph_reducer, data->jsgraph());
     CheckpointElimination checkpoint_elimination(&graph_reducer);
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->js_heap_broker(), data->common(),
+    CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                         data->graph(), data->common(),
                                          data->machine(), temp_zone);
     AddReducer(data, &graph_reducer, &dead_code_elimination);
     AddReducer(data, &graph_reducer, &create_lowering);
@@ -1398,13 +1399,12 @@ struct EarlyOptimizationPhase {
                                data->jsgraph()->Dead());
     DeadCodeElimination dead_code_elimination(&graph_reducer, data->graph(),
                                               data->common(), temp_zone);
-    SimplifiedOperatorReducer simple_reducer(&graph_reducer, data->jsgraph(),
-                                             data->js_heap_broker());
+    SimplifiedOperatorReducer simple_reducer(&graph_reducer, data->jsgraph());
     RedundancyElimination redundancy_elimination(&graph_reducer, temp_zone);
     ValueNumberingReducer value_numbering(temp_zone, data->graph()->zone());
     MachineOperatorReducer machine_reducer(data->jsgraph());
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->js_heap_broker(), data->common(),
+    CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                         data->graph(), data->common(),
                                          data->machine(), temp_zone);
     AddReducer(data, &graph_reducer, &dead_code_elimination);
     AddReducer(data, &graph_reducer, &simple_reducer);
@@ -1474,9 +1474,9 @@ struct EffectControlLinearizationPhase {
                                  data->jsgraph()->Dead());
       DeadCodeElimination dead_code_elimination(&graph_reducer, data->graph(),
                                                 data->common(), temp_zone);
-      CommonOperatorReducer common_reducer(
-          &graph_reducer, data->graph(), data->js_heap_broker(), data->common(),
-          data->machine(), temp_zone);
+      CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                           data->graph(), data->common(),
+                                           data->machine(), temp_zone);
       AddReducer(data, &graph_reducer, &dead_code_elimination);
       AddReducer(data, &graph_reducer, &common_reducer);
       graph_reducer.ReduceGraph();
@@ -1512,8 +1512,8 @@ struct LoadEliminationPhase {
                                      temp_zone);
     CheckpointElimination checkpoint_elimination(&graph_reducer);
     ValueNumberingReducer value_numbering(temp_zone, data->graph()->zone());
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->js_heap_broker(), data->common(),
+    CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                         data->graph(), data->common(),
                                          data->machine(), temp_zone);
     ConstantFoldingReducer constant_folding_reducer(
         &graph_reducer, data->jsgraph(), data->js_heap_broker());
@@ -1564,8 +1564,8 @@ struct LateOptimizationPhase {
                                               data->common(), temp_zone);
     ValueNumberingReducer value_numbering(temp_zone, data->graph()->zone());
     MachineOperatorReducer machine_reducer(data->jsgraph());
-    CommonOperatorReducer common_reducer(&graph_reducer, data->graph(),
-                                         data->js_heap_broker(), data->common(),
+    CommonOperatorReducer common_reducer(data->isolate(), &graph_reducer,
+                                         data->graph(), data->common(),
                                          data->machine(), temp_zone);
     SelectLowering select_lowering(data->jsgraph()->graph(),
                                    data->jsgraph()->common());

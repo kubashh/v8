@@ -997,8 +997,7 @@ class CodeGeneratorTester {
         &info_, environment->main_isolate(), base::Optional<OsrHelper>(),
         kNoSourcePosition, nullptr, nullptr,
         PoisoningMitigationLevel::kDontPoison,
-        AssemblerOptions::Default(environment->main_isolate()),
-        Builtins::kNoBuiltinId);
+        AssemblerOptions::Default(environment->main_isolate()));
 
     // Force a frame to be created.
     generator_->frame_access_state()->MarkHasFrame(true);

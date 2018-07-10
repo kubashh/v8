@@ -3094,9 +3094,6 @@ VisitorId Map::GetVisitorId(Map* map) {
     case WASM_INSTANCE_TYPE:
       return kVisitWasmInstanceObject;
 
-    case UNCOMPILED_DATA_WITH_PRE_PARSED_SCOPE_TYPE:
-      return kVisitUncompiledDataWithPreParsedScope;
-
     case JS_OBJECT_TYPE:
     case JS_ERROR_TYPE:
     case JS_ARGUMENTS_TYPE:
@@ -3146,7 +3143,6 @@ VisitorId Map::GetVisitorId(Map* map) {
     case HEAP_NUMBER_TYPE:
     case MUTABLE_HEAP_NUMBER_TYPE:
     case FEEDBACK_METADATA_TYPE:
-    case UNCOMPILED_DATA_WITHOUT_PRE_PARSED_SCOPE_TYPE:
       return kVisitDataObject;
 
     case BIGINT_TYPE:
@@ -3431,23 +3427,6 @@ void HeapObject::HeapObjectShortPrint(std::ostream& os) {  // NOLINT
 
     TYPED_ARRAYS(TYPED_ARRAY_SHORT_PRINT)
 #undef TYPED_ARRAY_SHORT_PRINT
-
-    case UNCOMPILED_DATA_WITHOUT_PRE_PARSED_SCOPE_TYPE: {
-      UncompiledDataWithoutPreParsedScope* data =
-          UncompiledDataWithoutPreParsedScope::cast(this);
-      os << "<UncompiledDataWithoutPreParsedScope (" << data->start_position()
-         << ", " << data->end_position() << ")]>";
-      break;
-    }
-
-    case UNCOMPILED_DATA_WITH_PRE_PARSED_SCOPE_TYPE: {
-      UncompiledDataWithPreParsedScope* data =
-          UncompiledDataWithPreParsedScope::cast(this);
-      os << "<UncompiledDataWithPreParsedScope (" << data->start_position()
-         << ", " << data->end_position()
-         << ") preparsed=" << Brief(data->pre_parsed_scope_data()) << ">";
-      break;
-    }
 
     case SHARED_FUNCTION_INFO_TYPE: {
       SharedFunctionInfo* shared = SharedFunctionInfo::cast(this);
@@ -10250,7 +10229,7 @@ bool FixedArray::ContainsSortedNumbers() {
 Handle<FixedArray> FixedArray::ShrinkOrEmpty(Handle<FixedArray> array,
                                              int new_length) {
   if (new_length == 0) {
-    return array->GetReadOnlyRoots().empty_fixed_array_handle();
+    return array->GetIsolate()->factory()->empty_fixed_array();
   } else {
     array->Shrink(new_length);
     return array;
@@ -13716,8 +13695,7 @@ void SharedFunctionInfo::SetScript(Handle<SharedFunctionInfo> shared,
   if (shared->script() == *script_object) return;
   Isolate* isolate = shared->GetIsolate();
 
-  if (reset_preparsed_scope_data &&
-      shared->HasUncompiledDataWithPreParsedScope()) {
+  if (reset_preparsed_scope_data && shared->HasPreParsedScopeData()) {
     shared->ClearPreParsedScopeData();
   }
 
@@ -14003,18 +13981,15 @@ void SharedFunctionInfo::DisableOptimization(BailoutReason reason) {
 void SharedFunctionInfo::InitFromFunctionLiteral(
     Handle<SharedFunctionInfo> shared_info, FunctionLiteral* lit,
     bool is_toplevel) {
-  Isolate* isolate = shared_info->GetIsolate();
-  bool needs_position_info = true;
-
   // When adding fields here, make sure DeclarationScope::AnalyzePartially is
   // updated accordingly.
   shared_info->set_internal_formal_parameter_count(lit->parameter_count());
-  shared_info->SetFunctionTokenPosition(lit->function_token_position(),
-                                        lit->start_position());
+  shared_info->set_raw_start_position(lit->start_position());
+  shared_info->set_raw_end_position(lit->end_position());
+  shared_info->SetFunctionTokenPosition(lit->function_token_position());
   if (shared_info->scope_info()->HasPositionInfo()) {
     shared_info->scope_info()->SetPositionInfo(lit->start_position(),
                                                lit->end_position());
-    needs_position_info = false;
   }
   shared_info->set_is_declaration(lit->is_declaration());
   shared_info->set_is_named_expression(lit->is_named_expression());
@@ -14051,14 +14026,6 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
     shared_info->set_has_duplicate_parameters(lit->has_duplicate_parameters());
     shared_info->SetExpectedNofPropertiesFromEstimate(lit);
     DCHECK_NULL(lit->produced_preparsed_scope_data());
-    if (lit->ShouldEagerCompile()) {
-      // If we're about to eager compile, we'll have the function literal
-      // available, so there's no need to wastefully allocate an uncompiled
-      // data.
-      // TODO(leszeks): This should be explicitly passed as a parameter, rather
-      // than relying on a property of the literal.
-      needs_position_info = false;
-    }
   } else {
     // Set an invalid length for lazy functions. This way we can set the correct
     // value after compiling, but avoid overwriting values set manually by the
@@ -14068,24 +14035,14 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
       ProducedPreParsedScopeData* scope_data =
           lit->produced_preparsed_scope_data();
       if (scope_data != nullptr) {
-        Handle<PreParsedScopeData> pre_parsed_scope_data;
-        if (scope_data->Serialize(shared_info->GetIsolate())
-                .ToHandle(&pre_parsed_scope_data)) {
-          Handle<UncompiledData> data =
-              isolate->factory()->NewUncompiledDataWithPreParsedScope(
-                  lit->start_position(), lit->end_position(),
-                  pre_parsed_scope_data);
-          shared_info->set_uncompiled_data(*data);
-          needs_position_info = false;
+        MaybeHandle<PreParsedScopeData> maybe_data =
+            scope_data->Serialize(shared_info->GetIsolate());
+        if (!maybe_data.is_null()) {
+          Handle<PreParsedScopeData> data = maybe_data.ToHandleChecked();
+          shared_info->set_preparsed_scope_data(*data);
         }
       }
     }
-  }
-  if (needs_position_info) {
-    Handle<UncompiledData> data =
-        isolate->factory()->NewUncompiledDataWithoutPreParsedScope(
-            lit->start_position(), lit->end_position());
-    shared_info->set_uncompiled_data(*data);
   }
 }
 
@@ -14108,13 +14065,13 @@ void SharedFunctionInfo::SetExpectedNofPropertiesFromEstimate(
   set_expected_nof_properties(estimate);
 }
 
-void SharedFunctionInfo::SetFunctionTokenPosition(int function_token_position,
-                                                  int start_position) {
+void SharedFunctionInfo::SetFunctionTokenPosition(int function_token_position) {
+  DCHECK_NE(StartPosition(), kNoSourcePosition);
   int offset;
   if (function_token_position == kNoSourcePosition) {
     offset = 0;
   } else {
-    offset = start_position - function_token_position;
+    offset = StartPosition() - function_token_position;
   }
 
   if (offset > kMaximumFunctionTokenOffset) {
@@ -14130,7 +14087,7 @@ void Map::StartInobjectSlackTracking() {
 }
 
 void ObjectVisitor::VisitCodeTarget(Code* host, RelocInfo* rinfo) {
-  DCHECK(RelocInfo::IsCodeTargetMode(rinfo->rmode()));
+  DCHECK(RelocInfo::IsCodeTarget(rinfo->rmode()));
   Object* old_pointer = Code::GetCodeFromTargetAddress(rinfo->target_address());
   Object* new_pointer = old_pointer;
   VisitPointer(host, &new_pointer);
@@ -14202,7 +14159,6 @@ void Code::CopyFromNoFlush(Heap* heap, const CodeDesc& desc) {
   int mode_mask = RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
                   RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT) |
                   RelocInfo::ModeMask(RelocInfo::RUNTIME_ENTRY) |
-                  RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET) |
                   RelocInfo::kApplyMask;
   // Needed to find target_object and runtime_entry on X64
   Assembler* origin = desc.origin;
@@ -14213,7 +14169,7 @@ void Code::CopyFromNoFlush(Heap* heap, const CodeDesc& desc) {
       Handle<HeapObject> p = it.rinfo()->target_object_handle(origin);
       it.rinfo()->set_target_object(heap, *p, UPDATE_WRITE_BARRIER,
                                     SKIP_ICACHE_FLUSH);
-    } else if (RelocInfo::IsCodeTargetMode(mode)) {
+    } else if (RelocInfo::IsCodeTarget(mode)) {
       // rewrite code handles to direct pointers to the first instruction in the
       // code object
       Handle<Object> p = it.rinfo()->target_object_handle(origin);
@@ -14411,7 +14367,6 @@ bool Code::IsIsolateIndependent(Isolate* isolate) {
                 (1 << RelocInfo::COMMENT));
   STATIC_ASSERT(mode_mask ==
                 (RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
-                 RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET) |
                  RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT) |
                  RelocInfo::ModeMask(RelocInfo::EXTERNAL_REFERENCE) |
                  RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE) |
@@ -14423,7 +14378,7 @@ bool Code::IsIsolateIndependent(Isolate* isolate) {
 
   bool is_process_independent = true;
   for (RelocIterator it(this, mode_mask); !it.done(); it.next()) {
-    if (RelocInfo::IsCodeTargetMode(it.rinfo()->rmode())) {
+    if (RelocInfo::IsCodeTarget(it.rinfo()->rmode())) {
       // Off-heap code targets are later rewritten as pc-relative jumps to the
       // off-heap instruction stream and are thus process-independent.
       Address target_address = it.rinfo()->target_address();

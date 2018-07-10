@@ -211,9 +211,6 @@ void AsyncHooks::PromiseHookDispatch(PromiseHookType type,
 
   HandleScope handle_scope(hooks->isolate_);
 
-  TryCatch try_catch(hooks->isolate_);
-  try_catch.SetVerbose(true);
-
   Local<Value> rcv = Undefined(hooks->isolate_);
   Local<Value> async_id =
       promise
@@ -249,10 +246,6 @@ void AsyncHooks::PromiseHookDispatch(PromiseHookType type,
     if (!wrap->promiseResolve_function().IsEmpty()) {
       wrap->promiseResolve_function()->Call(rcv, 1, args);
     }
-  }
-
-  if (try_catch.HasCaught()) {
-    Shell::ReportException(hooks->isolate_, &try_catch);
   }
 }
 

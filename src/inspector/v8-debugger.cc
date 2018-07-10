@@ -562,8 +562,9 @@ size_t V8Debugger::nearHeapLimitCallback(void* data, size_t current_heap_limit,
   thisPtr->m_originalHeapLimit = current_heap_limit;
   thisPtr->m_scheduledOOMBreak = true;
   v8::Local<v8::Context> context = thisPtr->m_isolate->GetEnteredContext();
+  DCHECK(!context.IsEmpty());
   thisPtr->m_targetContextGroupId =
-      context.IsEmpty() ? 0 : thisPtr->m_inspector->contextGroupId(context);
+      thisPtr->m_inspector->contextGroupId(context);
   thisPtr->m_isolate->RequestInterrupt(
       [](v8::Isolate* isolate, void*) { v8::debug::BreakRightNow(isolate); },
       nullptr);

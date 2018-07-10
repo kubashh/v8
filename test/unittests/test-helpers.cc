@@ -38,10 +38,7 @@ Handle<SharedFunctionInfo> CreateSharedFunctionInfo(
       isolate->factory()->NewSharedFunctionInfoForBuiltin(
           isolate->factory()->NewStringFromAsciiChecked("f"),
           Builtins::kCompileLazy);
-  // Ensure that the function can be compiled lazily.
-  shared->set_uncompiled_data(
-      *isolate->factory()->NewUncompiledDataWithoutPreParsedScope(
-          0, source->length()));
+  shared->set_raw_end_position(source->length());
   // Make sure we have an outer scope info, even though it's empty
   shared->set_raw_outer_scope_info_or_feedback_metadata(
       ScopeInfo::Empty(isolate));

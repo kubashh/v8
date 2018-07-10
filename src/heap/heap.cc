@@ -2242,14 +2242,10 @@ void Heap::Scavenge() {
     }
   }
 
-  {
-    // Update references into new space
-    TRACE_GC(tracer(), GCTracer::Scope::SCAVENGER_SCAVENGE_UPDATE_REFS);
-    UpdateNewSpaceReferencesInExternalStringTable(
-        &UpdateNewSpaceReferenceInExternalStringTableEntry);
+  UpdateNewSpaceReferencesInExternalStringTable(
+      &UpdateNewSpaceReferenceInExternalStringTableEntry);
 
-    incremental_marking()->UpdateMarkingWorklistAfterScavenge();
-  }
+  incremental_marking()->UpdateMarkingWorklistAfterScavenge();
 
   if (FLAG_concurrent_marking) {
     // Ensure that concurrent marker does not track pages that are
@@ -5168,7 +5164,7 @@ void Heap::RecordWriteIntoCodeSlow(Code* host, RelocInfo* rinfo,
   SlotType slot_type = SlotTypeForRelocInfoMode(rmode);
   if (rinfo->IsInConstantPool()) {
     addr = rinfo->constant_pool_entry_address();
-    if (RelocInfo::IsCodeTargetMode(rmode)) {
+    if (RelocInfo::IsCodeTarget(rmode)) {
       slot_type = CODE_ENTRY_SLOT;
     } else {
       DCHECK(RelocInfo::IsEmbeddedObject(rmode));

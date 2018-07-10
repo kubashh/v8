@@ -173,9 +173,6 @@
 //     - WeakCell
 //     - FeedbackCell
 //     - FeedbackVector
-//     - UncompiledData
-//       - UncompiledDataWithoutPreParsedScope
-//       - UncompiledDataWithPreParsedScope
 //
 // Formats of Object*:
 //  Smi:        [31 bit signed int] 0
@@ -528,8 +525,6 @@ enum InstanceType : uint16_t {
   SMALL_ORDERED_HASH_MAP_TYPE,
   SMALL_ORDERED_HASH_SET_TYPE,
   STORE_HANDLER_TYPE,
-  UNCOMPILED_DATA_WITHOUT_PRE_PARSED_SCOPE_TYPE,
-  UNCOMPILED_DATA_WITH_PRE_PARSED_SCOPE_TYPE,
   WEAK_CELL_TYPE,
   WEAK_ARRAY_LIST_TYPE,
 
@@ -712,7 +707,6 @@ class StringStream;
 class FeedbackCell;
 class FeedbackMetadata;
 class FeedbackVector;
-class UncompiledData;
 class WeakCell;
 class TemplateInfo;
 class TransitionArray;
@@ -888,9 +882,6 @@ template <class C> inline bool Is(Object* obj);
   V(TemplateObjectDescription)                 \
   V(ThinString)                                \
   V(TransitionArray)                           \
-  V(UncompiledData)                            \
-  V(UncompiledDataWithPreParsedScope)          \
-  V(UncompiledDataWithoutPreParsedScope)       \
   V(Undetectable)                              \
   V(UniqueName)                                \
   V(WasmGlobalObject)                          \

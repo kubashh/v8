@@ -260,7 +260,7 @@ template <FixedArrayVisitationMode fixed_array_mode,
 void MarkingVisitor<fixed_array_mode, retaining_path_mode,
                     MarkingState>::VisitCodeTarget(Code* host,
                                                    RelocInfo* rinfo) {
-  DCHECK(RelocInfo::IsCodeTargetMode(rinfo->rmode()));
+  DCHECK(RelocInfo::IsCodeTarget(rinfo->rmode()));
   Code* target = Code::GetCodeFromTargetAddress(rinfo->target_address());
   collector_->RecordRelocSlot(host, rinfo, target);
   MarkObject(host, target);

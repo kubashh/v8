@@ -35,19 +35,6 @@ void PostBuildProfileAndTracing(Isolate* isolate, Code* code,
 #endif
 }
 
-AssemblerOptions BuiltinAssemblerOptions(Isolate* isolate,
-                                         int32_t builtin_index) {
-  AssemblerOptions options = AssemblerOptions::Default(isolate);
-  if (isolate->ShouldLoadConstantsFromRootList() &&
-      Builtins::IsIsolateIndependent(builtin_index) &&
-      isolate->heap()->memory_allocator()->code_range()->valid() &&
-      isolate->heap()->memory_allocator()->code_range()->size() <=
-          kMaxPCRelativeCodeRangeInMB * MB) {
-    options.use_pc_relative_calls_and_jumps = true;
-  }
-  return options;
-}
-
 typedef void (*MacroAssemblerGenerator)(MacroAssembler*);
 typedef void (*CodeAssemblerGenerator)(compiler::CodeAssemblerState*);
 
@@ -80,9 +67,7 @@ Code* BuildWithMacroAssembler(Isolate* isolate, int32_t builtin_index,
   CanonicalHandleScope canonical(isolate);
   const size_t buffer_size = 32 * KB;
   byte buffer[buffer_size];  // NOLINT(runtime/arrays)
-
-  MacroAssembler masm(isolate, BuiltinAssemblerOptions(isolate, builtin_index),
-                      buffer, buffer_size, CodeObjectRequired::kYes);
+  MacroAssembler masm(isolate, buffer, buffer_size, CodeObjectRequired::kYes);
   masm.set_builtin_index(builtin_index);
   DCHECK(!masm.has_frame());
   generator(&masm);
@@ -103,8 +88,7 @@ Code* BuildAdaptor(Isolate* isolate, int32_t builtin_index,
   CanonicalHandleScope canonical(isolate);
   const size_t buffer_size = 32 * KB;
   byte buffer[buffer_size];  // NOLINT(runtime/arrays)
-  MacroAssembler masm(isolate, BuiltinAssemblerOptions(isolate, builtin_index),
-                      buffer, buffer_size, CodeObjectRequired::kYes);
+  MacroAssembler masm(isolate, buffer, buffer_size, CodeObjectRequired::kYes);
   masm.set_builtin_index(builtin_index);
   DCHECK(!masm.has_frame());
   Builtins::Generate_Adaptor(&masm, builtin_address, exit_frame_type);
@@ -135,8 +119,8 @@ Code* BuildWithCodeStubAssemblerJS(Isolate* isolate, int32_t builtin_index,
       isolate, &zone, argc_with_recv, Code::BUILTIN, name,
       PoisoningMitigationLevel::kDontPoison, builtin_index);
   generator(&state);
-  Handle<Code> code = compiler::CodeAssembler::GenerateCode(
-      &state, BuiltinAssemblerOptions(isolate, builtin_index));
+  AssemblerOptions options = AssemblerOptions::Default(isolate);
+  Handle<Code> code = compiler::CodeAssembler::GenerateCode(&state, options);
   PostBuildProfileAndTracing(isolate, *code, name);
   return *code;
 }
@@ -164,8 +148,8 @@ Code* BuildWithCodeStubAssemblerCS(Isolate* isolate, int32_t builtin_index,
       isolate, &zone, descriptor, Code::BUILTIN, name,
       PoisoningMitigationLevel::kDontPoison, 0, builtin_index);
   generator(&state);
-  Handle<Code> code = compiler::CodeAssembler::GenerateCode(
-      &state, BuiltinAssemblerOptions(isolate, builtin_index));
+  AssemblerOptions options = AssemblerOptions::Default(isolate);
+  Handle<Code> code = compiler::CodeAssembler::GenerateCode(&state, options);
   PostBuildProfileAndTracing(isolate, *code, name);
   return *code;
 }
@@ -197,10 +181,8 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
   Builtins* builtins = isolate->builtins();
   DisallowHeapAllocation no_gc;
   CodeSpaceMemoryModificationScope modification_scope(isolate->heap());
-  static const int kRelocMask =
-      RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
-      RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT) |
-      RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET);
+  static const int kRelocMask = RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
+                                RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT);
   HeapIterator iterator(isolate->heap());
   while (HeapObject* obj = iterator.next()) {
     if (!obj->IsCode()) continue;
@@ -208,10 +190,8 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
     bool flush_icache = false;
     for (RelocIterator it(code, kRelocMask); !it.done(); it.next()) {
       RelocInfo* rinfo = it.rinfo();
-      if (RelocInfo::IsCodeTargetMode(rinfo->rmode())) {
+      if (RelocInfo::IsCodeTarget(rinfo->rmode())) {
         Code* target = Code::GetCodeFromTargetAddress(rinfo->target_address());
-        DCHECK_IMPLIES(RelocInfo::IsRelativeCodeTarget(rinfo->rmode()),
-                       Builtins::IsIsolateIndependent(target->builtin_index()));
         if (!target->is_builtin()) continue;
         Code* new_target = builtins->builtin(target->builtin_index());
         rinfo->set_target_address(new_target->raw_instruction_start(),

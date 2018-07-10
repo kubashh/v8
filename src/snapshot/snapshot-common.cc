@@ -331,9 +331,7 @@ bool BuiltinAliasesOffHeapTrampolineRegister(Isolate* isolate, Code* code) {
 }
 
 void FinalizeEmbeddedCodeTargets(Isolate* isolate, EmbeddedData* blob) {
-  static const int kRelocMask =
-      RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
-      RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET);
+  static const int kRelocMask = RelocInfo::ModeMask(RelocInfo::CODE_TARGET);
 
   for (int i = 0; i < Builtins::builtin_count; i++) {
     if (!Builtins::IsIsolateIndependent(i)) continue;
@@ -342,16 +340,12 @@ void FinalizeEmbeddedCodeTargets(Isolate* isolate, EmbeddedData* blob) {
     RelocIterator on_heap_it(code, kRelocMask);
     RelocIterator off_heap_it(blob, code, kRelocMask);
 
-#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64) || \
-    defined(V8_TARGET_ARCH_ARM)
-    // On X64, ARM, ARM64 we emit relative builtin-to-builtin jumps for isolate
-    // independent builtins in the snapshot. This fixes up the relative jumps
-    // to the right offsets in the snapshot.
+#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64)
     while (!on_heap_it.done()) {
       DCHECK(!off_heap_it.done());
 
       RelocInfo* rinfo = on_heap_it.rinfo();
-      DCHECK_EQ(rinfo->rmode(), off_heap_it.rinfo()->rmode());
+      DCHECK(RelocInfo::IsCodeTarget(rinfo->rmode()));
       Code* target = Code::GetCodeFromTargetAddress(rinfo->target_address());
       CHECK(Builtins::IsIsolateIndependentBuiltin(target));
 
@@ -363,8 +357,8 @@ void FinalizeEmbeddedCodeTargets(Isolate* isolate, EmbeddedData* blob) {
     }
     DCHECK(off_heap_it.done());
 #else
-    // Architectures other than x64 and arm/arm64 do not use pc-relative calls
-    // and thus must not contain embedded code targets. Instead, we use an
+    // Architectures other than x64 and arm64 do not use pc-relative calls and
+    // thus must not contain embedded code targets. Instead, we use an
     // indirection through the root register.
     CHECK(on_heap_it.done());
     CHECK(off_heap_it.done());

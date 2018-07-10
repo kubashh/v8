@@ -5,7 +5,6 @@
 #ifndef V8_ROOTS_H_
 #define V8_ROOTS_H_
 
-#include "src/handles.h"
 #include "src/heap-symbols.h"
 #include "src/objects-definitions.h"
 
@@ -100,10 +99,6 @@ namespace internal {
   V(Map, small_ordered_hash_map_map, SmallOrderedHashMapMap)                   \
   V(Map, small_ordered_hash_set_map, SmallOrderedHashSetMap)                   \
   V(Map, string_table_map, StringTableMap)                                     \
-  V(Map, uncompiled_data_without_pre_parsed_scope_map,                         \
-    UncompiledDataWithoutPreParsedScopeMap)                                    \
-  V(Map, uncompiled_data_with_pre_parsed_scope_map,                            \
-    UncompiledDataWithPreParsedScopeMap)                                       \
   V(Map, weak_fixed_array_map, WeakFixedArrayMap)                              \
   V(Map, weak_array_list_map, WeakArrayListMap)                                \
   V(Map, ephemeron_hash_table_map, EphemeronHashTableMap)                      \
@@ -290,7 +285,6 @@ namespace internal {
 
 class Heap;
 class Isolate;
-class Map;
 class String;
 class Symbol;
 
@@ -299,41 +293,30 @@ class ReadOnlyRoots {
   explicit ReadOnlyRoots(Heap* heap) : heap_(heap) {}
   inline explicit ReadOnlyRoots(Isolate* isolate);
 
-#define ROOT_ACCESSOR(type, name, camel_name) \
-  inline class type* name();                  \
-  inline Handle<type> name##_handle();
+#define ROOT_ACCESSOR(type, name, camel_name) inline class type* name();
   STRONG_READ_ONLY_ROOT_LIST(ROOT_ACCESSOR)
 #undef ROOT_ACCESSOR
 
-#define STRING_ACCESSOR(name, str) \
-  inline String* name();           \
-  inline Handle<String> name##_handle();
+#define STRING_ACCESSOR(name, str) inline String* name();
   INTERNALIZED_STRING_LIST(STRING_ACCESSOR)
 #undef STRING_ACCESSOR
 
-#define SYMBOL_ACCESSOR(name) \
-  inline Symbol* name();      \
-  inline Handle<Symbol> name##_handle();
+#define SYMBOL_ACCESSOR(name) inline Symbol* name();
   PRIVATE_SYMBOL_LIST(SYMBOL_ACCESSOR)
 #undef SYMBOL_ACCESSOR
 
-#define SYMBOL_ACCESSOR(name, description) \
-  inline Symbol* name();                   \
-  inline Handle<Symbol> name##_handle();
+#define SYMBOL_ACCESSOR(name, description) inline Symbol* name();
   PUBLIC_SYMBOL_LIST(SYMBOL_ACCESSOR)
   WELL_KNOWN_SYMBOL_LIST(SYMBOL_ACCESSOR)
 #undef SYMBOL_ACCESSOR
 
 // Utility type maps.
-#define STRUCT_MAP_ACCESSOR(NAME, Name, name) \
-  inline Map* name##_map();                   \
-  inline class Handle<Map> name##_map_handle();
+#define STRUCT_MAP_ACCESSOR(NAME, Name, name) inline Map* name##_map();
   STRUCT_LIST(STRUCT_MAP_ACCESSOR)
 #undef STRUCT_MAP_ACCESSOR
 
 #define ALLOCATION_SITE_MAP_ACCESSOR(NAME, Name, Size, name) \
-  inline Map* name##_map();                                  \
-  inline class Handle<Map> name##_map_handle();
+  inline Map* name##_map();
   ALLOCATION_SITE_LIST(ALLOCATION_SITE_MAP_ACCESSOR)
 #undef ALLOCATION_SITE_MAP_ACCESSOR
 

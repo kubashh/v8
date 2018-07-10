@@ -80,8 +80,7 @@ void JumpTableAssembler::EmitLazyCompileJumpSlot(uint32_t func_index,
 }
 
 void JumpTableAssembler::EmitJumpSlot(Address target) {
-  int offset =
-      target - reinterpret_cast<Address>(pc_) - Instruction::kPcLoadDelta;
+  int offset = target - reinterpret_cast<Address>(pc_) - kPcLoadDelta;
   DCHECK_EQ(0, offset % kInstrSize);
   // If the offset is within 64 MB, emit a direct jump. Otherwise jump
   // indirectly.
