@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6882c2e6_e8c5f5a7",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-11T23:21:25Z",
+      "side": 1,
+      "message": "Why is this passed as a value? Use const reference (I guess v8 cannot use C++ 17 stringview yet).",
+      "range": {
+        "startLine": 1470,
+        "startChar": 53,
+        "endLine": 1470,
+        "endChar": 72
+      },
+      "revId": "642a023759f4a35333785f4f5a3e2be4999f7110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9561fd7_2cac8af2",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-11T23:21:25Z",
+      "side": 1,
+      "message": "You should not rely on icu::UnicodeString(const char*) here and elsewhere. (I may turn that ctor to be explicit anytime as recommended by the upstream and bundled ICU on some Linux distros may have already done that). \n\nPlease, use an explicit constructor. \nicu::UnicodeString(char*, -1, US_INV) if the input is guaranteed to be ASCII-only. \nIf it\u0027s non-ASCII but UTF-8, use\nicu::UnicodeString::fromUTF8(std::string(char *)) .",
+      "range": {
+        "startLine": 1479,
+        "startChar": 37,
+        "endLine": 1479,
+        "endChar": 52
+      },
+      "revId": "642a023759f4a35333785f4f5a3e2be4999f7110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3e0d51f_ab3d7b4a",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-11T23:21:25Z",
+      "side": 1,
+      "message": "This is locale-dependent and cannot be used. You can define a simple function  for [A-Z] \u003d\u003e [a-z] lower-casing and pass it to transform.",
+      "range": {
+        "startLine": 1486,
+        "startChar": 63,
+        "endLine": 1486,
+        "endChar": 72
+      },
+      "revId": "642a023759f4a35333785f4f5a3e2be4999f7110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
