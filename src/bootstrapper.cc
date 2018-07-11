@@ -2932,6 +2932,28 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
           isolate_, prototype, factory->to_string_tag_symbol(),
           factory->Object_string(),
           static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY));
+      printf("\ncall CanonicalizeLanguageTag\n");
+      Intl::CanonicalizeLanguageTag(
+          isolate_, isolate_->factory()->NewStringFromAsciiChecked("en"));
+      Intl::CanonicalizeLanguageTag(
+          isolate_, isolate_->factory()->NewStringFromAsciiChecked("iw"));
+      Intl::CanonicalizeLanguageTag(
+          isolate_, isolate_->factory()->NewStringFromAsciiChecked("fil"));
+      Intl::CanonicalizeLanguageTag(
+          isolate_,
+          isolate_->factory()->NewStringFromAsciiChecked("en-Latn-US"));
+      Intl::CanonicalizeLanguageTag(
+          isolate_, isolate_->factory()->NewStringFromAsciiChecked("x-en-US"));
+      Intl::CanonicalizeLanguageTag(
+          isolate_,
+          isolate_->factory()->NewStringFromAsciiChecked("en-US-x-a"));
+      Intl::CanonicalizeLanguageTag(
+          isolate_,
+          isolate_->factory()->NewStringFromAsciiChecked("az-Cyrl-AR"));
+      Intl::CanonicalizeLanguageTag(
+          isolate_, isolate_->factory()->NewStringFromAsciiChecked(
+                        "es-ES-Traditional-WIN"));
+      printf("\n\n");
     }
 
     {
