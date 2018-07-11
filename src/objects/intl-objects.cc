@@ -1265,11 +1265,7 @@ MaybeHandle<Object> NumberFormat::FormatNumber(
       reinterpret_cast<const uint16_t*>(result.getBuffer()), result.length()));
 }
 
-// TODO(bstell): enable this anonymous namespace once these routines are called:
-//  * GetLanguageSingletonRegexMatcher,
-//  * GetLanguageTagRegexMatcher
-//  * GetLanguageVariantRegexMatcher
-// namespace {
+namespace {
 
 // TODO(bstell): Make all these a constexpr on the Intl class.
 void BuildLanguageTagRegexes(Isolate* isolate) {
@@ -1355,7 +1351,7 @@ icu::RegexMatcher* GetLanguageVariantRegexMatcher(Isolate* isolate) {
   return language_variant_regexp_matcher;
 }
 
-// }  // anonymous namespace
+}  // anonymous namespace
 
 MaybeHandle<JSObject> Intl::ResolveLocale(Isolate* isolate, const char* service,
                                           Handle<Object> requestedLocales,
@@ -1451,6 +1447,122 @@ V8_WARN_UNUSED_RESULT Maybe<bool> Intl::GetBoolOption(
 
   return Just(false);
 }
+
+// TODO(bstell): enable this anonymous namespace once
+// isStructuallyValidLanguageTag called.
+// namespace {
+/**
+ * Check the structural Validity of the language tag per ECMA 402 6.2.2:
+ *   - Well-formed per RFC 5646 2.1
+ *   - There are no duplicate variant subtags
+ *   - There are no duplicate singletion (extension) subtags
+ *
+ * One extra-check is done (from RFC 5646 2.2.9): the tag is compared
+ * against the list of grandfathered tags. However, subtags for
+ * primary/extended language, script, region, variant are not checked
+ * against the IANA language subtag registry.
+ *
+ * ICU is too permissible and lets invalid tags, like
+ * hant-cmn-cn, through.
+ *
+ * Returns false if the language tag is invalid.
+ */
+bool isStructuallyValidLanguageTag(Isolate* isolate, std::string locale) {
+  icu::RegexMatcher* language_tag_regexp_matcher =
+      GetLanguageTagRegexMatcher(isolate);
+  if (language_tag_regexp_matcher == nullptr) {
+    // language_tag_regexp_matcher creation failed so assume tag is okay.
+    return true;
+  }
+
+  // Check if it's well-formed, including grandfadered tags.
+  language_tag_regexp_matcher->reset(locale.c_str());
+  UErrorCode status = U_ZERO_ERROR;
+  bool is_valid_lang_tag = language_tag_regexp_matcher->matches(status);
+  if (!is_valid_lang_tag) {
+    return false;
+  }
+
+  std::transform(locale.begin(), locale.end(), locale.begin(), ::tolower);
+
+  // Just return if it's a x- form. It's all private.
+  if (locale.find("x-") == 0) {
+    return true;
+  }
+
+  // Check if there are any duplicate variants or singletons (extensions).
+
+  // Remove private use section.
+  locale = locale.substr(0, locale.find("-x-"));
+
+  // Skip language since it can match variant regex, so we start from 1.
+  // We are matching i-klingon here, but that's ok, since i-klingon-klingon
+  // is not valid and would fail LANGUAGE_TAG_RE test.
+  std::vector<std::string> variants;
+  std::vector<std::string> extensions;
+  size_t pos = 0;
+  std::vector<std::string> parts;
+  while ((pos = locale.find("-")) != std::string::npos) {
+    std::string token = locale.substr(0, pos);
+    parts.push_back(token);
+    locale = locale.substr(pos + 1);
+  }
+  if (locale.length() != 0) {
+    parts.push_back(locale);
+  }
+
+  icu::RegexMatcher* language_variant_regexp_matcher =
+      GetLanguageVariantRegexMatcher(isolate);
+  if (language_variant_regexp_matcher == nullptr) {
+    // language_variant_regexp_matcher creation failed so assume tag is okay.
+    return true;
+  }
+
+  icu::RegexMatcher* language_singleton_regexp_matcher =
+      GetLanguageSingletonRegexMatcher(isolate);
+  if (language_singleton_regexp_matcher == nullptr) {
+    // language_singleton_re_matcher creation failed so assume tag is okay.
+    return true;
+  }
+
+  for (std::vector<int>::size_type i = 0; i != parts.size(); i++) {
+    std::string value = parts[i];
+    language_variant_regexp_matcher->reset(value.c_str());
+    status = U_ZERO_ERROR;
+    bool is_language_variant =
+        !!language_variant_regexp_matcher->matches(status);
+    if (!U_SUCCESS(status)) {
+      return false;
+    }
+    if (is_language_variant && extensions.size() == 0) {
+      if (std::find(variants.begin(), variants.end(), value) ==
+          variants.end()) {
+        variants.push_back(value);
+      } else {
+        return false;
+      }
+    }
+
+    language_singleton_regexp_matcher->reset(value.c_str());
+    status = U_ZERO_ERROR;
+    bool is_language_singleton =
+        !!language_singleton_regexp_matcher->matches(status);
+    if (!U_SUCCESS(status)) {
+      return false;
+    }
+    if (is_language_singleton) {
+      if (std::find(extensions.begin(), extensions.end(), value) ==
+          extensions.end()) {
+        extensions.push_back(value);
+      } else {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+// }  // anonymous namespace
 
 }  // namespace internal
 }  // namespace v8
