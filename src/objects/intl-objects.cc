@@ -1265,11 +1265,7 @@ MaybeHandle<Object> NumberFormat::FormatNumber(
       reinterpret_cast<const uint16_t*>(result.getBuffer()), result.length()));
 }
 
-// TODO(bstell): enable this anonymous namespace once these routines are called:
-//  * GetLanguageSingletonRegexMatcher,
-//  * GetLanguageTagRegexMatcher
-//  * GetLanguageVariantRegexMatcher
-// namespace {
+namespace {
 
 // TODO(bstell): Make all these a constexpr on the Intl class.
 void BuildLanguageTagRegexps(Isolate* isolate) {
@@ -1355,7 +1351,7 @@ icu::RegexMatcher* GetLanguageVariantRegexMatcher(Isolate* isolate) {
   return language_variant_regexp_matcher;
 }
 
-// }  // anonymous namespace
+}  // anonymous namespace
 
 MaybeHandle<JSObject> Intl::ResolveLocale(Isolate* isolate, const char* service,
                                           Handle<Object> requestedLocales,
@@ -1451,6 +1447,87 @@ V8_WARN_UNUSED_RESULT Maybe<bool> Intl::GetBoolOption(
 
   return Just(false);
 }
+
+// TODO(bstell): enable this anonymous namespace once
+// CanonicalizeLanguageTag called.
+// namespace {
+MaybeHandle<String> CanonicalizeLanguageTag_(Isolate* isolate,
+                                             Handle<String> localeID) {
+  std::string locale_str(localeID->ToCString().get());
+  // printf("localeID = %s\n", locale_str.c_str());
+
+  UErrorCode status = U_ZERO_ERROR;
+  icu::RegexMatcher two_letter_language_matcher("^[a-z]{2}$", 0, status);
+  if (!U_SUCCESS(status)) {
+    printf("two_letter_language_matcher creation failed\n");
+    return localeID;
+  }
+  icu::RegexMatcher deprecated_id_matcher("^(in|iw|ji|jw)$", 0, status);
+  if (!U_SUCCESS(status)) {
+    printf("deprecated_id_matcher creation failed\n");
+    return localeID;
+  }
+
+  two_letter_language_matcher.reset(locale_str.c_str());
+  bool is_two_letter_lang = !!two_letter_language_matcher.matches(status);
+  // printf("two_letter_language_matcher: %d\n", is_two_letter_lang);
+
+  deprecated_id_matcher.reset(locale_str.c_str());
+  bool is_deprecated_id = !!deprecated_id_matcher.matches(status);
+  // printf("deprecated_id_matcher: %d\n", is_deprecated_id);
+
+  DCHECK(U_SUCCESS(status));
+  // printf("matches \"fil\": %d\n", std::string("fil") == locale_str.c_str());
+
+  // Optimize for the most common case: a 2-letter language code in the
+  // canonical form/lowercase that is not one of the deprecated codes
+  // (in, iw, ji, jw). Don't check for ~70 of 3-letter deprecated language
+  // codes. Instead, let them be handled by ICU in the slow path. However,
+  // fast-track 'fil' (3-letter canonical code).
+  if ((is_two_letter_lang && !is_deprecated_id) ||
+      std::string("fil") == locale_str.c_str()) {
+    return localeID;
+  }
+
+  if (!isStructuallyValidLanguageTag(isolate, locale_str)) {
+    printf("not isStructuallyValidLanguageTag, %s/%d\n", __FILE__, __LINE__);
+    //     throw %make_range_error(kInvalidLanguageTag, localeString);
+  }
+
+  //   // ECMA 402 6.2.3
+  //   var tag = %CanonicalizeLanguageTag(localeString);
+  //   // TODO(jshin): This should not happen because the structural validity
+  //   // is already checked. If that's the case, remove this.
+  //   if (tag === 'invalid-tag') {
+  //     throw %make_range_error(kInvalidLanguageTag, localeString);
+  //   }
+  //
+  //   return tag;
+  // }
+  return localeID;
+}
+
+MaybeHandle<String> Intl::CanonicalizeLanguageTag(Isolate* isolate,
+                                                  Handle<Object> locale) {
+  // This following is the Javascript code.
+  // function canonicalizeLanguageTag(localeID) {
+  //   // null is typeof 'object' so we have to do extra check.
+  //   if ((!IS_STRING(localeID) && !IS_RECEIVER(localeID)) ||
+  //       IS_NULL(localeID)) {
+  //     throw %make_type_error(kLanguageID);
+  //   }
+  if ((locale->IsString() || locale->IsJSReceiver()) && !locale->IsNull()) {
+    MaybeHandle<Object> maybe_locale_id_str = Object::ToString(isolate, locale);
+    Handle<Object> locale_id_str;
+    if (maybe_locale_id_str.ToHandle(&locale_id_str)) {
+      return (CanonicalizeLanguageTag_(isolate,
+                                       Handle<String>::cast(locale_id_str)));
+    }
+  }
+  THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kLanguageID), String);
+}
+
+// }  // anonymous namespace
 
 }  // namespace internal
 }  // namespace v8
