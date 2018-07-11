@@ -10721,8 +10721,10 @@ size_t SnapshotCreator::AddData(Local<T> object) {
  */
 
 
-}  // namespace v8
+V8_EXPORT void RegisterNotifyV8UsageFunc(std::function<void()> func);
+V8_EXPORT void NotifyV8Usage();
 
+}  // namespace v8
 
 #undef TYPE_CHECK
 

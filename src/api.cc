@@ -156,6 +156,7 @@ namespace v8 {
 
 #define ENTER_V8(isolate, context, class_name, function_name, bailout_value, \
                  HandleScopeClass)                                           \
+  NotifyV8Usage();                                                      \
   ENTER_V8_HELPER_DO_NOT_USE(isolate, context, class_name, function_name,    \
                              bailout_value, HandleScopeClass, true)
 
@@ -10834,4 +10835,5 @@ void InvokeFunctionCallback(const v8::FunctionCallbackInfo<v8::Value>& info,
 #undef CALLBACK_SETTER
 
 }  // namespace internal
+
 }  // namespace v8
