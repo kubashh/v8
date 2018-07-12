@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d8cbba0_6aa4d9df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T08:30:45Z",
+      "side": 1,
+      "message": "Should describe PrototypeUsers.",
+      "range": {
+        "startLine": 7,
+        "startChar": 20,
+        "endLine": 7,
+        "endChar": 59
+      },
+      "revId": "f0db6747a87c2834ba5110f8e7f57a80785117d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35cd3442_0fdf19f3",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10491,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T08:30:45Z",
+      "side": 1,
+      "message": "How about a separate sentinel for readability?",
+      "range": {
+        "startLine": 10491,
+        "startChar": 32,
+        "endLine": 10491,
+        "endChar": 48
+      },
+      "revId": "f0db6747a87c2834ba5110f8e7f57a80785117d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84c102d9_d2fd1cc3",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10506,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T08:30:45Z",
+      "side": 1,
+      "message": "It is surprising that the array can be full and have empty slots at the same time.",
+      "range": {
+        "startLine": 10506,
+        "startChar": 1,
+        "endLine": 10506,
+        "endChar": 47
+      },
+      "revId": "f0db6747a87c2834ba5110f8e7f57a80785117d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c589b51_4affc251",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10509,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T08:30:45Z",
+      "side": 1,
+      "message": "also CHECK_LT(empty_slot, array-\u003elength())?",
+      "range": {
+        "startLine": 10509,
+        "startChar": 4,
+        "endLine": 10509,
+        "endChar": 44
+      },
+      "revId": "f0db6747a87c2834ba5110f8e7f57a80785117d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23632d70_3360cfbb",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10528,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T08:30:45Z",
+      "side": 1,
+      "message": "Since Compact cannot be re-used, can we simply inline the JSObject::PrototypeRegistryCompactionCallback here?",
+      "range": {
+        "startLine": 10528,
+        "startChar": 39,
+        "endLine": 10528,
+        "endChar": 66
+      },
+      "revId": "f0db6747a87c2834ba5110f8e7f57a80785117d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f0f5d60_49d24056",
+        "filename": "src/objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10555,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T08:30:45Z",
+      "side": 1,
+      "message": "kEmptySlotIndex or sentinel?",
+      "range": {
+        "startLine": 10555,
+        "startChar": 35,
+        "endLine": 10555,
+        "endChar": 36
+      },
+      "revId": "f0db6747a87c2834ba5110f8e7f57a80785117d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f6fd6ee_28f53233",
+        "filename": "src/objects/fixed-array-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T08:30:45Z",
+      "side": 1,
+      "message": "DCHECK_LT(index, array-\u003elength())",
+      "range": {
+        "startLine": 276,
+        "startChar": 2,
+        "endLine": 276,
+        "endChar": 38
+      },
+      "revId": "f0db6747a87c2834ba5110f8e7f57a80785117d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68d21d85_2c95d676",
+        "filename": "src/objects/fixed-array.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T08:30:45Z",
+      "side": 1,
+      "message": "This is not used and not defined.",
+      "range": {
+        "startLine": 341,
+        "startChar": 2,
+        "endLine": 341,
+        "endChar": 30
+      },
+      "revId": "f0db6747a87c2834ba5110f8e7f57a80785117d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
