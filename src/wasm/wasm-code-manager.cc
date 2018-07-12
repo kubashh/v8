@@ -537,17 +537,6 @@ WasmCode* NativeModule::AddCode(
     }
   }
 
-  {
-    // TODO(clemensh): Remove the need for locking here. Probably requires
-    // word-aligning the jump table slots.
-    base::LockGuard<base::Mutex> lock(&allocation_mutex_);
-    if (!ret->protected_instructions_.is_empty()) {
-      ret->RegisterTrapHandlerData();
-    }
-    set_code(index, ret);
-    PatchJumpTable(index, ret->instruction_start(), WasmCode::kFlushICache);
-  }
-
   // Flush the i-cache here instead of in AddOwnedCode, to include the changes
   // made while iterating over the RelocInfo above.
   Assembler::FlushICache(ret->instructions().start(),
@@ -578,6 +567,19 @@ WasmCode* NativeModule::AddDeserializedCode(
   // Note: we do not flush the i-cache here, since the code needs to be
   // relocated anyway. The caller is responsible for flushing the i-cache later.
   return code;
+}
+
+void NativeModule::PublishCode(WasmCode* code) {
+  // TODO(clemensh): Remove the need for locking here. Probably requires
+  // word-aligning the jump table slots.
+  base::LockGuard<base::Mutex> lock(&allocation_mutex_);
+  if (!code->protected_instructions_.is_empty()) {
+    code->RegisterTrapHandlerData();
+  }
+  DCHECK(!code->IsAnonymous());
+  set_code(code->index(), code);
+  PatchJumpTable(code->index(), code->instruction_start(),
+                 WasmCode::kFlushICache);
 }
 
 WasmCode* NativeModule::CreateEmptyJumpTable(uint32_t num_wasm_functions) {
