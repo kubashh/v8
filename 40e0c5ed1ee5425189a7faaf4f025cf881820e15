@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8f7c627_835ac61f",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T22:01:06Z",
+      "side": 1,
+      "message": "When is this expected to happen, and how are you planning to deal with it?\n\nWould it maybe have less overhead to do something like:\n\nbool is_two_letter_lang \u003d \n    // Two letters, both in range \u0027a\u0027-\u0027z\u0027...\n    locale_str.length() \u003d\u003d 2 \u0026\u0026\n    static_cast\u003cuint8_t\u003e(locale_str[0] - \u0027a\u0027) \u003c 26 \u0026\u0026\n    static_cast\u003cuint8_t\u003e(locale_str[1] - \u0027a\u0027) \u003c 26 \u0026\u0026\n    // ...but not one of the deprecated tags:\n    locale_str !\u003d \"in\" \u0026\u0026\n    locale_str !\u003d \"iw\" \u0026\u0026\n    locale_str !\u003d \"ji\" \u0026\u0026\n    locale_str !\u003d \"jw\";",
+      "range": {
+        "startLine": 1461,
+        "startChar": 2,
+        "endLine": 1461,
+        "endChar": 27
+      },
+      "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59eb4677_3d367bd4",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T22:01:06Z",
+      "side": 1,
+      "message": "I think this can simply be:\n\n  locale_str \u003d\u003d \"fil\"",
+      "range": {
+        "startLine": 1488,
+        "startChar": 6,
+        "endLine": 1488,
+        "endChar": 46
+      },
+      "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d488685_f1210602",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T22:01:06Z",
+      "side": 1,
+      "message": "I assume the meat of Runtime_CanonicalizeLanguageTag is going to get inlined here?",
+      "range": {
+        "startLine": 1498,
+        "startChar": 18,
+        "endLine": 1498,
+        "endChar": 41
+      },
+      "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aad17007_96cf1ea7",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T22:01:06Z",
+      "side": 1,
+      "message": "Here\u0027s a C++ equivalent:\n\n  Handle\u003cString\u003e locale_str;\n  if (locale-\u003eIsString()) {\n    locale_str \u003d Handle\u003cString\u003e::cast(locale);\n  } else if (locale-\u003eIsJSReceiver()) {\n    ASSIGN_RETURN_ON_EXCEPTION(isolate, locale_str,\n                               Object::ToString(isolate, locale), String);\n  } else {\n    THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kLanguageID),\n                    String);\n  }\n  // continue here, {locale_str} is now guaranteed to contain a String.\n\nSo you don\u0027t need CanonicalizeLanguageTag_ as a separate function, and you don\u0027t need the anonymous namespace either.\nFurther notes:\n- I believe the JS comment is wrong, there\u0027s no extra null check required\n- if Object::ToString fails, then there\u0027s a pending exception already, and calling THROW_NEW_ERROR again should trigger a DCHECK.",
+      "range": {
+        "startLine": 1512,
+        "startChar": 5,
+        "endLine": 1512,
+        "endChar": 43
+      },
+      "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
