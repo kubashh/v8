@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9c7c2c0_acb39951",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T19:44:03Z",
+      "side": 1,
+      "message": "nit: AsciiToLower",
+      "range": {
+        "startLine": 1451,
+        "startChar": 5,
+        "endLine": 1451,
+        "endChar": 17
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ae10c0c_0091f09f",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T19:44:03Z",
+      "side": 1,
+      "message": "Knowing that \u0027A\u0027 \u003d\u003d 65 and \u0027a\u0027 \u003d\u003d 97, I\u0027d find this more intuitive as:\n\nreturn c + (\u0027a\u0027 - \u0027A\u0027);",
+      "range": {
+        "startLine": 1455,
+        "startChar": 9,
+        "endLine": 1455,
+        "endChar": 24
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da1ce74a_afb1bb6b",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1465,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T19:44:03Z",
+      "side": 1,
+      "message": "singleton",
+      "range": {
+        "startLine": 1465,
+        "startChar": 30,
+        "endLine": 1465,
+        "endChar": 40
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dc468eb_b5006348",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1477,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T19:44:03Z",
+      "side": 1,
+      "message": "nit: \"Is...\" (capitalized), \"Structurally\" (with \u0027r\u0027). Please update the CL description too.",
+      "range": {
+        "startLine": 1477,
+        "startChar": 5,
+        "endLine": 1477,
+        "endChar": 34
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86324c4f_b7ccc3c1",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T19:44:03Z",
+      "side": 1,
+      "message": "nit: locale_in",
+      "range": {
+        "startLine": 1478,
+        "startChar": 54,
+        "endLine": 1478,
+        "endChar": 62
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f19f0ddf_5902802a",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T19:44:03Z",
+      "side": 1,
+      "message": "Under what circumstances is this expected to fail? Why is it okay to just continue?\nFrom a quick glance at the ICU code, it seems that allocation failures and malformed regexps are the expected failure modes. The latter would be a bug in V8, the former should cause a crash anyway. Would it make sense to simply CHECK() here that matcher creation was successful? Then at least we would learn (via crash reports) about unexpected failures.",
+      "range": {
+        "startLine": 1483,
+        "startChar": 7,
+        "endLine": 1483,
+        "endChar": 73
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1e1f673_30f52418",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T19:44:03Z",
+      "side": 1,
+      "message": "grandfathered",
+      "range": {
+        "startLine": 1487,
+        "startChar": 42,
+        "endLine": 1487,
+        "endChar": 54
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2138a8a2_d5c7573f",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-12T19:44:03Z",
+      "side": 1,
+      "message": "same question as above; again below",
+      "range": {
+        "startLine": 1527,
+        "startChar": 48,
+        "endLine": 1527,
+        "endChar": 54
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
