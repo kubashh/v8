@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c7bed87_86a2812f",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2959,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T17:04:35Z",
+      "side": 1,
+      "message": "Not needed anymore?",
+      "range": {
+        "startLine": 2959,
+        "startChar": 36,
+        "endLine": 2959,
+        "endChar": 64
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ccc7bcf_aebf8c99",
+        "filename": "src/objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 10563,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T17:04:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be compared against the marker?",
+      "range": {
+        "startLine": 10563,
+        "startChar": 6,
+        "endLine": 10563,
+        "endChar": 31
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a65063a_c3130597",
+        "filename": "src/objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 10567,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T17:04:35Z",
+      "side": 1,
+      "message": "Maybe dcheck that array-\u003eGet(empty_slot) is a Smi?",
+      "range": {
+        "startLine": 10567,
+        "startChar": 4,
+        "endLine": 10567,
+        "endChar": 14
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0279d33f_07abfa15",
+        "filename": "src/objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 10604,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T17:04:35Z",
+      "side": 1,
+      "message": "It is not guaranteed that copy_to index reaches the new_length: more objects may become IsClearedWeakHeapObject during the GC in line 10601.\n\nIt would be more robust to set the length to copy_to after the loop.",
+      "range": {
+        "startLine": 10604,
+        "startChar": 24,
+        "endLine": 10604,
+        "endChar": 34
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fcd43e3_9edff772",
+        "filename": "src/objects/prototype-info.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-07-12T17:04:35Z",
+      "side": 1,
+      "message": "Please comment the contract for the callback. What are the parameters, can callback cause GC?",
+      "range": {
+        "startLine": 80,
+        "startChar": 2,
+        "endLine": 80,
+        "endChar": 60
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
