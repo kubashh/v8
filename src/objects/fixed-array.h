@@ -361,13 +361,14 @@ class WeakArrayList : public HeapObject {
   static const int kMaxCapacity =
       (FixedArray::kMaxSize - kHeaderSize) / kPointerSize;
 
+ protected:
+  static Handle<WeakArrayList> EnsureSpace(Handle<WeakArrayList> array,
+                                           int length);
+
  private:
   static int OffsetOfElementAt(int index) {
     return kHeaderSize + index * kPointerSize;
   }
-
-  static Handle<WeakArrayList> EnsureSpace(Handle<WeakArrayList> array,
-                                           int length);
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(WeakArrayList);
 };
