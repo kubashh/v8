@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "40d54ec4_43d7ebc5",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T19:42:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9c7c2c0_acb39951",
+      "range": {
+        "startLine": 1451,
+        "startChar": 5,
+        "endLine": 1451,
+        "endChar": 17
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ae10c0c_0091f09f",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "334d64b3_332c1b17",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T19:42:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ae10c0c_0091f09f",
+      "range": {
+        "startLine": 1455,
+        "startChar": 9,
+        "endLine": 1455,
+        "endChar": 24
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1033d4d8_689b0e06",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1465,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T19:42:08Z",
+      "side": 1,
+      "message": "Wow, good eye. I copied this from https://cs.chromium.org/chromium/src/v8/src/js/intl.js?type\u003dcs\u0026q\u003df:/v8/+singletion\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d851 and never noticed.",
+      "parentUuid": "da1ce74a_afb1bb6b",
+      "range": {
+        "startLine": 1465,
+        "startChar": 30,
+        "endLine": 1465,
+        "endChar": 40
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9dc468eb_b5006348",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1002d4cb_de5da559",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1477,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T19:42:08Z",
+      "side": 1,
+      "message": "Again good eye. The missing \u0027r\u0027 was from init.js",
+      "parentUuid": "9dc468eb_b5006348",
+      "range": {
+        "startLine": 1477,
+        "startChar": 5,
+        "endLine": 1477,
+        "endChar": 34
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "72828cc3_7a7ca173",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T19:42:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86324c4f_b7ccc3c1",
+      "range": {
+        "startLine": 1478,
+        "startChar": 54,
+        "endLine": 1478,
+        "endChar": 62
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f19f0ddf_5902802a",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 7
@@ -137,6 +257,30 @@
       "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3674cd4_6f17737e",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T19:42:08Z",
+      "side": 1,
+      "message": "I put the CHECK() calls in the 3 accessor function and removed the null_ptr tests.",
+      "parentUuid": "f19f0ddf_5902802a",
+      "range": {
+        "startLine": 1483,
+        "startChar": 7,
+        "endLine": 1483,
+        "endChar": 73
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "33d160ec_8b42ec43",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T19:42:08Z",
+      "side": 1,
+      "message": "Good eye. Again copied from init.js",
+      "parentUuid": "f1e1f673_30f52418",
+      "range": {
+        "startLine": 1487,
+        "startChar": 42,
+        "endLine": 1487,
+        "endChar": 54
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2138a8a2_d5c7573f",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 7
@@ -183,6 +351,30 @@
       "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dc7fe1c_6b4b2561",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T19:42:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2138a8a2_d5c7573f",
+      "range": {
+        "startLine": 1527,
+        "startChar": 48,
+        "endLine": 1527,
+        "endChar": 54
+      },
+      "revId": "247d1b48ea1e305bf6c385d46f034df7a6db0386",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
