@@ -5465,6 +5465,10 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
                        promise_context, promise, effect, control);
   effect = graph()->NewNode(
       simplified()->StoreField(AccessBuilder::ForContextSlot(
+          PromiseBuiltinsAssembler::kAlreadyResolvedSlot)),
+      promise_context, jsgraph()->FalseConstant(), effect, control);
+  effect = graph()->NewNode(
+      simplified()->StoreField(AccessBuilder::ForContextSlot(
           PromiseBuiltinsAssembler::kDebugEventSlot)),
       promise_context, jsgraph()->TrueConstant(), effect, control);
 
