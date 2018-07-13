@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bdcdfcba_79ada959",
+        "filename": "src/runtime/runtime.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-07-13T10:42:51Z",
+      "side": 1,
+      "message": "this one is bad",
+      "range": {
+        "startLine": 176,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 11
+      },
+      "revId": "520cd8aa404f1e821e35ee8dac901d8505e4a1b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92fe6830_9c6e165c",
+        "filename": "src/utils.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-07-13T10:42:51Z",
+      "side": 1,
+      "message": "this one is bad",
+      "range": {
+        "startLine": 412,
+        "startChar": 60,
+        "endLine": 412,
+        "endChar": 69
+      },
+      "revId": "520cd8aa404f1e821e35ee8dac901d8505e4a1b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
