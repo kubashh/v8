@@ -1285,15 +1285,14 @@ class ElementsAccessorBase : public InternalElementsAccessor {
     return Subclass::GetCapacityImpl(holder, backing_store);
   }
 
-  static Object* FillImpl(Isolate* isolate, Handle<JSObject> receiver,
-                          Handle<Object> obj_value, uint32_t start,
-                          uint32_t end) {
+  static Object* FillImpl(Handle<JSObject> receiver, Handle<Object> obj_value,
+                          uint32_t start, uint32_t end) {
     UNREACHABLE();
   }
 
-  Object* Fill(Isolate* isolate, Handle<JSObject> receiver,
-               Handle<Object> obj_value, uint32_t start, uint32_t end) {
-    return Subclass::FillImpl(isolate, receiver, obj_value, start, end);
+  Object* Fill(Handle<JSObject> receiver, Handle<Object> obj_value,
+               uint32_t start, uint32_t end) {
+    return Subclass::FillImpl(receiver, obj_value, start, end);
   }
 
   static Maybe<bool> IncludesValueImpl(Isolate* isolate,
@@ -1324,17 +1323,16 @@ class ElementsAccessorBase : public InternalElementsAccessor {
                                       length);
   }
 
-  static Maybe<int64_t> LastIndexOfValueImpl(Isolate* isolate,
-                                             Handle<JSObject> receiver,
+  static Maybe<int64_t> LastIndexOfValueImpl(Handle<JSObject> receiver,
                                              Handle<Object> value,
                                              uint32_t start_from) {
     UNREACHABLE();
   }
 
-  Maybe<int64_t> LastIndexOfValue(Isolate* isolate, Handle<JSObject> receiver,
+  Maybe<int64_t> LastIndexOfValue(Handle<JSObject> receiver,
                                   Handle<Object> value,
                                   uint32_t start_from) final {
-    return Subclass::LastIndexOfValueImpl(isolate, receiver, value, start_from);
+    return Subclass::LastIndexOfValueImpl(receiver, value, start_from);
   }
 
   static void ReverseImpl(JSObject* receiver) { UNREACHABLE(); }
@@ -3040,9 +3038,8 @@ class TypedElementsAccessor
     return Just(true);
   }
 
-  static Object* FillImpl(Isolate* isolate, Handle<JSObject> receiver,
-                          Handle<Object> obj_value, uint32_t start,
-                          uint32_t end) {
+  static Object* FillImpl(Handle<JSObject> receiver, Handle<Object> obj_value,
+                          uint32_t start, uint32_t end) {
     Handle<JSTypedArray> array = Handle<JSTypedArray>::cast(receiver);
     DCHECK(!array->WasNeutered());
     DCHECK(obj_value->IsNumeric());
@@ -3174,8 +3171,7 @@ class TypedElementsAccessor
     return Just<int64_t>(-1);
   }
 
-  static Maybe<int64_t> LastIndexOfValueImpl(Isolate* isolate,
-                                             Handle<JSObject> receiver,
+  static Maybe<int64_t> LastIndexOfValueImpl(Handle<JSObject> receiver,
                                              Handle<Object> value,
                                              uint32_t start_from) {
     DisallowHeapAllocation no_gc;
@@ -3606,8 +3602,7 @@ class SloppyArgumentsElementsAccessor
   }
 
   static void ConvertArgumentsStoreResult(
-      Isolate* isolate, Handle<SloppyArgumentsElements> elements,
-      Handle<Object> result) {
+      Handle<SloppyArgumentsElements> elements, Handle<Object> result) {
     UNREACHABLE();
   }
 

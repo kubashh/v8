@@ -259,7 +259,7 @@ RUNTIME_FUNCTION(Runtime_InternalDateFormat) {
   }
 
   icu::SimpleDateFormat* date_format =
-      DateFormat::UnpackDateFormat(isolate, date_format_holder);
+      DateFormat::UnpackDateFormat(date_format_holder);
   CHECK_NOT_NULL(date_format);
 
   icu::UnicodeString result;
@@ -370,7 +370,7 @@ RUNTIME_FUNCTION(Runtime_InternalCompare) {
   CONVERT_ARG_HANDLE_CHECKED(String, string1, 1);
   CONVERT_ARG_HANDLE_CHECKED(String, string2, 2);
 
-  icu::Collator* collator = Collator::UnpackCollator(isolate, collator_holder);
+  icu::Collator* collator = Collator::UnpackCollator(collator_holder);
   CHECK_NOT_NULL(collator);
 
   string1 = String::Flatten(isolate, string1);
@@ -440,11 +440,11 @@ RUNTIME_FUNCTION(Runtime_PluralRulesSelect) {
   CONVERT_ARG_HANDLE_CHECKED(Object, number, 1);
 
   icu::PluralRules* plural_rules =
-      PluralRules::UnpackPluralRules(isolate, plural_rules_holder);
+      PluralRules::UnpackPluralRules(plural_rules_holder);
   CHECK_NOT_NULL(plural_rules);
 
   icu::DecimalFormat* number_format =
-      PluralRules::UnpackNumberFormat(isolate, plural_rules_holder);
+      PluralRules::UnpackNumberFormat(plural_rules_holder);
   CHECK_NOT_NULL(number_format);
 
   // Currently, PluralRules doesn't implement all the options for rounding that
@@ -517,7 +517,7 @@ RUNTIME_FUNCTION(Runtime_BreakIteratorAdoptText) {
   CONVERT_ARG_HANDLE_CHECKED(String, text, 1);
 
   icu::BreakIterator* break_iterator =
-      V8BreakIterator::UnpackBreakIterator(isolate, break_iterator_holder);
+      V8BreakIterator::UnpackBreakIterator(break_iterator_holder);
   CHECK_NOT_NULL(break_iterator);
 
   icu::UnicodeString* u_text = reinterpret_cast<icu::UnicodeString*>(
@@ -546,7 +546,7 @@ RUNTIME_FUNCTION(Runtime_BreakIteratorFirst) {
   CONVERT_ARG_HANDLE_CHECKED(JSObject, break_iterator_holder, 0);
 
   icu::BreakIterator* break_iterator =
-      V8BreakIterator::UnpackBreakIterator(isolate, break_iterator_holder);
+      V8BreakIterator::UnpackBreakIterator(break_iterator_holder);
   CHECK_NOT_NULL(break_iterator);
 
   return *isolate->factory()->NewNumberFromInt(break_iterator->first());
@@ -560,7 +560,7 @@ RUNTIME_FUNCTION(Runtime_BreakIteratorNext) {
   CONVERT_ARG_HANDLE_CHECKED(JSObject, break_iterator_holder, 0);
 
   icu::BreakIterator* break_iterator =
-      V8BreakIterator::UnpackBreakIterator(isolate, break_iterator_holder);
+      V8BreakIterator::UnpackBreakIterator(break_iterator_holder);
   CHECK_NOT_NULL(break_iterator);
 
   return *isolate->factory()->NewNumberFromInt(break_iterator->next());
@@ -574,7 +574,7 @@ RUNTIME_FUNCTION(Runtime_BreakIteratorCurrent) {
   CONVERT_ARG_HANDLE_CHECKED(JSObject, break_iterator_holder, 0);
 
   icu::BreakIterator* break_iterator =
-      V8BreakIterator::UnpackBreakIterator(isolate, break_iterator_holder);
+      V8BreakIterator::UnpackBreakIterator(break_iterator_holder);
   CHECK_NOT_NULL(break_iterator);
 
   return *isolate->factory()->NewNumberFromInt(break_iterator->current());
@@ -588,7 +588,7 @@ RUNTIME_FUNCTION(Runtime_BreakIteratorBreakType) {
   CONVERT_ARG_HANDLE_CHECKED(JSObject, break_iterator_holder, 0);
 
   icu::BreakIterator* break_iterator =
-      V8BreakIterator::UnpackBreakIterator(isolate, break_iterator_holder);
+      V8BreakIterator::UnpackBreakIterator(break_iterator_holder);
   CHECK_NOT_NULL(break_iterator);
 
   // TODO(cira): Remove cast once ICU fixes base BreakIterator class.
