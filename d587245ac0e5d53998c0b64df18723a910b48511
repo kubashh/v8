@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d3760c1_3c0d3f87",
+        "filename": "src/heap/array-buffer-tracker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-07-13T12:03:22Z",
+      "side": 0,
+      "message": "Unrelated drive-by cleanup",
+      "revId": "d587245ac0e5d53998c0b64df18723a910b48511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e9de335_d23938ae",
+        "filename": "src/objects/js-array.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-07-13T12:03:22Z",
+      "side": 0,
+      "message": "Drive-by cleanup",
+      "revId": "d587245ac0e5d53998c0b64df18723a910b48511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
