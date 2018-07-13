@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c2b90ce9_20831e75",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T22:53:57Z",
+      "side": 1,
+      "message": "I made these into IsTwoLetterLanguage and IsDeprecatedLanguage routines.",
+      "parentUuid": "b8f7c627_835ac61f",
+      "range": {
+        "startLine": 1461,
+        "startChar": 2,
+        "endLine": 1461,
+        "endChar": 27
+      },
+      "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59eb4677_3d367bd4",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f7315a6_73da6536",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T22:53:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59eb4677_3d367bd4",
+      "range": {
+        "startLine": 1488,
+        "startChar": 6,
+        "endLine": 1488,
+        "endChar": 46
+      },
+      "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "30e3d1a5_96674a2c",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T22:53:57Z",
+      "side": 1,
+      "message": "Yes, it needs to be done below (once I know how to do tat :-).",
+      "parentUuid": "5d488685_f1210602",
+      "range": {
+        "startLine": 1498,
+        "startChar": 18,
+        "endLine": 1498,
+        "endChar": 41
+      },
+      "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aad17007_96cf1ea7",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9350f90f_bcc198c1",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-13T22:53:57Z",
+      "side": 1,
+      "message": "I\u0027ve make a pass at this. I still need to call the runtime CanonicalizeLanguageTag.",
+      "parentUuid": "aad17007_96cf1ea7",
+      "range": {
+        "startLine": 1512,
+        "startChar": 5,
+        "endLine": 1512,
+        "endChar": 43
+      },
+      "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
