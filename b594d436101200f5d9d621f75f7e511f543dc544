@@ -22,6 +22,30 @@
       "revId": "b594d436101200f5d9d621f75f7e511f543dc544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9385514f_d093bc09",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-07-13T08:55:52Z",
+      "side": 1,
+      "message": "Thanks!\n\nFound another one in builtins-functions.cc as well.",
+      "parentUuid": "95f4cffa_c0d54200",
+      "range": {
+        "startLine": 579,
+        "startChar": 22,
+        "endLine": 579,
+        "endChar": 33
+      },
+      "revId": "b594d436101200f5d9d621f75f7e511f543dc544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
