@@ -22,6 +22,30 @@
       "revId": "4755e58a6d0bd1ab6533237d834a52cd975d994b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de1345eb_99b3aa2c",
+        "filename": "src/objects/code.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-07-13T09:35:20Z",
+      "side": 1,
+      "message": "No empty_fixed_array is definitely in RO_SPACE, so I\u0027ve reverted this change.",
+      "parentUuid": "00f768ce_928a4c10",
+      "range": {
+        "startLine": 830,
+        "startChar": 46,
+        "endLine": 830,
+        "endChar": 77
+      },
+      "revId": "4755e58a6d0bd1ab6533237d834a52cd975d994b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
