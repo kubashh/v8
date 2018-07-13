@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "caee4dcf_31879a98",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-07-13T07:42:27Z",
+      "side": 1,
+      "message": "Can we have a static_assert(sizeof(std::atomic\u003cintptr_t\u003e) \u003d\u003d kPointerSize)?",
+      "range": {
+        "startLine": 371,
+        "startChar": 8,
+        "endLine": 371,
+        "endChar": 20
+      },
+      "revId": "d3a6f869d4103a2f087e0ea24fb66c8579861714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52304c1d_2e5579c1",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-07-13T07:42:27Z",
+      "side": 1,
+      "message": "Maybe for this one too. They should all be the same size but I would rather check that.",
+      "range": {
+        "startLine": 374,
+        "startChar": 6,
+        "endLine": 374,
+        "endChar": 18
+      },
+      "revId": "d3a6f869d4103a2f087e0ea24fb66c8579861714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
