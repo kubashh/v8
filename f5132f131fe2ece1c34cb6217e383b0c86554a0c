@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4409158_5be1c484",
+        "filename": "src/isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-13T11:43:47Z",
+      "side": 1,
+      "message": "nit: Please also initialize these two.",
+      "range": {
+        "startLine": 363,
+        "startChar": 0,
+        "endLine": 364,
+        "endChar": 31
+      },
+      "revId": "f5132f131fe2ece1c34cb6217e383b0c86554a0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
