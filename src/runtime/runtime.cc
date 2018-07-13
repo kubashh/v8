@@ -159,7 +159,7 @@ const Runtime::Function* Runtime::FunctionForId(Runtime::FunctionId id) {
   return &(kIntrinsicFunctions[static_cast<int>(id)]);
 }
 
-const Runtime::Function* Runtime::RuntimeFunctionTable(Isolate* isolate) {
+const Runtime::Function* Runtime::RuntimeFunctionTable() {
 #ifdef USE_SIMULATOR
   // When running with the simulator we need to provide a table which has
   // redirected runtime entry addresses.
