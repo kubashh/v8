@@ -262,7 +262,7 @@ class GlobalHandles::Node {
   }
 
   void CollectPhantomCallbackData(
-      Isolate* isolate,
+
       std::vector<PendingPhantomCallback>* pending_phantom_callbacks) {
     DCHECK(weakness_type() == PHANTOM_WEAK ||
            weakness_type() == PHANTOM_WEAK_2_EMBEDDER_FIELDS);
@@ -637,8 +637,7 @@ void GlobalHandles::IterateWeakRootsForPhantomHandles(
         ++number_of_phantom_handle_resets_;
       } else if (node->IsPhantomCallback()) {
         node->MarkPending();
-        node->CollectPhantomCallbackData(isolate(),
-                                         &pending_phantom_callbacks_);
+        node->CollectPhantomCallbackData(&pending_phantom_callbacks_);
       }
     }
   }
@@ -736,8 +735,7 @@ void GlobalHandles::IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles(
 
         } else if (node->IsPhantomCallback()) {
           node->MarkPending();
-          node->CollectPhantomCallbackData(isolate(),
-                                           &pending_phantom_callbacks_);
+          node->CollectPhantomCallbackData(&pending_phantom_callbacks_);
         } else {
           UNREACHABLE();
         }
