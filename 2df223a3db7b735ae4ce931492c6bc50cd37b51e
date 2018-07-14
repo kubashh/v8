@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76068b36_eb6bb579",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1353,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-14T07:31:37Z",
+      "side": 1,
+      "message": "nit: \nLike other cases,  the above wouldn\u0027t fail unless input regex has an error. So, this should be CHECK(U_SUCCESS(status)) as well.\n\nHmm.... if we CHECK() here, other 3 CHECK\u0027s are redundant. They\u0027ll not be reached.  A benefit  of adding 3 separate CHECK\u0027s instead of CHECK() here  is that you\u0027d know which of three regex has an error. \n\nI like CHECK() here, but it\u0027s up to you.",
+      "range": {
+        "startLine": 1351,
+        "startChar": 2,
+        "endLine": 1353,
+        "endChar": 3
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90db71c5_09b0fe44",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-14T07:31:37Z",
+      "side": 1,
+      "message": "This should be inside anonymous namespace.\n\nI\u0027m not saying you have to use this (FastAsciiConvert uses it). Anyway, \n\n   return c ^ (1 \u003c\u003c 5)\n\nalso works.  :-)   (we don\u0027t use EBCDIC :-) ).",
+      "range": {
+        "startLine": 1494,
+        "startChar": 0,
+        "endLine": 1499,
+        "endChar": 1
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f0e6eb5_e4b2da0b",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-14T07:31:37Z",
+      "side": 1,
+      "message": "if (!is_valid_lang_tag || U_FAILURE(status))\n\nSee below as to why. Perhaps,with V8_UNLIKELY around U_FAILURE(status)",
+      "range": {
+        "startLine": 1531,
+        "startChar": 2,
+        "endLine": 1531,
+        "endChar": 27
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8452c111_86331acf",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1551,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-14T07:31:37Z",
+      "side": 1,
+      "message": "nit: move them right before their use (for loop at line 1569)",
+      "range": {
+        "startLine": 1550,
+        "startChar": 2,
+        "endLine": 1551,
+        "endChar": 37
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e14c840e_f792c562",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1569,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-14T07:31:37Z",
+      "side": 1,
+      "message": "for (const std::string\u0026 value : parts)\n\nor\n\nfor (const auto\u0026 value: parts)",
+      "range": {
+        "startLine": 1569,
+        "startChar": 2,
+        "endLine": 1569,
+        "endChar": 67
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ba33a56_da22ce27",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-14T07:31:37Z",
+      "side": 1,
+      "message": "FYI:\n\nI told  you to use either the above (only valid for pure ASCII input) or icu::UnicodeString::fromUTF8().  Because the former is only valid for pure ASCII input (well, ICU has U_ASSERT otherwise, but that\u0027d not fire in non-debug build),  you have to make sure that  the input is pure ASCII before calling IsStructurallyValid(). Without knowing how/where you are going to call this function, I\u0027m not sure which is better (or a combination of bhe two),  \n\n1. add a fast ascii-check at the beginning of this function and return false for non-ascii  input\n\n2. just make sure that a caller does the right thing (and add CHECK()is_ascii(locale) at the beginning of this function.\n\n\nAn alternative is to use fromUTF8, but  that also depends on how you make std::string from v8\u0027s various String types (v8\u0027s SingleByteString is not ASCII but contains U+0000 - U+00FF )\n\nFor now, you may just add TODO at the beginning of this function.",
+      "range": {
+        "startLine": 1571,
+        "startChar": 4,
+        "endLine": 1572,
+        "endChar": 55
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c931a5a2_eaf38731",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1574,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-14T07:31:37Z",
+      "side": 1,
+      "message": "Is this to silence a compiler warning about converting U_BOOL (icu) to bool ?  I\u0027m fine with that. \n\nIf so, I wonder why that compiler didn\u0027t complain about line 1530.",
+      "range": {
+        "startLine": 1574,
+        "startChar": 8,
+        "endLine": 1574,
+        "endChar": 10
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fae0e9c6_3df6a59b",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-14T07:31:37Z",
+      "side": 1,
+      "message": "With the above condition met (pure ASCII input), U_FAILURE(status) is unlikely to be ever true (I didn\u0027t check all the possibilities).  Let\u0027s keep this check (and the other one below).In that case,  add  the same check to line 1531.",
+      "range": {
+        "startLine": 1575,
+        "startChar": 4,
+        "endLine": 1577,
+        "endChar": 5
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
