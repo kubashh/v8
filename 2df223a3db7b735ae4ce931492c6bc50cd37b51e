@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "943f6ca5_aa52963c",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-14T15:38:59Z",
+      "side": 1,
+      "message": "or return c | (1 \u003c\u003c 5) because we know it\u0027s lowercasing. :-)",
+      "parentUuid": "90db71c5_09b0fe44",
+      "range": {
+        "startLine": 1494,
+        "startChar": 0,
+        "endLine": 1499,
+        "endChar": 1
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f0e6eb5_e4b2da0b",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 10
