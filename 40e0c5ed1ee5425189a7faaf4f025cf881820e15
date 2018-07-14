@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "c8d2c70f_8850f0c9",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-14T02:06:38Z",
+      "side": 1,
+      "message": "You can\u0027t call runtime functions directly from C++ code. The common workaround is to factor out the core functionality into a separate function. But in this case, I would just copy/paste the relevant bits. We can then delete the entire runtime function when the migration is done.",
+      "parentUuid": "30e3d1a5_96674a2c",
+      "range": {
+        "startLine": 1498,
+        "startChar": 18,
+        "endLine": 1498,
+        "endChar": 41
+      },
+      "revId": "40e0c5ed1ee5425189a7faaf4f025cf881820e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aad17007_96cf1ea7",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 6
