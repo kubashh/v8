@@ -1303,11 +1303,7 @@ MaybeHandle<Object> NumberFormat::FormatNumber(
       reinterpret_cast<const uint16_t*>(result.getBuffer()), result.length()));
 }
 
-// TODO(bstell): enable this anonymous namespace once these routines are called:
-//  * GetLanguageSingletonRegexMatcher,
-//  * GetLanguageTagRegexMatcher
-//  * GetLanguageVariantRegexMatcher
-// namespace {
+namespace {
 
 // TODO(bstell): Make all these a constexpr on the Intl class.
 void BuildLanguageTagRegexps(Isolate* isolate) {
@@ -1393,7 +1389,192 @@ icu::RegexMatcher* GetLanguageVariantRegexMatcher(Isolate* isolate) {
   return language_variant_regexp_matcher;
 }
 
-// }  // anonymous namespace
+}  // anonymous namespace
+
+// TODO(bstell): enable this anonymous namespace once
+// CanonicalizeLanguageTag called.
+// namespace {
+/**
+ * Check the structural Validity of the language tag per ECMA 402 6.2.2:
+ *   - Well-formed per RFC 5646 2.1
+ *   - There are no duplicate variant subtags
+ *   - There are no duplicate singletion (extension) subtags
+ *
+ * One extra-check is done (from RFC 5646 2.2.9): the tag is compared
+ * against the list of grandfathered tags. However, subtags for
+ * primary/extended language, script, region, variant are not checked
+ * against the IANA language subtag registry.
+ *
+ * ICU is too permissible and lets invalid tags, like
+ * hant-cmn-cn, through.
+ *
+ * Returns false if the language tag is invalid.
+ */
+bool isStructuallyValidLanguageTag(Isolate* isolate, std::string locale) {
+  icu::RegexMatcher* language_tag_regexp_matcher =
+      GetLanguageTagRegexMatcher(isolate);
+  if (language_tag_regexp_matcher == nullptr) {
+    // language_tag_regexp_matcher creation failed so assume tag is okay.
+    return true;
+  }
+
+  // Check if it's well-formed, including grandfadered tags.
+  language_tag_regexp_matcher->reset(locale.c_str());
+  UErrorCode status = U_ZERO_ERROR;
+  bool is_valid_lang_tag = language_tag_regexp_matcher->matches(status);
+  if (!is_valid_lang_tag) {
+    return false;
+  }
+
+  std::transform(locale.begin(), locale.end(), locale.begin(), ::tolower);
+
+  // Just return if it's a x- form. It's all private.
+  if (locale.find("x-") == 0) {
+    return true;
+  }
+
+  // Check if there are any duplicate variants or singletons (extensions).
+
+  // Remove private use section.
+  locale = locale.substr(0, locale.find("-x-"));
+
+  // Skip language since it can match variant regex, so we start from 1.
+  // We are matching i-klingon here, but that's ok, since i-klingon-klingon
+  // is not valid and would fail LANGUAGE_TAG_RE test.
+  std::vector<std::string> variants;
+  std::vector<std::string> extensions;
+  size_t pos = 0;
+  std::vector<std::string> parts;
+  while ((pos = locale.find("-")) != std::string::npos) {
+    std::string token = locale.substr(0, pos);
+    parts.push_back(token);
+    locale = locale.substr(pos + 1);
+  }
+  if (locale.length() != 0) {
+    parts.push_back(locale);
+  }
+
+  icu::RegexMatcher* language_variant_regexp_matcher =
+      GetLanguageVariantRegexMatcher(isolate);
+  if (language_variant_regexp_matcher == nullptr) {
+    // language_variant_regexp_matcher creation failed so assume tag is okay.
+    return true;
+  }
+
+  icu::RegexMatcher* language_singleton_regexp_matcher =
+      GetLanguageSingletonRegexMatcher(isolate);
+  if (language_singleton_regexp_matcher == nullptr) {
+    // language_singleton_re_matcher creation failed so assume tag is okay.
+    return true;
+  }
+
+  for (std::vector<int>::size_type i = 0; i != parts.size(); i++) {
+    std::string value = parts[i];
+    language_variant_regexp_matcher->reset(value.c_str());
+    bool is_language_variant =
+        !!language_variant_regexp_matcher->matches(status);
+    if (!U_SUCCESS(status)) {
+      return false;
+    }
+    if (is_language_variant && extensions.size() == 0) {
+      if (std::find(variants.begin(), variants.end(), value) ==
+          variants.end()) {
+        variants.push_back(value);
+      } else {
+        return false;
+      }
+    }
+
+    language_singleton_regexp_matcher->reset(value.c_str());
+    bool is_language_singleton =
+        !!language_singleton_regexp_matcher->matches(status);
+    if (!U_SUCCESS(status)) {
+      return false;
+    }
+    if (is_language_singleton) {
+      if (std::find(extensions.begin(), extensions.end(), value) ==
+          extensions.end()) {
+        extensions.push_back(value);
+      } else {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+bool IsLowerAscii(uint16_t c) { return c >= 'a' && c < 'z'; }
+
+bool IsTwoLetterLanguage(std::string locale) {
+  // Two letters, both in range 'a'-'z'...
+  return locale.length() == 2 && IsLowerAscii(locale[0]) &&
+         IsLowerAscii(locale[1]);
+}
+
+bool IsDeprecatedLanguage(std::string locale) {
+  //  Not one of the deprecated language tags:
+  return locale != "in" && locale != "iw" && locale != "ji" && locale != "jw";
+}
+
+MaybeHandle<String> Intl::CanonicalizeLanguageTag(Isolate* isolate,
+                                                  Handle<Object> locale_in) {
+  Handle<String> locale_str;
+  if (locale_in->IsString()) {
+    locale_str = Handle<String>::cast(locale_in);
+  } else if (locale_in->IsJSReceiver()) {
+    ASSIGN_RETURN_ON_EXCEPTION(isolate, locale_str,
+                               Object::ToString(isolate, locale_in), String);
+  } else {
+    THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kLanguageID),
+                    String);
+  }
+  std::string locale(locale_str->ToCString().get());
+
+  // Optimize for the most common case: a 2-letter language code in the
+  // canonical form/lowercase that is not one of the deprecated codes
+  // (in, iw, ji, jw). Don't check for ~70 of 3-letter deprecated language
+  // codes. Instead, let them be handled by ICU in the slow path. However,
+  // fast-track 'fil' (3-letter canonical code).
+  if ((IsTwoLetterLanguage(locale) && !IsDeprecatedLanguage(locale)) ||
+      locale == "fil") {
+    return locale_str;
+  }
+
+  if (!isStructuallyValidLanguageTag(isolate, locale)) {
+    THROW_NEW_ERROR(isolate, NewTypeError(MessageTemplate::kInvalidLanguageTag),
+                    String);
+  }
+
+  // // ECMA 402 6.2.3
+  // TODO(jshin): uloc_{for,to}TanguageTag can fail even for a structually valid
+  // language tag if it's too long (much longer than 100 chars). Even if we
+  // allocate a longer buffer, ICU will still fail if it's too long. Either
+  // propose to Ecma 402 to put a limit on the locale length or change ICU to
+  // handle long locale names better. See
+  // https://ssl.icu-project.org/trac/ticket/13417 .
+  UErrorCode error = U_ZERO_ERROR;
+  char icu_result[ULOC_FULLNAME_CAPACITY];
+  uloc_forLanguageTag(locale.c_str(), icu_result, ULOC_FULLNAME_CAPACITY,
+                      nullptr, &error);
+  if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
+    // TODO(jshin): This should not happen because the structural validity
+    // is already checked. If that's the case, remove this.
+    THROW_NEW_ERROR(
+        isolate, NewRangeError(MessageTemplate::kInvalidLanguageTag), String);
+  }
+
+  // Force strict BCP47 rules.
+  char result[ULOC_FULLNAME_CAPACITY];
+  uloc_toLanguageTag(icu_result, result, ULOC_FULLNAME_CAPACITY, TRUE, &error);
+
+  if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
+    THROW_NEW_ERROR(
+        isolate, NewRangeError(MessageTemplate::kInvalidLanguageTag), String);
+  }
+
+  return isolate->factory()->NewStringFromAsciiChecked(result);
+}
 
 MaybeHandle<JSObject> Intl::ResolveLocale(Isolate* isolate, const char* service,
                                           Handle<Object> requestedLocales,
