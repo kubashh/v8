@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1611415f_897dd117",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-15T05:05:37Z",
+      "side": 1,
+      "message": "This is now redundant",
+      "range": {
+        "startLine": 1354,
+        "startChar": 2,
+        "endLine": 1354,
+        "endChar": 26
+      },
+      "revId": "ce4d60fe2ed7a7fa31af0f655a779ca39d1b7e8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de49456a_010c8292",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-15T05:05:37Z",
+      "side": 1,
+      "message": "CHECK causes a crash if the checked condition does not hold, so handling this case is unnecessary (because it\u0027s unreachable).",
+      "range": {
+        "startLine": 1530,
+        "startChar": 2,
+        "endLine": 1530,
+        "endChar": 29
+      },
+      "revId": "ce4d60fe2ed7a7fa31af0f655a779ca39d1b7e8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
