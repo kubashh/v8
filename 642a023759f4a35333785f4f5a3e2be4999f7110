@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "54e27514_b6f639fa",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-15T22:04:06Z",
+      "side": 1,
+      "message": "I added the ascii test above and used icu::UnicodeString(char*, -1, US_INV)",
+      "parentUuid": "b60fc392_f5a6eec1",
+      "range": {
+        "startLine": 1479,
+        "startChar": 37,
+        "endLine": 1479,
+        "endChar": 52
+      },
+      "revId": "642a023759f4a35333785f4f5a3e2be4999f7110",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d3e0d51f_ab3d7b4a",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 6
