@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69821669_cfd6d64f",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-16T20:18:49Z",
+      "side": 1,
+      "message": "Isn\u0027t the following clearer?\n\nreturn (reinterpret_cast\u003cuint8_t\u0026\u003e(c) \u0026 0x80);",
+      "range": {
+        "startLine": 1504,
+        "startChar": 63,
+        "endLine": 1504,
+        "endChar": 75
+      },
+      "revId": "527cbc9b559d455aaeda95ad8c429cc2ff968bb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
