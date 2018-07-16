@@ -16,6 +16,24 @@
       "revId": "1104cd5afb9c69409b1fc46d9d1eb6e278b64515",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4d9abf0_3320aec5",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-16T11:47:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bbdbc9b_a6325021",
+      "revId": "1104cd5afb9c69409b1fc46d9d1eb6e278b64515",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
