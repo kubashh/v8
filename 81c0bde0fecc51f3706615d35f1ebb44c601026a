@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b728fb2c_d7e146cb",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-16T13:22:12Z",
+      "side": 1,
+      "message": "Why have both a DCHECK and an if? Usually a DCHECK signifies a fatal condition",
+      "revId": "81c0bde0fecc51f3706615d35f1ebb44c601026a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75e38b64_53eecff2",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-16T13:22:12Z",
+      "side": 1,
+      "message": "why does this need the double negation but the other uses don\u0027t?",
+      "revId": "81c0bde0fecc51f3706615d35f1ebb44c601026a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
