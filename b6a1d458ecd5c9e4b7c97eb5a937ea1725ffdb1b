@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fd177b66_9e3e6841",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2959,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-16T13:08:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c7bed87_86a2812f",
+      "range": {
+        "startLine": 2959,
+        "startChar": 36,
+        "endLine": 2959,
+        "endChar": 64
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ccc7bcf_aebf8c99",
         "filename": "src/objects.cc",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ee2f6be_1bef64a0",
+        "filename": "src/objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 10563,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-16T13:08:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ccc7bcf_aebf8c99",
+      "range": {
+        "startLine": 10563,
+        "startChar": 6,
+        "endLine": 10563,
+        "endChar": 31
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2570143d_15e1f4db",
+        "filename": "src/objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 10567,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-16T13:08:19Z",
+      "side": 1,
+      "message": "It\u0027s checked above: array-\u003eGet(empty_slot)-\u003eToSmi() does a DCHECK inside.",
+      "parentUuid": "6a65063a_c3130597",
+      "range": {
+        "startLine": 10567,
+        "startChar": 4,
+        "endLine": 10567,
+        "endChar": 14
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0279d33f_07abfa15",
         "filename": "src/objects.cc",
         "patchSetId": 11
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "d3f588e3_7a4006b9",
+        "filename": "src/objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 10604,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-16T13:08:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0279d33f_07abfa15",
+      "range": {
+        "startLine": 10604,
+        "startChar": 24,
+        "endLine": 10604,
+        "endChar": 34
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fcd43e3_9edff772",
         "filename": "src/objects/prototype-info.h",
         "patchSetId": 11
@@ -114,6 +210,30 @@
       "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "456e20bc_8998c51a",
+        "filename": "src/objects/prototype-info.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-16T13:08:19Z",
+      "side": 1,
+      "message": "// The callback is called when a weak pointer to HeapObject \"object\" is moved\n  // from index \"from_index\" to index \"to_index\" during compaction. The callback\n  // must not cause GC.\n  typedef void (*CompactionCallback)(HeapObject* object, int from_index, int to_index);",
+      "parentUuid": "6fcd43e3_9edff772",
+      "range": {
+        "startLine": 80,
+        "startChar": 2,
+        "endLine": 80,
+        "endChar": 60
+      },
+      "revId": "b6a1d458ecd5c9e4b7c97eb5a937ea1725ffdb1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
