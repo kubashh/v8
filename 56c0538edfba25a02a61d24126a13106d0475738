@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ae59758_32455337",
+        "filename": "src/torque/ast.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-07-16T20:07:05Z",
+      "side": 1,
+      "message": "The constructors follow the convention to sort the arguments by their occurrence in the grammar. So const_qualified should go first.",
+      "revId": "56c0538edfba25a02a61d24126a13106d0475738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cc6ac3f_99ef19be",
+        "filename": "src/torque/declarable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-07-16T20:07:05Z",
+      "side": 1,
+      "message": "a *const-bound variable",
+      "revId": "56c0538edfba25a02a61d24126a13106d0475738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9f01f5a_7203b6c0",
+        "filename": "src/torque/declaration-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-07-16T20:07:05Z",
+      "side": 1,
+      "message": "We should not allow constexpr here.",
+      "revId": "56c0538edfba25a02a61d24126a13106d0475738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bc48759_293937b0",
+        "filename": "src/torque/declaration-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-07-16T20:07:05Z",
+      "side": 1,
+      "message": "We should not allow constexpr here.",
+      "revId": "56c0538edfba25a02a61d24126a13106d0475738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
