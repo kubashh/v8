@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "88e507aa_9ff92330",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1527,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-16T18:29:11Z",
+      "side": 1,
+      "message": "I\u0027m trying to do as suggested in https://chromium-review.googlesource.com/c/v8/v8/+/1119103/11..13#message-8b2c93227bddaee6c300c08f85b29be5c217a48b . Jungshik wrote for line 1572:\n---------------\nI told  you to use either the above (only valid for pure ASCII input) or icu::UnicodeString::fromUTF8().  Because the former is only valid for pure ASCII input (well, ICU has U_ASSERT otherwise, but that\u0027d not fire in non-debug build),  you have to make sure that  the input is pure ASCII before calling IsStructurallyValid(). Without knowing how/where you are going to call this function, I\u0027m not sure which is better (or a combination of bhe two),  \n\n1. add a fast ascii-check at the beginning of this function and return false for non-ascii  input\n\n2. just make sure that a caller does the right thing (and add CHECK()is_ascii(locale) at the beginning of this function.",
+      "parentUuid": "b728fb2c_d7e146cb",
+      "revId": "81c0bde0fecc51f3706615d35f1ebb44c601026a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75e38b64_53eecff2",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 13
@@ -33,6 +51,24 @@
       "revId": "81c0bde0fecc51f3706615d35f1ebb44c601026a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "505118ce_88c050a2",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-07-16T18:29:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75e38b64_53eecff2",
+      "revId": "81c0bde0fecc51f3706615d35f1ebb44c601026a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
