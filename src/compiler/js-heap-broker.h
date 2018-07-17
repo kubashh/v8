@@ -233,6 +233,7 @@ class NativeContextRef : public ContextRef {
   MapRef promise_function_initial_map() const;
 
   MapRef GetFunctionMapFromIndex(int index) const;
+  MapRef ObjectLiteralMapFromCache() const;
 };
 
 class NameRef : public HeapObjectRef {
@@ -267,6 +268,9 @@ class AllocationSiteRef : public HeapObjectRef {
   JSObjectRef boilerplate() const;
   PretenureFlag GetPretenureMode() const;
   bool IsFastLiteral() const;
+  PretenureFlag DependOnPretenureMode(
+      CompilationDependencies* dependencies) const;
+  void DependOnElementsKinds(CompilationDependencies* dependencies) const;
 };
 
 class MapRef : public HeapObjectRef {
