@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6b0969e_4b57cb5a",
+        "filename": "src/d8.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2433,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-07-17T14:52:00Z",
+      "side": 1,
+      "message": "Is there a better way? Should we move this to a method on some class somewhere?",
+      "revId": "256dc752ab4eeba94339ca4882bef6a0e933618f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
