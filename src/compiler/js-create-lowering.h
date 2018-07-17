@@ -68,12 +68,12 @@ class V8_EXPORT_PRIVATE JSCreateLowering final
   Reduction ReduceJSCreateCatchContext(Node* node);
   Reduction ReduceJSCreateBlockContext(Node* node);
   Reduction ReduceJSCreateGeneratorObject(Node* node);
-  Reduction ReduceNewArray(Node* node, Node* length, Handle<Map> initial_map,
+  Reduction ReduceNewArray(Node* node, Node* length, MapRef initial_map,
                            PretenureFlag pretenure);
   Reduction ReduceNewArray(Node* node, Node* length, int capacity,
-                           Handle<Map> initial_map, PretenureFlag pretenure);
+                           MapRef initial_map, PretenureFlag pretenure);
   Reduction ReduceNewArray(Node* node, std::vector<Node*> values,
-                           Handle<Map> initial_map, PretenureFlag pretenure);
+                           MapRef initial_map, PretenureFlag pretenure);
   Reduction ReduceJSCreateObject(Node* node);
 
   Node* AllocateArguments(Node* effect, Node* control, Node* frame_state);

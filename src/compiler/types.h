@@ -372,6 +372,7 @@ class V8_EXPORT_PRIVATE Type {
   static Type NewConstant(const JSHeapBroker* js_heap_broker,
                           Handle<i::Object> value, Zone* zone);
   static Type NewConstant(double value, Zone* zone);
+  static Type NewConstant(JSFunctionRef value, Zone* zone);
 
   static Type Union(Type type1, Type type2, Zone* zone);
   static Type Intersect(Type type1, Type type2, Zone* zone);

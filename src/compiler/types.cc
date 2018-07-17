@@ -820,6 +820,10 @@ Type Type::NewConstant(double value, Zone* zone) {
   return OtherNumberConstant(value, zone);
 }
 
+Type Type::NewConstant(JSFunctionRef value, Zone* zone) {
+  return HeapConstantType::New(value, zone);
+}
+
 Type Type::NewConstant(const JSHeapBroker* js_heap_broker,
                        Handle<i::Object> value, Zone* zone) {
   auto maybe_smi = JSHeapBroker::TryGetSmi(value);
