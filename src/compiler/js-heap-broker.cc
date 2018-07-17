@@ -165,6 +165,11 @@ MapRef JSFunctionRef::DependOnInitialMap(
   return MapRef(broker(), initial_map);
 }
 
+void JSFunctionRef::CompleteInobjectSlackTrackingIfActive() {
+  AllowHandleDereference allow_handle_dereference;
+  object<JSFunction>()->CompleteInobjectSlackTrackingIfActive();
+}
+
 void JSFunctionRef::EnsureHasInitialMap() const {
   AllowHandleAllocation handle_allocation;
   AllowHandleDereference allow_handle_dereference;
@@ -180,6 +185,14 @@ void MapRef::DependOnStableMap(CompilationDependencies* dependencies) const {
   AllowHandleAllocation handle_allocation;
   AllowHandleDereference allow_handle_dereference;
   dependencies->DependOnStableMap(object<Map>());
+}
+
+// TODO(mslekova): Can we work without this?
+MapRef MapRef::AsElementsKind(Isolate* isolate, MapRef map, ElementsKind kind,
+                              const JSHeapBroker* broker) {
+  AllowHandleAllocation handle_allocation;
+  AllowHandleDereference allow_handle_dereference;
+  return MapRef(broker, Map::AsElementsKind(isolate, map.object<Map>(), kind));
 }
 
 SlackTrackingResult JSFunctionRef::FinishSlackTracking() const {
@@ -435,6 +448,11 @@ ObjectRef MapRef::constructor_or_backpointer() const {
   AllowHandleDereference allow_handle_dereference;
   return ObjectRef(broker(), handle(object<Map>()->constructor_or_backpointer(),
                                     broker()->isolate()));
+}
+
+ElementsKind MapRef::elements_kind() const {
+  AllowHandleDereference allow_handle_dereference;
+  return object<Map>()->elements_kind();
 }
 
 int MapRef::instance_size() const {
@@ -746,6 +764,13 @@ MapRef NativeContextRef::promise_function_initial_map() const {
   return MapRef(broker(),
                 handle(object<Context>()->promise_function()->initial_map(),
                        broker()->isolate()));
+}
+
+JSFunctionRef NativeContextRef::array_function() const {
+  AllowHandleAllocation handle_allocation;
+  AllowHandleDereference allow_handle_dereference;
+  return JSFunctionRef(broker(), handle(object<Context>()->array_function(),
+                                        broker()->isolate()));
 }
 
 MapRef NativeContextRef::GetFunctionMapFromIndex(int index) const {

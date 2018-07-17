@@ -172,6 +172,7 @@ class JSFunctionRef : public JSObjectRef {
   MapRef initial_map() const;
 
   MapRef DependOnInitialMap(CompilationDependencies* dependencies) const;
+  void CompleteInobjectSlackTrackingIfActive();
 
   JSGlobalProxyRef global_proxy() const;
   SlackTrackingResult FinishSlackTracking() const;
@@ -231,6 +232,7 @@ class NativeContextRef : public ContextRef {
   MapRef iterator_result_map() const;
   MapRef string_iterator_map() const;
   MapRef promise_function_initial_map() const;
+  JSFunctionRef array_function() const;
 
   MapRef GetFunctionMapFromIndex(int index) const;
 };
@@ -282,6 +284,7 @@ class MapRef : public HeapObjectRef {
   FieldIndex GetFieldIndexFor(int i) const;
   int GetInObjectPropertyOffset(int index) const;
   ObjectRef constructor_or_backpointer() const;
+  ElementsKind elements_kind() const;
 
   bool is_stable() const;
   bool has_prototype_slot() const;
@@ -293,6 +296,8 @@ class MapRef : public HeapObjectRef {
   bool IsFixedCowArrayMap() const;
 
   void DependOnStableMap(CompilationDependencies* dependencies) const;
+  static MapRef AsElementsKind(Isolate* isolate, MapRef map, ElementsKind kind,
+                               const JSHeapBroker* broker);
 };
 
 class FixedArrayBaseRef : public HeapObjectRef {
