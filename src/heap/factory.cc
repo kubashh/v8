@@ -3911,8 +3911,8 @@ Handle<Map> Factory::CreateSloppyFunctionMap(
   if (IsFunctionModeWithName(function_mode)) {
     // Add name field.
     Handle<Name> name = isolate()->factory()->name_string();
-    Descriptor d = Descriptor::DataField(name, field_index++, roc_attribs,
-                                         Representation::Tagged());
+    Descriptor d = Descriptor::DataField(isolate(), name, field_index++,
+                                         roc_attribs, Representation::Tagged());
     map->AppendDescriptor(&d);
 
   } else {
@@ -3987,8 +3987,8 @@ Handle<Map> Factory::CreateStrictFunctionMap(
   if (IsFunctionModeWithName(function_mode)) {
     // Add name field.
     Handle<Name> name = isolate()->factory()->name_string();
-    Descriptor d = Descriptor::DataField(name, field_index++, roc_attribs,
-                                         Representation::Tagged());
+    Descriptor d = Descriptor::DataField(isolate(), name, field_index++,
+                                         roc_attribs, Representation::Tagged());
     map->AppendDescriptor(&d);
 
   } else {
@@ -4002,8 +4002,8 @@ Handle<Map> Factory::CreateStrictFunctionMap(
   if (IsFunctionModeWithHomeObject(function_mode)) {
     // Add home object field.
     Handle<Name> name = isolate()->factory()->home_object_symbol();
-    Descriptor d = Descriptor::DataField(name, field_index++, DONT_ENUM,
-                                         Representation::Tagged());
+    Descriptor d = Descriptor::DataField(isolate(), name, field_index++,
+                                         DONT_ENUM, Representation::Tagged());
     map->AppendDescriptor(&d);
   }
 
