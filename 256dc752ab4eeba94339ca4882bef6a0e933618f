@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5516ec80_82f68771",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-07-17T15:13:45Z",
+      "side": 1,
+      "message": "You can just print (this \u003d\u003d\u003d undefined ? \u0027strict\u0027 : \u0027sloppy\u0027).",
+      "revId": "256dc752ab4eeba94339ca4882bef6a0e933618f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6b0969e_4b57cb5a",
         "filename": "src/d8.cc",
         "patchSetId": 2
