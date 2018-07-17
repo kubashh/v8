@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4380dd9b_c1172ab4",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-17T20:16:30Z",
+      "side": 1,
+      "message": "why uint16_t? |char|should work here, no?",
+      "range": {
+        "startLine": 1507,
+        "startChar": 18,
+        "endLine": 1507,
+        "endChar": 26
+      },
+      "revId": "352c408af12481d89fa8bbdd2c76995a32b22020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02e934f9_e21ef1f7",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1509,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-17T20:16:30Z",
+      "side": 1,
+      "message": "const std::string\u0026 locale",
+      "range": {
+        "startLine": 1509,
+        "startChar": 25,
+        "endLine": 1509,
+        "endChar": 43
+      },
+      "revId": "352c408af12481d89fa8bbdd2c76995a32b22020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25f046cc_1d6bd0aa",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-17T20:16:30Z",
+      "side": 1,
+      "message": "const std:string\u0026 locale",
+      "range": {
+        "startLine": 1515,
+        "startChar": 26,
+        "endLine": 1515,
+        "endChar": 44
+      },
+      "revId": "352c408af12481d89fa8bbdd2c76995a32b22020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "491d3a21_d92188ab",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1555,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-17T20:16:30Z",
+      "side": 1,
+      "message": "ICU bug tracker moved. Use this url, instead:\n\nhttps://unicode-org.atlassian.net/browse/ICU-13417",
+      "range": {
+        "startLine": 1555,
+        "startChar": 5,
+        "endLine": 1555,
+        "endChar": 50
+      },
+      "revId": "352c408af12481d89fa8bbdd2c76995a32b22020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6e610b6_abbdd042",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1571,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-17T20:16:30Z",
+      "side": 1,
+      "message": "I\u0027m aware that this part of the code is moved from my code.\nIf you just want to check U_FAILURE() without checking for an  unterminated buffer, you can\ndo something like this.  In that case, \u0027return ....\u0027 is a bit longer than now.(see below) \n\nIt\u0027s up to you (it\u0027s not a big deal anyway. One more character or not). Either way is fine with me. \n\nint16_t result_len \u003d uloc_toLanguageTag(....);\n\nif (U_FAILURE(error)) {\n   ....",
+      "range": {
+        "startLine": 1569,
+        "startChar": 2,
+        "endLine": 1571,
+        "endChar": 69
+      },
+      "revId": "352c408af12481d89fa8bbdd2c76995a32b22020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3a74671_8b9a8d9c",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-17T20:16:30Z",
+      "side": 1,
+      "message": "return isolate-\u003efactory()-\u003eNewStringFromOneByte(OneByteVector(result, result_len), NOT_TENURED).ToHandleChecked();",
+      "range": {
+        "startLine": 1576,
+        "startChar": 2,
+        "endLine": 1577,
+        "endChar": 1
+      },
+      "revId": "352c408af12481d89fa8bbdd2c76995a32b22020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
