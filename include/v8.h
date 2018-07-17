@@ -21,6 +21,7 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <functional>
 
 #include "v8-version.h"  // NOLINT(build/include)
 #include "v8config.h"    // NOLINT(build/include)
@@ -10816,8 +10817,10 @@ size_t SnapshotCreator::AddData(Local<T> object) {
  */
 
 
-}  // namespace v8
+V8_EXPORT void RegisterNotifyV8UsageFunc(std::function<void()> func);
+V8_EXPORT void NotifyV8Usage();
 
+}  // namespace v8
 
 #undef TYPE_CHECK
 

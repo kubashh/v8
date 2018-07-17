@@ -143,4 +143,16 @@ void V8::SetSnapshotBlob(StartupData* snapshot_blob) {
 double Platform::SystemClockTimeMillis() {
   return base::OS::TimeCurrentMillis();
 }
+
+static std::function<void()> g_notify_v8_usage_func;
+
+void RegisterNotifyV8UsageFunc(std::function<void()> func) {
+  g_notify_v8_usage_func = func;
+}
+
+void NotifyV8Usage() {
+  if (g_notify_v8_usage_func)
+    g_notify_v8_usage_func();
+}
+
 }  // namespace v8
