@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c151c138_e0aa662c",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1664,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-18T05:04:43Z",
+      "side": 1,
+      "message": "result_len is not supposed to be here.  Sorry If I told you to put it here. I thought I had asked you to do that for uloc_toLanguageTag(). Yes, I told you to add it for uloc_toLanguageTag(). See https://chromium-review.googlesource.com/c/v8/v8/+/1112202/10/src/objects/intl-objects.cc#1571  :-)",
+      "range": {
+        "startLine": 1664,
+        "startChar": 2,
+        "endLine": 1664,
+        "endChar": 23
+      },
+      "revId": "b99c0bd6cd257560b0078d3fff10c63533e7a732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "766a97c2_2a5952cc",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1675,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-18T05:04:43Z",
+      "side": 1,
+      "message": "|result_len| is supposed to be here. I think the return type of uloc_toLanguageTag is int32_t.",
+      "range": {
+        "startLine": 1675,
+        "startChar": 2,
+        "endLine": 1675,
+        "endChar": 20
+      },
+      "revId": "b99c0bd6cd257560b0078d3fff10c63533e7a732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8df1852f_6f67a517",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-18T05:04:43Z",
+      "side": 1,
+      "message": "Hmmm...  it\u0027s not your change (so nothing to do about it for this CL), but I\u0027m surprised to find that \u0027Intl\u0027 is a class with nothing but static members. I thought it was a namespace.",
+      "range": {
+        "startLine": 304,
+        "startChar": 2,
+        "endLine": 304,
+        "endChar": 52
+      },
+      "revId": "b99c0bd6cd257560b0078d3fff10c63533e7a732",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
