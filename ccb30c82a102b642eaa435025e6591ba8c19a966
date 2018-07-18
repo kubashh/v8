@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0067cd96_37c4c382",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-07-18T07:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9de724d_1b427482",
+      "range": {
+        "startLine": 700,
+        "startChar": 27,
+        "endLine": 700,
+        "endChar": 28
+      },
+      "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d8943f3_b7ba9fd9",
         "filename": "src/compiler/js-create-lowering.h",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-17T17:21:33Z",
       "side": 1,
       "message": "Let\u0027s use \u0027const MapRef\u0026\u0027 here and below.",
+      "range": {
+        "startLine": 71,
+        "startChar": 53,
+        "endLine": 71,
+        "endChar": 59
+      },
+      "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c81e1301_c7cb3048",
+        "filename": "src/compiler/js-create-lowering.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-07-18T07:32:20Z",
+      "side": 1,
+      "message": "These methods seem to change the initial_map, so const won\u0027t work here.",
+      "parentUuid": "2d8943f3_b7ba9fd9",
       "range": {
         "startLine": 71,
         "startChar": 53,
@@ -88,6 +136,48 @@
     },
     {
       "key": {
+        "uuid": "0cf0fd62_fbf44ae5",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-07-18T07:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d71e1d44_63fcc9a5",
+      "range": {
+        "startLine": 175,
+        "startChar": 30,
+        "endLine": 175,
+        "endChar": 46
+      },
+      "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f8219f65_23e166ba",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-07-18T07:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c8f7ddb_e9d2994d",
+      "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f5b4a37_a34c653f",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 2
@@ -102,6 +192,24 @@
       "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83355852_e73bdf08",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-07-18T07:32:20Z",
+      "side": 1,
+      "message": "Done. Let\u0027s discuss it with Jaro!",
+      "parentUuid": "9f5b4a37_a34c653f",
+      "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "74970c7e_744c69a0",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-07-18T07:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71ea1a15_c7653174",
+      "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0dc9d31e_3c66e87d",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 2
@@ -136,6 +262,24 @@
       "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2af42fc3_75599ce4",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-07-18T07:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dc9d31e_3c66e87d",
+      "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -159,6 +303,30 @@
       "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ce27cfd_7b2efbe2",
+        "filename": "src/compiler/types.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-07-18T07:32:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4fae85c_4566f7b1",
+      "range": {
+        "startLine": 375,
+        "startChar": 26,
+        "endLine": 375,
+        "endChar": 39
+      },
+      "revId": "ccb30c82a102b642eaa435025e6591ba8c19a966",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
