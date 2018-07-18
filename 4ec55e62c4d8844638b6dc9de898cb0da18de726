@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10828711_8fa723a0",
+        "filename": "src/wasm/wasm-linkage.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-18T13:10:52Z",
+      "side": 1,
+      "message": "If we set {extra_double_reg} here before calling into {NextFpReg} again, won\u0027t we get back the same {d_reg1_code} again? I think we should set {extra_double_reg} only after we are done with getting {d_reg1_code} and {d_reg2_code} here. WDYT?",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 67
+      },
+      "revId": "4ec55e62c4d8844638b6dc9de898cb0da18de726",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
