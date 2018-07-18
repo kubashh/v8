@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "35fb5548_7bbf1ac6",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-07-18T14:20:18Z",
+      "side": 1,
+      "message": "Whoops, mistook the return type for the first argument type. Thanks for the catch!",
+      "parentUuid": "17a06e9c_dfeff8a4",
+      "range": {
+        "startLine": 626,
+        "startChar": 12,
+        "endLine": 627,
+        "endChar": 65
+      },
+      "revId": "991bddd8069ab0449039e319d3e440946f736c2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5686c91d_5bb708b0",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "991bddd8069ab0449039e319d3e440946f736c2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3779ea5_3232919a",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-07-18T14:20:18Z",
+      "side": 1,
+      "message": "Done -- though this function seems to be dead? That seems to be why the tool didn\u0027t bother amending the declaration.",
+      "parentUuid": "5686c91d_5bb708b0",
+      "range": {
+        "startLine": 1534,
+        "startChar": 15,
+        "endLine": 1534,
+        "endChar": 38
+      },
+      "revId": "991bddd8069ab0449039e319d3e440946f736c2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
