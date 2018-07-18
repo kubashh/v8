@@ -3319,8 +3319,7 @@ Object* Object::GetHash() {
   return receiver->GetIdentityHash(isolate);
 }
 
-Handle<Object> ObjectHashTableShape::AsHandle(Isolate* isolate,
-                                              Handle<Object> key) {
+Handle<Object> ObjectHashTableShape::AsHandle(Handle<Object> key) {
   return key;
 }
 
