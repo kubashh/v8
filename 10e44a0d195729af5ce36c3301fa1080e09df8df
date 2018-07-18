@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e7188b1_bc9776f9",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-07-18T09:31:09Z",
+      "side": 1,
+      "message": "Nit: for readability I\u0027d prefer *site over site.value()",
+      "revId": "10e44a0d195729af5ce36c3301fa1080e09df8df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
