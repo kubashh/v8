@@ -2963,11 +2963,9 @@ bool Isolate::Init(StartupDeserializer* des) {
   DCHECK(!heap_.HasBeenSetUp());
   heap_.SetUp();
 
-  // Setup the wasm engine. Currently, there's one per Isolate by default.
+  // Setup the wasm engine.
   if (wasm_engine_ == nullptr) {
-    wasm_engine_.reset(
-        new wasm::WasmEngine(std::unique_ptr<wasm::WasmCodeManager>(
-            new wasm::WasmCodeManager(kMaxWasmCodeMemory))));
+    wasm_engine_ = wasm::WasmEngine::GetWasmEngine();
     wasm_engine_->code_manager()->SetModuleCodeSizeHistogram(
         counters()->wasm_module_code_size_mb());
   }
