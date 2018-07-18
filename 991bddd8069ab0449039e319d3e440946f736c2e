@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17a06e9c_dfeff8a4",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-18T12:49:47Z",
+      "side": 1,
+      "message": "This looks fishy, this signature now has a return type of {Pointer} as opposed to {AnyTagged} as before. Since the function we are calling is of type {Smi} I think we should stick with {AnyTagged} as a return type here.",
+      "range": {
+        "startLine": 626,
+        "startChar": 12,
+        "endLine": 627,
+        "endChar": 65
+      },
+      "revId": "991bddd8069ab0449039e319d3e440946f736c2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5686c91d_5bb708b0",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-18T12:49:47Z",
+      "side": 1,
+      "message": "nit: I think the declaration of {AsyncDecodeWasmFunction} in module-decoder.h also needs to be adapted.",
+      "range": {
+        "startLine": 1534,
+        "startChar": 15,
+        "endLine": 1534,
+        "endChar": 38
+      },
+      "revId": "991bddd8069ab0449039e319d3e440946f736c2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
