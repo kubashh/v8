@@ -396,7 +396,7 @@ bool AccessInfoFactory::ComputePropertyAccessInfo(
               // The field type was cleared by the GC, so we don't know anything
               // about the contents now.
             } else if (descriptors_field_type->IsClass()) {
-              dependencies()->DependOnFieldType(MapRef(js_heap_broker(), map),
+              dependencies()->DependOnFieldType(js_heap_broker()->MapRef(map),
                                                 number);
               // Remember the field map, and try to infer a useful type.
               Handle<Map> map(descriptors_field_type->AsClass(), isolate());
@@ -701,14 +701,14 @@ bool AccessInfoFactory::LookupTransition(Handle<Map> map, Handle<Name> name,
       return false;
     } else if (descriptors_field_type->IsClass()) {
       dependencies()->DependOnFieldType(
-          MapRef(js_heap_broker(), transition_map), number);
+          js_heap_broker()->MapRef(transition_map), number);
       // Remember the field map, and try to infer a useful type.
       Handle<Map> map(descriptors_field_type->AsClass(), isolate());
       field_type = Type::For(js_heap_broker(), map);
       field_map = MaybeHandle<Map>(map);
     }
   }
-  dependencies()->DependOnTransition(MapRef(js_heap_broker(), transition_map));
+  dependencies()->DependOnTransition(js_heap_broker()->MapRef(transition_map));
   // Transitioning stores are never stores to constant fields.
   *access_info = PropertyAccessInfo::DataField(
       PropertyConstness::kMutable, MapHandles{map}, field_index,

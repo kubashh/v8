@@ -556,28 +556,28 @@ Reduction TypedOptimization::ReduceTypeOf(Node* node) {
   Factory* const f = factory();
   if (type.Is(Type::Boolean())) {
     return Replace(
-        jsgraph()->Constant(ObjectRef(js_heap_broker(), f->boolean_string())));
+        jsgraph()->Constant(js_heap_broker()->Ref(f->boolean_string())));
   } else if (type.Is(Type::Number())) {
     return Replace(
-        jsgraph()->Constant(ObjectRef(js_heap_broker(), f->number_string())));
+        jsgraph()->Constant(js_heap_broker()->Ref(f->number_string())));
   } else if (type.Is(Type::String())) {
     return Replace(
-        jsgraph()->Constant(ObjectRef(js_heap_broker(), f->string_string())));
+        jsgraph()->Constant(js_heap_broker()->Ref(f->string_string())));
   } else if (type.Is(Type::BigInt())) {
     return Replace(
-        jsgraph()->Constant(ObjectRef(js_heap_broker(), f->bigint_string())));
+        jsgraph()->Constant(js_heap_broker()->Ref(f->bigint_string())));
   } else if (type.Is(Type::Symbol())) {
     return Replace(
-        jsgraph()->Constant(ObjectRef(js_heap_broker(), f->symbol_string())));
+        jsgraph()->Constant(js_heap_broker()->Ref(f->symbol_string())));
   } else if (type.Is(Type::OtherUndetectableOrUndefined())) {
-    return Replace(jsgraph()->Constant(
-        ObjectRef(js_heap_broker(), f->undefined_string())));
+    return Replace(
+        jsgraph()->Constant(js_heap_broker()->Ref(f->undefined_string())));
   } else if (type.Is(Type::NonCallableOrNull())) {
     return Replace(
-        jsgraph()->Constant(ObjectRef(js_heap_broker(), f->object_string())));
+        jsgraph()->Constant(js_heap_broker()->Ref(f->object_string())));
   } else if (type.Is(Type::Function())) {
     return Replace(
-        jsgraph()->Constant(ObjectRef(js_heap_broker(), f->function_string())));
+        jsgraph()->Constant(js_heap_broker()->Ref(f->function_string())));
   } else if (type.IsHeapConstant()) {
     return Replace(jsgraph()->Constant(type.AsHeapConstant()->Ref().TypeOf()));
   }
