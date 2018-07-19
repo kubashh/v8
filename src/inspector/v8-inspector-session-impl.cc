@@ -44,17 +44,20 @@ int V8ContextInfo::executionContextId(v8::Local<v8::Context> context) {
 
 std::unique_ptr<V8InspectorSessionImpl> V8InspectorSessionImpl::create(
     V8InspectorImpl* inspector, int contextGroupId, int sessionId,
-    V8Inspector::Channel* channel, const StringView& state) {
+    V8Inspector::Channel* channel, const StringView& state,
+    bool postponeRestore) {
   return std::unique_ptr<V8InspectorSessionImpl>(new V8InspectorSessionImpl(
-      inspector, contextGroupId, sessionId, channel, state));
+      inspector, contextGroupId, sessionId, channel, state, postponeRestore));
 }
 
 V8InspectorSessionImpl::V8InspectorSessionImpl(V8InspectorImpl* inspector,
                                                int contextGroupId,
                                                int sessionId,
                                                V8Inspector::Channel* channel,
-                                               const StringView& savedState)
-    : m_contextGroupId(contextGroupId),
+                                               const StringView& savedState,
+                                               bool postponeRestore)
+    : m_waitForRestore(savedState.length() > 0),
+      m_contextGroupId(contextGroupId),
       m_sessionId(sessionId),
       m_inspector(inspector),
       m_channel(channel),
@@ -101,13 +104,7 @@ V8InspectorSessionImpl::V8InspectorSessionImpl(V8InspectorImpl* inspector,
       this, this, agentState(protocol::Schema::Metainfo::domainName)));
   protocol::Schema::Dispatcher::wire(&m_dispatcher, m_schemaAgent.get());
 
-  if (savedState.length()) {
-    m_runtimeAgent->restore();
-    m_debuggerAgent->restore();
-    m_heapProfilerAgent->restore();
-    m_profilerAgent->restore();
-    m_consoleAgent->restore();
-  }
+  if (!postponeRestore) restore();
 }
 
 V8InspectorSessionImpl::~V8InspectorSessionImpl() {
@@ -118,6 +115,16 @@ V8InspectorSessionImpl::~V8InspectorSessionImpl() {
   m_debuggerAgent->disable();
   m_runtimeAgent->disable();
   m_inspector->disconnect(this);
+}
+
+void V8InspectorSessionImpl::restore() {
+  if (!m_waitForRestore) return;
+  m_runtimeAgent->restore();
+  m_debuggerAgent->restore();
+  m_heapProfilerAgent->restore();
+  m_profilerAgent->restore();
+  m_consoleAgent->restore();
+  m_waitForRestore = false;
 }
 
 protocol::DictionaryValue* V8InspectorSessionImpl::agentState(

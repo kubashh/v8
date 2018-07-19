@@ -75,7 +75,8 @@ class V8InspectorImpl : public V8Inspector {
   // V8Inspector implementation.
   std::unique_ptr<V8InspectorSession> connect(int contextGroupId,
                                               V8Inspector::Channel*,
-                                              const StringView& state) override;
+                                              const StringView& state,
+                                              bool postponeRestore) override;
   void contextCreated(const V8ContextInfo&) override;
   void contextDestroyed(v8::Local<v8::Context>) override;
   void contextCollected(int contextGroupId, int contextId);
