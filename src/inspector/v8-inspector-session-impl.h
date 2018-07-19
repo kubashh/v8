@@ -33,8 +33,11 @@ class V8InspectorSessionImpl : public V8InspectorSession,
  public:
   static std::unique_ptr<V8InspectorSessionImpl> create(
       V8InspectorImpl*, int contextGroupId, int sessionId,
-      V8Inspector::Channel*, const StringView& state);
+      V8Inspector::Channel*, const StringView& state,
+      bool postponeRestore = false);
   ~V8InspectorSessionImpl();
+
+  void restore() override;
 
   V8InspectorImpl* inspector() const { return m_inspector; }
   V8ConsoleAgentImpl* consoleAgent() { return m_consoleAgent.get(); }
@@ -93,7 +96,8 @@ class V8InspectorSessionImpl : public V8InspectorSession,
 
  private:
   V8InspectorSessionImpl(V8InspectorImpl*, int contextGroupId, int sessionId,
-                         V8Inspector::Channel*, const StringView& state);
+                         V8Inspector::Channel*, const StringView& state,
+                         bool postponeRestore);
   protocol::DictionaryValue* agentState(const String16& name);
 
   // protocol::FrontendChannel implementation.
@@ -103,6 +107,7 @@ class V8InspectorSessionImpl : public V8InspectorSession,
       std::unique_ptr<protocol::Serializable> message) override;
   void flushProtocolNotifications() override;
 
+  bool m_waitForRestore = false;
   int m_contextGroupId;
   int m_sessionId;
   V8InspectorImpl* m_inspector;

@@ -158,6 +158,8 @@ class V8_EXPORT V8InspectorSession {
                             v8::Local<v8::Context>*,
                             std::unique_ptr<StringBuffer>* objectGroup) = 0;
   virtual void releaseObjectGroup(const StringView&) = 0;
+
+  virtual void restore() = 0;
 };
 
 class V8_EXPORT V8InspectorClient {
@@ -277,7 +279,8 @@ class V8_EXPORT V8Inspector {
     virtual void flushProtocolNotifications() = 0;
   };
   virtual std::unique_ptr<V8InspectorSession> connect(
-      int contextGroupId, Channel*, const StringView& state) = 0;
+      int contextGroupId, Channel*, const StringView& state,
+      bool postponeRestore = false) = 0;
 
   // API methods.
   virtual std::unique_ptr<V8StackTrace> createStackTrace(
