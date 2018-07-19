@@ -145,6 +145,7 @@ int IsolateData::ConnectSession(int context_group_id,
                                 v8_inspector::V8Inspector::Channel* channel) {
   int session_id = ++last_session_id_;
   sessions_[session_id] = inspector_->connect(context_group_id, channel, state);
+  sessions_[session_id]->restore();
   context_group_by_session_[sessions_[session_id].get()] = context_group_id;
   return session_id;
 }
