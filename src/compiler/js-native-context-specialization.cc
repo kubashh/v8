@@ -68,7 +68,7 @@ JSNativeContextSpecialization::JSNativeContextSpecialization(
       global_object_(native_context->global_object(), jsgraph->isolate()),
       global_proxy_(JSGlobalProxy::cast(native_context->global_proxy()),
                     jsgraph->isolate()),
-      native_context_(js_heap_broker, native_context),
+      native_context_(js_heap_broker->Ref(native_context).AsNativeContext()),
       dependencies_(dependencies),
       zone_(zone),
       type_cache_(TypeCache::Get()) {}
@@ -155,7 +155,8 @@ Reduction JSNativeContextSpecialization::ReduceJSGetSuperConstructor(
   // {function}s map is stable, i.e. we can use a code dependency
   // to guard against [[Prototype]] changes of {function}.
   if (function_map->is_stable() && function_prototype->IsConstructor()) {
-    dependencies()->DependOnStableMap(MapRef(js_heap_broker(), function_map));
+    dependencies()->DependOnStableMap(
+        js_heap_broker()->Ref(function_map).AsMap());
     Node* value = jsgraph()->Constant(function_prototype);
     ReplaceWithValue(node, value);
     return Replace(value);
@@ -413,7 +414,7 @@ Reduction JSNativeContextSpecialization::ReduceJSOrdinaryHasInstance(
       JSFunction::EnsureHasInitialMap(function);
 
       MapRef initial_map = dependencies()->DependOnInitialMap(
-          JSFunctionRef(js_heap_broker(), function));
+          js_heap_broker()->Ref(function).AsJSFunction());
       Node* prototype = jsgraph()->Constant(
           handle(initial_map.object<Map>()->prototype(), isolate()));
 
@@ -612,7 +613,7 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
       if (property_details.cell_type() != PropertyCellType::kMutable ||
           property_details.IsConfigurable()) {
         dependencies()->DependOnGlobalProperty(
-            PropertyCellRef(js_heap_broker(), property_cell));
+            js_heap_broker()->Ref(property_cell).AsPropertyCell());
       }
 
       // Load from constant/undefined global property can be constant-folded.
@@ -645,7 +646,7 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
             // mutated without the cell state being updated.
             if (property_cell_value_map->is_stable()) {
               dependencies()->DependOnStableMap(
-                  MapRef(js_heap_broker(), property_cell_value_map));
+                  js_heap_broker()->Ref(property_cell_value_map).AsMap());
               map = property_cell_value_map;
             }
           }
@@ -668,7 +669,7 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
         // Record a code dependency on the cell, and just deoptimize if the new
         // value doesn't match the previous value stored inside the cell.
         dependencies()->DependOnGlobalProperty(
-            PropertyCellRef(js_heap_broker(), property_cell));
+            js_heap_broker()->Ref(property_cell).AsPropertyCell());
         Node* check =
             graph()->NewNode(simplified()->ReferenceEqual(), value,
                              jsgraph()->Constant(property_cell_value));
@@ -682,7 +683,7 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
         // values' type doesn't match the type of the previous value in the
         // cell.
         dependencies()->DependOnGlobalProperty(
-            PropertyCellRef(js_heap_broker(), property_cell));
+            js_heap_broker()->Ref(property_cell).AsPropertyCell());
         Type property_cell_value_type;
         MachineRepresentation representation = MachineRepresentation::kTagged;
         if (property_cell_value->IsHeapObject()) {
@@ -692,7 +693,7 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
               Handle<HeapObject>::cast(property_cell_value)->map(), isolate());
           DCHECK(property_cell_value_map->is_stable());
           dependencies()->DependOnStableMap(
-              MapRef(js_heap_broker(), property_cell_value_map));
+              js_heap_broker()->Ref(property_cell_value_map).AsMap());
 
           // Check that the {value} is a HeapObject.
           value = effect = graph()->NewNode(simplified()->CheckHeapObject(),
@@ -724,7 +725,7 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
         // Record a code dependency on the cell, and just deoptimize if the
         // property ever becomes read-only.
         dependencies()->DependOnGlobalProperty(
-            PropertyCellRef(js_heap_broker(), property_cell));
+            js_heap_broker()->Ref(property_cell).AsPropertyCell());
         effect = graph()->NewNode(
             simplified()->StoreField(ForPropertyCellValue(
                 MachineRepresentation::kTagged, Type::NonInternal(),
@@ -741,7 +742,8 @@ Reduction JSNativeContextSpecialization::ReduceGlobalAccess(
 
 Reduction JSNativeContextSpecialization::ReduceJSLoadGlobal(Node* node) {
   DCHECK_EQ(IrOpcode::kJSLoadGlobal, node->opcode());
-  NameRef name(js_heap_broker(), LoadGlobalParametersOf(node->op()).name());
+  NameRef name =
+      js_heap_broker()->Ref(LoadGlobalParametersOf(node->op()).name()).AsName();
   Node* effect = NodeProperties::GetEffectInput(node);
 
   // Try to lookup the name on the script context table first (lexical scoping).
@@ -768,7 +770,9 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadGlobal(Node* node) {
 
 Reduction JSNativeContextSpecialization::ReduceJSStoreGlobal(Node* node) {
   DCHECK_EQ(IrOpcode::kJSStoreGlobal, node->opcode());
-  NameRef name(js_heap_broker(), StoreGlobalParametersOf(node->op()).name());
+  NameRef name = js_heap_broker()
+                     ->Ref(StoreGlobalParametersOf(node->op()).name())
+                     .AsName();
   Node* value = NodeProperties::GetValueInput(node, 0);
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
@@ -1107,7 +1111,7 @@ Reduction JSNativeContextSpecialization::ReduceJSLoadNamed(Node* node) {
         // "prototype" of {function}.
         JSFunction::EnsureHasInitialMap(function);
         dependencies()->DependOnInitialMap(
-            JSFunctionRef(js_heap_broker(), function));
+            js_heap_broker()->Ref(function).AsJSFunction());
         Handle<Object> prototype(function->prototype(), isolate());
         Node* value = jsgraph()->Constant(prototype);
         ReplaceWithValue(node, value);
@@ -1242,7 +1246,7 @@ Reduction JSNativeContextSpecialization::ReduceElementAccess(
       // Install dependencies on the relevant prototype maps.
       for (Handle<Map> prototype_map : prototype_maps) {
         dependencies()->DependOnStableMap(
-            MapRef(js_heap_broker(), prototype_map));
+            js_heap_broker()->Ref(prototype_map).AsMap());
       }
     }
 
@@ -2274,8 +2278,10 @@ JSNativeContextSpecialization::BuildElementAccess(
     if (isolate()->IsArrayBufferNeuteringIntact()) {
       // Add a code dependency so we are deoptimized in case an ArrayBuffer
       // gets neutered.
-      dependencies()->DependOnProtector(PropertyCellRef(
-          js_heap_broker(), factory()->array_buffer_neutering_protector()));
+      dependencies()->DependOnProtector(
+          js_heap_broker()
+              ->Ref(factory()->array_buffer_neutering_protector())
+              .AsPropertyCell());
     } else {
       // Default to zero if the {receiver}s buffer was neutered.
       Node* check = effect = graph()->NewNode(
@@ -2678,7 +2684,9 @@ Node* JSNativeContextSpecialization::BuildIndexedStringLoad(
   if (load_mode == LOAD_IGNORE_OUT_OF_BOUNDS &&
       isolate()->IsNoElementsProtectorIntact()) {
     dependencies()->DependOnProtector(
-        PropertyCellRef(js_heap_broker(), factory()->no_elements_protector()));
+        js_heap_broker()
+            ->Ref(factory()->no_elements_protector())
+            .AsPropertyCell());
 
     // Ensure that the {index} is a valid String length.
     index = *effect = graph()->NewNode(
@@ -2828,7 +2836,9 @@ bool JSNativeContextSpecialization::CanTreatHoleAsUndefined(
   if (!isolate()->IsNoElementsProtectorIntact()) return false;
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->no_elements_protector()));
+      js_heap_broker()
+          ->Ref(factory()->no_elements_protector())
+          .AsPropertyCell());
   return true;
 }
 

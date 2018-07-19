@@ -137,7 +137,7 @@ void PropertyAccessBuilder::BuildCheckMaps(
       for (Handle<Map> map : receiver_maps) {
         if (map.is_identical_to(receiver_map)) {
           dependencies()->DependOnStableMap(
-              MapRef(js_heap_broker(), receiver_map));
+              js_heap_broker()->Ref(receiver_map).AsMap());
           return;
         }
       }
@@ -207,8 +207,10 @@ Node* PropertyAccessBuilder::TryBuildLoadConstantDataField(
           // the field.
           DCHECK(access_info.IsDataConstantField());
           DCHECK(!it.is_dictionary_holder());
-          MapRef map(js_heap_broker(),
-                     handle(it.GetHolder<HeapObject>()->map(), isolate()));
+          MapRef map =
+              js_heap_broker()
+                  ->Ref(handle(it.GetHolder<HeapObject>()->map(), isolate()))
+                  .AsMap();
           dependencies()->DependOnFieldType(map, it.GetFieldDescriptorIndex());
         }
         return value;
@@ -267,7 +269,8 @@ Node* PropertyAccessBuilder::BuildLoadDataField(
     Handle<Map> field_map;
     if (access_info.field_map().ToHandle(&field_map)) {
       if (field_map->is_stable()) {
-        dependencies()->DependOnStableMap(MapRef(js_heap_broker(), field_map));
+        dependencies()->DependOnStableMap(
+            js_heap_broker()->Ref(field_map).AsMap());
         field_access.map = field_map;
       }
     }

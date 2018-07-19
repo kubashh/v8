@@ -595,7 +595,7 @@ Reduction JSCallReducer::ReduceObjectGetPrototype(Node* node, Node* object) {
     if (result == NodeProperties::kUnreliableReceiverMaps) {
       for (size_t i = 0; i < object_maps.size(); ++i) {
         dependencies()->DependOnStableMap(
-            MapRef(js_heap_broker(), object_maps[i]));
+            js_heap_broker()->Ref(object_maps[i]).AsMap());
       }
     }
     Node* value = jsgraph()->Constant(candidate_prototype);
@@ -1052,7 +1052,9 @@ Reduction JSCallReducer::ReduceArrayForEach(Node* node,
   // Install code dependencies on the {receiver} prototype maps and the
   // global array protector cell.
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->no_elements_protector()));
+      js_heap_broker()
+          ->Ref(factory()->no_elements_protector())
+          .AsPropertyCell());
 
   // If we have unreliable maps, we need a map check.
   if (result == NodeProperties::kUnreliableReceiverMaps) {
@@ -1237,7 +1239,9 @@ Reduction JSCallReducer::ReduceArrayReduce(Node* node,
   // Install code dependencies on the {receiver} prototype maps and the
   // global array protector cell.
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->no_elements_protector()));
+      js_heap_broker()
+          ->Ref(factory()->no_elements_protector())
+          .AsPropertyCell());
 
   // If we have unreliable maps, we need a map check.
   if (result == NodeProperties::kUnreliableReceiverMaps) {
@@ -1508,7 +1512,9 @@ Reduction JSCallReducer::ReduceArrayMap(Node* node,
   }
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->array_species_protector()));
+      js_heap_broker()
+          ->Ref(factory()->array_species_protector())
+          .AsPropertyCell());
 
   Handle<JSFunction> handle_constructor(
       JSFunction::cast(
@@ -1716,7 +1722,9 @@ Reduction JSCallReducer::ReduceArrayFilter(Node* node,
   }
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->array_species_protector()));
+      js_heap_broker()
+          ->Ref(factory()->array_species_protector())
+          .AsPropertyCell());
 
   Handle<Map> initial_map(
       Map::cast(native_context()->GetInitialJSArrayMap(packed_kind)),
@@ -1745,7 +1753,7 @@ Reduction JSCallReducer::ReduceArrayFilter(Node* node,
              jsgraph()->ZeroConstant());
     for (int i = 0; i < initial_map->GetInObjectProperties(); ++i) {
       ab.Store(AccessBuilder::ForJSObjectInObjectProperty(
-                   MapRef(js_heap_broker(), initial_map), i),
+                   js_heap_broker()->Ref(initial_map).AsMap(), i),
                jsgraph()->UndefinedConstant());
     }
     a = effect = ab.Finish();
@@ -1995,7 +2003,9 @@ Reduction JSCallReducer::ReduceArrayFind(Node* node, ArrayFindVariant variant,
   // Install code dependencies on the {receiver} prototype maps and the
   // global array protector cell.
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->no_elements_protector()));
+      js_heap_broker()
+          ->Ref(factory()->no_elements_protector())
+          .AsPropertyCell());
 
   // If we have unreliable maps, we need a map check.
   if (result == NodeProperties::kUnreliableReceiverMaps) {
@@ -2311,7 +2321,9 @@ Reduction JSCallReducer::ReduceArrayEvery(Node* node,
   }
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->array_species_protector()));
+      js_heap_broker()
+          ->Ref(factory()->array_species_protector())
+          .AsPropertyCell());
 
   // If we have unreliable maps, we need a map check.
   if (result == NodeProperties::kUnreliableReceiverMaps) {
@@ -2652,7 +2664,9 @@ Reduction JSCallReducer::ReduceArraySome(Node* node,
   }
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->array_species_protector()));
+      js_heap_broker()
+          ->Ref(factory()->array_species_protector())
+          .AsPropertyCell());
 
   Node* k = jsgraph()->ZeroConstant();
 
@@ -2901,7 +2915,7 @@ Reduction JSCallReducer::ReduceCallApiFunction(
   if (result == NodeProperties::kUnreliableReceiverMaps) {
     for (size_t i = 0; i < receiver_maps.size(); ++i) {
       dependencies()->DependOnStableMap(
-          MapRef(js_heap_broker(), receiver_maps[i]));
+          js_heap_broker()->Ref(receiver_maps[i]).AsMap());
     }
   }
 
@@ -3071,8 +3085,10 @@ Reduction JSCallReducer::ReduceCallOrConstructWithArrayLikeOrSpread(
   // that no one messed with the %ArrayIteratorPrototype%.next method.
   if (node->opcode() == IrOpcode::kJSCallWithSpread ||
       node->opcode() == IrOpcode::kJSConstructWithSpread) {
-    dependencies()->DependOnProtector(PropertyCellRef(
-        js_heap_broker(), factory()->array_iterator_protector()));
+    dependencies()->DependOnProtector(
+        js_heap_broker()
+            ->Ref(factory()->array_iterator_protector())
+            .AsPropertyCell());
   }
 
   // Remove the {arguments_list} input from the {node}.
@@ -4345,7 +4361,9 @@ Reduction JSCallReducer::ReduceArrayPrototypePush(Node* node) {
 
   // Install code dependencies on the {receiver} global array protector cell.
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->no_elements_protector()));
+      js_heap_broker()
+          ->Ref(factory()->no_elements_protector())
+          .AsPropertyCell());
 
   // If the {receiver_maps} information is not reliable, we need
   // to check that the {receiver} still has one of these maps.
@@ -4460,7 +4478,9 @@ Reduction JSCallReducer::ReduceArrayPrototypePop(Node* node) {
 
   // Install code dependencies on the {receiver} global array protector cell.
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->no_elements_protector()));
+      js_heap_broker()
+          ->Ref(factory()->no_elements_protector())
+          .AsPropertyCell());
 
   // If the {receiver_maps} information is not reliable, we need
   // to check that the {receiver} still has one of these maps.
@@ -4579,7 +4599,9 @@ Reduction JSCallReducer::ReduceArrayPrototypeShift(Node* node) {
 
   // Install code dependencies on the {receiver} global array protector cell.
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->no_elements_protector()));
+      js_heap_broker()
+          ->Ref(factory()->no_elements_protector())
+          .AsPropertyCell());
 
   // If the {receiver_maps} information is not reliable, we need
   // to check that the {receiver} still has one of these maps.
@@ -4861,7 +4883,9 @@ Reduction JSCallReducer::ReduceArrayIteratorPrototypeNext(Node* node) {
   // Install code dependency on the array protector for holey arrays.
   if (IsHoleyElementsKind(elements_kind)) {
     dependencies()->DependOnProtector(
-        PropertyCellRef(js_heap_broker(), factory()->no_elements_protector()));
+        js_heap_broker()
+            ->Ref(factory()->no_elements_protector())
+            .AsPropertyCell());
   }
 
   // Load the (current) {iterated_object} from the {iterator}; this might be
@@ -4885,8 +4909,10 @@ Reduction JSCallReducer::ReduceArrayIteratorPrototypeNext(Node* node) {
     if (isolate()->IsArrayBufferNeuteringIntact()) {
       // Add a code dependency so we are deoptimized in case an ArrayBuffer
       // gets neutered.
-      dependencies()->DependOnProtector(PropertyCellRef(
-          js_heap_broker(), factory()->array_buffer_neutering_protector()));
+      dependencies()->DependOnProtector(
+          js_heap_broker()
+              ->Ref(factory()->array_buffer_neutering_protector())
+              .AsPropertyCell());
     } else {
       // Deoptimize if the array buffer was neutered.
       Node* buffer = effect = graph()->NewNode(
@@ -5372,7 +5398,9 @@ Reduction JSCallReducer::ReduceAsyncFunctionPromiseCreate(Node* node) {
 
   // Install a code dependency on the promise hook protector cell.
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->promise_hook_protector()));
+      js_heap_broker()
+          ->Ref(factory()->promise_hook_protector())
+          .AsPropertyCell());
 
   // Morph this {node} into a JSCreatePromise node.
   RelaxControls(node);
@@ -5388,7 +5416,9 @@ Reduction JSCallReducer::ReduceAsyncFunctionPromiseRelease(Node* node) {
   if (!isolate()->IsPromiseHookProtectorIntact()) return NoChange();
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->promise_hook_protector()));
+      js_heap_broker()
+          ->Ref(factory()->promise_hook_protector())
+          .AsPropertyCell());
 
   // The AsyncFunctionPromiseRelease builtin is a no-op as long as neither
   // the debugger is active nor any promise hook has been installed (ever).
@@ -5444,7 +5474,9 @@ Reduction JSCallReducer::ReducePromiseConstructor(Node* node) {
   if (target != new_target) return NoChange();
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->promise_hook_protector()));
+      js_heap_broker()
+          ->Ref(factory()->promise_hook_protector())
+          .AsPropertyCell());
 
   Handle<SharedFunctionInfo> promise_shared(
       handle(native_context()->promise_function()->shared(), isolate()));
@@ -5602,7 +5634,9 @@ Reduction JSCallReducer::ReducePromiseInternalConstructor(Node* node) {
   if (!isolate()->IsPromiseHookProtectorIntact()) return NoChange();
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->promise_hook_protector()));
+      js_heap_broker()
+          ->Ref(factory()->promise_hook_protector())
+          .AsPropertyCell());
 
   // Create a new pending promise.
   Node* value = effect =
@@ -5695,7 +5729,9 @@ Reduction JSCallReducer::ReducePromisePrototypeCatch(Node* node) {
   }
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->promise_then_protector()));
+      js_heap_broker()
+          ->Ref(factory()->promise_then_protector())
+          .AsPropertyCell());
 
   // If the {receiver_maps} aren't reliable, we need to repeat the
   // map check here, guarded by the CALL_IC.
@@ -5772,11 +5808,17 @@ Reduction JSCallReducer::ReducePromisePrototypeFinally(Node* node) {
   }
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->promise_hook_protector()));
+      js_heap_broker()
+          ->Ref(factory()->promise_hook_protector())
+          .AsPropertyCell());
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->promise_then_protector()));
-  dependencies()->DependOnProtector(PropertyCellRef(
-      js_heap_broker(), factory()->promise_species_protector()));
+      js_heap_broker()
+          ->Ref(factory()->promise_then_protector())
+          .AsPropertyCell());
+  dependencies()->DependOnProtector(
+      js_heap_broker()
+          ->Ref(factory()->promise_species_protector())
+          .AsPropertyCell());
 
   // If the {receiver_maps} aren't reliable, we need to repeat the
   // map check here, guarded by the CALL_IC.
@@ -5927,9 +5969,13 @@ Reduction JSCallReducer::ReducePromisePrototypeThen(Node* node) {
   }
 
   dependencies()->DependOnProtector(
-      PropertyCellRef(js_heap_broker(), factory()->promise_hook_protector()));
-  dependencies()->DependOnProtector(PropertyCellRef(
-      js_heap_broker(), factory()->promise_species_protector()));
+      js_heap_broker()
+          ->Ref(factory()->promise_hook_protector())
+          .AsPropertyCell());
+  dependencies()->DependOnProtector(
+      js_heap_broker()
+          ->Ref(factory()->promise_species_protector())
+          .AsPropertyCell());
 
   // If the {receiver_maps} aren't reliable, we need to repeat the
   // map check here, guarded by the CALL_IC.
@@ -6606,8 +6652,10 @@ Reduction JSCallReducer::ReduceArrayBufferViewAccessor(
     if (isolate()->IsArrayBufferNeuteringIntact()) {
       // Add a code dependency so we are deoptimized in case an ArrayBuffer
       // gets neutered.
-      dependencies()->DependOnProtector(PropertyCellRef(
-          js_heap_broker(), factory()->array_buffer_neutering_protector()));
+      dependencies()->DependOnProtector(
+          js_heap_broker()
+              ->Ref(factory()->array_buffer_neutering_protector())
+              .AsPropertyCell());
     } else {
       // Check if the {receiver}s buffer was neutered.
       Node* buffer = effect = graph()->NewNode(

@@ -196,7 +196,7 @@ struct HeapObjectMatcher final
   }
 
   ObjectRef Ref(const JSHeapBroker* broker) const {
-    return ObjectRef(broker, this->Value());
+    return broker->Ref(this->Value());
   }
 };
 

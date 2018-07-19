@@ -105,7 +105,7 @@ base::Optional<ContextRef> GetSpecializationContext(
     Maybe<OuterContext> maybe_outer) {
   switch (node->opcode()) {
     case IrOpcode::kHeapConstant: {
-      HeapObjectRef object(broker, HeapConstantOf(node->op()));
+      ObjectRef object = broker->Ref(HeapConstantOf(node->op()));
       if (object.IsContext()) return object.AsContext();
       break;
     }
@@ -114,7 +114,7 @@ base::Optional<ContextRef> GetSpecializationContext(
       if (maybe_outer.To(&outer) && IsContextParameter(node) &&
           *distance >= outer.distance) {
         *distance -= outer.distance;
-        return ContextRef(broker, outer.context);
+        return broker->Ref(outer.context).AsContext();
       }
       break;
     }

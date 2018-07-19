@@ -533,8 +533,8 @@ Reduction JSTypedLowering::ReduceJSAdd(Node* node) {
     if (r.BothInputsAre(Type::String())) {
       HeapObjectBinopMatcher m(node);
       if (m.IsFoldable()) {
-        StringRef left(js_heap_broker(), m.left().Value());
-        StringRef right(js_heap_broker(), m.right().Value());
+        StringRef left = m.left().Ref(js_heap_broker()).AsString();
+        StringRef right = m.right().Ref(js_heap_broker()).AsString();
         if (left.length() + right.length() > String::kMaxLength) {
           // No point in trying to optimize this, as it will just throw.
           return NoChange();
@@ -546,12 +546,11 @@ Reduction JSTypedLowering::ReduceJSAdd(Node* node) {
         AllowHandleDereference allow_handle_dereference;
         AllowHandleAllocation allow_handle_allocation;
         AllowHeapAllocation allow_heap_allocation;
-        ObjectRef cons(
-            js_heap_broker(),
+        Handle<String> cons =
             factory()
                 ->NewConsString(left.object<String>(), right.object<String>())
-                .ToHandleChecked());
-        Node* value = jsgraph()->Constant(cons);
+                .ToHandleChecked();
+        Node* value = jsgraph()->Constant(js_heap_broker()->Ref(cons));
         ReplaceWithValue(node, value);
         return Replace(value);
       }
@@ -1147,8 +1146,10 @@ Reduction JSTypedLowering::ReduceJSLoadNamed(Node* node) {
   DCHECK_EQ(IrOpcode::kJSLoadNamed, node->opcode());
   Node* receiver = NodeProperties::GetValueInput(node, 0);
   Type receiver_type = NodeProperties::GetType(receiver);
-  NameRef name(js_heap_broker(), NamedAccessOf(node->op()).name());
-  NameRef length_str(js_heap_broker(), factory()->length_string());
+  NameRef name =
+      js_heap_broker()->Ref(NamedAccessOf(node->op()).name()).AsName();
+  NameRef length_str =
+      js_heap_broker()->Ref(factory()->length_string()).AsName();
   // Optimize "length" property of strings.
   if (name.equals(length_str) && receiver_type.Is(Type::String())) {
     Node* value = graph()->NewNode(simplified()->StringLength(), receiver);
@@ -1383,7 +1384,7 @@ Node* JSTypedLowering::BuildGetModuleCell(Node* node) {
 
   if (module_type.IsHeapConstant()) {
     ModuleRef module_constant = module_type.AsHeapConstant()->Ref().AsModule();
-    CellRef cell_constant(module_constant.GetCell(cell_index));
+    CellRef cell_constant = module_constant.GetCell(cell_index);
     return jsgraph()->Constant(cell_constant);
   }
 
@@ -1581,10 +1582,12 @@ Reduction JSTypedLowering::ReduceJSConstruct(Node* node) {
     // Patch {node} to an indirect call via the {function}s construct stub.
     bool use_builtin_construct_stub = shared.construct_as_builtin();
 
-    CodeRef code(js_heap_broker(),
-                 use_builtin_construct_stub
-                     ? BUILTIN_CODE(isolate(), JSBuiltinsConstructStub)
-                     : BUILTIN_CODE(isolate(), JSConstructStubGeneric));
+    CodeRef code =
+        js_heap_broker()
+            ->Ref(use_builtin_construct_stub
+                      ? BUILTIN_CODE(isolate(), JSBuiltinsConstructStub)
+                      : BUILTIN_CODE(isolate(), JSConstructStubGeneric))
+            .AsCode();
 
     node->RemoveInput(arity + 1);
     node->InsertInput(graph()->zone(), 0, jsgraph()->Constant(code));

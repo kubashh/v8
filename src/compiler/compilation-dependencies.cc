@@ -354,7 +354,7 @@ void DependOnStablePrototypeChain(const JSHeapBroker* broker,
     Handle<JSReceiver> const current =
         PrototypeIterator::GetCurrent<JSReceiver>(i);
     deps->DependOnStableMap(
-        MapRef(broker, handle(current->map(), broker->isolate())));
+        broker->Ref(handle(current->map(), broker->isolate())).AsMap());
     Handle<JSReceiver> last;
     if (last_prototype.ToHandle(&last) && last.is_identical_to(current)) {
       break;
