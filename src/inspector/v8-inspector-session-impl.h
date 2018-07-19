@@ -36,6 +36,8 @@ class V8InspectorSessionImpl : public V8InspectorSession,
       V8Inspector::Channel*, const StringView& state);
   ~V8InspectorSessionImpl();
 
+  void restore() override;
+
   V8InspectorImpl* inspector() const { return m_inspector; }
   V8ConsoleAgentImpl* consoleAgent() { return m_consoleAgent.get(); }
   V8DebuggerAgentImpl* debuggerAgent() { return m_debuggerAgent.get(); }

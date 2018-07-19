@@ -110,6 +110,8 @@ V8InspectorSessionImpl::V8InspectorSessionImpl(V8InspectorImpl* inspector,
   }
 }
 
+void V8InspectorSessionImpl::restore() {}
+
 V8InspectorSessionImpl::~V8InspectorSessionImpl() {
   discardInjectedScripts();
   m_consoleAgent->disable();

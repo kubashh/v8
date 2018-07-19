@@ -158,6 +158,8 @@ class V8_EXPORT V8InspectorSession {
                             v8::Local<v8::Context>*,
                             std::unique_ptr<StringBuffer>* objectGroup) = 0;
   virtual void releaseObjectGroup(const StringView&) = 0;
+
+  virtual void restore() = 0;
 };
 
 class V8_EXPORT V8InspectorClient {
