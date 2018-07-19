@@ -100,8 +100,10 @@ V8InspectorSessionImpl::V8InspectorSessionImpl(V8InspectorImpl* inspector,
   m_schemaAgent.reset(new V8SchemaAgentImpl(
       this, this, agentState(protocol::Schema::Metainfo::domainName)));
   protocol::Schema::Dispatcher::wire(&m_dispatcher, m_schemaAgent.get());
+}
 
-  if (savedState.length()) {
+void V8InspectorSessionImpl::restore() {
+  if (m_state->size()) {
     m_runtimeAgent->restore();
     m_debuggerAgent->restore();
     m_heapProfilerAgent->restore();
@@ -109,8 +111,6 @@ V8InspectorSessionImpl::V8InspectorSessionImpl(V8InspectorImpl* inspector,
     m_consoleAgent->restore();
   }
 }
-
-void V8InspectorSessionImpl::restore() {}
 
 V8InspectorSessionImpl::~V8InspectorSessionImpl() {
   discardInjectedScripts();
