@@ -1864,5 +1864,29 @@ MaybeHandle<Object> Intl::InternalCompare(Isolate* isolate,
 
   return factory->NewNumberFromInt(result);
 }
+
+MaybeHandle<Object> Intl::NumberToLocaleString(Isolate* isolate,
+                                               Handle<Object> num,
+                                               Handle<Object> locales,
+                                               Handle<Object> options) {
+  Factory* factory = isolate->factory();
+  Handle<JSObject> number_format_holder;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, number_format_holder,
+      CachedOrNewService(isolate,
+                         factory->NewStringFromStaticChars("numberformat"),
+                         locales, options),
+      Object);
+  DCHECK(
+      Intl::IsObjectOfType(isolate, number_format_holder, Intl::kNumberFormat));
+  Handle<Object> number_obj;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, number_obj,
+                             Object::ToNumber(isolate, num), Object);
+
+  // Spec treats -0 and +0 as 0.
+  double number = number_obj->Number() + 0;
+  return NumberFormat::FormatNumber(isolate, number_format_holder, number);
+}
+
 }  // namespace internal
 }  // namespace v8

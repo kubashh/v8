@@ -304,23 +304,6 @@ RUNTIME_FUNCTION(Runtime_CreateNumberFormat) {
   return *local_object;
 }
 
-RUNTIME_FUNCTION(Runtime_InternalNumberFormat) {
-  HandleScope scope(isolate);
-
-  DCHECK_EQ(2, args.length());
-
-  CONVERT_ARG_HANDLE_CHECKED(JSObject, number_format_holder, 0);
-  CONVERT_ARG_HANDLE_CHECKED(Object, value, 1);
-
-  Handle<Object> number_obj;
-  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, number_obj,
-                                     Object::ToNumber(isolate, value));
-
-  double number = number_obj->Number();
-  RETURN_RESULT_OR_FAILURE(isolate, NumberFormat::FormatNumber(
-                                        isolate, number_format_holder, number));
-}
-
 RUNTIME_FUNCTION(Runtime_CurrencyDigits) {
   DCHECK_EQ(1, args.length());
   v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);

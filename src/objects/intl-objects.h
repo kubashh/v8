@@ -311,6 +311,10 @@ class Intl {
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> InternalCompare(
       Isolate* isolate, Handle<JSObject> collator, Handle<String> s1,
       Handle<String> s2);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<Object> NumberToLocaleString(
+      Isolate* isolate, Handle<Object> num, Handle<Object> locales,
+      Handle<Object> options);
 };
 
 }  // namespace internal
