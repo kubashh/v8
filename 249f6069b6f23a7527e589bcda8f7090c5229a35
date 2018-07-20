@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90415caa_74898ed1",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6796,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-07-20T08:58:01Z",
+      "side": 1,
+      "message": "I don\u0027t think this is correct: The LoadElement below (or the newly added LoadDataViewElement) passes a Word32 truncation for the index argument, which means that any non word32 value coming out of this NumberAdd is truncated to word32 range. That means your accesses on large DataViews would wrap around instead of reading the correct bits. I suspect we need to have a SpeculativeNumberAdd here.\n\nCan you follow up on this with Jaro and Sigurd?",
+      "revId": "249f6069b6f23a7527e589bcda8f7090c5229a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
