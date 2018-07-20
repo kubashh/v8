@@ -52,6 +52,24 @@
       "revId": "249f6069b6f23a7527e589bcda8f7090c5229a35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2a0e12d_4b6c6daa",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6796,
+      "author": {
+        "id": 1284072
+      },
+      "writtenOn": "2018-07-20T11:01:49Z",
+      "side": 1,
+      "message": "Ok, so I know where this comes from. When porting to Torque, the only ToIndex function that I found was ToSmiIndex so this restricted the values.\nIt\u0027s also used in TypedArrayBuiltinsAssembler::ConstructByArrayBuffer, and in SharedArrayBuffer (see https://cs.chromium.org/chromium/src/v8/src/builtins/builtins-sharedarraybuffer-gen.cc?g\u003d0\u0026l\u003d93), what do you think?",
+      "parentUuid": "a92a5d79_5469b644",
+      "revId": "249f6069b6f23a7527e589bcda8f7090c5229a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
