@@ -820,8 +820,8 @@ Type Type::NewConstant(double value, Zone* zone) {
   return OtherNumberConstant(value, zone);
 }
 
-Type Type::NewConstant(const JSHeapBroker* js_heap_broker,
-                       Handle<i::Object> value, Zone* zone) {
+Type Type::NewConstant(JSHeapBroker* js_heap_broker, Handle<i::Object> value,
+                       Zone* zone) {
   auto maybe_smi = JSHeapBroker::TryGetSmi(value);
   if (maybe_smi.has_value()) {
     return NewConstant(static_cast<double>(maybe_smi.value()), zone);
@@ -1061,8 +1061,8 @@ Type Type::OtherNumberConstant(double value, Zone* zone) {
 }
 
 // static
-Type Type::HeapConstant(const JSHeapBroker* js_heap_broker,
-                        Handle<i::Object> value, Zone* zone) {
+Type Type::HeapConstant(JSHeapBroker* js_heap_broker, Handle<i::Object> value,
+                        Zone* zone) {
   return FromTypeBase(
       HeapConstantType::New(HeapObjectRef(js_heap_broker, value), zone));
 }

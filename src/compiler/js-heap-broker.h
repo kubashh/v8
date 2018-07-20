@@ -9,6 +9,7 @@
 #include "src/base/optional.h"
 #include "src/globals.h"
 #include "src/objects.h"
+#include "src/zone/zone-containers.h"
 
 namespace v8 {
 namespace internal {
@@ -59,76 +60,82 @@ class HeapObjectType {
   Flags const flags_;
 };
 
-#define HEAP_BROKER_OBJECT_LIST(V) \
-  V(AllocationSite)                \
-  V(Cell)                          \
-  V(Code)                          \
-  V(Context)                       \
-  V(FeedbackVector)                \
-  V(FixedArray)                    \
-  V(FixedArrayBase)                \
-  V(FixedDoubleArray)              \
-  V(HeapNumber)                    \
-  V(HeapObject)                    \
-  V(InternalizedString)            \
-  V(JSArray)                       \
-  V(JSFunction)                    \
-  V(JSGlobalProxy)                 \
-  V(JSObject)                      \
-  V(JSRegExp)                      \
-  V(Map)                           \
-  V(Module)                        \
-  V(MutableHeapNumber)             \
-  V(Name)                          \
-  V(NativeContext)                 \
-  V(PropertyCell)                  \
-  V(ScopeInfo)                     \
-  V(ScriptContextTable)            \
-  V(SharedFunctionInfo)            \
+#define HEAP_BROKER_NORMAL_OBJECT_LIST(V) \
+  V(AllocationSite)                       \
+  V(Cell)                                 \
+  V(Code)                                 \
+  V(Context)                              \
+  V(FeedbackVector)                       \
+  V(FixedArray)                           \
+  V(FixedArrayBase)                       \
+  V(FixedDoubleArray)                     \
+  V(HeapNumber)                           \
+  V(HeapObject)                           \
+  V(InternalizedString)                   \
+  V(JSArray)                              \
+  V(JSFunction)                           \
+  V(JSGlobalProxy)                        \
+  V(JSObject)                             \
+  V(JSRegExp)                             \
+  V(Map)                                  \
+  V(Module)                               \
+  V(MutableHeapNumber)                    \
+  V(Name)                                 \
+  V(NativeContext)                        \
+  V(PropertyCell)                         \
+  V(ScopeInfo)                            \
+  V(ScriptContextTable)                   \
+  V(SharedFunctionInfo)                   \
   V(String)
+
+#define HEAP_BROKER_OBJECT_LIST(V)  \
+  HEAP_BROKER_NORMAL_OBJECT_LIST(V) \
+  V(FieldType)
 
 class CompilationDependencies;
 class JSHeapBroker;
+class ObjectData;
 #define FORWARD_DECL(Name) class Name##Ref;
 HEAP_BROKER_OBJECT_LIST(FORWARD_DECL)
 #undef FORWARD_DECL
 
 class ObjectRef {
  public:
-  explicit ObjectRef(const JSHeapBroker* broker, Handle<Object> object)
-      : broker_(broker), object_(object) {}
+  ObjectRef(JSHeapBroker* broker, Handle<Object> object);
+  explicit ObjectRef(ObjectData* data);
 
+  Handle<Object> object() const;
+  // TODO(neis): Remove eventually.
   template <typename T>
   Handle<T> object() const {
     AllowHandleDereference handle_dereference;
-    return Handle<T>::cast(object_);
+    return Handle<T>::cast(object());
   }
 
   OddballType oddball_type() const;
-
-  bool IsSmi() const;
-  int AsSmi() const;
-
   bool equals(const ObjectRef& other) const;
 
 #define HEAP_IS_METHOD_DECL(Name) bool Is##Name() const;
-  HEAP_BROKER_OBJECT_LIST(HEAP_IS_METHOD_DECL)
+  HEAP_BROKER_NORMAL_OBJECT_LIST(HEAP_IS_METHOD_DECL)
+  HEAP_IS_METHOD_DECL(Smi)
 #undef HEAP_IS_METHOD_DECL
 
 #define HEAP_AS_METHOD_DECL(Name) Name##Ref As##Name() const;
   HEAP_BROKER_OBJECT_LIST(HEAP_AS_METHOD_DECL)
 #undef HEAP_AS_METHOD_DECL
 
+  int AsSmi() const;
+
   StringRef TypeOf() const;
   bool BooleanValue();
   double OddballToNumber() const;
 
  protected:
-  const JSHeapBroker* broker() const { return broker_; }
+  JSHeapBroker* broker() const;
+  ObjectData* data() const;
 
  private:
-  const JSHeapBroker* broker_;
-  Handle<Object> object_;
+  ObjectData* data_;
 };
 
 class FieldTypeRef : public ObjectRef {
@@ -415,7 +422,7 @@ class InternalizedStringRef : public StringRef {
 
 class V8_EXPORT_PRIVATE JSHeapBroker : public NON_EXPORTED_BASE(ZoneObject) {
  public:
-  JSHeapBroker(Isolate* isolate);
+  JSHeapBroker(Isolate* isolate, Zone* zone);
 
   HeapObjectType HeapObjectTypeFromMap(Handle<Map> map) const {
     AllowHandleDereference handle_dereference;
@@ -424,13 +431,17 @@ class V8_EXPORT_PRIVATE JSHeapBroker : public NON_EXPORTED_BASE(ZoneObject) {
 
   static base::Optional<int> TryGetSmi(Handle<Object> object);
 
+  // XXX
   Isolate* isolate() const { return isolate_; }
 
  private:
+  friend class ObjectRef;
   friend class HeapObjectRef;
   HeapObjectType HeapObjectTypeFromMap(Map* map) const;
 
   Isolate* const isolate_;
+  Zone* const zone_;
+  ZoneUnorderedMap<Address, ObjectData*> refs_;
 };
 
 }  // namespace compiler

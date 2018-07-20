@@ -13,57 +13,47 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
-MapRef HeapObjectRef::map() const {
-  AllowHandleAllocation handle_allocation;
-  AllowHandleDereference allow_handle_dereference;
-  return MapRef(broker(),
-                handle(object<HeapObject>()->map(), broker()->isolate()));
+JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* zone)
+    : isolate_(isolate), zone_(zone), refs_(zone_) {}
+
+class ObjectData : public ZoneObject {
+ public:
+  ObjectData(JSHeapBroker* broker_, Handle<Object> object_)
+      : broker(broker_), object(object_) {}
+
+  JSHeapBroker* broker;
+  Handle<Object> object;
+
+#define DEFINE_IS(Name)                              \
+  bool Is##Name() const {                            \
+    AllowHandleDereference allow_handle_dereference; \
+    return object->Is##Name();                       \
+  }
+  HEAP_BROKER_NORMAL_OBJECT_LIST(DEFINE_IS)
+  DEFINE_IS(Smi)
+#undef DEFINE_IS
+};
+
+Handle<Object> ObjectRef::object() const { return data_->object; }
+
+ObjectRef::ObjectRef(JSHeapBroker* broker, Handle<Object> object)
+    : data_(nullptr) {
+  DisallowHeapAccess no_heap_access;
+  // TODO(neis): After serialization pass, only read from the hash table.
+  auto x = broker->refs_.insert({object.address(), nullptr});
+  if (x.second) {
+    CHECK_NULL(x.first->second);
+    x.first->second = new (broker->zone_) ObjectData(broker, object);
+  }
+  data_ = x.first->second;
+  CHECK_NOT_NULL(data_);
 }
 
-double HeapNumberRef::value() const {
-  AllowHandleDereference allow_handle_dereference;
-  return object<HeapNumber>()->value();
-}
+ObjectRef::ObjectRef(ObjectData* data) : data_(data) { CHECK_NOT_NULL(data); }
 
-double MutableHeapNumberRef::value() const {
-  AllowHandleDereference allow_handle_dereference;
-  return object<MutableHeapNumber>()->value();
-}
+JSHeapBroker* ObjectRef::broker() const { return data_->broker; }
 
-bool ObjectRef::IsSmi() const {
-  AllowHandleDereference allow_handle_dereference;
-  return object_->IsSmi();
-}
-
-int ObjectRef::AsSmi() const { return object<Smi>()->value(); }
-
-bool ObjectRef::equals(const ObjectRef& other) const {
-  return object<Object>().equals(other.object<Object>());
-}
-
-StringRef ObjectRef::TypeOf() const {
-  AllowHandleAllocation handle_allocation;
-  AllowHandleDereference handle_dereference;
-  return StringRef(broker(),
-                   Object::TypeOf(broker()->isolate(), object<Object>()));
-}
-
-base::Optional<ContextRef> ContextRef::previous() const {
-  AllowHandleAllocation handle_allocation;
-  AllowHandleDereference handle_dereference;
-  Context* previous = object<Context>()->previous();
-  if (previous == nullptr) return base::Optional<ContextRef>();
-  return ContextRef(broker(), handle(previous, broker()->isolate()));
-}
-
-ObjectRef ContextRef::get(int index) const {
-  AllowHandleAllocation handle_allocation;
-  AllowHandleDereference handle_dereference;
-  Handle<Object> value(object<Context>()->get(index), broker()->isolate());
-  return ObjectRef(broker(), value);
-}
-
-JSHeapBroker::JSHeapBroker(Isolate* isolate) : isolate_(isolate) {}
+ObjectData* ObjectRef::data() const { return data_; }
 
 HeapObjectType JSHeapBroker::HeapObjectTypeFromMap(Map* map) const {
   AllowHandleDereference allow_handle_dereference;
@@ -102,20 +92,71 @@ base::Optional<int> JSHeapBroker::TryGetSmi(Handle<Object> object) {
   return Smi::cast(*object)->value();
 }
 
-#define DEFINE_IS_AND_AS(Name)                        \
-  bool ObjectRef::Is##Name() const {                  \
-    AllowHandleDereference allow_handle_dereference;  \
-    return object<Object>()->Is##Name();              \
-  }                                                   \
-  Name##Ref ObjectRef::As##Name() const {             \
-    DCHECK(Is##Name());                               \
-    return Name##Ref(broker(), object<HeapObject>()); \
+MapRef HeapObjectRef::map() const {
+  AllowHandleAllocation handle_allocation;
+  AllowHandleDereference allow_handle_dereference;
+  return MapRef(broker(),
+                handle(object<HeapObject>()->map(), broker()->isolate()));
+}
+
+double HeapNumberRef::value() const {
+  AllowHandleDereference allow_handle_dereference;
+  return object<HeapNumber>()->value();
+}
+
+double MutableHeapNumberRef::value() const {
+  AllowHandleDereference allow_handle_dereference;
+  return object<MutableHeapNumber>()->value();
+}
+
+int ObjectRef::AsSmi() const { return object<Smi>()->value(); }
+
+bool ObjectRef::equals(const ObjectRef& other) const {
+  DCHECK_EQ(data_ == other.data_, data_->object.equals(other.data_->object));
+  return data_ == other.data_;
+}
+
+StringRef ObjectRef::TypeOf() const {
+  AllowHandleAllocation handle_allocation;
+  AllowHandleDereference handle_dereference;
+  return StringRef(broker(),
+                   Object::TypeOf(broker()->isolate(), object<Object>()));
+}
+
+base::Optional<ContextRef> ContextRef::previous() const {
+  AllowHandleAllocation handle_allocation;
+  AllowHandleDereference handle_dereference;
+  Context* previous = object<Context>()->previous();
+  if (previous == nullptr) return base::Optional<ContextRef>();
+  return ContextRef(broker(), handle(previous, broker()->isolate()));
+}
+
+ObjectRef ContextRef::get(int index) const {
+  AllowHandleAllocation handle_allocation;
+  AllowHandleDereference handle_dereference;
+  return ObjectRef(broker(),
+                   handle(object<Context>()->get(index), broker()->isolate()));
+}
+
+#define DEFINE_IS_AND_AS(Name)                                    \
+  bool ObjectRef::Is##Name() const { return data()->Is##Name(); } \
+  Name##Ref ObjectRef::As##Name() const {                         \
+    DCHECK(Is##Name());                                           \
+    return Name##Ref(data());                                     \
   }
-HEAP_BROKER_OBJECT_LIST(DEFINE_IS_AND_AS)
+HEAP_BROKER_NORMAL_OBJECT_LIST(DEFINE_IS_AND_AS)
 #undef DEFINE_IS_AND_AS
+
+bool ObjectRef::IsSmi() const { return data()->IsSmi(); }
+
+FieldTypeRef ObjectRef::AsFieldType() const {
+  return FieldTypeRef(broker(), object<Object>());
+}
 
 HeapObjectType HeapObjectRef::type() const {
   AllowHandleDereference allow_handle_dereference;
+  // TODO(neis): When this gets called via OptimizingCompileDispatcher ->
+  // LoadElimination -> TypeNarrowingReducer, we don't have a HandleScope. Why?
   return broker()->HeapObjectTypeFromMap(object<HeapObject>()->map());
 }
 
@@ -423,9 +464,9 @@ void JSObjectRef::EnsureElementsTenured() {
     // If we would like to pretenure a fixed cow array, we must ensure that
     // the array is already in old space, otherwise we'll create too many
     // old-to-new-space pointers (overflowing the store buffer).
-    object_elements = Handle<FixedArrayBase>(
+    object_elements =
         broker()->isolate()->factory()->CopyAndTenureFixedCOWArray(
-            Handle<FixedArray>::cast(object_elements)));
+            Handle<FixedArray>::cast(object_elements));
     object<JSObject>()->set_elements(*object_elements);
   }
 }
