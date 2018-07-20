@@ -224,7 +224,6 @@ namespace internal {
   F(IsInitializedIntlObjectOfType, 2, 1)     \
   F(MarkAsInitializedIntlObjectOfType, 2, 1) \
   F(PluralRulesSelect, 2, 1)                 \
-  F(StringLocaleConvertCase, 3, 1)           \
   F(StringToLowerCaseIntl, 1, 1)             \
   F(StringToUpperCaseIntl, 1, 1)
 #else

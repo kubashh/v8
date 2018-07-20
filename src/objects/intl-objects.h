@@ -298,6 +298,11 @@ class Intl {
   // Canonicalize the localeID.
   static MaybeHandle<String> CanonicalizeLanguageTag(Isolate* isolate,
                                                      Handle<Object> localeID);
+
+  // For locale sensitive functions
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> StringLocaleConvertCase(
+      Isolate* isolate, Handle<String> s, bool is_upper,
+      Handle<Object> locales);
 };
 
 }  // namespace internal
