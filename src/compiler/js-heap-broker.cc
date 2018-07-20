@@ -30,15 +30,11 @@ double MutableHeapNumberRef::value() const {
   return object<MutableHeapNumber>()->value();
 }
 
-bool ObjectRef::IsSmi() const {
-  AllowHandleDereference allow_handle_dereference;
-  return object_->IsSmi();
-}
-
 int ObjectRef::AsSmi() const { return object<Smi>()->value(); }
 
 bool ObjectRef::equals(const ObjectRef& other) const {
-  return object<Object>().equals(other.object<Object>());
+  DCHECK_EQ(data_ == other.data_, data_->object.equals(other.data_->object));
+  return data_ == other.data_;
 }
 
 StringRef ObjectRef::TypeOf() const {
@@ -63,7 +59,8 @@ ObjectRef ContextRef::get(int index) const {
   return ObjectRef(broker(), value);
 }
 
-JSHeapBroker::JSHeapBroker(Isolate* isolate) : isolate_(isolate) {}
+JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* zone)
+    : isolate_(isolate), zone_(zone), refs_(zone_) {}
 
 HeapObjectType JSHeapBroker::HeapObjectTypeFromMap(Map* map) const {
   AllowHandleDereference allow_handle_dereference;
@@ -95,27 +92,25 @@ HeapObjectType JSHeapBroker::HeapObjectTypeFromMap(Map* map) const {
   return HeapObjectType(map->instance_type(), flags, oddball_type);
 }
 
-// static
-base::Optional<int> JSHeapBroker::TryGetSmi(Handle<Object> object) {
-  AllowHandleDereference allow_handle_dereference;
-  if (!object->IsSmi()) return base::Optional<int>();
-  return Smi::cast(*object)->value();
-}
-
-#define DEFINE_IS_AND_AS(Name)                        \
-  bool ObjectRef::Is##Name() const {                  \
-    AllowHandleDereference allow_handle_dereference;  \
-    return object<Object>()->Is##Name();              \
-  }                                                   \
-  Name##Ref ObjectRef::As##Name() const {             \
-    DCHECK(Is##Name());                               \
-    return Name##Ref(broker(), object<HeapObject>()); \
+#define DEFINE_IS_AND_AS(Name)                                    \
+  bool ObjectRef::Is##Name() const { return data()->Is##Name(); } \
+  Name##Ref ObjectRef::As##Name() const {                         \
+    DCHECK(Is##Name());                                           \
+    return Name##Ref(data());                                     \
   }
-HEAP_BROKER_OBJECT_LIST(DEFINE_IS_AND_AS)
+HEAP_BROKER_NORMAL_OBJECT_LIST(DEFINE_IS_AND_AS)
 #undef DEFINE_IS_AND_AS
+
+bool ObjectRef::IsSmi() const { return data()->IsSmi(); }
+
+FieldTypeRef ObjectRef::AsFieldType() const {
+  return FieldTypeRef(broker(), object<Object>());
+}
 
 HeapObjectType HeapObjectRef::type() const {
   AllowHandleDereference allow_handle_dereference;
+  // TODO(neis): When this gets called via OptimizingCompileDispatcher ->
+  // LoadElimination -> TypeNarrowingReducer, we don't have a HandleScope. Why?
   return broker()->HeapObjectTypeFromMap(object<HeapObject>()->map());
 }
 
@@ -423,9 +418,9 @@ void JSObjectRef::EnsureElementsTenured() {
     // If we would like to pretenure a fixed cow array, we must ensure that
     // the array is already in old space, otherwise we'll create too many
     // old-to-new-space pointers (overflowing the store buffer).
-    object_elements = Handle<FixedArrayBase>(
+    object_elements =
         broker()->isolate()->factory()->CopyAndTenureFixedCOWArray(
-            Handle<FixedArray>::cast(object_elements)));
+            Handle<FixedArray>::cast(object_elements));
     object<JSObject>()->set_elements(*object_elements);
   }
 }
@@ -884,6 +879,45 @@ PropertyDetails PropertyCellRef::property_details() const {
   AllowHandleDereference allow_handle_dereference;
   return object<PropertyCell>()->property_details();
 }
+
+// TODO(neis): When do we need NON_EXPORTED_BASE?
+class ObjectData : public ZoneObject {
+ public:
+  ObjectData(JSHeapBroker* broker_, Handle<Object> object_)
+      : broker(broker_), object(object_) {}
+
+  JSHeapBroker* broker;
+  Handle<Object> object;
+
+#define DEFINE_IS(Name)                              \
+  bool Is##Name() const {                            \
+    AllowHandleDereference allow_handle_dereference; \
+    return object->Is##Name();                       \
+  }
+  HEAP_BROKER_NORMAL_OBJECT_LIST(DEFINE_IS)
+  DEFINE_IS(Smi)
+#undef DEFINE_IS
+};
+
+ObjectRef::ObjectRef(JSHeapBroker* broker, Handle<Object> object)
+    : data_(nullptr) {
+  DisallowHeapAccess no_heap_access;
+  // TODO(neis): After serialization pass, only read from the hash table.
+  auto x = broker->refs_.insert({object.address(), nullptr});
+  if (x.second) {
+    x.first->second = new (broker->zone_) ObjectData(broker, object);
+  }
+  data_ = x.first->second;
+  CHECK_NOT_NULL(data_);
+}
+
+ObjectRef::ObjectRef(ObjectData* data) : data_(data) { CHECK_NOT_NULL(data); }
+
+Handle<Object> ObjectRef::object() const { return data_->object; }
+
+JSHeapBroker* ObjectRef::broker() const { return data_->broker; }
+
+ObjectData* ObjectRef::data() const { return data_; }
 
 }  // namespace compiler
 }  // namespace internal
