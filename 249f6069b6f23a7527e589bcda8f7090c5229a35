@@ -16,6 +16,24 @@
       "revId": "249f6069b6f23a7527e589bcda8f7090c5229a35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5031d5b1_91496317",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 6796,
+      "author": {
+        "id": 1284072
+      },
+      "writtenOn": "2018-07-20T09:24:49Z",
+      "side": 1,
+      "message": "I believe we enforce that all ArrayBuffers have a length that fits on 32 bits, so this should never overflow for valid reads and throw before otherwise.",
+      "parentUuid": "90415caa_74898ed1",
+      "revId": "249f6069b6f23a7527e589bcda8f7090c5229a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
