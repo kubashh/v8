@@ -1672,6 +1672,11 @@ function toDateTimeOptions(options, required, defaults) {
 
   return options;
 }
+// TODO(ftang) remove the %InstallToContext once
+// toDateTimeOptions is available in C++
+%InstallToContext([
+  "to_date_time_options", toDateTimeOptions
+]);
 
 
 /**
@@ -1837,7 +1842,6 @@ DEFINE_METHOD(
     return supportedLocalesOf('dateformat', locales, arguments[1]);
   }
 );
-
 
 /**
  * Returns a String value representing the result of calling ToNumber(date)
@@ -2103,72 +2107,5 @@ function cachedOrNewService(service, locales, options, defaults) {
 %InstallToContext([
   "cached_or_new_service", cachedOrNewService
 ]);
-
-/**
- * Returns actual formatted date or fails if date parameter is invalid.
- */
-function toLocaleDateTime(date, locales, options, required, defaults, service) {
-  if (!(date instanceof GlobalDate)) {
-    throw %make_type_error(kMethodInvokedOnWrongType, "Date");
-  }
-
-  var dateValue = TO_NUMBER(date);
-  if (NUMBER_IS_NAN(dateValue)) return 'Invalid Date';
-
-  var internalOptions = toDateTimeOptions(options, required, defaults);
-
-  var dateFormat =
-      cachedOrNewService(service, locales, options, internalOptions);
-
-  return formatDate(dateFormat, date);
-}
-
-
-/**
- * Formats a Date object (this) using locale and options values.
- * If locale or options are omitted, defaults are used - both date and time are
- * present in the output.
- */
-DEFINE_METHOD(
-  GlobalDate.prototype,
-  toLocaleString() {
-    var locales = arguments[0];
-    var options = arguments[1];
-    return toLocaleDateTime(
-        this, locales, options, 'any', 'all', 'dateformatall');
-  }
-);
-
-
-/**
- * Formats a Date object (this) using locale and options values.
- * If locale or options are omitted, defaults are used - only date is present
- * in the output.
- */
-DEFINE_METHOD(
-  GlobalDate.prototype,
-  toLocaleDateString() {
-    var locales = arguments[0];
-    var options = arguments[1];
-    return toLocaleDateTime(
-        this, locales, options, 'date', 'date', 'dateformatdate');
-  }
-);
-
-
-/**
- * Formats a Date object (this) using locale and options values.
- * If locale or options are omitted, defaults are used - only time is present
- * in the output.
- */
-DEFINE_METHOD(
-  GlobalDate.prototype,
-  toLocaleTimeString() {
-    var locales = arguments[0];
-    var options = arguments[1];
-    return toLocaleDateTime(
-        this, locales, options, 'time', 'time', 'dateformattime');
-  }
-);
 
 })

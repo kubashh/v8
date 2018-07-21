@@ -104,6 +104,7 @@ enum ContextLookupFlags {
   V(SET_DELETE_INDEX, JSFunction, set_delete)                                  \
   V(SET_HAS_INDEX, JSFunction, set_has)                                        \
   V(SYNTAX_ERROR_FUNCTION_INDEX, JSFunction, syntax_error_function)            \
+  V(TO_DATE_TIME_OPTIONS_FUNCTION_INDEX, JSFunction, to_date_time_options)     \
   V(TYPE_ERROR_FUNCTION_INDEX, JSFunction, type_error_function)                \
   V(URI_ERROR_FUNCTION_INDEX, JSFunction, uri_error_function)                  \
   V(WASM_COMPILE_ERROR_FUNCTION_INDEX, JSFunction,                             \

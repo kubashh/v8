@@ -10,6 +10,9 @@
 #include "src/counters.h"
 #include "src/dateparser-inl.h"
 #include "src/objects-inl.h"
+#ifdef V8_INTL_SUPPORT
+#include "src/objects/intl-objects.h"
+#endif
 
 namespace v8 {
 namespace internal {
@@ -781,11 +784,21 @@ BUILTIN(DatePrototypeSetUTCSeconds) {
 BUILTIN(DatePrototypeToDateString) {
   HandleScope scope(isolate);
   CHECK_RECEIVER(JSDate, date, "Date.prototype.toDateString");
+#ifdef V8_INTL_SUPPORT
+  RETURN_RESULT_OR_FAILURE(
+      isolate, Intl::DateToLocaleDateTime(
+                   isolate, date, args.atOrUndefined(isolate, 1),  // locales
+                   args.atOrUndefined(isolate, 2),                 // options
+                   "date",                                         // required
+                   "date",                                         // defaults
+                   "dateformatdate"));                             // service
+#else
   char buffer[128];
   ToDateString(date->value()->Number(), ArrayVector(buffer),
                isolate->date_cache(), kDateOnly);
   RETURN_RESULT_OR_FAILURE(
       isolate, isolate->factory()->NewStringFromUtf8(CStrVector(buffer)));
+#endif  // V8_INTL_SUPPORT
 }
 
 // ES6 section 20.3.4.36 Date.prototype.toISOString ( )
@@ -819,22 +832,42 @@ BUILTIN(DatePrototypeToISOString) {
 BUILTIN(DatePrototypeToString) {
   HandleScope scope(isolate);
   CHECK_RECEIVER(JSDate, date, "Date.prototype.toString");
+#ifdef V8_INTL_SUPPORT
+  RETURN_RESULT_OR_FAILURE(
+      isolate, Intl::DateToLocaleDateTime(
+                   isolate, date, args.atOrUndefined(isolate, 1),  // locales
+                   args.atOrUndefined(isolate, 2),                 // options
+                   "any",                                          // required
+                   "all",                                          // defaults
+                   "dateformatall"));                              // service
+#else
   char buffer[128];
   ToDateString(date->value()->Number(), ArrayVector(buffer),
                isolate->date_cache());
   RETURN_RESULT_OR_FAILURE(
       isolate, isolate->factory()->NewStringFromUtf8(CStrVector(buffer)));
+#endif  // V8_INTL_SUPPORT
 }
 
 // ES6 section 20.3.4.42 Date.prototype.toTimeString ( )
 BUILTIN(DatePrototypeToTimeString) {
   HandleScope scope(isolate);
   CHECK_RECEIVER(JSDate, date, "Date.prototype.toTimeString");
+#ifdef V8_INTL_SUPPORT
+  RETURN_RESULT_OR_FAILURE(
+      isolate, Intl::DateToLocaleDateTime(
+                   isolate, date, args.atOrUndefined(isolate, 1),  // locales
+                   args.atOrUndefined(isolate, 2),                 // options
+                   "time",                                         // required
+                   "time",                                         // defaults
+                   "dateformattime"));                             // service
+#else
   char buffer[128];
   ToDateString(date->value()->Number(), ArrayVector(buffer),
                isolate->date_cache(), kTimeOnly);
   RETURN_RESULT_OR_FAILURE(
       isolate, isolate->factory()->NewStringFromUtf8(CStrVector(buffer)));
+#endif  // V8_INTL_SUPPORT
 }
 
 // ES6 section 20.3.4.43 Date.prototype.toUTCString ( )
