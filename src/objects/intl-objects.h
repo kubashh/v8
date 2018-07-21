@@ -315,6 +315,19 @@ class Intl {
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> NumberToLocaleString(
       Isolate* isolate, Handle<Object> num, Handle<Object> locales,
       Handle<Object> options);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> DateToLocaleDateTime(
+      Isolate* isolate, Handle<JSDate> date, Handle<Object> locales,
+      Handle<Object> options, const char* required, const char* defaults,
+      const char* service);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> FormatDate(
+      Isolate* isolate, Handle<JSObject> date_format_holder,
+      Handle<Object> date_obj);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> InternalDateFormat(
+      Isolate* isolate, Handle<JSObject> date_format_holder,
+      Handle<Object> date_ms);
 };
 
 }  // namespace internal
