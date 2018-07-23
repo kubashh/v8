@@ -261,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "e9844b52_a7ea58fb",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1569,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-07-23T10:38:54Z",
+      "side": 1,
+      "message": "The first element (i\u003d0) has to be skipped. So, for-each loop cannot be used. \nI overlooked that because your for loop started with i\u003d0. \n\nI added a comment on this issue. https://chromium-review.googlesource.com/c/v8/v8/+/1144524 . You can fix it there by applying my patch posted there (or take one of a few alternatives).",
+      "parentUuid": "4debbc57_cc8d4202",
+      "range": {
+        "startLine": 1569,
+        "startChar": 2,
+        "endLine": 1569,
+        "endChar": 67
+      },
+      "revId": "2df223a3db7b735ae4ce931492c6bc50cd37b51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ba33a56_da22ce27",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 10
