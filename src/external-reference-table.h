@@ -56,6 +56,13 @@ class ExternalReferenceTable {
     return i * sizeof(ExternalReferenceEntry);
   }
 
+  const char* NameFromOffset(uint32_t offset) {
+    DCHECK_EQ(offset % sizeof(ExternalReferenceEntry), 0);
+    DCHECK_LT(offset, SizeInBytes());
+    int index = offset / sizeof(ExternalReferenceEntry);
+    return name(index);
+  }
+
   static constexpr uint32_t SizeInBytes() {
     STATIC_ASSERT(OffsetOfEntry(size()) + 2 * kUInt32Size ==
                   sizeof(ExternalReferenceTable));
