@@ -66,6 +66,8 @@ class BuiltinDeserializer final
   // Convenience function to grab the handler off the heap's strong root list.
   Code* GetDeserializeLazyHandler(OperandScale operand_scale) const;
 
+  void ClearRelocInfoForOffHeapTrampoline(Code* code);
+
  private:
   // Stores the code object currently being deserialized. The
   // {current_code_object_id} stores the index of the currently-deserialized

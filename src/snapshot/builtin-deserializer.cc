@@ -157,8 +157,11 @@ Code* BuiltinDeserializer::DeserializeBuiltinRaw(int builtin_id) {
   // Rewind.
   source()->set_position(initial_position);
 
-  // Flush the instruction cache.
+  // Clear the reloc info for off-heap trampolines.
   Code* code = Code::cast(o);
+  if (code->is_off_heap_trampoline()) ClearRelocInfoForOffHeapTrampoline(code);
+
+  // Flush the instruction cache.
   Assembler::FlushICache(code->raw_instruction_start(),
                          code->raw_instruction_size());
 
@@ -238,6 +241,28 @@ Code* BuiltinDeserializer::GetDeserializeLazyHandler(
           isolate()->heap()->deserialize_lazy_handler_extra_wide());
   }
   UNREACHABLE();
+}
+
+void BuiltinDeserializer::ClearRelocInfoForOffHeapTrampoline(Code* code) {
+  // Clear the relocation info for off-heap trampolines. It should only contain
+  // the single OFF_HEAP_TARGET entry, which we can safely throw away once the
+  // target address has been patched up during deserialization above. It could
+  // also be empty (if we've already had one serialize-deserialize cycle).
+  DCHECK(code->is_off_heap_trampoline());
+#ifdef DEBUG
+  int reloc_count = 0;
+  for (RelocIterator it(code); !it.done(); it.next()) {
+    DCHECK(RelocInfo::IsOffHeapTarget(it.rinfo()->rmode()));
+    reloc_count++;
+  }
+  DCHECK_LE(reloc_count, 1);
+#endif
+  // TODO(jgruber): A nicer solution would be not to serialize the RelocInfo
+  // at all, but since serialization reuses GC iteration logic (see
+  // Code::BodyDescriptor) which iterates code body pointers before iterating
+  // the RelocInfo, this would be tricky.
+  code->set_relocation_info(ReadOnlyRoots(isolate()->heap()).empty_byte_array(),
+                            SKIP_WRITE_BARRIER);
 }
 
 }  // namespace internal
