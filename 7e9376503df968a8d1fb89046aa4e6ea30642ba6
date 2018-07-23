@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c171d231_99b1ab8c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 908,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-07-23T14:05:17Z",
+      "side": 1,
+      "message": "nit: Can you store this to a temporary ref (inserted_data for instance) to ease readability?",
+      "range": {
+        "startLine": 908,
+        "startChar": 4,
+        "endLine": 908,
+        "endChar": 19
+      },
+      "revId": "7e9376503df968a8d1fb89046aa4e6ea30642ba6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
