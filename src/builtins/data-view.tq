@@ -121,12 +121,13 @@ module data_view {
   extern macro LoadUint8(RawPtr, intptr): uint32;
   extern macro LoadInt8(RawPtr, intptr): int32;
 
-  macro LoadDataViewUint8(buffer: JSArrayBuffer, offset: intptr): Smi {
-    return convert<Smi>(LoadUint8(buffer.backing_store, offset));
-  }
-
-  macro LoadDataViewInt8(buffer: JSArrayBuffer, offset: intptr): Smi {
-    return convert<Smi>(LoadInt8(buffer.backing_store, offset));
+  macro LoadDataView8(buffer: JSArrayBuffer, offset: intptr,
+                          signed: constexpr bool): Smi {
+    if constexpr (signed) {
+      return convert<Smi>(LoadInt8(buffer.backing_store, offset));
+    } else {
+      return convert<Smi>(LoadUint8(buffer.backing_store, offset));
+    }
   }
 
   macro LoadDataView16(buffer: JSArrayBuffer, offset: intptr,
@@ -158,7 +159,7 @@ module data_view {
 
   macro LoadDataView32(buffer: JSArrayBuffer, offset: intptr,
                        requested_little_endian: bool,
-                       signed: constexpr bool): Number {
+                       kind: constexpr ElementsKind): Number {
     let data_pointer: RawPtr = buffer.backing_store;
 
     let b0: uint32 = LoadUint8(data_pointer, offset);
@@ -173,31 +174,16 @@ module data_view {
       result = (b0 << 24) | (b1 << 16) | (b2 << 8) | b3;
     }
 
-    if constexpr (signed) {
+    if constexpr (kind == INT32_ELEMENTS) {
       return convert<Number>(Signed(result));
-    } else {
+    } else if constexpr (kind == UINT32_ELEMENTS) {
       return convert<Number>(result);
-    }
-  }
-
-  macro LoadDataViewFloat32(buffer: JSArrayBuffer, offset: intptr,
-                            requested_little_endian: bool): Number {
-    let data_pointer: RawPtr = buffer.backing_store;
-
-    let b0: uint32 = LoadUint8(data_pointer, offset);
-    let b1: uint32 = LoadUint8(data_pointer, offset + 1);
-    let b2: uint32 = LoadUint8(data_pointer, offset + 2);
-    let b3: uint32 = LoadUint8(data_pointer, offset + 3);
-    let result: uint32;
-
-    if (requested_little_endian) {
-      result = (b3 << 24) | (b2 << 16) | (b1 << 8) | b0;
+    } else if constexpr (kind == FLOAT32_ELEMENTS) {
+      let float_res: float64 = convert<float64>(BitcastInt32ToFloat32(result));
+      return convert<Number>(float_res);
     } else {
-      result = (b0 << 24) | (b1 << 16) | (b2 << 8) | b3;
+      unreachable;
     }
-
-    let float_res: float64 = convert<float64>(BitcastInt32ToFloat32(result));
-    return convert<Number>(float_res);
   }
 
   macro LoadDataViewFloat64(buffer: JSArrayBuffer, offset: intptr,
@@ -438,19 +424,19 @@ module data_view {
     let bufferIndex: intptr = getIndex + viewOffset;
 
     if constexpr (kind == UINT8_ELEMENTS) {
-      return LoadDataViewUint8(buffer, bufferIndex);
+      return LoadDataView8(buffer, bufferIndex, false);
     } else if constexpr (kind == INT8_ELEMENTS) {
-      return LoadDataViewInt8(buffer, bufferIndex);
+      return LoadDataView8(buffer, bufferIndex, true);
     } else if constexpr (kind == UINT16_ELEMENTS) {
       return LoadDataView16(buffer, bufferIndex, littleEndian, false);
     } else if constexpr (kind == INT16_ELEMENTS) {
       return LoadDataView16(buffer, bufferIndex, littleEndian, true);
     } else if constexpr (kind == UINT32_ELEMENTS) {
-      return LoadDataView32(buffer, bufferIndex, littleEndian, false);
+      return LoadDataView32(buffer, bufferIndex, littleEndian, kind);
     } else if constexpr (kind == INT32_ELEMENTS) {
-      return LoadDataView32(buffer, bufferIndex, littleEndian, true);
+      return LoadDataView32(buffer, bufferIndex, littleEndian, kind);
     } else if constexpr (kind == FLOAT32_ELEMENTS) {
-      return LoadDataViewFloat32(buffer, bufferIndex, littleEndian);
+      return LoadDataView32(buffer, bufferIndex, littleEndian, kind);
     } else if constexpr (kind == FLOAT64_ELEMENTS) {
       return LoadDataViewFloat64(buffer, bufferIndex, littleEndian);
     } else if constexpr (kind == BIGINT64_ELEMENTS) {
