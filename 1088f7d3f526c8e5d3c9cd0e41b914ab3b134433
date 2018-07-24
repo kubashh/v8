@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "672d2596_7093f5cb",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-07-24T10:41:48Z",
+      "side": 1,
+      "message": "Because we call ConfigureUninitialized() below inside of Clear() now instead of ConfigurePremonomorphic().",
+      "parentUuid": "07bf4f64_689eb710",
+      "range": {
+        "startLine": 434,
+        "startChar": 0,
+        "endLine": 441,
+        "endChar": 38
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb0bba0f_ed497006",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 3
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "0f013bd2_1f37ea55",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2486,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-07-24T10:41:48Z",
+      "side": 1,
+      "message": "Based on offline discussion with tebbi@ this has to be Node*.",
+      "parentUuid": "fb0bba0f_ed497006",
+      "range": {
+        "startLine": 2486,
+        "startChar": 50,
+        "endLine": 2486,
+        "endChar": 65
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7cd7a288_153f5199",
         "filename": "src/ic/ic.cc",
         "patchSetId": 3
@@ -92,6 +140,30 @@
       "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b780cff1_2cfec1d3",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-07-24T10:41:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cd7a288_153f5199",
+      "range": {
+        "startLine": 372,
+        "startChar": 2,
+        "endLine": 372,
+        "endChar": 33
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "030146b1_90bdc029",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-07-24T10:41:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fafe2693_290bbb32",
+      "range": {
+        "startLine": 1441,
+        "startChar": 11,
+        "endLine": 1441,
+        "endChar": 31
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c99e8de_51561bc4",
         "filename": "src/ic/ic.cc",
         "patchSetId": 3
@@ -129,6 +225,30 @@
       "writtenOn": "2018-07-24T10:05:56Z",
       "side": 1,
       "message": "Please add a comment explaining that this is premonomorphic state. Why is ConfigureVectorState overloaded in such counter-intuitive way?",
+      "range": {
+        "startLine": 1792,
+        "startChar": 4,
+        "endLine": 1792,
+        "endChar": 39
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "318873a1_2df51f28",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-07-24T10:41:48Z",
+      "side": 1,
+      "message": "Done.\n\nI dunno about the weird naming inside of src/ic/, I was also puzzled by that especially since the FeedbackNexus methods have pretty sane names. I remember ishell@ once said something about it, maybe we can follow-up on this later.",
+      "parentUuid": "9c99e8de_51561bc4",
       "range": {
         "startLine": 1792,
         "startChar": 4,
