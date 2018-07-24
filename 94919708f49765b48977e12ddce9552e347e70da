@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "958b7053_772eea06",
+        "filename": "src/builtins/data-view.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-07-24T08:52:35Z",
+      "side": 1,
+      "message": "For consistency, I think it would be nice if all of these methods take a \"constexpr ElementsKind\" argument.",
+      "range": {
+        "startLine": 125,
+        "startChar": 26,
+        "endLine": 125,
+        "endChar": 48
+      },
+      "revId": "94919708f49765b48977e12ddce9552e347e70da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
