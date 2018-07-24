@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07bf4f64_689eb710",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-07-24T10:05:56Z",
+      "side": 1,
+      "message": "Why is this suddenly necessary?",
+      "range": {
+        "startLine": 434,
+        "startChar": 0,
+        "endLine": 441,
+        "endChar": 38
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb0bba0f_ed497006",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2486,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-07-24T10:05:56Z",
+      "side": 1,
+      "message": "Feeding Smi into IntPtrT node seems wrong. Adding Tobias to the review.",
+      "range": {
+        "startLine": 2486,
+        "startChar": 50,
+        "endLine": 2486,
+        "endChar": 65
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7cd7a288_153f5199",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-07-24T10:05:56Z",
+      "side": 1,
+      "message": "CHECK_EQ(new_state, MEGAMORPHIC);",
+      "range": {
+        "startLine": 372,
+        "startChar": 2,
+        "endLine": 372,
+        "endChar": 33
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fafe2693_290bbb32",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-07-24T10:05:56Z",
+      "side": 1,
+      "message": "Stale comment.",
+      "range": {
+        "startLine": 1441,
+        "startChar": 11,
+        "endLine": 1441,
+        "endChar": 31
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c99e8de_51561bc4",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-07-24T10:05:56Z",
+      "side": 1,
+      "message": "Please add a comment explaining that this is premonomorphic state. Why is ConfigureVectorState overloaded in such counter-intuitive way?",
+      "range": {
+        "startLine": 1792,
+        "startChar": 4,
+        "endLine": 1792,
+        "endChar": 39
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
