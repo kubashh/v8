@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "81f4fee8_61a9299e",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-24T12:15:20Z",
+      "side": 1,
+      "message": "These are just V8 impl details? AFAICT the spec always returns a JSArray (or throws): https://ecma-international.org/ecma-402/5.0/index.html#sec-formatnumbertoparts\n\nIn any case, a short comment would be helpful here and in other affected functions.",
+      "parentUuid": "9cf99b36_4f1d094e",
+      "revId": "07dd3c161895ad43c2e04daef4aadb1e9a7dd85e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d1e34a50_82792313",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 2
