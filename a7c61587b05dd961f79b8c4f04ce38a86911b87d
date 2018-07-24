@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f976edb0_1b136c73",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2646,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-24T11:42:38Z",
+      "side": 1,
+      "message": "nit: Empty newline between function definitions for readability.",
+      "range": {
+        "startLine": 2645,
+        "startChar": 0,
+        "endLine": 2646,
+        "endChar": 53
+      },
+      "revId": "a7c61587b05dd961f79b8c4f04ce38a86911b87d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
