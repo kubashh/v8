@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab5b0dbe_da43d682",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-24T11:54:47Z",
+      "side": 1,
+      "message": "Should this also return MaybeHandle?",
+      "revId": "07dd3c161895ad43c2e04daef4aadb1e9a7dd85e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1e34a50_82792313",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-24T11:54:47Z",
+      "side": 1,
+      "message": "Likewise here. I\u0027m not clear on the distinction between reported errors (MaybeHandle) and these undefined returns is.",
+      "revId": "07dd3c161895ad43c2e04daef4aadb1e9a7dd85e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "540914aa_d2a3a66e",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-24T11:54:47Z",
+      "side": 1,
+      "message": "And here. Are these spec operations / is the decision between undefined\u0026error documented somewhere?",
+      "revId": "07dd3c161895ad43c2e04daef4aadb1e9a7dd85e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
