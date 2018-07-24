@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5885f28f_cabb1d01",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-07-24T12:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caf9cbf3_6835abb1",
+      "range": {
+        "startLine": 538,
+        "startChar": 13,
+        "endLine": 538,
+        "endChar": 26
+      },
+      "revId": "6fbf84f6c9ebe5f651d0b788f513d3d8dd288f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b12e1d1d_e417a7e1",
         "filename": "src/objects/js-array-inl.h",
         "patchSetId": 14
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-24T11:36:14Z",
       "side": 1,
       "message": "nit: It would be nice to still have a check that the round-trip double-\u003esize_t-\u003edouble does not loose precision, as we did before in the ToArrayLength. I just don\u0027t think we have any supporting code for this for values larger than uint32_t. So I\u0027m not sure how to address this and would be fine with landing this as is. Maybe add a TODO though. Or an explanatory comment explaining why this is safe.",
+      "range": {
+        "startLine": 199,
+        "startChar": 2,
+        "endLine": 200,
+        "endChar": 63
+      },
+      "revId": "6fbf84f6c9ebe5f651d0b788f513d3d8dd288f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "037a2dbe_1056b9d1",
+        "filename": "src/objects/js-array-inl.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-07-24T12:03:42Z",
+      "side": 1,
+      "message": "4 DCHECKS it is :)",
+      "parentUuid": "b12e1d1d_e417a7e1",
       "range": {
         "startLine": 199,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ffdcbfe3_106ffc7c",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1193,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-07-24T12:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3804b638_5b7000b8",
+      "range": {
+        "startLine": 1193,
+        "startChar": 0,
+        "endLine": 1193,
+        "endChar": 28
+      },
+      "revId": "6fbf84f6c9ebe5f651d0b788f513d3d8dd288f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18ad7992_8d96ec66",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 14
@@ -91,6 +163,30 @@
       "revId": "6fbf84f6c9ebe5f651d0b788f513d3d8dd288f13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cdb12b4_df9d4cfa",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-07-24T12:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18ad7992_8d96ec66",
+      "range": {
+        "startLine": 1196,
+        "startChar": 38,
+        "endLine": 1196,
+        "endChar": 43
+      },
+      "revId": "6fbf84f6c9ebe5f651d0b788f513d3d8dd288f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
