@@ -24,6 +24,10 @@ class NameConverter {
   virtual const char* NameOfConstant(byte* addr) const;
   virtual const char* NameInCode(byte* addr) const;
 
+  // Given a root-relative offset, returns either a name or nullptr if none is
+  // found.
+  virtual const char* RootRelativeName(int offset) const { UNREACHABLE(); }
+
  protected:
   v8::internal::EmbeddedVector<char, 128> tmp_buffer_;
 };
