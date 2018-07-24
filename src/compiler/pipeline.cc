@@ -2148,10 +2148,6 @@ MaybeHandle<Code> Pipeline::GenerateCodeForCodeStub(
   info.set_builtin_index(builtin_index);
   info.set_stub_key(stub_key);
 
-  if (poisoning_level != PoisoningMitigationLevel::kDontPoison) {
-    info.SetPoisoningMitigationLevel(poisoning_level);
-  }
-
   // Construct a pipeline for scheduling and code generation.
   ZoneStats zone_stats(isolate->allocator());
   SourcePositionTable source_positions(graph);
