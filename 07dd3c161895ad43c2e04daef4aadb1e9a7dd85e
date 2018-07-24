@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9cf99b36_4f1d094e",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-24T12:08:36Z",
+      "side": 1,
+      "message": "Three return values are possible:\n(1) Handle\u003cObject\u003e(result) - when there is no error\n(2) MaybeHandle\u003cT\u003e() - when there is a JS exception\n(3) Handle\u003cObject\u003e(Undefined) - when there is an icu error (no JS error in this case)",
+      "parentUuid": "ab5b0dbe_da43d682",
+      "revId": "07dd3c161895ad43c2e04daef4aadb1e9a7dd85e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d1e34a50_82792313",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 2
