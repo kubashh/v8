@@ -3286,6 +3286,9 @@ void JSObject::PrintInstanceMigration(FILE* file,
 }
 
 bool JSObject::IsUnmodifiedApiObject(Object** o) {
+  // Always treat objects as if they have been modified.
+  return false;
+
   Object* object = *o;
   if (object->IsSmi()) return false;
   HeapObject* heap_object = HeapObject::cast(object);
