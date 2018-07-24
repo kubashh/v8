@@ -281,19 +281,19 @@ bool cmp_NumberFormatSpan(const NumberFormatSpan& a,
   return a.field_id < b.field_id;
 }
 
-Object* FormatNumberToParts(Isolate* isolate, icu::NumberFormat* fmt,
-                            double number) {
+MaybeHandle<Object> FormatNumberToParts(Isolate* isolate,
+                                        icu::NumberFormat* fmt, double number) {
   Factory* factory = isolate->factory();
 
   icu::UnicodeString formatted;
   icu::FieldPositionIterator fp_iter;
   UErrorCode status = U_ZERO_ERROR;
   fmt->format(number, formatted, &fp_iter, status);
-  if (U_FAILURE(status)) return ReadOnlyRoots(isolate).undefined_value();
+  if (U_FAILURE(status)) return isolate->factory()->undefined_value();
 
   Handle<JSArray> result = factory->NewJSArray(0);
   int32_t length = formatted.length();
-  if (length == 0) return *result;
+  if (length == 0) return result;
 
   std::vector<NumberFormatSpan> regions;
   // Add a "literal" backdrop for the entire string. This will be used if no
@@ -322,16 +322,16 @@ Object* FormatNumberToParts(Isolate* isolate, icu::NumberFormat* fmt,
     Maybe<bool> maybe_added_element =
         AddElement(isolate, result, index, field_type_string, formatted,
                    part.begin_pos, part.end_pos);
-    MAYBE_RETURN(maybe_added_element, ReadOnlyRoots(isolate).undefined_value());
+    MAYBE_RETURN(maybe_added_element, MaybeHandle<JSArray>());
     ++index;
   }
   JSObject::ValidateElements(*result);
 
-  return *result;
+  return result;
 }
 
-Object* FormatDateToParts(Isolate* isolate, icu::DateFormat* format,
-                          double date_value) {
+MaybeHandle<Object> FormatDateToParts(Isolate* isolate, icu::DateFormat* format,
+                                      double date_value) {
   Factory* factory = isolate->factory();
 
   icu::UnicodeString formatted;
@@ -339,11 +339,11 @@ Object* FormatDateToParts(Isolate* isolate, icu::DateFormat* format,
   icu::FieldPosition fp;
   UErrorCode status = U_ZERO_ERROR;
   format->format(date_value, formatted, &fp_iter, status);
-  if (U_FAILURE(status)) return ReadOnlyRoots(isolate).undefined_value();
+  if (U_FAILURE(status)) return isolate->factory()->undefined_value();
 
   Handle<JSArray> result = factory->NewJSArray(0);
   int32_t length = formatted.length();
-  if (length == 0) return *result;
+  if (length == 0) return result;
 
   int index = 0;
   int32_t previous_end_pos = 0;
@@ -355,15 +355,14 @@ Object* FormatDateToParts(Isolate* isolate, icu::DateFormat* format,
       Maybe<bool> maybe_added_element = AddElement(
           isolate, result, index, IcuDateFieldIdToDateType(-1, isolate),
           formatted, previous_end_pos, begin_pos);
-      MAYBE_RETURN(maybe_added_element,
-                   ReadOnlyRoots(isolate).undefined_value());
+      MAYBE_RETURN(maybe_added_element, MaybeHandle<JSArray>());
       ++index;
     }
     Maybe<bool> maybe_added_element =
         AddElement(isolate, result, index,
                    IcuDateFieldIdToDateType(fp.getField(), isolate), formatted,
                    begin_pos, end_pos);
-    MAYBE_RETURN(maybe_added_element, ReadOnlyRoots(isolate).undefined_value());
+    MAYBE_RETURN(maybe_added_element, MaybeHandle<JSArray>());
     previous_end_pos = end_pos;
     ++index;
   }
@@ -371,10 +370,10 @@ Object* FormatDateToParts(Isolate* isolate, icu::DateFormat* format,
     Maybe<bool> maybe_added_element = AddElement(
         isolate, result, index, IcuDateFieldIdToDateType(-1, isolate),
         formatted, previous_end_pos, length);
-    MAYBE_RETURN(maybe_added_element, ReadOnlyRoots(isolate).undefined_value());
+    MAYBE_RETURN(maybe_added_element, MaybeHandle<JSArray>());
   }
   JSObject::ValidateElements(*result);
-  return *result;
+  return result;
 }
 
 }  // namespace
@@ -495,8 +494,8 @@ BUILTIN(NumberFormatPrototypeFormatToParts) {
       NumberFormat::UnpackNumberFormat(number_format_holder);
   CHECK_NOT_NULL(number_format);
 
-  Object* result = FormatNumberToParts(isolate, number_format, x->Number());
-  return result;
+  RETURN_RESULT_OR_FAILURE(
+      isolate, FormatNumberToParts(isolate, number_format, x->Number()));
 }
 
 BUILTIN(DateTimeFormatPrototypeFormatToParts) {
@@ -531,7 +530,8 @@ BUILTIN(DateTimeFormatPrototypeFormatToParts) {
       DateFormat::UnpackDateFormat(date_format_holder);
   CHECK_NOT_NULL(date_format);
 
-  return FormatDateToParts(isolate, date_format, date_value);
+  RETURN_RESULT_OR_FAILURE(isolate,
+                           FormatDateToParts(isolate, date_format, date_value));
 }
 
 BUILTIN(NumberFormatPrototypeFormatNumber) {
@@ -808,7 +808,7 @@ bool GetURelativeDateTimeUnit(Handle<String> unit,
   return true;
 }
 
-Object* RelativeTimeFormatPrototypeFormatCommon(
+MaybeHandle<Object> RelativeTimeFormatPrototypeFormatCommon(
     BuiltinArguments args, Isolate* isolate,
     Handle<JSRelativeTimeFormat> format_holder, const char* func_name,
     bool to_parts) {
@@ -818,20 +818,21 @@ Object* RelativeTimeFormatPrototypeFormatCommon(
 
   // 3. Let value be ? ToNumber(value).
   Handle<Object> value;
-  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, value,
-                                     Object::ToNumber(isolate, value_obj));
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, value,
+                             Object::ToNumber(isolate, value_obj), Object);
   double number = value->Number();
   // 4. Let unit be ? ToString(unit).
   Handle<String> unit;
-  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, unit,
-                                     Object::ToString(isolate, unit_obj));
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, unit, Object::ToString(isolate, unit_obj),
+                             Object);
 
   // 4. If isFinite(value) is false, then throw a RangeError exception.
   if (!std::isfinite(number)) {
-    THROW_NEW_ERROR_RETURN_FAILURE(
-        isolate, NewRangeError(
-                     MessageTemplate::kNotFiniteNumber,
-                     isolate->factory()->NewStringFromAsciiChecked(func_name)));
+    THROW_NEW_ERROR(
+        isolate,
+        NewRangeError(MessageTemplate::kNotFiniteNumber,
+                      isolate->factory()->NewStringFromAsciiChecked(func_name)),
+        Object);
   }
 
   icu::RelativeDateTimeFormatter* formatter =
@@ -840,11 +841,12 @@ Object* RelativeTimeFormatPrototypeFormatCommon(
 
   URelativeDateTimeUnit unit_enum;
   if (!GetURelativeDateTimeUnit(unit, &unit_enum)) {
-    THROW_NEW_ERROR_RETURN_FAILURE(
+    THROW_NEW_ERROR(
         isolate,
         NewRangeError(MessageTemplate::kInvalidUnit,
                       isolate->factory()->NewStringFromAsciiChecked(func_name),
-                      unit));
+                      unit),
+        Object);
   }
 
   UErrorCode status = U_ZERO_ERROR;
@@ -862,7 +864,7 @@ Object* RelativeTimeFormatPrototypeFormatCommon(
 
   if (U_FAILURE(status)) {
     // Internal ICU error.
-    return ReadOnlyRoots(isolate).undefined_value();
+    return isolate->factory()->undefined_value();
   }
 
   if (to_parts) {
@@ -871,19 +873,19 @@ Object* RelativeTimeFormatPrototypeFormatCommon(
     formatter->getNumberFormat().format(std::abs(number), integer, pos, status);
     if (U_FAILURE(status)) {
       // Internal ICU error.
-      return ReadOnlyRoots(isolate).undefined_value();
+      return isolate->factory()->undefined_value();
     }
     Handle<JSArray> elements;
-    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+    ASSIGN_RETURN_ON_EXCEPTION(
         isolate, elements,
-        GenerateRelativeTimeFormatParts(isolate, formatted, integer, unit));
-    return *elements;
+        GenerateRelativeTimeFormatParts(isolate, formatted, integer, unit),
+        Object);
+    return elements;
   }
 
-  RETURN_RESULT_OR_FAILURE(
-      isolate, factory->NewStringFromTwoByte(Vector<const uint16_t>(
-                   reinterpret_cast<const uint16_t*>(formatted.getBuffer()),
-                   formatted.length())));
+  return factory->NewStringFromTwoByte(Vector<const uint16_t>(
+      reinterpret_cast<const uint16_t*>(formatted.getBuffer()),
+      formatted.length()));
 }
 
 }  // namespace
@@ -896,8 +898,9 @@ BUILTIN(RelativeTimeFormatPrototypeFormat) {
   //    true, throw a TypeError exception.
   CHECK_RECEIVER(JSRelativeTimeFormat, format_holder,
                  "Intl.RelativeTimeFormat.prototype.format");
-  return RelativeTimeFormatPrototypeFormatCommon(args, isolate, format_holder,
-                                                 "format", false);
+  RETURN_RESULT_OR_FAILURE(isolate,
+                           RelativeTimeFormatPrototypeFormatCommon(
+                               args, isolate, format_holder, "format", false));
 }
 
 BUILTIN(RelativeTimeFormatPrototypeFormatToParts) {
@@ -908,8 +911,9 @@ BUILTIN(RelativeTimeFormatPrototypeFormatToParts) {
   //    true, throw a TypeError exception.
   CHECK_RECEIVER(JSRelativeTimeFormat, format_holder,
                  "Intl.RelativeTimeFormat.prototype.formatToParts");
-  return RelativeTimeFormatPrototypeFormatCommon(args, isolate, format_holder,
-                                                 "formatToParts", true);
+  RETURN_RESULT_OR_FAILURE(
+      isolate, RelativeTimeFormatPrototypeFormatCommon(
+                   args, isolate, format_holder, "formatToParts", true));
 }
 
 // Locale getters.
