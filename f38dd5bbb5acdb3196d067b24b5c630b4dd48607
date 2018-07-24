@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c385eb99_528e42a1",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-24T14:26:15Z",
+      "side": 1,
+      "message": "Phew, this looks dangerous (taking more than one lock). Can lead to deadlocks if we start using the locks in more contexts.\nTo prevent that, I would vote for using std::atomic for {NativeModule::committed_code_space_} right away.",
+      "range": {
+        "startLine": 797,
+        "startChar": 0,
+        "endLine": 799,
+        "endChar": 73
+      },
+      "revId": "f38dd5bbb5acdb3196d067b24b5c630b4dd48607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a6ee9ee_56a89726",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-24T14:26:15Z",
+      "side": 1,
+      "message": "nit: I would prefer to make this one instruction (\"return ... \u003e 1 \u0026\u0026 ...\"), and remove the redundant parenthesis in the conjunction.\nIf you prefer it this way though, that\u0027s also fine for me.",
+      "range": {
+        "startLine": 851,
+        "startChar": 2,
+        "endLine": 854,
+        "endChar": 37
+      },
+      "revId": "f38dd5bbb5acdb3196d067b24b5c630b4dd48607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
