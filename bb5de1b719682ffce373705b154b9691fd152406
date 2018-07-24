@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65de8b73_5f55e974",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-24T11:29:10Z",
+      "side": 0,
+      "message": "This was completely bogus ... returning undefined when an exception occurs :/",
+      "revId": "bb5de1b719682ffce373705b154b9691fd152406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
