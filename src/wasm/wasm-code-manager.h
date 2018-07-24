@@ -455,7 +455,9 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
   void FreeNativeModule(NativeModule*);
   void Free(VirtualMemory* mem);
   void AssignRanges(Address start, Address end, NativeModule*);
+  bool ShouldForceCriticalMemoryPressureNotification();
 
+  mutable base::Mutex native_modules_mutex_;
   std::map<Address, std::pair<Address, NativeModule*>> lookup_map_;
   std::unordered_set<NativeModule*> native_modules_;
   std::atomic<size_t> remaining_uncommitted_code_space_;

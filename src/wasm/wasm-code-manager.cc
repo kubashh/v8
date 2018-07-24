@@ -794,6 +794,7 @@ void WasmCodeManager::TryAllocate(size_t size, VirtualMemory* ret, void* hint) {
 }
 
 void WasmCodeManager::SampleModuleSizes(Isolate* isolate) const {
+  base::LockGuard<base::Mutex> lock(&native_modules_mutex_);
   for (NativeModule* native_module : native_modules_) {
     base::LockGuard<base::Mutex> lock(&native_module->allocation_mutex_);
     int code_size = static_cast<int>(native_module->committed_code_space_ / MB);
@@ -840,9 +841,8 @@ size_t WasmCodeManager::EstimateNativeModuleSize(const WasmModule* module) {
   return estimate;
 }
 
-std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
-    Isolate* isolate, size_t memory_estimate, bool can_request_more,
-    std::shared_ptr<const WasmModule> module, const ModuleEnv& env) {
+bool WasmCodeManager::ShouldForceCriticalMemoryPressureNotification() {
+  base::LockGuard<base::Mutex> lock(&native_modules_mutex_);
   // TODO(titzer): we force a critical memory pressure notification
   // when the code space is almost exhausted, but only upon the next module
   // creation. This is only for one isolate, and it should really do this for
@@ -851,8 +851,13 @@ std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
   bool force_critical_notification =
       (native_modules_.size() > 1) &&
       (remaining_uncommitted_code_space_.load() < kCriticalThreshold);
+  return force_critical_notification;
+}
 
-  if (force_critical_notification) {
+std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
+    Isolate* isolate, size_t memory_estimate, bool can_request_more,
+    std::shared_ptr<const WasmModule> module, const ModuleEnv& env) {
+  if (ShouldForceCriticalMemoryPressureNotification()) {
     (reinterpret_cast<v8::Isolate*>(isolate))
         ->MemoryPressureNotification(MemoryPressureLevel::kCritical);
   }
@@ -870,6 +875,7 @@ std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
     TRACE_HEAP("New NativeModule %p: Mem: %" PRIuPTR ",+%zu\n", this, start,
                size);
     AssignRanges(start, end, ret.get());
+    base::LockGuard<base::Mutex> lock(&native_modules_mutex_);
     native_modules_.emplace(ret.get());
     return ret;
   }
@@ -923,6 +929,7 @@ bool NativeModule::SetExecutable(bool executable) {
 }
 
 void WasmCodeManager::FreeNativeModule(NativeModule* native_module) {
+  base::LockGuard<base::Mutex> lock(&native_modules_mutex_);
   DCHECK_EQ(1, native_modules_.count(native_module));
   native_modules_.erase(native_module);
   TRACE_HEAP("Freeing NativeModule %p\n", this);
