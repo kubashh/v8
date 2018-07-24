@@ -9631,9 +9631,12 @@ TNode<AllocationSite> CodeStubAssembler::CreateAllocationSiteInFeedbackVector(
 
 TNode<MaybeObject> CodeStubAssembler::StoreWeakReferenceInFeedbackVector(
     SloppyTNode<FeedbackVector> feedback_vector, SloppyTNode<IntPtrT> slot,
-    TNode<HeapObject> value) {
+    SloppyTNode<HeapObject> value, int additional_offset,
+    ParameterMode parameter_mode) {
   TNode<MaybeObject> weak_value = MakeWeak(value);
-  StoreFeedbackVectorSlot(feedback_vector, slot, weak_value);
+  StoreFeedbackVectorSlot(feedback_vector, slot, weak_value,
+                          UPDATE_WRITE_BARRIER, additional_offset,
+                          parameter_mode);
   return weak_value;
 }
 

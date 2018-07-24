@@ -2464,7 +2464,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Store a weak in-place reference into the FeedbackVector.
   TNode<MaybeObject> StoreWeakReferenceInFeedbackVector(
       SloppyTNode<FeedbackVector> feedback_vector, SloppyTNode<IntPtrT> slot,
-      TNode<HeapObject> value);
+      SloppyTNode<HeapObject> value, int additional_offset = 0,
+      ParameterMode parameter_mode = INTPTR_PARAMETERS);
 
   // Create a new AllocationSite and install it into a feedback vector.
   TNode<AllocationSite> CreateAllocationSiteInFeedbackVector(
