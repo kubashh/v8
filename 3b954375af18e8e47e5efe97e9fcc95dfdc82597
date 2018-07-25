@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fbb4fac5_6c088cd8",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-07-25T08:26:54Z",
+      "side": 1,
+      "message": "I tried Ross\u0027 change and it doesn\u0027t seem to. I think that\u0027s because of this:\nhttps://cs.chromium.org/chromium/src/.gn?type\u003dcs\u0026q\u003d.gn\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d53\n\nIf I remove that line I get the deprecation errors.",
+      "parentUuid": "a195172a_1cb57838",
+      "range": {
+        "startLine": 45,
+        "startChar": 37,
+        "endLine": 45,
+        "endChar": 41
+      },
+      "revId": "3b954375af18e8e47e5efe97e9fcc95dfdc82597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c29d132b_12f264dd",
         "filename": "src/api.cc",
         "patchSetId": 2
