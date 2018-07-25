@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b6a1fd2_e312b97f",
+        "filename": "src/inspector/v8-inspector-session-impl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-07-25T00:12:43Z",
+      "side": 1,
+      "message": "Pass \"\" and comment why.",
+      "range": {
+        "startLine": 328,
+        "startChar": 26,
+        "endLine": 328,
+        "endChar": 45
+      },
+      "revId": "d8a5bf6da2531df5a87d973da7a6e3c87574915f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
