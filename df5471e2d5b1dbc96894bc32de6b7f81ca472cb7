@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95e47eaf_d0f9e389",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1745,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-25T09:34:02Z",
+      "side": 1,
+      "message": "MaybeHandle\u003c\u003e",
+      "range": {
+        "startLine": 1745,
+        "startChar": 0,
+        "endLine": 1745,
+        "endChar": 7
+      },
+      "revId": "df5471e2d5b1dbc96894bc32de6b7f81ca472cb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "353c0c44_42270330",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1759,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-25T09:34:02Z",
+      "side": 1,
+      "message": "I removed this in https://chromium-review.googlesource.com/c/v8/v8/+/1149776 to help you change this to return a MaybeHandle\u003c\u003e",
+      "revId": "df5471e2d5b1dbc96894bc32de6b7f81ca472cb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
