@@ -1728,5 +1728,19 @@ MaybeHandle<String> Intl::CanonicalizeLanguageTag(Isolate* isolate,
       .ToHandleChecked();
 }
 
+// ecma-402/#sec-currencydigits
+Handle<Smi> Intl::CurrencyDigits(Isolate* isolate, Handle<String> currency) {
+  v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
+  v8::String::Value currency_string(v8_isolate, v8::Utils::ToLocal(currency));
+
+  DisallowHeapAllocation no_gc;
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t fraction_digits = ucurr_getDefaultFractionDigits(
+      reinterpret_cast<const UChar*>(*currency_string), &status);
+  // For missing currency codes, default to the most common, 2
+  if (!U_SUCCESS(status)) fraction_digits = 2;
+  return Handle<Smi>(Smi::FromInt(fraction_digits), isolate);
+}
+
 }  // namespace internal
 }  // namespace v8

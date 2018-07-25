@@ -303,6 +303,10 @@ class Intl {
   // Canonicalize the localeID.
   static MaybeHandle<String> CanonicalizeLanguageTag(Isolate* isolate,
                                                      Handle<Object> localeID);
+
+  // ecma-402/#sec-currencydigits
+  V8_WARN_UNUSED_RESULT static Handle<Smi> CurrencyDigits(
+      Isolate* isolate, Handle<String> currency);
 };
 
 }  // namespace internal
