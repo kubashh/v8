@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e584dcaf_b3e78f67",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-07-25T09:10:08Z",
+      "side": 0,
+      "message": "I suppose this is only really used in tests? If so I suppose this is fine... The reason why we went premonomorphic here is because we wanted to go monormophic as quickly as possible again.",
+      "revId": "1f5ab936003468a7dfd12af881109a89a3a44b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

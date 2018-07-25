@@ -329,6 +329,30 @@
       "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "520d5ea8_1b8d9edd",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-07-25T09:10:08Z",
+      "side": 1,
+      "message": "Agreed that this is weird.\n\nNot sure that SetFeedback/SetFeedbackExtra is that much better though :)",
+      "parentUuid": "318873a1_2df51f28",
+      "range": {
+        "startLine": 1792,
+        "startChar": 4,
+        "endLine": 1792,
+        "endChar": 39
+      },
+      "revId": "1088f7d3f526c8e5d3c9cd0e41b914ab3b134433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
