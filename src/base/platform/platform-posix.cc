@@ -349,7 +349,6 @@ bool OS::Release(void* address, size_t size) {
 // static
 bool OS::SetPermissions(void* address, size_t size, MemoryPermission access) {
   DCHECK_EQ(0, reinterpret_cast<uintptr_t>(address) % CommitPageSize());
-  DCHECK_EQ(0, size % CommitPageSize());
 
   int prot = GetProtectionFromMemoryPermission(access);
   int ret = mprotect(address, size, prot);
