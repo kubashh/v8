@@ -170,6 +170,12 @@ void V8InspectorSessionImpl::sendProtocolNotification(
   m_channel->sendNotification(MessageBuffer::create(std::move(message)));
 }
 
+void V8InspectorSessionImpl::fallThrough(int callId, const String16& method,
+                                         const String16& message) {
+  // There's no other layer to handle the command.
+  UNREACHABLE();
+}
+
 void V8InspectorSessionImpl::flushProtocolNotifications() {
   m_channel->flushProtocolNotifications();
 }
@@ -313,7 +319,14 @@ void V8InspectorSessionImpl::reportAllContexts(V8RuntimeAgentImpl* agent) {
 
 void V8InspectorSessionImpl::dispatchProtocolMessage(
     const StringView& message) {
-  m_dispatcher.dispatch(protocol::StringUtil::parseJSON(message));
+  int callId;
+  String16 method;
+  std::unique_ptr<protocol::Value> parsedMessage =
+      protocol::StringUtil::parseJSON(message);
+  if (m_dispatcher.parseCommand(parsedMessage.get(), &callId, &method)) {
+    m_dispatcher.dispatch(callId, method, std::move(parsedMessage),
+                          toString16(message));
+  }
 }
 
 std::unique_ptr<StringBuffer> V8InspectorSessionImpl::stateJSON() {
