@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "a195172a_1cb57838",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-07-25T08:07:17Z",
+      "side": 1,
+      "message": "does this default also affect chrome?",
+      "range": {
+        "startLine": 45,
+        "startChar": 37,
+        "endLine": 45,
+        "endChar": 41
+      },
+      "revId": "3b954375af18e8e47e5efe97e9fcc95dfdc82597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c29d132b_12f264dd",
         "filename": "src/api.cc",
         "patchSetId": 2
