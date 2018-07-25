@@ -307,6 +307,10 @@ class Intl {
   // ecma-402/#sec-currencydigits
   V8_WARN_UNUSED_RESULT static Handle<Smi> CurrencyDigits(
       Isolate* isolate, Handle<String> currency);
+
+  V8_WARN_UNUSED_RESULT static Object* CreateNumberFormat(
+      Isolate* isolate, Handle<String> locale, Handle<JSObject> options,
+      Handle<JSObject> resolved);
 };
 
 }  // namespace internal
