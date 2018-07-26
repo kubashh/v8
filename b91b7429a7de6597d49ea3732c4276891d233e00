@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "195ef77b_58f1edc8",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-07-26T13:18:01Z",
+      "side": 1,
+      "message": "if you think that can happen, I can build a iterative version.",
+      "parentUuid": "f736a0cf_9cd6f1b1",
+      "range": {
+        "startLine": 73,
+        "startChar": 15,
+        "endLine": 73,
+        "endChar": 26
+      },
+      "revId": "b91b7429a7de6597d49ea3732c4276891d233e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "139c9c18_da6c75e6",
         "filename": "src/parsing/scanner.h",
         "patchSetId": 1
