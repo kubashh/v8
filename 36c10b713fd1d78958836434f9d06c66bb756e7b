@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9261d865_41bc56e1",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3048,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-26T14:14:56Z",
+      "side": 1,
+      "message": "Why not just convert the first parameter (offset) to uint64_t? I think that\u0027s the general pattern to force 64-bit arithmetic:\nuint64_t end_offset \u003d uint64_t{offset} + access_size - 1;",
+      "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cabdf31c_24a5f72a",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-26T14:14:56Z",
+      "side": 1,
+      "message": "I would prefer to use the same style as {emit_ptrsize_add}. The idea is to use the most specific register type we can statically guarantee, and pointer sizes can always be stored in {Register}.\nNote that generating a {LiftoffRegister} for a {Register} is a noop, so this does not introduce any overhead.",
+      "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7d94310_203477b1",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-26T14:14:56Z",
+      "side": 1,
+      "message": "The style guide forbids else after return. Just skip the else.",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 10
+      },
+      "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ce16a50_2613d292",
+        "filename": "test/mjsunit/wasm/memory_1gb_oob.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-26T14:14:56Z",
+      "side": 1,
+      "message": "These can be const (also in the other files, and also more constants below).",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
