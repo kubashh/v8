@@ -2453,7 +2453,7 @@ RUNTIME_FUNCTION(Runtime_ElementsTransitionAndStoreIC_Miss) {
 static bool CanFastCloneObject(Handle<Map> map) {
   DisallowHeapAllocation no_gc;
   if (map->IsNullOrUndefinedMap()) return true;
-  if (!map->IsJSObjectMap() ||
+  if (!map->IsJSObjectMap() || map->is_deprecated() ||
       !IsSmiOrObjectElementsKind(map->elements_kind()) ||
       !map->OnlyHasSimpleProperties()) {
     return false;
