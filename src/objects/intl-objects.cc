@@ -1719,5 +1719,47 @@ MaybeHandle<String> Intl::CanonicalizeLanguageTag(Isolate* isolate,
       .ToHandleChecked();
 }
 
+// ecma-402/#sec-currencydigits
+Handle<Smi> Intl::CurrencyDigits(Isolate* isolate, Handle<String> currency) {
+  v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
+  v8::String::Value currency_string(v8_isolate, v8::Utils::ToLocal(currency));
+  CHECK_NOT_NULL(*currency_string);
+
+  DisallowHeapAllocation no_gc;
+  UErrorCode status = U_ZERO_ERROR;
+  uint32_t fraction_digits = ucurr_getDefaultFractionDigits(
+      reinterpret_cast<const UChar*>(*currency_string), &status);
+  // For missing currency codes, default to the most common, 2
+  if (U_FAILURE(status)) fraction_digits = 2;
+  return Handle<Smi>(Smi::FromInt(fraction_digits), isolate);
+}
+
+MaybeHandle<JSObject> Intl::CreateNumberFormat(Isolate* isolate,
+                                               Handle<String> locale,
+                                               Handle<JSObject> options,
+                                               Handle<JSObject> resolved) {
+  Handle<JSFunction> constructor(
+      isolate->native_context()->intl_number_format_function(), isolate);
+
+  Handle<JSObject> local_object;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, local_object,
+                             JSObject::New(constructor, constructor), JSObject);
+
+  // Set number formatter as embedder field of the resulting JS object.
+  icu::DecimalFormat* number_format =
+      NumberFormat::InitializeNumberFormat(isolate, locale, options, resolved);
+
+  CHECK_NOT_NULL(number_format);
+
+  local_object->SetEmbedderField(NumberFormat::kDecimalFormatIndex,
+                                 reinterpret_cast<Smi*>(number_format));
+
+  Handle<Object> wrapper = isolate->global_handles()->Create(*local_object);
+  GlobalHandles::MakeWeak(wrapper.location(), wrapper.location(),
+                          NumberFormat::DeleteNumberFormat,
+                          WeakCallbackType::kInternalFields);
+  return local_object;
+}
+
 }  // namespace internal
 }  // namespace v8

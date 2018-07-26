@@ -217,27 +217,8 @@ RUNTIME_FUNCTION(Runtime_CreateNumberFormat) {
   CONVERT_ARG_HANDLE_CHECKED(String, locale, 0);
   CONVERT_ARG_HANDLE_CHECKED(JSObject, options, 1);
   CONVERT_ARG_HANDLE_CHECKED(JSObject, resolved, 2);
-
-  Handle<JSFunction> constructor(
-      isolate->native_context()->intl_number_format_function(), isolate);
-
-  Handle<JSObject> local_object;
-  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, local_object,
-                                     JSObject::New(constructor, constructor));
-
-  // Set number formatter as embedder field of the resulting JS object.
-  icu::DecimalFormat* number_format =
-      NumberFormat::InitializeNumberFormat(isolate, locale, options, resolved);
-  CHECK_NOT_NULL(number_format);
-
-  local_object->SetEmbedderField(NumberFormat::kDecimalFormatIndex,
-                                 reinterpret_cast<Smi*>(number_format));
-
-  Handle<Object> wrapper = isolate->global_handles()->Create(*local_object);
-  GlobalHandles::MakeWeak(wrapper.location(), wrapper.location(),
-                          NumberFormat::DeleteNumberFormat,
-                          WeakCallbackType::kInternalFields);
-  return *local_object;
+  RETURN_RESULT_OR_FAILURE(
+      isolate, Intl::CreateNumberFormat(isolate, locale, options, resolved));
 }
 
 RUNTIME_FUNCTION(Runtime_InternalNumberFormat) {
@@ -258,20 +239,10 @@ RUNTIME_FUNCTION(Runtime_InternalNumberFormat) {
 }
 
 RUNTIME_FUNCTION(Runtime_CurrencyDigits) {
+  HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
-  v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
-
   CONVERT_ARG_HANDLE_CHECKED(String, currency, 0);
-
-  v8::String::Value currency_string(v8_isolate, v8::Utils::ToLocal(currency));
-
-  DisallowHeapAllocation no_gc;
-  UErrorCode status = U_ZERO_ERROR;
-  uint32_t fraction_digits = ucurr_getDefaultFractionDigits(
-      reinterpret_cast<const UChar*>(*currency_string), &status);
-  // For missing currency codes, default to the most common, 2
-  if (!U_SUCCESS(status)) fraction_digits = 2;
-  return Smi::FromInt(fraction_digits);
+  return *Intl::CurrencyDigits(isolate, currency);
 }
 
 RUNTIME_FUNCTION(Runtime_CreateCollator) {
