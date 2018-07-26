@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "27f32809_ff3aad30",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3048,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-07-26T16:49:48Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure if the conversion would cascade properly, so putting the conversion in the middle means it works no matter the associativity.",
+      "parentUuid": "9261d865_41bc56e1",
+      "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cabdf31c_24a5f72a",
         "filename": "src/wasm/baseline/liftoff-assembler.h",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-07-26T14:14:56Z",
       "side": 1,
       "message": "I would prefer to use the same style as {emit_ptrsize_add}. The idea is to use the most specific register type we can statically guarantee, and pointer sizes can always be stored in {Register}.\nNote that generating a {LiftoffRegister} for a {Register} is a noop, so this does not introduce any overhead.",
+      "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa7e3117_75c4c90b",
+        "filename": "src/wasm/baseline/liftoff-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-07-26T16:49:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cabdf31c_24a5f72a",
       "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "18393a5d_cb51155b",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-07-26T16:49:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7d94310_203477b1",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 10
+      },
+      "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ce16a50_2613d292",
         "filename": "test/mjsunit/wasm/memory_1gb_oob.js",
         "patchSetId": 1
@@ -79,6 +139,30 @@
       "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39bba789_6f3d0e14",
+        "filename": "test/mjsunit/wasm/memory_1gb_oob.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-07-26T16:49:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ce16a50_2613d292",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
