@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6c320f1_0ac2676c",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-26T04:33:36Z",
+      "side": 1,
+      "message": "just:\n\n  JSObject::AddProperty(isolate, target, key, value, DONT_DELETE);",
+      "range": {
+        "startLine": 1340,
+        "startChar": 2,
+        "endLine": 1348,
+        "endChar": 70
+      },
+      "revId": "d6fbf18dd5ce85014b05bbf27611d25cce209625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
