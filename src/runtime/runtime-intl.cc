@@ -116,6 +116,24 @@ RUNTIME_FUNCTION(Runtime_GetDefaultICULocale) {
   return *Intl::DefaultLocale(isolate);
 }
 
+void DefineWEProperty(Isolate* isolate, Handle<JSObject> object,
+                      Handle<Name> property, Handle<Object> value) {
+  JSObject::AddProperty(isolate, object, property, value,
+                        static_cast<PropertyAttributes>(NONE));
+}
+
+RUNTIME_FUNCTION(Runtime_DefineWEProperty) {
+  HandleScope scope(isolate);
+
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSObject, object, 0);
+  CONVERT_ARG_HANDLE_CHECKED(Name, property, 1);
+  CONVERT_ARG_HANDLE_CHECKED(Object, value, 2);
+  DefineWEProperty(isolate, object, property, value);
+  Handle<Object> result;
+  return *result;
+}
+
 RUNTIME_FUNCTION(Runtime_IsInitializedIntlObjectOfType) {
   HandleScope scope(isolate);
 
