@@ -22,6 +22,30 @@
       "revId": "d6fbf18dd5ce85014b05bbf27611d25cce209625",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "985ee4d2_1a4a8ac5",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1348,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-07-26T05:04:02Z",
+      "side": 1,
+      "message": "JSObject::AddProperty is void for return. I do not know how to make the the RUNTIME function return 0 values. I try to put F(DefineWEProperty, 3, 0)                  \\  in runtime.h but it does not work.",
+      "parentUuid": "e6c320f1_0ac2676c",
+      "range": {
+        "startLine": 1340,
+        "startChar": 2,
+        "endLine": 1348,
+        "endChar": 70
+      },
+      "revId": "d6fbf18dd5ce85014b05bbf27611d25cce209625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
