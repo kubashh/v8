@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b022ac20_d72acbf0",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-26T13:05:37Z",
+      "side": 1,
+      "message": "You prob meant \"AdvanceUntil\"?",
+      "range": {
+        "startLine": 64,
+        "startChar": 17,
+        "endLine": 64,
+        "endChar": 28
+      },
+      "revId": "b91b7429a7de6597d49ea3732c4276891d233e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f736a0cf_9cd6f1b1",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-26T13:05:37Z",
+      "side": 1,
+      "message": "Is it a risk that we can run out of stack space with this recursion? Afaics it\u0027s 1 recursive call per buffer fill... and the files can be quite long...\n\nWdyt about refactoring this so that it\u0027s not recursive?",
+      "range": {
+        "startLine": 73,
+        "startChar": 15,
+        "endLine": 73,
+        "endChar": 26
+      },
+      "revId": "b91b7429a7de6597d49ea3732c4276891d233e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "139c9c18_da6c75e6",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-26T13:05:37Z",
+      "side": 1,
+      "message": "Would it be reasonable to add a test to AdvanceUtil, esp now that in this CL you don\u0027t utilize the \"args\" yet?",
+      "range": {
+        "startLine": 646,
+        "startChar": 17,
+        "endLine": 646,
+        "endChar": 28
+      },
+      "revId": "b91b7429a7de6597d49ea3732c4276891d233e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
