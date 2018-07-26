@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98812914_cb13c4d9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-26T18:56:35Z",
+      "side": 1,
+      "message": "Pls fix here too",
+      "range": {
+        "startLine": 7,
+        "startChar": 17,
+        "endLine": 7,
+        "endChar": 28
+      },
+      "revId": "d65a1f1d41899d4cded1564829c08f78a92663ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0eb5d960_28db9011",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-26T18:56:35Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 9,
+        "startChar": 1,
+        "endLine": 9,
+        "endChar": 11
+      },
+      "revId": "d65a1f1d41899d4cded1564829c08f78a92663ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "109715d6_dd4c380b",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-26T18:56:35Z",
+      "side": 1,
+      "message": "Why do we need the ++ here? Seems like below we anyway assign buffer_cursor_. Am I missing something?",
+      "range": {
+        "startLine": 67,
+        "startChar": 25,
+        "endLine": 67,
+        "endChar": 27
+      },
+      "revId": "d65a1f1d41899d4cded1564829c08f78a92663ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88820018_621b3146",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-26T18:56:35Z",
+      "side": 1,
+      "message": "Style nit: we try to avoid abbreviating (at least in new code), maybe Functor or FunctorType?",
+      "range": {
+        "startLine": 646,
+        "startChar": 21,
+        "endLine": 646,
+        "endChar": 27
+      },
+      "revId": "d65a1f1d41899d4cded1564829c08f78a92663ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
