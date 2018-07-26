@@ -1545,7 +1545,7 @@ char AsciiToLower(char c) {
  *
  * Returns false if the language tag is invalid.
  */
-bool IsStructurallyValidLanguageTag(Isolate* isolate,
+bool XXX_IsStructurallyValidLanguageTag(Isolate* isolate,
                                     const std::string& locale_in) {
   if (!String::IsAscii(locale_in.c_str(),
                        static_cast<int>(locale_in.length()))) {
@@ -1651,7 +1651,7 @@ bool IsDeprecatedLanguage(const std::string& locale) {
 
 }  // anonymous namespace
 
-MaybeHandle<String> Intl::CanonicalizeLanguageTag(Isolate* isolate,
+MaybeHandle<String> Intl::XXX_CanonicalizeLanguageTag(Isolate* isolate,
                                                   Handle<Object> locale_in) {
   Handle<String> locale_str;
   if (locale_in->IsString()) {
@@ -1675,7 +1675,7 @@ MaybeHandle<String> Intl::CanonicalizeLanguageTag(Isolate* isolate,
     return locale_str;
   }
 
-  if (!IsStructurallyValidLanguageTag(isolate, locale)) {
+  if (!XXX_IsStructurallyValidLanguageTag(isolate, locale)) {
     THROW_NEW_ERROR(
         isolate,
         NewRangeError(MessageTemplate::kInvalidLanguageTag, locale_str),

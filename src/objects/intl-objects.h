@@ -300,7 +300,7 @@ class Intl {
       const char* service, bool* result);
 
   // Canonicalize the localeID.
-  static MaybeHandle<String> CanonicalizeLanguageTag(Isolate* isolate,
+  static MaybeHandle<String> XXX_CanonicalizeLanguageTag(Isolate* isolate,
                                                      Handle<Object> localeID);
 
   // ecma-402/#sec-currencydigits
