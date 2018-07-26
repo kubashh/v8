@@ -448,6 +448,14 @@ class LiftoffAssembler : public TurboAssembler {
       emit_i32_add(dst, lhs, rhs);
     }
   }
+  inline void emit_ptrsize_sub(LiftoffRegister dst, LiftoffRegister lhs,
+                               LiftoffRegister rhs) {
+    if (kPointerSize == 8) {
+      emit_i64_sub(dst, lhs, rhs);
+    } else {
+      emit_i32_sub(dst.gp(), lhs.gp(), rhs.gp());
+    }
+  }
 
   // f32 binops.
   inline void emit_f32_add(DoubleRegister dst, DoubleRegister lhs,
