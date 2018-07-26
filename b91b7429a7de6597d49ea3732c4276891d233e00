@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "391250d1_a0c26d10",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-07-26T15:00:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b022ac20_d72acbf0",
+      "range": {
+        "startLine": 64,
+        "startChar": 17,
+        "endLine": 64,
+        "endChar": 28
+      },
+      "revId": "b91b7429a7de6597d49ea3732c4276891d233e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f736a0cf_9cd6f1b1",
         "filename": "src/parsing/scanner.h",
         "patchSetId": 1
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "4f609600_6dc49911",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-07-26T15:00:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "195ef77b_58f1edc8",
+      "range": {
+        "startLine": 73,
+        "startChar": 15,
+        "endLine": 73,
+        "endChar": 26
+      },
+      "revId": "b91b7429a7de6597d49ea3732c4276891d233e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "139c9c18_da6c75e6",
         "filename": "src/parsing/scanner.h",
         "patchSetId": 1
@@ -92,6 +140,30 @@
       "revId": "b91b7429a7de6597d49ea3732c4276891d233e00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dd2758c_73ab4e0f",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-07-26T15:00:47Z",
+      "side": 1,
+      "message": "This is no longer necessary, had to rewrite the function anyway. We need to support a ancient gcc version, which does not support parameter pack expansion within lambda captures.\nhttps://ci.chromium.org/p/v8/builders/luci.v8.try/v8_linux_gcc_compile_rel/b8939936116443287984",
+      "parentUuid": "139c9c18_da6c75e6",
+      "range": {
+        "startLine": 646,
+        "startChar": 17,
+        "endLine": 646,
+        "endChar": 28
+      },
+      "revId": "b91b7429a7de6597d49ea3732c4276891d233e00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
