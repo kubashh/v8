@@ -3407,7 +3407,6 @@ void AccessorAssembler::GenerateCloneObjectIC() {
 
   CSA_SLOW_ASSERT(this, TaggedIsNotSmi(source));
   Node* source_map = LoadMap(UncheckedCast<HeapObject>(source));
-  GotoIf(IsDeprecatedMap(source_map), &miss);
   TNode<MaybeObject> feedback = TryMonomorphicCase(
       slot, vector, source_map, &if_handler, &var_handler, &try_polymorphic);
 
