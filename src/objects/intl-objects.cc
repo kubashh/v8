@@ -1335,6 +1335,19 @@ MaybeHandle<Object> NumberFormat::FormatNumber(
       reinterpret_cast<const uint16_t*>(result.getBuffer()), result.length()));
 }
 
+Object* Intl::DefineWEProperty(Isolate* isolate, Handle<Object> target,
+                               Handle<Object> key, Handle<Object> value) {
+  Factory* factory = isolate->factory();
+  Handle<JSObject> attributes = factory->NewJSObjectWithNullProto();
+  JSObject::AddProperty(isolate, attributes, factory->value_string(), value,
+                        NONE);
+  JSObject::AddProperty(isolate, attributes, factory->writable_string(),
+                        factory->true_value(), NONE);
+  JSObject::AddProperty(isolate, attributes, factory->enumerable_string(),
+                        factory->true_value(), NONE);
+  return JSReceiver::DefineProperty(isolate, target, key, attributes);
+}
+
 namespace {
 
 // TODO(bstell): Make all these a constexpr on the Intl class.

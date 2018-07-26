@@ -116,6 +116,16 @@ RUNTIME_FUNCTION(Runtime_GetDefaultICULocale) {
   return *Intl::DefaultLocale(isolate);
 }
 
+RUNTIME_FUNCTION(Runtime_DefineWEProperty) {
+  HandleScope scope(isolate);
+
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(Object, target, 0);
+  CONVERT_ARG_HANDLE_CHECKED(Object, key, 1);
+  CONVERT_ARG_HANDLE_CHECKED(Object, value, 2);
+  return Intl::DefineWEProperty(isolate, target, key, value);
+}
+
 RUNTIME_FUNCTION(Runtime_IsInitializedIntlObjectOfType) {
   HandleScope scope(isolate);
 
