@@ -1,0 +1,13 @@
+// Copyright 2018 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// Check that mere deprecation does not force ObjectClone to miss. Otherwise,
+// we could waste memory allocating new fast-clone maps.
+var obj1 = { x: 1 };
+var obj2 = { x: 2 }; // same map
+obj2.x = null; // deprecate map
+
+function f() { return { ...obj1 } };
+assertEquals({ x: 1 }, f()); // uninitialized with deprecated map -> miss
+assertEquals({ x: 1 }, f()); // monomorphic with deprecated map -> miss
