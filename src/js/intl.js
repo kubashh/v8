@@ -595,7 +595,7 @@ function setOptions(inOptions, extensionMap, keyValues, getOption, outOptions) {
     }
 
     if (!IS_UNDEFINED(property)) {
-      defineWEProperty(outOptions, property, value);
+      %DefineWEProperty(outOptions, property, value);
     }
   }
 
@@ -697,22 +697,12 @@ function getAvailableLocalesOf(service) {
 
 
 /**
- * Defines a property and sets writable and enumerable to true.
- * Configurable is false by default.
- */
-function defineWEProperty(object, property, value) {
-  %object_define_property(object, property,
-                          {value: value, writable: true, enumerable: true});
-}
-
-
-/**
  * Adds property to an object if the value is not undefined.
  * Sets configurable descriptor to false.
  */
 function addWEPropertyIfDefined(object, property, value) {
   if (!IS_UNDEFINED(value)) {
-    defineWEProperty(object, property, value);
+    %DefineWEProperty(object, property, value);
   }
 }
 
@@ -970,7 +960,7 @@ function CreateCollator(locales, options) {
 
   var internalOptions = {__proto__: null};
 
-  defineWEProperty(internalOptions, 'usage', getOption(
+  %DefineWEProperty(internalOptions, 'usage', getOption(
     'usage', 'string', ['sort', 'search'], 'sort'));
 
   var sensitivity = getOption('sensitivity', 'string',
@@ -978,9 +968,9 @@ function CreateCollator(locales, options) {
   if (IS_UNDEFINED(sensitivity) && internalOptions.usage === 'sort') {
     sensitivity = 'variant';
   }
-  defineWEProperty(internalOptions, 'sensitivity', sensitivity);
+  %DefineWEProperty(internalOptions, 'sensitivity', sensitivity);
 
-  defineWEProperty(internalOptions, 'ignorePunctuation', getOption(
+  %DefineWEProperty(internalOptions, 'ignorePunctuation', getOption(
     'ignorePunctuation', 'boolean', UNDEFINED, false));
 
   var locale = resolveLocale('collator', locales, options);
@@ -1029,7 +1019,7 @@ function CreateCollator(locales, options) {
   } else if (internalOptions.usage === 'search') {
     extension = '-u-co-search';
   }
-  defineWEProperty(internalOptions, 'collation', collation);
+  %DefineWEProperty(internalOptions, 'collation', collation);
 
   var requestedLocale = locale.locale + extension;
 
@@ -1144,7 +1134,7 @@ function PluralRulesConstructor() {
   var locale = resolveLocale('pluralrules', locales, options);
 
   var internalOptions = {__proto__: null};
-  defineWEProperty(internalOptions, 'type', getOption(
+  %DefineWEProperty(internalOptions, 'type', getOption(
     'type', 'string', ['cardinal', 'ordinal'], 'cardinal'));
 
   SetNumberFormatDigitOptions(internalOptions, options, 0, 3);
@@ -1159,12 +1149,12 @@ function PluralRulesConstructor() {
     requestedLocale: {value: requestedLocale, writable: true},
   });
   if (HAS_OWN_PROPERTY(internalOptions, 'minimumSignificantDigits')) {
-    defineWEProperty(resolved, 'minimumSignificantDigits', UNDEFINED);
+    %DefineWEProperty(resolved, 'minimumSignificantDigits', UNDEFINED);
   }
   if (HAS_OWN_PROPERTY(internalOptions, 'maximumSignificantDigits')) {
-    defineWEProperty(resolved, 'maximumSignificantDigits', UNDEFINED);
+    %DefineWEProperty(resolved, 'maximumSignificantDigits', UNDEFINED);
   }
-  defineWEProperty(resolved, 'pluralCategories', []);
+  %DefineWEProperty(resolved, 'pluralCategories', []);
   var pluralRules = %CreatePluralRules(requestedLocale, internalOptions,
                                        resolved);
 
@@ -1255,27 +1245,27 @@ function SetNumberFormatDigitOptions(internalOptions, options,
                                      mnfdDefault, mxfdDefault) {
   // Digit ranges.
   var mnid = getNumberOption(options, 'minimumIntegerDigits', 1, 21, 1);
-  defineWEProperty(internalOptions, 'minimumIntegerDigits', mnid);
+  %DefineWEProperty(internalOptions, 'minimumIntegerDigits', mnid);
 
   var mnfd = getNumberOption(options, 'minimumFractionDigits', 0, 20,
                              mnfdDefault);
-  defineWEProperty(internalOptions, 'minimumFractionDigits', mnfd);
+  %DefineWEProperty(internalOptions, 'minimumFractionDigits', mnfd);
 
   var mxfdActualDefault = MathMax(mnfd, mxfdDefault);
 
   var mxfd = getNumberOption(options, 'maximumFractionDigits', mnfd, 20,
                              mxfdActualDefault);
 
-  defineWEProperty(internalOptions, 'maximumFractionDigits', mxfd);
+  %DefineWEProperty(internalOptions, 'maximumFractionDigits', mxfd);
 
   var mnsd = options['minimumSignificantDigits'];
   var mxsd = options['maximumSignificantDigits'];
   if (!IS_UNDEFINED(mnsd) || !IS_UNDEFINED(mxsd)) {
     mnsd = defaultNumberOption(mnsd, 1, 21, 1, 'minimumSignificantDigits');
-    defineWEProperty(internalOptions, 'minimumSignificantDigits', mnsd);
+    %DefineWEProperty(internalOptions, 'minimumSignificantDigits', mnsd);
 
     mxsd = defaultNumberOption(mxsd, mnsd, 21, 21, 'maximumSignificantDigits');
-    defineWEProperty(internalOptions, 'maximumSignificantDigits', mxsd);
+    %DefineWEProperty(internalOptions, 'maximumSignificantDigits', mxsd);
   }
 }
 
@@ -1293,7 +1283,7 @@ function CreateNumberFormat(locales, options) {
   var locale = resolveLocale('numberformat', locales, options);
 
   var internalOptions = {__proto__: null};
-  defineWEProperty(internalOptions, 'style', getOption(
+  %DefineWEProperty(internalOptions, 'style', getOption(
     'style', 'string', ['decimal', 'percent', 'currency'], 'decimal'));
 
   var currency = getOption('currency', 'string');
@@ -1310,8 +1300,8 @@ function CreateNumberFormat(locales, options) {
   var currencyDisplay = getOption(
       'currencyDisplay', 'string', ['code', 'symbol', 'name'], 'symbol');
   if (internalOptions.style === 'currency') {
-    defineWEProperty(internalOptions, 'currency', %StringToUpperCaseIntl(currency));
-    defineWEProperty(internalOptions, 'currencyDisplay', currencyDisplay);
+    %DefineWEProperty(internalOptions, 'currency', %StringToUpperCaseIntl(currency));
+    %DefineWEProperty(internalOptions, 'currencyDisplay', currencyDisplay);
 
     mnfdDefault = mxfdDefault = %CurrencyDigits(internalOptions.currency);
   } else {
@@ -1323,7 +1313,7 @@ function CreateNumberFormat(locales, options) {
                               mxfdDefault);
 
   // Grouping.
-  defineWEProperty(internalOptions, 'useGrouping', getOption(
+  %DefineWEProperty(internalOptions, 'useGrouping', getOption(
     'useGrouping', 'boolean', UNDEFINED, true));
 
   // ICU prefers options to be passed using -u- extension key/values for
@@ -1356,10 +1346,10 @@ function CreateNumberFormat(locales, options) {
     useGrouping: {writable: true}
   });
   if (HAS_OWN_PROPERTY(internalOptions, 'minimumSignificantDigits')) {
-    defineWEProperty(resolved, 'minimumSignificantDigits', UNDEFINED);
+    %DefineWEProperty(resolved, 'minimumSignificantDigits', UNDEFINED);
   }
   if (HAS_OWN_PROPERTY(internalOptions, 'maximumSignificantDigits')) {
-    defineWEProperty(resolved, 'maximumSignificantDigits', UNDEFINED);
+    %DefineWEProperty(resolved, 'maximumSignificantDigits', UNDEFINED);
   }
   var numberFormat = %CreateNumberFormat(requestedLocale, internalOptions,
                                          resolved);
@@ -1588,13 +1578,13 @@ function fromLDMLString(ldmlString) {
 function appendToDateTimeObject(options, option, match, pairs) {
   if (IS_NULL(match)) {
     if (!HAS_OWN_PROPERTY(options, option)) {
-      defineWEProperty(options, option, UNDEFINED);
+      %DefineWEProperty(options, option, UNDEFINED);
     }
     return options;
   }
 
   var property = match[0];
-  defineWEProperty(options, option, pairs[property]);
+  %DefineWEProperty(options, option, pairs[property]);
 
   return options;
 }
@@ -1899,7 +1889,7 @@ function CreateBreakIterator(locales, options) {
 
   var internalOptions = {__proto__: null};
 
-  defineWEProperty(internalOptions, 'type', getOption(
+  %DefineWEProperty(internalOptions, 'type', getOption(
     'type', 'string', ['character', 'word', 'sentence', 'line'], 'word'));
 
   var locale = resolveLocale('breakiterator', locales, options);
