@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "74251ca8_1f66412d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3048,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-07-26T17:16:08Z",
+      "side": 1,
+      "message": "It should always cascade properly. The order of arguments never matters, the result is always the \"bigger\" type. There are some peculiarity about signed/unsigned conversions, but it\u0027s designed such that typically the right thing happens :)\nSee https://en.cppreference.com/w/cpp/language/operator_arithmetic\n\nAssociativity is left-to-right, which means that putting the type on the leftmost operand always does the right thing. But here, it wouldn\u0027t even matter if {access_size - 1} is computed first.",
+      "parentUuid": "27f32809_ff3aad30",
+      "revId": "36c10b713fd1d78958836434f9d06c66bb756e7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cabdf31c_24a5f72a",
         "filename": "src/wasm/baseline/liftoff-assembler.h",
         "patchSetId": 1
