@@ -22,6 +22,30 @@
       "revId": "a3f006bcff1d3f35f8f50cb800abb735997758dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "941fa3b6_e6fcaa9b",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-07-27T07:48:59Z",
+      "side": 1,
+      "message": "Done\nThanks. I don\u0027t know how to deal with the Maybe\u003cbool\u003e and I thought I have to call the MAYBE_RETURN() macro. I thought it force me to return and were not aware of the USE()",
+      "parentUuid": "33c8fc96_a091402e",
+      "range": {
+        "startLine": 1344,
+        "startChar": 2,
+        "endLine": 1344,
+        "endChar": 15
+      },
+      "revId": "a3f006bcff1d3f35f8f50cb800abb735997758dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
