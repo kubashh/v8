@@ -893,7 +893,7 @@ void LiftoffAssembler::emit_i64_shr(LiftoffRegister dst, LiftoffRegister src,
 }
 
 void LiftoffAssembler::emit_i32_to_intptr(Register dst, Register src) {
-  UNREACHABLE();
+  // This is a nop on ia32.
 }
 
 void LiftoffAssembler::emit_f32_add(DoubleRegister dst, DoubleRegister lhs,
