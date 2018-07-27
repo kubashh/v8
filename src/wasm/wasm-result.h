@@ -26,10 +26,10 @@ class V8_EXPORT_PRIVATE ResultBase {
  protected:
   ResultBase() = default;
 
-  ResultBase& operator=(ResultBase&& other) = default;
+  ResultBase& operator=(ResultBase&& other) noexcept = default;
 
  public:
-  ResultBase(ResultBase&& other)
+  ResultBase(ResultBase&& other) noexcept
       : error_offset_(other.error_offset_),
         error_msg_(std::move(other.error_msg_)) {}
 
@@ -76,7 +76,7 @@ class Result : public ResultBase {
   Result(Result<S>&& other)
       : ResultBase(std::move(other)), val(std::move(other.val)) {}
 
-  Result& operator=(Result&& other) = default;
+  Result& operator=(Result&& other) noexcept = default;
 
   static Result<T> PRINTF_FORMAT(1, 2) Error(const char* format, ...) {
     va_list args;
@@ -99,7 +99,7 @@ class V8_EXPORT_PRIVATE ErrorThrower {
   ErrorThrower(Isolate* isolate, const char* context)
       : isolate_(isolate), context_(context) {}
   // Explicitly allow move-construction. Disallow copy (below).
-  ErrorThrower(ErrorThrower&& other);
+  ErrorThrower(ErrorThrower&& other) noexcept;
   ~ErrorThrower();
 
   PRINTF_FORMAT(2, 3) void TypeError(const char* fmt, ...);
