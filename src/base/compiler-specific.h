@@ -92,4 +92,12 @@
 
 #endif  // V8_CC_MSVC
 
+// Allowing the use of noexcept by removing the keyword on older compilers that
+// do not support adding noexcept to default members.
+#if (V8_GNUC_PREREQ(4, 9, 0)) || defined(__clang__)
+  #define V8_NOEXCEPT noexcept
+#else
+  #define V8_NOEXCEPT
+#endif
+
 #endif  // V8_BASE_COMPILER_SPECIFIC_H_
