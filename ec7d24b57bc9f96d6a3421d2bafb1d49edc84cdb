@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c1710ab_cfb35acd",
+        "filename": "src/handles-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-07-27T11:22:15Z",
+      "side": 1,
+      "message": "These are often declared in -inl",
+      "range": {
+        "startLine": 29,
+        "startChar": 5,
+        "endLine": 29,
+        "endChar": 9
+      },
+      "revId": "ec7d24b57bc9f96d6a3421d2bafb1d49edc84cdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
