@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33c8fc96_a091402e",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-27T03:24:26Z",
+      "side": 1,
+      "message": "Why? This provides no benefit over simply ignoring the return value of JSReceiver::DefineOwnProperty, as it expands to (semantically) \"if (failure) { return undefined; } else { return undefined; }\".\nMaybe what you want is a DCHECK that the operation was successful, along with a USE to stop release builds from complaining about an unused variable:\n\n  Maybe\u003cbool\u003e success \u003d JSReceiver::DefineOwnProperty(...);\n  DCHECK(success.IsJust() \u0026\u0026 success.FromJust());\n  USE(success);",
+      "range": {
+        "startLine": 1344,
+        "startChar": 2,
+        "endLine": 1344,
+        "endChar": 15
+      },
+      "revId": "a3f006bcff1d3f35f8f50cb800abb735997758dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
