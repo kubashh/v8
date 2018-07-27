@@ -22,6 +22,30 @@
       "revId": "fb2bf746b60894073a49fe33da1c10bdaff7c8a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50212a64_c8b5f361",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-07-27T12:09:55Z",
+      "side": 1,
+      "message": "Ack. I am fine with relaxing the DEPS file rule accordingly. But in that case lets add the following typical comment in the top of the \"heap-write-barrier-inl.h\" file ...\n\n// Clients of this interface shouldn\u0027t depend on lots of heap internals.\n// Do not include anything from src/heap here!",
+      "parentUuid": "1394251d_7f0a3ab3",
+      "range": {
+        "startLine": 8,
+        "startChar": 19,
+        "endLine": 8,
+        "endChar": 23
+      },
+      "revId": "fb2bf746b60894073a49fe33da1c10bdaff7c8a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
