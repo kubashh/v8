@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07b88057_ffb0f0ba",
+        "filename": "test/cctest/wasm/test-wasm-shared-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-07-27T12:39:26Z",
+      "side": 1,
+      "message": "Nit: you could call {AsyncInstantiate} in the MockCompilationResolver. Thereby you only need 1 busy loop in this test.",
+      "revId": "87eb4332d33b286411ff5c82392c9220db77aded",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
