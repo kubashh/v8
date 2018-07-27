@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70ac0994_b8694d09",
+        "filename": "test/cctest/test-strings.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1672,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-07-27T10:24:24Z",
+      "side": 1,
+      "message": "nit: more descriptive var names to make the CHECKs more obvious (e.g. foo_str, foo_str2, bar_str, foo_twobyte)",
+      "range": {
+        "startLine": 1672,
+        "startChar": 7,
+        "endLine": 1672,
+        "endChar": 11
+      },
+      "revId": "8d577a78265cf5a52502bc5643ad121300929109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
