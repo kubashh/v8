@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1394251d_7f0a3ab3",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-07-27T11:28:46Z",
+      "side": 1,
+      "message": "Ideally this one would include heap/heap-write-barrier-inl.h which is disallowed to include as it is a heap-internal header (good!).\n\nShould we relax this presubmit check for the header? I think the idea behind this untangling is to only use the write barrier header if nothing else is required.",
+      "range": {
+        "startLine": 8,
+        "startChar": 19,
+        "endLine": 8,
+        "endChar": 23
+      },
+      "revId": "fb2bf746b60894073a49fe33da1c10bdaff7c8a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
