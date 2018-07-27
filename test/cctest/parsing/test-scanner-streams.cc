@@ -185,6 +185,57 @@ TEST(Utf8SplitBOM) {
   }
 }
 
+TEST(Utf8AdvanceUntil) {
+  // Test utf-8 advancing until a certain char.
+
+  char line_term = '\n';
+  char data[2 + arraysize(unicode_utf8)];
+  strncpy(data, unicode_utf8, arraysize(unicode_utf8));
+  data[arraysize(unicode_utf8) - 1] = line_term;
+  data[arraysize(unicode_utf8)] = '\0';
+
+  {
+    const char* chunks[] = {data, "\0"};
+    ChunkSource chunk_source(chunks);
+    std::unique_ptr<v8::internal::Utf16CharacterStream> stream(
+        v8::internal::ScannerStream::For(
+            &chunk_source, v8::ScriptCompiler::StreamedSource::UTF8, nullptr));
+
+    int32_t res = stream->AdvanceUntil(
+        [](int32_t c0_) { return unibrow::IsLineTerminator(c0_); });
+    CHECK_EQ(line_term, res);
+  }
+}
+
+TEST(Utf8AdvanceUntilOverChunkBoundaries) {
+  // Test utf-8 advancing until a certain char, crossing chunk boundaries.
+
+  // Split the test string at each byte and pass it to the stream. This way,
+  // we'll have a split at each possible boundary.
+  size_t len = strlen(unicode_utf8);
+  char buffer[arraysize(unicode_utf8) + 4];
+  for (size_t i = 1; i < len; i++) {
+    // Copy source string into buffer, splitting it at i.
+    // Then add three chunks, 0..i-1, i..strlen-1, empty.
+    strncpy(buffer, unicode_utf8, i);
+    strncpy(buffer + i + 1, unicode_utf8 + i, len - i);
+    buffer[i] = '\0';
+    buffer[len + 1] = '\n';
+    buffer[len + 2] = '\0';
+    buffer[len + 3] = '\0';
+    const char* chunks[] = {buffer, buffer + i + 1, buffer + len + 2};
+
+    ChunkSource chunk_source(chunks);
+    std::unique_ptr<v8::internal::Utf16CharacterStream> stream(
+        v8::internal::ScannerStream::For(
+            &chunk_source, v8::ScriptCompiler::StreamedSource::UTF8, nullptr));
+
+    int32_t res = stream->AdvanceUntil(
+        [](int32_t c0_) { return unibrow::IsLineTerminator(c0_); });
+    CHECK_EQ(buffer[len + 1], res);
+  }
+}
+
 TEST(Utf8ChunkBoundaries) {
   // Test utf-8 parsing at chunk boundaries.
 

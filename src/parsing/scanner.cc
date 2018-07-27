@@ -489,12 +489,11 @@ Token::Value Scanner::SkipSingleLineComment() {
   // stream of input elements for the syntactic grammar (see
   // ECMA-262, section 7.4).
   while (c0_ != kEndOfInput && !unibrow::IsLineTerminator(c0_)) {
-    Advance();
+    AdvanceUntil([](uc32 c0_) { return unibrow::IsLineTerminator(c0_); });
   }
 
   return Token::WHITESPACE;
 }
-
 
 Token::Value Scanner::SkipSourceURLComment() {
   TryToParseSourceURLComment();
