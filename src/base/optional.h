@@ -131,7 +131,7 @@ class Optional {
     if (!other.storage_.is_null_) Init(other.value());
   }
 
-  Optional(Optional&& other) {
+  Optional(Optional&& other) noexcept {
     if (!other.storage_.is_null_) Init(std::move(other.value()));
   }
 
@@ -164,7 +164,7 @@ class Optional {
     return *this;
   }
 
-  Optional& operator=(Optional&& other) {
+  Optional& operator=(Optional&& other) noexcept {
     if (other.storage_.is_null_) {
       FreeIfNeeded();
       return *this;

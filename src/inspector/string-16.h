@@ -22,7 +22,7 @@ class String16 {
 
   String16();
   String16(const String16& other);
-  String16(String16&& other);
+  String16(String16&& other) noexcept;
   String16(const UChar* characters, size_t size);
   String16(const UChar* characters);  // NOLINT(runtime/explicit)
   String16(const char* characters);   // NOLINT(runtime/explicit)
@@ -30,7 +30,7 @@ class String16 {
   explicit String16(const std::basic_string<UChar>& impl);
 
   String16& operator=(const String16& other);
-  String16& operator=(String16&& other);
+  String16& operator=(String16&& other) noexcept;
 
   static String16 fromInteger(int);
   static String16 fromInteger(size_t);
