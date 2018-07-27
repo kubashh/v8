@@ -69,6 +69,30 @@
       "revId": "ef69169e528e6482c955b6d61abd9146733f3ae7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6628fdc3_d0f132e3",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2456,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-27T01:58:14Z",
+      "side": 1,
+      "message": "I don\u0027t think your example triggers any map deprecations, but I get your point anyway: your concern is that the slow path returns a clone with a different map? I considered that, but wasn\u0027t sure how important that is. I\u0027d also be fine with not doing the early return, i.e. just have:\n\n  MigrateDeprecated(source);\n\nand continue with the regular flow. Does that address your concern?",
+      "parentUuid": "4a082a50_3418b997",
+      "range": {
+        "startLine": 2456,
+        "startChar": 30,
+        "endLine": 2456,
+        "endChar": 54
+      },
+      "revId": "ef69169e528e6482c955b6d61abd9146733f3ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
