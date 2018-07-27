@@ -1335,6 +1335,11 @@ MaybeHandle<Object> NumberFormat::FormatNumber(
       reinterpret_cast<const uint16_t*>(result.getBuffer()), result.length()));
 }
 
+void Intl::DefineWEProperty(Isolate* isolate, Handle<JSObject> target,
+                            Handle<Name> key, Handle<Object> value) {
+  JSObject::AddProperty(isolate, target, key, value, DONT_DELETE);
+}
+
 namespace {
 
 // Define general regexp macros.
