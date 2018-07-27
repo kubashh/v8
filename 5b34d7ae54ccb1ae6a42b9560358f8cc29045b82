@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f676d326_b13f1aa2",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-07-27T11:41:02Z",
+      "side": 1,
+      "message": "Camillo: When you initially added the bulk write barrier for FixedArray, did you require a fast path for each single element or do you think the fast path check for the FixedArray would be good enough?",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 42
+      },
+      "revId": "5b34d7ae54ccb1ae6a42b9560358f8cc29045b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
