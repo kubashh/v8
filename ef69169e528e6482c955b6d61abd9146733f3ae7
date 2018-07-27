@@ -45,6 +45,30 @@
       "revId": "ef69169e528e6482c955b6d61abd9146733f3ae7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a082a50_3418b997",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2456,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-07-27T01:17:41Z",
+      "side": 1,
+      "message": "Done --- However, I\u0027m not sure about something:\n\nIf a fast-clone-able Map is deprecated and we reach this point, and do the generic clone, doesn\u0027t that introduce extra polymorphism too? e.g:\n\n```\nfunction clone(o) { return { ...o }; }\n\nfunction test(o) {\n  o \u003d clone(o);\n\n  if (!o.fullName)\n    o.fullName \u003d `${o.firstName} ${o.surName}`;\n\n  return o.fullName;\n}\n\nlet cast \u003d [\n   { firstName: \"helena\", surName: \"bonham carter\" },\n   { firstName: \"brad\", surName: \"pitt\" },\n   { firstName: \"ed\", surName: \"norton\" }\n];\n\ncast.map(test).join(\", \"); // LoadICs and StoreIC all see identical maps, all monomorphic\ncast[1] \u003d { fullName: \"brad pitt\" }; // sneaky map deprecation!\ncast.map(test).join(\", \"); // LoadICs and StoreIC now polymorphic with initial fast map and\n                           // unrelated generic map, no deprecation\n```\n\nIt probably doesn\u0027t matter, in practice, but I think it pollutes the 2 o.fullName LoadICs and isn\u0027t able to be removed until a GC (but could potentially pollute the feedback vector much longer)",
+      "parentUuid": "ff275a86_ae28fa1d",
+      "range": {
+        "startLine": 2456,
+        "startChar": 30,
+        "endLine": 2456,
+        "endChar": 54
+      },
+      "revId": "ef69169e528e6482c955b6d61abd9146733f3ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
