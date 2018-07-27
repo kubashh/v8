@@ -22,6 +22,47 @@
       "revId": "5068626c67ec4ff3a7483e09c116d84c8774808c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af4a2acb_554de833",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-07-27T11:46:00Z",
+      "side": 1,
+      "message": "nop() is unnecessary. in the old implementation it was used to fill the branch delay slot of jr in last trampoline. This is not an issue anymore",
+      "parentUuid": "40d42664_529e7676",
+      "range": {
+        "startLine": 3926,
+        "startChar": 6,
+        "endLine": 3926,
+        "endChar": 9
+      },
+      "revId": "5068626c67ec4ff3a7483e09c116d84c8774808c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1dc23d2_97543fbf",
+        "filename": "src/mips/assembler-mips.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-07-27T11:46:00Z",
+      "side": 1,
+      "message": ":)",
+      "revId": "5068626c67ec4ff3a7483e09c116d84c8774808c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
