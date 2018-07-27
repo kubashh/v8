@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6506aaeb_eee13fde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-27T00:14:55Z",
+      "side": 1,
+      "message": "CloneObjectIC",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "ef69169e528e6482c955b6d61abd9146733f3ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff275a86_ae28fa1d",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2456,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-07-27T00:14:55Z",
+      "side": 1,
+      "message": "No need to go megamorphic just because you saw a deprecated object, just migrate it in Runtime_CloneObjectIC_Miss:\n\n  if (MigrateDeprecated(source)) {\n    // The IC state will be updated next time.\n    RETURN_RESULT_OR_FAILURE(isolate,\n                             CloneObjectSlowPath(isolate, source, flags));\n  }\n\n  FeedbackSlot slot \u003d ...",
+      "range": {
+        "startLine": 2456,
+        "startChar": 30,
+        "endLine": 2456,
+        "endChar": 54
+      },
+      "revId": "ef69169e528e6482c955b6d61abd9146733f3ae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
