@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40d42664_529e7676",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1211945
+      },
+      "writtenOn": "2018-07-27T10:23:03Z",
+      "side": 1,
+      "message": "This nop might be unnecessary.",
+      "range": {
+        "startLine": 3926,
+        "startChar": 6,
+        "endLine": 3926,
+        "endChar": 9
+      },
+      "revId": "5068626c67ec4ff3a7483e09c116d84c8774808c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
