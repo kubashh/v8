@@ -5824,6 +5824,16 @@ void Heap::GenerationalBarrierSlow(HeapObject* object, Address slot,
   heap->store_buffer()->InsertEntry(slot);
 }
 
+void Heap::GenerationalBarrierForElementsSlow(FixedArray* array, int offset,
+                                              int length) {
+  Heap* heap = Heap::FromWritableHeapObject(array);
+  for (int i = 0; i < length; i++) {
+    if (!InNewSpace(array->get(offset + i))) continue;
+    heap->store_buffer()->InsertEntry(
+        reinterpret_cast<Address>(array->RawFieldOfElementAt(offset + i)));
+  }
+}
+
 void Heap::MarkingBarrierSlow(HeapObject* object, Address slot,
                               HeapObject* value) {
   Heap* heap = Heap::FromWritableHeapObject(object);

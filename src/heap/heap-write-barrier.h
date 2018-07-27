@@ -8,6 +8,7 @@
 namespace v8 {
 namespace internal {
 
+class FixedArray;
 class HeapObject;
 class MaybeObject;
 class Object;
@@ -19,6 +20,7 @@ class Object;
 void GenerationalBarrier(HeapObject* object, Object** slot, Object* value);
 void GenerationalBarrier(HeapObject* object, MaybeObject** slot,
                          MaybeObject* value);
+void GenerationalBarrierForElements(FixedArray* array, int offset, int length);
 
 // Marking write barrier.
 void MarkingBarrier(HeapObject* object, Object** slot, Object* value);

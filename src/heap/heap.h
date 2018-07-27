@@ -168,7 +168,7 @@ using v8::MemoryPressureLevel;
 
 #define FIXED_ARRAY_ELEMENTS_WRITE_BARRIER(heap, array, start, length) \
   do {                                                                 \
-    heap->RecordFixedArrayElements(array, start, length);              \
+    GenerationalBarrierForElements(array, start, length);              \
     heap->incremental_marking()->RecordWrites(array);                  \
   } while (false)
 
@@ -495,6 +495,8 @@ class Heap {
   V8_EXPORT_PRIVATE static void GenerationalBarrierSlow(HeapObject* object,
                                                         Address slot,
                                                         HeapObject* value);
+  V8_EXPORT_PRIVATE static void GenerationalBarrierForElementsSlow(
+      FixedArray* array, int offset, int length);
   V8_EXPORT_PRIVATE static void MarkingBarrierSlow(HeapObject* object,
                                                    Address slot,
                                                    HeapObject* value);
@@ -989,8 +991,6 @@ class Heap {
   inline void RecordWriteIntoCode(Code* host, RelocInfo* rinfo, Object* target);
   void RecordWriteIntoCodeSlow(Code* host, RelocInfo* rinfo, Object* target);
   void RecordWritesIntoCode(Code* code);
-  inline void RecordFixedArrayElements(FixedArray* array, int offset,
-                                       int length);
 
   // Used for query incremental marking status in generated code.
   Address* IsMarkingFlagAddress() {
