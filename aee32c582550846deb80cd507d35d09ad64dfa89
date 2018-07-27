@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c4042f0_9545a9ae",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-27T13:49:37Z",
+      "side": 1,
+      "message": "Do we actually need this while loop now?",
+      "range": {
+        "startLine": 491,
+        "startChar": 2,
+        "endLine": 491,
+        "endChar": 65
+      },
+      "revId": "aee32c582550846deb80cd507d35d09ad64dfa89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4592dfb7_025d8d18",
+        "filename": "test/cctest/parsing/test-scanner-streams.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-27T13:49:37Z",
+      "side": 1,
+      "message": "the code would me more readable if you did\nint (or size_t) len \u003d arraysize(...);\nand used len below.",
+      "range": {
+        "startLine": 192,
+        "startChar": 16,
+        "endLine": 192,
+        "endChar": 39
+      },
+      "revId": "aee32c582550846deb80cd507d35d09ad64dfa89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
