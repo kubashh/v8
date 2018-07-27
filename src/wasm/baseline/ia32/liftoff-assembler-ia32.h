@@ -227,9 +227,10 @@ void LiftoffAssembler::Load(LiftoffRegister dst, Register src_addr,
   // Wasm memory is limited to a size <2GB, so all offsets can be encoded as
   // immediate value (in 31 bits, interpreted as signed value).
   // If the offset is bigger, we always trap and this code is not reached.
-  DCHECK(is_uint31(offset_imm));
+  // Note: We shouldn't have memories larger than 2GiB on 32-bit, but if we
+  // did, we encode {offset_im} as signed, and it will simply wrap around.
   Operand src_op = offset_reg == no_reg
-                       ? Operand(src_addr, offset_imm)
+                       ? Operand(src_addr, bit_cast<int32_t>(offset_imm))
                        : Operand(src_addr, offset_reg, times_1, offset_imm);
   if (protected_load_pc) *protected_load_pc = pc_offset();
 
@@ -893,7 +894,7 @@ void LiftoffAssembler::emit_i64_shr(LiftoffRegister dst, LiftoffRegister src,
 }
 
 void LiftoffAssembler::emit_i32_to_intptr(Register dst, Register src) {
-  UNREACHABLE();
+  // This is a nop on ia32.
 }
 
 void LiftoffAssembler::emit_f32_add(DoubleRegister dst, DoubleRegister lhs,
