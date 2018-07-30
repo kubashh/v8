@@ -310,6 +310,11 @@ class Intl {
   // The currency is expected to an all upper case string value.
   static Handle<Smi> CurrencyDigits(Isolate* isolate, Handle<String> currency);
 
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> SetOptions(
+      Isolate* isolate, Handle<JSReceiver> in_options,
+      Handle<JSReceiver> extension_map, Handle<String> key,
+      Handle<JSObject> out_options, Handle<String> caller);
+
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> CreateNumberFormat(
       Isolate* isolate, Handle<String> locale, Handle<JSObject> options,
       Handle<JSObject> resolved);
