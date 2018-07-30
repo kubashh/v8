@@ -2681,8 +2681,8 @@ class FastSmiOrObjectElementsAccessor
       case SLOW_SLOPPY_ARGUMENTS_ELEMENTS:
       case FAST_STRING_WRAPPER_ELEMENTS:
       case SLOW_STRING_WRAPPER_ELEMENTS:
-#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) case TYPE##_ELEMENTS:
-      TYPED_ARRAYS(TYPED_ARRAY_CASE)
+#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype) case TYPE##_ELEMENTS:
+        TYPED_ARRAYS(TYPED_ARRAY_CASE)
 #undef TYPED_ARRAY_CASE
       // This function is currently only used for JSArrays with non-zero
       // length.
@@ -2853,8 +2853,8 @@ class FastDoubleElementsAccessor
       case FAST_STRING_WRAPPER_ELEMENTS:
       case SLOW_STRING_WRAPPER_ELEMENTS:
       case NO_ELEMENTS:
-#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size) case TYPE##_ELEMENTS:
-      TYPED_ARRAYS(TYPED_ARRAY_CASE)
+#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype) case TYPE##_ELEMENTS:
+        TYPED_ARRAYS(TYPED_ARRAY_CASE)
 #undef TYPED_ARRAY_CASE
       // This function is currently only used for JSArrays with non-zero
       // length.
@@ -3308,7 +3308,7 @@ class TypedElementsAccessor
     }
 
     switch (source->GetElementsKind()) {
-#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size)                     \
+#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype)                           \
   case TYPE##_ELEMENTS:                                                     \
     CopyBetweenBackingStores<Type##ArrayTraits>(source_data, dest_elements, \
                                                 count, 0);                  \
@@ -3394,7 +3394,7 @@ class TypedElementsAccessor
       }
 
       switch (source->GetElementsKind()) {
-#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype, size)     \
+#define TYPED_ARRAY_CASE(Type, type, TYPE, ctype)           \
   case TYPE##_ELEMENTS:                                     \
     CopyBetweenBackingStores<Type##ArrayTraits>(            \
         source_data, destination_elements, length, offset); \
@@ -3613,8 +3613,8 @@ class TypedElementsAccessor
   }
 };
 
-#define FIXED_ELEMENTS_ACCESSOR(Type, type, TYPE, ctype, size) \
-  typedef TypedElementsAccessor<TYPE##_ELEMENTS, ctype>        \
+#define FIXED_ELEMENTS_ACCESSOR(Type, type, TYPE, ctype) \
+  typedef TypedElementsAccessor<TYPE##_ELEMENTS, ctype>  \
       Fixed##Type##ElementsAccessor;
 
 TYPED_ARRAYS(FIXED_ELEMENTS_ACCESSOR)
@@ -4567,7 +4567,7 @@ void CopyFastNumberJSArrayElementsToTypedArray(Context* context,
   DCHECK(destination->IsJSTypedArray());
 
   switch (destination->GetElementsKind()) {
-#define TYPED_ARRAYS_CASE(Type, type, TYPE, ctype, size)                       \
+#define TYPED_ARRAYS_CASE(Type, type, TYPE, ctype)                             \
   case TYPE##_ELEMENTS:                                                        \
     CHECK(Fixed##Type##ElementsAccessor::TryCopyElementsFastNumber(            \
         context, source, destination, length, static_cast<uint32_t>(offset))); \
@@ -4583,7 +4583,7 @@ void CopyTypedArrayElementsToTypedArray(JSTypedArray* source,
                                         JSTypedArray* destination,
                                         uintptr_t length, uintptr_t offset) {
   switch (destination->GetElementsKind()) {
-#define TYPED_ARRAYS_CASE(Type, type, TYPE, ctype, size)             \
+#define TYPED_ARRAYS_CASE(Type, type, TYPE, ctype)                   \
   case TYPE##_ELEMENTS:                                              \
     Fixed##Type##ElementsAccessor::CopyElementsFromTypedArray(       \
         source, destination, length, static_cast<uint32_t>(offset)); \
@@ -4677,5 +4677,7 @@ Handle<JSArray> ElementsAccessor::Concat(Isolate* isolate, Arguments* args,
 }
 
 ElementsAccessor** ElementsAccessor::elements_accessors_ = nullptr;
+
+#undef ELEMENTS_LIST
 }  // namespace internal
 }  // namespace v8
