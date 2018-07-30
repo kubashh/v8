@@ -22,6 +22,30 @@
       "revId": "5b34d7ae54ccb1ae6a42b9560358f8cc29045b82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58e2053e_b0d097c6",
+        "filename": "src/heap/heap-write-barrier-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-30T08:16:02Z",
+      "side": 1,
+      "message": "As discussed offline: The original fix (https://crrev.com/1834373003) addressed a for-in slow path where we sorted an array with HeapNumbers in it.\nI would assume that the per-element write-barrier omition only makes sense for large-object arrays (I hope this is rare enough) with many HeapNumbers. \n\nI\u0027m up for landing an inlined version and seeing whether we regress somewhere.",
+      "parentUuid": "f676d326_b13f1aa2",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 42
+      },
+      "revId": "5b34d7ae54ccb1ae6a42b9560358f8cc29045b82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
