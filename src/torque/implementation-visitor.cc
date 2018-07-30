@@ -1174,11 +1174,17 @@ void FailMacroLookup(const std::string& reason, const std::string& name,
 
 }  // namespace
 
-Callable* ImplementationVisitor::LookupCall(const std::string& name,
-                                            const Arguments& arguments) {
+Callable* ImplementationVisitor::LookupCall(
+    const std::string& name, const Arguments& arguments,
+    const TypeVector& specialization_types) {
   Callable* result = nullptr;
   TypeVector parameter_types(arguments.parameters.GetTypeVector());
-  Declarable* declarable = declarations()->Lookup(name);
+  bool has_template_arguments = !specialization_types.empty();
+  std::string mangled_name = name;
+  if (has_template_arguments) {
+    mangled_name = GetGeneratedCallableName(name, specialization_types);
+  }
+  Declarable* declarable = declarations()->Lookup(mangled_name);
   if (declarable->IsBuiltin()) {
     result = Builtin::cast(declarable);
   } else if (declarable->IsRuntimeFunction()) {
@@ -1248,6 +1254,16 @@ Callable* ImplementationVisitor::LookupCall(const std::string& name,
            << std::to_string(callee_size) << ", found "
            << std::to_string(caller_size);
     ReportError(stream.str());
+  }
+
+  if (has_template_arguments) {
+    Generic* generic = *result->generic();
+    CallableNode* callable = generic->declaration()->callable;
+    if (generic->declaration()->body) {
+      QueueGenericSpecialization({generic, specialization_types}, callable,
+                                 callable->signature.get(),
+                                 generic->declaration()->body);
+    }
   }
 
   return result;
@@ -1367,11 +1383,6 @@ LocationReference ImplementationVisitor::GetLocationReference(
           declarations()->LookupValue((*result.declarable())->name() + "." +
                                       expr->field),
           {}, {});
-
-    } else {
-      return LocationReference(
-          nullptr,
-          VisitResult(result.type(), result.RValue() + "." + expr->field), {});
     }
   }
   return LocationReference(nullptr, result, {});
@@ -1422,17 +1433,8 @@ VisitResult ImplementationVisitor::GenerateFetchFromLocation(
   if (reference.value != nullptr) {
     return GenerateFetchFromLocation(reference);
   } else if (const StructType* struct_type = StructType::DynamicCast(type)) {
-    auto& fields = struct_type->fields();
-    auto i = std::find_if(
-        fields.begin(), fields.end(),
-        [&](const NameAndType& f) { return f.name == expr->field; });
-    if (i == fields.end()) {
-      std::stringstream s;
-      s << "\"" << expr->field << "\" is not a field of struct type \""
-        << struct_type->name() << "\"";
-      ReportError(s.str());
-    }
-    return VisitResult(i->type, reference.base.RValue());
+    return VisitResult(struct_type->GetFieldType(expr->field),
+                       reference.base.RValue() + "." + expr->field);
   } else {
     Arguments arguments;
     arguments.parameters = {reference.base};
@@ -1488,7 +1490,7 @@ void ImplementationVisitor::GenerateAssignToLocation(
       ReportError(s.str());
     }
     GenerateAssignToVariable(var, assignment_value);
-  } else if (auto access = FieldAccessExpression::cast(location)) {
+  } else if (auto access = FieldAccessExpression::DynamicCast(location)) {
     GenerateCall(std::string(".") + access->field + "=",
                  {{reference.base, assignment_value}, {}});
   } else {
@@ -1679,8 +1681,10 @@ VisitResult ImplementationVisitor::GeneratePointerCall(
 }
 
 VisitResult ImplementationVisitor::GenerateCall(
-    const std::string& callable_name, Arguments arguments, bool is_tailcall) {
-  Callable* callable = LookupCall(callable_name, arguments);
+    const std::string& callable_name, Arguments arguments, bool is_tailcall,
+    const TypeVector& specialization_types) {
+  Callable* callable =
+      LookupCall(callable_name, arguments, specialization_types);
 
   // Operators used in a branching context can also be function calls that never
   // return but have a True and False label
@@ -1842,30 +1846,18 @@ VisitResult ImplementationVisitor::Visit(CallExpression* expr,
                                          bool is_tailcall) {
   Arguments arguments;
   std::string name = expr->callee.name;
-  bool has_template_arguments = expr->callee.generic_arguments.size() != 0;
-  if (has_template_arguments) {
     TypeVector specialization_types =
         GetTypeVector(expr->callee.generic_arguments);
-    name = GetGeneratedCallableName(name, specialization_types);
-    for (auto generic :
-         declarations()->LookupGeneric(expr->callee.name)->list()) {
-      CallableNode* callable = generic->declaration()->callable;
-      if (generic->declaration()->body) {
-        QueueGenericSpecialization({generic, specialization_types}, callable,
-                                   callable->signature.get(),
-                                   generic->declaration()->body);
-      }
-    }
-  }
-  for (Expression* arg : expr->arguments)
-    arguments.parameters.push_back(Visit(arg));
-  arguments.labels = LabelsFromIdentifiers(expr->labels);
-  VisitResult result;
-  if (!has_template_arguments &&
-      declarations()->Lookup(expr->callee.name)->IsValue()) {
-    result = GeneratePointerCall(&expr->callee, arguments, is_tailcall);
+    bool has_template_arguments = !specialization_types.empty();
+    for (Expression* arg : expr->arguments)
+      arguments.parameters.push_back(Visit(arg));
+    arguments.labels = LabelsFromIdentifiers(expr->labels);
+    VisitResult result;
+    if (!has_template_arguments &&
+        declarations()->Lookup(expr->callee.name)->IsValue()) {
+      result = GeneratePointerCall(&expr->callee, arguments, is_tailcall);
   } else {
-    result = GenerateCall(name, arguments, is_tailcall);
+    result = GenerateCall(name, arguments, is_tailcall, specialization_types);
   }
   if (!result.type()->IsVoidOrNever()) {
     GenerateIndent();
