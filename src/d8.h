@@ -139,13 +139,13 @@ class ExternalizedContents {
       : base_(contents.AllocationBase()),
         length_(contents.AllocationLength()),
         mode_(contents.AllocationMode()) {}
-  ExternalizedContents(ExternalizedContents&& other)
+  ExternalizedContents(ExternalizedContents&& other) noexcept
       : base_(other.base_), length_(other.length_), mode_(other.mode_) {
     other.base_ = nullptr;
     other.length_ = 0;
     other.mode_ = ArrayBuffer::Allocator::AllocationMode::kNormal;
   }
-  ExternalizedContents& operator=(ExternalizedContents&& other) {
+  ExternalizedContents& operator=(ExternalizedContents&& other) noexcept {
     if (this != &other) {
       base_ = other.base_;
       length_ = other.length_;
