@@ -200,82 +200,59 @@ char* ReadLine(const char* prompt) {
   return result;
 }
 
+namespace {
 
-char* ReadCharsFromFile(FILE* file,
-                        int* size,
-                        int extra_space,
-                        bool verbose,
-                        const char* filename) {
+std::vector<char> ReadCharsFromFile(FILE* file, bool verbose,
+                                    const char* filename) {
   if (file == nullptr || fseek(file, 0, SEEK_END) != 0) {
     if (verbose) {
       base::OS::PrintError("Cannot read from file %s.\n", filename);
     }
-    return nullptr;
+    return std::vector<char>();
   }
 
   // Get the size of the file and rewind it.
-  *size = static_cast<int>(ftell(file));
+  ptrdiff_t size = ftell(file);
   rewind(file);
 
-  char* result = NewArray<char>(*size + extra_space);
-  for (int i = 0; i < *size && feof(file) == 0;) {
-    int read = static_cast<int>(fread(&result[i], 1, *size - i, file));
-    if (read != (*size - i) && ferror(file) != 0) {
+  std::vector<char> result(size);
+  for (ptrdiff_t i = 0; i < size && feof(file) == 0;) {
+    ptrdiff_t read = fread(result.data() + i, 1, size - i, file);
+    if (read != (size - i) && ferror(file) != 0) {
       fclose(file);
-      DeleteArray(result);
-      return nullptr;
+      return std::vector<char>();
     }
     i += read;
   }
   return result;
 }
 
-
-char* ReadCharsFromFile(const char* filename,
-                        int* size,
-                        int extra_space,
-                        bool verbose) {
+std::vector<char> ReadCharsFromFile(const char* filename, bool verbose) {
   FILE* file = base::OS::FOpen(filename, "rb");
-  char* result = ReadCharsFromFile(file, size, extra_space, verbose, filename);
+  std::vector<char> result = ReadCharsFromFile(file, verbose, filename);
   if (file != nullptr) fclose(file);
   return result;
 }
 
-
-byte* ReadBytes(const char* filename, int* size, bool verbose) {
-  char* chars = ReadCharsFromFile(filename, size, 0, verbose);
-  return reinterpret_cast<byte*>(chars);
-}
-
-
-static Vector<const char> SetVectorContents(char* chars,
-                                            int size,
-                                            bool* exists) {
-  if (!chars) {
+std::string VectorToString(const std::vector<char>& chars, bool* exists) {
+  if (chars.size() == 0) {
     *exists = false;
-    return Vector<const char>::empty();
+    return std::string();
   }
-  chars[size] = '\0';
   *exists = true;
-  return Vector<const char>(chars, size);
+  return std::string(chars.begin(), chars.end());
 }
 
+}  // namespace
 
-Vector<const char> ReadFile(const char* filename,
-                            bool* exists,
-                            bool verbose) {
-  int size;
-  char* result = ReadCharsFromFile(filename, &size, 1, verbose);
-  return SetVectorContents(result, size, exists);
+std::string ReadFile(const char* filename, bool* exists, bool verbose) {
+  std::vector<char> result = ReadCharsFromFile(filename, verbose);
+  return VectorToString(result, exists);
 }
 
-
-Vector<const char> ReadFile(FILE* file,
-                            bool* exists,
-                            bool verbose) {
-  int size;
-  char* result = ReadCharsFromFile(file, &size, 1, verbose, "");
-  return SetVectorContents(result, size, exists);
+std::string ReadFile(FILE* file, bool* exists, bool verbose) {
+  std::vector<char> result = ReadCharsFromFile(file, verbose, "");
+  return VectorToString(result, exists);
 }
 
 

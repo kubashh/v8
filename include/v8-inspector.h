@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <cctype>
+#include <string>
 
 #include <memory>
 
@@ -36,6 +37,11 @@ class Domain;
 class V8_EXPORT StringView {
  public:
   StringView() : m_is8Bit(true), m_length(0), m_characters8(nullptr) {}
+
+  StringView(const std::string& str)
+      : m_is8Bit(true),
+        m_length(str.size()),
+        m_characters8(reinterpret_cast<const uint8_t*>(str.c_str())) {}
 
   StringView(const uint8_t* characters, size_t length)
       : m_is8Bit(true), m_length(length), m_characters8(characters) {}
