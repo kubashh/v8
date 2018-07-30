@@ -534,70 +534,6 @@ function parseExtension(extension) {
   return extensionMap;
 }
 
-
-/**
- * Populates internalOptions object with boolean key-value pairs
- * from extensionMap and options.
- * Returns filtered extension (number and date format constructors use
- * Unicode extensions for passing parameters to ICU).
- * It's used for extension-option pairs only, e.g. kn-normalization, but not
- * for 'sensitivity' since it doesn't have extension equivalent.
- * Extensions like nu and ca don't have options equivalent, so we place
- * undefined in the map.property to denote that.
- */
-function setOptions(inOptions, extensionMap, keyValues, getOption, outOptions) {
-  var extension = '';
-
-  var updateExtension = function updateExtension(key, value) {
-    return '-' + key + '-' + TO_STRING(value);
-  }
-
-  var updateProperty = function updateProperty(property, type, value) {
-    if (type === 'boolean' && (typeof value === 'string')) {
-      value = (value === 'true') ? true : false;
-    }
-
-    if (!IS_UNDEFINED(property)) {
-      %DefineWEProperty(outOptions, property, value);
-    }
-  }
-
-  for (var key in keyValues) {
-    if (HAS_OWN_PROPERTY(keyValues, key)) {
-      var value = UNDEFINED;
-      var map = keyValues[key];
-      if (!IS_UNDEFINED(map.property)) {
-        // This may return true if user specifies numeric: 'false', since
-        // Boolean('nonempty') === true.
-        value = getOption(map.property, map.type, map.values);
-      }
-      if (!IS_UNDEFINED(value)) {
-        updateProperty(map.property, map.type, value);
-        extension += updateExtension(key, value);
-        continue;
-      }
-      // User options didn't have it, check Unicode extension.
-      // Here we want to convert strings 'true', 'false' into proper Boolean
-      // values (not a user error).
-      if (HAS_OWN_PROPERTY(extensionMap, key)) {
-        value = extensionMap[key];
-        if (!IS_UNDEFINED(value)) {
-          updateProperty(map.property, map.type, value);
-          extension += updateExtension(key, value);
-        } else if (map.type === 'boolean') {
-          // Boolean keys are allowed not to have values in Unicode extension.
-          // Those default to true.
-          updateProperty(map.property, map.type, true);
-          extension += updateExtension(key, true);
-        }
-      }
-    }
-  }
-
-  return extension === ''? '' : '-u' + extension;
-}
-
-
 /**
  * Given an array-like, outputs an Array with the numbered
  * properties copied over and defined
@@ -819,19 +755,8 @@ function CreateCollator(locales, options) {
   // usage: sort, and its value can't be 'standard' or 'search'.
   var extensionMap = parseExtension(locale.extension);
 
-  /**
-   * Map of Unicode extensions to option properties, and their values and types,
-   * for a collator.
-   */
-  var COLLATOR_KEY_MAP = {
-    __proto__: null,
-    'kn': { __proto__: null, 'property': 'numeric', 'type': 'boolean'},
-    'kf': { __proto__: null, 'property': 'caseFirst', 'type': 'string',
-           'values': ['false', 'lower', 'upper']}
-  };
-
-  setOptions(
-      options, extensionMap, COLLATOR_KEY_MAP, getOption, internalOptions);
+  %SetOptions(options, extensionMap, 'kn', internalOptions, 'collator');
+  %SetOptions(options, extensionMap, 'kf', internalOptions, 'collator');
 
   var collation = 'default';
   var extension = '';
@@ -1155,17 +1080,8 @@ function CreateNumberFormat(locales, options) {
   // number format, so we need to build that.
   var extensionMap = parseExtension(locale.extension);
 
-  /**
-   * Map of Unicode extensions to option properties, and their values and types,
-   * for a number format.
-   */
-  var NUMBER_FORMAT_KEY_MAP = {
-    __proto__: null,
-    'nu': {__proto__: null, 'property': UNDEFINED, 'type': 'string'}
-  };
-
-  var extension = setOptions(options, extensionMap, NUMBER_FORMAT_KEY_MAP,
-                             getOption, internalOptions);
+  var extension = %SetOptions(options, extensionMap, 'nu', internalOptions, 'numberformat');
+  extension = (extension == '') ? '' : '-u' + extension;
 
   var requestedLocale = locale.locale + extension;
   var resolved = %object_define_properties({__proto__: null}, {
@@ -1504,18 +1420,10 @@ function CreateDateTimeFormat(locales, options) {
   var internalOptions = {__proto__: null};
   var extensionMap = parseExtension(locale.extension);
 
-  /**
-   * Map of Unicode extensions to option properties, and their values and types,
-   * for a date/time format.
-   */
-  var DATETIME_FORMAT_KEY_MAP = {
-    __proto__: null,
-    'ca': {__proto__: null, 'property': UNDEFINED, 'type': 'string'},
-    'nu': {__proto__: null, 'property': UNDEFINED, 'type': 'string'}
-  };
-
-  var extension = setOptions(options, extensionMap, DATETIME_FORMAT_KEY_MAP,
-                             getOption, internalOptions);
+  var extension =
+      %SetOptions(options, extensionMap, 'ca', internalOptions, 'dateformat') +
+      %SetOptions(options, extensionMap, 'nu', internalOptions, 'dateformat');
+  extension = (extension == '') ? '' : '-u' + extension;
 
   var requestedLocale = locale.locale + extension;
   var resolved = %object_define_properties({__proto__: null}, {

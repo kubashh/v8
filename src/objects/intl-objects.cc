@@ -1769,6 +1769,114 @@ Handle<Smi> Intl::CurrencyDigits(Isolate* isolate, Handle<String> currency) {
   return Handle<Smi>(Smi::FromInt(fraction_digits), isolate);
 }
 
+namespace {
+
+struct OptionData {
+  const char* name;
+  const char* key;
+  const std::vector<const char*>* possible_values;
+  bool is_bool_value;
+};
+
+}  // namespace
+
+MaybeHandle<String> Intl::SetOptions(Isolate* isolate,
+                                     Handle<JSReceiver> in_options,
+                                     Handle<JSReceiver> extension_map,
+                                     Handle<String> key,
+                                     Handle<JSObject> out_options,
+                                     Handle<String> caller) {
+  static std::vector<const char*> case_first_values = {"upper", "lower",
+                                                       "false"};
+  static std::vector<const char*> empty_values = {};
+  static const std::array<OptionData, 4> kOptionToUnicodeTagMap = {
+      {{"calendar", "ca", &empty_values, false},
+       {"caseFirst", "kf", &case_first_values, false},
+       {"numeric", "kn", &empty_values, true},
+       {"numberingSystem", "nu", &empty_values, false}}};
+
+  Factory* factory = isolate->factory();
+  Handle<Object> value =
+      Handle<Object>(ReadOnlyRoots(isolate).undefined_value(), isolate);
+  Handle<String> property;
+  std::unique_ptr<char[]> key_str = key->ToCString();
+  bool is_boolean = false;
+  for (const auto& option_to_bcp47 : kOptionToUnicodeTagMap) {
+    if (strcmp(option_to_bcp47.key, key_str.get()) == 0) {
+      is_boolean = option_to_bcp47.is_bool_value;
+      if (is_boolean) {
+        bool value_bool = false;
+        Maybe<bool> maybe_get_option =
+            Intl::GetBoolOption(isolate, in_options, option_to_bcp47.name,
+                                caller->ToCString().get(), &value_bool);
+        MAYBE_RETURN(maybe_get_option, Handle<String>());
+        if (maybe_get_option.FromJust()) {
+          value = value_bool
+                      ? Handle<Object>(ReadOnlyRoots(isolate).true_string(),
+                                       isolate)
+                      : Handle<Object>(ReadOnlyRoots(isolate).false_string(),
+                                       isolate);
+        }
+      } else {
+        std::unique_ptr<char[]> value_str = nullptr;
+        Maybe<bool> maybe_get_option =
+            Intl::GetStringOption(isolate, in_options, option_to_bcp47.name,
+                                  *(option_to_bcp47.possible_values),
+                                  caller->ToCString().get(), &value_str);
+        MAYBE_RETURN(maybe_get_option, Handle<String>());
+
+        if (maybe_get_option.FromJust()) {
+          DCHECK_NOT_NULL(value_str.get());
+          value = factory->NewStringFromAsciiChecked(value_str.get());
+        }
+      }
+      property = factory->NewStringFromAsciiChecked(option_to_bcp47.name);
+    }
+  }
+  if (value->IsUndefined()) {
+    Maybe<bool> maybe_has_owner_property =
+        JSReceiver::HasOwnProperty(extension_map, key);
+    if (maybe_has_owner_property.IsNothing() ||
+        !maybe_has_owner_property.FromJust()) {
+      return Handle<String>(ReadOnlyRoots(isolate).empty_string(), isolate);
+    }
+    // User options didn't have it, check Unicode extension.
+    // Here we want to convert strings 'true', 'false' into proper Boolean
+    // values (not a user error).
+    ASSIGN_RETURN_ON_EXCEPTION(
+        isolate, value, JSReceiver::GetProperty(isolate, extension_map, key),
+        String);
+    if (value->IsUndefined()) {
+      if (!is_boolean) {
+        return Handle<String>(ReadOnlyRoots(isolate).empty_string(), isolate);
+      }
+      value = Handle<Object>(ReadOnlyRoots(isolate).true_value(), isolate);
+    }
+  }
+  if (!property->IsUndefined()) {
+    if (is_boolean && value->IsString()) {
+      Handle<String> value_str;
+      ASSIGN_RETURN_ON_EXCEPTION(isolate, value_str,
+                                 Object::ToString(isolate, value), String);
+      value =
+          value_str->Equals(ReadOnlyRoots(isolate).true_string())
+              ? Handle<Object>(ReadOnlyRoots(isolate).true_value(), isolate)
+              : Handle<Object>(ReadOnlyRoots(isolate).false_value(), isolate);
+    }
+    Intl::DefineWEProperty(isolate, out_options, property, value);
+  }
+  std::string extension("-");
+  extension += key->ToCString().get();
+  extension += "-";
+  Handle<String> value_str;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, value_str,
+                             Object::ToString(isolate, value), String);
+
+  extension += value_str->ToCString().get();
+
+  return factory->NewStringFromAsciiChecked(extension.c_str());
+}
+
 MaybeHandle<JSObject> Intl::CreateNumberFormat(Isolate* isolate,
                                                Handle<String> locale,
                                                Handle<JSObject> options,
