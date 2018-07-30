@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f4ea7e4_edebf559",
+        "filename": "test/inspector/inspector-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-30T16:47:23Z",
+      "side": 1,
+      "message": "nit: braces please.",
+      "revId": "cb49ad05dfc33c63421d3b73ca601858364d9e44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0a70bdc_7316be07",
+        "filename": "test/inspector/inspector-test.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-07-30T16:47:23Z",
+      "side": 1,
+      "message": "duh! You almost managed to get rid of v8::internal::Vector ;)",
+      "revId": "cb49ad05dfc33c63421d3b73ca601858364d9e44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
