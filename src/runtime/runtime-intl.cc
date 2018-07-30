@@ -22,6 +22,7 @@
 #include "src/messages.h"
 #include "src/objects/intl-objects-inl.h"
 #include "src/objects/intl-objects.h"
+#include "src/objects/js-array-inl.h"
 #include "src/objects/managed.h"
 #include "src/utils.h"
 
@@ -480,6 +481,19 @@ RUNTIME_FUNCTION(Runtime_BreakIteratorBreakType) {
   } else {
     return *isolate->factory()->NewStringFromStaticChars("unknown");
   }
+}
+
+RUNTIME_FUNCTION(Runtime_SetOptions) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(args.length(), 5);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, in_options, 0);
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, extension_map, 1);
+  CONVERT_ARG_HANDLE_CHECKED(String, key, 2);
+  CONVERT_ARG_HANDLE_CHECKED(JSObject, out_options, 3);
+  CONVERT_ARG_HANDLE_CHECKED(String, caller, 4);
+  RETURN_RESULT_OR_FAILURE(
+      isolate, Intl::SetOptions(isolate, in_options, extension_map, key,
+                                out_options, caller));
 }
 
 RUNTIME_FUNCTION(Runtime_StringToLowerCaseIntl) {
