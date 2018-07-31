@@ -117,6 +117,30 @@
       "revId": "6d6f3a1260278fef2f978c9ff40f072abbccbfcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e545109_997866f9",
+        "filename": "third_party/inspector_protocol/lib/Maybe_h.template",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-07-31T10:48:30Z",
+      "side": 1,
+      "message": "Just to clarify, I think the change should happen in that repo. kozyatinskiy@ will know.",
+      "parentUuid": "14044527_90c68d69",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 9
+      },
+      "revId": "6d6f3a1260278fef2f978c9ff40f072abbccbfcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
