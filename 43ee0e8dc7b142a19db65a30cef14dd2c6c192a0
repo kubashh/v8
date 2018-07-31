@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fa2ffd9_06612b85",
+        "filename": "src/ast/prettyprinter.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-07-31T11:47:40Z",
+      "side": 1,
+      "message": "This is kind of a hack - I guess it\u0027s fine though. Can you add a small comment explaining why you have to do this?",
+      "range": {
+        "startLine": 46,
+        "startChar": 2,
+        "endLine": 46,
+        "endChar": 53
+      },
+      "revId": "43ee0e8dc7b142a19db65a30cef14dd2c6c192a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
