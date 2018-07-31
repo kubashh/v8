@@ -40,6 +40,12 @@ int CollectFunctions(Node* node, Handle<JSFunction>* functions,
     }
     return value_input_count;
   }
+  if (m.IsCheckClosure()) {
+    CheckClosureParameters const& p = CheckClosureParametersOf(m.op());
+    functions[0] = Handle<JSFunction>::null();
+    shared = p.shared_info();
+    return 1;
+  }
   if (m.IsJSCreateClosure()) {
     CreateClosureParameters const& p = CreateClosureParametersOf(m.op());
     functions[0] = Handle<JSFunction>::null();

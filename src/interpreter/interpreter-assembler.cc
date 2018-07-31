@@ -719,7 +719,8 @@ void InterpreterAssembler::IncrementCallCount(Node* feedback_vector,
 
 void InterpreterAssembler::CollectCallableFeedback(Node* target, Node* context,
                                                    Node* feedback_vector,
-                                                   Node* slot_id) {
+                                                   Node* slot_id,
+                                                   CallableFeedbackMode mode) {
   Label extra_checks(this, Label::kDeferred), done(this);
 
   // Check if we have monomorphic {target} feedback already.
@@ -746,10 +747,44 @@ void InterpreterAssembler::CollectCallableFeedback(Node* target, Node* context,
     GotoIf(is_uninitialized, &initialize);
     CSA_ASSERT(this, IsWeakOrClearedHeapObject(feedback));
 
-    // If the weak reference is cleared, we have a new chance to become
-    // monomorphic.
-    Comment("check if weak reference is cleared");
-    Branch(IsClearedWeakHeapObject(feedback), &initialize, &mark_megamorphic);
+    if (mode == CallableFeedbackMode::kDontCollectSharedFunctionInfo) {
+      // If the weak reference is cleared, we have a new chance to become
+      // monomorphic.
+      Comment("check if weak reference is cleared");
+      Branch(IsClearedWeakHeapObject(feedback), &initialize, &mark_megamorphic);
+    } else {
+      // If weak cell is cleared, we have a new chance to become monomorphic.
+      Comment("check if weak cell is cleared");
+      GotoIf(IsClearedWeakHeapObject(feedback), &initialize);
+      TNode<JSFunction> feedback_value = CAST(ToWeakHeapObject(feedback));
+
+      // Check if {target} is a JSFunction.
+      Comment("check if function in same native context");
+      GotoIf(TaggedIsSmi(target), &mark_megamorphic);
+      GotoIfNot(IsJSFunction(target), &mark_megamorphic);
+
+      // Check if {target}s feedback vector cell matches the {feedback_value}.
+      TNode<Object> target_feedback_cell =
+          LoadObjectField(target, JSFunction::kFeedbackCellOffset);
+      GotoIf(WordEqual(feedback_value, target_feedback_cell), &done);
+
+      // Check if {target} and {feedback_value} are both JSFunctions with
+      // the same feedback vector cell, and that those functions were
+      // actually compiled already.
+      GotoIfNot(IsJSFunction(feedback_value), &mark_megamorphic);
+      TNode<HeapObject> feedback_cell = CAST(
+          LoadObjectField(feedback_value, JSFunction::kFeedbackCellOffset));
+      GotoIfNot(WordEqual(feedback_cell, target_feedback_cell),
+                &mark_megamorphic);
+      GotoIfNot(IsFeedbackCell(feedback_cell), &mark_megamorphic);
+
+      // Record the feedback vector cell.
+      Comment("transition to polymorphic");
+      StoreWeakReferenceInFeedbackVector(feedback_vector, slot_id,
+                                         feedback_cell);
+      ReportFeedbackUpdate(feedback_vector, slot_id, "Call:FeedbackVectorCell");
+      Goto(&done);
+    }
 
     BIND(&initialize);
     {
@@ -824,7 +859,8 @@ void InterpreterAssembler::CollectCallFeedback(Node* target, Node* context,
   IncrementCallCount(feedback_vector, slot_id);
 
   // Collect the callable {target} feedback.
-  CollectCallableFeedback(target, context, feedback_vector, slot_id);
+  CollectCallableFeedback(target, context, feedback_vector, slot_id,
+                          CallableFeedbackMode::kCollectSharedFunctionInfo);
 }
 
 void InterpreterAssembler::CallJSAndDispatch(
