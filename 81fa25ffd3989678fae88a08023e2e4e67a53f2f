@@ -1,0 +1,233 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1fffebd_ab8f6919",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "This should be JSObject too as per the comment below",
+      "range": {
+        "startLine": 944,
+        "startChar": 43,
+        "endLine": 944,
+        "endChar": 49
+      },
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcfb584f_1659504b",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "This can\u0027t throw as this is an internal object that we store values on. So we can just do:\n\n  bool has_own \u003d JSReceiver::HasOwnProperty(in, prop).ToChecked();\n  if (!has_own) return;",
+      "range": {
+        "startLine": 950,
+        "startChar": 8,
+        "endLine": 950,
+        "endChar": 71
+      },
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f4daf7b_e38b633a",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "No need to cast once this is changed to JSObject",
+      "range": {
+        "startLine": 950,
+        "startChar": 35,
+        "endLine": 950,
+        "endChar": 63
+      },
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dd1d5f0_37ffd475",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "Please use the macro ASSIGN_RETURN_ON_EXCEPTION.",
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61d8e502_043bb071",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "This should just be JSReceiver::CreateDataProperty as per spec. I created a helper method here that you can use: \nhttps://chromium-review.googlesource.com/c/v8/v8/+/1156400",
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d911c996_0d73010d",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "please add spec steps as comments inline",
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d4b6624_8888c229",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "nit: casing",
+      "range": {
+        "startLine": 970,
+        "startChar": 21,
+        "endLine": 970,
+        "endChar": 29
+      },
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c29475a9_6cecd042",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "Please use NumberFormat::Unwrap",
+      "range": {
+        "startLine": 973,
+        "startChar": 6,
+        "endLine": 973,
+        "endChar": 25
+      },
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cedf66a9_57c311b6",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "This is always an internal JSObject that we create and don\u0027t ever let userspace javascript change this. So this would become:\n\n  Handle\u003cObject\u003e resolved_obj;\n  ASSIGN_RETURN_ON_EXCEPTION(isolate, revolved_obj, \n                             JSReceiver::GetProperty(isolate, format, \n                                                    factory-\u003eint_resolved_symbol(), \n                             JSObject);\n  Handle\u003cJSObject\u003e resolved \u003d Handle\u003cJSObject\u003e::cast(resolved_obj);",
+      "range": {
+        "startLine": 977,
+        "startChar": 9,
+        "endLine": 977,
+        "endChar": 15
+      },
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e11b7f5_79c9bb3b",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "This can be JSReceiver::GetProperty(isolate, format, factory-\u003eintl_resolved_symbol()).",
+      "range": {
+        "startLine": 980,
+        "startChar": 14,
+        "endLine": 980,
+        "endChar": 34
+      },
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0164a438_6334fcaa",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-07-31T12:51:30Z",
+      "side": 1,
+      "message": "No need for the Object::ToString here. We only store String here so we can directly cast it to a String. Similar to the casting we do for the resolved object above.",
+      "revId": "81fa25ffd3989678fae88a08023e2e4e67a53f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
