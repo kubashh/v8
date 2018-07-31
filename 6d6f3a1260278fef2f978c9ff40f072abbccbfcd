@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "463139a8_4635b50e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-31T09:18:33Z",
+      "side": 1,
+      "message": "You could add a link to the design doc here in the commit message.\n\nAlternatively, create a tracking bug, link to the design doc from there, and add the tracking bug number here.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 2
+      },
+      "revId": "6d6f3a1260278fef2f978c9ff40f072abbccbfcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ca23d7d_cfec1832",
+        "filename": "third_party/inspector_protocol/lib/Maybe_h.template",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-07-31T09:18:33Z",
+      "side": 1,
+      "message": "I don\u0027t think you can update third_party with this CL, isn\u0027t this pulled in from a different repo? Is it not? Or how does this work?",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 9
+      },
+      "revId": "6d6f3a1260278fef2f978c9ff40f072abbccbfcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
