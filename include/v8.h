@@ -2577,6 +2577,31 @@ class V8_EXPORT Value : public Data {
   V8_WARN_UNUSED_RESULT MaybeLocal<Uint32> ToArrayIndex(
       Local<Context> context) const;
 
+  /**
+   * Returns the value as a bool iff IsBoolean() is true, otherwise empty.
+   */
+  V8_WARN_UNUSED_RESULT Maybe<bool> AsBoolean() const;
+
+  /**
+   * Returns the value as a double iff IsNumber() is true, otherwise empty.
+   */
+  V8_WARN_UNUSED_RESULT Maybe<double> AsNumber() const;
+
+  /**
+   * Returns the value as an int64 iff IsNumber() is true, otherwise empty.
+   */
+  V8_WARN_UNUSED_RESULT Maybe<int64_t> AsInteger() const;
+
+  /**
+   * Returns the value as an uint32 iff IsUint32() is true, otherwise empty.
+   */
+  V8_WARN_UNUSED_RESULT Maybe<uint32_t> AsUint32() const;
+
+  /**
+   * Returns the value as an int32 iff IsInt32() is true, otherwise empty.
+   */
+  V8_WARN_UNUSED_RESULT Maybe<int32_t> AsInt32() const;
+
   V8_WARN_UNUSED_RESULT Maybe<bool> BooleanValue(Local<Context> context) const;
   V8_WARN_UNUSED_RESULT Maybe<double> NumberValue(Local<Context> context) const;
   V8_WARN_UNUSED_RESULT Maybe<int64_t> IntegerValue(
