@@ -22,6 +22,30 @@
       "revId": "43ee0e8dc7b142a19db65a30cef14dd2c6c192a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6710fde3_6686f1f1",
+        "filename": "src/ast/prettyprinter.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-07-31T11:58:05Z",
+      "side": 1,
+      "message": "Yep, indeed. We\u0027ve done this elsewhere for the same reason. Added a comment.",
+      "parentUuid": "8fa2ffd9_06612b85",
+      "range": {
+        "startLine": 46,
+        "startChar": 2,
+        "endLine": 46,
+        "endChar": 53
+      },
+      "revId": "43ee0e8dc7b142a19db65a30cef14dd2c6c192a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
