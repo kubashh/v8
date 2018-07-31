@@ -46,13 +46,6 @@ V8_EXPORT_PRIVATE DecodeResult VerifyWasmCode(AccountingAllocator* allocator,
                                               const wasm::WasmModule* module,
                                               FunctionBody& body);
 
-// Note: If run in the background thread, must follow protocol using
-// isolate::async_counters() to guarantee usability of counters argument.
-DecodeResult VerifyWasmCodeWithStats(AccountingAllocator* allocator,
-                                     const wasm::WasmModule* module,
-                                     FunctionBody& body, ModuleOrigin origin,
-                                     Counters* counters);
-
 DecodeResult BuildTFGraph(AccountingAllocator* allocator, TFBuilder* builder,
                           FunctionBody& body,
                           compiler::NodeOriginTable* node_origins);
