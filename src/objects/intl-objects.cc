@@ -926,6 +926,88 @@ void NumberFormat::DeleteNumberFormat(const v8::WeakCallbackInfo<void>& data) {
   GlobalHandles::Destroy(reinterpret_cast<Object**>(data.GetParameter()));
 }
 
+namespace {
+
+void DefineWECProperty(Isolate* isolate, Handle<JSObject> target,
+                       Handle<Name> key, Handle<Object> value) {
+  PropertyDescriptor desc;
+  desc.set_writable(true);
+  desc.set_enumerable(true);
+  desc.set_configurable(true);
+  desc.set_value(value);
+  Maybe<bool> success =
+      JSReceiver::DefineOwnProperty(isolate, target, key, &desc, kDontThrow);
+  DCHECK(success.IsJust() && success.FromJust());
+  USE(success);
+}
+
+void CopyProperty(Isolate* isolate, Handle<Object> in, Handle<JSObject> out,
+                  const char* key, bool add_only_if_own) {
+  Factory* factory = isolate->factory();
+  Handle<String> prop = factory->NewStringFromAsciiChecked(key);
+  if (add_only_if_own) {
+    Maybe<bool> maybe_has_own =
+        JSReceiver::HasOwnProperty(Handle<JSReceiver>::cast(in), prop);
+    CHECK(maybe_has_own.IsJust());
+    if (!maybe_has_own.FromJust()) {
+      return;
+    }
+  }
+  MaybeHandle<Object> maybe_value =
+      Object::GetPropertyOrElement(isolate, in, prop);
+  if (!maybe_value.is_null()) {
+    DefineWECProperty(isolate, out, prop, maybe_value.ToHandleChecked());
+  }
+}
+
+}  // namespace
+
+// ecma402/#sec-intl.numberformat.prototype.resolvedoptions
+MaybeHandle<JSObject> NumberFormat::ResolvedOptions(
+    Isolate* isolate, Handle<JSObject> number_format_holder) {
+  Factory* factory = isolate->factory();
+  Handle<JSObject> format;
+  Handle<JSFunction> nullFunc;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, format,
+      Intl::UnwrapReceiver(
+          isolate, number_format_holder, nullFunc, Intl::kNumberFormat,
+          factory->NewStringFromStaticChars("resolvedOptions"), false),
+      JSObject);
+  Handle<Object> resolved;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, resolved,
+      Object::GetPropertyOrElement(isolate, format,
+                                   factory->intl_resolved_symbol()),
+      JSObject);
+  Handle<JSObject> result = factory->NewJSObject(isolate->object_function());
+  CopyProperty(isolate, resolved, result, "locale", false);
+  CopyProperty(isolate, resolved, result, "numberingSystem", false);
+  CopyProperty(isolate, resolved, result, "style", false);
+  CopyProperty(isolate, resolved, result, "useGrouping", false);
+  CopyProperty(isolate, resolved, result, "minimumIntegerDigits", false);
+  CopyProperty(isolate, resolved, result, "minimumFractionDigits", false);
+  CopyProperty(isolate, resolved, result, "maximumFractionDigits", false);
+  Handle<Object> style;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, style,
+      Object::GetPropertyOrElement(isolate, resolved, factory->style_string()),
+      JSObject);
+  Handle<String> style_str;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, style_str,
+                             Object::ToString(isolate, style), JSObject);
+  bool style_is_currency =
+      (0 == strcmp("currency", style_str->ToCString().get()));
+  if (style_is_currency) {
+    CopyProperty(isolate, resolved, result, "currency", false);
+    CopyProperty(isolate, resolved, result, "currencyDisplay", false);
+  }
+  CopyProperty(isolate, resolved, result, "minimumSignificantDigits", true);
+  CopyProperty(isolate, resolved, result, "maximumSignificantDigits", true);
+
+  return result;
+}
+
 icu::Collator* Collator::InitializeCollator(Isolate* isolate,
                                             Handle<String> locale,
                                             Handle<JSObject> options,
