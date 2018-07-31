@@ -29,7 +29,8 @@ namespace torque {
   V(FieldAccessExpression)               \
   V(ElementAccessExpression)             \
   V(AssignmentExpression)                \
-  V(IncrementDecrementExpression)
+  V(IncrementDecrementExpression)        \
+  V(AssumeTypeImpossibleExpression)
 
 #define AST_TYPE_EXPRESSION_NODE_KIND_LIST(V) \
   V(BasicTypeExpression)                      \
@@ -209,7 +210,7 @@ class Ast {
 struct IdentifierExpression : LocationExpression {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(IdentifierExpression)
   IdentifierExpression(SourcePosition pos, std::string name,
-                       std::vector<TypeExpression*> args)
+                       std::vector<TypeExpression*> args = {})
       : LocationExpression(kKind, pos),
         name(std::move(name)),
         generic_arguments(std::move(args)) {}
@@ -333,11 +334,25 @@ struct IncrementDecrementExpression : Expression {
   bool postfix;
 };
 
+struct AssumeTypeImpossibleExpression : Expression {
+  DEFINE_AST_NODE_LEAF_BOILERPLATE(AssumeTypeImpossibleExpression)
+  AssumeTypeImpossibleExpression(SourcePosition pos,
+                                 TypeExpression* excluded_type,
+                                 Expression* expression)
+      : Expression(kKind, pos),
+        excluded_type(excluded_type),
+        expression(expression) {}
+  TypeExpression* excluded_type;
+  Expression* expression;
+};
+
 struct ParameterList {
   std::vector<std::string> names;
   std::vector<TypeExpression*> types;
   bool has_varargs;
   std::string arguments_variable;
+
+  static ParameterList Empty() { return ParameterList{{}, {}, false, ""}; }
 };
 
 struct BasicTypeExpression : TypeExpression {
@@ -544,8 +559,8 @@ struct TryLabelStatement : Statement {
 
 struct BlockStatement : Statement {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(BlockStatement)
-  BlockStatement(SourcePosition pos, bool deferred,
-                 std::vector<Statement*> statements)
+  explicit BlockStatement(SourcePosition pos, bool deferred = false,
+                          std::vector<Statement*> statements = {})
       : Statement(kKind, pos),
         deferred(deferred),
         statements(std::move(statements)) {}
