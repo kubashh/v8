@@ -198,6 +198,39 @@ std::ostream& operator<<(std::ostream&, CheckFloat64HoleMode);
 CheckFloat64HoleMode CheckFloat64HoleModeOf(const Operator*)
     V8_WARN_UNUSED_RESULT;
 
+// The parameters for the CheckClosure nodes. We carry the FeedbackCell
+// pointing to the feedback vector of the target function, as that
+// uniquely identifies a given function in a given native context, as
+// well as the SharedFunctionInfo and the FeedbackVector.
+class CheckClosureParameters final {
+ public:
+  CheckClosureParameters(Handle<FeedbackCell> feedback_cell,
+                         Handle<FeedbackVector> feedback_vector,
+                         Handle<SharedFunctionInfo> shared_info)
+      : feedback_cell_(feedback_cell),
+        feedback_vector_(feedback_vector),
+        shared_info_(shared_info) {}
+
+  Handle<FeedbackCell> feedback_cell() const { return feedback_cell_; }
+  Handle<FeedbackVector> feedback_vector() const { return feedback_vector_; }
+  Handle<SharedFunctionInfo> shared_info() const { return shared_info_; }
+
+ private:
+  Handle<FeedbackCell> const feedback_cell_;
+  Handle<FeedbackVector> const feedback_vector_;
+  Handle<SharedFunctionInfo> const shared_info_;
+};
+
+bool operator==(CheckClosureParameters const&, CheckClosureParameters const&);
+bool operator!=(CheckClosureParameters const&, CheckClosureParameters const&);
+
+size_t hash_value(CheckClosureParameters const&);
+
+std::ostream& operator<<(std::ostream&, CheckClosureParameters const&);
+
+CheckClosureParameters const& CheckClosureParametersOf(Operator const*)
+    V8_WARN_UNUSED_RESULT;
+
 enum class CheckTaggedInputMode : uint8_t {
   kNumber,
   kNumberOrOddball,
@@ -639,6 +672,9 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   const Operator* MapGuard(ZoneHandleSet<Map> maps);
 
   const Operator* CheckBounds(const VectorSlotPair& feedback);
+  const Operator* CheckClosure(Handle<FeedbackCell> feedback_cell,
+                               Handle<FeedbackVector> feedback_vector,
+                               Handle<SharedFunctionInfo> shared_info);
   const Operator* CheckEqualsInternalizedString();
   const Operator* CheckEqualsSymbol();
   const Operator* CheckFloat64Hole(CheckFloat64HoleMode);
