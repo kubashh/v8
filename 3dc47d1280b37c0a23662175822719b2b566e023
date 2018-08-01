@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b14d49ef_95bf3fad",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-01T23:40:17Z",
+      "side": 1,
+      "message": "This is a little be tricky to address. ICU will return some value for getCurrency() even we didn\u0027t set it. Add the following printf and you will see what happen:\nIn CreateICUNumberFormat of src/objects/intl-objects.cc\n   }\n \n   // Set all options.\n+  printf(\"\u003d\u003d\u003d\u003d\u003d\u003d\\n\");\n+  {\n+    std::string curr_str;\n+    currency.toUTF8String(curr_str);\n+    printf(\"currency: \u0027%s\u0027\\n\", curr_str.c_str());\n+  }\n   if (!currency.isEmpty()) {\n     number_format-\u003esetCurrency(currency.getBuffer(), status);\n   }\n+  {\n+    icu::UnicodeString currency(number_format-\u003egetCurrency());\n+    std::string curr_str;\n+    currency.toUTF8String(curr_str);\n+    printf(\"number_format-\u003egetCurrency: \u0027%s\u0027\\n\", curr_str.c_str());\n+  }\n+  printf(\"########\\n\");\n \n   SetNumericSettings(isolate, number_format, options);\n\nand then you compile and the following:\nout/x64.release/d8 --test test/test262/data/harness/sta.js \\\n  test/test262/data/harness/assert.js \\\n  test/test262/harness-adapt.js \\\n  test/test262/data/harness/testIntl.js  \\\n  test/test262/data/harness/propertyHelper.js \n  test/test262/data/test/intl402/NumberFormat/prototype/resolvedOptions/basic.js \\\n  --random-seed\u003d1623333544 --use-strict --nohard-abort\nYou will get\n\u003d\u003d\u003d\u003d\u003d\u003d\ncurrency: \u0027\u0027\nnumber_format-\u003egetCurrency: \u0027USD\u0027\n########\n\u003d\u003d\u003d\u003d\u003d\u003d\ncurrency: \u0027\u0027\nnumber_format-\u003egetCurrency: \u0027USD\u0027\n########",
+      "parentUuid": "42d4b836_b17242bf",
+      "revId": "3dc47d1280b37c0a23662175822719b2b566e023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56b76b7f_6b2e0a35",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-01T18:36:12Z",
       "side": 1,
       "message": "I landed the new version of JSReceiver::CreateDataProperty, you can use that now :)",
+      "revId": "3dc47d1280b37c0a23662175822719b2b566e023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9437d07a_2224c81e",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-01T23:40:17Z",
+      "side": 1,
+      "message": "Nice. Thanks. It is much easier to use now.",
+      "parentUuid": "56b76b7f_6b2e0a35",
       "revId": "3dc47d1280b37c0a23662175822719b2b566e023",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
