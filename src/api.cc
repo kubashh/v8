@@ -4099,6 +4099,30 @@ void v8::RegExp::CheckCast(v8::Value* that) {
                   "Could not convert to regular expression");
 }
 
+Maybe<bool> Value::AsBoolean() const {
+  if (!IsBoolean()) return Nothing<bool>();
+  return Just(Utils::OpenHandle(this)->IsTrue());
+}
+
+Maybe<double> Value::AsNumber() const {
+  if (!IsNumber()) return Nothing<double>();
+  return Just(Utils::OpenHandle(this)->Number());
+}
+
+Maybe<int64_t> Value::AsInteger() const {
+  if (!IsNumber()) return Nothing<int64_t>();
+  return Just(NumberToInt64(*Utils::OpenHandle(this)));
+}
+
+Maybe<int32_t> Value::AsInt32() const {
+  if (!IsNumber()) return Nothing<int32_t>();
+  return Just(NumberToInt32(*Utils::OpenHandle(this)));
+}
+
+Maybe<uint32_t> Value::AsUint32() const {
+  if (!IsNumber()) return Nothing<uint32_t>();
+  return Just(NumberToUint32(*Utils::OpenHandle(this)));
+}
 
 Maybe<bool> Value::BooleanValue(Local<Context> context) const {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(context->GetIsolate());
