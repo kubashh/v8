@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42d4b836_b17242bf",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-01T18:36:12Z",
+      "side": 1,
+      "message": "Why is this required? When would number_format-\u003egetCurrency().isEmpty() be different from style_is_currency?",
+      "revId": "3dc47d1280b37c0a23662175822719b2b566e023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56b76b7f_6b2e0a35",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-01T18:36:12Z",
+      "side": 1,
+      "message": "I landed the new version of JSReceiver::CreateDataProperty, you can use that now :)",
+      "revId": "3dc47d1280b37c0a23662175822719b2b566e023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
