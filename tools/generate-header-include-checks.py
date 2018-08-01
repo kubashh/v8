@@ -31,9 +31,7 @@ AUTO_EXCLUDE = [
   # blacklist of headers we need to fix (https://crbug.com/v8/7965).
   'src/allocation-site-scopes.h',
   'src/arguments.h',
-  'src/builtins/builtins-constructor.h',
   'src/builtins/builtins-utils.h',
-  'src/compiler/allocation-builder.h',
   'src/compiler/graph-visualizer.h',
   'src/compiler/js-context-specialization.h',
   'src/compiler/raw-machine-assembler.h',

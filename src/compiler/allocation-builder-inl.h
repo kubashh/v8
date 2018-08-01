@@ -2,12 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_COMPILER_ALLOCATION_BUILDER_H_
-#define V8_COMPILER_ALLOCATION_BUILDER_H_
+#ifndef V8_COMPILER_ALLOCATION_BUILDER_INL_H_
+#define V8_COMPILER_ALLOCATION_BUILDER_INL_H_
 
+#include "src/compiler/access-builder.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/node.h"
 #include "src/compiler/simplified-operator.h"
+#include "src/objects/map-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -110,4 +112,4 @@ class AllocationBuilder final {
 }  // namespace internal
 }  // namespace v8
 
-#endif  // V8_COMPILER_ALLOCATION_BUILDER_H_
+#endif  // V8_COMPILER_ALLOCATION_BUILDER_INL_H_
