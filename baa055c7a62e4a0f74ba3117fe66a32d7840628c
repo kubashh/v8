@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fd7029a_1530739b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-08-01T13:21:45Z",
+      "side": 1,
+      "message": "nit: for the reland, please use imperative form (\"Apply\" instead of \"Applied\"). For more information, see the style guide: http://go/chromium-commit-messages",
+      "revId": "baa055c7a62e4a0f74ba3117fe66a32d7840628c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
