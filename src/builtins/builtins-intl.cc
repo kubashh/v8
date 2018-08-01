@@ -474,6 +474,14 @@ std::vector<NumberFormatSpan> FlattenRegionsToParts(
   return out_parts;
 }
 
+BUILTIN(NumberFormatPrototypeResolvedOptions) {
+  const char* const method = "Intl.NumberFormat.prototype.resolvedOptions";
+  HandleScope scope(isolate);
+  CHECK_RECEIVER(JSObject, number_format_holder, method);
+  RETURN_RESULT_OR_FAILURE(
+      isolate, NumberFormat::ResolvedOptions(isolate, number_format_holder));
+}
+
 BUILTIN(NumberFormatPrototypeFormatToParts) {
   const char* const method = "Intl.NumberFormat.prototype.formatToParts";
   HandleScope handle_scope(isolate);

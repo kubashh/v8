@@ -2923,6 +2923,9 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                           factory->InternalizeUtf8String("format"),
                           Builtins::kNumberFormatPrototypeFormatNumber, false);
 
+      SimpleInstallFunction(isolate(), prototype, "resolvedOptions",
+                            Builtins::kNumberFormatPrototypeResolvedOptions, 0,
+                            false);
       {
         Handle<SharedFunctionInfo> info = SimpleCreateBuiltinSharedFunctionInfo(
             isolate_, Builtins::kNumberFormatInternalFormatNumber,
