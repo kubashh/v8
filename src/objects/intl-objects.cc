@@ -327,15 +327,18 @@ void SetNumericSettings(Isolate* isolate, icu::DecimalFormat* number_format,
 
 icu::DecimalFormat* CreateICUNumberFormat(Isolate* isolate,
                                           const icu::Locale& icu_locale,
-                                          Handle<JSObject> options) {
+                                          Handle<JSObject> options,
+                                          bool* style_is_currency) {
   // Make formatter from options. Numbering system is added
   // to the locale as Unicode extension (if it was specified at all).
   UErrorCode status = U_ZERO_ERROR;
   icu::DecimalFormat* number_format = nullptr;
+  *style_is_currency = false;
   icu::UnicodeString style;
   icu::UnicodeString currency;
   if (ExtractStringSetting(isolate, options, "style", &style)) {
     if (style == UNICODE_STRING_SIMPLE("currency")) {
+      *style_is_currency = true;
       icu::UnicodeString display;
       ExtractStringSetting(isolate, options, "currency", &currency);
       ExtractStringSetting(isolate, options, "currencyDisplay", &display);
@@ -475,21 +478,25 @@ void SetResolvedNumericSettings(Isolate* isolate, const icu::Locale& icu_locale,
 
 void SetResolvedNumberSettings(Isolate* isolate, const icu::Locale& icu_locale,
                                icu::DecimalFormat* number_format,
-                               Handle<JSObject> resolved) {
+                               Handle<JSObject> resolved,
+                               bool style_is_currency) {
   Factory* factory = isolate->factory();
 
-  // Set resolved currency code in options.currency if not empty.
-  icu::UnicodeString currency(number_format->getCurrency());
-  if (!currency.isEmpty()) {
-    JSObject::SetProperty(
-        isolate, resolved, factory->NewStringFromStaticChars("currency"),
-        factory
-            ->NewStringFromTwoByte(Vector<const uint16_t>(
-                reinterpret_cast<const uint16_t*>(currency.getBuffer()),
-                currency.length()))
-            .ToHandleChecked(),
-        LanguageMode::kSloppy)
-        .Assert();
+  if (style_is_currency) {
+    // Set resolved currency code in options.currency if not empty.
+    icu::UnicodeString currency(number_format->getCurrency());
+    if (!currency.isEmpty()) {
+      printf("set currency \n");
+      JSObject::SetProperty(
+          isolate, resolved, factory->NewStringFromStaticChars("currency"),
+          factory
+              ->NewStringFromTwoByte(Vector<const uint16_t>(
+                  reinterpret_cast<const uint16_t*>(currency.getBuffer()),
+                  currency.length()))
+              .ToHandleChecked(),
+          LanguageMode::kSloppy)
+          .Assert();
+    }
   }
 
   // Ugly hack. ICU doesn't expose numbering system in any way, so we have
@@ -858,6 +865,7 @@ icu::SimpleDateFormat* DateFormat::InitializeDateTimeFormat(
 
   icu::SimpleDateFormat* date_format =
       CreateICUDateFormat(isolate, icu_locale, options);
+
   if (!date_format) {
     // Remove extensions and try again.
     icu::Locale no_extension_locale(icu_locale.getBaseName());
@@ -893,13 +901,15 @@ icu::DecimalFormat* NumberFormat::InitializeNumberFormat(
   icu::Locale icu_locale = CreateICULocale(isolate, locale);
   DCHECK(!icu_locale.isBogus());
 
+  bool style_is_currency;
   icu::DecimalFormat* number_format =
-      CreateICUNumberFormat(isolate, icu_locale, options);
+      CreateICUNumberFormat(isolate, icu_locale, options, &style_is_currency);
+
   if (!number_format) {
     // Remove extensions and try again.
     icu::Locale no_extension_locale(icu_locale.getBaseName());
-    number_format =
-        CreateICUNumberFormat(isolate, no_extension_locale, options);
+    number_format = CreateICUNumberFormat(isolate, no_extension_locale, options,
+                                          &style_is_currency);
 
     if (!number_format) {
       FATAL("Failed to create ICU number format, are ICU data files missing?");
@@ -907,9 +917,10 @@ icu::DecimalFormat* NumberFormat::InitializeNumberFormat(
 
     // Set resolved settings (pattern, numbering system).
     SetResolvedNumberSettings(isolate, no_extension_locale, number_format,
-                              resolved);
+                              resolved, style_is_currency);
   } else {
-    SetResolvedNumberSettings(isolate, icu_locale, number_format, resolved);
+    SetResolvedNumberSettings(isolate, icu_locale, number_format, resolved,
+                              style_is_currency);
   }
 
   CHECK_NOT_NULL(number_format);
@@ -924,6 +935,72 @@ icu::DecimalFormat* NumberFormat::UnpackNumberFormat(Handle<JSObject> obj) {
 void NumberFormat::DeleteNumberFormat(const v8::WeakCallbackInfo<void>& data) {
   delete reinterpret_cast<icu::DecimalFormat*>(data.GetInternalField(0));
   GlobalHandles::Destroy(reinterpret_cast<Object**>(data.GetParameter()));
+}
+
+namespace {
+
+// Step 5 of ecma-402 #sec-intl.numberformat.prototype.resolvedoptions
+Maybe<bool> CopyProperty(Isolate* isolate, Handle<JSObject> in,
+                         Handle<JSObject> out, const char* key) {
+  Factory* factory = isolate->factory();
+  // a. Let p be the Property value of the current row.
+  Handle<String> p = factory->NewStringFromAsciiChecked(key);
+  // b. Let v be the value of nf's internal slot whose name is the Internal Slot
+  // value of the current row.
+  Handle<Object> v;
+  ASSIGN_RETURN_ON_EXCEPTION_VALUE(isolate, v,
+                                   Object::GetPropertyOrElement(isolate, in, p),
+                                   Nothing<bool>());
+  // c. If v is not undefined, then
+  if (v->IsUndefined()) return Just(false);
+  // i. Perform ! CreateDataPropertyOrThrow(options, p, v).
+  LookupIterator it =
+      LookupIterator::PropertyOrElement(isolate, out, p, LookupIterator::OWN);
+  return JSReceiver::CreateDataProperty(&it, v, kDontThrow);
+}
+
+}  // namespace
+
+// ecma402/#sec-intl.numberformat.prototype.resolvedoptions
+MaybeHandle<JSObject> NumberFormat::ResolvedOptions(
+    Isolate* isolate, Handle<JSObject> number_format_holder) {
+  Factory* factory = isolate->factory();
+  Handle<JSObject> format;
+  // 1. Let nf be this value.
+  // 2. If Type(nf) is not Object, throw a TypeError exception.
+  // 3. Let nf be ? UnwrapNumberFormat(nf).
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, format,
+      NumberFormat::Unwrap(isolate, number_format_holder, "resolvedOptions"),
+      JSObject);
+  // 4. Let options be ! ObjectCreate(%ObjectPrototype%).
+  Handle<JSObject> options = factory->NewJSObject(isolate->object_function());
+  // 5. For each row of Table 4, except the header row, in any order, do
+  Handle<Object> resolved_obj;
+  ASSIGN_RETURN_ON_EXCEPTION(
+      isolate, resolved_obj,
+      JSReceiver::GetProperty(isolate, format, factory->intl_resolved_symbol()),
+      JSObject);
+  Handle<JSObject> resolved = Handle<JSObject>::cast(resolved_obj);
+
+  static const std::array<const char*, 11>
+      kResolvedOptionsOfNumberFormatInstances = {"locale",
+                                                 "numberingSystem",
+                                                 "style",
+                                                 "currency",
+                                                 "currencyDisplay",
+                                                 "minimumIntegerDigits",
+                                                 "minimumFractionDigits",
+                                                 "maximumFractionDigits",
+                                                 "minimumSignificantDigits",
+                                                 "maximumSignificantDigits",
+                                                 "useGrouping"};
+  for (const auto& p : kResolvedOptionsOfNumberFormatInstances) {
+    CopyProperty(isolate, resolved, options, p);
+  }
+
+  // 6. Return options.
+  return options;
 }
 
 icu::Collator* Collator::InitializeCollator(Isolate* isolate,
