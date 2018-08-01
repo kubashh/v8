@@ -309,6 +309,9 @@ DEFINE_BOOL(feedback_normalization, false,
 // TODO(jkummerow): This currently adds too much load on the stub cache.
 DEFINE_BOOL_READONLY(internalize_on_the_fly, true,
                      "internalize string keys for generic keyed ICs on the fly")
+DEFINE_BOOL(context_associated_microtask_queue, false,
+            "Use spearate microtask queues for each mutually accessible groups "
+            "of contexts")
 
 // Flags for optimization types.
 DEFINE_BOOL(optimize_for_size, false,
