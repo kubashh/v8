@@ -676,11 +676,31 @@ void GlobalHandles::IterateNewSpaceStrongAndDependentRootsAndIdentifyUnmodified(
   }
 }
 
+namespace {
+
+bool IsDroppableApiObject(Object** o) {
+  Object* object = *o;
+  if (object->IsSmi()) return false;
+  HeapObject* heap_object = HeapObject::cast(object);
+  if (!object->IsJSObject()) return false;
+  JSObject* js_object = JSObject::cast(object);
+  return js_object->WasConstructedFromApiFunction();
+}
+
+}  // namespace
+
 void GlobalHandles::IdentifyWeakUnmodifiedObjects(
     WeakSlotCallback is_unmodified) {
   for (Node* node : new_space_nodes_) {
-    if (node->IsWeak() && !is_unmodified(node->location())) {
+    bool is_modified = true;
+    bool is_droppable_api_object =
+        node->IsWeak() && IsDroppableApiObject(node->location());
+    if (node->IsWeak() && (is_modified = !is_unmodified(node->location()))) {
       node->set_active(true);
+    }
+    if (is_droppable_api_object) {
+      printf("IdentifyWeakUnmodifiedObjects: node: %p modified: %d\n",
+             node->location(), is_modified);
     }
   }
 }
@@ -720,13 +740,22 @@ void GlobalHandles::IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles(
     if ((node->is_independent() || !node->is_active()) &&
         node->IsWeakRetainer() && (node->state() != Node::PENDING)) {
       DCHECK(node->IsPhantomResetHandle() || node->IsPhantomCallback());
-      if (should_reset_handle(isolate_->heap(), node->location())) {
+      bool is_dead = should_reset_handle(isolate_->heap(), node->location());
+      if (is_dead) {
         if (node->IsPhantomResetHandle()) {
+          printf(
+              "IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles: node %p "
+              "resetting\n",
+              node->location());
           node->MarkPending();
           node->ResetPhantomHandle();
           ++number_of_phantom_handle_resets_;
 
         } else if (node->IsPhantomCallback()) {
+          printf(
+              "IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles: node %p "
+              "resetting\n",
+              node->location());
           node->MarkPending();
           node->CollectPhantomCallbackData(&pending_phantom_callbacks_);
         } else {
@@ -734,6 +763,10 @@ void GlobalHandles::IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles(
         }
       } else {
         // Node survived and needs to be visited.
+        printf(
+            "IterateNewSpaceWeakUnmodifiedRootsForPhantomHandles: node %p "
+            "reviving\n",
+            node->location());
         v->VisitRootPointer(Root::kGlobalHandles, node->label(),
                             node->location());
       }
