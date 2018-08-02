@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f3049cd_72cc1b23",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T14:15:40Z",
+      "side": 1,
+      "message": "You\u0027re talking about lastIndexOf changing the prototype, but the prototype can be changed outside of lastIndexOf as well (similarly for the accessors).\n\nI\u0027d just say: \"In the path for sparse arrays, no changes are needed because element accesses are not observable there.\"",
+      "revId": "e0afda428b3b890cfd880c238ab01c9f2226cb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "789e9dc6_fa286002",
+        "filename": "test/mjsunit/array-lastindexof.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T14:15:40Z",
+      "side": 1,
+      "message": "There\u0027s a code style policy of having no more than 80 characters per line. Just remove the directory names and keep only the basename.",
+      "revId": "e0afda428b3b890cfd880c238ab01c9f2226cb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c873752b_7fb4c252",
+        "filename": "test/mjsunit/array-lastindexof.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T14:15:40Z",
+      "side": 1,
+      "message": "If you still have the example with the big array, please add it here as well, even though it works already without your changes.",
+      "revId": "e0afda428b3b890cfd880c238ab01c9f2226cb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
