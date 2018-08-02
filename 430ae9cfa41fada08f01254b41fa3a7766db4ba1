@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51c83785_6e820a9d",
+        "filename": "tools/generate-header-include-checks.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-08-02T07:57:34Z",
+      "side": 1,
+      "message": "nit: does this also work?\nold_content \u003d cc_file.read()",
+      "range": {
+        "startLine": 142,
+        "startChar": 8,
+        "endLine": 142,
+        "endChar": 50
+      },
+      "revId": "430ae9cfa41fada08f01254b41fa3a7766db4ba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
