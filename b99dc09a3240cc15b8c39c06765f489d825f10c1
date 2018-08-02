@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6481bb59_2bfd5421",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-02T14:55:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2258c5fd_84d876dc",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7707028d_0d2d0d6d",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 10
@@ -53,6 +71,42 @@
     },
     {
       "key": {
+        "uuid": "6c27cc71_2378e743",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-02T14:55:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7707028d_0d2d0d6d",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8eace152_01c50455",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-02T14:55:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b77d03ff_020b672a",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28304d1a_69f3af52",
         "filename": "src/objects/js-plural-rules-inl.h",
         "patchSetId": 10
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "4fc359a4_53215f80",
+        "filename": "src/objects/js-plural-rules-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-02T14:55:52Z",
+      "side": 1,
+      "message": "As discussed offline, the macros use `inline` requiring these to be defined in a header file. Leaving as such.",
+      "parentUuid": "28304d1a_69f3af52",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c729f670_a3e1e273",
         "filename": "src/objects/js-plural-rules.cc",
         "patchSetId": 10
@@ -84,6 +156,24 @@
       "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "387ad72d_5d1961a4",
+        "filename": "src/objects/js-plural-rules.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-02T14:55:52Z",
+      "side": 1,
+      "message": "I ended up creating a FixedArray instead.",
+      "parentUuid": "c729f670_a3e1e273",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
