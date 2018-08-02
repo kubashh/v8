@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b371dd64_5c93e38b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T11:41:13Z",
+      "side": 1,
+      "message": "Please capitalize the first letter.",
+      "revId": "4eb100e23d6173993fe1e55f0caa1175e57dc3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e72cdef0_dc82702c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T11:41:13Z",
+      "side": 1,
+      "message": "How about \"Also add more test cases [...].\"",
+      "revId": "4eb100e23d6173993fe1e55f0caa1175e57dc3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f6a0b1a_e5ece3e4",
+        "filename": "src/js/array.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T11:41:13Z",
+      "side": 1,
+      "message": "It looks like the same bug still exists in this code path. Please add tests for this path and fix it as well.",
+      "revId": "4eb100e23d6173993fe1e55f0caa1175e57dc3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dbdf985_cc8c30c9",
+        "filename": "test/mjsunit/array-lastindexof.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T11:41:13Z",
+      "side": 1,
+      "message": "If you want to mention that, then it makes sense to mention the name of the test you took inspiration from. Or just drop the comment.",
+      "revId": "4eb100e23d6173993fe1e55f0caa1175e57dc3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aba8ef89_51a08d3a",
+        "filename": "test/mjsunit/array-lastindexof.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T11:41:13Z",
+      "side": 1,
+      "message": "It\u0027s easier to read this test if you remove the value argument from testfromIndex and make the two checks more explicit:\n\nassertEquals(-1, array.lastIndexOf(5, fromIndex));\nassertEquals(-1, array.lastIndexOf(undefined, fromIndex));\n\nSince you only call the function once then, you can write it in the following idiomatic way (this is called IIFE, immediately invoked function expression):\n\n(function testFromIndex() {\n...\n})();",
+      "revId": "4eb100e23d6173993fe1e55f0caa1175e57dc3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaed0886_f315ca59",
+        "filename": "test/mjsunit/array-lastindexof.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T11:41:13Z",
+      "side": 1,
+      "message": "\"proxy as prototype\" is more accurate than \"Prototype\u0027s proxy\"",
+      "revId": "4eb100e23d6173993fe1e55f0caa1175e57dc3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b3aefe9_a76ac915",
+        "filename": "test/mjsunit/array-lastindexof.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T11:41:13Z",
+      "side": 1,
+      "message": "How about \"Install a prototype that throws on [[Get]]\".",
+      "revId": "4eb100e23d6173993fe1e55f0caa1175e57dc3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d89444b6_59f9bbcc",
+        "filename": "test/mjsunit/array-lastindexof.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T11:41:13Z",
+      "side": 1,
+      "message": "I think one of the two lines is redundant.",
+      "revId": "4eb100e23d6173993fe1e55f0caa1175e57dc3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31ff0655_215f828e",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T11:41:13Z",
+      "side": 1,
+      "message": "Please remove this entry entirely, including the comment.",
+      "revId": "4eb100e23d6173993fe1e55f0caa1175e57dc3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
