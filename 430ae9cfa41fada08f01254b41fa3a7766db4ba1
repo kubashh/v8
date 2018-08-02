@@ -22,6 +22,30 @@
       "revId": "430ae9cfa41fada08f01254b41fa3a7766db4ba1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7446070_83ba08d8",
+        "filename": "tools/generate-header-include-checks.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-08-02T08:43:51Z",
+      "side": 1,
+      "message": "Oh, yes. I thought File.read() would be allowed to return only a part of the file, so you need to call it repeatedly, but hey, this is Python, not C :)\nDone!",
+      "parentUuid": "51c83785_6e820a9d",
+      "range": {
+        "startLine": 142,
+        "startChar": 8,
+        "endLine": 142,
+        "endChar": 50
+      },
+      "revId": "430ae9cfa41fada08f01254b41fa3a7766db4ba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
