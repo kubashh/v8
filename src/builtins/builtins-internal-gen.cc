@@ -331,8 +331,8 @@ class RecordWriteCodeStubAssembler : public CodeStubAssembler {
     StoreNoWriteBarrier(MachineType::PointerRepresentation(),
                         store_buffer_top_addr, new_store_buffer_top);
 
-    Node* test = WordAnd(new_store_buffer_top,
-                         IntPtrConstant(StoreBuffer::kStoreBufferMask));
+    Node* test =
+        WordAnd(new_store_buffer_top, IntPtrConstant(StoreBuffer::mask()));
 
     Label overflow(this);
     Branch(WordEqual(test, IntPtrConstant(0)), &overflow, next);

@@ -35,15 +35,15 @@ void StoreBuffer::SetUp() {
   // aligned to 2x the size.  This lets us use a bit test to detect the end of
   // the area.
   VirtualMemory reservation;
-  if (!AllocVirtualMemory(kStoreBufferSize * 3, heap_->GetRandomMmapAddr(),
+  if (!AllocVirtualMemory(size() * 3, heap_->GetRandomMmapAddr(),
                           &reservation)) {
     heap_->FatalProcessOutOfMemory("StoreBuffer::SetUp");
   }
   Address start = reservation.address();
-  start_[0] = reinterpret_cast<Address*>(::RoundUp(start, kStoreBufferSize));
-  limit_[0] = start_[0] + (kStoreBufferSize / kPointerSize);
+  start_[0] = reinterpret_cast<Address*>(::RoundUp(start, size()));
+  limit_[0] = start_[0] + (size() / kPointerSize);
   start_[1] = limit_[0];
-  limit_[1] = start_[1] + (kStoreBufferSize / kPointerSize);
+  limit_[1] = start_[1] + (size() / kPointerSize);
 
   Address* vm_limit = reinterpret_cast<Address*>(start + reservation.size());
 
@@ -53,11 +53,11 @@ void StoreBuffer::SetUp() {
     DCHECK(reinterpret_cast<Address>(limit_[i]) >= reservation.address());
     DCHECK(start_[i] <= vm_limit);
     DCHECK(limit_[i] <= vm_limit);
-    DCHECK_EQ(0, reinterpret_cast<Address>(limit_[i]) & kStoreBufferMask);
+    DCHECK_EQ(0, reinterpret_cast<Address>(limit_[i]) & mask());
   }
 
   if (!reservation.SetPermissions(reinterpret_cast<Address>(start_[0]),
-                                  kStoreBufferSize * kStoreBuffers,
+                                  size() * kStoreBuffers,
                                   PageAllocator::kReadWrite)) {
     heap_->FatalProcessOutOfMemory("StoreBuffer::SetUp");
   }
@@ -76,6 +76,20 @@ void StoreBuffer::TearDown() {
     lazy_top_[i] = nullptr;
   }
 }
+
+// static
+int StoreBuffer::size() {
+  static int size = 0;
+  if (!size) {
+    // Buffer size should be a multiple of the system page size.
+    size = RoundUp(1 << (11 + kPointerSizeLog2),
+                   static_cast<intptr_t>(CommitPageSize()));
+  }
+  return size;
+}
+
+// static
+int StoreBuffer::mask() { return size() - 1; }
 
 void StoreBuffer::DeleteDuringRuntime(StoreBuffer* store_buffer, Address start,
                                       Address end) {
