@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2258c5fd_84d876dc",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-02T14:26:36Z",
+      "side": 1,
+      "message": "isolate-\u003efactory()-\u003eundefined_value();",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7707028d_0d2d0d6d",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-02T14:26:36Z",
+      "side": 1,
+      "message": "nit: single line return\n\n  if (...) return ...;",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b77d03ff_020b672a",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-02T14:26:36Z",
+      "side": 1,
+      "message": "nit: one line return",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28304d1a_69f3af52",
+        "filename": "src/objects/js-plural-rules-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-02T14:26:36Z",
+      "side": 1,
+      "message": "Currently this is probably the inl.h file isn\u0027t necessary yet since most accesses happen in js-plural-rules.cc anyway.",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c729f670_a3e1e273",
+        "filename": "src/objects/js-plural-rules.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-02T14:26:36Z",
+      "side": 1,
+      "message": "I would go with a C++ vector or something. Given that ArrayList::Elements fully copies the array you might be a tad faster ;)",
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
