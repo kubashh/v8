@@ -142,6 +142,29 @@
     },
     {
       "key": {
+        "uuid": "c735cbb9_3aded71a",
+        "filename": "src/objects/js-plural-rules.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-08-02T15:25:01Z",
+      "side": 1,
+      "message": "I\u0027m not sure if it\u0027s worth the trouble to use unique_ptr for pl/nf (a pointer to unique_ptr) and plural_rules, number_format. 3 deletes can be removed at the expense of a bit more verbose call sites (\u0027get()\u0027 has to be used a few times).\n\nIt\u0027s similar to the way Intl::GetStringOption uses unique_ptr.",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 25
+      },
+      "revId": "b99dc09a3240cc15b8c39c06765f489d825f10c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c729f670_a3e1e273",
         "filename": "src/objects/js-plural-rules.cc",
         "patchSetId": 10
