@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8e38dfb_57e35969",
+        "filename": "src/js/intl.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-02T16:50:14Z",
+      "side": 1,
+      "message": "Since you are adding a C++ version of SetNumberFormatDigitOptions, could you also remove this JS version in the same CL so we won\u0027t have two different implementation of the same function in the system at the same time?",
+      "range": {
+        "startLine": 974,
+        "startChar": 9,
+        "endLine": 974,
+        "endChar": 36
+      },
+      "revId": "1d7ef195915131be6d55802819aa85a6429ce977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f047482_34a2349a",
+        "filename": "src/js/intl.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-02T16:50:14Z",
+      "side": 1,
+      "message": "Could you change this one to call the C++ version in the same CL since you already add one in C++.",
+      "range": {
+        "startLine": 1042,
+        "startChar": 2,
+        "endLine": 1042,
+        "endChar": 29
+      },
+      "revId": "1d7ef195915131be6d55802819aa85a6429ce977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
