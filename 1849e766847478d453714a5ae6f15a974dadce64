@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4269b61_5cbaf77a",
+        "filename": "test/mjsunit/array-lastindexof.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-02T14:54:31Z",
+      "side": 1,
+      "message": "Here we want to check that the getter is called exactly once. So let\u0027s do the following:\n\nlet count \u003d 0;\nObject.defineProperty(array.__proto__, 9998, { get: () \u003d\u003e (++count) });\nArray.prototype.lastIndexOf.call(array, 0);\nassertEquals(1, count);",
+      "revId": "1849e766847478d453714a5ae6f15a974dadce64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
