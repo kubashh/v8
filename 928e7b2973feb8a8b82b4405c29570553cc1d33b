@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "531f7cd3_a9d1058b",
+        "filename": "src/heap/store-buffer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-08-02T22:06:59Z",
+      "side": 0,
+      "message": "Alignment appears to be only to 1x kStoreBufferSize.",
+      "range": {
+        "startLine": 35,
+        "startChar": 16,
+        "endLine": 35,
+        "endChar": 18
+      },
+      "revId": "928e7b2973feb8a8b82b4405c29570553cc1d33b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
