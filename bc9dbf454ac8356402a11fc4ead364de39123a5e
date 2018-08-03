@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "204a4367_35e2e097",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1991,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-03T13:03:08Z",
+      "side": 1,
+      "message": "I\u0027d vote to just pass {icu::DecimalFormat*} here instead. If the ownership is not pass to this function, then there is no real reason to use a unique_ptr in the signature, ownership of the object remains at the caller side.",
+      "range": {
+        "startLine": 1991,
+        "startChar": 22,
+        "endLine": 1991,
+        "endChar": 72
+      },
+      "revId": "bc9dbf454ac8356402a11fc4ead364de39123a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "127bd3f0_cad1fcd4",
+        "filename": "src/objects/js-plural-rules.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-03T13:03:08Z",
+      "side": 1,
+      "message": "If we are transferring ownership of the unique_ptr to the managed object here, then we should use Managed\u003cT\u003e::FromUniquePtr(.... std::move(icu_plural_rules)) here instead.",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 72
+      },
+      "revId": "bc9dbf454ac8356402a11fc4ead364de39123a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e969208_45f39560",
+        "filename": "src/objects/js-plural-rules.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-03T13:03:08Z",
+      "side": 1,
+      "message": "Likewise.",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 183,
+        "endChar": 76
+      },
+      "revId": "bc9dbf454ac8356402a11fc4ead364de39123a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
