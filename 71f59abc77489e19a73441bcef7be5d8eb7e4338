@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d053e428_9bf948fa",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-08-03T12:09:05Z",
+      "side": 1,
+      "message": "Can you please add a comment here describing why you made this change to avoid the recursion/and or verify that it\u0027s actually a problem? Without that, somebody might naively remove this and it will still work, but you won\u0027t catch new infinite recursion cases... or it might not be necessary at all.",
+      "range": {
+        "startLine": 339,
+        "startChar": 24,
+        "endLine": 339,
+        "endChar": 34
+      },
+      "revId": "71f59abc77489e19a73441bcef7be5d8eb7e4338",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37e41046_53a0ed9b",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-08-03T12:09:05Z",
+      "side": 1,
+      "message": "What do you think about adding a bit more syntactic sugar here to make it look more like a traditional switch, e.g.\n\ntypeswitch(number) {\n  case (Smi): {\n    return false;\n  };\n  case (hn : HeapNumber): {\n    let value: float64 \u003d convert\u003cfloat64\u003e(hn);\n    return value !\u003d value;\n  };\n}\n\nI know it\u0027s not unnecessary, but for some reason the \"case {} case {} case {}\" bugs me.",
+      "revId": "71f59abc77489e19a73441bcef7be5d8eb7e4338",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8647d27a_555fbb0a",
+        "filename": "src/torque/ast.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-08-03T12:09:05Z",
+      "side": 1,
+      "message": "This is a bit non-obvious why we need this, could you please add a comment here?",
+      "revId": "71f59abc77489e19a73441bcef7be5d8eb7e4338",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
