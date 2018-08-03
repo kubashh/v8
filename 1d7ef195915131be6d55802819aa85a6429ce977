@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1fc64ac2_ad262343",
+        "filename": "src/js/intl.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-03T08:40:30Z",
+      "side": 1,
+      "message": "Unfortunately the JS version sets a lot of properties on a JSObject, instead this version just sets values in icu so I can\u0027t directly reuse this but going forward we can just use this version as we start porting the other Intl objects.",
+      "parentUuid": "b8e38dfb_57e35969",
+      "range": {
+        "startLine": 974,
+        "startChar": 9,
+        "endLine": 974,
+        "endChar": 36
+      },
+      "revId": "1d7ef195915131be6d55802819aa85a6429ce977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f047482_34a2349a",
         "filename": "src/js/intl.js",
         "patchSetId": 11
