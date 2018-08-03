@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43781423_8aed5501",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "Here\u0027s my suggestion for how to put it (slightly more accurate insofar as it does not \"return a Handle\u003cX\u003e\"):\n\nRETURN_RESULT_OR_FAILURE is used in functions with return type Object* (such as \"RUNTIME_FUNCTION(...) {...}\" or \"BUILTIN(...) {...}\" ) to return either the contents of a MaybeHandle\u003cX\u003e, or the \"exception\" sentinel value.",
+      "range": {
+        "startLine": 171,
+        "startChar": 3,
+        "endLine": 173,
+        "endChar": 60
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1960dadb_55fe463c",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "nit: \"usage\"",
+      "range": {
+        "startLine": 174,
+        "startChar": 11,
+        "endLine": 174,
+        "endChar": 17
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8437a974_437c4086",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "let\u0027s drop this example; such functions should not normally exist.",
+      "range": {
+        "startLine": 183,
+        "startChar": 3,
+        "endLine": 190,
+        "endChar": 4
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2cfeac9_21cdef8f",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "nit: \"usage\"",
+      "range": {
+        "startLine": 249,
+        "startChar": 28,
+        "endLine": 249,
+        "endChar": 34
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e63e2e60_4a88d68b",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "conditionally returns the given value when the given MaybeHandle is empty. It is typically used in functions with return type Maybe\u003cX\u003e or Handle\u003cX\u003e.",
+      "range": {
+        "startLine": 247,
+        "startChar": 29,
+        "endLine": 249,
+        "endChar": 19
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ed99d3a_c5aa29a4",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "conditionally returns the \"exception\" sentinel if the given MaybeHandle is empty; so it can only be used in functions with return type Object*, such as RUNTIME_FUNCTION(...) {...} or BUILTIN(...) {...}.",
+      "range": {
+        "startLine": 285,
+        "startChar": 31,
+        "endLine": 287,
+        "endChar": 58
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a12bca7d_d7c8aec6",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "usage",
+      "range": {
+        "startLine": 288,
+        "startChar": 11,
+        "endLine": 288,
+        "endChar": 17
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d96459d4_4dc52b76",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "let\u0027s drop this example; such functions should not exist usually.",
+      "range": {
+        "startLine": 299,
+        "startChar": 3,
+        "endLine": 308,
+        "endChar": 4
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2c4ae23_e0a89a5e",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "For correctness this doesn\u0027t matter, as you can see from the source: RETURN_ON_EXCEPTION(..., T) is just shorthand for RETURN_ON_EXCEPTION_VALUE(..., MaybeHandle\u003cT\u003e())",
+      "range": {
+        "startLine": 310,
+        "startChar": 3,
+        "endLine": 311,
+        "endChar": 11
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fa67a57_eecc1d3f",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "conditionally returns an empty MaybeHandle\u003cT\u003e if the given MaybeHandle is empty. Use it to return immediately from a function with return type MaybeHandle when an exception was thrown.",
+      "range": {
+        "startLine": 323,
+        "startChar": 23,
+        "endLine": 324,
+        "endChar": 30
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04c20337_68a96bf1",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-03T22:38:01Z",
+      "side": 1,
+      "message": "usage",
+      "range": {
+        "startLine": 325,
+        "startChar": 11,
+        "endLine": 325,
+        "endChar": 17
+      },
+      "revId": "94ca7e3060fe1f86bd5a89a88a3ca89f1ce48d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
