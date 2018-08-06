@@ -4,180 +4,290 @@
 
 // Flags: --expose-wasm
 
-load("test/mjsunit/wasm/wasm-constants.js");
-load("test/mjsunit/wasm/wasm-module-builder.js");
+load('test/mjsunit/wasm/wasm-constants.js');
+load('test/mjsunit/wasm/wasm-module-builder.js');
 
-function instantiateWithFFI(ffi) {
-  var builder = new WasmModuleBuilder();
+const builder = new WasmModuleBuilder();
 
-  var sig_index = kSig_i_dd;
-  builder.addImport("mod", "fun", sig_index);
-  builder.addFunction("main", sig_index)
+const sig_index = kSig_i_dd;
+builder.addImport('mod', 'fun', sig_index);
+builder.addFunction('main', sig_index)
     .addBody([
-      kExprGetLocal, 0,              // --
-      kExprGetLocal, 1,              // --
-      kExprCallFunction, 0, // --
-    ])    // --
+      kExprGetLocal, 0,      // --
+      kExprGetLocal, 1,      // --
+      kExprCallFunction, 0,  // --
+    ])                       // --
     .exportFunc();
 
+function instantiateWithFFI(ffi) {
   return builder.instantiate(ffi);
+}
+
+function asyncInstantiateWithFFI(ffi) {
+  return builder.asyncInstantiate(ffi);
 }
 
 // everything is good.
 (function() {
-  var ffi = {"mod": {fun: function(a, b) { print(a, b); }}}
-  instantiateWithFFI(ffi);
+let ffi = {
+  'mod': {
+    fun: function(a, b) {
+      print(a, b);
+    }
+  }
+};
+instantiateWithFFI(ffi);
 })();
 
+(function() {
+const ffi = {
+  'mod': {
+    fun: function(a, b) {
+      print(a, b);
+    }
+  }
+};
+assertPromiseResult(asyncInstantiateWithFFI(ffi), undefined, assertUnreachable);
+})();
 
 // FFI object should be an object.
 assertThrows(function() {
-  var ffi = 0;
+  const ffi = 0;
   instantiateWithFFI(ffi);
-});
+}, TypeError);
 
+(function() {
+const ffi = 0;
+assertPromiseResult(
+    asyncInstantiateWithFFI(ffi), assertUnreachable,
+    e => assertInstanceof(e, TypeError));
+})();
 
 // FFI object should have a "mod" property.
 assertThrows(function() {
   instantiateWithFFI({});
-});
+}, TypeError);
 
+assertPromiseResult(
+    asyncInstantiateWithFFI({}), assertUnreachable,
+    e => assertInstanceof(e, TypeError));
 
 // FFI object should have a "fun" property.
 assertThrows(function() {
   instantiateWithFFI({mod: {}});
-});
+}, WebAssembly.LinkError);
 
+assertPromiseResult(
+    asyncInstantiateWithFFI({mod: {}}), assertUnreachable,
+    e => assertInstanceof(e, WebAssembly.LinkError));
 
 // "fun" should be a JS function.
 assertThrows(function() {
   instantiateWithFFI({mod: {fun: new Object()}});
-});
+}, WebAssembly.LinkError);
 
+assertPromiseResult(
+    asyncInstantiateWithFFI({mod: {fun: new Object()}}), assertUnreachable,
+    e => assertInstanceof(e, WebAssembly.LinkError));
 
 // "fun" should be a JS function.
 assertThrows(function() {
   instantiateWithFFI({mod: {fun: 0}});
-});
+}, WebAssembly.LinkError);
+
+assertPromiseResult(
+    asyncInstantiateWithFFI({mod: {fun: 0}}), assertUnreachable,
+    e => assertInstanceof(e, WebAssembly.LinkError));
 
 // "fun" should have signature "i_dd"
-assertThrows(function () {
-  var builder = new WasmModuleBuilder();
+assertThrows(function() {
+  let builder = new WasmModuleBuilder();
 
-  var sig_index = kSig_i_dd;
-  builder.addFunction("exp", kSig_i_i)
+  let sig_index = kSig_i_dd;
+  builder.addFunction('exp', kSig_i_i)
+      .addBody([
+        kExprGetLocal,
+        0,
+      ])  // --
+      .exportFunc();
+
+  let exported = builder.instantiate().exports.exp;
+  instantiateWithFFI({mod: {fun: exported}});
+}, WebAssembly.LinkError);
+
+(function() {
+let builder = new WasmModuleBuilder();
+
+let sig_index = kSig_i_dd;
+builder.addFunction('exp', kSig_i_i)
     .addBody([
-      kExprGetLocal, 0,
-    ])    // --
+      kExprGetLocal,
+      0,
+    ])  // --
     .exportFunc();
 
-  var exported = builder.instantiate().exports.exp;
-  instantiateWithFFI({mod: {fun: exported}});
+let exported = builder.instantiate().exports.exp;
+assertPromiseResult(
+    instantiateWithFFI({mod: {fun: exported}}), assertUnreachable,
+    e => assertInstanceof(e, WebAssembly.LinkError));
 });
 
 // "fun" matches signature "i_dd"
-(function () {
-  var builder = new WasmModuleBuilder();
+(function() {
+let builder = new WasmModuleBuilder();
 
-  builder.addFunction("exp", kSig_i_dd)
+builder.addFunction('exp', kSig_i_dd)
     .addBody([
-      kExprI32Const, 33,
-    ])    // --
+      kExprI32Const,
+      33,
+    ])  // --
     .exportFunc();
 
-  var exported = builder.instantiate().exports.exp;
-  var instance = instantiateWithFFI({mod: {fun: exported}});
-  assertEquals(33, instance.exports.main());
+let exported = builder.instantiate().exports.exp;
+let instance = instantiateWithFFI({mod: {fun: exported}});
+assertEquals(33, instance.exports.main());
+// Test also the async variant.
+assertPromiseResult(
+    asyncInstantiateWithFFI({mod: {fun: exported}}), instance => {
+      assertEquals(33, instance.exports.main());
+    });
 })();
 
 (function I64InSignatureThrows() {
-  var builder = new WasmModuleBuilder();
+  let builder = new WasmModuleBuilder();
 
   builder.addMemory(1, 1, true);
-  builder.addFunction("function_with_invalid_signature", kSig_l_ll)
+  builder.addFunction('function_with_invalid_signature', kSig_l_ll)
     .addBody([           // --
       kExprGetLocal, 0,  // --
       kExprGetLocal, 1,  // --
       kExprI64Sub])      // --
     .exportFunc()
 
-  var module = builder.instantiate();
+  let module = builder.instantiate();
 
   assertThrows(function() {
-      module.exports.function_with_invalid_signature(33, 88);
-    }, TypeError);
+    module.exports.function_with_invalid_signature(33, 88);
+  }, TypeError);
+
+  // Test also the async variant.
+  assertPromiseResult(
+      builder.asyncInstantiate(),
+      instance => assertThrows(
+          instance.exports.function_with_invalid_signature, TypeError));
 })();
 
 (function I64ParamsInSignatureThrows() {
-  var builder = new WasmModuleBuilder();
+  let builder = new WasmModuleBuilder();
 
   builder.addMemory(1, 1, true);
-  builder.addFunction("function_with_invalid_signature", kSig_i_l)
-    .addBody([
-       kExprGetLocal, 0,
-       kExprI32ConvertI64
-     ])
-    .exportFunc()
+  builder.addFunction('function_with_invalid_signature', kSig_i_l)
+      .addBody([kExprGetLocal, 0, kExprI32ConvertI64])
+      .exportFunc()
 
-  var module = builder.instantiate();
+          let module = builder.instantiate();
 
   assertThrows(function() {
-      module.exports.function_with_invalid_signature(33);
-    }, TypeError);
+    module.exports.function_with_invalid_signature(33);
+  }, TypeError);
+
+  // Test also the async variant.
+  assertPromiseResult(
+      builder.asyncInstantiate(),
+      instance => assertThrows(
+          instance.exports.function_with_invalid_signature, TypeError));
 })();
 
 (function I64JSImportThrows() {
-  var builder = new WasmModuleBuilder();
-  var sig_index = builder.addType(kSig_i_i);
-  var sig_i64_index = builder.addType(kSig_i_l);
-  var index = builder.addImport("", "func", sig_i64_index);
-  builder.addFunction("main", sig_index)
-    .addBody([
-      kExprGetLocal, 0,
-      kExprI64SConvertI32,
-      kExprCallFunction, index  // --
-    ])        // --
-    .exportFunc();
-  var func = function() {return {};};
-  var main = builder.instantiate({"": {func: func}}).exports.main;
+  let builder = new WasmModuleBuilder();
+  let sig_index = builder.addType(kSig_i_i);
+  let sig_i64_index = builder.addType(kSig_i_l);
+  let index = builder.addImport('', 'func', sig_i64_index);
+  builder.addFunction('main', sig_index)
+      .addBody([
+        kExprGetLocal, 0, kExprI64SConvertI32, kExprCallFunction, index  // --
+      ])                                                                 // --
+      .exportFunc();
+  let func = function() {
+    return {};
+  };
+  let main = builder.instantiate({'': {func: func}}).exports.main;
   assertThrows(function() {
     main(13);
   }, TypeError);
+
+  // Test also the async variant.
+  assertPromiseResult(
+      builder.asyncInstantiate({'': {func: func}}),
+      instance => assertThrows(instance.exports.main, TypeError));
 })();
 
 (function ImportI64ParamWithF64ReturnThrows() {
   // This tests that we generate correct code by using the correct return
   // register. See bug 6096.
-  var builder = new WasmModuleBuilder();
+  let builder = new WasmModuleBuilder();
   builder.addImport('', 'f', makeSig([kWasmI64], [kWasmF64]));
   builder.addFunction('main', kSig_v_v)
       .addBody([kExprI64Const, 0, kExprCallFunction, 0, kExprDrop])
       .exportFunc();
-  var instance = builder.instantiate({'': {f: i => i}});
+  let instance = builder.instantiate({'': {f: i => i}});
 
-  assertThrows(() => instance.exports.main(), TypeError);
+  assertThrows(instance.exports.main, TypeError);
+
+  // Test also the async variant.
+  assertPromiseResult(
+      builder.asyncInstantiate({'': {f: i => i}}),
+      instance => assertThrows(instance.exports.main, TypeError));
 })();
 
 (function ImportI64Return() {
   // This tests that we generate correct code by using the correct return
   // register(s). See bug 6104.
-  var builder = new WasmModuleBuilder();
+  let builder = new WasmModuleBuilder();
   builder.addImport('', 'f', makeSig([], [kWasmI64]));
   builder.addFunction('main', kSig_v_v)
       .addBody([kExprCallFunction, 0, kExprDrop])
       .exportFunc();
-  var instance = builder.instantiate({'': {f: () => 1}});
+  let instance = builder.instantiate({'': {f: () => 1}});
 
-  assertThrows(() => instance.exports.main(), TypeError);
+  assertThrows(instance.exports.main, TypeError);
+
+  // Test also the async variant.
+  assertPromiseResult(
+      builder.asyncInstantiate({'': {f: () => 1}}),
+      instance => assertThrows(instance.exports.main, TypeError));
 })();
 
 (function ImportSymbolToNumberThrows() {
-  var builder = new WasmModuleBuilder();
-  var index = builder.addImport("", "func", kSig_i_v);
-  builder.addFunction("main", kSig_i_v)
+  let builder = new WasmModuleBuilder();
+  let index = builder.addImport('', 'func', kSig_i_v);
+  builder.addFunction('main', kSig_i_v)
       .addBody([kExprCallFunction, 0])
       .exportFunc();
-  var func = () => Symbol();
-  var main = builder.instantiate({"": {func: func}}).exports.main;
-  assertThrows(() => main(), TypeError);
+  let func = () => Symbol();
+  let main = builder.instantiate({'': {func: func}}).exports.main;
+  assertThrows(main, TypeError);
+
+  // Test also the async variant.
+  assertPromiseResult(
+      builder.asyncInstantiate({'': {func: func}}),
+      instance => assertThrows(instance.exports.main, TypeError));
+})();
+
+// Regression test for https://crbug.com/870646.
+(function() {
+const ffi = {
+  mod: {fun: function() {}}
+};
+Object.defineProperty(ffi, 'mod', {
+  get: function() {
+    throw 'my_exception';
+  }
+});
+
+assertThrows(_ => instantiateWithFFI(ffi));
+
+assertPromiseResult(
+    asyncInstantiateWithFFI(ffi), assertUnreachable,
+    e => assertEquals(e, 'my_exception'));
 })();
