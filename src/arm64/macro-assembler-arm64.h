@@ -196,8 +196,7 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // external references, since the code spaces are not guaranteed to be close
   // to each other.
   bool CanUseNearCallOrJump(RelocInfo::Mode rmode) {
-    return rmode != RelocInfo::JS_TO_WASM_CALL &&
-           rmode != RelocInfo::EXTERNAL_REFERENCE;
+    return rmode != RelocInfo::EXTERNAL_REFERENCE;
   }
 
   // Activation support.

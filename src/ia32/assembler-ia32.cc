@@ -190,8 +190,7 @@ void Displacement::init(Label* L, Type type) {
 const int RelocInfo::kApplyMask =
     RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
     RelocInfo::ModeMask(RelocInfo::RUNTIME_ENTRY) |
-    RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE) |
-    RelocInfo::ModeMask(RelocInfo::JS_TO_WASM_CALL);
+    RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE);
 
 bool RelocInfo::IsCodedSpecially() {
   // The deserializer needs to know whether a pointer is specially coded.  Being
@@ -209,18 +208,6 @@ bool RelocInfo::IsInConstantPool() {
 int RelocInfo::GetDeoptimizationId(Isolate* isolate, DeoptimizeKind kind) {
   DCHECK(IsRuntimeEntry(rmode_));
   return Deoptimizer::GetDeoptimizationId(isolate, target_address(), kind);
-}
-
-void RelocInfo::set_js_to_wasm_address(Address address,
-                                       ICacheFlushMode icache_flush_mode) {
-  DCHECK_EQ(rmode_, JS_TO_WASM_CALL);
-  Assembler::set_target_address_at(pc_, constant_pool_, address,
-                                   icache_flush_mode);
-}
-
-Address RelocInfo::js_to_wasm_address() const {
-  DCHECK_EQ(rmode_, JS_TO_WASM_CALL);
-  return Assembler::target_address_at(pc_, constant_pool_);
 }
 
 uint32_t RelocInfo::wasm_call_tag() const {
@@ -3216,12 +3203,6 @@ void Assembler::GrowBuffer() {
   for (auto pos : internal_reference_positions_) {
     int32_t* p = reinterpret_cast<int32_t*>(buffer_ + pos);
     *p += pc_delta;
-  }
-
-  // Relocate js-to-wasm calls (which are encoded pc-relative).
-  for (RelocIterator it(desc, RelocInfo::ModeMask(RelocInfo::JS_TO_WASM_CALL));
-       !it.done(); it.next()) {
-    it.rinfo()->apply(pc_delta);
   }
 
   DCHECK(!buffer_overflow());
