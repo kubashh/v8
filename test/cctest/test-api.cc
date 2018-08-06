@@ -28597,3 +28597,29 @@ TEST(BigIntAPI) {
     CHECK_EQ(word_count, 2);
   }
 }
+
+namespace {
+
+bool wasm_threads_enabled_value = false;
+
+bool MockWasmThreadsEnabledCallback(Local<Context>) {
+  return wasm_threads_enabled_value;
+}
+
+}  // namespace
+
+TEST(TestSetWasmThreadsEnabledCallback) {
+  LocalContext env;
+  v8::Isolate* isolate = env->GetIsolate();
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+  v8::HandleScope scope(isolate);
+  v8::Local<Context> context = Context::New(CcTest::isolate());
+  CHECK_NULL(i_isolate->wasm_threads_enabled_callback());
+  isolate->SetWasmThreadsEnabledCallback(MockWasmThreadsEnabledCallback);
+  CHECK_NOT_NULL(i_isolate->wasm_threads_enabled_callback());
+  wasm_threads_enabled_value = false;
+  CHECK(!i_isolate->wasm_threads_enabled_callback()(context));
+
+  wasm_threads_enabled_value = true;
+  CHECK(i_isolate->wasm_threads_enabled_callback()(context));
+}
