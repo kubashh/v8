@@ -13968,6 +13968,7 @@ void SharedFunctionInfo::SetScript(Handle<SharedFunctionInfo> shared,
   // This is okay because the gc-time processing of these lists can tolerate
   // duplicates.
   if (script_object->IsScript()) {
+    DCHECK(!shared->script()->IsScript());
     Handle<Script> script = Handle<Script>::cast(script_object);
     Handle<WeakFixedArray> list =
         handle(script->shared_function_infos(), isolate);
@@ -13980,7 +13981,12 @@ void SharedFunctionInfo::SetScript(Handle<SharedFunctionInfo> shared,
     }
 #endif
     list->Set(function_literal_id, HeapObjectReference::Weak(*shared));
+
+    // Remove shared function info from root array.
+    Object* noscript_list = isolate->heap()->noscript_shared_function_infos();
+    CHECK(FixedArrayOfWeakCells::cast(noscript_list)->Remove(shared));
   } else {
+    DCHECK(shared->script()->IsScript());
     Handle<Object> list = isolate->factory()->noscript_shared_function_infos();
 
 #ifdef DEBUG
@@ -13996,9 +14002,7 @@ void SharedFunctionInfo::SetScript(Handle<SharedFunctionInfo> shared,
     list = FixedArrayOfWeakCells::Add(isolate, list, shared);
 
     isolate->heap()->SetRootNoScriptSharedFunctionInfos(*list);
-  }
 
-  if (shared->script()->IsScript()) {
     // Remove shared function info from old script's list.
     Script* old_script = Script::cast(shared->script());
 
@@ -14015,10 +14019,6 @@ void SharedFunctionInfo::SetScript(Handle<SharedFunctionInfo> shared,
                                      ReadOnlyRoots(isolate).undefined_value()));
       }
     }
-  } else {
-    // Remove shared function info from root array.
-    Object* list = isolate->heap()->noscript_shared_function_infos();
-    CHECK(FixedArrayOfWeakCells::cast(list)->Remove(shared));
   }
 
   // Finally set new script.
