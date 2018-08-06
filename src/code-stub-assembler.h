@@ -2259,6 +2259,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                     context, receiver, name);
   }
 
+  TNode<Object> SetPropertyStrict(TNode<Context> context,
+                                  TNode<Object> receiver, TNode<Object> key,
+                                  TNode<Object> value) {
+    return CallStub(Builtins::CallableFor(isolate(), Builtins::kSetProperty),
+                    context, receiver, key, value);
+  }
+
   Node* GetMethod(Node* context, Node* object, Handle<Name> name,
                   Label* if_null_or_undefined);
 

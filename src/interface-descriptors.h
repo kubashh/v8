@@ -60,6 +60,7 @@ namespace internal {
   V(StringAt)                         \
   V(StringSubstring)                  \
   V(GetProperty)                      \
+  V(SetProperty)                      \
   V(ArgumentAdaptor)                  \
   V(ApiCallback)                      \
   V(ApiGetter)                        \
@@ -649,6 +650,12 @@ class GetPropertyDescriptor final : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kObject, kKey)
   DECLARE_DEFAULT_DESCRIPTOR(GetPropertyDescriptor, CallInterfaceDescriptor)
+};
+
+class SetPropertyDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kReceiver, kKey, kValue)
+  DECLARE_DEFAULT_DESCRIPTOR(SetPropertyDescriptor, CallInterfaceDescriptor)
 };
 
 class TypeofDescriptor : public CallInterfaceDescriptor {
