@@ -269,9 +269,9 @@ class WasmFunctionWrapper : private compiler::GraphAndBuilders {
         inner_code_node_,
         kPointerSize == 8
             ? common()->RelocatableInt64Constant(address,
-                                                 RelocInfo::JS_TO_WASM_CALL)
-            : common()->RelocatableInt32Constant(static_cast<int>(address),
-                                                 RelocInfo::JS_TO_WASM_CALL));
+                                                 RelocInfo::EXTERNAL_REFERENCE)
+            : common()->RelocatableInt32Constant(
+                  static_cast<int>(address), RelocInfo::EXTERNAL_REFERENCE));
   }
 
   const compiler::Operator* IntPtrConstant(intptr_t value) {
