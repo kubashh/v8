@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ce97da02_60c0b3b0",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2121,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-06T14:57:17Z",
+      "side": 1,
+      "message": "use kNoneSlot directly here.",
+      "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ae713b0_c02e84ef",
         "filename": "src/interpreter/bytecodes.h",
         "patchSetId": 2
@@ -67,6 +84,74 @@
         "endLine": 252,
         "endChar": 22
       },
+      "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59b0c394_5a47111e",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2399,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-06T14:57:17Z",
+      "side": 1,
+      "message": "If we stick to calling the RT function directly we won\u0027t need this code I think (Or you just keep the negated version here as debug assertion).",
+      "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "881f2f1f_eb26111d",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-06T14:57:17Z",
+      "side": 1,
+      "message": "Boilerplate is quite confusing in this case.\n\nLet\u0027s rename Boilerplate to LiteralHelper, same for the helper structs.\nObjectBoilerplate \u003d\u003e ObjectLiteralHelper\nArrayBoilerplate \u003d\u003e ArrayLiteralHelper",
+      "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53a4e9a8_ac5b9147",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-06T14:57:17Z",
+      "side": 1,
+      "message": "maybe for a separte CL: could you rename kNoHints to kDeep and kObjectIsShallow \u003d\u003e kShallow",
+      "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a1c5a9b_c4bac0b3",
+        "filename": "src/runtime/runtime-literals.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-06T14:57:17Z",
+      "side": 1,
+      "message": "You can drop this comment by now.",
       "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
