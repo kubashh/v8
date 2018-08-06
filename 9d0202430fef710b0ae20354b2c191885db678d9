@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0170fc25_415ee109",
+        "filename": "test/mjsunit/wasm/ffi-error.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-08-06T16:32:04Z",
+      "side": 1,
+      "message": "Can we wrap this builder in a new function, called \"CreateDefaultBuilder\" or something? Otherwise this is confusing because functions below define their own \"builder\".",
+      "revId": "9d0202430fef710b0ae20354b2c191885db678d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a5a7e3d_8cdef425",
+        "filename": "test/mjsunit/wasm/ffi-error.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-08-06T16:32:04Z",
+      "side": 1,
+      "message": "I like that we now test everything one synchronous and once asynchronous, but this creates a lot of code duplication (like this ffi object).\nCan we create a new helper function which tests both paths (sync and async) and checks the same things on the result? The interface would probably look similar to assertPromiseResult, instead that it receives a builder as first argument. It then checks the synchronous case manually and calls assertPromiseResult to test the asynchronous part.",
+      "revId": "9d0202430fef710b0ae20354b2c191885db678d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
