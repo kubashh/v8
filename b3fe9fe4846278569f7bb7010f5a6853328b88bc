@@ -46,6 +46,30 @@
       "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dda38add_539fec5e",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-06T14:46:40Z",
+      "side": 1,
+      "message": "interpreting BoilerplateDescription in the runtime SGTM.",
+      "parentUuid": "0533f9e8_ed6f80ce",
+      "range": {
+        "startLine": 252,
+        "startChar": 17,
+        "endLine": 252,
+        "endChar": 22
+      },
+      "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
