@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ae713b0_c02e84ef",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-06T14:41:00Z",
+      "side": 1,
+      "message": "By changing this the operand goes from unsigned (i.e., 0-255 for a single byte), to signed (0-127 for valid slots) which means we will more often have to scale up the bytecode (i.e., to 16bit or 32bit bytecodes). This will probably have a significant impact on bytecode memory usage in the normal cases, since this would impact all CreateObjectLiteral operations, not just those in one-shot code.\n\nCould we do something else? Presumably we shouldn\u0027t be building boilerplates for one-shot object literals either? Would it make more sense to do something similar to your previous CL and explicitly call a runtime function to create the object literal rather than calling the feedback collecting bytecode handler?",
+      "range": {
+        "startLine": 252,
+        "startChar": 17,
+        "endLine": 252,
+        "endChar": 22
+      },
+      "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
