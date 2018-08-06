@@ -415,7 +415,11 @@ class PrototypeInfo::BodyDescriptor final : public BodyDescriptorBase {
   template <typename ObjectVisitor>
   static inline void IterateBody(Map* map, HeapObject* obj, int object_size,
                                  ObjectVisitor* v) {
-    IteratePointers(obj, HeapObject::kHeaderSize, kObjectCreateMapOffset, v);
+    STATIC_ASSERT(kJSModuleNamespaceOffset == HeapObject::kHeaderSize);
+    IterateMaybeWeakPointer(obj, kJSModuleNamespaceOffset, v);
+    STATIC_ASSERT(kPrototypeUsersOffset ==
+                  kJSModuleNamespaceOffset + kPointerSize);
+    IteratePointers(obj, kPrototypeUsersOffset, kObjectCreateMapOffset, v);
     IterateMaybeWeakPointer(obj, kObjectCreateMapOffset, v);
     IteratePointers(obj, kObjectCreateMapOffset + kPointerSize, object_size, v);
   }

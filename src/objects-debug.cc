@@ -1555,7 +1555,13 @@ void Module::ModuleVerify(Isolate* isolate) {
 
 void PrototypeInfo::PrototypeInfoVerify(Isolate* isolate) {
   CHECK(IsPrototypeInfo());
-  CHECK(weak_cell()->IsWeakCell() || weak_cell()->IsUndefined(isolate));
+  MaybeObject* module_ns = module_namespace();
+  HeapObject* heap_object;
+  CHECK(module_ns->IsClearedWeakHeapObject() ||
+        (module_ns->ToWeakHeapObject(&heap_object) &&
+         heap_object->IsJSModuleNamespace()) ||
+        (module_ns->ToStrongHeapObject(&heap_object) &&
+         heap_object->IsUndefined(isolate)));
   if (prototype_users()->IsWeakArrayList()) {
     PrototypeUsers::Verify(WeakArrayList::cast(prototype_users()));
   } else {

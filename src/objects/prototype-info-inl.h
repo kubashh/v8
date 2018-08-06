@@ -34,7 +34,7 @@ bool PrototypeInfo::HasObjectCreateMap() {
   return cache->IsWeakHeapObject();
 }
 
-ACCESSORS(PrototypeInfo, weak_cell, Object, kWeakCellOffset)
+WEAK_ACCESSORS(PrototypeInfo, module_namespace, kJSModuleNamespaceOffset)
 ACCESSORS(PrototypeInfo, prototype_users, Object, kPrototypeUsersOffset)
 WEAK_ACCESSORS(PrototypeInfo, object_create_map, kObjectCreateMapOffset)
 SMI_ACCESSORS(PrototypeInfo, registry_slot, kRegistrySlotOffset)
