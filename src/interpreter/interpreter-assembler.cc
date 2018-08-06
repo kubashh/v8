@@ -647,8 +647,8 @@ Node* InterpreterAssembler::BytecodeOperandIntrinsicId(int operand_index) {
 }
 
 Node* InterpreterAssembler::LoadConstantPoolEntry(Node* index) {
-  Node* constant_pool = LoadObjectField(BytecodeArrayTaggedPointer(),
-                                        BytecodeArray::kConstantPoolOffset);
+  TNode<FixedArray> constant_pool = CAST(LoadObjectField(
+      BytecodeArrayTaggedPointer(), BytecodeArray::kConstantPoolOffset));
   return LoadFixedArrayElement(constant_pool, UncheckedCast<IntPtrT>(index),
                                LoadSensitivity::kCritical);
 }
@@ -1693,7 +1693,7 @@ Node* InterpreterAssembler::ImportRegisterFile(Node* array,
     GotoIfNot(UintPtrLessThan(index, register_count), &done_loop);
 
     Node* array_index = IntPtrAdd(formal_parameter_count, index);
-    Node* value = LoadFixedArrayElement(array, array_index);
+    Node* value = LoadFixedArrayElement(CAST(array), array_index);
 
     Node* reg_index = IntPtrSub(IntPtrConstant(Register(0).ToOperand()), index);
     StoreRegister(value, reg_index);

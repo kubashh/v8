@@ -579,8 +579,8 @@ void AccessorAssembler::HandleLoadICSmiHandlerCase(
     Node* module =
         LoadObjectField(p->receiver, JSModuleNamespace::kModuleOffset,
                         MachineType::TaggedPointer());
-    Node* exports = LoadObjectField(module, Module::kExportsOffset,
-                                    MachineType::TaggedPointer());
+    TNode<ObjectHashTable> exports = CAST(LoadObjectField(
+        module, Module::kExportsOffset, MachineType::TaggedPointer()));
     Node* cell = LoadFixedArrayElement(exports, index);
     // The handler is only installed for exports that exist.
     CSA_ASSERT(this, IsCell(cell));
@@ -1768,13 +1768,13 @@ void AccessorAssembler::EmitElementLoad(
   BIND(&if_fast_packed);
   {
     Comment("fast packed elements");
-    exit_point->Return(LoadFixedArrayElement(elements, intptr_index));
+    exit_point->Return(LoadFixedArrayElement(CAST(elements), intptr_index));
   }
 
   BIND(&if_fast_holey);
   {
     Comment("fast holey elements");
-    Node* element = LoadFixedArrayElement(elements, intptr_index);
+    Node* element = LoadFixedArrayElement(CAST(elements), intptr_index);
     GotoIf(WordEqual(element, TheHoleConstant()), if_hole);
     exit_point->Return(element);
   }
