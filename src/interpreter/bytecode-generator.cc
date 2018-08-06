@@ -2116,6 +2116,10 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
     return;
   }
 
+  // No FeedbackSlot for literals in one shot code.
+  int literal_index = ShouldOptimizeAsOneShot()
+                          ? FeedbackSlot::None().ToInt()
+                          : feedback_index(feedback_spec()->AddLiteralSlot());
   // Deep-copy the literal boilerplate.
   uint8_t flags = CreateObjectLiteralFlags::Encode(
       expr->ComputeFlags(), expr->IsFastCloningSupported());
@@ -2158,7 +2162,6 @@ void BytecodeGenerator::VisitObjectLiteral(ObjectLiteral* expr) {
     // TODO(cbruni): Directly generate runtime call for literals we cannot
     // optimize once the CreateShallowObjectLiteral stub is in sync with the TF
     // optimizations.
-    int literal_index = feedback_index(feedback_spec()->AddLiteralSlot());
     builder()->CreateObjectLiteral(entry, literal_index, flags, literal);
   }
 

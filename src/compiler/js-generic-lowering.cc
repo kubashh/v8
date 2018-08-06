@@ -484,6 +484,7 @@ void JSGenericLowering::LowerJSCreateTypedArray(Node* node) {
 
 void JSGenericLowering::LowerJSCreateLiteralArray(Node* node) {
   CreateLiteralParameters const& p = CreateLiteralParametersOf(node->op());
+  DCHECK(!p.feedback().IsNone());
   CallDescriptor::Flags flags = FrameStateFlagForCall(node);
   node->InsertInput(zone(), 0, jsgraph()->HeapConstant(p.feedback().vector()));
   node->InsertInput(zone(), 1, jsgraph()->SmiConstant(p.feedback().index()));
@@ -525,7 +526,8 @@ void JSGenericLowering::LowerJSCreateLiteralObject(Node* node) {
   // without elements up to the number of properties that the stubs can handle.
   if ((p.flags() & AggregateLiteral::kIsShallow) != 0 &&
       p.length() <=
-          ConstructorBuiltins::kMaximumClonedShallowObjectProperties) {
+          ConstructorBuiltins::kMaximumClonedShallowObjectProperties &&
+      !p.feedback().IsNone()) {
     Callable callable =
         Builtins::CallableFor(isolate(), Builtins::kCreateShallowObjectLiteral);
     ReplaceWithStubCall(node, callable, flags);
@@ -551,6 +553,7 @@ void JSGenericLowering::LowerJSCreateEmptyLiteralObject(Node* node) {
 
 void JSGenericLowering::LowerJSCreateLiteralRegExp(Node* node) {
   CreateLiteralParameters const& p = CreateLiteralParametersOf(node->op());
+  DCHECK(!p.feedback().IsNone());
   CallDescriptor::Flags flags = FrameStateFlagForCall(node);
   Callable callable =
       Builtins::CallableFor(isolate(), Builtins::kCreateRegExpLiteral);
