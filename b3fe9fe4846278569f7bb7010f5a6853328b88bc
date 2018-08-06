@@ -22,6 +22,30 @@
       "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0533f9e8_ed6f80ce",
+        "filename": "src/interpreter/bytecodes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-06T14:44:53Z",
+      "side": 1,
+      "message": "Right, we should never create boilerplates in one-shot code.\n\nI had in mind was to start from an empty object and start adding properties with bytecode one by one.\nBut it might be slightly smaller to quickly interpret the BoilerplateDescription in the runtime insted.",
+      "parentUuid": "7ae713b0_c02e84ef",
+      "range": {
+        "startLine": 252,
+        "startChar": 17,
+        "endLine": 252,
+        "endChar": 22
+      },
+      "revId": "b3fe9fe4846278569f7bb7010f5a6853328b88bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
