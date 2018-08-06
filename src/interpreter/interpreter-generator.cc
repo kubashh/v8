@@ -2381,19 +2381,22 @@ IGNITION_HANDLER(CreateEmptyArrayLiteral, InterpreterAssembler) {
   Dispatch();
 }
 
-// CreateObjectLiteral <element_idx> <literal_idx> <flags>
+// CreateObjectLiteral <element_idx> <literal_imm> <flags>
 //
 // Creates an object literal for literal index <literal_idx> with
 // CreateObjectLiteralFlags <flags> and constant elements in <element_idx>.
 IGNITION_HANDLER(CreateObjectLiteral, InterpreterAssembler) {
   Node* feedback_vector = LoadFeedbackVector();
-  Node* slot_id = BytecodeOperandIdx(1);
+  Node* slot_id = BytecodeOperandImm(1);
   Node* bytecode_flags = BytecodeOperandFlag(2);
 
-  // Check if we can do a fast clone or have to call the runtime.
+  // Check if we can do a fast clone and the feedbackslot is valid  or have to
+  // call the runtime.
   Label if_fast_clone(this), if_not_fast_clone(this, Label::kDeferred);
-  Branch(IsSetWord32<CreateObjectLiteralFlags::FastCloneSupportedBit>(
-             bytecode_flags),
+  Branch(Word32And(
+             IsSetWord32<CreateObjectLiteralFlags::FastCloneSupportedBit>(
+                 bytecode_flags),
+             Word32NotEqual(slot_id, Int32Constant(FeedbackSlot::kNoneSlot))),
          &if_fast_clone, &if_not_fast_clone);
 
   BIND(&if_fast_clone);

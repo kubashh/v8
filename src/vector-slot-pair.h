@@ -23,6 +23,7 @@ class V8_EXPORT_PRIVATE VectorSlotPair {
       : vector_(vector), slot_(slot) {}
 
   bool IsValid() const { return !vector_.is_null() && !slot_.IsInvalid(); }
+  bool IsNone() const { return !vector_.is_null() && slot_.IsNone(); }
 
   Handle<FeedbackVector> vector() const { return vector_; }
   FeedbackSlot slot() const { return slot_; }

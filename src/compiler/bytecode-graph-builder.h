@@ -63,6 +63,7 @@ class BytecodeGraphBuilder {
   // Helper function for creating a pair containing type feedback vector and
   // a feedback slot.
   VectorSlotPair CreateVectorSlotPair(int slot_id);
+  VectorSlotPair CreateVectorSlotPairNone();
 
   void set_environment(Environment* env) { environment_ = env; }
   const Environment* environment() const { return environment_; }

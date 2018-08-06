@@ -249,7 +249,7 @@ namespace interpreter {
     OperandType::kIdx, OperandType::kFlag8)                                    \
   V(CreateEmptyArrayLiteral, AccumulatorUse::kWrite, OperandType::kIdx)        \
   V(CreateObjectLiteral, AccumulatorUse::kNone, OperandType::kIdx,             \
-    OperandType::kIdx, OperandType::kFlag8, OperandType::kRegOut)              \
+    OperandType::kImm, OperandType::kFlag8, OperandType::kRegOut)              \
   V(CreateEmptyObjectLiteral, AccumulatorUse::kWrite)                          \
   V(CloneObject, AccumulatorUse::kWrite, OperandType::kReg,                    \
     OperandType::kFlag8, OperandType::kIdx)                                    \

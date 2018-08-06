@@ -3727,6 +3727,11 @@ TEST(AllocationSiteCreation) {
 
   // No new AllocationSites created on the second invocation.
   CheckNumberOfAllocations(heap, "f9(); ", 0, 0);
+
+  // No allocation sites for literals in an iife even if it has array
+  // subliterals
+  CheckNumberOfAllocations(
+      heap, "(function f10() { return {a:[1], b:[2]}; })();", 0, 0);
 }
 
 TEST(CellsInOptimizedCodeAreWeak) {

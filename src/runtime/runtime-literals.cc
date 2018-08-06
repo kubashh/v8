@@ -467,20 +467,44 @@ Handle<Object> InnerCreateBoilerplate(Isolate* isolate,
   }
 }
 
-template <typename Boilerplate>
-MaybeHandle<JSObject> CreateLiteral(Isolate* isolate,
-                                    Handle<FeedbackVector> vector,
-                                    int literals_index,
-                                    Handle<HeapObject> description, int flags) {
-  FeedbackSlot literals_slot(FeedbackVector::ToSlot(literals_index));
-  CHECK(literals_slot.ToInt() < vector->length());
-  Handle<Object> literal_site(vector->Get(literals_slot)->ToObject(), isolate);
+inline DeepCopyHints DecodeCopyHints(int flags) {
   DeepCopyHints copy_hints =
       (flags & AggregateLiteral::kIsShallow) ? kObjectIsShallow : kNoHints;
   if (FLAG_track_double_fields && !FLAG_unbox_double_fields) {
     // Make sure we properly clone mutable heap numbers on 32-bit platforms.
     copy_hints = kNoHints;
   }
+  return copy_hints;
+}
+
+template <typename Boilerplate>
+MaybeHandle<JSObject> CreateLiteralWithoutAllocationSite(
+    Isolate* isolate, Handle<HeapObject> description, int flags) {
+  Handle<JSObject> boilerplate =
+      Boilerplate::Create(isolate, description, flags, NOT_TENURED);
+  DeepCopyHints copy_hints = DecodeCopyHints(flags);
+  if (copy_hints == kNoHints) {
+    DeprecationUpdateContext update_context(isolate);
+    RETURN_ON_EXCEPTION(isolate, DeepWalk(boilerplate, &update_context),
+                        JSObject);
+  }
+  return boilerplate;
+}
+
+template <typename Boilerplate>
+MaybeHandle<JSObject> CreateLiteral(Isolate* isolate,
+                                    Handle<FeedbackVector> vector,
+                                    int literals_index,
+                                    Handle<HeapObject> description, int flags) {
+  if (FeedbackSlot(literals_index).IsNone()) {
+    return CreateLiteralWithoutAllocationSite<Boilerplate>(isolate, description,
+                                                           flags);
+  }
+
+  FeedbackSlot literals_slot(FeedbackVector::ToSlot(literals_index));
+  CHECK(literals_slot.ToInt() < vector->length());
+  Handle<Object> literal_site(vector->Get(literals_slot)->ToObject(), isolate);
+  DeepCopyHints copy_hints = DecodeCopyHints(flags);
 
   Handle<AllocationSite> site;
   Handle<JSObject> boilerplate;
@@ -497,14 +521,8 @@ MaybeHandle<JSObject> CreateLiteral(Isolate* isolate,
     if (!needs_initial_allocation_site &&
         IsUninitializedLiteralSite(*literal_site)) {
       PreInitializeLiteralSite(vector, literals_slot);
-      boilerplate =
-          Boilerplate::Create(isolate, description, flags, NOT_TENURED);
-      if (copy_hints == kNoHints) {
-        DeprecationUpdateContext update_context(isolate);
-        RETURN_ON_EXCEPTION(isolate, DeepWalk(boilerplate, &update_context),
-                            JSObject);
-      }
-      return boilerplate;
+      return CreateLiteralWithoutAllocationSite<Boilerplate>(
+          isolate, description, flags);
     } else {
       boilerplate = Boilerplate::Create(isolate, description, flags, TENURED);
     }

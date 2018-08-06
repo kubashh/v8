@@ -570,6 +570,10 @@ Node* BytecodeGraphBuilder::BuildLoadNativeContextField(int index) {
   return result;
 }
 
+VectorSlotPair BytecodeGraphBuilder::CreateVectorSlotPairNone() {
+  return VectorSlotPair(feedback_vector(), FeedbackSlot::None());
+}
+
 VectorSlotPair BytecodeGraphBuilder::CreateVectorSlotPair(int slot_id) {
   return VectorSlotPair(feedback_vector(), FeedbackVector::ToSlot(slot_id));
 }
@@ -1606,8 +1610,10 @@ void BytecodeGraphBuilder::VisitCreateObjectLiteral() {
       ObjectBoilerplateDescription::cast(
           bytecode_iterator().GetConstantForIndexOperand(0)),
       isolate());
-  int const slot_id = bytecode_iterator().GetIndexOperand(1);
-  VectorSlotPair pair = CreateVectorSlotPair(slot_id);
+  int const slot_id = bytecode_iterator().GetImmediateOperand(1);
+  VectorSlotPair pair = (FeedbackSlot(slot_id).IsNone())
+                            ? CreateVectorSlotPairNone()
+                            : CreateVectorSlotPair(slot_id);
   int bytecode_flags = bytecode_iterator().GetFlagOperand(2);
   int literal_flags =
       interpreter::CreateObjectLiteralFlags::FlagsBits::decode(bytecode_flags);

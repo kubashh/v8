@@ -972,6 +972,9 @@ class FeedbackSlot {
 
   static FeedbackSlot Invalid() { return FeedbackSlot(); }
   bool IsInvalid() const { return id_ == kInvalidSlot; }
+  // Empty, void, Dummy, DontUse ?
+  static FeedbackSlot None() { return FeedbackSlot(kNoneSlot); }
+  bool IsNone() const { return id_ == kNoneSlot; }
 
   bool operator==(FeedbackSlot that) const { return this->id_ == that.id_; }
   bool operator!=(FeedbackSlot that) const { return !(*this == that); }
@@ -979,9 +982,10 @@ class FeedbackSlot {
   friend size_t hash_value(FeedbackSlot slot) { return slot.ToInt(); }
   friend std::ostream& operator<<(std::ostream& os, FeedbackSlot);
 
+  static const int kNoneSlot = -2;
+
  private:
   static const int kInvalidSlot = -1;
-
   int id_;
 };
 
