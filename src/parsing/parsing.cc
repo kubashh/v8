@@ -27,6 +27,16 @@ bool ParseProgram(ParseInfo* info, Isolate* isolate) {
   Handle<String> source(String::cast(info->script()->source()), isolate);
   isolate->counters()->total_parse_size()->Increment(source->length());
   std::unique_ptr<ScannerStream> stream(ScannerStream::For(isolate, source));
+  // if (stream->isBuffered()) {
+  //   std::cout << "Created Buffered\n";
+  // } else {
+  //   std::cout << "Created UnBuffered\n";
+  // }
+  // if (stream->can_access_heap()) {
+  //   std::cout << "Created HeapStream\n";
+  // } else {
+  //   std::cout << "Created Off Heap\n";
+  // }
   info->set_character_stream(std::move(stream));
 
   Parser parser(info);

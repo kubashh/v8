@@ -10,6 +10,8 @@
 
 #include <cmath>
 
+#include <iostream>
+
 #include "src/ast/ast-value-factory.h"
 #include "src/char-predicates-inl.h"
 #include "src/conversions-inl.h"
@@ -72,15 +74,16 @@ int Scanner::LiteralBuffer::NewCapacity(int min_capacity) {
   return new_capacity;
 }
 
-void Scanner::LiteralBuffer::ExpandBuffer() {
-  Vector<byte> new_store = Vector<byte>::New(NewCapacity(kInitialCapacity));
+void Scanner::LiteralBuffer::ExpandBuffer(int min) {
+  Vector<byte> new_store =
+      Vector<byte>::New(NewCapacity(Max(min, kInitialCapacity)));
   MemCopy(new_store.start(), backing_store_.start(), position_);
   backing_store_.Dispose();
   backing_store_ = new_store;
 }
 
 void Scanner::LiteralBuffer::ConvertToTwoByte() {
-  DCHECK(is_one_byte_);
+  DCHECK(is_one_byte());
   Vector<byte> new_store;
   int new_content_size = position_ * kUC16Size;
   if (new_content_size >= backing_store_.length()) {
@@ -100,12 +103,12 @@ void Scanner::LiteralBuffer::ConvertToTwoByte() {
     backing_store_ = new_store;
   }
   position_ = new_content_size;
-  is_one_byte_ = false;
+  is_one_byte_ = CharWidth::TWO_BYTE;
 }
 
 void Scanner::LiteralBuffer::AddCharSlow(uc32 code_unit) {
   if (position_ >= backing_store_.length()) ExpandBuffer();
-  if (is_one_byte_) {
+  if (is_one_byte()) {
     if (code_unit <= static_cast<uc32>(unibrow::Latin1::kMaxChar)) {
       backing_store_[position_] = static_cast<byte>(code_unit);
       position_ += kOneByteSize;
@@ -186,11 +189,21 @@ Scanner::Scanner(UnicodeCache* unicode_cache)
       has_line_terminator_after_next_(false),
       found_html_comment_(false),
       allow_harmony_bigint_(false),
-      allow_harmony_numeric_separator_(false) {}
+      allow_harmony_numeric_separator_(false),
+      has_unbuffered_offheap_stream(false) {}
 
 void Scanner::Initialize(CharacterStream<uint16_t>* source, bool is_module) {
   DCHECK_NOT_NULL(source);
   source_ = source;
+  has_unbuffered_offheap_stream =
+      (!source_->can_access_heap()) && (!source_->isBuffered());
+
+  // if (has_unbuffered_offheap_stream) {
+  //   std::cout << "This stream is good\n";
+  // } else {
+  //   std::cout << "This stream is bad\n";
+  // }
+
   is_module_ = is_module;
   // Need to capture identifiers in order to recognize "get" and "set"
   // in object literals.
@@ -1006,8 +1019,45 @@ Token::Value Scanner::ScanString() {
       }
       continue;
     }
-    AddLiteralCharAdvance();
+
+    // Stop only at one of the handled cases
+    if (has_unbuffered_offheap_stream) {
+      // AddLiteralCharAdvance();
+      AddLiteralCharAdvanceUntil([&quote](uc32 c0) {
+        return c0 == quote || unibrow::IsStringLiteralLineTerminator(c0) ||
+               c0 == '\\';
+      });
+      // TODO: split into two loops that first only check latin-1 cases until
+      // we find the first utf-16 char
+      // AddLiteralCharAdvance();
+    } else {
+      AddLiteralCharAdvance();
+    }
   }
+
+
+  // while (true) {
+  //   if (c0_ == quote) {
+  //     literal.Complete();
+  //     Advance();
+  //     return Token::STRING;
+  //   }
+  //   if (c0_ == kEndOfInput || unibrow::IsStringLiteralLineTerminator(c0_)) {
+  //     std::cout << "Error\n";
+  //     return Token::ILLEGAL;
+  //   }
+  //   if (c0_ == '\\') {
+  //     Advance();
+  //     // TODO(verwaest): Check whether we can remove the additional check.
+  //     if (c0_ == kEndOfInput || !ScanEscape<false, false>()) {
+  //       std::cout << "Error\n";
+  //       return Token::ILLEGAL;
+  //     }
+  //     std::cout << "Escape\n";
+  //     continue;
+  //   }
+  //   AddLiteralCharAdvance();
+  // }
 }
 
 Token::Value Scanner::ScanPrivateName() {

@@ -9,6 +9,10 @@
 
 #include "include/v8.h"  // for v8::ScriptCompiler
 #include "src/globals.h"
+#include "src/unicode-decoder.h"
+
+
+#include <iostream>
 
 namespace v8 {
 namespace internal {
@@ -19,6 +23,106 @@ template <typename Char>
 class CharacterStream;
 class RuntimeCallStats;
 class String;
+
+template <typename Char>
+struct Range {
+  using range_type = const Char*;
+
+  Range() = default;
+  Range(const Char* start, const Char* end) : start_(start), end_(end) {}
+
+  const Char* start_;
+  const Char* end_;
+
+  const Char *begin() const { return start_; }
+  const Char *end() const { return end_; }
+
+  inline bool is_one_byte() const {
+    if (checked_one_byte_) {
+      return is_one_byte_;
+    }
+    checked_one_byte_ = true;
+
+    // std::cout << "check\n";
+    // TODO: do we need magic constants? and what should be their value
+    if (length() < 256) {
+      is_one_byte_ = has_only_one_byte_chars();
+      return is_one_byte_;
+    }
+
+    size_t Step = 1024;//65536;//1024;// 65536;
+    auto current_start = begin();
+    const Char* next_end = current_start;
+
+    do {
+      next_end = next_end + Step;
+      if (next_end > end()) {
+        // If we reach the end return result of last subrange.
+        is_one_byte_ = sub_range_has_only_one_byte_chars(current_start, end());
+        // is_one_byte_ = sub_range_has_only_one_byte_chars(current_start, end());
+        return is_one_byte_;
+      }
+      // Repeat until we find a subrange that has a multi byte
+    } while (sub_range_has_only_one_byte_chars(current_start, next_end));
+    return false;
+  }
+
+  inline bool has_surrogate() const {
+    if (checked_surrogate_) {
+      return has_surrogate_;
+    }
+    checked_surrogate_ = true;
+
+    for (auto iter = begin(); iter != end(); ++iter) {
+      if (*iter > static_cast<uc32>(unibrow::Utf16::kMaxNonSurrogateCharCode)) {
+        has_surrogate_ = true;
+        return has_surrogate_;
+      }
+    }
+
+    return false;
+  }
+
+  inline void set_has_surroagte() {
+    checked_surrogate_ = true;
+    has_surrogate_ = true;
+  }
+
+  size_t length() const { return static_cast<size_t>(end_ - start_); }
+  bool unaligned_start() const {
+    return reinterpret_cast<intptr_t>(start_) % sizeof(Char) == 1;
+  }
+
+private:
+  // Use local bools to cache state of the range
+  mutable bool is_one_byte_ = false;
+  mutable bool checked_one_byte_ = false;
+  mutable bool has_surrogate_ = false;
+  mutable bool checked_surrogate_ = false;
+
+  bool sub_range_has_only_one_byte_chars(const Char* begin,
+                                         const Char* end) const {
+    int res = 0;
+    constexpr int32_t mask = ~static_cast<int32_t>(0xff);
+    for (auto iter = begin; iter != end; ++iter) {
+      res ^= (static_cast<int32_t>(*iter) & mask);
+    }
+    if (res != 0) {
+      return false;
+    }
+    return true;
+  }
+
+  bool has_only_one_byte_chars() const {
+    for (auto iter = begin(); iter != end(); ++iter) {
+      if (static_cast<uc32>(*iter) <=
+          static_cast<uc32>(unibrow::Latin1::kMaxChar)) {
+        return false;
+      }
+    }
+    return true;
+  }
+};
 
 class V8_EXPORT_PRIVATE ScannerStream {
  public:
@@ -43,6 +147,7 @@ class V8_EXPORT_PRIVATE ScannerStream {
   virtual void Seek(size_t pos) = 0;
   virtual size_t pos() const = 0;
   virtual void Back() = 0;
+  virtual bool isBuffered() const { return true; }
 
   virtual ~ScannerStream() {}
 };
@@ -88,6 +193,43 @@ class CharacterStream : public ScannerStream {
       } else {
         buffer_cursor_ = next_cursor_pos + 1;
         return static_cast<uc32>(*next_cursor_pos);
+      }
+    }
+  }
+
+  template <typename FunctionType>
+  V8_INLINE std::pair<uc32, Range<uint16_t>> AdvanceUntilRange(
+      FunctionType check) {
+    Range<uint16_t> R;
+    R.start_ = buffer_cursor_;
+    // bool saw_surrogate = false;
+    while (true) {
+      // TODO (sattlerf): remove _
+      auto next_cursor_pos = std::find_if(
+          buffer_cursor_, buffer_end_,
+          [&check](uint16_t raw_c0_) {
+            uc32 c0_ = static_cast<uc32>(raw_c0_);
+            // saw_surrogate |=
+            //     (c0_ >
+            //      static_cast<uc32>(unibrow::Utf16::kMaxNonSurrogateCharCode));
+            return check(c0_);
+          });
+
+      // if (saw_surrogate) {
+      //   R.set_has_surroagte();
+      // }
+
+      if (next_cursor_pos == buffer_end_) {
+        buffer_cursor_ = buffer_end_;
+        if (!ReadBlockChecked()) {
+          buffer_cursor_++;
+          R.end_ = buffer_cursor_;
+          return {kEndOfInput, R};
+        }
+      } else {
+        buffer_cursor_ = next_cursor_pos + 1;
+        R.end_ = next_cursor_pos;
+        return {static_cast<uc32>(*next_cursor_pos), R};
       }
     }
   }

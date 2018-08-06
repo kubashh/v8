@@ -12,6 +12,9 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <memory>
+#include <tuple>
+#include <iostream>
 
 #ifdef ENABLE_VTUNE_JIT_INTERFACE
 #include "src/third_party/vtune/v8-vtune.h"
@@ -396,6 +399,22 @@ class ExternalOwningOneByteStringResource
 
  private:
   std::unique_ptr<const char[]> data_;
+  size_t length_;
+};
+
+// TODO (sattlerf): should this be here?
+class ExternalOwningTwoByteStringResource
+    : public String::ExternalStringResource {
+ public:
+  ExternalOwningTwoByteStringResource() : length_(0) {}
+  ExternalOwningTwoByteStringResource(std::unique_ptr<const uint16_t[]> data,
+                                      size_t length)
+      : data_(std::move(data)), length_(length) {}
+  const uint16_t* data() const override { return data_.get(); }
+  size_t length() const override { return length_; }
+
+ private:
+  std::unique_ptr<const uint16_t[]> data_;
   size_t length_;
 };
 
@@ -2245,18 +2264,114 @@ void Shell::ReadBuffer(const v8::FunctionCallbackInfo<v8::Value>& args) {
   args.GetReturnValue().Set(buffer);
 }
 
+// TODO (sattlerf): should this be here? Talked to toon if we can generalize
+//  and merge the conversion code
+namespace {
+const unibrow::uchar kUtf8Bom = 0xFEFF;
+}  // namespace
+std::pair<std::unique_ptr<uint16_t[]>, size_t> convertToTwoByte(
+    const char* chars, size_t size) {
+  u_int32_t incomplete_char = 0;
+  unibrow::Utf8::State state = unibrow::Utf8::State::kAccept;
+  bool seen_bom = false;
+
+  if (size == 0) {
+    unibrow::uchar t = unibrow::Utf8::ValueOfIncrementalFinish(&state);
+    if (t != unibrow::Utf8::kBufferEmpty) {
+      incomplete_char = 0;
+      auto result = std::unique_ptr<uint16_t []>(new uint16_t[1]);
+      result.get()[0] = unibrow::Utf8::kBadChar;
+      return {std::move(result), 1};
+    } else {
+      auto result = std::unique_ptr<uint16_t []>(new uint16_t[0]);
+      return {std::move(result), 0};
+    }
+    // TODO (sattlerf): delete chars?
+  }
+
+  // First count the number of complete characters that can be produced.
+
+  size_t i =0;
+  size_t num_chars = 0;
+  while (i < size) {
+    unibrow::uchar t = unibrow::Utf8::ValueOfIncremental(chars[i], &i, &state,
+                                                         &incomplete_char);
+    if (!seen_bom && t == kUtf8Bom && num_chars == 0) {
+      seen_bom = true;
+      // BOM detected at beginning of the stream. Don't copy it.
+    } else if (t != unibrow::Utf8::kIncomplete) {
+      num_chars++;
+      if (t > unibrow::Utf16::kMaxNonSurrogateCharCode) num_chars++;
+    }
+  }
+
+  if (num_chars == 0) {
+    // TODO (sattlerf): delete chars?
+    return {std::unique_ptr<uint16_t[]>(new uint16_t[0]), 0};
+  }
+
+  incomplete_char = 0;
+  state = unibrow::Utf8::State::kAccept;
+  seen_bom = false;
+
+  auto data = std::unique_ptr<uint16_t []>(new uint16_t[num_chars]);
+  uint16_t *cursor = data.get();
+  i = 0;
+
+  while (i < size) {
+    unibrow::uchar t = unibrow::Utf8::ValueOfIncremental(chars[i], &i, &state,
+                                                         &incomplete_char);
+    if (V8_LIKELY(t < kUtf8Bom)) {
+      *(cursor++) = static_cast<uint16_t>(t);  // The by most frequent case.
+    } else if (t == unibrow::Utf8::kIncomplete) {
+      continue;
+    } else if (!seen_bom && t == kUtf8Bom && cursor == data.get()) {
+      // BOM detected at beginning of the stream. Don't copy it.
+      seen_bom = true;
+    } else if (t <= unibrow::Utf16::kMaxNonSurrogateCharCode) {
+      *(cursor++) = static_cast<uint16_t>(t);
+    } else {
+      *(cursor++) = unibrow::Utf16::LeadSurrogate(t);
+      *(cursor++) = unibrow::Utf16::TrailSurrogate(t);
+    }
+  }
+
+  return {std::move(data), num_chars};
+}
+
 // Reads a file into a v8 string.
 Local<String> Shell::ReadFile(Isolate* isolate, const char* name) {
   int size = 0;
   char* chars = ReadChars(name, &size);
   if (chars == nullptr) return Local<String>();
   Local<String> result;
-  if (i::FLAG_use_external_strings && i::String::IsAscii(chars, size)) {
-    String::ExternalOneByteStringResource* resource =
-        new ExternalOwningOneByteStringResource(
-            std::unique_ptr<const char[]>(chars), size);
-    result = String::NewExternalOneByte(isolate, resource).ToLocalChecked();
+
+  // TODO: for testing we to swap old/ new two byte buffer impls
+
+  // if (i::FLAG_use_external_strings && i::String::IsAscii(chars, size)) {
+  //   std::cout << "use_external\n";
+  //   String::ExternalOneByteStringResource* resource =
+  //       new ExternalOwningOneByteStringResource(
+  //           std::unique_ptr<const char[]>(chars), size);
+  //   result = String::NewExternalOneByte(isolate, resource).ToLocalChecked();
+
+    if (i::FLAG_use_external_strings) {
+      //if (i::String::IsAscii(chars, size)) {
+      //  std::cout << "use_external\n";
+      //  String::ExternalOneByteStringResource* resource =
+      //      new ExternalOwningOneByteStringResource(
+      //          std::unique_ptr<const char[]>(chars), size);
+      //  result = String::NewExternalOneByte(isolate, resource).ToLocalChecked();
+      //} else {
+        // std::cout << "use_new\n";
+        auto&& data_size_pair = convertToTwoByte(chars, size);
+        String::ExternalStringResource* resource =
+            new ExternalOwningTwoByteStringResource(
+                std::move(data_size_pair.first), data_size_pair.second);
+        result = String::NewExternalTwoByte(isolate, resource).ToLocalChecked();
+      //}
   } else {
+    // std::cout << "use_else\n";
     result = String::NewFromUtf8(isolate, chars, NewStringType::kNormal, size)
                  .ToLocalChecked();
     delete[] chars;
