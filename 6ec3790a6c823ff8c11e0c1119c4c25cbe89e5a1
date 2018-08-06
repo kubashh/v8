@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fcbc6c5_ed2a123d",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-06T10:57:45Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "6ec3790a6c823ff8c11e0c1119c4c25cbe89e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42ff39e1_d9bed57b",
+        "filename": "src/mips64/assembler-mips64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-06T10:57:45Z",
+      "side": 1,
+      "message": "Just checking - so offsets larger than 16 bits will still be isolate-dependent, right?",
+      "revId": "6ec3790a6c823ff8c11e0c1119c4c25cbe89e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "556936d9_2aa5630a",
+        "filename": "src/mips64/assembler-mips64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-06T10:57:45Z",
+      "side": 1,
+      "message": "Nit: perhaps a named constant for 4.",
+      "revId": "6ec3790a6c823ff8c11e0c1119c4c25cbe89e5a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
