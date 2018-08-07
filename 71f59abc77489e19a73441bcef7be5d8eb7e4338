@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5c634644_514cb1cd",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-08-07T14:29:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d053e428_9bf948fa",
+      "range": {
+        "startLine": 339,
+        "startChar": 24,
+        "endLine": 339,
+        "endChar": 34
+      },
+      "revId": "71f59abc77489e19a73441bcef7be5d8eb7e4338",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37e41046_53a0ed9b",
         "filename": "src/builtins/base.tq",
         "patchSetId": 4
@@ -36,6 +60,24 @@
       "writtenOn": "2018-08-03T12:09:05Z",
       "side": 1,
       "message": "What do you think about adding a bit more syntactic sugar here to make it look more like a traditional switch, e.g.\n\ntypeswitch(number) {\n  case (Smi): {\n    return false;\n  };\n  case (hn : HeapNumber): {\n    let value: float64 \u003d convert\u003cfloat64\u003e(hn);\n    return value !\u003d value;\n  };\n}\n\nI know it\u0027s not unnecessary, but for some reason the \"case {} case {} case {}\" bugs me.",
+      "revId": "71f59abc77489e19a73441bcef7be5d8eb7e4338",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c768d2c0_def58ed5",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-08-07T14:29:42Z",
+      "side": 1,
+      "message": "The outer braces make sense, I think. They add one more indentation level than necessary, but improve readability and familarity. \nBut for the colon and semicolon, I don\u0027t think they add much. The C/C++ colon after case is motivated by it being essentially a label, but here case is more than a label, so using label syntax is more confusing than helpful I think.\nThe semicolon after the curly brace is not even necessary in C++, and we don\u0027t use it in V8\u0027s C++.",
+      "parentUuid": "37e41046_53a0ed9b",
       "revId": "71f59abc77489e19a73441bcef7be5d8eb7e4338",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
