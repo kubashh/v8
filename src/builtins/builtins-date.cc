@@ -195,13 +195,14 @@ BUILTIN(DateConstructor) {
     ToDateString(time_val, ArrayVector(buffer), isolate->date_cache());
     RETURN_RESULT_OR_FAILURE(
         isolate, isolate->factory()->NewStringFromUtf8(CStrVector(buffer)));
-  } else {
-    int const argc = args.length() - 1;
-    Handle<JSFunction> target = args.target();
-    Handle<JSReceiver> new_target = Handle<JSReceiver>::cast(args.new_target());
-    double time_val;
-    if (argc == 0) {
-      time_val = JSDate::CurrentTimeValue(isolate);
+  }
+  // [Construct]
+  int const argc = args.length() - 1;
+  Handle<JSFunction> target = args.target();
+  Handle<JSReceiver> new_target = Handle<JSReceiver>::cast(args.new_target());
+  double time_val;
+  if (argc == 0) {
+    time_val = JSDate::CurrentTimeValue(isolate);
     } else if (argc == 1) {
       Handle<Object> value = args.at(1);
       if (value->IsJSDate()) {
@@ -274,7 +275,6 @@ BUILTIN(DateConstructor) {
     }
     RETURN_RESULT_OR_FAILURE(isolate,
                              JSDate::New(target, new_target, time_val));
-  }
 }
 
 // ES6 section 20.3.3.1 Date.now ( )

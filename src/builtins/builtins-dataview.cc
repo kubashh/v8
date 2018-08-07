@@ -25,19 +25,20 @@ BUILTIN(DataViewConstructor) {
         isolate, NewTypeError(MessageTemplate::kConstructorNotFunction,
                               isolate->factory()->NewStringFromAsciiChecked(
                                   "DataView")));
-  } else {  // [[Construct]]
-    Handle<JSFunction> target = args.target();
-    Handle<JSReceiver> new_target = Handle<JSReceiver>::cast(args.new_target());
-    Handle<Object> buffer = args.atOrUndefined(isolate, 1);
-    Handle<Object> byte_offset = args.atOrUndefined(isolate, 2);
-    Handle<Object> byte_length = args.atOrUndefined(isolate, 3);
+  }
+  // [[Construct]]
+  Handle<JSFunction> target = args.target();
+  Handle<JSReceiver> new_target = Handle<JSReceiver>::cast(args.new_target());
+  Handle<Object> buffer = args.atOrUndefined(isolate, 1);
+  Handle<Object> byte_offset = args.atOrUndefined(isolate, 2);
+  Handle<Object> byte_length = args.atOrUndefined(isolate, 3);
 
-    // 2. If Type(buffer) is not Object, throw a TypeError exception.
-    // 3. If buffer does not have an [[ArrayBufferData]] internal slot, throw a
-    //    TypeError exception.
-    if (!buffer->IsJSArrayBuffer()) {
-      THROW_NEW_ERROR_RETURN_FAILURE(
-          isolate, NewTypeError(MessageTemplate::kDataViewNotArrayBuffer));
+  // 2. If Type(buffer) is not Object, throw a TypeError exception.
+  // 3. If buffer does not have an [[ArrayBufferData]] internal slot, throw a
+  //    TypeError exception.
+  if (!buffer->IsJSArrayBuffer()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kDataViewNotArrayBuffer));
     }
     Handle<JSArrayBuffer> array_buffer = Handle<JSArrayBuffer>::cast(buffer);
 
@@ -102,7 +103,6 @@ BUILTIN(DataViewConstructor) {
 
     // 14. Return O.
     return *result;
-  }
 }
 
 }  // namespace internal
