@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8426d1c3_9598f79c",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-07T16:29:09Z",
+      "side": 1,
+      "message": "Force enable the one-shot-optimization just in case we have to disable the flag which would then break the tests.",
+      "revId": "07c10745c1d06a00ab4125b74faf71a95473b2fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
