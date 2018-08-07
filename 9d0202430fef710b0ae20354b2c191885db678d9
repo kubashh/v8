@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9de9ab8e_0d8c31b4",
+        "filename": "test/mjsunit/wasm/ffi-error.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-08-07T07:32:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0170fc25_415ee109",
+      "revId": "9d0202430fef710b0ae20354b2c191885db678d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a5a7e3d_8cdef425",
         "filename": "test/mjsunit/wasm/ffi-error.js",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "9d0202430fef710b0ae20354b2c191885db678d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "649aa118_16aec327",
+        "filename": "test/mjsunit/wasm/ffi-error.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-08-07T07:32:57Z",
+      "side": 1,
+      "message": "I cleaned up the test a bit to avoid the most obvious code duplication. However, I don\u0027t think we should do a bigger refactoring. It\u0027s just a test, and it happens easily that there is a small typo in the refactoring and we end up testing nothing.",
+      "parentUuid": "9a5a7e3d_8cdef425",
+      "revId": "9d0202430fef710b0ae20354b2c191885db678d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
