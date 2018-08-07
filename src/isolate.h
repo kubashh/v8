@@ -402,7 +402,6 @@ class ThreadLocalTop BASE_EMBEDDED {
   v8::TryCatch* try_catch_handler_ = nullptr;
 };
 
-
 #ifdef DEBUG
 
 #define ISOLATE_INIT_DEBUG_ARRAY_LIST(V)               \
@@ -436,6 +435,7 @@ typedef std::vector<HeapObject*> DebugObjectCache;
   V(ExtensionCallback, wasm_instance_callback, &NoExtension)                  \
   V(ApiImplementationCallback, wasm_compile_streaming_callback, nullptr)      \
   V(WasmStreamingCallback, wasm_streaming_callback, nullptr)                  \
+  V(WasmThreadsEnabledCallback, wasm_threads_enabled_callback, nullptr)       \
   /* State for Relocatable. */                                                \
   V(Relocatable*, relocatable_top, nullptr)                                   \
   V(DebugObjectCache*, string_stream_debug_object_cache, nullptr)             \
@@ -632,6 +632,8 @@ class Isolate : private HiddenFactory {
   inline Object* get_wasm_caught_exception();
   inline void set_wasm_caught_exception(Object* exception);
   inline void clear_wasm_caught_exception();
+
+  bool AreWasmThreadsEnabled(Handle<Context> context);
 
   THREAD_LOCAL_TOP_ADDRESS(Object*, pending_exception)
 
