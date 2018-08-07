@@ -86,6 +86,10 @@ class NumberFormat {
                                           Handle<JSObject> number_format_holder,
                                           double value);
 
+  // ecma402/#sec-intl.numberformat.prototype.resolvedoptions
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> ResolvedOptions(
+      Isolate* isolate, Handle<JSObject> number_format_holder);
+
   // Layout description.
 #define NUMBER_FORMAT_FIELDS(V)   \
   /* Pointer fields. */           \

@@ -1117,51 +1117,6 @@ function NumberFormatConstructor() {
 }
 %SetCode(GlobalIntlNumberFormat, NumberFormatConstructor);
 
-
-/**
- * NumberFormat resolvedOptions method.
- */
-DEFINE_METHOD(
-  GlobalIntlNumberFormat.prototype,
-  resolvedOptions() {
-    var methodName = 'resolvedOptions';
-    if(!IS_RECEIVER(this)) {
-      throw %make_type_error(kIncompatibleMethodReceiver, methodName, this);
-    }
-    var format = %IntlUnwrapReceiver(this, NUMBER_FORMAT_TYPE,
-                                     GlobalIntlNumberFormat,
-                                     methodName, true);
-    var result = {
-      locale: format[resolvedSymbol].locale,
-      numberingSystem: format[resolvedSymbol].numberingSystem,
-      style: format[resolvedSymbol].style,
-      useGrouping: format[resolvedSymbol].useGrouping,
-      minimumIntegerDigits: format[resolvedSymbol].minimumIntegerDigits,
-      minimumFractionDigits: format[resolvedSymbol].minimumFractionDigits,
-      maximumFractionDigits: format[resolvedSymbol].maximumFractionDigits,
-    };
-
-    if (result.style === 'currency') {
-      defineWECProperty(result, 'currency', format[resolvedSymbol].currency);
-      defineWECProperty(result, 'currencyDisplay',
-                        format[resolvedSymbol].currencyDisplay);
-    }
-
-    if (HAS_OWN_PROPERTY(format[resolvedSymbol], 'minimumSignificantDigits')) {
-      defineWECProperty(result, 'minimumSignificantDigits',
-                        format[resolvedSymbol].minimumSignificantDigits);
-    }
-
-    if (HAS_OWN_PROPERTY(format[resolvedSymbol], 'maximumSignificantDigits')) {
-      defineWECProperty(result, 'maximumSignificantDigits',
-                        format[resolvedSymbol].maximumSignificantDigits);
-    }
-
-    return result;
-  }
-);
-
-
 /**
  * Returns the subset of the given locale list for which this locale list
  * has a matching (possibly fallback) locale. Locales appear in the same

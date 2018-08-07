@@ -1361,6 +1361,8 @@ namespace internal {
   CPP(NumberFormatInternalFormatNumber)                                \
   /* ecma402 #sec-intl.numberformat.prototype.format */                \
   CPP(NumberFormatPrototypeFormatNumber)                               \
+  /* ecma402 #sec-intl.numberformat.prototype.resolvedoptions */       \
+  CPP(NumberFormatPrototypeResolvedOptions)                            \
   /* ecma402 #sec-intl.pluralrules */                                  \
   CPP(PluralRulesConstructor)                                          \
   /* ecma402 #sec-intl.RelativeTimeFormat.constructor */               \
