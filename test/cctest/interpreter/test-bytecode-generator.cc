@@ -138,8 +138,9 @@ static inline void ltrim(std::string& str) {
 
 // inplace right trim
 static inline void rtrim(std::string& str) {
-  str.erase(std::find_if(str.begin(), str.end(),
-                         [](unsigned char ch) { return !std::isspace(ch); }),
+  str.erase(std::find_if(str.rbegin(), str.rend(),
+                         [](unsigned char ch) { return !std::isspace(ch); })
+                .base(),
             str.end());
 }
 
