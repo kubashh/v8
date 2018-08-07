@@ -19,8 +19,9 @@ class PrototypeInfo : public Struct {
  public:
   static const int UNREGISTERED = -1;
 
-  // [weak_cell]: A WeakCell containing this prototype. ICs cache the cell here.
-  DECL_ACCESSORS(weak_cell, Object)
+  // [module_namespace]: A backpointer to JSModuleNamepace from its
+  // PrototypeInfo (or undefined).
+  DECL_ACCESSORS(module_namespace, Object)
 
   // [prototype_users]: WeakArrayList containing weak references to maps using
   // this prototype, or Smi(0) if uninitialized.
@@ -49,8 +50,9 @@ class PrototypeInfo : public Struct {
   DECL_PRINTER(PrototypeInfo)
   DECL_VERIFIER(PrototypeInfo)
 
-  static const int kWeakCellOffset = HeapObject::kHeaderSize;
-  static const int kPrototypeUsersOffset = kWeakCellOffset + kPointerSize;
+  static const int kJSModuleNamespaceOffset = HeapObject::kHeaderSize;
+  static const int kPrototypeUsersOffset =
+      kJSModuleNamespaceOffset + kPointerSize;
   static const int kRegistrySlotOffset = kPrototypeUsersOffset + kPointerSize;
   static const int kValidityCellOffset = kRegistrySlotOffset + kPointerSize;
   static const int kObjectCreateMapOffset = kValidityCellOffset + kPointerSize;
