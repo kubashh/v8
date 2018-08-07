@@ -10,6 +10,8 @@
 
 #include <cmath>
 
+#include <iostream>
+
 #include "src/ast/ast-value-factory.h"
 #include "src/char-predicates-inl.h"
 #include "src/conversions-inl.h"
@@ -72,15 +74,16 @@ int Scanner::LiteralBuffer::NewCapacity(int min_capacity) {
   return new_capacity;
 }
 
-void Scanner::LiteralBuffer::ExpandBuffer() {
-  Vector<byte> new_store = Vector<byte>::New(NewCapacity(kInitialCapacity));
+void Scanner::LiteralBuffer::ExpandBuffer(int min) {
+  Vector<byte> new_store =
+      Vector<byte>::New(NewCapacity(Max(min, kInitialCapacity)));
   MemCopy(new_store.start(), backing_store_.start(), position_);
   backing_store_.Dispose();
   backing_store_ = new_store;
 }
 
 void Scanner::LiteralBuffer::ConvertToTwoByte() {
-  DCHECK(is_one_byte_);
+  DCHECK(is_one_byte());
   Vector<byte> new_store;
   int new_content_size = position_ * kUC16Size;
   if (new_content_size >= backing_store_.length()) {
@@ -100,12 +103,12 @@ void Scanner::LiteralBuffer::ConvertToTwoByte() {
     backing_store_ = new_store;
   }
   position_ = new_content_size;
-  is_one_byte_ = false;
+  is_one_byte_ = CharWidth::TWO_BYTE;
 }
 
 void Scanner::LiteralBuffer::AddCharSlow(uc32 code_unit) {
   if (position_ >= backing_store_.length()) ExpandBuffer();
-  if (is_one_byte_) {
+  if (is_one_byte()) {
     if (code_unit <= static_cast<uc32>(unibrow::Latin1::kMaxChar)) {
       backing_store_[position_] = static_cast<byte>(code_unit);
       position_ += kOneByteSize;
@@ -186,11 +189,21 @@ Scanner::Scanner(UnicodeCache* unicode_cache)
       has_line_terminator_after_next_(false),
       found_html_comment_(false),
       allow_harmony_bigint_(false),
-      allow_harmony_numeric_separator_(false) {}
+      allow_harmony_numeric_separator_(false),
+      has_unbuffered_offheap_stream(false) {}
 
 void Scanner::Initialize(CharacterStream<uint16_t>* source, bool is_module) {
   DCHECK_NOT_NULL(source);
   source_ = source;
+  has_unbuffered_offheap_stream =
+      (!source_->can_access_heap()) && (!source_->isBuffered());
+
+  // if (has_unbuffered_offheap_stream) {
+  //   std::cout << "This stream is good\n";
+  // } else {
+  //   std::cout << "This stream is bad\n";
+  // }
+
   is_module_ = is_module;
   // Need to capture identifiers in order to recognize "get" and "set"
   // in object literals.
@@ -984,7 +997,8 @@ uc32 Scanner::ScanOctalEscape(uc32 c, int length, bool in_template_literal) {
 }
 
 
-Token::Value Scanner::ScanString() {
+// TODO (sattlerf): find better way than duplicating methods
+Token::Value Scanner::ScanStringDefault() {
   uc32 quote = c0_;
   Advance();  // consume quote
 
@@ -1006,7 +1020,39 @@ Token::Value Scanner::ScanString() {
       }
       continue;
     }
+
     AddLiteralCharAdvance();
+  }
+}
+
+Token::Value Scanner::ScanStringAdvance() {
+  uc32 quote = c0_;
+  Advance();  // consume quote
+
+  LiteralScope literal(this);
+  while (true) {
+    if (c0_ == quote) {
+      literal.Complete();
+      Advance();
+      return Token::STRING;
+    }
+    if (c0_ == kEndOfInput || unibrow::IsStringLiteralLineTerminator(c0_)) {
+      return Token::ILLEGAL;
+    }
+    if (c0_ == '\\') {
+      Advance();
+      // TODO(verwaest): Check whether we can remove the additional check.
+      if (c0_ == kEndOfInput || !ScanEscape<false, false>()) {
+        return Token::ILLEGAL;
+      }
+      continue;
+    }
+
+    // Stop only at one of the handled cases
+    AddLiteralCharAdvanceUntil([&quote](uc32 c0) {
+      return c0 == quote || unibrow::IsStringLiteralLineTerminator(c0) ||
+             c0 == '\\';
+    });
   }
 }
 
@@ -1601,6 +1647,9 @@ static Token::Value KeywordOrIdentifierToken(const uint8_t* input,
 
 Token::Value Scanner::ScanIdentifierOrKeyword() {
   LiteralScope literal(this);
+  if (has_unbuffered_offheap_stream) {
+    return ScanIdentifierOrKeywordInner(&literal);
+  }
   return ScanIdentifierOrKeywordInner(&literal);
 }
 
@@ -1637,6 +1686,108 @@ Token::Value Scanner::ScanIdentifierOrKeywordInner(LiteralScope* literal) {
     do {
       AddLiteralCharAdvance();
     } while (IsAsciiIdentifier(c0_));
+
+    if (c0_ <= kMaxAscii && c0_ != '\\') {
+      literal->Complete();
+      return Token::IDENTIFIER;
+    }
+  } else if (c0_ == '\\') {
+    escaped = true;
+    uc32 c = ScanIdentifierUnicodeEscape();
+    DCHECK(!unicode_cache_->IsIdentifierStart(-1));
+    if (c == '\\' || !unicode_cache_->IsIdentifierStart(c)) {
+      return Token::ILLEGAL;
+    }
+    AddLiteralChar(c);
+  }
+
+  while (true) {
+    if (c0_ == '\\') {
+      escaped = true;
+      uc32 c = ScanIdentifierUnicodeEscape();
+      // Only allow legal identifier part characters.
+      // TODO(verwaest): Make this true.
+      // DCHECK(!unicode_cache_->IsIdentifierPart('\\'));
+      DCHECK(!unicode_cache_->IsIdentifierPart(-1));
+      if (c == '\\' || !unicode_cache_->IsIdentifierPart(c)) {
+        return Token::ILLEGAL;
+      }
+      AddLiteralChar(c);
+    } else if (unicode_cache_->IsIdentifierPart(c0_) ||
+               (CombineSurrogatePair() &&
+                unicode_cache_->IsIdentifierPart(c0_))) {
+      AddLiteralCharAdvance();
+    } else {
+      break;
+    }
+  }
+
+  if (next_.literal_chars->is_one_byte()) {
+    Vector<const uint8_t> chars = next_.literal_chars->one_byte_literal();
+    Token::Value token =
+        KeywordOrIdentifierToken(chars.start(), chars.length());
+    /* TODO(adamk): YIELD should be handled specially. */
+    if (token == Token::FUTURE_STRICT_RESERVED_WORD) {
+      literal->Complete();
+      if (escaped) return Token::ESCAPED_STRICT_RESERVED_WORD;
+      return token;
+    }
+    if (token == Token::IDENTIFIER || Token::IsContextualKeyword(token)) {
+      literal->Complete();
+      return token;
+    }
+
+    if (!escaped) return token;
+
+    literal->Complete();
+    if (token == Token::LET || token == Token::STATIC) {
+      return Token::ESCAPED_STRICT_RESERVED_WORD;
+    }
+    return Token::ESCAPED_KEYWORD;
+  }
+
+  literal->Complete();
+  return Token::IDENTIFIER;
+}
+
+Token::Value Scanner::ScanIdentifierOrKeywordInnerAdvance(LiteralScope* literal) {
+  DCHECK(unicode_cache_->IsIdentifierStart(c0_));
+  bool escaped = false;
+  if (IsInRange(c0_, 'a', 'z') || c0_ == '_') {
+    // do {
+    //   AddLiteralCharAdvance();
+    // } while (IsInRange(c0_, 'a', 'z') || c0_ == '_');
+    AddLiteralCharAdvanceUntil(
+        [](uc32 c0) { return !(IsInRange(c0, 'a', 'z') || c0 == '_'); });
+
+    if (IsDecimalDigit(c0_) || IsInRange(c0_, 'A', 'Z') || c0_ == '$') {
+      // Identifier starting with lowercase or _.
+      // do {
+      //   AddLiteralCharAdvance();
+      // } while (IsAsciiIdentifier(c0_));
+      AddLiteralCharAdvanceUntil(
+          [](uc32 c0) { return !IsAsciiIdentifier(c0); });
+
+      if (c0_ <= kMaxAscii && c0_ != '\\') {
+        literal->Complete();
+        return Token::IDENTIFIER;
+      }
+    } else if (c0_ <= kMaxAscii && c0_ != '\\') {
+      // Only a-z+ or _: could be a keyword or identifier.
+      Vector<const uint8_t> chars = next_.literal_chars->one_byte_literal();
+      Token::Value token =
+          KeywordOrIdentifierToken(chars.start(), chars.length());
+      if (token == Token::IDENTIFIER ||
+          token == Token::FUTURE_STRICT_RESERVED_WORD ||
+          Token::IsContextualKeyword(token))
+        literal->Complete();
+      return token;
+    }
+  } else if (IsInRange(c0_, 'A', 'Z') || c0_ == '$') {
+    // do {
+    //   AddLiteralCharAdvance();
+    // } while (IsAsciiIdentifier(c0_));
+    AddLiteralCharAdvanceUntil([](uc32 c0) { return !IsAsciiIdentifier(c0); });
 
     if (c0_ <= kMaxAscii && c0_ != '\\') {
       literal->Complete();
