@@ -105,6 +105,24 @@
       "revId": "9d0202430fef710b0ae20354b2c191885db678d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ecd1f9f_dd5f0d7a",
+        "filename": "test/mjsunit/wasm/ffi-error.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-08-07T10:18:03Z",
+      "side": 1,
+      "message": "I don\u0027t think so. It\u0027s worth investing some time in good tests, for the next person that needs to add or change something here.",
+      "parentUuid": "d99bac3f_9395a83c",
+      "revId": "9d0202430fef710b0ae20354b2c191885db678d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
