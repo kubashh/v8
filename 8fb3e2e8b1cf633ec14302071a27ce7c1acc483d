@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "720f17c7_9dce4bd9",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-08-08T09:27:02Z",
+      "side": 1,
+      "message": "Nit: The declaration for iter could move here inside the loop, since you don\u0027t need it after the loop.",
+      "range": {
+        "startLine": 301,
+        "startChar": 13,
+        "endLine": 301,
+        "endChar": 14
+      },
+      "revId": "8fb3e2e8b1cf633ec14302071a27ce7c1acc483d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42d17cae_75a023e8",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-08-08T09:27:02Z",
+      "side": 1,
+      "message": "This is now misnamed, \"is_one_byte\" sounds like a bool, this should be \"char_width\" or sth.",
+      "range": {
+        "startLine": 317,
+        "startChar": 13,
+        "endLine": 317,
+        "endChar": 25
+      },
+      "revId": "8fb3e2e8b1cf633ec14302071a27ce7c1acc483d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7402235_3d2a5789",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-08-08T09:27:02Z",
+      "side": 1,
+      "message": "This could be called something more illustrative... ScanStringFromOffheapUnbufferedStream? ScanStringFast?",
+      "range": {
+        "startLine": 705,
+        "startChar": 13,
+        "endLine": 705,
+        "endChar": 31
+      },
+      "revId": "8fb3e2e8b1cf633ec14302071a27ce7c1acc483d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
