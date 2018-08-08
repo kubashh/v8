@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c02dbc1_ceb4b7ae",
+        "filename": "src/builtins/builtins-bigint.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-08T12:59:49Z",
+      "side": 1,
+      "message": "nit: double comment",
+      "revId": "dee90939f045d0ad66820b6f28747df8c055b47e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4964908f_5a19ffcc",
+        "filename": "src/builtins/builtins-dataview.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-08T12:59:49Z",
+      "side": 1,
+      "message": "Did gerrit break or is the formatting off here? Shouldn\u0027t this line and all the ones below have an indentation of 2?",
+      "revId": "dee90939f045d0ad66820b6f28747df8c055b47e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a339f7e_44b93d7e",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-08T12:59:49Z",
+      "side": 1,
+      "message": "Weird formatting on this line too 🐨",
+      "revId": "dee90939f045d0ad66820b6f28747df8c055b47e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
