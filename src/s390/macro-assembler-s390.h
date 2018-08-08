@@ -172,7 +172,7 @@ bool AreAliased(DoubleRegister reg1, DoubleRegister reg2,
 
 #endif
 
-class TurboAssembler : public TurboAssemblerBase {
+class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
  public:
   TurboAssembler(Isolate* isolate, const AssemblerOptions& options,
                  void* buffer, int buffer_size,
