@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a4c4fd89_6cfd1dc9",
+        "filename": "src/ppc/macro-assembler-ppc.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1769,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-08-08T13:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cbd7425_9ebf9a1e",
+      "revId": "e67eb238daf9dfade8fb3716c584aae461d01ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71c24bc6_d0923f79",
         "filename": "src/s390/macro-assembler-s390.cc",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "e67eb238daf9dfade8fb3716c584aae461d01ebd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28b96121_72fa987b",
+        "filename": "src/s390/macro-assembler-s390.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-08-08T13:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71c24bc6_d0923f79",
+      "revId": "e67eb238daf9dfade8fb3716c584aae461d01ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "e67eb238daf9dfade8fb3716c584aae461d01ebd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bc3fa36_2f96979d",
+        "filename": "test/unittests/assembler/turbo-assembler-ppc-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-08-08T13:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f0f1262_e9ab1c1a",
+      "range": {
+        "startLine": 17,
+        "startChar": 12,
+        "endLine": 17,
+        "endChar": 16
+      },
+      "revId": "e67eb238daf9dfade8fb3716c584aae461d01ebd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
