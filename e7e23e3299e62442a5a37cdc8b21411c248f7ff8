@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba18cb71_a9a4ba6c",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-08-08T09:38:59Z",
+      "side": 1,
+      "message": "this number 4 * kInstrSize is OptimizedBranchAndLinkLongReturnOffset so you should probably create a constant with same or similar name",
+      "revId": "e7e23e3299e62442a5a37cdc8b21411c248f7ff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
