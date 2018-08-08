@@ -9,6 +9,7 @@
 
 #include "include/v8.h"  // for v8::ScriptCompiler
 #include "src/globals.h"
+#include "src/unicode-decoder.h"
 
 namespace v8 {
 namespace internal {
@@ -19,6 +20,25 @@ template <typename Char>
 class CharacterStream;
 class RuntimeCallStats;
 class String;
+
+template <typename Char>
+struct Range {
+  using range_type = const Char*;
+
+  Range() = default;
+  Range(const Char* start, const Char* end) : start_(start), end_(end) {}
+
+  const Char* start_;
+  const Char* end_;
+
+  const Char *begin() const { return start_; }
+  const Char *end() const { return end_; }
+
+  size_t length() const { return static_cast<size_t>(end_ - start_); }
+  bool unaligned_start() const {
+    return reinterpret_cast<intptr_t>(start_) % sizeof(Char) == 1;
+  }
+};
 
 class V8_EXPORT_PRIVATE ScannerStream {
  public:
@@ -43,6 +63,7 @@ class V8_EXPORT_PRIVATE ScannerStream {
   virtual void Seek(size_t pos) = 0;
   virtual size_t pos() const = 0;
   virtual void Back() = 0;
+  virtual bool isBuffered() const { return true; }
 
   virtual ~ScannerStream() {}
 };
@@ -88,6 +109,33 @@ class CharacterStream : public ScannerStream {
       } else {
         buffer_cursor_ = next_cursor_pos + 1;
         return static_cast<uc32>(*next_cursor_pos);
+      }
+    }
+  }
+
+  template <typename FunctionType>
+  V8_INLINE std::pair<uc32, Range<uint16_t>> AdvanceUntilRange(
+      FunctionType check) {
+    Range<uint16_t> R;
+    R.start_ = buffer_cursor_;
+    while (true) {
+      auto next_cursor_pos =
+          std::find_if(buffer_cursor_, buffer_end_, [&check](uint16_t raw_c0) {
+            uc32 c0 = static_cast<uc32>(raw_c0);
+            return check(c0);
+          });
+
+      if (next_cursor_pos == buffer_end_) {
+        buffer_cursor_ = buffer_end_;
+        if (!ReadBlockChecked()) {
+          buffer_cursor_++;
+          R.end_ = buffer_cursor_;
+          return {kEndOfInput, R};
+        }
+      } else {
+        buffer_cursor_ = next_cursor_pos + 1;
+        R.end_ = next_cursor_pos;
+        return {static_cast<uc32>(*next_cursor_pos), R};
       }
     }
   }
