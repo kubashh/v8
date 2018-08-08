@@ -1502,7 +1502,7 @@ void Heap::MoveElements(FixedArray* array, int dst_index, int src_index,
     MemMove(dst, src, len * kPointerSize);
   }
   if (mode == SKIP_WRITE_BARRIER) return;
-  FIXED_ARRAY_ELEMENTS_WRITE_BARRIER(this, array, dst_index, len);
+  FIXED_ARRAY_ELEMENTS_WRITE_BARRIER(array, dst_index, len);
 }
 
 
@@ -5833,11 +5833,29 @@ void Heap::GenerationalBarrierSlow(HeapObject* object, Address slot,
   heap->store_buffer()->InsertEntry(slot);
 }
 
+void Heap::GenerationalBarrierForElementsSlow(FixedArray* array, int offset,
+                                              int length) {
+  Heap* heap = Heap::FromWritableHeapObject(array);
+  for (int i = 0; i < length; i++) {
+    if (!InNewSpace(array->get(offset + i))) continue;
+    heap->store_buffer()->InsertEntry(
+        reinterpret_cast<Address>(array->RawFieldOfElementAt(offset + i)));
+  }
+}
+
 void Heap::MarkingBarrierSlow(HeapObject* object, Address slot,
                               HeapObject* value) {
   Heap* heap = Heap::FromWritableHeapObject(object);
   heap->incremental_marking()->RecordWriteSlow(
       object, reinterpret_cast<HeapObjectReference**>(slot), value);
+}
+
+void Heap::MarkingBarrierForElementsSlow(HeapObject* object) {
+  Heap* heap = Heap::FromWritableHeapObject(object);
+  if (FLAG_concurrent_marking ||
+      heap->incremental_marking()->marking_state()->IsBlack(object)) {
+    heap->incremental_marking()->RevisitObject(object);
+  }
 }
 
 bool Heap::PageFlagsAreConsistent(HeapObject* object) {

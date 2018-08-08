@@ -8,6 +8,7 @@
 #include "src/conversions.h"
 #include "src/frames.h"
 #include "src/heap/factory.h"
+#include "src/heap/heap-write-barrier-inl.h"
 #include "src/isolate-inl.h"
 #include "src/messages.h"
 #include "src/objects-inl.h"
@@ -474,7 +475,7 @@ static void SortIndices(
               return !b->IsSmi() && b->IsUndefined(isolate);
             });
   if (write_barrier_mode != SKIP_WRITE_BARRIER) {
-    FIXED_ARRAY_ELEMENTS_WRITE_BARRIER(isolate->heap(), *indices, 0, sort_size);
+    FIXED_ARRAY_ELEMENTS_WRITE_BARRIER(*indices, 0, sort_size);
   }
 }
 

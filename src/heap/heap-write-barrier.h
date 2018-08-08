@@ -8,6 +8,7 @@
 namespace v8 {
 namespace internal {
 
+class FixedArray;
 class HeapObject;
 class MaybeObject;
 class Object;
@@ -15,14 +16,23 @@ class Object;
 // Note: In general it is preferred to use the macros defined in
 // object-macros.h.
 
+// Write barrier for FixedArray elements.
+#define FIXED_ARRAY_ELEMENTS_WRITE_BARRIER(array, start, length) \
+  do {                                                           \
+    GenerationalBarrierForElements(array, start, length);        \
+    MarkingBarrierForElements(array);                            \
+  } while (false)
+
 // Generational write barrier.
 void GenerationalBarrier(HeapObject* object, Object** slot, Object* value);
 void GenerationalBarrier(HeapObject* object, MaybeObject** slot,
                          MaybeObject* value);
+void GenerationalBarrierForElements(FixedArray* array, int offset, int length);
 
 // Marking write barrier.
 void MarkingBarrier(HeapObject* object, Object** slot, Object* value);
 void MarkingBarrier(HeapObject* object, MaybeObject** slot, MaybeObject* value);
+void MarkingBarrierForElements(HeapObject* object);
 
 }  // namespace internal
 }  // namespace v8
