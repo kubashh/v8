@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9405eb33_643e84c9",
+        "filename": "src/objects/prototype-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-08T16:56:46Z",
+      "side": 1,
+      "message": "nit: s/Namepace/Namespace/\n\nAlso, please extend this comment with:\n\n  This field is only used for JSModuleNamespace maps.\n  TODO(jkummerow): Figure out if there\u0027s a way to store the namespace\n  pointer elsewhere to save memory.",
+      "range": {
+        "startLine": 22,
+        "startChar": 42,
+        "endLine": 22,
+        "endChar": 58
+      },
+      "revId": "e0e0f5e69ed2e6cf7db0eeff93d5e2f6c5937bff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
