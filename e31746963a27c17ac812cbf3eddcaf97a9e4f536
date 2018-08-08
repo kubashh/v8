@@ -22,6 +22,30 @@
       "revId": "e31746963a27c17ac812cbf3eddcaf97a9e4f536",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f37b3cd_56433041",
+        "filename": "test/cctest/interpreter/bytecode_expectations/IIFEWithOneshotOpt.golden",
+        "patchSetId": 5
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-08-08T08:12:08Z",
+      "side": 1,
+      "message": "Length was queried from bytecode array, it is wired that bytecode is updated but not length. Running generate bytecode expectations with rebaseline fixed this inconsistency. Maybe I accidentally reverted this change in my editor.",
+      "parentUuid": "8a39dccb_53099a66",
+      "range": {
+        "startLine": 273,
+        "startChar": 22,
+        "endLine": 273,
+        "endChar": 26
+      },
+      "revId": "e31746963a27c17ac812cbf3eddcaf97a9e4f536",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
