@@ -653,6 +653,32 @@ class Instruction {
                        (new_imm24 & kImm24Mask));
   }
 
+  bool IsVldrDRegisterImmediate() {
+    return (InstructionBits() & (15 * B24 | 3 * B20 | 15 * B8)) ==
+           (13 * B24 | B20 | 11 * B8);
+  }
+
+  int GetVldrDRegisterImmediateOffset() {
+    DCHECK(IsVldrDRegisterImmediate());
+    bool positive = (InstructionBits() & B23) == B23;
+    int offset = InstructionBits() & kOff8Mask;  // Zero extended offset.
+    offset <<= 2;
+    return positive ? offset : -offset;
+  }
+
+  void SetVldrDRegisterImmediateOffset(intptr_t offset) {
+    DCHECK(IsVldrDRegisterImmediate());
+    DCHECK((offset & ~3) == offset);  // Must be 64-bit aligned.
+    bool positive = offset >= 0;
+    if (!positive) offset = -offset;
+    DCHECK(is_uint10(offset));
+    uint16_t imm = static_cast<uint16_t>(offset);
+    // Set bit indicating whether the offset should be added.
+    Instr instr = (InstructionBits() & ~B23) | (positive ? B23 : 0);
+    // Set the actual offset. Its bottom 2 bits are zero.
+    SetInstructionBits((instr & ~kOff8Mask) | (imm >> 2));
+  }
+
   // Fields used in Software interrupt instructions
   inline SoftwareInterruptCodes SvcValue() const {
     return static_cast<SoftwareInterruptCodes>(Bits(23, 0));
@@ -697,6 +723,10 @@ class Instruction {
     return reinterpret_cast<Instruction*>(pc);
   }
 
+  template <typename T>
+  V8_INLINE static Instruction* Cast(T src) {
+    return reinterpret_cast<Instruction*>(src);
+  }
 
  private:
   // Join split register codes, depending on register precision.

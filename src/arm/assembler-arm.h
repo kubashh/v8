@@ -1389,22 +1389,6 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   // Check whether an immediate fits an addressing mode 2 instruction.
   bool ImmediateFitsAddrMode2Instruction(int32_t imm32);
 
-  // Class for scoping postponing the constant pool generation.
-  class BlockConstPoolScope {
-   public:
-    explicit BlockConstPoolScope(Assembler* assem) : assem_(assem) {
-      assem_->StartBlockConstPool();
-    }
-    ~BlockConstPoolScope() {
-      assem_->EndBlockConstPool();
-    }
-
-   private:
-    Assembler* assem_;
-
-    DISALLOW_IMPLICIT_CONSTRUCTORS(BlockConstPoolScope);
-  };
-
   // Record a comment relocation entry that can be used by a disassembler.
   // Use --code-comments to enable.
   void RecordComment(const char* msg);
@@ -1442,6 +1426,10 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void dq(uint64_t data);
   void dp(uintptr_t data) { dd(data); }
 
+  void dc32(uint32_t data) { dd(data); }
+
+  void dc64(uint64_t data) { dq(data); }
+
   // Read/patch instructions
   Instr instr_at(int pos) { return *reinterpret_cast<Instr*>(buffer_ + pos); }
   void instr_at_put(int pos, Instr instr) {
@@ -1451,6 +1439,11 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   static void instr_at_put(Address pc, Instr instr) {
     *reinterpret_cast<Instr*>(pc) = instr;
   }
+
+  Instruction* InstructionAt(ptrdiff_t offset) const {
+    return reinterpret_cast<Instruction*>(buffer_ + offset);
+  }
+
   static Condition GetCondition(Instr instr);
   static bool IsLdrRegisterImmediate(Instr instr);
   static bool IsVldrDRegisterImmediate(Instr instr);
@@ -1507,13 +1500,15 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   // Postpone the generation of the constant pool for the specified number of
   // instructions.
-  void BlockConstPoolFor(int instructions);
+  void BlockConstPoolFor(int instructions) {
+    constpool_.BlockFor(instructions);
+  }
 
   // Check if is time to emit a constant pool.
   void CheckConstPool(bool force_emit, bool require_jump);
 
   void MaybeCheckConstPool() {
-    if (pc_offset() >= next_buffer_check_) {
+    if (pc_offset() >= constpool_.NextCheckOffset()) {
       CheckConstPool(false, true);
     }
   }
@@ -1532,6 +1527,27 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   V8_INLINE Handle<Code> relative_code_target_object_handle_at(
       Address pc_) const;
 
+  // Number of pool entries after which a pool will be emitted. Since constant
+  // pool emission checks are interval based this value is an approximation.
+  static constexpr int kApproxMaxPoolEntryCount = 32;
+
+  // Class for scoping postponing the constant pool generation.
+  class BlockConstPoolScope {
+   public:
+    explicit BlockConstPoolScope(Assembler* assem) : assem_(assem) {
+      assem_->constpool_.StartBlock();
+    }
+    ~BlockConstPoolScope() { assem_->constpool_.EndBlock(); }
+
+   private:
+    Assembler* assem_;
+
+    DISALLOW_IMPLICIT_CONSTRUCTORS(BlockConstPoolScope);
+  };
+
+  bool is_const_pool_blocked() const { return constpool_.IsBlocked(); }
+  bool is_const_pool_empty() const { return constpool_.IsEmpty(); }
+
  protected:
   int buffer_space() const { return reloc_info_writer.pos() - pc_; }
 
@@ -1540,46 +1556,6 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   // Patch branch instruction at pos to branch to given branch target pos
   void target_at_put(int pos, int target_pos);
-
-  // Prevent contant pool emission until EndBlockConstPool is called.
-  // Calls to this function can be nested but must be followed by an equal
-  // number of call to EndBlockConstpool.
-  void StartBlockConstPool() {
-    if (const_pool_blocked_nesting_++ == 0) {
-      // Prevent constant pool checks happening by setting the next check to
-      // the biggest possible offset.
-      next_buffer_check_ = kMaxInt;
-    }
-  }
-
-  // Resume constant pool emission. Needs to be called as many times as
-  // StartBlockConstPool to have an effect.
-  void EndBlockConstPool() {
-    if (--const_pool_blocked_nesting_ == 0) {
-#ifdef DEBUG
-      // Max pool start (if we need a jump and an alignment).
-      int start = pc_offset() + kInstrSize + 2 * kPointerSize;
-      // Check the constant pool hasn't been blocked for too long.
-      DCHECK(pending_32_bit_constants_.empty() ||
-             (start + pending_64_bit_constants_.size() * kDoubleSize <
-              static_cast<size_t>(first_const_pool_32_use_ +
-                                  kMaxDistToIntPool)));
-      DCHECK(pending_64_bit_constants_.empty() ||
-             (start < (first_const_pool_64_use_ + kMaxDistToFPPool)));
-#endif
-      // Two cases:
-      //  * no_const_pool_before_ >= next_buffer_check_ and the emission is
-      //    still blocked
-      //  * no_const_pool_before_ < next_buffer_check_ and the next emit will
-      //    trigger a check.
-      next_buffer_check_ = no_const_pool_before_;
-    }
-  }
-
-  bool is_const_pool_blocked() const {
-    return (const_pool_blocked_nesting_ > 0) ||
-           (pc_offset() < no_const_pool_before_);
-  }
 
   bool VfpRegisterIsAvailable(DwVfpRegister reg) {
     DCHECK(reg.is_valid());
@@ -1614,19 +1590,15 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   // If every instruction in a long sequence is accessing the pool, we need one
   // pending relocation entry per instruction.
 
-  // The buffers of pending constant pool entries.
-  std::vector<ConstantPoolEntry> pending_32_bit_constants_;
-  std::vector<ConstantPoolEntry> pending_64_bit_constants_;
-
   // Scratch registers available for use by the Assembler.
   RegList scratch_register_list_;
   VfpRegList scratch_vfp_register_list_;
 
+  ConstPool constpool_;
+
  private:
   // Avoid overflows for displacements etc.
   static const int kMaximalBufferSize = 512 * MB;
-
-  int next_buffer_check_;  // pc offset of next buffer check
 
   // Constant pool generation
   // Pools are emitted in the instruction stream, preferably after unconditional
@@ -1644,15 +1616,6 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   // an exact science, and that we rely on some slop to not overrun buffers.
   static constexpr int kCheckPoolIntervalInst = 32;
   static constexpr int kCheckPoolInterval = kCheckPoolIntervalInst * kInstrSize;
-
-  // Emission of the constant pool may be blocked in some code sequences.
-  int const_pool_blocked_nesting_;  // Block emission if this is not zero.
-  int no_const_pool_before_;  // Block emission before this pc offset.
-
-  // Keep track of the first instruction requiring a constant pool entry
-  // since the previous constant pool was emitted.
-  int first_const_pool_32_use_;
-  int first_const_pool_64_use_;
 
   // The bound position, before this we cannot do instruction elimination.
   int last_bound_pos_;
@@ -1681,6 +1644,9 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   // Record reloc info for current pc_
   void RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data = 0);
+
+  // The pending constant pool.
+  friend class ConstPool;
   void ConstantPoolAddEntry(int position, RelocInfo::Mode rmode,
                             intptr_t value);
   void ConstantPoolAddEntry(int position, Double value);
