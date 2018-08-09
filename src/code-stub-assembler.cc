@@ -6685,7 +6685,6 @@ TNode<String> CodeStubAssembler::NumberToString(TNode<Number> input) {
   GotoIfNot(Word32Equal(high, high_compare), &runtime);
 
   // Heap number match, return value from cache entry.
-  IncrementCounter(isolate()->counters()->number_to_string_native(), 1);
   result = CAST(
       LoadFixedArrayElement(CAST(number_string_cache), index, kPointerSize));
   Goto(&done);
@@ -6708,7 +6707,6 @@ TNode<String> CodeStubAssembler::NumberToString(TNode<Number> input) {
     GotoIf(WordNotEqual(smi_key, input), &runtime);
 
     // Smi match, return value from cache entry.
-    IncrementCounter(isolate()->counters()->number_to_string_native(), 1);
     result = CAST(LoadFixedArrayElement(CAST(number_string_cache), smi_index,
                                         kPointerSize, SMI_PARAMETERS));
     Goto(&done);
