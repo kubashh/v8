@@ -24,6 +24,7 @@
 #include "src/objects/js-collator-inl.h"
 #include "src/objects/js-list-format-inl.h"
 #include "src/objects/js-list-format.h"
+#include "src/objects/js-number-format-inl.h"
 #include "src/objects/js-plural-rules-inl.h"
 #include "src/objects/managed.h"
 #include "src/runtime/runtime-utils.h"
@@ -272,6 +273,28 @@ RUNTIME_FUNCTION(Runtime_CurrencyDigits) {
   DCHECK_EQ(1, args.length());
   CONVERT_ARG_HANDLE_CHECKED(String, currency, 0);
   return *Intl::CurrencyDigits(isolate, currency);
+}
+
+RUNTIME_FUNCTION(Runtime_NumberFormatResolvedOptions) {
+  HandleScope scope(isolate);
+
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(Object, number_format_obj, 0);
+
+  // 3. If pr does not have an [[InitializedNumberFormat]] internal
+  // slot, throw a TypeError exception.
+  if (!number_format_obj->IsJSNumberFormat()) {
+    Handle<String> method_str = isolate->factory()->NewStringFromStaticChars(
+        "Intl.NumberFormat.prototype.resolvedOptions");
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kIncompatibleMethodReceiver,
+                              method_str, number_format_obj));
+  }
+
+  Handle<JSNumberFormat> number_format =
+      Handle<JSNumberFormat>::cast(number_format_obj);
+
+  return *JSNumberFormat::ResolvedOptions(isolate, number_format);
 }
 
 RUNTIME_FUNCTION(Runtime_InternalCompare) {
