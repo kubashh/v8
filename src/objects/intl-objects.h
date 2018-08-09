@@ -22,6 +22,7 @@ namespace U_ICU_NAMESPACE {
 class BreakIterator;
 class Collator;
 class DecimalFormat;
+class NumberFormat;
 class PluralRules;
 class SimpleDateFormat;
 class UnicodeString;
