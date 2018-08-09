@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63cce945_0f631ce2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-08-09T08:34:26Z",
+      "side": 1,
+      "message": "/we ask/we will ask/",
+      "revId": "dfba6b5c1cabcd79fb01197fb815f0c717366a23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
