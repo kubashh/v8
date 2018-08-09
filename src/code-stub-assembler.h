@@ -1116,9 +1116,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<Map> LoadJSArrayElementsMap(SloppyTNode<Int32T> kind,
                                     SloppyTNode<Context> native_context);
 
-  TNode<Word32T> IsGeneratorFunction(TNode<JSFunction> function);
-  TNode<Word32T> HasPrototypeProperty(TNode<JSFunction> function);
-  TNode<Word32T> PrototypeRequiresRuntimeLookup(TNode<JSFunction> function);
+  TNode<BoolT> IsGeneratorFunction(TNode<JSFunction> function);
+  TNode<BoolT> HasPrototypeProperty(TNode<JSFunction> function);
+  void GotoIfPrototypeRequiresRuntimeLookup(TNode<JSFunction> function,
+                                            TNode<Map> map, Label* runtime);
   // Load the "prototype" property of a JSFunction.
   Node* LoadJSFunctionPrototype(Node* function, Label* if_bailout);
 
