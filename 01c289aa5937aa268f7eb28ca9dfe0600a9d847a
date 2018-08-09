@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e799ccac_2172496d",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 16130,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-09T09:40:34Z",
+      "side": 0,
+      "message": "In order for these DCHECKs to work we would need a whitelist of instance types that are allowed to be created through ObjectTemplateInfos and friends. I cannot come up with one, so I removed the DCHECKs.",
+      "range": {
+        "startLine": 16130,
+        "startChar": 7,
+        "endLine": 16130,
+        "endChar": 21
+      },
+      "revId": "01c289aa5937aa268f7eb28ca9dfe0600a9d847a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
