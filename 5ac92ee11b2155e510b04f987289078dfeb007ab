@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6918987_90007104",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-09T13:48:09Z",
+      "side": 1,
+      "message": "It might be cleaner/simpler to handle CR[LF] separately from the single character line terminators, it removes the need for the lastChar state. But, up to you.",
+      "revId": "5ac92ee11b2155e510b04f987289078dfeb007ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca0013f6_ae48b091",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-09T13:48:09Z",
+      "side": 1,
+      "message": "this is much cleaner :)",
+      "revId": "5ac92ee11b2155e510b04f987289078dfeb007ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
