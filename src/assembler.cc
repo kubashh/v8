@@ -940,5 +940,311 @@ void AssemblerBase::UpdateCodeTarget(intptr_t code_target_index,
   code_targets_[code_target_index] = code;
 }
 
+// Constant Pool.
+
+ConstPool::ConstPool(Assembler* assm)
+    : assm_(assm),
+      first_use_32_(-1),
+      first_use_64_(-1),
+      entry32_count_(0),
+      entry64_count_(0),
+      next_constant_pool_check_(0),
+      const_pool_blocked_nesting_(0),
+      no_const_pool_before_(0) {}
+
+ConstPool::~ConstPool() { DCHECK_EQ(const_pool_blocked_nesting_, 0); }
+
+bool ConstPool::RecordEntry(uint32_t data, RelocInfo::Mode rmode) {
+  DCHECK(rmode != RelocInfo::COMMENT && rmode != RelocInfo::CONST_POOL &&
+         rmode != RelocInfo::VENEER_POOL &&
+         rmode != RelocInfo::DEOPT_SCRIPT_OFFSET &&
+         rmode != RelocInfo::DEOPT_INLINING_ID &&
+         rmode != RelocInfo::DEOPT_REASON && rmode != RelocInfo::DEOPT_ID);
+  int offset = assm_->pc_offset();
+  ConstPoolKey key(data, DedupModeFromRelocInfo(rmode, data));
+  CHECK(key.is_value32());
+  return RecordKey(std::move(key), offset);
+}
+
+bool ConstPool::RecordEntry(uint64_t data, RelocInfo::Mode rmode) {
+  DCHECK(rmode != RelocInfo::COMMENT && rmode != RelocInfo::CONST_POOL &&
+         rmode != RelocInfo::VENEER_POOL &&
+         rmode != RelocInfo::DEOPT_SCRIPT_OFFSET &&
+         rmode != RelocInfo::DEOPT_INLINING_ID &&
+         rmode != RelocInfo::DEOPT_REASON && rmode != RelocInfo::DEOPT_ID);
+  int offset = assm_->pc_offset();
+  ConstPoolKey key(data, DedupModeFromRelocInfo(rmode, data));
+  CHECK(!key.is_value32());
+  return RecordKey(std::move(key), offset);
+}
+
+bool ConstPool::RecordKey(ConstPoolKey key, int offset) {
+  bool write_reloc_info = !IsDuplicate(key);
+  if (write_reloc_info) {
+    if (key.is_value32()) {
+      if (entry32_count_ == 0) first_use_32_ = offset;
+      ++entry32_count_;
+      // printf("#entry32 %d\n", static_cast<int>(entry32_count_));
+    } else {
+      if (entry64_count_ == 0) first_use_64_ = offset;
+      ++entry64_count_;
+      // printf("#entry64 %d\n", static_cast<int>(entry64_count_));
+    }
+  }
+  // printf("RecordEntry (value=%lld) (is_value32=%d) (shared=%d)\n",
+  // key.is_value32() ? key.value32() : key.value64(), key.is_value32(),
+  //! write_reloc_info);
+  entries_.insert(std::make_pair(key, offset));
+
+  if (EntryCount() > Assembler::kApproxMaxPoolEntryCount) {
+    // Request constant pool emission after the next instruction.
+    SetNextCheckIn(1);
+  }
+
+  return write_reloc_info;
+}
+
+bool ConstPool::IsDuplicate(const ConstPoolKey& key) {
+  if (!key.AllowsDeduplication()) return false;
+  auto existing = entries_.find(key);
+  return existing != entries_.end();
+}
+
+int ConstPool::DistanceToFirstUse32() const {
+  DCHECK_GE(first_use_32_, 0);
+  return assm_->pc_offset() - first_use_32_;
+}
+
+int ConstPool::DistanceToFirstUse64() const {
+  DCHECK_GE(first_use_64_, 0);
+  return assm_->pc_offset() - first_use_64_;
+}
+
+int ConstPool::DistanceToFirstUse() const {
+  return std::min(DistanceToFirstUse32(), DistanceToFirstUse64());
+}
+
+void ConstPool::Emit(bool require_jump) {
+  DCHECK(!IsBlocked());
+  // Prevent recursive pool emission and protect from veneer pools.
+  BlockScope block(this);
+
+  bool require_alignment = IsAlignmentRequired(require_jump);
+  int size = ComputeSize(require_jump, require_alignment);
+  Label size_check;
+  assm_->bind(&size_check);
+
+  assm_->RecordConstPool(size);
+  // Emit the constant pool. It is preceded by an optional branch if
+  // require_jump and a header which will:
+  //  1) Encode the size of the constant pool, for use by the disassembler.
+  //  2) Terminate the program, to try to prevent execution from accidentally
+  //     flowing into the constant pool.
+  //  3) align the pool entries to 64-bit.
+  // The header is therefore made of up to three arm64 instructions:
+  //   ldr xzr, #<size of the constant pool in 32-bit words>
+  //   blr xzr
+  //   nop
+  //
+  // If executed, the header will likely segfault and lr will point to the
+  // instruction following the offending blr.
+  // TODO(all): Make the alignment part less fragile. Currently code is
+  // allocated as a byte array so there are no guarantees the alignment will
+  // be preserved on compaction. Currently it works as allocation seems to be
+  // 64-bit aligned.
+
+  // Emit branch if required
+  Label after_pool;
+  if (require_jump) {
+    assm_->b(&after_pool);
+  }
+
+  // Emit the header.
+  assm_->RecordComment("[ Constant Pool");
+
+  EmitMarker(require_alignment);
+  EmitGuard();
+  if (require_alignment) assm_->Align(8);
+
+  // Emit constant pool entries.
+  EmitEntries();
+  assm_->RecordComment("]");
+
+  if (after_pool.is_linked()) {
+    assm_->bind(&after_pool);
+  }
+
+  DCHECK_EQ(assm_->SizeOfCodeGeneratedSince(&size_check), size);
+  Clear();
+}
+
+void ConstPool::Clear() {
+  entries_.clear();
+  first_use_32_ = -1;
+  first_use_64_ = -1;
+  entry32_count_ = 0;
+  entry64_count_ = 0;
+  next_constant_pool_check_ = 0;
+  no_const_pool_before_ = 0;
+}
+
+void ConstPool::StartBlock() {
+  if (const_pool_blocked_nesting_++ == 0) {
+    // Prevent constant pool checks happening by setting the next check to
+    // the biggest possible offset.
+    next_constant_pool_check_ = kMaxInt;
+  }
+}
+
+void ConstPool::EndBlock() {
+  if (--const_pool_blocked_nesting_ == 0) {
+    // Check the constant pool hasn't been blocked for too long.
+    DCHECK(CheckMaxPcOffset(assm_->pc_offset()));
+    // Two cases:
+    //  * no_const_pool_before_ >= next_constant_pool_check_ and the emission is
+    //    still blocked
+    //  * no_const_pool_before_ < next_constant_pool_check_ and the next emit
+    //    will trigger a check.
+    next_constant_pool_check_ = no_const_pool_before_;
+  }
+}
+
+bool ConstPool::IsBlocked() const {
+  return (const_pool_blocked_nesting_ > 0) ||
+         (assm_->pc_offset() < no_const_pool_before_);
+}
+
+// Set how far from current pc the next constant pool check will be.
+void ConstPool::SetNextCheckIn(int instructions) {
+  next_constant_pool_check_ = assm_->pc_offset() + instructions * kInstrSize;
+}
+
+void ConstPool::BlockFor(int instructions) {
+  int pc_limit = assm_->pc_offset() + instructions * kInstrSize;
+  if (no_const_pool_before_ < pc_limit) {
+    no_const_pool_before_ = pc_limit;
+    // Make sure the pool won't be blocked for too long.
+    DCHECK(CheckMaxPcOffset(pc_limit));
+  }
+
+  if (next_constant_pool_check_ < no_const_pool_before_) {
+    next_constant_pool_check_ = no_const_pool_before_;
+  }
+}
+
+void ConstPool::EmitEntries() {
+  for (auto iter = entries_.begin(); iter != entries_.end();) {
+    DCHECK(iter->first.is_value32() || IsAligned(assm_->pc_offset(), 8));
+    auto range = entries_.equal_range(iter->first);
+    bool shared = iter->first.AllowsDeduplication();
+    for (auto it = range.first; it != range.second; ++it) {
+      SetLoadOffsetToConstPoolEntry(it->second, assm_->pc_offset(), it->first);
+
+      if (!shared) Emit(it->first);
+    }
+    if (shared) Emit(iter->first);
+    iter = range.second;
+  }
+}
+
+DedupMode DedupModeFromRelocInfo(RelocInfo::Mode rmode, uint64_t value) {
+  switch (rmode) {
+    case RelocInfo::RELATIVE_CODE_TARGET:
+      return DedupMode::RELATIVE_CODE_TARGET;
+    case RelocInfo::JS_TO_WASM_CALL:
+      return DedupMode::JS_TO_WASM_CALL;
+    case RelocInfo::WASM_CALL:
+      return DedupMode::WASM_CALL;
+    case RelocInfo::WASM_STUB_CALL:
+      return DedupMode::WASM_STUB_CALL;
+    case RelocInfo::RUNTIME_ENTRY:
+      return DedupMode::RUNTIME_ENTRY;
+    case RelocInfo::COMMENT:
+      return DedupMode::COMMENT;
+    case RelocInfo::EXTERNAL_REFERENCE:
+      return DedupMode::EXTERNAL_REFERENCE;
+    case RelocInfo::INTERNAL_REFERENCE:
+      return DedupMode::INTERNAL_REFERENCE;
+    case RelocInfo::INTERNAL_REFERENCE_ENCODED:
+      return DedupMode::INTERNAL_REFERENCE_ENCODED;
+    case RelocInfo::OFF_HEAP_TARGET:
+      return DedupMode::OFF_HEAP_TARGET;
+    case RelocInfo::CODE_TARGET:
+      // case RelocInfo::EMBEDDED_OBJECT:
+      return DedupMode::OBJECT;
+    case RelocInfo::NONE:
+      return DedupMode::LITERAL;
+    default:
+      return DedupMode::NONE;
+  }
+  return DedupMode::NONE;
+}
+
+bool ConstPool::EnsureEntry32Exists(uint32_t data, DedupMode mode, int offset) {
+  ConstPoolKey key(data, mode);
+  auto i = entries_.equal_range(key);
+  if (i.first == entries_.end()) return false;
+  for (auto j = i.first; j != i.second; ++j) {
+    if (j->second == offset && j->first.is_value32()) return true;
+  }
+  return false;
+}
+
+bool ConstPool::EnsureEntry64Exists(uint64_t data, DedupMode mode, int offset) {
+  ConstPoolKey key(data, mode);
+  auto i = entries_.equal_range(key);
+  if (i.first == entries_.end()) return false;
+  for (auto j = i.first; j != i.second; ++j) {
+    if (j->second == offset && !j->first.is_value32()) return true;
+  }
+  return false;
+}
+
+bool ConstPool::ShouldEmitNow(bool require_jump) const {
+  if (IsEmpty()) return false;
+  bool require_alignment = IsAlignmentRequired(require_jump);
+  int size = ComputeSize(require_jump, require_alignment);
+  if (Entry64Count() != 0) {
+    // The 64-bit constants are always emitted before the 32-bit constants, so
+    // we subtract the size of the 32-bit constants from {size}.
+    size_t dist64 =
+        size - Entry32Count() * kPointerSize + DistanceToFirstUse64();
+    if ((dist64 + assm_->kCheckConstPoolInterval >= assm_->kMaxDistToFPPool) ||
+        (!require_jump && (dist64 >= assm_->kOpportunityDistToFPPool)) ||
+        (dist64 >= assm_->kApproxDistToFPPool)) {
+      return true;
+    }
+  }
+  if (Entry32Count() != 0) {
+    size_t dist32 = size + DistanceToFirstUse32();
+    if ((dist32 + assm_->kCheckConstPoolInterval >= assm_->kMaxDistToIntPool) ||
+        (!require_jump && (dist32 >= assm_->kOpportunityDistToIntPool)) ||
+        (dist32 >= assm_->kApproxDistToIntPool)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+int ConstPool::ComputeSize(bool require_jump = true,
+                           bool require_alignment = true) const {
+  // Check that the code buffer is large enough before emitting the constant
+  // pool (include the jump over the pool and the constant pool marker and
+  // the gap to the relocation information).
+  int size_up_to_marker = prologue_size(require_jump);
+
+  // Deduplicate constants.
+  size_t size_after_marker = Entry32Count() * kPointerSize +
+                             (require_alignment ? kInstrSize : 0) +
+                             Entry64Count() * kDoubleSize;
+  return size_up_to_marker + static_cast<int>(size_after_marker);
+}
+
+bool ConstPool::IsAlignmentRequired(bool require_jump) const {
+  int size_up_to_marker = prologue_size(require_jump);
+  return Entry64Count() != 0 &&
+         !IsAligned(assm_->pc_offset() + size_up_to_marker, kDoubleAlignment);
+}
+
 }  // namespace internal
 }  // namespace v8

@@ -1074,6 +1074,166 @@ inline std::ostream& operator<<(std::ostream& os,
   return reg.is_valid() ? os << "r" << reg.code() : os << "<invalid reg>";
 }
 
+enum class DedupMode {
+  RELATIVE_CODE_TARGET,
+  JS_TO_WASM_CALL,
+  WASM_CALL,
+  WASM_STUB_CALL,
+  RUNTIME_ENTRY,
+  COMMENT,
+  EXTERNAL_REFERENCE,
+  INTERNAL_REFERENCE,
+  INTERNAL_REFERENCE_ENCODED,
+  OFF_HEAP_TARGET,
+  OBJECT,
+  LITERAL,
+  NONE
+};
+
+class ConstPoolKey {
+ public:
+  explicit ConstPoolKey(uint64_t value, DedupMode dedup = DedupMode::NONE)
+      : is_value32_(false), value64_(value), dedup_(dedup) {}
+
+  explicit ConstPoolKey(uint32_t value, DedupMode dedup = DedupMode::NONE)
+      : is_value32_(true), value32_(value), dedup_(dedup) {}
+
+  uint64_t value64() const {
+    CHECK(!is_value32_);
+    return value64_;
+  }
+  uint32_t value32() const {
+    CHECK(is_value32_);
+    return value32_;
+  }
+
+  bool is_value32() const { return is_value32_; }
+  DedupMode dedup() const { return dedup_; }
+
+  bool AllowsDeduplication() const { return dedup_ != DedupMode::NONE; }
+
+ private:
+  bool is_value32_;
+  union {
+    uint64_t value64_;
+    uint32_t value32_;
+  };
+  DedupMode dedup_;
+};
+
+inline bool operator<(const ConstPoolKey& a, const ConstPoolKey& b) {
+  if (a.dedup() < b.dedup()) return true;
+  if (a.dedup() > b.dedup()) return false;
+  if (a.is_value32() < b.is_value32()) return true;
+  if (a.is_value32() > b.is_value32()) return false;
+  if (a.is_value32()) {
+    return a.value32() < b.value32();
+  } else {
+    return a.value64() < b.value64();
+  }
+}
+
+inline bool operator==(const ConstPoolKey& a, const ConstPoolKey& b) {
+  if (a.dedup() == b.dedup() && a.is_value32() == b.is_value32()) {
+    if (a.is_value32()) {
+      return a.value32() == b.value32();
+    } else {
+      return a.value64() == b.value64();
+    }
+  }
+  return false;
+}
+
+DedupMode DedupModeFromRelocInfo(RelocInfo::Mode rmode, uint64_t value);
+
+class ConstPool {
+ public:
+  explicit ConstPool(Assembler* assm);
+  ~ConstPool();
+
+  // Returns true when we need to write RelocInfo and false when we do not.
+  bool RecordEntry(uint32_t data, RelocInfo::Mode rmode);
+  bool RecordEntry(uint64_t data, RelocInfo::Mode rmode);
+  int EntryCount() const {
+    return static_cast<int>(entry32_count_ + entry64_count_);
+  }
+
+  size_t TotalEntryCount() const { return entries_.size(); }
+  size_t Entry32Count() const { return entry32_count_; }
+  size_t Entry64Count() const { return entry64_count_; }
+  bool IsEmpty() const { return entries_.empty(); }
+  // Distance in bytes between the current pc and the first instruction
+  // using the pool. If there are no pending entries return kMaxInt.
+  int DistanceToFirstUse() const;
+  int DistanceToFirstUse32() const;
+  int DistanceToFirstUse64() const;
+
+  int FirstUse32() const { return first_use_32_; }
+  int FirstUse64() const { return first_use_64_; }
+  int FirstUse() const { return std::min(first_use_32_, first_use_64_); }
+
+  // Offset after which instructions using the pool will be out of range.
+  bool CheckMaxPcOffset(int pc_offset);
+  // Maximum size the constant pool can be with current entries. It always
+  // includes alignment padding and branch over.
+  int WorstCaseSize();
+  // Size in bytes of the literal pool *if* it is emitted at the current
+  // pc. The size will include the branch over the pool if it was requested.
+  int ComputeSize(bool require_jump, bool require_alignment) const;
+  bool IsAlignmentRequired(bool require_jump) const;
+  // Emit the literal pool at the current pc with a branch over the pool if
+  // requested.
+  void Emit(bool require_jump);
+  // Discard any pending pool entries.
+  void Clear();
+  bool IsBlocked() const;
+  void BlockFor(int instructions);
+  void SetNextCheckIn(int instructions);
+  int NextCheckOffset() const { return next_constant_pool_check_; }
+  int BlockedUntilOffset() const { return no_const_pool_before_; }
+  bool ShouldEmitNow(bool require_jump) const;
+
+  // Class for scoping postponing the constant pool generation.
+  class BlockScope {
+   public:
+    explicit BlockScope(ConstPool* pool) : pool_(pool) { pool_->StartBlock(); }
+    ~BlockScope() { pool_->EndBlock(); }
+
+   private:
+    ConstPool* pool_;
+
+    DISALLOW_IMPLICIT_CONSTRUCTORS(BlockScope);
+  };
+  void StartBlock();
+  void EndBlock();
+
+  bool EnsureEntry32Exists(uint32_t data, DedupMode mode, int offset);
+  bool EnsureEntry64Exists(uint64_t data, DedupMode mode, int offset);
+  void EmitEntries();
+  void EmitMarker(bool require_align);
+
+ private:
+  int prologue_size(bool require_jump) const;
+  bool RecordKey(ConstPoolKey key, int offset);
+  bool IsDuplicate(const ConstPoolKey& key);
+  void EmitGuard();
+  void Emit(const ConstPoolKey& key);
+  void SetLoadOffsetToConstPoolEntry(int load_offset, int entry_offset,
+                                     const ConstPoolKey& key);
+
+  Assembler* assm_;
+  // Keep track of the first instruction requiring a constant pool entry
+  // since the previous constant pool was emitted.
+  int first_use_32_;
+  int first_use_64_;
+  std::multimap<ConstPoolKey, int> entries_;
+  size_t entry32_count_;
+  size_t entry64_count_;
+  int next_constant_pool_check_;
+  int const_pool_blocked_nesting_;
+  int no_const_pool_before_;
+};
+
 }  // namespace internal
 }  // namespace v8
 #endif  // V8_ASSEMBLER_H_
