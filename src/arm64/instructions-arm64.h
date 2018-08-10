@@ -433,6 +433,10 @@ class Instruction {
     return reinterpret_cast<Instruction*>(src);
   }
 
+  static Instruction* At(Address pc) {
+    return reinterpret_cast<Instruction*>(pc);
+  }
+
   V8_INLINE ptrdiff_t DistanceTo(Instruction* target) {
     return reinterpret_cast<Address>(target) - reinterpret_cast<Address>(this);
   }
