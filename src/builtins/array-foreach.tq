@@ -142,7 +142,7 @@ module array {
       }
 
       // 1. Let O be ? ToObject(this value).
-      let o: JSReceiver = ToObject(context, receiver);
+      let o: JSReceiver = ToObject_Inline(context, receiver);
 
       // 2. Let len be ? ToLength(? Get(O, "length")).
       let len: Number = GetLengthProperty(context, o);
