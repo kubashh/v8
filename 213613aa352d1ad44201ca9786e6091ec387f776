@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68bb5b6d_75219146",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-08-10T13:56:33Z",
+      "side": 1,
+      "message": "This should call SetFlags()?",
+      "range": {
+        "startLine": 566,
+        "startChar": 28,
+        "endLine": 566,
+        "endChar": 43
+      },
+      "revId": "213613aa352d1ad44201ca9786e6091ec387f776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
