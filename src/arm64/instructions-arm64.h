@@ -407,6 +407,7 @@ class Instruction {
                                                Instruction* target);
   // Patch a literal load instruction to load from 'source'.
   void SetImmLLiteral(Instruction* source);
+  void SetConstantPoolLoadAddress(Instruction* source);
 
   uintptr_t LiteralAddress() {
     int offset = ImmLLiteral() << kLoadLiteralScaleLog2;
@@ -431,6 +432,10 @@ class Instruction {
 
   template<typename T> V8_INLINE static Instruction* Cast(T src) {
     return reinterpret_cast<Instruction*>(src);
+  }
+
+  static Instruction* At(Address pc) {
+    return reinterpret_cast<Instruction*>(pc);
   }
 
   V8_INLINE ptrdiff_t DistanceTo(Instruction* target) {

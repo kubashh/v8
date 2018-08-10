@@ -1142,7 +1142,7 @@ inline void Assembler::CheckBuffer() {
   if (pc_offset() >= next_veneer_pool_check_) {
     CheckVeneerPool(false, true);
   }
-  if (pc_offset() >= next_constant_pool_check_) {
+  if (pc_offset() >= constpool_.NextCheckOffset()) {
     CheckConstPool(false, true);
   }
 }
