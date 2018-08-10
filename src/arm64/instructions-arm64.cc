@@ -319,6 +319,12 @@ void Instruction::SetImmLLiteral(Instruction* source) {
   SetInstructionBits(Mask(~mask) | imm);
 }
 
+void Instruction::SetConstantPoolLoadAddress(Instruction* source) {
+  // Instruction to patch must be 'ldr rd, [pc, #offset]' with offset == 0.
+  DCHECK(IsLdrLiteral());
+  DCHECK_EQ(ImmLLiteral(), 0);
+  SetImmLLiteral(source);
+}
 
 // TODO(jbramley): We can't put this inline in the class because things like
 // xzr and Register are not defined in that header. Consider adding
