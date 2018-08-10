@@ -1074,6 +1074,145 @@ inline std::ostream& operator<<(std::ostream& os,
   return reg.is_valid() ? os << "r" << reg.code() : os << "<invalid reg>";
 }
 
+#if defined(V8_TARGET_ARCH_ARM) || defined(V8_TARGET_ARCH_ARM64)
+
+class ConstPoolKey {
+ public:
+  explicit ConstPoolKey(uint64_t value, RelocInfo::Mode rmode = RelocInfo::NONE)
+      : is_value32_(false), value64_(value), rmode_(rmode) {}
+
+  explicit ConstPoolKey(uint32_t value, RelocInfo::Mode rmode = RelocInfo::NONE)
+      : is_value32_(true), value32_(value), rmode_(rmode) {}
+
+  uint64_t value64() const {
+    CHECK(!is_value32_);
+    return value64_;
+  }
+  uint32_t value32() const {
+    CHECK(is_value32_);
+    return value32_;
+  }
+
+  bool is_value32() const { return is_value32_; }
+  RelocInfo::Mode rmode() const { return rmode_; }
+
+  bool AllowsDeduplication() const {
+    DCHECK(rmode != RelocInfo::COMMENT && rmode != RelocInfo::CONST_POOL &&
+           rmode != RelocInfo::VENEER_POOL &&
+           rmode != RelocInfo::DEOPT_SCRIPT_OFFSET &&
+           rmode != RelocInfo::DEOPT_INLINING_ID &&
+           rmode != RelocInfo::DEOPT_REASON && rmode != RelocInfo::DEOPT_ID);
+    return IsShareableRelocMode(rmode_) || rmode_ == CODE_TARGET;
+  }
+
+ private:
+  bool is_value32_;
+  union {
+    uint64_t value64_;
+    uint32_t value32_;
+  };
+  RelocInfo::Mode rmode_;
+};
+
+inline bool operator<(const ConstPoolKey& a, const ConstPoolKey& b) {
+  if (a.rmode() < b.rmode()) return true;
+  if (a.rmode() > b.rmode()) return false;
+  if (a.is_value32() < b.is_value32()) return true;
+  if (a.is_value32() > b.is_value32()) return false;
+  return a.is_value32() ? a.value32() < b.value32() : a.value64() < b.value64();
+}
+
+inline bool operator==(const ConstPoolKey& a, const ConstPoolKey& b) {
+  if (a.rmode() != b.rmode() || a.is_value32() != b.is_value32()) {
+    return false;
+  }
+  return a.is_value32() ? a.value32() == b.value32()
+                        : a.value64() == b.value64();
+}
+
+class ArmConstPool {
+ public:
+  explicit ArmConstPool(Assembler* assm);
+  ~ArmConstPool();
+
+  // Returns true when we need to write RelocInfo and false when we do not.
+  bool RecordEntry(uint32_t data, RelocInfo::Mode rmode);
+  bool RecordEntry(uint64_t data, RelocInfo::Mode rmode);
+
+  size_t Entry32Count() const { return entry32_count_; }
+  size_t Entry64Count() const { return entry64_count_; }
+  bool IsEmpty() const { return entries_.empty(); }
+  // Offset after which instructions using the pool will be out of range.
+  bool IsInImmRangeIfEmittedAt(int pc_offset);
+  // Size in bytes of the constant pool. Depending on parameters, the size will
+  // include the branch over the pool and alignment padding.
+  int ComputeSize(bool require_jump, bool require_alignment) const;
+  bool IsAlignmentRequired(bool require_jump) const;
+  // Emit the literal pool at the current pc with a branch over the pool if
+  // requested.
+  void Emit(bool require_jump);
+  // Discard any pending pool entries.
+  void Clear();
+  bool IsBlocked() const;
+  void BlockFor(int instructions);
+  void SetNextCheckIn(size_t instructions);
+  int NextCheckOffset() const { return next_check_; }
+  int BlockedUntilOffset() const { return blocked_until_; }
+  bool ShouldEmitNow(bool require_jump) const;
+
+  // Class for scoping postponing the constant pool generation.
+  class BlockScope {
+   public:
+    explicit BlockScope(ArmConstPool* pool) : pool_(pool) {
+      pool_->StartBlock();
+    }
+    ~BlockScope() { pool_->EndBlock(); }
+
+   private:
+    ArmConstPool* pool_;
+    DISALLOW_IMPLICIT_CONSTRUCTORS(BlockScope);
+  };
+  void StartBlock();
+  void EndBlock();
+
+  bool EnsureEntry32Exists(uint32_t data, RelocInfo::Mode mode, int offset);
+  bool EnsureEntry64Exists(uint64_t data, RelocInfo::Mode mode, int offset);
+
+  static const size_t kMaxDistToPool32;
+  static const size_t kMaxDistToPool64;
+  static const size_t kApproxDistToIntPool;
+  static const size_t kApproxDistToFPPool;
+  static const size_t kOpportunityDistToPool32;
+  static const size_t kOpportunityDistToPool64;
+  static const size_t kCheckConstPoolInterval;
+  static const size_t kApproxMaxPoolEntryCount;
+
+ private:
+  void EmitEntries();
+  void EmitMarker(bool require_alignment);
+  int prologue_size(bool require_jump) const;
+  bool RecordKey(ConstPoolKey key, int offset);
+  bool IsDuplicate(const ConstPoolKey& key);
+  void EmitGuard();
+  void Emit(const ConstPoolKey& key);
+  void SetLoadOffsetToConstPoolEntry(int load_offset, int entry_offset,
+                                     const ConstPoolKey& key);
+
+  Assembler* assm_;
+  // Keep track of the first instruction requiring a constant pool entry
+  // since the previous constant pool was emitted.
+  int first_use_32_;
+  int first_use_64_;
+  std::multimap<ConstPoolKey, int> entries_;
+  size_t entry32_count_;
+  size_t entry64_count_;
+  int next_check_;
+  int blocked_nesting_;
+  int blocked_until_;
+};
+
+#endif
+
 }  // namespace internal
 }  // namespace v8
 #endif  // V8_ASSEMBLER_H_
