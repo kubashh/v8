@@ -940,5 +940,295 @@ void AssemblerBase::UpdateCodeTarget(intptr_t code_target_index,
   code_targets_[code_target_index] = code;
 }
 
+#if defined(V8_TARGET_ARCH_ARM) || defined(V8_TARGET_ARCH_ARM64)
+
+// Constant Pool.
+
+ArmConstPool::ArmConstPool(Assembler* assm)
+    : assm_(assm),
+      first_use_32_(-1),
+      first_use_64_(-1),
+      entry32_count_(0),
+      entry64_count_(0),
+      next_check_(0),
+      blocked_nesting_(0),
+      blocked_until_(0) {}
+
+ArmConstPool::~ArmConstPool() { DCHECK_EQ(blocked_nesting_, 0); }
+
+bool ArmConstPool::RecordEntry(uint32_t data, RelocInfo::Mode rmode) {
+  DCHECK(rmode != RelocInfo::COMMENT && rmode != RelocInfo::CONST_POOL &&
+         rmode != RelocInfo::VENEER_POOL &&
+         rmode != RelocInfo::DEOPT_SCRIPT_OFFSET &&
+         rmode != RelocInfo::DEOPT_INLINING_ID &&
+         rmode != RelocInfo::DEOPT_REASON && rmode != RelocInfo::DEOPT_ID);
+  ConstPoolKey key(data, DedupModeFromRelocInfo(rmode, data));
+  CHECK(key.is_value32());
+  return RecordKey(std::move(key), assm_->pc_offset());
+}
+
+bool ArmConstPool::RecordEntry(uint64_t data, RelocInfo::Mode rmode) {
+  DCHECK(rmode != RelocInfo::COMMENT && rmode != RelocInfo::CONST_POOL &&
+         rmode != RelocInfo::VENEER_POOL &&
+         rmode != RelocInfo::DEOPT_SCRIPT_OFFSET &&
+         rmode != RelocInfo::DEOPT_INLINING_ID &&
+         rmode != RelocInfo::DEOPT_REASON && rmode != RelocInfo::DEOPT_ID);
+  ConstPoolKey key(data, DedupModeFromRelocInfo(rmode, data));
+  CHECK(!key.is_value32());
+  return RecordKey(std::move(key), assm_->pc_offset());
+}
+
+bool ArmConstPool::RecordKey(ConstPoolKey key, int offset) {
+  bool write_reloc_info = !IsDuplicate(key);
+  if (write_reloc_info) {
+    if (key.is_value32()) {
+      if (entry32_count_ == 0) first_use_32_ = offset;
+      ++entry32_count_;
+    } else {
+      if (entry64_count_ == 0) first_use_64_ = offset;
+      ++entry64_count_;
+    }
+  }
+  entries_.insert(std::make_pair(key, offset));
+
+  if (Entry32Count() + Entry64Count() >
+      ArmConstPool::kApproxMaxPoolEntryCount) {
+    // Request constant pool emission after the next instruction.
+    SetNextCheckIn(1);
+  }
+
+  return write_reloc_info;
+}
+
+bool ArmConstPool::IsDuplicate(const ConstPoolKey& key) {
+  if (!key.AllowsDeduplication()) return false;
+  auto existing = entries_.find(key);
+  return existing != entries_.end();
+}
+
+int ArmConstPool::DistanceToFirstUse32() const {
+  DCHECK_GE(first_use_32_, 0);
+  return assm_->pc_offset() - first_use_32_;
+}
+
+int ArmConstPool::DistanceToFirstUse64() const {
+  DCHECK_GE(first_use_64_, 0);
+  return assm_->pc_offset() - first_use_64_;
+}
+
+void ArmConstPool::Emit(bool require_jump) {
+  DCHECK(!IsBlocked());
+  // Prevent recursive pool emission and protect from veneer pools.
+  BlockScope block(this);
+  bool require_alignment = IsAlignmentRequired(require_jump);
+  int size = ComputeSize(require_jump, require_alignment);
+  Label size_check;
+  assm_->bind(&size_check);
+  assm_->RecordConstPool(size);
+
+  // Emit the constant pool. It is preceded by an optional branch if
+  // require_jump and a header which will:
+  //  1) Encode the size of the constant pool, for use by the disassembler.
+  //  2) Terminate the program, to try to prevent execution from accidentally
+  //     flowing into the constant pool.
+  //  3) align the pool entries to 64-bit.
+  // TODO(all): Make the alignment part less fragile. Currently code is
+  // allocated as a byte array so there are no guarantees the alignment will
+  // be preserved on compaction. Currently it works as allocation seems to be
+  // 64-bit aligned.
+
+  Label after_pool;
+  if (require_jump) {
+    assm_->b(&after_pool);
+  }
+
+  assm_->RecordComment("[ Constant Pool");
+  EmitMarker(require_alignment);
+  EmitGuard();
+  if (require_alignment) assm_->Align(8);
+  EmitEntries();
+  assm_->RecordComment("]");
+
+  if (after_pool.is_linked()) {
+    assm_->bind(&after_pool);
+  }
+
+  DCHECK_EQ(assm_->SizeOfCodeGeneratedSince(&size_check), size);
+  Clear();
+}
+
+void ArmConstPool::Clear() {
+  entries_.clear();
+  first_use_32_ = -1;
+  first_use_64_ = -1;
+  entry32_count_ = 0;
+  entry64_count_ = 0;
+  next_check_ = 0;
+  blocked_until_ = 0;
+}
+
+void ArmConstPool::StartBlock() {
+  if (blocked_nesting_++ == 0) {
+    // Prevent constant pool checks happening by setting the next check to
+    // the biggest possible offset.
+    next_check_ = kMaxInt;
+  }
+}
+
+void ArmConstPool::EndBlock() {
+  if (--blocked_nesting_ == 0) {
+    DCHECK(IsInImmRangeIfEmittedAt(assm_->pc_offset()));
+    // Two cases:
+    //  * blocked_until_ >= next_check_ and the emission is still blocked
+    //  * blocked_until_ < next_check_ and the next emit will trigger a check.
+    next_check_ = blocked_until_;
+  }
+}
+
+bool ArmConstPool::IsBlocked() const {
+  return (blocked_nesting_ > 0) || (assm_->pc_offset() < blocked_until_);
+}
+
+void ArmConstPool::SetNextCheckIn(size_t instructions) {
+  next_check_ =
+      assm_->pc_offset() + static_cast<int>(instructions * kInstrSize);
+}
+
+void ArmConstPool::BlockFor(int instructions) {
+  int pc_limit = assm_->pc_offset() + instructions * kInstrSize;
+  next_check_ = std::max({next_check_, blocked_until_, pc_limit});
+  DCHECK(IsInImmRangeIfEmittedAt(next_check_));
+}
+
+void ArmConstPool::EmitEntries() {
+  for (auto iter = entries_.begin(); iter != entries_.end();) {
+    DCHECK(iter->first.is_value32() || IsAligned(assm_->pc_offset(), 8));
+    auto range = entries_.equal_range(iter->first);
+    bool shared = iter->first.AllowsDeduplication();
+    for (auto it = range.first; it != range.second; ++it) {
+      SetLoadOffsetToConstPoolEntry(it->second, assm_->pc_offset(), it->first);
+      if (!shared) Emit(it->first);
+    }
+    if (shared) Emit(iter->first);
+    iter = range.second;
+  }
+}
+
+DedupMode DedupModeFromRelocInfo(RelocInfo::Mode rmode, uint64_t value) {
+  switch (rmode) {
+    case RelocInfo::RELATIVE_CODE_TARGET:
+      return DedupMode::RELATIVE_CODE_TARGET;
+    case RelocInfo::JS_TO_WASM_CALL:
+      return DedupMode::JS_TO_WASM_CALL;
+    case RelocInfo::WASM_CALL:
+      return DedupMode::WASM_CALL;
+    case RelocInfo::WASM_STUB_CALL:
+      return DedupMode::WASM_STUB_CALL;
+    case RelocInfo::RUNTIME_ENTRY:
+      return DedupMode::RUNTIME_ENTRY;
+    case RelocInfo::COMMENT:
+      return DedupMode::COMMENT;
+    case RelocInfo::EXTERNAL_REFERENCE:
+      return DedupMode::EXTERNAL_REFERENCE;
+    case RelocInfo::INTERNAL_REFERENCE:
+      return DedupMode::INTERNAL_REFERENCE;
+    case RelocInfo::INTERNAL_REFERENCE_ENCODED:
+      return DedupMode::INTERNAL_REFERENCE_ENCODED;
+    case RelocInfo::OFF_HEAP_TARGET:
+      return DedupMode::OFF_HEAP_TARGET;
+    case RelocInfo::CODE_TARGET:
+      // case RelocInfo::EMBEDDED_OBJECT:
+      return DedupMode::OBJECT;
+    case RelocInfo::NONE:
+      return DedupMode::LITERAL;
+    default:
+      return DedupMode::NONE;
+  }
+  return DedupMode::NONE;
+}
+
+bool ArmConstPool::EnsureEntry32Exists(uint32_t data, DedupMode mode,
+                                       int offset) {
+  ConstPoolKey key(data, mode);
+  auto i = entries_.equal_range(key);
+  if (i.first == entries_.end()) return false;
+  for (auto j = i.first; j != i.second; ++j) {
+    if (j->second == offset && j->first.is_value32()) return true;
+  }
+  return false;
+}
+
+bool ArmConstPool::EnsureEntry64Exists(uint64_t data, DedupMode mode,
+                                       int offset) {
+  ConstPoolKey key(data, mode);
+  auto i = entries_.equal_range(key);
+  if (i.first == entries_.end()) return false;
+  for (auto j = i.first; j != i.second; ++j) {
+    if (j->second == offset && !j->first.is_value32()) return true;
+  }
+  return false;
+}
+
+bool ArmConstPool::ShouldEmitNow(bool require_jump) const {
+  // Let DELTA32 be the distance from the first instruction accessing a 32bit
+  // entry in the constant pool to any of the 32bit constant pool entries. Let
+  // DELTA64 be defined for 64bit respectively. The constant pool should be
+  // emitted if either of the following is true: (A) DELTA32 or DELTA64 will
+  // exceed the limit at the next check in. (B) Emission can be done behind an
+  // unconditional branch and DELTA* exceeds {kOpportunityDist*}. (C) DELTA
+  // exceeds the desired approximate distance to the pool.
+
+  if (IsEmpty()) return false;
+  bool require_alignment = IsAlignmentRequired(require_jump);
+  int size = ComputeSize(require_jump, require_alignment);
+  if (Entry64Count() != 0) {
+    // The 64-bit constants are always emitted before the 32-bit constants, so
+    // we subtract the size of the 32-bit constants from {size}.
+    size_t dist64 =
+        size - Entry32Count() * kPointerSize + DistanceToFirstUse64();
+    if ((dist64 + kCheckConstPoolInterval >= kMaxDistToFPPool) ||
+        (!require_jump && (dist64 >= kOpportunityDistToFPPool)) ||
+        (dist64 >= kApproxDistToFPPool)) {
+      return true;
+    }
+  }
+  if (Entry32Count() != 0) {
+    size_t dist32 = size + DistanceToFirstUse32();
+    if ((dist32 + kCheckConstPoolInterval >= kMaxDistToIntPool) ||
+        (!require_jump && (dist32 >= kOpportunityDistToIntPool)) ||
+        (dist32 >= kApproxDistToIntPool)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+int ArmConstPool::ComputeSize(bool require_jump, bool require_alignment) const {
+  int size_up_to_marker = prologue_size(require_jump);
+  size_t size_after_marker = Entry32Count() * kPointerSize +
+                             (require_alignment ? kInstrSize : 0) +
+                             Entry64Count() * kDoubleSize;
+  return size_up_to_marker + static_cast<int>(size_after_marker);
+}
+
+bool ArmConstPool::IsAlignmentRequired(bool require_jump) const {
+  int size_up_to_marker = prologue_size(require_jump);
+  return Entry64Count() != 0 &&
+         !IsAligned(assm_->pc_offset() + size_up_to_marker, kDoubleAlignment);
+}
+
+bool ArmConstPool::IsInImmRangeIfEmittedAt(int pc_offset) {
+  // Check the constant can be emitted at {pc_offset}.
+  size_t pool_end_32 = pc_offset + ComputeSize(true, true);
+  size_t pool_end_64 = end_of_pool32 - Entry32Count() * 4;
+  bool entries_in_range_32 =
+      Entry32Count() == 0 || (pool_end_32 < first_use_32_ + kMaxDistToIntPool);
+  bool entries_in_range_64 =
+      Entry64Count() == 0 || (pool_end_64 < first_use_64_ + kMaxDistToFPPool);
+  return entries_in_range_32 && entries_in_range_64;
+}
+
+#endif
+
 }  // namespace internal
 }  // namespace v8
