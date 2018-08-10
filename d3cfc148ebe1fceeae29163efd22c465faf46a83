@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef9048e6_19185bec",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-10T14:12:20Z",
+      "side": 1,
+      "message": "question: Any reason this has to be after the check, as opposed to PopQueued where it is after the check? Could we keep it in sync for both methods?",
+      "range": {
+        "startLine": 1119,
+        "startChar": 2,
+        "endLine": 1119,
+        "endChar": 27
+      },
+      "revId": "d3cfc148ebe1fceeae29163efd22c465faf46a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
