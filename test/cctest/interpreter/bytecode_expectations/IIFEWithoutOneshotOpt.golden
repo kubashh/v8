@@ -6,7 +6,6 @@
 wrap: no
 top level: yes
 print callee: yes
-oneshot opt: no
 
 ---
 snippet: "

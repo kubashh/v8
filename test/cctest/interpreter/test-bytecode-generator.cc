@@ -436,6 +436,8 @@ TEST(PropertyLoadStoreOneShot) {
   BytecodeExpectationsPrinter printer(CcTest::isolate());
   printer.set_wrap(false);
   printer.set_top_level(true);
+  printer.set_oneshot_opt(true);
+
   const char* snippets[] = {
       R"(
       l = {
@@ -502,7 +504,6 @@ TEST(PropertyLoadStoreWithoutOneShot) {
   BytecodeExpectationsPrinter printer(CcTest::isolate());
   printer.set_wrap(false);
   printer.set_top_level(true);
-  printer.set_oneshot_opt(false);
 
   const char* snippets[] = {
       R"(
@@ -539,6 +540,7 @@ TEST(IIFEWithOneshotOpt) {
   printer.set_wrap(false);
   printer.set_top_level(true);
   printer.set_print_callee(true);
+  printer.set_oneshot_opt(true);
 
   const char* snippets[] = {
       // No feedback vectors for top-level loads/store named property in an IIFE
@@ -614,7 +616,6 @@ TEST(IIFEWithoutOneshotOpt) {
   printer.set_wrap(false);
   printer.set_top_level(true);
   printer.set_print_callee(true);
-  printer.set_oneshot_opt(false);
 
   const char* snippets[] = {
       R"(
