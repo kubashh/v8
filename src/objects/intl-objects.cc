@@ -1509,6 +1509,23 @@ Maybe<std::string> Intl::CanonicalizeLanguageTag(Isolate* isolate,
         Nothing<std::string>());
   }
 
+  // As per,
+  // https://tc39.github.io/ecma402/#sec-unicode-locale-extension-sequences
+  //
+  // Private use subtags should be used as an unicode locale extension
+  // sequence.
+  const char* private_use_key = "x";
+  uloc_setKeywordValue(private_use_key, NULL, icu_result,
+                       ULOC_FULLNAME_CAPACITY, &error);
+  if (U_FAILURE(error) || error == U_STRING_NOT_TERMINATED_WARNING) {
+    // TODO(jshin): This should not happen because the structural validity
+    // is already checked. If that's the case, remove this.
+    THROW_NEW_ERROR_RETURN_VALUE(
+        isolate,
+        NewRangeError(MessageTemplate::kInvalidLanguageTag, locale_str),
+        Nothing<std::string>());
+  }
+
   // Force strict BCP47 rules.
   char result[ULOC_FULLNAME_CAPACITY];
   int32_t result_len = uloc_toLanguageTag(icu_result, result,
