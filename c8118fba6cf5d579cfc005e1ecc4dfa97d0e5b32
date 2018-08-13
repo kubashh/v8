@@ -22,6 +22,176 @@
       "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "076c27a2_c6bad4e7",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "Please preserve the CODE_TARGET shareable comment. \n\n  // We can share CODE_TARGETs because we don\u0027t patch the code objects anymore,\n  // and we make sure we emit only one reloc info for them (thus delta patching)\n  // will apply the delta only once. At the moment, we do not dedup code targets\n  // if they are wrapped in a heap object request (value \u003d\u003d 0).",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c9187a4_96e00e7e",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "Nit: Comment needs to be updated.",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c0e4a80_8cb4ffb2",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "Suggestion: An enum will make callsites more readable.\n\nAh I see now this is taken from arm/arm64 implementations. We don\u0027t have to complicate this CL.",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "872d5cdd_f6a8f248",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "Does this need to be exposed or could it move inside ComputeSize?",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea2e96b7_6176eb25",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "What does \u0027blocked\u0027 mean / when do we block?",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae47ce55_3c8fdf63",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "Suggestion: This could also take the \u0027require_jump\u0027 enum and call \u0027IsAlignmentRequired\u0027 inside, no?",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "290a6f00_88554be6",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "Nit: PrologueSize to stay consistent, it\u0027s not a simple accessor.",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "201620fc_01f912a0",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "Nit:  // defined(......",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02f4a16d_8a7efc82",
+        "filename": "test/cctest/test-assembler-arm.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 3900,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "We cannot block for 1019?",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74e3b834_eab3de3b",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-13T14:46:33Z",
+      "side": 1,
+      "message": "Should we keep this commented?",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
