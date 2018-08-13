@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c09f7fb_238bf145",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-13T13:28:29Z",
+      "side": 1,
+      "message": "Can\u0027t this whole thing go into a separate header, which is then included by assembler-arm(64).h?",
+      "range": {
+        "startLine": 1077,
+        "startChar": 0,
+        "endLine": 1077,
+        "endChar": 64
+      },
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
