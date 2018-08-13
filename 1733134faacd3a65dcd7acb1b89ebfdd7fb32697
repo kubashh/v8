@@ -34,6 +34,24 @@
       "revId": "1733134faacd3a65dcd7acb1b89ebfdd7fb32697",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2e78e0b_ce03f20f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-13T11:08:53Z",
+      "side": 1,
+      "message": "Yeah If you don\u0027t mind, let\u0027s add a IsAllSetWord32",
+      "parentUuid": "1f2e9659_e3aa5618",
+      "revId": "1733134faacd3a65dcd7acb1b89ebfdd7fb32697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
