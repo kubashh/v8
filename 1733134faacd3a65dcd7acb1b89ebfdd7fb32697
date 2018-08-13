@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d800541_62a9ef22",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-13T09:32:45Z",
+      "side": 1,
+      "message": "nit: Please use IsSetWord32(word32, mask) for this.",
+      "revId": "1733134faacd3a65dcd7acb1b89ebfdd7fb32697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
