@@ -16,6 +16,24 @@
       "revId": "1733134faacd3a65dcd7acb1b89ebfdd7fb32697",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f2e9659_e3aa5618",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2484,
+      "author": {
+        "id": 1288285
+      },
+      "writtenOn": "2018-08-13T09:39:04Z",
+      "side": 1,
+      "message": "Cannot use IsSetWord32 as it checks for any of the mask`s bits are set.\nHere, I want to check if all the bits are set. Should I create IsSetAllBitsWord32?",
+      "parentUuid": "7d800541_62a9ef22",
+      "revId": "1733134faacd3a65dcd7acb1b89ebfdd7fb32697",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
