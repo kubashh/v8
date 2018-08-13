@@ -3897,8 +3897,8 @@ TEST(regress4292_CheckConstPool) {
 
   Assembler assm(AssemblerOptions{}, nullptr, 0);
   __ mov(r0, Operand(isolate->factory()->infinity_value()));
-  __ BlockConstPoolFor(1019);
-  for (int i = 0; i < 1019; ++i) __ nop();
+  __ BlockConstPoolFor(1018);
+  for (int i = 0; i < 1018; ++i) __ nop();
   __ vldr(d0, MemOperand(r0, 0));
 }
 
