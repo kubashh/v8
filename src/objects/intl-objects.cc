@@ -1408,7 +1408,11 @@ Maybe<std::string> Intl::CanonicalizeLanguageTag(Isolate* isolate,
                                  Nothing<std::string>());
   }
   std::string locale(locale_str->ToCString().get());
+  return Intl::CanonicalizeLanguageTag(isolate, locale);
+}
 
+Maybe<std::string> Intl::CanonicalizeLanguageTag(Isolate* isolate,
+                                                 const std::string& locale) {
   // Optimize for the most common case: a 2-letter language code in the
   // canonical form/lowercase that is not one of the deprecated codes
   // (in, iw, ji, jw). Don't check for ~70 of 3-letter deprecated language
