@@ -22,6 +22,30 @@
       "revId": "d3cfc148ebe1fceeae29163efd22c465faf46a83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcab5306_5490790e",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-08-13T09:04:03Z",
+      "side": 1,
+      "message": "No, no reason. {queued_.empty()} should imply {size_ \u003d\u003d 0}, so it does not matter where we check it. Move it to the beginning of this method now.",
+      "parentUuid": "ef9048e6_19185bec",
+      "range": {
+        "startLine": 1119,
+        "startChar": 2,
+        "endLine": 1119,
+        "endChar": 27
+      },
+      "revId": "d3cfc148ebe1fceeae29163efd22c465faf46a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
