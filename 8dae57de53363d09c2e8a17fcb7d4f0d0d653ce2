@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eaf4ce61_58bf4358",
+        "filename": "src/assembler.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-13T10:30:54Z",
+      "side": 1,
+      "message": "This check is more conservative than the old check. The old check ensured that the first entry32/64 was in range of the first use. This check ensures that the last entry32/64 is in range of the first use.",
+      "range": {
+        "startLine": 1154,
+        "startChar": 19,
+        "endLine": 1154,
+        "endChar": 42
+      },
+      "revId": "8dae57de53363d09c2e8a17fcb7d4f0d0d653ce2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eca3017a_512c7792",
+        "filename": "test/cctest/test-assembler-arm.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 3900,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-13T10:30:54Z",
+      "side": 1,
+      "message": "This became necessary, because the check whether the constant pool can still be emitted is now more conservative: See IsInImmRangeIfEmittedAt",
+      "range": {
+        "startLine": 3900,
+        "startChar": 23,
+        "endLine": 3900,
+        "endChar": 27
+      },
+      "revId": "8dae57de53363d09c2e8a17fcb7d4f0d0d653ce2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
