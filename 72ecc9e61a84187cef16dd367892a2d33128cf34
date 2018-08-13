@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15702b8f_957f26d3",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-08-13T12:51:54Z",
+      "side": 1,
+      "message": "V(Word32BinaryNot, BoolT, Word32T)",
+      "range": {
+        "startLine": 546,
+        "startChar": 2,
+        "endLine": 546,
+        "endChar": 38
+      },
+      "revId": "72ecc9e61a84187cef16dd367892a2d33128cf34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
