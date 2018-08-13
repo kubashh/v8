@@ -1963,7 +1963,6 @@ void Script::ScriptPrint(std::ostream& os) {  // NOLINT
 #ifdef V8_INTL_SUPPORT
 void JSCollator::JSCollatorPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSCollator");
-  os << "\n - usage: " << JSCollator::UsageToString(usage());
   os << "\n - icu collator: " << Brief(icu_collator());
   os << "\n";
 }

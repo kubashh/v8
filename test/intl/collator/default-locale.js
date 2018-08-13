@@ -47,7 +47,126 @@ assertEquals(options.locale, collatorNone.resolvedOptions().locale);
 var collatorBraket = new Intl.Collator({});
 assertEquals(options.locale, collatorBraket.resolvedOptions().locale);
 
-var collatorWithOptions = new Intl.Collator(undefined, {usage: 'search'});
-var locale = collatorWithOptions.resolvedOptions().locale;
+// No locale
+var collatorWithOptions = new Intl.Collator(undefined);
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
 assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('default', collation);
 assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator(undefined, {usage: 'sort'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator(undefined, {usage: 'search'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertEquals('search', usage);
+assertEquals('default', collation);
+assertLanguageTag(%GetDefaultICULocale(), locale);
+
+// As per the spec, V8 shouldn't add the 'co-search' unicode extension
+// to the language tag, when the extension value is search or
+// standard. But, deleting it from the language tag returned by ICU is
+// expensive as we have to reparse the tag and trim it, or create a
+// new ICU locale class without the 'co' unicode extension.
+//
+// Since V8 will anyway not consider the 'co-search' value if passed
+// in as an extension, I think it's fine to digress from the spec
+// here.
+assertEquals(locale.indexOf('-co-search'), 7);
+
+collatorWithOptions = new Intl.Collator(locale);
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+// With Locale
+collatorWithOptions = new Intl.Collator('en-US');
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator('en-US', {usage: 'sort'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator('en-US', {usage: 'search'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertEquals('search', usage);
+assertEquals('default', collation);
+assertLanguageTag(%GetDefaultICULocale(), locale);
+
+// With invalid collation value = 'search'
+collatorWithOptions = new Intl.Collator('en-US-u-co-search');
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator('en-US-u-co-search', {usage: 'sort'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator('en-US-u-co-search', {usage: 'search'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('search', usage);
+assertEquals('default', collation);
+
+// With invalid collation value = 'standard'
+collatorWithOptions = new Intl.Collator('en-US-u-co-standard');
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator('en-US-u-co-standard', {usage: 'sort'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator('en-US-u-co-standard', {usage: 'search'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('search', usage);
+assertEquals('default', collation);
+
+// With valid collation value = 'emoji'
+collatorWithOptions = new Intl.Collator('en-US-u-co-emoji');
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('emoji', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator('en-US-u-co-emoji', {usage: 'sort'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('sort', usage);
+assertEquals('emoji', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
+
+collatorWithOptions = new Intl.Collator('en-US-u-co-emoji', {usage: 'search'});
+var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
+assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('search', usage);
+// usage = search overwrites emoji as a collation value.
+assertEquals('default', collation);
