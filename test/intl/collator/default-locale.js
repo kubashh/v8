@@ -67,17 +67,7 @@ var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
 assertEquals('search', usage);
 assertEquals('default', collation);
 assertLanguageTag(%GetDefaultICULocale(), locale);
-
-// As per the spec, V8 shouldn't add the 'co-search' unicode extension
-// to the language tag, when the extension value is search or
-// standard. But, deleting it from the language tag returned by ICU is
-// expensive as we have to reparse the tag and trim it, or create a
-// new ICU locale class without the 'co' unicode extension.
-//
-// Since V8 will anyway not consider the 'co-search' value if passed
-// in as an extension, I think it's fine to digress from the spec
-// here.
-assertEquals(locale.indexOf('-co-search'), 7);
+assertEquals(locale.indexOf('-co-search'), -1);
 
 collatorWithOptions = new Intl.Collator(locale);
 var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
@@ -106,6 +96,7 @@ var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
 assertEquals('search', usage);
 assertEquals('default', collation);
 assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals(locale.indexOf('-co-search'), -1);
 
 // With invalid collation value = 'search'
 collatorWithOptions = new Intl.Collator('en-US-u-co-search');
@@ -127,6 +118,7 @@ var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
 assertLanguageTag(%GetDefaultICULocale(), locale);
 assertEquals('search', usage);
 assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
 
 // With invalid collation value = 'standard'
 collatorWithOptions = new Intl.Collator('en-US-u-co-standard');
@@ -148,6 +140,7 @@ var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
 assertLanguageTag(%GetDefaultICULocale(), locale);
 assertEquals('search', usage);
 assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
 
 // With valid collation value = 'emoji'
 collatorWithOptions = new Intl.Collator('en-US-u-co-emoji');
@@ -170,3 +163,4 @@ assertLanguageTag(%GetDefaultICULocale(), locale);
 assertEquals('search', usage);
 // usage = search overwrites emoji as a collation value.
 assertEquals('default', collation);
+assertEquals(locale.indexOf('-co-search'), -1);
