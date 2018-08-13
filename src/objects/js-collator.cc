@@ -127,26 +127,32 @@ Handle<JSObject> JSCollator::ResolvedOptions(Isolate* isolate,
   icu::Locale icu_locale = icu_collator->getLocale(ULOC_VALID_LOCALE, status);
   CHECK(U_SUCCESS(status));
 
+  status = U_ZERO_ERROR;
+  char locale_id[ULOC_FULLNAME_CAPACITY];
+  DCHECK_LE(std::string(icu_locale.getName()).length(), ULOC_FULLNAME_CAPACITY);
+  snprintf(locale_id, ULOC_FULLNAME_CAPACITY, "%s", icu_locale.getName());
+
   const char* collation = "default";
   const char* usage = "sort";
-  const char* bcp47_key = "co";
+  const char* bcp47_collation_key = "co";
   // Convert bcp47 key to legacy keytype for icu::Locale::getKeywordValue.
-  const char* legacy_key = uloc_toLegacyKey(bcp47_key);
-  CHECK_NOT_NULL(legacy_key);
+  const char* legacy_collation_key = uloc_toLegacyKey(bcp47_collation_key);
+  CHECK_NOT_NULL(legacy_collation_key);
 
   status = U_ZERO_ERROR;
-  char legacy_value[ULOC_FULLNAME_CAPACITY];
-  icu_locale.getKeywordValue(legacy_key, legacy_value, ULOC_FULLNAME_CAPACITY,
-                             status);
+  char legacy_collation_value[ULOC_FULLNAME_CAPACITY];
+  uloc_getKeywordValue(locale_id, legacy_collation_key, legacy_collation_value,
+                       ULOC_FULLNAME_CAPACITY, &status);
   if (U_SUCCESS(status)) {
-    CHECK_NOT_NULL(legacy_value);
+    CHECK_NOT_NULL(legacy_collation_value);
 
-    const char* bcp47_value = uloc_toUnicodeLocaleType(bcp47_key, legacy_value);
+    const char* bcp47_collation_value =
+        uloc_toUnicodeLocaleType(bcp47_collation_key, legacy_collation_value);
     // This is working around a weirdness in ICU, instead of returning
     // a failure status for a missing value, ICU returns garbage. This
     // turns into a nullptr when passed to uloc_toUnicodeLocaleType.
-    if (bcp47_value != nullptr) {
-      if (strcmp(bcp47_value, "search") == 0) {
+    if (bcp47_collation_value != nullptr) {
+      if (strcmp(bcp47_collation_value, "search") == 0) {
         usage = "search";
 
         // Search is disallowed as a collation value per spec. Let's
@@ -154,8 +160,16 @@ Handle<JSObject> JSCollator::ResolvedOptions(Isolate* isolate,
         //
         // https://tc39.github.io/ecma402/#sec-properties-of-intl-collator-instances
         collation = "default";
+        status = U_ZERO_ERROR;
+        int32_t len =
+            uloc_setKeywordValue(legacy_collation_key, NULL, locale_id,
+                                 ULOC_FULLNAME_CAPACITY, &status);
+        // We're trimming the string, there's no way to have a buffer
+        // overflow here.
+        CHECK_LE(len, ULOC_FULLNAME_CAPACITY);
+        CHECK(U_SUCCESS(status));
       } else {
-        collation = bcp47_value;
+        collation = bcp47_collation_value;
       }
     }
   }
@@ -165,27 +179,14 @@ Handle<JSObject> JSCollator::ResolvedOptions(Isolate* isolate,
   CreateDataPropertyForOptions(isolate, options,
                                isolate->factory()->usage_string(), usage);
 
-  // In case, usage is set to search, as per the spec, V8 shouldn't
-  // add the 'co-search' unicode extension to the language tag. But,
-  // deleting it from the language tag returned by ICU is expensive as
-  // we have to reparse the tag and trim it, or create a new ICU
-  // locale class without the 'co' unicode extension.
-  //
-  // Since V8 will anyway not consider the 'co-search' value if passed
-  // in as an extension, I think it's fine to diverge from the spec
-  // here. For example:
-  //   let c = new Intl.Collator('en-US', { usage: search });
-  //   c.resolvedOptions().locale // 'en-US-u-co-search'
-  //
-  // But instead, the correct result is 'en-US'.
-  char result[ULOC_FULLNAME_CAPACITY];
-  status = U_ZERO_ERROR;
-  uloc_toLanguageTag(icu_locale.getName(), result, ULOC_FULLNAME_CAPACITY,
+  char bcp47_langauge_tag[ULOC_FULLNAME_CAPACITY];
+  uloc_toLanguageTag(locale_id, bcp47_langauge_tag, ULOC_FULLNAME_CAPACITY,
                      FALSE, &status);
   CHECK(U_SUCCESS(status));
 
   CreateDataPropertyForOptions(isolate, options,
-                               isolate->factory()->locale_string(), result);
+                               isolate->factory()->locale_string(),
+                               bcp47_langauge_tag);
   return options;
 }
 
