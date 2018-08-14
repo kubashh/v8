@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7542cedd_e9266710",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c09f7fb_238bf145",
+      "range": {
+        "startLine": 1077,
+        "startChar": 0,
+        "endLine": 1077,
+        "endChar": 64
+      },
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "076c27a2_c6bad4e7",
         "filename": "src/assembler.h",
         "patchSetId": 29
@@ -39,6 +63,24 @@
       "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2f5f420_473b6c50",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "076c27a2_c6bad4e7",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "5a5d4d4e_ade98bb1",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c9187a4_96e00e7e",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c0e4a80_8cb4ffb2",
         "filename": "src/assembler.h",
         "patchSetId": 29
@@ -73,6 +133,24 @@
       "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87a96175_518dd0d2",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8c0e4a80_8cb4ffb2",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "f220d07c_207e3026",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "872d5cdd_f6a8f248",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea2e96b7_6176eb25",
         "filename": "src/assembler.h",
         "patchSetId": 29
@@ -107,6 +203,24 @@
       "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3df9e672_5d60e8c0",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea2e96b7_6176eb25",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -127,6 +241,24 @@
     },
     {
       "key": {
+        "uuid": "391ac65b_d1e1c601",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "It could, but the marker does not depend on there being a jump around the pool, because the recorded size does not include the size of the jump. I\u0027ve added a comment to this end in EmitMarker.",
+      "parentUuid": "ae47ce55_3c8fdf63",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "290a6f00_88554be6",
         "filename": "src/assembler.h",
         "patchSetId": 29
@@ -141,6 +273,24 @@
       "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ae95f35_7187a719",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1205,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "290a6f00_88554be6",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +311,24 @@
     },
     {
       "key": {
+        "uuid": "353a9ed9_1027bad2",
+        "filename": "src/assembler.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "201620fc_01f912a0",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02f4a16d_8a7efc82",
         "filename": "test/cctest/test-assembler-arm.cc",
         "patchSetId": 29
@@ -178,6 +346,24 @@
     },
     {
       "key": {
+        "uuid": "9ad4afb7_b0206411",
+        "filename": "test/cctest/test-assembler-arm.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 3900,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "I\u0027ve modified the check such that it is tight up to kPCLoadDelta.",
+      "parentUuid": "02f4a16d_8a7efc82",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74e3b834_eab3de3b",
         "filename": "test/cctest/test-assembler-arm64.cc",
         "patchSetId": 29
@@ -189,6 +375,24 @@
       "writtenOn": "2018-08-13T14:46:33Z",
       "side": 1,
       "message": "Should we keep this commented?",
+      "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b82612a3_f14d7cb6",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-14T13:00:36Z",
+      "side": 1,
+      "message": "This re-adds functionality if --trace-sim is passed. I think it is useful.",
+      "parentUuid": "74e3b834_eab3de3b",
       "revId": "c8118fba6cf5d579cfc005e1ecc4dfa97d0e5b32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
