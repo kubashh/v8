@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26ac5a88_24c94613",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4252,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-14T21:29:35Z",
+      "side": 1,
+      "message": "nit: Handle\u003cJSGlobalProxy\u003e should work since it\u0027s a subclass of JSObject.",
+      "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6878383_d856e1c4",
+        "filename": "test/mjsunit/harmony/global.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-14T21:29:35Z",
+      "side": 1,
+      "message": "to add more confusion:\n  \n  assertEquals(this.globalThis, this);",
+      "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
