@@ -16,6 +16,24 @@
       "revId": "70b2574b56493fae537b9135980303ceae7fb4c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0fcb09c_17c5acf4",
+        "filename": "src/x64/assembler-x64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-14T19:47:23Z",
+      "side": 1,
+      "message": "Agree that adding these constructors makes it easy to create invalid encodings for the assembler instructions, thanks for pointing that out. I\u0027ve removed the constructors. I overlooked the sse instruction helpers, as they weren\u0027t in use in assembler-x64.cc, using these overloads achieves what I was trying to do originally. PTAL. \n\nIt makes sense to keep the existing paradigm, that said I think it makes sense to enforce it better throughout the x64 assembler. I\u0027ll take a pass at doing that as a cleanup Friday task.",
+      "parentUuid": "6d0b8de0_9e22d71c",
+      "revId": "70b2574b56493fae537b9135980303ceae7fb4c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
