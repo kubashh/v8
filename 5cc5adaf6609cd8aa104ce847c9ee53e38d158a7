@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "db13b718_7555f494",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-14T09:51:39Z",
+      "side": 1,
+      "message": "kPointerSize is not the right constant for 32-bit entries, it will be 8 on arm64.",
+      "revId": "5cc5adaf6609cd8aa104ce847c9ee53e38d158a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90baab49_c5b0c823",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-14T09:51:39Z",
+      "side": 1,
+      "message": "kDoubleSize also feels wrong here, despite working, since 64-bit entries do not have to be doubles.",
+      "revId": "5cc5adaf6609cd8aa104ce847c9ee53e38d158a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "640ddc7b_c5926937",
         "filename": "src/constant-pool.h",
         "patchSetId": 30
@@ -47,6 +81,23 @@
       "writtenOn": "2018-08-14T08:23:45Z",
       "side": 1,
       "message": "Hmm is the name a bit confusing? It\u0027s used on {arm,arm64} and to me it implies use only on arm. What about just \u0027ConstantPool\u0027? Also I\u0027m in favor of spelling out ConstantPool here and for ConstantPoolKey.",
+      "revId": "5cc5adaf6609cd8aa104ce847c9ee53e38d158a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f0d1693_5de2158b",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-14T09:51:39Z",
+      "side": 1,
+      "message": "These constants have IntPool/FPPool in their name but in ArmConstPool::ShouldEmitNow are used for 32/64-bit entries. For arm64, 64-bit constants are not FP.",
       "revId": "5cc5adaf6609cd8aa104ce847c9ee53e38d158a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
