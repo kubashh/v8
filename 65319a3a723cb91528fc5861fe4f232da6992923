@@ -16,6 +16,24 @@
       "revId": "65319a3a723cb91528fc5861fe4f232da6992923",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21ef884b_ca77ea15",
+        "filename": "src/inspector/v8-inspector-impl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1113672
+      },
+      "writtenOn": "2018-08-14T02:23:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8caed2de_41b12fe5",
+      "revId": "65319a3a723cb91528fc5861fe4f232da6992923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
