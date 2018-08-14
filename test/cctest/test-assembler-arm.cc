@@ -3891,14 +3891,21 @@ TEST(regress4292_blx) {
 
 
 TEST(regress4292_CheckConstPool) {
+  printf("FOO\n");
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   HandleScope scope(isolate);
 
+  const int max_distance_in_bytes = 4096 /* max immediate */ -
+                                    kInstrSize /* mov itself */ -
+                                    kInstrSize /* jump over const pool */ -
+                                    kInstrSize /* const pool marker */;
+  const int nops_inbetween = max_distance_in_bytes / kInstrSize;
+
   Assembler assm(AssemblerOptions{}, nullptr, 0);
   __ mov(r0, Operand(isolate->factory()->infinity_value()));
-  __ BlockConstPoolFor(1019);
-  for (int i = 0; i < 1019; ++i) __ nop();
+  __ BlockConstPoolFor(nops_inbetween);
+  for (int i = 0; i < nops_inbetween; ++i) __ nop();
   __ vldr(d0, MemOperand(r0, 0));
 }
 
