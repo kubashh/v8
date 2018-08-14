@@ -95,6 +95,26 @@ PauseAllocationObserversScope::~PauseAllocationObserversScope() {
 // -----------------------------------------------------------------------------
 // CodeRange
 
+class GlobalCodeRangeRegion {
+ public:
+  GlobalCodeRangeRegion() { base_addr_ = RandomAddr() & ~kCodeRangeRegionMask; }
+  void* GetRandomCodeRangeStart() {
+    return reinterpret_cast<void*>(base_addr_ +
+                                   (RandomAddr() & kCodeRangeRegionMask));
+  }
+
+ private:
+  uintptr_t RandomAddr() {
+    return reinterpret_cast<uintptr_t>(GetRandomMmapAddr());
+  }
+  static const size_t kCodeRangeRegionSize = 8u * static_cast<size_t>(GB);
+  static const size_t kCodeRangeRegionMask = kCodeRangeRegionSize - 1;
+  uintptr_t base_addr_;
+};
+
+static base::LazyInstance<GlobalCodeRangeRegion>::type
+    global_code_range_region = LAZY_INSTANCE_INITIALIZER;
+
 CodeRange::CodeRange(Isolate* isolate, size_t requested)
     : isolate_(isolate),
       free_list_(0),
@@ -125,9 +145,12 @@ CodeRange::CodeRange(Isolate* isolate, size_t requested)
   DCHECK(!kRequiresCodeRange || requested <= kMaximalCodeRangeSize);
 
   VirtualMemory reservation;
+  void* hint = global_code_range_region.Pointer()->GetRandomCodeRangeStart();
+  isolate->PrintWithTimestamp("CodeRange: requesting %p (%zuMB)\n", hint,
+                              requested / MB);
   if (!AlignedAllocVirtualMemory(
-          requested, Max(kCodeRangeAreaAlignment, AllocatePageSize()),
-          GetRandomMmapAddr(), &reservation)) {
+          requested, Max(kCodeRangeAreaAlignment, AllocatePageSize()), hint,
+          &reservation)) {
     V8::FatalProcessOutOfMemory(isolate,
                                 "CodeRange setup: allocate virtual memory");
   }
@@ -135,6 +158,9 @@ CodeRange::CodeRange(Isolate* isolate, size_t requested)
   // We are sure that we have mapped a block of requested addresses.
   DCHECK_GE(reservation.size(), requested);
   Address base = reservation.address();
+  isolate->PrintWithTimestamp("CodeRange: reserved   %p (%zuMB)\n",
+                              reinterpret_cast<void*>(base),
+                              reservation.size() / MB);
 
   // On some platforms, specifically Win64, we need to reserve some pages at
   // the beginning of an executable space.
