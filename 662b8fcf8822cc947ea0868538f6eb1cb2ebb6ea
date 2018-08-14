@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad2926bc_2fb05818",
+        "filename": "include/v8-inspector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1115999
+      },
+      "writtenOn": "2018-08-14T18:22:28Z",
+      "side": 1,
+      "message": "Do you actually want to align this with the runtime agent logic? https://cs.chromium.org/chromium/src/v8/src/inspector/v8-runtime-agent-impl.cc?sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d203",
+      "range": {
+        "startLine": 243,
+        "startChar": 50,
+        "endLine": 243,
+        "endChar": 63
+      },
+      "revId": "662b8fcf8822cc947ea0868538f6eb1cb2ebb6ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
