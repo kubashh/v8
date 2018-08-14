@@ -344,6 +344,12 @@ class Operand {
     int8_t addend;  // for rip + offset + addend.
   };
 
+  // Register
+  explicit Operand(Register reg);
+
+  // XMM Register
+  explicit Operand(XMMRegister xmm_reg);
+
   // [base + disp/r]
   Operand(Register base, int32_t disp);
 
@@ -903,6 +909,10 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   void pshufw(XMMRegister dst, XMMRegister src, uint8_t shuffle);
   void pshufw(XMMRegister dst, Operand src, uint8_t shuffle);
+  void pblendw(XMMRegister dst, Operand src, uint8_t mask);
+  void pblendw(XMMRegister dst, XMMRegister src, uint8_t mask);
+  void palignr(XMMRegister dst, Operand src, uint8_t mask);
+  void palignr(XMMRegister dst, XMMRegister src, uint8_t mask);
 
   // Label operations & relative jumps (PPUM Appendix D)
   //
@@ -1065,6 +1075,8 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   void cvttss2si(Register dst, XMMRegister src);
   void cvtlsi2ss(XMMRegister dst, Operand src);
   void cvtlsi2ss(XMMRegister dst, Register src);
+  void cvttps2dq(XMMRegister dst, Operand src);
+  void cvttps2dq(XMMRegister dst, XMMRegister src);
 
   void andps(XMMRegister dst, XMMRegister src);
   void andps(XMMRegister dst, Operand src);

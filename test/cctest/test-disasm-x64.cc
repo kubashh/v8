@@ -514,6 +514,8 @@ TEST(DisasmX64) {
       __ haddps(xmm1, xmm0);
       __ haddps(xmm1, Operand(rbx, rcx, times_4, 10000));
       __ lddqu(xmm1, Operand(rdx, 4));
+      __ palignr(xmm5, xmm1, 5);
+      __ palignr(xmm5, Operand(rdx, 4), 5);
     }
   }
 
@@ -539,6 +541,8 @@ TEST(DisasmX64) {
       __ pextrd(r12, xmm0, 1);
       __ pinsrd(xmm9, r9, 0);
       __ pinsrd(xmm5, Operand(rax, 4), 1);
+      __ pblendw(xmm5, xmm1, 1);
+      __ pblendw(xmm9, Operand(rax, 4), 1);
 
       __ cmpps(xmm5, xmm1, 1);
       __ cmpps(xmm5, Operand(rbx, rcx, times_4, 10000), 1);
@@ -737,6 +741,7 @@ TEST(DisasmX64) {
       SSE2_INSTRUCTION_LIST(EMIT_SSE2_AVXINSTR)
       SSSE3_INSTRUCTION_LIST(EMIT_SSE34_AVXINSTR)
       SSE4_INSTRUCTION_LIST(EMIT_SSE34_AVXINSTR)
+// SSE4_RM_INSTRUCTION_LIST(EMIT_SSE34_AVXINSTR)
 #undef EMIT_SSE2_AVXINSTR
 #undef EMIT_SSE34_AVXINSTR
 
