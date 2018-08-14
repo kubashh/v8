@@ -1272,6 +1272,12 @@ Handle<JSGlobalObject> Genesis::CreateNewGlobals(
   Handle<JSGlobalObject> global_object =
       factory()->NewJSGlobalObject(js_global_object_function);
 
+  if (FLAG_harmony_global) {
+    JSObject::AddProperty(isolate_, global_object,
+                          factory()->globalThis_string(), global_proxy,
+                          DONT_ENUM);
+  }
+
   // Step 2: (re)initialize the global proxy object.
   Handle<JSFunction> global_proxy_function;
   if (global_proxy_template.IsEmpty()) {
@@ -4232,6 +4238,7 @@ EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_class_fields)
 EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_dynamic_import)
 EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_import_meta)
 EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_numeric_separator)
+EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_global)
 
 #undef EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE
 
