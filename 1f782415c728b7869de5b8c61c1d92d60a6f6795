@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dc5ac7b_bd47b3a9",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1290495
+      },
+      "writtenOn": "2018-08-14T17:26:15Z",
+      "side": 1,
+      "message": "Just to double check, are you removing the private use subtag only if it is a unicode extension?\nFor example, what would happen to: \"el-x-koine\"?",
+      "range": {
+        "startLine": 394,
+        "startChar": 2,
+        "endLine": 394,
+        "endChar": 22
+      },
+      "revId": "1f782415c728b7869de5b8c61c1d92d60a6f6795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
