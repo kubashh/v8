@@ -149,6 +149,13 @@ uint32_t RelocInfo::wasm_call_tag() const {
 namespace {
 class OperandBuilder {
  public:
+  explicit OperandBuilder(Register reg) { set_modrm(3, reg); }
+
+  explicit OperandBuilder(XMMRegister xmm_reg) {
+    Register reg = Register::from_code(xmm_reg.code());
+    set_modrm(3, reg);
+  }
+
   OperandBuilder(Register base, int32_t disp) {
     if (base == rsp || base == r12) {
       // SIB byte is needed to encode (rsp + offset) or (r12 + offset).
@@ -295,6 +302,10 @@ class OperandBuilder {
 
 Operand::Operand(Register base, int32_t disp)
     : data_(OperandBuilder(base, disp).data()) {}
+
+Operand::Operand(Register base) : data_(OperandBuilder(base).data()) {}
+
+Operand::Operand(XMMRegister base) : data_(OperandBuilder(base).data()) {}
 
 Operand::Operand(Register base, Register index, ScaleFactor scale, int32_t disp)
     : data_(OperandBuilder(base, index, scale, disp).data()) {}
@@ -1018,7 +1029,7 @@ void Assembler::pshufw(XMMRegister dst, XMMRegister src, uint8_t shuffle) {
   emit_optional_rex_32(dst, src);
   emit(0x0F);
   emit(0x70);
-  emit(0xC0 | (dst.low_bits() << 3) | src.low_bits());
+  emit_sse_operand(dst, src);
   emit(shuffle);
 }
 
@@ -1029,6 +1040,38 @@ void Assembler::pshufw(XMMRegister dst, Operand src, uint8_t shuffle) {
   emit(0x70);
   emit_operand(dst.code(), src);
   emit(shuffle);
+}
+
+void Assembler::pblendw(XMMRegister dst, Operand src, uint8_t mask) {
+  DCHECK(IsEnabled(SSE4_1));
+  EnsureSpace ensure_space(this);
+  emit_optional_rex_32(dst, src);
+  emit(0x66);
+  emit(0x0F);
+  emit(0x3A);
+  emit(0x0E);
+  emit_sse_operand(dst, src);
+  emit(mask);
+}
+
+void Assembler::pblendw(XMMRegister dst, XMMRegister src, uint8_t mask) {
+  pblendw(dst, Operand(src), mask);
+}
+
+void Assembler::palignr(XMMRegister dst, Operand src, uint8_t mask) {
+  DCHECK(IsEnabled(SSSE3) || IsEnabled(SSE4_1));
+  EnsureSpace ensure_space(this);
+  emit_optional_rex_32(dst, src);
+  emit(0x66);
+  emit(0x0F);
+  emit(0x3A);
+  emit(0x0F);
+  emit_sse_operand(dst, src);
+  emit(mask);
+}
+
+void Assembler::palignr(XMMRegister dst, XMMRegister src, uint8_t mask) {
+  palignr(dst, Operand(src), mask);
 }
 
 void Assembler::call(Label* L) {
@@ -3855,6 +3898,18 @@ void Assembler::cvtsd2siq(Register dst, XMMRegister src) {
   emit_sse_operand(dst, src);
 }
 
+void Assembler::cvttps2dq(XMMRegister dst, Operand src) {
+  EnsureSpace ensure_space(this);
+  emit(0xF3);
+  emit_rex_64(dst, src);
+  emit(0x0F);
+  emit(0x5B);
+  emit_sse_operand(dst, src);
+}
+
+void Assembler::cvttps2dq(XMMRegister dst, XMMRegister src) {
+  cvttps2dq(dst, Operand(src));
+}
 
 void Assembler::addsd(XMMRegister dst, XMMRegister src) {
   EnsureSpace ensure_space(this);

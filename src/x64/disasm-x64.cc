@@ -1682,6 +1682,18 @@ int DisassemblerX64::TwoByteOpcodeInstruction(byte* data) {
         current += PrintRightXMMOperand(current);
         AppendToBuffer(",0x%x", (*current) & 3);
         current += 1;
+      } else if (third_byte == 0x0E) {
+        get_modrm(*current, &mod, &regop, &rm);
+        AppendToBuffer("pblendw %s,", NameOfXMMRegister(regop));
+        current += PrintRightXMMOperand(data);
+        AppendToBuffer(",0x%x", (*current) & 3);
+        current += 1;
+      } else if (third_byte == 0x0F) {
+        get_modrm(*data, &mod, &regop, &rm);
+        AppendToBuffer("palignr %s,", NameOfXMMRegister(regop));
+        current += PrintRightXMMOperand(data);
+        AppendToBuffer(",0x%x", (*current) & 3);
+        current += 1;
       } else if (third_byte == 0x14) {
         get_modrm(*current, &mod, &regop, &rm);
         AppendToBuffer("pextrb ");  // reg/m32, xmm, imm8

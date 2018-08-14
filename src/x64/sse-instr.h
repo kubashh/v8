@@ -58,7 +58,12 @@
   V(psignd, 66, 0F, 38, 0A)
 
 #define SSE4_INSTRUCTION_LIST(V) \
+  V(ptest, 66, 0F, 38, 17)       \
+  V(pmovsxbw, 66, 0F, 38, 20)    \
+  V(pmovsxwd, 66, 0F, 38, 23)    \
   V(packusdw, 66, 0F, 38, 2B)    \
+  V(pmovzxbw, 66, 0F, 38, 30)    \
+  V(pmovzxwd, 66, 0F, 38, 33)    \
   V(pminsb, 66, 0F, 38, 38)      \
   V(pminsd, 66, 0F, 38, 39)      \
   V(pminuw, 66, 0F, 38, 3A)      \
@@ -67,7 +72,6 @@
   V(pmaxsd, 66, 0F, 38, 3D)      \
   V(pmaxuw, 66, 0F, 38, 3E)      \
   V(pmaxud, 66, 0F, 38, 3F)      \
-  V(pmulld, 66, 0F, 38, 40)      \
-  V(ptest, 66, 0F, 38, 17)
+  V(pmulld, 66, 0F, 38, 40)
 
 #endif  // V8_X64_SSE_INSTR_H_
