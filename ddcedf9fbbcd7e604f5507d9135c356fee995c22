@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2599fce3_a56789ed",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1275,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-14T15:38:47Z",
+      "side": 1,
+      "message": "this will only be respected at mksnapshot-time.\nYou want to add this to EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE I presume.",
+      "revId": "ddcedf9fbbcd7e604f5507d9135c356fee995c22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
