@@ -188,6 +188,20 @@ InspectedContext* V8InspectorImpl::getContext(int contextId) const {
   return getContext(contextGroupId(contextId), contextId);
 }
 
+v8::MaybeLocal<v8::Context> V8InspectorImpl::contextById(int contextId) {
+  auto groupIt = m_contextIdToGroupIdMap.find(contextId);
+  if (groupIt == m_contextIdToGroupIdMap.end())
+    return v8::MaybeLocal<v8::Context>();
+  ContextsByGroupMap::const_iterator contextGroupIt =
+      m_contexts.find(groupIt->second);
+
+  ContextByIdMap::iterator contextIt = contextGroupIt->second->find(contextId);
+  if (contextIt == contextGroupIt->second->end())
+    return v8::MaybeLocal<v8::Context>();
+
+  return v8::MaybeLocal<v8::Context>(contextIt->second->context());
+}
+
 void V8InspectorImpl::contextCreated(const V8ContextInfo& info) {
   int contextId = ++m_lastContextId;
   InspectedContext* context = new InspectedContext(this, info, contextId);
