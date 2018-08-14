@@ -422,6 +422,20 @@ function attemptSingleLookup(availableLocales, requestedLocale) {
   var availableLocale = bestAvailableLocale(
       availableLocales, requestedLocale);
   if (!IS_UNDEFINED(availableLocale)) {
+    // Trim and copy the private use subtags as they're not valid
+    // unicode extension sequences.
+    var privateUseSubtag = '';
+    var pos = %StringLastIndexOf(requestedLocale, "-x-");
+    if (pos != -1) {
+      // TODO(gsathya): The requestedLocale.length lookup is an
+      // observable spec noncompliance. This should be fixed once we
+      // port this to C++.
+      privateUseSubtag = %_Call(StringSubstring,
+                                requestedLocale,
+                                pos,
+                                TO_LENGTH(requestedLocale.length));
+      requestedLocale = %_Call(StringSubstring, requestedLocale, 0, pos);
+    }
     // Return the resolved locale and extension.
     var extensionMatch = %regexp_internal_match(
         GetUnicodeExtensionRE(), requestedLocale);
@@ -430,7 +444,7 @@ function attemptSingleLookup(availableLocales, requestedLocale) {
       __proto__: null,
       locale: availableLocale,
       extension: extension,
-      localeWithExtension: availableLocale + extension,
+      localeWithExtension: availableLocale + extension + privateUseSubtag,
     };
   }
   return UNDEFINED;

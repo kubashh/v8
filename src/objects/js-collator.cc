@@ -192,12 +192,11 @@ Handle<JSObject> JSCollator::ResolvedOptions(Isolate* isolate,
 namespace {
 
 std::map<std::string, std::string> LookupUnicodeExtensions(
-    icu::Locale& icu_locale, std::set<std::string>& relevant_keys) {
+    char* locale_id, std::set<std::string>& relevant_keys) {
   std::map<std::string, std::string> extensions;
 
   UErrorCode status = U_ZERO_ERROR;
-  std::unique_ptr<icu::StringEnumeration> keywords(
-      icu_locale.createKeywords(status));
+  UEnumeration* keywords = uloc_openKeywords(locale_id, &status);
   if (U_FAILURE(status)) return extensions;
 
   if (!keywords) return extensions;
@@ -205,8 +204,8 @@ std::map<std::string, std::string> LookupUnicodeExtensions(
 
   int32_t length;
   status = U_ZERO_ERROR;
-  for (const char* keyword = keywords->next(&length, status);
-       keyword != nullptr; keyword = keywords->next(&length, status)) {
+  for (const char* keyword = uenum_next(keywords, &length, &status);
+       keyword != nullptr; keyword = uenum_next(keywords, &length, &status)) {
     // Ignore failures in ICU and skip to the next keyword.
     //
     // This is fine.™
@@ -215,7 +214,8 @@ std::map<std::string, std::string> LookupUnicodeExtensions(
       continue;
     }
 
-    icu_locale.getKeywordValue(keyword, value, ULOC_FULLNAME_CAPACITY, status);
+    uloc_getKeywordValue(locale_id, keyword, value, ULOC_FULLNAME_CAPACITY,
+                         &status);
 
     // Ignore failures in ICU and skip to the next keyword.
     //
@@ -234,6 +234,7 @@ std::map<std::string, std::string> LookupUnicodeExtensions(
     }
   }
 
+  uenum_close(keywords);
   return extensions;
 }
 
@@ -357,10 +358,10 @@ MaybeHandle<JSCollator> JSCollator::InitializeCollator(
       Intl::ResolveLocale(isolate, "collator", requested_locales, options),
       JSCollator);
 
-  Handle<String> locale_with_extension_str =
+  Handle<String> locale_with_extension_key =
       isolate->factory()->NewStringFromStaticChars("localeWithExtension");
   Handle<Object> locale_with_extension_obj =
-      JSObject::GetDataProperty(r, locale_with_extension_str);
+      JSObject::GetDataProperty(r, locale_with_extension_key);
 
   // The locale_with_extension has to be a string. Either a user
   // provided canonicalized string or the default locale.
@@ -368,12 +369,34 @@ MaybeHandle<JSCollator> JSCollator::InitializeCollator(
   Handle<String> locale_with_extension =
       Handle<String>::cast(locale_with_extension_obj);
 
-  icu::Locale icu_locale =
-      Intl::CreateICULocale(isolate, locale_with_extension);
-  DCHECK(!icu_locale.isBogus());
+  std::unique_ptr<char[]> locale_with_extension_cstr =
+      locale_with_extension->ToCString();
+  CHECK_NOT_NULL(locale_with_extension_cstr.get());
+
+  UErrorCode status = U_ZERO_ERROR;
+  char locale_id[ULOC_FULLNAME_CAPACITY];
+  int length = 0;
+
+  // bcp47_locale_str should be a canonicalized language tag, which
+  // means this shouldn't fail.
+  uloc_forLanguageTag(locale_with_extension_cstr.get(), locale_id,
+                      ULOC_FULLNAME_CAPACITY, &length, &status);
+  CHECK(U_SUCCESS(status));
+  CHECK_LT(0, length);
+
+  // As per,
+  // https://tc39.github.io/ecma402/#sec-unicode-locale-extension-sequences
+  //
+  // Private use subtags should be not used as an unicode locale
+  // extension sequences.
+  const char* private_use_key = uloc_toLegacyKey("x");
+  status = U_ZERO_ERROR;
+  uloc_setKeywordValue(private_use_key, NULL, locale_id, ULOC_FULLNAME_CAPACITY,
+                       &status);
+  CHECK(U_SUCCESS(status));
 
   std::map<std::string, std::string> extensions =
-      LookupUnicodeExtensions(icu_locale, relevant_extension_keys);
+      LookupUnicodeExtensions(locale_id, relevant_extension_keys);
 
   // 19. Let collation be r.[[co]].
   //
@@ -392,7 +415,8 @@ MaybeHandle<JSCollator> JSCollator::InitializeCollator(
       UErrorCode status = U_ZERO_ERROR;
       const char* key = uloc_toLegacyKey("co");
       DCHECK_NOT_NULL(key);
-      icu_locale.setKeywordValue(key, NULL, status);
+      uloc_setKeywordValue(key, NULL, locale_id, ULOC_FULLNAME_CAPACITY,
+                           &status);
       CHECK(U_SUCCESS(status));
     }
   }
@@ -416,7 +440,8 @@ MaybeHandle<JSCollator> JSCollator::InitializeCollator(
     const char* value = uloc_toLegacyType(key, "search");
     CHECK_NOT_NULL(value);
     UErrorCode status = U_ZERO_ERROR;
-    icu_locale.setKeywordValue(key, value, status);
+    uloc_setKeywordValue(key, value, locale_id, ULOC_FULLNAME_CAPACITY,
+                         &status);
     CHECK(U_SUCCESS(status));
   }
 
@@ -427,7 +452,12 @@ MaybeHandle<JSCollator> JSCollator::InitializeCollator(
   // here. The collation value can be looked up from icu::Collator on
   // demand, as part of Intl.Collator.prototype.resolvedOptions.
 
-  UErrorCode status = U_ZERO_ERROR;
+  icu::Locale icu_locale(locale_id);
+  if (icu_locale.isBogus()) {
+    FATAL("Failed to create ICU locale, are ICU data files missing?");
+  }
+
+  status = U_ZERO_ERROR;
   std::unique_ptr<icu::Collator> icu_collator(
       icu::Collator::createInstance(icu_locale, status));
   if (U_FAILURE(status) || icu_collator.get() == nullptr) {
