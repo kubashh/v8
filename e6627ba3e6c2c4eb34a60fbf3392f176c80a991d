@@ -52,6 +52,24 @@
       "revId": "e6627ba3e6c2c4eb34a60fbf3392f176c80a991d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f6480306_0c6a8a74",
+        "filename": "test/mjsunit/harmony/global.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-14T18:31:18Z",
+      "side": 1,
+      "message": "\u003e (2) Cross realms test that make sure we get a different Object for globalThis in different realms\n\nIs this added? I don\u0027t see it",
+      "parentUuid": "023aba1e_188b724b",
+      "revId": "e6627ba3e6c2c4eb34a60fbf3392f176c80a991d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
