@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e64df477_51153450",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 30
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-14T08:23:45Z",
+      "side": 1,
+      "message": "Tiny nit: I like the new-style initialization within the class declaration:\n\n e.g. int first_use_32_ \u003d -1;\n\nOr we could call Clear() instead to avoid duplication. Your choice though :)",
+      "revId": "5cc5adaf6609cd8aa104ce847c9ee53e38d158a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "640ddc7b_c5926937",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-14T08:23:45Z",
+      "side": 1,
+      "message": "2018",
+      "revId": "5cc5adaf6609cd8aa104ce847c9ee53e38d158a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8eed3c3_1c08d2b6",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-14T08:23:45Z",
+      "side": 1,
+      "message": "Hmm is the name a bit confusing? It\u0027s used on {arm,arm64} and to me it implies use only on arm. What about just \u0027ConstantPool\u0027? Also I\u0027m in favor of spelling out ConstantPool here and for ConstantPoolKey.",
+      "revId": "5cc5adaf6609cd8aa104ce847c9ee53e38d158a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
