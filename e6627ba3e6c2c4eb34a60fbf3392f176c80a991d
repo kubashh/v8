@@ -16,6 +16,24 @@
       "revId": "e6627ba3e6c2c4eb34a60fbf3392f176c80a991d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8873c00_24d385ce",
+        "filename": "test/mjsunit/harmony/global.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-08-14T17:46:18Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "e8a3b9b3_292b8cd6",
+      "revId": "e6627ba3e6c2c4eb34a60fbf3392f176c80a991d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
