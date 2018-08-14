@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d0b8de0_9e22d71c",
+        "filename": "src/x64/assembler-x64.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-08-14T08:37:03Z",
+      "side": 1,
+      "message": "IIUC, you are adding these constructors so that operands can represent registers and XMMRegisters (i.e. both are non-memory operands). What we\u0027ve been doing up until now is using overloads on the assembler methods themselves to enforce the proper addressing modes (e.g. see that everything in ASSEMBLER_INSTRUCTION_LIST() has overloads for Register, Operand, Immediate, etc).\n\nI think we should keep to the existing paradigm where Operand represents a memory operand, and not registers or XMMRegisters, because if we add these constructors it will then be too easy to create an invalid combination of inputs for assembler methods (e.g. addq(reg, operand) where the operand is actually an XMMRegister).\n\nThat would mean adding overloads for the new instructions that you introduce, but it looks like there are already these overloads.\n\nwdyt?",
+      "revId": "70b2574b56493fae537b9135980303ceae7fb4c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
