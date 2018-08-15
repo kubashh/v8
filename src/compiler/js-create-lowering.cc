@@ -484,10 +484,8 @@ Reduction JSCreateLowering::ReduceJSCreateGeneratorObject(Node* node) {
 namespace {
 Reduction NoChangeBecauseOfMissingData(JSHeapBroker* broker,
                                        const char* function, int line) {
-  if (FLAG_trace_heap_broker) {
-    PrintF("[%p] Skipping optimization in %s at line %d due to missing data\n",
-           broker, function, line);
-  }
+  broker->Trace("Skipping optimization in %s at line %d due to missing data\n",
+                function, line);
   return AdvancedReducer::NoChange();
 }
 }  // namespace
