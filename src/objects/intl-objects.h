@@ -23,6 +23,7 @@ namespace U_ICU_NAMESPACE {
 class BreakIterator;
 class Collator;
 class DecimalFormat;
+class NumberFormat;
 class PluralRules;
 class SimpleDateFormat;
 class UnicodeString;
@@ -55,68 +56,6 @@ class DateFormat {
 
  private:
   DateFormat();
-};
-
-class NumberFormat {
- public:
-  // Create a formatter for the specificied locale and options. Returns the
-  // resolved settings for the locale / options.
-  static icu::DecimalFormat* InitializeNumberFormat(Isolate* isolate,
-                                                    Handle<String> locale,
-                                                    Handle<JSObject> options,
-                                                    Handle<JSObject> resolved);
-
-  // Unpacks number format object from corresponding JavaScript object.
-  static icu::DecimalFormat* UnpackNumberFormat(Handle<JSObject> obj);
-
-  // Release memory we allocated for the NumberFormat once the JS object that
-  // holds the pointer gets garbage collected.
-  static void DeleteNumberFormat(const v8::WeakCallbackInfo<void>& data);
-
-  // The UnwrapNumberFormat abstract operation gets the underlying
-  // NumberFormat operation for various methods which implement
-  // ECMA-402 v1 semantics for supporting initializing existing Intl
-  // objects.
-  //
-  // ecma402/#sec-unwrapnumberformat
-  static MaybeHandle<JSObject> Unwrap(Isolate* isolate,
-                                      Handle<JSReceiver> receiver,
-                                      const char* method_name);
-
-  // ecm402/#sec-formatnumber
-  static MaybeHandle<String> FormatNumber(Isolate* isolate,
-                                          Handle<JSObject> number_format_holder,
-                                          double value);
-
-  // Layout description.
-#define NUMBER_FORMAT_FIELDS(V)   \
-  /* Pointer fields. */           \
-  V(kDecimalFormat, kPointerSize) \
-  V(kBoundFormat, kPointerSize)   \
-  V(kSize, 0)
-
-  DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize, NUMBER_FORMAT_FIELDS)
-#undef NUMBER_FORMAT_FIELDS
-
-  // ContextSlot defines the context structure for the bound
-  // NumberFormat.prototype.format function.
-  enum ContextSlot {
-    // The number format instance that the function holding this
-    // context is bound to.
-    kNumberFormat = Context::MIN_CONTEXT_SLOTS,
-
-    kLength
-  };
-
-  // TODO(gsathya): Remove this and use regular accessors once
-  // NumberFormat is a sub class of JSObject.
-  //
-  // This needs to be consistent with the above LayoutDescription.
-  static const int kDecimalFormatIndex = 0;
-  static const int kBoundFormatIndex = 1;
-
- private:
-  NumberFormat();
 };
 
 class V8BreakIterator {
@@ -179,7 +118,10 @@ class Intl {
 
   static std::string DefaultLocale(Isolate* isolate);
 
-  static void DefineWEProperty(Isolate* isolate, Handle<JSObject> target,
+  static void DefineWEProperty(Isolate* isolate, Handle<JSReceiver> target,
+                               const char* key, Handle<Object> value);
+
+  static void DefineWEProperty(Isolate* isolate, Handle<JSReceiver> target,
                                Handle<Name> key, Handle<Object> value);
 
   // If locale has a script tag then return true and the locale without the
@@ -273,10 +215,6 @@ class Intl {
       Isolate* isolate, Handle<Object> locales,
       bool only_return_one_result = false);
 
-  // ecma-402/#sec-currencydigits
-  // The currency is expected to an all upper case string value.
-  static Handle<Smi> CurrencyDigits(Isolate* isolate, Handle<String> currency);
-
   // TODO(ftang): Remove this and use ICU to the conversion in the future
   static void ParseExtension(Isolate* isolate, const std::string& extension,
                              std::map<std::string, std::string>& out);
@@ -284,10 +222,6 @@ class Intl {
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> CreateNumberFormat(
       Isolate* isolate, Handle<String> locale, Handle<JSObject> options,
       Handle<JSObject> resolved);
-
-  // ecma402/#sec-iswellformedcurrencycode
-  static bool IsWellFormedCurrencyCode(Isolate* isolate,
-                                       Handle<String> currency);
 
   // For locale sensitive functions
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> StringLocaleConvertCase(

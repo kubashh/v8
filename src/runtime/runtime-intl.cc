@@ -24,6 +24,7 @@
 #include "src/objects/js-collator-inl.h"
 #include "src/objects/js-list-format-inl.h"
 #include "src/objects/js-list-format.h"
+#include "src/objects/js-number-format-inl.h"
 #include "src/objects/js-plural-rules-inl.h"
 #include "src/objects/managed.h"
 #include "src/runtime/runtime-utils.h"
@@ -143,14 +144,6 @@ RUNTIME_FUNCTION(Runtime_GetDefaultICULocale) {
       Intl::DefaultLocale(isolate).c_str());
 }
 
-RUNTIME_FUNCTION(Runtime_IsWellFormedCurrencyCode) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(String, currency, 0);
-  return *(isolate->factory()->ToBoolean(
-      Intl::IsWellFormedCurrencyCode(isolate, currency)));
-}
-
 RUNTIME_FUNCTION(Runtime_DefineWEProperty) {
   HandleScope scope(isolate);
 
@@ -255,23 +248,26 @@ RUNTIME_FUNCTION(Runtime_InternalDateFormat) {
                    result.length())));
 }
 
-RUNTIME_FUNCTION(Runtime_CreateNumberFormat) {
+RUNTIME_FUNCTION(Runtime_NumberFormatResolvedOptions) {
   HandleScope scope(isolate);
 
-  DCHECK_EQ(3, args.length());
-
-  CONVERT_ARG_HANDLE_CHECKED(String, locale, 0);
-  CONVERT_ARG_HANDLE_CHECKED(JSObject, options, 1);
-  CONVERT_ARG_HANDLE_CHECKED(JSObject, resolved, 2);
-  RETURN_RESULT_OR_FAILURE(
-      isolate, Intl::CreateNumberFormat(isolate, locale, options, resolved));
-}
-
-RUNTIME_FUNCTION(Runtime_CurrencyDigits) {
-  HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(String, currency, 0);
-  return *Intl::CurrencyDigits(isolate, currency);
+  CONVERT_ARG_HANDLE_CHECKED(Object, number_format_obj, 0);
+
+  // 3. If pr does not have an [[InitializedNumberFormat]] internal
+  // slot, throw a TypeError exception.
+  if (!number_format_obj->IsJSNumberFormat()) {
+    Handle<String> method_str = isolate->factory()->NewStringFromStaticChars(
+        "Intl.NumberFormat.prototype.resolvedOptions");
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kIncompatibleMethodReceiver,
+                              method_str, number_format_obj));
+  }
+
+  Handle<JSNumberFormat> number_format =
+      Handle<JSNumberFormat>::cast(number_format_obj);
+
+  return *JSNumberFormat::ResolvedOptions(isolate, number_format);
 }
 
 RUNTIME_FUNCTION(Runtime_InternalCompare) {
