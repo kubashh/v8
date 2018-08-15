@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2dc314d6_bfb538db",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-15T19:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1d51251_0eccfe29",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fd9c262_e9342082",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92e02343_1b7ce8cb",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-15T19:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fd9c262_e9342082",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7ed38e19_4b8aeeb7",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-15T19:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7db91788_4fa17c75",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3dfee738_71f39262",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "a14c32bc_163eb1c6",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-15T19:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dfee738_71f39262",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d984e131_a9b02267",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 4
@@ -81,6 +153,24 @@
       "writtenOn": "2018-08-15T17:58:24Z",
       "side": 1,
       "message": "You can use the Intl::SetNumberFormatDigitOptions for this right? There\u0027s number_format-\u003eset_significant_digits_are_set() but I don\u0027t see why you need this at all?",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9afc1b3_0db69a8b",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-15T19:34:43Z",
+      "side": 1,
+      "message": "oh. I didn\u0027t realize you check in that part of code on 8/6. I start this cl before that landed and I grab what I did in +/1152557 for that.",
+      "parentUuid": "d984e131_a9b02267",
       "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "092fb5f1_d703bff0",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-15T19:34:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "397996f4_9d8ee230",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68adfe11_743acfca",
         "filename": "src/objects/js-number-format.h",
         "patchSetId": 4
@@ -118,6 +226,24 @@
       "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08c35f00_a4f468ed",
+        "filename": "src/objects/js-number-format.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-15T19:34:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "68adfe11_743acfca",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
