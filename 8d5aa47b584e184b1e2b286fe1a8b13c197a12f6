@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1d51251_0eccfe29",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T17:58:24Z",
+      "side": 1,
+      "message": "Let this be the this value.\n\n  Handle\u003cobject\u003e receiver \u003d args.receiver();",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fd9c262_e9342082",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T17:58:24Z",
+      "side": 1,
+      "message": "If NewTarget is undefined and ? InstanceofOperator(this, %NumberFormat%) is true, then\n\n  // Look up the intrinsic value that has been stored on the context. \n  Handle\u003cObject\u003e number_format_constructor \u003d isolate-\u003enumber_format_constructor(); \n\n  // Call the instanceof function\n  Handle\u003cObject\u003e is_instance_of_obj;\n  ASSIGN_RETURN_ON_EXCEPTION(isolate, \n    is_instance_of_obj;\n    Object::InstanceOf(isolate, receiver, number_format_constructor),\n    JSNumberFormat);\n\n  // Get the boolean value of the result\n  bool is_instance_of \u003d is_instance_of_obj-\u003eBooleanValue();\n  \n  if (new_target-\u003eIsUndefined() \u0026\u0026 is_instance_of) {\n    …\n  }\n\nThe spec defines %NumberFormat% as the constructor of NumberFormat like this:\n\"The NumberFormat constructor is the %NumberFormat% intrinsic object and a standard built-in property of the Intl object\".\nSee https://tc39.github.io/ecma402/#sec-intl-numberformat-constructor\n\nIn JavaScript, you can overwrite the constructor of NumberFormat like this:\n  NumberFormat.prototype.constructor \u003d function() {}\n\nTherefore, to get accesss to %NumberFormat%, we can\u0027t just load the \u0027constructor\u0027 property NumberFormat.prototype. Instead, we\u0027ll have to store it away in the context while bootstrapping and then use that here. You\u0027ve already correctly installed it using InstallWithIntrinsicDefaultProto in bootstrapper.cc",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7db91788_4fa17c75",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T17:58:24Z",
+      "side": 1,
+      "message": "Object::CreateDataProperty(isolate, receiver, isolate-\u003eintl_fallback_symbol(), number_format);",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dfee738_71f39262",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T17:58:24Z",
+      "side": 1,
+      "message": "💯",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d984e131_a9b02267",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T17:58:24Z",
+      "side": 1,
+      "message": "You can use the Intl::SetNumberFormatDigitOptions for this right? There\u0027s number_format-\u003eset_significant_digits_are_set() but I don\u0027t see why you need this at all?",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "397996f4_9d8ee230",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T17:58:24Z",
+      "side": 1,
+      "message": "You can get this from icu like this:\n if (decimal_format-\u003eareSignificantDigitsUsed()) { ... }",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68adfe11_743acfca",
+        "filename": "src/objects/js-number-format.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T17:58:24Z",
+      "side": 1,
+      "message": "This is perfect 👍",
+      "revId": "8d5aa47b584e184b1e2b286fe1a8b13c197a12f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
