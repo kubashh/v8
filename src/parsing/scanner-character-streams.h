@@ -67,6 +67,16 @@ class CharacterStream : public ScannerStream {
     }
   }
 
+  inline uc32 Peek() {
+    if (V8_LIKELY(buffer_cursor_ < buffer_end_)) {
+      return static_cast<uc32>(*buffer_cursor_);
+    } else if (ReadBlockChecked()) {
+      return static_cast<uc32>(*buffer_cursor_);
+    } else {
+      return kEndOfInput;
+    }
+  }
+
   // Returns and advances past the next UTF-16 code unit in the input stream
   // that meets the checks requirement. If there are no more code units it
   // returns kEndOfInput.

@@ -508,14 +508,7 @@ class Scanner {
     c0_ = ch;
   }
 
-  // Same as PushBack(ch1); PushBack(ch2).
-  // - Potentially more efficient as it uses Back2() on the stream.
-  // - Uses char as parameters, since we're only calling it with ASCII chars in
-  //   practice. This way, we can avoid a few edge cases.
-  void PushBack2(char ch1, char ch2) {
-    source_->Back2();
-    c0_ = ch2;
-  }
+  uc32 Peek() const { return source_->Peek(); }
 
   inline Token::Value Select(Token::Value tok) {
     Advance();

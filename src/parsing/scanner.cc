@@ -420,16 +420,11 @@ Token::Value Scanner::TryToSkipHTMLCommentAndWhiteSpaces(int start_position) {
     // If there is an HTML comment end '-->' at the beginning of a
     // line, we treat the rest of the line as a comment. This is in line with
     // the way SpiderMonkey handles it.
-    if (c0_ != '-') {
+    if (c0_ != '-' || Peek() != '>') {
       PushBack('-');  // undo Advance()
       break;
     }
-
     Advance();
-    if (c0_ != '>') {
-      PushBack2('-', '-');  // undo 2x Advance();
-      break;
-    }
 
     // Treat the rest of the line as a comment.
     Token::Value token = SkipSingleHTMLComment();
@@ -566,16 +561,11 @@ Token::Value Scanner::ScanHtmlComment() {
   // Check for <!-- comments.
   DCHECK_EQ(c0_, '!');
   Advance();
-  if (c0_ != '-') {
+  if (c0_ != '-' || Peek() != '-') {
     PushBack('!');  // undo Advance()
     return Token::LT;
   }
-
   Advance();
-  if (c0_ != '-') {
-    PushBack2('-', '!');  // undo 2x Advance()
-    return Token::LT;
-  }
 
   found_html_comment_ = true;
   return SkipSingleHTMLComment();
