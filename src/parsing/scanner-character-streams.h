@@ -67,6 +67,16 @@ class CharacterStream : public ScannerStream {
     }
   }
 
+  inline uc32 Peek() {
+    if (V8_LIKELY(buffer_cursor_ < buffer_end_)) {
+      return static_cast<uc32>(*buffer_cursor_);
+    } else if (ReadBlockChecked()) {
+      return static_cast<uc32>(*buffer_cursor_);
+    } else {
+      return kEndOfInput;
+    }
+  }
+
   // Returns and advances past the next UTF-16 code unit in the input stream
   // that meets the checks requirement. If there are no more code units it
   // returns kEndOfInput.
@@ -102,17 +112,6 @@ class CharacterStream : public ScannerStream {
       buffer_cursor_--;
     } else {
       ReadBlockAt(pos() - 1);
-    }
-  }
-
-  // Go back one by two characters in the input stream. (This is the same as
-  // calling Back() twice. But Back() may - in some instances - do substantial
-  // work. Back2() guarantees this work will be done only once.)
-  inline void Back2() {
-    if (V8_LIKELY(buffer_cursor_ - 2 >= buffer_start_)) {
-      buffer_cursor_ -= 2;
-    } else {
-      ReadBlockAt(pos() - 2);
     }
   }
 
@@ -157,7 +156,7 @@ class CharacterStream : public ScannerStream {
   }
 
   void ReadBlockAt(size_t new_pos) {
-    // The callers of this method (Back/Back2/Seek) should handle the easy
+    // The callers of this method (Back/Seek) should handle the easy
     // case (seeking within the current buffer), and we should only get here
     // if we actually require new data.
     // (This is really an efficiency check, not a correctness invariant.)
