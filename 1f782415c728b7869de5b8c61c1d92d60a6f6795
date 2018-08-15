@@ -22,6 +22,30 @@
       "revId": "1f782415c728b7869de5b8c61c1d92d60a6f6795",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2e88390_76e0e4d9",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1290495
+      },
+      "writtenOn": "2018-08-15T00:32:27Z",
+      "side": 1,
+      "message": "As discussed offline, this is fine. The private use subtag should be removed independent of the content of the tag.",
+      "parentUuid": "3dc5ac7b_bd47b3a9",
+      "range": {
+        "startLine": 394,
+        "startChar": 2,
+        "endLine": 394,
+        "endChar": 22
+      },
+      "revId": "1f782415c728b7869de5b8c61c1d92d60a6f6795",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
