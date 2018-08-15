@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80e4c356_138a75d4",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T23:48:18Z",
+      "side": 1,
+      "message": "This can just return a std::string.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 15
+      },
+      "revId": "9be6d758b5a00208588a75a3a70dd90b566fa2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6f0efe9_ee4a7b28",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T23:48:18Z",
+      "side": 1,
+      "message": "This can go on the Intl class, so that you don\u0027t have to duplicate this.",
+      "revId": "9be6d758b5a00208588a75a3a70dd90b566fa2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17d39ca5_b6c009c8",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T23:48:18Z",
+      "side": 1,
+      "message": "Lets use std::unique pointer here. \n\n  std::unique_ptr\u003cicu::NumberingSystem\u003e(icu::NumberingSystem::createInstance(..);\n  CHECK(U_SUCCESS(status);\n  return numbering_system-\u003egetName();",
+      "revId": "9be6d758b5a00208588a75a3a70dd90b566fa2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfc60960_e1108388",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T23:48:18Z",
+      "side": 1,
+      "message": "What\u0027s an example of a case where this fails?",
+      "range": {
+        "startLine": 72,
+        "startChar": 6,
+        "endLine": 72,
+        "endChar": 24
+      },
+      "revId": "9be6d758b5a00208588a75a3a70dd90b566fa2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14c5dcc2_c069161c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T23:48:18Z",
+      "side": 1,
+      "message": "nit: please format the comments line by line",
+      "revId": "9be6d758b5a00208588a75a3a70dd90b566fa2e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
