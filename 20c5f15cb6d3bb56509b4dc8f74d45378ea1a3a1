@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49d0520b_ffe02ec4",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T22:53:57Z",
+      "side": 1,
+      "message": "This is just the spec saying NumberFormat will be using all these internal slots. These slots are not observable to userspace, so we don\u0027t have to create all these exactly as defined. You\u0027ve already correctly selected the slots we require in JSNumberFormat. JSObject::New will create a new instance with all these set up. So this step (2) is exactly implemented below with your JSObject::New(..) call.",
+      "revId": "20c5f15cb6d3bb56509b4dc8f74d45378ea1a3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4580a948_ac6b7574",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T22:53:57Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 532,
+        "startChar": 18,
+        "endLine": 532,
+        "endChar": 39
+      },
+      "revId": "20c5f15cb6d3bb56509b4dc8f74d45378ea1a3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21726999_65234daa",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T22:53:57Z",
+      "side": 1,
+      "message": "The spec says NewTarget is undefined, not newTarget. So this should be:\n \n  args.new_target()-\u003eIsUndefined()",
+      "range": {
+        "startLine": 555,
+        "startChar": 6,
+        "endLine": 555,
+        "endChar": 32
+      },
+      "revId": "20c5f15cb6d3bb56509b4dc8f74d45378ea1a3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9131e82_0c29bc36",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T22:53:57Z",
+      "side": 1,
+      "message": "Sorry about this. This should actually be:\n\n    PropertyDescriptor desc;\n    desc.set_value(number_format);\n    desc.set_writable(false);\n    desc.set_enumerable(false);\n    desc.set_configurable(false);\n    Maybe\u003cbool\u003e success \u003d JSReceiver::DefineOwnProperty(\n        isolate, Handle\u003cJSReceiver\u003e::cast(receiver),\n        isolate-\u003efactory()-\u003eintl_fallback_symbol(), \u0026desc, kThrowOnError);\n    MAYBE_RETURN(success, ReadOnlyRoots(isolate).exception());\n    CHECK(success.FromJust());\n    // b. b. Return this.\n    return *receiver;",
+      "range": {
+        "startLine": 559,
+        "startChar": 1,
+        "endLine": 563,
+        "endChar": 53
+      },
+      "revId": "20c5f15cb6d3bb56509b4dc8f74d45378ea1a3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46bf75b8_f9c0bb70",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-15T22:53:57Z",
+      "side": 1,
+      "message": "This needs to be changed. You\u0027ll have to do another similar if here like this:\n\n  if ( type \u003d\u003d Intl::Type::kNumberFormat) {\n    if (!receiver-\u003eIsJSNumberFormat()) {\n     ... throw error ...\n    }\n    return Handle\u003cJSNumberFormat\u003e::cast(receiver);\n  }\n\n  DCHECK_NE(type, Intl::Type::kNumberFormat);\n\n\nI did exactly this in my Collator CL:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1165084/13/src/objects/intl-objects.cc\n\nThe reason we need to do this change is because of the way the existing Intl objects do typechecking. Previously, all Intl objects were plain JSObjects and did not have specialized subclass. So to do typechecking to differentiate between the different kinds of Intl objects like NumberFormat, DateTimeFormat, etc, we installed a private symbol on the object storing the type.\n\nNow, that you\u0027ve created a specialized JSNumberFormat class, we no longer need to do this type checking in JavaScript, but can just use the C++ IsJSNumberFormat function to check the type.",
+      "revId": "20c5f15cb6d3bb56509b4dc8f74d45378ea1a3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
