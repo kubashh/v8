@@ -33,6 +33,23 @@
       "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4944a7f_4803d33e",
+        "filename": "test/mjsunit/harmony/global.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-15T08:41:59Z",
+      "side": 1,
+      "message": "let\u0027s use assertTrue with \u003d\u003d\u003d everywhere here.",
+      "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
