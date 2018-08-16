@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aff5e9f6_f3df9320",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-16T14:18:23Z",
+      "side": 1,
+      "message": "This is just moved from create lowering.",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 224,
+        "endChar": 1
+      },
+      "revId": "2792a0da9ed79e6c78448d2339cc80587e31acd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
