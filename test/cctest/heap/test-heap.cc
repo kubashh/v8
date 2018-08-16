@@ -1611,7 +1611,10 @@ HEAP_TEST(TestSizeOfObjects) {
   }
 
   // The heap size should go back to initial size after a full GC, even
-  // though sweeping didn't finish yet.
+  // though sweeping didn't finish yet. Two GC calls are necessary because
+  // we might start incremental marking while inside the previous scope. The
+  // second GC call ensures that we start tracing after the scope is closed.
+  CcTest::CollectAllGarbage();
   CcTest::CollectAllGarbage();
   // Normally sweeping would not be complete here, but no guarantees.
   CHECK_EQ(initial_size, static_cast<int>(heap->SizeOfObjects()));
