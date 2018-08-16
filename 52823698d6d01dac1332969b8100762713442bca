@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8c182eb_ddaa6e8f",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-16T14:34:35Z",
+      "side": 1,
+      "message": "Nit: Variations -\u003e Generalizations",
+      "range": {
+        "startLine": 205,
+        "startChar": 35,
+        "endLine": 205,
+        "endChar": 45
+      },
+      "revId": "52823698d6d01dac1332969b8100762713442bca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
