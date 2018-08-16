@@ -22,6 +22,30 @@
       "revId": "b115a4491ee0003b4111b1a442af650064b7f2c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d57b1d2c_d8be4603",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-08-16T13:00:45Z",
+      "side": 1,
+      "message": "Ah right, hadn\u0027t thought about that. Done.",
+      "parentUuid": "6d846726_847b7652",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 349,
+        "endChar": 3
+      },
+      "revId": "b115a4491ee0003b4111b1a442af650064b7f2c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
