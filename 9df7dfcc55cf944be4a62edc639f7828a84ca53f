@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cff445be_a41b74f7",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-16T14:40:11Z",
+      "side": 1,
+      "message": "Please make those const that can be.",
+      "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "944f4502_881b047d",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-16T14:40:11Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be a bimodal accessor that just reads the IsFastLiteral field in the data?",
+      "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67c49c23_d0670b58",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-16T14:40:11Z",
+      "side": 1,
+      "message": "Nit: return boilerplate ? JSObjectRef(boilerplate) : base::nullopt;",
+      "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebf9b8b0_7be94fc2",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-16T14:40:11Z",
+      "side": 1,
+      "message": "Please move the comment up.",
+      "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d09e2f8e_7536af74",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-16T14:40:11Z",
+      "side": 1,
+      "message": "Please put a TODO that we remove this once we serialize the whole feedback vector.",
+      "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
