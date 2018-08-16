@@ -104,6 +104,24 @@
       "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8af435bd_0f4d3af5",
+        "filename": "test/mjsunit/harmony/global.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-08-16T11:05:50Z",
+      "side": 1,
+      "message": "After discussing this offline, let\u0027s stick with `assertEquals`.",
+      "parentUuid": "88a85271_a28ae93f",
+      "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
