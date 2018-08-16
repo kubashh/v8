@@ -267,7 +267,7 @@ class AllocationSiteRef : public HeapObjectRef {
  public:
   using HeapObjectRef::HeapObjectRef;
 
-  JSObjectRef boilerplate() const;
+  base::Optional<JSObjectRef> boilerplate() const;
   PretenureFlag GetPretenureMode() const;
   bool IsFastLiteral() const;
   ObjectRef nested_site() const;
@@ -285,26 +285,26 @@ class MapRef : public HeapObjectRef {
   int GetInObjectProperties() const;
   int GetInObjectPropertiesStartInWords() const;
   int NumberOfOwnDescriptors() const;
-  PropertyDetails GetPropertyDetails(int i) const;
-  NameRef GetPropertyKey(int i) const;
-  FieldIndex GetFieldIndexFor(int i) const;
   int GetInObjectPropertyOffset(int index) const;
-  ObjectRef constructor_or_backpointer() const;
   ElementsKind elements_kind() const;
-
-  base::Optional<MapRef> AsElementsKind(ElementsKind kind) const;
-
   bool is_stable() const;
   bool has_prototype_slot() const;
   bool is_deprecated() const;
   bool CanBeDeprecated() const;
   bool CanTransition() const;
   bool IsInobjectSlackTrackingInProgress() const;
-  MapRef FindFieldOwner(int descriptor) const;
   bool is_dictionary_map() const;
   bool IsJSArrayMap() const;
   bool IsFixedCowArrayMap() const;
 
+  ObjectRef constructor_or_backpointer() const;
+
+  base::Optional<MapRef> AsElementsKind(ElementsKind kind) const;
+
+  MapRef FindFieldOwner(int descriptor) const;
+  PropertyDetails GetPropertyDetails(int i) const;
+  NameRef GetPropertyKey(int i) const;
+  FieldIndex GetFieldIndexFor(int i) const;
   // Concerning the underlying instance_descriptors:
   ObjectRef GetFieldType(int descriptor) const;
 };
