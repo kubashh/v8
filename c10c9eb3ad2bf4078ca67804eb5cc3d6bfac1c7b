@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "41ece162_64fbefec",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4252,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-08-16T06:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26ac5a88_24c94613",
+      "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6878383_d856e1c4",
         "filename": "test/mjsunit/harmony/global.js",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "b3e584cd_ea52bed6",
+        "filename": "test/mjsunit/harmony/global.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-08-16T06:55:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6878383_d856e1c4",
+      "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4944a7f_4803d33e",
         "filename": "test/mjsunit/harmony/global.js",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2018-08-15T08:41:59Z",
       "side": 1,
       "message": "let\u0027s use assertTrue with \u003d\u003d\u003d everywhere here.",
+      "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88a85271_a28ae93f",
+        "filename": "test/mjsunit/harmony/global.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-08-16T06:55:41Z",
+      "side": 1,
+      "message": "Why? `assertEquals` uses `\u003d\u003d\u003d` and seems like the more descriptive option.",
+      "parentUuid": "c4944a7f_4803d33e",
       "revId": "c10c9eb3ad2bf4078ca67804eb5cc3d6bfac1c7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
