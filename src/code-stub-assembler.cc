@@ -12086,7 +12086,7 @@ Node* CodeStubAssembler::IsDebugActive() {
 
 TNode<BoolT> CodeStubAssembler::IsRuntimeCallStatsEnabled() {
   TNode<UintPtrT> flag_value = UncheckedCast<UintPtrT>(Load(
-      MachineType::IntPtr(),
+      MachineType::Int32(),
       ExternalConstant(ExternalReference::address_of_runtime_stats_flag())));
   return WordNotEqual(flag_value, IntPtrConstant(0));
 }
