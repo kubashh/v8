@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d846726_847b7652",
+        "filename": "src/asmjs/asm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-16T12:55:22Z",
+      "side": 1,
+      "message": "suggestion: Would it make sense to check the two WasmEngine-specific limits first? That way we would catch the case where FLAG_wasm_max_mem_pages is sitting in the [2^12;2^24] range. Currently we would silently accept values in that range even though the flag forbids them.",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 349,
+        "endChar": 3
+      },
+      "revId": "b115a4491ee0003b4111b1a442af650064b7f2c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
