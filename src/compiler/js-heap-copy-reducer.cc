@@ -28,6 +28,15 @@ Reduction JSHeapCopyReducer::Reduce(Node* node) {
       ObjectRef(broker(), HeapConstantOf(node->op()));
       break;
     }
+    case IrOpcode::kJSCreateLiteralArray:
+    case IrOpcode::kJSCreateLiteralObject: {
+      CreateLiteralParameters const& p = CreateLiteralParametersOf(node->op());
+      Handle<Object> feedback(
+          p.feedback().vector()->Get(p.feedback().slot())->ToObject(),
+          broker()->isolate());
+      ObjectRef(broker(), feedback);
+      break;
+    }
     case IrOpcode::kJSCreateArray: {
       CreateArrayParameters const& p = CreateArrayParametersOf(node->op());
       Handle<AllocationSite> site;
