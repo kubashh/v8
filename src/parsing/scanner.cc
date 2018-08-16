@@ -72,15 +72,16 @@ int Scanner::LiteralBuffer::NewCapacity(int min_capacity) {
   return new_capacity;
 }
 
-void Scanner::LiteralBuffer::ExpandBuffer() {
-  Vector<byte> new_store = Vector<byte>::New(NewCapacity(kInitialCapacity));
+void Scanner::LiteralBuffer::ExpandBuffer(int min) {
+  Vector<byte> new_store =
+      Vector<byte>::New(NewCapacity(Max(min, kInitialCapacity)));
   MemCopy(new_store.start(), backing_store_.start(), position_);
   backing_store_.Dispose();
   backing_store_ = new_store;
 }
 
 void Scanner::LiteralBuffer::ConvertToTwoByte() {
-  DCHECK(is_one_byte_);
+  DCHECK(is_one_byte());
   Vector<byte> new_store;
   int new_content_size = position_ * kUC16Size;
   if (new_content_size >= backing_store_.length()) {
@@ -100,12 +101,12 @@ void Scanner::LiteralBuffer::ConvertToTwoByte() {
     backing_store_ = new_store;
   }
   position_ = new_content_size;
-  is_one_byte_ = false;
+  char_width_ = CharWidth::TWO_BYTE;
 }
 
 void Scanner::LiteralBuffer::AddCharSlow(uc32 code_unit) {
   if (position_ >= backing_store_.length()) ExpandBuffer();
-  if (is_one_byte_) {
+  if (is_one_byte()) {
     if (code_unit <= static_cast<uc32>(unibrow::Latin1::kMaxChar)) {
       backing_store_[position_] = static_cast<byte>(code_unit);
       position_ += kOneByteSize;
@@ -186,11 +187,15 @@ Scanner::Scanner(UnicodeCache* unicode_cache)
       has_line_terminator_after_next_(false),
       found_html_comment_(false),
       allow_harmony_bigint_(false),
-      allow_harmony_numeric_separator_(false) {}
+      allow_harmony_numeric_separator_(false),
+      has_unbuffered_offheap_stream_(false) {}
 
 void Scanner::Initialize(CharacterStream<uint16_t>* source, bool is_module) {
   DCHECK_NOT_NULL(source);
   source_ = source;
+  has_unbuffered_offheap_stream_ =
+      (!source_->can_access_heap()) && (!source_->isBuffered());
+
   is_module_ = is_module;
   // Need to capture identifiers in order to recognize "get" and "set"
   // in object literals.
@@ -984,7 +989,8 @@ uc32 Scanner::ScanOctalEscape(uc32 c, int length, bool in_template_literal) {
 }
 
 
-Token::Value Scanner::ScanString() {
+// TODO (sattlerf): find better way than duplicating methods
+Token::Value Scanner::ScanStringDefault() {
   uc32 quote = c0_;
   Advance();  // consume quote
 
@@ -1007,6 +1013,35 @@ Token::Value Scanner::ScanString() {
       continue;
     }
     AddLiteralCharAdvance();
+  }
+}
+
+Token::Value Scanner::ScanStringFast() {
+  uc32 quote = c0_;
+  Advance();  // consume quote
+
+  LiteralScope literal(this);
+  while (true) {
+    if (c0_ == quote) {
+      literal.Complete();
+      Advance();
+      return Token::STRING;
+    }
+    if (c0_ == kEndOfInput || unibrow::IsStringLiteralLineTerminator(c0_)) {
+      return Token::ILLEGAL;
+    }
+    if (c0_ == '\\') {
+      Advance();
+      // TODO(verwaest): Check whether we can remove the additional check.
+      if (c0_ == kEndOfInput || !ScanEscape<false, false>()) {
+        return Token::ILLEGAL;
+      }
+      continue;
+    }
+    AddLiteralCharsAdvanceUntil([&quote](uc32 c0) {
+      return c0 == quote || unibrow::IsStringLiteralLineTerminator(c0) ||
+             c0 == '\\';
+    });
   }
 }
 

@@ -32,17 +32,6 @@ struct HeapStringType<uint16_t> {
   typedef SeqTwoByteString String;
 };
 
-template <typename Char>
-struct Range {
-  const Char* start;
-  const Char* end;
-
-  size_t length() { return static_cast<size_t>(end - start); }
-  bool unaligned_start() const {
-    return reinterpret_cast<intptr_t>(start) % sizeof(Char) == 1;
-  }
-};
-
 // A Char stream backed by an on-heap SeqOneByteString or SeqTwoByteString.
 template <typename Char>
 class OnHeapStream {
@@ -275,7 +264,7 @@ class BufferedCharacterStream : public CharacterStream<uint16_t> {
     }
 
     size_t length = Min(kBufferSize, range.length());
-    i::CopyCharsUnsigned(buffer_, range.start, length);
+    i::CopyCharsUnsigned(buffer_, range.start_, length);
     buffer_end_ = &buffer_[length];
     return true;
   }
@@ -298,13 +287,15 @@ class UnbufferedCharacterStream : public CharacterStream<uint16_t> {
     buffer_pos_ = pos;
   }
 
+  bool isBuffered() const final { return false; }
+
  protected:
   bool ReadBlock() final {
     size_t position = pos();
     buffer_pos_ = position;
     Range<uint16_t> range = byte_stream_.GetDataAt(position);
-    buffer_start_ = range.start;
-    buffer_end_ = range.end;
+    buffer_start_ = range.start_;
+    buffer_end_ = range.end_;
     buffer_cursor_ = buffer_start_;
     if (range.length() == 0) return false;
 
@@ -347,10 +338,10 @@ class RelocatingCharacterStream
 
   void UpdateBufferPointers() {
     Range<uint16_t> range = byte_stream_.GetDataAt(0);
-    if (range.start != buffer_start_) {
-      buffer_cursor_ = (buffer_cursor_ - buffer_start_) + range.start;
-      buffer_start_ = range.start;
-      buffer_end_ = range.end;
+    if (range.start_ != buffer_start_) {
+      buffer_cursor_ = (buffer_cursor_ - buffer_start_) + range.start_;
+      buffer_start_ = range.start_;
+      buffer_end_ = range.end_;
     }
   }
 

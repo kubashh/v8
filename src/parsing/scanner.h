@@ -7,6 +7,8 @@
 #ifndef V8_PARSING_SCANNER_H_
 #define V8_PARSING_SCANNER_H_
 
+#include <tuple>
+
 #include "src/allocation.h"
 #include "src/base/logging.h"
 #include "src/char-predicates.h"
@@ -270,7 +272,10 @@ class Scanner {
   // LiteralBuffer -  Collector of chars of literals.
   class LiteralBuffer {
    public:
-    LiteralBuffer() : is_one_byte_(true), position_(0), backing_store_() {}
+    enum struct CharWidth : bool { ONE_BYTE, TWO_BYTE };
+
+    LiteralBuffer()
+        : char_width_(CharWidth::ONE_BYTE), position_(0), backing_store_() {}
 
     ~LiteralBuffer() { backing_store_.Dispose(); }
 
@@ -280,7 +285,7 @@ class Scanner {
     }
 
     V8_INLINE void AddChar(uc32 code_unit) {
-      if (is_one_byte_ &&
+      if (is_one_byte() &&
           code_unit <= static_cast<uc32>(unibrow::Latin1::kMaxChar)) {
         AddOneByteChar(static_cast<byte>(code_unit));
       } else {
@@ -288,7 +293,26 @@ class Scanner {
       }
     }
 
-    bool is_one_byte() const { return is_one_byte_; }
+    V8_INLINE void AddChars(Range<uint16_t> char_range) {
+      if (is_one_byte()) {
+        for (auto iter = char_range.begin(); iter != char_range.end(); ++iter) {
+          if (V8_LIKELY(*iter <=
+                        static_cast<uc32>(unibrow::Latin1::kMaxChar))) {
+            AddOneByteChar(static_cast<byte>(*iter));
+          } else {
+            ConvertToTwoByte();
+            AddTwoByteChars(Range<uint16_t>(iter, char_range.end()));
+            return;
+          }
+        }
+      } else {
+        AddTwoByteChars(char_range);
+      }
+    }
+
+    inline bool is_one_byte() const {
+      return char_width_ == CharWidth::ONE_BYTE;
+    }
 
     bool Equals(Vector<const char> keyword) const {
       return is_one_byte() && keyword.length() == position_ &&
@@ -296,7 +320,7 @@ class Scanner {
     }
 
     Vector<const uint16_t> two_byte_literal() const {
-      DCHECK(!is_one_byte_);
+      DCHECK(!is_one_byte());
       DCHECK_EQ(position_ & 0x1, 0);
       return Vector<const uint16_t>(
           reinterpret_cast<const uint16_t*>(backing_store_.start()),
@@ -304,20 +328,20 @@ class Scanner {
     }
 
     Vector<const uint8_t> one_byte_literal() const {
-      DCHECK(is_one_byte_);
+      DCHECK(is_one_byte());
       return Vector<const uint8_t>(
           reinterpret_cast<const uint8_t*>(backing_store_.start()), position_);
     }
 
-    int length() const { return is_one_byte_ ? position_ : (position_ >> 1); }
+    int length() const { return is_one_byte() ? position_ : (position_ >> 1); }
 
     void ReduceLength(int delta) {
-      position_ -= delta * (is_one_byte_ ? kOneByteSize : kUC16Size);
+      position_ -= delta * (is_one_byte() ? kOneByteSize : kUC16Size);
     }
 
     void Reset() {
       position_ = 0;
-      is_one_byte_ = true;
+      char_width_ = CharWidth::ONE_BYTE;
     }
 
     Handle<String> Internalize(Isolate* isolate) const;
@@ -337,18 +361,46 @@ class Scanner {
     }
 
     V8_INLINE void AddOneByteChar(byte one_byte_char) {
-      DCHECK(is_one_byte_);
+      DCHECK(is_one_byte());
       if (position_ >= backing_store_.length()) ExpandBuffer();
       backing_store_[position_] = one_byte_char;
       position_ += kOneByteSize;
     }
 
+    V8_INLINE void AddOneByteChars(Range<uint16_t> char_range) {
+      DCHECK(is_one_byte());
+      ExpandBuffer(backing_store_.length() + (int) char_range.length());
+
+      CopyChars(&backing_store_[position_], char_range.begin(),
+                char_range.length());
+      position_ += kOneByteSize * char_range.length();
+    }
+
+    V8_INLINE void AddTwoByteChars(Range<uint16_t> char_range) {
+      DCHECK(!is_one_byte());
+      for (auto c0 : char_range) {
+        if (position_ >= backing_store_.length()) ExpandBuffer();
+        if (c0 <= static_cast<uc32>(unibrow::Utf16::kMaxNonSurrogateCharCode)) {
+          *reinterpret_cast<uint16_t*>(&backing_store_[position_]) = c0;
+          position_ += kUC16Size;
+        } else {
+          *reinterpret_cast<uint16_t*>(&backing_store_[position_]) =
+              unibrow::Utf16::LeadSurrogate(c0);
+          position_ += kUC16Size;
+          if (position_ >= backing_store_.length()) ExpandBuffer();
+          *reinterpret_cast<uint16_t*>(&backing_store_[position_]) =
+              unibrow::Utf16::TrailSurrogate(c0);
+          position_ += kUC16Size;
+        }
+      }
+    }
+
     void AddCharSlow(uc32 code_unit);
     int NewCapacity(int min_capacity);
-    void ExpandBuffer();
+    void ExpandBuffer(int min = 0);
     void ConvertToTwoByte();
 
-    bool is_one_byte_;
+    CharWidth char_width_;
     int position_;
     Vector<byte> backing_store_;
 
@@ -456,6 +508,11 @@ class Scanner {
     next_.literal_chars->AddChar(c);
   }
 
+  V8_INLINE void AddLiteralChars(Range<uint16_t> char_range) {
+    DCHECK_NOT_NULL(next_.literal_chars);
+    next_.literal_chars->AddChars(char_range);
+  }
+
   V8_INLINE void AddRawLiteralChar(uc32 c) {
     DCHECK_NOT_NULL(next_.raw_literal_chars);
     next_.raw_literal_chars->AddChar(c);
@@ -476,6 +533,15 @@ class Scanner {
   inline void AddLiteralCharAdvance() {
     AddLiteralChar(c0_);
     Advance();
+  }
+
+  template <typename FunctionType>
+  inline void AddLiteralCharsAdvanceUntil(FunctionType check) {
+    std::pair<uc32, Range<uint16_t>> CRangePair =
+        source_->AdvanceUntilRange(check);
+    AddLiteralChar(c0_);
+    AddLiteralChars(CRangePair.second);
+    c0_ = CRangePair.first;
   }
 
   // Low-level scanning support.
@@ -631,7 +697,15 @@ class Scanner {
   Token::Value ScanIdentifierOrKeyword();
   Token::Value ScanIdentifierOrKeywordInner(LiteralScope* literal);
 
-  Token::Value ScanString();
+  V8_INLINE Token::Value ScanString() {
+    if (has_unbuffered_offheap_stream_) {
+      return ScanStringFast();
+    } else {
+      return ScanStringDefault();
+    }
+  }
+  Token::Value ScanStringDefault();
+  Token::Value ScanStringFast();
   Token::Value ScanPrivateName();
 
   // Scans an escape-sequence which is part of a string and adds the
@@ -717,6 +791,8 @@ class Scanner {
   bool allow_harmony_bigint_;
   bool allow_harmony_private_fields_;
   bool allow_harmony_numeric_separator_;
+
+  bool has_unbuffered_offheap_stream_;
 
   MessageTemplate::Template scanner_error_;
   Location scanner_error_location_;
