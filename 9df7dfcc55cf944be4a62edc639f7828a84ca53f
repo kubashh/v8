@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "512e19de_3c9b970f",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-17T07:19:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cff445be_a41b74f7",
+      "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "944f4502_881b047d",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67a9d8fb_d2d553eb",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-17T07:19:35Z",
+      "side": 1,
+      "message": "Good catch! Done.\n\nI am wondering whether IsFastLiteral makes sense at all. \n\nCurrently we have IsFastLiteral() iff boilerplate.has_value(), so IsFastLiteral is redundant.",
+      "parentUuid": "944f4502_881b047d",
+      "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "da1170c4_11b8f780",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-17T07:19:35Z",
+      "side": 1,
+      "message": "Does not type check without some extra annotations.",
+      "parentUuid": "67c49c23_d0670b58",
+      "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ebf9b8b0_7be94fc2",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f8829eb_36c18c1b",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-17T07:19:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebf9b8b0_7be94fc2",
+      "revId": "9df7dfcc55cf944be4a62edc639f7828a84ca53f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
