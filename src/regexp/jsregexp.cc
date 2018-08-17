@@ -4686,6 +4686,11 @@ void DispatchTable::Dump() {
   tree()->ForEach(&dumper);
 }
 
+RegExpEngine::CompilationResult::CompilationResult(Isolate* isolate,
+                                                   const char* error_message)
+    : error_message(error_message),
+      code(ReadOnlyRoots(isolate).the_hole_value()),
+      num_registers(0) {}
 
 void RegExpEngine::DotPrint(const char* label,
                             RegExpNode* node,

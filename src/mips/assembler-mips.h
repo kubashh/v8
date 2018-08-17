@@ -41,6 +41,10 @@
 #include <set>
 
 #include "src/assembler.h"
+#include "src/constant-pool.h"
+#include "src/contexts.h"
+#include "src/external-reference.h"
+#include "src/label.h"
 #include "src/mips/constants-mips.h"
 
 namespace v8 {
