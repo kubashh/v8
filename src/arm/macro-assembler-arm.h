@@ -8,6 +8,7 @@
 #include "src/arm/assembler-arm.h"
 #include "src/assembler.h"
 #include "src/bailout-reason.h"
+#include "src/contexts.h"
 #include "src/globals.h"
 #include "src/turbo-assembler.h"
 
