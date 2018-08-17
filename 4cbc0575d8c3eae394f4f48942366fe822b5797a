@@ -16,6 +16,24 @@
       "revId": "4cbc0575d8c3eae394f4f48942366fe822b5797a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee3f437b_9eb58f25",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-08-17T08:58:32Z",
+      "side": 1,
+      "message": "We would need to change HandleGCRequest to also check global available space.",
+      "parentUuid": "5f1fb925_4907d401",
+      "revId": "4cbc0575d8c3eae394f4f48942366fe822b5797a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
