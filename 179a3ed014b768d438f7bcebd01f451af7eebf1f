@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d308fdb_ecb7342d",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-17T07:29:51Z",
+      "side": 1,
+      "message": "Please make this ObjectData*.",
+      "revId": "179a3ed014b768d438f7bcebd01f451af7eebf1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "318770a5_6ccd4993",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-17T07:29:51Z",
+      "side": 1,
+      "message": "If serialized, ...",
+      "revId": "179a3ed014b768d438f7bcebd01f451af7eebf1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
