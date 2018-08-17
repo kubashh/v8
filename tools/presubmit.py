@@ -71,6 +71,7 @@ ASSERT_OPTIMIZED_PATTERN = re.compile("assertOptimized")
 FLAGS_ENABLE_OPT = re.compile("//\s*Flags:.*--opt[^-].*\n")
 ASSERT_UNOPTIMIZED_PATTERN = re.compile("assertUnoptimized")
 FLAGS_NO_ALWAYS_OPT = re.compile("//\s*Flags:.*--no-?always-opt.*\n")
+CLANG_TIDY_WARNING = re.compile(r"(\/.*?)\ .*\[(.*)\]$")
 
 TOOLS_PATH = dirname(abspath(__file__))
 
@@ -555,6 +556,70 @@ def CheckDeps(workspace):
   return subprocess.call([sys.executable, checkdeps_py, workspace]) == 0
 
 
+class CTWarning(object):
+
+    def __init__(self, warning_type):
+        self.warning_type = warning_type
+        self.occurrences = set()
+
+    def AddOccurrence(self, file_path):
+        self.occurrences.add(file_path)
+
+    def __hash__(self):
+        return hash(self.warning_type)
+
+    def __str__(self):
+        s = ""
+        s +=  "[" + self.warning_type + "] #" + str(len(self.occurrences)) + "\n"
+        # s +=  "  " + '\n  '.join(self.occurrences)
+        return s
+
+    def __lt__(self, other):
+        return len(self.occurrences) < len(other.occurrences)
+
+
+class ClangTidyRunner(object):
+
+  def RunFull(self):
+    subprocess.call(["run-clang-tidy", "-j72", "-p", "."], cwd="out.gn/x64.release/")
+
+  def RunAggregate(self):
+    with open(os.devnull, "w") as DEVNULL:
+      ct_process = subprocess.Popen(["run-clang-tidy", "-j72", "-p", "."],
+                                    cwd="out.gn/x64.release/",
+                                    stdout=subprocess.PIPE,
+                                    stderr=DEVNULL)
+    warnings = dict()
+    while True:
+        line = ct_process.stdout.readline()
+        if line != '':
+            res = CLANG_TIDY_WARNING.search(line)
+            if res is not None:
+                if res.group(2) in warnings:
+                    current_warning = warnings[res.group(2)]
+                    current_warning.AddOccurrence(res.group(1))
+                else:
+                    new_warning =  CTWarning(res.group(2))
+                    new_warning.AddOccurrence(res.group(1))
+                    warnings[res.group(2)] = new_warning
+        else:
+            break
+    for warning in sorted(warnings.values(), reverse=True):
+        sys.stdout.write(str(warning))
+
+  def RunDiff(self):
+    git_ps = subprocess.Popen(["git", "diff", "-U0"], stdout=subprocess.PIPE)
+    ct_ps = subprocess.Popen(["clang-tidy-diff.py", "-p", ".", "-p1"], stdin=git_ps.stdout)
+    git_ps.wait()
+    ct_ps.wait()
+    return True
+
+
+def CheckClangTidy():
+    with open(os.devnull, "w") as DEVNULL:
+        return subprocess.call(["which", "clang-tidy"], stdout=DEVNULL) == 0
+    return False
+
 def PyTests(workspace):
   result = True
   for script in [
@@ -571,6 +636,11 @@ def GetOptions():
   result = optparse.OptionParser()
   result.add_option('--no-lint', help="Do not run cpplint", default=False,
                     action="store_true")
+  result.add_option('--ct-full', help="Run clang-tidy on the whole codebase",
+                    default=False, action='store_true')
+  result.add_option('--ct-aggregate', help="Run clang-tidy on the whole \
+                    codebase and aggregate the warnings",
+                    default=False, action='store_true')
   return result
 
 
@@ -591,6 +661,17 @@ def Main():
   success &= StatusFilesProcessor().RunOnPath(workspace)
   print "Running python tests..."
   success &= PyTests(workspace)
+  if CheckClangTidy():
+    if options.ct_full:
+        print "Running clang-tidy - full"
+        ClangTidyRunner().RunFull()
+    elif options.ct_aggregate:
+        print "Running clang-tidy - aggregating warnings"
+        ClangTidyRunner().RunAggregate()
+    else:
+        print "Running clang-tidy"
+        success &= ClangTidyRunner().RunDiff()
+
   if success:
     return 0
   else:
