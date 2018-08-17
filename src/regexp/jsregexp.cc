@@ -4686,7 +4686,6 @@ void DispatchTable::Dump() {
   tree()->ForEach(&dumper);
 }
 
-
 void RegExpEngine::DotPrint(const char* label,
                             RegExpNode* node,
                             bool ignore_case) {
@@ -4698,6 +4697,11 @@ void RegExpEngine::DotPrint(const char* label,
 
 #endif  // DEBUG
 
+RegExpEngine::CompilationResult::CompilationResult(Isolate* isolate,
+                                                   const char* error_message)
+    : error_message(error_message),
+      code(ReadOnlyRoots(isolate).the_hole_value()),
+      num_registers(0) {}
 
 // -------------------------------------------------------------------
 // Tree to graph conversion
