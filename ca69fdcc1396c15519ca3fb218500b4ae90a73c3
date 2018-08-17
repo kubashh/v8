@@ -1,0 +1,622 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb796eea_6d60b887",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "nit: please add a new line between the two lines to make sure the second line isn\u0027t confused as spec text.\n\n// 5. If NewTarget is undefined and ? ...\n//\n// Look up the intrinsic value ...",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b4733a2_8718e826",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "I don\u0027t think this casting is safe. Does this work with your patch?\n  Intl.NumberFormat.call(1);\n  Intl.NumberFormat.call(false);",
+      "range": {
+        "startLine": 565,
+        "startChar": 17,
+        "endLine": 565,
+        "endChar": 41
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b299f3d_aad4cba3",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "This should just be JSNumberFormat",
+      "range": {
+        "startLine": 632,
+        "startChar": 9,
+        "endLine": 632,
+        "endChar": 17
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6db1ac4_b0e67b35",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "nit: just number_format",
+      "range": {
+        "startLine": 632,
+        "startChar": 19,
+        "endLine": 632,
+        "endChar": 39
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6cfa073_06c71c89",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "JSNumberFormat::cast",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32fd1cf3_6a94d4d7",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "You can  drop this DCHECK. The above JSNumberFormat::cast() performs the DHCECK internally",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98bd5ad4_3512ef23",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "This can go away once you change number_format_holder to be JSNumberFormat",
+      "range": {
+        "startLine": 655,
+        "startChar": 0,
+        "endLine": 656,
+        "endChar": 60
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c03a4427_89015f22",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1990,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "You can print the values from the flags too",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "699d98be_24589344",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "This can be moved above, right after the CacehedOrNewService call.",
+      "range": {
+        "startLine": 1518,
+        "startChar": 0,
+        "endLine": 1520,
+        "endChar": 60
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "069d34bd_450e4571",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "input args are usually const references",
+      "range": {
+        "startLine": 29,
+        "startChar": 19,
+        "endLine": 29,
+        "endChar": 34
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3143b593_4616f9e1",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "nit: please add a new line above, looks very busy.",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d4fcc1f_3ee16900",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "nit: please add a new line above, looks very busy.",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96c2c037_a99fc749",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "nit: please add a new line above, looks very busy.",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "136eebf8_056801c9",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "This scares me a bit, but I think it\u0027s fine.",
+      "range": {
+        "startLine": 128,
+        "startChar": 13,
+        "endLine": 128,
+        "endChar": 28
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1d9d2227_1c7e456f",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "This should be a JSReceiver. The spec says \n// 1. assert: Type(nf) is an Object\n\nObject in spec land, is a JSReceiver in V8",
+      "range": {
+        "startLine": 156,
+        "startChar": 29,
+        "endLine": 156,
+        "endChar": 37
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682ba771_ba50579b",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "This should be IsJSReceiver().. but we can omit it since the IsJSNumberFormat is a more narrower check",
+      "range": {
+        "startLine": 180,
+        "startChar": 19,
+        "endLine": 180,
+        "endChar": 29
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e47740cb_46ea5685",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this just be: \n  ASSIGN_RETURN_ON_EXCEPTION(isolate, format_holder, JSReciever::GetProperty(...),..);\n\nThe IsJSObject check is done below, as part of the IsJSNumberFormat check.",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 0
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ef7d80e_84f9ddbf",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "This is just THROW_NEW_ERROR",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3863fb6_01c3ba95",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "this should be std::string, sorry about that.",
+      "range": {
+        "startLine": 209,
+        "startChar": 9,
+        "endLine": 209,
+        "endChar": 33
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06d8881b_ef622ce1",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "This should also be std::string, sorry about that",
+      "range": {
+        "startLine": 210,
+        "startChar": 38,
+        "endLine": 210,
+        "endChar": 50
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "794569bd_32b5ab2c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "Please add a comment explaining why forbid these values.\n\n  // The list that is the value of the \"nu\" field of any locale field of [[LocaleData]] must not \n  // include the values \"native\",  \"traditio\", or \"finance\".\n  //\n  // See https://tc39.github.io/ecma402/#sec-intl.numberformat-internal-slots",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19660a22_732de9c2",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this. The value is already set in icu_locale.",
+      "range": {
+        "startLine": 333,
+        "startChar": 1,
+        "endLine": 337,
+        "endChar": 5
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7ce5f74_c371f6b3",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "Please move this above to the icu_locale.setKeywordValue call",
+      "range": {
+        "startLine": 340,
+        "startChar": 0,
+        "endLine": 341,
+        "endChar": 4
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2625885_25838896",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "DCHECK_NOT_NULL(style_cstr.get())",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d79965_ddbd197c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "Please move this to where this used.",
+      "range": {
+        "startLine": 388,
+        "startChar": 0,
+        "endLine": 390,
+        "endChar": 55
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31989009_bf38f82b",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "Where is this part of the spec? If I\u0027m reading the spec correctly, I see \n\n  21) Else\n     a. Let mnfdDefault be 0\n     b. If style is \"percent\", then\n            i. Let mxfdDefault be 0.\n     c. Else,\n            i. Let mxfdDefault be 3.\n\nsetMinimumFractionDigits is done as part of Intl::SetNumberFormatDigitOptions. I don\u0027t see why this is necessary here.",
+      "range": {
+        "startLine": 453,
+        "startChar": 1,
+        "endLine": 455,
+        "endChar": 4
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba3748e5_fb69e951",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "Why is this here and not in step 17? Is it because icu::NumberFormat is created here? Can you move the creation to above step 17? And then perform step 17 completely?",
+      "range": {
+        "startLine": 460,
+        "startChar": 0,
+        "endLine": 463,
+        "endChar": 5
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aa7ebf6_3463f0c8",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "Why is this here and not in step 17? I understand that user of this is here but it\u0027s better to follow the spec order if this is a spec defined operation, otherwise it\u0027s fine to move it closer to the user.",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 469,
+        "endChar": 0
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4f694b6_32c085d5",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "You\u0027ll need to do step 2 as well\n\n  // 2. If Type(nf) is not Object, throw a TypeError exception\n  if (!number_format_obj-\u003eIsJSReceiver()) { .. }",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92e6ea19_b7d025f5",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-17T00:31:56Z",
+      "side": 1,
+      "message": "This seems wrong. The spec says\n // 3. Let nf be ? UnwrapNumberFormat(nf)",
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
