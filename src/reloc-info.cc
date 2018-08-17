@@ -5,9 +5,11 @@
 #include "src/reloc-info.h"
 
 #include "src/assembler-arch-inl.h"
+#include "src/code-reference.h"
 #include "src/code-stubs.h"
 #include "src/deoptimize-reason.h"
 #include "src/deoptimizer.h"
+#include "src/external-reference.h"
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/objects/code-inl.h"
 #include "src/snapshot/snapshot.h"
