@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a71e727_45129aae",
+        "filename": "src/heap/heap-controller.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-08-17T11:38:23Z",
+      "side": 1,
+      "message": "\"Plenty/Some\" are ambiguous. How about turning this into the expected action?\nkNone,\nkIncrementalMarking,\nkFullGarbageCollection,",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 17,
+        "endChar": 24
+      },
+      "revId": "e66f08b1f12927bdfdf2644147d3a4bdcbabdcc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d35186e3_f283b9c2",
+        "filename": "src/heap/heap-controller.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-08-17T11:38:23Z",
+      "side": 1,
+      "message": "Is there more descriptive name?",
+      "range": {
+        "startLine": 51,
+        "startChar": 30,
+        "endLine": 51,
+        "endChar": 56
+      },
+      "revId": "e66f08b1f12927bdfdf2644147d3a4bdcbabdcc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ade5c31_ca22da4a",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-08-17T11:38:23Z",
+      "side": 1,
+      "message": "We need to check if marking is already in progress",
+      "range": {
+        "startLine": 2320,
+        "startChar": 4,
+        "endLine": 2320,
+        "endChar": 27
+      },
+      "revId": "e66f08b1f12927bdfdf2644147d3a4bdcbabdcc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a64dfd91_df7345f0",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-08-17T11:38:23Z",
+      "side": 1,
+      "message": "ManualGCScope will prevent incremental marking from starting.",
+      "range": {
+        "startLine": 1617,
+        "startChar": 2,
+        "endLine": 1617,
+        "endChar": 30
+      },
+      "revId": "e66f08b1f12927bdfdf2644147d3a4bdcbabdcc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
