@@ -40,9 +40,12 @@
 #include <deque>
 
 #include "src/assembler.h"
+#include "src/constant-pool.h"
 #include "src/ia32/constants-ia32.h"
 #include "src/ia32/sse-instr.h"
 #include "src/isolate.h"
+#include "src/label.h"
+#include "src/reloc-info.h"
 #include "src/utils.h"
 
 namespace v8 {

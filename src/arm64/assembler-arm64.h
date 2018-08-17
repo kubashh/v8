@@ -15,6 +15,7 @@
 #include "src/assembler.h"
 #include "src/base/optional.h"
 #include "src/constant-pool.h"
+#include "src/contexts.h"
 #include "src/globals.h"
 #include "src/utils.h"
 

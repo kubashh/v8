@@ -40,7 +40,12 @@
 #include <set>
 
 #include "src/assembler.h"
+#include "src/constant-pool.h"
+#include "src/contexts.h"
+#include "src/external-reference.h"
+#include "src/label.h"
 #include "src/mips64/constants-mips64.h"
+#include "src/reloc-info.h"
 
 namespace v8 {
 namespace internal {

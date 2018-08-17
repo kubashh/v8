@@ -3891,6 +3891,7 @@ TEST(regress4292_blx) {
 
 
 TEST(regress4292_CheckConstPool) {
+  printf("FOO\n");
   CcTest::InitializeVM();
   Isolate* isolate = CcTest::i_isolate();
   HandleScope scope(isolate);
