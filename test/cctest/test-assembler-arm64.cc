@@ -130,13 +130,11 @@ static void InitializeVM() {
       new Decoder<DispatchingDecoderVisitor>();                \
   Simulator simulator(decoder);                                \
   PrintDisassembler* pdis = nullptr;                           \
-  RegisterDump core;
-
-/*  if (Cctest::trace_sim()) {                                                 \
-    pdis = new PrintDisassembler(stdout);                                      \
-    decoder.PrependVisitor(pdis);                                              \
-  }                                                                            \
-  */
+  RegisterDump core;                                           \
+  if (i::FLAG_trace_sim) {                                     \
+    pdis = new PrintDisassembler(stdout);                      \
+    decoder->PrependVisitor(pdis);                             \
+  }
 
 // Reset the assembler and simulator, so that instructions can be generated,
 // but don't actually emit any code. This can be used by tests that need to
@@ -6744,16 +6742,15 @@ TEST(ldr_literal) {
 // These tests rely on functions available in debug mode.
 enum LiteralPoolEmitOption { NoJumpRequired, JumpRequired };
 
-static void LdrLiteralRangeHelper(int range_, LiteralPoolEmitOption option,
+static void LdrLiteralRangeHelper(size_t range, LiteralPoolEmitOption option,
                                   bool expect_dump) {
-  CHECK_GT(range_, 0);
-  SETUP_SIZE(range_ + 1024);
+  SETUP_SIZE(static_cast<int>(range + 1024));
 
-  Label label_1, label_2;
+  Label label_1;
 
-  size_t range = static_cast<size_t>(range_);
   size_t code_size = 0;
   size_t pool_guard_size;
+  const size_t pool_size = 16;
 
   if (option == NoJumpRequired) {
     // Space for an explicit branch.
@@ -6769,40 +6766,49 @@ static void LdrLiteralRangeHelper(int range_, LiteralPoolEmitOption option,
 
   LoadLiteral(&masm, x0, 0x1234567890ABCDEFUL);
   LoadLiteral(&masm, x1, 0xABCDEF1234567890UL);
-  CHECK_CONSTANT_POOL_SIZE(16);
-
   code_size += 2 * kInstrSize;
+  CHECK_CONSTANT_POOL_SIZE(pool_size);
 
-  // Check that the requested range (allowing space for a branch over the pool)
-  // can be handled by this test.
-  CHECK_LE(code_size + pool_guard_size, range);
-
-  // Emit NOPs up to 'range', leaving space for the pool guard.
-  while ((code_size + pool_guard_size + kInstrSize) < range) {
-    __ Nop();
-    code_size += kInstrSize;
-  }
-
-  // Emit the guard sequence before the literal pool.
+  // Emit the guard sequence before the literal pool. We emit the branch before
+  // the nops, as an unconditional branch may trigger opportunity emission of
+  // the constant pool.
   if (option == NoJumpRequired) {
     __ B(&label_1);
     code_size += kInstrSize;
   }
 
-  // The next instruction will trigger pool emission when expect_dump is true.
-  CHECK_EQ(code_size, range - kInstrSize);
-  CHECK_CONSTANT_POOL_SIZE(16);
+  // Check that the requested range (allowing space for a branch over the pool)
+  // can be handled by this test.
+  CHECK_LE(code_size + pool_guard_size, range);
 
-  // Possibly generate a literal pool.
-  __ Nop();
+  auto PoolSizeAt = [&masm, pool_guard_size, pool_size](int pc_offset) {
+    // To determine padding, consider the size of the prologue of the pool.
+    size_t pc = __ pc_offset() + pool_guard_size + 2 * kInstrSize;
+    const size_t padding = IsAligned(pc, 8) ? 0 : 4;
+    return pool_guard_size + 2 * kInstrSize + pool_size + padding;
+  };
 
-  __ Bind(&label_1);
+  int pc_offset_before_emission = -1;
+  // Emit NOPs up to 'range', leaving space for the pool.
+  while (code_size + PoolSizeAt(__ pc_offset()) < range) {
+    pc_offset_before_emission = __ pc_offset();
+    __ Nop();
+    code_size += kInstrSize;
+    if (__ GetConstantPoolEntriesSizeForTesting() == 0) break;
+  }
   if (expect_dump) {
+    CHECK_GT(code_size, 0);
     CHECK_CONSTANT_POOL_SIZE(0);
+    // Check that the constant pool size is as expected.
+    CHECK_EQ(pc_offset_before_emission + kInstrSize +
+                 PoolSizeAt(pc_offset_before_emission + kInstrSize),
+             __ pc_offset());
   } else {
-    CHECK_CONSTANT_POOL_SIZE(16);
+    CHECK_CONSTANT_POOL_SIZE(pool_size);
+    CHECK_EQ(pc_offset_before_emission + kInstrSize, __ pc_offset());
   }
 
+  __ Bind(&label_1);
   // Force a pool flush to check that a second pool functions correctly.
   __ CheckConstPool(true, true);
   CHECK_CONSTANT_POOL_SIZE(0);
@@ -6810,7 +6816,7 @@ static void LdrLiteralRangeHelper(int range_, LiteralPoolEmitOption option,
   // These loads should be after the pool (and will require a new one).
   LoadLiteral(&masm, x4, 0x34567890ABCDEF12UL);
   LoadLiteral(&masm, x5, 0xABCDEF0123456789UL);
-  CHECK_CONSTANT_POOL_SIZE(16);
+  CHECK_CONSTANT_POOL_SIZE(pool_size);
   END();
 
   RUN();
@@ -6824,29 +6830,40 @@ static void LdrLiteralRangeHelper(int range_, LiteralPoolEmitOption option,
   TEARDOWN();
 }
 
-TEST(ldr_literal_range_1) {
-  INIT_V8();
-  LdrLiteralRangeHelper(MacroAssembler::GetApproxMaxDistToConstPoolForTesting(),
-                        NoJumpRequired, true);
-}
-
-
-TEST(ldr_literal_range_2) {
+TEST(ldr_literal_range_max_dist_no_emission) {
   INIT_V8();
   LdrLiteralRangeHelper(
       MacroAssembler::GetApproxMaxDistToConstPoolForTesting() - kInstrSize,
       NoJumpRequired, false);
 }
 
+TEST(ldr_literal_range_max_dist_no_emission_2) {
+  INIT_V8();
+  LdrLiteralRangeHelper(
+      MacroAssembler::GetApproxMaxDistToConstPoolForTesting() - 2 * kInstrSize,
+      NoJumpRequired, false);
+}
 
-TEST(ldr_literal_range_3) {
+TEST(ldr_literal_range_max_dist_emission) {
+  INIT_V8();
+  LdrLiteralRangeHelper(MacroAssembler::GetApproxMaxDistToConstPoolForTesting(),
+                        NoJumpRequired, true);
+}
+
+TEST(ldr_literal_range_max_dist_emission_2) {
+  INIT_V8();
+  LdrLiteralRangeHelper(
+      MacroAssembler::GetApproxMaxDistToConstPoolForTesting() + kInstrSize,
+      NoJumpRequired, true);
+}
+
+TEST(ldr_literal_range_no_emission_aligned_unaligned_1) {
   INIT_V8();
   LdrLiteralRangeHelper(MacroAssembler::GetCheckConstPoolIntervalForTesting(),
                         JumpRequired, false);
 }
 
-
-TEST(ldr_literal_range_4) {
+TEST(ldr_literal_range_no_emission_aligned_unaligned_2) {
   INIT_V8();
   LdrLiteralRangeHelper(
       MacroAssembler::GetCheckConstPoolIntervalForTesting() - kInstrSize,
