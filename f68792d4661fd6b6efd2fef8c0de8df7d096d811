@@ -1,0 +1,340 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3711a254_44f98041",
+        "filename": "src/js/intl.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "No need for object_define_properties now that we have an object with a null prototype, you can just do:\n\nvar resolved \u003d {__proto__: null};\n\nOr skip the resolved variable altogether and just change the line below to\n\ndateFormat[resolvedSymbol] \u003d {__proto__: null};",
+      "range": {
+        "startLine": 1025,
+        "startChar": 16,
+        "endLine": 1025,
+        "endChar": 42
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "113d0468_f3ddff31",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Nit: no need for parens here.",
+      "range": {
+        "startLine": 540,
+        "startChar": 32,
+        "endLine": 540,
+        "endChar": 33
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e847475_0084e05f",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "I would\u0027ve expected the default to be return false, can you explain?",
+      "range": {
+        "startLine": 541,
+        "startChar": 9,
+        "endLine": 541,
+        "endChar": 13
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5578472_e5821b3e",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "These two don\u0027t seem to be used, but I do see std::string used, please include \u003cstring\u003e",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99e9fc7a_6c6c4120",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "In general it looks like there are a good number of includes that aren\u0027t used here, please only include what you use to help keep build times low.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54183962_53ea9136",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Please wrap this, and the next two declarations in an anonymous namespace.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b689a765_6d5f91e7",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Can these be \"more const\", since they should never change? That is, const char* const? Same goes below.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac706b6b_97dd2f4c",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Typo: s/m/n/\n\nAlso this should be called \"kPatternItems\" to reflect its constant-ness.",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 32
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e6b6f4e_4788e5a0",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Please add a comment here about the importance of the ordering from longer to shorter, since you\u0027re depending on the longer things coming first.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34d2dc9a_e903d35f",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Can this be a CHECK instead of an if? That is,\n\nCHECK(resolved_obj-\u003eIsJSReceiver());\nHandle\u003cJSReceiver\u003e resolved \u003d Handle\u003cJSReceiver\u003e::cast(resolved_obj);",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96bab6c3_1b326bd2",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Given the CHECK above, no need for an if here, you can just case directly.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3176e43_4d74f1b4",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "This actually isn\u0027t guaranteed right now, because SetResolvedDateSettings can actually put undefined here.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b9d982f_4b68f586",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Please use const PatternItem* here, makes it a little easier to follow this code (for me anyway).",
+      "range": {
+        "startLine": 140,
+        "startChar": 7,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80bb1cc1_48257fbb",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "I think it\u0027d be easier to understand this code if it were pulled out into a helper function that\u0027s up next to kPatternItems. As is I found myself bouncing back and forth in the file to follow the logic.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e531eaf1_caa41d15",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Please add a comment here explaining that you\u0027re bailing out of the inner loop because the patterns are listed from longer to shorter.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1632c8f9_c3fc7ee1",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "Would we ever hit this branch? I thought the point of IsValidTimeZone was to make this unreachable?",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b609abff_3cc02610",
+        "filename": "src/objects/js-date-time-format.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "You shouldn\u0027t need these headers here.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bde1a3a_62342986",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:32:23Z",
+      "side": 1,
+      "message": "The equivalent C++ function for this spec concept is actually IsJSReceiver() (which is the superclass of JSObject and JSProxy). This doesn\u0027t make a big difference, since Intl::IsObjectOfType will already disregard non-JSObjects, but since this code is trying to follow the spec exactly I\u0027d prefer if this check was IsJSReceiver, and JSDateTimeFormat::ResolvedOptions should take a Handle\u003cJSReceiver\u003e.\n\nAlternatively, after all that explanation, you could just pass a Handle\u003cObject\u003e directly to ResolvedOptions, since that\u0027s what IsObjectOfType expects. That won\u0027t match 1:1 with the spec, but the behavior will be identical. So that\u0027s what I\u0027d recommend.",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
