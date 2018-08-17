@@ -9,6 +9,7 @@
 
 #include "src/ast/ast.h"
 #include "src/regexp/bytecodes-irregexp.h"
+#include "src/regexp/regexp-macro-assembler-irregexp.h"
 
 namespace v8 {
 namespace internal {
