@@ -270,6 +270,24 @@
     },
     {
       "key": {
+        "uuid": "48c14e07_fc52c4e9",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-17T23:37:05Z",
+      "side": 1,
+      "message": "One more high-level question: this method of approximating the JS regexp-based code looks a little hacky to me. But I\u0027m not at all familiar with ICU here; did you look into other ways of extracting this information?",
+      "parentUuid": "80bb1cc1_48257fbb",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e531eaf1_caa41d15",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 13
