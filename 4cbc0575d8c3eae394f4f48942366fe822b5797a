@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f1fb925_4907d401",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-17T08:55:09Z",
+      "side": 1,
+      "message": "This does not trigger a GC because Heap::HandleGCRequest ignores it. Should we replace this line with MemoryPressureNotification(level \u003d kCritical, is_isolate_locked \u003d false)?",
+      "revId": "4cbc0575d8c3eae394f4f48942366fe822b5797a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
