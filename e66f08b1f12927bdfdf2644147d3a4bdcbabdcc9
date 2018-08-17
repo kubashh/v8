@@ -91,6 +91,30 @@
       "revId": "e66f08b1f12927bdfdf2644147d3a4bdcbabdcc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f109bf7_30043701",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-17T12:01:17Z",
+      "side": 1,
+      "message": "To clarify: Put ManualGCScope at the top of the function. (See other examples.)",
+      "parentUuid": "a64dfd91_df7345f0",
+      "range": {
+        "startLine": 1617,
+        "startChar": 2,
+        "endLine": 1617,
+        "endChar": 30
+      },
+      "revId": "e66f08b1f12927bdfdf2644147d3a4bdcbabdcc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
