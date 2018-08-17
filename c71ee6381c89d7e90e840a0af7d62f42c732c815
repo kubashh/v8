@@ -22,6 +22,30 @@
       "revId": "c71ee6381c89d7e90e840a0af7d62f42c732c815",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c46375a9_ae36be67",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-17T09:49:05Z",
+      "side": 1,
+      "message": "1. They\u0027re cheap (and wasn\u0027t there talk about preferring CHECKs if the condition is cheap?)\n2. This only runs at mksnapshot time (and nosnap builds).",
+      "parentUuid": "a9fcee89_d525fef1",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 50
+      },
+      "revId": "c71ee6381c89d7e90e840a0af7d62f42c732c815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
