@@ -2207,6 +2207,30 @@ void InstructionSelector::VisitWord32AtomicBinaryOperation(
   Emit(code, 1, outputs, input_count, inputs, arraysize(temps), temps);
 }
 
+void InstructionSelector::VisitWord32AtomicPairAdd(Node* node) {
+  ArmOperandGenerator g(this);
+  Node* base = node->InputAt(0);
+  Node* index = node->InputAt(1);
+  Node* value = node->InputAt(2);
+  Node* value_high = node->InputAt(3);
+  AddressingMode addressing_mode = kMode_Offset_RR;
+  InstructionOperand inputs[4];
+  size_t input_count = 0;
+  inputs[input_count++] = g.UseUniqueRegister(value);
+  inputs[input_count++] = g.UseUniqueRegister(value_high);
+  inputs[input_count++] = g.UseRegister(base);
+  inputs[input_count++] = g.UseRegister(index);
+  InstructionOperand outputs[] = {
+      g.DefineAsFixed(NodeProperties::FindProjection(node, 0), r2),
+      g.DefineAsFixed(NodeProperties::FindProjection(node, 1), r3)};
+  InstructionOperand temps[] = {g.TempRegister(), g.TempRegister(r7),
+                                g.TempRegister(r6), g.TempRegister()};
+  InstructionCode code =
+      kArmWord32AtomicPairAdd | AddressingModeField::encode(addressing_mode);
+  Emit(code, arraysize(outputs), outputs, arraysize(inputs), inputs,
+       arraysize(temps), temps);
+}
+
 #define VISIT_ATOMIC_BINOP(op)                                   \
   void InstructionSelector::VisitWord32Atomic##op(Node* node) {  \
     VisitWord32AtomicBinaryOperation(                            \

@@ -2389,16 +2389,18 @@ void InstructionSelector::VisitWord32PairShr(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitWord32PairSar(Node* node) { UNIMPLEMENTED(); }
 #endif  // V8_TARGET_ARCH_64_BIT
 
+#if !V8_TARGET_ARCH_IA32 && !V8_TARGET_ARCH_ARM
+void InstructionSelector::VisitWord32AtomicPairAdd(Node* node) {
+  UNIMPLEMENTED();
+}
+#endif
+
 #if !V8_TARGET_ARCH_IA32
 void InstructionSelector::VisitWord32AtomicPairLoad(Node* node) {
   UNIMPLEMENTED();
 }
 
 void InstructionSelector::VisitWord32AtomicPairStore(Node* node) {
-  UNIMPLEMENTED();
-}
-
-void InstructionSelector::VisitWord32AtomicPairAdd(Node* node) {
   UNIMPLEMENTED();
 }
 

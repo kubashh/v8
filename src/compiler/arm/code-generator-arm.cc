@@ -2613,6 +2613,58 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ ExtractLane(i.OutputRegister(), scratch, NeonS8, 0);
       break;
     }
+#define ASSEMBLE_ATOMIC_BINOP(load_instr, store_instr, bin_instr)            \
+  do {                                                                       \
+    Label binop;                                                             \
+    __ add(i.TempRegister(1), i.InputRegister(0), i.InputRegister(1));       \
+    __ dmb(ISH);                                                             \
+    __ bind(&binop);                                                         \
+    __ load_instr(i.OutputRegister(0), i.TempRegister(1));                   \
+    __ bin_instr(i.TempRegister(0), i.OutputRegister(0),                     \
+                 Operand(i.InputRegister(2)));                               \
+    __ store_instr(i.TempRegister(2), i.TempRegister(0), i.TempRegister(1)); \
+    __ teq(i.TempRegister(2), Operand(0));                                   \
+    __ b(ne, &binop);                                                        \
+    __ dmb(ISH);                                                             \
+  } while (0)
+
+    case kArmWord32AtomicPairAdd: {
+      Label binop;
+      __ add(i.TempRegister(0), i.InputRegister(2), i.InputRegister(3));
+      __ dmb(ISH);
+      __ bind(&binop);
+      __ ldrexd(i.OutputRegister(0), i.OutputRegister(1), i.TempRegister(0));
+      __ add(i.TempRegister(2), i.OutputRegister(0), i.InputRegister(0),
+             SBit::SetCC);
+      __ adc(i.TempRegister(1), i.OutputRegister(1),
+             Operand(i.InputRegister(1)));
+      DCHECK_EQ(LeaveCC, i.OutputSBit());
+      __ strexd(i.TempRegister(3), i.TempRegister(2), i.TempRegister(1),
+                i.TempRegister(0));
+      __ teq(i.TempRegister(3), Operand(0));
+      __ b(ne, &binop);
+      __ dmb(ISH);
+      break;
+    }
+    /*
+    case kArmWord32AtomicPairSub: {
+      Label binop;
+      __ add(i.TempRegister(0), i.InputRegister(2), i.InputRegister(3));
+      __ dmb(ISH);
+      __ bind(&binop);
+      __ ldrexd(i.OutputRegister(0), i.OutputRegister(1), i.TempRegister(0));
+      __ sub(i.TempRegister(2), i.InputRegister(0), i.OutputRegister(0),
+    SBit::SetCC);
+      __ sbc(i.TempRegister(1), i.InputRegister(1),
+    Operand(i.OutputRegister(1))); DCHECK_EQ(LeaveCC, i.OutputSBit());
+      __ strexd(i.TempRegister(3), i.TempRegister(2), i.TempRegister(1),
+              i.TempRegister(0));
+      __ teq(i.TempRegister(3), Operand(0));
+      __ b(ne, &binop);
+      __ dmb(ISH);
+      break;
+    }
+    */
     case kWord32AtomicLoadInt8:
       ASSEMBLE_ATOMIC_LOAD_INTEGER(ldrsb);
       break;
@@ -2628,7 +2680,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kWord32AtomicLoadWord32:
       ASSEMBLE_ATOMIC_LOAD_INTEGER(ldr);
       break;
-
     case kWord32AtomicStoreWord8:
       ASSEMBLE_ATOMIC_STORE_INTEGER(strb);
       break;

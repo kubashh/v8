@@ -35,6 +35,7 @@ void RunU64BinOp(WasmExecutionMode execution_mode, WasmOpcode wasm_op,
 WASM_EXEC_TEST(I64AtomicAdd) {
   RunU64BinOp(execution_mode, kExprI64AtomicAdd, Add);
 }
+#if !V8_TARGET_ARCH_ARM
 WASM_EXEC_TEST(I64AtomicSub) {
   RunU64BinOp(execution_mode, kExprI64AtomicSub, Sub);
 }
@@ -401,6 +402,7 @@ WASM_EXEC_TEST(I64AtomicStoreLoad8U) {
     CHECK_EQ(*i, r.builder().ReadMemory(&memory[0]));
   }
 }
+#endif
 
 }  // namespace test_run_wasm_atomics_64
 }  // namespace wasm

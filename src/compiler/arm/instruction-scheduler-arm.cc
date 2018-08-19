@@ -278,6 +278,9 @@ int InstructionScheduler::GetTargetInstructionFlags(
     case kArmDsbIsb:
       return kHasSideEffect;
 
+    case kArmWord32AtomicPairAdd:
+      return kHasSideEffect;
+
 #define CASE(Name) case k##Name:
     COMMON_ARCH_OPCODE_LIST(CASE)
 #undef CASE
