@@ -2144,7 +2144,7 @@ void Assembler::ldrsh(Register dst, const MemOperand& src, Condition cond) {
 
 void Assembler::ldrd(Register dst1, Register dst2,
                      const MemOperand& src, Condition cond) {
-  DCHECK(src.rm() == no_reg);
+  // DCHECK(src.rm() == no_reg);
   DCHECK(dst1 != lr);  // r14.
   DCHECK_EQ(0, dst1.code() % 2);
   DCHECK_EQ(dst1.code() + 1, dst2.code());
@@ -2154,7 +2154,6 @@ void Assembler::ldrd(Register dst1, Register dst2,
 
 void Assembler::strd(Register src1, Register src2,
                      const MemOperand& dst, Condition cond) {
-  DCHECK(dst.rm() == no_reg);
   DCHECK(src1 != lr);  // r14.
   DCHECK_EQ(0, src1.code() % 2);
   DCHECK_EQ(src1.code() + 1, src2.code());
@@ -2238,6 +2237,34 @@ void Assembler::strexh(Register src1, Register src2, Register dst,
   DCHECK(src1 != src2);
   emit(cond | B24 | B23 | B22 | B21 | dst.code() * B16 | src1.code() * B12 |
        0xF9 * B4 | src2.code());
+}
+
+void Assembler::ldrexd(Register dst1, Register dst2, Register src,
+                       Condition cond) {
+  // Instruction details available in ARM DDI 0406C.b, A8.8.71.
+  // cond(31-28) | 00011011(27-20) | Rn(19-16) | Rt(15-12) | 111110011111(11-0)
+  // DCHECK(src.rm() == no_reg);
+  DCHECK(dst1 != lr);  // r14.
+  // The pair of destination registers is restricted to being an even-numbered
+  // register and the odd-numbered register that immediately follows it.
+  DCHECK_EQ(0, dst1.code() % 2);
+  DCHECK_EQ(dst1.code() + 1, dst2.code());
+  emit(cond | B24 | B23 | B21 | B20 | src.code() * B16 | dst1.code() * B12 |
+       0xF9F);
+}
+
+void Assembler::strexd(Register res, Register src1, Register src2, Register dst,
+                       Condition cond) {
+  // Instruction details available in ARM DDI 0406C.b, A8.6.204.
+  // cond(31-28) | 00011010(27-20) | Rn(19-16) | Rt(15-12) | 111110011111(11-0)
+  // DCHECK(dst.rm() == no_reg);
+  DCHECK(src1 != lr);  // r14.
+  // The pair of source registers is restricted to being an even-numbered
+  // register and the odd-numbered register that immediately follows it.
+  DCHECK_EQ(0, src1.code() % 2);
+  DCHECK_EQ(src1.code() + 1, src2.code());
+  emit(cond | B24 | B23 | B21 | dst.code() * B16 | res.code() * B12 |
+       0xF9 * B4 | src1.code());
 }
 
 // Preload instructions.

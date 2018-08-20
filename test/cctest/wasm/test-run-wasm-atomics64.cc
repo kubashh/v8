@@ -341,6 +341,7 @@ WASM_EXEC_TEST(I64AtomicStoreLoad) {
   }
 }
 
+#if !V8_TARGET_ARCH_ARM
 WASM_EXEC_TEST(I64AtomicStoreLoad32U) {
   EXPERIMENTAL_FLAG_SCOPE(threads);
   WasmRunner<uint64_t, uint64_t> r(execution_mode);
@@ -401,6 +402,7 @@ WASM_EXEC_TEST(I64AtomicStoreLoad8U) {
     CHECK_EQ(*i, r.builder().ReadMemory(&memory[0]));
   }
 }
+#endif
 
 }  // namespace test_run_wasm_atomics_64
 }  // namespace wasm
