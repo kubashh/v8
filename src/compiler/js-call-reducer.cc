@@ -5143,10 +5143,16 @@ Reduction JSCallReducer::ReduceArrayIteratorPrototypeNext(Node* node) {
     // iterator.[[NextIndex]] >= array.length, stop iterating.
     done_false = jsgraph()->TrueConstant();
     value_false = jsgraph()->UndefinedConstant();
-    efalse =
-        graph()->NewNode(simplified()->StoreField(
-                             AccessBuilder::ForJSArrayIteratorIteratedObject()),
-                         iterator, value_false, efalse, if_false);
+
+    // Mark the {iterator} as exhausted by setting the [[NextIndex]] to a
+    // value that will never pass the length check again (aka the maximum
+    // value possible for the specific iterated object). Note that this is
+    // different from what the specification says, which is changing the
+    // [[IteratedObject]] field to undefined, but that makes it difficult
+    // to eliminate the map checks and "length" accesses in for..of loops.
+    Node* end_index = jsgraph()->Constant(index_access.type.Max());
+    efalse = graph()->NewNode(simplified()->StoreField(index_access), iterator,
+                              end_index, efalse, if_false);
   }
 
   control = graph()->NewNode(common()->Merge(2), if_true, if_false);
