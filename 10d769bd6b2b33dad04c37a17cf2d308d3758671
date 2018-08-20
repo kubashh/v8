@@ -1,0 +1,299 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ba421ce_b8efe1ae",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "This doesn\u0027t need to change, it can stay as before, can\u0027t it?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2df27852_d13f9147",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 5042,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "Here and later in this file, could you use is_const_pool_blocked() and is_const_pool_empty()?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "871755ae_2436819c",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 5182,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "Isn\u0027t this case obsolete now?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17351922_5a9fa5f4",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 5193,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "Can you assert that Entry64Count() is zero instead?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5843b511_8cd5dfca",
+        "filename": "src/arm/assembler-arm.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "Can this also be shared?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d86f93c_17a93bcf",
+        "filename": "src/arm64/assembler-arm64.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 4788,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "If I\u0027m not mistaken, the marker now includes the size of the marker itself (taken into account in ComputeSize). Before, it didn\u0027t.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13a6ea2b_c69933d5",
+        "filename": "src/arm64/assembler-arm64.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 3413,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "Since we don\u0027t add 32-bit entries, should there be a DCHECK that Entry32Count is zero instead?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b45bea67_624b0379",
+        "filename": "src/arm64/assembler-arm64.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 3421,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "This should be kApproxDistToPool64.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c578fec9_a8901066",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like this will request pool emission after the next instruction. The number of entries is not checked in ShouldEmitNow, and next_check_ doesn\u0027t seem to be used in that calculation either. Am I missing something?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2ad4367_2faf44e1",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "Could you elaborate in the comment on why you calculate the distance from *any* of the entries instead of the first one? I think it would be useful if revisiting the code in the future.\n\nI can think of two different reasons:\n1) the entries might be emitted out of order\n2) when mixing 64-bit entries with 32-bit instructions that access them, even if entries are kept in order, it wouldn\u0027t be enough to check that the first entry is within the range of its use.\nPerhaps there\u0027s more obvious reasons, but these could cause subtle bugs so they\u0027d be useful to mention.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d36f9783_dffbf3fa",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "I wonder if the pool_end calculation could be relaxed a little - can we just assume the worst case, that we always need alignment and a jump? kCheckConstPoolInterval and kOpportunityDistToPool already mean that where a pool is emitted is not very precise.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "903dfd52_f247f698",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "Will there be cases where Entry64Count and Entry32Count will both be non-zero for an architecture? This isn\u0027t the case for arm and arm64 so effectively this case is not tested currently, right?\n\nWould it make sense to set kMaxDistToPoolX, kOpportunityDistToPoolX etc to a known constant (e.g. 0 which would always force returning true here) for the unused type of entry, and have a DCHECK that if the entry count is non-zero then these constants have to be properly defined?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d56eefe8_a7462b22",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "Will kInstrSize work for architectures other than arm/arm64?",
+      "range": {
+        "startLine": 202,
+        "startChar": 50,
+        "endLine": 202,
+        "endChar": 61
+      },
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be4d2130_37c93f63",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "I think last_entry_64 is off by 4. Could this be written as:\nsize_t pool_end \u003d pc_offset + ComputeSize(...);\nsize_t last_entry_32 \u003d pool_end - sizeof(uint32_t);\nsize_t last_entry_64 \u003d pool_end - Entry32Count() * sizeof(uint32_t) - sizeof(uint64_t);\n\n(I find it a bit easier to read sizeof(uint32_t) instead of 4 as the entry size and not an instruction size or alignment, or something else).",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f39d0ffd_a35afc31",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "It\u0027d be good to have a warning here about using BlockFor() with caution.\n\narm and arm64 perform the check for pool emission in different places as far as I can tell - arm before emitting an instruction, arm64 after emitting an instruction. So something like:\n\n__ Add(x0,x0,x0);\nconstpool_.BlockFor(1);\n__ Add(x1,x1,x1);\n\ndoes not mean there will not be a pool between the two add instructions in arm64.\n\nThere is also always the risk we can block the pool for too long with this method.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a068820_41fdbf90",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "It feels like next_check_ does not really belong in the pool at the moment, since the pool itself does not check against it (only updates it).\n\nIs it possible to hide next_check_ from the assembler - pass the pc_offset to the pool and have the pool do the check instead?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d30b0f2_7c2944df",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 6772,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-08-20T13:23:11Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand - why does the order of the branch and the NOPs matter for constant pool emission (and specifically opportunity emission)?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
