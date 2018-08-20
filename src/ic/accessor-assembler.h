@@ -40,6 +40,7 @@ class AccessorAssembler : public CodeStubAssembler {
   void GenerateStoreGlobalIC();
   void GenerateStoreGlobalICTrampoline();
   void GenerateCloneObjectIC();
+  void GenerateCloneObjectIC_Slow();
 
   void GenerateLoadGlobalIC(TypeofMode typeof_mode);
   void GenerateLoadGlobalICTrampoline(TypeofMode typeof_mode);
