@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "575acb57_3c981701",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-20T18:38:46Z",
+      "side": 0,
+      "message": "The MemoryOperand can also use Register Indirect addressing, so this check seems to be incorrect.",
+      "revId": "c7e4bf4550c7c5c6ab4849c605c7fc6077de26dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dc72d1c_6359f0be",
+        "filename": "src/arm/assembler-arm.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-20T18:38:46Z",
+      "side": 0,
+      "message": "Using MemOperand here, in conjunction with multiple TempRegisters can lead to a clash in the register used for indirect addressing. For example, for the code snippet below,\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1180211/5/src/compiler/arm/code-generator-arm.cc#419, the load instruction below is generated - \n\nldrexd r2, [r2]  \n\nThis can be worked around by fixing different registers, but as the Memory Operand doesn\u0027t check for registers already being in use, I\u0027d prefer to specify them explicitly. This is not required for ldrd, strd because there are no TempRegisters in use.",
+      "revId": "c7e4bf4550c7c5c6ab4849c605c7fc6077de26dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

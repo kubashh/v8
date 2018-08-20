@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2cabf610_d87adba0",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-20T18:38:46Z",
+      "side": 1,
+      "message": "The constraint for ldrexd, strexd instructions is that the registers need to be consecutive, and the first register code should be even. Are there alternative ways to do this? \n\nResult of quick offline discussion with bbudge@, regarding this - it\u0027s probably not worth the complexity, and performance hit to alias register pairs, especially as I64Atomic operations should be rare on 32 bit platforms.",
+      "revId": "a9a32c01aedc8c249d3bea7f0c08ed62ee10ed4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
