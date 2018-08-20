@@ -336,13 +336,10 @@
 }],  # 'arch == mips64el or arch == mips64'
 
 ##############################################################################
-['(arch == mipsel or arch == mips64el or arch == mips or arch == mips64) and not simd_mips', {
-  # Skip tests that fail on MIPS architectures which don't support SIMD,
-  # because lowering mechanism doesn't work properly
-  'test-run-wasm-simd/RunWasm_ReductionTest4_compiled': [SKIP],
-  'test-run-wasm-simd/RunWasm_ReductionTest8_compiled': [SKIP],
-  'test-run-wasm-simd/RunWasm_ReductionTest16_compiled': [SKIP],
-}],  # '(arch == mipsel or arch == mips64el or arch == mips or arch == mips64) and not simd_mips'
+['arch == mipsel or arch == mips64el or arch == mips or arch == mips64', {
+  # TODO(mips-team): Implement I64Atomic operations on MIPS
+  'test-run-wasm-atomics64/*': [SKIP],
+}],  # 'arch == mipsel or arch == mips64el or arch == mips or arch == mips64'
 
 ##############################################################################
 ['mips_arch_variant == r6', {
