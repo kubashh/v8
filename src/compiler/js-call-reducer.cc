@@ -5143,10 +5143,23 @@ Reduction JSCallReducer::ReduceArrayIteratorPrototypeNext(Node* node) {
     // iterator.[[NextIndex]] >= array.length, stop iterating.
     done_false = jsgraph()->TrueConstant();
     value_false = jsgraph()->UndefinedConstant();
-    efalse =
-        graph()->NewNode(simplified()->StoreField(
-                             AccessBuilder::ForJSArrayIteratorIteratedObject()),
-                         iterator, value_false, efalse, if_false);
+
+    // Mark the {iterator} as exhausted by setting the [[NextIndex]] to a
+    // value that will never pass the length check again (aka the maximum
+    // value possible for the specific iterated object). Note that this is
+    // different from what the specification says, which is changing the
+    // [[IteratedObject]] field to undefined, but that makes it difficult
+    // to eliminate the map checks and "length" accesses in for..of loops.
+    //
+    // This is different from what the baseline implementation does, where
+    // we store kMaxSafeInteger. Since the fast-path in TurboFan is only
+    // concerened with TypedArrays and Arrays, using kMaxUInt32 here is
+    // safe. Plus it allows TurboFan to store the {index} using Word32
+    // representation (instead of Float64 which would be required if we'd
+    // use kMaxSafeInteger here).
+    Node* end_index = jsgraph()->Constant(index_access.type.Max());
+    efalse = graph()->NewNode(simplified()->StoreField(index_access), iterator,
+                              end_index, efalse, if_false);
   }
 
   control = graph()->NewNode(common()->Merge(2), if_true, if_false);

@@ -1201,20 +1201,10 @@ void JSWeakMap::JSWeakMapVerify(Isolate* isolate) {
 void JSArrayIterator::JSArrayIteratorVerify(Isolate* isolate) {
   CHECK(IsJSArrayIterator());
   JSObjectVerify(isolate);
-  CHECK(iterated_object()->IsJSReceiver() ||
-        iterated_object()->IsUndefined(isolate));
+  CHECK(iterated_object()->IsJSReceiver());
 
   CHECK_GE(next_index()->Number(), 0);
   CHECK_LE(next_index()->Number(), kMaxSafeInteger);
-
-  if (iterated_object()->IsJSTypedArray()) {
-    // JSTypedArray::length is limited to Smi range.
-    CHECK(next_index()->IsSmi());
-    CHECK_LE(next_index()->Number(), Smi::kMaxValue);
-  } else if (iterated_object()->IsJSArray()) {
-    // JSArray::length is limited to Uint32 range.
-    CHECK_LE(next_index()->Number(), kMaxUInt32);
-  }
 }
 
 void JSStringIterator::JSStringIteratorVerify(Isolate* isolate) {
