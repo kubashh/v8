@@ -3507,6 +3507,9 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
   Label set_done(this);
   Label allocate_entry_if_needed(this);
   Label allocate_iterator_result(this);
+  Label if_detached(this, Label::kDeferred);
+  Label if_typedarray(this), if_other(this, Label::kDeferred), if_array(this),
+      if_generic(this, Label::kDeferred);
 
   // If O does not have all of the internal slots of an Array Iterator Instance
   // (22.1.5.3), throw a TypeError exception
@@ -3519,13 +3522,9 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
 
   // Let index be O.[[ArrayIteratorNextIndex]].
   Node* index = LoadObjectField(iterator, JSArrayIterator::kNextIndexOffset);
+  GotoIfNot(TaggedIsSmi(index), &if_other);
+
   Node* array_map = LoadMap(array);
-
-  Label if_detached(this, Label::kDeferred);
-
-  Label if_typedarray(this), if_other(this, Label::kDeferred), if_array(this),
-      if_generic(this, Label::kDeferred);
-
   Node* array_type = LoadInstanceType(array);
   GotoIf(InstanceTypeEqual(array_type, JS_ARRAY_TYPE), &if_array);
   Branch(InstanceTypeEqual(array_type, JS_TYPED_ARRAY_TYPE), &if_typedarray,
@@ -3541,11 +3540,12 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
 
     GotoIfNot(SmiBelow(CAST(index), length), &set_done);
 
-    var_value.Bind(index);
     TNode<Smi> one = SmiConstant(1);
     StoreObjectFieldNoWriteBarrier(iterator, JSArrayIterator::kNextIndexOffset,
                                    SmiAdd(CAST(index), one));
+
     var_done.Bind(FalseConstant());
+    var_value.Bind(index);
 
     GotoIf(Word32Equal(LoadAndUntagToWord32ObjectField(
                            iterator, JSArrayIterator::kKindOffset),
@@ -3619,9 +3619,6 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
 
   BIND(&if_other);
   {
-    // If a is undefined, return CreateIterResultObject(undefined, true)
-    GotoIf(IsUndefined(array), &allocate_iterator_result);
-
     Node* length =
         CallBuiltin(Builtins::kToLength, context,
                     GetProperty(context, array, factory()->length_string()));
@@ -3715,8 +3712,13 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
 
   BIND(&set_done);
   {
-    StoreObjectFieldNoWriteBarrier(
-        iterator, JSArrayIterator::kIteratedObjectOffset, UndefinedConstant());
+    // Change the [[NextIndex]] to the max safe integer, such that this
+    // {iterator} will never ever produce any values. Note that this is
+    // different from what the specification does, which is changing the
+    // [[IteratedObject]] to undefined, because leaving [[IteratedObject]]
+    // alone helps TurboFan to generate better code.
+    StoreObjectFieldNoWriteBarrier(iterator, JSArrayIterator::kNextIndexOffset,
+                                   NumberConstant(kMaxSafeInteger));
     Goto(&allocate_iterator_result);
   }
 
