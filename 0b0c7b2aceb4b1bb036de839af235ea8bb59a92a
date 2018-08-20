@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c159147b_27aedd2c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5153,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-20T19:10:23Z",
+      "side": 1,
+      "message": "Why is this different from the CSA code?",
+      "range": {
+        "startLine": 5153,
+        "startChar": 42,
+        "endLine": 5153,
+        "endChar": 65
+      },
+      "revId": "0b0c7b2aceb4b1bb036de839af235ea8bb59a92a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
