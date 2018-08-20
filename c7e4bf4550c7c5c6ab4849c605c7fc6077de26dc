@@ -33,6 +33,23 @@
       "revId": "c7e4bf4550c7c5c6ab4849c605c7fc6077de26dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04cfa5b3_cfb8e6ba",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 6
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-08-20T19:15:14Z",
+      "side": 0,
+      "message": "why remove these?",
+      "revId": "c7e4bf4550c7c5c6ab4849c605c7fc6077de26dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
