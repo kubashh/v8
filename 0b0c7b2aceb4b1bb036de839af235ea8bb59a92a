@@ -22,6 +22,30 @@
       "revId": "0b0c7b2aceb4b1bb036de839af235ea8bb59a92a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd54fb8a_33e52839",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5153,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-20T20:04:40Z",
+      "side": 1,
+      "message": "The fast-path in TurboFan is only concerned with TypedArrays and Arrays, so the length is always in [0...MaxUnsigned32-1] range. Therefore we don\u0027t need to use kMaxSafeInteger here. This allows the index to be kept in a CPU register (we can choose Word32 representation after escape analysis), while using kMaxSafeInteger here would require it to choose Float64. I\u0027ll extend the comment to cover that.",
+      "parentUuid": "c159147b_27aedd2c",
+      "range": {
+        "startLine": 5153,
+        "startChar": 42,
+        "endLine": 5153,
+        "endChar": 65
+      },
+      "revId": "0b0c7b2aceb4b1bb036de839af235ea8bb59a92a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
