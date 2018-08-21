@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1e53e41_add4298e",
+        "filename": "third_party/inspector_protocol/OWNERS",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-08-21T14:14:29Z",
+      "side": 1,
+      "message": "Please update only Maybe.h.template, DispatcherBase_h.template (local modifications in README file describe what files we sync) and README.v8 with current inspector_protocol revision. All other files below we do not sync.\n\nExample CL: https://codereview.chromium.org/2469063002",
+      "range": {
+        "startLine": 1,
+        "startChar": 12,
+        "endLine": 1,
+        "endChar": 0
+      },
+      "revId": "50a521901b6dc1561dfc3ae3626f07e40eccddcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
