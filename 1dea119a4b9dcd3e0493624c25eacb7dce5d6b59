@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef6b5fc4_8264aaae",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4979,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-21T05:44:55Z",
+      "side": 1,
+      "message": "Stale comment, no?",
+      "range": {
+        "startLine": 4979,
+        "startChar": 5,
+        "endLine": 4979,
+        "endChar": 21
+      },
+      "revId": "1dea119a4b9dcd3e0493624c25eacb7dce5d6b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fa2c17d_53d18743",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4987,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-21T05:44:55Z",
+      "side": 1,
+      "message": "Stale comment.",
+      "range": {
+        "startLine": 4987,
+        "startChar": 13,
+        "endLine": 4987,
+        "endChar": 22
+      },
+      "revId": "1dea119a4b9dcd3e0493624c25eacb7dce5d6b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c17c6fbc_ab82ce16",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5028,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-21T05:44:55Z",
+      "side": 1,
+      "message": "If the array iterator was exhausted by the CSA, then you would get kMaxSafeInteger as index here, which would be outside your types.\n\nPlease add a test for exhausting the iterator with CSA and then calling next in optimized code. The other way (exhaust in optimized code, next in CSA) should be also tested.",
+      "range": {
+        "startLine": 5018,
+        "startChar": 0,
+        "endLine": 5028,
+        "endChar": 60
+      },
+      "revId": "1dea119a4b9dcd3e0493624c25eacb7dce5d6b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04e5035c_bb6b8a66",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5159,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-21T05:44:55Z",
+      "side": 1,
+      "message": "As noted above, you can still get kMaxSafeInteger from CSA\u0027s implementation of next.",
+      "range": {
+        "startLine": 5157,
+        "startChar": 13,
+        "endLine": 5159,
+        "endChar": 33
+      },
+      "revId": "1dea119a4b9dcd3e0493624c25eacb7dce5d6b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
