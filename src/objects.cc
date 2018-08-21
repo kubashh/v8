@@ -64,6 +64,9 @@
 #include "src/objects/js-collator.h"
 #endif  // V8_INTL_SUPPORT
 #include "src/objects/js-collection-inl.h"
+#ifdef V8_INTL_SUPPORT
+#include "src/objects/js-date-time-format.h"
+#endif  // V8_INTL_SUPPORT
 #include "src/objects/js-generator-inl.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-list-format.h"
@@ -1446,6 +1449,8 @@ int JSObject::GetHeaderSize(InstanceType type,
 #ifdef V8_INTL_SUPPORT
     case JS_INTL_COLLATOR_TYPE:
       return JSCollator::kSize;
+    case JS_INTL_DATE_TIME_FORMAT_TYPE:
+      return JSDateTimeFormat::kSize;
     case JS_INTL_LIST_FORMAT_TYPE:
       return JSListFormat::kSize;
     case JS_INTL_LOCALE_TYPE:
@@ -3188,6 +3193,7 @@ VisitorId Map::GetVisitorId(Map* map) {
     case JS_REGEXP_STRING_ITERATOR_TYPE:
 #ifdef V8_INTL_SUPPORT
     case JS_INTL_COLLATOR_TYPE:
+    case JS_INTL_DATE_TIME_FORMAT_TYPE:
     case JS_INTL_LIST_FORMAT_TYPE:
     case JS_INTL_LOCALE_TYPE:
     case JS_INTL_PLURAL_RULES_TYPE:
@@ -13103,6 +13109,7 @@ bool CanSubclassHaveInobjectProperties(InstanceType instance_type) {
     case JS_GENERATOR_OBJECT_TYPE:
 #ifdef V8_INTL_SUPPORT
     case JS_INTL_COLLATOR_TYPE:
+    case JS_INTL_DATE_TIME_FORMAT_TYPE:
     case JS_INTL_PLURAL_RULES_TYPE:
 #endif
     case JS_ASYNC_GENERATOR_OBJECT_TYPE:
