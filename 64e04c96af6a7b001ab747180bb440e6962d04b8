@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f05cc81_3e6d4233",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-08-21T08:56:09Z",
+      "side": 0,
+      "message": "Can we update the comment too? It tells us when this should happen, not what it does.",
+      "revId": "64e04c96af6a7b001ab747180bb440e6962d04b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
