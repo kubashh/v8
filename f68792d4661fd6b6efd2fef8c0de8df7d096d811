@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "64b071a5_4045ca85",
+        "filename": "src/js/intl.js",
+        "patchSetId": 13
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3711a254_44f98041",
+      "range": {
+        "startLine": 1025,
+        "startChar": 16,
+        "endLine": 1025,
+        "endChar": 42
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "113d0468_f3ddff31",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 13
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a7558077_f417dd54",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "113d0468_f3ddff31",
+      "range": {
+        "startLine": 540,
+        "startChar": 32,
+        "endLine": 540,
+        "endChar": 33
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e847475_0084e05f",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 13
@@ -59,6 +107,30 @@
       "writtenOn": "2018-08-17T23:32:23Z",
       "side": 1,
       "message": "I would\u0027ve expected the default to be return false, can you explain?",
+      "range": {
+        "startLine": 541,
+        "startChar": 9,
+        "endLine": 541,
+        "endChar": 13
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "886f950c_43c7fae9",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "In the old code, the timezone is invalid if the SUCCESS is true (in src/objects/intl-object.cc) and later js code find the value is equals to \"ETC/Unknown\" (in src/js/intl.js). This is just moving that old logic here.",
+      "parentUuid": "3e847475_0084e05f",
       "range": {
         "startLine": 541,
         "startChar": 9,
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "cce0799f_fd20e69e",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5578472_e5821b3e",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99e9fc7a_6c6c4120",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 13
@@ -102,6 +192,24 @@
       "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1afba9bf_129e176f",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99e9fc7a_6c6c4120",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "9d6d6e1c_1390affd",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54183962_53ea9136",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b689a765_6d5f91e7",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 13
@@ -136,6 +262,24 @@
       "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c32bffdb_233921d7",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b689a765_6d5f91e7",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -179,6 +323,48 @@
     },
     {
       "key": {
+        "uuid": "68435dcb_596b5739",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e6b6f4e_4788e5a0",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fdc632af_316d5b48",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac706b6b_97dd2f4c",
+      "range": {
+        "startLine": 40,
+        "startChar": 31,
+        "endLine": 40,
+        "endChar": 32
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34d2dc9a_e903d35f",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 13
@@ -193,6 +379,24 @@
       "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d1f5a6b_ce8065b2",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34d2dc9a_e903d35f",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -213,6 +417,24 @@
     },
     {
       "key": {
+        "uuid": "4f546cbe_e6c0e946",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96bab6c3_1b326bd2",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3176e43_4d74f1b4",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 13
@@ -227,6 +449,24 @@
       "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "999116f1_da26fd3e",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3176e43_4d74f1b4",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -306,6 +546,48 @@
     },
     {
       "key": {
+        "uuid": "ad180633_4db9b52d",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "DONE",
+      "parentUuid": "6b9d982f_4b68f586",
+      "range": {
+        "startLine": 140,
+        "startChar": 7,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "509ad586_417fccfd",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Satha- the DateFormatSymbols is dealing with what  the string of each field should be (for example, \"Monday\", \"Tuesday\" (as in English) or \"domingo\" , \"lunes\" (as in Spanish) but in here we are dealing with the pattern (using long weekday or short weekday). Not the samething\n\nI asked ICU team. I don\u0027t believe there are class to parse the generated pattern in icu",
+      "parentUuid": "555965d0_28ff091c",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e531eaf1_caa41d15",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 13
@@ -320,6 +602,24 @@
       "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b08c445_d048df1a",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e531eaf1_caa41d15",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -340,6 +640,24 @@
     },
     {
       "key": {
+        "uuid": "9def88b5_4fe8a93a",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1632c8f9_c3fc7ee1",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b609abff_3cc02610",
         "filename": "src/objects/js-date-time-format.h",
         "patchSetId": 13
@@ -357,6 +675,24 @@
     },
     {
       "key": {
+        "uuid": "64f5131f_34bb4157",
+        "filename": "src/objects/js-date-time-format.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b609abff_3cc02610",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0bde1a3a_62342986",
         "filename": "src/runtime/runtime-intl.cc",
         "patchSetId": 13
@@ -371,6 +707,24 @@
       "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1904d54f_64256552",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T00:33:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bde1a3a_62342986",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
