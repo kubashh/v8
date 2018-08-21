@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a198fce_6a12974e",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-08-21T12:23:28Z",
+      "side": 1,
+      "message": "I wonder if the compiler sees this Peek and knows that the Advance doesn\u0027t need to call ReadBlockChecked. If not, it might be worth adding an AdvanceWithoutPeek or something that DCHECKs that buffer_cursor_ \u003c buffer_end_",
+      "range": {
+        "startLine": 675,
+        "startChar": 12,
+        "endLine": 675,
+        "endChar": 22
+      },
+      "revId": "398ad1d3c2e93d0483de1393742b3744e7b25f40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dc66813_480ab00b",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-08-21T12:23:28Z",
+      "side": 1,
+      "message": "this should probably go above the above \\r[\\n]-\u003e\\n comment.",
+      "range": {
+        "startLine": 1039,
+        "startChar": 6,
+        "endLine": 1039,
+        "endChar": 31
+      },
+      "revId": "398ad1d3c2e93d0483de1393742b3744e7b25f40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
