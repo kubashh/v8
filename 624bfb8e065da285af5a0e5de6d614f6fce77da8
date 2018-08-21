@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d61235e_b89aba85",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T09:53:42Z",
+      "side": 1,
+      "message": "Okay.. These two callsites of PatchConstantPoolAccessInstruction, which *only* apply to ppc, add the constant-pool.h dependency to all assemblers. IMO ConstantPoolBuilder should be ifdef\u0027d to ppc (or just implemented in assembler-ppc). And PatchConstantPoolAccessInstruction should be removed from assembler. If you want to, I can do it once this CL landed (please ping me :).",
+      "revId": "624bfb8e065da285af5a0e5de6d614f6fce77da8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
