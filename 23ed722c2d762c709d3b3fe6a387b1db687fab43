@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "956534ef_abb95be4",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-21T18:08:21Z",
+      "side": 1,
+      "message": "If this is referring to the OS, s/Window/Windows/ please (so as not to be confused with the browser\u0027s Window object).",
+      "range": {
+        "startLine": 230,
+        "startChar": 18,
+        "endLine": 230,
+        "endChar": 24
+      },
+      "revId": "23ed722c2d762c709d3b3fe6a387b1db687fab43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
