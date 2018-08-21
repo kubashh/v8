@@ -1992,11 +1992,6 @@ Reduction JSCallReducer::ReduceArrayFind(Node* node, ArrayFindVariant variant,
 
   const ElementsKind kind = receiver_maps[0]->elements_kind();
 
-  // TODO(pwong): Handle holey double elements kinds.
-  if (IsDoubleElementsKind(kind) && IsHoleyElementsKind(kind)) {
-    return NoChange();
-  }
-
   for (Handle<Map> receiver_map : receiver_maps) {
     if (!CanInlineArrayIteratingBuiltin(isolate(), receiver_map))
       return NoChange();
@@ -2082,12 +2077,14 @@ Reduction JSCallReducer::ReduceArrayFind(Node* node, ArrayFindVariant variant,
       graph()->NewNode(simplified()->NumberAdd(), k, jsgraph()->OneConstant());
 
   // Replace holes with undefined.
-  if (IsHoleyElementsKind(kind)) {
-    element = graph()->NewNode(
-        common()->Select(MachineRepresentation::kTagged, BranchHint::kFalse),
-        graph()->NewNode(simplified()->ReferenceEqual(), element,
-                         jsgraph()->TheHoleConstant()),
-        jsgraph()->UndefinedConstant(), element);
+  if (kind == HOLEY_DOUBLE_ELEMENTS) {
+    // TODO(7409): avoid deopt if not all uses of {element} are truncating.
+    CheckFloat64HoleMode mode = CheckFloat64HoleMode::kAllowReturnHole;
+    element = effect = graph()->NewNode(simplified()->CheckFloat64Hole(mode),
+                                        element, effect, control);
+  } else if (kind == HOLEY_ELEMENTS || kind == HOLEY_SMI_ELEMENTS) {
+    element =
+        graph()->NewNode(simplified()->ConvertTaggedHoleToUndefined(), element);
   }
 
   Node* if_found_return_value =
