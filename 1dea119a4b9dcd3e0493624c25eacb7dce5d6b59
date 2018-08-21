@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "21d05e11_acc589ed",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4979,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-21T06:51:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef6b5fc4_8264aaae",
+      "range": {
+        "startLine": 4979,
+        "startChar": 5,
+        "endLine": 4979,
+        "endChar": 21
+      },
+      "revId": "1dea119a4b9dcd3e0493624c25eacb7dce5d6b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fa2c17d_53d18743",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "1dea119a4b9dcd3e0493624c25eacb7dce5d6b59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b644ceb_63140b6d",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4987,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-21T06:51:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fa2c17d_53d18743",
+      "range": {
+        "startLine": 4987,
+        "startChar": 13,
+        "endLine": 4987,
+        "endChar": 22
+      },
+      "revId": "1dea119a4b9dcd3e0493624c25eacb7dce5d6b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2d4b1259_0472f3be",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5028,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-21T06:51:37Z",
+      "side": 1,
+      "message": "Good catch!",
+      "parentUuid": "c17c6fbc_ab82ce16",
+      "range": {
+        "startLine": 5018,
+        "startChar": 0,
+        "endLine": 5028,
+        "endChar": 60
+      },
+      "revId": "1dea119a4b9dcd3e0493624c25eacb7dce5d6b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04e5035c_bb6b8a66",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2018-08-21T05:44:55Z",
       "side": 1,
       "message": "As noted above, you can still get kMaxSafeInteger from CSA\u0027s implementation of next.",
+      "range": {
+        "startLine": 5157,
+        "startChar": 13,
+        "endLine": 5159,
+        "endChar": 33
+      },
+      "revId": "1dea119a4b9dcd3e0493624c25eacb7dce5d6b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e05fb8a_1d027268",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5159,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-21T06:51:37Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "04e5035c_bb6b8a66",
       "range": {
         "startLine": 5157,
         "startChar": 13,
