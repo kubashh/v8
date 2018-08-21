@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "512cda9a_f9db3f86",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6675,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-21T17:30:09Z",
+      "side": 1,
+      "message": "This is the new change to make sure CSA does the same as the runtime.",
+      "revId": "96cca6130f4d46f65407e141b926f89221dac170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61db09c7_7a1271da",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6725,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-21T17:30:09Z",
+      "side": 1,
+      "message": "The runtime call now does just the normal lookup.\nWhen comparing on deltablue I could not observe any difference in speed.",
+      "revId": "96cca6130f4d46f65407e141b926f89221dac170",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
