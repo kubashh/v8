@@ -606,6 +606,24 @@
     },
     {
       "key": {
+        "uuid": "2fafc6d6_e6748f54",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-21T01:24:55Z",
+      "side": 1,
+      "message": "I really think using regex here is overkill, if you look at what the previous js code was doing. It may make this less frequent use function a little faster (or maybe slower and use more memory). I am open for suggestion of how should I remove that pairs[11].",
+      "parentUuid": "ad3a4837_4aaceb92",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e531eaf1_caa41d15",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 13
