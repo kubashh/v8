@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "857c0991_a8265481",
+        "filename": "BUILD.gn",
+        "patchSetId": 41
+      },
+      "lineNbr": 2677,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Feels weird to have non-arm-specific files in the arm/arm64-specific sections. Let\u0027s just make constant-pool.{h,cc} global and #ifdef target-specific parts?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fa5d47c_7aaa2c95",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Let\u0027s do this in the .h :)\n\n virtual ~Assembler() \u003d default;",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7ba421ce_b8efe1ae",
         "filename": "src/arm/assembler-arm.cc",
         "patchSetId": 41
@@ -30,6 +64,23 @@
       "writtenOn": "2018-08-20T13:23:11Z",
       "side": 1,
       "message": "Here and later in this file, could you use is_const_pool_blocked() and is_const_pool_empty()?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27f0b75a_6ee6018a",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 5122,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "So this clears as well? Suggestion: EmitAndClear().",
       "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +121,40 @@
     },
     {
       "key": {
+        "uuid": "598243b0_41243e16",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 5209,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Nit: return is not needed ;)",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0384e3e_6bc3b4e3",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 5220,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "What\u0027s an opportunity dist?\n\n(It\u0027s great to have these constants well-named and in one place btw :)",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5843b511_8cd5dfca",
         "filename": "src/arm/assembler-arm.h",
         "patchSetId": 41
@@ -87,6 +172,74 @@
     },
     {
       "key": {
+        "uuid": "06085530_74ba05ea",
+        "filename": "src/arm64/assembler-arm64.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Nit: No need for unresolved_branches here, is there?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f19ad43_9f08d507",
+        "filename": "src/arm64/assembler-arm64.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 4585,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "With the refactored block below this comment is a bit confusing. IMO we can remove it.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5ac7d83_86f69a3e",
+        "filename": "src/arm64/assembler-arm64.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 4596,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Here as well. Please add an enum at least for require_jump here and elsewhere. \n\nBy the way, why do we pass \u0027true\u0027 to ComputeSize when we are actually passed a \u0027require_jump\u0027 parameter in this function? We pass in require_jump on arm at least.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73635774_dcb7d586",
+        "filename": "src/arm64/assembler-arm64.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 4602,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "What is the 1 * kInstrSize? It\u0027s not added on arm.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d86f93c_17a93bcf",
         "filename": "src/arm64/assembler-arm64.cc",
         "patchSetId": 41
@@ -98,6 +251,40 @@
       "writtenOn": "2018-08-20T13:23:11Z",
       "side": 1,
       "message": "If I\u0027m not mistaken, the marker now includes the size of the marker itself (taken into account in ComputeSize). Before, it didn\u0027t.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dc51ad6_2178c85f",
+        "filename": "src/arm64/assembler-arm64.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 4799,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Nit: prologue_size",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28b7dfca_5b60d6b5",
+        "filename": "src/arm64/assembler-arm64.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 3382,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "I realize this is old code, but these calls (and CheckVeneerPool above) are super-unreadable :(",
       "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -149,6 +336,57 @@
       "writtenOn": "2018-08-20T13:23:11Z",
       "side": 1,
       "message": "It doesn\u0027t look like this will request pool emission after the next instruction. The number of entries is not checked in ShouldEmitNow, and next_check_ doesn\u0027t seem to be used in that calculation either. Am I missing something?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c242f71c_40b86c5b",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Do we still protect from veneer pools here?",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a63ca85f_ec8272a9",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Nit: Less cognitive load:\n\n if (blocked_nesting_ \u003d\u003d 0) next_check_ \u003d kMaxInt;\n blocked_nesting_++;",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97614bdf_0358cf67",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 41
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Likewise",
       "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -246,6 +484,57 @@
     },
     {
       "key": {
+        "uuid": "17ece30b_173d96c3",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Please don\u0027t forget to also move remaining constant pool things from assembler.h (ConstantPoolBuilder, ConstantPoolEntry) in here and remove the reloc-info.h include from there. Also fine in a follow-up though if you prefer.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "935164e1_ae8b53e4",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Nitting on old code: I\u0027d prefer a named constant instead of magic 0. On x64 we now use \u0027ConstPool::kDummyDispValue\u0027 although the naming could still be improved :)",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f160e07b_4bc30a64",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "Nit: The callsites would be much clearer if this returned an enum, e.g. RELOC_INFO_REQUIRED and NO_WRITE_NEEDED or similar. Otherwise, the function name doesn\u0027t give any clue what the return value means.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f39d0ffd_a35afc31",
         "filename": "src/constant-pool.h",
         "patchSetId": 41
@@ -257,6 +546,23 @@
       "writtenOn": "2018-08-20T13:23:11Z",
       "side": 1,
       "message": "It\u0027d be good to have a warning here about using BlockFor() with caution.\n\narm and arm64 perform the check for pool emission in different places as far as I can tell - arm before emitting an instruction, arm64 after emitting an instruction. So something like:\n\n__ Add(x0,x0,x0);\nconstpool_.BlockFor(1);\n__ Add(x1,x1,x1);\n\ndoes not mean there will not be a pool between the two add instructions in arm64.\n\nThere is also always the risk we can block the pool for too long with this method.",
+      "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "275826a7_c6ce81e3",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-21T08:07:13Z",
+      "side": 1,
+      "message": "The value is a pc offset? Please either add a typedef or a short comment.",
       "revId": "10d769bd6b2b33dad04c37a17cf2d308d3758671",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
