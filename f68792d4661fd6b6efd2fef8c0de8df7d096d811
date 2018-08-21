@@ -588,6 +588,24 @@
     },
     {
       "key": {
+        "uuid": "ad3a4837_4aaceb92",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-21T00:49:09Z",
+      "side": 1,
+      "message": "Thanks for investigating. While it works, the current code doesn\u0027t seem ideal to me (in particular, having to hardcode `pairs[11]` into PatternItem seems bad). How would you feel about adding a TODO on SetPropertyFromPattern for doing this with regexes (or some other more-formalized matching) in future?",
+      "parentUuid": "509ad586_417fccfd",
+      "revId": "f68792d4661fd6b6efd2fef8c0de8df7d096d811",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e531eaf1_caa41d15",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 13

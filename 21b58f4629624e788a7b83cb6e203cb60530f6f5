@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2192c5d_293100e9",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-21T00:49:09Z",
+      "side": 1,
+      "message": "Typo: s/Afer/After/",
+      "range": {
+        "startLine": 72,
+        "startChar": 11,
+        "endLine": 72,
+        "endChar": 15
+      },
+      "revId": "21b58f4629624e788a7b83cb6e203cb60530f6f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efd58cc2_5ad29a6d",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-21T00:49:09Z",
+      "side": 1,
+      "message": "This will have to change to JSReceiver, see runtime-intl.cc",
+      "range": {
+        "startLine": 105,
+        "startChar": 29,
+        "endLine": 105,
+        "endChar": 37
+      },
+      "revId": "21b58f4629624e788a7b83cb6e203cb60530f6f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c29f6536_7928a0c2",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-21T00:49:09Z",
+      "side": 1,
+      "message": "In this case IsJSObject() is more appropriate, since we set a real object, not a Proxy as this symbol.",
+      "range": {
+        "startLine": 136,
+        "startChar": 22,
+        "endLine": 136,
+        "endChar": 34
+      },
+      "revId": "21b58f4629624e788a7b83cb6e203cb60530f6f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a69f62ba_a44150d5",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-21T00:49:09Z",
+      "side": 1,
+      "message": "And this should be JSObject.",
+      "range": {
+        "startLine": 137,
+        "startChar": 39,
+        "endLine": 137,
+        "endChar": 49
+      },
+      "revId": "21b58f4629624e788a7b83cb6e203cb60530f6f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c38c054a_91f893e2",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-21T00:49:09Z",
+      "side": 1,
+      "message": "This needs to be JSReceiver, now that you\u0027ve changed the typecheck above.\n\nTo cover this in JS, you\u0027d pass a Proxy as the receiver.",
+      "range": {
+        "startLine": 253,
+        "startChar": 47,
+        "endLine": 253,
+        "endChar": 55
+      },
+      "revId": "21b58f4629624e788a7b83cb6e203cb60530f6f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
