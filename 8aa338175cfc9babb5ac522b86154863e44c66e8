@@ -34,6 +34,24 @@
       "revId": "8aa338175cfc9babb5ac522b86154863e44c66e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b42ffa58_d65eeed1",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3460,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-22T15:30:31Z",
+      "side": 1,
+      "message": "Yes, that\u0027s not what I meant initially. Maybe one approach here would be to have a couple of checks whether the map fulfills the requirements for the monomorphic handler case? And if so use that?",
+      "parentUuid": "c18f7414_76724b25",
+      "revId": "8aa338175cfc9babb5ac522b86154863e44c66e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
