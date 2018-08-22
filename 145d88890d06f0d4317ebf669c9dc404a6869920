@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f92fafb_6d69ea88",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-08-22T15:31:31Z",
+      "side": 1,
+      "message": "nit: add a comment that the token storage rotates (or something like that)",
+      "range": {
+        "startLine": 379,
+        "startChar": 24,
+        "endLine": 379,
+        "endChar": 32
+      },
+      "revId": "145d88890d06f0d4317ebf669c9dc404a6869920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e7fec1f_e39f1b78",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 387,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-08-22T15:31:31Z",
+      "side": 1,
+      "message": "unrelated to this CL, but I find this return easy to miss, and it took a moment to understand why assigning previous to both next_next and next is safe -- I feel this would be neater with an if-else and returning current_-\u003etoken after that.",
+      "range": {
+        "startLine": 387,
+        "startChar": 4,
+        "endLine": 387,
+        "endChar": 27
+      },
+      "revId": "145d88890d06f0d4317ebf669c9dc404a6869920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "190e4422_1049b2c9",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-08-22T15:31:31Z",
+      "side": 1,
+      "message": "is this not a regression?",
+      "range": {
+        "startLine": 501,
+        "startChar": 4,
+        "endLine": 501,
+        "endChar": 22
+      },
+      "revId": "145d88890d06f0d4317ebf669c9dc404a6869920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3082e35e_78f29bf5",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-08-22T15:31:31Z",
+      "side": 1,
+      "message": "is it worth having bitfields for these, given that we only have like 6 LiteralBuffers total?",
+      "range": {
+        "startLine": 502,
+        "startChar": 1,
+        "endLine": 503,
+        "endChar": 22
+      },
+      "revId": "145d88890d06f0d4317ebf669c9dc404a6869920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e2c9b16_f6b68648",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-08-22T15:31:31Z",
+      "side": 1,
+      "message": "nit: token_storage_ or similar",
+      "range": {
+        "startLine": 781,
+        "startChar": 12,
+        "endLine": 781,
+        "endChar": 19
+      },
+      "revId": "145d88890d06f0d4317ebf669c9dc404a6869920",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
