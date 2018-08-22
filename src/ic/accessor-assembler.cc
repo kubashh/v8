@@ -4,6 +4,7 @@
 
 #include "src/ic/accessor-assembler.h"
 
+#include "src/ast/ast.h"
 #include "src/code-factory.h"
 #include "src/code-stubs.h"
 #include "src/counters.h"
@@ -12,6 +13,8 @@
 #include "src/ic/stub-cache.h"
 #include "src/objects-inl.h"
 #include "src/objects/module.h"
+
+#include "src/builtins/builtins-object-gen.h"
 
 namespace v8 {
 namespace internal {
@@ -3414,6 +3417,56 @@ void AccessorAssembler::GenerateStoreInArrayLiteralIC() {
   StoreInArrayLiteralIC(&p);
 }
 
+void AccessorAssembler::GenerateCloneObjectIC_Slow() {
+  typedef CloneObjectWithVectorDescriptor Descriptor;
+  TNode<HeapObject> source = CAST(Parameter(Descriptor::kSource));
+  TNode<Smi> flags = CAST(Parameter(Descriptor::kFlags));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+
+  // The Slow case uses the same call interface as CloneObjectIC, so that it
+  // can be tail called from it. However, the feedback slot and vector are not
+  // used.
+
+  // 1) Allocate an empty object
+  TNode<Context> native_context = LoadNativeContext(context);
+  TNode<JSFunction> object_fn =
+      CAST(LoadContextElement(native_context, Context::OBJECT_FUNCTION_INDEX));
+  TNode<Map> initial_map = CAST(
+      LoadObjectField(object_fn, JSFunction::kPrototypeOrInitialMapOffset));
+  CSA_ASSERT(this, IsMap(initial_map));
+
+  TNode<JSObject> result = CAST(AllocateJSObjectFromMap(initial_map));
+
+  {
+    Label did_set_proto_if_needed(this);
+    TNode<BoolT> is_null_proto = SmiNotEqual(
+        SmiAnd(flags, SmiConstant(ObjectLiteral::kHasNullPrototype)),
+        SmiConstant(Smi::kZero));
+    GotoIfNot(is_null_proto, &did_set_proto_if_needed);
+
+    CallRuntime(Runtime::kInternalSetPrototype, context, result,
+                NullConstant());
+
+    Goto(&did_set_proto_if_needed);
+    BIND(&did_set_proto_if_needed);
+  }
+
+  ReturnIf(IsNullOrUndefined(source), result);
+
+  CSA_ASSERT(this, IsJSReceiver(source));
+
+  // Code is copied from Builtins::ObjectAssign --- Move this into a shared
+  // stub?
+  Label call_runtime(this, Label::kDeferred);
+  ObjectBuiltinsAssembler assembler(state());
+  assembler.ObjectAssignFast(context, result, source, &call_runtime);
+  Return(result);
+
+  BIND(&call_runtime);
+  CallRuntime(Runtime::kCopyDataProperties, context, result, source);
+  Return(result);
+}
+
 void AccessorAssembler::GenerateCloneObjectIC() {
   typedef CloneObjectWithVectorDescriptor Descriptor;
   Node* source = Parameter(Descriptor::kSource);
@@ -3522,7 +3575,8 @@ void AccessorAssembler::GenerateCloneObjectIC() {
     GotoIfNot(WordEqual(strong_feedback,
                         LoadRoot(Heap::kmegamorphic_symbolRootIndex)),
               &miss);
-    TailCallRuntime(Runtime::kCloneObjectIC_Slow, context, source, flags);
+    TailCallBuiltin(Builtins::kCloneObjectIC_Slow, context, source, flags, slot,
+                    vector);
   }
 
   BIND(&miss);
