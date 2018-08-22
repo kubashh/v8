@@ -16,6 +16,24 @@
       "revId": "8f4e12278d4449fd827207bee2199227aeedbfa1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aee9606e_49a1a8ff",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 19141,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-08-22T09:33:44Z",
+      "side": 1,
+      "message": "Mmmm...I am always wary of putting side-effecting stuff into macros like this. (DCHECK PTSD).",
+      "parentUuid": "73b72167_4d586837",
+      "revId": "8f4e12278d4449fd827207bee2199227aeedbfa1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
