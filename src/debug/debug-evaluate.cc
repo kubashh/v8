@@ -936,7 +936,7 @@ DebugInfo::SideEffectState DebugEvaluate::FunctionGetSideEffectState(
         DCHECK_NE(Builtins::kDeserializeLazy, code->builtin_index());
       }
       // TODO(yangguo): Check builtin-to-builtin calls too.
-      int mode = RelocInfo::ModeMask(RelocInfo::EXTERNAL_REFERENCE);
+      int mode = RelocInfo::ExternalReferenceMask();
       bool failed = false;
       for (RelocIterator it(code, mode); !it.done(); it.next()) {
         RelocInfo* rinfo = it.rinfo();

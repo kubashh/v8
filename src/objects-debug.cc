@@ -2132,7 +2132,7 @@ bool CanLeak(Object* obj, Heap* heap) {
 void Code::VerifyEmbeddedObjects(Isolate* isolate, VerifyMode mode) {
   if (kind() == OPTIMIZED_FUNCTION) return;
   Heap* heap = isolate->heap();
-  int mask = RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT);
+  int mask = RelocInfo::EmbeddedObjectMask();
   for (RelocIterator it(this, mask); !it.done(); it.next()) {
     Object* target = it.rinfo()->target_object();
     DCHECK(!CanLeak(target, heap));

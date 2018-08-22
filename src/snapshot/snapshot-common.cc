@@ -331,8 +331,7 @@ bool BuiltinAliasesOffHeapTrampolineRegister(Isolate* isolate, Code* code) {
 
 void FinalizeEmbeddedCodeTargets(Isolate* isolate, EmbeddedData* blob) {
   static const int kRelocMask =
-      RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
-      RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET);
+      RelocInfo::CodeTargetMask() | RelocInfo::RelativeCodeTargetMask();
 
   for (int i = 0; i < Builtins::builtin_count; i++) {
     if (!Builtins::IsIsolateIndependent(i)) continue;

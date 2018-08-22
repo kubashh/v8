@@ -206,10 +206,9 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
   Builtins* builtins = isolate->builtins();
   DisallowHeapAllocation no_gc;
   CodeSpaceMemoryModificationScope modification_scope(isolate->heap());
-  static const int kRelocMask =
-      RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
-      RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT) |
-      RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET);
+  static const int kRelocMask = RelocInfo::CodeTargetMask() |
+                                RelocInfo::EmbeddedObjectMask() |
+                                RelocInfo::RelativeCodeTargetMask();
   HeapIterator iterator(isolate->heap());
   while (HeapObject* obj = iterator.next()) {
     if (!obj->IsCode()) continue;

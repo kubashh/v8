@@ -1147,7 +1147,7 @@ void Assembler::CallPcRelative(Address entry, RelocInfo::Mode rmode,
   } else {
     // Emit generic code.
     EnsureSpace ensure_space(this);
-    DCHECK(rmode > RelocInfo::LAST_GCED_ENUM);
+    DCHECK(rmode > RelocInfo::LAST_GCED_MODE);
     movp(scratch, entry, rmode);
     call(scratch);
   }
@@ -1659,7 +1659,7 @@ void Assembler::JmpPcRelative(Address entry, RelocInfo::Mode rmode,
   } else {
     // Emit generic code.
     EnsureSpace ensure_space(this);
-    DCHECK(rmode > RelocInfo::LAST_GCED_ENUM);
+    DCHECK(rmode > RelocInfo::LAST_GCED_MODE);
     movp(scratch, entry, rmode);
     jmp(scratch);
   }
@@ -5000,10 +5000,8 @@ void Assembler::RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data) {
 }
 
 const int RelocInfo::kApplyMask =
-    RelocInfo::ModeMask(RelocInfo::CODE_TARGET) |
-    RelocInfo::ModeMask(RelocInfo::RUNTIME_ENTRY) |
-    RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE) |
-    RelocInfo::ModeMask(RelocInfo::WASM_CALL);
+    RelocInfo::CodeTargetMask() | RelocInfo::RuntimeEntryMask() |
+    RelocInfo::InternalReferenceMask() | RelocInfo::WasmCallMask();
 
 bool RelocInfo::IsCodedSpecially() {
   // The deserializer needs to know whether a pointer is specially coded.  Being
