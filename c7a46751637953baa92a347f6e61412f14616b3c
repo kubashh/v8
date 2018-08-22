@@ -34,6 +34,24 @@
       "revId": "c7a46751637953baa92a347f6e61412f14616b3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0973253f_5f3f37a1",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2686,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-08-22T01:29:08Z",
+      "side": 1,
+      "message": "Hm, interesting idea! Worth exploring perhaps. But the cleanup you did here looks good too.",
+      "parentUuid": "5f48aae3_18b95f82",
+      "revId": "c7a46751637953baa92a347f6e61412f14616b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
