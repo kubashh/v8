@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab7f1aba_3867f441",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-22T14:10:34Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the missing support be able to handle holes, instead of deoptimizing?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 39
+      },
+      "revId": "8b9946437ae831b1fb2e8676c2f7a7aef790e938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d38640b5_6b8088e7",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2085,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-22T14:10:34Z",
+      "side": 1,
+      "message": "IsHoleyElementsKind(kind)?",
+      "range": {
+        "startLine": 2085,
+        "startChar": 13,
+        "endLine": 2085,
+        "endChar": 65
+      },
+      "revId": "8b9946437ae831b1fb2e8676c2f7a7aef790e938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
