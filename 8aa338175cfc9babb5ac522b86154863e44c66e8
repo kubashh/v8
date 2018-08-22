@@ -52,6 +52,24 @@
       "revId": "8aa338175cfc9babb5ac522b86154863e44c66e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2480a05a_b014f91d",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3460,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-22T16:06:26Z",
+      "side": 1,
+      "message": "what I did to work around this was just hack KeyedStoreGenericAssembler to support this case (basically by adding an enum class tag to indicate that it should use a \"store-in-literal\" behaviour, meaning \"don\u0027t check the prototype chain for accessors\" and \"ignore accessors on the receiver\" --- which is maybe a bit more complicated than that idea. Any preference there?",
+      "parentUuid": "b42ffa58_d65eeed1",
+      "revId": "8aa338175cfc9babb5ac522b86154863e44c66e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
