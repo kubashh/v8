@@ -20,10 +20,13 @@ using Node = compiler::Node;
 template <class T>
 using TNode = compiler::TNode<T>;
 
+enum class StoreMode { kOrdinary, kSetInLiteral };
 class KeyedStoreGenericAssembler : public AccessorAssembler {
  public:
-  explicit KeyedStoreGenericAssembler(compiler::CodeAssemblerState* state)
-      : AccessorAssembler(state) {}
+  explicit KeyedStoreGenericAssembler(
+      compiler::CodeAssemblerState* state,
+      StoreMode store_mode = StoreMode::kOrdinary)
+      : AccessorAssembler(state), store_mode_(store_mode) {}
 
   void KeyedStoreGeneric();
 
@@ -42,6 +45,14 @@ class KeyedStoreGenericAssembler : public AccessorAssembler {
   void SetProperty(TNode<Context> context, TNode<Object> receiver,
                    TNode<Object> key, TNode<Object> value,
                    LanguageMode language_mode);
+
+  bool IsStoreInLiteral() const {
+    return store_mode_ == StoreMode::kSetInLiteral;
+  }
+  bool ShouldCheckPrototype() const {
+    return store_mode_ == StoreMode::kOrdinary;
+  }
+  bool ShouldCallSetter() const { return store_mode_ == StoreMode::kOrdinary; }
 
  private:
   enum UpdateLength {
@@ -111,6 +122,8 @@ class KeyedStoreGenericAssembler : public AccessorAssembler {
                                       Variable* var_accessor_pair,
                                       Variable* var_accessor_holder,
                                       Label* readonly, Label* bailout);
+
+  StoreMode store_mode_;
 };
 
 void KeyedStoreGenericGenerator::Generate(compiler::CodeAssemblerState* state) {
@@ -139,6 +152,15 @@ void KeyedStoreGenericGenerator::SetProperty(
     LanguageMode language_mode) {
   KeyedStoreGenericAssembler assembler(state);
   assembler.SetProperty(context, receiver, key, value, language_mode);
+}
+
+void KeyedStoreGenericGenerator::SetOwnPropertyInLiteral(
+    compiler::CodeAssemblerState* state, TNode<Context> context,
+    TNode<JSReceiver> receiver, TNode<BoolT> is_simple_receiver,
+    TNode<Name> key, TNode<Object> value, LanguageMode language_mode) {
+  KeyedStoreGenericAssembler assembler(state, StoreMode::kSetInLiteral);
+  assembler.SetProperty(context, receiver, is_simple_receiver, key, value,
+                        language_mode);
 }
 
 void KeyedStoreGenericAssembler::BranchIfPrototypesHaveNonFastElements(
@@ -570,6 +592,7 @@ void KeyedStoreGenericAssembler::LookupPropertyOnPrototypeChain(
     Node* receiver_map, Node* name, Label* accessor,
     Variable* var_accessor_pair, Variable* var_accessor_holder, Label* readonly,
     Label* bailout) {
+  DCHECK(!IsStoreInLiteral());
   Label ok_to_write(this);
   VARIABLE(var_holder, MachineRepresentation::kTagged);
   var_holder.Bind(LoadMapPrototype(receiver_map));
@@ -683,15 +706,23 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
       TNode<IntPtrT> name_index = var_name_index.value();
       Node* details = LoadDetailsByKeyIndex(descriptors, name_index);
       Label data_property(this);
-      JumpIfDataProperty(details, &data_property, &readonly);
-
-      // Accessor case.
-      // TODO(jkummerow): Implement a trimmed-down LoadAccessorFromFastObject.
-      VARIABLE(var_details, MachineRepresentation::kWord32);
-      LoadPropertyFromFastObject(receiver, receiver_map, descriptors,
-                                 name_index, &var_details, &var_accessor_pair);
-      var_accessor_holder.Bind(receiver);
-      Goto(&accessor);
+      JumpIfDataProperty(details, &data_property,
+                         IsStoreInLiteral() ? slow : &readonly);
+      if (ShouldCallSetter()) {
+        // Accessor case.
+        // TODO(jkummerow): Implement a trimmed-down LoadAccessorFromFastObject.
+        VARIABLE(var_details, MachineRepresentation::kWord32);
+        LoadPropertyFromFastObject(receiver, receiver_map, descriptors,
+                                   name_index, &var_details,
+                                   &var_accessor_pair);
+        var_accessor_holder.Bind(receiver);
+        Goto(&accessor);
+      } else {
+        // If performing a SetInLiteral store and encounter an accessor, it's
+        // necessary to reconfigure the object. Currently, this involves a
+        // runtime call.
+        Goto(slow);
+      }
 
       BIND(&data_property);
       {
@@ -790,13 +821,21 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
       Label overwrite(this);
       TNode<Uint32T> details = LoadDetailsByKeyIndex<NameDictionary>(
           properties, var_name_index.value());
-      JumpIfDataProperty(details, &overwrite, &readonly);
+      JumpIfDataProperty(details, &overwrite,
+                         IsStoreInLiteral() ? slow : &readonly);
 
       // Accessor case.
-      var_accessor_pair.Bind(LoadValueByKeyIndex<NameDictionary>(
-          properties, var_name_index.value()));
-      var_accessor_holder.Bind(receiver);
-      Goto(&accessor);
+      if (ShouldCallSetter()) {
+        var_accessor_pair.Bind(LoadValueByKeyIndex<NameDictionary>(
+            properties, var_name_index.value()));
+        var_accessor_holder.Bind(receiver);
+        Goto(&accessor);
+      } else {
+        // If performing a SetInLiteral store and encounter an accessor, it's
+        // necessary to reconfigure the object. Currently, this involves a
+        // runtime call.
+        Goto(slow);
+      }
 
       BIND(&overwrite);
       {
@@ -816,9 +855,11 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
       Branch(IsSetWord32<Map::IsExtensibleBit>(bitfield2), &extensible, slow);
 
       BIND(&extensible);
-      LookupPropertyOnPrototypeChain(receiver_map, p->name, &accessor,
-                                     &var_accessor_pair, &var_accessor_holder,
-                                     &readonly, slow);
+      if (ShouldCheckPrototype()) {
+        LookupPropertyOnPrototypeChain(receiver_map, p->name, &accessor,
+                                       &var_accessor_pair, &var_accessor_holder,
+                                       &readonly, slow);
+      }
       Label add_dictionary_property_slow(this);
       InvalidateValidityCellIfPrototype(receiver_map, bitfield2);
       Add<NameDictionary>(properties, CAST(p->name), p->value,
@@ -830,6 +871,8 @@ void KeyedStoreGenericAssembler::EmitGenericPropertyStore(
                                     p->receiver, p->name, p->value);
     }
   }
+
+  if (!ShouldCallSetter()) return;
 
   BIND(&accessor);
   {
@@ -951,8 +994,11 @@ void KeyedStoreGenericAssembler::KeyedStoreGeneric(
   BIND(&slow);
   {
     Comment("KeyedStoreGeneric_slow");
+    Runtime::FunctionId slow_func = IsStoreInLiteral()
+                                        ? Runtime::kStoreDataPropertyInLiteral
+                                        : Runtime::kSetProperty;
     if (language_mode.IsJust()) {
-      TailCallRuntime(Runtime::kSetProperty, context, receiver, key, value,
+      TailCallRuntime(slow_func, context, receiver, key, value,
                       SmiConstant(language_mode.FromJust()));
     } else {
       TVARIABLE(Smi, var_language_mode, SmiConstant(LanguageMode::kStrict));
@@ -961,7 +1007,7 @@ void KeyedStoreGenericAssembler::KeyedStoreGeneric(
       var_language_mode = SmiConstant(LanguageMode::kSloppy);
       Goto(&call_runtime);
       BIND(&call_runtime);
-      TailCallRuntime(Runtime::kSetProperty, context, receiver, key, value,
+      TailCallRuntime(slow_func, context, receiver, key, value,
                       var_language_mode.value());
     }
   }
@@ -1048,7 +1094,10 @@ void KeyedStoreGenericAssembler::SetProperty(TNode<Context> context,
 
   BIND(&slow);
   {
-    CallRuntime(Runtime::kSetProperty, context, receiver, unique_name, value,
+    Runtime::FunctionId slow_func = IsStoreInLiteral()
+                                        ? Runtime::kStoreDataPropertyInLiteral
+                                        : Runtime::kSetProperty;
+    CallRuntime(slow_func, context, receiver, unique_name, value,
                 SmiConstant(language_mode));
     Goto(&done);
   }

@@ -649,6 +649,31 @@ RUNTIME_FUNCTION(Runtime_SetProperty) {
       Runtime::SetObjectProperty(isolate, object, key, value, language_mode));
 }
 
+// Similar to DefineOwnDataPropertyInLiteral, but does not update feedback, and
+// and does not have a flags parameter for performing SetFunctionName().
+//
+// Currently, this is used for ObjectLiteral spread properties.
+RUNTIME_FUNCTION(Runtime_StoreDataPropertyInLiteral) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(4, args.length());
+
+  CONVERT_ARG_HANDLE_CHECKED(JSReceiver, object, 0);
+  CONVERT_ARG_HANDLE_CHECKED(Object, key, 1);
+  CONVERT_ARG_HANDLE_CHECKED(Object, value, 2);
+  CONVERT_LANGUAGE_MODE_ARG_CHECKED(language_mode, 3);
+  USE(language_mode);
+
+  bool success;
+  LookupIterator it = LookupIterator::PropertyOrElement(
+      isolate, object, key, &success, LookupIterator::OWN);
+
+  // Cannot fail since this should only be called when
+  // creating an object literal.
+  CHECK(
+      JSObject::DefineOwnPropertyIgnoreAttributes(&it, value, NONE, kDontThrow)
+          .IsJust());
+  return *object;
+}
 
 namespace {
 

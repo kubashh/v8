@@ -30,6 +30,15 @@ class KeyedStoreGenericGenerator {
                           TNode<Context> context, TNode<Object> receiver,
                           TNode<Object> key, TNode<Object> value,
                           LanguageMode language_mode);
+
+  // Like the above, but does not traverse the prototype chain in the slow case.
+  // Building block for fast path of object literal spread properties.
+  static void SetOwnPropertyInLiteral(compiler::CodeAssemblerState* state,
+                                      TNode<Context> context,
+                                      TNode<JSReceiver> receiver,
+                                      TNode<BoolT> is_simple_receiver,
+                                      TNode<Name> name, TNode<Object> value,
+                                      LanguageMode language_mode);
 };
 
 class StoreICUninitializedGenerator {
