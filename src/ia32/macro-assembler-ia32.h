@@ -33,9 +33,13 @@ constexpr Register kJavaScriptCallTargetRegister = kJSFunctionRegister;
 constexpr Register kJavaScriptCallNewTargetRegister = edx;
 constexpr Register kJavaScriptCallExtraArg1Register = ebx;
 
-constexpr Register kOffHeapTrampolineRegister = ecx;
-constexpr Register kRuntimeCallFunctionRegister = ebx;
+// The off-heap trampoline does not need a register on ia32 (it uses a
+// pc-relative call instead).
+constexpr Register kOffHeapTrampolineRegister = no_reg;
+
+constexpr Register kRuntimeCallFunctionRegister = edx;
 constexpr Register kRuntimeCallArgCountRegister = eax;
+constexpr Register kRuntimeCallArgvRegister = ecx;
 constexpr Register kWasmInstanceRegister = esi;
 
 // TODO(v8:6666): Implement full support.
