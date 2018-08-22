@@ -5875,8 +5875,8 @@ Code* Heap::GcSafeFindCodeForInnerPointer(Address inner_pointer) {
 }
 
 void Heap::WriteBarrierForCodeSlow(Code* code) {
-  for (RelocIterator it(code, RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT));
-       !it.done(); it.next()) {
+  for (RelocIterator it(code, RelocInfo::EmbeddedObjectMask()); !it.done();
+       it.next()) {
     GenerationalBarrierForCode(code, it.rinfo(), it.rinfo()->target_object());
     MarkingBarrierForCode(code, it.rinfo(), it.rinfo()->target_object());
   }
