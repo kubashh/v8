@@ -319,11 +319,10 @@ void NativeModuleSerializer::WriteCode(const WasmCode* code, Writer* writer) {
 #endif
   memcpy(code_start, code->instructions().start(), code_size);
   // Relocate the code.
-  int mask = RelocInfo::ModeMask(RelocInfo::WASM_CALL) |
-             RelocInfo::ModeMask(RelocInfo::WASM_STUB_CALL) |
-             RelocInfo::ModeMask(RelocInfo::EXTERNAL_REFERENCE) |
-             RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE) |
-             RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE_ENCODED);
+  int mask = RelocInfo::WasmCallMask() | RelocInfo::WasmStubCallMask() |
+             RelocInfo::ExternalReferenceMask() |
+             RelocInfo::InternalReferenceMask() |
+             RelocInfo::InternalReferenceEncodedMask();
   RelocIterator orig_iter(code->instructions(), code->reloc_info(),
                           code->constant_pool(), mask);
   for (RelocIterator iter(
@@ -481,11 +480,10 @@ bool NativeModuleDeserializer::ReadCode(uint32_t fn_index, Reader* reader) {
       std::move(source_pos), tier);
 
   // Relocate the code.
-  int mask = RelocInfo::ModeMask(RelocInfo::WASM_CALL) |
-             RelocInfo::ModeMask(RelocInfo::WASM_STUB_CALL) |
-             RelocInfo::ModeMask(RelocInfo::EXTERNAL_REFERENCE) |
-             RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE) |
-             RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE_ENCODED);
+  int mask = RelocInfo::WasmCallMask() | RelocInfo::WasmStubCallMask() |
+             RelocInfo::ExternalReferenceMask() |
+             RelocInfo::InternalReferenceMask() |
+             RelocInfo::InternalReferenceEncodedMask();
   for (RelocIterator iter(code->instructions(), code->reloc_info(),
                           code->constant_pool(), mask);
        !iter.done(); iter.next()) {

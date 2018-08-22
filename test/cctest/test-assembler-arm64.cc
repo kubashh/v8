@@ -15263,8 +15263,7 @@ TEST(pool_size) {
       isolate->factory()->NewCode(desc, Code::STUB, masm.CodeObject());
 
   unsigned pool_count = 0;
-  int pool_mask = RelocInfo::ModeMask(RelocInfo::CONST_POOL) |
-                  RelocInfo::ModeMask(RelocInfo::VENEER_POOL);
+  int pool_mask = RelocInfo::ConstPoolMask() | RelocInfo::VeneerPoolMask();
   for (RelocIterator it(*code, pool_mask); !it.done(); it.next()) {
     RelocInfo* info = it.rinfo();
     if (RelocInfo::IsConstPool(info->rmode())) {

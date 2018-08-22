@@ -21,6 +21,44 @@ class EmbeddedData;
 // executed).
 enum ICacheFlushMode { FLUSH_ICACHE_IF_NEEDED, SKIP_ICACHE_FLUSH };
 
+// The list of reloc modes.
+// Please note the order is important (see IsRealRelocMode, IsGCRelocMode, and
+// IsShareableRelocMode predicates below).
+#define RELOC_MODE_LIST(V)                                                    \
+  V(CODE_TARGET, CodeTarget)                                                  \
+  V(RELATIVE_CODE_TARGET, RelativeCodeTarget)                                 \
+  V(EMBEDDED_OBJECT, EmbeddedObject)                                          \
+                                                                              \
+  V(JS_TO_WASM_CALL, JsToWasmCall)                                            \
+  V(WASM_CALL, WasmCall)                                                      \
+  V(WASM_STUB_CALL, WasmStubCall)                                             \
+                                                                              \
+  V(RUNTIME_ENTRY, RuntimeEntry)                                              \
+  V(COMMENT, Comment)                                                         \
+                                                                              \
+  V(EXTERNAL_REFERENCE, ExternalReference)                                    \
+  V(INTERNAL_REFERENCE, InternalReference)                                    \
+                                                                              \
+  /* Encoded internal reference, used only on MIPS, MIPS64 and PPC. */        \
+  V(INTERNAL_REFERENCE_ENCODED, InternalReferenceEncoded)                     \
+                                                                              \
+  /* An off-heap instruction stream target. See http://goo.gl/Z2HUiM. */      \
+  V(OFF_HEAP_TARGET, OffHeapTarget)                                           \
+                                                                              \
+  /* Marks constant and veneer pools. Only used on ARM and ARM64. */          \
+  /* They use a custom noncompact encoding. */                                \
+  V(CONST_POOL, ConstPool)                                                    \
+  V(VENEER_POOL, VeneerPool)                                                  \
+                                                                              \
+  V(DEOPT_SCRIPT_OFFSET, DeoptScriptOffset)                                   \
+  V(DEOPT_INLINING_ID, DeoptInliningId) /* Deoptimization source position. */ \
+  V(DEOPT_REASON, DeoptReason)          /* Deoptimization reason index. */    \
+  V(DEOPT_ID, DeoptId)                  /* Deoptimization inlining id. */     \
+                                                                              \
+  /* This is not an actual reloc mode, but used to encode a long pc jump  */  \
+  /* that cannot be encoded as part of another record. */                     \
+  V(PC_JUMP, PcJump)
+
 // -----------------------------------------------------------------------------
 // Relocation information
 
@@ -50,51 +88,17 @@ class RelocInfo {
   static const int kMaxSmallPCDelta;
 
   enum Mode : int8_t {
-    // Please note the order is important (see IsRealRelocMode, IsGCRelocMode,
-    // and IsShareableRelocMode predicates below).
-
-    CODE_TARGET,
-    RELATIVE_CODE_TARGET,  // LAST_CODE_TARGET_MODE
-    EMBEDDED_OBJECT,       // LAST_GCED_ENUM
-
-    JS_TO_WASM_CALL,
-    WASM_CALL,  // FIRST_SHAREABLE_RELOC_MODE
-    WASM_STUB_CALL,
-
-    RUNTIME_ENTRY,
-    COMMENT,
-
-    EXTERNAL_REFERENCE,  // The address of an external C++ function.
-    INTERNAL_REFERENCE,  // An address inside the same function.
-
-    // Encoded internal reference, used only on MIPS, MIPS64 and PPC.
-    INTERNAL_REFERENCE_ENCODED,
-
-    // An off-heap instruction stream target. See http://goo.gl/Z2HUiM.
-    OFF_HEAP_TARGET,
-
-    // Marks constant and veneer pools. Only used on ARM and ARM64.
-    // They use a custom noncompact encoding.
-    CONST_POOL,
-    VENEER_POOL,
-
-    DEOPT_SCRIPT_OFFSET,
-    DEOPT_INLINING_ID,  // Deoptimization source position.
-    DEOPT_REASON,       // Deoptimization reason index.
-    DEOPT_ID,           // Deoptimization inlining id.
-
-    // This is not an actual reloc mode, but used to encode a long pc jump that
-    // cannot be encoded as part of another record.
-    PC_JUMP,
+#define CASE(NAME, Name) NAME,
+    RELOC_MODE_LIST(CASE)
+#undef CASE
 
     // Pseudo-types
     NUMBER_OF_MODES,
     NONE,  // never recorded value
 
     LAST_CODE_TARGET_MODE = RELATIVE_CODE_TARGET,
-    FIRST_REAL_RELOC_MODE = CODE_TARGET,
     LAST_REAL_RELOC_MODE = VENEER_POOL,
-    LAST_GCED_ENUM = EMBEDDED_OBJECT,
+    LAST_GCED_MODE = EMBEDDED_OBJECT,
     FIRST_SHAREABLE_RELOC_MODE = WASM_CALL,
   };
 
@@ -110,64 +114,27 @@ class RelocInfo {
         host_(host),
         constant_pool_(constant_pool) {}
 
-  static constexpr bool IsRealRelocMode(Mode mode) {
-    return mode >= FIRST_REAL_RELOC_MODE && mode <= LAST_REAL_RELOC_MODE;
-  }
   // Is the relocation mode affected by GC?
   static constexpr bool IsGCRelocMode(Mode mode) {
-    return mode <= LAST_GCED_ENUM;
+    return mode <= LAST_GCED_MODE;
   }
+
   static constexpr bool IsShareableRelocMode(Mode mode) {
     static_assert(RelocInfo::NONE >= RelocInfo::FIRST_SHAREABLE_RELOC_MODE,
                   "Users of this function rely on NONE being a sharable "
                   "relocation mode.");
     return mode >= RelocInfo::FIRST_SHAREABLE_RELOC_MODE;
   }
-  static constexpr bool IsCodeTarget(Mode mode) { return mode == CODE_TARGET; }
+
   static constexpr bool IsCodeTargetMode(Mode mode) {
+    static_assert(RelocInfo::CODE_TARGET == 0, "CODE_TARGET is not 0.");
     return mode <= LAST_CODE_TARGET_MODE;
   }
-  static constexpr bool IsRelativeCodeTarget(Mode mode) {
-    return mode == RELATIVE_CODE_TARGET;
-  }
-  static constexpr bool IsEmbeddedObject(Mode mode) {
-    return mode == EMBEDDED_OBJECT;
-  }
-  static constexpr bool IsRuntimeEntry(Mode mode) {
-    return mode == RUNTIME_ENTRY;
-  }
-  static constexpr bool IsWasmCall(Mode mode) { return mode == WASM_CALL; }
-  static constexpr bool IsWasmStubCall(Mode mode) {
-    return mode == WASM_STUB_CALL;
-  }
-  static constexpr bool IsComment(Mode mode) { return mode == COMMENT; }
-  static constexpr bool IsConstPool(Mode mode) { return mode == CONST_POOL; }
-  static constexpr bool IsVeneerPool(Mode mode) { return mode == VENEER_POOL; }
-  static constexpr bool IsDeoptPosition(Mode mode) {
-    return mode == DEOPT_SCRIPT_OFFSET || mode == DEOPT_INLINING_ID;
-  }
-  static constexpr bool IsDeoptReason(Mode mode) {
-    return mode == DEOPT_REASON;
-  }
-  static constexpr bool IsDeoptId(Mode mode) { return mode == DEOPT_ID; }
-  static constexpr bool IsExternalReference(Mode mode) {
-    return mode == EXTERNAL_REFERENCE;
-  }
-  static constexpr bool IsInternalReference(Mode mode) {
-    return mode == INTERNAL_REFERENCE;
-  }
-  static constexpr bool IsInternalReferenceEncoded(Mode mode) {
-    return mode == INTERNAL_REFERENCE_ENCODED;
-  }
-  static constexpr bool IsOffHeapTarget(Mode mode) {
-    return mode == OFF_HEAP_TARGET;
-  }
+
   static constexpr bool IsNone(Mode mode) { return mode == NONE; }
+
   static constexpr bool IsWasmReference(Mode mode) {
     return IsWasmPtrReference(mode);
-  }
-  static constexpr bool IsJsToWasmCall(Mode mode) {
-    return mode == JS_TO_WASM_CALL;
   }
   static constexpr bool IsWasmPtrReference(Mode mode) {
     return mode == WASM_CALL || mode == JS_TO_WASM_CALL;
@@ -176,6 +143,21 @@ class RelocInfo {
   static constexpr bool IsOnlyForSerializer(Mode mode) {
     return mode == EXTERNAL_REFERENCE || mode == OFF_HEAP_TARGET;
   }
+
+// Define predicates for all normal reloc modes.
+#define DEFINE_PREDICATE(NAME, Name) \
+  static constexpr bool Is##Name(Mode mode) { return mode == NAME; }
+  RELOC_MODE_LIST(DEFINE_PREDICATE)
+#undef DEFINE_PREDICATE
+  static constexpr bool IsDeoptPosition(Mode mode) {
+    return mode == DEOPT_SCRIPT_OFFSET || mode == DEOPT_INLINING_ID;
+  }
+
+// Define mode masks for all normal reloc modes.
+#define DEFINE_MODE_MASK(NAME, Name) \
+  static constexpr int Name##Mask() { return ModeMask(NAME); }
+  RELOC_MODE_LIST(DEFINE_MODE_MASK)
+#undef DEFINE_MODE_MASK
 
   static constexpr int ModeMask(Mode mode) { return 1 << mode; }
 

@@ -936,7 +936,7 @@ void ObjectStatsCollectorImpl::RecordVirtualCodeDetails(Code* code) {
                                      ObjectStats::OPTIMIZED_CODE_LITERALS_TYPE);
     }
   }
-  int const mode_mask = RelocInfo::ModeMask(RelocInfo::EMBEDDED_OBJECT);
+  int const mode_mask = RelocInfo::EmbeddedObjectMask();
   for (RelocIterator it(code, mode_mask); !it.done(); it.next()) {
     RelocInfo::Mode mode = it.rinfo()->rmode();
     if (mode == RelocInfo::EMBEDDED_OBJECT) {

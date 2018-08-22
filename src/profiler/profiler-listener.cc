@@ -254,9 +254,8 @@ void ProfilerListener::AttachDeoptInlinedFrames(Code* code,
                                                 CodeDeoptEventRecord* rec) {
   int deopt_id = rec->deopt_id;
   SourcePosition last_position = SourcePosition::Unknown();
-  int mask = RelocInfo::ModeMask(RelocInfo::DEOPT_ID) |
-             RelocInfo::ModeMask(RelocInfo::DEOPT_SCRIPT_OFFSET) |
-             RelocInfo::ModeMask(RelocInfo::DEOPT_INLINING_ID);
+  int mask = RelocInfo::DeoptIdMask() | RelocInfo::DeoptScriptOffsetMask() |
+             RelocInfo::DeoptInliningIdMask();
 
   rec->deopt_frames = nullptr;
   rec->deopt_frame_count = 0;

@@ -324,8 +324,7 @@ void CpuFeatures::PrintFeatures() {
 // Implementation of RelocInfo
 
 // static
-const int RelocInfo::kApplyMask =
-    RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET);
+const int RelocInfo::kApplyMask = RelocInfo::RelativeCodeTargetMask();
 
 bool RelocInfo::IsCodedSpecially() {
   // The deserializer needs to know whether a pointer is specially coded.  Being
