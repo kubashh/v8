@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4c2a2450_da3ca9ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-22T15:25:44Z",
+      "side": 1,
+      "message": "Yes, but with the current representation selection we would force all doubles to be boxed into HeapNumbers, which is highly inefficient. That we can only avoid once we have a way to represent NumberOrUndefined and NumberOrHole as Float64, and have that handled in all the relevant places in SimplifiedLowering. This is the pragmatic work-around.",
+      "parentUuid": "ab7f1aba_3867f441",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 39
+      },
+      "revId": "8b9946437ae831b1fb2e8676c2f7a7aef790e938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d38640b5_6b8088e7",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "8b9946437ae831b1fb2e8676c2f7a7aef790e938",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef1b15c2_fd05d50c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2085,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-22T15:25:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d38640b5_6b8088e7",
+      "range": {
+        "startLine": 2085,
+        "startChar": 13,
+        "endLine": 2085,
+        "endChar": 65
+      },
+      "revId": "8b9946437ae831b1fb2e8676c2f7a7aef790e938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

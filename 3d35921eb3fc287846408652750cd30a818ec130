@@ -22,6 +22,30 @@
       "revId": "3d35921eb3fc287846408652750cd30a818ec130",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "956d3cfe_3fffdd49",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5109,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-22T15:25:44Z",
+      "side": 0,
+      "message": "Good catch. Added it back, and a similar TODO(7409) to find/findIndex.",
+      "parentUuid": "504c2589_fc45719d",
+      "range": {
+        "startLine": 5109,
+        "startChar": 10,
+        "endLine": 5109,
+        "endChar": 23
+      },
+      "revId": "3d35921eb3fc287846408652750cd30a818ec130",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
