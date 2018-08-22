@@ -112,6 +112,14 @@ size_t Interpreter::GetDispatchTableIndex(Bytecode bytecode,
   UNREACHABLE();
 }
 
+// static
+size_t Interpreter::GetBuiltinsTableIndex(Bytecode bytecode,
+                                          OperandScale operand_scale) {
+  size_t index = static_cast<size_t>(bytecode);
+  size_t num_scales = static_cast<size_t>(OperandScale::kLast) + 1;
+  return index * num_scales + static_cast<size_t>(operand_scale);
+}
+
 void Interpreter::IterateDispatchTable(RootVisitor* v) {
   for (int i = 0; i < kDispatchTableSize; i++) {
     Address code_entry = dispatch_table_[i];

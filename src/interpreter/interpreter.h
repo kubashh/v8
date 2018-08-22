@@ -90,6 +90,10 @@ class Interpreter {
   static size_t GetDispatchTableIndex(Bytecode bytecode,
                                       OperandScale operand_scale);
 
+  // Get builtins table index of bytecode.
+  static size_t GetBuiltinsTableIndex(Bytecode bytecode,
+                                      OperandScale operand_scale);
+
   static const int kNumberOfWideVariants = BytecodeOperands::kOperandScaleCount;
   static const int kDispatchTableSize = kNumberOfWideVariants * (kMaxUInt8 + 1);
   static const int kNumberOfBytecodes = static_cast<int>(Bytecode::kLast) + 1;

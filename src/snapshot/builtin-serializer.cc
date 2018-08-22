@@ -78,6 +78,9 @@ void BuiltinSerializer::SerializeBuiltin(Code* code) {
   // time (e.g. startup snapshot creation, or while iterating a builtin code
   // object during builtin serialization) is serialized by reference - see
   // BuiltinSerializer::SerializeObject below.
+
+  if (SerializeBuiltinReference(code, kPlain, kStartOfObject, 0)) return;
+
   ObjectSerializer object_serializer(this, code, &sink_, kPlain,
                                      kStartOfObject);
   object_serializer.Serialize();
