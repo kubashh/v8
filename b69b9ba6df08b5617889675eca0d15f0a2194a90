@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2740c41b_7a0ffbe5",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4866,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-22T12:50:59Z",
+      "side": 1,
+      "message": "Blah, this looks like an output variable but it\u0027s not; you\u0027re calling the overloaded operator\u003d... Perhaps it\u0027s less confusing if we pass in a TVariable\u003cSmi\u003e\u0026 instead?",
+      "revId": "b69b9ba6df08b5617889675eca0d15f0a2194a90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
