@@ -11,6 +11,7 @@
 #include "src/handles-inl.h"
 #include "src/interface-descriptors.h"
 #include "src/interpreter/bytecodes.h"
+#include "src/interpreter/interpreter-generator.h"
 #include "src/isolate.h"
 #include "src/objects-inl.h"
 #include "src/objects/shared-function-info.h"
@@ -184,7 +185,6 @@ Code* BuildWithCodeStubAssemblerCS(Isolate* isolate, int32_t builtin_index,
 // static
 void SetupIsolateDelegate::AddBuiltin(Builtins* builtins, int index,
                                       Code* code) {
-  DCHECK_EQ(index, code->builtin_index());
   builtins->set_builtin(index, code);
 }
 
@@ -248,10 +248,14 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
 #ifdef V8_EMBEDDED_BYTECODE_HANDLERS
 namespace {
 Code* GenerateBytecodeHandler(Isolate* isolate, int builtin_index,
-                              interpreter::Bytecode code,
+                              interpreter::Bytecode bytecode,
                               interpreter::OperandScale scale) {
-  // TODO(v8:8068): Actually generate the handler.
-  return nullptr;
+  if (!interpreter::Bytecodes::BytecodeHasHandler(bytecode, scale))
+    return nullptr;
+
+  Handle<Code> code = interpreter::GenerateBytecodeHandler(
+      isolate, bytecode, scale, builtin_index);
+  return *code;
 }
 }  // namespace
 #endif
@@ -302,10 +306,7 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
   code =                                                                      \
       GenerateBytecodeHandler(isolate, index, interpreter::Bytecode::k##Code, \
                               interpreter::OperandScale::k##Scale);           \
-  if (code) {                                                                 \
-    AddBuiltin(builtins, index, code);                                        \
-  }                                                                           \
-  ++index;
+  AddBuiltin(builtins, index++, code ? code : illegal_bytecode);
 
 #define BUILD_BCH(Code, ...)         \
   BUILD_BCH_WITH_SCALE(Code, Single) \
@@ -317,6 +318,11 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
                                  #Name);                                    \
   AddBuiltin(builtins, index++, code);
 
+#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
+  Code* illegal_bytecode = GenerateBytecodeHandler(
+      isolate, static_cast<int>(interpreter::Bytecode::kIllegal),
+      interpreter::Bytecode::kIllegal, interpreter::OperandScale::kSingle);
+#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
   BUILTIN_LIST(BUILD_CPP, BUILD_API, BUILD_TFJ, BUILD_TFC, BUILD_TFS, BUILD_TFH,
                BUILD_BCH, BUILD_ASM);
 
