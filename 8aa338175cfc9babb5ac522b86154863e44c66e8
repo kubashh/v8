@@ -16,6 +16,24 @@
       "revId": "8aa338175cfc9babb5ac522b86154863e44c66e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c18f7414_76724b25",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3460,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-22T11:33:12Z",
+      "side": 1,
+      "message": "unfortunately yes, Object.assign() does not work for CopyDataProperties... I guess sharing a stub isn\u0027t in the cards.",
+      "parentUuid": "fdde2cbc_27812e4d",
+      "revId": "8aa338175cfc9babb5ac522b86154863e44c66e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
