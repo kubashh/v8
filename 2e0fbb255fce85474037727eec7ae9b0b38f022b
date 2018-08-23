@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dcc740fd_26c0c672",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 3
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-08-23T14:40:49Z",
+      "side": 1,
+      "message": "Since we\u0027re not tracking the results anywhere, we should rather skip this.",
+      "range": {
+        "startLine": 648,
+        "startChar": 29,
+        "endLine": 648,
+        "endChar": 39
+      },
+      "revId": "2e0fbb255fce85474037727eec7ae9b0b38f022b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
