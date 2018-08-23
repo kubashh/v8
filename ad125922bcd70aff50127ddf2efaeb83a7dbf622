@@ -54,6 +54,23 @@
     },
     {
       "key": {
+        "uuid": "e63cd5f5_f7376cc5",
+        "filename": "src/builtins/array-reverse.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T09:22:13Z",
+      "side": 1,
+      "message": "Do we still need to silence nans?",
+      "revId": "ad125922bcd70aff50127ddf2efaeb83a7dbf622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a37b141_55eb80ef",
         "filename": "src/builtins/array-reverse.tq",
         "patchSetId": 2

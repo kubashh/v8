@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97f46464_eb5282bd",
+        "filename": "src/builtins/array-reverse.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T09:22:13Z",
+      "side": 1,
+      "message": "Nit: Why not ElementsKind instead of \u0027accessor\u0027? And couldn\u0027t the template argument just be of type ElementsKind (then we wouldn\u0027t need the custom types above)?",
+      "revId": "15879d0869ba4b1203ed97d9fd213183024ff365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
