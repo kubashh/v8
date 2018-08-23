@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b117975_d3520eee",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3635,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T10:16:30Z",
+      "side": 1,
+      "message": "Suggestion: FLAG_ia32_verify_root_register",
+      "revId": "1d3a4c8ca4fdfd123569786091c9ff54f0638d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71c56335_60f5ddb9",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3636,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T10:16:30Z",
+      "side": 1,
+      "message": "Nit: Use a named constant here and for initialization please and perhaps add a TurboAssembler::VerifyRootRegister() helper in case we want to add checks at specific spots later.",
+      "revId": "1d3a4c8ca4fdfd123569786091c9ff54f0638d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2d1e25f_3410d0a3",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T10:16:30Z",
+      "side": 1,
+      "message": "Please add a TODO to remove this (as below).",
+      "revId": "1d3a4c8ca4fdfd123569786091c9ff54f0638d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6649844_4d6195dc",
+        "filename": "src/ia32/code-stubs-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T10:16:30Z",
+      "side": 1,
+      "message": "Suggestion: This could go into TurboAssembler::InitializeRootRegister(), and there let\u0027s branch on \u0027FLAG_ia32_verify_root_register \u0026\u0026 FLAG_embedded_builtins\u0027. With a TODO for real initialization and also \u0027set_root_array_available(true)\u0027.",
+      "revId": "1d3a4c8ca4fdfd123569786091c9ff54f0638d81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
