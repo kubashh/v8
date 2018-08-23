@@ -102,9 +102,20 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   // Check that the stack is aligned.
   void CheckStackAlignment();
 
-  // Nop, because ia32 does not have a root register.
-  // TODO(jgruber,v8:6666): Implement one.
-  void InitializeRootRegister() {}
+  void InitializeRootRegister() {
+    // For now, only check sentinel value for root register.
+    // TODO(jgruber,v8:6666): Implement root register.
+    if (FLAG_ia32_verify_root_register && FLAG_embedded_builtins) {
+      mov(kRootRegister, kRootRegisterSentinel);
+    }
+  }
+
+  void VerifyRootRegister() {
+    if (FLAG_ia32_verify_root_register && FLAG_embedded_builtins) {
+      cmp(kRootRegister, kRootRegisterSentinel);
+      Assert(equal, AbortReason::kRootRegisterWasClobbered);
+    }
+  }
 
   // Move a constant into a destination using the most efficient encoding.
   void Move(Register dst, const Immediate& src);
