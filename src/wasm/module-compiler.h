@@ -102,8 +102,7 @@ class AsyncCompileJob {
   class DecodeFail;              // Step 1b (sync)
   class PrepareAndStartCompile;  // Step 2  (sync)
   class CompileFailed;           // Step 4b (sync)
-  class CompileWrappers;         // Step 5  (sync)
-  class FinishModule;            // Step 6  (sync)
+  class FinishModule;            // Step 5  (sync)
 
   const std::shared_ptr<Counters>& async_counters() const {
     return async_counters_;

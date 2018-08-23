@@ -2501,27 +2501,15 @@ class AsyncCompileJob::CompileFailed : public CompileStep {
 };
 
 //==========================================================================
-// Step 5 (sync): Compile JS->wasm wrappers.
+// Step 5 (sync): Finish the module and resolve the promise.
 //==========================================================================
-class AsyncCompileJob::CompileWrappers : public CompileStep {
-  // TODO(wasm): Compile all wrappers here, including the start function wrapper
-  // and the wrappers for the function table elements.
+class AsyncCompileJob::FinishModule : public CompileStep {
   void RunInForeground() override {
-    TRACE_COMPILE("(5) Compile wrappers...\n");
+    TRACE_COMPILE("(5) Finish module...\n");
     // TODO(6792): No longer needed once WebAssembly code is off heap.
     CodeSpaceMemoryModificationScope modification_scope(job_->isolate_->heap());
     // Compile JS->wasm wrappers for exported functions.
     CompileJsToWasmWrappers(job_->isolate_, job_->module_object_);
-    job_->DoSync<FinishModule>();
-  }
-};
-
-//==========================================================================
-// Step 6 (sync): Finish the module and resolve the promise.
-//==========================================================================
-class AsyncCompileJob::FinishModule : public CompileStep {
-  void RunInForeground() override {
-    TRACE_COMPILE("(6) Finish module...\n");
     job_->AsyncCompileSucceeded(job_->module_object_);
 
     size_t num_functions = job_->native_module_->num_functions() -
