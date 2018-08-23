@@ -11,6 +11,7 @@
 #include "src/handles-inl.h"
 #include "src/interface-descriptors.h"
 #include "src/interpreter/bytecodes.h"
+#include "src/interpreter/interpreter-generator.h"
 #include "src/isolate.h"
 #include "src/objects-inl.h"
 #include "src/objects/shared-function-info.h"
@@ -247,11 +248,34 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
 
 #ifdef V8_EMBEDDED_BYTECODE_HANDLERS
 namespace {
+void PrintBuiltinSize(interpreter::Bytecode bytecode,
+                      interpreter::OperandScale operand_scale,
+                      Handle<Code> code) {
+  PrintF(stdout, "Ignition Handler, %s, %d\n",
+         interpreter::Bytecodes::ToString(bytecode, operand_scale).c_str(),
+         code->InstructionSize());
+}
+
 Code* GenerateBytecodeHandler(Isolate* isolate, int builtin_index,
-                              interpreter::Bytecode code,
-                              interpreter::OperandScale scale) {
-  // TODO(v8:8068): Actually generate the handler.
-  return nullptr;
+                              interpreter::Bytecode bytecode,
+                              interpreter::OperandScale operand_scale) {
+  if (!interpreter::Bytecodes::BytecodeHasHandler(bytecode, operand_scale))
+    return nullptr;
+
+  Handle<Code> code = interpreter::GenerateBytecodeHandler(
+      isolate, bytecode, operand_scale, builtin_index);
+
+  if (FLAG_print_builtin_size) PrintBuiltinSize(bytecode, operand_scale, code);
+
+#ifdef ENABLE_DISASSEMBLER
+  if (FLAG_print_builtin_code) {
+    std::string name =
+        interpreter::Bytecodes::ToString(bytecode, operand_scale);
+    code->PrintBuiltinCode(isolate, name.c_str());
+  }
+#endif  // ENABLE_DISASSEMBLER
+
+  return *code;
 }
 }  // namespace
 #endif

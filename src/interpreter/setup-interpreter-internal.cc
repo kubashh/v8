@@ -80,7 +80,10 @@ void SetupInterpreter::InstallBytecodeHandler(Isolate* isolate,
   if (!Bytecodes::BytecodeHasHandler(bytecode, operand_scale)) return;
 
   size_t index = Interpreter::GetDispatchTableIndex(bytecode, operand_scale);
-  Handle<Code> code = GenerateBytecodeHandler(isolate, bytecode, operand_scale);
+  // TODO(delphick): Here we explicitly set the bytecode handler to not be a
+  // builtin with an index of -1.
+  Handle<Code> code =
+      GenerateBytecodeHandler(isolate, bytecode, operand_scale, -1);
   dispatch_table[index] = code->entry();
 
   if (FLAG_print_builtin_size) PrintBuiltinSize(bytecode, operand_scale, code);
