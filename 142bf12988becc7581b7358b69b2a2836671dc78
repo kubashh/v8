@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2eb6b7dd_74f6fd60",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-08-23T10:12:20Z",
+      "side": 1,
+      "message": "I think you need to use `arch_opcode` instead of `opcode` here. The latter may have other things encoded into it.",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5887aaa4_4cf31d8b",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-08-23T10:12:20Z",
+      "side": 1,
+      "message": "Would a `__ mov(i.OutputRegister(1), Operand(0))` be more explicit?",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5de55f8_9cd6e50b",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2773,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-08-23T10:12:20Z",
+      "side": 1,
+      "message": "I\u0027m afraid `ldrd` and `strd` will not work here. On Armv6 (the oldest version supported by V8) and Armv7 without the \"Large Physical Address Extension\" these instructions are not guaranteed to be atomic. They may perform two seperate 32-bit memory accesses.\n\nA portable way to do it would be to use `ldrexd/strexd`, those are guaranteed to be atomic, even on older platforms.\n\nFor instance:\n\n* load:\n\n    add temp, in0, in1\n    ldrexd out0, out1, [temp]\n    dmp ish\n\n* store:\n\n    add temp0, in0, in1\n    dmp ish\n  loop:\n    ldrexd temp1, temp2, [temp0]\n    strexd temp3, in0, in1, [temp0]\n    cmp temp3, #0\n    b.ne loop\n    dmp ish\n\nIt\u0027s a little sad to have to do a loop like that for the store. Maybe in the future this could be optimized by detecting the host CPU\u0027s features.\n\nFor reference, the section in the manual about atomicity in Armv7 is A3.5.3, from https://static.docs.arm.com/ddi0406/c/DDI0406C_C_arm_architecture_reference_manual.pdf.",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4169282c_fbb3bf33",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-08-23T10:12:20Z",
+      "side": 1,
+      "message": "Maye use `cmp` here instead of `teq` here and the next one?",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
