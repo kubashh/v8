@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "8b0f3724_78cd453f",
+        "filename": "src/builtins/array-reverse.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-23T09:16:50Z",
+      "side": 1,
+      "message": "Done, added a generic type argument for the type of the value thats loaded and stored.",
+      "parentUuid": "4b641a1a_4733c09d",
+      "revId": "ad125922bcd70aff50127ddf2efaeb83a7dbf622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a37b141_55eb80ef",
         "filename": "src/builtins/array-reverse.tq",
         "patchSetId": 2
@@ -50,6 +68,24 @@
       "revId": "ad125922bcd70aff50127ddf2efaeb83a7dbf622",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "312d0557_a2868e82",
+        "filename": "src/builtins/array-reverse.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-23T09:16:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a37b141_55eb80ef",
+      "revId": "ad125922bcd70aff50127ddf2efaeb83a7dbf622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
