@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5062c01_520a3cc1",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T08:40:43Z",
+      "side": 1,
+      "message": "Note to self: Okay, by now I think it\u0027d make sense to add \u0027false\u0027 as the default value for \u0027adapt\u0027.",
+      "revId": "ad125922bcd70aff50127ddf2efaeb83a7dbf622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4b641a1a_4733c09d",
+        "filename": "src/builtins/array-reverse.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T08:40:43Z",
+      "side": 1,
+      "message": "Do we really want to wrap (and immediately unwrap) each float in a heap number? Why not just pass around the raw value?",
+      "revId": "ad125922bcd70aff50127ddf2efaeb83a7dbf622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a37b141_55eb80ef",
+        "filename": "src/builtins/array-reverse.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T08:40:43Z",
+      "side": 1,
+      "message": "The interface for this is weird - it already expects kind to be fast..\n\nI think it\u0027d make more sense to change this to include the fast-elements check, and to add a similar method for IsPackedFastElementsKind. The call-site here would then clearly state what we are interested in.\n\nAnd.. looking at the remaining function, it could just be refactored as:\n\n TryFast...() {\n  if (kind \u003d\u003d ...) {\n   FastPackedArray...(array.elements, array.length_fast);\n  } else if (...) {\n  ...\n  } else {\n   goto Slow;\n  }",
+      "revId": "ad125922bcd70aff50127ddf2efaeb83a7dbf622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
