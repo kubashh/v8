@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "386f2309_bbe718d8",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-08-23T12:57:44Z",
+      "side": 1,
+      "message": "You\u0027re right. It prints it slightly differently to this but the gist is maintained.",
+      "parentUuid": "724022d4_417d481d",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 1
+      },
+      "revId": "dd06a8f12182b76fa03c6c2ec57cf3a9f43d74a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2d739ef_dfa25112",
         "filename": "src/interpreter/setup-interpreter-internal.cc",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "dd06a8f12182b76fa03c6c2ec57cf3a9f43d74a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55982e9b_619db776",
+        "filename": "src/interpreter/setup-interpreter-internal.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-08-23T12:57:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2d739ef_dfa25112",
+      "range": {
+        "startLine": 83,
+        "startChar": 2,
+        "endLine": 84,
+        "endChar": 33
+      },
+      "revId": "dd06a8f12182b76fa03c6c2ec57cf3a9f43d74a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
