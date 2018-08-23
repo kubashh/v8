@@ -1,0 +1,169 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1bec0de_fad55772",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-08-23T16:08:26Z",
+      "side": 1,
+      "message": "Maybe just\n  next().location \u003d current().location;",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12447c7f_a6917da4",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-08-23T16:08:26Z",
+      "side": 1,
+      "message": "Probably it would be cleaner to call something like \n  next().Clear();\nhere and ...",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbd2c314_beb1714f",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-08-23T16:08:26Z",
+      "side": 1,
+      "message": "...\n  next_next().Clear();\nhere.",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f519b86e_7654ea99",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1070,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-08-23T16:08:26Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be a DCHECK(source_url_.is_used()); given that you do value-\u003eStart() in TryToParseSourceURLComment()?",
+      "range": {
+        "startLine": 1070,
+        "startChar": 6,
+        "endLine": 1070,
+        "endChar": 27
+      },
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34ae1a90_34489bbe",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-08-23T16:08:26Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 1078,
+        "startChar": 6,
+        "endLine": 1078,
+        "endChar": 35
+      },
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94d4f7df_e22f0a33",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-08-23T16:08:26Z",
+      "side": 1,
+      "message": "DCHECK(is_used_); ?",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20d7acba_a979677b",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-08-23T16:08:26Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1da6cdff_b613829a",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-08-23T16:08:26Z",
+      "side": 1,
+      "message": "Should AddChar() methods do DCHECK(is_used_) inside?",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17bb6b2c_f6fd0971",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-08-23T16:08:26Z",
+      "side": 1,
+      "message": "I\u0027d suggest to add two sets of methods:\n  TokenDesc\u0026 XX() {...}\n  const TokenDesc\u0026 XX() const {...}\notherwise the interface allows to modify state of the const scanner object through mutable reference.",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
