@@ -222,9 +222,6 @@ class V8_EXPORT_PRIVATE ParseInfo {
     set_strict_mode(is_strict(language_mode));
   }
 
-  void EmitBackgroundParseStatisticsOnBackgroundThread();
-  void UpdateBackgroundParseStatisticsOnMainThread(Isolate* isolate);
-
  private:
   void SetScriptForToplevelCompile(Isolate* isolate, Handle<Script> script);
   void set_script(Handle<Script> script);
