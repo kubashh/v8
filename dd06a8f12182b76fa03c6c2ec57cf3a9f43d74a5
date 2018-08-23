@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "724022d4_417d481d",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-23T10:39:47Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this, https://cs.chromium.org/chromium/src/v8/src/isolate.cc?q\u003dprint_builtin_size\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d3060 should cover it shouldn\u0027t it?",
+      "range": {
+        "startLine": 251,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 1
+      },
+      "revId": "dd06a8f12182b76fa03c6c2ec57cf3a9f43d74a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2d739ef_dfa25112",
+        "filename": "src/interpreter/setup-interpreter-internal.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-23T10:39:47Z",
+      "side": 1,
+      "message": "This isn\u0027t really a TODO. This should be a comment and then it should be followed by:\nTODO(delphick) Use builtin versions instead.",
+      "range": {
+        "startLine": 83,
+        "startChar": 2,
+        "endLine": 84,
+        "endChar": 33
+      },
+      "revId": "dd06a8f12182b76fa03c6c2ec57cf3a9f43d74a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
