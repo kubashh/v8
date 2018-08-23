@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47092dc8_356c80cb",
+        "filename": "src/ia32/code-stubs-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T11:27:20Z",
+      "side": 1,
+      "message": "The comment about \u0027smi constant registers\u0027 looks stale, I think we can remove it from here and x64.",
+      "revId": "2beb1e42f20a538d43837a4d40e0c814c181bc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a65a7871_bab6a37e",
+        "filename": "src/ia32/code-stubs-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T11:27:20Z",
+      "side": 1,
+      "message": "Just VerifyRootRegister()?",
+      "revId": "2beb1e42f20a538d43837a4d40e0c814c181bc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "850a703a_98837712",
+        "filename": "src/ia32/macro-assembler-ia32.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T11:27:20Z",
+      "side": 1,
+      "message": "Suggestion: use int3() here and use it in JSEntryStub as well.\n\nAlso please TODO: Remove once root register is implemented.",
+      "revId": "2beb1e42f20a538d43837a4d40e0c814c181bc45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
