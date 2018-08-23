@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5acf0a48_9f3f03d6",
+        "filename": "src/optimized-compilation-info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-23T11:20:11Z",
+      "side": 1,
+      "message": "nit: Lets move this up a couple of lines to live together with the other flag setters and getters.",
+      "range": {
+        "startLine": 275,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 3
+      },
+      "revId": "9c930d1b49b65fd03b3e4e7980cf49d7fa535066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
