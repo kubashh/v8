@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "ee7d0451_e3f716d8",
+        "filename": "src/builtins/array-reverse.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-23T09:55:05Z",
+      "side": 1,
+      "message": "I am not sure since we do not change the values. Added the assertion:\nassert(value \u003d\u003d Float64SilenceNaN(value));",
+      "parentUuid": "e63cd5f5_f7376cc5",
+      "revId": "ad125922bcd70aff50127ddf2efaeb83a7dbf622",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a37b141_55eb80ef",
         "filename": "src/builtins/array-reverse.tq",
         "patchSetId": 2

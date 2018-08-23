@@ -16,6 +16,24 @@
       "revId": "15879d0869ba4b1203ed97d9fd213183024ff365",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b88cc856_3edb7728",
+        "filename": "src/builtins/array-reverse.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-23T09:55:05Z",
+      "side": 1,
+      "message": "As discussed offline, we can only define generics over types, not constexpr values. The naming convention was used to stay consistent with the sort code.",
+      "parentUuid": "97f46464_eb5282bd",
+      "revId": "15879d0869ba4b1203ed97d9fd213183024ff365",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
