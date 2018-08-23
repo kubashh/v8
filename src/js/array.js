@@ -451,62 +451,6 @@ function SparseReverse(array, len) {
   }
 }
 
-function PackedArrayReverse(array, len) {
-  var j = len - 1;
-  for (var i = 0; i < j; i++, j--) {
-    var current_i = array[i];
-    var current_j = array[j];
-    array[i] = current_j;
-    array[j] = current_i;
-  }
-  return array;
-}
-
-
-function GenericArrayReverse(array, len) {
-  var j = len - 1;
-  for (var i = 0; i < j; i++, j--) {
-    if (i in array) {
-      var current_i = array[i];
-      if (j in array) {
-        var current_j = array[j];
-        array[i] = current_j;
-        array[j] = current_i;
-      } else {
-        array[j] = current_i;
-        delete array[i];
-      }
-    } else {
-      if (j in array) {
-        var current_j = array[j];
-        array[i] = current_j;
-        delete array[j];
-      }
-    }
-  }
-  return array;
-}
-
-
-DEFINE_METHOD(
-  GlobalArray.prototype,
-  reverse() {
-    var array = TO_OBJECT(this);
-    var len = TO_LENGTH(array.length);
-    var isArray = IS_ARRAY(array);
-
-    if (UseSparseVariant(array, len, isArray, len)) {
-      %NormalizeElements(array);
-      SparseReverse(array, len);
-      return array;
-    } else if (isArray && %_HasFastPackedElements(array)) {
-      return PackedArrayReverse(array, len);
-    } else {
-      return GenericArrayReverse(array, len);
-    }
-  }
-);
-
 
 function ArrayShiftFallback() {
   var array = TO_OBJECT(this);
