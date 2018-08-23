@@ -27,7 +27,7 @@ namespace internal {
 
 void JSEntryStub::Generate(MacroAssembler* masm) {
   Label invoke, handler_entry, exit;
-  Label not_outermost_js, not_outermost_js_2;
+  Label not_outermost_js, not_outermost_js_2, root_register_ok;
 
   ProfileEntryHookStub::MaybeCallEntryHook(masm);
 
@@ -45,6 +45,9 @@ void JSEntryStub::Generate(MacroAssembler* masm) {
   __ push(edi);
   __ push(esi);
   __ push(ebx);
+  if (FLAG_ia32_root_register_checks) {
+    __ mov(kRootRegister, 0xcafeca11);
+  }
 
   // Save copies of the top frame descriptor on the stack.
   ExternalReference c_entry_fp =
@@ -89,6 +92,14 @@ void JSEntryStub::Generate(MacroAssembler* masm) {
   __ PopStackHandler();
 
   __ bind(&exit);
+
+  if (FLAG_ia32_root_register_checks) {
+    __ cmp(kRootRegister, 0xcafeca11);
+    __ j(equal, &root_register_ok);
+    __ int3();
+    __ bind(&root_register_ok);
+  }
+
   // Check if the current stack frame is marked as the outermost JS frame.
   __ pop(ebx);
   __ cmp(ebx, Immediate(StackFrame::OUTERMOST_JSENTRY_FRAME));
