@@ -76,9 +76,10 @@
 //         - JSMessageObject
 //         - JSModuleNamespace
 //         - JSCollator            // If V8_INTL_SUPPORT enabled.
-//         - JSListFormat          // If V8_INTL_SUPPORT enabled.
-//         - JSLocale              // If V8_INTL_SUPPORT enabled.
-//         - JSPluralRules         // If V8_INTL_SUPPORT enabled.
+//         - JSListFormat  // If V8_INTL_SUPPORT enabled.
+//         - JSLocale  // If V8_INTL_SUPPORT enabled.
+//         - JSNumberFormat  // If V8_INTL_SUPPORT enabled.
+//         - JSPluralRules  // If V8_INTL_SUPPORT enabled.
 //         - JSRelativeTimeFormat  // If V8_INTL_SUPPORT enabled.
 //         - WasmGlobalObject
 //         - WasmInstanceObject
@@ -585,6 +586,7 @@ enum InstanceType : uint16_t {
   JS_INTL_COLLATOR_TYPE,
   JS_INTL_LIST_FORMAT_TYPE,
   JS_INTL_LOCALE_TYPE,
+  JS_INTL_NUMBER_FORMAT_TYPE,
   JS_INTL_PLURAL_RULES_TYPE,
   JS_INTL_RELATIVE_TIME_FORMAT_TYPE,
 #endif  // V8_INTL_SUPPORT
@@ -703,6 +705,7 @@ class JSGlobalProxy;
 class JSCollator;
 class JSListFormat;
 class JSLocale;
+class JSNumberFormat;
 class JSPluralRules;
 class JSRelativeTimeFormat;
 #endif  // V8_INTL_SUPPORT
@@ -914,6 +917,7 @@ class ZoneForwardList;
   V(JSCollator)                           \
   V(JSListFormat)                         \
   V(JSLocale)                             \
+  V(JSNumberFormat)                       \
   V(JSPluralRules)                        \
   V(JSRelativeTimeFormat)
 #else
@@ -1029,12 +1033,13 @@ class ZoneForwardList;
   V(WeakArrayList, WEAK_ARRAY_LIST_TYPE)
 #ifdef V8_INTL_SUPPORT
 
-#define INSTANCE_TYPE_CHECKERS_SINGLE(V)      \
-  INSTANCE_TYPE_CHECKERS_SINGLE_BASE(V)       \
-  V(JSCollator, JS_INTL_COLLATOR_TYPE)        \
-  V(JSListFormat, JS_INTL_LIST_FORMAT_TYPE)   \
-  V(JSLocale, JS_INTL_LOCALE_TYPE)            \
-  V(JSPluralRules, JS_INTL_PLURAL_RULES_TYPE) \
+#define INSTANCE_TYPE_CHECKERS_SINGLE(V)        \
+  INSTANCE_TYPE_CHECKERS_SINGLE_BASE(V)         \
+  V(JSCollator, JS_INTL_COLLATOR_TYPE)          \
+  V(JSListFormat, JS_INTL_LIST_FORMAT_TYPE)     \
+  V(JSLocale, JS_INTL_LOCALE_TYPE)              \
+  V(JSNumberFormat, JS_INTL_NUMBER_FORMAT_TYPE) \
+  V(JSPluralRules, JS_INTL_PLURAL_RULES_TYPE)   \
   V(JSRelativeTimeFormat, JS_INTL_RELATIVE_TIME_FORMAT_TYPE)
 
 #else
