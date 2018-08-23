@@ -11,6 +11,7 @@
 #include "src/handles-inl.h"
 #include "src/interface-descriptors.h"
 #include "src/interpreter/bytecodes.h"
+#include "src/interpreter/interpreter-generator.h"
 #include "src/isolate.h"
 #include "src/objects-inl.h"
 #include "src/objects/shared-function-info.h"
@@ -248,10 +249,14 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
 #ifdef V8_EMBEDDED_BYTECODE_HANDLERS
 namespace {
 Code* GenerateBytecodeHandler(Isolate* isolate, int builtin_index,
-                              interpreter::Bytecode code,
+                              interpreter::Bytecode bytecode,
                               interpreter::OperandScale scale) {
-  // TODO(v8:8068): Actually generate the handler.
-  return nullptr;
+  if (!interpreter::Bytecodes::BytecodeHasHandler(bytecode, scale))
+    return nullptr;
+
+  Handle<Code> code = interpreter::GenerateBytecodeHandler(
+      isolate, bytecode, scale, builtin_index);
+  return *code;
 }
 }  // namespace
 #endif
