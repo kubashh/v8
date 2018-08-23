@@ -3632,6 +3632,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kIA32StackCheck: {
       ExternalReference const stack_limit =
           ExternalReference::address_of_stack_limit(__ isolate());
+      if (FLAG_ia32_root_register_checks) {
+        __ cmp(kRootRegister, 0xcafeca11);
+        __ Assert(equal, AbortReason::kRootRegisterWasClobbered);
+      }
       __ cmp(esp, tasm()->StaticVariable(stack_limit));
       break;
     }
