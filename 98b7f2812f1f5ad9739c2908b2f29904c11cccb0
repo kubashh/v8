@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9dfb411_1f0145de",
+        "filename": "src/ia32/code-stubs-ia32.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-23T11:46:31Z",
+      "side": 1,
+      "message": "These can go as well :)",
+      "revId": "98b7f2812f1f5ad9739c2908b2f29904c11cccb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
