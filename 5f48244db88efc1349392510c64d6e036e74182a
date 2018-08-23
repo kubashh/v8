@@ -22,6 +22,30 @@
       "revId": "5f48244db88efc1349392510c64d6e036e74182a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d82037ad_5bc75ec9",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3532,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-08-23T10:26:53Z",
+      "side": 1,
+      "message": "Yes, the array length in JavaScript is an Unsigned32.",
+      "parentUuid": "d0b42dac_222b0d38",
+      "range": {
+        "startLine": 3532,
+        "startChar": 8,
+        "endLine": 3532,
+        "endChar": 61
+      },
+      "revId": "5f48244db88efc1349392510c64d6e036e74182a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
