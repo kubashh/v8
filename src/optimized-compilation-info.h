@@ -56,6 +56,7 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     kTraceTurboJson = 1 << 14,
     kTraceTurboGraph = 1 << 15,
     kTraceTurboScheduled = 1 << 16,
+    kWasmRuntimeExceptionSupport = 1 << 17
   };
 
   // Construct a compilation info for optimized compilation.
@@ -269,6 +270,14 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
 
   void set_trace_turbo_filename(std::unique_ptr<char[]> filename) {
     trace_turbo_filename_ = std::move(filename);
+  }
+
+  void SetWasmRuntimeExceptionSupport() {
+    SetFlag(kWasmRuntimeExceptionSupport);
+  }
+
+  bool wasm_runtime_exception_support() {
+    return GetFlag(kWasmRuntimeExceptionSupport);
   }
 
  private:
