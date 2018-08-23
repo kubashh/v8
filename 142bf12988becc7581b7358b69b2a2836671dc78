@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "67df0726_f2a27bff",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-23T22:58:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2eb6b7dd_74f6fd60",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5887aaa4_4cf31d8b",
         "filename": "src/compiler/arm/code-generator-arm.cc",
         "patchSetId": 9
@@ -33,6 +51,24 @@
       "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84e9d2a0_8a1db055",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-23T22:58:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5887aaa4_4cf31d8b",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "0338c806_eb74206d",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2773,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-23T22:58:47Z",
+      "side": 1,
+      "message": "Not sure why the ldrexd is needed here, could you clarify? \n\nThe manual says \"Memory accesses caused by a LDREXD/STREXD to a doubleword-aligned location for which the STREXD succeeds cause single-copy atomic updates of the doubleword being accessed.\"\nSo as long as the strexd succeeds in the loop, then it should be an atomic update?",
+      "parentUuid": "f5de55f8_9cd6e50b",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4169282c_fbb3bf33",
         "filename": "src/compiler/arm/code-generator-arm.cc",
         "patchSetId": 9
@@ -64,6 +118,24 @@
       "writtenOn": "2018-08-23T10:12:20Z",
       "side": 1,
       "message": "Maye use `cmp` here instead of `teq` here and the next one?",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6556961_baeae3ce",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-23T22:58:47Z",
+      "side": 1,
+      "message": "Is there a reason \u0027cmp\u0027 here is better than \u0027teq\u0027?",
+      "parentUuid": "4169282c_fbb3bf33",
       "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
