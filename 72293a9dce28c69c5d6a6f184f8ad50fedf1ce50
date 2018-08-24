@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2ae7ea5b_b7dee893",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-24T08:11:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1bec0de_fad55772",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12447c7f_a6917da4",
         "filename": "src/parsing/scanner.cc",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-23T16:08:26Z",
       "side": 1,
       "message": "Probably it would be cleaner to call something like \n  next().Clear();\nhere and ...",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46b712f0_ece04652",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-24T08:11:20Z",
+      "side": 1,
+      "message": "Since there are different ways to clear, and we never clear all the way, I had decided to write the code this way. I still think it\u0027s clearer. I have considered it though...",
+      "parentUuid": "12447c7f_a6917da4",
       "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d787b74_f8ae8dca",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-24T08:11:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dbd2c314_beb1714f",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +170,24 @@
     },
     {
       "key": {
+        "uuid": "e963dc81_37f7d466",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-24T08:11:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94d4f7df_e22f0a33",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20d7acba_a979677b",
         "filename": "src/parsing/scanner.h",
         "patchSetId": 6
@@ -130,6 +202,24 @@
       "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8afe98bf_1e8c3280",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-24T08:11:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20d7acba_a979677b",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -150,6 +240,24 @@
     },
     {
       "key": {
+        "uuid": "a25b67b0_4ed1ce44",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-24T08:11:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1da6cdff_b613829a",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17bb6b2c_f6fd0971",
         "filename": "src/parsing/scanner.h",
         "patchSetId": 6
@@ -161,6 +269,24 @@
       "writtenOn": "2018-08-23T16:08:26Z",
       "side": 1,
       "message": "I\u0027d suggest to add two sets of methods:\n  TokenDesc\u0026 XX() {...}\n  const TokenDesc\u0026 XX() const {...}\notherwise the interface allows to modify state of the const scanner object through mutable reference.",
+      "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11b6b586_3f869c7c",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-24T08:11:20Z",
+      "side": 1,
+      "message": "Nice idea! And I only really need next() to be non-const, even better.",
+      "parentUuid": "17bb6b2c_f6fd0971",
       "revId": "72293a9dce28c69c5d6a6f184f8ad50fedf1ce50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
