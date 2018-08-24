@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "63bc35a1_c06fd55d",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-24T09:29:35Z",
+      "side": 1,
+      "message": "Is it even possible that literals have readonly properties?",
+      "revId": "2b2271fc696281c7614838cf611e0aa4d7da7600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cb4da9e_4f3d77bc",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-24T09:29:35Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "2b2271fc696281c7614838cf611e0aa4d7da7600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b14e1325_36801fa7",
         "filename": "src/runtime/runtime.h",
         "patchSetId": 4
