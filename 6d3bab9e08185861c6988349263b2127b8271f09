@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ae142c1_a4cbc847",
+        "filename": "src/interpreter/setup-interpreter-internal.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-24T15:41:55Z",
+      "side": 1,
+      "message": "using kNoBuiltinId",
+      "range": {
+        "startLine": 83,
+        "startChar": 69,
+        "endLine": 84,
+        "endChar": 17
+      },
+      "revId": "6d3bab9e08185861c6988349263b2127b8271f09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
