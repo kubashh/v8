@@ -22,6 +22,30 @@
       "revId": "309d0b9dcd399314fd0fcc918ee758d1bcabd8e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b9ed651_3e0efd3c",
+        "filename": "src/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-24T11:10:22Z",
+      "side": 1,
+      "message": "Just hackery to get this off the ground. Likewise we also use it in the then-branch above, I assume that\u0027s also invalid and we\u0027ll have to find a real solution. \n\nFor off-heap targets, we can do a pc-relative call. If we only have an (indirectly loaded) code target, I\u0027m not yet sure what to do.",
+      "parentUuid": "467f4c41_a62ebc89",
+      "range": {
+        "startLine": 1739,
+        "startChar": 8,
+        "endLine": 1739,
+        "endChar": 12
+      },
+      "revId": "309d0b9dcd399314fd0fcc918ee758d1bcabd8e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
