@@ -16,6 +16,24 @@
       "revId": "837fec91a456da3fe6faee53ee8e2894743633b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a877bad6_15a3abbf",
+        "filename": "test/js-perf-test/ArraySort/sort-lengths.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-24T07:00:56Z",
+      "side": 0,
+      "message": "For posterity:\n\nTest failures: https://ci.chromium.org/buildbot/internal.client.v8/v8_linux32_perf_1/26773\nThe likely culprit is https://crrev.com/365e2417805ae9e96e5b09329868dc2a04371d86",
+      "parentUuid": "36fe6465_d90824db",
+      "revId": "837fec91a456da3fe6faee53ee8e2894743633b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
