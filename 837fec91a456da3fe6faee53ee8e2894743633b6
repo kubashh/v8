@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36fe6465_d90824db",
+        "filename": "test/js-perf-test/ArraySort/sort-lengths.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-24T06:55:03Z",
+      "side": 0,
+      "message": "Do we understand why TearDown doesn\u0027t work?",
+      "revId": "837fec91a456da3fe6faee53ee8e2894743633b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
