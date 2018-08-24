@@ -22,6 +22,30 @@
       "revId": "ed7fb243ef3e8d5ab063653f36c6c429c5a85011",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e16ec18_597fdfc2",
+        "filename": "test/mjsunit/string-pad.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-24T13:57:28Z",
+      "side": 1,
+      "message": "That\u0027s copy-paste error, it shouldn\u0027t be there. Thanks!",
+      "parentUuid": "40c21c02_b8580830",
+      "range": {
+        "startLine": 87,
+        "startChar": 45,
+        "endLine": 87,
+        "endChar": 52
+      },
+      "revId": "ed7fb243ef3e8d5ab063653f36c6c429c5a85011",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
