@@ -22,6 +22,30 @@
       "revId": "c4183173a200babff9427878a4ef5dc58d0dd98b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a7e6f4f_871e451f",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-24T11:23:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e55fe7e_cd05fbf4",
+      "range": {
+        "startLine": 248,
+        "startChar": 6,
+        "endLine": 248,
+        "endChar": 28
+      },
+      "revId": "c4183173a200babff9427878a4ef5dc58d0dd98b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
