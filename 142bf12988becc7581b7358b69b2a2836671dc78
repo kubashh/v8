@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "cfb43933_4518bf62",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2773,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-08-24T09:24:14Z",
+      "side": 1,
+      "message": "\u003e So as long as the strexd succeeds in the loop, then it should be an atomic update?\n\nYes, that\u0027s right. However, if we do not have a `ldrexd` before it then the `strexd` will never succeed. Essentially, the load instruction\u0027s only job is to mark the local monitor as exclusive so that the following store will work.",
+      "parentUuid": "0338c806_eb74206d",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4169282c_fbb3bf33",
         "filename": "src/compiler/arm/code-generator-arm.cc",
         "patchSetId": 9
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "Is there a reason \u0027cmp\u0027 here is better than \u0027teq\u0027?",
       "parentUuid": "4169282c_fbb3bf33",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6c5a939_5386bcc4",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-08-24T09:24:14Z",
+      "side": 1,
+      "message": "I should have clarified why, sorry! It\u0027s actually more of a matter of style/taste so feel free to ignore this. I generally find `cmp` better since it\u0027s clearer it\u0027s a comparison. I was going to suggest using `cmp` to check the result of `strex{,d}` everywhere too but `teq` is already used for that before this patch. I\u0027d say consistency is more important.",
+      "parentUuid": "b6556961_baeae3ce",
       "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
