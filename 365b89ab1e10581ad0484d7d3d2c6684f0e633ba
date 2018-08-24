@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9bb8d85f_4b00ff0b",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-08-24T15:01:01Z",
+      "side": 1,
+      "message": "Bear in mind that BUILTIN_LIST always needs to be supplied with a BCH macro which is responsible for doing the expansion.\n\nI should probably update https://cs.chromium.org/chromium/src/v8/src/builtins/builtins-definitions.h?q\u003dbuiltins-defini\u0026sq\u003dpackage:chromium\u0026l\u003d28 to say this.\n\nIf we wanted to go down the header file generation route, we could eliminate a lot of list macros across the code base, but I was told this approach was not popular...",
+      "parentUuid": "9c3db0bb_e1849c9e",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "189d98ba_1f88d4e2",
         "filename": "src/builtins/setup-builtins-internal.cc",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-24T14:12:11Z",
       "side": 1,
       "message": "Could we initialize with kIllegal instead to avoid snapshotting placeholder objects?",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aa3db01_c8f18a33",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-08-24T15:01:01Z",
+      "side": 1,
+      "message": "Two problems:\nFirst AddBuiltin will DCHECK that code-\u003ebuiltin_index \u003d\u003d index\nSecondly the BuiltinSerializer expects that every object in the builtins table is unique, I think. So when it sees one again it complains that LookupReference() returns something. I had a play with trying to work around this, by calling SerializeBuiltinReference, but ultimately couldn\u0027t get it to work.\n\nHow about I add a TODO here to revisit this?",
+      "parentUuid": "189d98ba_1f88d4e2",
       "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8c74c4e_f9dc7404",
+        "filename": "src/interpreter/setup-interpreter-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-08-24T15:01:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b1bc9de_f79db417",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
