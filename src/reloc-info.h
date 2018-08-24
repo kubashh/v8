@@ -174,7 +174,16 @@ class RelocInfo {
   }
 
   static constexpr bool IsOnlyForSerializer(Mode mode) {
+#ifdef V8_TARGET_ARCH_IA32
+    // On ia32, inlined off-heap trampolines must be relocated.
+    DCHECK_NE((kApplyMask & ModeMask(OFF_HEAP_TARGET)), 0);
+    DCHECK_EQ((kApplyMask & ModeMask(EXTERNAL_REFERENCE)), 0);
+    return mode == EXTERNAL_REFERENCE;
+#else
+    DCHECK_EQ((kApplyMask & ModeMask(OFF_HEAP_TARGET)), 0);
+    DCHECK_EQ((kApplyMask & ModeMask(EXTERNAL_REFERENCE)), 0);
     return mode == EXTERNAL_REFERENCE || mode == OFF_HEAP_TARGET;
+#endif
   }
 
   static constexpr int ModeMask(Mode mode) { return 1 << mode; }

@@ -3231,9 +3231,10 @@ void Assembler::GrowBuffer() {
     *p += pc_delta;
   }
 
-  // Relocate js-to-wasm calls (which are encoded pc-relative).
-  for (RelocIterator it(desc, RelocInfo::ModeMask(RelocInfo::JS_TO_WASM_CALL));
-       !it.done(); it.next()) {
+  // Relocate pc-relative references.
+  int mode_mask = RelocInfo::ModeMask(RelocInfo::JS_TO_WASM_CALL) |
+                  RelocInfo::ModeMask(RelocInfo::OFF_HEAP_TARGET);
+  for (RelocIterator it(desc, mode_mask); !it.done(); it.next()) {
     it.rinfo()->apply(pc_delta);
   }
 
