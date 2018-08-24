@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "75729f05_2fe46b82",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-24T15:33:34Z",
+      "side": 1,
+      "message": "Would a second, dedicated handler list be an option? The list could be expanded for all widths, and could omit bytecodes/scale combinations without a handler.",
+      "parentUuid": "9bb8d85f_4b00ff0b",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "189d98ba_1f88d4e2",
         "filename": "src/builtins/setup-builtins-internal.cc",
         "patchSetId": 8
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Two problems:\nFirst AddBuiltin will DCHECK that code-\u003ebuiltin_index \u003d\u003d index\nSecondly the BuiltinSerializer expects that every object in the builtins table is unique, I think. So when it sees one again it complains that LookupReference() returns something. I had a play with trying to work around this, by calling SerializeBuiltinReference, but ultimately couldn\u0027t get it to work.\n\nHow about I add a TODO here to revisit this?",
       "parentUuid": "189d98ba_1f88d4e2",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e42c6f21_b80cc323",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-24T15:33:34Z",
+      "side": 1,
+      "message": "I see, a TODO sounds good. For the builtins list / table, it\u0027d be nice to have each entry be a real builtin and not have slots taken up by unused dummy objects.",
+      "parentUuid": "4aa3db01_c8f18a33",
       "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
