@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "465ef77c_0bf59e68",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2018-08-24T09:40:10Z",
+      "side": 0,
+      "message": "Since `ldrd` and `strd` with a register offset aren\u0027t used in V8 at the moment, it might be best to keep this DCHECK and the next one. There are no tests for this form at the moment so I\u0027m a bit worried about subtle bugs creeping in.\n\nFor example, `ldrd` has additional contraints compared to `ldr`. The offset register cannot be the same as either of the destination registers, while `ldr` accepts that. It looks like the assembler does not check for this case right now. Sadly, the result is \"unpredictable\" so it could work on one core and we could miss the bug. Until it fails on a different core.",
+      "revId": "eb1eaf636188488514315e75e55cc4e604553bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
