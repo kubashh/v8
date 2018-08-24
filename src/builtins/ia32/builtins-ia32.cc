@@ -1115,6 +1115,7 @@ void Builtins::Generate_InterpreterPushArgsThenConstructImpl(
     // Tail call to the array construct stub (still in the caller
     // context at this point).
     __ AssertFunction(edi);
+    __ Move(kJavaScriptCallExtraArg1Register, ebx);  // TODO(jgruber): Fix up.
     Handle<Code> code = BUILTIN_CODE(masm->isolate(), ArrayConstructorImpl);
     __ Jump(code, RelocInfo::CODE_TARGET);
   } else if (mode == InterpreterPushArgsMode::kWithFinalSpread) {
@@ -2840,6 +2841,7 @@ void GenerateInternalArrayConstructorCase(MacroAssembler* masm,
       RelocInfo::CODE_TARGET);
 
   __ bind(&not_one_case);
+  __ Move(kJavaScriptCallExtraArg1Register, ebx);  // TODO(jgruber): Fix up.
   Handle<Code> code = BUILTIN_CODE(masm->isolate(), ArrayNArgumentsConstructor);
   __ Jump(code, RelocInfo::CODE_TARGET);
 }
