@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "258e5527_f7d943ce",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-08-24T16:06:28Z",
+      "side": 1,
+      "message": "What would this second handler list be used for? I think it would just create confusion. You couldn\u0027t easily go back and forth between the two lists for instance (without an expensive mapping).",
+      "parentUuid": "75729f05_2fe46b82",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "189d98ba_1f88d4e2",
         "filename": "src/builtins/setup-builtins-internal.cc",
         "patchSetId": 8
@@ -105,6 +123,24 @@
       "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "756ff422_76cfbcc6",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-08-24T16:06:28Z",
+      "side": 1,
+      "message": "TODO added.\n\nI don\u0027t really see the utility of a builtins list without dummy objects. Sure you save a little memory (but not much), but at the cost of having to map back and forth.\n\nPossibly it would be better to just retain the dispatch table as the source of truth, but that has its own issues...",
+      "parentUuid": "e42c6f21_b80cc323",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
