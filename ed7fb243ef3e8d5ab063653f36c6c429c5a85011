@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40c21c02_b8580830",
+        "filename": "test/mjsunit/string-pad.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-08-24T13:52:46Z",
+      "side": 1,
+      "message": "Do you need this as the 3rd argument to assertEquals? I\u0027m confused about what it\u0027s doing.",
+      "range": {
+        "startLine": 87,
+        "startChar": 45,
+        "endLine": 87,
+        "endChar": 52
+      },
+      "revId": "ed7fb243ef3e8d5ab063653f36c6c429c5a85011",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
