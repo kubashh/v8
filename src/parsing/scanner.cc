@@ -375,10 +375,6 @@ static const byte one_char_tokens[] = {
 // clang-format on
 
 Token::Value Scanner::Next() {
-  if (next_.token == Token::EOS) {
-    next_.location.beg_pos = current_.location.beg_pos;
-    next_.location.end_pos = current_.location.end_pos;
-  }
   current_ = next_;
   if (V8_UNLIKELY(next_next_.token != Token::UNINITIALIZED)) {
     next_ = next_next_;
