@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "8a8c7db7_2f7191e5",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2773,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-25T01:44:07Z",
+      "side": 1,
+      "message": "Sounds good, thanks for explaining! I\u0027ve added the store-loop sequence with the minor modification of re-using a temp instruction from the previous load.",
+      "parentUuid": "cfb43933_4518bf62",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4169282c_fbb3bf33",
         "filename": "src/compiler/arm/code-generator-arm.cc",
         "patchSetId": 9
@@ -172,6 +190,24 @@
       "side": 1,
       "message": "I should have clarified why, sorry! It\u0027s actually more of a matter of style/taste so feel free to ignore this. I generally find `cmp` better since it\u0027s clearer it\u0027s a comparison. I was going to suggest using `cmp` to check the result of `strex{,d}` everywhere too but `teq` is already used for that before this patch. I\u0027d say consistency is more important.",
       "parentUuid": "b6556961_baeae3ce",
+      "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "518b5770_2a78c05f",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2820,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-25T01:44:07Z",
+      "side": 1,
+      "message": "No problem! I agree, keeping the teq sequences here as it\u0027s used in the rest of the file.",
+      "parentUuid": "c6c5a939_5386bcc4",
       "revId": "142bf12988becc7581b7358b69b2a2836671dc78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
