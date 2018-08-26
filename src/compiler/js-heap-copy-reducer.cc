@@ -74,7 +74,7 @@ Reduction JSHeapCopyReducer::Reduce(Node* node) {
       ObjectRef feedback = feedback_vector.get(p.feedback().slot());
       if (feedback.IsJSRegExp()) {
         JSRegExpRef boilerplate = feedback.AsJSRegExp();
-        boilerplate.SerializeElements();
+        boilerplate.SerializeAsRegExpBoilerplate();
       }
       break;
     }
