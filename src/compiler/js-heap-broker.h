@@ -170,6 +170,8 @@ class JSObjectRef : public HeapObjectRef {
   FixedArrayBaseRef elements() const;
   void EnsureElementsTenured();
   ElementsKind GetElementsKind() const;
+
+  void SerializeElements();
 };
 
 class JSFunctionRef : public JSObjectRef {
@@ -332,6 +334,7 @@ class MapRef : public HeapObjectRef {
   NameRef GetPropertyKey(int i) const;
   FieldIndex GetFieldIndexFor(int i) const;
   ObjectRef GetFieldType(int descriptor) const;
+  bool IsUnboxedDoubleField(FieldIndex index) const;
 };
 
 class FixedArrayBaseRef : public HeapObjectRef {
@@ -346,7 +349,6 @@ class FixedArrayRef : public FixedArrayBaseRef {
   using FixedArrayBaseRef::FixedArrayBaseRef;
 
   ObjectRef get(int i) const;
-  bool is_the_hole(int i) const;
 };
 
 class FixedDoubleArrayRef : public FixedArrayBaseRef {

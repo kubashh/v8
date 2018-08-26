@@ -1744,10 +1744,10 @@ Node* JSCreateLowering::AllocateFastLiteralElements(Node* effect, Node* control,
   } else {
     FixedArrayRef elements = boilerplate_elements.AsFixedArray();
     for (int i = 0; i < elements_length; ++i) {
-      if (elements.is_the_hole(i)) {
+      ObjectRef element_value = elements.get(i);
+      if (element_value.oddball_type() == OddballType::kHole) {
         elements_values[i] = jsgraph()->TheHoleConstant();
       } else {
-        ObjectRef element_value = elements.get(i);
         if (element_value.IsJSObject()) {
           elements_values[i] = effect = AllocateFastLiteral(
               effect, control, element_value.AsJSObject(), pretenure);
