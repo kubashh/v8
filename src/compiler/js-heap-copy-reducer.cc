@@ -68,6 +68,16 @@ Reduction JSHeapCopyReducer::Reduce(Node* node) {
       ObjectRef(broker(), p.feedback().vector());
       break;
     }
+    case IrOpcode::kJSCreateLiteralRegExp: {
+      CreateLiteralParameters const& p = CreateLiteralParametersOf(node->op());
+      FeedbackVectorRef feedback_vector(broker(), p.feedback().vector());
+      ObjectRef feedback = feedback_vector.get(p.feedback().slot());
+      if (feedback.IsJSRegExp()) {
+        JSRegExpRef boilerplate = feedback.AsJSRegExp();
+        boilerplate.SerializeElements();
+      }
+      break;
+    }
     case IrOpcode::kJSLoadNamed:
     case IrOpcode::kJSStoreNamed: {
       NamedAccess const& p = NamedAccessOf(node->op());
