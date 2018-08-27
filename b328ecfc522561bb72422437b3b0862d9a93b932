@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e2c93e4_82e239d5",
+        "filename": "src/feedback-vector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-27T12:16:49Z",
+      "side": 1,
+      "message": "\"creates a feedback slot on-demand\" ?",
+      "range": {
+        "startLine": 434,
+        "startChar": 21,
+        "endLine": 434,
+        "endChar": 49
+      },
+      "revId": "b328ecfc522561bb72422437b3b0862d9a93b932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09e77eb6_e1d0c2c2",
+        "filename": "test/cctest/interpreter/bytecode_expectations/ArrayLiterals.golden",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-27T12:16:49Z",
+      "side": 1,
+      "message": "Why is this changing? Is it because after your change, the feedback vector is created later than before?",
+      "range": {
+        "startLine": 90,
+        "startChar": 15,
+        "endLine": 90,
+        "endChar": 60
+      },
+      "revId": "b328ecfc522561bb72422437b3b0862d9a93b932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
