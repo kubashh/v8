@@ -19,6 +19,10 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+#source-status {
+  display: inline-block;
+}
+
 .tree-row-arrow {
   margin-right: 0.2em;
   text-align: right;
@@ -35,11 +39,47 @@ body {
 
 .tree-row-name {
   margin-left: 0.2em;
+  margin-right: 0.2em;
 }
 
 .codeid-link {
   text-decoration: underline;
   cursor: pointer;
+}
+
+.view-source-link {
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 10pt;
+  margin-left: 0.6em;
+  color: #555555;
+}
+
+#source-viewer {
+  border: 1px solid black;
+  padding: 0.2em;
+  font-family: 'Roboto Mono', monospace;
+  white-space: pre;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#source-viewer tr.light-stripe {
+  background-color: #f8fdff;
+}
+
+#source-viewer tr.dark-stripe {
+  background-color: #e8eaf6;
+}
+
+#source-viewer tr.highlighted-source-line {
+  background-color: #a5d6a7;
+}
+
+#source-viewer .source-line-number {
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  color: #003c8f;
 }
 
 div.mode-button {
