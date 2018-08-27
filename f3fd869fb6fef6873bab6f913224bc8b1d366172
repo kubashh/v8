@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "4e950f8e_f41abb91",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1748,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-27T11:12:00Z",
+      "side": 1,
+      "message": "What happened to the is_the_hole path here?",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37ec46ae_1091d8b5",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-27T11:12:00Z",
+      "side": 1,
+      "message": "(What do we know about element_value in the else-branch?)",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d856d5d1_5d70d68e",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 4
@@ -13,6 +47,57 @@
       "writtenOn": "2018-08-27T08:27:10Z",
       "side": 1,
       "message": "That logic is highly unlikely to change, but still you can call !IsObjectOrSmi() here.",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65d5896c_819a55b0",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-27T11:12:00Z",
+      "side": 1,
+      "message": "Can we make the interface consist of IsDouble, IsObject, AsDouble, AsObject?\n\nObject includes Smi so I don\u0027t we need to call it ObjectOrSmi.",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b422a5da_76e9931c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-27T11:12:00Z",
+      "side": 1,
+      "message": "We should probably call contents.reserve(length) here.",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31762c9d_37b30236",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-27T11:12:00Z",
+      "side": 1,
+      "message": "Why don\u0027t we use the hole-NaN? The pair type is a little ugly.",
       "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
