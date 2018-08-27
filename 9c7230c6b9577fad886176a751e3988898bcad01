@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8048278e_dd189293",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-27T19:29:24Z",
+      "side": 1,
+      "message": "💯 Can you please add a test for this?\n\n Object.defineProperty(Intl.NumberFormat, Symbol.hasInstance, { value: _ \u003d\u003e true });\n  assertThrows(() \u003d\u003e Intl.NumberFormat.call(1), TypeError);",
+      "revId": "9c7230c6b9577fad886176a751e3988898bcad01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
