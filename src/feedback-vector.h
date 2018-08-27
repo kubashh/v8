@@ -370,11 +370,14 @@ class V8_EXPORT_PRIVATE FeedbackVectorSpec {
                        : FeedbackSlotKind::kStoreGlobalSloppy);
   }
 
-  FeedbackSlot AddKeyedStoreICSlot(LanguageMode language_mode) {
+  FeedbackSlotKind GetKeyedStoreICSlotKind(LanguageMode language_mode) {
     STATIC_ASSERT(LanguageModeSize == 2);
-    return AddSlot(is_strict(language_mode)
-                       ? FeedbackSlotKind::kStoreKeyedStrict
-                       : FeedbackSlotKind::kStoreKeyedSloppy);
+    return is_strict(language_mode) ? FeedbackSlotKind::kStoreKeyedStrict
+                                    : FeedbackSlotKind::kStoreKeyedSloppy;
+  }
+
+  FeedbackSlot AddKeyedStoreICSlot(LanguageMode language_mode) {
+    return AddSlot(GetKeyedStoreICSlotKind(language_mode));
   }
 
   FeedbackSlot AddStoreInArrayLiteralICSlot() {
@@ -385,9 +388,11 @@ class V8_EXPORT_PRIVATE FeedbackVectorSpec {
     return AddSlot(FeedbackSlotKind::kBinaryOp);
   }
 
-  FeedbackSlot AddCompareICSlot() {
-    return AddSlot(FeedbackSlotKind::kCompareOp);
+  FeedbackSlotKind GetCompareICSlotKind() {
+    return FeedbackSlotKind::kCompareOp;
   }
+
+  FeedbackSlot AddCompareICSlot() { return AddSlot(GetCompareICSlotKind()); }
 
   FeedbackSlot AddForInSlot() { return AddSlot(FeedbackSlotKind::kForIn); }
 
@@ -422,6 +427,26 @@ class V8_EXPORT_PRIVATE FeedbackVectorSpec {
   }
 
   ZoneVector<unsigned char> slot_kinds_;
+
+  friend class SharedFeedbackSlot;
+};
+
+// Helper class that allows sharing feedback slot between bytecodes.
+class SharedFeedbackSlot {
+ public:
+  // FeedbackSlot default constructor constructs an invalid slot.
+  SharedFeedbackSlot(FeedbackVectorSpec* spec, FeedbackSlotKind kind)
+      : kind_(kind), spec_(spec) {}
+
+  FeedbackSlot Get() {
+    if (slot_.IsInvalid()) slot_ = spec_->AddSlot(kind_);
+    return slot_;
+  }
+
+ private:
+  FeedbackSlotKind kind_;
+  FeedbackSlot slot_;
+  FeedbackVectorSpec* spec_;
 };
 
 // FeedbackMetadata is an array-like object with a slot count (indicating how
