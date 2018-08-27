@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f6e470b8_cc96866c",
+        "filename": "src/feedback-vector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-08-27T12:51:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "661fffd7_037d3649",
+      "revId": "b328ecfc522561bb72422437b3b0862d9a93b932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e2c93e4_82e239d5",
         "filename": "src/feedback-vector.h",
         "patchSetId": 3
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "a80a1df0_72b087e8",
+        "filename": "src/feedback-vector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-08-27T12:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e2c93e4_82e239d5",
+      "range": {
+        "startLine": 434,
+        "startChar": 21,
+        "endLine": 434,
+        "endChar": 49
+      },
+      "revId": "b328ecfc522561bb72422437b3b0862d9a93b932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09e77eb6_e1d0c2c2",
         "filename": "test/cctest/interpreter/bytecode_expectations/ArrayLiterals.golden",
         "patchSetId": 3
@@ -62,6 +104,30 @@
       "revId": "b328ecfc522561bb72422437b3b0862d9a93b932",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ceb4db6e_b7c8cae0",
+        "filename": "test/cctest/interpreter/bytecode_expectations/ArrayLiterals.golden",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-08-27T12:51:13Z",
+      "side": 1,
+      "message": "Yes, the slot is now created later, when CreateArrayLiteral is emitted.",
+      "parentUuid": "09e77eb6_e1d0c2c2",
+      "range": {
+        "startLine": 90,
+        "startChar": 15,
+        "endLine": 90,
+        "endChar": 60
+      },
+      "revId": "b328ecfc522561bb72422437b3b0862d9a93b932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
