@@ -16,6 +16,7 @@ function createViews() {
     new HelpView(),
     new SummaryView(),
     new ModeBarView(),
+    new ScriptSourceView(),
   ];
 }
 
@@ -24,6 +25,7 @@ function emptyState() {
     file : null,
     mode : null,
     currentCodeId : null,
+    currentSourceContext: null,
     start : 0,
     end : Infinity,
     timelineSize : {
@@ -34,7 +36,8 @@ function emptyState() {
       attribution : "js-exclude-bc",
       categories : "code-type",
       sort : "time"
-    }
+    },
+    sources: null
   };
 }
 
@@ -119,11 +122,27 @@ let main = {
     }
   },
 
+  updateSources(file) {
+    let statusDiv = $("source-status");
+    if (!file) {
+      statusDiv.textContent = "";
+      return;
+    }
+    if (!file.scripts || file.scripts.length === 0) {
+      statusDiv.textContent =
+          "Script source not available. Run profiler with --log-source-code.";
+      return;
+    }
+    statusDiv.textContent = "Script source is available.";
+    main.currentState.sources = new ScriptSources(file.scripts);
+  },
+
   setFile(file) {
     if (file !== main.currentState.file) {
       let lastMode = main.currentState.mode || "summary";
       main.currentState = emptyState();
       main.currentState.file = file;
+      main.updateSources(file);
       main.setMode(lastMode);
       main.delayRender();
     }
@@ -135,6 +154,13 @@ let main = {
       main.currentState.currentCodeId = codeId;
       main.delayRender();
     }
+  },
+
+  viewSource(name) {
+    main.currentState = Object.assign({}, main.currentState);
+    main.currentState.currentSourceContext =
+        main.currentState.sources.getSourceContext(name, 10);
+    main.delayRender();
   },
 
   onResize() {
@@ -328,6 +354,20 @@ function createFunctionNode(name, codeId) {
   return nameElement;
 }
 
+function createViewSourceNode(name, codeId) {
+  let linkElement = document.createElement("span");
+  linkElement.appendChild(document.createTextNode("View source"));
+  linkElement.classList.add("view-source-link");
+  linkElement.onclick = (event) => {
+    main.setCurrentCode(codeId);
+    main.viewSource(name);
+    // Prevent the click from bubbling to the row and causing it to
+    // collapse/expand.
+    event.stopPropagation();
+  };
+  return linkElement;
+}
+
 const COLLAPSED_ARROW = "\u25B6";
 const EXPANDED_ARROW = "\u25BC";
 
@@ -448,6 +488,10 @@ class CallTreeView {
       nameCell.appendChild(arrow);
       nameCell.appendChild(createTypeNode(node.type));
       nameCell.appendChild(createFunctionNode(node.name, node.codeId));
+      if (main.currentState.sources &&
+          main.currentState.sources.hasSource(node.name)) {
+        nameCell.appendChild(createViewSourceNode(node.name, node.codeId));
+      }
 
       // Inclusive ticks cell.
       c = row.insertCell();
@@ -793,8 +837,8 @@ class TimelineView {
       return;
     }
 
-    let width = Math.round(window.innerWidth - 20);
-    let height = Math.round(window.innerHeight / 5);
+    let width = Math.round(document.documentElement.clientWidth - 20);
+    let height = Math.round(document.documentElement.clientHeight / 5);
 
     if (oldState) {
       if (width === oldState.timelineSize.width &&
@@ -1234,6 +1278,97 @@ class SummaryView {
 
     table.appendChild(rows);
     this.element.appendChild(table);
+  }
+}
+
+class ScriptSourceView {
+  constructor() {
+    this.element = $("source-viewer");
+  }
+
+  render(newState) {
+    let oldState = this.currentState;
+    if (!newState.file || !newState.currentSourceContext) {
+      this.element.style.display = "none";
+      this.currentState = null;
+      return;
+    }
+    if (oldState) {
+      if (newState.file === oldState.file &&
+        newState.currentCodeId === oldState.currentCodeId) {
+        // No change, nothing to do.
+        return;
+      }
+    }
+    this.currentState = newState;
+
+    this.element.style.display = "inline-block";
+    while (this.element.firstChild) {
+      this.element.removeChild(this.element.firstChild);
+    }
+
+    let sourceContext = this.currentState.currentSourceContext;
+    for (let i = 0; i < sourceContext.source.length; i++) {
+      let row = this.element.insertRow(-1);
+      if (i === sourceContext.highlighted) {
+        row.classList.add("highlighted-source-line");
+      } else {
+        row.classList.add(i % 2 === 0 ? "dark-stripe" : "light-stripe");
+      }
+
+      let lineNumberCell = row.insertCell(-1);
+      lineNumberCell.classList.add("source-line-number");
+      lineNumberCell.textContent = i + sourceContext.firstLineNumber;
+
+      let sourceLineCell = row.insertCell(-1);
+      sourceLineCell.textContent = sourceContext.source[i];
+    }
+  }
+}
+
+class ScriptSources {
+  constructor(scriptsFromFile) {
+    this.scripts = new Map();
+    for (let scriptBlock of scriptsFromFile) {
+      if (!scriptBlock) continue; // Array may be sparse.
+      let source = scriptBlock.source.split("\n");
+      this.scripts.set(scriptBlock.name, source);
+    }
+  }
+
+  parseName(name) {
+    let nameAndSource = name.split(" ")
+    if (nameAndSource.length < 2) return false;
+    let sourceAndLine = nameAndSource[1].split(":");
+    if (sourceAndLine.length < 2) return false;
+    return {
+      file: sourceAndLine[0],
+      line: parseInt(sourceAndLine[1]) - 1 // Source code is 1-indexed.
+    };
+  }
+
+  hasSource(name) {
+    let parseResult = this.parseName(name);
+    return parseResult && this.scripts.has(parseResult.file);
+  }
+
+  getSourceContext(name, linesCount) {
+    if (!this.hasSource(name))
+      return [];
+    let parseResult = this.parseName(name);
+    let source = this.scripts.get(parseResult.file);
+    let lines = [];
+    let lastLineNumber = Math.min(parseResult.line + Math.round(linesCount / 2), source.length);
+    let firstLineNumber = Math.max(lastLineNumber - linesCount, 0);
+    linesCount = lastLineNumber - firstLineNumber;
+    for (let i = 0; i <= linesCount; ++i) {
+      lines[i] = source[i + firstLineNumber];
+    }
+    return {
+      source: lines,
+      firstLineNumber: firstLineNumber + 1, // Source code is 1-indexed.
+      highlighted: parseResult.line - firstLineNumber
+    };
   }
 }
 
