@@ -3290,7 +3290,7 @@ TNode<String> CodeStubAssembler::NewConsString(Node* context, TNode<Smi> length,
                                                TNode<String> left,
                                                TNode<String> right,
                                                AllocationFlags flags) {
-  CSA_ASSERT(this, IsContext(context));
+  CSA_ASSERT(this, IsZeroOrContext(context));
   // Added string can be a cons string.
   Comment("Allocating ConsString");
   Node* left_instance_type = LoadInstanceType(left);
