@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "16c656fd_70830d87",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1748,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "Hole is handled properly in the else branch automatically.",
+      "parentUuid": "4e950f8e_f41abb91",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37ec46ae_1091d8b5",
         "filename": "src/compiler/js-create-lowering.cc",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-27T11:12:00Z",
       "side": 1,
       "message": "(What do we know about element_value in the else-branch?)",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9524158e_5db7eab2",
+        "filename": "src/compiler/js-create-lowering.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1752,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "Not sure what you are asking about.",
+      "parentUuid": "37ec46ae_1091d8b5",
       "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "af099fa7_9be3509a",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "If it changed by adding a third option (which is the most likely of the unlikely scenarios), then !IsObjectOrSmi would not really help, no?",
+      "parentUuid": "d856d5d1_5d70d68e",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "65d5896c_819a55b0",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "817b58db_5cd27a55",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65d5896c_819a55b0",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "98ea90dc_df951cb5",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b422a5da_76e9931c",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31762c9d_37b30236",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 4
@@ -101,6 +191,24 @@
       "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3423f68_1c855e6e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "We cannot do it directly (C++ is not required to preserve NaN patterns). I used Float64 class instead.",
+      "parentUuid": "31762c9d_37b30236",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "3af23c85_f63d5336",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3943608_97409ee3",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60fcaacd_3b5d118f",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 4
@@ -132,6 +258,24 @@
       "writtenOn": "2018-08-27T08:27:10Z",
       "side": 1,
       "message": "NIT: Can we extract this as a private function to give it some semantics? It\u0027s also used in JSObjectData::SerializeElements.",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "114795ce_09b585b2",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "Not sure what you mean. Just this one line? What is the special semantics?",
+      "parentUuid": "60fcaacd_3b5d118f",
       "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "b3ef7512_80197be9",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "476eda59_d7fdb321",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffeeb970_32d54611",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 4
@@ -166,6 +328,30 @@
       "writtenOn": "2018-08-27T08:27:10Z",
       "side": 1,
       "message": "Nit: We can move these two lines (and maybe the retrieval of object_data) into a reusable private function, to use as well in JSObjectRef::RawFastPropertyAt. We can do the first check independently.",
+      "range": {
+        "startLine": 1007,
+        "startChar": 0,
+        "endLine": 1009,
+        "endChar": 50
+      },
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "364ea1e2_8a956ff8",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-08-27T20:03:21Z",
+      "side": 1,
+      "message": "To be honest, I prefer checks to be close to use so that you can see what the preconditions are. It is a bit of a coincidence that the checks in both the methods are the same. If we supported out-of-objects properties, the checks would be different because double properties cannot live out-of-object.\n\nI did separate the elements getter.",
+      "parentUuid": "ffeeb970_32d54611",
       "range": {
         "startLine": 1007,
         "startChar": 0,
