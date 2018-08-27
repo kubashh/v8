@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "07134d1b_a29de665",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-27T21:45:06Z",
+      "side": 1,
+      "message": "I want to remove the whole NumberFormat in next cl. It will be cleaner if I remove NumberFormat::Unwrap in the same cl as this one. But it is a little more complicated w/ some other thing. Eventually, we should have no NumberFormat but only JSNumberFormat.",
+      "parentUuid": "4873ef2d_216cbab2",
+      "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "231f3bda_61baf767",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 26
@@ -70,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "64d1ad4e_55d275bf",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-27T21:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "231f3bda_61baf767",
+      "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5973bb84_ac2e847d",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 26
@@ -84,6 +120,24 @@
       "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d79a1fc_8f631223",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-27T21:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5973bb84_ac2e847d",
+      "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -127,6 +181,30 @@
     },
     {
       "key": {
+        "uuid": "81faec15_6b03434c",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-27T21:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c67290d0_f01c5bcf",
+      "range": {
+        "startLine": 460,
+        "startChar": 7,
+        "endLine": 460,
+        "endChar": 9
+      },
+      "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df3a959e_75f52859",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 26
@@ -138,6 +216,30 @@
       "writtenOn": "2018-08-27T19:26:34Z",
       "side": 1,
       "message": "Can this be empty here? We have a check above that does \n  if (style \u003d\u003d Style::CURRENCY \u0026\u0026 !found_currency.FromJust()) { throw .. }",
+      "range": {
+        "startLine": 461,
+        "startChar": 1,
+        "endLine": 461,
+        "endChar": 35
+      },
+      "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e524b71a_29008668",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-27T21:45:06Z",
+      "side": 1,
+      "message": "but the value in the options could still be \"\", right?\n{currency: \"\"}",
+      "parentUuid": "df3a959e_75f52859",
       "range": {
         "startLine": 461,
         "startChar": 1,
@@ -173,6 +275,30 @@
     },
     {
       "key": {
+        "uuid": "0655e53f_20a50216",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-27T21:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d402e010_7e5ac1dc",
+      "range": {
+        "startLine": 462,
+        "startChar": 64,
+        "endLine": 462,
+        "endChar": 70
+      },
+      "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5cc8b44_c70b3780",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 26
@@ -187,6 +313,24 @@
       "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fab1b1b_fbc0c79a",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-08-27T21:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5cc8b44_c70b3780",
+      "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
