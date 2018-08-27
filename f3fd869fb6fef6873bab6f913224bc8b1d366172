@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d856d5d1_5d70d68e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-08-27T08:27:10Z",
+      "side": 1,
+      "message": "That logic is highly unlikely to change, but still you can call !IsObjectOrSmi() here.",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3943608_97409ee3",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-08-27T08:27:10Z",
+      "side": 1,
+      "message": "NIT: if (elements) { return; } would save us 1 level of indentation for the rest of the function.",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60fcaacd_3b5d118f",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-08-27T08:27:10Z",
+      "side": 1,
+      "message": "NIT: Can we extract this as a private function to give it some semantics? It\u0027s also used in JSObjectData::SerializeElements.",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "476eda59_d7fdb321",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-08-27T08:27:10Z",
+      "side": 1,
+      "message": "NIT: Can we flatten this with an else if?",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffeeb970_32d54611",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-08-27T08:27:10Z",
+      "side": 1,
+      "message": "Nit: We can move these two lines (and maybe the retrieval of object_data) into a reusable private function, to use as well in JSObjectRef::RawFastPropertyAt. We can do the first check independently.",
+      "range": {
+        "startLine": 1007,
+        "startChar": 0,
+        "endLine": 1009,
+        "endChar": 50
+      },
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
