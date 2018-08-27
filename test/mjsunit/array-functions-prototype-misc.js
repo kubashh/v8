@@ -32,7 +32,6 @@
  */
 
 var LARGE = 400000;
-var VERYLARGE = 4000000000;
 
 // Nicer for firefox 1.5.  Unless you uncomment the following two lines,
 // smjs will appear to hang on this file.
@@ -45,7 +44,7 @@ function PseudoArray() {
 };
 
 for (var use_real_arrays = 0; use_real_arrays <= 1; use_real_arrays++) {
-  var poses = [0, 140, 20000, VERYLARGE];
+  var poses = [0, 140, 20000];
   var the_prototype;
   var new_function;
   var push_function;
