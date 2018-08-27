@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b58d090_9fa6d66f",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-27T13:18:21Z",
+      "side": 1,
+      "message": "note: We need to revisit how these \"values\" are accessed by JavaScript anyways, which is why am not polishing up the expected value much here. I just want to increase the test coverage to the maximum we have to offer first.",
+      "range": {
+        "startLine": 409,
+        "startChar": 21,
+        "endLine": 409,
+        "endChar": 35
+      },
+      "revId": "9dfed392c5f90c51cb2f461c09c513f8c300c376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
