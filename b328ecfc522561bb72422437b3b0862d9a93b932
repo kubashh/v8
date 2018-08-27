@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "661fffd7_037d3649",
+        "filename": "src/feedback-vector.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-27T12:27:32Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem very useful, just use kCompareOp directly.",
+      "revId": "b328ecfc522561bb72422437b3b0862d9a93b932",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e2c93e4_82e239d5",
         "filename": "src/feedback-vector.h",
         "patchSetId": 3
