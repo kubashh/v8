@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "e6b5e32f_f66572cd",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-27T17:49:47Z",
+      "side": 1,
+      "message": "No, JavaScript is messed up. You can monkey patch anything. For example:\n\n  var x \u003d { [Symbol.hasInstance]() { return true; } }\n  1 instanceof x // \u003c-- true\n\nHere\u0027s a test that should crash with your patch:\n  Object.defineProperty(Intl.NumberFormat, Symbol.hasInstance, { value: _ \u003d\u003e true });\n  Intl.NumberFormat.call(1);\n\n\nYou need a IsJSReceiver check that throws before you do the casting.",
+      "parentUuid": "5b531902_99f08521",
+      "range": {
+        "startLine": 565,
+        "startChar": 17,
+        "endLine": 565,
+        "endChar": 41
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8b299f3d_aad4cba3",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 13
@@ -775,6 +799,30 @@
     },
     {
       "key": {
+        "uuid": "ee2841cc_6fd28204",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-27T17:49:47Z",
+      "side": 1,
+      "message": "I did. It\u0027s been fixed here:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1176289\n\nI agree we need to move it to a util class. Can you move it as part of this CL or in a follow up CL? Up to you.",
+      "parentUuid": "cf1ea92f_47cfab03",
+      "range": {
+        "startLine": 209,
+        "startChar": 9,
+        "endLine": 209,
+        "endChar": 33
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06d8881b_ef622ce1",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 13
@@ -810,6 +858,30 @@
       "side": 1,
       "message": "Ackthis is copy from your code. How about your change that in other files first, I think we should merge them into a util class.",
       "parentUuid": "06d8881b_ef622ce1",
+      "range": {
+        "startLine": 210,
+        "startChar": 38,
+        "endLine": 210,
+        "endChar": 50
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "86c60d5a_a5d7085e",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-27T17:49:47Z",
+      "side": 1,
+      "message": "It\u0027s been fixed here: https://chromium-review.googlesource.com/c/v8/v8/+/1176289",
+      "parentUuid": "2e350e77_0ce286b2",
       "range": {
         "startLine": 210,
         "startChar": 38,
@@ -1106,6 +1178,30 @@
       "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80f16f61_c428c7a7",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-27T17:49:47Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "db4e891f_1efe3e36",
+      "range": {
+        "startLine": 460,
+        "startChar": 0,
+        "endLine": 463,
+        "endChar": 5
+      },
+      "revId": "ca69fdcc1396c15519ca3fb218500b4ae90a73c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
