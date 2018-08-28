@@ -33,6 +33,24 @@
       "revId": "ef0fac1d843194425747c745c9d39190d23c678c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ffff351_498570f7",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1640,
+      "author": {
+        "id": 1115880
+      },
+      "writtenOn": "2018-08-28T22:47:12Z",
+      "side": 1,
+      "message": "Feel free to remove TODO and the case, and call getRuleStatus directly from break_iterator.\n\nLonger version:\nAndy Heninger, who works on ICU break iterators, says that this was fixed couple versions ago. Base class didn\u0027t even have declaration of getRuleStatus, and now it has + implementation.",
+      "parentUuid": "4381a87b_703eae14",
+      "revId": "ef0fac1d843194425747c745c9d39190d23c678c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
