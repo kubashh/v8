@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f61e041_09f44b33",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3293,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-28T06:28:54Z",
+      "side": 1,
+      "message": "Wdyt about removing the context parameter instead?",
+      "revId": "b12196c818369703b00ee568fc8538c52ae012e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
