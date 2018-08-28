@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "170fcb73_d3fa4d7b",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-28T07:34:49Z",
+      "side": 1,
+      "message": "It seems a bit scary to disconnect the push from pop sites (here, in MaybeTailCallOptimizedCodeSlot, in TailCallRuntimeIfMarkerEquals) without extensive comments.\n\nI\u0027d suggest adding Push/PopRootRegister() helpers to make it easy to find all uses, and add state comments all affected functions that mention ebx pushed onto the stack.\n\nNote also that while kRootRegister is clobbered any root-relative loads are illegal. This could lead to really tricky bugs.. It\u0027s not ideal but could you add NoRootArrayScopes where required? In this particular case it would be from here to line 800.",
+      "revId": "13dc7f0e2740410ef9c6d8ed0be1cee2e8e01794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f356e56d_ba090cad",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-28T07:34:49Z",
+      "side": 1,
+      "message": "And a scope from here to L928.",
+      "revId": "13dc7f0e2740410ef9c6d8ed0be1cee2e8e01794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d0e3c99_6f69bfcc",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-28T07:34:49Z",
+      "side": 1,
+      "message": "AdvanceBytecodeOffsetOrReturn *could* contain the push/pop and bytecode load. That might make this call-site a bit less scary. We should probably stay consistent across platforms though.",
+      "revId": "13dc7f0e2740410ef9c6d8ed0be1cee2e8e01794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
