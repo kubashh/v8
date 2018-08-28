@@ -344,6 +344,25 @@ V8_INLINE Token::Value Scanner::ScanSingleToken() {
   return token;
 }
 
+void Scanner::Scan() {
+  token_end_ = (token_end_ + 1) & kTokenStorageMask;
+
+  scan_target().after_line_terminator = (source_pos() == 0);
+  scan_target().literal_chars.Drop();
+  scan_target().raw_literal_chars.Drop();
+  scan_target().contextual_token = Token::UNINITIALIZED;
+  scan_target().invalid_template_escape_message = MessageTemplate::kNone;
+
+  scan_target().token = ScanSingleToken();
+  scan_target().location.end_pos = source_pos();
+
+#ifdef DEBUG
+  for (TokenDesc& token : token_storage_) {
+    SanityCheckTokenDesc(token);
+  }
+#endif
+}
+
 }  // namespace internal
 }  // namespace v8
 

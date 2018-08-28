@@ -354,23 +354,28 @@ Token::Value Scanner::ScanHtmlComment() {
   return SkipSingleHTMLComment();
 }
 
-void Scanner::Scan() {
-  token_end_ = (token_end_ + 1) & kTokenStorageMask;
-
-  scan_target().after_line_terminator = (source_pos() == 0);
-  scan_target().literal_chars.Drop();
-  scan_target().raw_literal_chars.Drop();
-  scan_target().contextual_token = Token::UNINITIALIZED;
-  scan_target().invalid_template_escape_message = MessageTemplate::kNone;
-
-  scan_target().token = ScanSingleToken();
-  scan_target().location.end_pos = source_pos();
-
-#ifdef DEBUG
-  for (TokenDesc& token : token_storage_) {
-    SanityCheckTokenDesc(token);
+Token::Value Scanner::Next() {
+  // TODO(verwaest): Remove.
+  if (next().token == Token::EOS) {
+    next_target().location = current().location;
   }
-#endif
+  // Advance current token.
+  token_start_ = TokenIndex(1);
+  // Scan the next token if it's not yet ready.
+  if (V8_LIKELY(!HasToken(1))) Scan();
+  // Return current token.
+  DCHECK(HasToken(1));
+  return current().token;
+}
+
+Token::Value Scanner::PeekAhead() {
+  DCHECK_NE(Token::DIV, next().token);
+  DCHECK_NE(Token::ASSIGN_DIV, next().token);
+  DCHECK(HasToken(1));
+
+  if (V8_LIKELY(!HasToken(2))) Scan();
+
+  return next_next().token;
 }
 
 #ifdef DEBUG
