@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c83d3581_2db16fe2",
+        "filename": "src/heap/heap-controller.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T10:54:13Z",
+      "side": 1,
+      "message": "Move V8_EXPORT_PRIVATE to class decl",
+      "range": {
+        "startLine": 81,
+        "startChar": 2,
+        "endLine": 81,
+        "endChar": 19
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "325f3498_e6234eee",
+        "filename": "src/heap/heap-controller.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T10:54:13Z",
+      "side": 1,
+      "message": "Move static decls above constructor",
+      "range": {
+        "startLine": 84,
+        "startChar": 9,
+        "endLine": 84,
+        "endChar": 14
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5dffe0d_c20147a5",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1805,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T10:54:13Z",
+      "side": 1,
+      "message": "that\u0027s just \"GlobalSizeOfObjects()\", no?",
+      "range": {
+        "startLine": 1805,
+        "startChar": 6,
+        "endLine": 1805,
+        "endChar": 41
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61c9c49d_cfd64449",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T10:54:13Z",
+      "side": 1,
+      "message": "was that needed to mitigate a test crasher?",
+      "range": {
+        "startLine": 2311,
+        "startChar": 57,
+        "endLine": 2311,
+        "endChar": 75
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c51cc66e_3d8ca9da",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4589,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T10:54:13Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we use CheckAllocationLimit \u003d\u003d kBelowAllocationLimit here?",
+      "range": {
+        "startLine": 4589,
+        "startChar": 6,
+        "endLine": 4589,
+        "endChar": 22
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11df5491_5c69838e",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T10:54:13Z",
+      "side": 1,
+      "message": "nit: Order",
+      "range": {
+        "startLine": 176,
+        "startChar": 6,
+        "endLine": 176,
+        "endChar": 28
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9477948e_d18034f2",
+        "filename": "test/mjsunit/external-backing-store-gc.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T10:54:13Z",
+      "side": 1,
+      "message": "800M? Is a little bit lower also possible? E.g. ~128?",
+      "range": {
+        "startLine": 5,
+        "startChar": 45,
+        "endLine": 5,
+        "endChar": 54
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
