@@ -162,6 +162,24 @@
     },
     {
       "key": {
+        "uuid": "7ff8f26a_5c853a5d",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-28T09:32:18Z",
+      "side": 1,
+      "message": "I talked with Dan a bit about this when he was working on this, I\u0027d really prefer not to have a seperate list which encodes whether a bytecode is scalable or not. Currently that logic is encoded in the bytecode operands (if any of them are scalable), and I would prefer to avoid weird errors if someone removes or adds an operand but doesn\u0027t move it from the ONLY_SINGLE to ALL_SCALES list.\n\nRegarding the 64 empty builtins - currently we have empty placeholder objects but I think the plan is to avoid this (and either have them nulled out or point to the same invalid bytecode handler) - as such this is only wasting 64 words, and looking forward, once all builtins are embedded we could have the builtin table eventually point to raw instruction streams, at which point it could be used directly as the interpreter dispatch table if we allow these gaps, which would end up saving ~600 words.",
+      "parentUuid": "42f7b4d0_c61811fb",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b1bc9de_f79db417",
         "filename": "src/interpreter/setup-interpreter-internal.cc",
         "patchSetId": 8
