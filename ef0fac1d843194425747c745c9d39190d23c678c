@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5da8bb12_f46bb95b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-28T21:45:17Z",
+      "side": 1,
+      "message": "This CL removes the AddBoundMethod helper from intl.js.",
+      "revId": "ef0fac1d843194425747c745c9d39190d23c678c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4381a87b_703eae14",
         "filename": "src/builtins/builtins-intl.cc",
         "patchSetId": 3
