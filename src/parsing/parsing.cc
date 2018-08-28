@@ -5,6 +5,7 @@
 #include "src/parsing/parsing.h"
 
 #include <memory>
+#include <utility>
 
 #include "src/ast/ast.h"
 #include "src/objects-inl.h"
@@ -17,6 +18,50 @@ namespace v8 {
 namespace internal {
 namespace parsing {
 
+namespace {
+
+class ScopedExternalStringLock {
+ public:
+  explicit ScopedExternalStringLock(Handle<String> string) {
+    if (!string->IsExternalString()) return;
+
+    auto* external_string = ExternalString::cast(*string);
+    if (!external_string->is_uncached()) return;
+
+    string_ptr_ = external_string;
+    if (external_string->IsExternalOneByteString()) {
+      const ExternalOneByteString::Resource* resource =
+          ExternalOneByteString::cast(external_string)->resource();
+      resource->Lock();
+    } else {
+      DCHECK(external_string->IsExternalTwoByteString());
+      const ExternalTwoByteString::Resource* resource =
+          ExternalTwoByteString::cast(external_string)->resource();
+      resource->Lock();
+    }
+  }
+
+  ~ScopedExternalStringLock() {
+    if (!string_ptr_) return;
+
+    if (string_ptr_->IsExternalOneByteString()) {
+      const ExternalOneByteString::Resource* resource =
+          ExternalOneByteString::cast(string_ptr_)->resource();
+      resource->Unlock();
+    } else {
+      DCHECK(external_string->IsExternalTwoByteString());
+      const ExternalTwoByteString::Resource* resource =
+          ExternalTwoByteString::cast(string_ptr_)->resource();
+      resource->Unlock();
+    }
+  }
+
+ private:
+  ExternalString* string_ptr_ = nullptr;
+};
+
+}  // namespace
+
 bool ParseProgram(ParseInfo* info, Isolate* isolate) {
   DCHECK(info->is_toplevel());
   DCHECK_NULL(info->literal());
@@ -25,6 +70,8 @@ bool ParseProgram(ParseInfo* info, Isolate* isolate) {
 
   // Create a character stream for the parser.
   Handle<String> source(String::cast(info->script()->source()), isolate);
+  ScopedExternalStringLock source_lock(source);
+
   isolate->counters()->total_parse_size()->Increment(source->length());
   std::unique_ptr<Utf16CharacterStream> stream(
       ScannerStream::For(isolate, source));
@@ -60,6 +107,8 @@ bool ParseFunction(ParseInfo* info, Handle<SharedFunctionInfo> shared_info,
 
   // Create a character stream for the parser.
   Handle<String> source(String::cast(info->script()->source()), isolate);
+  ScopedExternalStringLock source_lock(source);
+
   isolate->counters()->total_parse_size()->Increment(source->length());
   std::unique_ptr<Utf16CharacterStream> stream(
       ScannerStream::For(isolate, source, shared_info->StartPosition(),
