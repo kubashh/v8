@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2435e003_7d1d369a",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-28T12:34:48Z",
+      "side": 1,
+      "message": "Sound like a good idea. I think readability is more important here than performance. The only possible concern is that we lose consistency across architectures (here we don\u0027t preserve feedback_vector, on others we do).",
+      "parentUuid": "2e940f86_27c3416d",
+      "revId": "13dc7f0e2740410ef9c6d8ed0be1cee2e8e01794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f356e56d_ba090cad",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 6
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Agreed. I\u0027m not sure which is better, though. The advantage of having it all here is that one can easily see what is going on.",
       "parentUuid": "3d0e3c99_6f69bfcc",
+      "revId": "13dc7f0e2740410ef9c6d8ed0be1cee2e8e01794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61dd1497_18b47f20",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-28T12:34:48Z",
+      "side": 1,
+      "message": "I think I prefer moving into AdvanceBytecodeOffsetOrReturn - we don\u0027t need to care what exactly happens there as long as kRootRegister is preserved. I\u0027ll defer to Ross here though.",
+      "parentUuid": "bdcab8d6_29235a74",
       "revId": "13dc7f0e2740410ef9c6d8ed0be1cee2e8e01794",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
