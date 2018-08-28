@@ -446,6 +446,30 @@
       "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c477a9f_da761b81",
+        "filename": "test/mjsunit/external-backing-store-gc.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T12:37:03Z",
+      "side": 1,
+      "message": "As discussed offline: Lets try w/ 800 and rely on Scavenges to configure.",
+      "parentUuid": "d43f1cdb_f17e9767",
+      "range": {
+        "startLine": 5,
+        "startChar": 45,
+        "endLine": 5,
+        "endChar": 54
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
