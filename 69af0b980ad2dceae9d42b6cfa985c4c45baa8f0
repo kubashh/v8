@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abbca8b9_8b893645",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-28T13:24:42Z",
+      "side": 1,
+      "message": "Once you\u0027re done porting the other two as well, we should move all this into a helper function \n\n  Handle\u003cJSFunction\u003e CreateBoundFunction(Handle\u003cNativeContext\u003e context,\n                                         Handle\u003cSharedFunctionInfo\u003e info);\n\nAnd then refactor the rest of the builtins to use this as well.",
+      "range": {
+        "startLine": 1477,
+        "startChar": 1,
+        "endLine": 1490,
+        "endChar": 80
+      },
+      "revId": "69af0b980ad2dceae9d42b6cfa985c4c45baa8f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
