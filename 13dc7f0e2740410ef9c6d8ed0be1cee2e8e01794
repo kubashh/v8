@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "db5b04c4_870f7b25",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-28T12:56:13Z",
+      "side": 1,
+      "message": "+1, let\u0027s just reload the feedback vector after MaybeTailCallOptimizedCodeSlot and avoid this disconnected push/pop.\n\n(Sorry thought I had replied to this earlier but my comment seems to have got lost)",
+      "parentUuid": "2435e003_7d1d369a",
+      "revId": "13dc7f0e2740410ef9c6d8ed0be1cee2e8e01794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f356e56d_ba090cad",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 6
