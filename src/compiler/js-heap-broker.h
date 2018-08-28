@@ -198,6 +198,8 @@ class JSRegExpRef : public JSObjectRef {
   ObjectRef source() const;
   ObjectRef flags() const;
   ObjectRef last_index() const;
+
+  void SerializeAsRegExpBoilerplate();
 };
 
 class HeapNumberRef : public HeapObjectRef {
