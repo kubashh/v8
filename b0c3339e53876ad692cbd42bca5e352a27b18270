@@ -16,6 +16,24 @@
       "revId": "b0c3339e53876ad692cbd42bca5e352a27b18270",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6247c485_b17bfbe3",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-28T18:05:20Z",
+      "side": 1,
+      "message": "See patch set 2 ;-)",
+      "parentUuid": "2955b505_76976a6f",
+      "revId": "b0c3339e53876ad692cbd42bca5e352a27b18270",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
