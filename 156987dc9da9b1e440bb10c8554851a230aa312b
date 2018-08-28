@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "cb88ead9_cb00fb8c",
+        "filename": "src/heap/heap-controller.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c83d3581_2db16fe2",
+      "range": {
+        "startLine": 81,
+        "startChar": 2,
+        "endLine": 81,
+        "endChar": 19
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "325f3498_e6234eee",
         "filename": "src/heap/heap-controller.h",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33e748f0_291f657d",
+        "filename": "src/heap/heap-controller.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "325f3498_e6234eee",
+      "range": {
+        "startLine": 84,
+        "startChar": 9,
+        "endLine": 84,
+        "endChar": 14
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "134db08b_2638cc63",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 1805,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5dffe0d_c20147a5",
+      "range": {
+        "startLine": 1805,
+        "startChar": 6,
+        "endLine": 1805,
+        "endChar": 41
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61c9c49d_cfd64449",
         "filename": "src/heap/heap.cc",
         "patchSetId": 15
@@ -91,6 +163,30 @@
       "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfd69b76_c8d69a29",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "Interestingly enough, I added this because I was having problems with some unittests.\nHowever, it seems that it is no longer a problem. Maybe some fix done after that also\nimproved this case. I will drop it.",
+      "parentUuid": "61c9c49d_cfd64449",
+      "range": {
+        "startLine": 2311,
+        "startChar": 57,
+        "endLine": 2311,
+        "endChar": 75
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "ab6274d4_c3b3e1b2",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 4589,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c51cc66e_3d8ca9da",
+      "range": {
+        "startLine": 4589,
+        "startChar": 6,
+        "endLine": 4589,
+        "endChar": 22
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11df5491_5c69838e",
         "filename": "src/heap/heap.h",
         "patchSetId": 15
@@ -137,6 +257,30 @@
       "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35022ee7_6114186c",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11df5491_5c69838e",
+      "range": {
+        "startLine": 176,
+        "startChar": 6,
+        "endLine": 176,
+        "endChar": 28
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,54 @@
     },
     {
       "key": {
+        "uuid": "b1068711_a287563f",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58dbf8c7_ffcd6aa1",
+      "range": {
+        "startLine": 1330,
+        "startChar": 4,
+        "endLine": 1330,
+        "endChar": 63
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7fe2c4de_e459bad9",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58dbf8c7_ffcd6aa1",
+      "range": {
+        "startLine": 1330,
+        "startChar": 4,
+        "endLine": 1330,
+        "endChar": 63
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7360c6f8_24b9293d",
         "filename": "src/heap/heap.h",
         "patchSetId": 15
@@ -186,6 +378,30 @@
     },
     {
       "key": {
+        "uuid": "8b54f85c_ff5d54f0",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1819,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "This method was removed because after Michael\u0027s comments, we no longer need it.",
+      "parentUuid": "7360c6f8_24b9293d",
+      "range": {
+        "startLine": 1819,
+        "startChar": 25,
+        "endLine": 1819,
+        "endChar": 76
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9477948e_d18034f2",
         "filename": "test/mjsunit/external-backing-store-gc.js",
         "patchSetId": 15
@@ -197,6 +413,30 @@
       "writtenOn": "2018-08-28T10:54:13Z",
       "side": 1,
       "message": "800M? Is a little bit lower also possible? E.g. ~128?",
+      "range": {
+        "startLine": 5,
+        "startChar": 45,
+        "endLine": 5,
+        "endChar": 54
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d43f1cdb_f17e9767",
+        "filename": "test/mjsunit/external-backing-store-gc.js",
+        "patchSetId": 15
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1287560
+      },
+      "writtenOn": "2018-08-28T11:49:44Z",
+      "side": 1,
+      "message": "I think not. This needs to be around 800M because it is the initial limit for triggering a GC.\nThis is still a hard coded constant for both heap and global memoy (https://cs.chromium.org/chromium/src/v8/src/heap/heap.cc?rcl\u003db72914434c3b864c2f6e17317c58b44038889a21\u0026l\u003d148)",
+      "parentUuid": "9477948e_d18034f2",
       "range": {
         "startLine": 5,
         "startChar": 45,
