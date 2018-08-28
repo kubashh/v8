@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09e479db_8ac3cece",
+        "filename": "src/heap/scavenger-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T11:00:12Z",
+      "side": 1,
+      "message": "nit: The helper is only used in the inline file. Avoid class method and hide it behind a \"details\" namespace.",
+      "range": {
+        "startLine": 138,
+        "startChar": 30,
+        "endLine": 138,
+        "endChar": 54
+      },
+      "revId": "ebd211b859dc04797efe34d645babea423e52b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28903033_4e558016",
+        "filename": "src/heap/scavenger-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T11:00:12Z",
+      "side": 1,
+      "message": "nit: DCHECK_NE(FAILURE, result);",
+      "range": {
+        "startLine": 139,
+        "startChar": 25,
+        "endLine": 139,
+        "endChar": 31
+      },
+      "revId": "ebd211b859dc04797efe34d645babea423e52b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "393ec888_9b880442",
+        "filename": "src/heap/scavenger-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-28T11:00:12Z",
+      "side": 1,
+      "message": "nit: DCHECK_IMPLIES",
+      "range": {
+        "startLine": 308,
+        "startChar": 4,
+        "endLine": 308,
+        "endChar": 10
+      },
+      "revId": "ebd211b859dc04797efe34d645babea423e52b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
