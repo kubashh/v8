@@ -34,6 +34,24 @@
       "revId": "9c7230c6b9577fad886176a751e3988898bcad01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82a0beba_d2056410",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 27
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-28T20:38:32Z",
+      "side": 1,
+      "message": "👍",
+      "parentUuid": "bed225ce_6768f9c5",
+      "revId": "9c7230c6b9577fad886176a751e3988898bcad01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

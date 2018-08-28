@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "a1836980_1ab2c750",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-28T20:38:32Z",
+      "side": 1,
+      "message": "You can just rename NumberFormat::Unwrap as JSNumberFormat::Unwrap right? \n\nNumberFormat::Unwrap calls out to Intl::UnwrapReceiver which calls out to LegacyUnwrapReceiver which does all of lines 154 to 190 here. And then you\u0027ve added the IsJSNumberFormat check already to NumberFormat::Unwrap so that does all of line 192 to 200.",
+      "parentUuid": "07134d1b_a29de665",
+      "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "231f3bda_61baf767",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 26
