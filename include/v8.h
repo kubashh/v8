@@ -2741,7 +2741,18 @@ class V8_EXPORT String : public Name {
    public:
     virtual ~ExternalStringResourceBase() {}
 
+    // If a string is cacheable, the value returned by
+    // ExternalStringResource::data() may be cached, otherwise it is not
+    // expected to be stable beyond the current top-level task.
+    virtual bool IsCacheable() const { return !IsCompressible(); }
     virtual bool IsCompressible() const { return false; }
+    // For a non-cacheable string, the value returned by
+    // ExternalStringResource::data() has to be stable between Lock() and
+    // Unlock(), that is the string must behave as is IsCompressible()
+    // returned false. Otherwise this is a no-op.
+    // These methods are thread-safe, and can be called from anywhere.
+    virtual void Lock() const {}
+    virtual void Unlock() const {}
 
    protected:
     ExternalStringResourceBase() {}
