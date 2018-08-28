@@ -354,6 +354,30 @@ Token::Value Scanner::ScanHtmlComment() {
   return SkipSingleHTMLComment();
 }
 
+Token::Value Scanner::Next() {
+  // TODO(verwaest): Remove.
+  if (next().token == Token::EOS) {
+    next_target().location = current().location;
+  }
+  // Advance current token.
+  token_start_ = TokenIndex(1);
+  // Scan the next token if it's not yet ready.
+  if (V8_LIKELY(!HasToken(1))) Scan();
+  // Return current token.
+  DCHECK(HasToken(1));
+  return current().token;
+}
+
+Token::Value Scanner::PeekAhead() {
+  DCHECK_NE(Token::DIV, next().token);
+  DCHECK_NE(Token::ASSIGN_DIV, next().token);
+  DCHECK(HasToken(1));
+
+  if (V8_LIKELY(!HasToken(2))) Scan();
+
+  return next_next().token;
+}
+
 void Scanner::Scan() {
   token_end_ = (token_end_ + 1) & kTokenStorageMask;
 

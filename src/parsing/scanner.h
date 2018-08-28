@@ -237,30 +237,10 @@ class Scanner {
   void Initialize();
 
   // Returns the next token and advances input.
-  V8_INLINE Token::Value Next() {
-    // TODO(verwaest): Remove.
-    if (next().token == Token::EOS) {
-      next_target().location = current().location;
-    }
-    // Advance current token.
-    token_start_ = TokenIndex(1);
-    // Scan the next token if it's not yet ready.
-    if (V8_LIKELY(!HasToken(1))) Scan();
-    // Return current token.
-    DCHECK(HasToken(1));
-    return current().token;
-  }
+  Token::Value Next();
 
   // Returns the token following peek()
-  V8_INLINE Token::Value PeekAhead() {
-    DCHECK_NE(Token::DIV, next().token);
-    DCHECK_NE(Token::ASSIGN_DIV, next().token);
-    DCHECK(HasToken(1));
-
-    if (V8_LIKELY(!HasToken(2))) Scan();
-
-    return next_next().token;
-  }
+  Token::Value PeekAhead();
 
   // Returns the current token again.
   Token::Value current_token() { return current().token; }
