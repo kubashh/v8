@@ -136,9 +136,20 @@ class JSFunctionData : public JSObjectData {
 
 class JSRegExpData : public JSObjectData {
  public:
+  ObjectData* raw_properties_or_hash = nullptr;
+  ObjectData* data = nullptr;
+  ObjectData* source = nullptr;
+  ObjectData* flags = nullptr;
+  ObjectData* last_index = nullptr;
+
   JSRegExpData(JSHeapBroker* broker_, Handle<JSRegExp> object_,
                HeapObjectType type_)
       : JSObjectData(broker_, object_, type_) {}
+
+  void SerializeAsRegExpBoilerplate();
+
+ private:
+  bool is_serialized_as_reg_exp_boilerplate_ = false;
 };
 
 class HeapNumberData : public HeapObjectData {
@@ -452,7 +463,7 @@ void FeedbackVectorData::SerializeSlots() {
     if (slot_value->IsAllocationSite()) {
       slot_value->AsAllocationSite()->SerializeBoilerplate();
     } else if (slot_value->IsJSRegExp()) {
-      slot_value->AsJSRegExp()->SerializeElements();
+      slot_value->AsJSRegExp()->SerializeAsRegExpBoilerplate();
     }
   }
   DCHECK_EQ(feedback_object->length(), feedback_.size());
@@ -757,6 +768,26 @@ void JSObjectData::SerializeRecursive(int depth, int* max_properties) {
       inobject_fields_.push_back(JSObjectField{value_data});
     }
   }
+}
+
+void JSRegExpData::SerializeAsRegExpBoilerplate() {
+  if (is_serialized_as_reg_exp_boilerplate_) return;
+  is_serialized_as_reg_exp_boilerplate_ = true;
+
+  SerializeElements();
+
+  CHECK(broker->SerializingAllowed());
+  Handle<JSRegExp> boilerplate = Handle<JSRegExp>::cast(this->object);
+  raw_properties_or_hash = broker->GetOrCreateData(
+      handle(boilerplate->raw_properties_or_hash(), broker->isolate()));
+  data =
+      broker->GetOrCreateData(handle(boilerplate->data(), broker->isolate()));
+  source =
+      broker->GetOrCreateData(handle(boilerplate->source(), broker->isolate()));
+  flags =
+      broker->GetOrCreateData(handle(boilerplate->flags(), broker->isolate()));
+  last_index = broker->GetOrCreateData(
+      handle(boilerplate->last_index(), broker->isolate()));
 }
 
 ObjectData* ObjectData::Serialize(JSHeapBroker* broker, Handle<Object> object) {
@@ -1244,7 +1275,7 @@ double FixedDoubleArrayRef::get_scalar(int i) const {
       return result##Ref(                                                   \
           broker(), handle(object<holder>()->name(), broker()->isolate())); \
     } else {                                                                \
-      return result##Ref(data()->As##holder()->name);                       \
+      return result##Ref(ObjectRef::data()->As##holder()->name);            \
     }                                                                       \
   }
 
@@ -1252,14 +1283,14 @@ double FixedDoubleArrayRef::get_scalar(int i) const {
 #define BIMODAL_ACCESSOR_C(holder, result, name)      \
   result holder##Ref::name() const {                  \
     IF_BROKER_DISABLED_ACCESS_HANDLE_C(holder, name); \
-    return data()->As##holder()->name;                \
+    return ObjectRef::data()->As##holder()->name;     \
   }
 
 // Like HANDLE_ACCESSOR_C but for BitFields.
-#define BIMODAL_ACCESSOR_B(holder, field, name, BitField)  \
-  typename BitField::FieldType holder##Ref::name() const { \
-    IF_BROKER_DISABLED_ACCESS_HANDLE_C(holder, name);      \
-    return BitField::decode(data()->As##holder()->field);  \
+#define BIMODAL_ACCESSOR_B(holder, field, name, BitField)            \
+  typename BitField::FieldType holder##Ref::name() const {           \
+    IF_BROKER_DISABLED_ACCESS_HANDLE_C(holder, name);                \
+    return BitField::decode(ObjectRef::data()->As##holder()->field); \
   }
 
 // Macros for definining a const getter that always looks into the handle.
@@ -1306,11 +1337,11 @@ HANDLE_ACCESSOR_C(JSFunction, bool, IsConstructor)
 HANDLE_ACCESSOR(JSFunction, JSGlobalProxy, global_proxy)
 HANDLE_ACCESSOR(JSFunction, SharedFunctionInfo, shared)
 
-HANDLE_ACCESSOR(JSRegExp, Object, data)
-HANDLE_ACCESSOR(JSRegExp, Object, flags)
-HANDLE_ACCESSOR(JSRegExp, Object, last_index)
-HANDLE_ACCESSOR(JSRegExp, Object, raw_properties_or_hash)
-HANDLE_ACCESSOR(JSRegExp, Object, source)
+BIMODAL_ACCESSOR(JSRegExp, Object, data)
+BIMODAL_ACCESSOR(JSRegExp, Object, flags)
+BIMODAL_ACCESSOR(JSRegExp, Object, last_index)
+BIMODAL_ACCESSOR(JSRegExp, Object, raw_properties_or_hash)
+BIMODAL_ACCESSOR(JSRegExp, Object, source)
 
 BIMODAL_ACCESSOR_B(Map, bit_field2, elements_kind, Map::ElementsKindBits)
 BIMODAL_ACCESSOR_B(Map, bit_field3, is_deprecated, Map::IsDeprecatedBit)
@@ -1497,6 +1528,10 @@ Float64 FixedDoubleArrayData::Get(int i) const {
 
 void FeedbackVectorRef::SerializeSlots() {
   data()->AsFeedbackVector()->SerializeSlots();
+}
+
+void JSRegExpRef::SerializeAsRegExpBoilerplate() {
+  ObjectRef::data()->AsJSRegExp()->SerializeAsRegExpBoilerplate();
 }
 
 Handle<Object> ObjectRef::object() const { return data_->object; }
