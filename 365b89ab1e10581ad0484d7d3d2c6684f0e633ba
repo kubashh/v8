@@ -180,6 +180,24 @@
     },
     {
       "key": {
+        "uuid": "94990c92_3c0bab4a",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-28T10:27:40Z",
+      "side": 1,
+      "message": "Ack. Setting e.g. the Illegal handler in all gaps at setup time would definitely be an improvement.\n\n\u003e once all builtins are embedded we could have the builtin table eventually point to raw instruction streams\n\nWhile this may be possible, I don\u0027t think it\u0027ll be easy. We currently still need to keep trampoline Code objects for their metadata. They also ensure all relevant logic that expects a Code objects don\u0027t care whether there\u0027s an embedded builtin underneath.",
+      "parentUuid": "7ff8f26a_5c853a5d",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b1bc9de_f79db417",
         "filename": "src/interpreter/setup-interpreter-internal.cc",
         "patchSetId": 8
