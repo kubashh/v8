@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6cb73792_fecb2d7c",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-28T21:42:28Z",
+      "side": 0,
+      "message": "Can this be removed?",
+      "revId": "ed42a71d5ce74409ebfe227ea112a2266b0079dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
