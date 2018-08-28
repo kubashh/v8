@@ -22,6 +22,30 @@
       "revId": "69af0b980ad2dceae9d42b6cfa985c4c45baa8f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1d202d2_e039e581",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1292588
+      },
+      "writtenOn": "2018-08-28T13:32:42Z",
+      "side": 1,
+      "message": "Totally! I had been thinking on the same lines myself.",
+      "parentUuid": "abbca8b9_8b893645",
+      "range": {
+        "startLine": 1477,
+        "startChar": 1,
+        "endLine": 1490,
+        "endChar": 80
+      },
+      "revId": "69af0b980ad2dceae9d42b6cfa985c4c45baa8f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
