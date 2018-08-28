@@ -1,0 +1,363 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16031ab4_712c35c1",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Nit: rename to object_",
+      "range": {
+        "startLine": 94,
+        "startChar": 14,
+        "endLine": 94,
+        "endChar": 28
+      },
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c19e6bfe_1997c87e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "No need to state the obvious.",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7cb023e_8cbbe80e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 685,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "need",
+      "range": {
+        "startLine": 685,
+        "startChar": 18,
+        "endLine": 685,
+        "endChar": 23
+      },
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f559332_22400649",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "their",
+      "range": {
+        "startLine": 686,
+        "startChar": 68,
+        "endLine": 686,
+        "endChar": 71
+      },
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75f4affb_cf7d1094",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "been",
+      "range": {
+        "startLine": 687,
+        "startChar": 73,
+        "endLine": 687,
+        "endChar": 75
+      },
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49cb3a5e_d9d403ab",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "I find it strange that we first do the basic serialization of elements here but in some cases then throw it away and serialize a modified version.\n\nCan we rewrite this code to have the following structure:\n\nbool const empty_or_cow \u003d elements_object-\u003elength() \u003d\u003d 0 || ...\nif (empty_or_cow \u0026\u0026 Heap::InNewSpace(...)) {\n  ... (do not write elements_ or elements_tenured_) ...\n}\n\nCHECK_NULL(elements_);\nelements_ \u003d broker-\u003eGetOrCreate(elements_object);\nelements_tenured_ \u003d empty_or_cow;\n\nif (empty_or_cow) {\n  // Don\u0027t need to serialize deeper because ...\n} else if (boilerplate-\u003eHasSmiOrObjectElements()) {\n  ... (do not write elements_ or elements_tenured_) ...\n} else {\n  CHECK(boilerplate-\u003eHasDoubleElements());\n  CHECK_LE(elements_object-\u003eSize(), kMaxRegularHeapObjectSize);\n  elements_-\u003eAsFixedDoubleArray()-\u003eSerializeContents();\n}\n\nThis makes me wonder if we can end up with elements_tenured being false although it actually is tenured.",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d0d5c50_21bb4234",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Nit: CHECK_GT",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f07b5d6_6ff10d5a",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Whenever you decrement max_properties (here and below) you need to check if you reach 0.",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0eee0a0d_0b0c9492",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "So the meaning of max_properties is the max total number of properties rather than the max number of properties _per object_? Is this really what we want? In any case, please document that at the function signature.",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c31365_329adb29",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Please make const.",
+      "range": {
+        "startLine": 733,
+        "startChar": 6,
+        "endLine": 733,
+        "endChar": 11
+      },
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44dea863_54ea87b6",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Nit: CHECK_GT",
+      "range": {
+        "startLine": 739,
+        "startChar": 4,
+        "endLine": 739,
+        "endChar": 12
+      },
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e69a4288_8078d8e1",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1050,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Let\u0027s remove this from JSObjectRef.",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd7741ab_671625a4",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Can this be removed now?",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e90b9cd_583b143b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Nit: just inline",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d68f4fb6_794cd43c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Nit: just inline",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4682f902_0f2ac986",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "No need to state the obvious.",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a53d340_ddf9ccc7",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "Nit: just inline",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc76a6cd_bec2d80b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1482,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "I think you can use IF_BROKER_DISABLED_ACCESS_HANDLE_C here.",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88dbf355_49691b47",
+        "filename": "src/compiler/js-heap-copy-reducer.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T12:33:03Z",
+      "side": 1,
+      "message": "I thought we had removed this comment already.",
+      "revId": "c17d5a93587b98f038042fb6be45f5b0897e829b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
