@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2955b505_76976a6f",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T17:07:19Z",
+      "side": 1,
+      "message": "Don\u0027t you want to clear the exception?",
+      "revId": "b0c3339e53876ad692cbd42bca5e352a27b18270",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
