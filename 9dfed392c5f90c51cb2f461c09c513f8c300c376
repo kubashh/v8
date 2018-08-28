@@ -22,6 +22,23 @@
       "revId": "9dfed392c5f90c51cb2f461c09c513f8c300c376",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d6e54f_50cb543a",
+        "filename": "test/mjsunit/wasm/wasm-constants.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-08-28T07:27:54Z",
+      "side": 1,
+      "message": "Could you make this line less than 80 characters wide?",
+      "revId": "9dfed392c5f90c51cb2f461c09c513f8c300c376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
