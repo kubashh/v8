@@ -513,7 +513,6 @@
   'annexB/language/function-code/block-decl-func-skip-arguments': [FAIL],
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=6538
-  'built-ins/Array/prototype/unshift/throws-if-integer-limit-exceeded': [SKIP],
   'built-ins/Array/prototype/splice/create-species-length-exceeding-integer-limit': [FAIL],
   'built-ins/Array/prototype/splice/throws-if-integer-limit-exceeded': [SKIP],
 

@@ -75,8 +75,8 @@ module array {
       context: Context, receiver: Object,
       arguments: constexpr Arguments): Object
   labels Slow {
-    EnsureFastJSArray(context, receiver) otherwise Slow;
-    const array: JSArray = unsafe_cast<JSArray>(receiver);
+    const array: FastJSArray = cast<FastJSArray>(context, receiver)
+    otherwise Slow;
 
     const length: Smi = array.length_fast;
     if (length == 0) return SmiConstant(-1);
