@@ -1192,9 +1192,8 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromEval(
     Handle<String> source, Handle<SharedFunctionInfo> outer_info,
     Handle<Context> context, LanguageMode language_mode,
     ParseRestriction restriction, int parameters_end_pos,
-    int eval_scope_position, int eval_position, int line_offset,
-    int column_offset, Handle<Object> script_name,
-    ScriptOriginOptions options) {
+    int eval_scope_position, int eval_position, ScriptOriginOptions options,
+    int line_offset, int column_offset, Handle<Object> script_name) {
   Isolate* isolate = context->GetIsolate();
   int source_length = source->length();
   isolate->counters()->total_eval_size()->Increment(source_length);
@@ -1330,7 +1329,8 @@ bool Compiler::CodeGenerationFromStringsAllowed(Isolate* isolate,
 
 MaybeHandle<JSFunction> Compiler::GetFunctionFromString(
     Handle<Context> context, Handle<String> source,
-    ParseRestriction restriction, int parameters_end_pos) {
+    ParseRestriction restriction, int parameters_end_pos,
+    ScriptOriginOptions script_origin_options) {
   Isolate* const isolate = context->GetIsolate();
   Handle<Context> native_context(context->native_context(), isolate);
 
@@ -1350,9 +1350,10 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromString(
   int eval_position = kNoSourcePosition;
   Handle<SharedFunctionInfo> outer_info(
       native_context->empty_function()->shared(), isolate);
-  return Compiler::GetFunctionFromEval(
-      source, outer_info, native_context, LanguageMode::kSloppy, restriction,
-      parameters_end_pos, eval_scope_position, eval_position);
+  return Compiler::GetFunctionFromEval(source, outer_info, native_context,
+                                       LanguageMode::kSloppy, restriction,
+                                       parameters_end_pos, eval_scope_position,
+                                       eval_position, script_origin_options);
 }
 
 namespace {

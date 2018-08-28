@@ -7,6 +7,8 @@
 #include "src/code-factory.h"
 #include "src/compiler.h"
 #include "src/counters.h"
+#include "src/isolate.h"
+#include "src/messages.h"
 #include "src/objects-inl.h"
 #include "src/uri.h"
 
@@ -94,9 +96,10 @@ BUILTIN(GlobalEval) {
   Handle<JSFunction> function;
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
       isolate, function,
-      Compiler::GetFunctionFromString(handle(target->native_context(), isolate),
-                                      Handle<String>::cast(x),
-                                      NO_PARSE_RESTRICTION, kNoSourcePosition));
+      Compiler::GetFunctionFromString(
+          handle(target->native_context(), isolate), Handle<String>::cast(x),
+          NO_PARSE_RESTRICTION, kNoSourcePosition,
+          isolate->GetScriptOriginOptionsForEval()));
   RETURN_RESULT_OR_FAILURE(
       isolate,
       Execution::Call(isolate, function, target_global_proxy, 0, nullptr));

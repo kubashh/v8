@@ -136,7 +136,7 @@ MaybeHandle<Object> DebugEvaluate::Evaluate(
       Compiler::GetFunctionFromEval(source, outer_info, context,
                                     LanguageMode::kSloppy, NO_PARSE_RESTRICTION,
                                     kNoSourcePosition, kNoSourcePosition,
-                                    kNoSourcePosition),
+                                    kNoSourcePosition, ScriptOriginOptions()),
       Object);
 
   Handle<Object> result;

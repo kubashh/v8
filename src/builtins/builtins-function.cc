@@ -107,7 +107,8 @@ MaybeHandle<Object> CreateDynamicFunction(Isolate* isolate,
         isolate, function,
         Compiler::GetFunctionFromString(
             handle(target->native_context(), isolate), source,
-            ONLY_SINGLE_FUNCTION_LITERAL, parameters_end_pos),
+            ONLY_SINGLE_FUNCTION_LITERAL, parameters_end_pos,
+            isolate->GetScriptOriginOptionsForEval()),
         Object);
     Handle<Object> result;
     ASSIGN_RETURN_ON_EXCEPTION(

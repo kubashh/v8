@@ -1774,6 +1774,16 @@ bool Isolate::ComputeLocationFromStackTrace(MessageLocation* target,
   return false;
 }
 
+ScriptOriginOptions Isolate::GetScriptOriginOptionsForEval() {
+  MessageLocation location;
+  Handle<Script> script;
+
+  if (ComputeLocation(&location)) script = location.script();
+  ScriptOriginOptions existing_options =
+      script.is_null() ? ScriptOriginOptions() : script->origin_options();
+  return ScriptOriginOptions(existing_options.IsSharedCrossOrigin(),
+                             existing_options.IsOpaque());
+}
 
 Handle<JSMessageObject> Isolate::CreateMessage(Handle<Object> exception,
                                                MessageLocation* location) {

@@ -101,9 +101,9 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
       Handle<String> source, Handle<SharedFunctionInfo> outer_info,
       Handle<Context> context, LanguageMode language_mode,
       ParseRestriction restriction, int parameters_end_pos,
-      int eval_scope_position, int eval_position, int line_offset = 0,
-      int column_offset = 0, Handle<Object> script_name = Handle<Object>(),
-      ScriptOriginOptions options = ScriptOriginOptions());
+      int eval_scope_position, int eval_position, ScriptOriginOptions options,
+      int line_offset = 0, int column_offset = 0,
+      Handle<Object> script_name = Handle<Object>());
 
   struct ScriptDetails {
     ScriptDetails() : line_offset(0), column_offset(0) {}
@@ -135,7 +135,8 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   // Create a (bound) function for a String source within a context for eval.
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSFunction> GetFunctionFromString(
       Handle<Context> context, Handle<String> source,
-      ParseRestriction restriction, int parameters_end_pos);
+      ParseRestriction restriction, int parameters_end_pos,
+      ScriptOriginOptions options);
 
   // Create a shared function info object for a String source.
   static MaybeHandle<SharedFunctionInfo> GetSharedFunctionInfoForScript(

@@ -936,6 +936,9 @@ class Isolate : private HiddenFactory {
                                     Handle<Object> exception);
   bool ComputeLocationFromStackTrace(MessageLocation* target,
                                      Handle<Object> exception);
+  // Returns a ScriptOriginOptions for eval-ish functionalities (eval,
+  // CreateDynamicFunction, etc).
+  ScriptOriginOptions GetScriptOriginOptionsForEval();
 
   Handle<JSMessageObject> CreateMessage(Handle<Object> exception,
                                         MessageLocation* location);

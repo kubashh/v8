@@ -321,7 +321,8 @@ static Object* CompileGlobalEval(Isolate* isolate, Handle<String> source,
       isolate, compiled,
       Compiler::GetFunctionFromEval(source, outer_info, context, language_mode,
                                     restriction, kNoSourcePosition,
-                                    eval_scope_position, eval_position),
+                                    eval_scope_position, eval_position,
+                                    isolate->GetScriptOriginOptionsForEval()),
       ReadOnlyRoots(isolate).exception());
   return *compiled;
 }
