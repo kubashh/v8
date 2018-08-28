@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2e940f86_27c3416d",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-28T08:02:33Z",
+      "side": 1,
+      "message": "I agree. There is the possibility to not remember feedback_vector across MaybeTailCallOptimizedCodeSlot, and reload it immediately afterwards. This would (together with a small modification of MaybeTailCallOptimizedCodeSlot) get rid of the push/pop because it frees ebx.",
+      "parentUuid": "170fcb73_d3fa4d7b",
+      "revId": "13dc7f0e2740410ef9c6d8ed0be1cee2e8e01794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f356e56d_ba090cad",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 6
