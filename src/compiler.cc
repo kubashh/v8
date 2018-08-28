@@ -1192,8 +1192,7 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromEval(
     Handle<String> source, Handle<SharedFunctionInfo> outer_info,
     Handle<Context> context, LanguageMode language_mode,
     ParseRestriction restriction, int parameters_end_pos,
-    int eval_scope_position, int eval_position, ScriptOriginOptions options,
-    int line_offset, int column_offset, Handle<Object> script_name) {
+    int eval_scope_position, int eval_position, ScriptOriginOptions options) {
   Isolate* isolate = context->GetIsolate();
   int source_length = source->length();
   isolate->counters()->total_eval_size()->Increment(source_length);
@@ -1233,13 +1232,6 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromEval(
   } else {
     ParseInfo parse_info(isolate);
     script = parse_info.CreateScript(isolate, source, options);
-    if (!script_name.is_null()) {
-      // TODO(cbruni): check whether we can store this data in options
-      script->set_name(*script_name);
-      script->set_line_offset(line_offset);
-      script->set_column_offset(column_offset);
-      LOG(isolate, ScriptDetails(*script));
-    }
     script->set_compilation_type(Script::COMPILATION_TYPE_EVAL);
     script->set_eval_from_shared(*outer_info);
     if (eval_position == kNoSourcePosition) {
