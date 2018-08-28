@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94873855_d8dfad26",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-28T15:05:51Z",
+      "side": 1,
+      "message": "nit: As discussed offline, still \"signed\" I think.",
+      "range": {
+        "startLine": 344,
+        "startChar": 37,
+        "endLine": 344,
+        "endChar": 45
+      },
+      "revId": "1264e40bfeaf70e87374de106cfbc1e59b456ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f153f50_93130d5f",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-28T15:05:51Z",
+      "side": 1,
+      "message": "nit: Comment outdated. Lets remove the second and third sentence.",
+      "range": {
+        "startLine": 1036,
+        "startChar": 40,
+        "endLine": 1037,
+        "endChar": 59
+      },
+      "revId": "1264e40bfeaf70e87374de106cfbc1e59b456ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
