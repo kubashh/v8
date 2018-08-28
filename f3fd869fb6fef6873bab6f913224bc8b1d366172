@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "dfbf8c3c_d83f1699",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-08-28T08:18:07Z",
+      "side": 1,
+      "message": "You\u0027re right, yes.",
+      "parentUuid": "af099fa7_9be3509a",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65d5896c_819a55b0",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 4
@@ -282,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "21d99fb3_ea14f4c6",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-08-28T08:18:07Z",
+      "side": 1,
+      "message": "This line, yes. I\u0027m not sure what\u0027s the semantics, i.e. what\u0027s your intention with this code - this is why a named function might help IMO. Don\u0027t insist on the change, though.",
+      "parentUuid": "114795ce_09b585b2",
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "476eda59_d7fdb321",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 4
@@ -361,6 +397,30 @@
       "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b804b73_e31ec1cc",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-08-28T08:18:07Z",
+      "side": 1,
+      "message": "That\u0027s good, thanks.",
+      "parentUuid": "364ea1e2_8a956ff8",
+      "range": {
+        "startLine": 1007,
+        "startChar": 0,
+        "endLine": 1009,
+        "endChar": 50
+      },
+      "revId": "f3fd869fb6fef6873bab6f913224bc8b1d366172",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
