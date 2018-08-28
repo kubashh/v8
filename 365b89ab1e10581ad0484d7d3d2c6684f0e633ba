@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "42f7b4d0_c61811fb",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-28T08:49:49Z",
+      "side": 1,
+      "message": "What I\u0027m concerned about is that the new BCH builtins change two properties of the builtins list:\n\n 1. The BUILTIN_LIST is flat and can be passed e.g. \n\n   #define CASE(Name, ...) case k##Name:\n\n    helpers which will be applied once to each builtin.\n\n 2. Each builtin ID is a real builtin. We don\u0027t expose placeholder code objects created during mksnapshot. At the moment we\u0027d have 64 such empty pseudo-builtins.\n\nThe first point is mainly a usability nit - if someone sees the BUILTIN_LIST for the first time, they will not expect it to be a nested list construct.\n\nThe second is the bigger issue to me. It wastes space in the builtins table, in the snapshot, in .text, and it generates unused code objects and associated metadata. In general it feels weird to have unused builtins.\n\nMy idea would be a new flat BYTECODE_HANDLER_LIST(V) that explicitly lists all real handlers. The list basically associates a bytecode with an operand scale. It would be used for handler setup in the builtins table.\n\nEverything else (dispatch table setup, dispatch logic) remains unmodified. The only time a mapping is needed is during dispatch table setup, and that can be done through macro magic.\n\nThe list could be something like this:\n\n  #define ONLY_SINGLE(V, Name) V(Name, kSingle)\n  \n  #define ALL_SCALES(V, Name)           \\\n    V(Name##Handle, Name, kSingle)      \\\n    V(Name##WideHandler, Name, kDouble) \\\n    V(Name##ExtraWideHandler, Name, kQuadruple)\n  \n  #define BYTECODE_HANDLER_LIST(V) \\\n    ALL_SCALES(Wide)               \\\n    ONLY_SINGLE(ExtraWide)         \\\n    /* ... */\n\nYes, it\u0027s one extra spot to touch when modifying a bytecode, but otherwise I think it\u0027s a cleaner solution for handler builtins. Wdyt?",
+      "parentUuid": "756ff422_76cfbcc6",
+      "revId": "365b89ab1e10581ad0484d7d3d2c6684f0e633ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b1bc9de_f79db417",
         "filename": "src/interpreter/setup-interpreter-internal.cc",
         "patchSetId": 8
