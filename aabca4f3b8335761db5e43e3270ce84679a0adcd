@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62345038_d97c6fc1",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T08:18:20Z",
+      "side": 1,
+      "message": "It\u0027s a little odd to have this here, esp. in the middle of the function. We already check this in Serialize so I think you can drop it here.",
+      "revId": "aabca4f3b8335761db5e43e3270ce84679a0adcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bcf2b59_2b94c534",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-08-28T08:18:20Z",
+      "side": 1,
+      "message": "I\u0027d prefer to have this only on the Data class.",
+      "revId": "aabca4f3b8335761db5e43e3270ce84679a0adcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
