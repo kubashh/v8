@@ -16,6 +16,24 @@
       "revId": "b12196c818369703b00ee568fc8538c52ae012e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55009d2c_2537342f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3293,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-08-28T08:11:26Z",
+      "side": 1,
+      "message": "Done, thanks for the idea.\nI wanted the CL to be as minimal as possible, but it makes sense to properly clean it up.",
+      "parentUuid": "3f61e041_09f44b33",
+      "revId": "b12196c818369703b00ee568fc8538c52ae012e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
