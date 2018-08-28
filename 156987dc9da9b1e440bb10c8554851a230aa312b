@@ -140,6 +140,52 @@
     },
     {
       "key": {
+        "uuid": "58dbf8c7_ffcd6aa1",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-08-28T11:08:18Z",
+      "side": 1,
+      "message": "Can we add a check that it doesn\u0027t overflow?\n\nsize_t global_size \u003d OldGenerationSizeOfObjects() + backing_store_bytes_;\nCHECK_GE(global_size, backing_store_bytes_);\nreturn global_size;",
+      "range": {
+        "startLine": 1330,
+        "startChar": 4,
+        "endLine": 1330,
+        "endChar": 63
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7360c6f8_24b9293d",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1819,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-08-28T11:08:18Z",
+      "side": 1,
+      "message": "GlobalSizeOfObjects()",
+      "range": {
+        "startLine": 1819,
+        "startChar": 25,
+        "endLine": 1819,
+        "endChar": 76
+      },
+      "revId": "156987dc9da9b1e440bb10c8554851a230aa312b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9477948e_d18034f2",
         "filename": "test/mjsunit/external-backing-store-gc.js",
         "patchSetId": 15
