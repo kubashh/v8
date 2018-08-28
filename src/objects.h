@@ -170,6 +170,7 @@
 //           - PromiseFulfillReactionJobTask
 //           - PromiseRejectReactionJobTask
 //         - PromiseResolveThenableJobTask
+//       - MicrotaskQueue
 //       - Module
 //       - ModuleInfoEntry
 //     - FeedbackCell
@@ -488,6 +489,8 @@ enum InstanceType : uint16_t {
   PROMISE_REJECT_REACTION_JOB_TASK_TYPE,
   PROMISE_RESOLVE_THENABLE_JOB_TASK_TYPE,  // LAST_MICROTASK_TYPE
 
+  MICROTASK_QUEUE_TYPE,
+
   ALLOCATION_SITE_TYPE,
   // FixedArrays.
   FIXED_ARRAY_TYPE,  // FIRST_FIXED_ARRAY_TYPE
@@ -711,6 +714,7 @@ class KeyAccumulator;
 class LayoutDescriptor;
 class LookupIterator;
 class FieldType;
+class MicrotaskQueue;
 class Module;
 class ModuleInfoEntry;
 class ObjectHashTable;
