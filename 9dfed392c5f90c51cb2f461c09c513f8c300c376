@@ -39,6 +39,24 @@
       "revId": "9dfed392c5f90c51cb2f461c09c513f8c300c376",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e8946e7_821cc5c2",
+        "filename": "test/mjsunit/wasm/wasm-constants.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-08-28T08:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5d6e54f_50cb543a",
+      "revId": "9dfed392c5f90c51cb2f461c09c513f8c300c376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
