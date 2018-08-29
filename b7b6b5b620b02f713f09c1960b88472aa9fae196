@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5c6ba4f0_f665ffd0",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T17:05:56Z",
+      "side": 1,
+      "message": "Clone returns a temporary, so we need either a move or a copy constructor. At least it seems to be what the compiler tells me.\n:)",
+      "parentUuid": "7a18736f_b913df19",
+      "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "588d223f_8e62766b",
         "filename": "src/parsing/scanner-character-streams.cc",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-29T16:53:31Z",
       "side": 1,
       "message": "If you use the HeapStringType above (perhaps rename it to CharTraits) you can here use CharTraits\u003cChar\u003e::ExternalString* to avoid the cast; and you can inline the methods below with a single implementation.",
+      "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f9cc515_be82c4b0",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T17:05:56Z",
+      "side": 1,
+      "message": "Thanks!\nDone.",
+      "parentUuid": "588d223f_8e62766b",
       "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -67,6 +103,24 @@
       "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "158f2fe4_25ade8cf",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T17:05:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c951e00c_afd48150",
+      "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
