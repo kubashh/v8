@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8ebfaad_1ae17730",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2747,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-29T12:31:55Z",
+      "side": 1,
+      "message": "Not sure what cachable means here or what we are meant to do if it isn\u0027t cacheable. Can we not just have Lock / Unlock be noops if the string doesn\u0027t move?",
+      "range": {
+        "startLine": 2747,
+        "startChar": 4,
+        "endLine": 2747,
+        "endChar": 66
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b2a5069_ef490ff9",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-29T12:31:55Z",
+      "side": 1,
+      "message": "I\u0027d prefer these aren\u0027t called explicitly by most code. Could we move the have the scoped locker class be the mechanism used by V8 code to lock / unlock these strings (i.e., move that to live in v8.h / api.cc and have it be a friend class of ExternalStringResourceBase so that it call call private lock / unlock functions. Also, could we make it clearer (in comments) that these functions increment the lock count, and it is only unlocked on the final call to unlock. \n\nAs a higher level point, I think we should make it more explicit in V8 what strings might need to be locked. Could we add a wrapper class (MoveableExternalString or similar) that wraps an ExternalStringResourceBase but only allows access to it when the lock is held? We would need to change a bit more code to make CharacterStreams take a MoveableExternalString explicitly, but I think this would make it much clearer on the V8 side when we have a string that needs to be locked.  Toon, WDYT?",
+      "range": {
+        "startLine": 2755,
+        "startChar": 3,
+        "endLine": 2756,
+        "endChar": 34
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d14b1af_f387cf9d",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2757,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-29T12:31:55Z",
+      "side": 1,
+      "message": "Please add whitespace between functions",
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "438ec8d6_0a5be472",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-29T12:31:55Z",
+      "side": 1,
+      "message": "Do these happen? What happens if we have an uncached string, why wouldn\u0027t we need to lock in these cases?",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 50
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9230fdf3_43c5fa71",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-29T12:31:55Z",
+      "side": 1,
+      "message": "Setting resource to nullptr on moves seems a bit confusing. Can we just disallow moving / copying with DISALLOW_COPY_AND_MOVE_AND_ASSIGN, and add an explicit method for cloning the lock to make it explicit that this causes the string to increment the lock count.",
+      "range": {
+        "startLine": 46,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
