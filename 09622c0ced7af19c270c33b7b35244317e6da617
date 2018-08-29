@@ -124,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "1c66c882_3b87f9a8",
+        "filename": "src/builtins/array-unshift.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-29T13:09:46Z",
+      "side": 1,
+      "message": "Ah yeah, didn\u0027t think of the builtin call. Let\u0027s keep the current form then.\n\n(We wouldn\u0027t need to cache arg_count, arguments.length already just returns a variable value.)",
+      "parentUuid": "be0e34ac_84aa9c22",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5edf0e0e_aa0e23f7",
         "filename": "src/builtins/array-unshift.tq",
         "patchSetId": 7
@@ -153,6 +171,24 @@
       "side": 1,
       "message": "We could do that using an \"extern constant\". We would need to change this later though, because with the Torque IR we won\u0027t be able to use arbitrary C++ strings as constexpr types.",
       "parentUuid": "5edf0e0e_aa0e23f7",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25a205bb_09099a31",
+        "filename": "src/builtins/array-unshift.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-29T13:09:46Z",
+      "side": 1,
+      "message": "Two alternatives: add LengthString() to CSA, or add SetLengthProperty(). I think either are preferable to the raw \u0027length\u0027 string.",
+      "parentUuid": "3725a04f_12b6466e",
       "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
