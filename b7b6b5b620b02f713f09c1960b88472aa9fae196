@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7359563a_854971b1",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-29T19:38:28Z",
+      "side": 1,
+      "message": "I think if you replace clone with the copy constructor again you can avoid this move constructor (and any need to handle null resource)",
+      "parentUuid": "5c6ba4f0_f665ffd0",
+      "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "588d223f_8e62766b",
         "filename": "src/parsing/scanner-character-streams.cc",
         "patchSetId": 7
