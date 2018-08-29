@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a18736f_b913df19",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-29T16:53:31Z",
+      "side": 1,
+      "message": "Is this still necessary?",
+      "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "588d223f_8e62766b",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-29T16:53:31Z",
+      "side": 1,
+      "message": "If you use the HeapStringType above (perhaps rename it to CharTraits) you can here use CharTraits\u003cChar\u003e::ExternalString* to avoid the cast; and you can inline the methods below with a single implementation.",
+      "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50ef4da0_1d1aea18",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-29T16:53:31Z",
+      "side": 1,
+      "message": "Nice :)",
+      "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c951e00c_afd48150",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-29T16:53:31Z",
+      "side": 1,
+      "message": "I suppose this isn\u0027t necessary anymore now.",
+      "revId": "b7b6b5b620b02f713f09c1960b88472aa9fae196",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
