@@ -1351,11 +1351,20 @@ void VisitPairAtomicBinOp(InstructionSelector* selector, Node* node,
       g.UseFixed(value, ebx), g.UseFixed(value_high, ecx),
       g.UseUniqueRegister(base),
       g.GetEffectiveIndexOperand(index, &addressing_mode)};
-  InstructionOperand outputs[] = {
-      g.DefineAsFixed(NodeProperties::FindProjection(node, 0), eax),
-      g.DefineAsFixed(NodeProperties::FindProjection(node, 1), edx)};
   InstructionCode code = opcode | AddressingModeField::encode(addressing_mode);
-  selector->Emit(code, arraysize(outputs), outputs, arraysize(inputs), inputs);
+  Node* projection0 = NodeProperties::FindProjection(node, 0);
+  Node* projection1 = NodeProperties::FindProjection(node, 1);
+  if (projection0 == nullptr && projection1 == nullptr) {
+    InstructionOperand temps[] = {g.TempRegister(eax), g.TempRegister(edx)};
+    selector->Emit(code, 0, nullptr, arraysize(inputs), inputs,
+                   arraysize(temps), temps);
+  } else {
+    DCHECK(projection0 != nullptr && projection1 != nullptr);
+    InstructionOperand outputs[] = {g.DefineAsFixed(projection0, eax),
+                                    g.DefineAsFixed(projection1, edx)};
+    selector->Emit(code, arraysize(outputs), outputs, arraysize(inputs),
+                   inputs);
+  }
 }
 
 }  // namespace
@@ -1745,14 +1754,23 @@ void InstructionSelector::VisitWord32AtomicPairLoad(Node* node) {
   Node* index = node->InputAt(1);
   InstructionOperand inputs[] = {g.UseUniqueRegister(base),
                                  g.GetEffectiveIndexOperand(index, &mode)};
-  InstructionOperand temps[] = {g.TempDoubleRegister()};
-  InstructionOperand outputs[] = {
-      g.DefineAsRegister(NodeProperties::FindProjection(node, 0)),
-      g.DefineAsRegister(NodeProperties::FindProjection(node, 1))};
   InstructionCode code =
       kIA32Word32AtomicPairLoad | AddressingModeField::encode(mode);
-  Emit(code, arraysize(outputs), outputs, arraysize(inputs), inputs,
-       arraysize(temps), temps);
+  Node* projection0 = NodeProperties::FindProjection(node, 0);
+  Node* projection1 = NodeProperties::FindProjection(node, 1);
+  if (projection0 == nullptr && projection1 == nullptr) {
+    InstructionOperand temps[] = {g.TempDoubleRegister(), g.TempRegister(),
+                                  g.TempRegister()};
+    Emit(code, 0, nullptr, arraysize(inputs), inputs, arraysize(temps), temps);
+  } else {
+    DCHECK(projection0 != nullptr && projection1 != nullptr);
+    InstructionOperand temps[] = {g.TempDoubleRegister()};
+    InstructionOperand outputs[] = {
+        g.DefineAsRegister(NodeProperties::FindProjection(node, 0)),
+        g.DefineAsRegister(NodeProperties::FindProjection(node, 1))};
+    Emit(code, arraysize(outputs), outputs, arraysize(inputs), inputs,
+         arraysize(temps), temps);
+  }
 }
 
 void InstructionSelector::VisitWord32AtomicPairStore(Node* node) {
@@ -1812,12 +1830,20 @@ void InstructionSelector::VisitWord32AtomicPairCompareExchange(Node* node) {
       // InputAt(0) => base
       g.UseUniqueRegister(node->InputAt(0)),
       g.GetEffectiveIndexOperand(index, &addressing_mode)};
-  InstructionOperand outputs[] = {
-      g.DefineAsFixed(NodeProperties::FindProjection(node, 0), eax),
-      g.DefineAsFixed(NodeProperties::FindProjection(node, 1), edx)};
+  Node* projection0 = NodeProperties::FindProjection(node, 0);
+  Node* projection1 = NodeProperties::FindProjection(node, 1);
   InstructionCode code = kIA32Word32AtomicPairCompareExchange |
                          AddressingModeField::encode(addressing_mode);
-  Emit(code, arraysize(outputs), outputs, arraysize(inputs), inputs);
+  if (projection0 == nullptr && projection1 == nullptr) {
+    InstructionOperand temps[] = {g.TempRegister(eax), g.TempRegister(edx)};
+    Emit(code, 0, nullptr, arraysize(inputs), inputs, arraysize(temps), temps);
+  } else {
+    DCHECK(projection0 != nullptr && projection1 != nullptr);
+    InstructionOperand outputs[] = {
+        g.DefineAsFixed(NodeProperties::FindProjection(node, 0), eax),
+        g.DefineAsFixed(NodeProperties::FindProjection(node, 1), edx)};
+    Emit(code, arraysize(outputs), outputs, arraysize(inputs), inputs);
+  }
 }
 
 #define SIMD_INT_TYPES(V) \
