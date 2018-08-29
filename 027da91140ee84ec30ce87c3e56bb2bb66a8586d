@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "986d6852_33b585ad",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-29T10:27:41Z",
+      "side": 1,
+      "message": "Any reason we can\u0027t just pass another register as a scratch for |bytecode| here? Looks like esi is free (it\u0027s reloaded before we dispatch)",
+      "range": {
+        "startLine": 717,
+        "startChar": 12,
+        "endLine": 717,
+        "endChar": 41
+      },
+      "revId": "027da91140ee84ec30ce87c3e56bb2bb66a8586d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
