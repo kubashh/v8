@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd2af659_b96cdeb9",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-08-29T23:16:06Z",
+      "side": 1,
+      "message": "If you\u0027re going to use explicit register names here, then perhaps we need a DCHECK that the OutputRegisters are correct.",
+      "range": {
+        "startLine": 2747,
+        "startChar": 0,
+        "endLine": 2748,
+        "endChar": 0
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb5b4071_eca45c08",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-08-29T23:16:06Z",
+      "side": 1,
+      "message": "DCHECK that both projections are non-null?",
+      "range": {
+        "startLine": 2268,
+        "startChar": 0,
+        "endLine": 2268,
+        "endChar": 10
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "041f2a22_cea58234",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-08-29T23:16:06Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2329,
+        "startChar": 0,
+        "endLine": 2329,
+        "endChar": 57
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "923e6e16_a62d8f82",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2353,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-08-29T23:16:06Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2353,
+        "startChar": 0,
+        "endLine": 2353,
+        "endChar": 57
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b3bee6b_c7c68613",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-08-29T23:16:06Z",
+      "side": 1,
+      "message": "DCHECK OutputRegisters",
+      "range": {
+        "startLine": 434,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 0
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
