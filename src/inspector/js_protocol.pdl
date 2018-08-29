@@ -857,22 +857,7 @@ domain Runtime
         symbol
         bigint
       # Object subtype hint. Specified for `object` type values only.
-      optional enum subtype
-        array
-        null
-        node
-        regexp
-        date
-        map
-        set
-        weakmap
-        weakset
-        iterator
-        generator
-        error
-        proxy
-        promise
-        typedarray
+      optional string subtype
       # Object class (constructor) name. Specified for `object` type values only.
       optional string className
       # Remote object value in case of primitive values or JSON values (if it was requested).
@@ -910,19 +895,7 @@ domain Runtime
         symbol
         bigint
       # Object subtype hint. Specified for `object` type values only.
-      optional enum subtype
-        array
-        null
-        node
-        regexp
-        date
-        map
-        set
-        weakmap
-        weakset
-        iterator
-        generator
-        error
+      optional string subtype
       # String representation of the object.
       optional string description
       # True iff some of the properties or entries of the original object did not fit.
@@ -952,19 +925,7 @@ domain Runtime
       # Nested value preview.
       optional ObjectPreview valuePreview
       # Object subtype hint. Specified for `object` type values only.
-      optional enum subtype
-        array
-        null
-        node
-        regexp
-        date
-        map
-        set
-        weakmap
-        weakset
-        iterator
-        generator
-        error
+      optional string subtype
 
   experimental type EntryPreview extends object
     properties

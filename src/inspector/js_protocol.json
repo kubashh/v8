@@ -1840,24 +1840,7 @@
                             "name": "subtype",
                             "description": "Object subtype hint. Specified for `object` type values only.",
                             "optional": true,
-                            "type": "string",
-                            "enum": [
-                                "array",
-                                "null",
-                                "node",
-                                "regexp",
-                                "date",
-                                "map",
-                                "set",
-                                "weakmap",
-                                "weakset",
-                                "iterator",
-                                "generator",
-                                "error",
-                                "proxy",
-                                "promise",
-                                "typedarray"
-                            ]
+                            "type": "string"
                         },
                         {
                             "name": "className",
@@ -1957,21 +1940,7 @@
                             "name": "subtype",
                             "description": "Object subtype hint. Specified for `object` type values only.",
                             "optional": true,
-                            "type": "string",
-                            "enum": [
-                                "array",
-                                "null",
-                                "node",
-                                "regexp",
-                                "date",
-                                "map",
-                                "set",
-                                "weakmap",
-                                "weakset",
-                                "iterator",
-                                "generator",
-                                "error"
-                            ]
+                            "type": "string"
                         },
                         {
                             "name": "description",
@@ -2045,21 +2014,7 @@
                             "name": "subtype",
                             "description": "Object subtype hint. Specified for `object` type values only.",
                             "optional": true,
-                            "type": "string",
-                            "enum": [
-                                "array",
-                                "null",
-                                "node",
-                                "regexp",
-                                "date",
-                                "map",
-                                "set",
-                                "weakmap",
-                                "weakset",
-                                "iterator",
-                                "generator",
-                                "error"
-                            ]
+                            "type": "string"
                         }
                     ]
                 },
