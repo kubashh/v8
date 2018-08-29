@@ -416,41 +416,37 @@ void ComputePoisonedAddressForLoad(CodeGenerator* codegen,
     __ dmb(ISH);                                                             \
   } while (0)
 
-#define ASSEMBLE_ATOMIC64_ARITH_BINOP(instr1, instr2)                       \
-  do {                                                                      \
-    Label binop;                                                            \
-    __ add(i.TempRegister(0), i.InputRegister(2), i.InputRegister(3));      \
-    __ dmb(ISH);                                                            \
-    __ bind(&binop);                                                        \
-    __ ldrexd(i.OutputRegister(0), i.OutputRegister(1), i.TempRegister(0)); \
-    __ instr1(i.TempRegister(1), i.OutputRegister(0), i.InputRegister(0),   \
-              SBit::SetCC);                                                 \
-    __ instr2(i.TempRegister(2), i.OutputRegister(1),                       \
-              Operand(i.InputRegister(1)));                                 \
-    DCHECK_EQ(LeaveCC, i.OutputSBit());                                     \
-    __ strexd(i.TempRegister(3), i.TempRegister(1), i.TempRegister(2),      \
-              i.TempRegister(0));                                           \
-    __ teq(i.TempRegister(3), Operand(0));                                  \
-    __ b(ne, &binop);                                                       \
-    __ dmb(ISH);                                                            \
+#define ASSEMBLE_ATOMIC64_ARITH_BINOP(instr1, instr2)                  \
+  do {                                                                 \
+    Label binop;                                                       \
+    __ add(i.TempRegister(0), i.InputRegister(2), i.InputRegister(3)); \
+    __ dmb(ISH);                                                       \
+    __ bind(&binop);                                                   \
+    __ ldrexd(r2, r3, i.TempRegister(0));                              \
+    __ instr1(i.TempRegister(1), r2, i.InputRegister(0), SBit::SetCC); \
+    __ instr2(i.TempRegister(2), r3, Operand(i.InputRegister(1)));     \
+    DCHECK_EQ(LeaveCC, i.OutputSBit());                                \
+    __ strexd(i.TempRegister(3), i.TempRegister(1), i.TempRegister(2), \
+              i.TempRegister(0));                                      \
+    __ teq(i.TempRegister(3), Operand(0));                             \
+    __ b(ne, &binop);                                                  \
+    __ dmb(ISH);                                                       \
   } while (0)
 
-#define ASSEMBLE_ATOMIC64_LOGIC_BINOP(instr)                                \
-  do {                                                                      \
-    Label binop;                                                            \
-    __ add(i.TempRegister(0), i.InputRegister(2), i.InputRegister(3));      \
-    __ dmb(ISH);                                                            \
-    __ bind(&binop);                                                        \
-    __ ldrexd(i.OutputRegister(0), i.OutputRegister(1), i.TempRegister(0)); \
-    __ instr(i.TempRegister(1), i.OutputRegister(0),                        \
-             Operand(i.InputRegister(0)));                                  \
-    __ instr(i.TempRegister(2), i.OutputRegister(1),                        \
-             Operand(i.InputRegister(1)));                                  \
-    __ strexd(i.TempRegister(3), i.TempRegister(1), i.TempRegister(2),      \
-              i.TempRegister(0));                                           \
-    __ teq(i.TempRegister(3), Operand(0));                                  \
-    __ b(ne, &binop);                                                       \
-    __ dmb(ISH);                                                            \
+#define ASSEMBLE_ATOMIC64_LOGIC_BINOP(instr)                           \
+  do {                                                                 \
+    Label binop;                                                       \
+    __ add(i.TempRegister(0), i.InputRegister(2), i.InputRegister(3)); \
+    __ dmb(ISH);                                                       \
+    __ bind(&binop);                                                   \
+    __ ldrexd(r2, r3, i.TempRegister(0));                              \
+    __ instr(i.TempRegister(1), r2, Operand(i.InputRegister(0)));      \
+    __ instr(i.TempRegister(2), r3, Operand(i.InputRegister(1)));      \
+    __ strexd(i.TempRegister(3), i.TempRegister(1), i.TempRegister(2), \
+              i.TempRegister(0));                                      \
+    __ teq(i.TempRegister(3), Operand(0));                             \
+    __ b(ne, &binop);                                                  \
+    __ dmb(ISH);                                                       \
   } while (0)
 
 #define ASSEMBLE_IEEE754_BINOP(name)                                           \
@@ -2746,11 +2742,16 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       ATOMIC_BINOP_CASE(Or, orr)
       ATOMIC_BINOP_CASE(Xor, eor)
 #undef ATOMIC_BINOP_CASE
-    case kArmWord32AtomicPairLoad:
+    case kArmWord32AtomicPairLoad: {
+      if (instr->OutputCount() > 0) {
+        DCHECK_EQ(i.OutputRegister(0), r0);
+        DCHECK_EQ(i.OutputRegister(1), r1);
+      }
       __ add(i.TempRegister(0), i.InputRegister(0), i.InputRegister(1));
-      __ ldrexd(i.OutputRegister(0), i.OutputRegister(1), i.TempRegister(0));
+      __ ldrexd(r0, r1, i.TempRegister(0));
       __ dmb(ISH);
       break;
+    }
     case kArmWord32AtomicPairStore: {
       Label store;
       __ add(i.TempRegister(0), i.InputRegister(0), i.InputRegister(1));
@@ -2766,6 +2767,10 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     }
 #define ATOMIC_ARITH_BINOP_CASE(op, instr1, instr2) \
   case kArmWord32AtomicPair##op: {                  \
+    if (instr->OutputCount() > 0) {                 \
+      DCHECK_EQ(i.OutputRegister(0), r2);           \
+      DCHECK_EQ(i.OutputRegister(1), r3);           \
+    }                                               \
     ASSEMBLE_ATOMIC64_ARITH_BINOP(instr1, instr2);  \
     break;                                          \
   }
@@ -2780,12 +2785,17 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       ATOMIC_LOGIC_BINOP_CASE(And, and_)
       ATOMIC_LOGIC_BINOP_CASE(Or, orr)
       ATOMIC_LOGIC_BINOP_CASE(Xor, eor)
+#undef ATOMIC_LOGIC_BINOP_CASE
     case kArmWord32AtomicPairExchange: {
+      if (instr->OutputCount() > 0) {
+        DCHECK_EQ(i.OutputRegister(0), r6);
+        DCHECK_EQ(i.OutputRegister(1), r7);
+      }
       Label exchange;
       __ add(i.TempRegister(0), i.InputRegister(2), i.InputRegister(3));
       __ dmb(ISH);
       __ bind(&exchange);
-      __ ldrexd(i.OutputRegister(0), i.OutputRegister(1), i.TempRegister(0));
+      __ ldrexd(r6, r7, i.TempRegister(0));
       __ strexd(i.TempRegister(1), i.InputRegister(0), i.InputRegister(1),
                 i.TempRegister(0));
       __ teq(i.TempRegister(1), Operand(0));
@@ -2794,15 +2804,19 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kArmWord32AtomicPairCompareExchange: {
+      if (instr->OutputCount() > 0) {
+        DCHECK_EQ(i.OutputRegister(0), r2);
+        DCHECK_EQ(i.OutputRegister(1), r3);
+      }
       __ add(i.TempRegister(0), i.InputRegister(4), i.InputRegister(5));
       Label compareExchange;
       Label exit;
       __ dmb(ISH);
       __ bind(&compareExchange);
-      __ ldrexd(i.OutputRegister(0), i.OutputRegister(1), i.TempRegister(0));
-      __ teq(i.InputRegister(0), Operand(i.OutputRegister(0)));
+      __ ldrexd(r2, r3, i.TempRegister(0));
+      __ teq(i.InputRegister(0), Operand(r2));
       __ b(ne, &exit);
-      __ teq(i.InputRegister(1), Operand(i.OutputRegister(1)));
+      __ teq(i.InputRegister(1), Operand(r3));
       __ b(ne, &exit);
       __ strexd(i.TempRegister(1), i.InputRegister(2), i.InputRegister(3),
                 i.TempRegister(0));
@@ -2812,7 +2826,6 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ dmb(ISH);
       break;
     }
-#undef ATOMIC_LOGIC_BINOP_CASE
 #undef ASSEMBLE_ATOMIC_LOAD_INTEGER
 #undef ASSEMBLE_ATOMIC_STORE_INTEGER
 #undef ASSEMBLE_ATOMIC_EXCHANGE_INTEGER
