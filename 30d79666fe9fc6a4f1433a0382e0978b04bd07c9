@@ -204,6 +204,30 @@
       "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8c3f559_8d76f5d3",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T13:45:12Z",
+      "side": 1,
+      "message": "Ah, sorry, the extra Lock()/Unlock() is during the ExternalStringStream object creation, from the BufferedCharacterStream constructor.\n\nEssentially, the lock must be created before calling ExternalString::GetChars(), because:\n- ExternalString::GetChars() must be protected by the lock (otherwise the pointer could move between the GetChars() call and the lock)\n- Argument evaluation order is unspecified in C++\n\nSo in\n  ScopedExternalStringLock lock(string);\n  return new BufferedCharacterStream\u003cExternalStringStream\u003e(\n      static_cast\u003csize_t\u003e(start_pos), std::move(lock),\n      string-\u003eGetChars() + start_offset, static_cast\u003csize_t\u003e(end_pos));\n\nThere is an extra Lock()/Unlock() pair from the local variable lock which is avoided with the move constructor.\n\nThis is a bit tricky, but as this is the same as what happens with std::lock_guard and std::unique_ptr, I thought this would be fine.",
+      "parentUuid": "10d49f79_d5071d61",
+      "range": {
+        "startLine": 46,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
