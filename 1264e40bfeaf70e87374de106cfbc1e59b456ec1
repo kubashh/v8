@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2296e7d6_812e2548",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-29T07:45:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94873855_d8dfad26",
+      "range": {
+        "startLine": 344,
+        "startChar": 37,
+        "endLine": 344,
+        "endChar": 45
+      },
+      "revId": "1264e40bfeaf70e87374de106cfbc1e59b456ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f153f50_93130d5f",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "1264e40bfeaf70e87374de106cfbc1e59b456ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccc430b3_19c41413",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-29T07:45:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f153f50_93130d5f",
+      "range": {
+        "startLine": 1036,
+        "startChar": 40,
+        "endLine": 1037,
+        "endChar": 59
+      },
+      "revId": "1264e40bfeaf70e87374de106cfbc1e59b456ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
