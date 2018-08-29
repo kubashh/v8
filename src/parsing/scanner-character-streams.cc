@@ -4,6 +4,10 @@
 
 #include "src/parsing/scanner-character-streams.h"
 
+#include <utility>
+#include <memory>
+#include <vector>
+
 #include "include/v8.h"
 #include "src/counters.h"
 #include "src/globals.h"
@@ -17,6 +21,44 @@ namespace internal {
 
 namespace {
 const unibrow::uchar kUtf8Bom = 0xFEFF;
+
+class ScopedExternalStringLock {
+ public:
+  explicit ScopedExternalStringLock(ExternalString* string) {
+    if (!string || !string->is_uncached()) return;
+
+    if (string->IsExternalOneByteString()) {
+      resource_ = ExternalOneByteString::cast(string)->resource();
+    } else {
+      DCHECK(external_string->IsExternalTwoByteString());
+      resource_ = ExternalTwoByteString::cast(string)->resource();
+    }
+
+    MaybeLock();
+  }
+
+  ScopedExternalStringLock(const ScopedExternalStringLock& other)
+      : resource_(other.resource_) {
+    MaybeLock();
+  }
+
+  ScopedExternalStringLock(ScopedExternalStringLock&& other)
+      : resource_(other.resource_) {
+    other.resource_ = nullptr;
+  }
+
+  ~ScopedExternalStringLock() {
+    if (resource_) resource_->Unlock();
+  }
+
+ private:
+  void MaybeLock() {
+    if (resource_) resource_->Lock();
+  }
+
+  const v8::String::ExternalStringResourceBase* resource_;
+};
+
 }  // namespace
 
 template <typename Char>
@@ -75,11 +117,12 @@ class OnHeapStream {
 template <typename Char>
 class ExternalStringStream {
  public:
-  ExternalStringStream(const Char* data, size_t end)
-      : data_(data), length_(end) {}
+  ExternalStringStream(ScopedExternalStringLock&& lock, const Char* data,
+                       size_t end)
+      : lock_(lock), data_(data), length_(end) {}
 
   ExternalStringStream(const ExternalStringStream& other)
-      : data_(other.data_), length_(other.length_) {}
+      : lock_(other.lock_), data_(other.data_), length_(other.length_) {}
 
   Range<Char> GetDataAt(size_t pos) {
     return {&data_[Min(length_, pos)], &data_[length_]};
@@ -89,6 +132,7 @@ class ExternalStringStream {
   static const bool kCanAccessHeap = false;
 
  private:
+  ScopedExternalStringLock lock_;
   const Char* const data_;
   const size_t length_;
 };
@@ -272,7 +316,8 @@ template <template <typename T> class ByteStream>
 class BufferedCharacterStream : public Utf16CharacterStream {
  public:
   template <class... TArgs>
-  BufferedCharacterStream(size_t pos, TArgs... args) : byte_stream_(args...) {
+  BufferedCharacterStream(size_t pos, TArgs&&... args)
+      : byte_stream_(std::forward<TArgs>(args)...) {
     buffer_pos_ = pos;
   }
 
@@ -324,7 +369,8 @@ template <template <typename T> class ByteStream>
 class UnbufferedCharacterStream : public Utf16CharacterStream {
  public:
   template <class... TArgs>
-  UnbufferedCharacterStream(size_t pos, TArgs... args) : byte_stream_(args...) {
+  UnbufferedCharacterStream(size_t pos, TArgs&&... args)
+      : byte_stream_(std::forward<TArgs>(args)...) {
     buffer_pos_ = pos;
   }
 
@@ -753,15 +799,17 @@ Utf16CharacterStream* ScannerStream::For(Isolate* isolate, Handle<String> data,
     data = String::Flatten(isolate, data);
   }
   if (data->IsExternalOneByteString()) {
+    ExternalOneByteString* string = ExternalOneByteString::cast(*data);
+    ScopedExternalStringLock lock(string);
     return new BufferedCharacterStream<ExternalStringStream>(
-        static_cast<size_t>(start_pos),
-        ExternalOneByteString::cast(*data)->GetChars() + start_offset,
-        static_cast<size_t>(end_pos));
+        static_cast<size_t>(start_pos), std::move(lock),
+        string->GetChars() + start_offset, static_cast<size_t>(end_pos));
   } else if (data->IsExternalTwoByteString()) {
+    ExternalTwoByteString* string = ExternalTwoByteString::cast(*data);
+    ScopedExternalStringLock lock(string);
     return new UnbufferedCharacterStream<ExternalStringStream>(
-        static_cast<size_t>(start_pos),
-        ExternalTwoByteString::cast(*data)->GetChars() + start_offset,
-        static_cast<size_t>(end_pos));
+        static_cast<size_t>(start_pos), std::move(lock),
+        string->GetChars() + start_offset, static_cast<size_t>(end_pos));
   } else if (data->IsSeqOneByteString()) {
     return new BufferedCharacterStream<OnHeapStream>(
         static_cast<size_t>(start_pos), Handle<SeqOneByteString>::cast(data),
@@ -785,8 +833,8 @@ std::unique_ptr<Utf16CharacterStream> ScannerStream::ForTesting(
     const char* data, size_t length) {
   return std::unique_ptr<Utf16CharacterStream>(
       new BufferedCharacterStream<ExternalStringStream>(
-          static_cast<size_t>(0), reinterpret_cast<const uint8_t*>(data),
-          static_cast<size_t>(length)));
+          static_cast<size_t>(0), ScopedExternalStringLock(nullptr),
+          reinterpret_cast<const uint8_t*>(data), static_cast<size_t>(length)));
 }
 
 Utf16CharacterStream* ScannerStream::For(
