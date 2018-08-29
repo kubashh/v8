@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "00976a32_d915f7fd",
+        "filename": "src/builtins/array-unshift.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-29T13:04:46Z",
+      "side": 1,
+      "message": "I think COW arrays get correctly converted in elements.cc, but I think it will be safer to do it here upfront. Most of conditions get DCHECKED in the C++ builtin now.",
+      "parentUuid": "fbb3abd1_79286497",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c01d2054_cb07b1eb",
         "filename": "src/builtins/array-unshift.tq",
         "patchSetId": 7
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "45b44362_de353b0f",
+        "filename": "src/builtins/array-unshift.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-29T13:04:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f908f1bd_56650ec7",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce0e0754_79a28bbc",
         "filename": "src/builtins/array-unshift.tq",
         "patchSetId": 7
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "be0e34ac_84aa9c22",
+        "filename": "src/builtins/array-unshift.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-29T13:04:46Z",
+      "side": 1,
+      "message": "In that case wouldn\u0027t we need to SmiTag \u0027j\u0027 for the third argument (since its a builtin call)?\nPlus another variable to cache arg_count in intptr form.",
+      "parentUuid": "ce0e0754_79a28bbc",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5edf0e0e_aa0e23f7",
         "filename": "src/builtins/array-unshift.tq",
         "patchSetId": 7
@@ -81,6 +135,24 @@
       "writtenOn": "2018-08-29T08:24:03Z",
       "side": 1,
       "message": "Could you use the factory()-\u003elength_string() instead to avoid creating a new string here? would a .length\u003d operator make sense on JSReceiver?",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3725a04f_12b6466e",
+        "filename": "src/builtins/array-unshift.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-29T13:04:46Z",
+      "side": 1,
+      "message": "We could do that using an \"extern constant\". We would need to change this later though, because with the Torque IR we won\u0027t be able to use arbitrary C++ strings as constexpr types.",
+      "parentUuid": "5edf0e0e_aa0e23f7",
       "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -121,6 +193,24 @@
     },
     {
       "key": {
+        "uuid": "753ea919_69b9a656",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-29T13:04:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ce7121d_cf5957a5",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44ceb0ee_2b472541",
         "filename": "src/builtins/builtins-array.cc",
         "patchSetId": 7
@@ -138,6 +228,24 @@
     },
     {
       "key": {
+        "uuid": "b9d22883_7c90102f",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-29T13:04:46Z",
+      "side": 1,
+      "message": "TransitionElementsKind will convert the target_kind to its respective HOLEY version, if the origin_kind is HOLEY.",
+      "parentUuid": "44ceb0ee_2b472541",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19457345_555bc1d8",
         "filename": "src/builtins/builtins-array.cc",
         "patchSetId": 7
@@ -152,6 +260,24 @@
       "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14523ffb_0aae0a40",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-29T13:04:46Z",
+      "side": 1,
+      "message": "Added DCHECKs for these with a comment that they are checked in the Torque code.",
+      "parentUuid": "19457345_555bc1d8",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
