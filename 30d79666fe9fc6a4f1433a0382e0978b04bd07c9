@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf2b50c3_72d802e1",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2747,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T16:54:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8ebfaad_1ae17730",
+      "range": {
+        "startLine": 2747,
+        "startChar": 4,
+        "endLine": 2747,
+        "endChar": 66
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b2a5069_ef490ff9",
         "filename": "include/v8.h",
         "patchSetId": 6
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "821fdb47_9500ef66",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T16:54:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "08a9c3fd_8fbb35d0",
+      "range": {
+        "startLine": 2755,
+        "startChar": 3,
+        "endLine": 2756,
+        "endChar": 34
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d14b1af_f387cf9d",
         "filename": "include/v8.h",
         "patchSetId": 6
@@ -110,6 +158,24 @@
       "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6052434_a61b5678",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2757,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T16:54:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d14b1af_f387cf9d",
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +223,30 @@
       "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5566ef75_0cdc4cea",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T16:54:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdaddcdc_fafb5c5c",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 50
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -279,6 +369,30 @@
     },
     {
       "key": {
+        "uuid": "7c8d01b7_c21c5256",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T16:54:52Z",
+      "side": 1,
+      "message": "Done, all locks protect non-nullptr objects, unless it has been moved away.",
+      "parentUuid": "6557e7d0_1019d364",
+      "range": {
+        "startLine": 46,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dcd33192_2675b60c",
         "filename": "src/parsing/scanner-character-streams.cc",
         "patchSetId": 6
@@ -290,6 +404,24 @@
       "writtenOn": "2018-08-29T14:37:45Z",
       "side": 1,
       "message": "Wouldn\u0027t it be simpler to change ExternalString to have something like GetChar() (which is simply resource()-\u003edata() anyway), make ExternalStringString take an ExternalString and create the lock itself?",
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee2db8cf_e8f3bc41",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T16:54:52Z",
+      "side": 1,
+      "message": "Thanks for the suggestion!\n\nLooked at it, it would have required non trivial changes, and changes in clients as well, possibly.\nUsed templates to achieve the same thing in the end in ExternalStringStream.",
+      "parentUuid": "dcd33192_2675b60c",
       "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8b7a894_f0bc1343",
+        "filename": "include/v8.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T16:54:52Z",
+      "side": 1,
+      "message": "Unsure about this change (and the deprecation above).\nOne one hand this maps to the actual meaning, on the other it\u0027s an API change.\n\nPlease advise :)",
+      "range": {
+        "startLine": 2750,
+        "startChar": 6,
+        "endLine": 2750,
+        "endChar": 7
+      },
+      "revId": "e6b8e59ab194df2cb17a8a864bb819824c3a632e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
