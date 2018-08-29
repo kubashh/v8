@@ -16,6 +16,24 @@
       "revId": "7514af7ecbf13f002c26d265cf20af6797d794e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b468c532_ebb0df4b",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-29T09:36:44Z",
+      "side": 1,
+      "message": "bytecode_size_table is aliasing scratch1, so we can\u0027t do that :(",
+      "parentUuid": "50395885_c99d9b23",
+      "revId": "7514af7ecbf13f002c26d265cf20af6797d794e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
