@@ -16,6 +16,24 @@
       "revId": "ed42a71d5ce74409ebfe227ea112a2266b0079dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f14c9f21_50c992ac",
+        "filename": "src/runtime/runtime-intl.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1292588
+      },
+      "writtenOn": "2018-08-29T10:41:15Z",
+      "side": 0,
+      "message": "Done! Why isn\u0027t stuff like unused headers and symbols picked up by `git cl format` though?",
+      "parentUuid": "6cb73792_fecb2d7c",
+      "revId": "ed42a71d5ce74409ebfe227ea112a2266b0079dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
