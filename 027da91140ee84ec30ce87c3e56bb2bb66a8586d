@@ -22,6 +22,30 @@
       "revId": "027da91140ee84ec30ce87c3e56bb2bb66a8586d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7321e075_27d26037",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-08-29T14:11:00Z",
+      "side": 1,
+      "message": "Done, this got rid of the push altogether!",
+      "parentUuid": "986d6852_33b585ad",
+      "range": {
+        "startLine": 717,
+        "startChar": 12,
+        "endLine": 717,
+        "endChar": 41
+      },
+      "revId": "027da91140ee84ec30ce87c3e56bb2bb66a8586d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
