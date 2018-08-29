@@ -180,6 +180,30 @@
       "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10d49f79_d5071d61",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-29T13:36:29Z",
+      "side": 1,
+      "message": "\u003e This was done to avoid needless Lock()/Unlock() increments with the copy constructor.\n\nThe copy constructor takes the value by const reference, so shouldn\u0027t do unecessary Lock()/Unlocks() so shouldn\u0027t invoke the move constructor anyway, or am I missing something?\n\n\u003e calls the copy constructor of ExternalStringStream.\n\nSure, but that doesn\u0027t stop you from doing lock_(other.lock_.Clone()) or similar in the ExternalStringStream copy constructor :).",
+      "parentUuid": "c0fbdbc4_3592434a",
+      "range": {
+        "startLine": 46,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
