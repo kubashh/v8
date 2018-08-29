@@ -153,6 +153,7 @@ template<typename T> class CustomArguments;
 class PropertyCallbackArguments;
 class FunctionCallbackArguments;
 class GlobalHandles;
+class ScopedExternalStringLock;
 
 namespace wasm {
 class NativeModule;
@@ -2741,7 +2742,22 @@ class V8_EXPORT String : public Name {
    public:
     virtual ~ExternalStringResourceBase() {}
 
-    virtual bool IsCompressible() const { return false; }
+    V8_DEPRECATE_SOON("Use IsCacheable().",
+                      virtual bool IsCompressible() const) {
+      return false;
+    }
+
+    /**
+     * If a string is cacheable, the value returned by
+     * ExternalStringResource::data() may be cached, otherwise it is not
+     * expected to be stable beyond the current top-level task.
+     */
+    virtual bool IsCacheable() const {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+      return !IsCompressible();
+#pragma clang diagnostic pop
+    }
 
    protected:
     ExternalStringResourceBase() {}
@@ -2754,6 +2770,22 @@ class V8_EXPORT String : public Name {
      */
     virtual void Dispose() { delete this; }
 
+    /**
+     * For a non-cacheable string, the value returned by
+     * |ExternalStringResource::data()| has to be stable between |Lock()| and
+     * |Unlock()|, that is the string must behave as is |IsCacheable()| returned
+     * true.
+     *
+     * These two functions must be thread-safe, and can be called from anywhere.
+     * They also must handle lock depth, in the sense that each can be called
+     * several times, from different threads, and unlocking should only happen
+     * when the balance of Lock() and Unlock() calls is 0.
+     */
+    virtual void Lock() const {}
+
+    // Unlocks the string.
+    virtual void Unlock() const {}
+
     // Disallow copying and assigning.
     ExternalStringResourceBase(const ExternalStringResourceBase&) = delete;
     void operator=(const ExternalStringResourceBase&) = delete;
@@ -2761,6 +2793,7 @@ class V8_EXPORT String : public Name {
    private:
     friend class internal::Heap;
     friend class v8::String;
+    friend class internal::ScopedExternalStringLock;
   };
 
   /**
