@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "08a9c3fd_8fbb35d0",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-29T14:37:45Z",
+      "side": 1,
+      "message": "It\u0027d be a nice guarantee to have if it\u0027s somewhat straightforward, but as Benoit says, I\u0027m not too worried about it. There aren\u0027t many V8 accesses that outlive the current task and there likely won\u0027t be beyond parallel compilation.",
+      "parentUuid": "a216c06e_da255698",
+      "range": {
+        "startLine": 2755,
+        "startChar": 3,
+        "endLine": 2756,
+        "endChar": 34
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d14b1af_f387cf9d",
         "filename": "include/v8.h",
         "patchSetId": 6
@@ -249,6 +273,23 @@
         "endLine": 46,
         "endChar": 60
       },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcd33192_2675b60c",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-08-29T14:37:45Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be simpler to change ExternalString to have something like GetChar() (which is simply resource()-\u003edata() anyway), make ExternalStringString take an ExternalString and create the lock itself?",
       "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
