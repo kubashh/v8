@@ -228,6 +228,30 @@
       "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6557e7d0_1019d364",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-29T13:52:41Z",
+      "side": 1,
+      "message": "Ahh right I see. Personally I\u0027d prefer to see this lock object always have resource_ !\u003d nullptr so that we know that it is always locking a resource (doing things wrong might leave you with an empty ScopedExternalStringLock not locking anything). Maybe this is something that the wrapper object comment on the other file can help with.",
+      "parentUuid": "a8c3f559_8d76f5d3",
+      "range": {
+        "startLine": 46,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
