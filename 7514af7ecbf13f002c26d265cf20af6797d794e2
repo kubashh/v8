@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50395885_c99d9b23",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-29T09:27:17Z",
+      "side": 1,
+      "message": "I think we could simplify if we shuffle registers around a bit. For example (stupid but safe):\n \n MoveForRootRegisterRefactoring(scratch1, bytecode);\n pop(ebx);  // We can pop here and remove all related logic afterwards.\n /* ... Dispatch with cmpb(scratch1, Immediate) ... */",
+      "revId": "7514af7ecbf13f002c26d265cf20af6797d794e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
