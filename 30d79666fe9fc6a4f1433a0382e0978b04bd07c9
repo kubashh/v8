@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "a216c06e_da255698",
+        "filename": "include/v8.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T12:58:43Z",
+      "side": 1,
+      "message": "For the first point, thanks, will do.\n\nFor the second one, I have a local patch which does that, but was a bit concerned with the overhead. It was also more intrusive to lock every ExternalString access, as all the non-flat strings can contain ExternalStrings as components IIUC.\n\nFrom an offline discussion with Toon and Yang, it seemed unnecessary as no access outlives the current task, but I let Toon comment on that.",
+      "parentUuid": "3b2a5069_ef490ff9",
+      "range": {
+        "startLine": 2755,
+        "startChar": 3,
+        "endLine": 2756,
+        "endChar": 34
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d14b1af_f387cf9d",
         "filename": "include/v8.h",
         "patchSetId": 6
@@ -88,6 +112,30 @@
     },
     {
       "key": {
+        "uuid": "fdaddcdc_fafb5c5c",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T12:58:43Z",
+      "side": 1,
+      "message": "The first one happen in tests, the second happens because not all ExternalStrings are uncached. But we could lock them nonetheless.",
+      "parentUuid": "438ec8d6_0a5be472",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 50
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9230fdf3_43c5fa71",
         "filename": "src/parsing/scanner-character-streams.cc",
         "patchSetId": 6
@@ -99,6 +147,30 @@
       "writtenOn": "2018-08-29T12:31:55Z",
       "side": 1,
       "message": "Setting resource to nullptr on moves seems a bit confusing. Can we just disallow moving / copying with DISALLOW_COPY_AND_MOVE_AND_ASSIGN, and add an explicit method for cloning the lock to make it explicit that this causes the string to increment the lock count.",
+      "range": {
+        "startLine": 46,
+        "startChar": 1,
+        "endLine": 46,
+        "endChar": 60
+      },
+      "revId": "30d79666fe9fc6a4f1433a0382e0978b04bd07c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0fbdbc4_3592434a",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-29T12:58:43Z",
+      "side": 1,
+      "message": "This was done to avoid needless Lock()/Unlock() increments with the copy constructor.\nCopying requires less code changes elsewhere as (Un)BufferedCharacterStream::Clone() calls the copy constructor of ExternalStringStream.\nAlso, this maps to what std::unique_ptr\u003cT\u003e does.\n\nI can either add comments to make this more explicit, or change, up to you.",
+      "parentUuid": "9230fdf3_43c5fa71",
       "range": {
         "startLine": 46,
         "startChar": 1,
