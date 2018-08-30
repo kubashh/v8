@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62cfc537_692dc26c",
+        "filename": "src/optimized-compilation-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-30T11:46:08Z",
+      "side": 1,
+      "message": "Just talked with tebbi@, I\u0027ll change this to add proper IsBuiltin() detection here in a follow-up.",
+      "revId": "7a1a5b8f9936b75b4d4ea53b3a8edb49e5eb83c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
