@@ -16,6 +16,24 @@
       "revId": "fa1eac554b4aaa293b4d955753a77f159a91e417",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c624151_7b3a26cb",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2262,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-30T19:11:36Z",
+      "side": 1,
+      "message": "I tried to get one projection to be used in a few ways, but I haven\u0027t gotten it to fail. I\u0027ve added a sample test here - https://chromium-review.googlesource.com/c/v8/v8/+/1195910/6/test/cctest/wasm/test-run-wasm-atomics64.cc#441\n\nNot sure what I\u0027m missing, my understanding of it is that for the i64-\u003ei32 conversion cases, the entire i64 value is fed into the conversion node, so it cannot be partially optimized?",
+      "parentUuid": "ae74857e_7580a725",
+      "revId": "fa1eac554b4aaa293b4d955753a77f159a91e417",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
