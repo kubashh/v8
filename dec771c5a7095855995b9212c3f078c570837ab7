@@ -70,6 +70,24 @@
       "revId": "dec771c5a7095855995b9212c3f078c570837ab7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55cb6a8b_d570d3b2",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-08-30T08:55:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "05611336_97354ba6",
+      "revId": "dec771c5a7095855995b9212c3f078c570837ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
