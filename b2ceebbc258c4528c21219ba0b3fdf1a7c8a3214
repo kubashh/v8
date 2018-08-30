@@ -34,6 +34,57 @@
       "revId": "b2ceebbc258c4528c21219ba0b3fdf1a7c8a3214",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "00acd235_2bf8c5e2",
+        "filename": "test/mjsunit/array-unshift.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-30T07:50:56Z",
+      "side": 0,
+      "message": "I think we should still throw at the 2**32 boundary (unless we got an agreement on the spec change) or did I miss something?",
+      "revId": "b2ceebbc258c4528c21219ba0b3fdf1a7c8a3214",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "befebf4c_82a2fe5f",
+        "filename": "test/mjsunit/array-unshift.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-30T07:50:56Z",
+      "side": 0,
+      "message": "why did you remove the test here?",
+      "revId": "b2ceebbc258c4528c21219ba0b3fdf1a7c8a3214",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2934f74c_1a42cf75",
+        "filename": "test/mjsunit/regress/regress-splice-large-index.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-30T07:50:56Z",
+      "side": 0,
+      "message": "why do you remove this? Was this wrong before?",
+      "revId": "b2ceebbc258c4528c21219ba0b3fdf1a7c8a3214",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1b12f804_997f87fc",
+        "filename": "src/builtins/array-lastindexof.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-08-30T07:50:56Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fbb3abd1_79286497",
         "filename": "src/builtins/array-unshift.tq",
         "patchSetId": 7
