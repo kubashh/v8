@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c06b22f_1592e67d",
+        "filename": "src/parsing/scanner-character-streams.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-30T11:43:01Z",
+      "side": 1,
+      "message": "Could you add a couple of tests in test-scanner-streams that ensure the lock is held while the character stream is alive (in particular one involving cloning a character stream and destroying the original still keeps the lock set).",
+      "range": {
+        "startLine": 21,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 30
+      },
+      "revId": "6bea4ecb70b890c1a9c31bf7538e5ad9c06ee0a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
