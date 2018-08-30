@@ -78,11 +78,14 @@ module array {
     EnsureFastJSArray(context, receiver) otherwise Slow;
     const array: JSArray = unsafe_cast<JSArray>(receiver);
 
+    // Get the "from" value first, since ToInteger could have side-effects.
+    const from: Smi =
+        cast<Smi>(GetFromIndex(context, array.length_fast, arguments))
+    otherwise Slow;
+
+    // Reload length, it could have changed.
     const length: Smi = array.length_fast;
     if (length == 0) return SmiConstant(-1);
-
-    const from: Smi = cast<Smi>(GetFromIndex(context, length, arguments))
-    otherwise Slow;
 
     const kind: ElementsKind = array.map.elements_kind;
     if (IsFastSmiOrTaggedElementsKind(kind)) {
