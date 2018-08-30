@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bb2299e_d914fcbd",
+        "filename": "src/builtins/array-lastindexof.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-30T11:11:56Z",
+      "side": 1,
+      "message": "I think this violates the spec in two ways:\n\n1. If the length is initially 0, we should return early and never call GetFromIndex (which is observable).\n\n2. If length is initially a value x !\u003d 0, and GetFromIndex then sets it to 0, we should still perform the iteration (with generic accessors). But we should not repeat the length read and ToInteger(fromIndex) conversion.\n\nWdyt about moving these initial steps (ToObject, ToLength, early return, ToInteger) into ArrayPrototoypeIndexOf and dispatching to slow/fast paths afterwards?",
+      "revId": "a646ec63329526f08d22a02c77c1e4bfbc960c2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
