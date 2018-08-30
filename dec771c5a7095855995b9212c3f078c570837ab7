@@ -16,6 +16,24 @@
       "revId": "dec771c5a7095855995b9212c3f078c570837ab7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83901635_5b611e4d",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-08-30T07:10:20Z",
+      "side": 1,
+      "message": "We explicitly use a jump table in InvokeIntrinsic to decode the intrinsic I\u0027d, doing it as an if/else would probably be a fair bit slower. Is there any way we could recode this as offsets, or relocate the absolute addresses on embedding?",
+      "parentUuid": "06cf3602_d293b762",
+      "revId": "dec771c5a7095855995b9212c3f078c570837ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
