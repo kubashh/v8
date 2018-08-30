@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae74857e_7580a725",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2262,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-08-30T10:31:05Z",
+      "side": 1,
+      "message": "I think it is also possible that one of the projections is removed and one remains (e.g. if we do a i64-\u003ei32 conversion which discards the upper part).",
+      "revId": "fa1eac554b4aaa293b4d955753a77f159a91e417",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
