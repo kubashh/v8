@@ -16,6 +16,24 @@
       "revId": "a646ec63329526f08d22a02c77c1e4bfbc960c2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3e19a19_0d94599f",
+        "filename": "src/builtins/array-lastindexof.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-30T12:50:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bb2299e_d914fcbd",
+      "revId": "a646ec63329526f08d22a02c77c1e4bfbc960c2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
