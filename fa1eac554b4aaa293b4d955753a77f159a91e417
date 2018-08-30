@@ -34,6 +34,24 @@
       "revId": "fa1eac554b4aaa293b4d955753a77f159a91e417",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23eb56bb_96715cef",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2262,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-08-30T20:39:28Z",
+      "side": 1,
+      "message": "If you have something like I32ConvertI64(AtomicLoad64()), on a 32-bit platform we will use int64-lowering and the I32Convert will just become the low-order half of the atomic load. Then the upper half of the AtomicLoad64 might die.\n\nI think this can only occur on 32-bit platforms.",
+      "parentUuid": "7c624151_7b3a26cb",
+      "revId": "fa1eac554b4aaa293b4d955753a77f159a91e417",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
