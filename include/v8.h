@@ -8007,7 +8007,7 @@ class V8_EXPORT Isolate {
    * but the microtasks queue was empty and no single microtask was actually
    * executed.
    *
-   * Executing scriptsinside the callback will not re-trigger microtasks and
+   * Executing scripts inside the callback will not re-trigger microtasks and
    * the callback.
    */
   void AddMicrotasksCompletedCallback(MicrotasksCompletedCallback callback);
