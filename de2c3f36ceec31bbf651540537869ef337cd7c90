@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41ca6bd1_b01216f0",
+        "filename": "src/contexts-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-30T17:45:53Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "revId": "de2c3f36ceec31bbf651540537869ef337cd7c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7620ac5_b82773b6",
+        "filename": "src/objects/microtask-queue.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-30T17:45:53Z",
+      "side": 1,
+      "message": "What will this class look like in future? Right now you\u0027re reserving space for a single pointer but haven\u0027t added any actual members.",
+      "revId": "de2c3f36ceec31bbf651540537869ef337cd7c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6cc0af3_69e5edd2",
+        "filename": "src/objects/microtask-queue.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-30T17:45:53Z",
+      "side": 1,
+      "message": "No need to add this yet if there\u0027s not a way yet to create these.",
+      "revId": "de2c3f36ceec31bbf651540537869ef337cd7c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
