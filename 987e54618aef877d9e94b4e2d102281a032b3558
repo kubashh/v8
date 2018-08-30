@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4775503_e20c046a",
+        "filename": "test/cctest/parsing/test-scanner-streams.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-08-30T17:47:16Z",
+      "side": 1,
+      "message": "Why does this need to be \"const\". \n\nWe need \"mutable\" below indicating that this might be too restrictive.",
+      "range": {
+        "startLine": 70,
+        "startChar": 14,
+        "endLine": 70,
+        "endChar": 19
+      },
+      "revId": "987e54618aef877d9e94b4e2d102281a032b3558",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
