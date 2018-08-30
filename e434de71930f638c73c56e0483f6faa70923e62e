@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ef900e1e_8574a74f",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-30T06:33:29Z",
+      "side": 1,
+      "message": "Added DCHECKS here, and for the other operations.",
+      "parentUuid": "bd2af659_b96cdeb9",
+      "range": {
+        "startLine": 2747,
+        "startChar": 0,
+        "endLine": 2748,
+        "endChar": 0
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bb5b4071_eca45c08",
         "filename": "src/compiler/arm/instruction-selector-arm.cc",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-08-29T23:16:06Z",
       "side": 1,
       "message": "DCHECK that both projections are non-null?",
+      "range": {
+        "startLine": 2268,
+        "startChar": 0,
+        "endLine": 2268,
+        "endChar": 10
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d96248d_3015b21f",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-30T06:33:29Z",
+      "side": 1,
+      "message": "Done, here and for other selectors.",
+      "parentUuid": "bb5b4071_eca45c08",
       "range": {
         "startLine": 2268,
         "startChar": 0,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a82a868c_9d2a96c9",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-30T06:33:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "041f2a22_cea58234",
+      "range": {
+        "startLine": 2329,
+        "startChar": 0,
+        "endLine": 2329,
+        "endChar": 57
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "923e6e16_a62d8f82",
         "filename": "src/compiler/arm/instruction-selector-arm.cc",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "47d1b6cb_95d598f8",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2353,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-30T06:33:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "923e6e16_a62d8f82",
+      "range": {
+        "startLine": 2353,
+        "startChar": 0,
+        "endLine": 2353,
+        "endChar": 57
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b3bee6b_c7c68613",
         "filename": "src/compiler/ia32/code-generator-ia32.cc",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92367b1c_16c59305",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-08-30T06:33:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b3bee6b_c7c68613",
+      "range": {
+        "startLine": 434,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 0
+      },
+      "revId": "e434de71930f638c73c56e0483f6faa70923e62e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
