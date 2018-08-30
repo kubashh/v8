@@ -34,6 +34,24 @@
       "revId": "dec771c5a7095855995b9212c3f078c570837ab7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "911d08f1_a36349fe",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-08-30T07:19:42Z",
+      "side": 1,
+      "message": "\u003e We explicitly use a jump table in InvokeIntrinsic to decode the intrinsic I\u0027d, doing it as an if/else would probably be a fair bit slower. \n\nBy \u0027explicitly\u0027, do you mean the Switch in IntrinsicsGenerator::InvokeIntrinsic? \n\nIf we flip the flag in the link above, the jump table would turn into a binary search sequence of if/elses. So 5 jumps in the worst case since there\u0027s currently 25 entries in the intrinsics list. That doesn\u0027t sound *too* bad to me, although I don\u0027t know how perf-critical this is.\n\n\u003e Is there any way we could recode this as offsets, or relocate the absolute addresses on embedding?\n\nI don\u0027t see why Code-internal jump tables shouldn\u0027t work as a pc-relative jump table (a sequence of \u0027jmp pc+offset\u0027 instructions), possibly with more complexity due to offset limits and offset calculation. Tobias will know more though.",
+      "parentUuid": "83901635_5b611e4d",
+      "revId": "dec771c5a7095855995b9212c3f078c570837ab7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
