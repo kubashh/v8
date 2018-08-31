@@ -20,8 +20,22 @@ module array {
       return a.length_fast;
     } else
       deferred {
-        return ToLength_Inline(context, GetProperty(context, o, 'length'));
+        return ToLength_Inline(context, GetProperty(context, o, kLengthString));
       }
+  }
+
+  macro EnsureWriteableFastElements(array: JSArray) {
+    const elements: FixedArrayBase = array.elements;
+    if (elements.map != kCOWMap) return;
+
+    // There are no COW *_DOUBLE_ELEMENTS arrays, so we are allowed to always
+    // extract FixedArrays and don't have to worry about FixedDoubleArrays.
+    assert(IsFastSmiOrTaggedElementsKind(array.map.elements_kind));
+
+    const length: Smi = array.length_fast;
+    array.elements = ExtractFixedArray(
+        unsafe_cast<FixedArray>(elements), 0, length, length, kFixedArrays);
+    assert(array.elements.map != kCOWMap);
   }
 
   macro FastArraySplice(
