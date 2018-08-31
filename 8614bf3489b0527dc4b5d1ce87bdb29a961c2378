@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca2c9437_79451567",
+        "filename": "test/intl/date-format/date-format-to-parts.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-08-31T23:13:38Z",
+      "side": 1,
+      "message": "nit: 02",
+      "range": {
+        "startLine": 16,
+        "startChar": 19,
+        "endLine": 16,
+        "endChar": 21
+      },
+      "revId": "8614bf3489b0527dc4b5d1ce87bdb29a961c2378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
