@@ -925,7 +925,9 @@ std::unique_ptr<UnoptimizedCompilationJob> CompileTopLevelOnBackgroundThread(
       stricter_language_mode(parse_info->language_mode(), language_mode));
 
   // Can't access scope info data off-main-thread.
-  DCHECK(!parse_info->consumed_preparsed_scope_data()->HasData());
+  // TODO(rmcilroy): We can access off-heap preparsed scope data, but don't
+  // have any here.
+  DCHECK(!parse_info->consumed_preparsed_scope_data());
 
   // Generate the unoptimized bytecode or asm-js data.
   std::unique_ptr<UnoptimizedCompilationJob> outer_function_job(
@@ -1078,10 +1080,12 @@ bool Compiler::Compile(Handle<SharedFunctionInfo> shared_info,
 
   if (FLAG_preparser_scope_analysis) {
     if (shared_info->HasUncompiledDataWithPreParsedScope()) {
-      parse_info.consumed_preparsed_scope_data()->SetData(
-          isolate, handle(shared_info->uncompiled_data_with_pre_parsed_scope()
-                              ->pre_parsed_scope_data(),
-                          isolate));
+      parse_info.set_consumed_preparsed_scope_data(
+          ConsumedPreParsedScopeData::For(
+              isolate,
+              handle(shared_info->uncompiled_data_with_pre_parsed_scope()
+                         ->pre_parsed_scope_data(),
+                     isolate)));
     }
   }
 
