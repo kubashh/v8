@@ -64,14 +64,14 @@ deps = {
     Var('chromium_url') + '/external/github.com/tc39/test262.git' + '@' + '835c85c26e35afbac872d4a98ad66585cd76ae62',
   'v8/test/test262/harness':
     Var('chromium_url') + '/external/github.com/test262-utils/test262-harness-py.git' + '@' + '0f2acdd882c84cff43b9d60df7574a1901e2cdcd',
-  'v8/third_party/qemu': {
+  'v8/third_party/qemu-linux-x64': {
       'packages': [
           {
               'package': 'fuchsia/qemu/linux-amd64',
               'version': '9cc486c5b18a0be515c39a280ca9a309c54cf994'
           },
       ],
-      'condition': 'checkout_fuchsia',
+      'condition': 'host_os == "linux" and checkout_fuchsia',
       'dep_type': 'cipd',
   },
   'v8/tools/clang':
