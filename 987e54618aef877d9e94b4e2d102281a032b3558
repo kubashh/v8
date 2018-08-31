@@ -22,6 +22,30 @@
       "revId": "987e54618aef877d9e94b4e2d102281a032b3558",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57cad5cc_d32d54c3",
+        "filename": "test/cctest/parsing/test-scanner-streams.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1132034
+      },
+      "writtenOn": "2018-08-31T08:38:44Z",
+      "side": 1,
+      "message": "This was to match the usual \"RefCounted\" pattern we use in a few places, where the reference count can be manipulated on a const object.\nThe alternative is to either do a const_cast\u003c\u003e on External*ByteString::resource(), or change the signature of this function to return a non-const pointer.\n\nWhat do you recommend?",
+      "parentUuid": "d4775503_e20c046a",
+      "range": {
+        "startLine": 70,
+        "startChar": 14,
+        "endLine": 70,
+        "endChar": 19
+      },
+      "revId": "987e54618aef877d9e94b4e2d102281a032b3558",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
