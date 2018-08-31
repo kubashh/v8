@@ -1638,11 +1638,11 @@ Node* JSCreateLowering::AllocateFastLiteral(Node* effect, Node* control,
   int const boilerplate_nof = boilerplate_map.NumberOfOwnDescriptors();
   for (int i = 0; i < boilerplate_nof; ++i) {
     PropertyDetails const property_details =
-        boilerplate_map.GetPropertyDetails(i);
+        boilerplate_map.GetPropertyDetails(i).value();
     if (property_details.location() != kField) continue;
     DCHECK_EQ(kData, property_details.kind());
-    NameRef property_name = boilerplate_map.GetPropertyKey(i);
-    FieldIndex index = boilerplate_map.GetFieldIndexFor(i);
+    NameRef property_name = boilerplate_map.GetPropertyKey(i).value();
+    FieldIndex index = boilerplate_map.GetFieldIndexFor(i).value();
     FieldAccess access = {
         kTaggedBase,        index.offset(), property_name.object<Name>(),
         MaybeHandle<Map>(), Type::Any(),    MachineType::AnyTagged(),

@@ -151,8 +151,8 @@ class FieldTypeDependency final : public CompilationDependencies::Dependency {
   FieldTypeDependency(const MapRef& owner, int descriptor,
                       const ObjectRef& type)
       : owner_(owner), descriptor_(descriptor), type_(type) {
-    DCHECK(owner_.equals(owner_.FindFieldOwner(descriptor_)));
-    DCHECK(type_.equals(owner_.GetFieldType(descriptor_)));
+    DCHECK(owner_.equals(owner_.FindFieldOwner(descriptor_).value()));
+    DCHECK(type_.equals(owner_.GetFieldType(descriptor_).value()));
   }
 
   bool IsValid() const override {
@@ -328,9 +328,9 @@ PretenureFlag CompilationDependencies::DependOnPretenureMode(
 
 void CompilationDependencies::DependOnFieldType(const MapRef& map,
                                                 int descriptor) {
-  MapRef owner = map.FindFieldOwner(descriptor);
-  ObjectRef type = owner.GetFieldType(descriptor);
-  DCHECK(type.equals(map.GetFieldType(descriptor)));
+  MapRef owner = map.FindFieldOwner(descriptor).value();
+  ObjectRef type = owner.GetFieldType(descriptor).value();
+  DCHECK(type.equals(map.GetFieldType(descriptor).value()));
   dependencies_.push_front(new (zone_)
                                FieldTypeDependency(owner, descriptor, type));
 }

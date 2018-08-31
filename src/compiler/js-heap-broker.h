@@ -332,11 +332,14 @@ class MapRef : public HeapObjectRef {
   base::Optional<MapRef> AsElementsKind(ElementsKind kind) const;
 
   // Concerning the underlying instance_descriptors:
-  MapRef FindFieldOwner(int descriptor) const;
-  PropertyDetails GetPropertyDetails(int i) const;
-  NameRef GetPropertyKey(int i) const;
-  FieldIndex GetFieldIndexFor(int i) const;
-  ObjectRef GetFieldType(int descriptor) const;
+  void SerializeDescriptors();
+  base::Optional<MapRef> FindFieldOwner(int descriptor_index) const;
+  base::Optional<PropertyDetails> GetPropertyDetails(
+      int descriptor_index) const;
+  base::Optional<NameRef> GetPropertyKey(int descriptor_index) const;
+  base::Optional<FieldIndex> GetFieldIndexFor(int descriptor_index) const;
+  base::Optional<ObjectRef> GetFieldType(int descriptor_index) const;
+
   bool IsUnboxedDoubleField(FieldIndex index) const;
 };
 
