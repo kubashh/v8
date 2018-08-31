@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "605ce5d3_595fda68",
+        "filename": "src/builtins/array-lastindexof.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-31T08:51:45Z",
+      "side": 1,
+      "message": "Sadly, this got removed again. I feel similar as Jakob about introducing a type that could actually change over time.",
+      "parentUuid": "1b12f804_997f87fc",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fbb3abd1_79286497",
         "filename": "src/builtins/array-unshift.tq",
         "patchSetId": 7
@@ -212,6 +230,24 @@
     },
     {
       "key": {
+        "uuid": "2e17e62b_cc70b926",
+        "filename": "src/builtins/array-unshift.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-31T08:51:45Z",
+      "side": 1,
+      "message": "Discovered there is \"LengthStringConstant()\" already in CSA. Will use that.",
+      "parentUuid": "25a205bb_09099a31",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc6b4db5_53c9b369",
         "filename": "src/builtins/base.tq",
         "patchSetId": 7
@@ -226,6 +262,24 @@
       "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4cb1723_4a7ff7ed",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-08-31T08:51:45Z",
+      "side": 1,
+      "message": "Agreed, removed the type again and left the \"EnsureFastJSArray\" macro.",
+      "parentUuid": "bc6b4db5_53c9b369",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
