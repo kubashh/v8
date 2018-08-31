@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "643b2e37_9f8a1df0",
+        "filename": "src/builtins/builtins-conversion-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-08-31T09:03:03Z",
+      "side": 1,
+      "message": "Since this is just the fallthrough case and as such not guarded by an explicit check, please add a CSA_ASSERT here that the input actually is an oddball. Anyone who adds a new instance type in the future will thank you for making it easier to notice that this code will need updating :-)",
+      "range": {
+        "startLine": 149,
+        "startChar": 4,
+        "endLine": 149,
+        "endChar": 5
+      },
+      "revId": "5bc4aefb88803321d99bfc36d830bcdebffa3efd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
