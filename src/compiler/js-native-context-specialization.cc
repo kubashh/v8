@@ -1801,6 +1801,46 @@ Node* JSNativeContextSpecialization::InlineApiCall(
              graph()->NewNode(common()->Call(call_descriptor), index, inputs);
 }
 
+Node* JSNativeContextSpecialization::InlineProxyTrap(
+    Node* receiver, Node* context, Node* frame_state, Node* value,
+    Node** effect, Node** control, Handle<Name> name,
+    ZoneVector<Node*>* if_exceptions) {
+  Callable const callable = Builtins::CallableFor(
+      isolate(), value == nullptr ? Builtins::kProxyGetProperty
+                                  : Builtins::kProxySetProperty);
+  CallDescriptor const* const desc = Linkage::GetStubCallDescriptor(
+      graph()->zone(), callable.descriptor(), 0,
+      CallDescriptor::kNeedsFrameState, Operator::kNoProperties);
+
+  Node* inputs[9] = {jsgraph()->HeapConstant(callable.code()), receiver,
+                     jsgraph()->HeapConstant(name)};
+  int input_count = 3;
+  if (value != nullptr) inputs[input_count++] = value;
+  inputs[input_count++] = receiver;
+  if (value == nullptr) {
+    inputs[input_count++] =
+        jsgraph()->Constant(static_cast<int>(OnNonExistent::kReturnUndefined));
+  }
+  inputs[input_count++] = context;
+  inputs[input_count++] = frame_state;
+  inputs[input_count++] = *effect;
+  inputs[input_count++] = *control;
+
+  value = *effect = *control =
+      graph()->NewNode(common()->Call(desc), input_count, inputs);
+
+  // Remember to rewire the IfException edge if this is inside a try-block.
+  if (if_exceptions != nullptr) {
+    // Create the appropriate IfException/IfSuccess projections.
+    Node* const if_exception =
+        graph()->NewNode(common()->IfException(), *control, *effect);
+    Node* const if_success = graph()->NewNode(common()->IfSuccess(), *control);
+    if_exceptions->push_back(if_exception);
+    *control = if_success;
+  }
+  return value;
+}
+
 JSNativeContextSpecialization::ValueEffectControl
 JSNativeContextSpecialization::BuildPropertyLoad(
     Node* receiver, Node* context, Node* frame_state, Node* effect,
@@ -1831,6 +1871,9 @@ JSNativeContextSpecialization::BuildPropertyLoad(
     value = effect =
         graph()->NewNode(simplified()->LoadField(AccessBuilder::ForCellValue()),
                          cell, effect, control);
+  } else if (access_info.IsProxyAccess()) {
+    value = InlineProxyTrap(receiver, context, frame_state, nullptr, &effect,
+                            &control, name, if_exceptions);
   } else {
     DCHECK(access_info.IsDataField() || access_info.IsDataConstantField());
     value = access_builder.BuildLoadDataField(name, access_info, receiver,
@@ -1890,6 +1933,9 @@ JSNativeContextSpecialization::BuildPropertyStore(
   } else if (access_info.IsAccessorConstant()) {
     InlinePropertySetterCall(receiver, value, context, frame_state, &effect,
                              &control, if_exceptions, access_info);
+  } else if (access_info.IsProxyAccess()) {
+    InlineProxyTrap(receiver, context, frame_state, value, &effect, &control,
+                    name, if_exceptions);
   } else {
     DCHECK(access_info.IsDataField() || access_info.IsDataConstantField());
     FieldIndex const field_index = access_info.field_index();

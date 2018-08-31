@@ -158,6 +158,11 @@ class JSNativeContextSpecialization final : public AdvancedReducer {
                       Handle<SharedFunctionInfo> shared_info,
                       Handle<FunctionTemplateInfo> function_template_info);
 
+  // Helpers for proxy trap inlining.
+  Node* InlineProxyTrap(Node* receiver, Node* context, Node* frame_state,
+                        Node* value, Node** effect, Node** control,
+                        Handle<Name> name, ZoneVector<Node*>* if_exceptions);
+
   // Construct the appropriate subgraph for element access.
   ValueEffectControl BuildElementAccess(
       Node* receiver, Node* index, Node* value, Node* effect, Node* control,

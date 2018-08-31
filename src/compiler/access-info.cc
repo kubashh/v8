@@ -44,6 +44,7 @@ bool CanInlinePropertyAccess(Handle<Map> map) {
   STATIC_ASSERT(ODDBALL_TYPE == LAST_PRIMITIVE_TYPE);
   if (map->IsBooleanMap()) return true;
   if (map->instance_type() < LAST_PRIMITIVE_TYPE) return true;
+  if (map->IsJSProxyMap()) return true;
   return map->IsJSObjectMap() && !map->is_dictionary_map() &&
          !map->has_named_interceptor() &&
          // TODO(verwaest): Whitelist contexts to which we have access.
@@ -74,7 +75,7 @@ ElementAccessInfo::ElementAccessInfo(MapHandles const& receiver_maps,
 // static
 PropertyAccessInfo PropertyAccessInfo::NotFound(MapHandles const& receiver_maps,
                                                 MaybeHandle<JSObject> holder) {
-  return PropertyAccessInfo(holder, receiver_maps);
+  return PropertyAccessInfo(kNotFound, holder, receiver_maps);
 }
 
 // static
@@ -111,14 +112,21 @@ PropertyAccessInfo PropertyAccessInfo::ModuleExport(
                             receiver_maps);
 }
 
+// static
+PropertyAccessInfo PropertyAccessInfo::ProxyAccess(
+    MapHandles const& receiver_maps) {
+  return PropertyAccessInfo(kProxyAccess, MaybeHandle<JSObject>(),
+                            receiver_maps);
+}
+
 PropertyAccessInfo::PropertyAccessInfo()
     : kind_(kInvalid),
       field_representation_(MachineRepresentation::kNone),
       field_type_(Type::None()) {}
 
-PropertyAccessInfo::PropertyAccessInfo(MaybeHandle<JSObject> holder,
+PropertyAccessInfo::PropertyAccessInfo(Kind kind, MaybeHandle<JSObject> holder,
                                        MapHandles const& receiver_maps)
-    : kind_(kNotFound),
+    : kind_(kind),
       receiver_maps_(receiver_maps),
       holder_(holder),
       field_representation_(MachineRepresentation::kNone),
@@ -224,8 +232,16 @@ bool PropertyAccessInfo::Merge(PropertyAccessInfo const* that,
                                   that->receiver_maps_.end());
       return true;
     }
+
     case kModuleExport: {
       return false;
+    }
+
+    case kProxyAccess: {
+      this->receiver_maps_.insert(this->receiver_maps_.end(),
+                                  that->receiver_maps_.begin(),
+                                  that->receiver_maps_.end());
+      return true;
     }
   }
 
@@ -339,6 +355,12 @@ bool AccessInfoFactory::ComputePropertyAccessInfo(
 
   // Property lookups require the name to be internalized.
   name = isolate()->factory()->InternalizeName(name);
+
+  // Fast support for proxy get/set traps if the {name} is not a private symbol.
+  if (map->IsJSProxyMap() && !name->IsPrivate()) {
+    *access_info = PropertyAccessInfo::ProxyAccess(MapHandles{receiver_map});
+    return true;
+  }
 
   // We support fast inline cases for certain JSObject getters.
   if (access_mode == AccessMode::kLoad &&
