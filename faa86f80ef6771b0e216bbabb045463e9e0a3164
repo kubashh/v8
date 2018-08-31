@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1778d4fd_5687344d",
+        "filename": "src/objects/microtask-queue.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-31T19:22:33Z",
+      "side": 1,
+      "message": "Please put this below the methods.",
+      "revId": "faa86f80ef6771b0e216bbabb045463e9e0a3164",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bbe083b_30bd23df",
+        "filename": "src/objects/microtask-queue.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-08-31T19:22:33Z",
+      "side": 1,
+      "message": "I suspect that these are going to possibly allocate, so they should be static and take a Handle\u003cMicrotaskQueue\u003e as input, i.e.,\n\nstatic void RunMicrotasks(Handle\u003cMicrotaskQueue\u003e queue);\n\nWe can un-staticify them if it turns out they\u0027re non-allocating later, but it\u0027s safer to start this way to avoid accidentally ending up with invalid {this} pointers.",
+      "revId": "faa86f80ef6771b0e216bbabb045463e9e0a3164",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
