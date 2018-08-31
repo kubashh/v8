@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "c8d3d3b4_b5de9367",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-08-31T16:00:14Z",
+      "side": 1,
+      "message": "For anyone else following along - this was discussed offline. Once https://chromium-review.googlesource.com/c/v8/v8/+/1198682 is landed, we will change this function to use the LegacyUnwrapReceiver but continue to use IsJSNumberFormat for the initialized slot check.",
+      "parentUuid": "bdab9fc8_04730de4",
+      "revId": "b0b1f2d8fc74ff9b195f88f0aae5224fa98aee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "231f3bda_61baf767",
         "filename": "src/objects/js-number-format.cc",
         "patchSetId": 26
