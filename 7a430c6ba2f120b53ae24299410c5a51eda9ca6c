@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6726ae3f_66e31af1",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-31T16:22:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f73f5cd_465c94a1",
+      "range": {
+        "startLine": 1721,
+        "startChar": 66,
+        "endLine": 1721,
+        "endChar": 77
+      },
+      "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e3e7c300_ea91ecbe",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a687567_3ff93297",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5595,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-31T16:22:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3e7c300_ea91ecbe",
+      "range": {
+        "startLine": 5595,
+        "startChar": 32,
+        "endLine": 5595,
+        "endChar": 50
+      },
+      "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "82f2efe4_b3d5b226",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-31T16:22:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bcf7d15_83119af1",
+      "range": {
+        "startLine": 1020,
+        "startChar": 53,
+        "endLine": 1020,
+        "endChar": 66
+      },
+      "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7cec02a6_d168246a",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 6
@@ -91,6 +163,30 @@
       "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75a13f01_74d9d35a",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 3464,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-31T16:22:36Z",
+      "side": 1,
+      "message": "Just removed the comment since there\u0027s it\u0027s not really adding anything",
+      "parentUuid": "7cec02a6_d168246a",
+      "range": {
+        "startLine": 3464,
+        "startChar": 26,
+        "endLine": 3464,
+        "endChar": 32
+      },
+      "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "0dbd5867_301da414",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-31T16:22:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6c118f4_8cf603bf",
+      "range": {
+        "startLine": 704,
+        "startChar": 23,
+        "endLine": 704,
+        "endChar": 39
+      },
+      "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60b0e817_e0a55efb",
         "filename": "src/ic/keyed-store-generic.cc",
         "patchSetId": 6
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "593c35f5_1d35f1a4",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-31T16:22:36Z",
+      "side": 1,
+      "message": "Technically the object should only ever be JS_OBJECT_TYPE, since this is meant to be used for object literals --- the comment was just leftover from copied code.\n\nAnyway, done (Removed the comment and added a\n`CSA_ASSERT(this, HasInstanceType(receiver, JS_OBJECT_TYPE));` at the top of the function)",
+      "parentUuid": "60b0e817_e0a55efb",
+      "range": {
+        "startLine": 1170,
+        "startChar": 7,
+        "endLine": 1170,
+        "endChar": 17
+      },
+      "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88130e8a_b8fc0ada",
         "filename": "src/runtime/runtime-object.cc",
         "patchSetId": 6
@@ -151,6 +295,30 @@
       "writtenOn": "2018-08-30T22:52:09Z",
       "side": 1,
       "message": "why pass this in if it\u0027s not used?",
+      "range": {
+        "startLine": 664,
+        "startChar": 2,
+        "endLine": 664,
+        "endChar": 21
+      },
+      "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa620a0a_ebfecf39",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-08-31T16:22:36Z",
+      "side": 1,
+      "message": "I’m not sure if it’s needed or not. I’ve been trying to think of a case where this could throw in strict mode, but if it’s used the way it should be, I think that’s impossible. If nobody can think of a case where it matters, may as well get rid of it.",
+      "parentUuid": "88130e8a_b8fc0ada",
       "range": {
         "startLine": 664,
         "startChar": 2,
