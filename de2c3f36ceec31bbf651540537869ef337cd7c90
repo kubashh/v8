@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c10d5553_419ab060",
+        "filename": "src/contexts-inl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-08-31T18:30:22Z",
+      "side": 1,
+      "message": "This was for the new member of context added by below in context.h.\n  V(MICROTASK_QUEUE_INDEX, MicrotaskQueue, microtask_queue)\n\nAnyway, let me revert this line from this CL to focus on the new class.",
+      "parentUuid": "41ca6bd1_b01216f0",
+      "revId": "de2c3f36ceec31bbf651540537869ef337cd7c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7620ac5_b82773b6",
         "filename": "src/objects/microtask-queue.h",
         "patchSetId": 10
@@ -30,6 +48,24 @@
       "writtenOn": "2018-08-30T17:45:53Z",
       "side": 1,
       "message": "What will this class look like in future? Right now you\u0027re reserving space for a single pointer but haven\u0027t added any actual members.",
+      "revId": "de2c3f36ceec31bbf651540537869ef337cd7c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dc3c89c_315eb4bd",
+        "filename": "src/objects/microtask-queue.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-08-31T18:30:22Z",
+      "side": 1,
+      "message": "Let me revert that part. I added this to avoid a GC test failure at some point, but it seems no longer failing.",
+      "parentUuid": "a7620ac5_b82773b6",
       "revId": "de2c3f36ceec31bbf651540537869ef337cd7c90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "de2c3f36ceec31bbf651540537869ef337cd7c90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69964b7e_44b0e59c",
+        "filename": "src/objects/microtask-queue.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-08-31T18:30:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6cc0af3_69e5edd2",
+      "revId": "de2c3f36ceec31bbf651540537869ef337cd7c90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
