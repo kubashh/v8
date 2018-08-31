@@ -84,21 +84,12 @@ class RegisterPairs : public Pairs {
               GetRegConfig()->allocatable_general_codes()) {}
 };
 
-
-// Pairs of double registers.
+// Pairs of float registers.
 class Float32RegisterPairs : public Pairs {
  public:
   Float32RegisterPairs()
-      : Pairs(
-            100,
-#if V8_TARGET_ARCH_ARM
-            // TODO(bbudge) Modify wasm linkage to allow use of all float regs.
-            GetRegConfig()->num_allocatable_double_registers() / 2 - 2,
-#else
-            GetRegConfig()->num_allocatable_double_registers(),
-#endif
-            GetRegConfig()->allocatable_double_codes()) {
-  }
+      : Pairs(100, GetRegConfig()->num_allocatable_float_registers(),
+              GetRegConfig()->allocatable_float_codes()) {}
 };
 
 
@@ -132,15 +123,19 @@ struct Allocator {
 
   int stack_offset;
 
+#if V8_TARGET_ARCH_ARM
+  // ARM FP register aliasing may require splitting or merging double registers.
+  // Track fragments of registers below fp_offset_ here. There can only be one
+  // extra float and double register.
+  int extra_float_reg = -1;
+  int extra_double_reg = -1;
+#endif
+
   LinkageLocation Next(MachineType type) {
     if (IsFloatingPoint(type.representation())) {
       // Allocate a floating point register/stack location.
       if (fp_offset < fp_count) {
-        int code = fp_regs[fp_offset++];
-#if V8_TARGET_ARCH_ARM
-        // TODO(bbudge) Modify wasm linkage to allow use of all float regs.
-        if (type.representation() == MachineRepresentation::kFloat32) code *= 2;
-#endif
+        int code = NextFpRegister(type.representation());
         return LinkageLocation::ForRegister(code, type);
       } else {
         int offset = -1 - stack_offset;
@@ -166,6 +161,65 @@ struct Allocator {
     fp_offset = 0;
     gp_offset = 0;
     stack_offset = 0;
+  }
+
+  // Get the next FP register code; models FP register aliasing.
+  int NextFpRegister(MachineRepresentation rep) {
+#if V8_TARGET_ARCH_ARM
+    switch (rep) {
+      case MachineRepresentation::kFloat32: {
+        // Use the extra S-register if we can.
+        if (extra_float_reg >= 0) {
+          int reg_code = extra_float_reg;
+          extra_float_reg = -1;
+          return reg_code;
+        }
+        // Allocate a D-register and split into 2 float registers.
+        int d_reg_code = NextFpRegister(MachineRepresentation::kFloat64);
+        DCHECK_GT(16, d_reg_code);  // D-registers 16 - 31 can't split.
+        int reg_code = d_reg_code * 2;
+        // Save the extra S-register.
+        DCHECK_EQ(-1, extra_float_reg);
+        extra_float_reg = reg_code + 1;
+        return reg_code;
+      }
+      case MachineRepresentation::kFloat64: {
+        // Use an extra D-register if we can.
+        if (extra_double_reg >= 0) {
+          int reg_code = extra_double_reg;
+          extra_double_reg = -1;
+          return reg_code;
+        }
+        DCHECK_LT(fp_offset, fp_count);
+        return fp_regs[fp_offset++];
+      }
+      case MachineRepresentation::kSimd128: {
+        // Q-register must be an even-odd pair, so we must try to allocate at
+        // the end, not using extra_double_reg. If we are at an odd D-register,
+        // skip past it (saving it to extra_double_reg).
+        DCHECK_LT(((fp_offset + 1) & ~1) + 1, fp_count);
+        int d_reg1_code = fp_regs[fp_offset++];
+        if (d_reg1_code % 2 != 0) {
+          // If we're misaligned then extra_double_reg must have been consumed.
+          DCHECK_EQ(-1, extra_double_reg);
+          int odd_double_reg = d_reg1_code;
+          d_reg1_code = fp_regs[fp_offset++];
+          extra_double_reg = odd_double_reg;
+        }
+        // Combine the current D-register with the next to form a Q-register.
+        int d_reg2_code = fp_regs[fp_offset++];
+        DCHECK_EQ(0, d_reg1_code % 2);
+        DCHECK_EQ(d_reg1_code + 1, d_reg2_code);
+        USE(d_reg2_code);
+        return d_reg1_code / 2;
+      }
+      default:
+        UNREACHABLE();
+    }
+#else
+    DCHECK_LT(fp_offset, fp_count);
+    return fp_regs[fp_offset++];
+#endif
   }
 };
 
@@ -864,11 +918,11 @@ TEST(Int64Select_registers) {
 
 
 TEST(Float32Select_registers) {
-  if (GetRegConfig()->num_allocatable_double_registers() < 2) {
+  if (GetRegConfig()->num_allocatable_float_registers() < 2) {
     return;
   }
 
-  int rarray[] = {GetRegConfig()->GetAllocatableDoubleCode(0)};
+  int rarray[] = {GetRegConfig()->GetAllocatableFloatCode(0)};
   ArgsBuffer<float32>::Sig sig(2);
 
   Float32RegisterPairs pairs;
@@ -912,7 +966,7 @@ TEST(Float64Select_registers) {
 
 
 TEST(Float32Select_stack_params_return_reg) {
-  int rarray[] = {GetRegConfig()->GetAllocatableDoubleCode(0)};
+  int rarray[] = {GetRegConfig()->GetAllocatableFloatCode(0)};
   Allocator params(nullptr, 0, nullptr, 0);
   Allocator rets(nullptr, 0, rarray, 1);
   RegisterConfig config(params, rets);
