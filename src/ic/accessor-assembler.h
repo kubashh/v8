@@ -40,6 +40,7 @@ class AccessorAssembler : public CodeStubAssembler {
   void GenerateStoreGlobalIC();
   void GenerateStoreGlobalICTrampoline();
   void GenerateCloneObjectIC();
+  void GenerateCloneObjectIC_Slow();
 
   void GenerateLoadGlobalIC(TypeofMode typeof_mode);
   void GenerateLoadGlobalICTrampoline(TypeofMode typeof_mode);
@@ -110,6 +111,9 @@ class AccessorAssembler : public CodeStubAssembler {
                                              TNode<Map> transition_map,
                                              Label* miss,
                                              bool validate_transition_handler);
+  void StoreDataPropertyWithMapTransition(const StoreICParameters* p,
+                                          TNode<Map> transition_map,
+                                          Label* miss);
 
   void JumpIfDataProperty(Node* details, Label* writable, Label* readonly);
 
