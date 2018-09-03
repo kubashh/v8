@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1c06d649_4e6a3d01",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:54:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d00a05c9_644dc54b",
+      "range": {
+        "startLine": 226,
+        "startChar": 14,
+        "endLine": 226,
+        "endChar": 18
+      },
+      "revId": "7f2ea45c15f798731a7194a88f5db75c0769e248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c41445ed_a849413c",
         "filename": "src/parsing/token.h",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2018-09-03T14:42:29Z",
       "side": 1,
       "message": "It would be nice to know what are the most common tokens that are passed here and maybe reorder the range checks based on that data.",
+      "revId": "7f2ea45c15f798731a7194a88f5db75c0769e248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d193b87_a5d0c240",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:54:12Z",
+      "side": 1,
+      "message": "Seems like the order makes mostly sense when looking at the branch coverage: https://chromium-coverage.appspot.com/reports/588298/linux/chromium/src/v8/src/parsing/token.h.html#L225",
+      "parentUuid": "c41445ed_a849413c",
       "revId": "7f2ea45c15f798731a7194a88f5db75c0769e248",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -56,6 +98,24 @@
       "revId": "7f2ea45c15f798731a7194a88f5db75c0769e248",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "368d3743_4cd7aeec",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:54:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d4da9cb_fa261183",
+      "revId": "7f2ea45c15f798731a7194a88f5db75c0769e248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
