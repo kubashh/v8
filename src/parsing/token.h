@@ -152,15 +152,16 @@ namespace internal {
   /* Identifiers (not keywords or future reserved words). */       \
   T(IDENTIFIER, nullptr, 0)                                        \
   K(ASYNC, "async", 0)                                             \
-  /* `await` is a reserved word in module code only */             \
-  K(AWAIT, "await", 0)                                             \
-  K(ENUM, "enum", 0)                                               \
-  K(LET, "let", 0)                                                 \
-  K(STATIC, "static", 0)                                           \
-  K(YIELD, "yield", 0)                                             \
   /* Future reserved words (ECMA-262, section 7.6.1.2). */         \
   T(FUTURE_STRICT_RESERVED_WORD, nullptr, 0)                       \
   T(ESCAPED_STRICT_RESERVED_WORD, nullptr, 0)                      \
+  K(LET, "let", 0)                                                 \
+  K(STATIC, "static", 0)                                           \
+  /* `await` is a reserved word in module code only */             \
+  K(ENUM, "enum", 0)                                               \
+  K(AWAIT, "await", 0)                                             \
+  K(YIELD, "yield", 0)                                             \
+  /* End AnyIdentifier. */                                         \
   K(CLASS, "class", 0)                                             \
   K(CONST, "const", 0)                                             \
   K(EXPORT, "export", 0)                                           \
@@ -218,27 +219,21 @@ class Token {
   static bool IsKeyword(Value tok) {
     return token_type[tok] == 'K';
   }
-  static bool IsContextualKeyword(Value tok) { return token_type[tok] == 'C'; }
+  static bool IsContextualKeyword(Value tok) {
+    return IsInRange(tok, GET, ANONYMOUS);
+  }
+
+  static char TypeForTesting(Value tok) { return token_type[tok]; }
 
   static bool IsIdentifier(Value tok, LanguageMode language_mode,
                            bool is_generator, bool disallow_await) {
-    switch (tok) {
-      case IDENTIFIER:
-      case ASYNC:
-        return true;
-      case ESCAPED_STRICT_RESERVED_WORD:
-      case FUTURE_STRICT_RESERVED_WORD:
-      case LET:
-      case STATIC:
-        return is_sloppy(language_mode);
-      case YIELD:
-        return !is_generator && is_sloppy(language_mode);
-      case AWAIT:
-        return !disallow_await;
-      default:
-        return false;
+    if (IsInRange(tok, IDENTIFIER, ASYNC)) return true;
+    if (IsInRange(tok, FUTURE_STRICT_RESERVED_WORD, STATIC)) {
+      return is_sloppy(language_mode);
     }
-    UNREACHABLE();
+    if (tok == AWAIT) return !disallow_await;
+    if (tok == YIELD) return !is_generator && is_sloppy(language_mode);
+    return false;
   }
 
   static bool IsAssignmentOp(Value tok) {
@@ -256,7 +251,7 @@ class Token {
   static bool IsEqualityOp(Value op) { return IsInRange(op, EQ, EQ_STRICT); }
 
   static bool IsAnyIdentifier(Value tok) {
-    return IsInRange(tok, IDENTIFIER, ESCAPED_STRICT_RESERVED_WORD);
+    return IsInRange(tok, IDENTIFIER, YIELD);
   }
 
   static Value BinaryOpForAssignment(Value op) {
