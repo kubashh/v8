@@ -243,8 +243,10 @@ class Scanner {
   // Returns the current token again.
   Token::Value current_token() { return current().token; }
 
-  Token::Value current_contextual_token() { return current().contextual_token; }
-  Token::Value next_contextual_token() { return next().contextual_token; }
+  Token::Value current_contextual_token() const {
+    return current().contextual_token;
+  }
+  Token::Value next_contextual_token() const { return next().contextual_token; }
 
   // Returns the location information for the current token
   // (the token last returned by Next()).
@@ -295,7 +297,7 @@ class Scanner {
 
   inline bool CurrentMatchesContextual(Token::Value token) const {
     DCHECK(Token::IsContextualKeyword(token));
-    return current().contextual_token == token;
+    return current_contextual_token() == token;
   }
 
   // Match the token against the contextual keyword or literal buffer.
@@ -306,7 +308,7 @@ class Scanner {
     // (which was escape-processed already).
     // Conveniently, !current().literal_chars.is_used() for all proper
     // keywords, so this second condition should exit early in common cases.
-    return (current().contextual_token == token) ||
+    return (current_contextual_token() == token) ||
            (current().literal_chars.is_used() &&
             current().literal_chars.Equals(Vector<const char>(
                 Token::String(token), Token::StringLength(token))));
@@ -322,6 +324,11 @@ class Scanner {
     *is_set = CurrentMatchesContextual(Token::SET);
     return *is_get || *is_set;
   }
+
+  bool IsGet() { return CurrentMatchesContextual(Token::GET); }
+
+  bool IsSet() { return CurrentMatchesContextual(Token::SET); }
+
   bool IsLet() const {
     return CurrentMatches(Token::LET) ||
            CurrentMatchesContextualEscaped(Token::LET);
