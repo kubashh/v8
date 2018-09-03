@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5059f33d_ec11ece2",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-03T09:21:06Z",
+      "side": 1,
+      "message": "What do we normally do when we want to do a refactoring in our code that would probably take \u003e1h? Do we file a bug for it, check first if we have necessary test coverage and then start refactoring?",
+      "parentUuid": "f765b2e9_9894e110",
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa9aeea6_736b8071",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 3
@@ -69,6 +87,24 @@
       "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ade0ddb_018f47c0",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-03T09:21:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "001914da_de7bda4d",
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
