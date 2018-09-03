@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ffb21fc_ffc933ef",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:04:35Z",
+      "side": 1,
+      "message": "\u003d multiprocessing.cpu_count()",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97455b1a_96b32f90",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:04:35Z",
+      "side": 1,
+      "message": "git cl format --python",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95335118_d6e01c75",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:04:35Z",
+      "side": 1,
+      "message": "flip the condition and do an early break.",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fae9b8f_0ae26058",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:04:35Z",
+      "side": 1,
+      "message": "flip the condition and do an early break.",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c732acc2_514c86c8",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:04:35Z",
+      "side": 1,
+      "message": "flip the condition and do an early break.",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b722446_b877d700",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:04:35Z",
+      "side": 1,
+      "message": "Maybe using the default from tools/dev/gm.py might make more sense, not fully sure.",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d15628ad_b0891dd6",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:04:35Z",
+      "side": 1,
+      "message": "TODO: check that build folder exists",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
