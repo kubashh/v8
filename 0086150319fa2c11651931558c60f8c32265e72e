@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3ffc5a25_05586bef",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-03T16:26:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ffb21fc_ffc933ef",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97455b1a_96b32f90",
         "filename": "tools/run-clang-tidy.py",
         "patchSetId": 15
@@ -33,6 +51,24 @@
       "revId": "0086150319fa2c11651931558c60f8c32265e72e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dd46562_d6ceb661",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-03T16:26:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97455b1a_96b32f90",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ba9a7c8b_18832fbf",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-03T16:26:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95335118_d6e01c75",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8fae9b8f_0ae26058",
         "filename": "tools/run-clang-tidy.py",
         "patchSetId": 15
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "282c33f0_2c9279ee",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-03T16:26:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fae9b8f_0ae26058",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c732acc2_514c86c8",
         "filename": "tools/run-clang-tidy.py",
         "patchSetId": 15
@@ -84,6 +156,24 @@
       "revId": "0086150319fa2c11651931558c60f8c32265e72e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3128474c_08c35012",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-03T16:26:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c732acc2_514c86c8",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +208,24 @@
       "revId": "0086150319fa2c11651931558c60f8c32265e72e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe4cfced_62f8d3cf",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-03T16:26:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d15628ad_b0891dd6",
+      "revId": "0086150319fa2c11651931558c60f8c32265e72e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
