@@ -180,7 +180,7 @@ def run_site(site, domain, args, timeout=None):
           user_data_dir = args.user_data_dir
         else:
           user_data_dir = tempfile.mkdtemp(prefix="chr_")
-        js_flags = "--runtime-call-stats --noconcurrent-recompilation"
+        js_flags = "--runtime-call-stats"
         if args.replay_wpr: js_flags += " --allow-natives-syntax"
         if args.js_flags: js_flags += " " + args.js_flags
         chrome_flags = get_chrome_flags(js_flags, user_data_dir)
@@ -253,8 +253,9 @@ def read_sites_file(args):
 
 def read_sites(args):
   # Determine the websites to benchmark.
-  if args.sites_file:
-    return read_sites_file(args)
+  # if args.sites_file:
+  #   return read_sites_file(args)
+  print args.sites
   return [{'url': site, 'timeout': args.timeout} for site in args.sites]
 
 def do_run(args):
@@ -354,6 +355,8 @@ def read_stats(path, domain, args):
   if args.aggregate:
     groups = [
         ('Group-IC', re.compile(".*IC_.*")),
+        ('Group-OptimizeBackground',
+         re.compile(".*OptimizeConcurrent.*|RecompileConcurrent.*")),
         ('Group-Optimize',
          re.compile("StackGuard|.*Optimize.*|.*Deoptimize.*|Recompile.*")),
         ('Group-CompileBackground', re.compile("(.*CompileBackground.*)")),
@@ -651,7 +654,7 @@ def main():
         "-l", "--log-stderr", type=str, metavar="<path>",
         help="specify where chrome's stderr should go (default: /dev/null)")
     subparser.add_argument(
-        "sites", type=str, metavar="<URL>", nargs="*",
+        "--sites", type=str, metavar="<URL>", nargs="*",
         help="specify benchmark website")
   add_replay_args(subparsers["run"])
 
