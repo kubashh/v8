@@ -71,6 +71,14 @@ void MockUseCounterCallback(v8::Isolate* isolate,
 
 }  // namespace
 
+TEST(IsContextualKeyword) {
+  for (int i = 0; i < Token::NUM_TOKENS; i++) {
+    Token::Value tok = static_cast<Token::Value>(i);
+    CHECK_EQ(Token::TypeForTesting(tok) == 'C',
+             Token::IsContextualKeyword(tok));
+  }
+}
+
 bool TokenIsAnyIdentifier(Token::Value tok) {
   switch (tok) {
     case Token::IDENTIFIER:
@@ -92,6 +100,43 @@ TEST(AnyIdentifierToken) {
   for (int i = 0; i < Token::NUM_TOKENS; i++) {
     Token::Value tok = static_cast<Token::Value>(i);
     CHECK_EQ(TokenIsAnyIdentifier(tok), Token::IsAnyIdentifier(tok));
+  }
+}
+
+bool TokenIsIdentifier(Token::Value tok, LanguageMode language_mode,
+                       bool is_generator, bool disallow_await) {
+  switch (tok) {
+    case Token::IDENTIFIER:
+    case Token::ASYNC:
+      return true;
+    case Token::ESCAPED_STRICT_RESERVED_WORD:
+    case Token::FUTURE_STRICT_RESERVED_WORD:
+    case Token::LET:
+    case Token::STATIC:
+      return is_sloppy(language_mode);
+    case Token::YIELD:
+      return !is_generator && is_sloppy(language_mode);
+    case Token::AWAIT:
+      return !disallow_await;
+    default:
+      return false;
+  }
+  UNREACHABLE();
+}
+
+TEST(IsIdentifier) {
+  for (int i = 0; i < Token::NUM_TOKENS; i++) {
+    Token::Value tok = static_cast<Token::Value>(i);
+    for (int j = 0; j < 2; j++) {
+      LanguageMode mode = static_cast<LanguageMode>(i);
+      for (int is_generator = 0; is_generator < 2; is_generator++) {
+        for (int disallow_await = 0; disallow_await < 2; disallow_await++) {
+          CHECK_EQ(
+              TokenIsIdentifier(tok, mode, is_generator, disallow_await),
+              Token::IsIdentifier(tok, mode, is_generator, disallow_await));
+        }
+      }
+    }
   }
 }
 
