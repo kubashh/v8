@@ -17,11 +17,6 @@ void SetupIsolateDelegateForTests::SetupBuiltins(Isolate* isolate) {
 
 void SetupIsolateDelegateForTests::SetupInterpreter(
     interpreter::Interpreter* interpreter) {
-#ifndef V8_EMBEDDED_BYTECODE_HANDLERS
-  if (create_heap_objects_) {
-    interpreter::SetupInterpreter::InstallBytecodeHandlers(interpreter);
-  }
-#endif
 }
 
 bool SetupIsolateDelegateForTests::SetupHeap(Heap* heap) {

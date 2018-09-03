@@ -147,7 +147,6 @@ Handle<Code> Builtins::builtin_handle(int index) {
       reinterpret_cast<Code**>(isolate_->heap()->builtin_address(index)));
 }
 
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
 Code* Builtins::GetBytecodeHandler(interpreter::Bytecode bytecode,
                                    interpreter::OperandScale operand_scale) {
   return builtin(
@@ -156,7 +155,6 @@ Code* Builtins::GetBytecodeHandler(interpreter::Bytecode bytecode,
           interpreter::BytecodeOperands::kOperandScaleCount +
       interpreter::BytecodeOperands::OperandScaleAsIndex(operand_scale));
 }
-#endif
 
 // static
 int Builtins::GetStackParameterCount(Name name) {

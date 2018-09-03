@@ -13,57 +13,5 @@ bool BuiltinSnapshotUtils::IsBuiltinIndex(int maybe_index) {
           maybe_index < kFirstBuiltinIndex + kNumberOfBuiltins);
 }
 
-#ifndef V8_EMBEDDED_BYTECODE_HANDLERS
-// static
-bool BuiltinSnapshotUtils::IsHandlerIndex(int maybe_index) {
-  return (kFirstHandlerIndex <= maybe_index &&
-          maybe_index < kFirstHandlerIndex + kNumberOfHandlers);
-}
-
-// static
-int BuiltinSnapshotUtils::BytecodeToIndex(Bytecode bytecode,
-                                          OperandScale operand_scale) {
-  int index =
-      BuiltinSnapshotUtils::kNumberOfBuiltins + static_cast<int>(bytecode);
-  switch (operand_scale) {  // clang-format off
-    case OperandScale::kSingle: return index;
-    case OperandScale::kDouble: return index + Bytecodes::kBytecodeCount;
-    case OperandScale::kQuadruple: return index + 2 * Bytecodes::kBytecodeCount;
-  }  // clang-format on
-  UNREACHABLE();
-}
-
-// static
-std::pair<interpreter::Bytecode, interpreter::OperandScale>
-BuiltinSnapshotUtils::BytecodeFromIndex(int index) {
-  DCHECK(IsHandlerIndex(index));
-
-  const int x = index - BuiltinSnapshotUtils::kNumberOfBuiltins;
-  Bytecode bytecode = Bytecodes::FromByte(x % Bytecodes::kBytecodeCount);
-  switch (x / Bytecodes::kBytecodeCount) {  // clang-format off
-    case 0: return {bytecode, OperandScale::kSingle};
-    case 1: return {bytecode, OperandScale::kDouble};
-    case 2: return {bytecode, OperandScale::kQuadruple};
-    default: UNREACHABLE();
-  }  // clang-format on
-}
-
-// static
-void BuiltinSnapshotUtils::ForEachBytecode(
-    std::function<void(Bytecode, OperandScale)> f) {
-  static const OperandScale kOperandScales[] = {
-#define VALUE(Name, _) OperandScale::k##Name,
-      OPERAND_SCALE_LIST(VALUE)
-#undef VALUE
-  };
-
-  for (OperandScale operand_scale : kOperandScales) {
-    for (int i = 0; i < Bytecodes::kBytecodeCount; i++) {
-      f(Bytecodes::FromByte(i), operand_scale);
-    }
-  }
-}
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
-
 }  // namespace internal
 }  // namespace v8

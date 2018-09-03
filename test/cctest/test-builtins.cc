@@ -9,7 +9,6 @@
 namespace {
 
 TEST(GetBytecodeHandler) {
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
   using Bytecode = i::interpreter::Bytecode;
   using OperandScale = i::interpreter::OperandScale;
   using Builtins = i::Builtins;
@@ -31,7 +30,6 @@ TEST(GetBytecodeHandler) {
       builtins->GetBytecodeHandler(Bytecode::kLdaImmutableContextSlot,
                                    OperandScale::kQuadruple),
       builtins->builtin(Builtins::kLdaImmutableContextSlotExtraWideHandler));
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
 }
 
 }  // namespace

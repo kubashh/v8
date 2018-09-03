@@ -371,10 +371,7 @@ config("features") {
     defines += [ "V8_CHECK_MICROTASKS_SCOPES_CONSISTENCY" ]
   }
   if (v8_enable_embedded_builtins) {
-    defines += [
-      "V8_EMBEDDED_BUILTINS",
-      "V8_EMBEDDED_BYTECODE_HANDLERS",
-    ]
+    defines += [ "V8_EMBEDDED_BUILTINS" ]
   }
   if (v8_use_multi_snapshots) {
     defines += [ "V8_MULTI_SNAPSHOTS" ]

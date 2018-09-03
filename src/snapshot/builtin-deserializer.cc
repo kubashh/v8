@@ -86,39 +86,6 @@ void BuiltinDeserializer::DeserializeEagerBuiltinsAndHandlers() {
     }
   }
 #endif
-
-#ifndef V8_EMBEDDED_BYTECODE_HANDLERS
-  // Deserialize bytecode handlers.
-  Interpreter* interpreter = isolate()->interpreter();
-  DCHECK(!interpreter->IsDispatchTableInitialized());
-
-  BSU::ForEachBytecode([=](Bytecode bytecode, OperandScale operand_scale) {
-    // Bytecodes without a dedicated handler are patched up in a second pass.
-    if (!Bytecodes::BytecodeHasHandler(bytecode, operand_scale)) return;
-
-    // If lazy-deserialization is enabled and the current bytecode is lazy,
-    // we write the generic LazyDeserialization handler into the dispatch table
-    // and deserialize later upon first use.
-    Code* code = (FLAG_lazy_handler_deserialization &&
-                  IsLazyDeserializationEnabled() && Bytecodes::IsLazy(bytecode))
-                     ? GetDeserializeLazyHandler(operand_scale)
-                     : DeserializeHandlerRaw(bytecode, operand_scale);
-
-    interpreter->SetBytecodeHandler(bytecode, operand_scale, code);
-  });
-
-  // Patch up holes in the dispatch table.
-
-  Code* illegal_handler = interpreter->GetBytecodeHandler(
-      Bytecode::kIllegal, OperandScale::kSingle);
-
-  BSU::ForEachBytecode([=](Bytecode bytecode, OperandScale operand_scale) {
-    if (Bytecodes::BytecodeHasHandler(bytecode, operand_scale)) return;
-    interpreter->SetBytecodeHandler(bytecode, operand_scale, illegal_handler);
-  });
-
-  DCHECK(isolate()->interpreter()->IsDispatchTableInitialized());
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
 }
 
 Code* BuiltinDeserializer::DeserializeBuiltin(int builtin_id) {
@@ -135,15 +102,6 @@ Code* BuiltinDeserializer::DeserializeBuiltin(int builtin_id) {
 
   return code;
 }
-
-#ifndef V8_EMBEDDED_BYTECODE_HANDLERS
-Code* BuiltinDeserializer::DeserializeHandler(Bytecode bytecode,
-                                              OperandScale operand_scale) {
-  allocator()->ReserveForHandler(bytecode, operand_scale);
-  DisallowHeapAllocation no_gc;
-  return DeserializeHandlerRaw(bytecode, operand_scale);
-}
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
 
 Code* BuiltinDeserializer::DeserializeBuiltinRaw(int builtin_id) {
   DCHECK(!AllowHeapAllocation::IsAllowed());
@@ -174,42 +132,6 @@ Code* BuiltinDeserializer::DeserializeBuiltinRaw(int builtin_id) {
                      ByteArray::cast(code->source_position_table())));
   return code;
 }
-
-#ifndef V8_EMBEDDED_BYTECODE_HANDLERS
-Code* BuiltinDeserializer::DeserializeHandlerRaw(Bytecode bytecode,
-                                                 OperandScale operand_scale) {
-  DCHECK(!AllowHeapAllocation::IsAllowed());
-  DCHECK(Bytecodes::BytecodeHasHandler(bytecode, operand_scale));
-
-  const int code_object_id = BSU::BytecodeToIndex(bytecode, operand_scale);
-  DeserializingCodeObjectScope scope(this, code_object_id);
-
-  const int initial_position = source()->position();
-  source()->set_position(code_offsets_[code_object_id]);
-
-  Object* o = ReadDataSingle();
-  DCHECK(o->IsCode() && Code::cast(o)->kind() == Code::BYTECODE_HANDLER);
-
-  // Rewind.
-  source()->set_position(initial_position);
-
-  // Flush the instruction cache.
-  Code* code = Code::cast(o);
-  Assembler::FlushICache(code->raw_instruction_start(),
-                         code->raw_instruction_size());
-
-  std::string name = Bytecodes::ToString(bytecode, operand_scale);
-  PROFILE(isolate(), CodeCreateEvent(CodeEventListener::HANDLER_TAG,
-                                     AbstractCode::cast(code), name.c_str()));
-#ifdef ENABLE_DISASSEMBLER
-  if (FLAG_print_builtin_code) {
-    code->PrintBuiltinCode(isolate(), name.c_str());
-  }
-#endif  // ENABLE_DISASSEMBLER
-
-  return code;
-}
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
 
 uint32_t BuiltinDeserializer::ExtractCodeObjectSize(int code_object_id) {
   DCHECK_LT(code_object_id, BSU::kNumberOfCodeObjects);
