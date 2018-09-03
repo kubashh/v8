@@ -16,6 +16,24 @@
       "revId": "6e740c083fe2508ada7cfd127e75d3c14c5a0f00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46630955_27560f97",
+        "filename": "src/compiler/types.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-03T19:12:36Z",
+      "side": 1,
+      "message": "NonNumber includes receivers (via kUnique).",
+      "parentUuid": "263b1706_654f87ac",
+      "revId": "6e740c083fe2508ada7cfd127e75d3c14c5a0f00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
