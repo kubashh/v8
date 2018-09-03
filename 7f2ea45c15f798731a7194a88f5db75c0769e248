@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d00a05c9_644dc54b",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-03T14:42:29Z",
+      "side": 1,
+      "message": "Maybe private: ... TypeForTesting() ?",
+      "range": {
+        "startLine": 226,
+        "startChar": 14,
+        "endLine": 226,
+        "endChar": 18
+      },
+      "revId": "7f2ea45c15f798731a7194a88f5db75c0769e248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c41445ed_a849413c",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-03T14:42:29Z",
+      "side": 1,
+      "message": "It would be nice to know what are the most common tokens that are passed here and maybe reorder the range checks based on that data.",
+      "revId": "7f2ea45c15f798731a7194a88f5db75c0769e248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d4da9cb_fa261183",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-03T14:42:29Z",
+      "side": 1,
+      "message": "How about doing simple for (i \u003d 0; i \u003c 2; i++) loop for mode and other two flags? Just to ensure that we didn\u0027t miss a combination?",
+      "revId": "7f2ea45c15f798731a7194a88f5db75c0769e248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
