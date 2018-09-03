@@ -16,6 +16,24 @@
       "revId": "1e56f24a8ffbd6998a10675a18d7925d4dc10eab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02b027e6_416b3df0",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-03T08:52:28Z",
+      "side": 0,
+      "message": "if the flag is enabled, the broker is enabled and therefore the mode check that I moved into SerializeStandardObjects subsumes this FLAG check. I think it makes sense that the flag is only used to initialize the broker.",
+      "parentUuid": "a99184c4_1a31ce77",
+      "revId": "1e56f24a8ffbd6998a10675a18d7925d4dc10eab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

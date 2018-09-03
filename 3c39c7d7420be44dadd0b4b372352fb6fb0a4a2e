@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f765b2e9_9894e110",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-03T08:52:28Z",
+      "side": 1,
+      "message": "We want to remove this later because we don\u0027t want to serialize in the middle of an optimization pass. This is just here because it\u0027s a pass that already uses the broker in some places but runs before the copy reducer.\n\nAbout the structure of the function: I agree that it\u0027s hard to read. You could try to simplify/refactor it :)",
+      "parentUuid": "222f3735_5c10ff13",
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa9aeea6_736b8071",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2018-09-03T08:37:08Z",
       "side": 1,
       "message": "Do we need some reporting here or is this an expected call?",
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "001914da_de7bda4d",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-03T08:52:28Z",
+      "side": 1,
+      "message": "If the broker is disabled, we don\u0027t need to do anything here. Instead of checking at all call sites of this and similar functions, I\u0027m moving the checks into the functions.",
+      "parentUuid": "fa9aeea6_736b8071",
       "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -56,6 +92,30 @@
       "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13ba6d4f_de75486a",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-03T08:52:28Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fb17643d_11ac59ae",
+      "range": {
+        "startLine": 1112,
+        "startChar": 34,
+        "endLine": 1112,
+        "endChar": 36
+      },
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
