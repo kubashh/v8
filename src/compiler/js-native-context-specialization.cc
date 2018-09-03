@@ -113,8 +113,36 @@ Reduction JSNativeContextSpecialization::Reduce(Node* node) {
       return ReduceJSStoreInArrayLiteral(node);
     case IrOpcode::kJSToObject:
       return ReduceJSToObject(node);
+    case IrOpcode::kJSToString:
+      return ReduceJSToString(node);
     default:
       break;
+  }
+  return NoChange();
+}
+
+Reduction JSNativeContextSpecialization::ReduceJSToStringInput(Node* input) {
+  if (input->opcode() == IrOpcode::kJSToString) {
+    // Recursively try to reduce the input first.
+    Reduction result = ReduceJSToString(input);
+    if (result.Changed()) return result;
+    return Changed(input);  // JSToString(JSToString(x)) => JSToString(x)
+  }
+  HeapObjectMatcher matcher(input);
+  if (matcher.HasValue() && matcher.Value()->IsString()) {
+    return Changed(input);  // JSToString(x:string) => x
+  }
+  return NoChange();
+}
+
+Reduction JSNativeContextSpecialization::ReduceJSToString(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSToString, node->opcode());
+  // Try to reduce the input first.
+  Node* const input = node->InputAt(0);
+  Reduction reduction = ReduceJSToStringInput(input);
+  if (reduction.Changed()) {
+    ReplaceWithValue(node, reduction.replacement());
+    return reduction;
   }
   return NoChange();
 }
