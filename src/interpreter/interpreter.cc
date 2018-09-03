@@ -59,43 +59,9 @@ Interpreter::Interpreter(Isolate* isolate) : isolate_(isolate) {
   }
 }
 
-Code* Interpreter::GetAndMaybeDeserializeBytecodeHandler(
-    Bytecode bytecode, OperandScale operand_scale) {
-  Code* code = GetBytecodeHandler(bytecode, operand_scale);
-
-  // Already deserialized? Then just return the handler.
-  if (!isolate_->heap()->IsDeserializeLazyHandler(code)) return code;
-
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
-  UNREACHABLE();
-#else
-  DCHECK(FLAG_lazy_handler_deserialization);
-  DCHECK(Bytecodes::BytecodeHasHandler(bytecode, operand_scale));
-  code = Snapshot::DeserializeHandler(isolate_, bytecode, operand_scale);
-
-  DCHECK(code->IsCode());
-  DCHECK_EQ(code->kind(), Code::BYTECODE_HANDLER);
-  DCHECK(!isolate_->heap()->IsDeserializeLazyHandler(code));
-
-  SetBytecodeHandler(bytecode, operand_scale, code);
-
-  return code;
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
-}
-
 Code* Interpreter::GetBytecodeHandler(Bytecode bytecode,
                                       OperandScale operand_scale) {
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
-  // The dispatch table has pointers to the offheap instruction stream, so it's
-  // not possible to use that to get hold of the Code object.
   return isolate_->builtins()->GetBytecodeHandler(bytecode, operand_scale);
-#else
-  DCHECK(IsDispatchTableInitialized());
-  DCHECK(Bytecodes::BytecodeHasHandler(bytecode, operand_scale));
-  size_t index = GetDispatchTableIndex(bytecode, operand_scale);
-  Address code_entry = dispatch_table_[index];
-  return Code::GetCodeFromTargetAddress(code_entry);
-#endif
 }
 
 void Interpreter::SetBytecodeHandler(Bytecode bytecode,
@@ -114,22 +80,6 @@ size_t Interpreter::GetDispatchTableIndex(Bytecode bytecode,
   return index + BytecodeOperands::OperandScaleAsIndex(operand_scale) *
                      kEntriesPerOperandScale;
 }
-
-#ifndef V8_EMBEDDED_BYTECODE_HANDLERS
-void Interpreter::IterateDispatchTable(RootVisitor* v) {
-  for (int i = 0; i < kDispatchTableSize; i++) {
-    Address code_entry = dispatch_table_[i];
-    Object* code = code_entry == kNullAddress
-                       ? nullptr
-                       : Code::GetCodeFromTargetAddress(code_entry);
-    Object* old_code = code;
-    v->VisitRootPointer(Root::kDispatchTable, nullptr, &code);
-    if (code != old_code) {
-      dispatch_table_[i] = reinterpret_cast<Code*>(code)->entry();
-    }
-  }
-}
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
 
 int Interpreter::InterruptBudget() {
   return FLAG_interrupt_budget;
@@ -250,7 +200,6 @@ void Interpreter::ForEachBytecode(
 }
 
 void Interpreter::InitializeDispatchTable() {
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
   Builtins* builtins = isolate_->builtins();
   Code* illegal = builtins->builtin(Builtins::kIllegalHandler);
   ForEachBytecode([=](Bytecode bytecode, OperandScale operand_scale) {
@@ -259,7 +208,6 @@ void Interpreter::InitializeDispatchTable() {
                         : illegal;
     SetBytecodeHandler(bytecode, operand_scale, handler);
   });
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
 }
 
 bool Interpreter::IsDispatchTableInitialized() const {

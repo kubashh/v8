@@ -46,7 +46,7 @@ void StartupDeserializer::DeserializeInto(Isolate* isolate) {
 
     // Deserialize eager builtins from the builtin snapshot. Note that deferred
     // objects must have been deserialized prior to this.
-    builtin_deserializer.DeserializeEagerBuiltinsAndHandlers();
+    builtin_deserializer.DeserializeEagerBuiltins();
 
     // Flush the instruction cache for the entire code-space. Must happen after
     // builtins deserialization.

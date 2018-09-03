@@ -111,9 +111,8 @@ template <class AllocatorT>
 void Serializer<AllocatorT>::VisitRootPointers(Root root,
                                                const char* description,
                                                Object** start, Object** end) {
-  // Builtins and bytecode handlers are serialized in a separate pass by the
-  // BuiltinSerializer.
-  if (root == Root::kBuiltins || root == Root::kDispatchTable) return;
+  // Builtins are serialized in a separate pass by the BuiltinSerializer.
+  if (root == Root::kBuiltins) return;
 
   for (Object** current = start; current < end; current++) {
     SerializeRootObject(*current);

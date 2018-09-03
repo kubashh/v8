@@ -25,7 +25,6 @@ class Object;
   V(kDebug, "(Debugger)")                              \
   V(kCompilationCache, "(Compilation cache)")          \
   V(kHandleScope, "(Handle scope)")                    \
-  V(kDispatchTable, "(Dispatch table)")                \
   V(kBuiltins, "(Builtins)")                           \
   V(kGlobalHandles, "(Global handles)")                \
   V(kEternalHandles, "(Eternal handles)")              \

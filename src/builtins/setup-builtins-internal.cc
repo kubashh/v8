@@ -247,7 +247,6 @@ void SetupIsolateDelegate::ReplacePlaceholders(Isolate* isolate) {
   }
 }
 
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
 namespace {
 Code* GenerateBytecodeHandler(Isolate* isolate, int builtin_index,
                               const char* name, interpreter::Bytecode bytecode,
@@ -267,7 +266,6 @@ Code* GenerateBytecodeHandler(Isolate* isolate, int builtin_index,
   return *code;
 }
 }  // namespace
-#endif
 
 // static
 void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
@@ -311,7 +309,6 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
       CallDescriptors::InterfaceDescriptor, #Name, 1);     \
   AddBuiltin(builtins, index++, code);
 
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
 #define BUILD_BCH_WITH_SCALE(Code, Scale)                               \
   code = GenerateBytecodeHandler(isolate, index, Builtins::name(index), \
                                  interpreter::Bytecode::k##Code,        \
@@ -325,9 +322,6 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
   BUILD_BCH_WITH_SCALE(Code, Single) \
   BUILD_BCH_WITH_SCALE(Code, Double) \
   BUILD_BCH_WITH_SCALE(Code, Quadruple)
-#else
-#define BUILD_BCH(Code, ...) UNREACHABLE();
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
 
 #define BUILD_ASM(Name)                                                     \
   code = BuildWithMacroAssembler(isolate, index, Builtins::Generate_##Name, \

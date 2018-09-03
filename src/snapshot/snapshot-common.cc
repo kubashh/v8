@@ -168,44 +168,6 @@ Code* Snapshot::EnsureBuiltinIsDeserialized(Isolate* isolate,
   return code;
 }
 
-#ifndef V8_EMBEDDED_BYTECODE_HANDLERS
-// static
-Code* Snapshot::DeserializeHandler(Isolate* isolate,
-                                   interpreter::Bytecode bytecode,
-                                   interpreter::OperandScale operand_scale) {
-  if (FLAG_trace_lazy_deserialization) {
-    PrintF("Lazy-deserializing handler %s\n",
-           interpreter::Bytecodes::ToString(bytecode, operand_scale).c_str());
-  }
-
-  base::ElapsedTimer timer;
-  if (FLAG_profile_deserialization) timer.Start();
-
-  const v8::StartupData* blob = isolate->snapshot_blob();
-  Vector<const byte> builtin_data = Snapshot::ExtractBuiltinData(blob);
-  BuiltinSnapshotData builtin_snapshot_data(builtin_data);
-
-  CodeSpaceMemoryModificationScope code_allocation(isolate->heap());
-  BuiltinDeserializer builtin_deserializer(isolate, &builtin_snapshot_data);
-  Code* code = builtin_deserializer.DeserializeHandler(bytecode, operand_scale);
-
-  if (FLAG_profile_deserialization) {
-    double ms = timer.Elapsed().InMillisecondsF();
-    int bytes = code->Size();
-    PrintF("[Deserializing handler %s (%d bytes) took %0.3f ms]\n",
-           interpreter::Bytecodes::ToString(bytecode, operand_scale).c_str(),
-           bytes, ms);
-  }
-
-  if (isolate->logger()->is_listening_to_code_events() ||
-      isolate->is_profiling()) {
-    isolate->logger()->LogBytecodeHandler(bytecode, operand_scale, code);
-  }
-
-  return code;
-}
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
-
 void ProfileDeserialization(
     const SnapshotData* startup_snapshot, const SnapshotData* builtin_snapshot,
     const std::vector<SnapshotData*>& context_snapshots) {
@@ -695,7 +657,7 @@ Vector<const byte> BuiltinSnapshotData::Payload() const {
       GetHeaderValue(kNumReservationsOffset) * kUInt32Size;
   const byte* payload = data_ + kHeaderSize + reservations_size;
   const int builtin_offsets_size =
-      BuiltinSnapshotUtils::kNumberOfCodeObjects * kUInt32Size;
+      BuiltinSnapshotUtils::kNumberOfBuiltins * kUInt32Size;
   uint32_t payload_length = GetHeaderValue(kPayloadLengthOffset);
   DCHECK_EQ(data_ + size_, payload + payload_length);
   DCHECK_GT(payload_length, builtin_offsets_size);
@@ -707,14 +669,13 @@ Vector<const uint32_t> BuiltinSnapshotData::BuiltinOffsets() const {
       GetHeaderValue(kNumReservationsOffset) * kUInt32Size;
   const byte* payload = data_ + kHeaderSize + reservations_size;
   const int builtin_offsets_size =
-      BuiltinSnapshotUtils::kNumberOfCodeObjects * kUInt32Size;
+      BuiltinSnapshotUtils::kNumberOfBuiltins * kUInt32Size;
   uint32_t payload_length = GetHeaderValue(kPayloadLengthOffset);
   DCHECK_EQ(data_ + size_, payload + payload_length);
   DCHECK_GT(payload_length, builtin_offsets_size);
   const uint32_t* data = reinterpret_cast<const uint32_t*>(
       payload + payload_length - builtin_offsets_size);
-  return Vector<const uint32_t>(data,
-                                BuiltinSnapshotUtils::kNumberOfCodeObjects);
+  return Vector<const uint32_t>(data, BuiltinSnapshotUtils::kNumberOfBuiltins);
 }
 
 }  // namespace internal

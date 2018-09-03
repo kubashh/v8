@@ -36,8 +36,7 @@ RUNTIME_FUNCTION(Runtime_InterpreterDeserializeLazy) {
   Bytecode bytecode = Bytecodes::FromByte(bytecode_int);
   OperandScale operand_scale = static_cast<OperandScale>(operand_scale_int);
 
-  return isolate->interpreter()->GetAndMaybeDeserializeBytecodeHandler(
-      bytecode, operand_scale);
+  return isolate->interpreter()->GetBytecodeHandler(bytecode, operand_scale);
 }
 
 #ifdef V8_TRACE_IGNITION

@@ -371,10 +371,7 @@ config("features") {
     defines += [ "V8_CHECK_MICROTASKS_SCOPES_CONSISTENCY" ]
   }
   if (v8_enable_embedded_builtins) {
-    defines += [
-      "V8_EMBEDDED_BUILTINS",
-      "V8_EMBEDDED_BYTECODE_HANDLERS",
-    ]
+    defines += [ "V8_EMBEDDED_BUILTINS" ]
   }
   if (v8_use_multi_snapshots) {
     defines += [ "V8_MULTI_SNAPSHOTS" ]
@@ -1375,8 +1372,6 @@ v8_source_set("v8_initializers") {
     "src/interpreter/interpreter-generator.h",
     "src/interpreter/interpreter-intrinsics-generator.cc",
     "src/interpreter/interpreter-intrinsics-generator.h",
-    "src/interpreter/setup-interpreter-internal.cc",
-    "src/interpreter/setup-interpreter.h",
   ]
 
   if (use_jumbo_build == true) {

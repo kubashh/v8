@@ -53,13 +53,11 @@ class Builtins {
 #undef DEF_ENUM_BYTECODE_HANDLER
         builtin_count,
 
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
 #define EXTRACT_NAME(Name, ...) k##Name##Handler,
     // Define kFirstBytecodeHandler,
     kFirstBytecodeHandler =
         FirstFromVarArgs(BUILTIN_LIST_BYTECODE_HANDLERS(EXTRACT_NAME) 0)
 #undef EXTRACT_NAME
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
   };
 
   static const int32_t kNoBuiltinId = -1;
@@ -92,10 +90,8 @@ class Builtins {
   Code* builtin(int index);
   V8_EXPORT_PRIVATE Handle<Code> builtin_handle(int index);
 
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
   Code* GetBytecodeHandler(interpreter::Bytecode bytecode,
                            interpreter::OperandScale operand_scale);
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
 
   V8_EXPORT_PRIVATE static Callable CallableFor(Isolate* isolate, Name name);
 
