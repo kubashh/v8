@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "596ce055_310e94ab",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-03T11:27:21Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to file a bug for that. Regarding test coverage, that would probably require you to understand in detail what this code does, which might be very time consuming. So I\u0027d stick to simple transformations that are \"obviously correct\" and choose a reviewer who knows the code well.",
+      "parentUuid": "5059f33d_ec11ece2",
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa9aeea6_736b8071",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 3
