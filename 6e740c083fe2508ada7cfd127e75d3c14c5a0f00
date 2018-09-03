@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "263b1706_654f87ac",
+        "filename": "src/compiler/types.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-03T07:29:02Z",
+      "side": 1,
+      "message": "I\u0027m not so happy with these names. If NonNumber doesn\u0027t include receivers, then NonBigInt shouldn\u0027t either. Maybe you can find a better name.",
+      "revId": "6e740c083fe2508ada7cfd127e75d3c14c5a0f00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
