@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "92e93f0b_ddd26091",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-03T11:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0af3d403_4b1f6db0",
+      "range": {
+        "startLine": 3,
+        "startChar": 2,
+        "endLine": 3,
+        "endChar": 32
+      },
+      "revId": "d24eb076c5ee970e1592a4056b9b753d57decad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0369959b_00473af9",
         "filename": "tools/run-clang-tidy.py",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "36a6a312_cda126a4",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-03T11:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0369959b_00473af9",
+      "range": {
+        "startLine": 69,
+        "startChar": 8,
+        "endLine": 69,
+        "endChar": 22
+      },
+      "revId": "d24eb076c5ee970e1592a4056b9b753d57decad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d648f11b_ffbc2772",
         "filename": "tools/run-clang-tidy.py",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "d24eb076c5ee970e1592a4056b9b753d57decad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63b06ea7_ec4a3429",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-03T11:16:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d648f11b_ffbc2772",
+      "range": {
+        "startLine": 131,
+        "startChar": 31,
+        "endLine": 131,
+        "endChar": 37
+      },
+      "revId": "d24eb076c5ee970e1592a4056b9b753d57decad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
