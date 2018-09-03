@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "758c2034_9c3010ae",
+        "filename": "tools/callstats.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:14:49Z",
+      "side": 1,
+      "message": "I fully trust with this (careful?) choice of color.",
+      "revId": "bda6396a6ea8be4213faf769eb191e7e85af03b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f2e014b_64c79a4e",
+        "filename": "tools/callstats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:14:49Z",
+      "side": 1,
+      "message": "We should probably print an error message here.. silently falling back from json to the primitive file has bitten me in the past :P",
+      "revId": "bda6396a6ea8be4213faf769eb191e7e85af03b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a96317a3_2748b83e",
+        "filename": "tools/callstats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:14:49Z",
+      "side": 1,
+      "message": "left-over debug code?",
+      "revId": "bda6396a6ea8be4213faf769eb191e7e85af03b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdd6bdf4_65e78c6c",
+        "filename": "tools/callstats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-03T16:14:49Z",
+      "side": 1,
+      "message": "We should also add a Group-Optimize-Total (time for a helper I\u0027d say)",
+      "revId": "bda6396a6ea8be4213faf769eb191e7e85af03b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
