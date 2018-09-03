@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "222f3735_5c10ff13",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-03T08:37:08Z",
+      "side": 1,
+      "message": "Why do we want to remove this later?\n\nAnd more importantly (although probably a thing for another CL): can we refactor this 200+ lines method into smaller chunks, at least for the first 3-4 levels of nesting?\n\nI have a really hard time following all the small cases\u0027 conditions, and for instance introducing methods named such as\n(ComputePropertyAccessInfo)ForHeapObject might sound too verbose, but will allow for the whole ComputePropertyAccessInfo method to be concise and readable. As for now the only way I could deal with it is by folding in my IDE.",
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa9aeea6_736b8071",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-03T08:37:08Z",
+      "side": 1,
+      "message": "Do we need some reporting here or is this an expected call?",
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb17643d_11ac59ae",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-03T08:37:08Z",
+      "side": 1,
+      "message": "typo: missing space",
+      "range": {
+        "startLine": 1112,
+        "startChar": 34,
+        "endLine": 1112,
+        "endChar": 36
+      },
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "906f2001_f2d40c9d",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1748,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-03T08:37:08Z",
+      "side": 1,
+      "message": "Same as above for possible error reporting.",
+      "revId": "3c39c7d7420be44dadd0b4b372352fb6fb0a4a2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
