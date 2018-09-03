@@ -506,9 +506,8 @@ void Serializer<AllocatorT>::ObjectSerializer::SerializeExternalString() {
   } else {
     ExternalOneByteString* string = ExternalOneByteString::cast(object_);
     DCHECK(string->is_uncached());
-    const NativesExternalStringResource* resource =
-        reinterpret_cast<const NativesExternalStringResource*>(
-            string->resource());
+    NativesExternalStringResource* resource =
+        reinterpret_cast<NativesExternalStringResource*>(string->resource());
     // Replace the resource field with the type and index of the native source.
     string->set_resource(resource->EncodeForSerialization());
     SerializeObject();

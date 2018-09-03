@@ -568,7 +568,7 @@ void ExternalString::set_uint32_as_resource(uint32_t value) {
   *data_field = nullptr;
 }
 
-const ExternalOneByteString::Resource* ExternalOneByteString::resource() {
+ExternalOneByteString::Resource* ExternalOneByteString::resource() {
   return *reinterpret_cast<Resource**>(FIELD_ADDR(this, kResourceOffset));
 }
 
@@ -580,7 +580,7 @@ void ExternalOneByteString::update_data_cache() {
 }
 
 void ExternalOneByteString::SetResource(
-    Isolate* isolate, const ExternalOneByteString::Resource* resource) {
+    Isolate* isolate, ExternalOneByteString::Resource* resource) {
   set_resource(resource);
   size_t new_payload = resource == nullptr ? 0 : resource->length();
   if (new_payload > 0)
@@ -588,10 +588,9 @@ void ExternalOneByteString::SetResource(
 }
 
 void ExternalOneByteString::set_resource(
-    const ExternalOneByteString::Resource* resource) {
+    ExternalOneByteString::Resource* resource) {
   DCHECK(IsAligned(reinterpret_cast<intptr_t>(resource), kPointerSize));
-  *reinterpret_cast<const Resource**>(FIELD_ADDR(this, kResourceOffset)) =
-      resource;
+  *reinterpret_cast<Resource**>(FIELD_ADDR(this, kResourceOffset)) = resource;
   if (resource != nullptr) update_data_cache();
 }
 
@@ -604,7 +603,7 @@ uint16_t ExternalOneByteString::ExternalOneByteStringGet(int index) {
   return GetChars()[index];
 }
 
-const ExternalTwoByteString::Resource* ExternalTwoByteString::resource() {
+ExternalTwoByteString::Resource* ExternalTwoByteString::resource() {
   return *reinterpret_cast<Resource**>(FIELD_ADDR(this, kResourceOffset));
 }
 
@@ -616,7 +615,7 @@ void ExternalTwoByteString::update_data_cache() {
 }
 
 void ExternalTwoByteString::SetResource(
-    Isolate* isolate, const ExternalTwoByteString::Resource* resource) {
+    Isolate* isolate, ExternalTwoByteString::Resource* resource) {
   set_resource(resource);
   size_t new_payload = resource == nullptr ? 0 : resource->length() * 2;
   if (new_payload > 0)
@@ -624,9 +623,8 @@ void ExternalTwoByteString::SetResource(
 }
 
 void ExternalTwoByteString::set_resource(
-    const ExternalTwoByteString::Resource* resource) {
-  *reinterpret_cast<const Resource**>(FIELD_ADDR(this, kResourceOffset)) =
-      resource;
+    ExternalTwoByteString::Resource* resource) {
+  *reinterpret_cast<Resource**>(FIELD_ADDR(this, kResourceOffset)) = resource;
   if (resource != nullptr) update_data_cache();
 }
 

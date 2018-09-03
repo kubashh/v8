@@ -1235,7 +1235,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
 }
 
 MaybeHandle<String> Factory::NewExternalStringFromOneByte(
-    const ExternalOneByteString::Resource* resource) {
+    ExternalOneByteString::Resource* resource) {
   size_t length = resource->length();
   if (length > static_cast<size_t>(String::kMaxLength)) {
     THROW_NEW_ERROR(isolate(), NewInvalidStringLengthError(), String);
@@ -1243,7 +1243,7 @@ MaybeHandle<String> Factory::NewExternalStringFromOneByte(
   if (length == 0) return empty_string();
 
   Handle<Map> map;
-  if (resource->IsCompressible()) {
+  if (!resource->IsCacheable()) {
     map = uncached_external_one_byte_string_map();
   } else {
     map = external_one_byte_string_map();
@@ -1259,7 +1259,7 @@ MaybeHandle<String> Factory::NewExternalStringFromOneByte(
 }
 
 MaybeHandle<String> Factory::NewExternalStringFromTwoByte(
-    const ExternalTwoByteString::Resource* resource) {
+    ExternalTwoByteString::Resource* resource) {
   size_t length = resource->length();
   if (length > static_cast<size_t>(String::kMaxLength)) {
     THROW_NEW_ERROR(isolate(), NewInvalidStringLengthError(), String);
@@ -1273,7 +1273,7 @@ MaybeHandle<String> Factory::NewExternalStringFromTwoByte(
       length <= kOneByteCheckLengthLimit &&
       String::IsOneByte(resource->data(), static_cast<int>(length));
   Handle<Map> map;
-  if (resource->IsCompressible()) {
+  if (!resource->IsCacheable()) {
     map = is_one_byte ? uncached_external_string_with_one_byte_data_map()
                       : uncached_external_string_map();
   } else {
@@ -1291,7 +1291,7 @@ MaybeHandle<String> Factory::NewExternalStringFromTwoByte(
 }
 
 Handle<ExternalOneByteString> Factory::NewNativeSourceString(
-    const ExternalOneByteString::Resource* resource) {
+    ExternalOneByteString::Resource* resource) {
   size_t length = resource->length();
   DCHECK_LE(length, static_cast<size_t>(String::kMaxLength));
 

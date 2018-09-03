@@ -348,13 +348,13 @@ class V8_EXPORT_PRIVATE Factory {
   // because we cannot change the underlying buffer.  Note that these strings
   // are backed by a string resource that resides outside the V8 heap.
   V8_WARN_UNUSED_RESULT MaybeHandle<String> NewExternalStringFromOneByte(
-      const ExternalOneByteString::Resource* resource);
+      ExternalOneByteString::Resource* resource);
   V8_WARN_UNUSED_RESULT MaybeHandle<String> NewExternalStringFromTwoByte(
-      const ExternalTwoByteString::Resource* resource);
+      ExternalTwoByteString::Resource* resource);
   // Create a new external string object for one-byte encoded native script.
   // It does not cache the resource data pointer.
   Handle<ExternalOneByteString> NewNativeSourceString(
-      const ExternalOneByteString::Resource* resource);
+      ExternalOneByteString::Resource* resource);
 
   // Create a symbol in old or read-only space.
   Handle<Symbol> NewSymbol(PretenureFlag pretenure = TENURED);

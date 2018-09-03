@@ -760,13 +760,13 @@ class ExternalOneByteString : public ExternalString {
   typedef v8::String::ExternalOneByteStringResource Resource;
 
   // The underlying resource.
-  inline const Resource* resource();
+  inline Resource* resource();
 
   // It is assumed that the previous resource is null. If it is not null, then
   // it is the responsability of the caller the handle the previous resource.
-  inline void SetResource(Isolate* isolate, const Resource* buffer);
+  inline void SetResource(Isolate* isolate, Resource* buffer);
   // Used only during serialization.
-  inline void set_resource(const Resource* buffer);
+  inline void set_resource(Resource* buffer);
 
   // Update the pointer cache to the external character array.
   // The cached pointer is always valid, as the external character array does =
@@ -798,13 +798,13 @@ class ExternalTwoByteString : public ExternalString {
   typedef v8::String::ExternalStringResource Resource;
 
   // The underlying string resource.
-  inline const Resource* resource();
+  inline Resource* resource();
 
   // It is assumed that the previous resource is null. If it is not null, then
   // it is the responsability of the caller the handle the previous resource.
-  inline void SetResource(Isolate* isolate, const Resource* buffer);
+  inline void SetResource(Isolate* isolate, Resource* buffer);
   // Used only during serialization.
-  inline void set_resource(const Resource* buffer);
+  inline void set_resource(Resource* buffer);
 
   // Update the pointer cache to the external character array.
   // The cached pointer is always valid, as the external character array does =

@@ -1992,7 +1992,7 @@ TEST(CodeSerializerExternalScriptName) {
   Handle<String> source_string =
       f->NewStringFromUtf8(CStrVector(source)).ToHandleChecked();
 
-  const SerializerOneByteResource one_byte_resource("one_byte", 8);
+  SerializerOneByteResource one_byte_resource("one_byte", 8);
   Handle<String> name =
       f->NewExternalStringFromOneByte(&one_byte_resource).ToHandleChecked();
   CHECK(name->IsExternalOneByteString());
