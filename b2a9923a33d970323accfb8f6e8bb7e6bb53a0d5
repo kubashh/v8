@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a80ba58_3985f6b1",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-04T18:12:39Z",
+      "side": 1,
+      "message": "This comment belongs one line lower.",
+      "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5eb69d32_ca4b91fb",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-04T18:12:39Z",
+      "side": 1,
+      "message": "Maybe add a matching comment for the start? Especially since the start, IDENTIFIER, has that parenthetical which is a little awkward.",
+      "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c3adc6f_a4985022",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-04T18:12:39Z",
+      "side": 1,
+      "message": "Is this actually fewer branches? It seems like the thing this avoids is loading the token_type array into memory (which I could imagine being faster...though I\u0027d wonder if there\u0027s some way to make that faster, to speed up IsKeyword too).",
+      "range": {
+        "startLine": 223,
+        "startChar": 11,
+        "endLine": 223,
+        "endChar": 41
+      },
+      "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f6ccd56_7e7b19f2",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-04T18:12:39Z",
+      "side": 1,
+      "message": "I\u0027m OK with these here for now, but wanted to point out that these might be lighter-weight as unittests under test/unittests/parser.",
+      "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
