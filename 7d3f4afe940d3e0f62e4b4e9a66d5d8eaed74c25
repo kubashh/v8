@@ -1,0 +1,521 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83deb560_21665251",
+        "filename": ".clang-tidy_chrom",
+        "patchSetId": 17
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "Where is the name .clang-tidy_chrom specified? Sure it shouldn\u0027t be .clang-tidy_chrome?",
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb338f15_0ff4a3e8",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: New scripts should use \u0027 like chrome-infra. Most existing V8 scripts are legacy.",
+      "range": {
+        "startLine": 15,
+        "startChar": 33,
+        "endLine": 15,
+        "endChar": 34
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7840475_99baeb76",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "Is \\ before a space needed?",
+      "range": {
+        "startLine": 15,
+        "startChar": 41,
+        "endLine": 15,
+        "endChar": 42
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "836cd5b0_a05616cd",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: Please use two-space indent everywhere, except after opening round parenthesis, only then it\u0027s 4.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 4
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bdd8230_35eea0fd",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit (optional, up to you): Chrome infra uses low cap with underscore style for all methods (in new scripts). E.g. add_occurrence",
+      "range": {
+        "startLine": 30,
+        "startChar": 8,
+        "endLine": 30,
+        "endChar": 21
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d24fdd8a_fbb6b418",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit:\ns \u003d \u0027[%s] #%d\\n\u0027 % (self.warning_type, len(self.occurrences))",
+      "range": {
+        "startLine": 37,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 37
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da04e519_09e53716",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: we what?",
+      "range": {
+        "startLine": 57,
+        "startChar": 36,
+        "endLine": 57,
+        "endChar": 43
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b5701da_f1e6897d",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: Usually using \\ is discouraged. Please use parentheses or other tricks (local vars) to get lines short.",
+      "range": {
+        "startLine": 63,
+        "startChar": 72,
+        "endLine": 63,
+        "endChar": 73
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "574a8eaa_f226671d",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "Optional: How hard would it be to just do this in python?\n\nUsing sed makes this less platform independent. Are there already more blockers for e.g. external windows users?",
+      "range": {
+        "startLine": 68,
+        "startChar": 36,
+        "endLine": 68,
+        "endChar": 39
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "726e7727_d65ec89e",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: maybe just:\nreturn bool(CLANG_TIDY_CMDLINE_OUT.search(line))",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 19
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef512552_50caddcc",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: Start all comments with capitals and end with a dot.",
+      "range": {
+        "startLine": 112,
+        "startChar": 10,
+        "endLine": 112,
+        "endChar": 11
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b45b26a5_3ce704b8",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "Maybe simpler:\nwarnings.setdefault(res.group(2), CTWarning(res.group(2))).AddOccurrence(res.group(1))",
+      "range": {
+        "startLine": 138,
+        "startChar": 12,
+        "endLine": 144,
+        "endChar": 52
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec73c48d_c761e47f",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "Instead of some of the Popen+wait commands you could use the subprocess helpers instead, e.g. here probably: subprocess.check_output()",
+      "range": {
+        "startLine": 158,
+        "startChar": 8,
+        "endLine": 158,
+        "endChar": 21
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77685ce6_56b676c1",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "How large can this get? Can it overflow on wait? Maybe use communicate instead?",
+      "range": {
+        "startLine": 170,
+        "startChar": 21,
+        "endLine": 170,
+        "endChar": 27
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd141e15_fe956419",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: add space",
+      "range": {
+        "startLine": 183,
+        "startChar": 4,
+        "endLine": 183,
+        "endChar": 6
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c414b1c8_70d585ef",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "Rather don\u0027t use \"open\" without \"with\". Rather:\nwith open(os.path.join(build_folder, \"compile_commands.json\")) as f:\n  compdb \u003d json.load(f)",
+      "range": {
+        "startLine": 196,
+        "startChar": 4,
+        "endLine": 197,
+        "endChar": 66
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b04d4441_03f19f3b",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "unused variable",
+      "range": {
+        "startLine": 214,
+        "startChar": 16,
+        "endLine": 214,
+        "endChar": 24
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be086d12_9a2be724",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "Maybe factor this out?\n[\"clang-tidy\", \"-p\", \".\"] + extra_args + [file_with_relative_path]\n\nand above:\nextra_args \u003d [\"-line-filter\u003d\" + line_filter] if line_filter else []",
+      "range": {
+        "startLine": 216,
+        "startChar": 49,
+        "endLine": 216,
+        "endChar": 79
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e556a189_88a475fa",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "dead code?",
+      "range": {
+        "startLine": 234,
+        "startChar": 4,
+        "endLine": 234,
+        "endChar": 16
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75e96230_dd61524f",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: Maybe just inline this?",
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "274f8c51_3daee62b",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: compilation",
+      "range": {
+        "startLine": 335,
+        "startChar": 30,
+        "endLine": 335,
+        "endChar": 40
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "362de47b_789930fb",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "Is there an else case to this printing some help?",
+      "range": {
+        "startLine": 347,
+        "startChar": 12,
+        "endLine": 347,
+        "endChar": 45
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecfb63ee_ada1e977",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T13:00:34Z",
+      "side": 1,
+      "message": "nit: is the ? needed?",
+      "range": {
+        "startLine": 349,
+        "startChar": 47,
+        "endLine": 349,
+        "endChar": 48
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
