@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ad42c49_ecbabba4",
+        "filename": "src/runtime/runtime-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-04T12:59:27Z",
+      "side": 1,
+      "message": "This can be removed - its only purpose was to ensure the handler was deserialized.",
+      "revId": "8da8cc77c3b7753a8093350e1eb3d1ba2c3b0371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc3dd9db_d49bc11f",
+        "filename": "src/runtime/runtime-interpreter.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-04T12:59:27Z",
+      "side": 1,
+      "message": "This entire function should now be unreachable. Can we remove it? Also FLAG_lazy_handler_deserialization.",
+      "revId": "8da8cc77c3b7753a8093350e1eb3d1ba2c3b0371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be17efdf_1497e4ea",
+        "filename": "src/setup-isolate-deserialize.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-04T12:59:27Z",
+      "side": 1,
+      "message": "We could also remove the Delegate::SetupInterpreter method (it\u0027s now a bit of a misnomer since it never does anything) and add the FLAG_perf_prof_unwinding_info print in Isolate::Init (behind a !isolate-\u003eserializer_active() check).",
+      "revId": "8da8cc77c3b7753a8093350e1eb3d1ba2c3b0371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b7d32c0_83ee6ee7",
+        "filename": "src/snapshot/builtin-snapshot-utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-04T12:59:27Z",
+      "side": 1,
+      "message": "Let\u0027s remove this entire file: kNumberOfBuiltins becomes Builtins::builtin_count and IsBuiltinIndex becomes Builtins::IsBuiltinId.",
+      "revId": "8da8cc77c3b7753a8093350e1eb3d1ba2c3b0371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
