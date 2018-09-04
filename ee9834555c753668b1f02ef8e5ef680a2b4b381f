@@ -57,6 +57,30 @@
       "revId": "ee9834555c753668b1f02ef8e5ef680a2b4b381f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf1d929d_850db7e5",
+        "filename": "src/objects/js-number-format.cc",
+        "patchSetId": 37
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-09-04T18:36:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "834172d5_71907158",
+      "range": {
+        "startLine": 76,
+        "startChar": 18,
+        "endLine": 76,
+        "endChar": 31
+      },
+      "revId": "ee9834555c753668b1f02ef8e5ef680a2b4b381f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
