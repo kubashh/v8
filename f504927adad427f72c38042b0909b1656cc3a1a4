@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "08c8ee8f_34d0302d",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2261,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-04T14:51:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce14c143_bc748d1c",
+      "revId": "f504927adad427f72c38042b0909b1656cc3a1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "058bf3ca_34c505a9",
         "filename": "src/utils.h",
         "patchSetId": 3
@@ -39,6 +57,30 @@
       "revId": "f504927adad427f72c38042b0909b1656cc3a1a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaa45669_663e6b45",
+        "filename": "src/utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-04T14:51:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "058bf3ca_34c505a9",
+      "range": {
+        "startLine": 66,
+        "startChar": 9,
+        "endLine": 66,
+        "endChar": 32
+      },
+      "revId": "f504927adad427f72c38042b0909b1656cc3a1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
