@@ -34,6 +34,24 @@
       "revId": "6e740c083fe2508ada7cfd127e75d3c14c5a0f00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "119bfabb_1ce8f335",
+        "filename": "src/compiler/types.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-04T08:03:29Z",
+      "side": 1,
+      "message": "Thanks, I missed that. Looks like they both have the expected meaning after all, namely \"Any except BigInt/Number\".",
+      "parentUuid": "46630955_27560f97",
+      "revId": "6e740c083fe2508ada7cfd127e75d3c14c5a0f00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
