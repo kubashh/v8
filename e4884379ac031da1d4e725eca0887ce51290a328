@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da600c25_cb63975a",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-09-04T20:10:51Z",
+      "side": 1,
+      "message": "just so I understand what you\u0027re asking for...\n\nYou want to:\nA) check that the key being stored is the equal to the last key in the transition map\u0027s descriptor array (is there a case where this could fail?)\nB) also check that the transition map\u0027s attributes are compatible with the attributes being added\n\nbasically, use the `validate_transition_handler` bits, but add an exemption for the prototype validity check?",
+      "parentUuid": "691b9f76_d2a7227b",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b538297b_4b33d9c3",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 8
