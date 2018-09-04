@@ -118,6 +118,30 @@
       "revId": "987e54618aef877d9e94b4e2d102281a032b3558",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "45342e73_5b847c8d",
+        "filename": "test/cctest/parsing/test-scanner-streams.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-04T11:44:14Z",
+      "side": 1,
+      "message": "Well, then please leave it as is.\n\n(Personally, I think that\u0027s bad practice as adding more and more special cases just mean that we cannot trust const anymore.)",
+      "parentUuid": "345273a2_8be8c51a",
+      "range": {
+        "startLine": 70,
+        "startChar": 14,
+        "endLine": 70,
+        "endChar": 19
+      },
+      "revId": "987e54618aef877d9e94b4e2d102281a032b3558",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
