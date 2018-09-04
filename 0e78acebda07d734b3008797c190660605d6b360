@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1a65549_f6582993",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-04T12:17:53Z",
+      "side": 1,
+      "message": "For next time: Please run tests on reland. E.g. press reland button on original CL and not revert button on revert.\n\nAlso, running the chromium trybot with the blink tests would have been desired. In case some other blink tests fail, we need to revert again.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 12
+      },
+      "revId": "0e78acebda07d734b3008797c190660605d6b360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
