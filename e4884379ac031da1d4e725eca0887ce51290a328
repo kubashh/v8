@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "691b9f76_d2a7227b",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T12:35:20Z",
+      "side": 1,
+      "message": "Both the attributes (it could be a transition to a property with non NONE attributes) and the name (in case of a simple transition the HandleStoreICTransitionMapHandlerCase() does not check the name) must be checked before OverwriteExistingFastDataProperty().\nBasically, you need the full HandleStoreICTransitionMapHandlerCase() here with validation except the prototype validity cell check.\nCould you please write tests for these cases?",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b538297b_4b33d9c3",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 3505,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T12:35:20Z",
+      "side": 1,
+      "message": "I guess JSObject is the most common case so I think it makes sense to move this check up instead of IsJSReceiver(). IsJSObject implies IsJSReceiver.",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afc62541_3aac5f3c",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T12:35:20Z",
+      "side": 1,
+      "message": "Since we are storing to a newly created JSObject literal it looks like none of the protectors apply here. However it is worth keeping this call for in case we extend the protectors set in the future. Idea for a follow-up CL: add an enum parameter describing the context of the check and do nothing for this case.\nPlease add a TODO for now.",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ae7e32b_f7c02785",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T12:35:20Z",
+      "side": 1,
+      "message": "TODO implement here.\nThis should be easy - just update details entry with the proper attributes and property kind before doing \u0026overwrite. Maybe even do this unconditionally.",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43cb60cc_32cd13b8",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1187,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T12:35:20Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39d02e6e_11b848ce",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T12:35:20Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bd531e2_7a4f8dbd",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T12:35:20Z",
+      "side": 1,
+      "message": "Since the literal object is not \"available\" in the middle of construction I guess it must be extensible. Please change this to assert.",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe332776_6189b3f6",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T12:35:20Z",
+      "side": 1,
+      "message": "I think you the literal we are storing to can\u0027t be used as a prototype at this point, so the validity cell invalidation is not necessary.\nPlease change this to assert or even combine it with the extensibility assert above.",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

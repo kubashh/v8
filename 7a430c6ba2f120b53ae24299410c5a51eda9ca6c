@@ -328,6 +328,30 @@
       "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c734ae9f_711f7178",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T12:35:20Z",
+      "side": 1,
+      "message": "+1 for removing the language_mode.",
+      "parentUuid": "aa620a0a_ebfecf39",
+      "range": {
+        "startLine": 664,
+        "startChar": 2,
+        "endLine": 664,
+        "endChar": 21
+      },
+      "revId": "7a430c6ba2f120b53ae24299410c5a51eda9ca6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
