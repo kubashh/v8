@@ -205,34 +205,71 @@ class SnapshotWriter {
     fprintf(fp, "\n");
   }
 
+  static int WriteOcta(FILE* fp, int length, const uint8_t* data) {
+    const uint64_t* quad_ptr1 = reinterpret_cast<const uint64_t*>(data);
+    const uint64_t* quad_ptr2 = reinterpret_cast<const uint64_t*>(data + 8);
+
+#ifdef V8_TARGET_BIG_ENDIAN
+    uint64_t part1 = *quad_ptr1;
+    uint64_t part2 = *quad_ptr2;
+#else
+    uint64_t part1 = *quad_ptr2;
+    uint64_t part2 = *quad_ptr1;
+#endif  // V8_TARGET_BIG_ENDIAN
+
+    if (part1 != 0) {
+      length += fprintf(fp, "0x%" PRIx64 "%016" PRIx64, part1, part2);
+    } else {
+      length += fprintf(fp, "0x%" PRIx64, part2);
+    }
+    return length;
+  }
+
+  static int WriteDirectiveOrSeparator(FILE* fp, int current_line_length,
+                                       const char* directive) {
+    int printed_chars;
+    if (current_line_length == 0) {
+      printed_chars = fprintf(fp, "  \".%s ", directive);
+      DCHECK_LT(0, printed_chars);
+    } else {
+      printed_chars = fprintf(fp, ",");
+      DCHECK_EQ(1, printed_chars);
+    }
+    return current_line_length + printed_chars;
+  }
+
+  static int WriteLineEndIfNeeded(FILE* fp, int current_line_length,
+                                  int write_size) {
+    static const int kTextWidth = 80;
+    if (current_line_length + strlen(",0x\\n\"") + write_size * 2 >
+        kTextWidth) {
+      fprintf(fp, "\\n\"\n");
+      return 0;
+    } else {
+      return current_line_length;
+    }
+  }
+
   static void WriteBinaryContentsAsByteDirective(FILE* fp, const uint8_t* data,
                                                  uint32_t size) {
-    static const int kTextWidth = 80;
     int current_line_length = 0;
-    int printed_chars;
 
     fprintf(fp, "__asm__(\n");
-    for (uint32_t i = 0; i < size; i++) {
-      if (current_line_length == 0) {
-        printed_chars = fprintf(fp, "%s", "  \".byte ");
-        DCHECK_LT(0, printed_chars);
-        current_line_length += printed_chars;
-      } else {
-        printed_chars = fprintf(fp, ",");
-        DCHECK_EQ(1, printed_chars);
-        current_line_length += printed_chars;
-      }
-
-      printed_chars = fprintf(fp, "0x%02x", data[i]);
-      DCHECK_LT(0, printed_chars);
-      current_line_length += printed_chars;
-
-      if (current_line_length + strlen(",0xFF\\n\"") > kTextWidth) {
-        fprintf(fp, "\\n\"\n");
-        current_line_length = 0;
-      }
+    uint32_t i = 0;
+    for (; i < size - 15; i += 16) {
+      current_line_length =
+          WriteDirectiveOrSeparator(fp, current_line_length, "octa");
+      current_line_length = WriteOcta(fp, current_line_length, data + i);
+      current_line_length = WriteLineEndIfNeeded(fp, current_line_length, 16);
     }
-
+    if (current_line_length != 0) fprintf(fp, "\\n\"\n");
+    current_line_length = 0;
+    for (; i < size; i++) {
+      current_line_length =
+          WriteDirectiveOrSeparator(fp, current_line_length, "byte");
+      current_line_length += fprintf(fp, "0x%x", data[i]);
+      current_line_length = WriteLineEndIfNeeded(fp, current_line_length, 1);
+    }
     if (current_line_length != 0) fprintf(fp, "\\n\"\n");
     fprintf(fp, ");\n");
   }
