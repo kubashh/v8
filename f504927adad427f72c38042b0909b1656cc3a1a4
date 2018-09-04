@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce14c143_bc748d1c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2261,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T10:12:45Z",
+      "side": 1,
+      "message": "\u0026\u0026 !IsGetterOrSetter(*kind)",
+      "revId": "f504927adad427f72c38042b0909b1656cc3a1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "058bf3ca_34c505a9",
+        "filename": "src/utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-04T10:12:45Z",
+      "side": 1,
+      "message": "The outer static_casts are not needed anymore and maybe add a comment that we static_cast each value before subtracting in order to support enum classes.",
+      "range": {
+        "startLine": 66,
+        "startChar": 9,
+        "endLine": 66,
+        "endChar": 32
+      },
+      "revId": "f504927adad427f72c38042b0909b1656cc3a1a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
