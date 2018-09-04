@@ -2182,6 +2182,10 @@ void UncompiledDataWithPreParsedScope::UncompiledDataWithPreParsedScopePrint(
   os << "\n";
 }
 
+void MicrotaskQueue::MicrotaskQueuePrint(std::ostream& os) {  // NOLINT
+  UNIMPLEMENTED();
+}
+
 void InterpreterData::InterpreterDataPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "InterpreterData");
   os << "\n - bytecode_array: " << Brief(bytecode_array());
