@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f722807_ef2dfc8f",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T08:49:54Z",
+      "side": 1,
+      "message": "Nit: For consistency with below, \u0027current_line_length\u0027.",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f656e362_b965f5b6",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T08:49:54Z",
+      "side": 1,
+      "message": "I\u0027m confused. .quad takes a sequence of 64bit integer expressions, right? Why are we writing 128bit ints here?",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08b1ed81_9ba2e86c",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T08:49:54Z",
+      "side": 1,
+      "message": "What\u0027s the *2 for? Don\u0027t we just want to know whether the next write would exceed the text width?",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9199f63_6d0a9ba7",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T08:49:54Z",
+      "side": 1,
+      "message": "The name needs to be updated (it mentions the \u0027ByteDirective\u0027). A suggestion: \u0027AsInlineAssembly\u0027",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8cd033f_aa7b8349",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T08:49:54Z",
+      "side": 1,
+      "message": "Please add a named constant for 16, and the condition could be restated as \u0027i \u003c\u003d size - 16\u0027.",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11aac8a1_50814328",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T08:49:54Z",
+      "side": 1,
+      "message": "Nit: For readability I\u0027d prefer passing in the full directive, including the leading period (\u0027.octa\u0027)",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
