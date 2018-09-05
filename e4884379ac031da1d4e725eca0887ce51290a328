@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "3a9124a8_58208578",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-05T09:24:56Z",
+      "side": 1,
+      "message": "A) Yes. The reason is that when transition is not simple then on success the LookupTransition() call in TryMigrateToCachedTransitionMap() guarantees that the entry has the right name. However, in case of a simple transition we just get whatever transition map is there. The regression test should be something like this:\n  function foo(src) {\n    return {a:0, ...src};\n  }\n  // ... make clone IC in foo() megamorphic\n  // construct a transition tree so that transition to \"boom\" is simple\n  let tmp \u003d {a:0, b:0, c:0, boom:0};\n  // BTW, you can use \"jtt\" macro in gdb to print the whole transition tree\n  let src \u003d {b:0, c:0, d:0};\n  let obj \u003d foo(src);\n  // I expect obj to have \"boom\" property instead of \"d\".\n\nB) Yes. The test case is similar but \"d\" has to be created differently\n  // ...\n  let tmp \u003d {a:0, b:0, c:0};\n  Object.defineProperty(tmp, \"d\", {value:0, writable: true, configurable: true, enumerable: false});\n  // ...\n  // I expect obj to have non-enumerable \"d\" property.\n\nSo, yes, exactly - you need HandleStoreICTransitionMapHandlerCase() with validate_transition_handler\u003dtrue but without the validity cell check in the beginning.",
+      "parentUuid": "da600c25_cb63975a",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b538297b_4b33d9c3",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 8
@@ -48,6 +66,46 @@
       "writtenOn": "2018-09-04T12:35:20Z",
       "side": 1,
       "message": "I guess JSObject is the most common case so I think it makes sense to move this check up instead of IsJSReceiver(). IsJSObject implies IsJSReceiver.",
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "915b1815_43181cca",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-05T09:24:56Z",
+      "side": 1,
+      "message": "Maybe something like FindCandidateStoreICTransitionMapHandler() would be a better name?",
+      "range": {
+        "startLine": 690,
+        "startChar": 33,
+        "endLine": 690,
+        "endChar": 64
+      },
+      "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "632aa385_0574fa7d",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-05T09:24:56Z",
+      "side": 1,
+      "message": "I think the code will be simpler if this function return the var_transition_map.value() instead of calling a callback.",
       "revId": "e4884379ac031da1d4e725eca0887ce51290a328",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
