@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a093fca9_4f38b58b",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-05T16:11:07Z",
+      "side": 1,
+      "message": "There\u0027s no other user of ReduceJSToStringInput() in JSNativeContextSpecialization. Can you please inline this fully into the ReduceJSToString below?",
+      "revId": "cedb67ce6be9622b36f2cddf6ca2e0cb415ecee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
