@@ -415,3 +415,20 @@ function TestStore(func, buffer, value, size) {
         {m: {imported_mem: memory}}));
   assertEquals(20, instance.exports.main());
 })();
+
+(function TestUnalignedAtomicAccesses() {
+  print("TestUnalignedAtomicAccesses");
+  let wasmAdd = GetAtomicBinOpFunction(kExprI32AtomicAdd, 2, 17);
+  assertTraps(kTrapUnalignedAccess, () => wasmAdd(4, 1001));
+  let wasmLoad = GetAtomicLoadFunction(kExprI32AtomicLoad16U, 1, 0);
+  assertTraps(kTrapUnalignedAccess, () => wasmLoad(15));
+  let wasmStore = GetAtomicStoreFunction(kExprI32AtomicStore, 2, 0);
+  assertTraps(kTrapUnalignedAccess, () => wasmStore(22, 5));
+  let wasmCmpExchange =
+      GetAtomicCmpExchangeFunction(kExprI32AtomicCompareExchange, 2, 0x16);
+  assertTraps(kTrapUnalignedAccess, () => wasmCmpExchange(11, 6, 5));
+
+  // Building functions with bad alignment should fail to compile
+  assertThrows(() => GetAtomicBinOpFunction(kExprI32AtomicSub16U, 3, 0),
+      WebAssembly.CompileError);
+})();
