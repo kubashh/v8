@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "819d84de_37d8d013",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 13233,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-05T23:08:18Z",
+      "side": 1,
+      "message": "Maybe this should not have a default? Then the compiler would catch this error. Not something to fix in this CL, but something to look into.",
+      "revId": "d3b47fc9677d3c0e608aa7c37118aa7efdd668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
