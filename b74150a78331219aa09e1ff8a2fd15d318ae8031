@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a0ac23c_71ffd80c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-05T08:43:19Z",
+      "side": 1,
+      "message": "maybe also mention removing sparse support here.",
+      "revId": "b74150a78331219aa09e1ff8a2fd15d318ae8031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
