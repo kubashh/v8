@@ -16,6 +16,24 @@
       "revId": "07a59b09ff2c1183561ed491dc3de284422e453a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "494613c5_2a832b61",
+        "filename": "src/compiler/ppc/code-generator-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-09-05T16:46:13Z",
+      "side": 1,
+      "message": "Yes, the \u00274\u0027 is the instr size. And it should work on both 32/64 because all ppc instructions are 4 bytes regardless 32/64.",
+      "parentUuid": "55734738_fdf4620b",
+      "revId": "07a59b09ff2c1183561ed491dc3de284422e453a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
