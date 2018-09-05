@@ -33,9 +33,10 @@ class V8_BASE_EXPORT RegionAllocator final {
 
   // Allocates region of |size| (must be |min_region_size|-aligned). Returns
   // the address of the region on success or kAllocationFailure.
-  Address AllocateRegion(size_t size);
+  Address AllocateRegion(size_t size, size_t alignment = 2);
   // Same as above but tries to randomize the region displacement.
-  Address AllocateRegion(RandomNumberGenerator* rng, size_t size);
+  Address AllocateRegion(RandomNumberGenerator* rng, size_t size,
+                         size_t alignment = 2);
 
   // Allocates region of |size| at |requested_address| if it's free. Both the
   // address and the size must be |min_region_size|-aligned. On success returns
@@ -44,13 +45,25 @@ class V8_BASE_EXPORT RegionAllocator final {
   // certain regions as used or for randomizing regions displacement.
   bool AllocateRegionAt(Address requested_address, size_t size);
 
+  // Marks region [|address|, |address + size|) as free.
+  void FreeRegion(Address address, size_t size);
+
   // Frees region at given |address|, returns the size of the region.
-  // The region must be previously allocated. Return 0 on failure.
-  size_t FreeRegion(Address address);
+  // There must be a used region at given address otherwise nothing will be
+  // freed and 0 will be returned.
+  size_t FreeRegionAt(Address address);
 
   Address begin() const { return whole_region_.begin(); }
   Address end() const { return whole_region_.end(); }
   size_t size() const { return whole_region_.size(); }
+
+  bool contains(Address address) const {
+    return whole_region_.contains(address);
+  }
+
+  bool contains(Address address, size_t size) const {
+    return whole_region_.contains(address, size);
+  }
 
   // Total size of not yet aquired regions.
   size_t free_size() const { return free_size_; }
@@ -68,7 +81,14 @@ class V8_BASE_EXPORT RegionAllocator final {
 
     bool contains(Address address) const {
       STATIC_ASSERT(std::is_unsigned<Address>::value);
-      return (address - begin()) < size();
+      Address offset = address - begin();
+      return offset < size_;
+    }
+
+    bool contains(Address address, size_t size) const {
+      STATIC_ASSERT(std::is_unsigned<Address>::value);
+      Address offset = address - begin();
+      return (offset < size_) && (offset <= size_ - size);
     }
 
     bool is_used() const { return is_used_; }
@@ -117,19 +137,28 @@ class V8_BASE_EXPORT RegionAllocator final {
     }
   };
   // Free regions ordered by sizes and addresses.
-  std::set<Region*, SizeAddressOrder> free_regions_;
+  typedef std::set<Region*, SizeAddressOrder> FreeRegionsSet;
+  FreeRegionsSet free_regions_;
 
   // Returns region containing given address or nullptr.
   AllRegionsSet::iterator FindRegion(Address address);
+
+  // Free region at given iterator, may invalidate given iterator.
+  // Returns a new iterator pointing to the region into which the current one
+  // was potentially included.
+  AllRegionsSet::iterator FreeRegion(AllRegionsSet::iterator region_iter);
 
   // Adds given region to the set of free regions.
   void FreeListAddRegion(Region* region);
 
   // Finds best-fit free region for given size.
-  Region* FreeListFindRegion(size_t size);
+  FreeRegionsSet::iterator FreeListFindRegion(size_t size);
 
   // Removes given region from the set of free regions.
   void FreeListRemoveRegion(Region* region);
+
+  // Frees all used regions.
+  void FreeAll();
 
   // Splits given |region| into two: one of |new_size| size and a new one
   // having the rest. The new region is returned.
@@ -142,6 +171,10 @@ class V8_BASE_EXPORT RegionAllocator final {
   FRIEND_TEST(RegionAllocatorTest, AllocateRegionRandom);
   FRIEND_TEST(RegionAllocatorTest, Fragmentation);
   FRIEND_TEST(RegionAllocatorTest, FindRegion);
+  FRIEND_TEST(RegionAllocatorTest, FreeRegionWhole);
+  FRIEND_TEST(RegionAllocatorTest, FreeRegionMultipleUsed);
+  FRIEND_TEST(RegionAllocatorTest, FreeRegionInsideUsed);
+  FRIEND_TEST(RegionAllocatorTest, FreeRegionSplitMerge);
 
   DISALLOW_COPY_AND_ASSIGN(RegionAllocator);
 };
