@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bb765b14_20dcf1ad",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-05T09:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f722807_ef2dfc8f",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f656e362_b965f5b6",
         "filename": "src/snapshot/mksnapshot.cc",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4ad7fcf_ab809b77",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-05T09:33:22Z",
+      "side": 1,
+      "message": "because the function is call WriteOcta? There\u0027s no uint128_t so I have to break out in uint64_ts and do it manually. So let\u0027s hope I haven\u0027t messed up the big endianness...\n\nThe reason it\u0027s octa is that it gave a small speed improvement over quads.",
+      "parentUuid": "f656e362_b965f5b6",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "a6a0a8c8_eb4a6026",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-05T09:33:22Z",
+      "side": 1,
+      "message": "Originally for byte you had strlen(\",0xFF\\\\n\\\"\"). It\u0027s general purpose now to cope with writes of any number of bytes. The *2 is just because each byte requires 2 hex digits. It could be made more intelligent by looking ahead to the next write to see if it would actually need to wrap, but I spent way more time on this than it will save already.\n\nI\u0027ll add a comment to clarify this.",
+      "parentUuid": "08b1ed81_9ba2e86c",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9199f63_6d0a9ba7",
         "filename": "src/snapshot/mksnapshot.cc",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5612c6dd_6b0c6ac3",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-05T09:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9199f63_6d0a9ba7",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "38ff0075_c282080d",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-05T09:33:22Z",
+      "side": 1,
+      "message": "I had it using i \u003c size - 15 because it makes it more like the byte-case loop which is strictly i \u003c size - 0, but with the constant it\u0027s certainly clearly with \u003c\u003d",
+      "parentUuid": "e8cd033f_aa7b8349",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11aac8a1_50814328",
         "filename": "src/snapshot/mksnapshot.cc",
         "patchSetId": 1
@@ -101,6 +191,24 @@
       "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "575b1311_6b2a7162",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-05T09:33:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11aac8a1_50814328",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
