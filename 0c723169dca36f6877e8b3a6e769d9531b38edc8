@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95c0dbfa_62c83837",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-05T08:53:45Z",
+      "side": 1,
+      "message": "How about calling this IsAccessor?",
+      "range": {
+        "startLine": 1115,
+        "startChar": 21,
+        "endLine": 1115,
+        "endChar": 37
+      },
+      "revId": "0c723169dca36f6877e8b3a6e769d9531b38edc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c4910b3_f496afce",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-05T08:53:45Z",
+      "side": 1,
+      "message": "This sounds like the kind of TODO that stays in the code forever, so I\u0027d like to ask you to either do it now or drop the TODO :)",
+      "revId": "0c723169dca36f6877e8b3a6e769d9531b38edc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb3d6230_7e4f7eaa",
+        "filename": "src/utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-05T08:53:45Z",
+      "side": 1,
+      "message": "The two outer casts are now redundant.",
+      "range": {
+        "startLine": 69,
+        "startChar": 9,
+        "endLine": 69,
+        "endChar": 32
+      },
+      "revId": "0c723169dca36f6877e8b3a6e769d9531b38edc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
