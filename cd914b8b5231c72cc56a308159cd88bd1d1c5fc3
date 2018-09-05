@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fffd289e_cd222b2c",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-05T19:16:10Z",
+      "side": 1,
+      "message": "This is a broken link. Can you remove this?",
+      "range": {
+        "startLine": 1429,
+        "startChar": 0,
+        "endLine": 1429,
+        "endChar": 61
+      },
+      "revId": "cd914b8b5231c72cc56a308159cd88bd1d1c5fc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
