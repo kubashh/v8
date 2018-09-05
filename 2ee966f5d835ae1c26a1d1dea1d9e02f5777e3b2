@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ac7e29e_6a12dea6",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T12:57:42Z",
+      "side": 1,
+      "message": "Hmm I realize this is a straight port but the function name is weird. It sounds like it ensures that the elements are fast, but it actually expects to be called only on fast elements.\n\nI\u0027d prefer \u0027EnsureFastElementsAreWritable\u0027 (or something that reflects its semantics of replacing COW with non-COW elements), but I guess for consistency let\u0027s keep the name. But could you add the fast elements assertion to the very top of this method?",
+      "revId": "2ee966f5d835ae1c26a1d1dea1d9e02f5777e3b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

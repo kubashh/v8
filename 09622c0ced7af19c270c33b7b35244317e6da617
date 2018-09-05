@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "f91a2f59_6a6ef282",
+        "filename": "src/builtins/array-unshift.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T12:57:42Z",
+      "side": 1,
+      "message": "Ack. (I really dislike the \u0027EnsureWriteableFastElements\u0027 name. Unless you know the implementation, it doesn\u0027t tell you that it actually handles COW elements.)",
+      "parentUuid": "00976a32_d915f7fd",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c01d2054_cb07b1eb",
         "filename": "src/builtins/array-unshift.tq",
         "patchSetId": 7
@@ -83,6 +101,24 @@
       "writtenOn": "2018-08-29T08:24:03Z",
       "side": 1,
       "message": "Out of curiosity - do you have any data on how slow the generic path is compared to the fast path?",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2a139d1_fc8a6897",
+        "filename": "src/builtins/array-unshift.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T12:57:42Z",
+      "side": 1,
+      "message": "Ping :) Would be nice to get at least a gut feeling how slow builtin GetProperty\u0026friends are in comparison to direct elements access.",
+      "parentUuid": "c01d2054_cb07b1eb",
       "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -347,6 +383,24 @@
       "side": 1,
       "message": "TransitionElementsKind will convert the target_kind to its respective HOLEY version, if the origin_kind is HOLEY.",
       "parentUuid": "44ceb0ee_2b472541",
+      "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "be065370_e507ba4f",
+        "filename": "src/builtins/builtins-array.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T12:57:42Z",
+      "side": 1,
+      "message": "Okay.. Magic :(",
+      "parentUuid": "b9d22883_7c90102f",
       "revId": "09622c0ced7af19c270c33b7b35244317e6da617",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
