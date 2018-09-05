@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "178b652d_56d6c86f",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-05T09:08:16Z",
+      "side": 1,
+      "message": "SGTM, shorter and nicer.",
+      "parentUuid": "95c0dbfa_62c83837",
+      "range": {
+        "startLine": 1115,
+        "startChar": 21,
+        "endLine": 1115,
+        "endChar": 37
+      },
+      "revId": "0c723169dca36f6877e8b3a6e769d9531b38edc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c4910b3_f496afce",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 5
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "624f05b4_64449d4d",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-05T09:08:16Z",
+      "side": 1,
+      "message": "You\u0027re right... dropping it and making a manual note on paper :P",
+      "parentUuid": "7c4910b3_f496afce",
+      "revId": "0c723169dca36f6877e8b3a6e769d9531b38edc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb3d6230_7e4f7eaa",
         "filename": "src/utils.h",
         "patchSetId": 5
@@ -53,6 +95,30 @@
       "writtenOn": "2018-09-05T08:53:45Z",
       "side": 1,
       "message": "The two outer casts are now redundant.",
+      "range": {
+        "startLine": 69,
+        "startChar": 9,
+        "endLine": 69,
+        "endChar": 32
+      },
+      "revId": "0c723169dca36f6877e8b3a6e769d9531b38edc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17f36e27_9973a461",
+        "filename": "src/utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-05T09:08:16Z",
+      "side": 1,
+      "message": "My initial implementation didn\u0027t have them, but actually they\u0027re needed :P. Igor and I have been staring at this for 1h trying to figure out why (still not fully sure). Seems like you get the result from the subtraction as an int which defeats the range check.",
+      "parentUuid": "fb3d6230_7e4f7eaa",
       "range": {
         "startLine": 69,
         "startChar": 9,
