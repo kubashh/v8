@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55734738_fdf4620b",
+        "filename": "src/compiler/ppc/code-generator-ppc.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T07:28:32Z",
+      "side": 1,
+      "message": "Nit: Do we have a named constant for \u00274\u0027 (I assume it\u0027s the instruction size?). Does this work on both 32/64bit?",
+      "revId": "07a59b09ff2c1183561ed491dc3de284422e453a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
