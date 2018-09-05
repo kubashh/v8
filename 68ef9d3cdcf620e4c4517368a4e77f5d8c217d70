@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "6b77ad5d_59b3f2f1",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T11:25:03Z",
+      "side": 1,
+      "message": "Ah :) For some reason I was focused on .quad and totally interpreted all \u0027octa\u0027 occurrences in this CL as \u0027quad\u0027. Makes sense.",
+      "parentUuid": "d4ad7fcf_ab809b77",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08b1ed81_9ba2e86c",
         "filename": "src/snapshot/mksnapshot.cc",
         "patchSetId": 1
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Originally for byte you had strlen(\",0xFF\\\\n\\\"\"). It\u0027s general purpose now to cope with writes of any number of bytes. The *2 is just because each byte requires 2 hex digits. It could be made more intelligent by looking ahead to the next write to see if it would actually need to wrap, but I spent way more time on this than it will save already.\n\nI\u0027ll add a comment to clarify this.",
       "parentUuid": "08b1ed81_9ba2e86c",
+      "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab8c9074_f7cabff7",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-05T11:25:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a6a0a8c8_eb4a6026",
       "revId": "68ef9d3cdcf620e4c4517368a4e77f5d8c217d70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
