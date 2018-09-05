@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef0db132_785226ec",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3055,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-09-05T22:27:41Z",
+      "side": 1,
+      "message": "Add assertion that `access_size` is a power-of-two? Unlikely to be a bug, but usually worth doing.",
+      "revId": "5bbd7e73816ecfba6ae27a639f9076b5d1e5d209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
