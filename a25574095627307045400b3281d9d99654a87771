@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e2d3dc78_07f440cc",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3053,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-05T22:17:45Z",
+      "side": 1,
+      "message": "Thanks for catching, actually as access_size is always a power of two, remainder calculation boils down to effective_address \u0026 (access_size - 1), fixed now.",
+      "parentUuid": "e99997df_71a530ba",
+      "range": {
+        "startLine": 3053,
+        "startChar": 45,
+        "endLine": 3053,
+        "endChar": 51
+      },
+      "revId": "a25574095627307045400b3281d9d99654a87771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "179e9a09_25e07647",
         "filename": "src/compiler/wasm-compiler.h",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2018-09-05T09:24:35Z",
       "side": 1,
       "message": "Can you make the naming similar to {BoundsCheckMem}? Actually I like your naming scheme better than {BoundsCheckMem}, but I think we should try to be consistent.",
+      "revId": "a25574095627307045400b3281d9d99654a87771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a3458b8_3d53d3f4",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-05T22:17:45Z",
+      "side": 1,
+      "message": "Being consistent with BoundsCheckMem sounds good, but the function names themselves are not very intuitive - the best I could come up with was BoundsAndAlignmentCheckMem. I\u0027m leaving this as is for now, happy to followup with a cleanup CL if you have suggestions for what these should be called.",
+      "parentUuid": "179e9a09_25e07647",
       "revId": "a25574095627307045400b3281d9d99654a87771",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -56,6 +98,24 @@
       "revId": "a25574095627307045400b3281d9d99654a87771",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12b4c8b8_69f25ad2",
+        "filename": "test/mjsunit/wasm/atomics.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-05T22:17:45Z",
+      "side": 1,
+      "message": "Done, fixed here and tests above.",
+      "parentUuid": "5827845f_0f81b9e0",
+      "revId": "a25574095627307045400b3281d9d99654a87771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
