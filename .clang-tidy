@@ -1,0 +1,7 @@
+---
+Checks:          '-*,performance-for-range-copy,google-readability-todo'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+...
+
