@@ -22,6 +22,30 @@
       "revId": "66ff5af3e829991915e7e385198f1a7a6f3fdba1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7ce1f77_e6f1ad36",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-06T16:02:30Z",
+      "side": 1,
+      "message": "An alternative would be to add a v8-internal.h file which includes all the namespace internal { } logic to pull it out of v8.h. WDYT Ulan?",
+      "parentUuid": "bf0dda77_af88132e",
+      "range": {
+        "startLine": 25,
+        "startChar": 10,
+        "endLine": 25,
+        "endChar": 25
+      },
+      "revId": "66ff5af3e829991915e7e385198f1a7a6f3fdba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
