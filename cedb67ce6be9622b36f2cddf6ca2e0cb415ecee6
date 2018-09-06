@@ -16,6 +16,24 @@
       "revId": "cedb67ce6be9622b36f2cddf6ca2e0cb415ecee6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "999c6f42_ca34185c",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-06T08:48:21Z",
+      "side": 1,
+      "message": "The resulting code contains a few copy-pasted lines, which is not ideal IMO, but done.",
+      "parentUuid": "a093fca9_4f38b58b",
+      "revId": "cedb67ce6be9622b36f2cddf6ca2e0cb415ecee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
