@@ -322,7 +322,7 @@ NativeModule::NativeModule(Isolate* isolate, const WasmFeatures& enabled,
       use_trap_handler_(env.use_trap_handler) {
   DCHECK_EQ(module_.get(), env.module);
   DCHECK_NOT_NULL(module_);
-  VirtualMemory my_mem;
+  VirtualMemory my_mem(GetPlatformPageAllocator());
   owned_code_space_.push_back(my_mem);
   owned_code_space_.back().TakeControl(code_space);
   owned_code_.reserve(num_functions());
@@ -649,7 +649,7 @@ Address NativeModule::AllocateForCode(size_t size) {
 
     Address hint = owned_code_space_.empty() ? kNullAddress
                                              : owned_code_space_.back().end();
-    VirtualMemory empty_mem;
+    VirtualMemory empty_mem(page_allocator);
     owned_code_space_.push_back(empty_mem);
     VirtualMemory& new_mem = owned_code_space_.back();
     wasm_code_manager_->TryAllocate(size, &new_mem,
@@ -884,7 +884,7 @@ std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
         ->MemoryPressureNotification(MemoryPressureLevel::kCritical);
   }
 
-  VirtualMemory mem;
+  VirtualMemory mem(GetPlatformPageAllocator());
   // If the code must be contiguous, reserve enough address space up front.
   size_t vmem_size = kRequiresCodeRange ? kMaxWasmCodeMemory : memory_estimate;
   TryAllocate(vmem_size, &mem);

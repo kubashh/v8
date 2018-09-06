@@ -220,15 +220,15 @@ bool OnCriticalMemoryPressure(size_t length) {
   return true;
 }
 
-VirtualMemory::VirtualMemory()
-    : page_allocator_(GetPlatformPageAllocator()),
-      address_(kNullAddress),
-      size_(0) {}
+VirtualMemory::VirtualMemory(v8::PageAllocator* page_allocator)
+    : page_allocator_(page_allocator), address_(kNullAddress), size_(0) {
+  DCHECK_NOT_NULL(page_allocator);
+}
 
-VirtualMemory::VirtualMemory(size_t size, void* hint, size_t alignment)
-    : page_allocator_(GetPlatformPageAllocator()),
-      address_(kNullAddress),
-      size_(0) {
+VirtualMemory::VirtualMemory(v8::PageAllocator* page_allocator, size_t size,
+                             void* hint, size_t alignment)
+    : page_allocator_(page_allocator), address_(kNullAddress), size_(0) {
+  DCHECK_NOT_NULL(page_allocator);
   size_t page_size = page_allocator_->AllocatePageSize();
   size_t alloc_size = RoundUp(size, page_size);
   address_ = reinterpret_cast<Address>(AllocatePages(
@@ -296,7 +296,7 @@ void VirtualMemory::TakeControl(VirtualMemory* from) {
 }
 
 bool AllocVirtualMemory(size_t size, void* hint, VirtualMemory* result) {
-  VirtualMemory vm(size, hint);
+  VirtualMemory vm(result->page_allocator(), size, hint);
   if (vm.IsReserved()) {
     result->TakeControl(&vm);
     return true;
@@ -306,7 +306,7 @@ bool AllocVirtualMemory(size_t size, void* hint, VirtualMemory* result) {
 
 bool AlignedAllocVirtualMemory(size_t size, size_t alignment, void* hint,
                                VirtualMemory* result) {
-  VirtualMemory vm(size, hint, alignment);
+  VirtualMemory vm(result->page_allocator(), size, hint, alignment);
   if (vm.IsReserved()) {
     result->TakeControl(&vm);
     return true;

@@ -155,19 +155,20 @@ V8_EXPORT_PRIVATE bool OnCriticalMemoryPressure(size_t length);
 class V8_EXPORT_PRIVATE VirtualMemory {
  public:
   // Empty VirtualMemory object, controlling no reserved memory.
-  VirtualMemory();
+  explicit VirtualMemory(v8::PageAllocator* page_allocator);
 
   // Reserves virtual memory containing an area of the given size that is
   // aligned per alignment. This may not be at the position returned by
   // address().
-  VirtualMemory(size_t size, void* hint, size_t alignment = AllocatePageSize());
+  VirtualMemory(v8::PageAllocator* page_allocator, size_t size, void* hint,
+                size_t alignment = AllocatePageSize());
 
   // Construct a virtual memory by assigning it some already mapped address
   // and size.
-  VirtualMemory(Address address, size_t size)
-      : page_allocator_(GetPlatformPageAllocator()),
-        address_(address),
-        size_(size) {}
+  VirtualMemory(v8::PageAllocator* page_allocator, Address address, size_t size)
+      : page_allocator_(page_allocator), address_(address), size_(size) {
+    DCHECK_NOT_NULL(page_allocator);
+  }
 
   // Releases the reserved memory, if any, controlled by this VirtualMemory
   // object.
