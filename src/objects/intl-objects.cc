@@ -1594,6 +1594,39 @@ std::vector<std::string> BestFitSupportedLocales(
 
 enum MatcherOption { kBestFit, kLookup };
 
+// ECMA 9.2.3 LookupMatcher(availableLocales, requestedLocales)
+// https://tc39.github.io/ecma402/#sec-lookupmatcher
+std::string LookupMatcher(Isolate* isolate,
+                          std::set<std::string> available_locales,
+                          std::vector<std::string> requested_locales) {
+  std::string locale;
+  std::vector<std::string> supported_locales =
+      LookupSupportedLocales(available_locales, requested_locales);
+  if (supported_locales.size()) {
+    locale = supported_locales[0];
+  } else {
+    locale = Intl::DefaultLocale(isolate);
+  }
+  return locale;
+}
+
+// ECMA 9.2.4 BestFitMatcher(availableLocales, requestedLocales)
+// https://tc39.github.io/ecma402/#sec-bestfitmatcher
+// NEED DISCRIPTION ON WHY IS THIS DIFFERENT FROM THE SPEC
+std::string BestFitMatcher(Isolate* isolate,
+                           std::set<std::string> available_locales,
+                           std::vector<std::string> requested_locales) {
+  std::string locale;
+  std::vector<std::string> supported_locales =
+      BestFitSupportedLocales(available_locales, requested_locales);
+  if (supported_locales.size()) {
+    locale = supported_locales[0];
+  } else {
+    locale = Intl::DefaultLocale(isolate);
+  }
+  return locale;
+}
+
 // TODO(bstell): should this be moved somewhere where it is reusable?
 // Implement steps 5, 6, 7 for ECMA 402 9.2.9 SupportedLocales
 // https://tc39.github.io/ecma402/#sec-supportedlocales
@@ -1696,6 +1729,110 @@ MaybeHandle<JSObject> SupportedLocales(
   return subset;
 }
 }  // namespace
+
+// 9.2.6 ResolveLocale
+Maybe<Intl::ResolvedLocale*> Intl::ResolveLocale_New(
+    Isolate* isolate, const char* service,
+    const std::set<std::string>& available_locales,
+    const std::vector<std::string>& requested_locales,
+    const std::set<std::string>& relevant_extension_keys,
+    Handle<JSReceiver> options) {
+  // Call BestFitMatcher or LookupMatcher based on the matcher option to get a
+  // bcp47 locale.
+  MatcherOption matcher = kBestFit;
+  Handle<JSReceiver> options_obj;
+  std::unique_ptr<char[]> matcher_str = nullptr;
+  std::vector<const char*> matcher_values = {"lookup", "best fit"};
+
+  Maybe<bool> maybe_found_matcher = Intl::GetStringOption(
+      isolate, options, "localeMatcher", matcher_values, service, &matcher_str);
+  MAYBE_RETURN(maybe_found_matcher, Nothing<Intl::ResolvedLocale*>());
+  if (maybe_found_matcher.FromJust()) {
+    DCHECK_NOT_NULL(matcher_str.get());
+    if (strcmp(matcher_str.get(), "lookup") == 0) {
+      matcher = kLookup;
+    }
+  }
+  ResolvedLocale* r = new Intl::ResolvedLocale;
+  if (matcher == kLookup) {
+    r->locale = LookupMatcher(isolate, available_locales, requested_locales);
+  } else {
+    DCHECK_EQ(matcher, kBestFit);
+    r->locale = BestFitMatcher(isolate, available_locales, requested_locales);
+  }
+
+  // Create a icu::Locale using the bcp47 locale.
+  UErrorCode status = U_ZERO_ERROR;
+  char icu_result[ULOC_FULLNAME_CAPACITY];
+  int icu_length = 0;
+  // r->locale should be a canonicalized language tag, which
+  // means this shouldn't fail.
+  uloc_forLanguageTag(r->locale.c_str(), icu_result, ULOC_FULLNAME_CAPACITY,
+                      &icu_length, &status);
+  CHECK(U_SUCCESS(status));
+  CHECK_LT(0, icu_length);
+
+  icu::Locale icu_locale(icu_result);
+  if (icu_locale.isBogus()) {
+    FATAL("Failed to create ICU locale, are ICU data files missing?");
+  }
+
+  // As per,
+  // https://tc39.github.io/ecma402/#sec-unicode-locale-extension-sequences
+  // Private use subtags should be not used as an unicode locale extension
+  // sequences.
+  status = U_ZERO_ERROR;
+  const char* private_use_key = uloc_toLegacyKey("x");
+  CHECK_NOT_NULL(private_use_key);
+  const char* value = uloc_toLegacyType(private_use_key, "search");
+  CHECK_NOT_NULL(value);
+  icu_locale.setKeywordValue(private_use_key, value, status);
+  CHECK(U_SUCCESS(status));
+
+  // Ignore all unicode keys values that are not present in the
+  // relevantExtensionKeys
+  std::unique_ptr<icu::StringEnumeration> keywords(
+      icu_locale.createKeywords(status));
+  if (U_SUCCESS(status) && keywords) {
+    char value[ULOC_FULLNAME_CAPACITY];
+
+    int32_t length;
+    status = U_ZERO_ERROR;
+    for (const char* keyword = keywords->next(&length, status);
+         keyword != nullptr; keyword = keywords->next(&length, status)) {
+      // Ignore failures in ICU and skip to the next keyword.
+      //
+      // This is fine.™
+      if (U_FAILURE(status)) {
+        status = U_ZERO_ERROR;
+        continue;
+      }
+
+      icu_locale.getKeywordValue(keyword, value, ULOC_FULLNAME_CAPACITY,
+                                 status);
+
+      // Ignore failures in ICU and skip to the next keyword.
+      //
+      // This is fine.™
+      if (U_FAILURE(status)) {
+        status = U_ZERO_ERROR;
+        continue;
+      }
+
+      const char* bcp47_key = uloc_toUnicodeLocaleKey(keyword);
+
+      // Ignore keywords that we don't recognize - spec allows that.
+      if (bcp47_key && (relevant_extension_keys.find(bcp47_key) !=
+                        relevant_extension_keys.end())) {
+        std::string bcp47_value = uloc_toUnicodeLocaleType(bcp47_key, value);
+        r->extensions.insert(
+            std::pair<std::string, std::string>(bcp47_key, bcp47_value));
+      }
+    }
+  }
+
+  return Just(r);
+}
 
 // ECMA 402 Intl.*.supportedLocalesOf
 // https://tc39.github.io/ecma402/#sec-intl.collator.supportedlocalesof
