@@ -395,8 +395,7 @@ class ThreadId {
   inline void set_##name(type v) { name##_ = v; }  \
   inline type name() const { return name##_; }
 
-
-class ThreadLocalTop BASE_EMBEDDED {
+class ThreadLocalTop {
  public:
   // Does early low-level initialization that does not depend on the
   // isolate being present.
@@ -1895,7 +1894,7 @@ class PromiseOnStack {
 // If the GCC version is 4.1.x or 4.2.x an additional field is added to the
 // class as a work around for a bug in the generated code found with these
 // versions of GCC. See V8 issue 122 for details.
-class V8_EXPORT_PRIVATE SaveContext BASE_EMBEDDED {
+class V8_EXPORT_PRIVATE SaveContext {
  public:
   explicit SaveContext(Isolate* isolate);
   ~SaveContext();
@@ -1913,8 +1912,7 @@ class V8_EXPORT_PRIVATE SaveContext BASE_EMBEDDED {
   Address c_entry_fp_;
 };
 
-
-class AssertNoContextChange BASE_EMBEDDED {
+class AssertNoContextChange {
 #ifdef DEBUG
  public:
   explicit AssertNoContextChange(Isolate* isolate);
@@ -1931,8 +1929,7 @@ class AssertNoContextChange BASE_EMBEDDED {
 #endif
 };
 
-
-class ExecutionAccess BASE_EMBEDDED {
+class ExecutionAccess {
  public:
   explicit ExecutionAccess(Isolate* isolate) : isolate_(isolate) {
     Lock(isolate);
@@ -1952,7 +1949,7 @@ class ExecutionAccess BASE_EMBEDDED {
 
 
 // Support for checking for stack-overflows.
-class StackLimitCheck BASE_EMBEDDED {
+class StackLimitCheck {
  public:
   explicit StackLimitCheck(Isolate* isolate) : isolate_(isolate) { }
 
