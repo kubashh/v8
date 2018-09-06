@@ -22,6 +22,30 @@
       "revId": "e0aa3bd8abf49a372954259c8615ecb175763630",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e97f78c_ffa9471c",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-06T17:57:10Z",
+      "side": 1,
+      "message": "Indeed, removing....",
+      "parentUuid": "4a2b209a_ccb854cd",
+      "range": {
+        "startLine": 318,
+        "startChar": 18,
+        "endLine": 318,
+        "endChar": 44
+      },
+      "revId": "e0aa3bd8abf49a372954259c8615ecb175763630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
