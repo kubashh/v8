@@ -19,7 +19,11 @@ namespace v8 {
 namespace internal {
 
 StoreBuffer::StoreBuffer(Heap* heap)
-    : heap_(heap), top_(nullptr), current_(0), mode_(NOT_IN_GC) {
+    : heap_(heap),
+      top_(nullptr),
+      current_(0),
+      mode_(NOT_IN_GC),
+      virtual_memory_(GetPlatformPageAllocator()) {
   for (int i = 0; i < kStoreBuffers; i++) {
     start_[i] = nullptr;
     limit_[i] = nullptr;
@@ -31,13 +35,14 @@ StoreBuffer::StoreBuffer(Heap* heap)
 }
 
 void StoreBuffer::SetUp() {
+  v8::PageAllocator* page_allocator = GetPlatformPageAllocator();
   const size_t requested_size = kStoreBufferSize * kStoreBuffers;
   // Allocate buffer memory aligned at least to kStoreBufferSize. This lets us
   // use a bit test to detect the ends of the buffers.
   const size_t alignment =
-      std::max<size_t>(kStoreBufferSize, AllocatePageSize());
+      std::max<size_t>(kStoreBufferSize, page_allocator->AllocatePageSize());
   void* hint = AlignedAddress(heap_->GetRandomMmapAddr(), alignment);
-  VirtualMemory reservation;
+  VirtualMemory reservation(page_allocator);
   if (!AlignedAllocVirtualMemory(requested_size, alignment, hint,
                                  &reservation)) {
     heap_->FatalProcessOutOfMemory("StoreBuffer::SetUp");

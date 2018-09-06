@@ -141,7 +141,7 @@ TEST(AlignedAllocOOM) {
 TEST(AllocVirtualMemoryOOM) {
   AllocationPlatform platform;
   CHECK(!platform.oom_callback_called);
-  v8::internal::VirtualMemory result;
+  v8::internal::VirtualMemory result(v8::internal::GetPlatformPageAllocator());
   bool success =
       v8::internal::AllocVirtualMemory(GetHugeMemoryAmount(), nullptr, &result);
   // On a few systems, allocation somehow succeeds.
@@ -152,7 +152,7 @@ TEST(AllocVirtualMemoryOOM) {
 TEST(AlignedAllocVirtualMemoryOOM) {
   AllocationPlatform platform;
   CHECK(!platform.oom_callback_called);
-  v8::internal::VirtualMemory result;
+  v8::internal::VirtualMemory result(v8::internal::GetPlatformPageAllocator());
   bool success = v8::internal::AlignedAllocVirtualMemory(
       GetHugeMemoryAmount(), v8::internal::AllocatePageSize(), nullptr,
       &result);

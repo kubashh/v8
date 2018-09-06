@@ -1086,7 +1086,8 @@ class MemoryChunkValidator {
 // manages a range of virtual memory.
 class CodeRange {
  public:
-  CodeRange(Isolate* isolate, size_t requested_size);
+  CodeRange(Isolate* isolate, v8::PageAllocator* page_allocator,
+            size_t requested_size);
   ~CodeRange();
 
   bool valid() { return virtual_memory_.IsReserved(); }
@@ -2619,8 +2620,8 @@ class NewSpace : public SpaceWithLinearArea {
  public:
   typedef PageIterator iterator;
 
-  NewSpace(Heap* heap, size_t initial_semispace_capacity,
-           size_t max_semispace_capacity);
+  NewSpace(Heap* heap, v8::PageAllocator* page_allocator,
+           size_t initial_semispace_capacity, size_t max_semispace_capacity);
 
   ~NewSpace() override { TearDown(); }
 
