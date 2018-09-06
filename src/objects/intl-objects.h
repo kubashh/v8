@@ -137,6 +137,20 @@ class Intl {
       Handle<String> method_name /* TODO(gsathya): Make this char const* */,
       bool check_legacy_constructor = false);
 
+  struct ResolvedLocale {
+    // bcp47 locale to use
+    std::string locale;
+    // key value pairs of the unicode extensions
+    std::map<std::string, std::string> extensions;
+  };
+
+  V8_WARN_UNUSED_RESULT static Maybe<ResolvedLocale*> ResolveLocale_New(
+      Isolate* isolate, const char* service,
+      const std::set<std::string>& available_locales,
+      const std::vector<std::string>& requested_locales,
+      const std::set<std::string>& relevant_extension_keys,
+      Handle<JSReceiver> options);
+
   // The ResolveLocale abstract operation compares a BCP 47 language
   // priority list requestedLocales against the locales in
   // availableLocales and determines the best available language to
