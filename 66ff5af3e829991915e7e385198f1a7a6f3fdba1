@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf0dda77_af88132e",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-06T15:55:11Z",
+      "side": 1,
+      "message": "Lost a comment here: I\u0027m not sure on the name v8-base-types.h. I think it would be better if we could get what we need into v8config.h if possible, but maybe Ulan has an opinion.",
+      "range": {
+        "startLine": 25,
+        "startChar": 10,
+        "endLine": 25,
+        "endChar": 25
+      },
+      "revId": "66ff5af3e829991915e7e385198f1a7a6f3fdba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
