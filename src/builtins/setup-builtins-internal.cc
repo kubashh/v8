@@ -312,19 +312,13 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
   AddBuiltin(builtins, index++, code);
 
 #ifdef V8_EMBEDDED_BYTECODE_HANDLERS
-#define BUILD_BCH_WITH_SCALE(Code, Scale)                               \
+#define BUILD_BCH(Code, bytecode, operand_scale)                        \
   code = GenerateBytecodeHandler(isolate, index, Builtins::name(index), \
-                                 interpreter::Bytecode::k##Code,        \
-                                 interpreter::OperandScale::k##Scale);  \
+                                 bytecode, operand_scale);              \
   if (code) {                                                           \
     AddBuiltin(builtins, index, code);                                  \
   }                                                                     \
   ++index;
-
-#define BUILD_BCH(Code, ...)         \
-  BUILD_BCH_WITH_SCALE(Code, Single) \
-  BUILD_BCH_WITH_SCALE(Code, Double) \
-  BUILD_BCH_WITH_SCALE(Code, Quadruple)
 #else
 #define BUILD_BCH(Code, ...) UNREACHABLE();
 #endif  // V8_EMBEDDED_BYTECODE_HANDLERS
@@ -344,7 +338,6 @@ void SetupIsolateDelegate::SetupBuiltinsInternal(Isolate* isolate) {
 #undef BUILD_TFS
 #undef BUILD_TFH
 #undef BUILD_BCH
-#undef BUILD_BCH_WITH_SCALE
 #undef BUILD_ASM
   CHECK_EQ(Builtins::builtin_count, index);
 
