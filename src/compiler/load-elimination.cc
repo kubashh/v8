@@ -963,7 +963,7 @@ Reduction LoadElimination::ReduceStoreField(Node* node) {
     if (new_value_type.IsHeapConstant()) {
       // Record the new {object} map information.
       ZoneHandleSet<Map> object_maps(
-          bit_cast<Handle<Map>>(new_value_type.AsHeapConstant()->Value()));
+          Handle<Map>::cast(new_value_type.AsHeapConstant()->Value()));
       state = state->SetMaps(object, object_maps, zone());
     }
   } else {

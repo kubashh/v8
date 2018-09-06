@@ -671,7 +671,7 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
           Type const map_type = NodeProperties::GetType(map);
           if (map_type.IsHeapConstant() &&
               params.maps().contains(
-                  bit_cast<Handle<Map>>(map_type.AsHeapConstant()->Value()))) {
+                  Handle<Map>::cast(map_type.AsHeapConstant()->Value()))) {
             current->MarkForDeletion();
             break;
           }
