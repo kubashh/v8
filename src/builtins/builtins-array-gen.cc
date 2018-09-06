@@ -3703,8 +3703,6 @@ TF_BUILTIN(ArrayIteratorPrototypeNext, CodeStubAssembler) {
   }
 }
 
-namespace {
-
 class ArrayFlattenAssembler : public CodeStubAssembler {
  public:
   explicit ArrayFlattenAssembler(compiler::CodeAssemblerState* state)
@@ -3844,8 +3842,6 @@ class ArrayFlattenAssembler : public CodeStubAssembler {
     return var_target_index.value();
   }
 };
-
-}  // namespace
 
 // https://tc39.github.io/proposal-flatMap/#sec-FlattenIntoArray
 TF_BUILTIN(FlattenIntoArray, ArrayFlattenAssembler) {

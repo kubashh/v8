@@ -450,6 +450,8 @@ ModuleEnv CreateDefaultModuleEnv(const WasmModule* module,
   return ModuleEnv(module, use_trap_handler, kRuntimeExceptionSupport);
 }
 
+}  // namespace
+
 // The CompilationUnitBuilder builds compilation units and stores them in an
 // internal buffer. The buffer is moved into the working queue of the
 // CompilationState when {Commit} is called.
@@ -508,6 +510,8 @@ class CompilationUnitBuilder {
   std::vector<std::unique_ptr<WasmCompilationUnit>> baseline_units_;
   std::vector<std::unique_ptr<WasmCompilationUnit>> tiering_units_;
 };
+
+namespace {
 
 // Run by each compilation task and by the main thread (i.e. in both
 // foreground and background threads). The no_finisher_callback is called

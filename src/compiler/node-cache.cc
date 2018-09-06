@@ -112,11 +112,11 @@ void NodeCache<Key, Hash, Pred>::GetCachedNodes(ZoneVector<Node*>* nodes) {
 // -----------------------------------------------------------------------------
 // Instantiations
 
-template class V8_EXPORT_PRIVATE NodeCache<int32_t>;
-template class V8_EXPORT_PRIVATE NodeCache<int64_t>;
+template class NodeCache<int32_t>;
+template class NodeCache<int64_t>;
 
-template class V8_EXPORT_PRIVATE NodeCache<RelocInt32Key>;
-template class V8_EXPORT_PRIVATE NodeCache<RelocInt64Key>;
+template class NodeCache<RelocInt32Key>;
+template class NodeCache<RelocInt64Key>;
 
 }  // namespace compiler
 }  // namespace internal
