@@ -16,6 +16,24 @@
       "revId": "2ee966f5d835ae1c26a1d1dea1d9e02f5777e3b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88146c41_b55d2bc3",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1273453
+      },
+      "writtenOn": "2018-09-06T05:47:57Z",
+      "side": 1,
+      "message": "Added a \"IsFastElementsKind\" assert to the top. The \"FastSmiOrTagged\" will fail since it might get called with one of the two DOUBLE kinds.",
+      "parentUuid": "6ac7e29e_6a12dea6",
+      "revId": "2ee966f5d835ae1c26a1d1dea1d9e02f5777e3b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
