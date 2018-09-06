@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af5954d7_09072d9d",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-06T15:53:51Z",
+      "side": 0,
+      "message": "I think you are pulling over more than you need. Could we instead split out SmiTaggingConstants (for kSmiShiftSize and kSmiValueSize) and use them to generate the constants below (which are what I think you need for globals.h/checks.h), then still have the convertion routines here. Doing this would make me happier about including them in v8config.h.",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 0
+      },
+      "revId": "ea518290d34614a6b020ce840d0a91ddbf89dab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
