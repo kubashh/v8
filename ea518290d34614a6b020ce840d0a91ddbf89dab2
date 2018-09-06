@@ -22,6 +22,30 @@
       "revId": "ea518290d34614a6b020ce840d0a91ddbf89dab2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b38b557_42b83484",
+        "filename": "include/v8.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-06T16:16:42Z",
+      "side": 0,
+      "message": "Sure I\u0027m happy to consider any split/filename.\n\nFor Ulan, the reason I want to do this split is because I have another change that generates some header files using an executable that depends on a very small number of V8 source files. These files end up including v8.h via globals.h.\n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1209304\n\nWith this change it fails to compile on MSVC because v8.h declares external symbols my executable doesn\u0027t provide. I could probably solve this another way by ensuring my executable doesn\u0027t have BUILDING_V8_SHARED declared, but I think globals.h should avoid depending on such a large file anyway.",
+      "parentUuid": "af5954d7_09072d9d",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 0
+      },
+      "revId": "ea518290d34614a6b020ce840d0a91ddbf89dab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
