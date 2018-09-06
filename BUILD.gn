@@ -1481,6 +1481,7 @@ v8_header_set("v8_headers") {
   configs = [ ":internal_config" ]
 
   sources = [
+    "include/v8-base-types.h",
     "include/v8.h",
     "include/v8config.h",
   ]
@@ -1500,6 +1501,7 @@ v8_source_set("v8_base") {
     "//base/trace_event/common/trace_event_common.h",
 
     ### gcmole(all) ###
+    "include/v8-base-types.h",
     "include/v8-inspector-protocol.h",
     "include/v8-inspector.h",
     "include/v8-platform.h",
