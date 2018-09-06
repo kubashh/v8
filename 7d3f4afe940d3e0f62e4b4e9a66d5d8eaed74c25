@@ -624,6 +624,30 @@
     },
     {
       "key": {
+        "uuid": "acbad1cd_222a7092",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-06T09:19:22Z",
+      "side": 1,
+      "message": "Ignore this comment please. Confused git_ps and ct_ps.",
+      "parentUuid": "77685ce6_56b676c1",
+      "range": {
+        "startLine": 170,
+        "startChar": 21,
+        "endLine": 170,
+        "endChar": 27
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dd141e15_fe956419",
         "filename": "tools/run-clang-tidy.py",
         "patchSetId": 17
