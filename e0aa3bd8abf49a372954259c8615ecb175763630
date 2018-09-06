@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a2b209a_ccb854cd",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-06T15:03:35Z",
+      "side": 1,
+      "message": "Why is this?",
+      "range": {
+        "startLine": 318,
+        "startChar": 18,
+        "endLine": 318,
+        "endChar": 44
+      },
+      "revId": "e0aa3bd8abf49a372954259c8615ecb175763630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
