@@ -22,6 +22,30 @@
       "revId": "1f3f950ce9bc58de6626ff27c518927ba3f79e69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa695342_9689449e",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-07T07:53:24Z",
+      "side": 1,
+      "message": "It\u0027s a random name. According to doc [1] it has to start with \"v8-\", but validator only accepts \"_\" in the name.\n\n[1]: https://chromium.googlesource.com/infra/luci/luci-go/+/master/buildbucket/proto/config/project_config.proto#131",
+      "parentUuid": "4937615a_8702a89e",
+      "range": {
+        "startLine": 88,
+        "startChar": 11,
+        "endLine": 88,
+        "endChar": 34
+      },
+      "revId": "1f3f950ce9bc58de6626ff27c518927ba3f79e69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
