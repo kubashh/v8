@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa8146c4_6622f7ef",
+        "filename": "BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T13:56:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73dd4ebb_7bd779dc",
+      "range": {
+        "startLine": 993,
+        "startChar": 43,
+        "endLine": 993,
+        "endChar": 59
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f44b7741_1b8c468b",
         "filename": "src/builtins/builtins-definitions.h",
         "patchSetId": 13
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "0b86b5ee_e5c5f9ac",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T13:56:11Z",
+      "side": 1,
+      "message": "I\u0027ve changed the generator to use the flag to decide whether to populate the macro (but the macro is always generated) so this can go completely.",
+      "parentUuid": "f44b7741_1b8c468b",
+      "range": {
+        "startLine": 1446,
+        "startChar": 0,
+        "endLine": 1450,
+        "endChar": 13
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae4976d6_e2ee27ae",
         "filename": "src/builtins/builtins.h",
         "patchSetId": 13
@@ -62,6 +110,24 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bcec5b4_79ba0af9",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T13:56:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae4976d6_e2ee27ae",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "f72eb26f_7bba6d1e",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T13:56:11Z",
+      "side": 1,
+      "message": "Moved the generated file and its generator as discussed.",
+      "parentUuid": "cfed5fe6_4c4baa9b",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 38
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "801d78c4_82257a02",
         "filename": "src/interpreter/generate-flat-headers.cc",
         "patchSetId": 13
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "8212f1f3_f92bcb7a",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T13:56:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "801d78c4_82257a02",
+      "range": {
+        "startLine": 14,
+        "startChar": 5,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e832d2c6_c44a1858",
         "filename": "src/interpreter/generate-flat-headers.cc",
         "patchSetId": 13
@@ -125,6 +239,24 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe6509ec_65258bf3",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T13:56:11Z",
+      "side": 1,
+      "message": "Converted it all to use ofstream",
+      "parentUuid": "e832d2c6_c44a1858",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -171,6 +303,54 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7248dec3_e9bd3e1a",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T13:56:11Z",
+      "side": 1,
+      "message": "changed to BUILTIN_LIST_BYTECODE_HANDLERS as discussed offline.",
+      "parentUuid": "f5480b01_f5cf4f2c",
+      "range": {
+        "startLine": 39,
+        "startChar": 23,
+        "endLine": 39,
+        "endChar": 42
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9208ce14_5fead73d",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T13:56:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cce3b576_57dcdb32",
+      "range": {
+        "startLine": 39,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 47
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
