@@ -340,6 +340,7 @@ namespace internal {
   F(SameValueZero, 2, 1)                                        \
   F(SetDataProperties, 2, 1)                                    \
   F(SetProperty, 4, 1)                                          \
+  F(StoreDataPropertyInLiteral, 3, 1)                           \
   F(ShrinkPropertyDictionary, 1, 1)                             \
   F(ToFastProperties, 1, 1)                                     \
   F(ToInteger, 1, 1)                                            \

@@ -643,6 +643,7 @@ namespace internal {
   TFH(LoadGlobalICTrampoline, LoadGlobal)                                      \
   TFH(LoadGlobalICInsideTypeofTrampoline, LoadGlobal)                          \
   TFH(CloneObjectIC, CloneObjectWithVector)                                    \
+  TFH(CloneObjectIC_Slow, CloneObjectWithVector)                               \
                                                                                \
   /* IterableToList */                                                         \
   /* ES #sec-iterabletolist */                                                 \
