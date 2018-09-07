@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc098556_fac45fee",
+        "filename": "src/builtins/array-foreach.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-09-07T14:52:24Z",
+      "side": 1,
+      "message": "I guess this could also stay Smi, but it doesn\u0027t really matter.",
+      "revId": "8c815769166a9777aa59b238efb88217316b3b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c40d7bc8_c9a49fac",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2744,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-09-07T14:52:24Z",
+      "side": 1,
+      "message": "To match the Torque signature, this should be JSReceiver. This is asserted in the Spec and the runtime would throw a JavaScript exception on non-JSReceiver types.",
+      "range": {
+        "startLine": 2744,
+        "startChar": 42,
+        "endLine": 2744,
+        "endChar": 48
+      },
+      "revId": "8c815769166a9777aa59b238efb88217316b3b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
