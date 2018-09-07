@@ -574,7 +574,13 @@ bool IC::UpdatePolymorphicIC(Handle<Name> name,
   int number_of_valid_maps =
       number_of_maps - deprecated_maps - (handler_to_overwrite != -1);
 
-  if (number_of_valid_maps >= kMaxPolymorphicMapCount) return false;
+  if (number_of_valid_maps >= kMaxPolymorphicMapCount) {
+    for (int i = 0; i < number_of_maps; ++i) {
+      if (maps.at(i)->is_deprecated()) continue;
+      if (!handler.is_identical_to(handlers[i])) return false;
+    }
+    if (number_of_valid_maps >= kMaxPolymorphicMapCount * 2) return false;
+  }
   if (number_of_maps == 0 && state() != MONOMORPHIC && state() != POLYMORPHIC) {
     return false;
   }
