@@ -963,10 +963,9 @@ void JSHeapBroker::SerializeStandardObjects() {
   Builtins::Name builtins[] = {
       Builtins::kArgumentsAdaptorTrampoline,
       Builtins::kCallFunctionForwardVarargs,
-      Builtins::kStringAdd_CheckNone_NotTenured,
-      Builtins::kStringAdd_CheckNone_Tenured,
-      Builtins::kStringAdd_ConvertLeft_NotTenured,
-      Builtins::kStringAdd_ConvertRight_NotTenured,
+      Builtins::kStringAdd_CheckNone,
+      Builtins::kStringAdd_ConvertLeft,
+      Builtins::kStringAdd_ConvertRight,
   };
   for (auto id : builtins) {
     GetOrCreateData(b->builtin_handle(id));
