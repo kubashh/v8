@@ -5,7 +5,7 @@
 #ifndef V8_BUILTINS_BUILTINS_DEFINITIONS_H_
 #define V8_BUILTINS_BUILTINS_DEFINITIONS_H_
 
-#include "src/interpreter/bytecodes.h"
+#include "interpreter-generated/bytecodes-flat.h"
 
 // include generated header
 #include "torque-generated/builtin-definitions-from-dsl.h"
@@ -26,7 +26,7 @@ namespace internal {
 // TFH: Handlers in Turbofan, with CodeStub linkage.
 //      Args: name, interface descriptor
 // BCH: Bytecode Handlers, with bytecode dispatch linkage.
-//      Args: name
+//      Args: name, Bytecode, OperandScale
 // ASM: Builtin in platform-dependent assembly.
 //      Args: name
 
@@ -1444,7 +1444,7 @@ namespace internal {
 #endif  // V8_INTL_SUPPORT
 
 #ifdef V8_EMBEDDED_BYTECODE_HANDLERS
-#define BUILTIN_LIST_BYTECODE_HANDLERS(BCH) BYTECODE_LIST(BCH)
+#define BUILTIN_LIST_BYTECODE_HANDLERS(BCH) FLAT_BYTECODE_LIST(BCH)
 #else
 #define BUILTIN_LIST_BYTECODE_HANDLERS(BCH)
 #endif  // V8_EMBEDDED_BYTECODE_HANDLERS
