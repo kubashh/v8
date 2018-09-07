@@ -49,6 +49,64 @@
     },
     {
       "key": {
+        "uuid": "d3444d18_5d4d3e94",
+        "filename": "BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-07T14:13:37Z",
+      "side": 1,
+      "message": "+1 also the action name. It\u0027s really a packed bytecode handler list, no?",
+      "parentUuid": "73dd4ebb_7bd779dc",
+      "range": {
+        "startLine": 993,
+        "startChar": 43,
+        "endLine": 993,
+        "endChar": 59
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd3c3aea_41acb035",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-07T14:13:37Z",
+      "side": 1,
+      "message": "At the cost of some memory, we could use this to generate a {bytecode,scale}-\u003ebuiltin_index lookup table and keep the handler accessor on Builtins.",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "064773c4_f41b7bb4",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-07T14:13:37Z",
+      "side": 1,
+      "message": "Maybe mentioned elsewhere: perhaps this should also be renamed, e.g. to BYTECODE_HANDLER_LIST?",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f44b7741_1b8c468b",
         "filename": "src/builtins/builtins-definitions.h",
         "patchSetId": 13
@@ -128,6 +186,23 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7a1146c_7c788a30",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-07T14:13:37Z",
+      "side": 1,
+      "message": "Nit: camel-case.",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -222,6 +297,23 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cecfbcd9_6932fb45",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-07T14:13:37Z",
+      "side": 1,
+      "message": "This is already in OperandScaleToString, we could expose that.",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -351,6 +443,74 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f222d72f_adc1d747",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-07T14:13:37Z",
+      "side": 1,
+      "message": "Could we ensure we fail somewhere if diverging from the expected dispatch table order?",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77d165a3_c542dcda",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-07T14:13:37Z",
+      "side": 1,
+      "message": "Suggestion: print a usage message on argc mismatch.",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54ce2626_ca369eeb",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-07T14:13:37Z",
+      "side": 1,
+      "message": "Nit: DCHECK_NOT_NULL or DCHECK(builtin-\u003eIsCode())",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b787b318_4b10607b",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-07T14:13:37Z",
+      "side": 1,
+      "message": "A mapping would be useful here as well, implicitly relying on an ordering without being able to check it seems a bit scary.",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
