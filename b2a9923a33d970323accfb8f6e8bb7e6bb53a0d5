@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5cd1d69c_ecb428b9",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T13:59:39Z",
+      "side": 1,
+      "message": "outch :)",
+      "parentUuid": "8a80ba58_3985f6b1",
+      "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5eb69d32_ca4b91fb",
         "filename": "src/parsing/token.h",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3320be22_f46cd47e",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T13:59:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5eb69d32_ca4b91fb",
+      "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "10c316d7_d45a4704",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T13:59:39Z",
+      "side": 1,
+      "message": "This \"optimization\" is mostly of speculative nature (and yeah, no fewer branches). \nI assume that doing compuation without memory access is going to be a bit faster in this case. I convinced myself that I did see the needle move on this once (hard squinting required).\n\nIsKeyword has quite a few non-consecutive ranges (especially the ASNYC token) I believe we\u0027ll end up doing more work.",
+      "parentUuid": "8c3adc6f_a4985022",
+      "range": {
+        "startLine": 223,
+        "startChar": 11,
+        "endLine": 223,
+        "endChar": 41
+      },
+      "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3f6ccd56_7e7b19f2",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 6
@@ -70,6 +130,24 @@
       "writtenOn": "2018-09-04T18:12:39Z",
       "side": 1,
       "message": "I\u0027m OK with these here for now, but wanted to point out that these might be lighter-weight as unittests under test/unittests/parser.",
+      "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86b0bd5e_4cf7ccea",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T13:59:39Z",
+      "side": 1,
+      "message": "OK, I actually ran into some annoyances with this one, might migrate all of them over in a separate CL.",
+      "parentUuid": "3f6ccd56_7e7b19f2",
       "revId": "b2a9923a33d970323accfb8f6e8bb7e6bb53a0d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

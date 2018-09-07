@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a12780a_a68e9ac2",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T13:59:39Z",
+      "side": 1,
+      "message": "As discussed offline, this is rather annoying with cctests.",
+      "parentUuid": "f3604abd_e252b8ec",
+      "revId": "784cb7b1f0b7e4099c1abe5efc6305e333644ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "871f8bf9_6e56ab35",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 5
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "bc82a0f6_93f69a40",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T13:59:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "871f8bf9_6e56ab35",
+      "range": {
+        "startLine": 130,
+        "startChar": 24,
+        "endLine": 130,
+        "endChar": 25
+      },
+      "revId": "784cb7b1f0b7e4099c1abe5efc6305e333644ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3b1c808_e8d340aa",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 5
@@ -62,6 +104,30 @@
       "revId": "784cb7b1f0b7e4099c1abe5efc6305e333644ae0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "688ceeed_f0150f11",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T13:59:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3b1c808_e8d340aa",
+      "range": {
+        "startLine": 131,
+        "startChar": 52,
+        "endLine": 131,
+        "endChar": 53
+      },
+      "revId": "784cb7b1f0b7e4099c1abe5efc6305e333644ae0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
