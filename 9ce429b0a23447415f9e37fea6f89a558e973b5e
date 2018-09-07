@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5e2c74d_05df62fe",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-07T07:21:45Z",
+      "side": 1,
+      "message": "You don\u0027t need the recursion here, because of the way the reducers are handled. The contract is that all inputs will be reduced before a node is processed (modulo ordering due to loops).",
+      "revId": "9ce429b0a23447415f9e37fea6f89a558e973b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfc72d84_441574a5",
+        "filename": "src/compiler/js-native-context-specialization.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-07T07:21:45Z",
+      "side": 1,
+      "message": "Nit: remove this line.",
+      "revId": "9ce429b0a23447415f9e37fea6f89a558e973b5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
