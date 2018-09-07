@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9675021d_8728392b",
+        "filename": "BUILD.gn",
+        "patchSetId": 16
+      },
+      "lineNbr": 969,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T14:23:30Z",
+      "side": 1,
+      "message": "generate_bytecode_builtins_list",
+      "range": {
+        "startLine": 969,
+        "startChar": 6,
+        "endLine": 969,
+        "endChar": 28
+      },
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fb21fcf_5daa7941",
+        "filename": "BUILD.gn",
+        "patchSetId": 16
+      },
+      "lineNbr": 3283,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T14:23:30Z",
+      "side": 1,
+      "message": "generate_bytecode_builtins_list",
+      "range": {
+        "startLine": 3283,
+        "startChar": 12,
+        "endLine": 3283,
+        "endChar": 40
+      },
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c33dd25_f52d2de8",
+        "filename": "src/builtins/generate-bytecodes-builtins-list.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T14:23:30Z",
+      "side": 1,
+      "message": "Unused, please delete",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 5
+      },
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fef1a266_4db12c79",
+        "filename": "src/builtins/generate-bytecodes-builtins-list.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T14:23:30Z",
+      "side": 1,
+      "message": "Also add an #ifdef guard please",
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "833acfaf_d31f8a8b",
+        "filename": "src/snapshot/startup-deserializer.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T14:23:30Z",
+      "side": 1,
+      "message": "Please add a comment why (e.g.: \"Log bytecode handlers if they haven\u0027t already been logged as builtins\").",
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
