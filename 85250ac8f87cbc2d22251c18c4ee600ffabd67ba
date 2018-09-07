@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35049791_f8af3dc7",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-07T10:59:38Z",
+      "side": 1,
+      "message": "cctest and unittests bailed out here on None. An empty list is enough to not bail out. The basic files (executable, snapshot, etc) are always pushed.",
+      "range": {
+        "startLine": 214,
+        "startChar": 26,
+        "endLine": 214,
+        "endChar": 40
+      },
+      "revId": "85250ac8f87cbc2d22251c18c4ee600ffabd67ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
