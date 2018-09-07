@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "04f364fd_f4cd215f",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T14:00:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14ae7093_8d02a423",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a616d36_81a2da66",
         "filename": "src/builtins/builtins-typedarray.cc",
         "patchSetId": 8
@@ -100,6 +118,24 @@
       "writtenOn": "2017-03-10T14:39:56Z",
       "side": 1,
       "message": "length here can be a user JS value so we need the observable ToIndex call.",
+      "parentUuid": "5a616d36_81a2da66",
+      "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "610e2657_f0d867c7",
+        "filename": "src/builtins/builtins-typedarray.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T14:00:44Z",
+      "side": 1,
+      "message": "Done",
       "parentUuid": "5a616d36_81a2da66",
       "revId": "5843796602f7634b53d71d086dbd0320fdd41aad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
