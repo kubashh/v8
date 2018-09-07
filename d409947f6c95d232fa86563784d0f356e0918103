@@ -22,6 +22,30 @@
       "revId": "d409947f6c95d232fa86563784d0f356e0918103",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9720f85_40351b17",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T14:04:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "392f27f0_e3523def",
+      "range": {
+        "startLine": 1005,
+        "startChar": 48,
+        "endLine": 1005,
+        "endChar": 58
+      },
+      "revId": "d409947f6c95d232fa86563784d0f356e0918103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
