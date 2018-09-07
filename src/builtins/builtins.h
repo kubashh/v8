@@ -5,6 +5,7 @@
 #ifndef V8_BUILTINS_BUILTINS_H_
 #define V8_BUILTINS_BUILTINS_H_
 
+#include "interpreter-generated/bytecodes-flat.h"
 #include "src/base/flags.h"
 #include "src/builtins/builtins-definitions.h"
 #include "src/globals.h"
@@ -45,16 +46,14 @@ class Builtins {
 
   enum Name : int32_t {
 #define DEF_ENUM(Name, ...) k##Name,
-#define DEF_ENUM_BYTECODE_HANDLER(Name, ...) \
-  k##Name##Handler, k##Name##WideHandler, k##Name##ExtraWideHandler,
     BUILTIN_LIST(DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM, DEF_ENUM,
-                 DEF_ENUM_BYTECODE_HANDLER, DEF_ENUM)
+                 DEF_ENUM, DEF_ENUM)
 #undef DEF_ENUM
 #undef DEF_ENUM_BYTECODE_HANDLER
         builtin_count,
 
 #ifdef V8_EMBEDDED_BYTECODE_HANDLERS
-#define EXTRACT_NAME(Name, ...) k##Name##Handler,
+#define EXTRACT_NAME(Name, ...) k##Name,
     // Define kFirstBytecodeHandler,
     kFirstBytecodeHandler =
         FirstFromVarArgs(BUILTIN_LIST_BYTECODE_HANDLERS(EXTRACT_NAME) 0)
@@ -91,11 +90,6 @@ class Builtins {
 
   Code* builtin(int index);
   V8_EXPORT_PRIVATE Handle<Code> builtin_handle(int index);
-
-#ifdef V8_EMBEDDED_BYTECODE_HANDLERS
-  Code* GetBytecodeHandler(interpreter::Bytecode bytecode,
-                           interpreter::OperandScale operand_scale);
-#endif  // V8_EMBEDDED_BYTECODE_HANDLERS
 
   V8_EXPORT_PRIVATE static Callable CallableFor(Isolate* isolate, Name name);
 
