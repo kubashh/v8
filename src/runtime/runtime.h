@@ -340,6 +340,7 @@ namespace internal {
   F(SameValueZero, 2, 1)                                        \
   F(SetDataProperties, 2, 1)                                    \
   F(SetProperty, 4, 1)                                          \
+  F(StoreDataPropertyInLiteral, 3, 1)                           \
   F(ShrinkPropertyDictionary, 1, 1)                             \
   F(ToFastProperties, 1, 1)                                     \
   F(ToInteger, 1, 1)                                            \
@@ -694,6 +695,10 @@ class Runtime : public AllStatic {
       LanguageMode language_mode);
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> SetObjectProperty(
+      Isolate* isolate, Handle<Object> object, Handle<Object> key,
+      Handle<Object> value, LanguageMode language_mode);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<Object> SetOwnProperty(
       Isolate* isolate, Handle<Object> object, Handle<Object> key,
       Handle<Object> value, LanguageMode language_mode);
 
