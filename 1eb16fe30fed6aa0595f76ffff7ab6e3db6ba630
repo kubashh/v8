@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b9fdd97f_24ebbb46",
+        "filename": "test/mjsunit/es6/typedarray-slice.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T14:00:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "224de3ef_fa8600ca",
+      "range": {
+        "startLine": 103,
+        "startChar": 50,
+        "endLine": 103,
+        "endChar": 56
+      },
+      "revId": "1eb16fe30fed6aa0595f76ffff7ab6e3db6ba630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "14f564b2_8b719041",
         "filename": "test/mjsunit/es6/typedarray-slice.js",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "1eb16fe30fed6aa0595f76ffff7ab6e3db6ba630",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f8210f1_8a18da44",
+        "filename": "test/mjsunit/es6/typedarray-slice.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T14:00:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14f564b2_8b719041",
+      "range": {
+        "startLine": 104,
+        "startChar": 5,
+        "endLine": 104,
+        "endChar": 53
+      },
+      "revId": "1eb16fe30fed6aa0595f76ffff7ab6e3db6ba630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "2f52962b_908bd700",
+        "filename": "test/mjsunit/es6/typedarray-slice.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T14:00:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb7c2065_b8ce6f52",
+      "range": {
+        "startLine": 114,
+        "startChar": 39,
+        "endLine": 114,
+        "endChar": 42
+      },
+      "revId": "1eb16fe30fed6aa0595f76ffff7ab6e3db6ba630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "109a53db_5bcc1375",
         "filename": "test/mjsunit/regress-6223.js",
         "patchSetId": 4
@@ -82,6 +154,24 @@
       "writtenOn": "2017-04-10T11:40:36Z",
       "side": 1,
       "message": "You can use assertArrayEquals, which works for comparing typed arrays with regular arrays value by value, and it does the length assertion first too.",
+      "revId": "1eb16fe30fed6aa0595f76ffff7ab6e3db6ba630",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d69a1e21_54f2dfa1",
+        "filename": "test/mjsunit/regress-6223.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T14:00:59Z",
+      "side": 1,
+      "message": "uhm, yeah... I actually looked at that and forgot about it!",
+      "parentUuid": "109a53db_5bcc1375",
       "revId": "1eb16fe30fed6aa0595f76ffff7ab6e3db6ba630",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
