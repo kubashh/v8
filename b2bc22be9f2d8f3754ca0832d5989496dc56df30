@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5fcc1420_80e789ad",
+        "filename": "BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d3444d18_5d4d3e94",
+      "range": {
+        "startLine": 993,
+        "startChar": 43,
+        "endLine": 993,
+        "endChar": 59
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd3c3aea_41acb035",
         "filename": "src/builtins/builtins-definitions.h",
         "patchSetId": 13
@@ -90,6 +114,24 @@
     },
     {
       "key": {
+        "uuid": "f685c372_f5068a4e",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Let\u0027s come back to this if we find we need it. At the moment this CL saves memory. I\u0027d like not to lose that saving without justification.",
+      "parentUuid": "cd3c3aea_41acb035",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "064773c4_f41b7bb4",
         "filename": "src/builtins/builtins-definitions.h",
         "patchSetId": 13
@@ -104,6 +146,24 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a22dd81f_2917acc9",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1447,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "064773c4_f41b7bb4",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -203,6 +263,24 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "089066c7_8489deae",
+        "filename": "src/builtins/setup-builtins-internal.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7a1146c_7c788a30",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -314,6 +392,24 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2af2a74_b4a25a2c",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "I\u0027ve switched everything to ostreams so this isn\u0027t necessary any more.",
+      "parentUuid": "cecfbcd9_6932fb45",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -463,6 +559,24 @@
     },
     {
       "key": {
+        "uuid": "31d9cdd9_96944dcf",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "It will now fail in InitializeDispatchTable.",
+      "parentUuid": "f222d72f_adc1d747",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77d165a3_c542dcda",
         "filename": "src/interpreter/generate-flat-headers.cc",
         "patchSetId": 13
@@ -477,6 +591,24 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f02a6672_a67a78a6",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77d165a3_c542dcda",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -497,6 +629,24 @@
     },
     {
       "key": {
+        "uuid": "5fed1115_63d9a386",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54ce2626_ca369eeb",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b787b318_4b10607b",
         "filename": "src/interpreter/interpreter.cc",
         "patchSetId": 13
@@ -511,6 +661,24 @@
       "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "350b698a_f6b08727",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Rather than using a mapping, I\u0027ve created a DEBUG only check that compares the name of the builtin with the name generated from the bytecode and operand_scale.",
+      "parentUuid": "b787b318_4b10607b",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

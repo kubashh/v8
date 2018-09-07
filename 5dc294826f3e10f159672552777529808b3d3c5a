@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bc3fefd4_3eb012d1",
+        "filename": "BUILD.gn",
+        "patchSetId": 16
+      },
+      "lineNbr": 969,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9675021d_8728392b",
+      "range": {
+        "startLine": 969,
+        "startChar": 6,
+        "endLine": 969,
+        "endChar": 28
+      },
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fb21fcf_5daa7941",
         "filename": "BUILD.gn",
         "patchSetId": 16
@@ -45,6 +69,30 @@
       "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68804bc5_246ad869",
+        "filename": "BUILD.gn",
+        "patchSetId": 16
+      },
+      "lineNbr": 3283,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "This can\u0027t have the same name as the action that uses it. I\u0027ve called it bytecode_builtins_list_generator.",
+      "parentUuid": "9fb21fcf_5daa7941",
+      "range": {
+        "startLine": 3283,
+        "startChar": 12,
+        "endLine": 3283,
+        "endChar": 40
+      },
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "6285348f_eee2e919",
+        "filename": "src/builtins/generate-bytecodes-builtins-list.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c33dd25_f52d2de8",
+      "range": {
+        "startLine": 16,
+        "startChar": 4,
+        "endLine": 26,
+        "endChar": 5
+      },
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fef1a266_4db12c79",
         "filename": "src/builtins/generate-bytecodes-builtins-list.cc",
         "patchSetId": 16
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "cbf43e7c_6b93f29b",
+        "filename": "src/builtins/generate-bytecodes-builtins-list.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fef1a266_4db12c79",
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "833acfaf_d31f8a8b",
         "filename": "src/snapshot/startup-deserializer.cc",
         "patchSetId": 16
@@ -102,6 +192,24 @@
       "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2428279_ff6ebdfc",
+        "filename": "src/snapshot/startup-deserializer.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-07T16:37:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "833acfaf_d31f8a8b",
+      "revId": "5dc294826f3e10f159672552777529808b3d3c5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
