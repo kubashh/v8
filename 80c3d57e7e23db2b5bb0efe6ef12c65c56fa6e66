@@ -16,6 +16,24 @@
       "revId": "80c3d57e7e23db2b5bb0efe6ef12c65c56fa6e66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99903b35_76ff0a6c",
+        "filename": "src/objects/name.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T14:01:15Z",
+      "side": 1,
+      "message": "SGTM\n- addded comment\n- added C++ helper\n- renamed the constant",
+      "parentUuid": "af86f0e1_52df0d87",
+      "revId": "80c3d57e7e23db2b5bb0efe6ef12c65c56fa6e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

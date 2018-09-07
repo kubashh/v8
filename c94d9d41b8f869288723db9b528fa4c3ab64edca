@@ -16,6 +16,24 @@
       "revId": "c94d9d41b8f869288723db9b528fa4c3ab64edca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9987d2f3_aeb1d0a3",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-07T14:01:15Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "466a274a_a39c947a",
+      "revId": "c94d9d41b8f869288723db9b528fa4c3ab64edca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
