@@ -44,7 +44,9 @@ class TestSuite(testsuite.TestSuite):
     cmd = command.Command(
         cmd_prefix=self.test_config.command_prefix,
         shell=shell,
-        args=["--list"] + self.test_config.extra_flags)
+        args=["--list"] + self.test_config.extra_flags,
+        resources_func=lambda: [],
+    )
     output = cmd.execute()
     if output.exit_code != 0:
       print cmd
