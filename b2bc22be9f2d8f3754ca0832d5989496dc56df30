@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73dd4ebb_7bd779dc",
+        "filename": "BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T11:30:21Z",
+      "side": 1,
+      "message": "I\u0027m not sure about bytecodes-flat.h.  How about bytecode-builtins-list.h",
+      "range": {
+        "startLine": 993,
+        "startChar": 43,
+        "endLine": 993,
+        "endChar": 59
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f44b7741_1b8c468b",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T11:30:21Z",
+      "side": 1,
+      "message": "As discussed - remove else",
+      "range": {
+        "startLine": 1446,
+        "startChar": 0,
+        "endLine": 1450,
+        "endChar": 13
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae4976d6_e2ee27ae",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T11:30:21Z",
+      "side": 1,
+      "message": "is this needed?",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfed5fe6_4c4baa9b",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T11:30:21Z",
+      "side": 1,
+      "message": "Let\u0027s move all these files to builtins/ and call make the file: builtins-generated/... etc.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 38
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "801d78c4_82257a02",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T11:30:21Z",
+      "side": 1,
+      "message": "WriteBytecode ?",
+      "range": {
+        "startLine": 14,
+        "startChar": 5,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e832d2c6_c44a1858",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T11:30:21Z",
+      "side": 1,
+      "message": "Can you use the:\n  std::ostream\u0026 operator\u003c\u003c(std::ostream\u0026 os,\n                           const OperandScale\u0026 operand_scale);\nin bytecode-operands.h?",
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cce3b576_57dcdb32",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T11:30:21Z",
+      "side": 1,
+      "message": "Can you print a header comment saying where this file is generated from and what it is for.",
+      "range": {
+        "startLine": 39,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 47
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5480b01_f5cf4f2c",
+        "filename": "src/interpreter/generate-flat-headers.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-07T11:30:21Z",
+      "side": 1,
+      "message": "BYTECODE_BUILTIN_LIST",
+      "range": {
+        "startLine": 39,
+        "startChar": 23,
+        "endLine": 39,
+        "endChar": 42
+      },
+      "revId": "b2bc22be9f2d8f3754ca0832d5989496dc56df30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
