@@ -351,15 +351,11 @@ MaybeHandle<Object> JSRelativeTimeFormat::Format(
 
   UErrorCode status = U_ZERO_ERROR;
   icu::UnicodeString formatted;
-  if (unit_enum == UDAT_REL_UNIT_QUARTER) {
-    // ICU have not yet implement UDAT_REL_UNIT_QUARTER.
+  if (format_holder->numeric() == JSRelativeTimeFormat::Numeric::ALWAYS) {
+    formatter->formatNumeric(number, unit_enum, formatted, status);
   } else {
-    if (format_holder->numeric() == JSRelativeTimeFormat::Numeric::ALWAYS) {
-      formatter->formatNumeric(number, unit_enum, formatted, status);
-    } else {
-      DCHECK_EQ(JSRelativeTimeFormat::Numeric::AUTO, format_holder->numeric());
-      formatter->format(number, unit_enum, formatted, status);
-    }
+    DCHECK_EQ(JSRelativeTimeFormat::Numeric::AUTO, format_holder->numeric());
+    formatter->format(number, unit_enum, formatted, status);
   }
 
   if (U_FAILURE(status)) {
