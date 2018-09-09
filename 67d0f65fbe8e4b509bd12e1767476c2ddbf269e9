@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9581bd06_8201caa3",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-09-09T21:26:28Z",
+      "side": 0,
+      "message": "If Node.js cares, the above block has to be enclosed with\n\n#if USE_CHROMIUM_ICU !\u003d 1 \u0026\u0026 U_ICU_VERSION_MAJOR_NUM \u003c 63\n...\n#endif\n\nAnd, for IWYU,  include unicode/uvernum.h for U_ICU_VERSION_MAJOR_NUM.",
+      "range": {
+        "startLine": 354,
+        "startChar": 1,
+        "endLine": 356,
+        "endChar": 10
+      },
+      "revId": "67d0f65fbe8e4b509bd12e1767476c2ddbf269e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bf69b46_adcf0dfc",
+        "filename": "src/objects/js-relative-time-format.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-09-09T21:26:28Z",
+      "side": 0,
+      "message": "the same here.",
+      "range": {
+        "startLine": 363,
+        "startChar": 1,
+        "endLine": 363,
+        "endChar": 3
+      },
+      "revId": "67d0f65fbe8e4b509bd12e1767476c2ddbf269e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
