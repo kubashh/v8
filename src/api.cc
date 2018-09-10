@@ -8216,7 +8216,9 @@ void Isolate::Initialize(Isolate* isolate,
   if (params.entry_hook || !i::Snapshot::Initialize(i_isolate)) {
     // If snapshot data was provided and we failed to deserialize it must
     // have been corrupted.
-    CHECK_NULL(i_isolate->snapshot_blob());
+    CHECK_NULL(i_isolate->snapshot_blob(),
+               "Invalid snapshot blob was provided. This can mean that the V8 "
+               "snapshot blob file is invalid or missing.");
     base::ElapsedTimer timer;
     if (i::FLAG_profile_deserialization) timer.Start();
     i_isolate->Init(nullptr);
