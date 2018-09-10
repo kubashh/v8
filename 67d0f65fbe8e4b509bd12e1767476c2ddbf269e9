@@ -93,6 +93,29 @@
       "revId": "67d0f65fbe8e4b509bd12e1767476c2ddbf269e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d792f3cb_62b4a538",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 6
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1000244
+      },
+      "writtenOn": "2018-09-10T22:53:12Z",
+      "side": 0,
+      "message": "Michael:  is there a way to mark the above tests as \u0027skip\u0027 or \u0027fail\u0027 in Node.js bot?",
+      "range": {
+        "startLine": 620,
+        "startChar": 1,
+        "endLine": 631,
+        "endChar": 81
+      },
+      "revId": "67d0f65fbe8e4b509bd12e1767476c2ddbf269e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
