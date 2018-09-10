@@ -22,6 +22,30 @@
       "revId": "1207e1cd31136bd60f803d8a6386ff888a995850",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74026308_2d3a31a3",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-10T07:54:03Z",
+      "side": 1,
+      "message": "I\u0027ve added a comment explaining this:\n\n+  // We copy all descriptors (not only the own) in order to support\n+  // FindFieldOwner, which is used by the FieldType compilation dependency.",
+      "parentUuid": "155e8e4c_296671d0",
+      "range": {
+        "startLine": 808,
+        "startChar": 12,
+        "endLine": 808,
+        "endChar": 33
+      },
+      "revId": "1207e1cd31136bd60f803d8a6386ff888a995850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
