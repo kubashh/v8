@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afe16cdd_81bc29a4",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-10T16:45:27Z",
+      "side": 1,
+      "message": "Can we also check that we don\u0027t have any exported exceptions yet? Otherwise their returned index would be invalidated.",
+      "revId": "b1c610bea332b1e0b608347d28830cfaa8920822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c6d401a_732fe27a",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-10T16:45:27Z",
+      "side": 1,
+      "message": "Can we make this error message a bit more specific, like \"Exception signature must not have results\" or something similar?",
+      "revId": "b1c610bea332b1e0b608347d28830cfaa8920822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
