@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e661e7e_497882d0",
+        "filename": "src/base/compiler-specific.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-10T07:24:20Z",
+      "side": 1,
+      "message": "We should not disable noexcept if we compile with -fnoexceptions because it is still needed to allow the use of certain optimizations of the standard library. For example, std::vector checks if a element is is_nothrow_move_constructible\u003cT\u003e at certain places to allow optimizations. Even without exceptions an element still does not full fill this requirement.\n\nThere was discussion to add an additional compiler flag to gcc/clang to support default noexcept  but was never added. As far as I know, this was never added because such a flag will cause and ABI break.",
+      "revId": "b3b9894b9d18fa5f40cd5f8af1db863880e0a488",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
