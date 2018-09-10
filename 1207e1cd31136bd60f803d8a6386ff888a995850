@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "155e8e4c_296671d0",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-10T07:45:48Z",
+      "side": 1,
+      "message": "Should not we only need to copy NumberOfOwnDescriptors descriptors here? (Rather than all descriptors?)",
+      "range": {
+        "startLine": 808,
+        "startChar": 12,
+        "endLine": 808,
+        "endChar": 33
+      },
+      "revId": "1207e1cd31136bd60f803d8a6386ff888a995850",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
