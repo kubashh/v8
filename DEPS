@@ -72,8 +72,15 @@ deps = {
   },
   'v8/tools/clang':
     Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + 'e9dadb972c07f43237da73ecad9c7e3ec3c0822b',
-  'v8/tools/luci-go':
-    Var('chromium_url') + '/chromium/src/tools/luci-go.git' + '@' + '445d7c4b6a4f10e188edb395b132e3996b127691',
+  'v8/tools/luci-go': {
+      'packages': [
+        {
+          'package': 'infra/tools/luci/isolate/${{platform}}',
+          'version': 'git_revision:bc125484b8513898f17bc2501ac5e95330f44a3b',
+        },
+      ],
+      'dep_type': 'cipd',
+  },
   'v8/test/wasm-js':
     Var('chromium_url') + '/external/github.com/WebAssembly/spec.git' + '@' + '240ea673de6e75d78ae472f66127301ecab22a99',
 }
@@ -178,43 +185,6 @@ hooks = [
                 '-u', '--no_resume',
                 '-s', 'v8/tools/jsfunfuzz/jsfunfuzz.tar.gz.sha1',
                 '--platform=linux*',
-    ],
-  },
-  # Pull luci-go binaries (isolate, swarming) using checked-in hashes.
-  {
-    'name': 'luci-go_win',
-    'pattern': '.',
-    'condition': 'host_os == "win"',
-    'action': [ 'download_from_google_storage',
-                '--no_resume',
-                '--platform=win32',
-                '--no_auth',
-                '--bucket', 'chromium-luci',
-                '-d', 'v8/tools/luci-go/win64',
-    ],
-  },
-  {
-    'name': 'luci-go_mac',
-    'pattern': '.',
-    'condition': 'host_os == "mac"',
-    'action': [ 'download_from_google_storage',
-                '--no_resume',
-                '--platform=darwin',
-                '--no_auth',
-                '--bucket', 'chromium-luci',
-                '-d', 'v8/tools/luci-go/mac64',
-    ],
-  },
-  {
-    'name': 'luci-go_linux',
-    'pattern': '.',
-    'condition': 'host_os == "linux"',
-    'action': [ 'download_from_google_storage',
-                '--no_resume',
-                '--platform=linux*',
-                '--no_auth',
-                '--bucket', 'chromium-luci',
-                '-d', 'v8/tools/luci-go/linux64',
     ],
   },
   # Pull GN using checked-in hashes.
