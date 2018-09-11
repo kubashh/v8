@@ -1751,9 +1751,20 @@ int InstanceBuilder::ProcessImports(Handle<WasmInstanceObject> instance) {
                           index, module_name, import_name);
           return -1;
         }
+        Zone zone(module_->signature_zone->allocator(), ZONE_NAME);
+        Handle<WasmExceptionObject> imported_exception =
+            Handle<WasmExceptionObject>::cast(value);
+        const WasmExceptionSig* imported_sig =
+            imported_exception->DeserializeSignature(&zone);
+        const WasmExceptionSig* expected_sig =
+            module_->exceptions[import.index].sig;
+        if (*imported_sig != *expected_sig) {
+          ReportLinkError("imported exception does not match the expected type",
+                          index, module_name, import_name);
+          return -1;
+        }
         // TODO(mstarzinger): Actually add imported exceptions to the instance
-        // exception table, making sure to preserve object identity. Also check
-        // against the expected signature.
+        // exception table, making sure to preserve object identity.
         break;
       }
       default:
@@ -2035,9 +2046,7 @@ void InstanceBuilder::ProcessExports(Handle<WasmInstanceObject> instance) {
         const WasmException& exception = module_->exceptions[exp.index];
         Handle<WasmExceptionObject> wrapper = exception_wrappers_[exp.index];
         if (wrapper.is_null()) {
-          wrapper = WasmExceptionObject::New(isolate_);
-          // TODO(mstarzinger): Store exception signature in wrapper.
-          USE(exception);
+          wrapper = WasmExceptionObject::New(isolate_, exception.sig);
           exception_wrappers_[exp.index] = wrapper;
         }
         desc.set_value(wrapper);

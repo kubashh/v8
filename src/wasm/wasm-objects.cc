@@ -1344,14 +1344,37 @@ Address WasmInstanceObject::GetCallTarget(uint32_t func_index) {
 }
 
 // static
-Handle<WasmExceptionObject> WasmExceptionObject::New(Isolate* isolate) {
+Handle<WasmExceptionObject> WasmExceptionObject::New(
+    Isolate* isolate, const wasm::FunctionSig* sig) {
   Handle<JSFunction> exception_cons(
       isolate->native_context()->wasm_exception_constructor(), isolate);
   Handle<JSObject> exception_object =
       isolate->factory()->NewJSObject(exception_cons, TENURED);
   Handle<WasmExceptionObject> exception =
       Handle<WasmExceptionObject>::cast(exception_object);
+
+  // Serialize the signature.
+  DCHECK_EQ(0, sig->return_count());
+  DCHECK_LE(sig->parameter_count(), std::numeric_limits<int>::max());
+  int sig_size = static_cast<int>(sig->parameter_count());
+  Handle<PodArray<wasm::ValueType>> serialized_sig =
+      PodArray<wasm::ValueType>::New(isolate, sig_size, TENURED);
+  int index = 0;  // Index into the {PodArray} above.
+  for (wasm::ValueType param : sig->parameters()) {
+    serialized_sig->set(index++, param);
+  }
+  exception->set_serialized_signature(*serialized_sig);
+
   return exception;
+}
+
+wasm::FunctionSig* WasmExceptionObject::DeserializeSignature(Zone* zone) {
+  int size = serialized_signature()->length();
+  wasm::FunctionSig::Builder builder(zone, 0, size);
+  for (int index = 0; index < size; ++index) {
+    builder.AddParam(serialized_signature()->get(index));
+  }
+  return builder.Build();
 }
 
 bool WasmExportedFunction::IsWasmExportedFunction(Object* object) {
