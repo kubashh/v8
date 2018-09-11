@@ -46,6 +46,30 @@
       "revId": "ad53d838667e5138e03a91a09575325b9a3b4d9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da91cb85_37327391",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-11T22:29:35Z",
+      "side": 1,
+      "message": "What is the difference between `r.get()-\u003eextensions` and `extensions` created by calling out to Intl::LookupUnicodeExtensions() in line 331?",
+      "parentUuid": "a7b4266b_60bcc0bb",
+      "range": {
+        "startLine": 324,
+        "startChar": 65,
+        "endLine": 324,
+        "endChar": 74
+      },
+      "revId": "ad53d838667e5138e03a91a09575325b9a3b4d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
