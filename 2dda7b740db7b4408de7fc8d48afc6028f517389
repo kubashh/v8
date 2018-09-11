@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "798e0f11_4f1b45cb",
+        "filename": "src/heap/array-buffer-tracker-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-11T14:46:07Z",
+      "side": 1,
+      "message": "Made this explicit by adding a private AddInternal method that is called from LocalABT::Process. The public interface for LocalABT now unconditionally updates counters.",
+      "parentUuid": "bbbb13de_1b07c03f",
+      "range": {
+        "startLine": 100,
+        "startChar": 30,
+        "endLine": 100,
+        "endChar": 33
+      },
+      "revId": "2dda7b740db7b4408de7fc8d48afc6028f517389",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b0ecd91_b01d9190",
         "filename": "src/heap/array-buffer-tracker.cc",
         "patchSetId": 1
@@ -166,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "ca68aa6d_9587dd00",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-11T14:46:07Z",
+      "side": 1,
+      "message": "Done (everywhere)",
+      "parentUuid": "dd4ff144_6c88597e",
+      "range": {
+        "startLine": 229,
+        "startChar": 2,
+        "endLine": 229,
+        "endChar": 52
+      },
+      "revId": "2dda7b740db7b4408de7fc8d48afc6028f517389",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d96d5242_991aee89",
         "filename": "src/heap/spaces-inl.h",
         "patchSetId": 1
@@ -186,6 +234,30 @@
       "revId": "2dda7b740db7b4408de7fc8d48afc6028f517389",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb2c3189_30483ea0",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-11T14:46:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d96d5242_991aee89",
+      "range": {
+        "startLine": 231,
+        "startChar": 3,
+        "endLine": 238,
+        "endChar": 76
+      },
+      "revId": "2dda7b740db7b4408de7fc8d48afc6028f517389",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
