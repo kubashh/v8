@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d2fb1e6_a677d31a",
+        "filename": "BUILD.gn",
+        "patchSetId": 21
+      },
+      "lineNbr": 3288,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-09-11T19:55:40Z",
+      "side": 1,
+      "message": "Hello, Can we use v8_executable here? On s390/ppc native, this one leads to compile failures because of missing some flags.\n\nThanks,",
+      "range": {
+        "startLine": 3288,
+        "startChar": 2,
+        "endLine": 3288,
+        "endChar": 12
+      },
+      "revId": "5a9f05560e5d6b608e6cdd73540845a365812b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
