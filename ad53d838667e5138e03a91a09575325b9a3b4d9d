@@ -22,6 +22,30 @@
       "revId": "ad53d838667e5138e03a91a09575325b9a3b4d9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7b4266b_60bcc0bb",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-09-11T22:19:07Z",
+      "side": 1,
+      "message": "I\u0027m not an expert here but my experience is that LookupUnicodeExtensions seems to get the unicode extensions from the icu_locale. If the extensions are not passed in when creating icu_locale then LookupUnicodeExtensions does not return any extensions.",
+      "parentUuid": "66583fee_ca523985",
+      "range": {
+        "startLine": 324,
+        "startChar": 65,
+        "endLine": 324,
+        "endChar": 74
+      },
+      "revId": "ad53d838667e5138e03a91a09575325b9a3b4d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
