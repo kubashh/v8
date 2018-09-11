@@ -1283,5 +1283,15 @@ TF_BUILTIN(SetProperty, CodeStubAssembler) {
                                           value, LanguageMode::kStrict);
 }
 
+TF_BUILTIN(SetPropertySloppy, CodeStubAssembler) {
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
+  TNode<Object> key = CAST(Parameter(Descriptor::kKey));
+  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
+
+  KeyedStoreGenericGenerator::SetProperty(state(), context, receiver, key,
+                                          value, LanguageMode::kSloppy);
+}
+
 }  // namespace internal
 }  // namespace v8
