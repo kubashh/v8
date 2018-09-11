@@ -1822,6 +1822,8 @@ void Assembler::j(int64_t target) {
   BlockTrampolinePoolScope block_trampoline_pool(this);
   GenInstrJump(J, static_cast<uint32_t>(target >> 2) & kImm26Mask);
   BlockTrampolinePoolFor(1);  // For associated delay slot.
+  // Instruction not used anymore.
+  UNREACHABLE();
 }
 
 
@@ -1835,6 +1837,8 @@ void Assembler::j(Label* target) {
   } else {
     j(imm);
   }
+  // Instruction not used anymore.
+  UNREACHABLE();
 }
 
 
@@ -1848,6 +1852,8 @@ void Assembler::jal(Label* target) {
   } else {
     jal(imm);
   }
+  // Instruction not used anymore.
+  UNREACHABLE();
 }
 
 
@@ -1866,6 +1872,8 @@ void Assembler::jal(int64_t target) {
   BlockTrampolinePoolScope block_trampoline_pool(this);
   GenInstrJump(JAL, static_cast<uint32_t>(target >> 2) & kImm26Mask);
   BlockTrampolinePoolFor(1);  // For associated delay slot.
+  // Instruction not used anymore.
+  UNREACHABLE();
 }
 
 
