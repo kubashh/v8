@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a94ff85d_544f3507",
+        "filename": "src/heap/array-buffer-tracker-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-11T12:35:00Z",
+      "side": 1,
+      "message": "Instead of having those mode we could also update the counters in ArrayBufferTracker. The difference would be that the updates are then distributed among two classes (ArrayBufferTracker and LocalArrayBufferTracker). WDYT?",
+      "range": {
+        "startLine": 100,
+        "startChar": 30,
+        "endLine": 100,
+        "endChar": 33
+      },
+      "revId": "2dda7b740db7b4408de7fc8d48afc6028f517389",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b0ecd91_b01d9190",
+        "filename": "src/heap/array-buffer-tracker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-11T12:35:00Z",
+      "side": 1,
+      "message": "This is the expensive case where we copied the buffer. It is also the most expensive case for counter updates.\n\nThe other cases for counters:\n- live: noop\n- dead: batch decrement on line 68.",
+      "range": {
+        "startLine": 36,
+        "startChar": 25,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "2dda7b740db7b4408de7fc8d48afc6028f517389",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54036728_5d6c1827",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-11T12:35:00Z",
+      "side": 1,
+      "message": "Enum class would require static_cast for all array accessors.",
+      "range": {
+        "startLine": 210,
+        "startChar": 5,
+        "endLine": 210,
+        "endChar": 29
+      },
+      "revId": "2dda7b740db7b4408de7fc8d48afc6028f517389",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

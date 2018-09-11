@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7091c7b_62800389",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2292,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-11T12:35:00Z",
+      "side": 0,
+      "message": "I replaced this one with MemoryChunk::MoveExternalBackingStoreBytes to always have the data flow from MemoryChunk-\u003eSpace-\u003eHeap.",
+      "range": {
+        "startLine": 2292,
+        "startChar": 11,
+        "endLine": 2292,
+        "endChar": 37
+      },
+      "revId": "d83060283900a51773bc401231120171e4a80fd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
