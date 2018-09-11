@@ -70,6 +70,30 @@
       "revId": "ad53d838667e5138e03a91a09575325b9a3b4d9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9153df78_486eda65",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-09-11T23:16:04Z",
+      "side": 1,
+      "message": "When there is a unicode extension then LookupUnicodeExtensions returns the pairs; eg,\n\nif (r.get()-\u003eextension \u003d\u003d \"\") then empty map\nif (r.get()-\u003eextension \u003d\u003d \"-u-co-search\") then the map has { \"co\":\"search\" }\nif (r.get()-\u003eextension \u003d\u003d \"-u-co-emoji\") then the map has { \"co\":\"emoji\" }\n\nRight now r.get()-\u003eextensions is not filled out in ResolveLocale. In ResolveLocale I could parse the unicode extension apart with regexp\u0027s or by creating an icu_locale and using LookupUnicodeExtensions. Would it be better to do the parsing there rather than here?\n\nI\u0027m not really sure what the right way to solve this is. I just did enough code to make the tests pass.",
+      "parentUuid": "da91cb85_37327391",
+      "range": {
+        "startLine": 324,
+        "startChar": 65,
+        "endLine": 324,
+        "endChar": 74
+      },
+      "revId": "ad53d838667e5138e03a91a09575325b9a3b4d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
