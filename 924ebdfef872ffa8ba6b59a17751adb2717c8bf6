@@ -34,6 +34,24 @@
       "revId": "924ebdfef872ffa8ba6b59a17751adb2717c8bf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e8ae7f4_5d6ad856",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1757,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-09-11T12:50:05Z",
+      "side": 1,
+      "message": "Forgot to mention, I like this approach much more as well. Good idea. Thanks!",
+      "parentUuid": "4402a710_db3baf95",
+      "revId": "924ebdfef872ffa8ba6b59a17751adb2717c8bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
