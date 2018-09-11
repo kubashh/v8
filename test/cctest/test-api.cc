@@ -17936,8 +17936,7 @@ void PromiseRejectCallback(v8::PromiseRejectMessage reject_message) {
           message->GetLineNumber(context).FromJust();
       promise_reject_msg_column_number =
           message->GetStartColumn(context).FromJust() + 1;
-      promise_reject_is_shared_cross_origin =
-          message->IsSharedCrossOrigin();
+      promise_reject_is_shared_cross_origin = message->IsSharedCrossOrigin();
 
       if (!stack_trace.IsEmpty()) {
         promise_reject_frame_count = stack_trace->GetFrameCount();
