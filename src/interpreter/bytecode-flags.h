@@ -91,6 +91,15 @@ class StoreLookupSlotFlags {
   DISALLOW_IMPLICIT_CONSTRUCTORS(StoreLookupSlotFlags);
 };
 
+class StoreNamedPropertyNoFeedbackFlags {
+ public:
+  class LanguageModeBit : public BitField8<LanguageMode, 0, 1> {};
+
+  static uint8_t Encode(LanguageMode language_mode);
+
+ private:
+  DISALLOW_IMPLICIT_CONSTRUCTORS(StoreNamedPropertyNoFeedbackFlags);
+};
 }  // namespace interpreter
 }  // namespace internal
 }  // namespace v8

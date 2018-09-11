@@ -85,6 +85,11 @@ uint8_t StoreLookupSlotFlags::Encode(LanguageMode language_mode,
          LookupHoistingModeBit::encode(static_cast<bool>(lookup_hoisting_mode));
 }
 
+// static
+uint8_t StoreNamedPropertyNoFeedbackFlags::Encode(LanguageMode language_mode) {
+  return LanguageModeBit::encode(language_mode);
+}
+
 }  // namespace interpreter
 }  // namespace internal
 }  // namespace v8
