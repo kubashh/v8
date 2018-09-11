@@ -58,6 +58,9 @@ class TestCase(testcase.TestCase):
   def get_shell(self):
     return 'inspector-test'
 
+  def _get_resources(self):
+    return [os.path.join('src', 'inspector', 'injected-script-source.js')]
+
   @property
   def output_proc(self):
     return outproc.ExpectedOutProc(
