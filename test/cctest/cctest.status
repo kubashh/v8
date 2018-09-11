@@ -370,6 +370,13 @@
 }],  # 'arch == android_arm or arch == android_ia32'
 
 ##############################################################################
+['system == android', {
+  'test-assembler-arm64/*': [FAIL],
+  'test-run-wasm-module/Run_WasmModule_Reclaim_Memory': [FAIL],
+  'test-run-wasm/*': [FAIL],
+}],  # 'system == android'
+
+##############################################################################
 ['system == aix and arch == ppc64', {
 
   # BUG 2857
