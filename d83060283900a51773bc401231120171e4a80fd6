@@ -22,6 +22,30 @@
       "revId": "d83060283900a51773bc401231120171e4a80fd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f0e6977_1963b367",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2292,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-11T13:18:24Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "a7091c7b_62800389",
+      "range": {
+        "startLine": 2292,
+        "startChar": 11,
+        "endLine": 2292,
+        "endChar": 37
+      },
+      "revId": "d83060283900a51773bc401231120171e4a80fd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
