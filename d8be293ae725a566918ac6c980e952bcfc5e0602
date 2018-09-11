@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78fb8c03_ec7acdcc",
+        "filename": "test/mjsunit/wasm/disallow-codegen.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-11T12:27:39Z",
+      "side": 1,
+      "message": "instantiate",
+      "range": {
+        "startLine": 92,
+        "startChar": 22,
+        "endLine": 92,
+        "endChar": 29
+      },
+      "revId": "d8be293ae725a566918ac6c980e952bcfc5e0602",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5eff86c2_a1f6d07a",
+        "filename": "test/mjsunit/wasm/disallow-codegen.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-11T12:27:39Z",
+      "side": 1,
+      "message": "instantiate",
+      "range": {
+        "startLine": 118,
+        "startChar": 27,
+        "endLine": 118,
+        "endChar": 34
+      },
+      "revId": "d8be293ae725a566918ac6c980e952bcfc5e0602",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
