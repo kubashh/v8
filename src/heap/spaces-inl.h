@@ -93,6 +93,23 @@ HeapObject* HeapObjectIterator::FromCurrentPage() {
   return nullptr;
 }
 
+template <ExternalBackingStoreNotificationMode mode>
+void Space::IncrementExternalBackingStoreBytes(ExternalBackingStoreType type,
+                                               size_t amount) {
+  external_backing_store_bytes_[type] += amount;
+  if (mode == ExternalBackingStoreNotificationMode::kNotifyHeap)
+    heap()->IncrementExternalBackingStoreBytes(type, amount);
+}
+
+template <ExternalBackingStoreNotificationMode mode>
+void Space::DecrementExternalBackingStoreBytes(ExternalBackingStoreType type,
+                                               size_t amount) {
+  DCHECK_GE(external_backing_store_bytes_[type], amount);
+  external_backing_store_bytes_[type] -= amount;
+  if (mode == ExternalBackingStoreNotificationMode::kNotifyHeap)
+    heap()->DecrementExternalBackingStoreBytes(type, amount);
+}
+
 // -----------------------------------------------------------------------------
 // SemiSpace
 
@@ -188,6 +205,38 @@ MemoryChunk* MemoryChunk::FromAnyPointerAddress(Heap* heap, Address addr) {
     chunk = MemoryChunk::FromAddress(addr);
   }
   return chunk;
+}
+
+void MemoryChunk::IncrementExternalBackingStoreBytes(
+    ExternalBackingStoreType type, size_t amount) {
+  external_backing_store_bytes_[type] += amount;
+  owner()->IncrementExternalBackingStoreBytes(type, amount);
+}
+
+void MemoryChunk::DecrementExternalBackingStoreBytes(
+    ExternalBackingStoreType type, size_t amount) {
+  DCHECK_GE(external_backing_store_bytes_[type], amount);
+  external_backing_store_bytes_[type] -= amount;
+  owner()->DecrementExternalBackingStoreBytes(type, amount);
+}
+
+void MemoryChunk::MoveExternalBackingStoreBytes(ExternalBackingStoreType type,
+                                                MemoryChunk* from,
+                                                MemoryChunk* to,
+                                                size_t amount) {
+  DCHECK_GE(from->external_backing_store_bytes_[type], amount);
+  from->external_backing_store_bytes_[type] -= amount;
+  to->external_backing_store_bytes_[type] += amount;
+  if (from->owner()->identity() != to->owner()->identity()) {
+    from->owner()
+        ->DecrementExternalBackingStoreBytes<
+            ExternalBackingStoreNotificationMode::kDoNotNotifyHeap>(type,
+                                                                    amount);
+    to->owner()
+        ->IncrementExternalBackingStoreBytes<
+            ExternalBackingStoreNotificationMode::kDoNotNotifyHeap>(type,
+                                                                    amount);
+  }
 }
 
 void Page::MarkNeverAllocateForTesting() {

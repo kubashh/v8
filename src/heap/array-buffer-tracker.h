@@ -66,11 +66,14 @@ class LocalArrayBufferTracker {
  public:
   enum CallbackResult { kKeepEntry, kUpdateEntry, kRemoveEntry };
   enum FreeMode { kFreeDead, kFreeAll };
+  enum ModificationMode { kUpdateCounters, kRaw };
 
   explicit LocalArrayBufferTracker(Page* page) : page_(page) {}
   ~LocalArrayBufferTracker();
 
+  template <ModificationMode mode>
   inline void Add(JSArrayBuffer* buffer, size_t length);
+  template <ModificationMode mode>
   inline void Remove(JSArrayBuffer* buffer, size_t length);
 
   // Frees up array buffers.
