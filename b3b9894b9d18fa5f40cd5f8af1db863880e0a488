@@ -16,6 +16,24 @@
       "revId": "b3b9894b9d18fa5f40cd5f8af1db863880e0a488",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78f4b3ff_ae938419",
+        "filename": "src/base/compiler-specific.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-11T09:55:48Z",
+      "side": 1,
+      "message": "Seems like `-fno-exceptions` does not impact is_nothrow_move_constructible here. What am I missing?\n\n➜  temp cat main.cc\n#include \u003cstdio.h\u003e\n#include \u003ctype_traits\u003e\n\nstruct A { };\nstruct B { B(B\u0026\u0026){} };\nstruct C { C(C\u0026\u0026) noexcept {} };\n\nint main(int argc, char** argv) {\n  printf(\"A: %d\\n\", std::is_nothrow_move_constructible\u003cA\u003e::value);\n  printf(\"B: %d\\n\", std::is_nothrow_move_constructible\u003cB\u003e::value);\n  printf(\"C: %d\\n\", std::is_nothrow_move_constructible\u003cC\u003e::value);\n  return 0;\n}\n\n➜  temp g++ --version\nConfigured with: --prefix\u003d/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir\u003d/usr/include/c++/4.2.1\nApple LLVM version 9.1.0 (clang-902.0.39.2)\nTarget: x86_64-apple-darwin17.7.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n➜  temp g++ -std\u003dc++11 -o test main.cc\n➜  temp ./test\nA: 1\nB: 0\nC: 1\n➜  temp g++ -std\u003dc++11 -fno-exceptions -o test main.cc\n➜  temp ./test\nA: 1\nB: 0\nC: 1",
+      "parentUuid": "6e661e7e_497882d0",
+      "revId": "b3b9894b9d18fa5f40cd5f8af1db863880e0a488",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
