@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cecfefcf_d8c607d2",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-11T09:19:20Z",
+      "side": 1,
+      "message": "nit: Indent on level with character after ( above. Or indent everything after ( and then use 4 spaces.",
+      "range": {
+        "startLine": 223,
+        "startChar": 20,
+        "endLine": 223,
+        "endChar": 35
+      },
+      "revId": "894435f022625437c7203de5e5b58bb7a0e79064",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -272,6 +272,30 @@
     },
     {
       "key": {
+        "uuid": "0c35fa22_72f1e8d3",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-11T09:19:20Z",
+      "side": 1,
+      "message": "nit: Remove first line and then s \u003d ...",
+      "parentUuid": "07e89f97_4cbfb627",
+      "range": {
+        "startLine": 37,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 37
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da04e519_09e53716",
         "filename": "tools/run-clang-tidy.py",
         "patchSetId": 17
@@ -1047,6 +1071,30 @@
       "side": 1,
       "message": "yes, the user is allowed to provide a list of lines, e.g., [4,5],[390,395],[430,430], without the ? the regex would match the first and last [ ] and create one big group instead of 3 separate ones.",
       "parentUuid": "ecfb63ee_ada1e977",
+      "range": {
+        "startLine": 349,
+        "startChar": 47,
+        "endLine": 349,
+        "endChar": 48
+      },
+      "revId": "7d3f4afe940d3e0f62e4b4e9a66d5d8eaed74c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da8d1692_e5d4fed2",
+        "filename": "tools/run-clang-tidy.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-11T09:19:20Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e120010c_e644fdfe",
       "range": {
         "startLine": 349,
         "startChar": 47,
