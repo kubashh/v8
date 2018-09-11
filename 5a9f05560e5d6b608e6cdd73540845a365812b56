@@ -22,6 +22,30 @@
       "revId": "5a9f05560e5d6b608e6cdd73540845a365812b56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09634c55_ec979939",
+        "filename": "BUILD.gn",
+        "patchSetId": 21
+      },
+      "lineNbr": 3288,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-09-11T19:59:31Z",
+      "side": 1,
+      "message": "I\u0027ve submitted https://chromium-review.googlesource.com/c/v8/v8/+/1219326 which does this. Hopefully that solves your problems. If not let me know.",
+      "parentUuid": "4d2fb1e6_a677d31a",
+      "range": {
+        "startLine": 3288,
+        "startChar": 2,
+        "endLine": 3288,
+        "endChar": 12
+      },
+      "revId": "5a9f05560e5d6b608e6cdd73540845a365812b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
