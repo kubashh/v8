@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45132bdb_a6480bf5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1757,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-11T12:33:16Z",
+      "side": 1,
+      "message": "It seems like this deserialization is quite heavy-weight, especially since it requires a Zone for the signature. Can\u0027t we just check the expected signature against the encoded imported signature?",
+      "revId": "924ebdfef872ffa8ba6b59a17751adb2717c8bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
