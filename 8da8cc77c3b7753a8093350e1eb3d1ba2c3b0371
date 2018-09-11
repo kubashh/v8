@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "c70ecd78_236dd2f6",
+        "filename": "src/setup-isolate-deserialize.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-09-11T10:56:05Z",
+      "side": 1,
+      "message": "We could also move this check to Interpreter::InitializeDispatchTable() which is probably more appropriate.",
+      "parentUuid": "be17efdf_1497e4ea",
+      "revId": "8da8cc77c3b7753a8093350e1eb3d1ba2c3b0371",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3b7d32c0_83ee6ee7",
         "filename": "src/snapshot/builtin-snapshot-utils.h",
         "patchSetId": 2
