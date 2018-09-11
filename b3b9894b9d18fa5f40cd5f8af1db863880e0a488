@@ -34,6 +34,24 @@
       "revId": "b3b9894b9d18fa5f40cd5f8af1db863880e0a488",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f1da498_ea9fd6bf",
+        "filename": "src/base/compiler-specific.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-11T10:08:13Z",
+      "side": 1,
+      "message": "Actually, nevermind, misread the output. The example very well proves that no-exceptions does not have an influence as otherwise the output for `B` should be 1.",
+      "parentUuid": "78f4b3ff_ae938419",
+      "revId": "b3b9894b9d18fa5f40cd5f8af1db863880e0a488",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
