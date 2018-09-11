@@ -20,6 +20,7 @@
 #include "unicode/uversion.h"
 
 namespace U_ICU_NAMESPACE {
+class BreakIterator;
 class DecimalFormat;
 class SimpleDateFormat;
 class UnicodeString;
@@ -30,6 +31,41 @@ namespace internal {
 
 template <typename T>
 class Handle;
+
+class DateFormat {
+ public:
+  // Create a formatter for the specificied locale and options. Returns the
+  // resolved settings for the locale / options.
+  static Maybe<icu::SimpleDateFormat*> InitializeDateTimeFormat(
+      Isolate* isolate, Handle<String> locale, Handle<JSObject> options,
+      Handle<JSObject> resolved);
+
+  // Unpacks date format object from corresponding JavaScript object.
+  static icu::SimpleDateFormat* UnpackDateFormat(Handle<JSObject> obj);
+
+  // Release memory we allocated for the DateFormat once the JS object that
+  // holds the pointer gets garbage collected.
+  static void DeleteDateFormat(const v8::WeakCallbackInfo<void>& data);
+
+// Layout description.
+#define DATE_FORMAT_FIELDS(V)        \
+  V(kSimpleDateFormat, kPointerSize) \
+  V(kBoundFormat, kPointerSize)      \
+  V(kSize, 0)
+
+  DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize, DATE_FORMAT_FIELDS)
+#undef DATE_FORMAT_FIELDS
+
+  // TODO(ryzokuken): Remove this and use regular accessors once DateFormat is a
+  // subclass of JSObject
+  //
+  // This needs to be consistent with the above Layout Description
+  static const int kSimpleDateFormatIndex = 0;
+  static const int kBoundFormatIndex = 1;
+
+ private:
+  DateFormat();
+};
 
 class Intl {
  public:
@@ -84,10 +120,29 @@ class Intl {
 
   static std::string DefaultLocale(Isolate* isolate);
 
+  static void DefineWEProperty(Isolate* isolate, Handle<JSReceiver> target,
+                               Handle<Name> key, Handle<Object> value);
+
   // If locale has a script tag then return true and the locale without the
   // script else return false and an empty string
   static bool RemoveLocaleScriptTag(const std::string& icu_locale,
                                     std::string* locale_less_script);
+
+  // Returns the underlying Intl receiver for various methods which
+  // implement ECMA-402 v1 semantics for supporting initializing
+  // existing Intl objects.
+  V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> UnwrapReceiver(
+      Isolate* isolate, Handle<JSReceiver> receiver,
+      Handle<JSFunction> constructor, Intl::Type type,
+      Handle<String> method_name /* TODO(gsathya): Make this char const* */,
+      bool check_legacy_constructor = false);
+
+  struct ResolvedLocale {
+    std::string locale;     // bcp47 locale to use.
+    std::string extension;  // Unicode extension if found.
+    // key value pairs of the unicode extensions
+    std::map<std::string, std::string> extensions;
+  };
 
   // The ResolveLocale abstract operation compares a BCP 47 language
   // priority list requestedLocales against the locales in
@@ -98,14 +153,15 @@ class Intl {
   //
   // #ecma402/sec-partitiondatetimepattern
   //
-  // Returns a JSObject with two properties:
+  // Returns an object with two properties:
   //   (1) locale
   //   (2) extension
-  //
-  // To access either, use JSObject::GetDataProperty.
-  V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> ResolveLocale(
-      Isolate* isolate, const char* service, Handle<Object> requestedLocales,
-      Handle<Object> options);
+  V8_WARN_UNUSED_RESULT static Maybe<ResolvedLocale*> ResolveLocale(
+      Isolate* isolate, const char* service,
+      const std::set<std::string>& available_locales,
+      const std::vector<std::string>& requested_locales,
+      const std::set<std::string>& relevant_extension_keys,
+      Handle<JSReceiver> options);
 
   // This currently calls out to the JavaScript implementation of
   // CanonicalizeLocaleList.
@@ -166,6 +222,10 @@ class Intl {
       Isolate* isolate, Handle<Object> locales,
       bool only_return_one_result = false);
 
+  // TODO(ftang): Remove this and use ICU to the conversion in the future
+  static void ParseExtension(Isolate* isolate, const std::string& extension,
+                             std::map<std::string, std::string>& out);
+
   V8_WARN_UNUSED_RESULT static MaybeHandle<JSObject> CreateNumberFormat(
       Isolate* isolate, Handle<String> locale, Handle<JSObject> options,
       Handle<JSObject> resolved);
@@ -187,6 +247,19 @@ class Intl {
   V8_WARN_UNUSED_RESULT static MaybeHandle<String> NumberToLocaleString(
       Isolate* isolate, Handle<Object> num, Handle<Object> locales,
       Handle<Object> options);
+
+  // ecma402/#sec-defaultnumberoption
+  V8_WARN_UNUSED_RESULT static Maybe<int> DefaultNumberOption(
+      Isolate* isolate, Handle<Object> value, int min, int max, int fallback,
+      Handle<String> property);
+
+  // ecma402/#sec-getnumberoption
+  V8_WARN_UNUSED_RESULT static Maybe<int> GetNumberOption(
+      Isolate* isolate, Handle<JSReceiver> options, Handle<String> property,
+      int min, int max, int fallback);
+  V8_WARN_UNUSED_RESULT static Maybe<int> GetNumberOption(
+      Isolate* isolate, Handle<JSReceiver> options, const char* property,
+      int min, int max, int fallback);
 
   // ecma402/#sec-setnfdigitoptions
   V8_WARN_UNUSED_RESULT static Maybe<bool> SetNumberFormatDigitOptions(
