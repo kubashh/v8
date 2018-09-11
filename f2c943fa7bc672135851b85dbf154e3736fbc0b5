@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9331f070_f6c2ef76",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-09-11T09:45:18Z",
+      "side": 0,
+      "message": "I think it\u0027d be better to move this (up if necessary) than to split the namespace.",
+      "revId": "f2c943fa7bc672135851b85dbf154e3736fbc0b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
