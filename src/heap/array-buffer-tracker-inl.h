@@ -28,7 +28,7 @@ void ArrayBufferTracker::RegisterNew(Heap* heap, JSArrayBuffer* buffer) {
       tracker = page->local_tracker();
     }
     DCHECK_NOT_NULL(tracker);
-    tracker->Add(buffer, length);
+    tracker->Add<LocalArrayBufferTracker::kUpdateCounters>(buffer, length);
   }
 
   // TODO(wez): Remove backing-store from external memory accounting.
@@ -47,7 +47,7 @@ void ArrayBufferTracker::Unregister(Heap* heap, JSArrayBuffer* buffer) {
     base::LockGuard<base::Mutex> guard(page->mutex());
     LocalArrayBufferTracker* tracker = page->local_tracker();
     DCHECK_NOT_NULL(tracker);
-    tracker->Remove(buffer, length);
+    tracker->Remove<LocalArrayBufferTracker::kUpdateCounters>(buffer, length);
   }
 
   // TODO(wez): Remove backing-store from external memory accounting.
@@ -96,9 +96,11 @@ void ArrayBufferTracker::FreeDead(Page* page, MarkingState* marking_state) {
   }
 }
 
+template <LocalArrayBufferTracker::ModificationMode mode>
 void LocalArrayBufferTracker::Add(JSArrayBuffer* buffer, size_t length) {
-  page_->IncrementExternalBackingStoreBytes(
-      ExternalBackingStoreType::kArrayBuffer, length);
+  if (mode == LocalArrayBufferTracker::kUpdateCounters)
+    page_->IncrementExternalBackingStoreBytes(
+        ExternalBackingStoreType::kArrayBuffer, length);
 
   auto ret = array_buffers_.insert(
       {buffer,
@@ -110,9 +112,11 @@ void LocalArrayBufferTracker::Add(JSArrayBuffer* buffer, size_t length) {
   DCHECK(ret.second);
 }
 
+template <LocalArrayBufferTracker::ModificationMode mode>
 void LocalArrayBufferTracker::Remove(JSArrayBuffer* buffer, size_t length) {
-  page_->DecrementExternalBackingStoreBytes(
-      ExternalBackingStoreType::kArrayBuffer, length);
+  if (mode == LocalArrayBufferTracker::kUpdateCounters)
+    page_->DecrementExternalBackingStoreBytes(
+        ExternalBackingStoreType::kArrayBuffer, length);
 
   TrackingData::iterator it = array_buffers_.find(buffer);
   // Check that we indeed find a key to remove.
