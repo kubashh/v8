@@ -22,6 +22,30 @@
       "revId": "57455140fc74df104e5d0d3752ec5ffaeb3ec518",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64fcd2f2_942ca314",
+        "filename": "src/mips64/assembler-mips64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-09-12T11:12:21Z",
+      "side": 1,
+      "message": "We are not sure what to do with them. J instruction is not longer used in V8 because it is a very weird kind of jump that jumps to a absolute address within the same 256MB aligned block as the instruction itself.\n\nIt is not longer used but we might try using it later on, but in that case we would need to make sure all the code is stored in 256MB aligned block. It would be nice (but not necessary) to keep the implementation. What do you suggest that we do?",
+      "parentUuid": "baf46664_dc7e8927",
+      "range": {
+        "startLine": 823,
+        "startChar": 2,
+        "endLine": 823,
+        "endChar": 15
+      },
+      "revId": "57455140fc74df104e5d0d3752ec5ffaeb3ec518",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
