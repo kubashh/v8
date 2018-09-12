@@ -46,6 +46,30 @@
       "revId": "57455140fc74df104e5d0d3752ec5ffaeb3ec518",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e7791e8_8676ad00",
+        "filename": "src/mips64/assembler-mips64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-12T12:24:40Z",
+      "side": 1,
+      "message": "We usually don\u0027t keep dead code around. I\u0027d rather have them an UNREACHABLE() in those implementations with a comment on what is going on. \n\nWe can always dig up the previous implementation later on if needed.",
+      "parentUuid": "64fcd2f2_942ca314",
+      "range": {
+        "startLine": 823,
+        "startChar": 2,
+        "endLine": 823,
+        "endChar": 15
+      },
+      "revId": "57455140fc74df104e5d0d3752ec5ffaeb3ec518",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
