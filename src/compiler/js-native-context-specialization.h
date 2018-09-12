@@ -58,6 +58,11 @@ class JSNativeContextSpecialization final : public AdvancedReducer {
 
   Reduction Reduce(Node* node) final;
 
+  // Utility for folding string constant concatenation.
+  // Supports JSAdd nodes and nodes typed as string or number.
+  // Public for the sake of unit testing.
+  static size_t GetMaxStringLength(Node* node);
+
  private:
   Reduction ReduceJSAdd(Node* node);
   Reduction ReduceJSGetSuperConstructor(Node* node);

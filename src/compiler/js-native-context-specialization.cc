@@ -11,12 +11,14 @@
 #include "src/compiler/access-info.h"
 #include "src/compiler/allocation-builder.h"
 #include "src/compiler/compilation-dependencies.h"
+#include "src/compiler/delayed-operator.h"
 #include "src/compiler/js-graph.h"
 #include "src/compiler/js-operator.h"
 #include "src/compiler/linkage.h"
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/property-access-builder.h"
 #include "src/compiler/type-cache.h"
+#include "src/dtoa.h"
 #include "src/feedback-vector.h"
 #include "src/field-index-inl.h"
 #include "src/isolate-inl.h"
@@ -121,6 +123,30 @@ Reduction JSNativeContextSpecialization::Reduce(Node* node) {
   return NoChange();
 }
 
+// static
+size_t JSNativeContextSpecialization::GetMaxStringLength(Node* node) {
+  if (node->opcode() == IrOpcode::kJSAdd) {
+    Node* const lhs = node->InputAt(0);
+    Node* const rhs = node->InputAt(1);
+    return GetMaxStringLength(lhs) + GetMaxStringLength(rhs);
+  }
+
+  HeapObjectMatcher matcher(node);
+  if (matcher.HasValue() && matcher.Value()->IsString()) {
+    Handle<String> input = Handle<String>::cast(matcher.Value());
+    return input->length();
+  }
+
+  NumberMatcher number_matcher(node);
+  if (number_matcher.HasValue()) {
+    return kBase10MaximalLength + 1;
+  }
+
+  // We don't support objects with possibly monkey-patched prototype.toString
+  // as it might have side-effects, so we shouldn't attempt lowering them.
+  UNREACHABLE();
+}
+
 Reduction JSNativeContextSpecialization::ReduceJSToString(Node* node) {
   DCHECK_EQ(IrOpcode::kJSToString, node->opcode());
   Node* const input = node->InputAt(0);
@@ -139,8 +165,8 @@ Reduction JSNativeContextSpecialization::ReduceJSToString(Node* node) {
   // regressions and the stronger optimization should be re-implemented.
   NumberMatcher number_matcher(input);
   if (number_matcher.HasValue()) {
-    reduction = Replace(jsgraph()->HeapConstant(factory()->NumberToString(
-        factory()->NewNumber(number_matcher.Value()))));
+    reduction = Replace(graph()->NewNode(
+        javascript()->DelayedStringConstant(number_matcher.Value())));
     ReplaceWithValue(node, reduction.replacement());
     return reduction;
   }
@@ -155,18 +181,29 @@ Reduction JSNativeContextSpecialization::ReduceJSAdd(Node* node) {
   // nevertheless find a better home for this at some point.
   DCHECK_EQ(IrOpcode::kJSAdd, node->opcode());
 
+  // TODO(mslekova): cases to cover:
+  // ✓ JSAdd(string, string)
+  // JSAdd(number, string), JSAdd(string, number)
+  // JSAdd(JSAdd, string), JSAdd(string, JSAdd)
+
   // Constant-fold string concatenation.
   HeapObjectBinopMatcher m(node);
   if (m.left().HasValue() && m.left().Value()->IsString() &&
       m.right().HasValue() && m.right().Value()->IsString()) {
-    Handle<String> left = Handle<String>::cast(m.left().Value());
-    Handle<String> right = Handle<String>::cast(m.right().Value());
-    if (left->length() + right->length() <= String::kMaxLength) {
-      Handle<String> result =
-          factory()->NewConsString(left, right).ToHandleChecked();
-      Node* value = jsgraph()->HeapConstant(result);
-      ReplaceWithValue(node, value);
-      return Replace(value);
+    // TODO(mslekova): Possibly specialize this function for inputs with
+    // type that is already known (i.e. string, string)
+    size_t max_length = GetMaxStringLength(node);
+    if (max_length <= String::kMaxLength) {
+      Node* left = graph()->NewNode(javascript()->DelayedStringConstant(
+          Handle<String>::cast(m.left().Value())));
+      Node* right = graph()->NewNode(javascript()->DelayedStringConstant(
+          Handle<String>::cast(m.right().Value())));
+      Node* reduced = graph()->NewNode(javascript()->DelayedStringConstant(
+          static_cast<const StringConstantBase*>(&StringLiteralOf(left->op())),
+          static_cast<const StringConstantBase*>(
+              &StringLiteralOf(right->op()))));
+      ReplaceWithValue(node, reduced);
+      return Replace(reduced);
     }
   }
   return NoChange();
