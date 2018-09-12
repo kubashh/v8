@@ -1822,6 +1822,8 @@ void Assembler::j(int64_t target) {
   BlockTrampolinePoolScope block_trampoline_pool(this);
   GenInstrJump(J, static_cast<uint32_t>(target >> 2) & kImm26Mask);
   BlockTrampolinePoolFor(1);  // For associated delay slot.
+  // Deprecated. Use PC-relative jumps instead.
+  UNREACHABLE();
 }
 
 
@@ -1835,6 +1837,8 @@ void Assembler::j(Label* target) {
   } else {
     j(imm);
   }
+  // Deprecated. Use PC-relative jumps instead.
+  UNREACHABLE();
 }
 
 
@@ -1848,6 +1852,16 @@ void Assembler::jal(Label* target) {
   } else {
     jal(imm);
   }
+  // Deprecated. Use PC-relative jumps instead.
+  UNREACHABLE();
+}
+
+void Assembler::jal(int64_t target) {
+  BlockTrampolinePoolScope block_trampoline_pool(this);
+  GenInstrJump(JAL, static_cast<uint32_t>(target >> 2) & kImm26Mask);
+  BlockTrampolinePoolFor(1);  // For associated delay slot.
+  // Deprecated. Use PC-relative jumps instead.
+  UNREACHABLE();
 }
 
 
@@ -1859,13 +1873,6 @@ void Assembler::jr(Register rs) {
   } else {
     jalr(rs, zero_reg);
   }
-}
-
-
-void Assembler::jal(int64_t target) {
-  BlockTrampolinePoolScope block_trampoline_pool(this);
-  GenInstrJump(JAL, static_cast<uint32_t>(target >> 2) & kImm26Mask);
-  BlockTrampolinePoolFor(1);  // For associated delay slot.
 }
 
 
