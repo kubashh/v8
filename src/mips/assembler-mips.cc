@@ -186,7 +186,8 @@ Register ToRegister(int num) {
 
 const int RelocInfo::kApplyMask =
     RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE) |
-    RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE_ENCODED);
+    RelocInfo::ModeMask(RelocInfo::INTERNAL_REFERENCE_ENCODED) |
+    RelocInfo::ModeMask(RelocInfo::RELATIVE_CODE_TARGET);
 
 bool RelocInfo::IsCodedSpecially() {
   // The deserializer needs to know whether a pointer is specially coded.  Being
@@ -3787,6 +3788,35 @@ int Assembler::RelocateInternalReference(RelocInfo::Mode rmode, Address pc,
   }
 }
 
+int Assembler::RelocateRelativeReference(RelocInfo::Mode rmode, Address pc,
+                                         intptr_t pc_delta) {
+  Instr instr = instr_at(pc);
+
+  DCHECK(RelocInfo::IsRelativeCodeTarget(rmode));
+  if (IsLui(instr)) {
+    Instr instr1 = instr_at(pc + 0 * kInstrSize);
+    Instr instr2 = instr_at(pc + 1 * kInstrSize);
+    DCHECK(IsOri(instr2));
+    int32_t imm;
+    imm = (instr1 & static_cast<int32_t>(kImm16Mask)) << kLuiShift;
+    imm |= (instr2 & static_cast<int32_t>(kImm16Mask));
+    printf("pc_delta is %d and imm is %d\n", pc_delta, imm);
+
+    if (imm == kEndOfJumpChain) {
+      return 0;  // Number of instructions patched.
+    }
+    imm += pc_delta;
+    DCHECK_EQ(imm & 3, 0);
+    instr1 &= ~kImm16Mask;
+    instr2 &= ~kImm16Mask;
+    instr_at_put(pc + 0 * kInstrSize,
+                 instr1 | ((imm >> kLuiShift) & kImm16Mask));
+    instr_at_put(pc + 1 * kInstrSize, instr2 | (imm & kImm16Mask));
+    return 2;  // Number of instructions patched.
+  } else {
+    UNREACHABLE();
+  }
+}
 
 void Assembler::GrowBuffer() {
   if (!own_buffer_) FATAL("external code buffer is too small");
@@ -3969,9 +3999,14 @@ Address Assembler::target_address_at(Address pc) {
   // lui/jic, aui/jic or lui/jialc.
   if (IsLui(instr1)) {
     if (IsOri(instr2)) {
+      Address target_address;
       // Assemble the 32 bit value.
-      return static_cast<Address>((GetImmediate16(instr1) << kLuiShift) |
-                                  GetImmediate16(instr2));
+      target_address = static_cast<Address>(
+          (GetImmediate16(instr1) << kLuiShift) | GetImmediate16(instr2));
+      if (IsNal(instr_at(pc + 2 * kInstrSize))) {
+        target_address += pc + kRelativeJumpForBuiltinsOffset;
+      }
+      return target_address;
     } else if (IsJicOrJialc(instr2)) {
       // Assemble the 32 bit value.
       return static_cast<Address>(CreateTargetAddress(instr1, instr2));
@@ -4025,6 +4060,10 @@ void Assembler::set_target_value_at(Address pc, uint32_t target,
     *(p + 1) |= jic_offset;
 
   } else {
+    // If we are using relative calls/jumps for builtins.
+    if (IsNal(instr_at(pc + 2 * kInstrSize))) {
+      target -= pc + kRelativeJumpForBuiltinsOffset;
+    }
     // Must use 2 instructions to insure patchable code => just use lui and ori.
     // lui rt, upper-16.
     // ori rt rt, lower-16.
