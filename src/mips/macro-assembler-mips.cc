@@ -3770,23 +3770,48 @@ void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
   DCHECK(RelocInfo::IsCodeTarget(rmode));
   BlockTrampolinePoolScope block_trampoline_pool(this);
   if (FLAG_embedded_builtins) {
-    if (root_array_available_ && options().isolate_independent_code) {
+    int builtin_index = Builtins::kNoBuiltinId;
+    bool target_is_isolate_independent_builtin =
+        isolate()->builtins()->IsBuiltinHandle(code, &builtin_index) &&
+        Builtins::IsIsolateIndependent(builtin_index);
+    if (target_is_isolate_independent_builtin &&
+        options().use_pc_relative_calls_and_jumps) {
+      int32_t code_target_index = AddCodeTarget(code);
+      Label skip;
+      if (IsMipsArchVariant(kMips32r6)) {
+        bc(code_target_index, RelocInfo::RELATIVE_CODE_TARGET);
+      } else {
+        BlockTrampolinePoolScope block_trampoline_pool(this);
+        if (cond != cc_always) {
+          Branch(USE_DELAY_SLOT, &skip, NegateCondition(cond), rs, rt);
+        }
+        or_(t8, ra, zero_reg);
+        li(t9, Operand(code_target_index * kInstrSize,
+                       RelocInfo::RELATIVE_CODE_TARGET));
+        nal();  // Read pc to ra.
+        addu(t9, ra, t9);
+        // If this DCHECK fails then kRelativeJumpForBuiltinsOffset should be
+        // changed.
+        DCHECK_EQ(bd, PROTECT);
+        jr(t9);
+        or_(ra, t8, zero_reg);
+        bind(&skip);
+      }
+      return;
+    } else if (root_array_available_ && options().isolate_independent_code) {
       IndirectLoadConstant(t9, code);
       Jump(t9, Code::kHeaderSize - kHeapObjectTag, cond, rs, rt, bd);
       return;
-    } else if (options().inline_offheap_trampolines) {
-      int builtin_index = Builtins::kNoBuiltinId;
-      if (isolate()->builtins()->IsBuiltinHandle(code, &builtin_index) &&
-          Builtins::IsIsolateIndependent(builtin_index)) {
-        // Inline the trampoline.
-        RecordCommentForOffHeapTrampoline(builtin_index);
-        CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
-        EmbeddedData d = EmbeddedData::FromBlob();
-        Address entry = d.InstructionStartOfBuiltin(builtin_index);
-        li(t9, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
-        Jump(t9, 0, cond, rs, rt, bd);
-        return;
-      }
+    } else if (target_is_isolate_independent_builtin &&
+               options().inline_offheap_trampolines) {
+      // Inline the trampoline.
+      RecordCommentForOffHeapTrampoline(builtin_index);
+      CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
+      EmbeddedData d = EmbeddedData::FromBlob();
+      Address entry = d.InstructionStartOfBuiltin(builtin_index);
+      li(t9, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
+      Jump(t9, 0, cond, rs, rt, bd);
+      return;
     }
   }
   Jump(static_cast<intptr_t>(code.address()), rmode, cond, rs, rt, bd);
@@ -3877,23 +3902,44 @@ void TurboAssembler::Call(Handle<Code> code, RelocInfo::Mode rmode,
                           BranchDelaySlot bd) {
   BlockTrampolinePoolScope block_trampoline_pool(this);
   if (FLAG_embedded_builtins) {
-    if (root_array_available_ && options().isolate_independent_code) {
+    int builtin_index = Builtins::kNoBuiltinId;
+    bool target_is_isolate_independent_builtin =
+        isolate()->builtins()->IsBuiltinHandle(code, &builtin_index) &&
+        Builtins::IsIsolateIndependent(builtin_index);
+    if (target_is_isolate_independent_builtin &&
+        options().use_pc_relative_calls_and_jumps) {
+      int32_t code_target_index = AddCodeTarget(code);
+      Label skip;
+      if (IsMipsArchVariant(kMips32r6)) {
+        balc(code_target_index, RelocInfo::RELATIVE_CODE_TARGET);
+      } else {
+        BlockTrampolinePoolScope block_trampoline_pool(this);
+        if (cond != cc_always) {
+          Branch(PROTECT, &skip, NegateCondition(cond), rs, rt);
+        }
+        li(t8, Operand(code_target_index * kInstrSize,
+                       RelocInfo::RELATIVE_CODE_TARGET));
+        nal();
+        addu(t8, ra, t8);
+        jalr(t8);
+        bind(&skip);
+        if (bd == PROTECT) nop();
+      }
+      return;
+    } else if (root_array_available_ && options().isolate_independent_code) {
       IndirectLoadConstant(t9, code);
       Call(t9, Code::kHeaderSize - kHeapObjectTag, cond, rs, rt, bd);
       return;
-    } else if (options().inline_offheap_trampolines) {
-      int builtin_index = Builtins::kNoBuiltinId;
-      if (isolate()->builtins()->IsBuiltinHandle(code, &builtin_index) &&
-          Builtins::IsIsolateIndependent(builtin_index)) {
-        // Inline the trampoline.
-        RecordCommentForOffHeapTrampoline(builtin_index);
-        CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
-        EmbeddedData d = EmbeddedData::FromBlob();
-        Address entry = d.InstructionStartOfBuiltin(builtin_index);
-        li(t9, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
-        Call(t9, 0, cond, rs, rt, bd);
-        return;
-      }
+    } else if (target_is_isolate_independent_builtin &&
+               options().inline_offheap_trampolines) {
+      // Inline the trampoline.
+      RecordCommentForOffHeapTrampoline(builtin_index);
+      CHECK_NE(builtin_index, Builtins::kNoBuiltinId);
+      EmbeddedData d = EmbeddedData::FromBlob();
+      Address entry = d.InstructionStartOfBuiltin(builtin_index);
+      li(t9, Operand(entry, RelocInfo::OFF_HEAP_TARGET));
+      Call(t9, 0, cond, rs, rt, bd);
+      return;
     }
   }
   DCHECK(RelocInfo::IsCodeTarget(rmode));

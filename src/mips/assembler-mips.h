@@ -615,11 +615,13 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   // branches
   static constexpr int kLongBranchPCOffset = 3 * kInstrSize;
 
-  // Adjust ra register in branch delay slot of bal instruction so to skip
+  // Adjust ra register in branch delay slot of bal instruction in order to skip
   // instructions not needed after optimization of PIC in
   // TurboAssembler::BranchAndLink method.
-
   static constexpr int kOptimizedBranchAndLinkLongReturnOffset = 4 * kInstrSize;
+
+  // Offset of target relative address in calls/jumps for builtins.
+  static constexpr int kRelativeJumpForBuiltinsOffset = 4 * kInstrSize;
 
   // Here we are patching the address in the LUI/ORI instruction pair.
   // These values are used in the serialization process and must be zero for
@@ -643,10 +645,6 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 #else
   static constexpr int kCallTargetAddressOffset = 4 * kInstrSize;
 #endif
-
-  // Difference between address of current opcode and value read from pc
-  // register.
-  static constexpr int kPcLoadDelta = 4;
 
   // Max offset for instructions with 16-bit offset field
   static constexpr int kMaxBranchOffset = (1 << (18 - 1)) - 1;
@@ -1731,6 +1729,9 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   static int RelocateInternalReference(RelocInfo::Mode rmode, Address pc,
                                        intptr_t pc_delta);
 
+  static int RelocateRelativeReference(RelocInfo::Mode rmode, Address pc,
+                                       intptr_t pc_delta);
+
   // Writes a single byte or word of data in the code stream.  Used for
   // inline tables, e.g., jump-tables.
   void db(uint8_t data);
@@ -1845,6 +1846,10 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
   static bool IsCompactBranchSupported() {
     return IsMipsArchVariant(kMips32r6);
   }
+
+  // Get the code target object for a pc-relative call or jump.
+  V8_INLINE Handle<Code> relative_code_target_object_handle_at(
+      Address pc_) const;
 
   inline int UnboundLabelsCount() { return unbound_labels_count_; }
 
