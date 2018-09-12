@@ -163,6 +163,7 @@ class BytecodeGraphBuilder {
   Node* BuildLoadGlobal(Handle<Name> name, uint32_t feedback_slot_index,
                         TypeofMode typeof_mode);
 
+  void BuildSoftDeopt();
   enum class StoreMode {
     // Check the prototype chain before storing.
     kNormal,

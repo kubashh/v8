@@ -2862,13 +2862,7 @@ void BytecodeGenerator::BuildLoadNamedProperty(Property* property,
                                                Register object,
                                                const AstRawString* name) {
   if (ShouldOptimizeAsOneShot()) {
-    RegisterList args = register_allocator()->NewRegisterList(2);
-    size_t name_index = builder()->GetConstantPoolEntry(name);
-    builder()
-        ->MoveRegister(object, args[0])
-        .LoadConstantPoolEntry(name_index)
-        .StoreAccumulatorInRegister(args[1])
-        .CallRuntime(Runtime::kInlineGetProperty, args);
+    builder()->LoadNamedPropertyNoFeedback(object, name);
   } else {
     FeedbackSlot slot = GetCachedLoadICSlot(property->obj(), name);
     builder()->LoadNamedProperty(object, name, feedback_index(slot));
@@ -2885,16 +2879,7 @@ void BytecodeGenerator::BuildStoreNamedProperty(Property* property,
   }
 
   if (ShouldOptimizeAsOneShot()) {
-    RegisterList args = register_allocator()->NewRegisterList(4);
-    size_t name_index = builder()->GetConstantPoolEntry(name);
-    builder()
-        ->MoveRegister(object, args[0])
-        .StoreAccumulatorInRegister(args[2])
-        .LoadConstantPoolEntry(name_index)
-        .StoreAccumulatorInRegister(args[1])
-        .LoadLiteral(Smi::FromEnum(language_mode()))
-        .StoreAccumulatorInRegister(args[3])
-        .CallRuntime(Runtime::kSetNamedProperty, args);
+    builder()->StoreNamedPropertyNoFeedback(object, name, language_mode());
   } else {
     FeedbackSlot slot = GetCachedStoreICSlot(property->obj(), name);
     builder()->StoreNamedProperty(object, name, feedback_index(slot),
@@ -3594,6 +3579,8 @@ void BytecodeGenerator::VisitCall(Call* expr) {
   // exactly one spread, and it is the last argument.
   bool is_spread_call = expr->only_last_arg_is_spread();
 
+  bool optimize_as_one_shot = ShouldOptimizeAsOneShot();
+
   // TODO(petermarshall): We have a lot of call bytecodes that are very similar,
   // see if we can reduce the number by adding a separate argument which
   // specifies the call type (e.g., property, spread, tailcall, etc.).
@@ -3617,7 +3604,7 @@ void BytecodeGenerator::VisitCall(Call* expr) {
     }
     case Call::GLOBAL_CALL: {
       // Receiver is undefined for global calls.
-      if (!is_spread_call) {
+      if (!is_spread_call && !optimize_as_one_shot) {
         implicit_undefined_receiver = true;
       } else {
         // TODO(leszeks): There's no special bytecode for tail calls or spread
@@ -3653,7 +3640,7 @@ void BytecodeGenerator::VisitCall(Call* expr) {
     }
     case Call::OTHER_CALL: {
       // Receiver is undefined for other calls.
-      if (!is_spread_call) {
+      if (!is_spread_call && !optimize_as_one_shot) {
         implicit_undefined_receiver = true;
       } else {
         // TODO(leszeks): There's no special bytecode for tail calls or spread
@@ -3717,19 +3704,24 @@ void BytecodeGenerator::VisitCall(Call* expr) {
 
   builder()->SetExpressionPosition(expr);
 
-  int feedback_slot_index = feedback_index(feedback_spec()->AddCallICSlot());
-
   if (is_spread_call) {
+    int feedback_slot_index = feedback_index(feedback_spec()->AddCallICSlot());
     DCHECK(!implicit_undefined_receiver);
     builder()->CallWithSpread(callee, args, feedback_slot_index);
+  } else if (optimize_as_one_shot) {
+    DCHECK(!implicit_undefined_receiver);
+    builder()->CallNoFeedback(callee, args);
   } else if (call_type == Call::NAMED_PROPERTY_CALL ||
              call_type == Call::KEYED_PROPERTY_CALL ||
              call_type == Call::RESOLVED_PROPERTY_CALL) {
     DCHECK(!implicit_undefined_receiver);
+    int feedback_slot_index = feedback_index(feedback_spec()->AddCallICSlot());
     builder()->CallProperty(callee, args, feedback_slot_index);
   } else if (implicit_undefined_receiver) {
+    int feedback_slot_index = feedback_index(feedback_spec()->AddCallICSlot());
     builder()->CallUndefinedReceiver(callee, args, feedback_slot_index);
   } else {
+    int feedback_slot_index = feedback_index(feedback_spec()->AddCallICSlot());
     builder()->CallAnyReceiver(callee, args, feedback_slot_index);
   }
 }

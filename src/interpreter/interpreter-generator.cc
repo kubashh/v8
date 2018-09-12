@@ -518,6 +518,18 @@ IGNITION_HANDLER(LdaNamedProperty, InterpreterAssembler) {
   }
 }
 
+// LdaPropertyNofeedback <object> <slot>
+//
+// Calls the GetProperty builtin  for <object> and the key in the accumulator.
+IGNITION_HANDLER(LdaNamedPropertyNoFeedback, InterpreterAssembler) {
+  Node* object = LoadRegisterAtOperandIndex(0);
+  Node* name = LoadConstantPoolEntryAtOperandIndex(1);
+  Node* context = GetContext();
+  Node* result = CallBuiltin(Builtins::kGetProperty, context, object, name);
+  SetAccumulator(result);
+  Dispatch();
+}
+
 // KeyedLoadIC <object> <slot>
 //
 // Calls the KeyedLoadIC at FeedBackVector slot <slot> for <object> and the key
@@ -581,6 +593,24 @@ IGNITION_HANDLER(StaNamedProperty, InterpreterStoreNamedPropertyAssembler) {
 IGNITION_HANDLER(StaNamedOwnProperty, InterpreterStoreNamedPropertyAssembler) {
   Callable ic = CodeFactory::StoreOwnICInOptimizedCode(isolate());
   StaNamedProperty(ic);
+}
+
+// StaNamedPropertyNoFeedback <object> <name_index>
+//
+// Calls the SetPropertyBuiltin for <object> and the name in constant pool entry
+// <name_index> with the value in the accumulator.
+IGNITION_HANDLER(StaNamedPropertyNoFeedback,
+                 InterpreterStoreNamedPropertyAssembler) {
+  Node* object = LoadRegisterAtOperandIndex(0);
+  Node* name = LoadConstantPoolEntryAtOperandIndex(1);
+  Node* value = GetAccumulator();
+  Node* language_mode = SmiFromInt32(BytecodeOperandFlag(2));
+  Node* context = GetContext();
+
+  Node* result = CallRuntime(Runtime::kSetNamedProperty, context, object, name,
+                             value, language_mode);
+  SetAccumulator(result);
+  Dispatch();
 }
 
 // StaKeyedProperty <object> <key> <slot>
@@ -1502,6 +1532,16 @@ class InterpreterJSCallAssembler : public InterpreterAssembler {
     CallJSAndDispatch(function, context, args, receiver_mode);
   }
 
+  // Generates code to perform a JS call without collecting feedback.
+  void JSCallNoFeedback(ConvertReceiverMode receiver_mode) {
+    Node* function = LoadRegisterAtOperandIndex(0);
+    RegListNodePair args = GetRegisterListAtOperandIndex(1);
+    Node* context = GetContext();
+
+    // Call the function and dispatch to the next handler.
+    CallJSAndDispatch(function, context, args, receiver_mode);
+  }
+
   // Generates code to perform a JS call with a known number of arguments that
   // collects type feedback.
   void JSCallN(int arg_count, ConvertReceiverMode receiver_mode) {
@@ -1589,6 +1629,10 @@ IGNITION_HANDLER(CallUndefinedReceiver1, InterpreterJSCallAssembler) {
 
 IGNITION_HANDLER(CallUndefinedReceiver2, InterpreterJSCallAssembler) {
   JSCallN(2, ConvertReceiverMode::kNullOrUndefined);
+}
+
+IGNITION_HANDLER(CallNoFeedback, InterpreterJSCallAssembler) {
+  JSCallNoFeedback(ConvertReceiverMode::kAny);
 }
 
 // CallRuntime <function_id> <first_arg> <arg_count>

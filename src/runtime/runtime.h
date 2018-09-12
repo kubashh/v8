@@ -199,16 +199,16 @@ namespace internal {
   F(GeneratorGetResumeMode, 1, 1)
 
 #ifdef V8_INTL_SUPPORT
-#define FOR_EACH_INTRINSIC_INTL(F)           \
-  F(AvailableLocalesOf, 1, 1)                \
-  F(CanonicalizeLanguageTag, 1, 1)           \
-  F(DateCacheVersion, 0, 1)                  \
-  F(DateTimeFormatResolvedOptions, 1, 1)     \
-  F(FormatList, 2, 1)                        \
-  F(FormatListToParts, 2, 1)                 \
-  F(GetDefaultICULocale, 0, 1)               \
-  F(PluralRulesSelect, 2, 1)                 \
-  F(StringToLowerCaseIntl, 1, 1)             \
+#define FOR_EACH_INTRINSIC_INTL(F)       \
+  F(AvailableLocalesOf, 1, 1)            \
+  F(CanonicalizeLanguageTag, 1, 1)       \
+  F(DateCacheVersion, 0, 1)              \
+  F(DateTimeFormatResolvedOptions, 1, 1) \
+  F(FormatList, 2, 1)                    \
+  F(FormatListToParts, 2, 1)             \
+  F(GetDefaultICULocale, 0, 1)           \
+  F(PluralRulesSelect, 2, 1)             \
+  F(StringToLowerCaseIntl, 1, 1)         \
   F(StringToUpperCaseIntl, 1, 1)  // End of macro.
 #else
 #define FOR_EACH_INTRINSIC_INTL(F)
