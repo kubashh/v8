@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e49e4b15_5b058a40",
+        "filename": "src/mips64/assembler-mips64.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1822,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-12T15:26:50Z",
+      "side": 1,
+      "message": "Consider also removing this code as it is completely untested. If it is revived then people likely think that they can just use it as is but it might be outdated (?)",
+      "range": {
+        "startLine": 1822,
+        "startChar": 2,
+        "endLine": 1822,
+        "endChar": 26
+      },
+      "revId": "4a009bf763d81574190ee9bbb24d984acaeeb329",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
