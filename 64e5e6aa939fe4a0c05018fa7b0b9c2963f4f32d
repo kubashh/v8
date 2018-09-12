@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7b869fda_5ee95278",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-12T15:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18cea837_667a6871",
+      "range": {
+        "startLine": 10,
+        "startChar": 14,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "64e5e6aa939fe4a0c05018fa7b0b9c2963f4f32d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5bc8bc1_9ad9091d",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "64e5e6aa939fe4a0c05018fa7b0b9c2963f4f32d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce3ca45b_59a19c73",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-12T15:48:38Z",
+      "side": 1,
+      "message": "After a lot of offline discussion and back and forth: We did not come up with a better solution, so I will leave it as it is for now.",
+      "parentUuid": "a5bc8bc1_9ad9091d",
+      "range": {
+        "startLine": 269,
+        "startChar": 26,
+        "endLine": 269,
+        "endChar": 59
+      },
+      "revId": "64e5e6aa939fe4a0c05018fa7b0b9c2963f4f32d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
