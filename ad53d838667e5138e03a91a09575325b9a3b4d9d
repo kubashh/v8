@@ -94,6 +94,30 @@
       "revId": "ad53d838667e5138e03a91a09575325b9a3b4d9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb43ce0b_3d53c0e5",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-12T22:52:44Z",
+      "side": 1,
+      "message": "Ok, I think this is fine for now. Can you remove this extensions if it\u0027s just going to be empty? Also remove all the js code that\u0027s no longer required.",
+      "parentUuid": "9153df78_486eda65",
+      "range": {
+        "startLine": 324,
+        "startChar": 65,
+        "endLine": 324,
+        "endChar": 74
+      },
+      "revId": "ad53d838667e5138e03a91a09575325b9a3b4d9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
