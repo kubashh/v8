@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baf46664_dc7e8927",
+        "filename": "src/mips64/assembler-mips64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-12T10:45:10Z",
+      "side": 1,
+      "message": "We usually only use those macros on API (v8.h) level to allow embedders to adjust. Here we can remove them immediately if they are unused.",
+      "range": {
+        "startLine": 823,
+        "startChar": 2,
+        "endLine": 823,
+        "endChar": 15
+      },
+      "revId": "57455140fc74df104e5d0d3752ec5ffaeb3ec518",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
