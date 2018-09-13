@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d716f97_a4dec0a5",
+        "filename": "src/mips/assembler-mips-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-09-13T10:52:01Z",
+      "side": 1,
+      "message": "remove printf",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e22da53a_770cf964",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3803,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-09-13T10:52:01Z",
+      "side": 1,
+      "message": "remove printf",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
