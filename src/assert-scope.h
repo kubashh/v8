@@ -77,7 +77,7 @@ class PerThreadAssertScopeDebugOnly : public
 #else
 class PerThreadAssertScopeDebugOnly {
  public:
-  PerThreadAssertScopeDebugOnly() { }
+  PerThreadAssertScopeDebugOnly(){};
   void Release() {}
 #endif
 };

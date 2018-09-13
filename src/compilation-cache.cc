@@ -34,7 +34,7 @@ CompilationCache::CompilationCache(Isolate* isolate)
   }
 }
 
-CompilationCache::~CompilationCache() {}
+CompilationCache::~CompilationCache() = default;
 
 Handle<CompilationCacheTable> CompilationSubCache::GetTable(int generation) {
   DCHECK(generation < generations_);

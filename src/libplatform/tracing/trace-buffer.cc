@@ -15,7 +15,7 @@ TraceBufferRingBuffer::TraceBufferRingBuffer(size_t max_chunks,
   chunks_.resize(max_chunks);
 }
 
-TraceBufferRingBuffer::~TraceBufferRingBuffer() {}
+TraceBufferRingBuffer::~TraceBufferRingBuffer() = default;
 
 TraceObject* TraceBufferRingBuffer::AddTraceEvent(uint64_t* handle) {
   base::LockGuard<base::Mutex> guard(&mutex_);

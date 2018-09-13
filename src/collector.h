@@ -184,7 +184,7 @@ class SequenceCollector : public Collector<T, growth_factor, max_growth> {
       : Collector<T, growth_factor, max_growth>(initial_capacity),
         sequence_start_(kNoSequence) {}
 
-  virtual ~SequenceCollector() {}
+  virtual ~SequenceCollector() = default;
 
   void StartSequence() {
     DCHECK_EQ(sequence_start_, kNoSequence);

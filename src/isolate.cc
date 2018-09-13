@@ -2260,7 +2260,7 @@ char* Isolate::RestoreThread(char* from) {
 
 Isolate::ThreadDataTable::ThreadDataTable() : table_() {}
 
-Isolate::ThreadDataTable::~ThreadDataTable() {}
+Isolate::ThreadDataTable::~ThreadDataTable() = default;
 
 void Isolate::ReleaseSharedPtrs() {
   while (managed_ptr_destructors_head_) {
