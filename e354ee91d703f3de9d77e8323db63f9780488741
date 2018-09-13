@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26156cdf_00ef206a",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-13T19:58:52Z",
+      "side": 1,
+      "message": "This assertion can never fail given the if\u0027s above.",
+      "range": {
+        "startLine": 2285,
+        "startChar": 0,
+        "endLine": 2285,
+        "endChar": 61
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9059b85_033fee5b",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2344,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-13T19:58:52Z",
+      "side": 1,
+      "message": "Be consistent with DCHECKs; line 421 you don\u0027t DCHECK this. The assertion in DEFINE that node is non-null will catch this before dereferencing, so I\u0027d be OK with leaving the DCHECKs out in this file.",
+      "range": {
+        "startLine": 2344,
+        "startChar": 0,
+        "endLine": 2344,
+        "endChar": 35
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2edecd5_cad8997b",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2357,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-13T19:58:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2357,
+        "startChar": 0,
+        "endLine": 2357,
+        "endChar": 61
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a609eac_9a3fa066",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-13T19:58:52Z",
+      "side": 1,
+      "message": "My advice here would be to DCHECK eax/edx as you do below. Otherwise it could be difficult to track down if someone changes instruction selection and breaks this.",
+      "range": {
+        "startLine": 434,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 0
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a653adfd_0c07ba6f",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3687,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-13T19:58:52Z",
+      "side": 1,
+      "message": "You could \"optimize\" the DCHECKs by always checking eax, and only checking edx in the 2 output case.",
+      "range": {
+        "startLine": 3687,
+        "startChar": 0,
+        "endLine": 3687,
+        "endChar": 44
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fbeb2ac_5324ac9f",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3785,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-13T19:58:52Z",
+      "side": 1,
+      "message": "DCHECK these",
+      "range": {
+        "startLine": 3783,
+        "startChar": 0,
+        "endLine": 3785,
+        "endChar": 0
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8c7b1fe_0e2f0a53",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-13T19:58:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1369,
+        "startChar": 0,
+        "endLine": 1369,
+        "endChar": 61
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9b3f60f_d5907a4b",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-13T19:58:52Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1781,
+        "startChar": 0,
+        "endLine": 1781,
+        "endChar": 61
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16552c93_1d489fe8",
+        "filename": "test/cctest/wasm/test-run-wasm-atomics64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-13T19:58:52Z",
+      "side": 1,
+      "message": "Perhaps add a comment here explaining what these tests are for? Is this to hit the case where a projection is optimized away?",
+      "range": {
+        "startLine": 357,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 66
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
