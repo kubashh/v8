@@ -22,9 +22,7 @@ namespace internal {
 
 OFStreamBase::OFStreamBase(FILE* f) : f_(f) {}
 
-
-OFStreamBase::~OFStreamBase() {}
-
+OFStreamBase::~OFStreamBase() = default;
 
 int OFStreamBase::sync() {
   std::fflush(f_);
@@ -47,8 +45,7 @@ OFStream::OFStream(FILE* f) : std::ostream(nullptr), buf_(f) {
   rdbuf(&buf_);
 }
 
-
-OFStream::~OFStream() {}
+OFStream::~OFStream() = default;
 
 #if defined(ANDROID) && !defined(V8_ANDROID_LOG_STDOUT)
 AndroidLogStream::~AndroidLogStream() {
