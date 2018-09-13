@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1bff3d9b_2cb02ee0",
+        "filename": "src/js/intl.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-09-13T21:46:29Z",
+      "side": 1,
+      "message": "I very carefully kept track of items that are no longer used in intl.js. \n\nHowever, removing them globally involves changing other files like runtime.h and runtime-intl.cc. This CL is already 800 line changes.\n\nI\u0027d strongly like to get this large change to intl.js done and then in a subsequent CL look at the global use of these",
+      "parentUuid": "d887f848_d272b0e7",
+      "revId": "948226cf452ff46225509345ac07b47796aed604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0c842b8_a242e47a",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 11
@@ -39,6 +57,30 @@
       "revId": "948226cf452ff46225509345ac07b47796aed604",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "274a1c6f_1dacc844",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1571,
+      "author": {
+        "id": 1000545
+      },
+      "writtenOn": "2018-09-13T21:46:29Z",
+      "side": 1,
+      "message": "I initially removed it but then put most of it back. Without this ResolveLocale basically becomes LookupMatcher and that do not feel right to me.\n\nOTOH I would like to settle this CL so it does not go stale and then discuss this.",
+      "parentUuid": "c0c842b8_a242e47a",
+      "range": {
+        "startLine": 1541,
+        "startChar": 2,
+        "endLine": 1571,
+        "endChar": 3
+      },
+      "revId": "948226cf452ff46225509345ac07b47796aed604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
