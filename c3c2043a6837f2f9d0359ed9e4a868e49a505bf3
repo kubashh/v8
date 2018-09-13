@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "914e7bc7_2f30c118",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-13T23:08:25Z",
+      "side": 1,
+      "message": "Please follow the chromium commit message guidelines:\nhttps://www.chromium.org/developers/contributing-code#TOC-Writing-commit-descriptions\n\nSomething like:\n\n [Intl] Rename dayperiod to dayPeriod\n\n Previously, DateTimeFormat.prototype.formatToParts returned an object \n with the property key \u0027dayperiod\u0027 which is incorrect as per the spec. \n This patch updates the property key to say \u0027dayPeriod\u0027, making this spec \n compliant.",
+      "revId": "c3c2043a6837f2f9d0359ed9e4a868e49a505bf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
