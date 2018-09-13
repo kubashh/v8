@@ -1005,7 +1005,7 @@ RUNTIME_FUNCTION(Runtime_WasmNumInterpretedCalls) {
   DCHECK_EQ(1, args.length());
   HandleScope scope(isolate);
   CONVERT_ARG_HANDLE_CHECKED(WasmInstanceObject, instance, 0);
-  if (!instance->has_debug_info()) return 0;
+  if (!instance->has_debug_info()) return nullptr;
   uint64_t num = instance->debug_info()->NumInterpretedCalls();
   return *isolate->factory()->NewNumberFromSize(static_cast<size_t>(num));
 }
