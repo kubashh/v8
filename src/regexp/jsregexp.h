@@ -1404,7 +1404,7 @@ struct PreloadState {
 
 class NodeVisitor {
  public:
-  virtual ~NodeVisitor() { }
+  virtual ~NodeVisitor() = default;
 #define DECLARE_VISIT(Type)                                          \
   virtual void Visit##Type(Type##Node* that) = 0;
 FOR_EACH_NODE_TYPE(DECLARE_VISIT)
