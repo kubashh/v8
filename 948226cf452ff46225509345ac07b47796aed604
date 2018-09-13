@@ -16,6 +16,29 @@
       "revId": "948226cf452ff46225509345ac07b47796aed604",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0c842b8_a242e47a",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1571,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-13T19:40:18Z",
+      "side": 1,
+      "message": "AFACT, this is basically dead code now",
+      "range": {
+        "startLine": 1541,
+        "startChar": 2,
+        "endLine": 1571,
+        "endChar": 3
+      },
+      "revId": "948226cf452ff46225509345ac07b47796aed604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
