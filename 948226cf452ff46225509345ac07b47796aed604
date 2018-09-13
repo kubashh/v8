@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "72da2f17_90d15ad4",
+        "filename": "src/js/intl.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-13T22:44:20Z",
+      "side": 1,
+      "message": "Please reassign these to me. I\u0027ll take over this part since it\u0027s a big cross cutting change.",
+      "parentUuid": "1bff3d9b_2cb02ee0",
+      "revId": "948226cf452ff46225509345ac07b47796aed604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0c842b8_a242e47a",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 11
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "I initially removed it but then put most of it back. Without this ResolveLocale basically becomes LookupMatcher and that do not feel right to me.\n\nOTOH I would like to settle this CL so it does not go stale and then discuss this.",
       "parentUuid": "c0c842b8_a242e47a",
+      "range": {
+        "startLine": 1541,
+        "startChar": 2,
+        "endLine": 1571,
+        "endChar": 3
+      },
+      "revId": "948226cf452ff46225509345ac07b47796aed604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5841e6bc_c51aa0ee",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1571,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-13T22:44:20Z",
+      "side": 1,
+      "message": "I think that\u0027s fine, please remove all the dead code. No one else is touching this file for now as Frank is gone so don\u0027t worry about getting stale.",
+      "parentUuid": "274a1c6f_1dacc844",
       "range": {
         "startLine": 1541,
         "startChar": 2,
