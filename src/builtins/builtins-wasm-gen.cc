@@ -76,6 +76,21 @@ TF_BUILTIN(WasmStackGuard, WasmBuiltinsAssembler) {
                             NoContextConstant());
 }
 
+TF_BUILTIN(WasmAtomicWake, WasmBuiltinsAssembler) {
+  TNode<Uint32T> address =
+      UncheckedCast<Uint32T>(Parameter(Descriptor::kAddress));
+  TNode<Int32T> count = UncheckedCast<Int32T>(Parameter(Descriptor::kCount));
+
+  TNode<Object> instance = LoadInstanceFromFrame();
+  TNode<Code> centry = LoadCEntryFromInstance(instance);
+
+  // TODO(adamk): Check these are actually in Smi range before tagging.
+  TNode<Smi> result_smi = UncheckedCast<Smi>(CallRuntimeWithCEntry(
+      Runtime::kWasmAtomicWake, centry, NoContextConstant(), instance,
+      SmiFromInt32(Signed(address)), SmiFromInt32(count)));
+  ReturnRaw(SmiToInt32(result_smi));
+}
+
 TF_BUILTIN(WasmGrowMemory, WasmBuiltinsAssembler) {
   TNode<Int32T> num_pages =
       UncheckedCast<Int32T>(Parameter(Descriptor::kNumPages));
