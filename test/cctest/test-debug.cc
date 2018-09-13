@@ -2999,7 +2999,7 @@ int event_listener_hit_count = 0;
 class EmptyExternalStringResource : public v8::String::ExternalStringResource {
  public:
   EmptyExternalStringResource() { empty_[0] = 0; }
-  virtual ~EmptyExternalStringResource() {}
+  virtual ~EmptyExternalStringResource() = default;
   virtual size_t length() const { return empty_.length(); }
   virtual const uint16_t* data() const { return empty_.start(); }
 
