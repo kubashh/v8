@@ -42,3 +42,8 @@ nf.format(12345);
 
 // Reading the format doesn't add any additional property keys
 assertEquals(beforeCount, Object.getOwnPropertyNames(nf).length);
+
+// format should be bound properly even if created from a non-instance
+var legacy = Intl.NumberFormat.call(Object.create(Intl.NumberFormat));
+numberArray.forEach(legacy.format);
+legacy.format(12345);
