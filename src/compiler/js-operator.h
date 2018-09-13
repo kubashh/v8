@@ -6,6 +6,7 @@
 #define V8_COMPILER_JS_OPERATOR_H_
 
 #include "src/base/compiler-specific.h"
+#include "src/compiler/delayed-operator.h"
 #include "src/globals.h"
 #include "src/maybe-handles.h"
 #include "src/runtime/runtime.h"
@@ -26,6 +27,10 @@ namespace compiler {
 // Forward declarations.
 class Operator;
 struct JSOperatorGlobalCache;
+class StringConstantBase;
+class StringLiteral;
+class NumberToStringConstant;
+class StringCons;
 
 // Defines the frequency a given Call/Construct site was executed. For some
 // call sites the frequency is not known.
@@ -670,6 +675,11 @@ int RestoreRegisterIndexOf(const Operator* op) V8_WARN_UNUSED_RESULT;
 
 Handle<ScopeInfo> ScopeInfoOf(const Operator* op) V8_WARN_UNUSED_RESULT;
 
+StringConstantKind StringConstantKindOf(const Operator* op);
+const StringLiteral& StringLiteralOf(const Operator* op);
+const NumberToStringConstant& NumberToStringConstantOf(const Operator* op);
+const StringCons& StringConsOf(const Operator* op);
+
 // Interface for building JavaScript-level operators, e.g. directly from the
 // AST. Most operators have no parameters, thus can be globally shared for all
 // graphs.
@@ -844,6 +854,11 @@ class V8_EXPORT_PRIVATE JSOperatorBuilder final
   const Operator* ObjectIsArray();
   const Operator* ParseInt();
   const Operator* RegExpTest();
+
+  const Operator* DelayedStringConstant(Handle<String> str);
+  const Operator* DelayedStringConstant(double num);
+  const Operator* DelayedStringConstant(const StringConstantBase* lhs,
+                                        const StringConstantBase* rhs);
 
  private:
   Zone* zone() const { return zone_; }

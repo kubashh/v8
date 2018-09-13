@@ -7,6 +7,7 @@
 #include <limits>
 
 #include "src/base/lazy-instance.h"
+#include "src/compiler/delayed-operator.h"
 #include "src/compiler/opcodes.h"
 #include "src/compiler/operator.h"
 #include "src/handles-inl.h"
@@ -1282,11 +1283,50 @@ const Operator* JSOperatorBuilder::CreateBlockContext(
       scope_info);                                               // parameter
 }
 
+const Operator* JSOperatorBuilder::DelayedStringConstant(Handle<String> str) {
+  return new (zone()) Operator1<StringLiteral>(
+      IrOpcode::kDelayedStringConstant, Operator::kPure, "StringLiteral", 0, 0,
+      0, 1, 0, 0, StringLiteral(str));
+}
+
+const Operator* JSOperatorBuilder::DelayedStringConstant(double num) {
+  return new (zone()) Operator1<NumberToStringConstant>(
+      IrOpcode::kDelayedStringConstant, Operator::kPure,
+      "NumberToStringConstant", 0, 0, 0, 1, 0, 0, NumberToStringConstant(num));
+}
+
+const Operator* JSOperatorBuilder::DelayedStringConstant(
+    const StringConstantBase* lhs, const StringConstantBase* rhs) {
+  return new (zone()) Operator1<StringCons>(IrOpcode::kDelayedStringConstant,
+                                            Operator::kPure, "StringCons", 0, 0,
+                                            0, 1, 0, 0, StringCons(lhs, rhs));
+}
+
 Handle<ScopeInfo> ScopeInfoOf(const Operator* op) {
   DCHECK(IrOpcode::kJSCreateBlockContext == op->opcode() ||
          IrOpcode::kJSCreateWithContext == op->opcode() ||
          IrOpcode::kJSCreateCatchContext == op->opcode());
   return OpParameter<Handle<ScopeInfo>>(op);
+}
+
+StringConstantKind StringConstantKindOf(const Operator* op) {
+  DCHECK_EQ(IrOpcode::kDelayedStringConstant, op->opcode());
+  return OpParameter<StringConstantBase>(op).kind();
+}
+
+const StringLiteral& StringLiteralOf(const Operator* op) {
+  DCHECK_EQ(IrOpcode::kDelayedStringConstant, op->opcode());
+  return OpParameter<StringLiteral>(op);
+}
+
+const NumberToStringConstant& NumberToStringConstantOf(const Operator* op) {
+  DCHECK_EQ(IrOpcode::kDelayedStringConstant, op->opcode());
+  return OpParameter<NumberToStringConstant>(op);
+}
+
+const StringCons& StringConsOf(const Operator* op) {
+  DCHECK_EQ(IrOpcode::kDelayedStringConstant, op->opcode());
+  return OpParameter<StringCons>(op);
 }
 
 #undef BINARY_OP_LIST
