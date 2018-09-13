@@ -16,6 +16,24 @@
       "revId": "e231e01f0311e948e8ed996a3f8374f0b264897a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b6b9e88_aada8b62",
+        "filename": "test/mjsunit/for-in-special-cases.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-13T14:06:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3721b98_82427108",
+      "revId": "e231e01f0311e948e8ed996a3f8374f0b264897a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
