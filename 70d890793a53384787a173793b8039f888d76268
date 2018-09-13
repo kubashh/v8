@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73a83a09_18a3503f",
+        "filename": "test/intl/date-format/format-is-bound.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-13T21:33:41Z",
+      "side": 1,
+      "message": "It\u0027d be nice to assert the result too, not just check for crash. Both here and below.",
+      "revId": "70d890793a53384787a173793b8039f888d76268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
