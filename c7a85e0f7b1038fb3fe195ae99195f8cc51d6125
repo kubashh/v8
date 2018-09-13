@@ -19,6 +19,74 @@
     },
     {
       "key": {
+        "uuid": "621e0762_eea0a4ea",
+        "filename": "src/mips/assembler-mips-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Nit: could be updated to IsEmbeddedObject(rmode_) when we come across such lines :)",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4e98941_0eb70b31",
+        "filename": "src/mips/assembler-mips-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Would it make sense to add a helper for this pattern? Besides here, I see similar uses in\n\n RelocInfo::target_internal_reference\n Assembler::target_at\n Assembler::RelocateInternalReference\n Assembler::RelocateRelativeReference\n Assembler::target_address_at",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "252825e8_7acb81ce",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3791,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "If the result is unused, could we just remove it for simplicity?",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd46c534_3dce576f",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3796,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Why not make this a DCHECK, remove instr and just directly fetch instr1/instr2?",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e22da53a_770cf964",
         "filename": "src/mips/assembler-mips.cc",
         "patchSetId": 2
@@ -30,6 +98,176 @@
       "writtenOn": "2018-09-13T10:52:01Z",
       "side": 1,
       "message": "remove printf",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27aeb229_19fa30bb",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3812,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "A helper for this pattern may also improve readability. Not necessary in this CL though.",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d48e966e_d91a1a0f",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4006,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "This implicit dependence from the precise call/jump instruction sequence to here looks a bit scary. We could at least add a helper predicate that\u0027s also used below, and link both ways (from Call/Jump to the helper and reverse) with comments, wdyt? \n\nIt also seems worth mentioning that the one case is an absolute target address, and the other is pc-relative as used by RELATIVE_CODE_TARGET.",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ec59aeb_c54b481b",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3fee3d_c3fc400e",
+        "filename": "src/mips/constants-mips.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Nit: Please update/remove this TODO.",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d3e109e_836b1c90",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3781,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Would it be possible to refactor this and the block below to take a common code path with BranchLong/BranchAndLinkLong?\n\nIs there no shorter sequence for pc-relative calls/jumps? We could even guarantee the maximal offset since we know the embedded blob size at build-time.",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "201b3cb2_9a4f0bb0",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3786,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Is there a reason to multiply with kInstrSize? On arm/arm64 it was convenient due to the values that Assembler::bl expected, but I don\u0027t think that applies here.",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "224c62b6_61f94298",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3790,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Does this also apply to Call below?",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4930d404_baf73e07",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3794,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Out of curiosity, could you explain what\u0027s going on with t8 here? Do we also need that for Call?",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a306a8a_b4106fae",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14715,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "You\u0027ll add MIPS64 support in a later patchset?",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5897300_3177e11c",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-13T12:11:40Z",
+      "side": 1,
+      "message": "Also here, fine if mips64 is added in another PS.",
       "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
