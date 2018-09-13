@@ -52,6 +52,24 @@
       "revId": "fa1eac554b4aaa293b4d955753a77f159a91e417",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64bed5af_409c0fe0",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2262,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-13T18:48:49Z",
+      "side": 1,
+      "message": "Thanks for the pointer, added tests for the convert case, and fixed instruction selection to handle the upper half being optimized away as well.",
+      "parentUuid": "23eb56bb_96715cef",
+      "revId": "fa1eac554b4aaa293b4d955753a77f159a91e417",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
