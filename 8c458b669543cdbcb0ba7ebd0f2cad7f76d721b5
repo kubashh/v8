@@ -25,6 +25,47 @@
     },
     {
       "key": {
+        "uuid": "3c8d9829_4239df2e",
+        "filename": "src/objects-body-descriptors-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-09-13T12:08:39Z",
+      "side": 1,
+      "message": "s/instances contains/instances contain/",
+      "parentUuid": "926c3c04_ec94ddb9",
+      "range": {
+        "startLine": 210,
+        "startChar": 66,
+        "endLine": 210,
+        "endChar": 75
+      },
+      "revId": "8c458b669543cdbcb0ba7ebd0f2cad7f76d721b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e181a6a0_cb068a94",
+        "filename": "src/objects/js-array-buffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-09-13T12:08:39Z",
+      "side": 1,
+      "message": "What about size_t to make it clear that this represents the size of something in memory in bytes? AFAIK uintptr_t and size_t are the same size on all/most C ABIs.",
+      "revId": "8c458b669543cdbcb0ba7ebd0f2cad7f76d721b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ef2b01b1_8a69255e",
         "filename": "src/objects/object-macros.h",
         "patchSetId": 4
