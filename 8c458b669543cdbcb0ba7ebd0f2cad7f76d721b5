@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "07a1cba0_c8c57a05",
+        "filename": "src/objects-body-descriptors-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-13T17:18:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c8d9829_4239df2e",
+      "range": {
+        "startLine": 210,
+        "startChar": 66,
+        "endLine": 210,
+        "endChar": 75
+      },
+      "revId": "8c458b669543cdbcb0ba7ebd0f2cad7f76d721b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e181a6a0_cb068a94",
         "filename": "src/objects/js-array-buffer.h",
         "patchSetId": 4
@@ -60,6 +84,24 @@
       "writtenOn": "2018-09-13T12:08:39Z",
       "side": 1,
       "message": "What about size_t to make it clear that this represents the size of something in memory in bytes? AFAIK uintptr_t and size_t are the same size on all/most C ABIs.",
+      "revId": "8c458b669543cdbcb0ba7ebd0f2cad7f76d721b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70dca38e_40dc3642",
+        "filename": "src/objects/js-array-buffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-13T17:18:59Z",
+      "side": 1,
+      "message": "Makes sense. 👍",
+      "parentUuid": "e181a6a0_cb068a94",
       "revId": "8c458b669543cdbcb0ba7ebd0f2cad7f76d721b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -86,6 +128,30 @@
       "revId": "8c458b669543cdbcb0ba7ebd0f2cad7f76d721b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c80b506_bd5b4ba7",
+        "filename": "src/objects/object-macros.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-13T17:18:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef2b01b1_8a69255e",
+      "range": {
+        "startLine": 293,
+        "startChar": 8,
+        "endLine": 293,
+        "endChar": 26
+      },
+      "revId": "8c458b669543cdbcb0ba7ebd0f2cad7f76d721b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
