@@ -27,8 +27,7 @@ BasicBlockProfiler::Data::Data(size_t n_blocks)
       block_rpo_numbers_(n_blocks_),
       counts_(n_blocks_, 0) {}
 
-BasicBlockProfiler::Data::~Data() {}
-
+BasicBlockProfiler::Data::~Data() = default;
 
 static void InsertIntoString(std::ostringstream* os, std::string* string) {
   string->insert(0, os->str());
@@ -68,9 +67,7 @@ void BasicBlockProfiler::Data::ResetCounts() {
   }
 }
 
-
-BasicBlockProfiler::BasicBlockProfiler() {}
-
+BasicBlockProfiler::BasicBlockProfiler() = default;
 
 BasicBlockProfiler::Data* BasicBlockProfiler::NewData(size_t n_blocks) {
   base::LockGuard<base::Mutex> lock(&data_list_mutex_);

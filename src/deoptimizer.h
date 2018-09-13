@@ -284,7 +284,7 @@ class TranslatedFrame {
 
 class TranslatedState {
  public:
-  TranslatedState() {}
+  TranslatedState() = default;
   explicit TranslatedState(const JavaScriptFrame* frame);
 
   void Prepare(Address stack_frame_pointer);
@@ -388,7 +388,7 @@ class TranslatedState {
 
 class OptimizedFunctionVisitor {
  public:
-  virtual ~OptimizedFunctionVisitor() {}
+  virtual ~OptimizedFunctionVisitor() = default;
   virtual void VisitFunction(JSFunction* function) = 0;
 };
 
