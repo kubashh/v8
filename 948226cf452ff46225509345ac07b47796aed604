@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d887f848_d272b0e7",
+        "filename": "src/js/intl.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-13T19:38:06Z",
+      "side": 1,
+      "message": "Remove them and see if there\u0027s a compile error, if not then its safe to remove.",
+      "revId": "948226cf452ff46225509345ac07b47796aed604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
