@@ -839,73 +839,24 @@ TEST(BytecodeArrayAging) {
 }
 
 static const char* not_so_random_string_table[] = {
-  "abstract",
-  "boolean",
-  "break",
-  "byte",
-  "case",
-  "catch",
-  "char",
-  "class",
-  "const",
-  "continue",
-  "debugger",
-  "default",
-  "delete",
-  "do",
-  "double",
-  "else",
-  "enum",
-  "export",
-  "extends",
-  "false",
-  "final",
-  "finally",
-  "float",
-  "for",
-  "function",
-  "goto",
-  "if",
-  "implements",
-  "import",
-  "in",
-  "instanceof",
-  "int",
-  "interface",
-  "long",
-  "native",
-  "new",
-  "null",
-  "package",
-  "private",
-  "protected",
-  "public",
-  "return",
-  "short",
-  "static",
-  "super",
-  "switch",
-  "synchronized",
-  "this",
-  "throw",
-  "throws",
-  "transient",
-  "true",
-  "try",
-  "typeof",
-  "var",
-  "void",
-  "volatile",
-  "while",
-  "with",
-  0
-};
-
+    "abstract",   "boolean",      "break",      "byte",    "case",
+    "catch",      "char",         "class",      "const",   "continue",
+    "debugger",   "default",      "delete",     "do",      "double",
+    "else",       "enum",         "export",     "extends", "false",
+    "final",      "finally",      "float",      "for",     "function",
+    "goto",       "if",           "implements", "import",  "in",
+    "instanceof", "int",          "interface",  "long",    "native",
+    "new",        "null",         "package",    "private", "protected",
+    "public",     "return",       "short",      "static",  "super",
+    "switch",     "synchronized", "this",       "throw",   "throws",
+    "transient",  "true",         "try",        "typeof",  "var",
+    "void",       "volatile",     "while",      "with",    nullptr};
 
 static void CheckInternalizedStrings(const char** strings) {
   Isolate* isolate = CcTest::i_isolate();
   Factory* factory = isolate->factory();
-  for (const char* string = *strings; *strings != 0; string = *strings++) {
+  for (const char* string = *strings; *strings != nullptr;
+       string = *strings++) {
     HandleScope scope(isolate);
     Handle<String> a =
         isolate->factory()->InternalizeUtf8String(CStrVector(string));
