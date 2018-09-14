@@ -1468,6 +1468,8 @@ void InstructionSelector::VisitNode(Node* node) {
       return MarkAsFloat64(node), VisitChangeFloat32ToFloat64(node);
     case IrOpcode::kChangeInt32ToFloat64:
       return MarkAsFloat64(node), VisitChangeInt32ToFloat64(node);
+    case IrOpcode::kChangeInt64ToFloat64:
+      return MarkAsFloat64(node), VisitChangeInt64ToFloat64(node);
     case IrOpcode::kChangeUint32ToFloat64:
       return MarkAsFloat64(node), VisitChangeUint32ToFloat64(node);
     case IrOpcode::kChangeFloat64ToInt32:
