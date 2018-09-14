@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8bec5a5_8071ed2c",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-09-14T11:03:43Z",
+      "side": 1,
+      "message": "You should just assume that any of the four combinations of null/nonnull for the two projections can happen. (e.g. it can be the case that projection1 is nonnull but projection0 is null, because a 64-bit shift by 32 is lowered to just a use of the upper half).",
+      "revId": "ccc5cd3037752a63378a75530360328250fdf119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
