@@ -231,8 +231,8 @@ void HeapProfiler::QueryObjects(Handle<Context> context,
   // collect all garbage first.
   heap()->CollectAllAvailableGarbage(
       GarbageCollectionReason::kLowMemoryNotification);
-  heap()->CollectAllGarbage(Heap::kMakeHeapIterableMask,
-                            GarbageCollectionReason::kHeapProfiler);
+  heap()->PreciseCollectGarbage(Heap::kNoGCFlags,
+                                GarbageCollectionReason::kHeapProfiler);
   HeapIterator heap_iterator(heap());
   HeapObject* heap_obj;
   while ((heap_obj = heap_iterator.next()) != nullptr) {

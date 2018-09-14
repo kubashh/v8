@@ -432,8 +432,8 @@ TEST(EquivalenceOfLoggingAndTraversal) {
         "    (function a(j) { return function b() { return j; } })(100);\n"
         "})(this);");
     logger.logger()->StopProfiler();
-    reinterpret_cast<i::Isolate*>(isolate)->heap()->CollectAllGarbage(
-        i::Heap::kMakeHeapIterableMask, i::GarbageCollectionReason::kTesting);
+    reinterpret_cast<i::Isolate*>(isolate)->heap()->PreciseCollectGarbage(
+        i::Heap::kNoGCFlags, i::GarbageCollectionReason::kTesting);
     logger.StringEvent("test-logging-done", "");
 
     // Iterate heap to find compiled functions, will write to log.
