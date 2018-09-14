@@ -21,6 +21,7 @@
 #include "src/code-stubs.h"
 #include "src/deoptimizer.h"
 #include "src/macro-assembler.h"
+#include "src/string-constants.h"
 #include "src/v8.h"
 
 namespace v8 {
@@ -334,6 +335,29 @@ bool Operand::AddressUsesRegister(Register reg) const {
   }
 }
 
+Handle<String> AllocateStringConstant(const StringConstantBase* base,
+                                      Isolate* isolate) {
+  switch (base->kind()) {
+    case StringConstantKind::kStringLiteral: {
+      return static_cast<const StringLiteral*>(base)->str();
+    }
+    case StringConstantKind::kNumberToStringConstant: {
+      auto num_constant = static_cast<const NumberToStringConstant*>(base);
+      Handle<Object> num_obj =
+          isolate->factory()->NewNumber(num_constant->num());
+      return isolate->factory()->NumberToString(num_obj);
+    }
+    case StringConstantKind::kStringCons: {
+      Handle<String> lhs = AllocateStringConstant(
+          static_cast<const StringCons*>(base)->lhs(), isolate);
+      Handle<String> rhs = AllocateStringConstant(
+          static_cast<const StringCons*>(base)->rhs(), isolate);
+      return isolate->factory()->NewConsString(lhs, rhs).ToHandleChecked();
+    }
+  }
+  UNREACHABLE();
+}
+
 void Assembler::AllocateAndInstallRequestedHeapObjects(Isolate* isolate) {
   for (auto& request : heap_object_requests_) {
     Address pc = reinterpret_cast<Address>(buffer_) + request.offset();
@@ -347,6 +371,14 @@ void Assembler::AllocateAndInstallRequestedHeapObjects(Isolate* isolate) {
       case HeapObjectRequest::kCodeStub: {
         request.code_stub()->set_isolate(isolate);
         UpdateCodeTarget(Memory<int32_t>(pc), request.code_stub()->GetCode());
+        break;
+      }
+      case HeapObjectRequest::kStringConstant: {
+        const StringConstantBase* str = request.string();
+        CHECK_NOT_NULL(str);
+        Handle<String> result = AllocateStringConstant(str, isolate);
+        result = String::Flatten(isolate, result);
+        Memory<Handle<Object>>(pc) = result;
         break;
       }
     }
@@ -1815,6 +1847,14 @@ void Assembler::movp_heap_number(Register dst, double value) {
   emit_rex(dst, kPointerSize);
   emit(0xB8 | dst.low_bits());
   RequestHeapObject(HeapObjectRequest(value));
+  emitp(0, RelocInfo::EMBEDDED_OBJECT);
+}
+
+void Assembler::movp_string(Register dst, const StringConstantBase* str) {
+  EnsureSpace ensure_space(this);
+  emit_rex(dst, kPointerSize);
+  emit(0xB8 | dst.low_bits());
+  RequestHeapObject(HeapObjectRequest(str));
   emitp(0, RelocInfo::EMBEDDED_OBJECT);
 }
 
