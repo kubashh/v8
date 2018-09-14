@@ -1294,6 +1294,8 @@ void InstructionSelector::VisitNode(Node* node) {
       if (!IsSmiDouble(value)) MarkAsReference(node);
       return VisitConstant(node);
     }
+    case IrOpcode::kDelayedStringConstant:
+      return MarkAsReference(node), VisitConstant(node);
     case IrOpcode::kCall:
       return VisitCall(node);
     case IrOpcode::kCallWithCallerSavedRegisters:
