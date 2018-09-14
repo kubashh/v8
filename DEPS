@@ -70,7 +70,17 @@ deps = {
       'condition': 'host_os == "linux" and checkout_fuchsia',
       'dep_type': 'cipd',
   },
-  'v8/tools/clang':
+  'v8/third_party/qemu-mac-x64': {
+      'packages': [
+          {
+              'package': 'fuchsia/qemu/mac-amd64',
+              'version': '2d3358ae9a569b2d4a474f498b32b202a152134f'
+          },
+      ],
+      'condition': 'host_os == "mac" and checkout_fuchsia',
+      'dep_type': 'cipd',
+  },
+ 'v8/tools/clang':
     Var('chromium_url') + '/chromium/src/tools/clang.git' + '@' + 'e9dadb972c07f43237da73ecad9c7e3ec3c0822b',
   'v8/tools/luci-go':
     Var('chromium_url') + '/chromium/src/tools/luci-go.git' + '@' + '445d7c4b6a4f10e188edb395b132e3996b127691',
@@ -382,6 +392,23 @@ hooks = [
       'python',
       'v8/build/fuchsia/update_sdk.py',
     ],
+  },
+  {
+    # Mac doesn't use lld so it's not included in the default clang bundle
+    # there. However, lld is need in Fuchsia cross builds, so
+    # download it there.
+    # Should run after the clang hook.
+    'name': 'lld/mac',
+    'pattern': '.',
+    'condition': 'host_os == "mac" and checkout_fuchsia',
+    'action': ['python', 'v8/tools/clang/scripts/download_lld_mac.py'],
+  },
+  {
+      # Mac does not have llvm-objdump, download it for cross builds in Fuchsia.
+    'name': 'llvm-objdump',
+    'pattern': '.',
+    'condition': 'host_os == "mac" and checkout_fuchsia',
+    'action': ['python', 'v8/tools/clang/scripts/download_objdump.py'],
   },
   {
     'name': 'mips_toolchain',
