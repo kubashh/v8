@@ -450,7 +450,7 @@ RUNTIME_FUNCTION(Runtime_FunctionGetInferredName) {
 RUNTIME_FUNCTION(Runtime_CollectGarbage) {
   SealHandleScope shs(isolate);
   DCHECK_EQ(1, args.length());
-  isolate->heap()->CollectAllGarbage(Heap::kAbortIncrementalMarkingMask,
+  isolate->heap()->CollectAllGarbage(Heap::kExactMarkingMask,
                                      GarbageCollectionReason::kRuntime);
   return ReadOnlyRoots(isolate).undefined_value();
 }

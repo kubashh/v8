@@ -1132,6 +1132,10 @@ void Heap::CollectAllGarbage(int flags, GarbageCollectionReason gc_reason,
   // not matter, so long as we do not specify NEW_SPACE, which would not
   // cause a full GC.
   set_current_gc_flags(flags);
+  // Finalize incremental marking if requires by flags.
+  if (ShouldUseExactMarking() && !incremental_marking()->IsStopped()) {
+    FinalizeIncrementalMarkingAtomically(gc_reason);
+  }
   CollectGarbage(OLD_SPACE, gc_reason, gc_callback_flags);
   set_current_gc_flags(kNoGCFlags);
 }
@@ -1418,8 +1422,7 @@ bool Heap::CollectGarbage(AllocationSpace space,
   // generator needs incremental marking to stay off after it aborted.
   // We do this only for scavenger to avoid a loop where mark-compact
   // causes another mark-compact.
-  if (IsYoungGenerationCollector(collector) &&
-      !ShouldAbortIncrementalMarking()) {
+  if (IsYoungGenerationCollector(collector) && !ShouldUseExactMarking()) {
     StartIncrementalMarkingIfAllocationLimitIsReached(
         GCFlagsForIncrementalMarking(),
         kGCCallbackScheduleIdleGarbageCollection);
@@ -1625,11 +1628,10 @@ bool Heap::ReserveSpace(Reservation* reservations, std::vector<Address>* maps) {
           CollectGarbage(NEW_SPACE, GarbageCollectionReason::kDeserializer);
         } else {
           if (counter > 1) {
-            CollectAllGarbage(
-                kReduceMemoryFootprintMask | kAbortIncrementalMarkingMask,
-                GarbageCollectionReason::kDeserializer);
+            CollectAllGarbage(kReduceMemoryFootprintMask | kExactMarkingMask,
+                              GarbageCollectionReason::kDeserializer);
           } else {
-            CollectAllGarbage(kAbortIncrementalMarkingMask,
+            CollectAllGarbage(kExactMarkingMask,
                               GarbageCollectionReason::kDeserializer);
           }
         }
@@ -3570,7 +3572,7 @@ void Heap::CollectGarbageOnMemoryPressure() {
   const double kMaxMemoryPressurePauseMs = 100;
 
   double start = MonotonicallyIncreasingTimeInMs();
-  CollectAllGarbage(kReduceMemoryFootprintMask | kAbortIncrementalMarkingMask,
+  CollectAllGarbage(kReduceMemoryFootprintMask | kExactMarkingMask,
                     GarbageCollectionReason::kMemoryPressure,
                     kGCCallbackFlagCollectAllAvailableGarbage);
   double end = MonotonicallyIncreasingTimeInMs();
@@ -3586,10 +3588,9 @@ void Heap::CollectGarbageOnMemoryPressure() {
     // If we spent less than half of the time budget, then perform full GC
     // Otherwise, start incremental marking.
     if (end - start < kMaxMemoryPressurePauseMs / 2) {
-      CollectAllGarbage(
-          kReduceMemoryFootprintMask | kAbortIncrementalMarkingMask,
-          GarbageCollectionReason::kMemoryPressure,
-          kGCCallbackFlagCollectAllAvailableGarbage);
+      CollectAllGarbage(kReduceMemoryFootprintMask | kExactMarkingMask,
+                        GarbageCollectionReason::kMemoryPressure,
+                        kGCCallbackFlagCollectAllAvailableGarbage);
     } else {
       if (FLAG_incremental_marking && incremental_marking()->IsStopped()) {
         StartIncrementalMarking(kReduceMemoryFootprintMask,
