@@ -404,11 +404,11 @@ class Heap {
 
   static const int kNoGCFlags = 0;
   static const int kReduceMemoryFootprintMask = 1;
-  static const int kAbortIncrementalMarkingMask = 2;
+  static const int kExactMarkingMask = 2;
   static const int kFinalizeIncrementalMarkingMask = 4;
 
-  // Making the heap iterable requires us to abort incremental marking.
-  static const int kMakeHeapIterableMask = kAbortIncrementalMarkingMask;
+  // Making the heap iterable requires exact marking information.
+  static const int kMakeHeapIterableMask = kExactMarkingMask;
 
   // The roots that have an index less than this are always in old space.
   static const int kOldSpaceRoots = 0x20;
@@ -1624,16 +1624,15 @@ class Heap {
 
   void set_current_gc_flags(int flags) {
     current_gc_flags_ = flags;
-    DCHECK(!ShouldFinalizeIncrementalMarking() ||
-           !ShouldAbortIncrementalMarking());
+    DCHECK(!ShouldFinalizeIncrementalMarking() || !ShouldUseExactMarking());
   }
 
   inline bool ShouldReduceMemory() const {
     return (current_gc_flags_ & kReduceMemoryFootprintMask) != 0;
   }
 
-  inline bool ShouldAbortIncrementalMarking() const {
-    return (current_gc_flags_ & kAbortIncrementalMarkingMask) != 0;
+  bool ShouldUseExactMarking() const {
+    return (current_gc_flags_ & kExactMarkingMask) != 0;
   }
 
   inline bool ShouldFinalizeIncrementalMarking() const {
