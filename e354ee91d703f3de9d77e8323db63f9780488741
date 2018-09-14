@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "226f0807_aef4a97f",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2285,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-14T01:42:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26156cdf_00ef206a",
+      "range": {
+        "startLine": 2285,
+        "startChar": 0,
+        "endLine": 2285,
+        "endChar": 61
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9059b85_033fee5b",
         "filename": "src/compiler/arm/instruction-selector-arm.cc",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad24b298_a9be5e29",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2344,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-14T01:42:31Z",
+      "side": 1,
+      "message": "Sounds good, removed the DCHECKS from both the selectors.",
+      "parentUuid": "a9059b85_033fee5b",
+      "range": {
+        "startLine": 2344,
+        "startChar": 0,
+        "endLine": 2344,
+        "endChar": 35
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "6f5356aa_d158f696",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2357,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-14T01:42:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2edecd5_cad8997b",
+      "range": {
+        "startLine": 2357,
+        "startChar": 0,
+        "endLine": 2357,
+        "endChar": 61
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a609eac_9a3fa066",
         "filename": "src/compiler/ia32/code-generator-ia32.cc",
         "patchSetId": 9
@@ -82,6 +154,30 @@
       "writtenOn": "2018-09-13T19:58:52Z",
       "side": 1,
       "message": "My advice here would be to DCHECK eax/edx as you do below. Otherwise it could be difficult to track down if someone changes instruction selection and breaks this.",
+      "range": {
+        "startLine": 434,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 0
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c75a9d31_a14d8fe6",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-14T01:42:31Z",
+      "side": 1,
+      "message": "These have been DCHECKed in code-gen from line 3765.",
+      "parentUuid": "3a609eac_9a3fa066",
       "range": {
         "startLine": 434,
         "startChar": 0,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "50f02916_4c20189c",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3687,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-14T01:42:31Z",
+      "side": 1,
+      "message": "There will still need to be two checks, because the entire output could be optimized in which case neither outputs would exist, but I\u0027ve collapsed them and added a tiny helper function as we check this for all ops for both the selectors.",
+      "parentUuid": "a653adfd_0c07ba6f",
+      "range": {
+        "startLine": 3687,
+        "startChar": 0,
+        "endLine": 3687,
+        "endChar": 44
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8fbeb2ac_5324ac9f",
         "filename": "src/compiler/ia32/code-generator-ia32.cc",
         "patchSetId": 9
@@ -137,6 +257,30 @@
       "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffac4f12_d743ed4e",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 3785,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-14T01:42:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fbeb2ac_5324ac9f",
+      "range": {
+        "startLine": 3783,
+        "startChar": 0,
+        "endLine": 3785,
+        "endChar": 0
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "8a3d7e24_a9cb4a3e",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-14T01:42:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8c7b1fe_0e2f0a53",
+      "range": {
+        "startLine": 1369,
+        "startChar": 0,
+        "endLine": 1369,
+        "endChar": 61
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d9b3f60f_d5907a4b",
         "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
         "patchSetId": 9
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "605550f9_7f61786c",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1781,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-14T01:42:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9b3f60f_d5907a4b",
+      "range": {
+        "startLine": 1781,
+        "startChar": 0,
+        "endLine": 1781,
+        "endChar": 61
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16552c93_1d489fe8",
         "filename": "test/cctest/wasm/test-run-wasm-atomics64.cc",
         "patchSetId": 9
@@ -197,6 +389,30 @@
       "writtenOn": "2018-09-13T19:58:52Z",
       "side": 1,
       "message": "Perhaps add a comment here explaining what these tests are for? Is this to hit the case where a projection is optimized away?",
+      "range": {
+        "startLine": 357,
+        "startChar": 0,
+        "endLine": 357,
+        "endChar": 66
+      },
+      "revId": "e354ee91d703f3de9d77e8323db63f9780488741",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f1534cd_9296770e",
+        "filename": "test/cctest/wasm/test-run-wasm-atomics64.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-14T01:42:31Z",
+      "side": 1,
+      "message": "The Drop tests check for when the entire output is optimized, the convert test checks for when only the upper half is optimized, added comments for both.",
+      "parentUuid": "16552c93_1d489fe8",
       "range": {
         "startLine": 357,
         "startChar": 0,
