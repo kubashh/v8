@@ -41,7 +41,7 @@ const int g_num_builtin_categories = 4;
 // Skip default categories.
 v8::base::AtomicWord g_category_index = g_num_builtin_categories;
 
-TracingController::TracingController() {}
+TracingController::TracingController() = default;
 
 TracingController::~TracingController() {
   StopTracing();
