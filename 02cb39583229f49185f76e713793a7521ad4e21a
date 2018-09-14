@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "541bb24d_f9babdf8",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-14T14:11:40Z",
+      "side": 1,
+      "message": "I do not understand how this is distinguished from the misuse of int64 for Smis. Or you have already fixed that before? If yes, I would prefer you to submit a separate CL that removes the Word64 case from the DCHECK below to make sure that we never interpret smi as int64 value.",
+      "range": {
+        "startLine": 1190,
+        "startChar": 0,
+        "endLine": 1191,
+        "endChar": 77
+      },
+      "revId": "02cb39583229f49185f76e713793a7521ad4e21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
