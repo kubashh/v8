@@ -45,6 +45,30 @@
       "revId": "aeb6713a1a3af9f1a6a51d1dc45240504cd3c02a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fceb5526_e7d0d8b6",
+        "filename": "test/cctest/test-weaksets.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-14T12:57:40Z",
+      "side": 1,
+      "message": "+1 to manual gc scope if that makes sense for the test.",
+      "parentUuid": "44ba654b_873cef65",
+      "range": {
+        "startLine": 73,
+        "startChar": 5,
+        "endLine": 73,
+        "endChar": 21
+      },
+      "revId": "aeb6713a1a3af9f1a6a51d1dc45240504cd3c02a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c25198c_dca330b4",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-14T12:57:40Z",
+      "side": 0,
+      "message": "I was hoping that we can get rid of this flag completely by introducing a test helper:\ne.g. CcTest::ExactCollectGarbage() {\n  // 1. Finalize incremental marking.\n  // 2. Do GC.\n}",
+      "range": {
+        "startLine": 407,
+        "startChar": 2,
+        "endLine": 407,
+        "endChar": 52
+      },
+      "revId": "09ab629de5285e049db5038fefa79cf2eafa2b47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8a9120a_fa08769c",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-14T12:57:40Z",
+      "side": 0,
+      "message": "This statement doesn\u0027t make sense to me. Heap iterability doesn\u0027t depend on incremental marking.\n\nLooks like we can just get rid of kMakeHeapIterableMask. It is used only in heap profiler and that triggers multiple GCs. So they will be non-incremental anyway.",
+      "range": {
+        "startLine": 410,
+        "startChar": 1,
+        "endLine": 411,
+        "endChar": 72
+      },
+      "revId": "09ab629de5285e049db5038fefa79cf2eafa2b47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
