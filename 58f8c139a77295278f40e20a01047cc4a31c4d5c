@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d574f89_aba5bbcc",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3315,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-14T12:23:56Z",
+      "side": 1,
+      "message": "This part didn\u0027t not apply cleanly.",
+      "range": {
+        "startLine": 3308,
+        "startChar": 2,
+        "endLine": 3315,
+        "endChar": 3
+      },
+      "revId": "58f8c139a77295278f40e20a01047cc4a31c4d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e329709_98e60667",
+        "filename": "test/cctest/heap/test-invalidated-slots.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-14T12:23:56Z",
+      "side": 1,
+      "message": "This applied cleanly, but had to be changed from Page::FromHeapObject, because in 6.9 there is not such function (there is MemoryChunk::FromHeapObject).",
+      "range": {
+        "startLine": 198,
+        "startChar": 33,
+        "endLine": 198,
+        "endChar": 69
+      },
+      "revId": "58f8c139a77295278f40e20a01047cc4a31c4d5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
