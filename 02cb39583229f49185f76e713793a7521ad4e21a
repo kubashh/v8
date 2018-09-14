@@ -22,6 +22,30 @@
       "revId": "02cb39583229f49185f76e713793a7521ad4e21a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8697984_6e26fcbd",
+        "filename": "src/compiler/code-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-14T15:28:59Z",
+      "side": 1,
+      "message": "Done in https://chromium-review.googlesource.com/c/v8/v8/+/1226593",
+      "parentUuid": "541bb24d_f9babdf8",
+      "range": {
+        "startLine": 1190,
+        "startChar": 0,
+        "endLine": 1191,
+        "endChar": 77
+      },
+      "revId": "02cb39583229f49185f76e713793a7521ad4e21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
