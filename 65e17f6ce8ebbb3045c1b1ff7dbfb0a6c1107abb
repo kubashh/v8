@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3cfa81ca_fdef46cb",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-14T07:42:56Z",
+      "side": 1,
+      "message": "In case it stays permanently skipped after closing this bug, we should remove the bug number here and rather provide a comment with an explanation.",
+      "range": {
+        "startLine": 804,
+        "startChar": 2,
+        "endLine": 804,
+        "endChar": 29
+      },
+      "revId": "65e17f6ce8ebbb3045c1b1ff7dbfb0a6c1107abb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
