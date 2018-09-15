@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a2de9c6_ff2f22c2",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-15T13:52:35Z",
+      "side": 1,
+      "message": "Please also assert invariants that you expect between code_range_start and code_page_allocator.\n\nDCHECK_LE(code_range_start + kReserved..., code_page_allocator_instance_-\u003estart()).",
+      "range": {
+        "startLine": 557,
+        "startChar": 2,
+        "endLine": 558,
+        "endChar": 27
+      },
+      "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64287338_adbdaa31",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-15T13:52:35Z",
+      "side": 1,
+      "message": "Please assert  invariants that you expect between code_range_size and code_page_allocator.",
+      "range": {
+        "startLine": 562,
+        "startChar": 1,
+        "endLine": 563,
+        "endChar": 26
+      },
+      "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8eccdfb3_dd769235",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-15T13:52:35Z",
+      "side": 1,
+      "message": "Can you add a link to the code in chrome that need this?\nhttps://cs.chromium.org/chromium/src/components/crash/content/app/crashpad_win.cc?rcl\u003dfd680447881449fba2edcf0589320e7253719212\u0026l\u003d204",
+      "range": {
+        "startLine": 180,
+        "startChar": 2,
+        "endLine": 181,
+        "endChar": 42
+      },
+      "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3194fe6_9e1df9ff",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-09-15T13:52:35Z",
+      "side": 1,
+      "message": "Please add an explanation on why we need separate code range if we already have code_page_allocator_instance.\n\nAlso state the invariants between code_range_start, code_range_size and code_page_allocator.",
+      "range": {
+        "startLine": 1483,
+        "startChar": 1,
+        "endLine": 1484,
+        "endChar": 26
+      },
+      "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
