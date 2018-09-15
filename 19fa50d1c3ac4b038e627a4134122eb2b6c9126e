@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6b609e83_d8576b3b",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-15T22:24:23Z",
+      "side": 1,
+      "message": "These code range start/size values are only necessary for serving v8::Isolate::GetCodeRange() query. The heap_reservation_ owns the region and manages the alignment. Basically, the only check that I can think of is that this region lies in heap_reservation_.\n\nI added a TODO to add an assert, because I don\u0027t have all the convenient functionality in this CL yet have it in a 4th follow-up CL where I cleanup this code a bit.",
+      "parentUuid": "9a2de9c6_ff2f22c2",
+      "range": {
+        "startLine": 557,
+        "startChar": 2,
+        "endLine": 558,
+        "endChar": 27
+      },
+      "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64287338_adbdaa31",
         "filename": "src/heap/spaces-inl.h",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76d60d6e_a5ceac6c",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-15T22:24:23Z",
+      "side": 1,
+      "message": "Same here.",
+      "parentUuid": "64287338_adbdaa31",
+      "range": {
+        "startLine": 562,
+        "startChar": 1,
+        "endLine": 563,
+        "endChar": 26
+      },
+      "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "47a538ea_085cafa2",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-15T22:24:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eccdfb3_dd769235",
+      "range": {
+        "startLine": 180,
+        "startChar": 2,
+        "endLine": 181,
+        "endChar": 42
+      },
+      "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e3194fe6_9e1df9ff",
         "filename": "src/heap/spaces.h",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36b9408b_603b3630",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-15T22:24:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3194fe6_9e1df9ff",
+      "range": {
+        "startLine": 1483,
+        "startChar": 1,
+        "endLine": 1484,
+        "endChar": 26
+      },
+      "revId": "19fa50d1c3ac4b038e627a4134122eb2b6c9126e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
