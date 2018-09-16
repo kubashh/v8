@@ -831,6 +831,11 @@ DebugInfo::SideEffectState BuiltinGetSideEffectState(Builtins::Name id) {
     case Builtins::kRegExpPrototypeDotAllGetter:
     case Builtins::kRegExpPrototypeUnicodeGetter:
     case Builtins::kRegExpPrototypeStickyGetter:
+    // String builtins that might use RegExp.
+    case Builtins::kStringPrototypeMatch:
+    case Builtins::kStringPrototypeReplace:
+    case Builtins::kStringPrototypeSplit:
+    case Builtins::kStringPrototypeSearch:
       return DebugInfo::kRequiresRuntimeChecks;
     default:
       if (FLAG_trace_side_effect_free_debug_evaluate) {

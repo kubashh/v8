@@ -181,13 +181,18 @@ function listener(event, exec_state, event_data, data) {
           if (f == "toLowerCase") continue;
         }
         if (f == "normalize") continue;
-        if (f == "match") continue;
-        if (f == "search") continue;
-        if (f == "split" || f == "replace") {
-          fail(`'abcd'.${f}(2)`);
-          continue;
+        if (f == "match" || f == "search" || f == "split" || f == "replace") {
+          success("abcd"[f](/2/, "3"), `'abcd'.${f}(/2/, '3')`);
+
+          fail(`{
+            let i = 0;
+            const a = {
+              [Symbol.${f}]: () => { i++; },
+            };
+            'abcd'.${f}(a, '3');
+          }`);
         }
-        success("abcd"[f](2), `"abcd".${f}(2);`);
+        success("abcd"[f](2, "3"), `"abcd".${f}(2, '3');`);
       }
     }
     fail("'abCd'.toLocaleLowerCase()");
