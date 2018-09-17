@@ -897,23 +897,29 @@ std::unique_ptr<NativeModule> WasmCodeManager::NewNativeModule(
   // If the code must be contiguous, reserve enough address space up front.
   size_t vmem_size = kRequiresCodeRange ? kMaxWasmCodeMemory : memory_estimate;
   TryAllocate(vmem_size, &mem);
-  if (mem.IsReserved()) {
-    Address start = mem.address();
-    size_t size = mem.size();
-    Address end = mem.end();
-    std::unique_ptr<NativeModule> ret(
-        new NativeModule(isolate, enabled, can_request_more, std::move(mem),
-                         this, std::move(module), env));
-    TRACE_HEAP("New NativeModule %p: Mem: %" PRIuPTR ",+%zu\n", this, start,
-               size);
-    base::LockGuard<base::Mutex> lock(&native_modules_mutex_);
-    AssignRanges(start, end, ret.get());
-    native_modules_.emplace(ret.get());
-    return ret;
+  if (!mem.IsReserved()) {
+    // Run one GC, then try the allocation again.
+    isolate->heap()->MemoryPressureNotification(MemoryPressureLevel::kCritical,
+                                                true);
+    TryAllocate(vmem_size, &mem);
+  }
+  if (!mem.IsReserved()) {
+    V8::FatalProcessOutOfMemory(isolate, "WasmCodeManager::NewNativeModule");
+    return nullptr;
   }
 
-  V8::FatalProcessOutOfMemory(isolate, "WasmCodeManager::NewNativeModule");
-  return nullptr;
+  Address start = mem.address();
+  size_t size = mem.size();
+  Address end = mem.end();
+  std::unique_ptr<NativeModule> ret(
+      new NativeModule(isolate, enabled, can_request_more, std::move(mem), this,
+                       std::move(module), env));
+  TRACE_HEAP("New NativeModule %p: Mem: %" PRIuPTR ",+%zu\n", this, start,
+             size);
+  base::LockGuard<base::Mutex> lock(&native_modules_mutex_);
+  AssignRanges(start, end, ret.get());
+  native_modules_.emplace(ret.get());
+  return ret;
 }
 
 bool NativeModule::SetExecutable(bool executable) {
