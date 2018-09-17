@@ -17,12 +17,14 @@
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/property-access-builder.h"
 #include "src/compiler/type-cache.h"
+#include "src/dtoa.h"
 #include "src/feedback-vector.h"
 #include "src/field-index-inl.h"
 #include "src/isolate-inl.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
 #include "src/objects/templates.h"
+#include "src/string-constants.h"
 #include "src/vector-slot-pair.h"
 
 namespace v8 {
@@ -62,7 +64,7 @@ struct JSNativeContextSpecialization::ScriptContextTableLookupResult {
 JSNativeContextSpecialization::JSNativeContextSpecialization(
     Editor* editor, JSGraph* jsgraph, JSHeapBroker* js_heap_broker, Flags flags,
     Handle<Context> native_context, CompilationDependencies* dependencies,
-    Zone* zone)
+    Zone* zone, Zone* shared_zone)
     : AdvancedReducer(editor),
       jsgraph_(jsgraph),
       js_heap_broker_(js_heap_broker),
@@ -73,6 +75,7 @@ JSNativeContextSpecialization::JSNativeContextSpecialization(
       native_context_(js_heap_broker, native_context),
       dependencies_(dependencies),
       zone_(zone),
+      shared_zone_(shared_zone),
       type_cache_(TypeCache::Get()) {}
 
 Reduction JSNativeContextSpecialization::Reduce(Node* node) {
@@ -121,6 +124,55 @@ Reduction JSNativeContextSpecialization::Reduce(Node* node) {
   return NoChange();
 }
 
+// static
+base::Optional<size_t> JSNativeContextSpecialization::GetMaxStringLength(
+    Node* node) {
+  if (node->opcode() == IrOpcode::kDelayedStringConstant) {
+    StringConstantKind kind = StringConstantKindOf(node->op());
+    switch (kind) {
+      case StringConstantKind::kStringLiteral: {
+        return GetMaxStringConstantLength(StringLiteralOf(node->op()));
+      }
+      case StringConstantKind::kNumberToStringConstant: {
+        return GetMaxStringConstantLength(NumberToStringConstantOf(node->op()));
+      }
+      case StringConstantKind::kStringCons: {
+        return GetMaxStringConstantLength(StringConsOf(node->op()));
+      }
+    }
+    UNREACHABLE();
+  }
+
+  if (node->opcode() == IrOpcode::kJSAdd) {
+    Node* const lhs = node->InputAt(0);
+    Node* const rhs = node->InputAt(1);
+    base::Optional<size_t> lhs_len = GetMaxStringLength(lhs);
+    if (!lhs_len) {
+      return base::nullopt;
+    }
+    base::Optional<size_t> rhs_len = GetMaxStringLength(rhs);
+    if (!rhs_len) {
+      return base::nullopt;
+    }
+    return *lhs_len + *rhs_len;
+  }
+
+  HeapObjectMatcher matcher(node);
+  if (matcher.HasValue() && matcher.Value()->IsString()) {
+    Handle<String> input = Handle<String>::cast(matcher.Value());
+    return input->length();
+  }
+
+  NumberMatcher number_matcher(node);
+  if (number_matcher.HasValue()) {
+    return kBase10MaximalLength + 1;
+  }
+
+  // We don't support objects with possibly monkey-patched prototype.toString
+  // as it might have side-effects, so we shouldn't attempt lowering them.
+  return base::nullopt;
+}
+
 Reduction JSNativeContextSpecialization::ReduceJSToString(Node* node) {
   DCHECK_EQ(IrOpcode::kJSToString, node->opcode());
   Node* const input = node->InputAt(0);
@@ -139,8 +191,8 @@ Reduction JSNativeContextSpecialization::ReduceJSToString(Node* node) {
   // regressions and the stronger optimization should be re-implemented.
   NumberMatcher number_matcher(input);
   if (number_matcher.HasValue()) {
-    reduction = Replace(jsgraph()->HeapConstant(factory()->NumberToString(
-        factory()->NewNumber(number_matcher.Value()))));
+    reduction = Replace(graph()->NewNode(common()->DelayedStringConstant(
+        shared_zone(), number_matcher.Value())));
     ReplaceWithValue(node, reduction.replacement());
     return reduction;
   }
@@ -155,20 +207,106 @@ Reduction JSNativeContextSpecialization::ReduceJSAdd(Node* node) {
   // nevertheless find a better home for this at some point.
   DCHECK_EQ(IrOpcode::kJSAdd, node->opcode());
 
-  // Constant-fold string concatenation.
+  // Constant-fold string concatenation: JSAdd(string, string)
   HeapObjectBinopMatcher m(node);
   if (m.left().HasValue() && m.left().Value()->IsString() &&
       m.right().HasValue() && m.right().Value()->IsString()) {
-    Handle<String> left = Handle<String>::cast(m.left().Value());
-    Handle<String> right = Handle<String>::cast(m.right().Value());
-    if (left->length() + right->length() <= String::kMaxLength) {
-      Handle<String> result =
-          factory()->NewConsString(left, right).ToHandleChecked();
-      Node* value = jsgraph()->HeapConstant(result);
-      ReplaceWithValue(node, value);
-      return Replace(value);
+    // TODO(mslekova): Possibly define this function for inputs with
+    // type that is already known (i.e. string, string) to avoid
+    // obtaining the types of the inputs.
+    base::Optional<size_t> max_length = GetMaxStringLength(node);
+    if (!max_length) return NoChange();
+
+    if (*max_length <= String::kMaxLength) {
+      Node* left = graph()->NewNode(common()->DelayedStringConstant(
+          shared_zone(), Handle<String>::cast(m.left().Value())));
+      Node* right = graph()->NewNode(common()->DelayedStringConstant(
+          shared_zone(), Handle<String>::cast(m.right().Value())));
+      Node* reduced = graph()->NewNode(common()->DelayedStringConstant(
+          shared_zone(),
+          static_cast<const StringConstantBase*>(&StringLiteralOf(left->op())),
+          static_cast<const StringConstantBase*>(
+              &StringLiteralOf(right->op()))));
+      ReplaceWithValue(node, reduced);
+      return Replace(reduced);
     }
   }
+
+  Node* const lhs = node->InputAt(0);
+  Node* const rhs = node->InputAt(1);
+
+  // Constant-fold JSAdd(x:string, number|JSAdd)
+  HeapObjectMatcher matcher(lhs);
+  if (matcher.HasValue() && matcher.Value()->IsString()) {
+    base::Optional<size_t> max_length = GetMaxStringLength(node);
+    if (!max_length) return NoChange();
+
+    if (*max_length <= String::kMaxLength) {
+      Node* left = graph()->NewNode(common()->DelayedStringConstant(
+          shared_zone(), Handle<String>::cast(matcher.Value())));
+
+      if (rhs->opcode() == IrOpcode::kDelayedStringConstant) {
+        Node* reduced = graph()->NewNode(common()->DelayedStringConstant(
+            shared_zone(),
+            static_cast<const StringConstantBase*>(
+                &StringLiteralOf(left->op())),
+            static_cast<const StringConstantBase*>(&StringConsOf(rhs->op()))));
+        ReplaceWithValue(node, reduced);
+        return Replace(reduced);
+      } else {
+        NumberMatcher number_matcher(rhs);
+        if (number_matcher.HasValue()) {
+          Node* right = graph()->NewNode(common()->DelayedStringConstant(
+              shared_zone(), number_matcher.Value()));
+          Node* reduced = graph()->NewNode(common()->DelayedStringConstant(
+              shared_zone(),
+              static_cast<const StringConstantBase*>(
+                  &StringLiteralOf(left->op())),
+              static_cast<const StringConstantBase*>(
+                  &NumberToStringConstantOf(right->op()))));
+          ReplaceWithValue(node, reduced);
+          return Replace(reduced);
+        }
+      }
+    }
+  }
+
+  // Constant-fold JSAdd(number|JSAdd, y:string)
+  matcher = HeapObjectMatcher(rhs);
+  if (matcher.HasValue() && matcher.Value()->IsString()) {
+    base::Optional<size_t> max_length = GetMaxStringLength(node);
+    if (!max_length) return NoChange();
+
+    if (*max_length <= String::kMaxLength) {
+      Node* right = graph()->NewNode(common()->DelayedStringConstant(
+          shared_zone(), Handle<String>::cast(matcher.Value())));
+
+      if (lhs->opcode() == IrOpcode::kDelayedStringConstant) {
+        Node* reduced = graph()->NewNode(common()->DelayedStringConstant(
+            shared_zone(),
+            static_cast<const StringConstantBase*>(&StringConsOf(lhs->op())),
+            static_cast<const StringConstantBase*>(
+                &StringLiteralOf(right->op()))));
+        ReplaceWithValue(node, reduced);
+        return Replace(reduced);
+      } else {
+        NumberMatcher number_matcher(lhs);
+        if (number_matcher.HasValue()) {
+          Node* left = graph()->NewNode(common()->DelayedStringConstant(
+              shared_zone(), number_matcher.Value()));
+          Node* reduced = graph()->NewNode(common()->DelayedStringConstant(
+              shared_zone(),
+              static_cast<const StringConstantBase*>(
+                  &NumberToStringConstantOf(left->op())),
+              static_cast<const StringConstantBase*>(
+                  &StringLiteralOf(right->op()))));
+          ReplaceWithValue(node, reduced);
+          return Replace(reduced);
+        }
+      }
+    }
+  }
+
   return NoChange();
 }
 
