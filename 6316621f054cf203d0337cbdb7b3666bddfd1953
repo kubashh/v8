@@ -70,6 +70,30 @@
       "revId": "6316621f054cf203d0337cbdb7b3666bddfd1953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a41b0cf1_26a76c7f",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-17T08:28:12Z",
+      "side": 1,
+      "message": "Just tried it, and we would need to pass the Isolate through a lot of methods, e.g.:\nAddCodeCopy -\u003e AddAnonymousCode -\u003e AddOwnedCode -\u003e AllocateForCode -\u003e TryAllocate\n\nIf it turns out that we need this logic in more places, we can still refactor it. For now, I will leave it in NewNativeModule.",
+      "parentUuid": "27838e11_bc46db7e",
+      "range": {
+        "startLine": 903,
+        "startChar": 27,
+        "endLine": 903,
+        "endChar": 34
+      },
+      "revId": "6316621f054cf203d0337cbdb7b3666bddfd1953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
