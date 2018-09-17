@@ -136,6 +136,28 @@ const Operator* CommonOperatorBuilder::MarkAsSafetyCheck(
   }
 }
 
+const Operator* CommonOperatorBuilder::DelayedStringConstant(
+    Zone* shared_zone, Handle<String> str) {
+  return new (shared_zone) Operator1<StringLiteral>(
+      IrOpcode::kDelayedStringConstant, Operator::kPure,
+      "DelayedStringConstant", 0, 0, 0, 1, 0, 0, StringLiteral(str));
+}
+
+const Operator* CommonOperatorBuilder::DelayedStringConstant(Zone* shared_zone,
+                                                             double num) {
+  return new (shared_zone) Operator1<NumberToStringConstant>(
+      IrOpcode::kDelayedStringConstant, Operator::kPure,
+      "DelayedStringConstant", 0, 0, 0, 1, 0, 0, NumberToStringConstant(num));
+}
+
+const Operator* CommonOperatorBuilder::DelayedStringConstant(
+    Zone* shared_zone, const StringConstantBase* lhs,
+    const StringConstantBase* rhs) {
+  return new (shared_zone) Operator1<StringCons>(
+      IrOpcode::kDelayedStringConstant, Operator::kPure,
+      "DelayedStringConstant", 0, 0, 0, 1, 0, 0, StringCons(lhs, rhs));
+}
+
 bool operator==(SelectParameters const& lhs, SelectParameters const& rhs) {
   return lhs.representation() == rhs.representation() &&
          lhs.hint() == rhs.hint();
@@ -1192,6 +1214,31 @@ const Operator* CommonOperatorBuilder::HeapConstant(
 Handle<HeapObject> HeapConstantOf(const Operator* op) {
   DCHECK_EQ(IrOpcode::kHeapConstant, op->opcode());
   return OpParameter<Handle<HeapObject>>(op);
+}
+
+StringConstantKind StringConstantKindOf(const Operator* op) {
+  DCHECK_EQ(IrOpcode::kDelayedStringConstant, op->opcode());
+  return OpParameter<StringConstantBase>(op).kind();
+}
+
+const StringConstantBase* StringConstantBaseOf(const Operator* op) {
+  DCHECK_EQ(IrOpcode::kDelayedStringConstant, op->opcode());
+  return &(OpParameter<StringConstantBase>(op));
+}
+
+const StringLiteral& StringLiteralOf(const Operator* op) {
+  DCHECK_EQ(IrOpcode::kDelayedStringConstant, op->opcode());
+  return OpParameter<StringLiteral>(op);
+}
+
+const NumberToStringConstant& NumberToStringConstantOf(const Operator* op) {
+  DCHECK_EQ(IrOpcode::kDelayedStringConstant, op->opcode());
+  return OpParameter<NumberToStringConstant>(op);
+}
+
+const StringCons& StringConsOf(const Operator* op) {
+  DCHECK_EQ(IrOpcode::kDelayedStringConstant, op->opcode());
+  return OpParameter<StringCons>(op);
 }
 
 const Operator* CommonOperatorBuilder::RelocatableInt32Constant(
