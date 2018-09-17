@@ -22,6 +22,30 @@
       "revId": "75c047361de7dea518a6fc36b5ab9febdc0ca67b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e1d234a_2e1ad009",
+        "filename": "test/mjsunit/wasm/exceptions.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-09-17T11:19:45Z",
+      "side": 1,
+      "message": "Done, here and below. But please note that {kExprUnreachable} will itself look like an exception to JavaScript. So it becomes double-important to check for the correct exception kind/object as we do below.",
+      "parentUuid": "fe568fe3_f090990f",
+      "range": {
+        "startLine": 546,
+        "startChar": 0,
+        "endLine": 547,
+        "endChar": 15
+      },
+      "revId": "75c047361de7dea518a6fc36b5ab9febdc0ca67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
