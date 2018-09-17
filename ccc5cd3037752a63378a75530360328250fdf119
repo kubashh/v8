@@ -16,6 +16,24 @@
       "revId": "ccc5cd3037752a63378a75530360328250fdf119",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df3d7433_3edc1dff",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-17T08:32:03Z",
+      "side": 1,
+      "message": "In the case of 64-bit shifts, it should be optimized but that\u0027s currently not the case. There\u0027s a TODO for this to be implemented. As far as I can see, there are no other node replacements that only null the lower half of the output. \nhttps://cs.chromium.org/chromium/src/v8/src/compiler/int64-lowering.cc?q\u003dint64-loweri\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d503\n\nI have a follow-up CL that partially implements the shift optimization, and fixes the case here as well, but I\u0027d like to keep that separate as this needs to be merged to M70.",
+      "parentUuid": "b8bec5a5_8071ed2c",
+      "revId": "ccc5cd3037752a63378a75530360328250fdf119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
