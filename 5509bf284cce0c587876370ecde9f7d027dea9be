@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45722f83_e6d5c394",
+        "filename": "src/compiler/code-generator.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "Nit: How about giving default values to these fields below (lines 93-95) and then initializing here only the fields you care about?",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 26
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c074080_d73e5752",
+        "filename": "src/compiler/common-operator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "I think it would be better to have just one kind of operator with the parameter being StringConstantBase*. Then you need just one method construct them, and you do not have to pass shared_zone around.",
+      "range": {
+        "startLine": 141,
+        "startChar": 37,
+        "endLine": 141,
+        "endChar": 50
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e852ddd_024e6930",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "This would not be necessary if the parameter of DelayedStringConstant was StringConstantBase*.",
+      "range": {
+        "startLine": 221,
+        "startChar": 19,
+        "endLine": 221,
+        "endChar": 67
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d4d798f_2eaf4fdc",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "Do you need the casting here? (and below?)",
+      "range": {
+        "startLine": 227,
+        "startChar": 10,
+        "endLine": 227,
+        "endChar": 48
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d873921_2540fd2a",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "This seems like it should be possible to merge with the case above.",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 308,
+        "endChar": 3
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9d9d8a0_3dae1ac5",
+        "filename": "src/string-constants.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "Do you need the default case? Normally, it is better not to have the default case, then the compiler will automatically check that you handled all the enum cases.",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de5cb6fe_e49c6bf4",
+        "filename": "src/string-constants.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "I think location() will fail within DisallowHandleDereference scope, you need to use address() here.",
+      "range": {
+        "startLine": 52,
+        "startChar": 19,
+        "endLine": 52,
+        "endChar": 27
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c979230_028a73b2",
+        "filename": "src/string-constants.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "Does this work? I think this will try to dereference the handle, no? I think you want to take the address here (p.str().address()).",
+      "range": {
+        "startLine": 60,
+        "startChar": 29,
+        "endLine": 60,
+        "endChar": 36
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b0f9260_18709821",
+        "filename": "src/string-constants.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "The equalities will only do pointer equality, I think you want something like *(lhs.lhs()) \u003d\u003d *(rhs.lhs()) here.",
+      "range": {
+        "startLine": 87,
+        "startChar": 9,
+        "endLine": 87,
+        "endChar": 57
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a05f5292_71371a70",
+        "filename": "src/string-constants.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "Again, I think this should be hash_combine(*(p.lhs()), *(p.rhs())).",
+      "range": {
+        "startLine": 95,
+        "startChar": 28,
+        "endLine": 95,
+        "endChar": 44
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "406b13f3_a8f69707",
+        "filename": "src/string-constants.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "This does not have to be virtual.\n\nOr, if you are happy with virtual, then perhaps we do not need the StringConstantKind thing and the dispatches on the kind. Instead, we could introduce virtual methods for Equals, Print, Hashcode, AllocateStringConstant and GetMaxLength. I do not have strong preference either way.",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13f4b055_78384f02",
+        "filename": "src/string-constants.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-17T12:28:49Z",
+      "side": 1,
+      "message": "Yes, please.",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 64
+      },
+      "revId": "5509bf284cce0c587876370ecde9f7d027dea9be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
