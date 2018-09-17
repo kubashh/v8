@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "432a737e_1e0f5eec",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-17T16:10:26Z",
+      "side": 1,
+      "message": "I guess my earlier comment suggested this approach. I would prefer the DCHECKs be inline, so if/when they fail, we get the line number. Otherwise, the AssembleArchInstruction will be on the stack but we won\u0027t know which opcode is failing.",
+      "range": {
+        "startLine": 610,
+        "startChar": 0,
+        "endLine": 610,
+        "endChar": 1
+      },
+      "revId": "ccc5cd3037752a63378a75530360328250fdf119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42c40bf9_775e7654",
         "filename": "src/compiler/arm/instruction-selector-arm.cc",
         "patchSetId": 12
