@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83ed8343_a44a1697",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2018-09-17T22:41:55Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 550,
+        "startChar": 7,
+        "endLine": 550,
+        "endChar": 12
+      },
+      "revId": "3617da24e47976342c4c865c8474035aa73cf3d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
