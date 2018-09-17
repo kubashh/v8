@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "d2f5fd6d_83c4b4d3",
+        "filename": "src/compiler/arm/instruction-selector-arm.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-17T16:56:42Z",
+      "side": 1,
+      "message": "Can\u0027t skip emitting code in this case because the outputs are not results of the binary operation, they only return the previous value in memory. Correct me if I\u0027m wrong - my understanding of how the RMW operations is that the output being optimized shouldn\u0027t affect the values in memory being correct, so the 64-bit operation needs to be reflected in memory, but the outputs could be unused. For example, for the drop tests - https://chromium-review.googlesource.com/c/v8/v8/+/1195910/12/test/cctest/wasm/test-run-wasm-atomics64.cc#376, the read memory should return the result of the RMW operation.",
+      "parentUuid": "42c40bf9_775e7654",
+      "revId": "ccc5cd3037752a63378a75530360328250fdf119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b8bec5a5_8071ed2c",
         "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
         "patchSetId": 12
@@ -92,6 +110,24 @@
       "revId": "ccc5cd3037752a63378a75530360328250fdf119",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8090e1fa_7ddd566e",
+        "filename": "src/compiler/ia32/instruction-selector-ia32.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1357,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-17T16:56:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f87b709f_db740c28",
+      "revId": "ccc5cd3037752a63378a75530360328250fdf119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
