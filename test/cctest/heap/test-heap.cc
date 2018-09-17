@@ -2192,8 +2192,7 @@ HEAP_TEST(GCFlags) {
   heap->set_current_gc_flags(Heap::kNoGCFlags);
   CHECK_EQ(Heap::kNoGCFlags, heap->current_gc_flags_);
 
-  // Set the flags to check whether we appropriately resets them after the GC.
-  heap->set_current_gc_flags(Heap::kFinalizeIncrementalMarkingMask);
+  // Check whether we appropriately reset flags after GC.
   CcTest::CollectAllGarbage(Heap::kReduceMemoryFootprintMask);
   CHECK_EQ(Heap::kNoGCFlags, heap->current_gc_flags_);
 
@@ -2212,7 +2211,7 @@ HEAP_TEST(GCFlags) {
   // NewSpace scavenges should not overwrite the flags.
   CHECK_NE(0, heap->current_gc_flags_ & Heap::kReduceMemoryFootprintMask);
 
-  CcTest::CollectAllGarbage(Heap::kFinalizeIncrementalMarkingMask);
+  CcTest::CollectAllGarbage();
   CHECK_EQ(Heap::kNoGCFlags, heap->current_gc_flags_);
 }
 
@@ -4511,8 +4510,7 @@ HEAP_TEST(Regress538257) {
       heap::ForceEvacuationCandidate(Page::FromAddress(objects[i]->address()));
     }
     heap::SimulateFullSpace(old_space);
-    heap->CollectAllGarbage(i::Heap::kFinalizeIncrementalMarkingMask,
-                            i::GarbageCollectionReason::kTesting);
+    CcTest::CollectAllGarbage();
     // If we get this far, we've successfully aborted compaction. Any further
     // allocations might trigger OOM.
   }
