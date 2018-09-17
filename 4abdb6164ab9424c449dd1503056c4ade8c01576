@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f12bde7a_e0b1cbd1",
+        "filename": "src/ia32/assembler-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-17T11:01:29Z",
+      "side": 1,
+      "message": "It\u0027s likely I missed a few locations, but this should cover the majority. I added the assertion to choke-points such as emit_operand and friends, plus in assembler functions that directly emit the register code.",
+      "revId": "4abdb6164ab9424c449dd1503056c4ade8c01576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5db3069b_554e7513",
+        "filename": "src/ia32/assembler-ia32.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-17T11:01:29Z",
+      "side": 1,
+      "message": "This is ugly, but I didn\u0027t want to start doing clever things like packing a bit into rmode_ for temporary debug-only code.",
+      "revId": "4abdb6164ab9424c449dd1503056c4ade8c01576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
