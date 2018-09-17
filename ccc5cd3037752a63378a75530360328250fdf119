@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d3195ade_78ddbfe3",
+        "filename": "src/compiler/arm/code-generator-arm.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-09-17T22:23:36Z",
+      "side": 1,
+      "message": "I\u0027ve modified this to return true/false, so that the DCHECK failure will point to the right instruction.",
+      "parentUuid": "432a737e_1e0f5eec",
+      "range": {
+        "startLine": 610,
+        "startChar": 0,
+        "endLine": 610,
+        "endChar": 1
+      },
+      "revId": "ccc5cd3037752a63378a75530360328250fdf119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "42c40bf9_775e7654",
         "filename": "src/compiler/arm/instruction-selector-arm.cc",
         "patchSetId": 12
