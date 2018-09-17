@@ -50,28 +50,35 @@ class InstructionOperandIterator {
   size_t pos_;
 };
 
-// Either a non-null Handle<Object> or a double.
+// Either a non-null Handle<Object>, a double or a StringConstantBase.
 class DeoptimizationLiteral {
  public:
-  DeoptimizationLiteral() : object_(), number_(0) {}
+  DeoptimizationLiteral() : object_(), number_(0), string_(nullptr) {}
   explicit DeoptimizationLiteral(Handle<Object> object)
-      : object_(object), number_(0) {
+      : object_(object), number_(0), string_(nullptr) {
     DCHECK(!object_.is_null());
   }
-  explicit DeoptimizationLiteral(double number) : object_(), number_(number) {}
+  explicit DeoptimizationLiteral(double number)
+      : object_(), number_(number), string_(nullptr) {}
+  explicit DeoptimizationLiteral(const StringConstantBase* string)
+      : object_(), number_(0), string_(string) {}
 
   Handle<Object> object() const { return object_; }
+  const StringConstantBase* string() const { return string_; }
 
   bool operator==(const DeoptimizationLiteral& other) const {
     return object_.equals(other.object_) &&
-           bit_cast<uint64_t>(number_) == bit_cast<uint64_t>(other.number_);
+           bit_cast<uint64_t>(number_) == bit_cast<uint64_t>(other.number_) &&
+           bit_cast<intptr_t>(string_) == bit_cast<intptr_t>(other.string_);
   }
 
   Handle<Object> Reify(Isolate* isolate) const;
+  // TODO(mslekova): Add kind to this class
 
  private:
   Handle<Object> object_;
   double number_;
+  const StringConstantBase* string_;
 };
 
 // Generates native code for a sequence of instructions.
