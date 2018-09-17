@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "752fe17b_3223a23f",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-17T08:15:40Z",
+      "side": 1,
+      "message": "Would it make sense to move that loop into TryAllocate to have a central bottleneck where we do GC?",
+      "range": {
+        "startLine": 903,
+        "startChar": 27,
+        "endLine": 903,
+        "endChar": 34
+      },
+      "revId": "6316621f054cf203d0337cbdb7b3666bddfd1953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
