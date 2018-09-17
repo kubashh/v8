@@ -2192,6 +2192,10 @@ Type Typer::Visitor::TypeNewArgumentsElements(Node* node) {
 
 Type Typer::Visitor::TypeNewConsString(Node* node) { return Type::String(); }
 
+Type Typer::Visitor::TypeDelayedStringConstant(Node* node) {
+  return Type::String();
+}
+
 Type Typer::Visitor::TypeArrayBufferWasNeutered(Node* node) {
   return Type::Boolean();
 }
