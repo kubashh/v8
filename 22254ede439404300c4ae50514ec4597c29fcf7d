@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb4c181b_3c096e78",
+        "filename": "src/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9883,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-09-18T16:14:31Z",
+      "side": 1,
+      "message": "Jakob, could you check whether this is the best way to use this TFJ builtin? It looks like implementing this in C++ would not be particularly difficult, but maybe we want to choose maintainability over performance here?",
+      "range": {
+        "startLine": 9883,
+        "startChar": 59,
+        "endLine": 9883,
+        "endChar": 70
+      },
+      "revId": "22254ede439404300c4ae50514ec4597c29fcf7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1654eee6_8d40a9aa",
+        "filename": "src/counters.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-09-18T16:14:31Z",
+      "side": 1,
+      "message": "Not sure we need to log counters for these debug:: methods.",
+      "range": {
+        "startLine": 753,
+        "startChar": 4,
+        "endLine": 753,
+        "endChar": 15
+      },
+      "revId": "22254ede439404300c4ae50514ec4597c29fcf7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
