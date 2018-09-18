@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8701165e_3c0e7212",
+        "filename": "src/api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 7455,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7081d729_1cda7d29",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "647c35cc_1a0cb189",
         "filename": "src/api.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34327644_72bbbf0d",
+        "filename": "src/api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 9746,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "647c35cc_1a0cb189",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "6ff8b8ad_b90f1f5e",
+        "filename": "src/assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "I first tried to default this one but then the compiler sees that it\u0027s trivial and we get unused variable warnings. After that auto format said no space 4 you :)",
+      "parentUuid": "3d657ec6_df922d36",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d1c0e73_fbd9d46c",
         "filename": "src/assert-scope.h",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18c066ca_a992693d",
+        "filename": "src/assert-scope.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "same here",
+      "parentUuid": "0d1c0e73_fbd9d46c",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "69b09d1d_85cb8186",
+        "filename": "src/basic-block-profiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "59da0e75_3a0f9ccb",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5435678_a80853da",
         "filename": "src/basic-block-profiler.cc",
         "patchSetId": 4
@@ -101,6 +191,24 @@
       "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "305fe932_d7ac43cf",
+        "filename": "src/basic-block-profiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5435678_a80853da",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "c2a9a305_3ac7ad07",
+        "filename": "src/isolate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2270,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "removed this completely",
+      "parentUuid": "30cd95f0_3056b83b",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b32d322c_f33085ac",
         "filename": "src/keys.cc",
         "patchSetId": 4
@@ -135,6 +261,24 @@
       "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd934987_f935ef56",
+        "filename": "src/keys.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "This is somehow needed for linking.",
+      "parentUuid": "b32d322c_f33085ac",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "4d3c20a5_cd723f97",
+        "filename": "src/libplatform/tracing/trace-buffer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32374467_0eb7e920",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4873fda8_e1fb251d",
         "filename": "src/libplatform/tracing/tracing-controller.cc",
         "patchSetId": 4
@@ -169,6 +331,24 @@
       "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "962d983e_e7b52b13",
+        "filename": "src/libplatform/tracing/tracing-controller.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-18T16:50:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4873fda8_e1fb251d",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
