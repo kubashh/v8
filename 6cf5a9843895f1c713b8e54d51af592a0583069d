@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4251e23_5179b033",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2289,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-18T16:00:55Z",
+      "side": 1,
+      "message": "Note that the spill slot remains on the stack until LeaveArgumentsAdaptorFrame below. Another way to approach this without all the register juggling would be to reserve required stack space and spill before setting up args. I tried both, this seemed less intrusive.",
+      "revId": "6cf5a9843895f1c713b8e54d51af592a0583069d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
