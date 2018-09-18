@@ -50,7 +50,7 @@ class MessageLocation {
 
 class StackFrameBase {
  public:
-  virtual ~StackFrameBase() {}
+  virtual ~StackFrameBase() = default;
 
   virtual Handle<Object> GetReceiver() const = 0;
   virtual Handle<Object> GetFunction() const = 0;
@@ -77,7 +77,7 @@ class StackFrameBase {
   virtual MaybeHandle<String> ToString() = 0;
 
  protected:
-  StackFrameBase() {}
+  StackFrameBase() = default;
   explicit StackFrameBase(Isolate* isolate) : isolate_(isolate) {}
   Isolate* isolate_;
 
@@ -91,7 +91,7 @@ class JSStackFrame : public StackFrameBase {
   JSStackFrame(Isolate* isolate, Handle<Object> receiver,
                Handle<JSFunction> function, Handle<AbstractCode> code,
                int offset);
-  ~JSStackFrame() override {}
+  ~JSStackFrame() override = default;
 
   Handle<Object> GetReceiver() const override { return receiver_; }
   Handle<Object> GetFunction() const override;
@@ -133,7 +133,7 @@ class JSStackFrame : public StackFrameBase {
 
 class WasmStackFrame : public StackFrameBase {
  public:
-  ~WasmStackFrame() override {}
+  ~WasmStackFrame() override = default;
 
   Handle<Object> GetReceiver() const override;
   Handle<Object> GetFunction() const override;
@@ -177,7 +177,7 @@ class WasmStackFrame : public StackFrameBase {
 
 class AsmJsWasmStackFrame : public WasmStackFrame {
  public:
-  ~AsmJsWasmStackFrame() override {}
+  ~AsmJsWasmStackFrame() override = default;
 
   Handle<Object> GetReceiver() const override;
   Handle<Object> GetFunction() const override;

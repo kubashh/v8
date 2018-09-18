@@ -307,7 +307,7 @@ void JSStackFrame::FromFrameArray(Isolate* isolate, Handle<FrameArray> array,
   is_strict_ = (flags & FrameArray::kIsStrict) != 0;
 }
 
-JSStackFrame::JSStackFrame() {}
+JSStackFrame::JSStackFrame() = default;
 
 JSStackFrame::JSStackFrame(Isolate* isolate, Handle<Object> receiver,
                            Handle<JSFunction> function,
@@ -642,7 +642,7 @@ Handle<Script> JSStackFrame::GetScript() const {
   return handle(Script::cast(function_->shared()->script()), isolate_);
 }
 
-WasmStackFrame::WasmStackFrame() {}
+WasmStackFrame::WasmStackFrame() = default;
 
 void WasmStackFrame::FromFrameArray(Isolate* isolate, Handle<FrameArray> array,
                                     int frame_ix) {
@@ -735,7 +735,7 @@ Handle<Script> WasmStackFrame::GetScript() const {
   return handle(wasm_instance_->module_object()->script(), isolate_);
 }
 
-AsmJsWasmStackFrame::AsmJsWasmStackFrame() {}
+AsmJsWasmStackFrame::AsmJsWasmStackFrame() = default;
 
 void AsmJsWasmStackFrame::FromFrameArray(Isolate* isolate,
                                          Handle<FrameArray> array,
