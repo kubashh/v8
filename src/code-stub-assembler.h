@@ -1600,6 +1600,13 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                              SMI_PARAMETERS);
   }
 
+  TNode<FixedArray> ExtractFixedArrayWithCOW(
+      Node* fixed_array, Node* first, Node* count, Node* capacity,
+      Node* fixed_array_map, ElementsKind from_kind, AllocationFlags flags,
+      ExtractFixedArrayFlags extract_flags =
+          ExtractFixedArrayFlag::kAllFixedArrays,
+      ParameterMode parameter_mode = INTPTR_PARAMETERS);
+
   // Copy the entire contents of a FixedArray or FixedDoubleArray to a new
   // array, including special appropriate handling for empty arrays and COW
   // arrays.

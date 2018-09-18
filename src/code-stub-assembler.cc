@@ -4052,6 +4052,93 @@ TNode<FixedArrayBase> CodeStubAssembler::AllocateFixedArray(
   return UncheckedCast<FixedArray>(array);
 }
 
+TNode<FixedArray> CodeStubAssembler::ExtractFixedArrayWithCOW(
+    Node* fixed_array, Node* first, Node* count, Node* capacity,
+    Node* fixed_array_map, ElementsKind from_kind, AllocationFlags flags,
+    ExtractFixedArrayFlags extract_flags, ParameterMode parameter_mode) {
+  DCHECK_NE(first, nullptr);
+  DCHECK_NE(count, nullptr);
+  DCHECK_NE(capacity, nullptr);
+  DCHECK(extract_flags & ExtractFixedArrayFlag::kFixedArrays);
+  CSA_ASSERT(this, Word32BinaryNot(IsFixedDoubleArrayMap(fixed_array_map)));
+
+  VARIABLE(var_result, MachineRepresentation::kTagged);
+  VARIABLE(var_fixed_array_map, MachineRepresentation::kTagged);
+  var_fixed_array_map.Bind(fixed_array_map);
+
+  Label done(this, {&var_result}), cow(this),
+      new_space_check(this, {&var_fixed_array_map});
+  Branch(WordEqual(var_fixed_array_map.value(),
+                   LoadRoot(Heap::kFixedCOWArrayMapRootIndex)),
+         &cow, &new_space_check);
+
+  BIND(&new_space_check);
+  {
+    bool handle_old_space = true;
+    if (extract_flags & ExtractFixedArrayFlag::kNewSpaceAllocationOnly) {
+      handle_old_space = false;
+      CSA_ASSERT(this, Word32BinaryNot(FixedArraySizeDoesntFitInNewSpace(
+                           count, FixedArray::kHeaderSize, parameter_mode)));
+    } else {
+      int constant_count;
+      handle_old_space =
+          !TryGetIntPtrOrSmiConstantValue(count, &constant_count,
+                                          parameter_mode) ||
+          (constant_count >
+           FixedArray::GetMaxLengthForNewSpaceAllocation(PACKED_ELEMENTS));
+    }
+
+    Label old_space(this, Label::kDeferred);
+    if (handle_old_space) {
+      GotoIfFixedArraySizeDoesntFitInNewSpace(
+          capacity, &old_space, FixedArray::kHeaderSize, parameter_mode);
+    }
+
+    Comment("Copy PACKED_ELEMENTS new space");
+
+    ElementsKind to_kind = PACKED_ELEMENTS;
+    Node* to_elements =
+        AllocateFixedArray(to_kind, capacity, parameter_mode,
+                           AllocationFlag::kNone, var_fixed_array_map.value());
+    var_result.Bind(to_elements);
+    CopyFixedArrayElements(from_kind, fixed_array, to_kind, to_elements, first,
+                           count, capacity, SKIP_WRITE_BARRIER, parameter_mode);
+    Goto(&done);
+
+    if (handle_old_space) {
+      BIND(&old_space);
+      {
+        Comment("Copy PACKED_ELEMENTS old space");
+
+        to_elements = AllocateFixedArray(to_kind, capacity, parameter_mode,
+                                         flags, var_fixed_array_map.value());
+        var_result.Bind(to_elements);
+        CopyFixedArrayElements(from_kind, fixed_array, to_kind, to_elements,
+                               first, count, capacity, UPDATE_WRITE_BARRIER,
+                               parameter_mode);
+        Goto(&done);
+      }
+    }
+  }
+
+  BIND(&cow);
+  {
+    if (extract_flags & ExtractFixedArrayFlag::kDontCopyCOW) {
+      Branch(WordNotEqual(IntPtrOrSmiConstant(0, parameter_mode), first),
+             &new_space_check, [&] {
+               var_result.Bind(fixed_array);
+               Goto(&done);
+             });
+    } else {
+      var_fixed_array_map.Bind(LoadRoot(Heap::kFixedArrayMapRootIndex));
+      Goto(&new_space_check);
+    }
+  }
+
+  BIND(&done);
+  return UncheckedCast<FixedArray>(var_result.value());
+}
+
 TNode<FixedArrayBase> CodeStubAssembler::ExtractFixedArray(
     Node* fixed_array, Node* first, Node* count, Node* capacity,
     ExtractFixedArrayFlags extract_flags, ParameterMode parameter_mode) {
@@ -4082,7 +4169,7 @@ TNode<FixedArrayBase> CodeStubAssembler::ExtractFixedArray(
                          parameter_mode)));
   }
 
-  Label if_fixed_double_array(this), empty(this), cow(this),
+  Label if_fixed_double_array(this), empty(this),
       done(this, {&var_result, &var_fixed_array_map});
   var_fixed_array_map.Bind(LoadMap(fixed_array));
   GotoIf(WordEqual(IntPtrOrSmiConstant(0, parameter_mode), capacity), &empty);
@@ -4094,79 +4181,14 @@ TNode<FixedArrayBase> CodeStubAssembler::ExtractFixedArray(
     } else {
       CSA_ASSERT(this, IsFixedDoubleArrayMap(var_fixed_array_map.value()));
     }
-  } else {
-    DCHECK(extract_flags & ExtractFixedArrayFlag::kFixedArrays);
-    CSA_ASSERT(this, Word32BinaryNot(
-                         IsFixedDoubleArrayMap(var_fixed_array_map.value())));
   }
 
   if (extract_flags & ExtractFixedArrayFlag::kFixedArrays) {
-    Label new_space_check(this, {&var_fixed_array_map});
-    Branch(WordEqual(var_fixed_array_map.value(),
-                     LoadRoot(Heap::kFixedCOWArrayMapRootIndex)),
-           &cow, &new_space_check);
-
-    BIND(&new_space_check);
-
-    bool handle_old_space = true;
-    if (extract_flags & ExtractFixedArrayFlag::kNewSpaceAllocationOnly) {
-      handle_old_space = false;
-      CSA_ASSERT(this, Word32BinaryNot(FixedArraySizeDoesntFitInNewSpace(
-                           count, FixedArray::kHeaderSize, parameter_mode)));
-    } else {
-      int constant_count;
-      handle_old_space =
-          !TryGetIntPtrOrSmiConstantValue(count, &constant_count,
-                                          parameter_mode) ||
-          (constant_count >
-           FixedArray::GetMaxLengthForNewSpaceAllocation(PACKED_ELEMENTS));
-    }
-
-    Label old_space(this, Label::kDeferred);
-    if (handle_old_space) {
-      GotoIfFixedArraySizeDoesntFitInNewSpace(
-          capacity, &old_space, FixedArray::kHeaderSize, parameter_mode);
-    }
-
-    Comment("Copy PACKED_ELEMENTS new space");
-
-    ElementsKind kind = PACKED_ELEMENTS;
-    Node* to_elements =
-        AllocateFixedArray(kind, capacity, parameter_mode,
-                           AllocationFlag::kNone, var_fixed_array_map.value());
+    Node* to_elements = ExtractFixedArrayWithCOW(
+        fixed_array, first, count, capacity, var_fixed_array_map.value(),
+        PACKED_ELEMENTS, flags, extract_flags, parameter_mode);
     var_result.Bind(to_elements);
-    CopyFixedArrayElements(kind, fixed_array, kind, to_elements, first, count,
-                           capacity, SKIP_WRITE_BARRIER, parameter_mode);
     Goto(&done);
-
-    if (handle_old_space) {
-      BIND(&old_space);
-      {
-        Comment("Copy PACKED_ELEMENTS old space");
-
-        to_elements = AllocateFixedArray(kind, capacity, parameter_mode, flags,
-                                         var_fixed_array_map.value());
-        var_result.Bind(to_elements);
-        CopyFixedArrayElements(kind, fixed_array, kind, to_elements, first,
-                               count, capacity, UPDATE_WRITE_BARRIER,
-                               parameter_mode);
-        Goto(&done);
-      }
-    }
-
-    BIND(&cow);
-    {
-      if (extract_flags & ExtractFixedArrayFlag::kDontCopyCOW) {
-        Branch(WordNotEqual(IntPtrOrSmiConstant(0, parameter_mode), first),
-               &new_space_check, [&] {
-                 var_result.Bind(fixed_array);
-                 Goto(&done);
-               });
-      } else {
-        var_fixed_array_map.Bind(LoadRoot(Heap::kFixedArrayMapRootIndex));
-        Goto(&new_space_check);
-      }
-    }
   } else {
     Goto(&if_fixed_double_array);
   }
