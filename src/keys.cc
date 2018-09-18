@@ -20,8 +20,7 @@
 namespace v8 {
 namespace internal {
 
-KeyAccumulator::~KeyAccumulator() {
-}
+KeyAccumulator::~KeyAccumulator() = default;
 
 namespace {
 
