@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36265d0c_be84acf5",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1626,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-18T18:47:50Z",
+      "side": 0,
+      "message": "Yang: That flag did nothing anymore :)",
+      "range": {
+        "startLine": 1626,
+        "startChar": 44,
+        "endLine": 1626,
+        "endChar": 75
+      },
+      "revId": "bb595303d167de75b3014a84fead707cff81fff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
