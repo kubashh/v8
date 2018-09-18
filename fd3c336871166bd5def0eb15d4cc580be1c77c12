@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "397d1a38_5c3b3230",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-18T13:12:21Z",
+      "side": 1,
+      "message": "Can\u0027t this be replaced with StringConstantBaseOf(node-\u003eop())-\u003eGetMaxStringConstantLength()?\n\nThat way you can also get rid of three of the operator parameter getters.",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 143,
+        "endChar": 5
+      },
+      "revId": "fd3c336871166bd5def0eb15d4cc580be1c77c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59dd9722_3fe35087",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-18T13:12:21Z",
+      "side": 1,
+      "message": "In fact, I think this whole if should be inlined into ReduceJSAdd. Also it needs to check that at least one side is a string (i.e., delayed string or string literal).\n\nThen you can leave out the JSAdd case here.\n\nNote that full recursion is not necessary here - if you have a JSAdd as input, you can just refuse to optimize yet, and the reducer framework will call you again if it changed the JSAdd to DelayedStringConstant.",
+      "range": {
+        "startLine": 150,
+        "startChar": 37,
+        "endLine": 150,
+        "endChar": 60
+      },
+      "revId": "fd3c336871166bd5def0eb15d4cc580be1c77c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
