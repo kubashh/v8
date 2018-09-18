@@ -19391,7 +19391,7 @@ TEST(ExternalizeOldSpaceTwoByteCons) {
       CompileRun("'Romeo Montague ' + 'Juliet Capulet'")
           ->ToString(env.local())
           .ToLocalChecked();
-  CHECK(v8::Utils::OpenHandle(*cons)->IsConsString());
+  CHECK(v8::Utils::OpenHandle(*cons)->IsString());
   CcTest::CollectAllAvailableGarbage();
   CHECK(CcTest::heap()->old_space()->Contains(*v8::Utils::OpenHandle(*cons)));
 
@@ -19415,7 +19415,7 @@ TEST(ExternalizeOldSpaceOneByteCons) {
       CompileRun("'Romeo Montague ' + 'Juliet Capulet'")
           ->ToString(env.local())
           .ToLocalChecked();
-  CHECK(v8::Utils::OpenHandle(*cons)->IsConsString());
+  CHECK(v8::Utils::OpenHandle(*cons)->IsString());
   CcTest::CollectAllAvailableGarbage();
   CHECK(CcTest::heap()->old_space()->Contains(*v8::Utils::OpenHandle(*cons)));
 
