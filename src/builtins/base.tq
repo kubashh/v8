@@ -61,7 +61,7 @@ type LanguageMode generates 'TNode<Smi>' constexpr 'LanguageMode';
 type ExtractFixedArrayFlags generates
 'TNode<Smi>' constexpr 'ExtractFixedArrayFlags';
 type ParameterMode generates 'TNode<Int32T>' constexpr 'ParameterMode';
-type RootListIndex generates 'TNode<Int32T>' constexpr 'Heap::RootListIndex';
+type RootListIndex generates 'TNode<Int32T>' constexpr 'RootIndex';
 type WriteBarrierMode generates 'TNode<Int32T>' constexpr 'WriteBarrierMode';
 
 type MessageTemplate constexpr 'MessageTemplate::Template';
@@ -115,9 +115,9 @@ const kFixedArrays: constexpr ExtractFixedArrayFlags generates
 'ExtractFixedArrayFlag::kFixedArrays';
 
 const kFixedCOWArrayMapRootIndex: constexpr RootListIndex generates
-'Heap::kFixedCOWArrayMapRootIndex';
+'RootIndex::kFixedCOWArrayMap';
 const kEmptyFixedArrayRootIndex: constexpr RootListIndex generates
-'Heap::kEmptyFixedArrayRootIndex';
+'RootIndex::kEmptyFixedArray';
 
 const kInvalidArrayLength: constexpr MessageTemplate generates
 'MessageTemplate::kInvalidArrayLength';
