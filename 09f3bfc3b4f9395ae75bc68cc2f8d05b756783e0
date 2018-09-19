@@ -22,6 +22,30 @@
       "revId": "09f3bfc3b4f9395ae75bc68cc2f8d05b756783e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf5755a3_fd2cb207",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-19T07:51:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4029a633_1b2ed0bd",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 70
+      },
+      "revId": "09f3bfc3b4f9395ae75bc68cc2f8d05b756783e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
