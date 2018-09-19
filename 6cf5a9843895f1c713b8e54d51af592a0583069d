@@ -52,6 +52,24 @@
       "revId": "6cf5a9843895f1c713b8e54d51af592a0583069d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "869db4c9_128e69bf",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2289,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-19T11:23:33Z",
+      "side": 1,
+      "message": "Changed as you suggested. Much cleaner now, thanks!",
+      "parentUuid": "e7f4e9ee_ebe946cc",
+      "revId": "6cf5a9843895f1c713b8e54d51af592a0583069d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
