@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4029a633_1b2ed0bd",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-19T07:32:14Z",
+      "side": 1,
+      "message": "This should also trigger if one side is DelayedStringConstant, no?\n\nPerhaps you want to separate the logic for detecting heap-constant-string-or-delayed-string-constant into separate function, then you can fold this if into the previous if.",
+      "range": {
+        "startLine": 219,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 70
+      },
+      "revId": "09f3bfc3b4f9395ae75bc68cc2f8d05b756783e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
