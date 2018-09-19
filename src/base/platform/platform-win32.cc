@@ -822,7 +822,8 @@ void* OS::Allocate(void* address, size_t size, size_t alignment,
   if (base == nullptr) return nullptr;  // Can't allocate, we're OOM.
 
   // If address is suitably aligned, we're done.
-  uint8_t* aligned_base = RoundUp(base, alignment);
+  uint8_t* aligned_base = reinterpret_cast<uint8_t*>(
+      RoundUp(reinterpret_cast<uintptr_t>(base), alignment));
   if (base == aligned_base) return reinterpret_cast<void*>(base);
 
   // Otherwise, free it and try a larger allocation.
