@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9975b9d_f4666089",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2001,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-19T11:33:12Z",
+      "side": 0,
+      "message": "Nit: Keep this line with s/edx/xmm0",
+      "revId": "35a05302b93a246c5d7e821a57de4bc6335e3b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
