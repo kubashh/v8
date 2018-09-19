@@ -1563,7 +1563,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   typedef base::Flags<ExtractFixedArrayFlag> ExtractFixedArrayFlags;
 
   // Copy a portion of an existing FixedArray or FixedDoubleArray into a new
-  // FixedArray, including special appropriate handling for empty arrays and COW
+  // array, including special appropriate handling for empty arrays and COW
   // arrays.
   //
   // * |source| is either a FixedArray or FixedDoubleArray from which to copy
@@ -1599,6 +1599,34 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
     return ExtractFixedArray(source, first, count, capacity, extract_flags,
                              SMI_PARAMETERS);
   }
+
+  // Copy a portion of an existing FixedArray or FixedDoubleArray into a new
+  // FixedArray, including special appropriate handling for and COW arrays.
+  // * |source| is either a FixedArray or FixedDoubleArray from which to copy
+  // elements.
+  // * |first| is the starting element index to copy from, must not be nullptr.
+  // * |count| is the number of elements to copy out of the source array
+  // starting from and including the element indexed by |start|. It must not be
+  // nullptr.
+  // * |capacity| determines the size of the allocated result array, with
+  // |capacity| >= |count|. |capacity| must not be nullptr.
+  // * |to_fixed_array_map| is the map of the target fixed array. It must not
+  // be a FixedDoubleArrayMap.
+  // * |from_kind| is the elements kind of |source|. It must be consistent
+  // with |source| being a FixedArray or FixedDoubleArray. By the default
+  // |source| is expected to be a FixedArray, so |from_kind| is PACKED_ELEMENTS
+  // by default.
+  // * |extract_flags| determines whether the next FixedArray will be allocated
+  // in new space or old space.
+  // * |parameter_mode| determines the parameter mode of |first|, |count| and
+  // |capacity|.
+  TNode<FixedArray> ExtractToFixedArrayWithCOW(
+      Node* source, Node* first, Node* count, Node* capacity,
+      Node* to_fixed_array_map, ElementsKind from_kind = PACKED_ELEMENTS,
+      AllocationFlags allocation_flags = AllocationFlag::kNone,
+      ExtractFixedArrayFlags extract_flags =
+          ExtractFixedArrayFlag::kAllFixedArrays,
+      ParameterMode parameter_mode = INTPTR_PARAMETERS);
 
   // Copy the entire contents of a FixedArray or FixedDoubleArray to a new
   // array, including special appropriate handling for empty arrays and COW
