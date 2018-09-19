@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a090848_66e72445",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-19T15:31:11Z",
+      "side": 1,
+      "message": "Ideally we\u0027d get rid of this (all MoveForRootRegisterRefactoring were added when updating call interface descriptors and should be removed as part of what we are doing now).\n\nCould we swap edx/ecx use above and remove the move here?",
+      "revId": "93a48f9bb23239840321f57a9d8bc228facb0c33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
