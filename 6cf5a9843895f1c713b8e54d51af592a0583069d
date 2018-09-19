@@ -16,6 +16,24 @@
       "revId": "6cf5a9843895f1c713b8e54d51af592a0583069d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a7e2640_164a5cc1",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2289,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-09-19T09:31:49Z",
+      "side": 1,
+      "message": "Can\u0027t we just spill kExpectedNumberOfArgumentsRegister/ecx to xmm0 in line 2287 and then reload it in line 2315?",
+      "parentUuid": "e4251e23_5179b033",
+      "revId": "6cf5a9843895f1c713b8e54d51af592a0583069d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
