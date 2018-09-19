@@ -356,8 +356,9 @@ class CpuFeatureScope {
 #else
   CpuFeatureScope(AssemblerBase* assembler, CpuFeature f,
                   CheckPolicy check = kCheckSupported) {}
-  // Define a destructor to avoid unused variable warnings.
-  ~CpuFeatureScope() {}
+  ~CpuFeatureScope(){
+      // Define a destructor to avoid unused variable warnings.
+  }
 #endif
 };
 
@@ -436,7 +437,7 @@ double power_double_double(double x, double y);
 
 class ConstantPoolEntry {
  public:
-  ConstantPoolEntry() {}
+  ConstantPoolEntry() = default;
   ConstantPoolEntry(int position, intptr_t value, bool sharing_ok,
                     RelocInfo::Mode rmode = RelocInfo::NONE)
       : position_(position),
