@@ -1494,6 +1494,8 @@ void Builtins::Generate_FunctionPrototypeCall(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
+
   // ----------- S t a t e -------------
   //  -- eax     : argc
   //  -- esp[0]  : return address
@@ -1503,14 +1505,14 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
   //  -- esp[16] : receiver
   // -----------------------------------
 
-  // 1. Load target into edi (if present), argumentsList into ebx (if present),
+  // 1. Load target into edi (if present), argumentsList into ecx (if present),
   // remove all arguments from the stack (including the receiver), and push
   // thisArgument (if present) instead.
   {
     Label done;
     __ LoadRoot(edi, Heap::kUndefinedValueRootIndex);
     __ mov(edx, edi);
-    __ mov(ebx, edi);
+    __ mov(ecx, edi);
     __ cmp(eax, Immediate(1));
     __ j(below, &done, Label::kNear);
     __ mov(edi, Operand(esp, eax, times_pointer_size, -0 * kPointerSize));
@@ -1518,16 +1520,23 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
     __ mov(edx, Operand(esp, eax, times_pointer_size, -1 * kPointerSize));
     __ cmp(eax, Immediate(3));
     __ j(below, &done, Label::kNear);
-    __ mov(ebx, Operand(esp, eax, times_pointer_size, -2 * kPointerSize));
+    __ mov(ecx, Operand(esp, eax, times_pointer_size, -2 * kPointerSize));
     __ bind(&done);
+
+    // Spill argumentsList to use ecx as a scratch register.
+    __ movd(xmm0, ecx);
+
     __ PopReturnAddressTo(ecx);
     __ lea(esp, Operand(esp, eax, times_pointer_size, kPointerSize));
     __ Push(edx);
     __ PushReturnAddressFrom(ecx);
+
+    // Restore argumentsList.
+    __ movd(ecx, xmm0);
   }
 
   // ----------- S t a t e -------------
-  //  -- ebx    : argumentsList
+  //  -- ecx    : argumentsList
   //  -- edi    : target
   //  -- esp[0] : return address
   //  -- esp[4] : thisArgument
@@ -1538,7 +1547,7 @@ void Builtins::Generate_ReflectApply(MacroAssembler* masm) {
   // will do.
 
   // 3. Apply the target to the given argumentsList.
-  __ MoveForRootRegisterRefactoring(edx, ebx);
+  __ MoveForRootRegisterRefactoring(edx, ecx);
   __ Jump(BUILTIN_CODE(masm->isolate(), CallWithArrayLike),
           RelocInfo::CODE_TARGET);
 }
