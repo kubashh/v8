@@ -1666,6 +1666,7 @@ static void LeaveArgumentsAdaptorFrame(MacroAssembler* masm) {
 // static
 void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
                                                Handle<Code> code) {
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
   // ----------- S t a t e -------------
   //  -- edi    : target
   //  -- eax    : number of parameters on the stack (not including the receiver)
@@ -1675,84 +1676,89 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
   //  -- esp[0] : return address.
   // -----------------------------------
 
-  // We need to preserve eax, edi and ebx.
-  __ movd(xmm0, edx);
-  __ movd(xmm1, edi);
-  __ movd(xmm2, eax);
-
-  // TODO(v8:6666): Remove this usage of ebx to enable kRootRegister support.
   const Register kArgumentsList = ebx;
   const Register kArgumentsLength = ecx;
 
-  __ PopReturnAddressTo(edx);
-  __ pop(kArgumentsList);
-  __ PushReturnAddressFrom(edx);
-
-  if (masm->emit_debug_code()) {
-    // Allow kArgumentsList to be a FixedArray, or a FixedDoubleArray if
-    // kArgumentsLength == 0.
-    Label ok, fail;
-    __ AssertNotSmi(kArgumentsList);
-    __ mov(edx, FieldOperand(kArgumentsList, HeapObject::kMapOffset));
-    __ CmpInstanceType(edx, FIXED_ARRAY_TYPE);
-    __ j(equal, &ok);
-    __ CmpInstanceType(edx, FIXED_DOUBLE_ARRAY_TYPE);
-    __ j(not_equal, &fail);
-    __ cmp(kArgumentsLength, 0);
-    __ j(equal, &ok);
-    // Fall through.
-    __ bind(&fail);
-    __ Abort(AbortReason::kOperandIsNotAFixedArray);
-
-    __ bind(&ok);
-  }
-
-  // Check for stack overflow.
   {
-    // Check the stack for overflow. We are not trying to catch interruptions
-    // (i.e. debug break and preemption) here, so check the "real stack limit".
-    Label done;
-    ExternalReference real_stack_limit =
-        ExternalReference::address_of_real_stack_limit(masm->isolate());
-    __ mov(edx, __ StaticVariable(real_stack_limit));
-    // Make edx the space we have left. The stack might already be overflowed
-    // here which will cause edx to become negative.
-    __ neg(edx);
-    __ add(edx, esp);
-    __ sar(edx, kPointerSizeLog2);
-    // Check if the arguments will overflow the stack.
-    __ cmp(edx, kArgumentsLength);
-    __ j(greater, &done, Label::kNear);  // Signed comparison.
-    __ TailCallRuntime(Runtime::kThrowStackOverflow);
-    __ bind(&done);
-  }
+    Assembler::AllowExplicitEbxAccessScope root_register_spilled(masm);
+    // We need to preserve eax, ebx, edi and edx.
+    __ movd(xmm0, edx);
+    __ movd(xmm1, edi);
+    __ movd(xmm2, eax);
+    __ movd(xmm3, ebx);
 
-  // Push additional arguments onto the stack.
-  {
     __ PopReturnAddressTo(edx);
-    __ Move(eax, Immediate(0));
-    Label done, push, loop;
-    __ bind(&loop);
-    __ cmp(eax, kArgumentsLength);
-    __ j(equal, &done, Label::kNear);
-    // Turn the hole into undefined as we go.
-    __ mov(edi, FieldOperand(kArgumentsList, eax, times_pointer_size,
-                             FixedArray::kHeaderSize));
-    __ CompareRoot(edi, Heap::kTheHoleValueRootIndex);
-    __ j(not_equal, &push, Label::kNear);
-    __ LoadRoot(edi, Heap::kUndefinedValueRootIndex);
-    __ bind(&push);
-    __ Push(edi);
-    __ inc(eax);
-    __ jmp(&loop);
-    __ bind(&done);
+    __ pop(kArgumentsList);
     __ PushReturnAddressFrom(edx);
-  }
 
-  // Restore eax, edi and edx.
-  __ movd(eax, xmm2);
-  __ movd(edi, xmm1);
-  __ movd(edx, xmm0);
+    if (masm->emit_debug_code()) {
+      // Allow kArgumentsList to be a FixedArray, or a FixedDoubleArray if
+      // kArgumentsLength == 0.
+      Label ok, fail;
+      __ AssertNotSmi(kArgumentsList);
+      __ mov(edx, FieldOperand(kArgumentsList, HeapObject::kMapOffset));
+      __ CmpInstanceType(edx, FIXED_ARRAY_TYPE);
+      __ j(equal, &ok);
+      __ CmpInstanceType(edx, FIXED_DOUBLE_ARRAY_TYPE);
+      __ j(not_equal, &fail);
+      __ cmp(kArgumentsLength, 0);
+      __ j(equal, &ok);
+      // Fall through.
+      __ bind(&fail);
+      __ Abort(AbortReason::kOperandIsNotAFixedArray);
+
+      __ bind(&ok);
+    }
+
+    // Check for stack overflow.
+    {
+      // Check the stack for overflow. We are not trying to catch interruptions
+      // (i.e. debug break and preemption) here, so check the "real stack
+      // limit".
+      Label done;
+      ExternalReference real_stack_limit =
+          ExternalReference::address_of_real_stack_limit(masm->isolate());
+      __ mov(edx, __ StaticVariable(real_stack_limit));
+      // Make edx the space we have left. The stack might already be overflowed
+      // here which will cause edx to become negative.
+      __ neg(edx);
+      __ add(edx, esp);
+      __ sar(edx, kPointerSizeLog2);
+      // Check if the arguments will overflow the stack.
+      __ cmp(edx, kArgumentsLength);
+      __ j(greater, &done, Label::kNear);  // Signed comparison.
+      __ TailCallRuntime(Runtime::kThrowStackOverflow);
+      __ bind(&done);
+    }
+
+    // Push additional arguments onto the stack.
+    {
+      __ PopReturnAddressTo(edx);
+      __ Move(eax, Immediate(0));
+      Label done, push, loop;
+      __ bind(&loop);
+      __ cmp(eax, kArgumentsLength);
+      __ j(equal, &done, Label::kNear);
+      // Turn the hole into undefined as we go.
+      __ mov(edi, FieldOperand(kArgumentsList, eax, times_pointer_size,
+                               FixedArray::kHeaderSize));
+      __ CompareRoot(edi, Heap::kTheHoleValueRootIndex);
+      __ j(not_equal, &push, Label::kNear);
+      __ LoadRoot(edi, Heap::kUndefinedValueRootIndex);
+      __ bind(&push);
+      __ Push(edi);
+      __ inc(eax);
+      __ jmp(&loop);
+      __ bind(&done);
+      __ PushReturnAddressFrom(edx);
+    }
+
+    // Restore eax, ebx, edi and edx.
+    __ movd(ebx, xmm3);
+    __ movd(eax, xmm2);
+    __ movd(edi, xmm1);
+    __ movd(edx, xmm0);
+  }
 
   // Compute the actual parameter count.
   __ add(eax, kArgumentsLength);
@@ -1765,6 +1771,7 @@ void Builtins::Generate_CallOrConstructVarargs(MacroAssembler* masm,
 void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
                                                       CallOrConstructMode mode,
                                                       Handle<Code> code) {
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
   // ----------- S t a t e -------------
   //  -- eax : the number of arguments (not including the receiver)
   //  -- edi : the target to call (can be any Object)
@@ -1772,90 +1779,96 @@ void Builtins::Generate_CallOrConstructForwardVarargs(MacroAssembler* masm,
   //  -- ecx : start index (to support rest parameters)
   // -----------------------------------
 
-  // Check if new.target has a [[Construct]] internal method.
-  if (mode == CallOrConstructMode::kConstruct) {
-    Label new_target_constructor, new_target_not_constructor;
-    __ JumpIfSmi(edx, &new_target_not_constructor, Label::kNear);
-    __ mov(ebx, FieldOperand(edx, HeapObject::kMapOffset));
-    __ test_b(FieldOperand(ebx, Map::kBitFieldOffset),
-              Immediate(Map::IsConstructorBit::kMask));
-    __ j(not_zero, &new_target_constructor, Label::kNear);
-    __ bind(&new_target_not_constructor);
-    {
-      FrameScope scope(masm, StackFrame::MANUAL);
-      __ EnterFrame(StackFrame::INTERNAL);
-      __ Push(edx);
-      __ CallRuntime(Runtime::kThrowNotConstructor);
-    }
-    __ bind(&new_target_constructor);
-  }
-
-  // Preserve new.target (in case of [[Construct]]).
-  __ movd(xmm0, edx);
-
-  // Check if we have an arguments adaptor frame below the function frame.
-  Label arguments_adaptor, arguments_done;
-  __ mov(ebx, Operand(ebp, StandardFrameConstants::kCallerFPOffset));
-  __ cmp(Operand(ebx, CommonFrameConstants::kContextOrFrameTypeOffset),
-         Immediate(StackFrame::TypeToMarker(StackFrame::ARGUMENTS_ADAPTOR)));
-  __ j(equal, &arguments_adaptor, Label::kNear);
   {
-    __ mov(edx, Operand(ebp, JavaScriptFrameConstants::kFunctionOffset));
-    __ mov(edx, FieldOperand(edx, JSFunction::kSharedFunctionInfoOffset));
-    __ movzx_w(edx, FieldOperand(
-                        edx, SharedFunctionInfo::kFormalParameterCountOffset));
-    __ mov(ebx, ebp);
-  }
-  __ jmp(&arguments_done, Label::kNear);
-  __ bind(&arguments_adaptor);
-  {
-    // Just load the length from the ArgumentsAdaptorFrame.
-    __ mov(edx, Operand(ebx, ArgumentsAdaptorFrameConstants::kLengthOffset));
-    __ SmiUntag(edx);
-  }
-  __ bind(&arguments_done);
+    Assembler::AllowExplicitEbxAccessScope root_register_spilled(masm);
+    __ movd(xmm0, ebx);  // Preserve root register.
 
-  Label stack_done;
-  __ sub(edx, ecx);
-  __ j(less_equal, &stack_done);
-  {
-    // Check for stack overflow.
-    {
-      // Check the stack for overflow. We are not trying to catch interruptions
-      // (i.e. debug break and preemption) here, so check the "real stack
-      // limit".
-      Label done;
-      __ LoadRoot(ecx, Heap::kRealStackLimitRootIndex);
-      // Make ecx the space we have left. The stack might already be
-      // overflowed here which will cause ecx to become negative.
-      __ neg(ecx);
-      __ add(ecx, esp);
-      __ sar(ecx, kPointerSizeLog2);
-      // Check if the arguments will overflow the stack.
-      __ cmp(ecx, edx);
-      __ j(greater, &done, Label::kNear);  // Signed comparison.
-      __ TailCallRuntime(Runtime::kThrowStackOverflow);
-      __ bind(&done);
-    }
-
-    // Forward the arguments from the caller frame.
-    {
-      Label loop;
-      __ add(eax, edx);
-      __ PopReturnAddressTo(ecx);
-      __ bind(&loop);
+    // Check if new.target has a [[Construct]] internal method.
+    if (mode == CallOrConstructMode::kConstruct) {
+      Label new_target_constructor, new_target_not_constructor;
+      __ JumpIfSmi(edx, &new_target_not_constructor, Label::kNear);
+      __ mov(ebx, FieldOperand(edx, HeapObject::kMapOffset));
+      __ test_b(FieldOperand(ebx, Map::kBitFieldOffset),
+                Immediate(Map::IsConstructorBit::kMask));
+      __ j(not_zero, &new_target_constructor, Label::kNear);
+      __ bind(&new_target_not_constructor);
       {
-        __ Push(Operand(ebx, edx, times_pointer_size, 1 * kPointerSize));
-        __ dec(edx);
-        __ j(not_zero, &loop);
+        FrameScope scope(masm, StackFrame::MANUAL);
+        __ EnterFrame(StackFrame::INTERNAL);
+        __ Push(edx);
+        __ CallRuntime(Runtime::kThrowNotConstructor);
       }
-      __ PushReturnAddressFrom(ecx);
+      __ bind(&new_target_constructor);
     }
-  }
-  __ bind(&stack_done);
 
-  // Restore new.target (in case of [[Construct]]).
-  __ movd(edx, xmm0);
+    // Preserve new.target (in case of [[Construct]]).
+    __ movd(xmm1, edx);
+
+    // Check if we have an arguments adaptor frame below the function frame.
+    Label arguments_adaptor, arguments_done;
+    __ mov(ebx, Operand(ebp, StandardFrameConstants::kCallerFPOffset));
+    __ cmp(Operand(ebx, CommonFrameConstants::kContextOrFrameTypeOffset),
+           Immediate(StackFrame::TypeToMarker(StackFrame::ARGUMENTS_ADAPTOR)));
+    __ j(equal, &arguments_adaptor, Label::kNear);
+    {
+      __ mov(edx, Operand(ebp, JavaScriptFrameConstants::kFunctionOffset));
+      __ mov(edx, FieldOperand(edx, JSFunction::kSharedFunctionInfoOffset));
+      __ movzx_w(
+          edx,
+          FieldOperand(edx, SharedFunctionInfo::kFormalParameterCountOffset));
+      __ mov(ebx, ebp);
+    }
+    __ jmp(&arguments_done, Label::kNear);
+    __ bind(&arguments_adaptor);
+    {
+      // Just load the length from the ArgumentsAdaptorFrame.
+      __ mov(edx, Operand(ebx, ArgumentsAdaptorFrameConstants::kLengthOffset));
+      __ SmiUntag(edx);
+    }
+    __ bind(&arguments_done);
+
+    Label stack_done;
+    __ sub(edx, ecx);
+    __ j(less_equal, &stack_done);
+    {
+      // Check for stack overflow.
+      {
+        // Check the stack for overflow. We are not trying to catch
+        // interruptions (i.e. debug break and preemption) here, so check the
+        // "real stack limit".
+        Label done;
+        __ LoadRoot(ecx, Heap::kRealStackLimitRootIndex);
+        // Make ecx the space we have left. The stack might already be
+        // overflowed here which will cause ecx to become negative.
+        __ neg(ecx);
+        __ add(ecx, esp);
+        __ sar(ecx, kPointerSizeLog2);
+        // Check if the arguments will overflow the stack.
+        __ cmp(ecx, edx);
+        __ j(greater, &done, Label::kNear);  // Signed comparison.
+        __ TailCallRuntime(Runtime::kThrowStackOverflow);
+        __ bind(&done);
+      }
+
+      // Forward the arguments from the caller frame.
+      {
+        Label loop;
+        __ add(eax, edx);
+        __ PopReturnAddressTo(ecx);
+        __ bind(&loop);
+        {
+          __ Push(Operand(ebx, edx, times_pointer_size, 1 * kPointerSize));
+          __ dec(edx);
+          __ j(not_zero, &loop);
+        }
+        __ PushReturnAddressFrom(ecx);
+      }
+    }
+    __ bind(&stack_done);
+
+    __ movd(edx, xmm1);  // Restore new.target (in case of [[Construct]]).
+    __ movd(ebx, xmm0);  // Restore root register.
+  }
 
   // Tail-call to the {code} handler.
   __ Jump(code, RelocInfo::CODE_TARGET);
@@ -2122,6 +2135,7 @@ void Builtins::Generate_Call(MacroAssembler* masm, ConvertReceiverMode mode) {
 
 // static
 void Builtins::Generate_ConstructFunction(MacroAssembler* masm) {
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
   // ----------- S t a t e -------------
   //  -- eax : the number of arguments (not including the receiver)
   //  -- edx : the new target (checked to be a constructor)
@@ -2181,6 +2195,7 @@ void Builtins::Generate_ConstructBoundFunction(MacroAssembler* masm) {
 
 // static
 void Builtins::Generate_Construct(MacroAssembler* masm) {
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
   // ----------- S t a t e -------------
   //  -- eax : the number of arguments (not including the receiver)
   //  -- edx : the new target (either the same as the constructor or
