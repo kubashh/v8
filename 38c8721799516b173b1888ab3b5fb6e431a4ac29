@@ -1,0 +1,381 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fb9a813_e91215d7",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Please find a more descriptive name.",
+      "range": {
+        "startLine": 4055,
+        "startChar": 37,
+        "endLine": 4055,
+        "endChar": 63
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "925ab34f_6b36f174",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4057,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Please rename to allocation_flags.",
+      "range": {
+        "startLine": 4057,
+        "startChar": 70,
+        "endLine": 4057,
+        "endChar": 75
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5889c5c_7daa35af",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4126,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Please move the cow block up, before the new_space_check block. That makes it easier to read because the cow block can jump to the new_space_check but not the other way around.",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62e2db03_dbd0bb38",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4128,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "It\u0027s unclear what it means to \"use COW\".",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a29a9584_636d7a73",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4131,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "If you understand what is going on here, please add a comment.",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27d2eca2_84eb6ec0",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4147,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Please rename to source.",
+      "range": {
+        "startLine": 4147,
+        "startChar": 10,
+        "endLine": 4147,
+        "endChar": 21
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1648f58e_f52a749b",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4150,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "This variable seems unnecessary.",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00b189ea_543d19b0",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4151,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Please rename to allocation_flags.",
+      "range": {
+        "startLine": 4151,
+        "startChar": 24,
+        "endLine": 4151,
+        "endChar": 29
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0773f471_8b3607d2",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4191,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Please add a comment above this line saying that we only get here for FixedArray inputs, never for FixedDoubleArray.",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baca91ac_055c7a03",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4193,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Your documentation says that this must be the elements kind of the input array, but here this is not guaranteed.",
+      "range": {
+        "startLine": 4193,
+        "startChar": 8,
+        "endLine": 4193,
+        "endChar": 23
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61cde631_ab132397",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4197,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Doesn\u0027t it make more sense to move this up to line 4186?",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7019de9_c0604756",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4203,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Please change this to \"Copy FixedDoubleArray\".",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cb91e3b_9ab4efeb",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4205,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Please add a comment explaining that only the DOUBLE aspect of this matters.",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a63bd49_55cecb6c",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "\"The result array will be of the same kind.\"",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66dfdb81_632b7e7d",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "I think that should always be the assumption unless mentioned otherwise, so you can drop that part here and below.",
+      "range": {
+        "startLine": 1607,
+        "startChar": 57,
+        "endLine": 1607,
+        "endChar": 78
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8963c11e_556e37cb",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1614,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Unfortunately that explanation is too simple. Can we say that it\u0027s the input map and that it\u0027s also used as the output map unless so and so?",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7439da66_787ebe30",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "(E.g., when using the default value PACKED_ELEMENTS, |source| must be a FixedArray, not a FixedDoubleArray.)",
+      "range": {
+        "startLine": 1616,
+        "startChar": 59,
+        "endLine": 1618,
+        "endChar": 16
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "885dd49d_7e13838e",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "result",
+      "range": {
+        "startLine": 1619,
+        "startChar": 46,
+        "endLine": 1619,
+        "endChar": 50
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62ee0d46_5881c16d",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 1,
+      "message": "Can you instead say:\n* |extract_flags| describe the inputs and operation modes that the generated code needs to support.\n* |allocation_flags| influence the allocation of the result FixedArray.",
+      "range": {
+        "startLine": 1620,
+        "startChar": 5,
+        "endLine": 1620,
+        "endChar": 29
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

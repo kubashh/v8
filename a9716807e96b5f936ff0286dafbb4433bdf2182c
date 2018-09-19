@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c21cbf10_6824b150",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4098,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-19T15:15:14Z",
+      "side": 0,
+      "message": "Please add back this DCHECK, or even better add the following DCHECK to the top:\nDCHECK(extract_flags \u0026 ExtractFixedArrayFlag:kFixedArrays ||\n       extract_flags \u0026 ExtractFixedArrayFlag:kFixedDoubleArrays);\n\nPlease don\u0027t use the equivalent\nDCHECK(extract_flags \u0026 ExtractFixedArrayFlag:kAllFixedArrays);\nbecause I find it harder to read.",
+      "revId": "a9716807e96b5f936ff0286dafbb4433bdf2182c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
