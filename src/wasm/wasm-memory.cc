@@ -161,10 +161,16 @@ bool WasmMemoryTracker::ReserveAddressSpace(size_t num_bytes,
       limit == kSoftLimit ? kAddressSpaceSoftLimit : kAddressSpaceHardLimit;
   while (true) {
     size_t old_count = reserved_address_space_.load();
-    if (old_count > reservation_limit) return false;
-    if (reservation_limit - old_count < num_bytes) return false;
+    if (old_count > reservation_limit ||
+        reservation_limit - old_count < num_bytes) {
+      printf("ReserveAddressSpace +%zu: above limit, at %zu\n", num_bytes,
+             old_count);
+      return false;
+    }
     if (reserved_address_space_.compare_exchange_weak(old_count,
                                                       old_count + num_bytes)) {
+      printf("ReserveAddressSpace +%zu: %zu -> %zu\n", num_bytes, old_count,
+             old_count + num_bytes);
       return true;
     }
   }
@@ -172,6 +178,8 @@ bool WasmMemoryTracker::ReserveAddressSpace(size_t num_bytes,
 
 void WasmMemoryTracker::ReleaseReservation(size_t num_bytes) {
   size_t const old_reserved = reserved_address_space_.fetch_sub(num_bytes);
+  printf("ReleaseReservation -%zu: %zu -> %zu\n", num_bytes, old_reserved,
+         old_reserved - num_bytes);
   USE(old_reserved);
   DCHECK_LE(num_bytes, old_reserved);
 }
