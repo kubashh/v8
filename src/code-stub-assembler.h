@@ -1563,8 +1563,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   typedef base::Flags<ExtractFixedArrayFlag> ExtractFixedArrayFlags;
 
   // Copy a portion of an existing FixedArray or FixedDoubleArray into a new
-  // FixedArray, including special appropriate handling for empty arrays and COW
-  // arrays.
+  // array, including special appropriate handling for empty arrays and COW
+  // arrays. The result array will be of the same type as the original array.
   //
   // * |source| is either a FixedArray or FixedDoubleArray from which to copy
   // elements.
@@ -1599,6 +1599,38 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
     return ExtractFixedArray(source, first, count, capacity, extract_flags,
                              SMI_PARAMETERS);
   }
+
+  // Copy a portion of an existing FixedArray or FixedDoubleArray into a new
+  // FixedArray, including special appropriate handling for COW arrays.
+  // * |source| is either a FixedArray or FixedDoubleArray from which to copy
+  // elements. |source| is assumed to be non-empty.
+  // * |first| is the starting element index to copy from.
+  // * |count| is the number of elements to copy out of the source array
+  // starting from and including the element indexed by |start|.
+  // * |capacity| determines the size of the allocated result array, with
+  // |capacity| >= |count|.
+  // * |to_fixed_array_map| is the map of the target fixed array. It must not
+  // be a FixedDoubleArrayMap. This is usually the map of the |source| array,
+  // unless the elements kind of |source| and target do not match.
+  // In case where the |source| and target maps are both FixedCOWArrayMap,
+  // but the target array is intended to be a subarray of the |source|, the
+  // target array map will not be FixedCOWArrayMap, but FixedArrayMap.
+  // * |from_kind| is the elements kind that is consistant with |source| being
+  // a FixedArray or FixedDoubleArray. The function only cares about double vs.
+  // non-double, so as to distinguish FixedDoubleArray vs. FixedArray. It does
+  // not care about holeyness. For example, when |source| is a FixedArray,
+  // PACKED/HOLEY_ELEMENTS can be used, but not PACKED_DOUBLE_ELEMENTS.
+  // * |allocation_flags| and |extract_flags| influence the allocation of the
+  // result FixedArray.
+  // * |parameter_mode| determines the parameter mode of |first|, |count| and
+  // |capacity|.
+  TNode<FixedArray> ExtractToFixedArrayWithCOW(
+      Node* source, Node* first, Node* count, Node* capacity,
+      Node* to_fixed_array_map, ElementsKind from_kind = PACKED_ELEMENTS,
+      AllocationFlags allocation_flags = AllocationFlag::kNone,
+      ExtractFixedArrayFlags extract_flags =
+          ExtractFixedArrayFlag::kAllFixedArrays,
+      ParameterMode parameter_mode = INTPTR_PARAMETERS);
 
   // Copy the entire contents of a FixedArray or FixedDoubleArray to a new
   // array, including special appropriate handling for empty arrays and COW
