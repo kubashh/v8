@@ -347,47 +347,32 @@ V8_INLINE A implicit_cast(A x) {
 //      write V8_2PART_UINT64_C(0x12345678,90123456);
 #define V8_2PART_UINT64_C(a, b) (((static_cast<uint64_t>(a) << 32) + 0x##b##u))
 
-
-// Compute the 0-relative offset of some absolute value x of type T.
-// This allows conversion of Addresses and integral types into
-// 0-relative int offsets.
-template <typename T>
-constexpr inline intptr_t OffsetFrom(T x) {
-  return x - static_cast<T>(0);
-}
-
-
-// Compute the absolute value of type T for some 0-relative offset x.
-// This allows conversion of 0-relative int offsets into Addresses and
-// integral types.
-template <typename T>
-constexpr inline T AddressFrom(intptr_t x) {
-  return static_cast<T>(static_cast<T>(0) + x);
-}
-
-
 // Return the largest multiple of m which is <= x.
 template <typename T>
 inline T RoundDown(T x, intptr_t m) {
+  STATIC_ASSERT(std::is_integral<T>::value);
   // m must be a power of two.
   DCHECK(m != 0 && ((m & (m - 1)) == 0));
-  return AddressFrom<T>(OffsetFrom(x) & -m);
+  return x & -m;
 }
 template <intptr_t m, typename T>
 constexpr inline T RoundDown(T x) {
+  STATIC_ASSERT(std::is_integral<T>::value);
   // m must be a power of two.
   STATIC_ASSERT(m != 0 && ((m & (m - 1)) == 0));
-  return AddressFrom<T>(OffsetFrom(x) & -m);
+  return x & -m;
 }
 
 // Return the smallest multiple of m which is >= x.
 template <typename T>
 inline T RoundUp(T x, intptr_t m) {
+  STATIC_ASSERT(std::is_integral<T>::value);
   return RoundDown<T>(static_cast<T>(x + m - 1), m);
 }
 template <intptr_t m, typename T>
 constexpr inline T RoundUp(T x) {
-  return RoundDown<m, T>(static_cast<T>(x + m - 1));
+  STATIC_ASSERT(std::is_integral<T>::value);
+  return RoundDown<m, T>(static_cast<T>(x + (m - 1)));
 }
 
 template <typename T, typename U>
@@ -395,11 +380,12 @@ inline bool IsAligned(T value, U alignment) {
   return (value & (alignment - 1)) == 0;
 }
 
-inline void* AlignedAddress(void* address, size_t alignment) {
+template <typename T>
+inline T* AlignedAddress(T* address, size_t alignment) {
   // The alignment must be a power of two.
   DCHECK_EQ(alignment & (alignment - 1), 0u);
-  return reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(address) &
-                                 ~static_cast<uintptr_t>(alignment - 1));
+  return reinterpret_cast<T*>(
+      RoundDown(reinterpret_cast<uintptr_t>(address), alignment));
 }
 
 // Bounds checks for float to integer conversions, which does truncation. Hence,
