@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "06b406fc_442e4b2a",
+        "filename": "src/assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-19T11:26:59Z",
+      "side": 1,
+      "message": "It would be nice to avoid such spurious changes here and below. Maybe add a comment inside destructor if it helps to avoid the tidy warning.",
+      "parentUuid": "6ff8b8ad_b90f1f5e",
+      "revId": "c7a5fa1b0c5cdf6bd1d97ecf714238b76f44261c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d1c0e73_fbd9d46c",
         "filename": "src/assert-scope.h",
         "patchSetId": 4
