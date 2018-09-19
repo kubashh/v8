@@ -34,6 +34,24 @@
       "revId": "6cf5a9843895f1c713b8e54d51af592a0583069d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7f4e9ee_ebe946cc",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2289,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-19T09:39:05Z",
+      "side": 1,
+      "message": "Good question, I don\u0027t know - I\u0027ll find out.",
+      "parentUuid": "7a7e2640_164a5cc1",
+      "revId": "6cf5a9843895f1c713b8e54d51af592a0583069d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
