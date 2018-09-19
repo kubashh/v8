@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "82122845_3f0e9a99",
+        "filename": "src/api.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9883,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-19T07:49:27Z",
+      "side": 1,
+      "message": "lgtm, that\u0027s how I would do it.",
+      "parentUuid": "bb4c181b_3c096e78",
+      "range": {
+        "startLine": 9883,
+        "startChar": 59,
+        "endLine": 9883,
+        "endChar": 70
+      },
+      "revId": "22254ede439404300c4ae50514ec4597c29fcf7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1654eee6_8d40a9aa",
         "filename": "src/counters.h",
         "patchSetId": 5
