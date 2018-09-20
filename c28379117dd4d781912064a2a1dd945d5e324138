@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3186c5c7_7b7436a7",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 4076,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-20T15:57:50Z",
+      "side": 1,
+      "message": "Let\u0027s call this var_target_map.",
+      "range": {
+        "startLine": 4076,
+        "startChar": 4,
+        "endLine": 4076,
+        "endChar": 26
+      },
+      "revId": "c28379117dd4d781912064a2a1dd945d5e324138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
