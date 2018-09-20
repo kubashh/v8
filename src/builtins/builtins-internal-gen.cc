@@ -1208,6 +1208,9 @@ void Builtins::Generate_CallApiGetter(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_CallApiCallback_Argc0(MacroAssembler* masm) {
+#ifdef V8_TARGET_ARCH_IA32
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
+#endif
   // The common variants of CallApiCallbackStub (i.e. all that are embedded into
   // the snapshot) are generated as builtins. The rest remain available as code
   // stubs. Here we abuse the instantiated stub to generate code and avoid
@@ -1218,6 +1221,9 @@ void Builtins::Generate_CallApiCallback_Argc0(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_CallApiCallback_Argc1(MacroAssembler* masm) {
+#ifdef V8_TARGET_ARCH_IA32
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
+#endif
   // The common variants of CallApiCallbackStub (i.e. all that are embedded into
   // the snapshot) are generated as builtins. The rest remain available as code
   // stubs. Here we abuse the instantiated stub to generate code and avoid

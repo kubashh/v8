@@ -202,7 +202,7 @@ static void CallApiFunctionAndReturn(MacroAssembler* masm,
 
   DCHECK(edx == function_address);
   // Allocate HandleScope in callee-save registers.
-  __ mov(ebx, __ StaticVariable(next_address));
+  __ mov(esi, __ StaticVariable(next_address));
   __ mov(edi, __ StaticVariable(limit_address));
   __ add(__ StaticVariable(level_address), Immediate(1));
 
@@ -256,7 +256,7 @@ static void CallApiFunctionAndReturn(MacroAssembler* masm,
   __ bind(&prologue);
   // No more valid handles (the result handle was the last one). Restore
   // previous handle scope.
-  __ mov(__ StaticVariable(next_address), ebx);
+  __ mov(__ StaticVariable(next_address), esi);
   __ sub(__ StaticVariable(level_address), Immediate(1));
   __ Assert(above_equal, AbortReason::kInvalidHandleScopeLevel);
   __ cmp(edi, __ StaticVariable(limit_address));
@@ -265,7 +265,7 @@ static void CallApiFunctionAndReturn(MacroAssembler* masm,
   // Leave the API exit frame.
   __ bind(&leave_exit_frame);
   if (stack_space_operand != nullptr) {
-    __ mov(ebx, *stack_space_operand);
+    __ mov(edx, *stack_space_operand);
   }
   __ LeaveApiExitFrame();
 
@@ -314,7 +314,7 @@ static void CallApiFunctionAndReturn(MacroAssembler* masm,
   if (stack_space_operand != nullptr) {
     DCHECK_EQ(0, stack_space);
     __ pop(ecx);
-    __ add(esp, ebx);
+    __ add(esp, edx);
     __ jmp(ecx);
   } else {
     __ ret(stack_space * kPointerSize);
@@ -339,6 +339,8 @@ static void CallApiFunctionAndReturn(MacroAssembler* masm,
 }
 
 void CallApiCallbackStub::Generate(MacroAssembler* masm) {
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
+
   // ----------- S t a t e -------------
   //  -- eax                 : call_data
   //  -- ecx                 : holder
@@ -355,7 +357,7 @@ void CallApiCallbackStub::Generate(MacroAssembler* masm) {
   Register call_data = eax;
   Register holder = ecx;
   Register api_function_address = edx;
-  Register return_address = ebx;
+  Register return_address = edi;
 
   typedef FunctionCallbackArguments FCA;
 
