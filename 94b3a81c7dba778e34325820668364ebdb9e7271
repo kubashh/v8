@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1904360d_46548a63",
+        "filename": "src/ia32/code-stubs-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-20T11:00:34Z",
+      "side": 1,
+      "message": "The context has already been stored on the frame and will be restored when leaving it below, so we can reuse esi (also callee-saved).",
+      "revId": "94b3a81c7dba778e34325820668364ebdb9e7271",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6727a16b_4dd05c31",
+        "filename": "src/ia32/code-stubs-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-20T11:00:34Z",
+      "side": 1,
+      "message": "esi is restored just below so we switch to edx here.",
+      "revId": "94b3a81c7dba778e34325820668364ebdb9e7271",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
