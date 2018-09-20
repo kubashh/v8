@@ -22,6 +22,30 @@
       "revId": "4c18f44ae3d6f9fb176de0452d327c005b12a2b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edbbe046_4827f410",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-20T11:07:16Z",
+      "side": 1,
+      "message": "Let\u0027s call it kInitialRefsBucketCount.",
+      "parentUuid": "655d7af1_d183c6b6",
+      "range": {
+        "startLine": 503,
+        "startChar": 22,
+        "endLine": 503,
+        "endChar": 44
+      },
+      "revId": "4c18f44ae3d6f9fb176de0452d327c005b12a2b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
