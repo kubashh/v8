@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6fd0283_b1c6f723",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-20T13:15:20Z",
+      "side": 1,
+      "message": "Same as in https://crrev.com/c/1233915.",
+      "revId": "63b63258efedfac5121e7a7d59f11a548c214cb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
