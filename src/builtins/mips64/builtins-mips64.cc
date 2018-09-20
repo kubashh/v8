@@ -56,7 +56,6 @@ void Builtins::Generate_InternalArrayConstructor(MacroAssembler* masm) {
 
   // Run the native code for the InternalArray function called as a normal
   // function.
-  __ LoadRoot(a2, Heap::kUndefinedValueRootIndex);
   __ Jump(BUILTIN_CODE(masm->isolate(), InternalArrayConstructorImpl),
           RelocInfo::CODE_TARGET);
 }
@@ -2709,6 +2708,9 @@ namespace {
 
 void GenerateInternalArrayConstructorCase(MacroAssembler* masm,
                                           ElementsKind kind) {
+  // Load undefined into the allocation site parameter.
+  __ LoadRoot(kJavaScriptCallExtraArg1Register, Heap::kUndefinedValueRootIndex);
+
   __ Jump(CodeFactory::InternalArrayNoArgumentConstructor(masm->isolate(), kind)
               .code(),
           RelocInfo::CODE_TARGET, lo, a0, Operand(1));
