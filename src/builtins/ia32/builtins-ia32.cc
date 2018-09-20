@@ -1249,6 +1249,8 @@ void Builtins::Generate_InterpreterEnterBytecodeDispatch(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_InstantiateAsmJs(MacroAssembler* masm) {
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
+
   // ----------- S t a t e -------------
   //  -- eax : argument count (preserved for callee)
   //  -- edx : new target (preserved for callee)
@@ -1300,10 +1302,10 @@ void Builtins::Generate_InstantiateAsmJs(MacroAssembler* masm) {
     __ SmiUntag(ecx);
     scope.GenerateLeaveFrame();
 
-    __ PopReturnAddressTo(ebx);
+    __ PopReturnAddressTo(edx);
     __ inc(ecx);
     __ lea(esp, Operand(esp, ecx, times_pointer_size, 0));
-    __ PushReturnAddressFrom(ebx);
+    __ PushReturnAddressFrom(edx);
     __ ret(0);
 
     __ bind(&failed);
@@ -1373,6 +1375,8 @@ void Builtins::Generate_ContinueToJavaScriptBuiltinWithResult(
 }
 
 void Builtins::Generate_NotifyDeoptimized(MacroAssembler* masm) {
+  Assembler::SupportsRootRegisterScope supports_root_register(masm);
+
   {
     FrameScope scope(masm, StackFrame::INTERNAL);
     __ CallRuntime(Runtime::kNotifyDeoptimized);
