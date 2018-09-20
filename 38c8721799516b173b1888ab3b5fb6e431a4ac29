@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0ff76813_e4b5603b",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4055,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Please take a look at the new name.",
+      "parentUuid": "8fb9a813_e91215d7",
+      "range": {
+        "startLine": 4055,
+        "startChar": 37,
+        "endLine": 4055,
+        "endChar": 63
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "925ab34f_6b36f174",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "508a27a4_b53b3dca",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4057,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "925ab34f_6b36f174",
+      "range": {
+        "startLine": 4057,
+        "startChar": 70,
+        "endLine": 4057,
+        "endChar": 75
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5889c5c_7daa35af",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 7
@@ -62,6 +110,24 @@
       "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d794d753_3b36c5c1",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4126,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5889c5c_7daa35af",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "7b8c325d_cfccc8b7",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4128,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "I rewrote some bit.",
+      "parentUuid": "62e2db03_dbd0bb38",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a29a9584_636d7a73",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 7
@@ -93,6 +177,24 @@
       "writtenOn": "2018-09-19T15:15:14Z",
       "side": 1,
       "message": "If you understand what is going on here, please add a comment.",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc84d9c6_dbaa9a15",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4131,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Added.",
+      "parentUuid": "a29a9584_636d7a73",
       "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "2dac1d95_8e3c6006",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4147,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27d2eca2_84eb6ec0",
+      "range": {
+        "startLine": 4147,
+        "startChar": 10,
+        "endLine": 4147,
+        "endChar": 21
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1648f58e_f52a749b",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 7
@@ -136,6 +262,24 @@
       "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0574dc30_08a553fd",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4150,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1648f58e_f52a749b",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -162,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "c47516af_48a8620c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4151,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00b189ea_543d19b0",
+      "range": {
+        "startLine": 4151,
+        "startChar": 24,
+        "endLine": 4151,
+        "endChar": 29
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0773f471_8b3607d2",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 7
@@ -179,6 +347,24 @@
     },
     {
       "key": {
+        "uuid": "8c15935c_6e5135d5",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4191,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0773f471_8b3607d2",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baca91ac_055c7a03",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 7
@@ -190,6 +376,30 @@
       "writtenOn": "2018-09-19T15:15:14Z",
       "side": 1,
       "message": "Your documentation says that this must be the elements kind of the input array, but here this is not guaranteed.",
+      "range": {
+        "startLine": 4193,
+        "startChar": 8,
+        "endLine": 4193,
+        "endChar": 23
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8749d25_54637945",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4193,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "I updated the documentation of the function to be clearer.",
+      "parentUuid": "baca91ac_055c7a03",
       "range": {
         "startLine": 4193,
         "startChar": 8,
@@ -219,6 +429,24 @@
     },
     {
       "key": {
+        "uuid": "f0b9b0a0_7b1f9001",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4197,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Hmm, now I actually think it\u0027s not even needed. I removed it.",
+      "parentUuid": "61cde631_ab132397",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c7019de9_c0604756",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 7
@@ -233,6 +461,24 @@
       "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0cb2a7a_960c78d0",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4203,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7019de9_c0604756",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -253,6 +499,24 @@
     },
     {
       "key": {
+        "uuid": "25c653de_3779800f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4205,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cb91e3b_9ab4efeb",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a63bd49_55cecb6c",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 7
@@ -267,6 +531,24 @@
       "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3d978e1_ad57c7b1",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a63bd49_55cecb6c",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -293,6 +575,30 @@
     },
     {
       "key": {
+        "uuid": "c11ed102_4aeac91c",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66dfdb81_632b7e7d",
+      "range": {
+        "startLine": 1607,
+        "startChar": 57,
+        "endLine": 1607,
+        "endChar": 78
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8963c11e_556e37cb",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 7
@@ -304,6 +610,24 @@
       "writtenOn": "2018-09-19T15:15:14Z",
       "side": 1,
       "message": "Unfortunately that explanation is too simple. Can we say that it\u0027s the input map and that it\u0027s also used as the output map unless so and so?",
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24db699e_a21a110b",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1614,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "I added something more explanation. PTAL.",
+      "parentUuid": "8963c11e_556e37cb",
       "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -333,6 +657,30 @@
     },
     {
       "key": {
+        "uuid": "f2e806f9_6541447c",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1618,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7439da66_787ebe30",
+      "range": {
+        "startLine": 1616,
+        "startChar": 59,
+        "endLine": 1618,
+        "endChar": 16
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "885dd49d_7e13838e",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 7
@@ -356,6 +704,30 @@
     },
     {
       "key": {
+        "uuid": "86c5aca9_9ee76e73",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "885dd49d_7e13838e",
+      "range": {
+        "startLine": 1619,
+        "startChar": 46,
+        "endLine": 1619,
+        "endChar": 50
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62ee0d46_5881c16d",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 7
@@ -367,6 +739,30 @@
       "writtenOn": "2018-09-19T15:15:14Z",
       "side": 1,
       "message": "Can you instead say:\n* |extract_flags| describe the inputs and operation modes that the generated code needs to support.\n* |allocation_flags| influence the allocation of the result FixedArray.",
+      "range": {
+        "startLine": 1620,
+        "startChar": 5,
+        "endLine": 1620,
+        "endChar": 29
+      },
+      "revId": "38c8721799516b173b1888ab3b5fb6e431a4ac29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e1c0093_50fe2736",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-20T08:05:58Z",
+      "side": 1,
+      "message": "Unfortunately that is only true for the ExtractFixedArray function. For this function they are both used to determine the allocation. This is because ExtractFixedArray calls ExtractToFixedArrayWithCOW and I don\u0027t want to duplicate the computation of allocation_flags in ExtractToFixedArrayWithCOW.",
+      "parentUuid": "62ee0d46_5881c16d",
       "range": {
         "startLine": 1620,
         "startChar": 5,
