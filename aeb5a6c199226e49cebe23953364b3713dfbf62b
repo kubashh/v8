@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0075ce1_3f0fb07c",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 6935,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-09-20T13:48:54Z",
+      "side": 1,
+      "message": "Can we move this up to where value is initialized and add a comment there?",
+      "range": {
+        "startLine": 6935,
+        "startChar": 8,
+        "endLine": 6935,
+        "endChar": 47
+      },
+      "revId": "aeb5a6c199226e49cebe23953364b3713dfbf62b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
