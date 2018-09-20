@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b2b48e4_909d1bce",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4087,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-20T12:20:16Z",
+      "side": 1,
+      "message": "Thanks for this and the above comment. Now I got it.\n\nHere\u0027s a suggestion to make it even clearer:\n\n// |source| is a COW array, so we don\u0027t actually need to allocate a new \n// array unless\n// 1) |extract_flags| forces us to, or\n// 2) |source| is a FixedDoubleArray (we must produce a FixedArray), or\n// 3) we\u0027re asked to extract only part of the |source| (|first| !\u003d 0).",
+      "revId": "3ed3b53a7e1449774cafca8f9cf834b6a270a1b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f6d6730_d200b2c8",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-20T12:20:16Z",
+      "side": 1,
+      "message": "Let\u0027s change this to be the source map as discussed.",
+      "revId": "3ed3b53a7e1449774cafca8f9cf834b6a270a1b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
