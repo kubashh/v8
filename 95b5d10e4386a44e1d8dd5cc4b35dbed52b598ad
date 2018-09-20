@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a0072b3_6ae1a8e7",
+        "filename": "src/ia32/code-stubs-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-09-20T15:03:04Z",
+      "side": 1,
+      "message": "Outdated.",
+      "range": {
+        "startLine": 189,
+        "startChar": 43,
+        "endLine": 189,
+        "endChar": 55
+      },
+      "revId": "95b5d10e4386a44e1d8dd5cc4b35dbed52b598ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfc4f28d_2518206f",
+        "filename": "src/ia32/code-stubs-ia32.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-09-20T15:03:04Z",
+      "side": 1,
+      "message": "Add the scope here for documentation purposes?",
+      "range": {
+        "startLine": 198,
+        "startChar": 2,
+        "endLine": 198,
+        "endChar": 11
+      },
+      "revId": "95b5d10e4386a44e1d8dd5cc4b35dbed52b598ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
