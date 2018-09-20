@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9498e7d1_9556ee58",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4081,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-20T14:30:11Z",
+      "side": 1,
+      "message": "You can drop this assert.",
+      "revId": "0bc932c15bdd76a98c9e64c7f2b7e3c6e5bf5b88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2ecb217_18c4d6d0",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4088,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-20T14:30:11Z",
+      "side": 1,
+      "message": "Let\u0027s call this is_cow.",
+      "range": {
+        "startLine": 4088,
+        "startChar": 8,
+        "endLine": 4088,
+        "endChar": 11
+      },
+      "revId": "0bc932c15bdd76a98c9e64c7f2b7e3c6e5bf5b88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a759347_84ee84c5",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4208,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-20T14:30:11Z",
+      "side": 1,
+      "message": "Let\u0027s remove this second sentence, it\u0027s not very clear.",
+      "revId": "0bc932c15bdd76a98c9e64c7f2b7e3c6e5bf5b88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
