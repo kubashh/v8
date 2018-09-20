@@ -16,6 +16,24 @@
       "revId": "b15df1f28f3a84e7c9643b6225d79ca433e35a8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef94bb05_15921ebd",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-20T09:58:22Z",
+      "side": 1,
+      "message": "Right, sorry, was confused because I am currently debugging an arm64 bug :/\nFixed, PTAL.",
+      "parentUuid": "b3b0d1c4_56ab779e",
+      "revId": "b15df1f28f3a84e7c9643b6225d79ca433e35a8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
