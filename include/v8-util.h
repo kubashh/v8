@@ -288,6 +288,9 @@ class PersistentValueMapBase {
     return PersistentValueReference(Traits::Get(&impl_, key));
   }
 
+  PersistentValueMapBase(PersistentValueMapBase&) = delete;
+  void operator=(PersistentValueMapBase&) = delete;
+
  protected:
   explicit PersistentValueMapBase(Isolate* isolate) : isolate_(isolate) {}
 
@@ -332,9 +335,6 @@ class PersistentValueMapBase {
   }
 
  private:
-  PersistentValueMapBase(PersistentValueMapBase&);
-  void operator=(PersistentValueMapBase&);
-
   static bool SetReturnValueFromVal(ReturnValue<Value>* returnValue,
                                     PersistentContainerValue value) {
     bool hasValue = value != kPersistentContainerNotFound;

@@ -66,10 +66,10 @@ class PrototypeInfo : public Struct {
 
   class BodyDescriptor;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(PrototypeInfo);
+
  private:
   DECL_ACCESSORS(object_create_map, MaybeObject)
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(PrototypeInfo);
 };
 
 // A growing array with an additional API for marking slots "empty". When adding
@@ -100,13 +100,13 @@ class PrototypeUsers : public WeakArrayList {
 
   static const int kNoEmptySlotsMarker = 0;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(PrototypeUsers);
+
  private:
   static inline Smi* empty_slot_index(WeakArrayList* array);
   static inline void set_empty_slot_index(WeakArrayList* array, int index);
 
   static void IsSlotEmpty(WeakArrayList* array, int index);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(PrototypeUsers);
 };
 
 }  // namespace internal

@@ -89,7 +89,6 @@ class Result : public ResultBase {
 
   T val = T{};
 
- private:
   DISALLOW_COPY_AND_ASSIGN(Result);
 };
 
@@ -127,6 +126,8 @@ class V8_EXPORT_PRIVATE ErrorThrower {
 
   Isolate* isolate() const { return isolate_; }
 
+  DISALLOW_COPY_AND_ASSIGN(ErrorThrower);
+
  private:
   enum ErrorType {
     kNone,
@@ -148,8 +149,6 @@ class V8_EXPORT_PRIVATE ErrorThrower {
   const char* context_;
   ErrorType error_type_ = kNone;
   std::string error_msg_;
-
-  DISALLOW_COPY_AND_ASSIGN(ErrorThrower);
   // ErrorThrower should always be stack-allocated, since it constitutes a scope
   // (things happen in the destructor).
   DISALLOW_NEW_AND_DELETE();

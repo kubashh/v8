@@ -165,6 +165,8 @@ class Frame : public ZoneObject {
     DCHECK_LT(0, frame_slot_count_);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(Frame);
+
  private:
   int fixed_slot_count_;
   int frame_slot_count_;
@@ -172,8 +174,6 @@ class Frame : public ZoneObject {
   int return_slot_count_;
   BitVector* allocated_registers_;
   BitVector* allocated_double_registers_;
-
-  DISALLOW_COPY_AND_ASSIGN(Frame);
 };
 
 

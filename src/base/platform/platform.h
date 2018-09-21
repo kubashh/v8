@@ -248,6 +248,8 @@ class V8_BASE_EXPORT OS {
 
   static void ExitProcess(int exit_code);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(OS);
+
  private:
   // These classes use the private memory management API below.
   friend class MemoryMappedFile;
@@ -278,8 +280,6 @@ class V8_BASE_EXPORT OS {
 #if V8_OS_POSIX
   static const char* GetGCFakeMMapFile();
 #endif
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(OS);
 };
 
 #if (defined(_WIN32) || defined(_WIN64))
@@ -387,6 +387,8 @@ class V8_BASE_EXPORT Thread {
     Run();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(Thread);
+
  private:
   void set_name(const char* name);
 
@@ -395,8 +397,6 @@ class V8_BASE_EXPORT Thread {
   char name_[kMaxThreadNameLength];
   int stack_size_;
   Semaphore* start_semaphore_;
-
-  DISALLOW_COPY_AND_ASSIGN(Thread);
 };
 
 }  // namespace base

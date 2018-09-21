@@ -25,14 +25,14 @@ class V8_EXPORT_PRIVATE ConstantFoldingReducer final
 
   Reduction Reduce(Node* node) final;
 
+  DISALLOW_COPY_AND_ASSIGN(ConstantFoldingReducer);
+
  private:
   JSGraph* jsgraph() const { return jsgraph_; }
   JSHeapBroker* js_heap_broker() const { return js_heap_broker_; }
 
   JSGraph* const jsgraph_;
   JSHeapBroker* const js_heap_broker_;
-
-  DISALLOW_COPY_AND_ASSIGN(ConstantFoldingReducer);
 };
 
 }  // namespace compiler

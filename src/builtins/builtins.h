@@ -188,6 +188,8 @@ class Builtins {
   static Handle<Code> GenerateOffHeapTrampolineFor(Isolate* isolate,
                                                    Address off_heap_entry);
 
+  DISALLOW_COPY_AND_ASSIGN(Builtins);
+
  private:
   static void Generate_CallFunction(MacroAssembler* masm,
                                     ConvertReceiverMode mode);
@@ -226,8 +228,6 @@ class Builtins {
   bool initialized_ = false;
 
   friend class SetupIsolateDelegate;
-
-  DISALLOW_COPY_AND_ASSIGN(Builtins);
 };
 
 }  // namespace internal

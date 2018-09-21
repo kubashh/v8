@@ -50,6 +50,8 @@ class CompilationStatistics final : public Malloced {
 
   void RecordTotalStats(size_t source_size, const BasicStats& stats);
 
+  DISALLOW_COPY_AND_ASSIGN(CompilationStatistics);
+
  private:
   class TotalStats : public BasicStats {
    public:
@@ -81,8 +83,6 @@ class CompilationStatistics final : public Malloced {
   PhaseKindMap phase_kind_map_;
   PhaseMap phase_map_;
   base::Mutex record_mutex_;
-
-  DISALLOW_COPY_AND_ASSIGN(CompilationStatistics);
 };
 
 std::ostream& operator<<(std::ostream& os, const AsPrintableStatistics& s);

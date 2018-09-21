@@ -69,10 +69,10 @@ class BytecodeLivenessState : public ZoneObject {
     bit_vector_.CopyFrom(other.bit_vector_);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(BytecodeLivenessState);
+
  private:
   BitVector bit_vector_;
-
-  DISALLOW_COPY_AND_ASSIGN(BytecodeLivenessState);
 };
 
 struct BytecodeLiveness {

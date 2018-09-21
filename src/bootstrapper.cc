@@ -260,9 +260,11 @@ class Genesis {
     ExtensionTraversalState get_state(RegisteredExtension* extension);
     void set_state(RegisteredExtension* extension,
                    ExtensionTraversalState state);
+
+    DISALLOW_COPY_AND_ASSIGN(ExtensionStates);
+
    private:
     base::HashMap map_;
-    DISALLOW_COPY_AND_ASSIGN(ExtensionStates);
   };
 
   // Used both for deserialized and from-scratch contexts to add the extensions

@@ -44,11 +44,11 @@ class PerThreadAssertScope {
 
   void Release();
 
+  DISALLOW_COPY_AND_ASSIGN(PerThreadAssertScope);
+
  private:
   PerThreadAssertData* data_;
   bool old_state_;
-
-  DISALLOW_COPY_AND_ASSIGN(PerThreadAssertScope);
 };
 
 
@@ -60,13 +60,13 @@ class PerIsolateAssertScope {
 
   static bool IsAllowed(Isolate* isolate);
 
+  DISALLOW_COPY_AND_ASSIGN(PerIsolateAssertScope);
+
  private:
   class DataBit;
 
   Isolate* isolate_;
   uint32_t old_data_;
-
-  DISALLOW_COPY_AND_ASSIGN(PerIsolateAssertScope);
 };
 
 

@@ -92,6 +92,8 @@ class KeyAccumulator final {
   void AddShadowingKey(Object* key);
   void AddShadowingKey(Handle<Object> key);
 
+  DISALLOW_COPY_AND_ASSIGN(KeyAccumulator);
+
  private:
   Maybe<bool> CollectOwnKeys(Handle<JSReceiver> receiver,
                              Handle<JSObject> object);
@@ -119,8 +121,6 @@ class KeyAccumulator final {
   // For all the keys on the first receiver adding a shadowing key we can skip
   // the shadow check.
   bool skip_shadow_check_ = true;
-
-  DISALLOW_COPY_AND_ASSIGN(KeyAccumulator);
 };
 
 // The FastKeyAccumulator handles the cases where there are no elements on the

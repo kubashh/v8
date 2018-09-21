@@ -1483,6 +1483,8 @@ class Object {
   void Print(std::ostream& os) { ShortPrint(os); }  // NOLINT
 #endif
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Object);
+
  private:
   friend class LookupIterator;
   friend class StringStream;
@@ -1524,8 +1526,6 @@ class Object {
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object> ConvertToIndex(
       Isolate* isolate, Handle<Object> input,
       MessageTemplate::Template error_index);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Object);
 };
 
 
@@ -1605,7 +1605,6 @@ class Smi: public Object {
   static const int kMinValue = kSmiMinValue;
   static const int kMaxValue = kSmiMaxValue;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Smi);
 };
 
@@ -1825,7 +1824,6 @@ class HeapObject: public Object {
 
   inline Address GetFieldAddress(int field_offset) const;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(HeapObject);
 };
 
@@ -1895,7 +1893,6 @@ class HeapNumberBase : public HeapObject {
   static const int kMantissaBitsInTopWord = 20;
   static const int kNonMantissaBitsInTopWord = 12;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(HeapNumberBase)
 };
 
@@ -1904,7 +1901,6 @@ class HeapNumber : public HeapNumberBase {
   DECL_CAST(HeapNumber)
   V8_EXPORT_PRIVATE void HeapNumberPrint(std::ostream& os);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(HeapNumber)
 };
 
@@ -1913,7 +1909,6 @@ class MutableHeapNumber : public HeapNumberBase {
   DECL_CAST(MutableHeapNumber)
   V8_EXPORT_PRIVATE void MutableHeapNumberPrint(std::ostream& os);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(MutableHeapNumber)
 };
 
@@ -1989,7 +1984,6 @@ class PropertyArray : public HeapObject {
 
   static const int kNoHashSentinel = 0;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PropertyArray);
 };
 
@@ -2237,7 +2231,6 @@ class JSReceiver : public HeapObject, public NeverReadOnlySpaceObject {
 
   bool HasComplexElements();
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSReceiver);
 };
 
@@ -2742,6 +2735,8 @@ class JSObject: public JSReceiver {
   static bool AllCanRead(LookupIterator* it);
   static bool AllCanWrite(LookupIterator* it);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(JSObject);
+
  private:
   friend class JSReceiver;
   friend class Object;
@@ -2765,8 +2760,6 @@ class JSObject: public JSReceiver {
   template <PropertyAttributes attrs>
   V8_WARN_UNUSED_RESULT static Maybe<bool> PreventExtensionsWithTransition(
       Handle<JSObject> object, ShouldThrow should_throw);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(JSObject);
 };
 
 
@@ -2788,7 +2781,6 @@ class JSAccessorPropertyDescriptor: public JSObject {
   static const int kEnumerableIndex = 2;
   static const int kConfigurableIndex = 3;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSAccessorPropertyDescriptor);
 };
 
@@ -2811,7 +2803,6 @@ class JSDataPropertyDescriptor: public JSObject {
   static const int kEnumerableIndex = 2;
   static const int kConfigurableIndex = 3;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSDataPropertyDescriptor);
 };
 
@@ -2833,7 +2824,6 @@ class JSIteratorResult: public JSObject {
   static const int kValueIndex = 0;
   static const int kDoneIndex = 1;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSIteratorResult);
 };
 
@@ -2869,7 +2859,6 @@ class FreeSpace: public HeapObject {
   static const int kNextOffset = POINTER_SIZE_ALIGN(kSizeOffset + kPointerSize);
   static const int kSize = kNextOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(FreeSpace);
 };
 
@@ -2901,7 +2890,6 @@ class Tuple2 : public Struct {
   static const int kValue2Offset = kValue1Offset + kPointerSize;
   static const int kSize = kValue2Offset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Tuple2);
 };
 
@@ -2919,7 +2907,6 @@ class Tuple3 : public Tuple2 {
   static const int kValue3Offset = Tuple2::kSize;
   static const int kSize = kValue3Offset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Tuple3);
 };
 
@@ -2941,7 +2928,6 @@ class AsyncGeneratorRequest : public Struct {
   DECL_PRINTER(AsyncGeneratorRequest)
   DECL_VERIFIER(AsyncGeneratorRequest)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(AsyncGeneratorRequest);
 };
 
@@ -3184,7 +3170,6 @@ class JSBoundFunction : public JSObject {
   static const int kBoundArgumentsOffset = kBoundThisOffset + kPointerSize;
   static const int kSize = kBoundArgumentsOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSBoundFunction);
 };
 
@@ -3390,7 +3375,6 @@ class JSFunction: public JSObject {
   DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize, JS_FUNCTION_FIELDS)
 #undef JS_FUNCTION_FIELDS
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSFunction);
 };
 
@@ -3423,7 +3407,6 @@ class JSGlobalProxy : public JSObject {
   static const int kNativeContextOffset = JSObject::kHeaderSize;
   static const int kSize = kNativeContextOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSGlobalProxy);
 };
 
@@ -3462,7 +3445,6 @@ class JSGlobalObject : public JSObject {
   static const int kHeaderSize = kGlobalProxyOffset + kPointerSize;
   static const int kSize = kHeaderSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSGlobalObject);
 };
 
@@ -3483,7 +3465,6 @@ class JSValue: public JSObject {
   static const int kValueOffset = JSObject::kHeaderSize;
   static const int kSize = kValueOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSValue);
 };
 
@@ -3575,6 +3556,8 @@ class JSDate: public JSObject {
   static const int kCacheStampOffset = kSecOffset + kPointerSize;
   static const int kSize = kCacheStampOffset + kPointerSize;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(JSDate);
+
  private:
   inline Object* DoGetField(FieldIndex index);
 
@@ -3582,9 +3565,6 @@ class JSDate: public JSObject {
 
   // Computes and caches the cacheable fields of the date.
   inline void SetCachedFields(int64_t local_time_ms, DateCache* date_cache);
-
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(JSDate);
 };
 
 
@@ -3740,7 +3720,6 @@ class Oddball: public HeapObject {
   STATIC_ASSERT(kNull == Internals::kNullOddballKind);
   STATIC_ASSERT(kUndefined == Internals::kUndefinedOddballKind);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Oddball);
 };
 
@@ -3773,7 +3752,6 @@ class Cell: public HeapObject {
                               kValueOffset + kPointerSize,
                               kSize> BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Cell);
 };
 
@@ -3799,7 +3777,6 @@ class FeedbackCell : public Struct {
   typedef FixedBodyDescriptor<kValueOffset, kValueOffset + kPointerSize, kSize>
       BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(FeedbackCell);
 };
 
@@ -3855,7 +3832,6 @@ class PropertyCell : public HeapObject {
 
   typedef FixedBodyDescriptor<kNameOffset, kSize, kSize> BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PropertyCell);
 };
 
@@ -3886,7 +3862,6 @@ class JSAsyncFromSyncIterator : public JSObject {
   static const int kNextOffset = kSyncIteratorOffset + kPointerSize;
   static const int kSize = kNextOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSAsyncFromSyncIterator);
 };
 
@@ -3909,7 +3884,6 @@ class JSStringIterator : public JSObject {
   static const int kNextIndexOffset = kStringOffset + kPointerSize;
   static const int kSize = kNextIndexOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSStringIterator);
 };
 
@@ -3936,14 +3910,14 @@ class Foreign: public HeapObject {
 
   class BodyDescriptor;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Foreign);
+
  private:
   friend class Factory;
   friend class SerializerDeserializer;
   friend class StartupSerializer;
 
   inline void set_foreign_address(Address value);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Foreign);
 };
 
 // Support for JavaScript accessors: A pair of a getter and a setter. Each
@@ -3985,6 +3959,8 @@ class AccessorPair: public Struct {
   static const int kSetterOffset = kGetterOffset + kPointerSize;
   static const int kSize = kSetterOffset + kPointerSize;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(AccessorPair);
+
  private:
   // Strangely enough, in addition to functions and harmony proxies, the spec
   // requires us to consider undefined as a kind of accessor, too:
@@ -3992,8 +3968,6 @@ class AccessorPair: public Struct {
   //    Object.defineProperty(obj, "foo", {get: undefined});
   //    assertTrue("foo" in obj);
   inline bool IsJSAccessor(Object* obj);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(AccessorPair);
 };
 
 class StackFrameInfo : public Struct, public NeverReadOnlySpaceObject {
@@ -4028,13 +4002,13 @@ class StackFrameInfo : public Struct, public NeverReadOnlySpaceObject {
   static const int kIdIndex = kFlagIndex + kPointerSize;
   static const int kSize = kIdIndex + kPointerSize;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(StackFrameInfo);
+
  private:
   // Bit position in the flag, from least significant bit position.
   static const int kIsEvalBit = 0;
   static const int kIsConstructorBit = 1;
   static const int kIsWasmBit = 2;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(StackFrameInfo);
 };
 
 class SourcePositionTableWithFrameCache : public Tuple2 {
@@ -4049,7 +4023,6 @@ class SourcePositionTableWithFrameCache : public Tuple2 {
       kSourcePositionTableIndex + kPointerSize;
   static const int kSize = kStackFrameCacheIndex + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(SourcePositionTableWithFrameCache);
 };
 

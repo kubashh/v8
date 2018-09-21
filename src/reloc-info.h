@@ -361,6 +361,8 @@ class RelocInfoWriter {
   // ExtraTag, VariableLengthPCJump, ExtraTag, pc_delta, data_delta.
   static constexpr int kMaxSize = 1 + 4 + 1 + 1 + kPointerSize;
 
+  DISALLOW_COPY_AND_ASSIGN(RelocInfoWriter);
+
  private:
   inline uint32_t WriteLongPCJump(uint32_t pc_delta);
 
@@ -374,8 +376,6 @@ class RelocInfoWriter {
 
   byte* pos_;
   byte* last_pc_;
-
-  DISALLOW_COPY_AND_ASSIGN(RelocInfoWriter);
 };
 
 // A RelocIterator iterates over relocation information.
@@ -414,6 +414,8 @@ class RelocIterator : public Malloced {
     return &rinfo_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(RelocIterator);
+
  private:
   RelocIterator(Code* host, Address pc, Address constant_pool, const byte* pos,
                 const byte* end, int mode_mask);
@@ -445,8 +447,6 @@ class RelocIterator : public Malloced {
   RelocInfo rinfo_;
   bool done_ = false;
   const int mode_mask_;
-
-  DISALLOW_COPY_AND_ASSIGN(RelocIterator);
 };
 
 }  // namespace internal

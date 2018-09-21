@@ -47,6 +47,8 @@ class V8_EXPORT_PRIVATE DeadCodeElimination final
 
   Reduction Reduce(Node* node) final;
 
+  DISALLOW_COPY_AND_ASSIGN(DeadCodeElimination);
+
  private:
   Reduction ReduceEnd(Node* node);
   Reduction ReduceLoopOrMerge(Node* node);
@@ -75,8 +77,6 @@ class V8_EXPORT_PRIVATE DeadCodeElimination final
   CommonOperatorBuilder* const common_;
   Node* const dead_;
   Zone* zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(DeadCodeElimination);
 };
 
 }  // namespace compiler

@@ -65,7 +65,6 @@ class V8_EXPORT_PRIVATE RegExpMatchInfo : NON_EXPORTED_BASE(public FixedArray) {
   // Every match info is guaranteed to have enough space to store two captures.
   static const int kInitialCaptureIndices = 2;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(RegExpMatchInfo);
 };
 

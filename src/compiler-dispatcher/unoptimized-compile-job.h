@@ -49,6 +49,8 @@ class V8_EXPORT_PRIVATE UnoptimizedCompileJob : public CompilerDispatcherJob {
   void ResetOnMainThread(Isolate* isolate) override;
   double EstimateRuntimeOfNextStepInMs() const override;
 
+  DISALLOW_COPY_AND_ASSIGN(UnoptimizedCompileJob);
+
  private:
   friend class CompilerDispatcherTest;
   friend class UnoptimizedCompileJobTest;
@@ -69,8 +71,6 @@ class V8_EXPORT_PRIVATE UnoptimizedCompileJob : public CompilerDispatcherJob {
   std::unique_ptr<UnoptimizedCompilationJob> compilation_job_;
 
   bool trace_compiler_dispatcher_jobs_;
-
-  DISALLOW_COPY_AND_ASSIGN(UnoptimizedCompileJob);
 };
 
 }  // namespace internal

@@ -274,7 +274,6 @@ class PrintBacktraceOutputHandler : public BacktraceOutputHandler {
     PrintToStderr(output);
   }
 
- private:
   DISALLOW_COPY_AND_ASSIGN(PrintBacktraceOutputHandler);
 };
 
@@ -284,10 +283,10 @@ class StreamBacktraceOutputHandler : public BacktraceOutputHandler {
 
   void HandleOutput(const char* output) override { (*os_) << output; }
 
+  DISALLOW_COPY_AND_ASSIGN(StreamBacktraceOutputHandler);
+
  private:
   std::ostream* os_;
-
-  DISALLOW_COPY_AND_ASSIGN(StreamBacktraceOutputHandler);
 };
 
 void WarmUpBacktrace() {

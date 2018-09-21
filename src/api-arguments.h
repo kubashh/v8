@@ -117,6 +117,10 @@ class PropertyCallbackArguments
   inline Handle<JSObject> CallIndexedEnumerator(
       Handle<InterceptorInfo> interceptor);
 
+  // Don't copy PropertyCallbackArguments, because they would both have the
+  // same prev_ pointer.
+  DISALLOW_COPY_AND_ASSIGN(PropertyCallbackArguments);
+
  private:
   /*
    * The following Call functions wrap the calling of all callbacks to handle
@@ -137,10 +141,6 @@ class PropertyCallbackArguments
 
   inline JSObject* holder();
   inline Object* receiver();
-
-  // Don't copy PropertyCallbackArguments, because they would both have the
-  // same prev_ pointer.
-  DISALLOW_COPY_AND_ASSIGN(PropertyCallbackArguments);
 };
 
 class FunctionCallbackArguments

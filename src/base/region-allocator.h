@@ -75,6 +75,8 @@ class V8_BASE_EXPORT RegionAllocator final {
 
   void Print(std::ostream& os) const;
 
+  DISALLOW_COPY_AND_ASSIGN(RegionAllocator);
+
  private:
   class Region : public AddressRegion {
    public:
@@ -148,8 +150,6 @@ class V8_BASE_EXPORT RegionAllocator final {
   FRIEND_TEST(RegionAllocatorTest, Fragmentation);
   FRIEND_TEST(RegionAllocatorTest, FindRegion);
   FRIEND_TEST(RegionAllocatorTest, Contains);
-
-  DISALLOW_COPY_AND_ASSIGN(RegionAllocator);
 };
 
 }  // namespace base

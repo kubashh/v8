@@ -22,7 +22,6 @@ class Microtask : public Struct {
   DECL_CAST(Microtask)
   DECL_VERIFIER(Microtask)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Microtask);
 };
 
@@ -43,7 +42,6 @@ class CallbackTask : public Microtask {
   DECL_PRINTER(CallbackTask)
   DECL_VERIFIER(CallbackTask)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CallbackTask)
 };
 
@@ -65,7 +63,6 @@ class CallableTask : public Microtask {
   DECL_VERIFIER(CallableTask)
   void BriefPrintDetails(std::ostream& os);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CallableTask);
 };
 

@@ -43,7 +43,6 @@ class V8_EXPORT_PRIVATE MicrotaskQueue : public Struct {
   static const int kPendingMicrotaskCountOffset = kQueueOffset + kPointerSize;
   static const int kSize = kPendingMicrotaskCountOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(MicrotaskQueue);
 };
 

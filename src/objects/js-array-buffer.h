@@ -130,7 +130,6 @@ class JSArrayBuffer : public JSObject {
   // kBackingStoreOffset and kBitFieldSlot.
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSArrayBuffer);
 };
 
@@ -160,7 +159,6 @@ class JSArrayBufferView : public JSObject {
   // kByteOffset and kByteLengthOffset.
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSArrayBufferView);
 };
 
@@ -198,14 +196,14 @@ class JSTypedArray : public JSArrayBufferView {
   static const int kSizeWithEmbedderFields =
       kSize + v8::ArrayBufferView::kEmbedderFieldCount * kPointerSize;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(JSTypedArray);
+
  private:
   static Handle<JSArrayBuffer> MaterializeArrayBuffer(
       Handle<JSTypedArray> typed_array);
 #ifdef VERIFY_HEAP
   DECL_ACCESSORS(raw_length, Object)
 #endif
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(JSTypedArray);
 };
 
 class JSDataView : public JSArrayBufferView {
@@ -220,7 +218,6 @@ class JSDataView : public JSArrayBufferView {
   static const int kSizeWithEmbedderFields =
       kSize + v8::ArrayBufferView::kEmbedderFieldCount * kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSDataView);
 };
 

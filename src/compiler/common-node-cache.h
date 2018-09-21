@@ -71,6 +71,8 @@ class CommonNodeCache final {
 
   Zone* zone() const { return zone_; }
 
+  DISALLOW_COPY_AND_ASSIGN(CommonNodeCache);
+
  private:
   Int32NodeCache int32_constants_;
   Int64NodeCache int64_constants_;
@@ -83,8 +85,6 @@ class CommonNodeCache final {
   RelocInt32NodeCache relocatable_int32_constants_;
   RelocInt64NodeCache relocatable_int64_constants_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(CommonNodeCache);
 };
 
 }  // namespace compiler

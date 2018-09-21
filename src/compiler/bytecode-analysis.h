@@ -152,6 +152,8 @@ class V8_EXPORT_PRIVATE BytecodeAnalysis {
   Zone* zone() const { return zone_; }
   Handle<BytecodeArray> bytecode_array() const { return bytecode_array_; }
 
+  DISALLOW_COPY_AND_ASSIGN(BytecodeAnalysis);
+
  private:
   Handle<BytecodeArray> bytecode_array_;
   bool do_liveness_analysis_;
@@ -166,8 +168,6 @@ class V8_EXPORT_PRIVATE BytecodeAnalysis {
   int osr_entry_point_;
 
   BytecodeLivenessMap liveness_map_;
-
-  DISALLOW_COPY_AND_ASSIGN(BytecodeAnalysis);
 };
 
 }  // namespace compiler

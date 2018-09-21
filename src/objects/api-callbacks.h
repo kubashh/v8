@@ -90,6 +90,8 @@ class AccessorInfo : public Struct {
   DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize, ACCESSOR_INFO_FIELDS)
 #undef ACCESSOR_INFO_FIELDS
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(AccessorInfo);
+
  private:
   inline bool HasExpectedReceiverType();
 
@@ -107,8 +109,6 @@ class AccessorInfo : public Struct {
 
   DEFINE_BIT_FIELDS(ACCESSOR_INFO_FLAGS_BIT_FIELDS)
 #undef ACCESSOR_INFO_FLAGS_BIT_FIELDS
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(AccessorInfo);
 };
 
 class AccessCheckInfo : public Struct {
@@ -133,7 +133,6 @@ class AccessCheckInfo : public Struct {
   static const int kDataOffset = kIndexedInterceptorOffset + kPointerSize;
   static const int kSize = kDataOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(AccessCheckInfo);
 };
 
@@ -179,7 +178,6 @@ class InterceptorInfo : public Struct {
   static const int kNamed = 3;
   static const int kHasNoSideEffect = 4;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(InterceptorInfo);
 };
 
@@ -208,7 +206,6 @@ class CallHandlerInfo : public Tuple3 {
   static const int kJsCallbackOffset = kValue2Offset;
   static const int kDataOffset = kValue3Offset;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CallHandlerInfo);
 };
 
