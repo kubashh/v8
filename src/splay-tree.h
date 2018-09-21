@@ -144,6 +144,8 @@ class SplayTree {
   template <class Callback>
   void ForEach(Callback* callback);
 
+  DISALLOW_COPY_AND_ASSIGN(SplayTree);
+
  protected:
   // Resets tree root. Existing nodes become unreachable.
   void ResetRoot() { root_ = nullptr; }
@@ -168,10 +170,10 @@ class SplayTree {
       callback_->Call(node->key(), node->value());
     }
 
+    DISALLOW_COPY_AND_ASSIGN(NodeToPairAdaptor);
+
    private:
     Callback* callback_;
-
-    DISALLOW_COPY_AND_ASSIGN(NodeToPairAdaptor);
   };
 
   class NodeDeleter {
@@ -179,7 +181,6 @@ class SplayTree {
     NodeDeleter() = default;
     void Call(Node* node) { AllocationPolicy::Delete(node); }
 
-   private:
     DISALLOW_COPY_AND_ASSIGN(NodeDeleter);
   };
 
@@ -188,8 +189,6 @@ class SplayTree {
 
   Node* root_;
   AllocationPolicy allocator_;
-
-  DISALLOW_COPY_AND_ASSIGN(SplayTree);
 };
 
 

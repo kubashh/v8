@@ -29,6 +29,8 @@ class UnicodeCache {
   inline bool IsWhiteSpace(unibrow::uchar c);
   inline bool IsWhiteSpaceOrLineTerminator(unibrow::uchar c);
 
+  DISALLOW_COPY_AND_ASSIGN(UnicodeCache);
+
  private:
   unibrow::Predicate<IdentifierStart, 128> kIsIdentifierStart;
   unibrow::Predicate<IdentifierPart, 128> kIsIdentifierPart;
@@ -36,8 +38,6 @@ class UnicodeCache {
   unibrow::Predicate<WhiteSpaceOrLineTerminator, 128>
       kIsWhiteSpaceOrLineTerminator;
   StaticResource<Utf8Decoder> utf8_decoder_;
-
-  DISALLOW_COPY_AND_ASSIGN(UnicodeCache);
 };
 
 }  // namespace internal

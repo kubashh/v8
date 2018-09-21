@@ -135,6 +135,8 @@ class V8_EXPORT_PRIVATE StackGuard final {
   // stack overflow, then handle the interruption accordingly.
   Object* HandleInterrupts();
 
+  DISALLOW_COPY_AND_ASSIGN(StackGuard);
+
  private:
   StackGuard();
 
@@ -224,8 +226,6 @@ class V8_EXPORT_PRIVATE StackGuard final {
   friend class Isolate;
   friend class StackLimitCheck;
   friend class InterruptsScope;
-
-  DISALLOW_COPY_AND_ASSIGN(StackGuard);
 };
 
 }  // namespace internal

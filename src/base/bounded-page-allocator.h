@@ -62,14 +62,14 @@ class V8_BASE_EXPORT BoundedPageAllocator : public v8::PageAllocator {
   bool SetPermissions(void* address, size_t size,
                       PageAllocator::Permission access) override;
 
+  DISALLOW_COPY_AND_ASSIGN(BoundedPageAllocator);
+
  private:
   v8::base::Mutex mutex_;
   const size_t allocate_page_size_;
   const size_t commit_page_size_;
   v8::PageAllocator* const page_allocator_;
   v8::base::RegionAllocator region_allocator_;
-
-  DISALLOW_COPY_AND_ASSIGN(BoundedPageAllocator);
 };
 
 }  // namespace base

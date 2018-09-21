@@ -110,6 +110,8 @@ class V8_EXPORT_PRIVATE JSGraph : public MachineGraph {
   CACHED_GLOBAL_LIST(DECLARE_GETTER)
 #undef DECLARE_FIELD
 
+  DISALLOW_COPY_AND_ASSIGN(JSGraph);
+
  private:
   Isolate* isolate_;
   JSOperatorBuilder* javascript_;
@@ -129,8 +131,6 @@ class V8_EXPORT_PRIVATE JSGraph : public MachineGraph {
 
   // Internal helper to canonicalize a number constant.
   Node* NumberConstant(double value);
-
-  DISALLOW_COPY_AND_ASSIGN(JSGraph);
 };
 
 }  // namespace compiler

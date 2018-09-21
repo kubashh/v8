@@ -48,6 +48,8 @@ class AstTraversalVisitor : public AstVisitor<Subclass> {
   AST_NODE_LIST(DECLARE_VISIT)
 #undef DECLARE_VISIT
 
+  DISALLOW_COPY_AND_ASSIGN(AstTraversalVisitor);
+
  protected:
   int depth() const { return depth_; }
 
@@ -56,8 +58,6 @@ class AstTraversalVisitor : public AstVisitor<Subclass> {
 
   AstNode* root_;
   int depth_;
-
-  DISALLOW_COPY_AND_ASSIGN(AstTraversalVisitor);
 };
 
 // ----------------------------------------------------------------------------

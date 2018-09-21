@@ -40,6 +40,8 @@ class BytecodeGraphBuilder {
   // Creates a graph by visiting bytecodes.
   void CreateGraph();
 
+  DISALLOW_COPY_AND_ASSIGN(BytecodeGraphBuilder);
+
  private:
   class Environment;
   class OsrIteratorState;
@@ -438,8 +440,6 @@ class BytecodeGraphBuilder {
   static int const kCountOperationHintIndex = 0;
   static int const kBinaryOperationSmiHintIndex = 1;
   static int const kUnaryOperationHintIndex = 0;
-
-  DISALLOW_COPY_AND_ASSIGN(BytecodeGraphBuilder);
 };
 
 }  // namespace compiler

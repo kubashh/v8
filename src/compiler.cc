@@ -947,14 +947,14 @@ class BackgroundCompileTask : public ScriptCompiler::ScriptStreamingTask {
 
   void Run() override;
 
+  DISALLOW_COPY_AND_ASSIGN(BackgroundCompileTask);
+
  private:
   ScriptStreamingData* source_;  // Not owned.
   int stack_size_;
   WorkerThreadRuntimeCallStats* worker_thread_runtime_call_stats_;
   AccountingAllocator* allocator_;
   TimedHistogram* timer_;
-
-  DISALLOW_COPY_AND_ASSIGN(BackgroundCompileTask);
 };
 
 BackgroundCompileTask::BackgroundCompileTask(ScriptStreamingData* source,

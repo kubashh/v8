@@ -38,14 +38,14 @@ class BuiltinsConstantsTableBuilder final {
   // handlers) has been generated.
   void Finalize();
 
+  DISALLOW_COPY_AND_ASSIGN(BuiltinsConstantsTableBuilder)
+
  private:
   Isolate* isolate_;
 
   // Maps objects to corresponding indices within the constants list.
   typedef IdentityMap<uint32_t, FreeStoreAllocationPolicy> ConstantsMap;
   ConstantsMap map_;
-
-  DISALLOW_COPY_AND_ASSIGN(BuiltinsConstantsTableBuilder)
 };
 
 }  // namespace internal

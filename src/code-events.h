@@ -170,11 +170,11 @@ class CodeEventDispatcher {
   }
 #undef CODE_EVENT_DISPATCH
 
+  DISALLOW_COPY_AND_ASSIGN(CodeEventDispatcher);
+
  private:
   std::unordered_set<CodeEventListener*> listeners_;
   base::Mutex mutex_;
-
-  DISALLOW_COPY_AND_ASSIGN(CodeEventDispatcher);
 };
 
 }  // namespace internal

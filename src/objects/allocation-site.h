@@ -152,10 +152,10 @@ class AllocationSite : public Struct, public NeverReadOnlySpaceObject {
 
   class BodyDescriptor;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(AllocationSite);
+
  private:
   inline bool PretenuringDecisionMade() const;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(AllocationSite);
 };
 
 class AllocationMemento : public Struct {
@@ -174,7 +174,6 @@ class AllocationMemento : public Struct {
 
   DECL_CAST(AllocationMemento)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(AllocationMemento);
 };
 

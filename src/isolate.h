@@ -601,6 +601,8 @@ class Isolate : private HiddenFactory {
       return isolate_ == isolate && thread_id_.Equals(thread_id);
     }
 
+    DISALLOW_COPY_AND_ASSIGN(PerIsolateThreadData);
+
    private:
     Isolate* isolate_;
     ThreadId thread_id_;
@@ -617,8 +619,6 @@ class Isolate : private HiddenFactory {
     friend class Isolate;
     friend class ThreadDataTable;
     friend class EntryStackItem;
-
-    DISALLOW_COPY_AND_ASSIGN(PerIsolateThreadData);
   };
 
   static void InitializeOncePerProcess();
@@ -1537,6 +1537,8 @@ class Isolate : private HiddenFactory {
 
   void SetIdle(bool is_idle);
 
+  DISALLOW_COPY_AND_ASSIGN(Isolate);
+
  protected:
   Isolate();
   bool IsArrayOrObjectOrStringPrototype(Object* object);
@@ -1591,7 +1593,6 @@ class Isolate : private HiddenFactory {
     Isolate* previous_isolate;
     EntryStackItem* previous_item;
 
-   private:
     DISALLOW_COPY_AND_ASSIGN(EntryStackItem);
   };
 
@@ -1874,8 +1875,6 @@ class Isolate : private HiddenFactory {
   friend class v8::Locker;
   friend class v8::SnapshotCreator;
   friend class v8::Unlocker;
-
-  DISALLOW_COPY_AND_ASSIGN(Isolate);
 };
 
 

@@ -189,6 +189,8 @@ class FixedArray : public FixedArrayBase {
 
   typedef FlexibleBodyDescriptor<kHeaderSize> BodyDescriptor;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(FixedArray);
+
  protected:
   // Set operation on FixedArray without using write barriers. Can
   // only be used for storing old space objects or smis.
@@ -201,8 +203,6 @@ class FixedArray : public FixedArrayBase {
   inline void set_undefined(ReadOnlyRoots ro_roots, int index);
   inline void set_null(ReadOnlyRoots ro_roots, int index);
   inline void set_the_hole(ReadOnlyRoots ro_roots, int index);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(FixedArray);
 };
 
 // FixedArray alias added only because of IsFixedArrayExact() predicate, which
@@ -255,7 +255,6 @@ class FixedDoubleArray : public FixedArrayBase {
 
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(FixedDoubleArray);
 };
 
@@ -303,6 +302,8 @@ class WeakFixedArray : public HeapObject {
   static_assert(Internals::IsValidSmi(kMaxLength),
                 "WeakFixedArray maxLength not a Smi");
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(WeakFixedArray);
+
  protected:
   static int OffsetOfElementAt(int index) {
     return kHeaderSize + index * kPointerSize;
@@ -312,8 +313,6 @@ class WeakFixedArray : public HeapObject {
   friend class Heap;
 
   static const int kFirstIndex = 1;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(WeakFixedArray);
 };
 
 // WeakArrayList is like a WeakFixedArray with static convenience methods for
@@ -383,21 +382,22 @@ class WeakArrayList : public HeapObject {
 
     inline HeapObject* Next();
 
+    DISALLOW_COPY_AND_ASSIGN(Iterator);
+
    private:
     int index_;
     WeakArrayList* array_;
 #ifdef DEBUG
     DisallowHeapAllocation no_gc_;
 #endif  // DEBUG
-    DISALLOW_COPY_AND_ASSIGN(Iterator);
   };
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(WeakArrayList);
 
  private:
   static int OffsetOfElementAt(int index) {
     return kHeaderSize + index * kPointerSize;
   }
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(WeakArrayList);
 };
 
 // Generic array grows dynamically with O(1) amortized insertion.
@@ -438,12 +438,13 @@ class ArrayList : public FixedArray {
   static Handle<FixedArray> Elements(Isolate* isolate, Handle<ArrayList> array);
   DECL_CAST(ArrayList)
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(ArrayList);
+
  private:
   static Handle<ArrayList> EnsureSpace(Isolate* isolate,
                                        Handle<ArrayList> array, int length);
   static const int kLengthIndex = 0;
   static const int kFirstIndex = 1;
-  DISALLOW_IMPLICIT_CONSTRUCTORS(ArrayList);
 };
 
 enum SearchMode { ALL_ENTRIES, VALID_ENTRIES };
@@ -515,7 +516,6 @@ class ByteArray : public FixedArrayBase {
 
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ByteArray);
 };
 
@@ -542,7 +542,6 @@ class PodArray : public ByteArray {
   inline int length();
   DECL_CAST(PodArray<T>)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PodArray<T>);
 };
 
@@ -591,12 +590,12 @@ class FixedTypedArrayBase : public FixedArrayBase {
 
   inline size_t ByteLength() const;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(FixedTypedArrayBase);
+
  private:
   static inline int ElementSize(InstanceType type);
 
   inline int DataSize(InstanceType type) const;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(FixedTypedArrayBase);
 };
 
 template <class Traits>
@@ -629,7 +628,6 @@ class FixedTypedArray : public FixedTypedArrayBase {
   DECL_PRINTER(FixedTypedArray)
   DECL_VERIFIER(FixedTypedArray)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(FixedTypedArray);
 };
 
@@ -660,10 +658,12 @@ class TemplateList : public FixedArray {
   static Handle<TemplateList> Add(Isolate* isolate, Handle<TemplateList> list,
                                   Handle<Object> value);
   DECL_CAST(TemplateList)
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(TemplateList);
+
  private:
   static const int kLengthIndex = 0;
   static const int kFirstElementIndex = kLengthIndex + 1;
-  DISALLOW_IMPLICIT_CONSTRUCTORS(TemplateList);
 };
 
 }  // namespace internal

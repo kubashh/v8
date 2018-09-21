@@ -164,13 +164,13 @@ class ExternalizedContents {
   }
   ~ExternalizedContents();
 
+  DISALLOW_COPY_AND_ASSIGN(ExternalizedContents);
+
  private:
   void* data_;
   size_t length_;
   ArrayBuffer::Contents::DeleterCallback deleter_;
   void* deleter_data_;
-
-  DISALLOW_COPY_AND_ASSIGN(ExternalizedContents);
 };
 
 class SerializationData {
@@ -191,6 +191,8 @@ class SerializationData {
     return transferrable_modules_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(SerializationData);
+
  private:
   struct DataDeleter {
     void operator()(uint8_t* p) const { free(p); }
@@ -204,8 +206,6 @@ class SerializationData {
 
  private:
   friend class Serializer;
-
-  DISALLOW_COPY_AND_ASSIGN(SerializationData);
 };
 
 

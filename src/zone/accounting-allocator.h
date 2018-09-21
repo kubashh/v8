@@ -47,6 +47,8 @@ class V8_EXPORT_PRIVATE AccountingAllocator {
   virtual void ZoneCreation(const Zone* zone) {}
   virtual void ZoneDestruction(const Zone* zone) {}
 
+  DISALLOW_COPY_AND_ASSIGN(AccountingAllocator);
+
  private:
   FRIEND_TEST(Zone, SegmentPoolConstraints);
 
@@ -82,8 +84,6 @@ class V8_EXPORT_PRIVATE AccountingAllocator {
   base::AtomicWord current_pool_size_ = 0;
 
   base::AtomicValue<MemoryPressureLevel> memory_pressure_level_;
-
-  DISALLOW_COPY_AND_ASSIGN(AccountingAllocator);
 };
 
 }  // namespace internal

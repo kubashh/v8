@@ -41,11 +41,12 @@ class RingBuffer {
 
   void Reset() { start_ = count_ = 0; }
 
+  DISALLOW_COPY_AND_ASSIGN(RingBuffer);
+
  private:
   T elements_[kSize];
   int start_;
   int count_;
-  DISALLOW_COPY_AND_ASSIGN(RingBuffer);
 };
 
 }  // namespace base
