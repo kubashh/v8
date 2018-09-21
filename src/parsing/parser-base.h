@@ -651,8 +651,8 @@ class ParserBase {
                                      Zone* target_zone = nullptr) const {
     DCHECK(ast_value_factory());
     if (target_zone == nullptr) target_zone = zone();
-    DeclarationScope* result = new (target_zone)
-        DeclarationScope(zone(), scope(), FUNCTION_SCOPE, kind);
+    DeclarationScope* result = new (zone())
+        DeclarationScope(target_zone, scope(), FUNCTION_SCOPE, kind);
 
     // Record presence of an inner function scope
     function_state_->RecordFunctionOrEvalCall();
@@ -1552,8 +1552,6 @@ class ParserBase {
   bool allow_harmony_import_meta_;
   bool allow_harmony_private_fields_;
   bool allow_eval_cache_;
-
-  friend class DiscardableZoneScope;
 };
 
 template <typename Impl>
