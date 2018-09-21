@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3e9f15a1_c7e88ef1",
+        "filename": "src/mips/assembler-mips-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d716f97_a4dec0a5",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "621e0762_eea0a4ea",
         "filename": "src/mips/assembler-mips-inl.h",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17c7ce3d_3ad5024d",
+        "filename": "src/mips/assembler-mips-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "621e0762_eea0a4ea",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "07813a13_a484f21c",
+        "filename": "src/mips/assembler-mips-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4e98941_0eb70b31",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "252825e8_7acb81ce",
         "filename": "src/mips/assembler-mips.cc",
         "patchSetId": 2
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "e9f7af7b_913840dd",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3791,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "252825e8_7acb81ce",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd46c534_3dce576f",
         "filename": "src/mips/assembler-mips.cc",
         "patchSetId": 2
@@ -81,6 +153,24 @@
       "writtenOn": "2018-09-13T12:11:40Z",
       "side": 1,
       "message": "Why not make this a DCHECK, remove instr and just directly fetch instr1/instr2?",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cd43aa6_a97caf38",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3796,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Optimization for MIPSR6 will use bc instruction instead of lui,ori pair. Then, else part will exist.",
+      "parentUuid": "bd46c534_3dce576f",
       "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "18690263_be13707d",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3803,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e22da53a_770cf964",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27aeb229_19fa30bb",
         "filename": "src/mips/assembler-mips.cc",
         "patchSetId": 2
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "06d240ed_e574a003",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3812,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27aeb229_19fa30bb",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d48e966e_d91a1a0f",
         "filename": "src/mips/assembler-mips.cc",
         "patchSetId": 2
@@ -132,6 +258,24 @@
       "writtenOn": "2018-09-13T12:11:40Z",
       "side": 1,
       "message": "This implicit dependence from the precise call/jump instruction sequence to here looks a bit scary. We could at least add a helper predicate that\u0027s also used below, and link both ways (from Call/Jump to the helper and reverse) with comments, wdyt? \n\nIt also seems worth mentioning that the one case is an absolute target address, and the other is pc-relative as used by RELATIVE_CODE_TARGET.",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6426651f_caa88485",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4006,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "I am not sure what do you think when you say \"helper predicate\". Could you please elaborate that.",
+      "parentUuid": "d48e966e_d91a1a0f",
       "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -172,6 +316,24 @@
     },
     {
       "key": {
+        "uuid": "0751a5e0_8f94654a",
+        "filename": "src/mips/constants-mips.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db3fee3d_c3fc400e",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d3e109e_836b1c90",
         "filename": "src/mips/macro-assembler-mips.cc",
         "patchSetId": 2
@@ -183,6 +345,24 @@
       "writtenOn": "2018-09-13T12:11:40Z",
       "side": 1,
       "message": "Would it be possible to refactor this and the block below to take a common code path with BranchLong/BranchAndLinkLong?\n\nIs there no shorter sequence for pc-relative calls/jumps? We could even guarantee the maximal offset since we know the embedded blob size at build-time.",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78fc9349_01be5691",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3781,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Refactoring is done. I will add optimization when offset can fit into 16 bits in another CL.",
+      "parentUuid": "0d3e109e_836b1c90",
       "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -206,6 +386,24 @@
     },
     {
       "key": {
+        "uuid": "f4a81b20_32e12496",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3786,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "201b3cb2_9a4f0bb0",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "224c62b6_61f94298",
         "filename": "src/mips/macro-assembler-mips.cc",
         "patchSetId": 2
@@ -223,6 +421,24 @@
     },
     {
       "key": {
+        "uuid": "6d74bd96_464b3625",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3790,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Solved with block refactoring.",
+      "parentUuid": "224c62b6_61f94298",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4930d404_baf73e07",
         "filename": "src/mips/macro-assembler-mips.cc",
         "patchSetId": 2
@@ -234,6 +450,24 @@
       "writtenOn": "2018-09-13T12:11:40Z",
       "side": 1,
       "message": "Out of curiosity, could you explain what\u0027s going on with t8 here? Do we also need that for Call?",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a838eb7_0b8c25d2",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3794,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "First, old value of ra register is saved in t8 with or_(t8, ra, zero_reg), several lines above;\nHere in the branch delay slot of jr, old value of ra is restored.",
+      "parentUuid": "4930d404_baf73e07",
       "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -257,6 +491,24 @@
     },
     {
       "key": {
+        "uuid": "71f267c3_e532ab33",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14715,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Yes, after the review of MIPS32.",
+      "parentUuid": "2a306a8a_b4106fae",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5897300_3177e11c",
         "filename": "src/snapshot/snapshot-common.cc",
         "patchSetId": 2
@@ -271,6 +523,24 @@
       "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5eb6abc0_8495f787",
+        "filename": "src/snapshot/snapshot-common.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-21T07:41:03Z",
+      "side": 1,
+      "message": "Yes, MIPS64 is coming in another PS.",
+      "parentUuid": "b5897300_3177e11c",
+      "revId": "c7a85e0f7b1038fb3fe195ae99195f8cc51d6125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
