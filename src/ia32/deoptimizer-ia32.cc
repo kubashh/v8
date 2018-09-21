@@ -194,6 +194,7 @@ void Deoptimizer::TableEntryGenerator::Generate() {
   }
 
   // Restore the registers from the stack.
+  Assembler::AllowExplicitEbxAccessScope restoring_spilled_value(masm());
   __ popad();
 
   // Return to the continuation point.

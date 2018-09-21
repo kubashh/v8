@@ -502,7 +502,7 @@ void CodeGenerator::AssemblePopArgumentsAdaptorFrame(Register args_reg,
   int scratch_count = 3;
   Register scratch1 = ebx;
   Register scratch2 = ecx;
-  Register scratch3 = edx;
+  Register scratch3 = edi;
   DCHECK(!AreAliased(args_reg, scratch1, scratch2, scratch3));
   Label done;
 
@@ -624,9 +624,11 @@ void CodeGenerator::AssembleCodeStartRegisterCheck() {
 //    3. if it is not zero then it jumps to the builtin.
 void CodeGenerator::BailoutIfDeoptimized() {
   int offset = Code::kCodeDataContainerOffset - Code::kHeaderSize;
+  __ movd(xmm0, ebx);  // TODO.
   __ mov(ebx, Operand(kJavaScriptCallCodeStartRegister, offset));
   __ test(FieldOperand(ebx, CodeDataContainer::kKindSpecificFlagsOffset),
           Immediate(1 << Code::kMarkedForDeoptimizationBit));
+  __ movd(ebx, xmm0);  // TODO.
   // Ensure we're not serializing (otherwise we'd need to use an indirection to
   // access the builtin below).
   DCHECK(!isolate()->ShouldLoadConstantsFromRootList());
