@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f414b32_50ad6ced",
+        "filename": "src/heap/factory-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-09-21T13:31:27Z",
+      "side": 1,
+      "message": "Same here?",
+      "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4672bad4_6ebb1300",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-09-21T13:31:27Z",
+      "side": 1,
+      "message": "What about moving this below the next 3 lines to have all uses together?",
+      "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e070ed7_6608306c",
+        "filename": "src/roots-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-09-21T13:31:27Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa0ac461_67608b29",
+        "filename": "src/roots.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-09-21T13:31:27Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
