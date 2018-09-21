@@ -341,11 +341,10 @@ class V8_EXPORT CpuProfiler {
   V8_DEPRECATED("Use Isolate::SetIdle(bool) instead.",
                 void SetIdle(bool is_idle));
 
- private:
-  CpuProfiler();
-  ~CpuProfiler();
-  CpuProfiler(const CpuProfiler&);
-  CpuProfiler& operator=(const CpuProfiler&);
+  CpuProfiler() = delete;
+  ~CpuProfiler() = delete;
+  CpuProfiler(const CpuProfiler&) = delete;
+  CpuProfiler& operator=(const CpuProfiler&) = delete;
 };
 
 
@@ -667,7 +666,6 @@ class V8_EXPORT EmbedderGraph {
      */
     virtual const char* NamePrefix() { return nullptr; }
 
-   private:
     Node(const Node&) = delete;
     Node& operator=(const Node&) = delete;
   };
@@ -913,11 +911,10 @@ class V8_EXPORT HeapProfiler {
    */
   static const uint16_t kPersistentHandleNoClassId = 0;
 
- private:
-  HeapProfiler();
-  ~HeapProfiler();
-  HeapProfiler(const HeapProfiler&);
-  HeapProfiler& operator=(const HeapProfiler&);
+  HeapProfiler() = delete;
+  ~HeapProfiler() = delete;
+  HeapProfiler(const HeapProfiler&) = delete;
+  HeapProfiler& operator=(const HeapProfiler&) = delete;
 };
 
 /**
@@ -984,13 +981,12 @@ class V8_EXPORT RetainedObjectInfo {  // NOLINT
   /** Returns embedder's object size in bytes. */
   virtual intptr_t GetSizeInBytes() { return -1; }
 
+  RetainedObjectInfo(const RetainedObjectInfo&) = delete;
+  RetainedObjectInfo& operator=(const RetainedObjectInfo&) = delete;
+
  protected:
   RetainedObjectInfo() = default;
   virtual ~RetainedObjectInfo() = default;
-
- private:
-  RetainedObjectInfo(const RetainedObjectInfo&);
-  RetainedObjectInfo& operator=(const RetainedObjectInfo&);
 };
 
 
@@ -1070,10 +1066,11 @@ class V8_EXPORT CodeEventHandler {
   void Enable();
   void Disable();
 
+  CodeEventHandler() = delete;
+  CodeEventHandler(const CodeEventHandler&) = delete;
+  CodeEventHandler& operator=(const CodeEventHandler&) = delete;
+
  private:
-  CodeEventHandler();
-  CodeEventHandler(const CodeEventHandler&);
-  CodeEventHandler& operator=(const CodeEventHandler&);
   void* internal_listener_;
 };
 
