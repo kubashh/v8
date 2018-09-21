@@ -1,0 +1,158 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d08ec530_9c3fcd52",
+        "filename": "src/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-21T01:12:58Z",
+      "side": 1,
+      "message": "Please use a full word here, say, \"result\".",
+      "range": {
+        "startLine": 1599,
+        "startChar": 14,
+        "endLine": 1599,
+        "endChar": 17
+      },
+      "revId": "3ece5957de25bab15d1be5ca838ed58eca04088c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6359c3fb_6895701b",
+        "filename": "src/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1630,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-21T01:12:58Z",
+      "side": 1,
+      "message": "Rather unfortunate that this function uses both snprintf and ostringstream. How hard would it be to get rid of |buffer| and use ostringstream throughout?",
+      "revId": "3ece5957de25bab15d1be5ca838ed58eca04088c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "828c9f20_ba3a0d43",
+        "filename": "src/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-21T01:12:58Z",
+      "side": 1,
+      "message": "I\u0027d just call this \"data\" (and in the below function).",
+      "range": {
+        "startLine": 2029,
+        "startChar": 18,
+        "endLine": 2029,
+        "endChar": 23
+      },
+      "revId": "3ece5957de25bab15d1be5ca838ed58eca04088c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68c33a56_f807ecc0",
+        "filename": "src/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-21T01:12:58Z",
+      "side": 1,
+      "message": "No need for this early-out.",
+      "revId": "3ece5957de25bab15d1be5ca838ed58eca04088c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32ceed6f_f3f22f83",
+        "filename": "src/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-21T01:12:58Z",
+      "side": 1,
+      "message": "const auto\u0026",
+      "range": {
+        "startLine": 2031,
+        "startChar": 7,
+        "endLine": 2031,
+        "endChar": 11
+      },
+      "revId": "3ece5957de25bab15d1be5ca838ed58eca04088c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50e96cdf_3860af48",
+        "filename": "src/d8.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-21T01:12:58Z",
+      "side": 1,
+      "message": "What does this look like when running interactively?",
+      "revId": "3ece5957de25bab15d1be5ca838ed58eca04088c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7aebb35_4c929a23",
+        "filename": "src/d8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-21T01:12:58Z",
+      "side": 1,
+      "message": "Can this be a private inner class of PerIsolateData?",
+      "revId": "3ece5957de25bab15d1be5ca838ed58eca04088c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "316c925b_ad958bac",
+        "filename": "src/d8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-21T01:12:58Z",
+      "side": 1,
+      "message": "I think you can simplify this a bit by using Global\u003cPromise\u003e (which has move semantics) instead of Persistent. See https://cs.chromium.org/chromium/src/v8/src/d8.cc?rcl\u003d08b9e3767fb200bec683f9d382f4f72b3d16a765\u0026l\u003d736 for a similar case.\n\nYou\u0027ll still need the PromiseHash, but it won\u0027t be quite as ugly.\n\nAlso, please move this up next to the other members (even if the ordering seems a bit wrong, at least it\u0027s good to stay consistent).",
+      "revId": "3ece5957de25bab15d1be5ca838ed58eca04088c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
