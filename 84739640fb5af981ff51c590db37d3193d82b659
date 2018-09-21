@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef8af637_eeb304e0",
+        "filename": "src/objects.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2621,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-09-21T12:47:09Z",
+      "side": 0,
+      "message": "suggestion: Should we also move the accessors from \"src/objects-inl.h\" to \"src/objects/code-inl.h\" as part of this CL?",
+      "range": {
+        "startLine": 2621,
+        "startChar": 6,
+        "endLine": 2621,
+        "endChar": 39
+      },
+      "revId": "84739640fb5af981ff51c590db37d3193d82b659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
