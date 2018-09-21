@@ -2227,8 +2227,6 @@ v8_source_set("v8_base") {
     "src/objects/js-number-format-inl.h",
     "src/objects/js-number-format.cc",
     "src/objects/js-number-format.h",
-    "src/objects/js-objects-inl.h",
-    "src/objects/js-objects.h",
     "src/objects/js-plural-rules-inl.h",
     "src/objects/js-plural-rules.cc",
     "src/objects/js-plural-rules.h",
