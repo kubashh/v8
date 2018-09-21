@@ -77,6 +77,10 @@ class V8_PLATFORM_EXPORT TraceObject {
   uint64_t duration() { return duration_; }
   uint64_t cpu_duration() { return cpu_duration_; }
 
+  // Disallow copy and assign
+  TraceObject(const TraceObject&) = delete;
+  void operator=(const TraceObject&) = delete;
+
  private:
   int pid_;
   int tid_;
@@ -98,10 +102,6 @@ class V8_PLATFORM_EXPORT TraceObject {
   int64_t tts_;
   uint64_t duration_;
   uint64_t cpu_duration_;
-
-  // Disallow copy and assign
-  TraceObject(const TraceObject&) = delete;
-  void operator=(const TraceObject&) = delete;
 };
 
 class V8_PLATFORM_EXPORT TraceWriter {
@@ -115,7 +115,6 @@ class V8_PLATFORM_EXPORT TraceWriter {
   static TraceWriter* CreateJSONTraceWriter(std::ostream& stream,
                                             const std::string& tag);
 
- private:
   // Disallow copy and assign
   TraceWriter(const TraceWriter&) = delete;
   void operator=(const TraceWriter&) = delete;
@@ -135,14 +134,14 @@ class V8_PLATFORM_EXPORT TraceBufferChunk {
 
   static const size_t kChunkSize = 64;
 
+  // Disallow copy and assign
+  TraceBufferChunk(const TraceBufferChunk&) = delete;
+  void operator=(const TraceBufferChunk&) = delete;
+
  private:
   size_t next_free_ = 0;
   TraceObject chunk_[kChunkSize];
   uint32_t seq_;
-
-  // Disallow copy and assign
-  TraceBufferChunk(const TraceBufferChunk&) = delete;
-  void operator=(const TraceBufferChunk&) = delete;
 };
 
 class V8_PLATFORM_EXPORT TraceBuffer {
@@ -159,7 +158,6 @@ class V8_PLATFORM_EXPORT TraceBuffer {
   static TraceBuffer* CreateTraceBufferRingBuffer(size_t max_chunks,
                                                   TraceWriter* trace_writer);
 
- private:
   // Disallow copy and assign
   TraceBuffer(const TraceBuffer&) = delete;
   void operator=(const TraceBuffer&) = delete;
@@ -200,15 +198,15 @@ class V8_PLATFORM_EXPORT TraceConfig {
 
   bool IsCategoryGroupEnabled(const char* category_group) const;
 
+  // Disallow copy and assign
+  TraceConfig(const TraceConfig&) = delete;
+  void operator=(const TraceConfig&) = delete;
+
  private:
   TraceRecordMode record_mode_;
   bool enable_systrace_ : 1;
   bool enable_argument_filter_ : 1;
   StringList included_categories_;
-
-  // Disallow copy and assign
-  TraceConfig(const TraceConfig&) = delete;
-  void operator=(const TraceConfig&) = delete;
 };
 
 #if defined(_MSC_VER)
@@ -268,6 +266,10 @@ class V8_PLATFORM_EXPORT TracingController
 
   static const char* GetCategoryGroupName(const uint8_t* category_enabled_flag);
 
+  // Disallow copy and assign
+  TracingController(const TracingController&) = delete;
+  void operator=(const TracingController&) = delete;
+
  protected:
   virtual int64_t CurrentTimestampMicroseconds();
   virtual int64_t CurrentCpuTimestampMicroseconds();
@@ -282,10 +284,6 @@ class V8_PLATFORM_EXPORT TracingController
   std::unique_ptr<base::Mutex> mutex_;
   std::unordered_set<v8::TracingController::TraceStateObserver*> observers_;
   Mode mode_ = DISABLED;
-
-  // Disallow copy and assign
-  TracingController(const TracingController&) = delete;
-  void operator=(const TracingController&) = delete;
 };
 
 #undef V8_PLATFORM_NON_EXPORTED_BASE

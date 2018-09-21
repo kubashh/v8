@@ -962,8 +962,8 @@ class V8_EXPORT SealHandleScope {
  * The superclass of values and API object templates.
  */
 class V8_EXPORT Data {
- private:
-  Data();
+public:
+  Data() = delete;
 };
 
 /**
@@ -1985,10 +1985,10 @@ class V8_EXPORT ValueSerializer {
   void WriteDouble(double value);
   void WriteRawBytes(const void* source, size_t length);
 
- private:
   ValueSerializer(const ValueSerializer&) = delete;
   void operator=(const ValueSerializer&) = delete;
 
+ private:
   struct PrivateData;
   PrivateData* private_;
 };
@@ -2091,10 +2091,10 @@ class V8_EXPORT ValueDeserializer {
   V8_WARN_UNUSED_RESULT bool ReadDouble(double* value);
   V8_WARN_UNUSED_RESULT bool ReadRawBytes(size_t length, const void** data);
 
- private:
   ValueDeserializer(const ValueDeserializer&) = delete;
   void operator=(const ValueDeserializer&) = delete;
 
+ private:
   struct PrivateData;
   PrivateData* private_;
 };
@@ -2643,6 +2643,10 @@ class V8_EXPORT String : public Name {
 #endif
     }
 
+    // Disallow copying and assigning.
+    ExternalStringResourceBase(const ExternalStringResourceBase&) = delete;
+    void operator=(const ExternalStringResourceBase&) = delete;
+
    protected:
     ExternalStringResourceBase() = default;
 
@@ -2671,10 +2675,6 @@ class V8_EXPORT String : public Name {
      * Unlocks the string.
      */
     virtual void Unlock() const {}
-
-    // Disallow copying and assigning.
-    ExternalStringResourceBase(const ExternalStringResourceBase&) = delete;
-    void operator=(const ExternalStringResourceBase&) = delete;
 
    private:
     friend class internal::Heap;
@@ -2969,8 +2969,9 @@ class V8_EXPORT Symbol : public Name {
 
   V8_INLINE static Symbol* Cast(Value* obj);
 
+  Symbol() = delete;
+
  private:
-  Symbol();
   static void CheckCast(Value* obj);
 };
 
@@ -3006,9 +3007,9 @@ class V8_EXPORT Private : public Data {
 
   V8_INLINE static Private* Cast(Data* data);
 
- private:
-  Private();
+  Private() = delete;
 
+ private:
   static void CheckCast(Data* that);
 };
 
@@ -3021,8 +3022,10 @@ class V8_EXPORT Number : public Primitive {
   double Value() const;
   static Local<Number> New(Isolate* isolate, double value);
   V8_INLINE static Number* Cast(v8::Value* obj);
+
+  Number() = delete;
+
  private:
-  Number();
   static void CheckCast(v8::Value* obj);
 };
 
@@ -3036,8 +3039,10 @@ class V8_EXPORT Integer : public Number {
   static Local<Integer> NewFromUnsigned(Isolate* isolate, uint32_t value);
   int64_t Value() const;
   V8_INLINE static Integer* Cast(v8::Value* obj);
+
+  Integer() = delete;
+
  private:
-  Integer();
   static void CheckCast(v8::Value* obj);
 };
 
@@ -3050,8 +3055,9 @@ class V8_EXPORT Int32 : public Integer {
   int32_t Value() const;
   V8_INLINE static Int32* Cast(v8::Value* obj);
 
+  Int32() = delete;
+
  private:
-  Int32();
   static void CheckCast(v8::Value* obj);
 };
 
@@ -3064,8 +3070,9 @@ class V8_EXPORT Uint32 : public Integer {
   uint32_t Value() const;
   V8_INLINE static Uint32* Cast(v8::Value* obj);
 
+  Uint32() = delete;
+
  private:
-  Uint32();
   static void CheckCast(v8::Value* obj);
 };
 
@@ -3119,8 +3126,9 @@ class V8_EXPORT BigInt : public Primitive {
 
   V8_INLINE static BigInt* Cast(v8::Value* obj);
 
+  BigInt() = delete;
+
  private:
-  BigInt();
   static void CheckCast(v8::Value* obj);
 };
 
@@ -3650,8 +3658,9 @@ class V8_EXPORT Object : public Value {
 
   V8_INLINE static Object* Cast(Value* obj);
 
+  Object() = delete;
+
  private:
-  Object();
   static void CheckCast(Value* obj);
   Local<Value> SlowGetInternalField(int index);
   void* SlowGetAlignedPointerFromInternalField(int index);
@@ -3672,8 +3681,10 @@ class V8_EXPORT Array : public Object {
   static Local<Array> New(Isolate* isolate, int length = 0);
 
   V8_INLINE static Array* Cast(Value* obj);
+
+  Array() = delete;
+
  private:
-  Array();
   static void CheckCast(Value* obj);
 };
 
@@ -3708,8 +3719,9 @@ class V8_EXPORT Map : public Object {
 
   V8_INLINE static Map* Cast(Value* obj);
 
+  Map() = delete;
+
  private:
-  Map();
   static void CheckCast(Value* obj);
 };
 
@@ -3740,8 +3752,9 @@ class V8_EXPORT Set : public Object {
 
   V8_INLINE static Set* Cast(Value* obj);
 
+  Set() = delete;
+
  private:
-  Set();
   static void CheckCast(Value* obj);
 };
 
@@ -4061,8 +4074,9 @@ class V8_EXPORT Function : public Object {
   V8_INLINE static Function* Cast(Value* obj);
   static const int kLineOffsetNotFound;
 
+  Function() = delete;
+
  private:
-  Function();
   static void CheckCast(Value* obj);
 };
 
@@ -4107,8 +4121,9 @@ class V8_EXPORT Promise : public Object {
 
     V8_INLINE static Resolver* Cast(Value* obj);
 
+    Resolver() = delete;
+
    private:
-    Resolver();
     static void CheckCast(Value* obj);
   };
 
@@ -4145,8 +4160,9 @@ class V8_EXPORT Promise : public Object {
 
   static const int kEmbedderFieldCount = V8_PROMISE_INTERNAL_FIELD_COUNT;
 
+  Promise() = delete;
+
  private:
-  Promise();
   static void CheckCast(Value* obj);
 };
 
@@ -4243,8 +4259,9 @@ class V8_EXPORT Proxy : public Object {
 
   V8_INLINE static Proxy* Cast(Value* obj);
 
+  Proxy() = delete;
+
  private:
-  Proxy();
   static void CheckCast(Value* obj);
 };
 
@@ -4406,13 +4423,14 @@ class V8_EXPORT WasmModuleObjectBuilderStreaming final {
 
   ~WasmModuleObjectBuilderStreaming() = default;
 
- private:
   WasmModuleObjectBuilderStreaming(const WasmModuleObjectBuilderStreaming&) =
       delete;
-  WasmModuleObjectBuilderStreaming(WasmModuleObjectBuilderStreaming&&) =
-      default;
   WasmModuleObjectBuilderStreaming& operator=(
       const WasmModuleObjectBuilderStreaming&) = delete;
+
+ private:
+  WasmModuleObjectBuilderStreaming(WasmModuleObjectBuilderStreaming&&) =
+      default;
   WasmModuleObjectBuilderStreaming& operator=(
       WasmModuleObjectBuilderStreaming&&) = default;
   Isolate* isolate_ = nullptr;
