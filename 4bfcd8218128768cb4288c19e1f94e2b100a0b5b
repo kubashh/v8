@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "425a3fb6_bdc5d589",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-21T15:58:55Z",
+      "side": 1,
+      "message": "Of course I intended to update scratch1 instead.",
+      "revId": "4bfcd8218128768cb4288c19e1f94e2b100a0b5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2afaae45_d4120048",
+        "filename": "src/compiler/ia32/code-generator-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-21T15:58:55Z",
+      "side": 1,
+      "message": "Not sure how to best solve this. So far we just assume ebx is unused at the beginning of each optimized function. I don\u0027t think there\u0027s another register we can make the same assumption about. Spilling may be too expensive.",
+      "revId": "4bfcd8218128768cb4288c19e1f94e2b100a0b5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab201df9_70ff2a58",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2469,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-09-21T15:58:55Z",
+      "side": 1,
+      "message": "With this we use PreserveRootIA32 for user code,stubs,etc as well as for builtins.",
+      "revId": "4bfcd8218128768cb4288c19e1f94e2b100a0b5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
