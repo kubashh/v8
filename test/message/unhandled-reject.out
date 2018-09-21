@@ -1,0 +1,4 @@
+start
+Unhandled Promise Rejection: *%(basename)s:7: Error
+  throw "Error";
+  ^

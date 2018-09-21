@@ -273,6 +273,19 @@ class Worker {
   base::Atomic32 running_;
 };
 
+class PromiseHash {
+ public:
+  explicit PromiseHash(Isolate* isolate) : isolate_(isolate) {}
+  size_t operator()(
+      const Persistent<Promise, CopyablePersistentTraits<Promise>>& object)
+      const {
+    return object.Get(isolate_)->GetIdentityHash();
+  }
+
+ private:
+  Isolate* isolate_;
+};
+
 class PerIsolateData {
  public:
   explicit PerIsolateData(Isolate* isolate);
@@ -314,6 +327,9 @@ class PerIsolateData {
   int RealmIndexOrThrow(const v8::FunctionCallbackInfo<v8::Value>& args,
                         int arg_offset);
   int RealmFind(Local<Context> context);
+  std::unordered_map<Persistent<Promise, CopyablePersistentTraits<Promise>>,
+                     std::string, PromiseHash>
+      unhandled_rejects_;
 };
 
 class ShellOptions {
@@ -577,6 +593,8 @@ class Shell : public i::AllStatic {
                                                      Local<Value> name);
   static void StoreInCodeCache(Isolate* isolate, Local<Value> name,
                                const ScriptCompiler::CachedData* data);
+  static void PromiseRejectHandler(v8::PromiseRejectMessage data);
+  static void ReportUnhandledRejections();
   // We may have multiple isolates running concurrently, so the access to
   // the isolate_status_ needs to be concurrency-safe.
   static base::LazyMutex isolate_status_lock_;
