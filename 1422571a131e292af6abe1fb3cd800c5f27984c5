@@ -22,6 +22,30 @@
       "revId": "1422571a131e292af6abe1fb3cd800c5f27984c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c25aa55_7fedcb09",
+        "filename": "src/objects-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-21T12:20:26Z",
+      "side": 1,
+      "message": "No. The _ here will be V that expects the adapted set of arguments.",
+      "parentUuid": "f95ef40d_4f27d238",
+      "range": {
+        "startLine": 347,
+        "startChar": 42,
+        "endLine": 347,
+        "endChar": 43
+      },
+      "revId": "1422571a131e292af6abe1fb3cd800c5f27984c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
