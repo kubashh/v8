@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f95ef40d_4f27d238",
+        "filename": "src/objects-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-21T12:04:15Z",
+      "side": 1,
+      "message": "That should be (V, _, Name, Size, name_size), no?",
+      "range": {
+        "startLine": 347,
+        "startChar": 42,
+        "endLine": 347,
+        "endChar": 43
+      },
+      "revId": "1422571a131e292af6abe1fb3cd800c5f27984c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
