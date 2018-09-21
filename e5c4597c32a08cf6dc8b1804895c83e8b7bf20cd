@@ -22,6 +22,30 @@
       "revId": "e5c4597c32a08cf6dc8b1804895c83e8b7bf20cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67459cf8_9ff86ef0",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 2231,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-09-21T13:19:45Z",
+      "side": 0,
+      "message": "Yup, gerrit does something surprising here. Fixed manually.",
+      "parentUuid": "33eec98f_574bc157",
+      "range": {
+        "startLine": 2230,
+        "startChar": 0,
+        "endLine": 2231,
+        "endChar": 31
+      },
+      "revId": "e5c4597c32a08cf6dc8b1804895c83e8b7bf20cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
