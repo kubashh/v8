@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "62a166e5_0928d873",
+        "filename": "src/heap/factory-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-21T13:36:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5f414b32_50ad6ced",
+      "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4672bad4_6ebb1300",
         "filename": "src/heap/factory.h",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "195d94e3_a6d522b6",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-21T13:36:01Z",
+      "side": 1,
+      "message": "In a follow-up CL I\u0027m planning to create adapters for all the lists below so that one ROOT_ACCESSOR could be used.",
+      "parentUuid": "4672bad4_6ebb1300",
+      "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "577a783f_de4c2e53",
+        "filename": "src/roots-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-21T13:36:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3e070ed7_6608306c",
+      "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa0ac461_67608b29",
         "filename": "src/roots.h",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16ff61a0_bb19f512",
+        "filename": "src/roots.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-09-21T13:36:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aa0ac461_67608b29",
+      "revId": "ce4a2894fc52ae3aa6ceb7f097a2f5a2138b2e74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
