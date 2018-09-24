@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24732c3e_6acb93cb",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T14:03:36Z",
+      "side": 1,
+      "message": "You can remove this TODO now.",
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68315a1f_6876582c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T14:03:36Z",
+      "side": 1,
+      "message": "This doesn\u0027t sound right. The broker_zone is per compilation (not per pass) and the compiler_zone is for data shared by multiple compilations.",
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6acdd3ad_07e2aabc",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T14:03:36Z",
+      "side": 1,
+      "message": "This doesn\u0027t have much to do with the broker, you could make it a local function that takes the isolate as argument.",
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "843998ef_c8652ebe",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T14:03:36Z",
+      "side": 1,
+      "message": "Nit: move this up a line, away from the static data.",
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c59c8e0_fcf71421",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T14:03:36Z",
+      "side": 1,
+      "message": "This looks unnecessary (but not sure).",
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "222d91dd_2ed5b0ea",
+        "filename": "src/isolate.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1770,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T14:03:36Z",
+      "side": 1,
+      "message": "How about setting this to nullptr right here instead of in the Init method.",
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
