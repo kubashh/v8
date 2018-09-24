@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "303e0981_fde784b7",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-24T08:25:57Z",
+      "side": 1,
+      "message": "if you want to be pedantic add a DCHECK or maybe just add a small comment.",
+      "revId": "38ec39f0bd6593e74e50d1b04309ad05081d9390",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
