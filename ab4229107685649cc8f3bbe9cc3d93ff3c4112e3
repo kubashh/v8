@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cff7af4f_2b7d9c07",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T12:02:59Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faf5b756_848c41c4",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T12:02:59Z",
+      "side": 1,
+      "message": "Can\u0027t we just check if the map is non-empty?",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "966cb78f_18fab374",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T12:02:59Z",
+      "side": 1,
+      "message": "Please make this const.",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ea31b8c_28f4a6be",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T12:02:59Z",
+      "side": 1,
+      "message": "Nit: remove this comment.",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "731aa0b6_a19fca6c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T12:02:59Z",
+      "side": 1,
+      "message": "Please add back the separating empty line here.",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24ad79d1_3ecd91bc",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-24T12:02:59Z",
+      "side": 1,
+      "message": "Can you find a more specific name for this zone?",
+      "range": {
+        "startLine": 475,
+        "startChar": 39,
+        "endLine": 475,
+        "endChar": 43
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
