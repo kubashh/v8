@@ -147,13 +147,13 @@ class V8_EXPORT_PRIVATE GCIdleTimeHandler {
 
   static bool ShouldDoOverApproximateWeakClosure(double idle_time_in_ms);
 
+  DISALLOW_COPY_AND_ASSIGN(GCIdleTimeHandler);
+
  private:
   GCIdleTimeAction NothingOrDone(double idle_time_in_ms);
 
   // Idle notifications with no progress.
   int idle_times_which_made_no_progress_;
-
-  DISALLOW_COPY_AND_ASSIGN(GCIdleTimeHandler);
 };
 
 }  // namespace internal

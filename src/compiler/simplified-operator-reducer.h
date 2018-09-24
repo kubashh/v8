@@ -36,6 +36,8 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorReducer final
 
   Reduction Reduce(Node* node) final;
 
+  DISALLOW_COPY_AND_ASSIGN(SimplifiedOperatorReducer);
+
  private:
   Reduction ReduceReferenceEqual(Node* node);
 
@@ -60,8 +62,6 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorReducer final
 
   JSGraph* const jsgraph_;
   JSHeapBroker* const js_heap_broker_;
-
-  DISALLOW_COPY_AND_ASSIGN(SimplifiedOperatorReducer);
 };
 
 }  // namespace compiler

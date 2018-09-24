@@ -2648,10 +2648,10 @@ class LeftTrimmerVerifierRootVisitor : public RootVisitor {
     }
   }
 
+  DISALLOW_COPY_AND_ASSIGN(LeftTrimmerVerifierRootVisitor);
+
  private:
   FixedArrayBase* to_check_;
-
-  DISALLOW_COPY_AND_ASSIGN(LeftTrimmerVerifierRootVisitor);
 };
 }  // namespace
 #endif  // ENABLE_SLOW_DCHECKS
@@ -3310,12 +3310,13 @@ class MemoryPressureInterruptTask : public CancelableTask {
 
   ~MemoryPressureInterruptTask() override = default;
 
+  DISALLOW_COPY_AND_ASSIGN(MemoryPressureInterruptTask);
+
  private:
   // v8::internal::CancelableTask overrides.
   void RunInternal() override { heap_->CheckMemoryPressure(); }
 
   Heap* heap_;
-  DISALLOW_COPY_AND_ASSIGN(MemoryPressureInterruptTask);
 };
 
 void Heap::CheckMemoryPressure() {

@@ -79,6 +79,8 @@ class StatsTable {
     return add_histogram_sample_function_(histogram, sample);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(StatsTable);
+
  private:
   friend class Counters;
 
@@ -87,8 +89,6 @@ class StatsTable {
   CounterLookupCallback lookup_function_;
   CreateHistogramCallback create_histogram_function_;
   AddHistogramSampleCallback add_histogram_sample_function_;
-
-  DISALLOW_COPY_AND_ASSIGN(StatsTable);
 };
 
 // Base class for stats counters.
@@ -193,6 +193,8 @@ class StatsCounterThreadSafe : public StatsCounterBase {
     return ptr_;
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(StatsCounterThreadSafe);
+
  private:
   friend class Counters;
 
@@ -200,8 +202,6 @@ class StatsCounterThreadSafe : public StatsCounterBase {
   void Reset() { ptr_ = FindLocationInStatsTable(); }
 
   base::Mutex mutex_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(StatsCounterThreadSafe);
 };
 
 // A Histogram represents a dynamically created histogram in the
@@ -297,12 +297,12 @@ class TimedHistogramScope {
 
   ~TimedHistogramScope() { histogram_->Stop(&timer_, isolate_); }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(TimedHistogramScope);
+
  private:
   base::ElapsedTimer timer_;
   TimedHistogram* histogram_;
   Isolate* isolate_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(TimedHistogramScope);
 };
 
 // Helper class for recording a TimedHistogram asynchronously with manual
@@ -1153,12 +1153,12 @@ class RuntimeCallTimerScope {
       stats_->Leave(&timer_);
     }
   }
-
- private:
-  RuntimeCallStats* stats_ = nullptr;
   RuntimeCallTimer timer_;
 
   DISALLOW_COPY_AND_ASSIGN(RuntimeCallTimerScope);
+
+ private:
+  RuntimeCallStats* stats_ = nullptr;
 };
 
 #define HISTOGRAM_RANGE_LIST(HR)                                               \
@@ -1568,6 +1568,8 @@ class Counters : public std::enable_shared_from_this<Counters> {
     return &worker_thread_runtime_call_stats_;
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Counters);
+
  private:
   friend class StatsTable;
   friend class StatsCounterBase;
@@ -1648,8 +1650,6 @@ class Counters : public std::enable_shared_from_this<Counters> {
 
   RuntimeCallStats runtime_call_stats_;
   WorkerThreadRuntimeCallStats worker_thread_runtime_call_stats_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Counters);
 };
 
 void HistogramTimer::Start() {

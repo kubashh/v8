@@ -162,6 +162,8 @@ class AccessInfoFactory final {
                                   AccessMode access_mode,
                                   ZoneVector<PropertyAccessInfo>* access_infos);
 
+  DISALLOW_COPY_AND_ASSIGN(AccessInfoFactory);
+
  private:
   bool ConsolidateElementLoad(MapHandles const& maps,
                               ElementAccessInfo* access_info);
@@ -184,8 +186,6 @@ class AccessInfoFactory final {
   Isolate* const isolate_;
   TypeCache const& type_cache_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(AccessInfoFactory);
 };
 
 }  // namespace compiler

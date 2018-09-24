@@ -25,12 +25,12 @@ class V8Regex {
   bool isValid() const { return !m_regex.IsEmpty(); }
   const String16& errorMessage() const { return m_errorMessage; }
 
+  DISALLOW_COPY_AND_ASSIGN(V8Regex);
+
  private:
   V8InspectorImpl* m_inspector;
   v8::Global<v8::RegExp> m_regex;
   String16 m_errorMessage;
-
-  DISALLOW_COPY_AND_ASSIGN(V8Regex);
 };
 
 }  // namespace v8_inspector

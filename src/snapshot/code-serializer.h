@@ -33,13 +33,13 @@ class ScriptData {
     owns_data_ = false;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(ScriptData);
+
  private:
   bool owns_data_ : 1;
   bool rejected_ : 1;
   const byte* data_;
   int length_;
-
-  DISALLOW_COPY_AND_ASSIGN(ScriptData);
 };
 
 class CodeSerializer : public Serializer<> {
@@ -69,6 +69,8 @@ class CodeSerializer : public Serializer<> {
   void SerializeGeneric(HeapObject* heap_object, HowToCode how_to_code,
                         WhereToPoint where_to_point);
 
+  DISALLOW_COPY_AND_ASSIGN(CodeSerializer);
+
  private:
   void SerializeObject(HeapObject* o, HowToCode how_to_code,
                        WhereToPoint where_to_point, int skip) override;
@@ -82,7 +84,6 @@ class CodeSerializer : public Serializer<> {
   DisallowHeapAllocation no_gc_;
   uint32_t source_hash_;
   std::vector<uint32_t> stub_keys_;
-  DISALLOW_COPY_AND_ASSIGN(CodeSerializer);
 };
 
 // Wrapper around ScriptData to provide code-serializer-specific functionality.

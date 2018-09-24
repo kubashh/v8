@@ -68,11 +68,11 @@ class Disassembler {
                           UnimplementedOpcodeAction unimplemented_action =
                               kAbortOnUnimplementedOpcode);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Disassembler);
+
  private:
   const NameConverter& converter_;
   const UnimplementedOpcodeAction unimplemented_opcode_action_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Disassembler);
 };
 
 }  // namespace disasm

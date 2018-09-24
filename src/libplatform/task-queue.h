@@ -34,6 +34,8 @@ class V8_PLATFORM_EXPORT TaskQueue {
   // Terminate the queue.
   void Terminate();
 
+  DISALLOW_COPY_AND_ASSIGN(TaskQueue);
+
  private:
   FRIEND_TEST(WorkerThreadTest, PostSingleTask);
 
@@ -43,8 +45,6 @@ class V8_PLATFORM_EXPORT TaskQueue {
   base::Mutex lock_;
   std::queue<std::unique_ptr<Task>> task_queue_;
   bool terminated_;
-
-  DISALLOW_COPY_AND_ASSIGN(TaskQueue);
 };
 
 }  // namespace platform

@@ -25,6 +25,8 @@ class BuiltinSerializer : public Serializer<BuiltinSerializerAllocator> {
 
   void SerializeBuiltinsAndHandlers();
 
+  DISALLOW_COPY_AND_ASSIGN(BuiltinSerializer);
+
  private:
   void VisitRootPointers(Root root, const char* description, Object** start,
                          Object** end) override;
@@ -49,8 +51,6 @@ class BuiltinSerializer : public Serializer<BuiltinSerializerAllocator> {
   // Indices [kFirstBuiltinIndex, kFirstBuiltinIndex + kNumberOfBuiltins[:
   //     Builtin offsets.
   uint32_t code_offsets_[Builtins::builtin_count];
-
-  DISALLOW_COPY_AND_ASSIGN(BuiltinSerializer);
 };
 
 }  // namespace internal

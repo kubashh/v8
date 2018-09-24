@@ -716,14 +716,14 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
 #undef PSEUDO_OP
 #undef PSEUDO_OP_LIST
 
+  DISALLOW_COPY_AND_ASSIGN(MachineOperatorBuilder);
+
  private:
   Zone* zone_;
   MachineOperatorGlobalCache const& cache_;
   MachineRepresentation const word_;
   Flags const flags_;
   AlignmentRequirements const alignment_requirements_;
-
-  DISALLOW_COPY_AND_ASSIGN(MachineOperatorBuilder);
 };
 
 

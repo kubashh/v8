@@ -42,9 +42,10 @@ typedef CodeStubAssembler::Variable Variable;
     static void Generate(compiler::CodeAssemblerState* state,         \
                          OperandScale scale);                         \
                                                                       \
+    DISALLOW_COPY_AND_ASSIGN(Name##Assembler);                        \
+                                                                      \
    private:                                                           \
     void GenerateImpl();                                              \
-    DISALLOW_COPY_AND_ASSIGN(Name##Assembler);                        \
   };                                                                  \
   void Name##Assembler::Generate(compiler::CodeAssemblerState* state, \
                                  OperandScale scale) {                \

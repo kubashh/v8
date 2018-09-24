@@ -138,6 +138,8 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
 
   RegList allocatable_registers() const { return allocatable_registers_; }
 
+  DISALLOW_COPY_AND_ASSIGN(CallInterfaceDescriptorData);
+
  private:
   bool IsInitializedPlatformSpecific() const {
     const bool initialized =
@@ -173,8 +175,6 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
   // runtime static initializers which we don't want.
   Register* register_params_ = nullptr;
   MachineType* machine_types_ = nullptr;
-
-  DISALLOW_COPY_AND_ASSIGN(CallInterfaceDescriptorData);
 };
 
 class V8_EXPORT_PRIVATE CallDescriptors : public AllStatic {

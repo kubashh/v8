@@ -63,6 +63,8 @@ class WasmTranslation {
   int GetEndColumn(const String16& script_id, int func_index);
   String16 GetHash(const String16& script_id, int func_index);
 
+  DISALLOW_COPY_AND_ASSIGN(WasmTranslation);
+
  private:
   class TranslatorImpl;
   friend class TranslatorImpl;
@@ -73,8 +75,6 @@ class WasmTranslation {
   std::unordered_map<int, std::unique_ptr<TranslatorImpl>> wasm_translators_;
   std::unordered_map<String16, TranslatorImpl*> fake_scripts_;
   Mode mode_;
-
-  DISALLOW_COPY_AND_ASSIGN(WasmTranslation);
 };
 
 }  // namespace v8_inspector

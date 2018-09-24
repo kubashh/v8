@@ -59,6 +59,8 @@ class FutexWaitListNode {
 
   void NotifyWake();
 
+  DISALLOW_COPY_AND_ASSIGN(FutexWaitListNode);
+
  private:
   friend class FutexEmulation;
   friend class FutexWaitList;
@@ -75,8 +77,6 @@ class FutexWaitListNode {
   // or an AtomicsWaitWakeHandle has access to it.
   bool waiting_;
   bool interrupted_;
-
-  DISALLOW_COPY_AND_ASSIGN(FutexWaitListNode);
 };
 
 
@@ -87,13 +87,13 @@ class FutexWaitList {
   void AddNode(FutexWaitListNode* node);
   void RemoveNode(FutexWaitListNode* node);
 
+  DISALLOW_COPY_AND_ASSIGN(FutexWaitList);
+
  private:
   friend class FutexEmulation;
 
   FutexWaitListNode* head_;
   FutexWaitListNode* tail_;
-
-  DISALLOW_COPY_AND_ASSIGN(FutexWaitList);
 };
 
 class ResetWaitingOnScopeExit {
@@ -101,10 +101,10 @@ class ResetWaitingOnScopeExit {
   explicit ResetWaitingOnScopeExit(FutexWaitListNode* node) : node_(node) {}
   ~ResetWaitingOnScopeExit() { node_->waiting_ = false; }
 
+  DISALLOW_COPY_AND_ASSIGN(ResetWaitingOnScopeExit);
+
  private:
   FutexWaitListNode* node_;
-
-  DISALLOW_COPY_AND_ASSIGN(ResetWaitingOnScopeExit);
 };
 
 class FutexEmulation : public AllStatic {

@@ -272,6 +272,8 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
     trace_turbo_filename_ = std::move(filename);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(OptimizedCompilationInfo);
+
  private:
   OptimizedCompilationInfo(Code::Kind code_kind, Zone* zone);
   void ConfigureFlags();
@@ -317,8 +319,6 @@ class V8_EXPORT_PRIVATE OptimizedCompilationInfo final {
 
   Vector<const char> debug_name_;
   std::unique_ptr<char[]> trace_turbo_filename_;
-
-  DISALLOW_COPY_AND_ASSIGN(OptimizedCompilationInfo);
 };
 
 }  // namespace internal

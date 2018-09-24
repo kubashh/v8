@@ -149,6 +149,8 @@ class BreakIterator {
   void ClearDebugBreak();
   void SetDebugBreak();
 
+  DISALLOW_COPY_AND_ASSIGN(BreakIterator);
+
  private:
   int BreakIndexFromPosition(int position);
 
@@ -162,8 +164,6 @@ class BreakIterator {
   int statement_position_;
   SourcePositionTableIterator source_position_iterator_;
   DisallowHeapAllocation no_gc_;
-
-  DISALLOW_COPY_AND_ASSIGN(BreakIterator);
 };
 
 // Linked list holding debug info objects. The debug info objects are kept as
@@ -382,6 +382,8 @@ class Debug {
 
   void RemoveBreakInfoAndMaybeFree(Handle<DebugInfo> debug_info);
 
+  DISALLOW_COPY_AND_ASSIGN(Debug);
+
  private:
   explicit Debug(Isolate* isolate);
   ~Debug();
@@ -549,8 +551,6 @@ class Debug {
 
   friend Handle<FixedArray> GetDebuggedFunctions();  // In test-debug.cc
   friend void CheckDebuggerUnloaded();               // In test-debug.cc
-
-  DISALLOW_COPY_AND_ASSIGN(Debug);
 };
 
 // This scope is used to load and enter the debug context and create a new
@@ -594,10 +594,11 @@ class DisableBreak {
     debug_->break_disabled_ = previous_break_disabled_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(DisableBreak);
+
  private:
   Debug* debug_;
   bool previous_break_disabled_;
-  DISALLOW_COPY_AND_ASSIGN(DisableBreak);
 };
 
 class SuppressDebug {
@@ -608,10 +609,11 @@ class SuppressDebug {
   }
   ~SuppressDebug() { debug_->is_suppressed_ = old_state_; }
 
+  DISALLOW_COPY_AND_ASSIGN(SuppressDebug);
+
  private:
   Debug* debug_;
   bool old_state_;
-  DISALLOW_COPY_AND_ASSIGN(SuppressDebug);
 };
 
 // Code generator routines.

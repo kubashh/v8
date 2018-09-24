@@ -140,6 +140,8 @@ class V8InspectorImpl : public V8Inspector {
     v8::Isolate::SafeForTerminationScope m_safeForTerminationScope;
   };
 
+  DISALLOW_COPY_AND_ASSIGN(V8InspectorImpl);
+
  private:
   v8::Isolate* m_isolate;
   V8InspectorClient* m_client;
@@ -170,8 +172,6 @@ class V8InspectorImpl : public V8Inspector {
   std::unordered_map<int, int> m_contextIdToGroupIdMap;
 
   std::unique_ptr<V8Console> m_console;
-
-  DISALLOW_COPY_AND_ASSIGN(V8InspectorImpl);
 };
 
 }  // namespace v8_inspector

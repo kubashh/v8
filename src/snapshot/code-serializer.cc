@@ -368,11 +368,11 @@ class Checksum {
   uint32_t a() const { return a_; }
   uint32_t b() const { return b_; }
 
+  DISALLOW_COPY_AND_ASSIGN(Checksum);
+
  private:
   uint32_t a_;
   uint32_t b_;
-
-  DISALLOW_COPY_AND_ASSIGN(Checksum);
 };
 
 SerializedCodeData::SerializedCodeData(const std::vector<byte>* payload,

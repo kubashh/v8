@@ -255,6 +255,8 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
 
   void Deactivate();
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(IncrementalMarking);
+
  private:
   class Observer : public AllocationObserver {
    public:
@@ -344,8 +346,6 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
   MarkingState marking_state_;
   AtomicMarkingState atomic_marking_state_;
   NonAtomicMarkingState non_atomic_marking_state_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(IncrementalMarking);
 };
 }  // namespace internal
 }  // namespace v8

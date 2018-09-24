@@ -179,6 +179,8 @@ class SerializerReferenceMap
     return reference;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(SerializerReferenceMap);
+
  private:
   static inline uintptr_t Key(void* value) {
     return reinterpret_cast<uintptr_t>(value);
@@ -188,7 +190,6 @@ class SerializerReferenceMap
 
   DisallowHeapAllocation no_allocation_;
   int attached_reference_index_;
-  DISALLOW_COPY_AND_ASSIGN(SerializerReferenceMap);
 };
 
 }  // namespace internal

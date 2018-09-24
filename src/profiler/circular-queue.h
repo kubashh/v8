@@ -38,6 +38,8 @@ class SamplingCircularQueue {
   T* Peek();
   void Remove();
 
+  DISALLOW_COPY_AND_ASSIGN(SamplingCircularQueue);
+
  private:
   // Reserved values for the entry marker.
   enum {
@@ -57,8 +59,6 @@ class SamplingCircularQueue {
   Entry buffer_[Length];
   V8_ALIGNED(PROCESSOR_CACHE_LINE_SIZE) Entry* enqueue_pos_;
   V8_ALIGNED(PROCESSOR_CACHE_LINE_SIZE) Entry* dequeue_pos_;
-
-  DISALLOW_COPY_AND_ASSIGN(SamplingCircularQueue);
 };
 
 

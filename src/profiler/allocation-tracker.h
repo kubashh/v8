@@ -42,6 +42,8 @@ class AllocationTraceNode {
 
   void Print(int indent, AllocationTracker* tracker);
 
+  DISALLOW_COPY_AND_ASSIGN(AllocationTraceNode);
+
  private:
   AllocationTraceTree* tree_;
   unsigned function_info_index_;
@@ -49,8 +51,6 @@ class AllocationTraceNode {
   unsigned allocation_count_;
   unsigned id_;
   std::vector<AllocationTraceNode*> children_;
-
-  DISALLOW_COPY_AND_ASSIGN(AllocationTraceNode);
 };
 
 
@@ -63,11 +63,11 @@ class AllocationTraceTree {
   unsigned next_node_id() { return next_node_id_++; }
   void Print(AllocationTracker* tracker);
 
+  DISALLOW_COPY_AND_ASSIGN(AllocationTraceTree);
+
  private:
   unsigned next_node_id_;
   AllocationTraceNode root_;
-
-  DISALLOW_COPY_AND_ASSIGN(AllocationTraceTree);
 };
 
 
@@ -119,6 +119,8 @@ class AllocationTracker {
   }
   AddressToTraceMap* address_to_trace() { return &address_to_trace_; }
 
+  DISALLOW_COPY_AND_ASSIGN(AllocationTracker);
+
  private:
   unsigned AddFunctionInfo(SharedFunctionInfo* info, SnapshotObjectId id);
   unsigned functionInfoIndexForVMState(StateTag state);
@@ -147,8 +149,6 @@ class AllocationTracker {
   std::vector<UnresolvedLocation*> unresolved_locations_;
   unsigned info_index_for_other_state_;
   AddressToTraceMap address_to_trace_;
-
-  DISALLOW_COPY_AND_ASSIGN(AllocationTracker);
 };
 
 }  // namespace internal

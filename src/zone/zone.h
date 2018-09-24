@@ -267,6 +267,8 @@ class ZoneList final {
   void operator delete(void* pointer) { UNREACHABLE(); }
   void operator delete(void* pointer, Zone* zone) { UNREACHABLE(); }
 
+  DISALLOW_COPY_AND_ASSIGN(ZoneList);
+
  private:
   T* data_;
   int capacity_;
@@ -287,8 +289,6 @@ class ZoneList final {
 
   // Resize the list.
   void Resize(int new_capacity, ZoneAllocationPolicy allocator);
-
-  DISALLOW_COPY_AND_ASSIGN(ZoneList);
 };
 
 // ZonePtrList is a ZoneList of pointers to ZoneObjects allocated in the same

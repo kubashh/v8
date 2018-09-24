@@ -64,6 +64,8 @@ class FrameArray : public FixedArray {
 
   DECL_CAST(FrameArray)
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(FrameArray);
+
  private:
   // The underlying fixed array embodies a captured stack trace. Frame i
   // occupies indices
@@ -99,7 +101,6 @@ class FrameArray : public FixedArray {
                                         Handle<FrameArray> array, int length);
 
   friend class Factory;
-  DISALLOW_IMPLICIT_CONSTRUCTORS(FrameArray);
 };
 
 }  // namespace internal

@@ -34,11 +34,11 @@ class NodeMarkerBase {
     node->set_mark(mark + mark_min_);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(NodeMarkerBase);
+
  private:
   Mark const mark_min_;
   Mark const mark_max_;
-
-  DISALLOW_COPY_AND_ASSIGN(NodeMarkerBase);
 };
 
 // A NodeMarker assigns a local "state" to every node of a graph in constant

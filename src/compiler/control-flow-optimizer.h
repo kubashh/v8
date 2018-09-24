@@ -26,6 +26,8 @@ class V8_EXPORT_PRIVATE ControlFlowOptimizer final {
 
   void Optimize();
 
+  DISALLOW_COPY_AND_ASSIGN(ControlFlowOptimizer);
+
  private:
   void Enqueue(Node* node);
   void VisitNode(Node* node);
@@ -45,8 +47,6 @@ class V8_EXPORT_PRIVATE ControlFlowOptimizer final {
   ZoneQueue<Node*> queue_;
   NodeMarker<bool> queued_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(ControlFlowOptimizer);
 };
 
 }  // namespace compiler

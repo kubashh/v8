@@ -62,6 +62,8 @@ class PendingCompilationErrorHandler {
 
   Handle<String> FormatErrorMessageForTest(Isolate* isolate) const;
 
+  DISALLOW_COPY_AND_ASSIGN(PendingCompilationErrorHandler);
+
  private:
   class MessageDetails {
    public:
@@ -102,8 +104,6 @@ class PendingCompilationErrorHandler {
   ParseErrorType error_type_;
 
   std::forward_list<MessageDetails> warning_messages_;
-
-  DISALLOW_COPY_AND_ASSIGN(PendingCompilationErrorHandler);
 };
 
 }  // namespace internal

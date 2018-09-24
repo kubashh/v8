@@ -98,7 +98,6 @@ class JSArray : public JSObject {
   // Valid array indices range from +0 <= i < 2^32 - 1 (kMaxUInt32).
   static const uint32_t kMaxArrayIndex = kMaxUInt32 - 1;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSArray);
 };
 
@@ -151,7 +150,6 @@ class JSArrayIterator : public JSObject {
   static const int kKindOffset = kNextIndexOffset + kPointerSize;
   static const int kSize = kKindOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSArrayIterator);
 };
 

@@ -74,7 +74,6 @@ class JSGeneratorObject : public JSObject {
       kContinuationOffset + kPointerSize;
   static const int kSize = kParametersAndRegistersOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSGeneratorObject);
 };
 
@@ -99,7 +98,6 @@ class JSAsyncGeneratorObject : public JSGeneratorObject {
   static const int kIsAwaitingOffset = kQueueOffset + kPointerSize;
   static const int kSize = kIsAwaitingOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSAsyncGeneratorObject);
 };
 

@@ -45,14 +45,14 @@ class CodeReference {
     return wasm_code_;
   }
 
+  DISALLOW_NEW_AND_DELETE();
+
  private:
   enum { JS, WASM } kind_;
   union {
     const wasm::WasmCode* wasm_code_;
     Handle<Code> js_code_;
   };
-
-  DISALLOW_NEW_AND_DELETE();
 };
 ASSERT_TRIVIALLY_COPYABLE(CodeReference);
 

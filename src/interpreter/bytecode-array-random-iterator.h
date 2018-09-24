@@ -62,13 +62,13 @@ class V8_EXPORT_PRIVATE BytecodeArrayRandomIterator final
 
   bool IsValid() const;
 
+  DISALLOW_COPY_AND_ASSIGN(BytecodeArrayRandomIterator);
+
  private:
   ZoneVector<int> offsets_;
   int current_index_;
 
   void UpdateOffsetFromIndex();
-
-  DISALLOW_COPY_AND_ASSIGN(BytecodeArrayRandomIterator);
 };
 
 }  // namespace interpreter

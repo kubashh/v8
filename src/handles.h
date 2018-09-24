@@ -207,6 +207,8 @@ class HandleScope {
   // slack for future changes to natives.
   static const int kCheckHandleThreshold = 30 * 1024;
 
+  DISALLOW_COPY_AND_ASSIGN(HandleScope);
+
  private:
   // Prevent heap allocation or illegal handle scopes.
   void* operator new(size_t size);
@@ -234,8 +236,6 @@ class HandleScope {
   friend class DeferredHandleScope;
   friend class HandleScopeImplementer;
   friend class Isolate;
-
-  DISALLOW_COPY_AND_ASSIGN(HandleScope);
 };
 
 

@@ -116,12 +116,12 @@ class ParseResultIterator {
 
   const MatchedInput& matched_input() const { return matched_input_; }
 
+  DISALLOW_COPY_AND_MOVE_AND_ASSIGN(ParseResultIterator);
+
  private:
   std::vector<ParseResult> results_;
   size_t i_ = 0;
   MatchedInput matched_input_;
-
-  DISALLOW_COPY_AND_MOVE_AND_ASSIGN(ParseResultIterator);
 };
 
 struct LexerResult {
@@ -192,11 +192,11 @@ class Symbol {
   V8_EXPORT_PRIVATE base::Optional<ParseResult> RunAction(
       const Item* item, const LexerResult& tokens);
 
- private:
-  std::vector<std::unique_ptr<Rule>> rules_;
-
   // Disallow copying and moving to ensure Symbol has a stable address.
   DISALLOW_COPY_AND_MOVE_AND_ASSIGN(Symbol);
+
+ private:
+  std::vector<std::unique_ptr<Rule>> rules_;
 };
 
 // Items are the core datastructure of Earley's algorithm.

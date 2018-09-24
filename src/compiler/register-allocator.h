@@ -221,12 +221,12 @@ class UseInterval final : public ZoneObject {
     return ret;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(UseInterval);
+
  private:
   LifetimePosition start_;
   LifetimePosition end_;
   UseInterval* next_;
-
-  DISALLOW_COPY_AND_ASSIGN(UseInterval);
 };
 
 enum class UsePositionType : uint8_t {
@@ -289,6 +289,8 @@ class V8_EXPORT_PRIVATE UsePosition final
   }
   static UsePositionHintType HintTypeForOperand(const InstructionOperand& op);
 
+  DISALLOW_COPY_AND_ASSIGN(UsePosition);
+
  private:
   typedef BitField<UsePositionType, 0, 2> TypeField;
   typedef BitField<UsePositionHintType, 2, 3> HintTypeField;
@@ -300,8 +302,6 @@ class V8_EXPORT_PRIVATE UsePosition final
   UsePosition* next_;
   LifetimePosition const pos_;
   uint32_t flags_;
-
-  DISALLOW_COPY_AND_ASSIGN(UsePosition);
 };
 
 
@@ -431,6 +431,8 @@ class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
   void Print(const RegisterConfiguration* config, bool with_children) const;
   void Print(bool with_children) const;
 
+  DISALLOW_COPY_AND_ASSIGN(LiveRange);
+
  private:
   friend class TopLevelLiveRange;
   explicit LiveRange(int relative_id, MachineRepresentation rep,
@@ -467,8 +469,6 @@ class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
   mutable UsePosition* current_hint_position_;
   // Cache the last position splintering stopped at.
   mutable UsePosition* splitting_pointer_;
-
-  DISALLOW_COPY_AND_ASSIGN(LiveRange);
 };
 
 
@@ -628,6 +628,8 @@ class V8_EXPORT_PRIVATE TopLevelLiveRange final : public LiveRange {
     return list_of_blocks_requiring_spill_operands_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(TopLevelLiveRange);
+
  private:
   void SetSplinteredFrom(TopLevelLiveRange* splinter_parent);
 
@@ -657,8 +659,6 @@ class V8_EXPORT_PRIVATE TopLevelLiveRange final : public LiveRange {
   UsePosition* last_pos_;
   TopLevelLiveRange* splinter_;
   bool has_preassigned_slot_;
-
-  DISALLOW_COPY_AND_ASSIGN(TopLevelLiveRange);
 };
 
 
@@ -699,6 +699,8 @@ class SpillRange final : public ZoneObject {
   int byte_width() const { return byte_width_; }
   void Print() const;
 
+  DISALLOW_COPY_AND_ASSIGN(SpillRange);
+
  private:
   LifetimePosition End() const { return end_position_; }
   bool IsIntersectingWith(SpillRange* other) const;
@@ -710,8 +712,6 @@ class SpillRange final : public ZoneObject {
   LifetimePosition end_position_;
   int assigned_slot_;
   int byte_width_;
-
-  DISALLOW_COPY_AND_ASSIGN(SpillRange);
 };
 
 
@@ -832,6 +832,8 @@ class RegisterAllocationData final : public ZoneObject {
     return preassigned_slot_ranges_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(RegisterAllocationData);
+
  private:
   int GetNextLiveRangeId();
 
@@ -854,8 +856,6 @@ class RegisterAllocationData final : public ZoneObject {
   BitVector* assigned_double_registers_;
   int virtual_register_count_;
   RangesWithPreassignedSlots preassigned_slot_ranges_;
-
-  DISALLOW_COPY_AND_ASSIGN(RegisterAllocationData);
 };
 
 
@@ -869,6 +869,8 @@ class ConstraintBuilder final : public ZoneObject {
   // Phase 2: deconstruct SSA by inserting moves in successors and the headers
   // of blocks containing phis.
   void ResolvePhis();
+
+  DISALLOW_COPY_AND_ASSIGN(ConstraintBuilder);
 
  private:
   RegisterAllocationData* data() const { return data_; }
@@ -885,8 +887,6 @@ class ConstraintBuilder final : public ZoneObject {
   void ResolvePhis(const InstructionBlock* block);
 
   RegisterAllocationData* const data_;
-
-  DISALLOW_COPY_AND_ASSIGN(ConstraintBuilder);
 };
 
 
@@ -898,6 +898,8 @@ class LiveRangeBuilder final : public ZoneObject {
   void BuildLiveRanges();
   static BitVector* ComputeLiveOut(const InstructionBlock* block,
                                    RegisterAllocationData* data);
+
+  DISALLOW_COPY_AND_ASSIGN(LiveRangeBuilder);
 
  private:
   RegisterAllocationData* data() const { return data_; }
@@ -952,8 +954,6 @@ class LiveRangeBuilder final : public ZoneObject {
 
   RegisterAllocationData* const data_;
   ZoneMap<InstructionOperand*, UsePosition*> phi_hints_;
-
-  DISALLOW_COPY_AND_ASSIGN(LiveRangeBuilder);
 };
 
 
@@ -1016,6 +1016,8 @@ class RegisterAllocator : public ZoneObject {
   const ZoneVector<TopLevelLiveRange*>& GetFixedRegisters() const;
   const char* RegisterName(int allocation_index) const;
 
+  DISALLOW_COPY_AND_ASSIGN(RegisterAllocator);
+
  private:
   RegisterAllocationData* const data_;
   const RegisterKind mode_;
@@ -1026,8 +1028,6 @@ class RegisterAllocator : public ZoneObject {
 
  private:
   bool no_combining_;
-
-  DISALLOW_COPY_AND_ASSIGN(RegisterAllocator);
 };
 
 
@@ -1038,6 +1038,8 @@ class LinearScanAllocator final : public RegisterAllocator {
 
   // Phase 4: compute register assignments.
   void AllocateRegisters();
+
+  DISALLOW_COPY_AND_ASSIGN(LinearScanAllocator);
 
  private:
   struct LiveRangeOrdering {
@@ -1098,8 +1100,6 @@ class LinearScanAllocator final : public RegisterAllocator {
 #ifdef DEBUG
   LifetimePosition allocation_finger_;
 #endif
-
-  DISALLOW_COPY_AND_ASSIGN(LinearScanAllocator);
 };
 
 
@@ -1109,12 +1109,12 @@ class SpillSlotLocator final : public ZoneObject {
 
   void LocateSpillSlots();
 
+  DISALLOW_COPY_AND_ASSIGN(SpillSlotLocator);
+
  private:
   RegisterAllocationData* data() const { return data_; }
 
   RegisterAllocationData* const data_;
-
-  DISALLOW_COPY_AND_ASSIGN(SpillSlotLocator);
 };
 
 
@@ -1128,12 +1128,12 @@ class OperandAssigner final : public ZoneObject {
   // Phase 6: commit assignment.
   void CommitAssignment();
 
+  DISALLOW_COPY_AND_ASSIGN(OperandAssigner);
+
  private:
   RegisterAllocationData* data() const { return data_; }
 
   RegisterAllocationData* const data_;
-
-  DISALLOW_COPY_AND_ASSIGN(OperandAssigner);
 };
 
 
@@ -1144,14 +1144,14 @@ class ReferenceMapPopulator final : public ZoneObject {
   // Phase 7: compute values for pointer maps.
   void PopulateReferenceMaps();
 
+  DISALLOW_COPY_AND_ASSIGN(ReferenceMapPopulator);
+
  private:
   RegisterAllocationData* data() const { return data_; }
 
   bool SafePointsAreInOrder() const;
 
   RegisterAllocationData* const data_;
-
-  DISALLOW_COPY_AND_ASSIGN(ReferenceMapPopulator);
 };
 
 
@@ -1176,6 +1176,8 @@ class LiveRangeConnector final : public ZoneObject {
   // branches.
   void ResolveControlFlow(Zone* local_zone);
 
+  DISALLOW_COPY_AND_ASSIGN(LiveRangeConnector);
+
  private:
   RegisterAllocationData* data() const { return data_; }
   InstructionSequence* code() const { return data()->code(); }
@@ -1193,8 +1195,6 @@ class LiveRangeConnector final : public ZoneObject {
                                     Zone* temp_zone);
 
   RegisterAllocationData* const data_;
-
-  DISALLOW_COPY_AND_ASSIGN(LiveRangeConnector);
 };
 
 }  // namespace compiler

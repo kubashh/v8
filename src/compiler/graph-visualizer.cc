@@ -332,6 +332,8 @@ class JSONGraphNodeWriter {
     os_ << "}";
   }
 
+  DISALLOW_COPY_AND_ASSIGN(JSONGraphNodeWriter);
+
  private:
   std::ostream& os_;
   AllNodes all_;
@@ -339,8 +341,6 @@ class JSONGraphNodeWriter {
   const SourcePositionTable* positions_;
   const NodeOriginTable* origins_;
   bool first_node_;
-
-  DISALLOW_COPY_AND_ASSIGN(JSONGraphNodeWriter);
 };
 
 
@@ -386,12 +386,12 @@ class JSONGraphEdgeWriter {
         << ",\"index\":" << index << ",\"type\":\"" << edge_type << "\"}";
   }
 
+  DISALLOW_COPY_AND_ASSIGN(JSONGraphEdgeWriter);
+
  private:
   std::ostream& os_;
   AllNodes all_;
   bool first_edge_;
-
-  DISALLOW_COPY_AND_ASSIGN(JSONGraphEdgeWriter);
 };
 
 std::ostream& operator<<(std::ostream& os, const GraphAsJSON& ad) {
@@ -417,6 +417,8 @@ class GraphC1Visualizer {
                      const InstructionSequence* instructions);
   void PrintLiveRanges(const char* phase, const RegisterAllocationData* data);
   Zone* zone() const { return zone_; }
+
+  DISALLOW_COPY_AND_ASSIGN(GraphC1Visualizer);
 
  private:
   void PrintIndent();
@@ -459,8 +461,6 @@ class GraphC1Visualizer {
   std::ostream& os_;
   int indent_;
   Zone* zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(GraphC1Visualizer);
 };
 
 

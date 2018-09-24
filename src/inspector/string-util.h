@@ -79,12 +79,12 @@ class StringBufferImpl : public StringBuffer {
   static std::unique_ptr<StringBufferImpl> adopt(String16&);
   const StringView& string() override { return m_string; }
 
+  DISALLOW_COPY_AND_ASSIGN(StringBufferImpl);
+
  private:
   explicit StringBufferImpl(String16&);
   String16 m_owner;
   StringView m_string;
-
-  DISALLOW_COPY_AND_ASSIGN(StringBufferImpl);
 };
 
 String16 debuggerIdToString(const std::pair<int64_t, int64_t>& debuggerId);

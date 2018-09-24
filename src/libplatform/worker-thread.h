@@ -26,12 +26,12 @@ class V8_PLATFORM_EXPORT WorkerThread : public NON_EXPORTED_BASE(base::Thread) {
   // Thread implementation.
   void Run() override;
 
+  DISALLOW_COPY_AND_ASSIGN(WorkerThread);
+
  private:
   friend class QuitTask;
 
   TaskQueue* queue_;
-
-  DISALLOW_COPY_AND_ASSIGN(WorkerThread);
 };
 
 }  // namespace platform

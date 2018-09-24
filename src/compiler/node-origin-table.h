@@ -82,10 +82,11 @@ class V8_EXPORT_PRIVATE NodeOriginTable final
       if (origins_) origins_->current_origin_ = prev_origin_;
     }
 
+    DISALLOW_COPY_AND_ASSIGN(Scope);
+
    private:
     NodeOriginTable* const origins_;
     NodeOrigin prev_origin_;
-    DISALLOW_COPY_AND_ASSIGN(Scope);
   };
 
   class PhaseScope final {
@@ -103,10 +104,11 @@ class V8_EXPORT_PRIVATE NodeOriginTable final
       if (origins_) origins_->current_phase_name_ = prev_phase_name_;
     }
 
+    DISALLOW_COPY_AND_ASSIGN(PhaseScope);
+
    private:
     NodeOriginTable* const origins_;
     const char* prev_phase_name_;
-    DISALLOW_COPY_AND_ASSIGN(PhaseScope);
   };
 
   explicit NodeOriginTable(Graph* graph);
@@ -121,6 +123,8 @@ class V8_EXPORT_PRIVATE NodeOriginTable final
 
   void PrintJson(std::ostream& os) const;
 
+  DISALLOW_COPY_AND_ASSIGN(NodeOriginTable);
+
  private:
   class Decorator;
 
@@ -130,8 +134,6 @@ class V8_EXPORT_PRIVATE NodeOriginTable final
 
   const char* current_phase_name_;
   NodeAuxData<NodeOrigin, NodeOrigin::Unknown> table_;
-
-  DISALLOW_COPY_AND_ASSIGN(NodeOriginTable);
 };
 
 }  // namespace compiler

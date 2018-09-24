@@ -72,6 +72,8 @@ class Bignum {
     return PlusCompare(a, b, c) < 0;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(Bignum);
+
  private:
   typedef uint32_t Chunk;
   typedef uint64_t DoubleChunk;
@@ -111,8 +113,6 @@ class Bignum {
   int used_digits_;
   // The Bignum's value equals value(bigits_) * 2^(exponent_ * kBigitSize).
   int exponent_;
-
-  DISALLOW_COPY_AND_ASSIGN(Bignum);
 };
 
 }  // namespace internal

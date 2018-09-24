@@ -53,7 +53,6 @@ class JSCollator : public JSObject {
   DECL_ACCESSORS(icu_collator, Managed<icu::Collator>)
   DECL_ACCESSORS(bound_compare, Object);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSCollator);
 };
 

@@ -33,6 +33,8 @@ class ContextSlotCache {
 
   static const int kNotFound = -2;
 
+  DISALLOW_COPY_AND_ASSIGN(ContextSlotCache);
+
  private:
   ContextSlotCache() {
     for (int i = 0; i < kLength; ++i) {
@@ -103,7 +105,6 @@ class ContextSlotCache {
   uint32_t values_[kLength];
 
   friend class Isolate;
-  DISALLOW_COPY_AND_ASSIGN(ContextSlotCache);
 };
 
 }  // namespace internal

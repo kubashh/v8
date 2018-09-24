@@ -144,12 +144,12 @@ class BytecodeGenerator::ControlScope {
   ControlScope* outer() const { return outer_; }
   ContextScope* context() const { return context_; }
 
+  DISALLOW_COPY_AND_ASSIGN(ControlScope);
+
  private:
   BytecodeGenerator* generator_;
   ControlScope* outer_;
   ContextScope* context_;
-
-  DISALLOW_COPY_AND_ASSIGN(ControlScope);
 };
 
 // Helper class for a try-finally control scope. It can record intercepted
@@ -553,11 +553,11 @@ class BytecodeGenerator::RegisterAllocationScope final {
         outer_next_register_index_);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(RegisterAllocationScope);
+
  private:
   BytecodeGenerator* generator_;
   int outer_next_register_index_;
-
-  DISALLOW_COPY_AND_ASSIGN(RegisterAllocationScope);
 };
 
 // Scoped base class for determining how the result of an expression will be
@@ -599,14 +599,14 @@ class BytecodeGenerator::ExpressionResultScope {
 
   TypeHint type_hint() const { return type_hint_; }
 
+  DISALLOW_COPY_AND_ASSIGN(ExpressionResultScope);
+
  private:
   BytecodeGenerator* generator_;
   ExpressionResultScope* outer_;
   RegisterAllocationScope allocator_;
   Expression::Context kind_;
   TypeHint type_hint_;
-
-  DISALLOW_COPY_AND_ASSIGN(ExpressionResultScope);
 };
 
 // Scoped class used when the result of the current expression is not
@@ -680,13 +680,13 @@ class BytecodeGenerator::TestResultScope final : public ExpressionResultScope {
     fallthrough_ = fallthrough;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(TestResultScope);
+
  private:
   bool result_consumed_by_test_;
   TestFallthrough fallthrough_;
   BytecodeLabels* then_labels_;
   BytecodeLabels* else_labels_;
-
-  DISALLOW_COPY_AND_ASSIGN(TestResultScope);
 };
 
 // Used to build a list of global declaration initial value pairs.

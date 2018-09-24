@@ -29,6 +29,8 @@ class UnboundQueue {
   V8_INLINE bool IsEmpty() const;
   V8_INLINE Record* Peek() const;
 
+  DISALLOW_COPY_AND_ASSIGN(UnboundQueue);
+
  private:
   V8_INLINE void DeleteFirst();
 
@@ -37,8 +39,6 @@ class UnboundQueue {
   Node* first_;
   base::AtomicWord divider_;  // Node*
   base::AtomicWord last_;     // Node*
-
-  DISALLOW_COPY_AND_ASSIGN(UnboundQueue);
 };
 
 
