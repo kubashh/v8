@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "e9a13859_b71591ff",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cff7af4f_2b7d9c07",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "805ebca6_d877698b",
         "filename": "src/compiler/compiler-data.h",
         "patchSetId": 2
@@ -111,6 +135,24 @@
     },
     {
       "key": {
+        "uuid": "88e2512d_098934ff",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "faf5b756_848c41c4",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "740853c6_721bdb66",
         "filename": "src/compiler/compiler-data.h",
         "patchSetId": 2
@@ -148,6 +190,24 @@
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f58bba6f_62ad53eb",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "966cb78f_18fab374",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -254,6 +314,24 @@
     },
     {
       "key": {
+        "uuid": "267891ab_c42bdc48",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:17:28Z",
+      "side": 1,
+      "message": "I prefer having explicit variable, just in case somebody violates our assumption that refs_ will be empty here. Otherwise the builtins would never get serialized, which will be harder to trace. WDYT?",
+      "parentUuid": "9b1a41cd_826ac596",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8ea31b8c_28f4a6be",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 2
@@ -271,6 +349,24 @@
     },
     {
       "key": {
+        "uuid": "34ada175_cddac493",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ea31b8c_28f4a6be",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "731aa0b6_a19fca6c",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 2
@@ -285,6 +381,24 @@
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb11bf3d_e97a9eed",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1472,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:17:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "731aa0b6_a19fca6c",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -331,6 +445,30 @@
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9eee698_ad03d19a",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:17:28Z",
+      "side": 1,
+      "message": "Done. Renamed to broker_zone.",
+      "parentUuid": "24ad79d1_3ecd91bc",
+      "range": {
+        "startLine": 475,
+        "startChar": 39,
+        "endLine": 475,
+        "endChar": 43
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
