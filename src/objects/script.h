@@ -178,9 +178,10 @@ class Script : public Struct, public NeverReadOnlySpaceObject {
     explicit Iterator(Isolate* isolate);
     Script* Next();
 
+    DISALLOW_COPY_AND_ASSIGN(Iterator);
+
    private:
     WeakArrayList::Iterator iterator_;
-    DISALLOW_COPY_AND_ASSIGN(Iterator);
   };
 
   // Dispatched behavior.
@@ -208,6 +209,8 @@ class Script : public Struct, public NeverReadOnlySpaceObject {
       kSourceMappingUrlOffset + kPointerSize;
   static const int kSize = kHostDefinedOptionsOffset + kPointerSize;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Script);
+
  private:
   // Bit positions in the flags field.
   static const int kCompilationTypeBit = 0;
@@ -216,8 +219,6 @@ class Script : public Struct, public NeverReadOnlySpaceObject {
   static const int kOriginOptionsSize = 4;
   static const int kOriginOptionsMask = ((1 << kOriginOptionsSize) - 1)
                                         << kOriginOptionsShift;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Script);
 };
 
 }  // namespace internal

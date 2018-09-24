@@ -234,12 +234,12 @@ class V8_EXPORT_PRIVATE VirtualMemory final {
     return region_.contains(address, size);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(VirtualMemory);
+
  private:
   // Page allocator that controls the virtual memory.
   v8::PageAllocator* page_allocator_ = nullptr;
   base::AddressRegion region_;
-
-  DISALLOW_COPY_AND_ASSIGN(VirtualMemory);
 };
 
 }  // namespace internal

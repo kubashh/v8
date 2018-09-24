@@ -930,10 +930,10 @@ class PrepareStackTraceScope {
 
   ~PrepareStackTraceScope() { isolate_->set_formatting_stack_trace(false); }
 
+  DISALLOW_COPY_AND_ASSIGN(PrepareStackTraceScope);
+
  private:
   Isolate* isolate_;
-
-  DISALLOW_COPY_AND_ASSIGN(PrepareStackTraceScope);
 };
 
 }  // namespace

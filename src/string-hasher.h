@@ -47,6 +47,8 @@ class V8_EXPORT_PRIVATE StringHasher {
                                                       const char* chars,
                                                       int length);
 
+  DISALLOW_COPY_AND_ASSIGN(StringHasher);
+
  protected:
   // Returns the value to store in the hash field of a string with
   // the given length and contents.
@@ -69,7 +71,6 @@ class V8_EXPORT_PRIVATE StringHasher {
   uint32_t array_index_;
   bool is_array_index_;
   bool is_first_char_;
-  DISALLOW_COPY_AND_ASSIGN(StringHasher);
 };
 
 class IteratingStringHasher : public StringHasher {
@@ -78,10 +79,11 @@ class IteratingStringHasher : public StringHasher {
   inline void VisitOneByteString(const uint8_t* chars, int length);
   inline void VisitTwoByteString(const uint16_t* chars, int length);
 
+  DISALLOW_COPY_AND_ASSIGN(IteratingStringHasher);
+
  private:
   inline IteratingStringHasher(int len, uint64_t seed);
   void VisitConsString(ConsString* cons_string);
-  DISALLOW_COPY_AND_ASSIGN(IteratingStringHasher);
 };
 
 // Useful for std containers that require something ()'able.

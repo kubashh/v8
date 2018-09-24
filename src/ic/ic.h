@@ -163,6 +163,8 @@ class IC {
   const FeedbackNexus* nexus() const { return &nexus_; }
   FeedbackNexus* nexus() { return &nexus_; }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(IC);
+
  private:
   inline Address constant_pool() const;
   inline Address raw_constant_pool() const;
@@ -201,8 +203,6 @@ class IC {
   const char* slow_stub_reason_;
 
   FeedbackNexus nexus_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(IC);
 };
 
 

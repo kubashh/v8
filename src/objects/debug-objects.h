@@ -175,11 +175,11 @@ class DebugInfo : public Struct, public NeverReadOnlySpaceObject {
 
   static const int kEstimatedNofBreakPointsInFunction = 4;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(DebugInfo);
+
  private:
   // Get the break point info object for a source position.
   Object* GetBreakPointInfo(Isolate* isolate, int source_position);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(DebugInfo);
 };
 
 // The BreakPointInfo class holds information for break points set in a
@@ -211,7 +211,6 @@ class BreakPointInfo : public Tuple2 {
   static const int kSourcePositionOffset = kValue1Offset;
   static const int kBreakPointsOffset = kValue2Offset;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(BreakPointInfo);
 };
 
@@ -237,6 +236,8 @@ class CoverageInfo : public FixedArray {
   // Print debug info.
   void Print(std::unique_ptr<char[]> function_name);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(CoverageInfo);
+
  private:
   static int FirstIndexForSlot(int slot_index) {
     return kFirstSlotIndex + slot_index * kSlotIndexCount;
@@ -250,8 +251,6 @@ class CoverageInfo : public FixedArray {
   static const int kSlotEndSourcePositionIndex = 1;
   static const int kSlotBlockCountIndex = 2;
   static const int kSlotIndexCount = 3;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(CoverageInfo);
 };
 
 // Holds breakpoint related information. This object is used by inspector.
@@ -265,7 +264,6 @@ class BreakPoint : public Tuple2 {
   static const int kIdOffset = kValue1Offset;
   static const int kConditionOffset = kValue2Offset;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(BreakPoint);
 };
 

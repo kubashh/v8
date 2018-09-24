@@ -155,6 +155,8 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
 
   v8::Isolate* isolate() { return m_isolate; }
 
+  DISALLOW_COPY_AND_ASSIGN(V8DebuggerAgentImpl);
+
  private:
   void enableImpl();
 
@@ -219,8 +221,6 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
   std::unique_ptr<V8Regex> m_blackboxPattern;
   std::unordered_map<String16, std::vector<std::pair<int, int>>>
       m_blackboxedPositions;
-
-  DISALLOW_COPY_AND_ASSIGN(V8DebuggerAgentImpl);
 };
 
 String16 scopeType(v8::debug::ScopeIterator::ScopeType type);

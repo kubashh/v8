@@ -110,6 +110,8 @@ class BuiltinDeserializerAllocator final {
   std::unordered_set<int> unused_reservations_;
 #endif
 
+  DISALLOW_COPY_AND_ASSIGN(BuiltinDeserializerAllocator)
+
  private:
   // The current deserializer. Note that this always points to a
   // BuiltinDeserializer instance, but we can't perform the cast during
@@ -117,8 +119,6 @@ class BuiltinDeserializerAllocator final {
   Deserializer<BuiltinDeserializerAllocator>* const deserializer_;
 
   bool next_reference_is_weak_ = false;
-
-  DISALLOW_COPY_AND_ASSIGN(BuiltinDeserializerAllocator)
 };
 
 }  // namespace internal

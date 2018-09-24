@@ -26,6 +26,8 @@ class LockedQueue final {
   inline bool IsEmpty() const;
   inline bool Peek(Record* record) const;
 
+  DISALLOW_COPY_AND_ASSIGN(LockedQueue);
+
  private:
   struct Node;
 
@@ -33,8 +35,6 @@ class LockedQueue final {
   base::Mutex tail_mutex_;
   Node* head_;
   Node* tail_;
-
-  DISALLOW_COPY_AND_ASSIGN(LockedQueue);
 };
 
 }  // namespace internal

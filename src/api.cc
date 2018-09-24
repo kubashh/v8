@@ -2456,11 +2456,12 @@ class IsIdentifierHelper {
     }
   }
 
+  DISALLOW_COPY_AND_ASSIGN(IsIdentifierHelper);
+
  private:
   bool is_identifier_;
   bool first_char_;
   i::UnicodeCache unicode_cache_;
-  DISALLOW_COPY_AND_ASSIGN(IsIdentifierHelper);
 };
 
 MaybeLocal<Function> ScriptCompiler::CompileFunctionInContext(
@@ -5255,6 +5256,8 @@ class ContainsOnlyOneByteHelper {
     if ((acc & kOneByteMask) != 0) is_one_byte_ = false;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(ContainsOnlyOneByteHelper);
+
  private:
   bool CheckCons(i::ConsString* cons_string) {
     while (true) {
@@ -5297,7 +5300,6 @@ class ContainsOnlyOneByteHelper {
     return is_one_byte_;
   }
   bool is_one_byte_;
-  DISALLOW_COPY_AND_ASSIGN(ContainsOnlyOneByteHelper);
 };
 
 
@@ -5499,6 +5501,8 @@ class Utf8WriterVisitor {
     return static_cast<int>(buffer_ - start_);
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Utf8WriterVisitor);
+
  private:
   bool early_termination_;
   int last_character_;
@@ -5508,7 +5512,6 @@ class Utf8WriterVisitor {
   bool const skip_capacity_check_;
   bool const replace_invalid_utf8_;
   int utf16_chars_read_;
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Utf8WriterVisitor);
 };
 
 

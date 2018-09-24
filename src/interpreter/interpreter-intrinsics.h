@@ -50,7 +50,6 @@ class IntrinsicsHelper {
   static IntrinsicId FromRuntimeId(Runtime::FunctionId function_id);
   static Runtime::FunctionId ToRuntimeId(IntrinsicId intrinsic_id);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(IntrinsicsHelper);
 };
 

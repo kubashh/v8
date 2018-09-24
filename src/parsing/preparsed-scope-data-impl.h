@@ -167,6 +167,8 @@ class BaseConsumedPreParsedScopeData : public ConsumedPreParsedScopeData {
   void VerifyDataStart();
 #endif
 
+  DISALLOW_COPY_AND_ASSIGN(BaseConsumedPreParsedScopeData);
+
  private:
   void RestoreData(Scope* scope);
   void RestoreDataForVariable(Variable* var);
@@ -176,8 +178,6 @@ class BaseConsumedPreParsedScopeData : public ConsumedPreParsedScopeData {
   // When consuming the data, these indexes point to the data we're going to
   // consume next.
   int child_index_;
-
-  DISALLOW_COPY_AND_ASSIGN(BaseConsumedPreParsedScopeData);
 };
 
 // Implementation of ConsumedPreParsedScopeData for on-heap data.
@@ -205,10 +205,10 @@ class ZoneVectorWrapper {
 
   uint8_t get(int index) const { return data_->at(index); }
 
+  DISALLOW_COPY_AND_ASSIGN(ZoneVectorWrapper);
+
  private:
   ZoneVector<uint8_t>* data_;
-
-  DISALLOW_COPY_AND_ASSIGN(ZoneVectorWrapper);
 };
 
 // A serialized PreParsedScopeData in zone memory (as apposed to being on-heap).
@@ -231,11 +231,11 @@ class ZonePreParsedScopeData : public ZoneObject {
 
   ZoneVector<uint8_t>* byte_data() { return &byte_data_; }
 
+  DISALLOW_COPY_AND_ASSIGN(ZonePreParsedScopeData);
+
  private:
   ZoneVector<uint8_t> byte_data_;
   ZoneVector<ZonePreParsedScopeData*> children_;
-
-  DISALLOW_COPY_AND_ASSIGN(ZonePreParsedScopeData);
 };
 
 // Implementation of ConsumedPreParsedScopeData for PreParsedScopeData

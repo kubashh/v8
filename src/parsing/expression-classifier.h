@@ -352,6 +352,8 @@ class ExpressionClassifier {
 
   ExpressionClassifier* previous() const { return previous_; }
 
+  DISALLOW_COPY_AND_ASSIGN(ExpressionClassifier);
+
  private:
   V8_INLINE const Error& reported_error(ErrorKind kind) const {
     if (invalid_productions_ & (1 << kind)) {
@@ -407,8 +409,6 @@ class ExpressionClassifier {
   // stack overflow while parsing.
   uint16_t reported_errors_begin_;
   uint16_t reported_errors_end_;
-
-  DISALLOW_COPY_AND_ASSIGN(ExpressionClassifier);
 };
 
 

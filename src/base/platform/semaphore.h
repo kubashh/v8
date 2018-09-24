@@ -64,10 +64,10 @@ class V8_BASE_EXPORT Semaphore final {
     return native_handle_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(Semaphore);
+
  private:
   NativeHandle native_handle_;
-
-  DISALLOW_COPY_AND_ASSIGN(Semaphore);
 };
 
 

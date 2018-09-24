@@ -127,6 +127,8 @@ class StubCache {
                                     offset * multiplier);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(StubCache);
+
  private:
   Entry primary_[kPrimaryTableSize];
   Entry secondary_[kSecondaryTableSize];
@@ -134,8 +136,6 @@ class StubCache {
 
   friend class Isolate;
   friend class SCTableReference;
-
-  DISALLOW_COPY_AND_ASSIGN(StubCache);
 };
 }  // namespace internal
 }  // namespace v8

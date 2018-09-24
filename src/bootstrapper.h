@@ -35,10 +35,11 @@ class SourceCodeCache final {
   void Add(Isolate* isolate, Vector<const char> name,
            Handle<SharedFunctionInfo> shared);
 
+  DISALLOW_COPY_AND_ASSIGN(SourceCodeCache);
+
  private:
   Script::Type type_;
   FixedArray* cache_;
-  DISALLOW_COPY_AND_ASSIGN(SourceCodeCache);
 };
 
 enum GlobalContextType { FULL_CONTEXT, DEBUG_CONTEXT };
@@ -100,6 +101,8 @@ class Bootstrapper final {
 
   static void ExportFromRuntime(Isolate* isolate, Handle<JSObject> container);
 
+  DISALLOW_COPY_AND_ASSIGN(Bootstrapper);
+
  private:
   Isolate* isolate_;
   typedef int NestingCounterType;
@@ -118,8 +121,6 @@ class Bootstrapper final {
   static v8::Extension* statistics_extension_;
   static v8::Extension* trigger_failure_extension_;
   static v8::Extension* ignition_statistics_extension_;
-
-  DISALLOW_COPY_AND_ASSIGN(Bootstrapper);
 };
 
 class BootstrapperActive final {
@@ -133,10 +134,10 @@ class BootstrapperActive final {
     --bootstrapper_->nesting_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(BootstrapperActive);
+
  private:
   Bootstrapper* bootstrapper_;
-
-  DISALLOW_COPY_AND_ASSIGN(BootstrapperActive);
 };
 
 }  // namespace internal

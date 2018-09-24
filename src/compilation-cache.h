@@ -62,6 +62,8 @@ class CompilationSubCache {
   // Number of generations in this sub-cache.
   inline int generations() { return generations_; }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(CompilationSubCache);
+
  protected:
   Isolate* isolate() { return isolate_; }
 
@@ -69,8 +71,6 @@ class CompilationSubCache {
   Isolate* isolate_;
   int generations_;  // Number of generations.
   Object** tables_;  // Compilation cache tables - one for each generation.
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(CompilationSubCache);
 };
 
 
@@ -90,12 +90,12 @@ class CompilationCacheScript : public CompilationSubCache {
            LanguageMode language_mode,
            Handle<SharedFunctionInfo> function_info);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(CompilationCacheScript);
+
  private:
   bool HasOrigin(Handle<SharedFunctionInfo> function_info,
                  MaybeHandle<Object> name, int line_offset, int column_offset,
                  ScriptOriginOptions resource_options);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(CompilationCacheScript);
 };
 
 
@@ -126,7 +126,6 @@ class CompilationCacheEval: public CompilationSubCache {
            Handle<Context> native_context, Handle<FeedbackCell> feedback_cell,
            int position);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CompilationCacheEval);
 };
 
@@ -142,7 +141,6 @@ class CompilationCacheRegExp: public CompilationSubCache {
   void Put(Handle<String> source,
            JSRegExp::Flags flags,
            Handle<FixedArray> data);
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CompilationCacheRegExp);
 };
 
@@ -211,6 +209,8 @@ class CompilationCache {
   void Enable();
   void Disable();
 
+  DISALLOW_COPY_AND_ASSIGN(CompilationCache);
+
  private:
   explicit CompilationCache(Isolate* isolate);
   ~CompilationCache() = default;
@@ -236,8 +236,6 @@ class CompilationCache {
   bool enabled_;
 
   friend class Isolate;
-
-  DISALLOW_COPY_AND_ASSIGN(CompilationCache);
 };
 
 

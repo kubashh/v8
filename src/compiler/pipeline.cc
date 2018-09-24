@@ -431,6 +431,8 @@ class PipelineData {
 
   int wasm_function_index() const { return wasm_function_index_; }
 
+  DISALLOW_COPY_AND_ASSIGN(PipelineData);
+
  private:
   Isolate* const isolate_;
   wasm::WasmEngine* const wasm_engine_ = nullptr;
@@ -495,8 +497,6 @@ class PipelineData {
 
   JumpOptimizationInfo* jump_optimization_info_ = nullptr;
   AssemblerOptions assembler_options_;
-
-  DISALLOW_COPY_AND_ASSIGN(PipelineData);
 };
 
 class PipelineImpl final {
@@ -719,11 +719,11 @@ class SourcePositionWrapper final : public Reducer {
 
   void Finalize() final { reducer_->Finalize(); }
 
+  DISALLOW_COPY_AND_ASSIGN(SourcePositionWrapper);
+
  private:
   Reducer* const reducer_;
   SourcePositionTable* const table_;
-
-  DISALLOW_COPY_AND_ASSIGN(SourcePositionWrapper);
 };
 
 class NodeOriginsWrapper final : public Reducer {
@@ -741,11 +741,11 @@ class NodeOriginsWrapper final : public Reducer {
 
   void Finalize() final { reducer_->Finalize(); }
 
+  DISALLOW_COPY_AND_ASSIGN(NodeOriginsWrapper);
+
  private:
   Reducer* const reducer_;
   NodeOriginTable* const table_;
-
-  DISALLOW_COPY_AND_ASSIGN(NodeOriginsWrapper);
 };
 
 void AddReducer(PipelineData* data, GraphReducer* graph_reducer,
@@ -871,6 +871,8 @@ class PipelineCompilationJob final : public OptimizedCompilationJob {
         pipeline_(&data_),
         linkage_(nullptr) {}
 
+  DISALLOW_COPY_AND_ASSIGN(PipelineCompilationJob);
+
  protected:
   Status PrepareJobImpl(Isolate* isolate) final;
   Status ExecuteJobImpl() final;
@@ -887,8 +889,6 @@ class PipelineCompilationJob final : public OptimizedCompilationJob {
   PipelineData data_;
   PipelineImpl pipeline_;
   Linkage* linkage_;
-
-  DISALLOW_COPY_AND_ASSIGN(PipelineCompilationJob);
 };
 
 PipelineCompilationJob::Status PipelineCompilationJob::PrepareJobImpl(

@@ -19,7 +19,6 @@ class V8_EXPORT_PRIVATE BytecodeArrayIterator final
   void Advance();
   bool done() const;
 
- private:
   DISALLOW_COPY_AND_ASSIGN(BytecodeArrayIterator);
 };
 

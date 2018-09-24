@@ -31,7 +31,6 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
     virtual void EmitStar(Register output) = 0;
     virtual void EmitMov(Register input, Register output) = 0;
 
-   private:
     DISALLOW_COPY_AND_ASSIGN(BytecodeWriter);
   };
 
@@ -107,6 +106,8 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   RegisterList GetInputRegisterList(RegisterList reg_list);
 
   int maxiumum_register_index() const { return max_register_index_; }
+
+  DISALLOW_COPY_AND_ASSIGN(BytecodeRegisterOptimizer);
 
  private:
   static const uint32_t kInvalidEquivalenceId;
@@ -202,8 +203,6 @@ class V8_EXPORT_PRIVATE BytecodeRegisterOptimizer final
   BytecodeWriter* bytecode_writer_;
   bool flush_required_;
   Zone* zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(BytecodeRegisterOptimizer);
 };
 
 }  // namespace interpreter

@@ -215,11 +215,11 @@ class ElementsAccessor {
                             Handle<FixedArrayBase> destination,
                             uint32_t destination_start, int copy_size) = 0;
 
+  DISALLOW_COPY_AND_ASSIGN(ElementsAccessor);
+
  private:
   static ElementsAccessor** elements_accessors_;
   const char* name_;
-
-  DISALLOW_COPY_AND_ASSIGN(ElementsAccessor);
 };
 
 void CheckArrayAbuse(Handle<JSObject> obj, const char* op, uint32_t index,

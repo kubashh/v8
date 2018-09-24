@@ -711,11 +711,11 @@ class V8_EXPORT_PRIVATE MoveOperands final
   void Print(const RegisterConfiguration* config) const;
   void Print() const;
 
+  DISALLOW_COPY_AND_ASSIGN(MoveOperands);
+
  private:
   InstructionOperand source_;
   InstructionOperand destination_;
-
-  DISALLOW_COPY_AND_ASSIGN(MoveOperands);
 };
 
 
@@ -757,7 +757,6 @@ class V8_EXPORT_PRIVATE ParallelMove final
   void PrepareInsertAfter(MoveOperands* move,
                           ZoneVector<MoveOperands*>* to_eliminate) const;
 
- private:
   DISALLOW_COPY_AND_ASSIGN(ParallelMove);
 };
 
@@ -966,6 +965,8 @@ class V8_EXPORT_PRIVATE Instruction final {
   static const size_t kMaxInputCount = InputCountField::kMax;
   static const size_t kMaxTempCount = TempCountField::kMax;
 
+  DISALLOW_COPY_AND_ASSIGN(Instruction);
+
  private:
   explicit Instruction(InstructionCode opcode);
 
@@ -982,8 +983,6 @@ class V8_EXPORT_PRIVATE Instruction final {
   ReferenceMap* reference_map_;
   InstructionBlock* block_;
   InstructionOperand operands_[1];
-
-  DISALLOW_COPY_AND_ASSIGN(Instruction);
 };
 
 
@@ -1644,6 +1643,8 @@ class V8_EXPORT_PRIVATE InstructionSequence final
       const RegisterConfiguration* regConfig);
   static void ClearRegisterConfigurationForTesting();
 
+  DISALLOW_COPY_AND_ASSIGN(InstructionSequence);
+
  private:
   friend V8_EXPORT_PRIVATE std::ostream& operator<<(
       std::ostream& os, const PrintableInstructionSequence& code);
@@ -1668,8 +1669,6 @@ class V8_EXPORT_PRIVATE InstructionSequence final
 
   // Used at construction time
   InstructionBlock* current_block_;
-
-  DISALLOW_COPY_AND_ASSIGN(InstructionSequence);
 };
 
 

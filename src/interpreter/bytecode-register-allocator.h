@@ -97,12 +97,12 @@ class BytecodeRegisterAllocator final {
   int next_register_index() const { return next_register_index_; }
   int maximum_register_count() const { return max_register_count_; }
 
+  DISALLOW_COPY_AND_ASSIGN(BytecodeRegisterAllocator);
+
  private:
   int next_register_index_;
   int max_register_count_;
   Observer* observer_;
-
-  DISALLOW_COPY_AND_ASSIGN(BytecodeRegisterAllocator);
 };
 
 }  // namespace interpreter

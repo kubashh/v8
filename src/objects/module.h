@@ -138,6 +138,8 @@ class Module : public Struct, public NeverReadOnlySpaceObject {
   static const int kImportMetaOffset = kScriptOffset + kPointerSize;
   static const int kSize = kImportMetaOffset + kPointerSize;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Module);
+
  private:
   friend class Factory;
 
@@ -208,8 +210,6 @@ class Module : public Struct, public NeverReadOnlySpaceObject {
   // For --trace-module-status.
   void PrintStatusTransition(Status new_status);
 #endif  // DEBUG
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Module);
 };
 
 // When importing a module namespace (import * as foo from "bar"), a
@@ -247,7 +247,6 @@ class JSModuleNamespace : public JSObject {
 
   static const int kSize = kHeaderSize + kPointerSize * kInObjectFieldCount;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSModuleNamespace);
 };
 
@@ -276,6 +275,8 @@ class ModuleInfo : public FixedArray {
   inline bool Equals(ModuleInfo* other) const;
 #endif
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(ModuleInfo);
+
  private:
   friend class Factory;
   friend class ModuleDescriptor;
@@ -294,7 +295,6 @@ class ModuleInfo : public FixedArray {
     kRegularExportExportNamesOffset,
     kRegularExportLength
   };
-  DISALLOW_IMPLICIT_CONSTRUCTORS(ModuleInfo);
 };
 
 class ModuleInfoEntry : public Struct {
@@ -327,7 +327,6 @@ class ModuleInfoEntry : public Struct {
   static const int kEndPosOffset = kBegPosOffset + kPointerSize;
   static const int kSize = kEndPosOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ModuleInfoEntry);
 };
 

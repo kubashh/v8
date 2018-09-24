@@ -37,6 +37,8 @@ class V8_EXPORT_PRIVATE LoadElimination final
 
   Reduction Reduce(Node* node) final;
 
+  DISALLOW_COPY_AND_ASSIGN(LoadElimination);
+
  private:
   static const size_t kMaxTrackedElements = 8;
 
@@ -274,8 +276,6 @@ class V8_EXPORT_PRIVATE LoadElimination final
   AbstractState const empty_state_;
   AbstractStateForEffectNodes node_states_;
   JSGraph* const jsgraph_;
-
-  DISALLOW_COPY_AND_ASSIGN(LoadElimination);
 };
 
 }  // namespace compiler

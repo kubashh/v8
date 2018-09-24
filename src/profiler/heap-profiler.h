@@ -91,6 +91,8 @@ class HeapProfiler : public HeapObjectAllocationTracker {
                     debug::QueryObjectPredicate* predicate,
                     v8::PersistentValueVector<v8::Object>* objects);
 
+  DISALLOW_COPY_AND_ASSIGN(HeapProfiler);
+
  private:
   Heap* heap() const;
 
@@ -107,8 +109,6 @@ class HeapProfiler : public HeapObjectAllocationTracker {
       nullptr;
   std::vector<std::pair<v8::HeapProfiler::BuildEmbedderGraphCallback, void*>>
       build_embedder_graph_callbacks_;
-
-  DISALLOW_COPY_AND_ASSIGN(HeapProfiler);
 };
 
 }  // namespace internal

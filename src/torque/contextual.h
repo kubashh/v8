@@ -47,6 +47,8 @@ class ContextualVariable {
       Top() = previous_;
     }
 
+    DISALLOW_COPY_AND_ASSIGN(Scope);
+
    private:
     VarType current_;
     VarType* previous_;
@@ -55,7 +57,6 @@ class ContextualVariable {
                   "Curiously Recurring Template Pattern");
 
     DISALLOW_NEW_AND_DELETE();
-    DISALLOW_COPY_AND_ASSIGN(Scope);
   };
 
   // Access the most recent active {Scope}. There has to be an active {Scope}

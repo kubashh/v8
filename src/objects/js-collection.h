@@ -22,7 +22,6 @@ class JSCollection : public JSObject {
   static const int kTableOffset = JSObject::kHeaderSize;
   static const int kSize = kTableOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSCollection);
 };
 
@@ -38,7 +37,6 @@ class JSSet : public JSCollection {
   DECL_PRINTER(JSSet)
   DECL_VERIFIER(JSSet)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSSet);
 };
 
@@ -51,7 +49,6 @@ class JSSetIterator
 
   DECL_CAST(JSSetIterator)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSSetIterator);
 };
 
@@ -67,7 +64,6 @@ class JSMap : public JSCollection {
   DECL_PRINTER(JSMap)
   DECL_VERIFIER(JSMap)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSMap);
 };
 
@@ -84,7 +80,6 @@ class JSMapIterator
   // |HasMore| returns true.
   inline Object* CurrentValue();
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSMapIterator);
 };
 
@@ -113,7 +108,6 @@ class JSWeakCollection : public JSObject {
   // Visit the whole object.
   typedef BodyDescriptorImpl BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSWeakCollection);
 };
 
@@ -126,7 +120,6 @@ class JSWeakMap : public JSWeakCollection {
   DECL_PRINTER(JSWeakMap)
   DECL_VERIFIER(JSWeakMap)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSWeakMap);
 };
 
@@ -139,7 +132,6 @@ class JSWeakSet : public JSWeakCollection {
   DECL_PRINTER(JSWeakSet)
   DECL_VERIFIER(JSWeakSet)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSWeakSet);
 };
 

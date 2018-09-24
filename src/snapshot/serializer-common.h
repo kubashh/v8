@@ -46,6 +46,8 @@ class ExternalReferenceEncoder {
 
   const char* NameOfAddress(Isolate* isolate, Address address) const;
 
+  DISALLOW_COPY_AND_ASSIGN(ExternalReferenceEncoder);
+
  private:
   AddressToIndexHashMap* map_;
 
@@ -53,8 +55,6 @@ class ExternalReferenceEncoder {
   std::vector<int> count_;
   const intptr_t* api_references_;
 #endif  // DEBUG
-
-  DISALLOW_COPY_AND_ASSIGN(ExternalReferenceEncoder);
 };
 
 class HotObjectsList {
@@ -87,13 +87,13 @@ class HotObjectsList {
 
   static const int kSize = 8;
 
+  DISALLOW_COPY_AND_ASSIGN(HotObjectsList);
+
  private:
   static_assert(base::bits::IsPowerOfTwo(kSize), "kSize must be power of two");
   static const int kSizeMask = kSize - 1;
   HeapObject* circular_queue_[kSize];
   int index_;
-
-  DISALLOW_COPY_AND_ASSIGN(HotObjectsList);
 };
 
 // The Serializer/Deserializer class is a common superclass for Serializer and
@@ -324,6 +324,8 @@ class SerializedData {
 
   static const uint32_t kMagicNumberOffset = 0;
 
+  DISALLOW_COPY_AND_ASSIGN(SerializedData);
+
  protected:
   void SetHeaderValue(uint32_t offset, uint32_t value) {
     WriteLittleEndianValue(reinterpret_cast<Address>(data_) + offset, value);
@@ -345,9 +347,6 @@ class SerializedData {
   byte* data_;
   uint32_t size_;
   bool owns_data_;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(SerializedData);
 };
 
 }  // namespace internal

@@ -23,7 +23,6 @@ class CreateArrayLiteralFlags {
 
   static uint8_t Encode(bool use_fast_shallow_clone, int runtime_flags);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CreateArrayLiteralFlags);
 };
 
@@ -34,7 +33,6 @@ class CreateObjectLiteralFlags {
 
   static uint8_t Encode(int runtime_flags, bool fast_clone_supported);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CreateObjectLiteralFlags);
 };
 
@@ -45,7 +43,6 @@ class CreateClosureFlags {
 
   static uint8_t Encode(bool pretenure, bool is_function_scope);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CreateClosureFlags);
 };
 
@@ -73,7 +70,6 @@ class TestTypeOfFlags {
   static uint8_t Encode(LiteralFlag literal_flag);
   static LiteralFlag Decode(uint8_t raw_flag);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(TestTypeOfFlags);
 };
 
@@ -87,7 +83,6 @@ class StoreLookupSlotFlags {
   static uint8_t Encode(LanguageMode language_mode,
                         LookupHoistingMode lookup_hoisting_mode);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(StoreLookupSlotFlags);
 };
 

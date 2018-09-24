@@ -155,11 +155,11 @@ class InjectedScript final {
     ContextScope(V8InspectorSessionImpl*, int executionContextId);
     ~ContextScope() override;
 
+    DISALLOW_COPY_AND_ASSIGN(ContextScope);
+
    private:
     Response findInjectedScript(V8InspectorSessionImpl*) override;
     int m_executionContextId;
-
-    DISALLOW_COPY_AND_ASSIGN(ContextScope);
   };
 
   class ObjectScope : public Scope {
@@ -169,13 +169,13 @@ class InjectedScript final {
     const String16& objectGroupName() const { return m_objectGroupName; }
     v8::Local<v8::Value> object() const { return m_object; }
 
+    DISALLOW_COPY_AND_ASSIGN(ObjectScope);
+
    private:
     Response findInjectedScript(V8InspectorSessionImpl*) override;
     String16 m_remoteObjectId;
     String16 m_objectGroupName;
     v8::Local<v8::Value> m_object;
-
-    DISALLOW_COPY_AND_ASSIGN(ObjectScope);
   };
 
   class CallFrameScope : public Scope {
@@ -184,13 +184,15 @@ class InjectedScript final {
     ~CallFrameScope() override;
     size_t frameOrdinal() const { return m_frameOrdinal; }
 
+    DISALLOW_COPY_AND_ASSIGN(CallFrameScope);
+
    private:
     Response findInjectedScript(V8InspectorSessionImpl*) override;
     String16 m_remoteCallFrameId;
     size_t m_frameOrdinal;
-
-    DISALLOW_COPY_AND_ASSIGN(CallFrameScope);
   };
+
+  DISALLOW_COPY_AND_ASSIGN(InjectedScript);
 
  private:
   InjectedScript(InspectedContext*, v8::Local<v8::Object>, int sessionId);
@@ -216,8 +218,6 @@ class InjectedScript final {
   std::unordered_map<int, String16> m_idToObjectGroupName;
   std::unordered_map<String16, std::vector<int>> m_nameToObjectGroup;
   std::unordered_set<EvaluateCallback*> m_evaluateCallbacks;
-
-  DISALLOW_COPY_AND_ASSIGN(InjectedScript);
 };
 
 }  // namespace v8_inspector

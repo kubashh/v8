@@ -78,6 +78,8 @@ class Sweeper::SweeperTask final : public CancelableTask {
 
   ~SweeperTask() override = default;
 
+  DISALLOW_COPY_AND_ASSIGN(SweeperTask);
+
  private:
   void RunInternal() final {
     TRACE_BACKGROUND_GC(tracer_,
@@ -102,8 +104,6 @@ class Sweeper::SweeperTask final : public CancelableTask {
   std::atomic<intptr_t>* const num_sweeping_tasks_;
   AllocationSpace space_to_start_;
   GCTracer* const tracer_;
-
-  DISALLOW_COPY_AND_ASSIGN(SweeperTask);
 };
 
 class Sweeper::IncrementalSweeperTask final : public CancelableTask {
@@ -112,6 +112,8 @@ class Sweeper::IncrementalSweeperTask final : public CancelableTask {
       : CancelableTask(isolate), isolate_(isolate), sweeper_(sweeper) {}
 
   ~IncrementalSweeperTask() override = default;
+
+  DISALLOW_COPY_AND_ASSIGN(IncrementalSweeperTask);
 
  private:
   void RunInternal() final {
@@ -129,7 +131,6 @@ class Sweeper::IncrementalSweeperTask final : public CancelableTask {
 
   Isolate* const isolate_;
   Sweeper* const sweeper_;
-  DISALLOW_COPY_AND_ASSIGN(IncrementalSweeperTask);
 };
 
 void Sweeper::StartSweeping() {
@@ -532,6 +533,8 @@ class Sweeper::IterabilityTask final : public CancelableTask {
 
   ~IterabilityTask() override = default;
 
+  DISALLOW_COPY_AND_ASSIGN(IterabilityTask);
+
  private:
   void RunInternal() final {
     TRACE_BACKGROUND_GC(tracer_,
@@ -546,8 +549,6 @@ class Sweeper::IterabilityTask final : public CancelableTask {
   Sweeper* const sweeper_;
   base::Semaphore* const pending_iterability_task_;
   GCTracer* const tracer_;
-
-  DISALLOW_COPY_AND_ASSIGN(IterabilityTask);
 };
 
 void Sweeper::StartIterabilityTasks() {

@@ -63,10 +63,10 @@ class RootIndexMap {
     return maybe_index.IsJust() ? maybe_index.FromJust() : kInvalidRootIndex;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(RootIndexMap);
+
  private:
   HeapObjectToIndexHashMap* map_;
-
-  DISALLOW_COPY_AND_ASSIGN(RootIndexMap);
 };
 
 }  // namespace internal

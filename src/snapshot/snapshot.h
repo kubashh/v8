@@ -195,6 +195,8 @@ class Snapshot : public AllStatic {
   static bool SnapshotIsValid(const v8::StartupData* snapshot_blob);
 #endif  // DEBUG
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Snapshot);
+
  private:
   static uint32_t ExtractNumContexts(const v8::StartupData* data);
   static uint32_t ExtractContextOffset(const v8::StartupData* data,
@@ -248,8 +250,6 @@ class Snapshot : public AllStatic {
   static uint32_t ContextSnapshotOffsetOffset(int index) {
     return kFirstContextOffsetOffset + index * kInt32Size;
   }
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Snapshot);
 };
 
 #ifdef V8_USE_EXTERNAL_STARTUP_DATA

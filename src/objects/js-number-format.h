@@ -114,7 +114,6 @@ class JSNumberFormat : public JSObject {
   DECL_ACCESSORS(bound_format, Object)
   DECL_INT_ACCESSORS(flags)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSNumberFormat);
 };
 

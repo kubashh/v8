@@ -803,13 +803,13 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
 
   const Operator* DateNow();
 
+  DISALLOW_COPY_AND_ASSIGN(SimplifiedOperatorBuilder);
+
  private:
   Zone* zone() const { return zone_; }
 
   const SimplifiedOperatorGlobalCache& cache_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(SimplifiedOperatorBuilder);
 };
 
 }  // namespace compiler

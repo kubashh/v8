@@ -82,12 +82,12 @@ class PreParsedScopeDataBuilder : public ZoneObject {
 
     void MarkFunctionAsSkippable(int end_position, int num_inner_functions);
 
+    DISALLOW_COPY_AND_ASSIGN(DataGatheringScope);
+
    private:
     DeclarationScope* function_scope_;
     PreParser* preparser_;
     PreParsedScopeDataBuilder* builder_;
-
-    DISALLOW_COPY_AND_ASSIGN(DataGatheringScope);
   };
 
   // Saves the information needed for allocating the Scope's (and its
@@ -124,6 +124,8 @@ class PreParsedScopeDataBuilder : public ZoneObject {
   static bool ScopeNeedsData(Scope* scope);
   static bool ScopeIsSkippableFunctionScope(Scope* scope);
 
+  DISALLOW_COPY_AND_ASSIGN(PreParsedScopeDataBuilder);
+
  private:
   friend class BuilderProducedPreParsedScopeData;
 
@@ -146,8 +148,6 @@ class PreParsedScopeDataBuilder : public ZoneObject {
 
   // Whether we've given up producing the data for this function.
   bool bailed_out_;
-
-  DISALLOW_COPY_AND_ASSIGN(PreParsedScopeDataBuilder);
 };
 
 class ProducedPreParsedScopeData : public ZoneObject {
@@ -201,11 +201,10 @@ class ConsumedPreParsedScopeData {
   // subscopes') variables.
   virtual void RestoreScopeAllocationData(DeclarationScope* scope) = 0;
 
+  DISALLOW_COPY_AND_ASSIGN(ConsumedPreParsedScopeData);
+
  protected:
   ConsumedPreParsedScopeData() = default;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(ConsumedPreParsedScopeData);
 };
 
 }  // namespace internal

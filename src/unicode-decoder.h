@@ -60,6 +60,8 @@ class V8_EXPORT_PRIVATE Utf8DecoderBase {
                          const v8::internal::Vector<const char>& stream);
   inline size_t Utf16Length() const { return utf16_length_; }
 
+  DISALLOW_COPY_AND_ASSIGN(Utf8DecoderBase);
+
  protected:
   // This reads all characters and sets the utf16_length_.
   // The first buffer_length utf16 chars are cached in the buffer.
@@ -73,9 +75,6 @@ class V8_EXPORT_PRIVATE Utf8DecoderBase {
   size_t chars_written_;
   size_t utf16_length_;
   bool trailing_;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(Utf8DecoderBase);
 };
 
 template <size_t kBufferSize>

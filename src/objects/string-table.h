@@ -85,11 +85,11 @@ class StringTable : public HashTable<StringTable, StringTableShape> {
   static const int kMinCapacity = 2048;
   static const int kMinShrinkCapacity = kMinCapacity;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(StringTable);
+
  private:
   template <bool seq_one_byte>
   friend class JsonParser;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(StringTable);
 };
 
 class StringSetShape : public BaseShape<String*> {

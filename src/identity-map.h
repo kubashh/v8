@@ -57,6 +57,8 @@ class IdentityMapBase {
   virtual void** NewPointerArray(size_t length) = 0;
   virtual void DeleteArray(void* array) = 0;
 
+  DISALLOW_COPY_AND_ASSIGN(IdentityMapBase);
+
  private:
   // Internal implementation should not be called directly by subclasses.
   int ScanKeysFor(Object* address) const;
@@ -77,8 +79,6 @@ class IdentityMapBase {
   Object** keys_;
   void** values_;
   bool is_iterable_;
-
-  DISALLOW_COPY_AND_ASSIGN(IdentityMapBase);
 };
 
 // Implements an identity map from object addresses to a given value type {V}.
@@ -169,10 +169,13 @@ class IdentityMap : public IdentityMapBase {
     Iterator begin() { return Iterator(map_, map_->NextIndex(-1)); }
     Iterator end() { return Iterator(map_, map_->capacity()); }
 
+    DISALLOW_COPY_AND_ASSIGN(IteratableScope);
+
    private:
     IdentityMap* map_;
-    DISALLOW_COPY_AND_ASSIGN(IteratableScope);
   };
+
+  DISALLOW_COPY_AND_ASSIGN(IdentityMap);
 
  protected:
   void** NewPointerArray(size_t length) override {
@@ -182,7 +185,6 @@ class IdentityMap : public IdentityMapBase {
 
  private:
   AllocationPolicy allocator_;
-  DISALLOW_COPY_AND_ASSIGN(IdentityMap);
 };
 
 }  // namespace internal

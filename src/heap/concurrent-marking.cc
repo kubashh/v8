@@ -62,11 +62,12 @@ class SlotSnapshot {
     ++number_of_slots_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(SlotSnapshot);
+
  private:
   static const int kMaxSnapshotSize = JSObject::kMaxInstanceSize / kPointerSize;
   int number_of_slots_;
   std::pair<Object**, Object*> snapshot_[kMaxSnapshotSize];
-  DISALLOW_COPY_AND_ASSIGN(SlotSnapshot);
 };
 
 class ConcurrentMarkingVisitor final
@@ -513,6 +514,8 @@ class ConcurrentMarking::Task : public CancelableTask {
 
   ~Task() override = default;
 
+  DISALLOW_COPY_AND_ASSIGN(Task);
+
  private:
   // v8::internal::CancelableTask overrides.
   void RunInternal() override {
@@ -522,7 +525,6 @@ class ConcurrentMarking::Task : public CancelableTask {
   ConcurrentMarking* concurrent_marking_;
   TaskState* task_state_;
   int task_id_;
-  DISALLOW_COPY_AND_ASSIGN(Task);
 };
 
 ConcurrentMarking::ConcurrentMarking(Heap* heap, MarkingWorklist* shared,

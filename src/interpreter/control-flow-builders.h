@@ -22,13 +22,13 @@ class V8_EXPORT_PRIVATE ControlFlowBuilder {
       : builder_(builder) {}
   virtual ~ControlFlowBuilder() = default;
 
+  DISALLOW_COPY_AND_ASSIGN(ControlFlowBuilder);
+
  protected:
   BytecodeArrayBuilder* builder() const { return builder_; }
 
  private:
   BytecodeArrayBuilder* builder_;
-
-  DISALLOW_COPY_AND_ASSIGN(ControlFlowBuilder);
 };
 
 class V8_EXPORT_PRIVATE BreakableControlFlowBuilder
