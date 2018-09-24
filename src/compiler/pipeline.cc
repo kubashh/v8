@@ -23,6 +23,7 @@
 #include "src/compiler/code-generator.h"
 #include "src/compiler/common-operator-reducer.h"
 #include "src/compiler/compilation-dependencies.h"
+#include "src/compiler/compiler-data.h"
 #include "src/compiler/compiler-source-position-table.h"
 #include "src/compiler/constant-folding-reducer.h"
 #include "src/compiler/control-flow-optimizer.h"
@@ -137,7 +138,13 @@ class PipelineData {
     javascript_ = new (graph_zone_) JSOperatorBuilder(graph_zone_);
     jsgraph_ = new (graph_zone_)
         JSGraph(isolate_, graph_, common_, javascript_, simplified_, machine_);
-    js_heap_broker_ = new (info_->zone()) JSHeapBroker(isolate_, info_->zone());
+    CompilerData*& compiler_data = isolate->compiler_data();
+    if (!compiler_data) {
+      Zone* compiler_zone = new Zone(isolate->allocator(), "Compiler zone");
+      compiler_data = new (compiler_zone) CompilerData(isolate, compiler_zone);
+    }
+    js_heap_broker_ = new (info_->zone())
+        JSHeapBroker(isolate_, info_->zone(), compiler_data->zone());
     dependencies_ =
         new (info_->zone()) CompilationDependencies(isolate_, info_->zone());
   }
