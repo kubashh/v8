@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8178c75_14594ec7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-09-24T13:56:00Z",
+      "side": 1,
+      "message": "missing regression bug? Makes future investigation easier to have one.",
+      "revId": "0600408c571905ef98486a78001773ed3c17654e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
