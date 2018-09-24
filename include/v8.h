@@ -8107,13 +8107,13 @@ class V8_EXPORT Isolate {
   void GetCodeRange(void** start, size_t* length_in_bytes);
 
   /**
-   * Returns a memory range containing the code for V8's builtin functions
-   * which are shared across isolates.
+   * Returns a memory range containing the code for V8's embedded functions
+   * (e.g. builtins) which are shared across isolates.
    *
    * If embedded builtins are disabled, then the memory range will be a null
    * pointer with 0 length.
    */
-  MemoryRange GetBuiltinsCodeRange();
+  MemoryRange GetEmbeddedCodeRange();
 
   /** Set the callback to invoke in case of fatal errors. */
   void SetFatalErrorHandler(FatalErrorCallback that);
