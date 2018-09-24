@@ -7,6 +7,7 @@
 #include "src/ast/modules.h"
 #include "src/boxed-float.h"
 #include "src/code-factory.h"
+#include "src/compiler/compiler-data.h"
 #include "src/compiler/graph-reducer.h"
 #include "src/objects-inl.h"
 #include "src/objects/js-array-inl.h"
@@ -1320,12 +1321,23 @@ ObjectRef ContextRef::get(int index) const {
   return ObjectRef(broker(), value);
 }
 
-JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* zone)
+JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone)
     : isolate_(isolate),
-      zone_(zone),
-      refs_(zone, kInitialRefsBucketCount),
+      broker_zone_(broker_zone),
+      current_zone_(broker_zone),
+      refs_(broker_zone, kInitialRefsBucketCount),
       mode_(FLAG_concurrent_compiler_frontend ? kSerializing : kDisabled) {
   Trace("Constructing heap broker.\n");
+
+  if (!isolate->compiler_data()) {
+    // The following zone is supposed to contain compiler-related objects
+    // that should live through all compilation passes, as opposed to the
+    // broker_zone which holds per-pass data.
+    Zone* compiler_zone = new Zone(isolate->allocator(), "Compiler zone");
+    isolate->set_compiler_data(new (compiler_zone)
+                                   CompilerData(isolate, compiler_zone));
+  }
+  compiler_data_ = isolate->compiler_data();
 }
 
 void JSHeapBroker::Trace(const char* format, ...) const {
@@ -1344,7 +1356,73 @@ bool JSHeapBroker::SerializingAllowed() const {
          (!FLAG_strict_heap_broker && mode() == kSerialized);
 }
 
+bool JSHeapBroker::IsShareable(Handle<Object> object) const {
+  Builtins* const b = isolate()->builtins();
+
+  int index;
+  RootIndex root_index;
+  return (object->IsHeapObject() &&
+          b->IsBuiltinHandle(Handle<HeapObject>::cast(object), &index)) ||
+         isolate()->heap()->IsRootHandle(object, &root_index);
+}
+
+void JSHeapBroker::SerializeShareableObjects() {
+  if (mode() == kDisabled) return;
+
+  if (compiler_data_->HasSnapshot()) {
+    refs_ = compiler_data_->GetSnapshot();
+    return;
+  }
+
+  Trace("Serializing shareable objects.\n");
+
+  CHECK(refs_.empty());
+  current_zone_ = compiler_data_->zone();
+
+  Builtins* const b = isolate()->builtins();
+  {
+    Builtins::Name builtins[] = {
+        Builtins::kAllocateInNewSpace,
+        Builtins::kAllocateInOldSpace,
+        Builtins::kArgumentsAdaptorTrampoline,
+        Builtins::kArrayConstructorImpl,
+        Builtins::kCallFunctionForwardVarargs,
+        Builtins::kCallFunction_ReceiverIsAny,
+        Builtins::kCallFunction_ReceiverIsNotNullOrUndefined,
+        Builtins::kCallFunction_ReceiverIsNullOrUndefined,
+        Builtins::kConstructFunctionForwardVarargs,
+        Builtins::kForInFilter,
+        Builtins::kJSBuiltinsConstructStub,
+        Builtins::kJSConstructStubGeneric,
+        Builtins::kStringAdd_CheckNone,
+        Builtins::kStringAdd_ConvertLeft,
+        Builtins::kStringAdd_ConvertRight,
+        Builtins::kToNumber,
+        Builtins::kToObject,
+    };
+    for (auto id : builtins) {
+      GetOrCreateData(b->builtin_handle(id));
+    }
+  }
+  for (int32_t id = 0; id < Builtins::builtin_count; ++id) {
+    if (Builtins::KindOf(id) == Builtins::TFJ) {
+      GetOrCreateData(b->builtin_handle(id));
+    }
+  }
+
+  for (auto ref : refs_) {
+    CHECK(IsShareable(ref.second->object()));
+  }
+
+  // TODO(mslekova):
+  // serialize root objects (from factory)
+  compiler_data()->SetSnapshot(refs_);
+  current_zone_ = broker_zone_;
+}
+
 void JSHeapBroker::SerializeStandardObjects() {
+  SerializeShareableObjects();
+
   if (!native_context_.has_value()) {
     native_context_ = NativeContextRef(this, isolate()->native_context());
     native_context_->Serialize();
@@ -1354,7 +1432,6 @@ void JSHeapBroker::SerializeStandardObjects() {
 
   TraceScope tracer(this, "JSHeapBroker::SerializeStandardObjects");
 
-  Builtins* const b = isolate()->builtins();
   Factory* const f = isolate()->factory();
 
   // Maps, strings, oddballs
@@ -1409,37 +1486,6 @@ void JSHeapBroker::SerializeStandardObjects() {
       ->AsPropertyCell()
       ->Serialize();
   GetOrCreateData(f->promise_then_protector())->AsPropertyCell()->Serialize();
-
-  // Builtins
-  {
-    Builtins::Name builtins[] = {
-        Builtins::kAllocateInNewSpace,
-        Builtins::kAllocateInOldSpace,
-        Builtins::kArgumentsAdaptorTrampoline,
-        Builtins::kArrayConstructorImpl,
-        Builtins::kCallFunctionForwardVarargs,
-        Builtins::kCallFunction_ReceiverIsAny,
-        Builtins::kCallFunction_ReceiverIsNotNullOrUndefined,
-        Builtins::kCallFunction_ReceiverIsNullOrUndefined,
-        Builtins::kConstructFunctionForwardVarargs,
-        Builtins::kForInFilter,
-        Builtins::kJSBuiltinsConstructStub,
-        Builtins::kJSConstructStubGeneric,
-        Builtins::kStringAdd_CheckNone,
-        Builtins::kStringAdd_ConvertLeft,
-        Builtins::kStringAdd_ConvertRight,
-        Builtins::kToNumber,
-        Builtins::kToObject,
-    };
-    for (auto id : builtins) {
-      GetOrCreateData(b->builtin_handle(id));
-    }
-  }
-  for (int32_t id = 0; id < Builtins::builtin_count; ++id) {
-    if (Builtins::KindOf(id) == Builtins::TFJ) {
-      GetOrCreateData(b->builtin_handle(id));
-    }
-  }
 
   // Stubs
   GetOrCreateData(
