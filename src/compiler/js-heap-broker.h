@@ -468,14 +468,17 @@ class InternalizedStringRef : public StringRef {
   using StringRef::StringRef;
 };
 
+class CompilerData;
+
 class V8_EXPORT_PRIVATE JSHeapBroker : public NON_EXPORTED_BASE(ZoneObject) {
  public:
   JSHeapBroker(Isolate* isolate, Zone* zone);
   void SerializeStandardObjects();
 
   Isolate* isolate() const { return isolate_; }
-  Zone* zone() const { return zone_; }
+  Zone* zone() const { return current_zone_; }
   NativeContextRef native_context() const { return native_context_.value(); }
+  CompilerData* compiler_data() const { return compiler_data_; }
 
   enum BrokerMode { kDisabled, kSerializing, kSerialized };
   BrokerMode mode() const { return mode_; }
@@ -501,13 +504,20 @@ class V8_EXPORT_PRIVATE JSHeapBroker : public NON_EXPORTED_BASE(ZoneObject) {
   friend class ObjectRef;
   friend class ObjectData;
 
+  void SerializeShareableObjects();
+  bool IsShareable(Handle<Object> object) const;
+
   Isolate* const isolate_;
   Zone* const zone_;
+  Zone* compiler_zone_;
+  Zone* current_zone_;
   base::Optional<NativeContextRef> native_context_;
   ZoneUnorderedMap<Address, ObjectData*> refs_;
   BrokerMode mode_;
   unsigned tracing_indentation_ = 0;
 
+  CompilerData* compiler_data_;
+  bool should_create_builtins_;
   static const size_t kInitialRefsBucketCount = 1000;
 };
 
