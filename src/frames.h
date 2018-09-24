@@ -46,6 +46,8 @@ class InnerPointerToCodeCache {
 
   InnerPointerToCodeCacheEntry* GetCacheEntry(Address inner_pointer);
 
+  DISALLOW_COPY_AND_ASSIGN(InnerPointerToCodeCache);
+
  private:
   InnerPointerToCodeCacheEntry* cache(int index) { return &cache_[index]; }
 
@@ -53,8 +55,6 @@ class InnerPointerToCodeCache {
 
   static const int kInnerPointerToCodeCacheSize = 1024;
   InnerPointerToCodeCacheEntry cache_[kInnerPointerToCodeCacheSize];
-
-  DISALLOW_COPY_AND_ASSIGN(InnerPointerToCodeCache);
 };
 
 
@@ -78,7 +78,6 @@ class StackHandler {
   // Conversion support.
   static inline StackHandler* FromAddress(Address address);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(StackHandler);
 };
 
@@ -1205,6 +1204,8 @@ class StackFrameIteratorBase {
 
   bool done() const { return frame_ == nullptr; }
 
+  DISALLOW_COPY_AND_ASSIGN(StackFrameIteratorBase);
+
  protected:
   // An iterator that iterates over a given thread's stack.
   StackFrameIteratorBase(Isolate* isolate, bool can_access_heap_objects);
@@ -1229,7 +1230,6 @@ class StackFrameIteratorBase {
 
  private:
   friend class StackFrame;
-  DISALLOW_COPY_AND_ASSIGN(StackFrameIteratorBase);
 };
 
 
@@ -1246,11 +1246,11 @@ class StackFrameIterator: public StackFrameIteratorBase {
   }
   void Advance();
 
+  DISALLOW_COPY_AND_ASSIGN(StackFrameIterator);
+
  private:
   // Go back to the first frame.
   void Reset(ThreadLocalTop* top);
-
-  DISALLOW_COPY_AND_ASSIGN(StackFrameIterator);
 };
 
 // Iterator that supports iterating through all JavaScript frames.

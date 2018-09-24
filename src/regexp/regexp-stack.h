@@ -29,10 +29,10 @@ class RegExpStackScope {
 
   RegExpStack* stack() const { return regexp_stack_; }
 
+  DISALLOW_COPY_AND_ASSIGN(RegExpStackScope);
+
  private:
   RegExpStack* regexp_stack_;
-
-  DISALLOW_COPY_AND_ASSIGN(RegExpStackScope);
 };
 
 
@@ -71,6 +71,8 @@ class RegExpStack {
   char* ArchiveStack(char* to);
   char* RestoreStack(char* from);
   void FreeThreadResources() { thread_local_.Free(); }
+
+  DISALLOW_COPY_AND_ASSIGN(RegExpStack);
 
  private:
   RegExpStack();
@@ -122,8 +124,6 @@ class RegExpStack {
   friend class ExternalReference;
   friend class Isolate;
   friend class RegExpStackScope;
-
-  DISALLOW_COPY_AND_ASSIGN(RegExpStack);
 };
 
 }  // namespace internal

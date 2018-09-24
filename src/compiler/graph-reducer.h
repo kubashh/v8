@@ -141,6 +141,8 @@ class V8_EXPORT_PRIVATE GraphReducer
   // Reduce the whole graph.
   void ReduceGraph();
 
+  DISALLOW_COPY_AND_ASSIGN(GraphReducer);
+
  private:
   enum class State : uint8_t;
   struct NodeState {
@@ -181,8 +183,6 @@ class V8_EXPORT_PRIVATE GraphReducer
   ZoneVector<Reducer*> reducers_;
   ZoneQueue<Node*> revisit_;
   ZoneStack<NodeState> stack_;
-
-  DISALLOW_COPY_AND_ASSIGN(GraphReducer);
 };
 
 }  // namespace compiler

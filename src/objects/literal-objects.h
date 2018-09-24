@@ -75,9 +75,10 @@ class ArrayBoilerplateDescription : public Struct {
                                 ARRAY_BOILERPLATE_DESCRIPTION_FIELDS)
 #undef ARRAY_BOILERPLATE_DESCRIPTION_FIELDS
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(ArrayBoilerplateDescription);
+
  private:
   DECL_INT_ACCESSORS(flags)
-  DISALLOW_IMPLICIT_CONSTRUCTORS(ArrayBoilerplateDescription);
 };
 
 class ClassBoilerplate : public FixedArray {

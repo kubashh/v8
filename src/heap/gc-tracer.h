@@ -89,14 +89,14 @@ class V8_EXPORT_PRIVATE GCTracer {
     ~Scope();
     static const char* Name(ScopeId id);
 
+    DISALLOW_COPY_AND_ASSIGN(Scope);
+
    private:
     GCTracer* tracer_;
     ScopeId scope_;
     double start_time_;
     RuntimeCallTimer timer_;
     RuntimeCallStats* runtime_stats_ = nullptr;
-
-    DISALLOW_COPY_AND_ASSIGN(Scope);
   };
 
   class V8_EXPORT_PRIVATE BackgroundScope {
@@ -118,6 +118,8 @@ class V8_EXPORT_PRIVATE GCTracer {
 
     static const char* Name(ScopeId id);
 
+    DISALLOW_COPY_AND_ASSIGN(BackgroundScope);
+
    private:
     GCTracer* tracer_;
     ScopeId scope_;
@@ -125,7 +127,6 @@ class V8_EXPORT_PRIVATE GCTracer {
     RuntimeCallTimer timer_;
     RuntimeCallCounter counter_;
     bool runtime_stats_enabled_;
-    DISALLOW_COPY_AND_ASSIGN(BackgroundScope);
   };
 
   class Event {
@@ -323,6 +324,8 @@ class V8_EXPORT_PRIVATE GCTracer {
 
   void RecordGCPhasesHistograms(HistogramTimer* gc_timer);
 
+  DISALLOW_COPY_AND_ASSIGN(GCTracer);
+
  private:
   FRIEND_TEST(GCTracer, AverageSpeed);
   FRIEND_TEST(GCTracerTest, AllocationThroughput);
@@ -447,8 +450,6 @@ class V8_EXPORT_PRIVATE GCTracer {
 
   base::Mutex background_counter_mutex_;
   BackgroundCounter background_counter_[BackgroundScope::NUMBER_OF_SCOPES];
-
-  DISALLOW_COPY_AND_ASSIGN(GCTracer);
 };
 
 }  // namespace internal

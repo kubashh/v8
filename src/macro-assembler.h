@@ -132,13 +132,13 @@ class FrameAndConstantPoolScope {
     masm_->LeaveFrame(type_);
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(FrameAndConstantPoolScope);
+
  private:
   MacroAssembler* masm_;
   StackFrame::Type type_;
   bool old_has_frame_;
   bool old_constant_pool_available_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(FrameAndConstantPoolScope);
 };
 
 // Class for scoping the the unavailability of constant pool access.
@@ -158,11 +158,11 @@ class ConstantPoolUnavailableScope {
     }
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(ConstantPoolUnavailableScope);
+
  private:
   Assembler* assembler_;
   int old_constant_pool_available_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(ConstantPoolUnavailableScope);
 };
 
 
@@ -226,11 +226,11 @@ class ParameterCount {
     return immediate_;
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(ParameterCount);
+
  private:
   const Register reg_;
   const uint16_t immediate_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(ParameterCount);
 };
 
 }  // namespace internal

@@ -71,6 +71,9 @@ class AsmValueType {
     kAsmValueTypeTag = 1u
   };
 
+  // AsmValueTypes can't be created except through AsmValueType::New.
+  DISALLOW_IMPLICIT_CONSTRUCTORS(AsmValueType);
+
  private:
   friend class AsmType;
 
@@ -94,9 +97,6 @@ class AsmValueType {
     return reinterpret_cast<AsmType*>(
         static_cast<uintptr_t>(bits | kAsmValueTypeTag));
   }
-
-  // AsmValueTypes can't be created except through AsmValueType::New.
-  DISALLOW_IMPLICIT_CONSTRUCTORS(AsmValueType);
 };
 
 class V8_EXPORT_PRIVATE AsmCallableType : public NON_EXPORTED_BASE(ZoneObject) {
@@ -111,6 +111,8 @@ class V8_EXPORT_PRIVATE AsmCallableType : public NON_EXPORTED_BASE(ZoneObject) {
   FOR_EACH_ASM_CALLABLE_TYPE_LIST(DECLARE_CAST)
 #undef DECLARE_CAST
 
+  DISALLOW_COPY_AND_ASSIGN(AsmCallableType);
+
  protected:
   AsmCallableType() = default;
   virtual ~AsmCallableType() = default;
@@ -118,8 +120,6 @@ class V8_EXPORT_PRIVATE AsmCallableType : public NON_EXPORTED_BASE(ZoneObject) {
 
  private:
   friend class AsmType;
-
-  DISALLOW_COPY_AND_ASSIGN(AsmCallableType);
 };
 
 class V8_EXPORT_PRIVATE AsmFunctionType final : public AsmCallableType {
@@ -133,6 +133,8 @@ class V8_EXPORT_PRIVATE AsmFunctionType final : public AsmCallableType {
   bool CanBeInvokedWith(AsmType* return_type,
                         const ZoneVector<AsmType*>& args) override;
 
+  DISALLOW_COPY_AND_ASSIGN(AsmFunctionType);
+
  protected:
   AsmFunctionType(Zone* zone, AsmType* return_type)
       : return_type_(return_type), args_(zone) {}
@@ -145,8 +147,6 @@ class V8_EXPORT_PRIVATE AsmFunctionType final : public AsmCallableType {
 
   AsmType* return_type_;
   ZoneVector<AsmType*> args_;
-
-  DISALLOW_COPY_AND_ASSIGN(AsmFunctionType);
 };
 
 class V8_EXPORT_PRIVATE AsmOverloadedFunctionType final
@@ -158,6 +158,8 @@ class V8_EXPORT_PRIVATE AsmOverloadedFunctionType final
 
   void AddOverload(AsmType* overload);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(AsmOverloadedFunctionType);
+
  private:
   friend AsmType;
 
@@ -168,8 +170,6 @@ class V8_EXPORT_PRIVATE AsmOverloadedFunctionType final
                         const ZoneVector<AsmType*>& args) override;
 
   ZoneVector<AsmType*> overloads_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(AsmOverloadedFunctionType);
 };
 
 class V8_EXPORT_PRIVATE AsmType {

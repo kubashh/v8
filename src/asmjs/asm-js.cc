@@ -202,6 +202,8 @@ class AsmJsCompilationJob final : public UnoptimizedCompilationJob {
         translate_time_micro_(0),
         translate_zone_size_(0) {}
 
+  DISALLOW_COPY_AND_ASSIGN(AsmJsCompilationJob);
+
  protected:
   Status ExecuteJobImpl() final;
   Status FinalizeJobImpl(Handle<SharedFunctionInfo> shared_info,
@@ -222,8 +224,6 @@ class AsmJsCompilationJob final : public UnoptimizedCompilationJob {
   int module_source_size_;  // Module source size in bytes.
   int64_t translate_time_micro_;  // Time (microseconds) taken to translate.
   size_t translate_zone_size_;
-
-  DISALLOW_COPY_AND_ASSIGN(AsmJsCompilationJob);
 };
 
 UnoptimizedCompilationJob::Status AsmJsCompilationJob::ExecuteJobImpl() {

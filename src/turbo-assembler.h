@@ -68,6 +68,8 @@ class V8_EXPORT_PRIVATE TurboAssemblerBase : public Assembler {
   static bool IsAddressableThroughRootRegister(
       Isolate* isolate, const ExternalReference& reference);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(TurboAssemblerBase);
+
  protected:
   TurboAssemblerBase(const AssemblerOptions& options, void* buffer,
                      int buffer_size)
@@ -98,8 +100,6 @@ class V8_EXPORT_PRIVATE TurboAssemblerBase : public Assembler {
   int maybe_builtin_index_ = Builtins::kNoBuiltinId;
 
   bool has_frame_ = false;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(TurboAssemblerBase);
 };
 
 // Avoids emitting calls to the {Builtins::kAbort} builtin when emitting debug

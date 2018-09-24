@@ -45,6 +45,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayWriter final {
                                         int parameter_count,
                                         Handle<ByteArray> handler_table);
 
+  DISALLOW_COPY_AND_ASSIGN(BytecodeArrayWriter);
+
  private:
   // Maximum sized packed bytecode is comprised of a prefix bytecode,
   // plus the actual bytecode, plus the maximum number of operands times
@@ -98,7 +100,6 @@ class V8_EXPORT_PRIVATE BytecodeArrayWriter final {
   bool exit_seen_in_block_;
 
   friend class bytecode_array_writer_unittest::BytecodeArrayWriterUnittest;
-  DISALLOW_COPY_AND_ASSIGN(BytecodeArrayWriter);
 };
 
 }  // namespace interpreter

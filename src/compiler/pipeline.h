@@ -90,7 +90,6 @@ class Pipeline : public AllStatic {
       const RegisterConfiguration* config, InstructionSequence* sequence,
       bool run_verifier);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Pipeline);
 };
 

@@ -73,10 +73,10 @@ class V8_BASE_EXPORT ConditionVariable final {
     return native_handle_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(ConditionVariable);
+
  private:
   NativeHandle native_handle_;
-
-  DISALLOW_COPY_AND_ASSIGN(ConditionVariable);
 };
 
 

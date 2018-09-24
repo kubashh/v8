@@ -92,7 +92,10 @@ MaybeHandle<String> GetLocalName(Isolate* isolate,
 }
 
 class InterpreterHandle {
+ public:
   MOVE_ONLY_NO_DEFAULT_CONSTRUCTOR(InterpreterHandle);
+
+ private:
   Isolate* isolate_;
   const WasmModule* module_;
   WasmInterpreter interpreter_;

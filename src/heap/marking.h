@@ -311,7 +311,6 @@ class Marking : public AllStatic {
     UNREACHABLE();
   }
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(Marking);
 };
 

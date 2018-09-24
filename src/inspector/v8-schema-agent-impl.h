@@ -24,11 +24,11 @@ class V8SchemaAgentImpl : public protocol::Schema::Backend {
   Response getDomains(
       std::unique_ptr<protocol::Array<protocol::Schema::Domain>>*) override;
 
+  DISALLOW_COPY_AND_ASSIGN(V8SchemaAgentImpl);
+
  private:
   V8InspectorSessionImpl* m_session;
   protocol::Schema::Frontend m_frontend;
-
-  DISALLOW_COPY_AND_ASSIGN(V8SchemaAgentImpl);
 };
 
 }  // namespace v8_inspector

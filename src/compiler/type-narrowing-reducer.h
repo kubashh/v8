@@ -27,6 +27,8 @@ class V8_EXPORT_PRIVATE TypeNarrowingReducer final
 
   Reduction Reduce(Node* node) final;
 
+  DISALLOW_COPY_AND_ASSIGN(TypeNarrowingReducer);
+
  private:
   JSGraph* jsgraph() const { return jsgraph_; }
   Graph* graph() const;
@@ -34,8 +36,6 @@ class V8_EXPORT_PRIVATE TypeNarrowingReducer final
 
   JSGraph* const jsgraph_;
   OperationTyper op_typer_;
-
-  DISALLOW_COPY_AND_ASSIGN(TypeNarrowingReducer);
 };
 
 }  // namespace compiler

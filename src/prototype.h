@@ -71,6 +71,8 @@ class PrototypeIterator {
   bool IsAtEnd() const { return is_at_end_; }
   Isolate* isolate() const { return isolate_; }
 
+  DISALLOW_COPY_AND_ASSIGN(PrototypeIterator);
+
  private:
   Isolate* isolate_;
   Object* object_;
@@ -78,8 +80,6 @@ class PrototypeIterator {
   WhereToEnd where_to_end_;
   bool is_at_end_;
   int seen_proxies_;
-
-  DISALLOW_COPY_AND_ASSIGN(PrototypeIterator);
 };
 
 

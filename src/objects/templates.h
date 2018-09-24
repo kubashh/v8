@@ -40,7 +40,6 @@ class TemplateInfo : public Struct, public NeverReadOnlySpaceObject {
   // instead of caching them.
   static const int kSlowTemplateInstantiationsCacheSize = 1 * MB;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(TemplateInfo);
 };
 
@@ -174,6 +173,8 @@ class FunctionTemplateInfo : public TemplateInfo {
   static MaybeHandle<Name> TryGetCachedPropertyName(Isolate* isolate,
                                                     Handle<Object> getter);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(FunctionTemplateInfo);
+
  private:
   // Bit position in the flag, from least significant bit position.
   static const int kHiddenPrototypeBit = 0;
@@ -183,8 +184,6 @@ class FunctionTemplateInfo : public TemplateInfo {
   static const int kRemovePrototypeBit = 4;
   static const int kDoNotCacheBit = 5;
   static const int kAcceptAnyReceiver = 6;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(FunctionTemplateInfo);
 };
 
 class ObjectTemplateInfo : public TemplateInfo {

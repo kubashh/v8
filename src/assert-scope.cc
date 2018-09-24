@@ -60,11 +60,11 @@ class PerThreadAssertData final {
     base::Thread::SetThreadLocal(kPerThreadAssertKey.Get(), data);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(PerThreadAssertData);
+
  private:
   bool assert_states_[LAST_PER_THREAD_ASSERT_TYPE];
   int nesting_level_;
-
-  DISALLOW_COPY_AND_ASSIGN(PerThreadAssertData);
 };
 
 

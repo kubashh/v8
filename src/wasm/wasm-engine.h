@@ -143,6 +143,8 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // engines this might be a pointer to a new instance or to a shared one.
   static std::shared_ptr<WasmEngine> GetWasmEngine();
 
+  DISALLOW_COPY_AND_ASSIGN(WasmEngine);
+
  private:
   AsyncCompileJob* CreateAsyncCompileJob(
       Isolate* isolate, const WasmFeatures& enabled,
@@ -170,8 +172,6 @@ class V8_EXPORT_PRIVATE WasmEngine {
 
   // End of fields protected by {mutex_}.
   //////////////////////////////////////////////////////////////////////////////
-
-  DISALLOW_COPY_AND_ASSIGN(WasmEngine);
 };
 
 }  // namespace wasm

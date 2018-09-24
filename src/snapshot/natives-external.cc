@@ -74,6 +74,8 @@ class NativesStore {
     return store;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(NativesStore);
+
  private:
   NativesStore() : debugger_count_(0) {}
 
@@ -104,8 +106,6 @@ class NativesStore {
   std::vector<Vector<const char>> native_names_;
   std::vector<Vector<const char>> native_source_;
   int debugger_count_;
-
-  DISALLOW_COPY_AND_ASSIGN(NativesStore);
 };
 
 

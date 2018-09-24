@@ -225,6 +225,8 @@ class CpuProfiler : public CodeEventObserver {
     return profiler_listener_.get();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(CpuProfiler);
+
  private:
   void StartProcessorIfNotStarted();
   void StopProcessorIfLastProfile(const char* title);
@@ -241,8 +243,6 @@ class CpuProfiler : public CodeEventObserver {
   std::unique_ptr<ProfilerListener> profiler_listener_;
   bool saved_is_logging_;
   bool is_profiling_;
-
-  DISALLOW_COPY_AND_ASSIGN(CpuProfiler);
 };
 
 }  // namespace internal

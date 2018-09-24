@@ -844,13 +844,13 @@ class V8_EXPORT_PRIVATE JSOperatorBuilder final
   const Operator* ParseInt();
   const Operator* RegExpTest();
 
+  DISALLOW_COPY_AND_ASSIGN(JSOperatorBuilder);
+
  private:
   Zone* zone() const { return zone_; }
 
   const JSOperatorGlobalCache& cache_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(JSOperatorBuilder);
 };
 
 }  // namespace compiler

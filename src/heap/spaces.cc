@@ -222,6 +222,8 @@ class MemoryAllocator::Unmapper::UnmapFreeMemoryTask : public CancelableTask {
         unmapper_(unmapper),
         tracer_(isolate->heap()->tracer()) {}
 
+  DISALLOW_COPY_AND_ASSIGN(UnmapFreeMemoryTask);
+
  private:
   void RunInternal() override {
     TRACE_BACKGROUND_GC(tracer_,
@@ -237,7 +239,6 @@ class MemoryAllocator::Unmapper::UnmapFreeMemoryTask : public CancelableTask {
 
   Unmapper* const unmapper_;
   GCTracer* const tracer_;
-  DISALLOW_COPY_AND_ASSIGN(UnmapFreeMemoryTask);
 };
 
 void MemoryAllocator::Unmapper::FreeQueuedChunks() {

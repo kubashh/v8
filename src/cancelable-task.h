@@ -58,6 +58,8 @@ class V8_EXPORT_PRIVATE CancelableTaskManager {
   // 3) All registered tasks were cancelled (kTaskAborted).
   TryAbortResult TryAbortAll();
 
+  DISALLOW_COPY_AND_ASSIGN(CancelableTaskManager);
+
  private:
   // Only called by {Cancelable} destructor. The task is done with executing,
   // but needs to be removed.
@@ -77,8 +79,6 @@ class V8_EXPORT_PRIVATE CancelableTaskManager {
   bool canceled_;
 
   friend class Cancelable;
-
-  DISALLOW_COPY_AND_ASSIGN(CancelableTaskManager);
 };
 
 class V8_EXPORT_PRIVATE Cancelable {
@@ -92,6 +92,8 @@ class V8_EXPORT_PRIVATE Cancelable {
   // the task after running it. Since the exact time is not known, we cannot
   // access the object after handing it to a platform.
   CancelableTaskManager::Id id() { return id_; }
+
+  DISALLOW_COPY_AND_ASSIGN(Cancelable);
 
  protected:
   bool TryRun() { return status_.TrySetValue(kWaiting, kRunning); }
@@ -130,8 +132,6 @@ class V8_EXPORT_PRIVATE Cancelable {
   std::atomic<intptr_t> cancel_counter_;
 
   friend class CancelableTaskManager;
-
-  DISALLOW_COPY_AND_ASSIGN(Cancelable);
 };
 
 
@@ -151,7 +151,6 @@ class V8_EXPORT_PRIVATE CancelableTask : public Cancelable,
 
   virtual void RunInternal() = 0;
 
- private:
   DISALLOW_COPY_AND_ASSIGN(CancelableTask);
 };
 
@@ -171,7 +170,6 @@ class CancelableIdleTask : public Cancelable, public IdleTask {
 
   virtual void RunInternal(double deadline_in_seconds) = 0;
 
- private:
   DISALLOW_COPY_AND_ASSIGN(CancelableIdleTask);
 };
 

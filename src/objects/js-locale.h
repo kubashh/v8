@@ -70,7 +70,6 @@ class JSLocale : public JSObject {
   // Final size.
   static const int kSize = kNumberingSystemOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSLocale);
 };
 

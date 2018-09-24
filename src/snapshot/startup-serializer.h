@@ -32,6 +32,8 @@ class StartupSerializer : public Serializer<> {
     return root_has_been_serialized_.test(root_index);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(StartupSerializer);
+
  private:
   class PartialCacheIndexMap {
    public:
@@ -50,12 +52,12 @@ class StartupSerializer : public Serializer<> {
       return false;
     }
 
+    DISALLOW_COPY_AND_ASSIGN(PartialCacheIndexMap);
+
    private:
     DisallowHeapAllocation no_allocation_;
     HeapObjectToIndexHashMap map_;
     int next_index_;
-
-    DISALLOW_COPY_AND_ASSIGN(PartialCacheIndexMap);
   };
 
   // The StartupSerializer has to serialize the root array, which is slightly
@@ -77,8 +79,6 @@ class StartupSerializer : public Serializer<> {
   // Indicates whether we only serialized hash tables that we can rehash.
   // TODO(yangguo): generalize rehashing, and remove this flag.
   bool can_be_rehashed_;
-
-  DISALLOW_COPY_AND_ASSIGN(StartupSerializer);
 };
 
 class SerializedHandleChecker : public RootVisitor {

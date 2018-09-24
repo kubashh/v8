@@ -274,6 +274,8 @@ class BitVector : public ZoneObject {
   void Print();
 #endif
 
+  DISALLOW_COPY_AND_ASSIGN(BitVector);
+
  private:
   int length_;
   int data_length_;
@@ -301,8 +303,6 @@ class BitVector : public ZoneObject {
       }
     }
   }
-
-  DISALLOW_COPY_AND_ASSIGN(BitVector);
 };
 
 class GrowableBitVector {

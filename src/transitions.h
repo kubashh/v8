@@ -120,6 +120,8 @@ class TransitionsAccessor {
   bool IsSortedNoDuplicates();
 #endif
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(TransitionsAccessor);
+
  protected:
   // Allow tests to use inheritance to access internals.
   enum Encoding {
@@ -187,8 +189,6 @@ class TransitionsAccessor {
 #if DEBUG
   bool needs_reload_;
 #endif
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(TransitionsAccessor);
 };
 
 // TransitionArrays are fixed arrays used to hold map transitions for property,
@@ -263,6 +263,8 @@ class TransitionArray : public WeakFixedArray {
                                   int* out_insertion_index = nullptr) {
     return SearchName(name, out_insertion_index);
   }
+
+  DISALLOW_IMPLICIT_CONSTRUCTORS(TransitionArray);
 
  private:
   friend class Factory;
@@ -340,8 +342,6 @@ class TransitionArray : public WeakFixedArray {
   inline void Set(int transition_number, Name* key, MaybeObject* target);
 
   void Zap(Isolate* isolate);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(TransitionArray);
 };
 
 }  // namespace internal

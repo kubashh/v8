@@ -42,6 +42,8 @@ class BigIntBase : public HeapObject {
   static const int kDigitsOffset = kBitfieldOffset + kPointerSize;
   static const int kHeaderSize = kDigitsOffset;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(BigIntBase);
+
  private:
   friend class ::v8::internal::BigInt;  // MSVC wants full namespace.
   friend class MutableBigInt;
@@ -68,8 +70,6 @@ class BigIntBase : public HeapObject {
   }
 
   bool is_zero() const { return length() == 0; }
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(BigIntBase);
 };
 
 class FreshlyAllocatedBigInt : public BigIntBase {
@@ -87,7 +87,6 @@ class FreshlyAllocatedBigInt : public BigIntBase {
  public:
   inline static FreshlyAllocatedBigInt* cast(Object* object);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(FreshlyAllocatedBigInt);
 };
 
@@ -189,6 +188,8 @@ class V8_EXPORT_PRIVATE BigInt : public BigIntBase {
 
   class BodyDescriptor;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(BigInt);
+
  private:
   friend class StringToBigIntHelper;
   friend class ValueDeserializer;
@@ -212,8 +213,6 @@ class V8_EXPORT_PRIVATE BigInt : public BigIntBase {
   V8_WARN_UNUSED_RESULT static MaybeHandle<BigInt> FromSerializedDigits(
       Isolate* isolate, uint32_t bitfield, Vector<const uint8_t> digits_storage,
       PretenureFlag pretenure);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(BigInt);
 };
 
 }  // namespace internal

@@ -68,6 +68,8 @@ class V8_EXPORT_PRIVATE StreamingDecoder {
   // Notify the StreamingDecoder that there has been an compilation error.
   void NotifyError() { ok_ = false; }
 
+  DISALLOW_COPY_AND_ASSIGN(StreamingDecoder);
+
  private:
   // TODO(ahaas): Put the whole private state of the StreamingDecoder into the
   // cc file (PIMPL design pattern).
@@ -255,8 +257,6 @@ class V8_EXPORT_PRIVATE StreamingDecoder {
   uint32_t module_offset_ = 0;
   size_t total_size_ = 0;
   uint8_t next_section_id_ = kFirstSectionInModule;
-
-  DISALLOW_COPY_AND_ASSIGN(StreamingDecoder);
 };
 
 }  // namespace wasm

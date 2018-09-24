@@ -31,6 +31,8 @@ class V8Console : public v8::debug::ConsoleDelegate {
                         v8::Local<v8::Object> global);
     ~CommandLineAPIScope();
 
+    DISALLOW_COPY_AND_ASSIGN(CommandLineAPIScope);
+
    private:
     static void accessorGetterCallback(
         v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>&);
@@ -43,8 +45,6 @@ class V8Console : public v8::debug::ConsoleDelegate {
     v8::Local<v8::Object> m_global;
     v8::Local<v8::Set> m_installedMethods;
     bool m_cleanup;
-
-    DISALLOW_COPY_AND_ASSIGN(CommandLineAPIScope);
   };
 
   explicit V8Console(V8InspectorImpl* inspector);

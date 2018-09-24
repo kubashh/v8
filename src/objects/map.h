@@ -849,6 +849,8 @@ class Map : public HeapObject {
       InstanceType instance_type);
   inline bool CanHaveFastTransitionableElementsKind() const;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Map);
+
  private:
   // This byte encodes either the instance size without the in-object slack or
   // the slack size in properties backing store.
@@ -944,8 +946,6 @@ class Map : public HeapObject {
   static const int kMaxFastProperties = 128;
 
   friend class MapUpdater;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Map);
 };
 
 // The cache for maps used by normalized (dictionary mode) objects.

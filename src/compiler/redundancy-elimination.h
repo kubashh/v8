@@ -20,6 +20,8 @@ class V8_EXPORT_PRIVATE RedundancyElimination final : public AdvancedReducer {
 
   Reduction Reduce(Node* node) final;
 
+  DISALLOW_COPY_AND_ASSIGN(RedundancyElimination);
+
  private:
   struct Check {
     Check(Node* node, Check* next) : node(node), next(next) {}
@@ -70,8 +72,6 @@ class V8_EXPORT_PRIVATE RedundancyElimination final : public AdvancedReducer {
 
   PathChecksForEffectNodes node_checks_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(RedundancyElimination);
 };
 
 }  // namespace compiler

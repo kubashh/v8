@@ -31,6 +31,8 @@ class V8_EXPORT_PRIVATE SourcePositionTable final
     }
     ~Scope() { source_positions_->current_position_ = prev_position_; }
 
+    DISALLOW_COPY_AND_ASSIGN(Scope);
+
    private:
     void Init(SourcePosition position) {
       if (position.IsKnown()) source_positions_->current_position_ = position;
@@ -38,7 +40,6 @@ class V8_EXPORT_PRIVATE SourcePositionTable final
 
     SourcePositionTable* const source_positions_;
     SourcePosition const prev_position_;
-    DISALLOW_COPY_AND_ASSIGN(Scope);
   };
 
   explicit SourcePositionTable(Graph* graph);
@@ -55,6 +56,8 @@ class V8_EXPORT_PRIVATE SourcePositionTable final
 
   void PrintJson(std::ostream& os) const;
 
+  DISALLOW_COPY_AND_ASSIGN(SourcePositionTable);
+
  private:
   class Decorator;
 
@@ -62,8 +65,6 @@ class V8_EXPORT_PRIVATE SourcePositionTable final
   Decorator* decorator_;
   SourcePosition current_position_;
   NodeAuxData<SourcePosition, SourcePosition::Unknown> table_;
-
-  DISALLOW_COPY_AND_ASSIGN(SourcePositionTable);
 };
 
 }  // namespace compiler

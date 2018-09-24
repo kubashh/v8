@@ -58,7 +58,6 @@ class PreParsedScopeData : public HeapObject {
     return kChildDataStartOffset + length * kPointerSize;
   }
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PreParsedScopeData);
 };
 
@@ -95,7 +94,6 @@ class UncompiledData : public HeapObject {
   // Clear uninitialized padding space.
   inline void clear_padding();
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(UncompiledData);
 };
 
@@ -113,7 +111,6 @@ class UncompiledDataWithoutPreParsedScope : public UncompiledData {
   // No extra fields compared to UncompiledData.
   typedef UncompiledData::BodyDescriptor BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(UncompiledDataWithoutPreParsedScope);
 };
 
@@ -147,7 +144,6 @@ class UncompiledDataWithPreParsedScope : public UncompiledData {
                           kEndOfPointerFieldsOffset, kSize>>
       BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(UncompiledDataWithPreParsedScope);
 };
 
@@ -165,7 +161,6 @@ class InterpreterData : public Struct {
   DECL_PRINTER(InterpreterData)
   DECL_VERIFIER(InterpreterData)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(InterpreterData);
 };
 
@@ -550,11 +545,12 @@ class SharedFunctionInfo : public HeapObject, public NeverReadOnlySpaceObject {
     // Reset the iterator to run on |script|.
     void Reset(Script* script);
 
+    DISALLOW_COPY_AND_ASSIGN(ScriptIterator);
+
    private:
     Isolate* isolate_;
     Handle<WeakFixedArray> shared_function_infos_;
     int index_;
-    DISALLOW_COPY_AND_ASSIGN(ScriptIterator);
   };
 
   // Iterate over all shared function infos on the heap.
@@ -563,12 +559,13 @@ class SharedFunctionInfo : public HeapObject, public NeverReadOnlySpaceObject {
     explicit GlobalIterator(Isolate* isolate);
     SharedFunctionInfo* Next();
 
+    DISALLOW_COPY_AND_ASSIGN(GlobalIterator);
+
    private:
     Script::Iterator script_iterator_;
     WeakArrayList::Iterator noscript_sfi_iterator_;
     SharedFunctionInfo::ScriptIterator sfi_iterator_;
     DisallowHeapAllocation no_gc_;
-    DISALLOW_COPY_AND_ASSIGN(GlobalIterator);
   };
 
   DECL_CAST(SharedFunctionInfo)
@@ -654,6 +651,8 @@ class SharedFunctionInfo : public HeapObject, public NeverReadOnlySpaceObject {
   // This is needed to set up the [[HomeObject]] on the function instance.
   inline bool needs_home_object() const;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(SharedFunctionInfo);
+
  private:
   // [name_or_scope_info]: Function name string, kNoSharedNameSentinel or
   // ScopeInfo.
@@ -676,8 +675,6 @@ class SharedFunctionInfo : public HeapObject, public NeverReadOnlySpaceObject {
   // Find the index of this function in the parent script. Slow path of
   // FunctionLiteralId.
   int FindIndexInScript(Isolate* isolate) const;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(SharedFunctionInfo);
 };
 
 // Printing support.

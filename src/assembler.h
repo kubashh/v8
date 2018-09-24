@@ -414,6 +414,8 @@ class CpuFeatures : public AllStatic {
   static void PrintTarget();
   static void PrintFeatures();
 
+  DISALLOW_COPY_AND_ASSIGN(CpuFeatures);
+
  private:
   friend class ExternalReference;
   friend class AssemblerBase;
@@ -427,7 +429,6 @@ class CpuFeatures : public AllStatic {
   static unsigned icache_line_size_;
   static unsigned dcache_line_size_;
   static bool initialized_;
-  DISALLOW_COPY_AND_ASSIGN(CpuFeatures);
 };
 
 // -----------------------------------------------------------------------------

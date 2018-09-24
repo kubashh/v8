@@ -94,7 +94,6 @@ class CompilationCacheTable
 
   DECL_CAST(CompilationCacheTable)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CompilationCacheTable);
 };
 

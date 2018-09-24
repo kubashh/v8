@@ -854,6 +854,8 @@ class DeoptimizerData {
   explicit DeoptimizerData(Heap* heap);
   ~DeoptimizerData();
 
+  DISALLOW_COPY_AND_ASSIGN(DeoptimizerData);
+
  private:
   Heap* heap_;
   static const int kLastDeoptimizeKind =
@@ -865,8 +867,6 @@ class DeoptimizerData {
   Deoptimizer* current_;
 
   friend class Deoptimizer;
-
-  DISALLOW_COPY_AND_ASSIGN(DeoptimizerData);
 };
 
 class TranslationBuffer {

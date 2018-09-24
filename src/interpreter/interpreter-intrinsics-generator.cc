@@ -34,6 +34,8 @@ class IntrinsicsGenerator {
   Node* InvokeIntrinsic(Node* function_id, Node* context,
                         const InterpreterAssembler::RegListNodePair& args);
 
+  DISALLOW_COPY_AND_ASSIGN(IntrinsicsGenerator);
+
  private:
   enum InstanceTypeCompareMode {
     kInstanceTypeEqual,
@@ -61,8 +63,6 @@ class IntrinsicsGenerator {
   Isolate* isolate_;
   Zone* zone_;
   InterpreterAssembler* assembler_;
-
-  DISALLOW_COPY_AND_ASSIGN(IntrinsicsGenerator);
 };
 
 Node* GenerateInvokeIntrinsic(

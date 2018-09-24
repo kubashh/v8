@@ -182,6 +182,8 @@ class ElementsAccessor {
                                            JSTypedArray* destination,
                                            size_t start, size_t end) = 0;
 
+  DISALLOW_COPY_AND_ASSIGN(ElementsAccessor);
+
  protected:
   friend class LookupIterator;
 
@@ -218,8 +220,6 @@ class ElementsAccessor {
  private:
   static ElementsAccessor** elements_accessors_;
   const char* name_;
-
-  DISALLOW_COPY_AND_ASSIGN(ElementsAccessor);
 };
 
 void CheckArrayAbuse(Handle<JSObject> obj, const char* op, uint32_t index,

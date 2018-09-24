@@ -48,12 +48,12 @@ class V8_EXPORT_PRIVATE Graph final : public NON_EXPORTED_BASE(ZoneObject) {
       graph_->SetEnd(end_);
     }
 
+    DISALLOW_COPY_AND_ASSIGN(SubgraphScope);
+
    private:
     Graph* const graph_;
     Node* const start_;
     Node* const end_;
-
-    DISALLOW_COPY_AND_ASSIGN(SubgraphScope);
   };
 
   // Base implementation used by all factory methods.
@@ -90,6 +90,8 @@ class V8_EXPORT_PRIVATE Graph final : public NON_EXPORTED_BASE(ZoneObject) {
   // Very simple print API usable in a debugger.
   void Print() const;
 
+  DISALLOW_COPY_AND_ASSIGN(Graph);
+
  private:
   friend class NodeMarkerBase;
 
@@ -101,8 +103,6 @@ class V8_EXPORT_PRIVATE Graph final : public NON_EXPORTED_BASE(ZoneObject) {
   Mark mark_max_;
   NodeId next_node_id_;
   ZoneVector<GraphDecorator*> decorators_;
-
-  DISALLOW_COPY_AND_ASSIGN(Graph);
 };
 
 

@@ -544,13 +544,13 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
 
   const Operator* DelayedStringConstant(const StringConstantBase* str);
 
+  DISALLOW_COPY_AND_ASSIGN(CommonOperatorBuilder);
+
  private:
   Zone* zone() const { return zone_; }
 
   const CommonOperatorGlobalCache& cache_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(CommonOperatorBuilder);
 };
 
 }  // namespace compiler

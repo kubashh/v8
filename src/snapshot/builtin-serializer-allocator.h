@@ -32,6 +32,8 @@ class BuiltinSerializerAllocator final {
 
   void OutputStatistics();
 
+  DISALLOW_COPY_AND_ASSIGN(BuiltinSerializerAllocator)
+
  private:
   static constexpr int kNumberOfPreallocatedSpaces =
       SerializerDeserializer::kNumberOfPreallocatedSpaces;
@@ -40,8 +42,6 @@ class BuiltinSerializerAllocator final {
 
   uint32_t allocated_bytes_ = 0;
   uint32_t next_builtin_reference_index_ = 0;
-
-  DISALLOW_COPY_AND_ASSIGN(BuiltinSerializerAllocator)
 };
 
 }  // namespace internal

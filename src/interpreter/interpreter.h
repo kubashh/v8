@@ -80,6 +80,8 @@ class Interpreter {
     return reinterpret_cast<Address>(bytecode_dispatch_counters_table_.get());
   }
 
+  DISALLOW_COPY_AND_ASSIGN(Interpreter);
+
  private:
   friend class SetupInterpreter;
   friend class v8::internal::SetupIsolateDelegate;
@@ -98,8 +100,6 @@ class Interpreter {
   Isolate* isolate_;
   Address dispatch_table_[kDispatchTableSize];
   std::unique_ptr<uintptr_t[]> bytecode_dispatch_counters_table_;
-
-  DISALLOW_COPY_AND_ASSIGN(Interpreter);
 };
 
 }  // namespace interpreter

@@ -299,11 +299,11 @@ class FeedbackVector : public HeapObject, public NeverReadOnlySpaceObject {
     return kFeedbackSlotsOffset + length * kPointerSize;
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(FeedbackVector);
+
  private:
   static void AddToVectorsForProfilingTools(Isolate* isolate,
                                             Handle<FeedbackVector> vector);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(FeedbackVector);
 };
 
 class V8_EXPORT_PRIVATE FeedbackVectorSpec {
@@ -491,6 +491,8 @@ class FeedbackMetadata : public HeapObject {
 
   class BodyDescriptor;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(FeedbackMetadata);
+
  private:
   friend class AccessorAssembler;
 
@@ -514,8 +516,6 @@ class FeedbackMetadata : public HeapObject {
   typedef BitSetComputer<FeedbackSlotKind, kFeedbackSlotKindBits,
                          kInt32Size * kBitsPerByte, uint32_t>
       VectorICComputer;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(FeedbackMetadata);
 };
 
 // Verify that an empty hash field looks like a tagged object, but can't

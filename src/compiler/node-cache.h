@@ -46,6 +46,8 @@ class V8_EXPORT_PRIVATE NodeCache final {
   // Appends all nodes from this cache to {nodes}.
   void GetCachedNodes(ZoneVector<Node*>* nodes);
 
+  DISALLOW_COPY_AND_ASSIGN(NodeCache);
+
  private:
   struct Entry;
 
@@ -56,8 +58,6 @@ class V8_EXPORT_PRIVATE NodeCache final {
   Pred pred_;
 
   bool Resize(Zone* zone);
-
-  DISALLOW_COPY_AND_ASSIGN(NodeCache);
 };
 
 // Various default cache types.

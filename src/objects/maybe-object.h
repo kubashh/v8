@@ -104,7 +104,6 @@ class MaybeObject {
   void Print(std::ostream& os) { ShortPrint(os); }
 #endif
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(MaybeObject);
 };
 
@@ -146,7 +145,6 @@ class HeapObjectReference : public MaybeObject {
 #endif
   }
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(HeapObjectReference);
 };
 

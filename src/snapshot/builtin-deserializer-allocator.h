@@ -95,6 +95,8 @@ class BuiltinDeserializerAllocator final {
   bool ReservationsAreFullyUsed() const;
 #endif
 
+  DISALLOW_COPY_AND_ASSIGN(BuiltinDeserializerAllocator)
+
  private:
   Isolate* isolate() const;
   BuiltinDeserializer* deserializer() const;
@@ -117,8 +119,6 @@ class BuiltinDeserializerAllocator final {
   Deserializer<BuiltinDeserializerAllocator>* const deserializer_;
 
   bool next_reference_is_weak_ = false;
-
-  DISALLOW_COPY_AND_ASSIGN(BuiltinDeserializerAllocator)
 };
 
 }  // namespace internal

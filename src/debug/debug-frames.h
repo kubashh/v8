@@ -43,6 +43,8 @@ class FrameInspector {
 
   int inlined_frame_index() const { return inlined_frame_index_; }
 
+  DISALLOW_COPY_AND_ASSIGN(FrameInspector);
+
  private:
   bool ParameterIsShadowedByContextLocal(Handle<ScopeInfo> info,
                                          Handle<String> parameter_name);
@@ -61,8 +63,6 @@ class FrameInspector {
   bool is_interpreted_ = false;
   bool has_adapted_arguments_ = false;
   bool is_constructor_ = false;
-
-  DISALLOW_COPY_AND_ASSIGN(FrameInspector);
 };
 }  // namespace internal
 }  // namespace v8

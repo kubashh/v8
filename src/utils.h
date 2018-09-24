@@ -866,14 +866,13 @@ class SimpleStringBuilder {
   // Finalize the string by 0-terminating it and returning the buffer.
   char* Finalize();
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(SimpleStringBuilder);
+
  protected:
   Vector<char> buffer_;
   int position_;
 
   bool is_finalized() const { return position_ < 0; }
-
- private:
-  DISALLOW_IMPLICIT_CONSTRUCTORS(SimpleStringBuilder);
 };
 
 
@@ -1562,7 +1561,6 @@ class StringBuilder : public SimpleStringBuilder {
   // Add formatted contents like printf based on a va_list.
   void PRINTF_FORMAT(2, 0) AddFormattedList(const char* format, va_list list);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(StringBuilder);
 };
 
@@ -1876,10 +1874,11 @@ class ThreadedListBase final : public BaseClass {
     return true;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(ThreadedListBase);
+
  private:
   T* head_;
   T** tail_;
-  DISALLOW_COPY_AND_ASSIGN(ThreadedListBase);
 };
 
 struct EmptyBase {};

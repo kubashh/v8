@@ -43,11 +43,11 @@ class PreParserZoneScope {
     }
   }
 
+  DISALLOW_COPY_AND_ASSIGN(PreParserZoneScope);
+
  private:
   Parser* parser_;
   bool should_preparse_;
-
-  DISALLOW_COPY_AND_ASSIGN(PreParserZoneScope);
 };
 
 FunctionLiteral* Parser::DefaultConstructor(const AstRawString* name,

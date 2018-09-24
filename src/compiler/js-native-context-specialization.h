@@ -67,6 +67,8 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
   // Public for the sake of unit testing.
   static base::Optional<size_t> GetMaxStringLength(Node* node);
 
+  DISALLOW_COPY_AND_ASSIGN(JSNativeContextSpecialization);
+
  private:
   Reduction ReduceJSAdd(Node* node);
   Reduction ReduceJSGetSuperConstructor(Node* node);
@@ -254,8 +256,6 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
   Zone* const zone_;
   Zone* const shared_zone_;
   TypeCache const& type_cache_;
-
-  DISALLOW_COPY_AND_ASSIGN(JSNativeContextSpecialization);
 };
 
 DEFINE_OPERATORS_FOR_FLAGS(JSNativeContextSpecialization::Flags)

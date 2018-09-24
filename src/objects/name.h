@@ -127,11 +127,10 @@ class Name : public HeapObject {
   static const int kEmptyHashField =
       kIsNotArrayIndexMask | kHashNotComputedMask;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Name);
+
  protected:
   static inline bool IsHashFieldComputed(uint32_t field);
-
- private:
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Name);
 };
 
 // ES6 symbols.
@@ -195,13 +194,13 @@ class Symbol : public Name {
 
   void SymbolShortPrint(std::ostream& os);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Symbol);
+
  private:
   const char* PrivateSymbolToName() const;
 
   // TODO(cbruni): remove once the new maptracer is in place.
   friend class Name;  // For PrivateSymbolToName.
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Symbol);
 };
 
 }  // namespace internal

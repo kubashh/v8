@@ -48,10 +48,10 @@ class MemoryPressureTask : public CancelableTask {
   // CancelableTask implementation.
   void RunInternal() override;
 
+  DISALLOW_COPY_AND_ASSIGN(MemoryPressureTask);
+
  private:
   CompilerDispatcher* dispatcher_;
-
-  DISALLOW_COPY_AND_ASSIGN(MemoryPressureTask);
 };
 
 MemoryPressureTask::MemoryPressureTask(CancelableTaskManager* task_manager,
@@ -75,10 +75,10 @@ class CompilerDispatcher::AbortTask : public CancelableTask {
   // CancelableTask implementation.
   void RunInternal() override;
 
+  DISALLOW_COPY_AND_ASSIGN(AbortTask);
+
  private:
   CompilerDispatcher* dispatcher_;
-
-  DISALLOW_COPY_AND_ASSIGN(AbortTask);
 };
 
 CompilerDispatcher::AbortTask::AbortTask(CancelableTaskManager* task_manager,
@@ -100,10 +100,10 @@ class CompilerDispatcher::WorkerTask : public CancelableTask {
   // CancelableTask implementation.
   void RunInternal() override;
 
+  DISALLOW_COPY_AND_ASSIGN(WorkerTask);
+
  private:
   CompilerDispatcher* dispatcher_;
-
-  DISALLOW_COPY_AND_ASSIGN(WorkerTask);
 };
 
 CompilerDispatcher::WorkerTask::WorkerTask(CancelableTaskManager* task_manager,
@@ -124,10 +124,10 @@ class CompilerDispatcher::IdleTask : public CancelableIdleTask {
   // CancelableIdleTask implementation.
   void RunInternal(double deadline_in_seconds) override;
 
+  DISALLOW_COPY_AND_ASSIGN(IdleTask);
+
  private:
   CompilerDispatcher* dispatcher_;
-
-  DISALLOW_COPY_AND_ASSIGN(IdleTask);
 };
 
 CompilerDispatcher::IdleTask::IdleTask(CancelableTaskManager* task_manager,

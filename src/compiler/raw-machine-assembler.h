@@ -928,6 +928,8 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
     return AddNode(op, sizeof...(args) + 1, buffer);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(RawMachineAssembler);
+
  private:
   Node* MakeNode(const Operator* op, int input_count, Node* const* inputs);
   BasicBlock* Use(RawMachineLabel* label);
@@ -947,8 +949,6 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
   NodeVector parameters_;
   BasicBlock* current_block_;
   PoisoningMitigationLevel poisoning_level_;
-
-  DISALLOW_COPY_AND_ASSIGN(RawMachineAssembler);
 };
 
 class V8_EXPORT_PRIVATE RawMachineLabel final {
@@ -961,13 +961,14 @@ class V8_EXPORT_PRIVATE RawMachineLabel final {
 
   BasicBlock* block() const { return block_; }
 
+  DISALLOW_COPY_AND_ASSIGN(RawMachineLabel);
+
  private:
   BasicBlock* block_ = nullptr;
   bool used_ = false;
   bool bound_ = false;
   bool deferred_;
   friend class RawMachineAssembler;
-  DISALLOW_COPY_AND_ASSIGN(RawMachineLabel);
 };
 
 }  // namespace compiler

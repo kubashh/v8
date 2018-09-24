@@ -125,6 +125,8 @@ class StoreBuffer {
           tracer_(isolate->heap()->tracer()) {}
     ~Task() override = default;
 
+    DISALLOW_COPY_AND_ASSIGN(Task);
+
    private:
     void RunInternal() override {
       TRACE_BACKGROUND_GC(tracer_,
@@ -133,7 +135,6 @@ class StoreBuffer {
     }
     StoreBuffer* store_buffer_;
     GCTracer* tracer_;
-    DISALLOW_COPY_AND_ASSIGN(Task);
   };
 
   StoreBufferMode mode() const { return mode_; }

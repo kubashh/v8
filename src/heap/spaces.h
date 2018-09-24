@@ -202,6 +202,8 @@ class FreeListCategory {
   int FreeListLength();
 #endif
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(FreeListCategory);
+
  private:
   // For debug builds we accurately compute free lists lengths up until
   // {kVeryLongFreeList} by manually walking the list.
@@ -235,8 +237,6 @@ class FreeListCategory {
 
   friend class FreeList;
   friend class PagedSpace;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(FreeListCategory);
 };
 
 // MemoryChunk represents a memory region owned by a specific space.
@@ -1039,6 +1039,8 @@ class Space : public Malloced {
   virtual void Print() = 0;
 #endif
 
+  DISALLOW_COPY_AND_ASSIGN(Space);
+
  protected:
   intptr_t GetNextInlineAllocationStepSize();
   bool AllocationObserversActive() {
@@ -1061,8 +1063,6 @@ class Space : public Malloced {
   // Keeps track of committed memory in a space.
   size_t committed_;
   size_t max_committed_;
-
-  DISALLOW_COPY_AND_ASSIGN(Space);
 };
 
 
@@ -1401,6 +1401,8 @@ class V8_EXPORT_PRIVATE MemoryAllocator {
 
   Unmapper* unmapper() { return &unmapper_; }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(MemoryAllocator);
+
  private:
   void InitializeCodePageAllocator(v8::PageAllocator* page_allocator,
                                    size_t requested);
@@ -1513,8 +1515,6 @@ class V8_EXPORT_PRIVATE MemoryAllocator {
   std::unordered_set<MemoryChunk*> executable_memory_;
 
   friend class heap::TestCodePageAllocatorScope;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(MemoryAllocator);
 };
 
 extern template Page*
@@ -2811,9 +2811,10 @@ class PauseAllocationObserversScope {
   explicit PauseAllocationObserversScope(Heap* heap);
   ~PauseAllocationObserversScope();
 
+  DISALLOW_COPY_AND_ASSIGN(PauseAllocationObserversScope);
+
  private:
   Heap* heap_;
-  DISALLOW_COPY_AND_ASSIGN(PauseAllocationObserversScope);
 };
 
 // -----------------------------------------------------------------------------

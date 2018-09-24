@@ -102,6 +102,8 @@ class WasmCompilationUnit final {
   NativeModule* native_module() const { return native_module_; }
   ExecutionTier mode() const { return mode_; }
 
+  DISALLOW_COPY_AND_ASSIGN(WasmCompilationUnit);
+
  private:
   friend class LiftoffCompilationUnit;
   friend class compiler::TurbofanWasmCompilationUnit;
@@ -119,8 +121,6 @@ class WasmCompilationUnit final {
   std::unique_ptr<compiler::TurbofanWasmCompilationUnit> turbofan_unit_;
 
   void SwitchMode(ExecutionTier new_mode);
-
-  DISALLOW_COPY_AND_ASSIGN(WasmCompilationUnit);
 };
 
 }  // namespace wasm

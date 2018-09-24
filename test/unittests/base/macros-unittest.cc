@@ -33,26 +33,31 @@ struct StillTriviallyCopyable {
 ASSERT_TRIVIALLY_COPYABLE(StillTriviallyCopyable);
 
 struct NonTrivialDestructor {
+  // NOLINTNEXTLINE
   ~NonTrivialDestructor() {}
 };
 ASSERT_NOT_TRIVIALLY_COPYABLE(NonTrivialDestructor);
 
 struct NonTrivialCopyConstructor {
+  // NOLINTNEXTLINE
   NonTrivialCopyConstructor(const NonTrivialCopyConstructor&) {}
 };
 ASSERT_NOT_TRIVIALLY_COPYABLE(NonTrivialCopyConstructor);
 
 struct NonTrivialMoveConstructor {
+  // NOLINTNEXTLINE
   NonTrivialMoveConstructor(const NonTrivialMoveConstructor&) {}
 };
 ASSERT_NOT_TRIVIALLY_COPYABLE(NonTrivialMoveConstructor);
 
 struct NonTrivialCopyAssignment {
+  // NOLINTNEXTLINE
   NonTrivialCopyAssignment(const NonTrivialCopyAssignment&) {}
 };
 ASSERT_NOT_TRIVIALLY_COPYABLE(NonTrivialCopyAssignment);
 
 struct NonTrivialMoveAssignment {
+  // NOLINTNEXTLINE
   NonTrivialMoveAssignment(const NonTrivialMoveAssignment&) {}
 };
 ASSERT_NOT_TRIVIALLY_COPYABLE(NonTrivialMoveAssignment);
