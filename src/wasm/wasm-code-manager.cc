@@ -44,12 +44,12 @@ struct WasmCodeUniquePtrComparator {
 
 }  // namespace
 
-void DisjointAllocationPool::Merge(AddressRange range) {
+void DisjointAllocationPool::Merge(base::AddressRegion range) {
   auto dest_it = ranges_.begin();
   auto dest_end = ranges_.end();
 
   // Skip over dest ranges strictly before {range}.
-  while (dest_it != dest_end && dest_it->end < range.start) ++dest_it;
+  while (dest_it != dest_end && dest_it->end() < range.begin()) ++dest_it;
 
   // After last dest range: insert and done.
   if (dest_it == dest_end) {
@@ -58,39 +58,43 @@ void DisjointAllocationPool::Merge(AddressRange range) {
   }
 
   // Adjacent (from below) to dest: merge and done.
-  if (dest_it->start == range.end) {
-    dest_it->start = range.start;
+  if (dest_it->begin() == range.end()) {
+    base::AddressRegion merged_range{range.begin(),
+                                     range.size() + dest_it->size()};
+    DCHECK_EQ(merged_range.end(), dest_it->end());
+    *dest_it = merged_range;
     return;
   }
 
   // Before dest: insert and done.
-  if (dest_it->start > range.end) {
+  if (dest_it->begin() > range.end()) {
     ranges_.insert(dest_it, range);
     return;
   }
 
   // Src is adjacent from above. Merge and check whether the merged range is now
   // adjacent to the next range.
-  DCHECK_EQ(dest_it->end, range.start);
-  dest_it->end = range.end;
+  DCHECK_EQ(dest_it->end(), range.begin());
+  dest_it->set_size(dest_it->size() + range.size());
+  DCHECK_EQ(dest_it->end(), range.end());
   auto next_dest = dest_it;
   ++next_dest;
-  if (next_dest != dest_end && dest_it->end == next_dest->start) {
-    dest_it->end = next_dest->end;
+  if (next_dest != dest_end && dest_it->end() == next_dest->begin()) {
+    dest_it->set_size(dest_it->size() + next_dest->size());
+    DCHECK_EQ(dest_it->end(), next_dest->end());
     ranges_.erase(next_dest);
   }
 }
 
-AddressRange DisjointAllocationPool::Allocate(size_t size) {
+base::AddressRegion DisjointAllocationPool::Allocate(size_t size) {
   for (auto it = ranges_.begin(), end = ranges_.end(); it != end; ++it) {
     size_t range_size = it->size();
     if (size > range_size) continue;
-    AddressRange ret{it->start, it->start + size};
+    base::AddressRegion ret{it->begin(), size};
     if (size == range_size) {
       ranges_.erase(it);
     } else {
-      it->start += size;
-      DCHECK_LT(it->start, it->end);
+      *it = base::AddressRegion{it->begin() + size, it->size() - size};
     }
     return ret;
   }
@@ -654,7 +658,7 @@ Address NativeModule::AllocateForCode(size_t size) {
   v8::PageAllocator* page_allocator = GetPlatformPageAllocator();
   // This happens under a lock assumed by the caller.
   size = RoundUp(size, kCodeAlignment);
-  AddressRange mem = free_code_space_.Allocate(size);
+  base::AddressRegion mem = free_code_space_.Allocate(size);
   if (mem.is_empty()) {
     if (!can_request_more_memory_) return kNullAddress;
 
@@ -671,8 +675,9 @@ Address NativeModule::AllocateForCode(size_t size) {
     mem = free_code_space_.Allocate(size);
     DCHECK(!mem.is_empty());
   }
-  Address commit_start = RoundUp(mem.start, page_allocator->AllocatePageSize());
-  Address commit_end = RoundUp(mem.end, page_allocator->AllocatePageSize());
+  Address commit_start =
+      RoundUp(mem.begin(), page_allocator->AllocatePageSize());
+  Address commit_end = RoundUp(mem.end(), page_allocator->AllocatePageSize());
   // {commit_start} will be either mem.start or the start of the next page.
   // {commit_end} will be the start of the page after the one in which
   // the allocation ends.
@@ -710,10 +715,10 @@ Address NativeModule::AllocateForCode(size_t size) {
     committed_code_space_.fetch_add(commit_size);
 #endif
   }
-  DCHECK(IsAligned(mem.start, kCodeAlignment));
-  allocated_code_space_.Merge(mem);
-  TRACE_HEAP("Code alloc for %p: %" PRIuPTR ",+%zu\n", this, mem.start, size);
-  return mem.start;
+  DCHECK(IsAligned(mem.begin(), kCodeAlignment));
+  allocated_code_space_.Merge(std::move(mem));
+  TRACE_HEAP("Code alloc for %p: %" PRIuPTR ",+%zu\n", this, mem.begin(), size);
+  return mem.begin();
 }
 
 WasmCode* NativeModule::Lookup(Address pc) const {
@@ -979,13 +984,13 @@ bool NativeModule::SetExecutable(bool executable) {
       // page-align it.
       size_t range_size =
           RoundUp(range.size(), page_allocator->AllocatePageSize());
-      if (!SetPermissions(page_allocator, range.start, range_size,
+      if (!SetPermissions(page_allocator, range.begin(), range_size,
                           permission)) {
         return false;
       }
       TRACE_HEAP("Set %p:%p to executable:%d\n",
-                 reinterpret_cast<void*>(range.start),
-                 reinterpret_cast<void*>(range.end), executable);
+                 reinterpret_cast<void*>(range.begin()),
+                 reinterpret_cast<void*>(range.end()), executable);
     }
   }
   is_executable_ = executable;

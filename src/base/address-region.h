@@ -12,7 +12,7 @@
 namespace v8 {
 namespace base {
 
-// Helper class representing an address region of certian size.
+// Helper class representing an address region of certain size.
 class AddressRegion {
  public:
   typedef uintptr_t Address;

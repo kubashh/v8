@@ -32,21 +32,6 @@ class WasmCodeManager;
 class WasmMemoryTracker;
 struct WasmModule;
 
-struct AddressRange {
-  Address start;
-  Address end;
-
-  AddressRange(Address s, Address e) : start(s), end(e) {
-    DCHECK_LE(start, end);
-    DCHECK_IMPLIES(start == kNullAddress, end == kNullAddress);
-  }
-  AddressRange() : AddressRange(kNullAddress, kNullAddress) {}
-
-  size_t size() const { return static_cast<size_t>(end - start); }
-  bool is_empty() const { return start == end; }
-  operator bool() const { return start == kNullAddress; }
-};
-
 // Sorted, disjoint and non-overlapping memory ranges. A range is of the
 // form [start, end). So there's no [start, end), [end, other_end),
 // because that should have been reduced to [start, other_end).
@@ -54,7 +39,8 @@ class V8_EXPORT_PRIVATE DisjointAllocationPool final {
  public:
   DisjointAllocationPool() = default;
 
-  explicit DisjointAllocationPool(AddressRange range) : ranges_({range}) {}
+  explicit DisjointAllocationPool(base::AddressRegion range)
+      : ranges_({range}) {}
 
   DisjointAllocationPool(DisjointAllocationPool&& other) = default;
   DisjointAllocationPool& operator=(DisjointAllocationPool&& other) = default;
@@ -62,17 +48,17 @@ class V8_EXPORT_PRIVATE DisjointAllocationPool final {
   // Merge the parameter range into this object while preserving ordering of the
   // ranges. The assumption is that the passed parameter is not intersecting
   // this object - for example, it was obtained from a previous Allocate.
-  void Merge(AddressRange);
+  void Merge(base::AddressRegion);
 
   // Allocate a contiguous range of size {size}. Return an empty pool on
   // failure.
-  AddressRange Allocate(size_t size);
+  base::AddressRegion Allocate(size_t size);
 
   bool IsEmpty() const { return ranges_.empty(); }
-  const std::list<AddressRange>& ranges() const { return ranges_; }
+  const std::list<base::AddressRegion>& ranges() const { return ranges_; }
 
  private:
-  std::list<AddressRange> ranges_;
+  std::list<base::AddressRegion> ranges_;
 
   DISALLOW_COPY_AND_ASSIGN(DisjointAllocationPool)
 };

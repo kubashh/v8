@@ -20,7 +20,7 @@ class DisjointAllocationPoolTest : public ::testing::Test {
   Address A(size_t n) { return static_cast<Address>(n); }
   void CheckLooksLike(const DisjointAllocationPool& mem,
                       std::vector<std::pair<size_t, size_t>> expectation);
-  void CheckLooksLike(AddressRange range,
+  void CheckLooksLike(base::AddressRegion region,
                       std::pair<size_t, size_t> expectation);
   DisjointAllocationPool Make(std::vector<std::pair<size_t, size_t>> model);
 };
@@ -37,9 +37,9 @@ void DisjointAllocationPoolTest::CheckLooksLike(
 }
 
 void DisjointAllocationPoolTest::CheckLooksLike(
-    AddressRange range, std::pair<size_t, size_t> expectation) {
-  CHECK_EQ(range.start, A(expectation.first));
-  CHECK_EQ(range.end, A(expectation.second));
+    base::AddressRegion region, std::pair<size_t, size_t> expectation) {
+  CHECK_EQ(region.begin(), A(expectation.first));
+  CHECK_EQ(region.end(), A(expectation.second));
 }
 
 DisjointAllocationPool DisjointAllocationPoolTest::Make(
@@ -67,19 +67,19 @@ TEST_F(DisjointAllocationPoolTest, ConstructWithRange) {
 
 TEST_F(DisjointAllocationPoolTest, SimpleExtract) {
   DisjointAllocationPool a = Make({{1, 5}});
-  AddressRange b = a.Allocate(2);
+  base::AddressRegion b = a.Allocate(2);
   CheckLooksLike(a, {{3, 5}});
   CheckLooksLike(b, {1, 3});
   a.Merge(b);
   CheckLooksLike(a, {{1, 5}});
   CHECK_EQ(a.ranges().size(), 1);
-  CHECK_EQ(a.ranges().front().start, A(1));
-  CHECK_EQ(a.ranges().front().end, A(5));
+  CHECK_EQ(a.ranges().front().begin(), A(1));
+  CHECK_EQ(a.ranges().front().end(), A(5));
 }
 
 TEST_F(DisjointAllocationPoolTest, ExtractAll) {
   DisjointAllocationPool a({A(1), A(5)});
-  AddressRange b = a.Allocate(4);
+  base::AddressRegion b = a.Allocate(4);
   CheckLooksLike(b, {1, 5});
   CHECK(a.IsEmpty());
   a.Merge(b);
@@ -88,21 +88,21 @@ TEST_F(DisjointAllocationPoolTest, ExtractAll) {
 
 TEST_F(DisjointAllocationPoolTest, FailToExtract) {
   DisjointAllocationPool a = Make({{1, 5}});
-  AddressRange b = a.Allocate(5);
+  base::AddressRegion b = a.Allocate(5);
   CheckLooksLike(a, {{1, 5}});
   CHECK(b.is_empty());
 }
 
 TEST_F(DisjointAllocationPoolTest, FailToExtractExact) {
   DisjointAllocationPool a = Make({{1, 5}, {10, 14}});
-  AddressRange b = a.Allocate(5);
+  base::AddressRegion b = a.Allocate(5);
   CheckLooksLike(a, {{1, 5}, {10, 14}});
   CHECK(b.is_empty());
 }
 
 TEST_F(DisjointAllocationPoolTest, ExtractExact) {
   DisjointAllocationPool a = Make({{1, 5}, {10, 15}});
-  AddressRange b = a.Allocate(5);
+  base::AddressRegion b = a.Allocate(5);
   CheckLooksLike(a, {{1, 5}});
   CheckLooksLike(b, {10, 15});
 }
