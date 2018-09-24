@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ec5288c_ba79b8c1",
+        "filename": "test/intl/general/getCanonicalLocales.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-24T17:48:52Z",
+      "side": 1,
+      "message": "This can be uncommented now and the TODO can be removed",
+      "revId": "78212d16151ffdf2e80df8a53267bbc3e9a429eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "248568f2_a6dfbdc0",
+        "filename": "test/test262/test262.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-24T17:48:52Z",
+      "side": 1,
+      "message": "This line can now be removed",
+      "revId": "78212d16151ffdf2e80df8a53267bbc3e9a429eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
