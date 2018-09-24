@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c22fd9d2_2383a386",
+        "filename": "src/mips/assembler-mips-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-24T12:45:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2350e8e2_3a2d8517",
+      "range": {
+        "startLine": 291,
+        "startChar": 2,
+        "endLine": 293,
+        "endChar": 30
+      },
+      "revId": "f2790332a1a87bfa1be2c5750e6379623cbd1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80c6301e_74f2a3bb",
         "filename": "src/mips/assembler-mips.cc",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2018-09-24T10:41:17Z",
       "side": 1,
       "message": "Out of curiosity, since we\u0027re not patching the code anymore, is there a way to do the relative jump in one instruction? Or is patching here referring to the process of updating references when code is moved by the GC?",
+      "range": {
+        "startLine": 4113,
+        "startChar": 7,
+        "endLine": 4113,
+        "endChar": 55
+      },
+      "revId": "f2790332a1a87bfa1be2c5750e6379623cbd1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "696e73fc_177b97b9",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4113,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-24T12:45:10Z",
+      "side": 1,
+      "message": "I will add optimization in case when immediate of relative jump can be stored in one instruction, in another CL. Then I will remove this comment.",
+      "parentUuid": "80c6301e_74f2a3bb",
       "range": {
         "startLine": 4113,
         "startChar": 7,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "970b8abe_41a699bd",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4137,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-24T12:45:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2584c30_e9d1e43d",
+      "range": {
+        "startLine": 4137,
+        "startChar": 20,
+        "endLine": 4137,
+        "endChar": 32
+      },
+      "revId": "f2790332a1a87bfa1be2c5750e6379623cbd1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c47a968b_3faa5f76",
         "filename": "src/mips/macro-assembler-mips.cc",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "f2790332a1a87bfa1be2c5750e6379623cbd1a5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7787dab_9bc01443",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2018-09-24T12:45:10Z",
+      "side": 1,
+      "message": "Only the first instruction will be executed even in case we don\u0027t jump to the code target, which is safe. Added comment for that.",
+      "parentUuid": "c47a968b_3faa5f76",
+      "range": {
+        "startLine": 3783,
+        "startChar": 15,
+        "endLine": 3783,
+        "endChar": 29
+      },
+      "revId": "f2790332a1a87bfa1be2c5750e6379623cbd1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
