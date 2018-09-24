@@ -66,12 +66,12 @@ class SnapshotByteSource final {
   int position() { return position_; }
   void set_position(int position) { position_ = position; }
 
+  DISALLOW_COPY_AND_ASSIGN(SnapshotByteSource);
+
  private:
   const byte* data_;
   int length_;
   int position_;
-
-  DISALLOW_COPY_AND_ASSIGN(SnapshotByteSource);
 };
 
 

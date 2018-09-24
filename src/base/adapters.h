@@ -29,10 +29,10 @@ class ReversedAdapter {
   Iterator begin() const { return Iterator(std::end(t_)); }
   Iterator end() const { return Iterator(std::begin(t_)); }
 
+  DISALLOW_ASSIGN(ReversedAdapter);
+
  private:
   T& t_;
-
-  DISALLOW_ASSIGN(ReversedAdapter);
 };
 
 // Reversed returns a container adapter usable in a range-based "for" statement

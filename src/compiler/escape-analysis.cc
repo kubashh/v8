@@ -145,6 +145,8 @@ class VariableTracker {
     State current_state_;
   };
 
+  DISALLOW_COPY_AND_ASSIGN(VariableTracker);
+
  private:
   State MergeInputs(Node* effect_phi);
   Zone* zone_;
@@ -153,8 +155,6 @@ class VariableTracker {
   ZoneVector<Node*> buffer_;
   EffectGraphReducer* reducer_;
   int next_variable_ = 0;
-
-  DISALLOW_COPY_AND_ASSIGN(VariableTracker);
 };
 
 // Encapsulates the current state of the escape analysis reducer to preserve
@@ -258,6 +258,8 @@ class EscapeAnalysisTracker : public ZoneObject {
     return node;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(EscapeAnalysisTracker);
+
  private:
   friend class EscapeAnalysisResult;
   static const size_t kMaxTrackedObjects = 100;
@@ -274,8 +276,6 @@ class EscapeAnalysisTracker : public ZoneObject {
   VirtualObject::Id next_object_id_ = 0;
   JSGraph* const jsgraph_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(EscapeAnalysisTracker);
 };
 
 EffectGraphReducer::EffectGraphReducer(

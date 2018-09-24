@@ -36,6 +36,8 @@ class V8_EXPORT_PRIVATE StringsStorage {
   // result.
   const char* GetConsName(const char* prefix, Name* name);
 
+  DISALLOW_COPY_AND_ASSIGN(StringsStorage);
+
  private:
   static bool StringsMatch(void* key1, void* key2);
   // Adds the string to storage and returns it, or if a matching string exists
@@ -46,8 +48,6 @@ class V8_EXPORT_PRIVATE StringsStorage {
   const char* GetVFormatted(const char* format, va_list args);
 
   base::CustomMatcherHashMap names_;
-
-  DISALLOW_COPY_AND_ASSIGN(StringsStorage);
 };
 
 }  // namespace internal

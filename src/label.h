@@ -69,6 +69,10 @@ class Label {
 
   int near_link_pos() const { return near_link_pos_ - 1; }
 
+  // Disallow copy construction and assignment, but allow move construction and
+  // move assignment on selected platforms (see above).
+  DISALLOW_COPY_AND_ASSIGN(Label);
+
  private:
   // pos_ encodes both the binding state (via its sign)
   // and the binding position (via its value) of a label.
@@ -98,10 +102,6 @@ class Label {
   friend class Assembler;
   friend class Displacement;
   friend class RegExpMacroAssemblerIrregexp;
-
-  // Disallow copy construction and assignment, but allow move construction and
-  // move assignment on selected platforms (see above).
-  DISALLOW_COPY_AND_ASSIGN(Label);
 };
 
 }  // namespace internal

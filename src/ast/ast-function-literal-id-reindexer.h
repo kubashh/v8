@@ -24,10 +24,10 @@ class AstFunctionLiteralIdReindexer final
   // AstTraversalVisitor implementation.
   void VisitFunctionLiteral(FunctionLiteral* lit);
 
+  DISALLOW_COPY_AND_ASSIGN(AstFunctionLiteralIdReindexer);
+
  private:
   int delta_;
-
-  DISALLOW_COPY_AND_ASSIGN(AstFunctionLiteralIdReindexer);
 };
 
 }  // namespace internal

@@ -240,7 +240,6 @@ class LiftoffAssembler : public TurboAssembler {
       return static_cast<uint32_t>(stack_state.size());
     }
 
-   private:
     // Make the copy assignment operator private (to be used from {Split()}).
     CacheState& operator=(const CacheState&) = default;
     // Disallow copy construction.

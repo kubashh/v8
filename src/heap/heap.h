@@ -1442,6 +1442,8 @@ class Heap {
   // Calculates the nof entries for the full sized number to string cache.
   inline int MaxNumberToStringCacheSize() const;
 
+  DISALLOW_COPY_AND_ASSIGN(Heap);
+
  private:
   class SkipStoreBufferScope;
 
@@ -1476,6 +1478,8 @@ class Heap {
     void UpdateReferences(
         Heap::ExternalStringTableUpdaterCallback updater_func);
 
+    DISALLOW_COPY_AND_ASSIGN(ExternalStringTable);
+
    private:
     void Verify();
     void VerifyNewSpace();
@@ -1486,8 +1490,6 @@ class Heap {
     // separate from old space strings.
     std::vector<Object*> new_space_strings_;
     std::vector<Object*> old_space_strings_;
-
-    DISALLOW_COPY_AND_ASSIGN(ExternalStringTable);
   };
 
   struct StrongRootsList;
@@ -2242,7 +2244,6 @@ class Heap {
   FRIEND_TEST(HeapControllerTest, OldGenerationAllocationLimit);
   FRIEND_TEST(HeapTest, ExternalLimitDefault);
   FRIEND_TEST(HeapTest, ExternalLimitStaysAboveDefaultForExplicitHandling);
-  DISALLOW_COPY_AND_ASSIGN(Heap);
 };
 
 
@@ -2454,6 +2455,8 @@ class AllocationObserver {
   // multiple observers, or when page or space boundary is encountered.)
   void AllocationStep(int bytes_allocated, Address soon_object, size_t size);
 
+  DISALLOW_COPY_AND_ASSIGN(AllocationObserver);
+
  protected:
   intptr_t step_size() const { return step_size_; }
   intptr_t bytes_to_next_step() const { return bytes_to_next_step_; }
@@ -2480,7 +2483,6 @@ class AllocationObserver {
 
  private:
   friend class Space;
-  DISALLOW_COPY_AND_ASSIGN(AllocationObserver);
 };
 
 V8_EXPORT_PRIVATE const char* AllocationSpaceName(AllocationSpace space);

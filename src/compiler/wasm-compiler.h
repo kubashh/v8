@@ -59,13 +59,13 @@ class TurbofanWasmCompilationUnit {
 
   wasm::WasmCode* FinishCompilation(wasm::ErrorThrower*);
 
+  DISALLOW_COPY_AND_ASSIGN(TurbofanWasmCompilationUnit);
+
  private:
   wasm::WasmCompilationUnit* const wasm_unit_;
   bool ok_ = true;
   wasm::WasmCode* wasm_code_ = nullptr;
   wasm::Result<wasm::DecodeStruct*> graph_construction_result_;
-
-  DISALLOW_COPY_AND_ASSIGN(TurbofanWasmCompilationUnit);
 };
 
 // Wraps a JS function, producing a code object that can be called from wasm.

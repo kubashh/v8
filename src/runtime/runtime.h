@@ -704,6 +704,8 @@ class RuntimeState {
     redirected_intrinsic_functions_.reset(redirected_intrinsic_functions);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(RuntimeState);
+
  private:
   RuntimeState() = default;
 #ifndef V8_INTL_SUPPORT
@@ -715,8 +717,6 @@ class RuntimeState {
 
   friend class Isolate;
   friend class Runtime;
-
-  DISALLOW_COPY_AND_ASSIGN(RuntimeState);
 };
 
 V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&, Runtime::FunctionId);

@@ -29,7 +29,6 @@ class JSArgumentsObject : public JSObject {
   DECL_VERIFIER(JSArgumentsObject)
   DECL_CAST(JSArgumentsObject)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSArgumentsObject);
 };
 
@@ -47,7 +46,6 @@ class JSSloppyArgumentsObject : public JSArgumentsObject {
                                               Handle<JSObject> object,
                                               int* out);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSSloppyArgumentsObject);
 };
 
@@ -58,7 +56,6 @@ class JSStrictArgumentsObject : public JSArgumentsObject {
   // Offsets of object fields.
   static const int kSize = JSArgumentsObject::kSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSStrictArgumentsObject);
 };
 
@@ -102,7 +99,6 @@ class SloppyArgumentsElements : public FixedArray {
   void SloppyArgumentsElementsVerify(Isolate* isolate, JSObject* holder);
 #endif
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(SloppyArgumentsElements);
 };
 
@@ -128,7 +124,6 @@ class AliasedArgumentsEntry : public Struct {
   static const int kAliasedContextSlot = HeapObject::kHeaderSize;
   static const int kSize = kAliasedContextSlot + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(AliasedArgumentsEntry);
 };
 

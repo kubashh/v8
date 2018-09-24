@@ -60,7 +60,6 @@ class JSPluralRules : public JSObject {
   DECL_ACCESSORS(icu_plural_rules, Managed<icu::PluralRules>)
   DECL_ACCESSORS(icu_decimal_format, Managed<icu::DecimalFormat>)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSPluralRules);
 };
 

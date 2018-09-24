@@ -184,7 +184,6 @@ class ScopedVector : public Vector<T> {
     DeleteArray(this->start());
   }
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ScopedVector);
 };
 

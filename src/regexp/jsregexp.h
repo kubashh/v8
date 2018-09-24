@@ -1476,12 +1476,12 @@ class Analysis: public NodeVisitor {
 
   Isolate* isolate() const { return isolate_; }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Analysis);
+
  private:
   Isolate* isolate_;
   bool is_one_byte_;
   const char* error_message_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Analysis);
 };
 
 

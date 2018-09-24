@@ -419,6 +419,8 @@ class HandleScopeImplementer {
     spare_ = block;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(HandleScopeImplementer);
+
  private:
   void ResetAfterArchive() {
     blocks_.detach();
@@ -478,8 +480,6 @@ class HandleScopeImplementer {
   friend class DeferredHandles;
   friend class DeferredHandleScope;
   friend class HandleScopeImplementerOffsets;
-
-  DISALLOW_COPY_AND_ASSIGN(HandleScopeImplementer);
 };
 
 class HandleScopeImplementerOffsets {
@@ -493,7 +493,6 @@ class HandleScopeImplementerOffsets {
         HandleScopeImplementer, entered_context_count_during_microtasks_)
   };
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(HandleScopeImplementerOffsets);
 };
 

@@ -1233,6 +1233,8 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   bool UnalignedLoadSupported(MachineRepresentation rep) const;
   bool UnalignedStoreSupported(MachineRepresentation rep) const;
 
+  DISALLOW_COPY_AND_ASSIGN(CodeAssembler);
+
  protected:
   void RegisterCallGenerationCallbacks(
       const CodeAssemblerCallback& call_prologue,
@@ -1287,8 +1289,6 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void CallEpilogue();
 
   CodeAssemblerState* state_;
-
-  DISALLOW_COPY_AND_ASSIGN(CodeAssembler);
 };
 
 class CodeAssemblerVariable {
@@ -1310,6 +1310,8 @@ class CodeAssemblerVariable {
   MachineRepresentation rep() const;
   bool IsBound() const;
 
+  DISALLOW_COPY_AND_ASSIGN(CodeAssemblerVariable);
+
  private:
   class Impl;
   friend class CodeAssemblerLabel;
@@ -1318,7 +1320,6 @@ class CodeAssemblerVariable {
   friend std::ostream& operator<<(std::ostream&, const CodeAssemblerVariable&);
   Impl* impl_;
   CodeAssemblerState* state_;
-  DISALLOW_COPY_AND_ASSIGN(CodeAssemblerVariable);
 };
 
 std::ostream& operator<<(std::ostream&, const CodeAssemblerVariable&);
@@ -1439,6 +1440,8 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
 #endif  // DEBUG
   void SetInitialDebugInformation(const char* msg, const char* file, int line);
 
+  DISALLOW_COPY_AND_ASSIGN(CodeAssemblerState);
+
  private:
   friend class CodeAssembler;
   friend class CodeAssemblerLabel;
@@ -1459,8 +1462,6 @@ class V8_EXPORT_PRIVATE CodeAssemblerState {
   ZoneSet<CodeAssemblerVariable::Impl*> variables_;
   CodeAssemblerCallback call_prologue_;
   CodeAssemblerCallback call_epilogue_;
-
-  DISALLOW_COPY_AND_ASSIGN(CodeAssemblerState);
 };
 
 }  // namespace compiler

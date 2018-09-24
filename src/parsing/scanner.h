@@ -201,6 +201,8 @@ class Scanner {
     bool HasBeenSet() const;
     bool HasBeenApplied() const;
 
+    DISALLOW_COPY_AND_ASSIGN(BookmarkScope);
+
    private:
     static const size_t kNoBookmark;
     static const size_t kBookmarkWasApplied;
@@ -208,8 +210,6 @@ class Scanner {
 
     Scanner* scanner_;
     size_t bookmark_;
-
-    DISALLOW_COPY_AND_ASSIGN(BookmarkScope);
   };
 
   // Representation of an interval of source positions.
@@ -475,6 +475,8 @@ class Scanner {
 
     Handle<String> Internalize(Isolate* isolate) const;
 
+    DISALLOW_COPY_AND_ASSIGN(LiteralBuffer);
+
    private:
     static const int kInitialCapacity = 16;
     static const int kGrowthFactory = 4;
@@ -505,8 +507,6 @@ class Scanner {
     int position_;
     bool is_one_byte_;
     bool is_used_;
-
-    DISALLOW_COPY_AND_ASSIGN(LiteralBuffer);
   };
 
   // Scoped helper for literal recording. Automatically drops the literal

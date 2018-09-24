@@ -34,6 +34,8 @@ class SourcePositionTable : public Malloced {
   void SetPosition(int pc_offset, int line);
   int GetSourceLineNumber(int pc_offset) const;
 
+  DISALLOW_COPY_AND_ASSIGN(SourcePositionTable);
+
  private:
   struct PCOffsetAndLineNumber {
     bool operator<(const PCOffsetAndLineNumber& other) const {
@@ -46,7 +48,6 @@ class SourcePositionTable : public Malloced {
   // the pc offset, so that we can save space and look up items using binary
   // search.
   std::vector<PCOffsetAndLineNumber> pc_offsets_to_lines_;
-  DISALLOW_COPY_AND_ASSIGN(SourcePositionTable);
 };
 
 class CodeEntry {
@@ -136,6 +137,8 @@ class CodeEntry {
     return kUnresolvedEntry.Pointer();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(CodeEntry);
+
  private:
   struct RareData {
     const char* deopt_reason_ = kNoDeoptReason;
@@ -184,8 +187,6 @@ class CodeEntry {
   std::unique_ptr<SourcePositionTable> line_info_;
   Address instruction_start_;
   std::unique_ptr<RareData> rare_data_;
-
-  DISALLOW_COPY_AND_ASSIGN(CodeEntry);
 };
 
 struct CodeEntryAndLineNumber {
@@ -233,6 +234,8 @@ class ProfileNode {
 
   void Print(int indent);
 
+  DISALLOW_COPY_AND_ASSIGN(ProfileNode);
+
  private:
   struct Equals {
     bool operator()(CodeEntryAndLineNumber lhs,
@@ -260,8 +263,6 @@ class ProfileNode {
   std::unordered_map<int, int> line_ticks_;
 
   std::vector<CpuProfileDeoptInfo> deopt_infos_;
-
-  DISALLOW_COPY_AND_ASSIGN(ProfileNode);
 };
 
 class ProfileTree {
@@ -296,6 +297,8 @@ class ProfileTree {
     return std::move(pending_nodes_);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(ProfileTree);
+
  private:
   template <typename Callback>
   void TraverseDepthFirst(Callback* callback);
@@ -309,8 +312,6 @@ class ProfileTree {
 
   unsigned next_function_id_;
   std::unordered_map<CodeEntry*, unsigned> function_ids_;
-
-  DISALLOW_COPY_AND_ASSIGN(ProfileTree);
 };
 
 
@@ -343,6 +344,8 @@ class CpuProfile {
 
   void Print();
 
+  DISALLOW_COPY_AND_ASSIGN(CpuProfile);
+
  private:
   void StreamPendingTraceEvents();
 
@@ -359,8 +362,6 @@ class CpuProfile {
   uint32_t id_;
 
   static std::atomic<uint32_t> last_id_;
-
-  DISALLOW_COPY_AND_ASSIGN(CpuProfile);
 };
 
 class CodeMap {
@@ -372,6 +373,8 @@ class CodeMap {
   void MoveCode(Address from, Address to);
   CodeEntry* FindEntry(Address addr);
   void Print();
+
+  DISALLOW_COPY_AND_ASSIGN(CodeMap);
 
  private:
   struct CodeEntryMapInfo {
@@ -395,8 +398,6 @@ class CodeMap {
   std::deque<CodeEntrySlotInfo> code_entries_;
   std::map<Address, CodeEntryMapInfo> code_map_;
   unsigned free_list_head_ = kNoFreeSlot;
-
-  DISALLOW_COPY_AND_ASSIGN(CodeMap);
 };
 
 class CpuProfilesCollection {
@@ -424,6 +425,8 @@ class CpuProfilesCollection {
   // Limits the number of profiles that can be simultaneously collected.
   static const int kMaxSimultaneousProfiles = 100;
 
+  DISALLOW_COPY_AND_ASSIGN(CpuProfilesCollection);
+
  private:
   StringsStorage resource_names_;
   std::vector<std::unique_ptr<CpuProfile>> finished_profiles_;
@@ -432,8 +435,6 @@ class CpuProfilesCollection {
   // Accessed by VM thread and profile generator thread.
   std::vector<std::unique_ptr<CpuProfile>> current_profiles_;
   base::Semaphore current_profiles_semaphore_;
-
-  DISALLOW_COPY_AND_ASSIGN(CpuProfilesCollection);
 };
 
 class ProfileGenerator {
@@ -444,14 +445,14 @@ class ProfileGenerator {
 
   CodeMap* code_map() { return &code_map_; }
 
+  DISALLOW_COPY_AND_ASSIGN(ProfileGenerator);
+
  private:
   CodeEntry* FindEntry(Address address);
   CodeEntry* EntryForVMState(StateTag tag);
 
   CpuProfilesCollection* profiles_;
   CodeMap code_map_;
-
-  DISALLOW_COPY_AND_ASSIGN(ProfileGenerator);
 };
 
 }  // namespace internal

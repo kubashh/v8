@@ -33,10 +33,10 @@ class AllocationProfile : public v8::AllocationProfile {
 
   std::deque<v8::AllocationProfile::Node>& nodes() { return nodes_; }
 
+  DISALLOW_COPY_AND_ASSIGN(AllocationProfile);
+
  private:
   std::deque<v8::AllocationProfile::Node> nodes_;
-
-  DISALLOW_COPY_AND_ASSIGN(AllocationProfile);
 };
 
 class SamplingHeapProfiler {
@@ -66,7 +66,6 @@ class SamplingHeapProfiler {
     Global<Value> global;
     SamplingHeapProfiler* const profiler;
 
-   private:
     DISALLOW_COPY_AND_ASSIGN(Sample);
   };
 
@@ -84,6 +83,8 @@ class SamplingHeapProfiler {
         delete child.second;
       }
     }
+
+    DISALLOW_COPY_AND_ASSIGN(AllocationNode);
 
    private:
     typedef uint64_t FunctionId;
@@ -115,9 +116,9 @@ class SamplingHeapProfiler {
     bool pinned_;
 
     friend class SamplingHeapProfiler;
-
-    DISALLOW_COPY_AND_ASSIGN(AllocationNode);
   };
+
+  DISALLOW_COPY_AND_ASSIGN(SamplingHeapProfiler);
 
  private:
   Heap* heap() const { return heap_; }
@@ -152,8 +153,6 @@ class SamplingHeapProfiler {
   v8::HeapProfiler::SamplingFlags flags_;
 
   friend class SamplingAllocationObserver;
-
-  DISALLOW_COPY_AND_ASSIGN(SamplingHeapProfiler);
 };
 
 class SamplingAllocationObserver : public AllocationObserver {

@@ -217,6 +217,8 @@ class V8_EXPORT_PRIVATE NativeModuleSerializer {
   size_t Measure() const;
   bool Write(Writer* writer);
 
+  DISALLOW_COPY_AND_ASSIGN(NativeModuleSerializer);
+
  private:
   size_t MeasureCode(const WasmCode*) const;
   void WriteHeader(Writer* writer);
@@ -230,8 +232,6 @@ class V8_EXPORT_PRIVATE NativeModuleSerializer {
   // Reverse lookup tables for embedded addresses.
   std::map<Address, uint32_t> wasm_stub_targets_lookup_;
   std::map<Address, uint32_t> reference_table_lookup_;
-
-  DISALLOW_COPY_AND_ASSIGN(NativeModuleSerializer);
 };
 
 NativeModuleSerializer::NativeModuleSerializer(
@@ -414,6 +414,8 @@ class V8_EXPORT_PRIVATE NativeModuleDeserializer {
 
   bool Read(Reader* reader);
 
+  DISALLOW_COPY_AND_ASSIGN(NativeModuleDeserializer);
+
  private:
   bool ReadHeader(Reader* reader);
   bool ReadCode(uint32_t fn_index, Reader* reader);
@@ -421,8 +423,6 @@ class V8_EXPORT_PRIVATE NativeModuleDeserializer {
   Isolate* const isolate_;
   NativeModule* const native_module_;
   bool read_called_;
-
-  DISALLOW_COPY_AND_ASSIGN(NativeModuleDeserializer);
 };
 
 NativeModuleDeserializer::NativeModuleDeserializer(Isolate* isolate,

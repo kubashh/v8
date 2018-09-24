@@ -329,6 +329,8 @@ class GlobalHandles::Node {
 
   inline GlobalHandles* GetGlobalHandles();
 
+  DISALLOW_COPY_AND_ASSIGN(Node);
+
  private:
   inline NodeBlock* FindBlock();
   inline void IncreaseBlockUses();
@@ -370,8 +372,6 @@ class GlobalHandles::Node {
     const char* label;
     void* parameter;
   } data_;
-
-  DISALLOW_COPY_AND_ASSIGN(Node);
 };
 
 
@@ -493,11 +493,11 @@ class GlobalHandles::NodeIterator {
     block_ = block_->next_used();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(NodeIterator);
+
  private:
   NodeBlock* block_;
   int index_;
-
-  DISALLOW_COPY_AND_ASSIGN(NodeIterator);
 };
 
 class GlobalHandles::PendingPhantomCallbacksSecondPassTask
@@ -511,9 +511,10 @@ class GlobalHandles::PendingPhantomCallbacksSecondPassTask
     global_handles_->InvokeSecondPassPhantomCallbacksFromTask();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(PendingPhantomCallbacksSecondPassTask);
+
  private:
   GlobalHandles* global_handles_;
-  DISALLOW_COPY_AND_ASSIGN(PendingPhantomCallbacksSecondPassTask);
 };
 
 GlobalHandles::GlobalHandles(Isolate* isolate)

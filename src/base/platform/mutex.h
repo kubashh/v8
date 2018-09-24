@@ -67,6 +67,8 @@ class V8_BASE_EXPORT Mutex final {
     return native_handle_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(Mutex);
+
  private:
   NativeHandle native_handle_;
 #ifdef DEBUG
@@ -88,8 +90,6 @@ class V8_BASE_EXPORT Mutex final {
   }
 
   friend class ConditionVariable;
-
-  DISALLOW_COPY_AND_ASSIGN(Mutex);
 };
 
 
@@ -166,13 +166,13 @@ class V8_BASE_EXPORT RecursiveMutex final {
     return native_handle_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(RecursiveMutex);
+
  private:
   NativeHandle native_handle_;
 #ifdef DEBUG
   int level_;
 #endif
-
-  DISALLOW_COPY_AND_ASSIGN(RecursiveMutex);
 };
 
 
@@ -219,10 +219,10 @@ class LockGuard final {
     if (mutex_ != nullptr) mutex_->Unlock();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(LockGuard);
+
  private:
   Mutex* mutex_;
-
-  DISALLOW_COPY_AND_ASSIGN(LockGuard);
 };
 
 }  // namespace base

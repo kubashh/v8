@@ -153,6 +153,8 @@ class Frame : public ZoneObject {
     return frame_slot_count_ - 1;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(Frame);
+
  private:
   void AllocateAlignedFrameSlots(int width) {
     DCHECK_LT(0, width);
@@ -172,8 +174,6 @@ class Frame : public ZoneObject {
   int return_slot_count_;
   BitVector* allocated_registers_;
   BitVector* allocated_double_registers_;
-
-  DISALLOW_COPY_AND_ASSIGN(Frame);
 };
 
 

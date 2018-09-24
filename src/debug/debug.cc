@@ -74,10 +74,11 @@ class Debug::TemporaryObjectsTracker : public HeapObjectAllocationTracker {
     return objects_.find(obj->address()) != objects_.end();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(TemporaryObjectsTracker);
+
  private:
   std::unordered_set<Address> objects_;
   base::Mutex mutex_;
-  DISALLOW_COPY_AND_ASSIGN(TemporaryObjectsTracker);
 };
 
 Debug::Debug(Isolate* isolate)

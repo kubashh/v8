@@ -160,7 +160,6 @@ class JSRegExpResult : public JSArray {
   static const int kGroupsIndex = 2;
   static const int kInObjectPropertyCount = 3;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSRegExpResult);
 };
 

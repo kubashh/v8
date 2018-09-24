@@ -215,7 +215,6 @@ class CodeStub : public ZoneObject {
  public:                                                        \
   NAME(uint32_t key, Isolate* isolate) : SUPER(key, isolate) {} \
                                                                 \
- private:                                                       \
   DISALLOW_COPY_AND_ASSIGN(NAME)
 
 

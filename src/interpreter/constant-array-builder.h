@@ -209,14 +209,14 @@ class V8_EXPORT_PRIVATE ConstantArrayBuilder final {
     inline size_t max_index() const { return start_index_ + capacity() - 1; }
     inline OperandSize operand_size() const { return operand_size_; }
 
+    DISALLOW_COPY_AND_ASSIGN(ConstantArraySlice);
+
    private:
     const size_t start_index_;
     const size_t capacity_;
     size_t reserved_;
     OperandSize operand_size_;
     ZoneVector<Entry> constants_;
-
-    DISALLOW_COPY_AND_ASSIGN(ConstantArraySlice);
   };
 
   ConstantArraySlice* IndexToSlice(size_t index) const;

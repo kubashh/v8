@@ -118,6 +118,8 @@ class V8_EXPORT_PRIVATE EhFrameWriter {
   Register base_register() const { return base_register_; }
   int base_offset() const { return base_offset_; }
 
+  DISALLOW_COPY_AND_ASSIGN(EhFrameWriter);
+
  private:
   enum class InternalState { kUndefined, kInitialized, kFinalized };
 
@@ -200,8 +202,6 @@ class V8_EXPORT_PRIVATE EhFrameWriter {
   Register base_register_;
   int base_offset_;
   ZoneVector<byte> eh_frame_buffer_;
-
-  DISALLOW_COPY_AND_ASSIGN(EhFrameWriter);
 };
 
 class V8_EXPORT_PRIVATE EhFrameIterator {
@@ -285,6 +285,8 @@ class EhFrameDisassembler final {
 
   void DisassembleToStream(std::ostream& stream);  // NOLINT
 
+  DISALLOW_COPY_AND_ASSIGN(EhFrameDisassembler);
+
  private:
   static void DumpDwarfDirectives(std::ostream& stream,  // NOLINT
                                   const byte* start, const byte* end);
@@ -293,8 +295,6 @@ class EhFrameDisassembler final {
 
   const byte* start_;
   const byte* end_;
-
-  DISALLOW_COPY_AND_ASSIGN(EhFrameDisassembler);
 };
 
 #endif

@@ -67,12 +67,13 @@ class InterpretedFrame {
   WasmValue GetLocalValue(int index) const;
   WasmValue GetStackValue(int index) const;
 
- private:
-  friend class WasmInterpreter;
   // Don't instante InterpretedFrames; they will be allocated as
   // InterpretedFrameImpl in the interpreter implementation.
   InterpretedFrame() = delete;
   DISALLOW_COPY_AND_ASSIGN(InterpretedFrame);
+
+ private:
+  friend class WasmInterpreter;
 };
 
 // Deleter struct to delete the underlying InterpretedFrameImpl without
@@ -106,11 +107,11 @@ class V8_EXPORT_PRIVATE WasmInterpreter {
 
   // Representation of a thread in the interpreter.
   class V8_EXPORT_PRIVATE Thread {
+   public:
     // Don't instante Threads; they will be allocated as ThreadImpl in the
     // interpreter implementation.
     Thread() = delete;
 
-   public:
     enum ExceptionHandlingResult { HANDLED, UNWOUND };
 
     // Execution control.

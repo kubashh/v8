@@ -32,10 +32,10 @@ class DeserializingCodeObjectScope {
         BuiltinDeserializer::kNoCodeObjectId;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(DeserializingCodeObjectScope)
+
  private:
   BuiltinDeserializer* builtin_deserializer_;
-
-  DISALLOW_COPY_AND_ASSIGN(DeserializingCodeObjectScope)
 };
 
 BuiltinDeserializer::BuiltinDeserializer(Isolate* isolate,

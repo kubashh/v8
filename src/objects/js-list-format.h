@@ -109,7 +109,6 @@ class JSListFormat : public JSObject {
   static const int kFlagsOffset = kFormatterOffset + kPointerSize;
   static const int kSize = kFlagsOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSListFormat);
 };
 

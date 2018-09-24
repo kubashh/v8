@@ -24,14 +24,14 @@ class LiveRangeSeparator final : public ZoneObject {
 
   void Splinter();
 
+  DISALLOW_COPY_AND_ASSIGN(LiveRangeSeparator);
+
  private:
   RegisterAllocationData* data() const { return data_; }
   Zone* zone() const { return zone_; }
 
   RegisterAllocationData* const data_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(LiveRangeSeparator);
 };
 
 
@@ -41,6 +41,8 @@ class LiveRangeMerger final : public ZoneObject {
       : data_(data), zone_(zone) {}
 
   void Merge();
+
+  DISALLOW_COPY_AND_ASSIGN(LiveRangeMerger);
 
  private:
   RegisterAllocationData* data() const { return data_; }
@@ -53,8 +55,6 @@ class LiveRangeMerger final : public ZoneObject {
 
   RegisterAllocationData* const data_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(LiveRangeMerger);
 };
 
 

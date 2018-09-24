@@ -31,7 +31,6 @@ class TemplateObjectDescription final : public Tuple2 {
   static constexpr int kRawStringsOffset = kValue1Offset;
   static constexpr int kCookedStringsOffset = kValue2Offset;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(TemplateObjectDescription);
 };
 

@@ -631,7 +631,6 @@ class NativeContext : public Context {
   static inline NativeContext* cast(Object* context);
   // TODO(neis): Move some stuff from Context here.
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(NativeContext);
 };
 

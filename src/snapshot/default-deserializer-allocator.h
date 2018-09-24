@@ -72,6 +72,8 @@ class DefaultDeserializerAllocator final {
 
   void RegisterDeserializedObjectsForBlackAllocation();
 
+  DISALLOW_COPY_AND_ASSIGN(DefaultDeserializerAllocator)
+
  private:
   Isolate* isolate() const;
 
@@ -107,8 +109,6 @@ class DefaultDeserializerAllocator final {
 
   // The current deserializer.
   Deserializer<DefaultDeserializerAllocator>* const deserializer_;
-
-  DISALLOW_COPY_AND_ASSIGN(DefaultDeserializerAllocator)
 };
 
 }  // namespace internal

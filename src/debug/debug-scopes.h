@@ -102,6 +102,8 @@ class ScopeIterator {
     return context_;
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(ScopeIterator);
+
  private:
   Isolate* isolate_;
   ParseInfo* info_ = nullptr;
@@ -152,8 +154,6 @@ class ScopeIterator {
   bool VisitLocals(const Visitor& visitor, Mode mode) const;
   bool VisitContextLocals(const Visitor& visitor, Handle<ScopeInfo> scope_info,
                           Handle<Context> context) const;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(ScopeIterator);
 };
 
 }  // namespace internal

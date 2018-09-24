@@ -72,6 +72,8 @@ class V8_PLATFORM_EXPORT DefaultPlatform : public NON_EXPORTED_BASE(Platform) {
   StackTracePrinter GetStackTracePrinter() override;
   v8::PageAllocator* GetPageAllocator() override;
 
+  DISALLOW_COPY_AND_ASSIGN(DefaultPlatform);
+
  private:
   static const int kMaxThreadPoolSize;
 
@@ -86,7 +88,6 @@ class V8_PLATFORM_EXPORT DefaultPlatform : public NON_EXPORTED_BASE(Platform) {
   std::unique_ptr<PageAllocator> page_allocator_;
 
   TimeFunction time_function_for_testing_;
-  DISALLOW_COPY_AND_ASSIGN(DefaultPlatform);
 };
 
 }  // namespace platform

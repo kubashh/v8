@@ -98,6 +98,8 @@ class ValueSerializer {
    */
   void SetTreatArrayBufferViewsAsHostObjects(bool mode);
 
+  DISALLOW_COPY_AND_ASSIGN(ValueSerializer);
+
  private:
   // Managing allocations of the internal buffer.
   Maybe<bool> ExpandBuffer(size_t required_capacity);
@@ -174,8 +176,6 @@ class ValueSerializer {
 
   // A similar map, for transferred array buffers.
   IdentityMap<uint32_t, ZoneAllocationPolicy> array_buffer_transfer_map_;
-
-  DISALLOW_COPY_AND_ASSIGN(ValueSerializer);
 };
 
 /*
@@ -233,6 +233,8 @@ class ValueDeserializer {
   void set_expect_inline_wasm(bool expect_inline_wasm) {
     expect_inline_wasm_ = expect_inline_wasm;
   }
+
+  DISALLOW_COPY_AND_ASSIGN(ValueDeserializer);
 
  private:
   // Reading the wire format.
@@ -310,8 +312,6 @@ class ValueDeserializer {
   // Always global handles.
   Handle<FixedArray> id_map_;
   MaybeHandle<SimpleNumberDictionary> array_buffer_transfer_map_;
-
-  DISALLOW_COPY_AND_ASSIGN(ValueDeserializer);
 };
 
 }  // namespace internal

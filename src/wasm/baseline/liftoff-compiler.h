@@ -24,13 +24,13 @@ class LiftoffCompilationUnit final {
   bool ExecuteCompilation(WasmFeatures* detected);
   WasmCode* FinishCompilation(ErrorThrower*);
 
+  DISALLOW_COPY_AND_ASSIGN(LiftoffCompilationUnit);
+
  private:
   WasmCompilationUnit* const wasm_unit_;
 
   // Result of compilation:
   WasmCode* code_;
-
-  DISALLOW_COPY_AND_ASSIGN(LiftoffCompilationUnit);
 };
 
 }  // namespace wasm

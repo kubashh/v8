@@ -90,6 +90,8 @@ class V8DebuggerScript {
   virtual bool setBreakpoint(const String16& condition,
                              v8::debug::Location* location, int* id) const = 0;
 
+  DISALLOW_COPY_AND_ASSIGN(V8DebuggerScript);
+
  protected:
   V8DebuggerScript(v8::Isolate*, String16 id, String16 url);
 
@@ -101,9 +103,6 @@ class V8DebuggerScript {
   int m_executionContextId = 0;
 
   v8::Isolate* m_isolate;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(V8DebuggerScript);
 };
 
 }  // namespace v8_inspector

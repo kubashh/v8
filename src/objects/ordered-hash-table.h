@@ -628,7 +628,6 @@ class JSCollectionIterator : public JSObject {
   static const int kIndexOffset = kTableOffset + kPointerSize;
   static const int kSize = kIndexOffset + kPointerSize;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSCollectionIterator);
 };
 
@@ -658,12 +657,12 @@ class OrderedHashTableIterator : public JSCollectionIterator {
   // |HasMore| returns true.
   inline Object* CurrentKey();
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(OrderedHashTableIterator);
+
  private:
   // Transitions the iterator to the non obsolete backing store. This is a NOP
   // if the [table] is not obsolete.
   void Transition();
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(OrderedHashTableIterator);
 };
 
 }  // namespace internal

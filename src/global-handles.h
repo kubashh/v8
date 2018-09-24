@@ -178,6 +178,8 @@ class GlobalHandles {
 
   void InvokeSecondPassPhantomCallbacks();
 
+  DISALLOW_COPY_AND_ASSIGN(GlobalHandles);
+
  private:
   // Internal node structures.
   class Node;
@@ -223,8 +225,6 @@ class GlobalHandles {
   bool second_pass_callbacks_task_posted_ = false;
 
   friend class Isolate;
-
-  DISALLOW_COPY_AND_ASSIGN(GlobalHandles);
 };
 
 
@@ -300,6 +300,8 @@ class EternalHandles {
   // Rebuilds new space list.
   void PostGarbageCollectionProcessing();
 
+  DISALLOW_COPY_AND_ASSIGN(EternalHandles);
+
  private:
   static const int kInvalidIndex = -1;
   static const int kShift = 8;
@@ -316,8 +318,6 @@ class EternalHandles {
   std::vector<Object**> blocks_;
   std::vector<int> new_space_indices_;
   int singleton_handles_[NUMBER_OF_SINGLETON_HANDLES];
-
-  DISALLOW_COPY_AND_ASSIGN(EternalHandles);
 };
 
 

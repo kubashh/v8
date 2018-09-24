@@ -147,6 +147,8 @@ class ConsoleHelper {
     m_inspector->forEachSession(m_groupId, std::move(callback));
   }
 
+  DISALLOW_COPY_AND_ASSIGN(ConsoleHelper);
+
  private:
   const v8::debug::ConsoleCallArguments& m_info;
   const v8::debug::ConsoleContext& m_consoleContext;
@@ -155,8 +157,6 @@ class ConsoleHelper {
   V8InspectorImpl* m_inspector = nullptr;
   int m_contextId;
   int m_groupId;
-
-  DISALLOW_COPY_AND_ASSIGN(ConsoleHelper);
 };
 
 void returnDataCallback(const v8::FunctionCallbackInfo<v8::Value>& info) {

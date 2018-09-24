@@ -442,6 +442,8 @@ class String : public Name {
                                               Handle<String> string,
                                               bool include_ending_line);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(String);
+
  private:
   friend class Name;
   friend class StringTableInsertionKey;
@@ -462,8 +464,6 @@ class String : public Name {
 
   // Compute and set the hash code.
   uint32_t ComputeAndSetHash(Isolate* isolate);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(String);
 };
 
 // The SeqString abstract class captures sequential string values.
@@ -477,7 +477,6 @@ class SeqString : public String {
   V8_WARN_UNUSED_RESULT static Handle<String> Truncate(Handle<SeqString> string,
                                                        int new_length);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(SeqString);
 };
 
@@ -486,7 +485,6 @@ class InternalizedString : public String {
   DECL_CAST(InternalizedString)
   // TODO(neis): Possibly move some stuff from String here.
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(InternalizedString);
 };
 
@@ -528,7 +526,6 @@ class SeqOneByteString : public SeqString {
 
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(SeqOneByteString);
 };
 
@@ -571,7 +568,6 @@ class SeqTwoByteString : public SeqString {
 
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(SeqTwoByteString);
 };
 
@@ -619,7 +615,6 @@ class ConsString : public String {
 
   DECL_VERIFIER(ConsString)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ConsString);
 };
 
@@ -649,7 +644,6 @@ class ThinString : public String {
 
   typedef FixedBodyDescriptor<kActualOffset, kSize, kSize> BodyDescriptor;
 
- private:
   DISALLOW_COPY_AND_ASSIGN(ThinString);
 };
 
@@ -692,7 +686,6 @@ class SlicedString : public String {
 
   DECL_VERIFIER(SlicedString)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(SlicedString);
 };
 
@@ -728,7 +721,6 @@ class ExternalString : public String {
 
   STATIC_ASSERT(kResourceOffset == Internals::kStringResourceOffset);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ExternalString);
 };
 
@@ -764,7 +756,6 @@ class ExternalOneByteString : public ExternalString {
 
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ExternalOneByteString);
 };
 
@@ -803,7 +794,6 @@ class ExternalTwoByteString : public ExternalString {
 
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ExternalTwoByteString);
 };
 
@@ -849,6 +839,8 @@ class ConsStringIterator {
     return Continue(offset_out);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(ConsStringIterator);
+
  private:
   static const int kStackSize = 32;
   // Use a mask instead of doing modulo operations for stack wrapping.
@@ -874,7 +866,6 @@ class ConsStringIterator {
   int depth_;
   int maximum_depth_;
   int consumed_;
-  DISALLOW_COPY_AND_ASSIGN(ConsStringIterator);
 };
 
 class StringCharacterStream {
@@ -886,6 +877,8 @@ class StringCharacterStream {
   inline void VisitOneByteString(const uint8_t* chars, int length);
   inline void VisitTwoByteString(const uint16_t* chars, int length);
 
+  DISALLOW_COPY_AND_ASSIGN(StringCharacterStream);
+
  private:
   ConsStringIterator iter_;
   bool is_one_byte_;
@@ -894,7 +887,6 @@ class StringCharacterStream {
     const uint16_t* buffer16_;
   };
   const uint8_t* end_;
-  DISALLOW_COPY_AND_ASSIGN(StringCharacterStream);
 };
 
 }  // namespace internal

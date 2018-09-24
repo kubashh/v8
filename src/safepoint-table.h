@@ -126,6 +126,8 @@ class SafepointTable {
 
   void PrintEntry(unsigned index, std::ostream& os) const;  // NOLINT
 
+  DISALLOW_COPY_AND_ASSIGN(SafepointTable);
+
  private:
   static const uint8_t kNoRegisters = 0xFF;
 
@@ -166,8 +168,6 @@ class SafepointTable {
 
   friend class SafepointTableBuilder;
   friend class SafepointEntry;
-
-  DISALLOW_COPY_AND_ASSIGN(SafepointTable);
 };
 
 class Safepoint {
@@ -233,6 +233,8 @@ class SafepointTableBuilder {
   // return PC {pc} on the stack.
   int UpdateDeoptimizationInfo(int pc, int trampoline, int start);
 
+  DISALLOW_COPY_AND_ASSIGN(SafepointTableBuilder);
+
  private:
   struct DeoptimizationInfo {
     unsigned pc;
@@ -271,8 +273,6 @@ class SafepointTableBuilder {
   size_t last_lazy_safepoint_;
 
   Zone* zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(SafepointTableBuilder);
 };
 
 }  // namespace internal

@@ -39,10 +39,10 @@ class FuncNameInferrer : public ZoneObject {
     explicit State(FuncNameInferrer* fni) : fni_(fni) { fni_->Enter(); }
     ~State() { fni_->Leave(); }
 
+    DISALLOW_COPY_AND_ASSIGN(State);
+
    private:
     FuncNameInferrer* fni_;
-
-    DISALLOW_COPY_AND_ASSIGN(State);
   };
 
   // Returns whether we have entered name collection state.
@@ -79,6 +79,8 @@ class FuncNameInferrer : public ZoneObject {
     }
   }
 
+  DISALLOW_COPY_AND_ASSIGN(FuncNameInferrer);
+
  private:
   enum NameType {
     kEnclosingConstructorName,
@@ -108,8 +110,6 @@ class FuncNameInferrer : public ZoneObject {
   ZoneChunkList<Name> names_stack_;
   ZoneChunkList<FunctionLiteral*> funcs_to_infer_;
   Zone* zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(FuncNameInferrer);
 };
 
 

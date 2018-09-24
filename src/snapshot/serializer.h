@@ -83,6 +83,8 @@ class CodeAddressMap : public CodeEventLogger {
       to_entry->value = value;
     }
 
+    DISALLOW_COPY_AND_ASSIGN(NameMap);
+
    private:
     static char* CopyName(const char* name, int name_size) {
       char* result = NewArray<char>(name_size + 1);
@@ -110,8 +112,6 @@ class CodeAddressMap : public CodeEventLogger {
     }
 
     base::HashMap impl_;
-
-    DISALLOW_COPY_AND_ASSIGN(NameMap);
   };
 
   void LogRecordedBuffer(AbstractCode* code, SharedFunctionInfo*,
@@ -144,6 +144,8 @@ class Serializer : public SerializerDeserializer {
   }
 
   Isolate* isolate() const { return isolate_; }
+
+  DISALLOW_COPY_AND_ASSIGN(Serializer);
 
  protected:
   class ObjectSerializer;
@@ -263,8 +265,6 @@ class Serializer : public SerializerDeserializer {
 #endif  // DEBUG
 
   friend class DefaultSerializerAllocator;
-
-  DISALLOW_COPY_AND_ASSIGN(Serializer);
 };
 
 class RelocInfoIterator;

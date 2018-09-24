@@ -126,6 +126,8 @@ class V8RuntimeAgentImpl : public protocol::Runtime::Backend {
   void messageAdded(V8ConsoleMessage*);
   bool enabled() const { return m_enabled; }
 
+  DISALLOW_COPY_AND_ASSIGN(V8RuntimeAgentImpl);
+
  private:
   bool reportMessage(V8ConsoleMessage*, bool generatePreview);
 
@@ -141,8 +143,6 @@ class V8RuntimeAgentImpl : public protocol::Runtime::Backend {
   bool m_enabled;
   std::unordered_map<String16, std::unique_ptr<v8::Global<v8::Script>>>
       m_compiledScripts;
-
-  DISALLOW_COPY_AND_ASSIGN(V8RuntimeAgentImpl);
 };
 
 }  // namespace v8_inspector

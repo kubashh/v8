@@ -35,6 +35,8 @@ class V8_EXPORT_PRIVATE GraphTrimmer final {
     TrimGraph();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(GraphTrimmer);
+
  private:
   V8_INLINE bool IsLive(Node* const node) { return is_live_.Get(node); }
   V8_INLINE void MarkAsLive(Node* const node) {
@@ -50,8 +52,6 @@ class V8_EXPORT_PRIVATE GraphTrimmer final {
   Graph* const graph_;
   NodeMarker<bool> is_live_;
   NodeVector live_;
-
-  DISALLOW_COPY_AND_ASSIGN(GraphTrimmer);
 };
 
 }  // namespace compiler

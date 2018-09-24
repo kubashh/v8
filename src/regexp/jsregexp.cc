@@ -5421,12 +5421,12 @@ class RegExpExpansionLimiter {
 
   bool ok_to_expand() { return ok_to_expand_; }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(RegExpExpansionLimiter);
+
  private:
   RegExpCompiler* compiler_;
   int saved_expansion_factor_;
   bool ok_to_expand_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(RegExpExpansionLimiter);
 };
 
 

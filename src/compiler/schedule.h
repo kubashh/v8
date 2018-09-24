@@ -156,6 +156,8 @@ class V8_EXPORT_PRIVATE BasicBlock final
   // complexity is O(N) where N is the height of the dominator tree.
   static BasicBlock* GetCommonDominator(BasicBlock* b1, BasicBlock* b2);
 
+  DISALLOW_COPY_AND_ASSIGN(BasicBlock);
+
  private:
   int32_t loop_number_;      // loop number of the block.
   int32_t rpo_number_;       // special RPO number of the block.
@@ -179,8 +181,6 @@ class V8_EXPORT_PRIVATE BasicBlock final
   AssemblerDebugInfo debug_info_;
 #endif
   Id id_;
-
-  DISALLOW_COPY_AND_ASSIGN(BasicBlock);
 };
 
 std::ostream& operator<<(std::ostream&, const BasicBlock&);
@@ -267,6 +267,8 @@ class V8_EXPORT_PRIVATE Schedule final : public NON_EXPORTED_BASE(ZoneObject) {
 
   Zone* zone() const { return zone_; }
 
+  DISALLOW_COPY_AND_ASSIGN(Schedule);
+
  private:
   friend class Scheduler;
   friend class BasicBlockInstrumentor;
@@ -299,8 +301,6 @@ class V8_EXPORT_PRIVATE Schedule final : public NON_EXPORTED_BASE(ZoneObject) {
   BasicBlockVector rpo_order_;            // Reverse-post-order block list.
   BasicBlock* start_;
   BasicBlock* end_;
-
-  DISALLOW_COPY_AND_ASSIGN(Schedule);
 };
 
 V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream&, const Schedule&);

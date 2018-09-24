@@ -259,11 +259,11 @@ class PredictablePlatform : public Platform {
 
   Platform* platform() const { return platform_.get(); }
 
+  DISALLOW_COPY_AND_ASSIGN(PredictablePlatform);
+
  private:
   double synthetic_time_in_sec_ = 0.0;
   std::unique_ptr<Platform> platform_;
-
-  DISALLOW_COPY_AND_ASSIGN(PredictablePlatform);
 };
 
 std::unique_ptr<v8::Platform> g_platform;
@@ -3168,6 +3168,8 @@ class Serializer : public ValueSerializer::Delegate {
     externalized_contents_.clear();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(Serializer);
+
  protected:
   // Implements ValueSerializer::Delegate.
   void ThrowDataCloneError(Local<String> message) override {
@@ -3293,8 +3295,6 @@ class Serializer : public ValueSerializer::Delegate {
   std::vector<Global<WasmCompiledModule>> wasm_modules_;
   std::vector<ExternalizedContents> externalized_contents_;
   size_t current_memory_usage_;
-
-  DISALLOW_COPY_AND_ASSIGN(Serializer);
 };
 
 class Deserializer : public ValueDeserializer::Delegate {
@@ -3344,12 +3344,12 @@ class Deserializer : public ValueDeserializer::Delegate {
     return MaybeLocal<WasmCompiledModule>();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(Deserializer);
+
  private:
   Isolate* isolate_;
   ValueDeserializer deserializer_;
   std::unique_ptr<SerializationData> data_;
-
-  DISALLOW_COPY_AND_ASSIGN(Deserializer);
 };
 
 std::unique_ptr<SerializationData> Shell::SerializeValue(

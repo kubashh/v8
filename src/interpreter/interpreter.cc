@@ -33,6 +33,8 @@ class InterpreterCompilationJob final : public UnoptimizedCompilationJob {
                             AccountingAllocator* allocator,
                             ZoneVector<FunctionLiteral*>* eager_inner_literals);
 
+  DISALLOW_COPY_AND_ASSIGN(InterpreterCompilationJob);
+
  protected:
   Status ExecuteJobImpl() final;
   Status FinalizeJobImpl(Handle<SharedFunctionInfo> shared_info,
@@ -44,8 +46,6 @@ class InterpreterCompilationJob final : public UnoptimizedCompilationJob {
   Zone zone_;
   UnoptimizedCompilationInfo compilation_info_;
   BytecodeGenerator generator_;
-
-  DISALLOW_COPY_AND_ASSIGN(InterpreterCompilationJob);
 };
 
 Interpreter::Interpreter(Isolate* isolate) : isolate_(isolate) {
