@@ -6,6 +6,7 @@
 #define V8_WASM_WASM_ENGINE_H_
 
 #include <memory>
+#include <unordered_set>
 
 #include "src/wasm/wasm-code-manager.h"
 #include "src/wasm/wasm-memory.h"
@@ -143,6 +144,10 @@ class V8_EXPORT_PRIVATE WasmEngine {
   // engines this might be a pointer to a new instance or to a shared one.
   static std::shared_ptr<WasmEngine> GetWasmEngine();
 
+  // Manage the set of Isolates that use this WasmEngine.
+  void AddIsolate(Isolate* isolate);
+  void RemoveIsolate(Isolate* isolate);
+
  private:
   AsyncCompileJob* CreateAsyncCompileJob(
       Isolate* isolate, const WasmFeatures& enabled,
@@ -167,6 +172,9 @@ class V8_EXPORT_PRIVATE WasmEngine {
 
   std::unique_ptr<CompilationStatistics> compilation_stats_;
   std::unique_ptr<CodeTracer> code_tracer_;
+
+  // Set of isolates which use this WasmEngine. Used for cross-isolate GCs.
+  std::unordered_set<Isolate*> isolates_;
 
   // End of fields protected by {mutex_}.
   //////////////////////////////////////////////////////////////////////////////
