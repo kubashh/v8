@@ -52,22 +52,31 @@ if len(sys.argv) < 2 or len(sys.argv) > 3:
   sys.exit(-1)
 
 use_stdout = True
-if len(sys.argv) == 3 and sys.argv[1] == '-i':
-  use_stdout = False
+lint = False
+if len(sys.argv) == 3:
+  if sys.argv[1] == '-i':
+    use_stdout = False
+  if sys.argv[1] == '-l':
+    lint = True
 
 filename = sys.argv[len(sys.argv) - 1]
 
 with open(filename, 'r') as content_file:
   content = content_file.read()
+original_input = content
 p = Popen(['clang-format', '-assume-filename=.ts'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
 output, err = p.communicate(preprocess(content))
 output = postprocess(output)
 rc = p.returncode
 if (rc <> 0):
   sys.exit(rc);
-if use_stdout:
-  print output
+if lint:
+  if (output != original_input):
+    print >>sys.stderr,'Torque file requires formatting: ' + filename
 else:
-  output_file = open(filename, 'w')
-  output_file.write(output);
-  output_file.close()
+  if use_stdout:
+    print output
+  else:
+    output_file = open(filename, 'w')
+    output_file.write(output);
+    output_file.close()
