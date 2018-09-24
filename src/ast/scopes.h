@@ -102,7 +102,6 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   void SetScopeName(const AstRawString* scope_name) {
     scope_name_ = scope_name;
   }
-  void set_needs_migration() { needs_migration_ = true; }
 #endif
 
   // TODO(verwaest): Is this needed on Scope?
@@ -677,6 +676,7 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   }
 
   bool was_lazily_parsed() const { return was_lazily_parsed_; }
+  void mark_lazily_parsed() { was_lazily_parsed_ = true; }
 
 #ifdef DEBUG
   void set_is_being_lazily_parsed(bool is_being_lazily_parsed) {
@@ -684,7 +684,12 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   }
   bool is_being_lazily_parsed() const { return is_being_lazily_parsed_; }
 #endif
-  void set_zone(Zone* zone) { zone_ = zone; }
+  void set_zone(Zone* zone) {
+#ifdef DEBUG
+    needs_migration_ = true;
+#endif
+    zone_ = zone;
+  }
 
   bool ShouldEagerCompile() const;
   void set_should_eager_compile();
