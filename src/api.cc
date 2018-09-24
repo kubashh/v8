@@ -48,6 +48,7 @@
 #include "src/isolate-inl.h"
 #include "src/json-parser.h"
 #include "src/json-stringifier.h"
+#include "src/math-random.h"
 #include "src/messages.h"
 #include "src/objects-inl.h"
 #include "src/objects/api-callbacks.h"
@@ -705,6 +706,18 @@ StartupData SnapshotCreator::CreateBlob(
                               i::Smi::FromInt(context->global_proxy()->Size()));
     }
     isolate->heap()->SetSerializedGlobalProxySizes(*global_proxy_sizes);
+  }
+
+  {
+    // Reset Math.random state to uinitialized.
+    i::HandleScope scope(isolate);
+    i::MathRandom::InitializeContext(
+        isolate,
+        v8::Utils::OpenHandle(*data->default_context_.Get(data->isolate_)));
+    for (int i = 0; i < num_additional_contexts; i++) {
+      i::MathRandom::InitializeContext(
+          isolate, v8::Utils::OpenHandle(*data->contexts_.Get(i)));
+    }
   }
 
   // We might rehash strings and re-sort descriptors. Clear the lookup cache.
