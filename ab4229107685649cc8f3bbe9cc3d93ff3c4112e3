@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b756d8f3_4e58ac9e",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3073686c_067607ef",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "805ebca6_d877698b",
         "filename": "src/compiler/compiler-data.h",
         "patchSetId": 2
@@ -92,6 +116,30 @@
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9afbaa4_91443379",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "This map is working fine with initial bucket count of 100, but given that it\u0027s the default value, just removed the parameter and the constant.",
+      "parentUuid": "805ebca6_d877698b",
+      "range": {
+        "startLine": 26,
+        "startChar": 64,
+        "endLine": 26,
+        "endChar": 67
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -153,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "726b8f0f_756c8d5a",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80c7aa94_b4abc7b9",
+      "range": {
+        "startLine": 36,
+        "startChar": 7,
+        "endLine": 36,
+        "endChar": 20
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "740853c6_721bdb66",
         "filename": "src/compiler/compiler-data.h",
         "patchSetId": 2
@@ -173,6 +245,30 @@
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83fbd6b0_b094218a",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "740853c6_721bdb66",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 38
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -234,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "ba1c5c3d_cb015e9e",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38ced47f_860aad41",
+      "range": {
+        "startLine": 1335,
+        "startChar": 6,
+        "endLine": 1335,
+        "endChar": 30
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76b547aa_b509d021",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 2
@@ -254,6 +374,30 @@
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd446ee6_4b2f2352",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Probably it has some optimizations when the bucket count is the same, but generally yes, it means rehashing. Removing the comment.",
+      "parentUuid": "76b547aa_b509d021",
+      "range": {
+        "startLine": 1336,
+        "startChar": 0,
+        "endLine": 1338,
+        "endChar": 93
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -280,6 +424,30 @@
     },
     {
       "key": {
+        "uuid": "05a32345_cf6a1953",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2230e26_f9a1b195",
+      "range": {
+        "startLine": 1339,
+        "startChar": 4,
+        "endLine": 1339,
+        "endChar": 42
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6399d55_459c4b9f",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 2
@@ -294,6 +462,24 @@
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48575ec0_a7b88230",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6399d55_459c4b9f",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -329,6 +515,24 @@
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17562255_2b9be98d",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Anyway, following Jaro\u0027s comment, got rid of the variable.",
+      "parentUuid": "267891ab_c42bdc48",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -472,6 +676,30 @@
     },
     {
       "key": {
+        "uuid": "2cd8744a_3eae760e",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Removed the parameter. Still will add a comment.",
+      "parentUuid": "2fa805bb_20ebfddd",
+      "range": {
+        "startLine": 475,
+        "startChar": 45,
+        "endLine": 475,
+        "endChar": 64
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8eb681e0_0a0cd51f",
         "filename": "src/compiler/js-heap-broker.h",
         "patchSetId": 2
@@ -515,6 +743,30 @@
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dc1b2e9_a52d4c3a",
+        "filename": "src/isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-24T12:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f1545ff_ac543b8b",
+      "range": {
+        "startLine": 1471,
+        "startChar": 2,
+        "endLine": 1471,
+        "endChar": 26
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
