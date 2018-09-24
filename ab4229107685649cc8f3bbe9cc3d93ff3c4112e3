@@ -25,6 +25,52 @@
     },
     {
       "key": {
+        "uuid": "3073686c_067607ef",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "Nit: wrong year.",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "805ebca6_d877698b",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "Should not this be kInitialRefsBucketCount?",
+      "range": {
+        "startLine": 26,
+        "startChar": 64,
+        "endLine": 26,
+        "endChar": 67
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "faf5b756_848c41c4",
         "filename": "src/compiler/compiler-data.h",
         "patchSetId": 2
@@ -42,6 +88,52 @@
     },
     {
       "key": {
+        "uuid": "80c7aa94_b4abc7b9",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "How about renaming to HasSnapshot()?",
+      "range": {
+        "startLine": 36,
+        "startChar": 7,
+        "endLine": 36,
+        "endChar": 20
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "740853c6_721bdb66",
+        "filename": "src/compiler/compiler-data.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "Could you add some comments on allowed uses of this zone?",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 38
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "966cb78f_18fab374",
         "filename": "src/compiler/compiler-data.h",
         "patchSetId": 2
@@ -53,6 +145,92 @@
       "writtenOn": "2018-09-24T12:02:59Z",
       "side": 1,
       "message": "Please make this const.",
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38ced47f_860aad41",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "Nit: it makes more sense to say if (compiler_data_-\u003eIsInitialized()) here, no?",
+      "range": {
+        "startLine": 1335,
+        "startChar": 6,
+        "endLine": 1335,
+        "endChar": 30
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76b547aa_b509d021",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "Why would want to merge? I think merging would mean rehashing; we do not really need that.",
+      "range": {
+        "startLine": 1336,
+        "startChar": 0,
+        "endLine": 1338,
+        "endChar": 93
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2230e26_f9a1b195",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "I am wondering whether this whole dance should not be done in a separate method that actually inserts the builtins (i.e., SerializeShareableObjects). You enforce the refs_ is empty at that point, so it should be fine.\n\nAlso, such change would allow making should_create_builtins_ local variable of SerializeShareableObjects.",
+      "range": {
+        "startLine": 1339,
+        "startChar": 4,
+        "endLine": 1339,
+        "endChar": 42
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6399d55_459c4b9f",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "Nit: Insert newline.",
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -126,6 +304,75 @@
         "startChar": 39,
         "endLine": 475,
         "endChar": 43
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fa805bb_20ebfddd",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "This would deserve a comment on what is compiler_zone.",
+      "range": {
+        "startLine": 475,
+        "startChar": 45,
+        "endLine": 475,
+        "endChar": 64
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8eb681e0_0a0cd51f",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "It would nice to come up with some name which captures persistence of the data across multiple compilations.",
+      "range": {
+        "startLine": 481,
+        "startChar": 15,
+        "endLine": 481,
+        "endChar": 29
+      },
+      "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f1545ff_ac543b8b",
+        "filename": "src/isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1471,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-24T12:15:37Z",
+      "side": 1,
+      "message": "Nit: I believe we normally do not expose references to pointers. Could we have a getter and a setter?",
+      "range": {
+        "startLine": 1471,
+        "startChar": 2,
+        "endLine": 1471,
+        "endChar": 26
       },
       "revId": "ab4229107685649cc8f3bbe9cc3d93ff3c4112e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
