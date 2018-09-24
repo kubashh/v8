@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2350e8e2_3a2d8517",
+        "filename": "src/mips/assembler-mips-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-09-24T10:41:17Z",
+      "side": 1,
+      "message": "nit: Why not write:\n\nint code_target_index \u003d GetLuiOriImmediate(instr1, instr2);",
+      "range": {
+        "startLine": 291,
+        "startChar": 2,
+        "endLine": 293,
+        "endChar": 30
+      },
+      "revId": "f2790332a1a87bfa1be2c5750e6379623cbd1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80c6301e_74f2a3bb",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4113,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-09-24T10:41:17Z",
+      "side": 1,
+      "message": "Out of curiosity, since we\u0027re not patching the code anymore, is there a way to do the relative jump in one instruction? Or is patching here referring to the process of updating references when code is moved by the GC?",
+      "range": {
+        "startLine": 4113,
+        "startChar": 7,
+        "endLine": 4113,
+        "endChar": 55
+      },
+      "revId": "f2790332a1a87bfa1be2c5750e6379623cbd1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2584c30_e9d1e43d",
+        "filename": "src/mips/assembler-mips.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4137,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-09-24T10:41:17Z",
+      "side": 1,
+      "message": "nit: instructions",
+      "range": {
+        "startLine": 4137,
+        "startChar": 20,
+        "endLine": 4137,
+        "endChar": 32
+      },
+      "revId": "f2790332a1a87bfa1be2c5750e6379623cbd1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c47a968b_3faa5f76",
+        "filename": "src/mips/macro-assembler-mips.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-09-24T10:41:17Z",
+      "side": 1,
+      "message": "My understanding is that you don\u0027t care that the first two instructions of GenPCRelativeJump\n\n    or_(tf, ra, zero_reg);\n    nal();  // Relative place of nal instruction determines kLongBranchPCOffset.\n\nare executed in case we don\u0027t jump to the code target, is this correct?\n\nIf so, could you add a comment that explains this?",
+      "range": {
+        "startLine": 3783,
+        "startChar": 15,
+        "endLine": 3783,
+        "endChar": 29
+      },
+      "revId": "f2790332a1a87bfa1be2c5750e6379623cbd1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
