@@ -203,6 +203,8 @@ class HeapSnapshot {
 
   void Print(int max_depth);
 
+  DISALLOW_COPY_AND_ASSIGN(HeapSnapshot);
+
  private:
   HeapEntry* AddRootEntry();
   HeapEntry* AddGcRootsEntry();
@@ -220,8 +222,6 @@ class HeapSnapshot {
   SnapshotObjectId max_snapshot_js_object_id_;
 
   friend class HeapSnapshotTester;
-
-  DISALLOW_COPY_AND_ASSIGN(HeapSnapshot);
 };
 
 
@@ -267,6 +267,8 @@ class HeapObjectsMap {
   void UpdateHeapObjectsMap();
   void RemoveDeadEntries();
 
+  DISALLOW_COPY_AND_ASSIGN(HeapObjectsMap);
+
  private:
   struct EntryInfo {
     EntryInfo(SnapshotObjectId id, Address addr, unsigned int size,
@@ -284,8 +286,6 @@ class HeapObjectsMap {
   std::vector<EntryInfo> entries_;
   std::vector<TimeInterval> time_intervals_;
   Heap* heap_;
-
-  DISALLOW_COPY_AND_ASSIGN(HeapObjectsMap);
 };
 
 // A typedef for referencing anything that can be snapshotted living
@@ -326,6 +326,8 @@ class V8HeapExplorer : public HeapEntriesAllocator {
 
   static JSFunction* GetConstructor(JSReceiver* receiver);
   static String* GetConstructorName(JSObject* object);
+
+  DISALLOW_COPY_AND_ASSIGN(V8HeapExplorer);
 
  private:
   void MarkVisitedField(int offset);
@@ -450,8 +452,6 @@ class V8HeapExplorer : public HeapEntriesAllocator {
 
   friend class IndexedReferencesExtractor;
   friend class RootsReferencesExtractor;
-
-  DISALLOW_COPY_AND_ASSIGN(V8HeapExplorer);
 };
 
 
@@ -466,6 +466,8 @@ class NativeObjectsExplorer {
   virtual ~NativeObjectsExplorer();
   int EstimateObjectsCount();
   bool IterateAndExtractReferences(SnapshotFiller* filler);
+
+  DISALLOW_COPY_AND_ASSIGN(NativeObjectsExplorer);
 
  private:
   void FillRetainedObjects();
@@ -515,8 +517,6 @@ class NativeObjectsExplorer {
   static HeapThing const kNativesRootObject;
 
   friend class GlobalHandlesExtractor;
-
-  DISALLOW_COPY_AND_ASSIGN(NativeObjectsExplorer);
 };
 
 
@@ -531,6 +531,8 @@ class HeapSnapshotGenerator : public SnapshottingProgressReportingInterface {
                         v8::HeapProfiler::ObjectNameResolver* resolver,
                         Heap* heap);
   bool GenerateSnapshot();
+
+  DISALLOW_COPY_AND_ASSIGN(HeapSnapshotGenerator);
 
  private:
   bool FillReferences();
@@ -548,8 +550,6 @@ class HeapSnapshotGenerator : public SnapshottingProgressReportingInterface {
   int progress_counter_;
   int progress_total_;
   Heap* heap_;
-
-  DISALLOW_COPY_AND_ASSIGN(HeapSnapshotGenerator);
 };
 
 class OutputStreamWriter;
@@ -563,6 +563,8 @@ class HeapSnapshotJSONSerializer {
         next_string_id_(1),
         writer_(nullptr) {}
   void Serialize(v8::OutputStream* stream);
+
+  DISALLOW_COPY_AND_ASSIGN(HeapSnapshotJSONSerializer);
 
  private:
   V8_INLINE static bool StringsMatch(void* key1, void* key2) {
@@ -601,8 +603,6 @@ class HeapSnapshotJSONSerializer {
 
   friend class HeapSnapshotJSONSerializerEnumerator;
   friend class HeapSnapshotJSONSerializerIterator;
-
-  DISALLOW_COPY_AND_ASSIGN(HeapSnapshotJSONSerializer);
 };
 
 

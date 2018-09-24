@@ -359,13 +359,14 @@ class Code : public HeapObject, public NeverReadOnlySpaceObject {
     explicit OptimizedCodeIterator(Isolate* isolate);
     Code* Next();
 
+    DISALLOW_COPY_AND_ASSIGN(OptimizedCodeIterator)
+
    private:
     Context* next_context_;
     Code* current_code_;
     Isolate* isolate_;
 
     DisallowHeapAllocation no_gc;
-    DISALLOW_COPY_AND_ASSIGN(OptimizedCodeIterator)
   };
 
   static const int kConstantPoolSize =
@@ -438,13 +439,13 @@ class Code : public HeapObject, public NeverReadOnlySpaceObject {
   // Reserve one argument count value as the "don't adapt arguments" sentinel.
   static const int kMaxArguments = (1 << kArgumentsBits) - 2;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Code);
+
  private:
   friend class RelocIterator;
 
   bool is_promise_rejection() const;
   bool is_exception_caught() const;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Code);
 };
 
 // CodeDataContainer is a container for all mutable fields associated with its
@@ -479,7 +480,6 @@ class CodeDataContainer : public HeapObject, public NeverReadOnlySpaceObject {
 
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(CodeDataContainer);
 };
 
@@ -790,7 +790,6 @@ class BytecodeArray : public FixedArrayBase {
 
   class BodyDescriptor;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(BytecodeArray);
 };
 

@@ -27,6 +27,8 @@ class PipelineStatistics : public Malloced {
   void BeginPhaseKind(const char* phase_kind_name);
   void EndPhaseKind();
 
+  DISALLOW_COPY_AND_ASSIGN(PipelineStatistics);
+
  private:
   size_t OuterZoneSize() {
     return static_cast<size_t>(outer_zone_->allocation_size());
@@ -45,7 +47,6 @@ class PipelineStatistics : public Malloced {
     size_t outer_zone_initial_size_;
     size_t allocated_bytes_at_start_;
 
-   private:
     DISALLOW_COPY_AND_ASSIGN(CommonStats);
   };
 
@@ -72,8 +73,6 @@ class PipelineStatistics : public Malloced {
   // Stats for phase.
   const char* phase_name_;
   CommonStats phase_stats_;
-
-  DISALLOW_COPY_AND_ASSIGN(PipelineStatistics);
 };
 
 
@@ -87,10 +86,10 @@ class PhaseScope {
     if (pipeline_stats_ != nullptr) pipeline_stats_->EndPhase();
   }
 
+  DISALLOW_COPY_AND_ASSIGN(PhaseScope);
+
  private:
   PipelineStatistics* const pipeline_stats_;
-
-  DISALLOW_COPY_AND_ASSIGN(PhaseScope);
 };
 
 }  // namespace compiler

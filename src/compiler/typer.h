@@ -34,6 +34,8 @@ class V8_EXPORT_PRIVATE Typer {
   void Run(const ZoneVector<Node*>& roots,
            LoopVariableOptimizer* induction_vars);
 
+  DISALLOW_COPY_AND_ASSIGN(Typer);
+
  private:
   class Visitor;
   class Decorator;
@@ -53,8 +55,6 @@ class V8_EXPORT_PRIVATE Typer {
 
   Type singleton_false_;
   Type singleton_true_;
-
-  DISALLOW_COPY_AND_ASSIGN(Typer);
 };
 
 DEFINE_OPERATORS_FOR_FLAGS(Typer::Flags);

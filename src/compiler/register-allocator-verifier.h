@@ -56,12 +56,11 @@ class Assessment : public ZoneObject {
  public:
   AssessmentKind kind() const { return kind_; }
 
+  DISALLOW_COPY_AND_ASSIGN(Assessment);
+
  protected:
   explicit Assessment(AssessmentKind kind) : kind_(kind) {}
   AssessmentKind kind_;
-
- private:
-  DISALLOW_COPY_AND_ASSIGN(Assessment);
 };
 
 // PendingAssessments are associated to operands coming from the multiple
@@ -95,12 +94,12 @@ class PendingAssessment final : public Assessment {
   bool IsAliasOf(int vreg) const { return aliases_.count(vreg) > 0; }
   void AddAlias(int vreg) { aliases_.insert(vreg); }
 
+  DISALLOW_COPY_AND_ASSIGN(PendingAssessment);
+
  private:
   const InstructionBlock* const origin_;
   InstructionOperand operand_;
   ZoneSet<int> aliases_;
-
-  DISALLOW_COPY_AND_ASSIGN(PendingAssessment);
 };
 
 // FinalAssessments are associated to operands that we know to be a certain
@@ -116,10 +115,10 @@ class FinalAssessment final : public Assessment {
     return static_cast<const FinalAssessment*>(assessment);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(FinalAssessment);
+
  private:
   int virtual_register_;
-
-  DISALLOW_COPY_AND_ASSIGN(FinalAssessment);
 };
 
 struct OperandAsKeyLess {
@@ -159,12 +158,12 @@ class BlockAssessments : public ZoneObject {
   const OperandMap& map() const { return map_; }
   void Print() const;
 
+  DISALLOW_COPY_AND_ASSIGN(BlockAssessments);
+
  private:
   OperandMap map_;
   OperandMap map_for_moves_;
   Zone* zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(BlockAssessments);
 };
 
 class RegisterAllocatorVerifier final : public ZoneObject {
@@ -174,6 +173,8 @@ class RegisterAllocatorVerifier final : public ZoneObject {
 
   void VerifyAssignment(const char* caller_info);
   void VerifyGapMoves();
+
+  DISALLOW_COPY_AND_ASSIGN(RegisterAllocatorVerifier);
 
  private:
   enum ConstraintType {
@@ -263,8 +264,6 @@ class RegisterAllocatorVerifier final : public ZoneObject {
   ZoneMap<RpoNumber, DelayedAssessments*> outstanding_assessments_;
   // TODO(chromium:725559): remove after we understand this bug's root cause.
   const char* caller_info_ = nullptr;
-
-  DISALLOW_COPY_AND_ASSIGN(RegisterAllocatorVerifier);
 };
 
 }  // namespace compiler

@@ -48,9 +48,9 @@ struct TestCaseData {
   const char* declaration_parameters() const { return declaration_parameters_; }
   const char* arguments() const { return arguments_; }
 
- private:
   TestCaseData() = delete;
 
+ private:
   const char* const script_;
   const char* const declaration_parameters_;
   const char* const arguments_;

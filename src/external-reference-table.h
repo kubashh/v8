@@ -76,6 +76,8 @@ class ExternalReferenceTable {
   ExternalReferenceTable() = default;
   void Init(Isolate* isolate);
 
+  DISALLOW_COPY_AND_ASSIGN(ExternalReferenceTable);
+
  private:
   struct ExternalReferenceEntry {
     Address address;
@@ -98,8 +100,6 @@ class ExternalReferenceTable {
   ExternalReferenceEntry refs_[kSize];
   uint32_t is_initialized_ = 0;  // Not bool to guarantee deterministic size.
   uint32_t unused_padding_ = 0;  // For alignment.
-
-  DISALLOW_COPY_AND_ASSIGN(ExternalReferenceTable);
 };
 
 }  // namespace internal

@@ -31,7 +31,6 @@ class V8_EXPORT_PRIVATE OperatorProperties final {
 
   static bool IsBasicBlockBegin(const Operator* op);
 
- private:
   DISALLOW_COPY_AND_ASSIGN(OperatorProperties);
 };
 

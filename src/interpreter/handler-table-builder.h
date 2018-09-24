@@ -42,6 +42,8 @@ class V8_EXPORT_PRIVATE HandlerTableBuilder final {
   void SetPrediction(int handler_id, HandlerTable::CatchPrediction prediction);
   void SetContextRegister(int handler_id, Register reg);
 
+  DISALLOW_COPY_AND_ASSIGN(HandlerTableBuilder);
+
  private:
   struct Entry {
     size_t offset_start;   // Bytecode offset starting try-region.
@@ -53,8 +55,6 @@ class V8_EXPORT_PRIVATE HandlerTableBuilder final {
   };
 
   ZoneVector<Entry> entries_;
-
-  DISALLOW_COPY_AND_ASSIGN(HandlerTableBuilder);
 };
 
 }  // namespace interpreter

@@ -75,6 +75,8 @@ class ProfilerListener : public CodeEventListener {
     return function_and_resource_names_.GetConsName(prefix, name);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(ProfilerListener);
+
  private:
   void RecordInliningInfo(CodeEntry* entry, AbstractCode* abstract_code);
   void AttachDeoptInlinedFrames(Code* code, CodeDeoptEventRecord* rec);
@@ -86,8 +88,6 @@ class ProfilerListener : public CodeEventListener {
   Isolate* isolate_;
   CodeEventObserver* observer_;
   StringsStorage function_and_resource_names_;
-
-  DISALLOW_COPY_AND_ASSIGN(ProfilerListener);
 };
 
 }  // namespace internal

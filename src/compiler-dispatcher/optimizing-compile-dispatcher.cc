@@ -52,6 +52,8 @@ class OptimizingCompileDispatcher::CompileTask : public CancelableTask {
 
   ~CompileTask() override = default;
 
+  DISALLOW_COPY_AND_ASSIGN(CompileTask);
+
  private:
   // v8::Task overrides.
   void RunInternal() override {
@@ -88,8 +90,6 @@ class OptimizingCompileDispatcher::CompileTask : public CancelableTask {
   Isolate* isolate_;
   WorkerThreadRuntimeCallStats* worker_thread_runtime_call_stats_;
   OptimizingCompileDispatcher* dispatcher_;
-
-  DISALLOW_COPY_AND_ASSIGN(CompileTask);
 };
 
 OptimizingCompileDispatcher::~OptimizingCompileDispatcher() {

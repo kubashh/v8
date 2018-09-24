@@ -71,10 +71,10 @@ class V8_EXPORT_PRIVATE DisjointAllocationPool final {
   bool IsEmpty() const { return ranges_.empty(); }
   const std::list<AddressRange>& ranges() const { return ranges_; }
 
+  DISALLOW_COPY_AND_ASSIGN(DisjointAllocationPool)
+
  private:
   std::list<AddressRange> ranges_;
-
-  DISALLOW_COPY_AND_ASSIGN(DisjointAllocationPool)
 };
 
 class V8_EXPORT_PRIVATE WasmCode final {
@@ -147,6 +147,8 @@ class V8_EXPORT_PRIVATE WasmCode final {
 
   enum FlushICache : bool { kFlushICache = true, kNoFlushICache = false };
 
+  DISALLOW_COPY_AND_ASSIGN(WasmCode);
+
  private:
   friend class NativeModule;
 
@@ -201,8 +203,6 @@ class V8_EXPORT_PRIVATE WasmCode final {
   intptr_t trap_handler_index_ = -1;
   OwnedVector<trap_handler::ProtectedInstructionData> protected_instructions_;
   Tier tier_;
-
-  DISALLOW_COPY_AND_ASSIGN(WasmCode);
 };
 
 // Return a textual description of the kind.
@@ -340,6 +340,8 @@ class V8_EXPORT_PRIVATE NativeModule final {
 
   const WasmFeatures& enabled_features() const { return enabled_features_; }
 
+  DISALLOW_COPY_AND_ASSIGN(NativeModule);
+
  private:
   friend class WasmCode;
   friend class WasmCodeManager;
@@ -422,8 +424,6 @@ class V8_EXPORT_PRIVATE NativeModule final {
   bool use_trap_handler_ = false;
   bool is_executable_ = false;
   bool lazy_compile_frozen_ = false;
-
-  DISALLOW_COPY_AND_ASSIGN(NativeModule);
 };
 
 class V8_EXPORT_PRIVATE WasmCodeManager final {
@@ -456,6 +456,8 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
 
   static size_t EstimateNativeModuleSize(const WasmModule* module);
 
+  DISALLOW_COPY_AND_ASSIGN(WasmCodeManager);
+
  private:
   friend class NativeModule;
 
@@ -484,8 +486,6 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
 
   // End of fields protected by {native_modules_mutex_}.
   //////////////////////////////////////////////////////////////////////////////
-
-  DISALLOW_COPY_AND_ASSIGN(WasmCodeManager);
 };
 
 // Within the scope, the native_module is writable and not executable.

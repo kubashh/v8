@@ -134,6 +134,8 @@ class V8Debugger : public v8::debug::DebugDelegate,
   std::shared_ptr<AsyncStackTrace> stackTraceFor(int contextGroupId,
                                                  const V8StackTraceId& id);
 
+  DISALLOW_COPY_AND_ASSIGN(V8Debugger);
+
  private:
   void clearContinueToLocation();
   bool shouldContinueToCurrentLocation();
@@ -252,8 +254,6 @@ class V8Debugger : public v8::debug::DebugDelegate,
   v8::Global<v8::debug::WeakMap> m_stableObjectId;
 
   WasmTranslation m_wasmTranslation;
-
-  DISALLOW_COPY_AND_ASSIGN(V8Debugger);
 };
 
 }  // namespace v8_inspector

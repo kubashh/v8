@@ -75,6 +75,8 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   bool needs_flush() const { return needs_flush_; }
   void set_needs_flush(bool needs_flush) { needs_flush_ = needs_flush; }
 
+  DISALLOW_COPY_AND_ASSIGN(RegisterInfo);
+
  private:
   Register register_;
   uint32_t equivalence_id_;
@@ -85,8 +87,6 @@ class BytecodeRegisterOptimizer::RegisterInfo final : public ZoneObject {
   // Equivalence set pointers.
   RegisterInfo* next_;
   RegisterInfo* prev_;
-
-  DISALLOW_COPY_AND_ASSIGN(RegisterInfo);
 };
 
 void BytecodeRegisterOptimizer::RegisterInfo::AddToEquivalenceSetOf(

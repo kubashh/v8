@@ -423,7 +423,6 @@ class ScopeIterator {
   virtual bool SetVariableValue(v8::Local<v8::String> name,
                                 v8::Local<v8::Value> value) = 0;
 
- private:
   DISALLOW_COPY_AND_ASSIGN(ScopeIterator);
 };
 
@@ -450,7 +449,6 @@ class StackTraceIterator {
   virtual v8::MaybeLocal<v8::Value> Evaluate(v8::Local<v8::String> source,
                                              bool throw_on_side_effect) = 0;
 
- private:
   DISALLOW_COPY_AND_ASSIGN(StackTraceIterator);
 };
 
@@ -513,8 +511,7 @@ class WeakMap : public v8::Object {
   static Local<WeakMap> New(v8::Isolate* isolate);
   V8_INLINE static WeakMap* Cast(Value* obj);
 
- private:
-  WeakMap();
+  WeakMap() = delete;
 };
 }  // namespace debug
 }  // namespace v8

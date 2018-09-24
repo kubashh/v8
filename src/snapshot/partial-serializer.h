@@ -25,6 +25,8 @@ class PartialSerializer : public Serializer<> {
 
   bool can_be_rehashed() const { return can_be_rehashed_; }
 
+  DISALLOW_COPY_AND_ASSIGN(PartialSerializer);
+
  private:
   void SerializeObject(HeapObject* o, HowToCode how_to_code,
                        WhereToPoint where_to_point, int skip) override;
@@ -42,7 +44,6 @@ class PartialSerializer : public Serializer<> {
   // TODO(yangguo): generalize rehashing, and remove this flag.
   bool can_be_rehashed_;
   Context* context_;
-  DISALLOW_COPY_AND_ASSIGN(PartialSerializer);
 };
 
 }  // namespace internal

@@ -49,10 +49,11 @@ class FixedStringAllocator final : public StringAllocator {
   char* allocate(unsigned bytes) override;
   char* grow(unsigned* bytes) override;
 
+  DISALLOW_COPY_AND_ASSIGN(FixedStringAllocator);
+
  private:
   char* buffer_;
   unsigned length_;
-  DISALLOW_COPY_AND_ASSIGN(FixedStringAllocator);
 };
 
 class StringStream final {
@@ -164,6 +165,8 @@ class StringStream final {
 
   static const int kInitialCapacity = 16;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(StringStream);
+
  private:
   void Add(Vector<const char> format, Vector<FmtElm> elms);
   void PrintObject(Object* obj);
@@ -176,8 +179,6 @@ class StringStream final {
 
   bool full() const { return (capacity_ - length_) == 1; }
   int space() const { return capacity_ - length_; }
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(StringStream);
 };
 
 }  // namespace internal

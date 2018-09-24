@@ -51,9 +51,10 @@ class Verifier {
                                          const Node* replacement) {}
 #endif  // DEBUG
 
+  DISALLOW_COPY_AND_ASSIGN(Verifier);
+
  private:
   class Visitor;
-  DISALLOW_COPY_AND_ASSIGN(Verifier);
 };
 
 // Verifies properties of a schedule, such as dominance, phi placement, etc.

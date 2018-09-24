@@ -93,6 +93,8 @@ class V8_EXPORT_PRIVATE EscapeAnalysisReducer final
   // after this reducer has been applied.
   void VerifyReplacement() const;
 
+  DISALLOW_COPY_AND_ASSIGN(EscapeAnalysisReducer);
+
  private:
   void ReduceFrameStateInputs(Node* node);
   Node* ReduceDeoptState(Node* node, Node* effect, Deduplicator* deduplicator);
@@ -110,8 +112,6 @@ class V8_EXPORT_PRIVATE EscapeAnalysisReducer final
   NodeHashCache node_cache_;
   ZoneSet<Node*> arguments_elements_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(EscapeAnalysisReducer);
 };
 
 }  // namespace compiler

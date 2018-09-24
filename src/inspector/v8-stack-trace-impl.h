@@ -79,6 +79,8 @@ class V8StackTraceImpl : public V8StackTrace {
 
   bool isEqualIgnoringTopFrame(V8StackTraceImpl* stackTrace) const;
 
+  DISALLOW_COPY_AND_ASSIGN(V8StackTraceImpl);
+
  private:
   V8StackTraceImpl(std::vector<std::shared_ptr<StackFrame>> frames,
                    int maxAsyncDepth,
@@ -103,8 +105,6 @@ class V8StackTraceImpl : public V8StackTrace {
   int m_maxAsyncDepth;
   std::weak_ptr<AsyncStackTrace> m_asyncParent;
   V8StackTraceId m_externalParent;
-
-  DISALLOW_COPY_AND_ASSIGN(V8StackTraceImpl);
 };
 
 class AsyncStackTrace {
@@ -139,6 +139,8 @@ class AsyncStackTrace {
     return m_frames;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(AsyncStackTrace);
+
  private:
   AsyncStackTrace(int contextGroupId, const String16& description,
                   std::vector<std::shared_ptr<StackFrame>> frames,
@@ -153,8 +155,6 @@ class AsyncStackTrace {
   std::vector<std::shared_ptr<StackFrame>> m_frames;
   std::weak_ptr<AsyncStackTrace> m_asyncParent;
   V8StackTraceId m_externalParent;
-
-  DISALLOW_COPY_AND_ASSIGN(AsyncStackTrace);
 };
 
 }  // namespace v8_inspector

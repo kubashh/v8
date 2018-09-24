@@ -107,6 +107,8 @@ class TemplateHashMapImpl {
     occupancy_ = 0;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(TemplateHashMapImpl);
+
  protected:
   void Initialize(uint32_t capacity, AllocationPolicy allocator);
 
@@ -124,8 +126,6 @@ class TemplateHashMapImpl {
                         uint32_t hash,
                         AllocationPolicy allocator = AllocationPolicy());
   void Resize(AllocationPolicy allocator);
-
-  DISALLOW_COPY_AND_ASSIGN(TemplateHashMapImpl);
 };
 template <typename Key, typename Value, typename MatchFun,
           class AllocationPolicy>
@@ -408,7 +408,6 @@ class CustomMatcherTemplateHashMapImpl
       AllocationPolicy allocator = AllocationPolicy())
       : Base(original, allocator) {}
 
- private:
   DISALLOW_COPY_AND_ASSIGN(CustomMatcherTemplateHashMapImpl);
 };
 

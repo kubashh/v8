@@ -47,6 +47,8 @@ class TracedValue : public ConvertableToTraceFormat {
   // ConvertableToTraceFormat implementation.
   void AppendAsTraceFormat(std::string* out) const override;
 
+  DISALLOW_COPY_AND_ASSIGN(TracedValue);
+
  private:
   TracedValue();
 
@@ -60,8 +62,6 @@ class TracedValue : public ConvertableToTraceFormat {
 
   std::string data_;
   bool first_item_;
-
-  DISALLOW_COPY_AND_ASSIGN(TracedValue);
 };
 
 }  // namespace tracing

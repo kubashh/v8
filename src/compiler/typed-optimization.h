@@ -35,6 +35,8 @@ class V8_EXPORT_PRIVATE TypedOptimization final
 
   Reduction Reduce(Node* node) final;
 
+  DISALLOW_COPY_AND_ASSIGN(TypedOptimization);
+
  private:
   Reduction ReduceConvertReceiver(Node* node);
   Reduction ReduceCheckHeapObject(Node* node);
@@ -81,8 +83,6 @@ class V8_EXPORT_PRIVATE TypedOptimization final
   Type const true_type_;
   Type const false_type_;
   TypeCache const& type_cache_;
-
-  DISALLOW_COPY_AND_ASSIGN(TypedOptimization);
 };
 
 }  // namespace compiler

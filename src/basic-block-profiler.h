@@ -30,6 +30,8 @@ class BasicBlockProfiler {
     void SetBlockRpoNumber(size_t offset, int32_t block_rpo);
     intptr_t GetCounterAddress(size_t offset);
 
+    DISALLOW_COPY_AND_ASSIGN(Data);
+
    private:
     friend class BasicBlockProfiler;
     friend std::ostream& operator<<(std::ostream& os,
@@ -46,7 +48,6 @@ class BasicBlockProfiler {
     std::string function_name_;
     std::string schedule_;
     std::string code_;
-    DISALLOW_COPY_AND_ASSIGN(Data);
   };
 
   typedef std::list<Data*> DataList;
@@ -60,14 +61,14 @@ class BasicBlockProfiler {
 
   const DataList* data_list() { return &data_list_; }
 
+  DISALLOW_COPY_AND_ASSIGN(BasicBlockProfiler);
+
  private:
   friend V8_EXPORT_PRIVATE std::ostream& operator<<(
       std::ostream& os, const BasicBlockProfiler& s);
 
   DataList data_list_;
   base::Mutex data_list_mutex_;
-
-  DISALLOW_COPY_AND_ASSIGN(BasicBlockProfiler);
 };
 
 V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,

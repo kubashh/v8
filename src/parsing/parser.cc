@@ -68,6 +68,8 @@ class DiscardableZoneScope {
   }
   ~DiscardableZoneScope() { Reset(); }
 
+  DISALLOW_COPY_AND_ASSIGN(DiscardableZoneScope);
+
  private:
   FuncNameInferrer fni_;
   Parser* parser_;
@@ -75,8 +77,6 @@ class DiscardableZoneScope {
   Zone* prev_zone_;
   bool prev_allow_lazy_;
   bool prev_temp_zoned_;
-
-  DISALLOW_COPY_AND_ASSIGN(DiscardableZoneScope);
 };
 
 FunctionLiteral* Parser::DefaultConstructor(const AstRawString* name,

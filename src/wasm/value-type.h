@@ -340,7 +340,6 @@ class V8_EXPORT_PRIVATE ValueTypes {
     }
   }
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(ValueTypes);
 };
 

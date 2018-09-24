@@ -37,6 +37,8 @@ class Deserializer : public SerializerDeserializer {
 
   void SetRehashability(bool v) { can_rehash_ = v; }
 
+  DISALLOW_COPY_AND_ASSIGN(Deserializer);
+
  protected:
   // Create a deserializer from a snapshot byte source.
   template <class Data>
@@ -173,8 +175,6 @@ class Deserializer : public SerializerDeserializer {
 
   // For source(), isolate(), and allocator().
   friend class DefaultDeserializerAllocator;
-
-  DISALLOW_COPY_AND_ASSIGN(Deserializer);
 };
 
 // Used to insert a deserialized internalized string into the string table.

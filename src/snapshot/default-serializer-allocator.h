@@ -34,6 +34,8 @@ class DefaultSerializerAllocator final {
 
   void OutputStatistics();
 
+  DISALLOW_COPY_AND_ASSIGN(DefaultSerializerAllocator)
+
  private:
   // We try to not exceed this size for every chunk. We will not succeed for
   // larger objects though.
@@ -69,8 +71,6 @@ class DefaultSerializerAllocator final {
 
   // The current serializer.
   Serializer<DefaultSerializerAllocator>* const serializer_;
-
-  DISALLOW_COPY_AND_ASSIGN(DefaultSerializerAllocator)
 };
 
 }  // namespace internal

@@ -91,6 +91,8 @@ class V8InspectorSessionImpl : public V8InspectorSession,
   V8InspectorSession::Inspectable* inspectedObject(unsigned num);
   static const unsigned kInspectedObjectBufferSize = 5;
 
+  DISALLOW_COPY_AND_ASSIGN(V8InspectorSessionImpl);
+
  private:
   V8InspectorSessionImpl(V8InspectorImpl*, int contextGroupId, int sessionId,
                          V8Inspector::Channel*, const StringView& state);
@@ -122,8 +124,6 @@ class V8InspectorSessionImpl : public V8InspectorSession,
   std::unique_ptr<V8SchemaAgentImpl> m_schemaAgent;
   std::vector<std::unique_ptr<V8InspectorSession::Inspectable>>
       m_inspectedObjects;
-
-  DISALLOW_COPY_AND_ASSIGN(V8InspectorSessionImpl);
 };
 
 }  // namespace v8_inspector

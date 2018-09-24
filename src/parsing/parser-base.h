@@ -99,6 +99,8 @@ class SourceRangeScope final {
     return *range_;
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(SourceRangeScope);
+
  private:
   int32_t GetPosition(PositionKind kind) {
     switch (kind) {
@@ -119,8 +121,6 @@ class SourceRangeScope final {
   SourceRange* range_;
   PositionKind post_kind_;
   bool is_finalized_ = false;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(SourceRangeScope);
 };
 
 // ----------------------------------------------------------------------------

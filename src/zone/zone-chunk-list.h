@@ -101,6 +101,8 @@ class ZoneChunkList : public ZoneObject {
     return const_reverse_iterator::End(this);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(ZoneChunkList);
+
  private:
   template <typename S, bool backwards, bool modifiable>
   friend class ZoneChunkListIterator;
@@ -139,8 +141,6 @@ class ZoneChunkList : public ZoneObject {
   size_t size_ = 0;
   Chunk* front_ = nullptr;
   Chunk* back_ = nullptr;
-
-  DISALLOW_COPY_AND_ASSIGN(ZoneChunkList);
 };
 
 template <typename T, bool backwards, bool modifiable>

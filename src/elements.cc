@@ -1388,7 +1388,6 @@ class ElementsAccessorBase : public InternalElementsAccessor {
     UNREACHABLE();
   }
 
- private:
   DISALLOW_COPY_AND_ASSIGN(ElementsAccessorBase);
 };
 

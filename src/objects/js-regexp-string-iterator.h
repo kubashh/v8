@@ -47,7 +47,6 @@ class JSRegExpStringIterator : public JSObject {
   static const int kGlobalBit = 1;
   static const int kUnicodeBit = 2;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSRegExpStringIterator);
 };
 

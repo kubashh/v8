@@ -534,6 +534,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   }
   Zone* zone() const { return zone_; }
 
+  DISALLOW_COPY_AND_ASSIGN(BytecodeArrayBuilder);
+
  private:
   friend class BytecodeRegisterAllocator;
   template <Bytecode bytecode, AccumulatorUse accumulator_use,
@@ -610,8 +612,6 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
   BytecodeRegisterOptimizer* register_optimizer_;
   BytecodeSourceInfo latest_source_info_;
   BytecodeSourceInfo deferred_source_info_;
-
-  DISALLOW_COPY_AND_ASSIGN(BytecodeArrayBuilder);
 };
 
 V8_EXPORT_PRIVATE std::ostream& operator<<(

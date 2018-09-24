@@ -76,10 +76,10 @@ class V8_EXPORT_PRIVATE BytecodeLabels {
 
   bool empty() const { return labels_.empty(); }
 
+  DISALLOW_COPY_AND_ASSIGN(BytecodeLabels);
+
  private:
   ZoneLinkedList<BytecodeLabel> labels_;
-
-  DISALLOW_COPY_AND_ASSIGN(BytecodeLabels);
 };
 
 }  // namespace interpreter

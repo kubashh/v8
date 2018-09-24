@@ -26,6 +26,8 @@ class TracingCpuProfilerImpl final
   void OnTraceEnabled() final;
   void OnTraceDisabled() final;
 
+  DISALLOW_COPY_AND_ASSIGN(TracingCpuProfilerImpl);
+
  private:
   void StartProfiling();
   void StopProfiling();
@@ -34,8 +36,6 @@ class TracingCpuProfilerImpl final
   std::unique_ptr<CpuProfiler> profiler_;
   bool profiling_enabled_;
   base::Mutex mutex_;
-
-  DISALLOW_COPY_AND_ASSIGN(TracingCpuProfilerImpl);
 };
 
 }  // namespace internal

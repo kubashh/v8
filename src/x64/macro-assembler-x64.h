@@ -104,14 +104,14 @@ class StackArgumentsAccessor {
     return GetArgumentOperand(0);
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(StackArgumentsAccessor);
+
  private:
   const Register base_reg_;
   const Register argument_count_reg_;
   const int argument_count_immediate_;
   const StackArgumentsAccessorReceiverMode receiver_mode_;
   const int extra_displacement_to_last_argument_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(StackArgumentsAccessor);
 };
 
 class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {

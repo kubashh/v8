@@ -124,7 +124,6 @@ class JSProxy : public JSReceiver {
                                       PropertyDescriptor* desc,
                                       ShouldThrow should_throw);
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSProxy);
 };
 
@@ -141,7 +140,6 @@ class JSProxyRevocableResult : public JSObject {
   static const int kProxyIndex = 0;
   static const int kRevokeIndex = 1;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSProxyRevocableResult);
 };
 

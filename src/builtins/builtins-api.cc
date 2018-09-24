@@ -155,7 +155,6 @@ class RelocatableArguments : public BuiltinArguments, public Relocatable {
                          highest_address() + 1);
   }
 
- private:
   DISALLOW_COPY_AND_ASSIGN(RelocatableArguments);
 };
 

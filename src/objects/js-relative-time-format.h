@@ -111,11 +111,11 @@ class JSRelativeTimeFormat : public JSObject {
   static const int kFlagsOffset = kFormatterOffset + kPointerSize;
   static const int kSize = kFlagsOffset + kPointerSize;
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(JSRelativeTimeFormat);
+
  private:
   static Style getStyle(const char* str);
   static Numeric getNumeric(const char* str);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(JSRelativeTimeFormat);
 };
 
 }  // namespace internal

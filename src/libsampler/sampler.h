@@ -78,6 +78,8 @@ class Sampler {
   class PlatformData;
   PlatformData* platform_data() const { return data_; }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(Sampler);
+
  protected:
   // Counts stack samples taken in various VM states.
   bool is_counting_samples_;
@@ -94,7 +96,6 @@ class Sampler {
   base::Atomic32 active_;
   base::Atomic32 registered_;
   PlatformData* data_;  // Platform specific data.
-  DISALLOW_IMPLICIT_CONSTRUCTORS(Sampler);
 };
 
 }  // namespace sampler

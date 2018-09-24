@@ -31,6 +31,8 @@ class V8ConsoleAgentImpl : public protocol::Console::Backend {
   void reset();
   bool enabled();
 
+  DISALLOW_COPY_AND_ASSIGN(V8ConsoleAgentImpl);
+
  private:
   void reportAllMessages();
   bool reportMessage(V8ConsoleMessage*, bool generatePreview);
@@ -39,8 +41,6 @@ class V8ConsoleAgentImpl : public protocol::Console::Backend {
   protocol::DictionaryValue* m_state;
   protocol::Console::Frontend m_frontend;
   bool m_enabled;
-
-  DISALLOW_COPY_AND_ASSIGN(V8ConsoleAgentImpl);
 };
 
 }  // namespace v8_inspector

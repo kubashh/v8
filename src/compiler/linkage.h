@@ -322,6 +322,8 @@ class V8_EXPORT_PRIVATE CallDescriptor final
 
   SaveFPRegsMode get_save_fp_mode() const { return save_fp_mode_; }
 
+  DISALLOW_COPY_AND_ASSIGN(CallDescriptor);
+
  private:
   friend class Linkage;
   SaveFPRegsMode save_fp_mode_ = kSaveFPRegs;
@@ -340,8 +342,6 @@ class V8_EXPORT_PRIVATE CallDescriptor final
   const RegList allocatable_registers_;
   const Flags flags_;
   const char* const debug_name_;
-
-  DISALLOW_COPY_AND_ASSIGN(CallDescriptor);
 };
 
 DEFINE_OPERATORS_FOR_FLAGS(CallDescriptor::Flags)
@@ -462,10 +462,10 @@ class V8_EXPORT_PRIVATE Linkage : public NON_EXPORTED_BASE(ZoneObject) {
   // A special {OsrValue} index to indicate the accumulator register.
   static const int kOsrAccumulatorRegisterIndex = -1;
 
+  DISALLOW_COPY_AND_ASSIGN(Linkage);
+
  private:
   CallDescriptor* const incoming_;
-
-  DISALLOW_COPY_AND_ASSIGN(Linkage);
 };
 
 }  // namespace compiler

@@ -112,7 +112,6 @@ class LiveRangeBound {
   const LifetimePosition end_;
   const bool skip_;
 
- private:
   DISALLOW_COPY_AND_ASSIGN(LiveRangeBound);
 };
 
@@ -197,11 +196,11 @@ class LiveRangeBoundArray {
     return (result->cur_cover_ != result->pred_cover_);
   }
 
+  DISALLOW_COPY_AND_ASSIGN(LiveRangeBoundArray);
+
  private:
   size_t length_;
   LiveRangeBound* start_;
-
-  DISALLOW_COPY_AND_ASSIGN(LiveRangeBoundArray);
 };
 
 
@@ -228,13 +227,13 @@ class LiveRangeFinder {
     return array;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(LiveRangeFinder);
+
  private:
   const RegisterAllocationData* const data_;
   const int bounds_length_;
   LiveRangeBoundArray* const bounds_;
   Zone* const zone_;
-
-  DISALLOW_COPY_AND_ASSIGN(LiveRangeFinder);
 };
 
 

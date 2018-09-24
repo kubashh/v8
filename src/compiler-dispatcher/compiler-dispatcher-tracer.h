@@ -40,13 +40,13 @@ class V8_EXPORT_PRIVATE CompilerDispatcherTracer {
 
     static const char* Name(ScopeID scoped_id);
 
+    DISALLOW_COPY_AND_ASSIGN(Scope);
+
    private:
     CompilerDispatcherTracer* tracer_;
     ScopeID scope_id_;
     size_t num_;
     double start_time_;
-
-    DISALLOW_COPY_AND_ASSIGN(Scope);
   };
 
   explicit CompilerDispatcherTracer(Isolate* isolate);
@@ -62,6 +62,8 @@ class V8_EXPORT_PRIVATE CompilerDispatcherTracer {
 
   void DumpStatistics() const;
 
+  DISALLOW_COPY_AND_ASSIGN(CompilerDispatcherTracer);
+
  private:
   static double Average(const base::RingBuffer<double>& buffer);
   static double Estimate(
@@ -73,8 +75,6 @@ class V8_EXPORT_PRIVATE CompilerDispatcherTracer {
   base::RingBuffer<double> finalize_events_;
 
   RuntimeCallStats* runtime_call_stats_;
-
-  DISALLOW_COPY_AND_ASSIGN(CompilerDispatcherTracer);
 };
 
 }  // namespace internal

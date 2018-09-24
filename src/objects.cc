@@ -11469,7 +11469,6 @@ class StringComparator {
       const uint16_t* buffer16_;
     };
 
-   private:
     DISALLOW_COPY_AND_ASSIGN(State);
   };
 
@@ -11514,11 +11513,11 @@ class StringComparator {
     }
   }
 
+  DISALLOW_COPY_AND_ASSIGN(StringComparator);
+
  private:
   State state_1_;
   State state_2_;
-
-  DISALLOW_COPY_AND_ASSIGN(StringComparator);
 };
 
 

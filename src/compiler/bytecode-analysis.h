@@ -131,6 +131,8 @@ class V8_EXPORT_PRIVATE BytecodeAnalysis {
 
   std::ostream& PrintLivenessTo(std::ostream& os) const;
 
+  DISALLOW_COPY_AND_ASSIGN(BytecodeAnalysis);
+
  private:
   struct LoopStackEntry {
     int header_offset;
@@ -166,8 +168,6 @@ class V8_EXPORT_PRIVATE BytecodeAnalysis {
   int osr_entry_point_;
 
   BytecodeLivenessMap liveness_map_;
-
-  DISALLOW_COPY_AND_ASSIGN(BytecodeAnalysis);
 };
 
 }  // namespace compiler

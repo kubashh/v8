@@ -101,6 +101,8 @@ class WasmMemoryTracker {
     kOtherFailure  // Failed for an unknown reason
   };
 
+  DISALLOW_COPY_AND_ASSIGN(WasmMemoryTracker);
+
  private:
   void AddAddressSpaceSample(Isolate* isolate);
 
@@ -123,8 +125,6 @@ class WasmMemoryTracker {
   // Track Wasm memory allocation information. This is keyed by the start of the
   // buffer, rather than by the start of the allocation.
   std::unordered_map<const void*, AllocationData> allocations_;
-
-  DISALLOW_COPY_AND_ASSIGN(WasmMemoryTracker);
 };
 
 // Attempts to allocate an array buffer with guard regions suitable for trap

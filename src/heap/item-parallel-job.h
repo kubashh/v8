@@ -51,6 +51,8 @@ class V8_EXPORT_PRIVATE ItemParallelJob {
     // Marks an item as being finished.
     void MarkFinished() { CHECK_EQ(kProcessing, state_.exchange(kFinished)); }
 
+    DISALLOW_COPY_AND_ASSIGN(Item);
+
    private:
     enum ProcessingState : uintptr_t { kAvailable, kProcessing, kFinished };
 
@@ -64,8 +66,6 @@ class V8_EXPORT_PRIVATE ItemParallelJob {
 
     friend class ItemParallelJob;
     friend class ItemParallelJob::Task;
-
-    DISALLOW_COPY_AND_ASSIGN(Item);
   };
 
   class V8_EXPORT_PRIVATE Task : public CancelableTask {
@@ -74,6 +74,8 @@ class V8_EXPORT_PRIVATE ItemParallelJob {
     ~Task() override;
 
     virtual void RunInParallel() = 0;
+
+    DISALLOW_COPY_AND_ASSIGN(Task);
 
    protected:
     // Retrieves a new item that needs to be processed. Returns |nullptr| if
@@ -117,8 +119,6 @@ class V8_EXPORT_PRIVATE ItemParallelJob {
     size_t items_considered_ = 0;
     base::Semaphore* on_finish_ = nullptr;
     base::Optional<AsyncTimedHistogram> gc_parallel_task_latency_histogram_;
-
-    DISALLOW_COPY_AND_ASSIGN(Task);
   };
 
   ItemParallelJob(CancelableTaskManager* cancelable_task_manager,
@@ -139,12 +139,13 @@ class V8_EXPORT_PRIVATE ItemParallelJob {
   // |async_counters|.
   void Run(const std::shared_ptr<Counters>& async_counters);
 
+  DISALLOW_COPY_AND_ASSIGN(ItemParallelJob);
+
  private:
   std::vector<Item*> items_;
   std::vector<std::unique_ptr<Task>> tasks_;
   CancelableTaskManager* cancelable_task_manager_;
   base::Semaphore* pending_tasks_;
-  DISALLOW_COPY_AND_ASSIGN(ItemParallelJob);
 };
 
 }  // namespace internal

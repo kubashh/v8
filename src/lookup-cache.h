@@ -28,6 +28,8 @@ class DescriptorLookupCache {
 
   static const int kAbsent = -2;
 
+  DISALLOW_COPY_AND_ASSIGN(DescriptorLookupCache);
+
  private:
   DescriptorLookupCache() {
     for (int i = 0; i < kLength; ++i) {
@@ -49,7 +51,6 @@ class DescriptorLookupCache {
   int results_[kLength];
 
   friend class Isolate;
-  DISALLOW_COPY_AND_ASSIGN(DescriptorLookupCache);
 };
 
 }  // namespace internal

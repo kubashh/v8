@@ -129,6 +129,8 @@ class V8_EXPORT_PRIVATE Operator : public NON_EXPORTED_BASE(ZoneObject) {
 
   void PrintPropsTo(std::ostream& os) const;
 
+  DISALLOW_COPY_AND_ASSIGN(Operator);
+
  protected:
   virtual void PrintToImpl(std::ostream& os, PrintVerbosity verbose) const;
 
@@ -142,8 +144,6 @@ class V8_EXPORT_PRIVATE Operator : public NON_EXPORTED_BASE(ZoneObject) {
   uint32_t value_out_;
   uint8_t effect_out_;
   uint32_t control_out_;
-
-  DISALLOW_COPY_AND_ASSIGN(Operator);
 };
 
 DEFINE_OPERATORS_FOR_FLAGS(Operator::Properties)

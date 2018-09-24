@@ -33,11 +33,12 @@ class V8_EXPORT_PRIVATE ZoneStats final {
       zone_ = nullptr;
     }
 
+    DISALLOW_COPY_AND_ASSIGN(Scope);
+
    private:
     const char* zone_name_;
     ZoneStats* const zone_stats_;
     Zone* zone_;
-    DISALLOW_COPY_AND_ASSIGN(Scope);
   };
 
   class V8_EXPORT_PRIVATE StatsScope final {
@@ -49,6 +50,8 @@ class V8_EXPORT_PRIVATE ZoneStats final {
     size_t GetCurrentAllocatedBytes();
     size_t GetTotalAllocatedBytes();
 
+    DISALLOW_COPY_AND_ASSIGN(StatsScope);
+
    private:
     friend class ZoneStats;
     void ZoneReturned(Zone* zone);
@@ -59,8 +62,6 @@ class V8_EXPORT_PRIVATE ZoneStats final {
     InitialValues initial_values_;
     size_t total_allocated_bytes_at_start_;
     size_t max_allocated_bytes_;
-
-    DISALLOW_COPY_AND_ASSIGN(StatsScope);
   };
 
   explicit ZoneStats(AccountingAllocator* allocator);
@@ -69,6 +70,8 @@ class V8_EXPORT_PRIVATE ZoneStats final {
   size_t GetMaxAllocatedBytes() const;
   size_t GetTotalAllocatedBytes() const;
   size_t GetCurrentAllocatedBytes() const;
+
+  DISALLOW_COPY_AND_ASSIGN(ZoneStats);
 
  private:
   Zone* NewEmptyZone(const char* zone_name);
@@ -83,8 +86,6 @@ class V8_EXPORT_PRIVATE ZoneStats final {
   size_t max_allocated_bytes_;
   size_t total_deleted_bytes_;
   AccountingAllocator* allocator_;
-
-  DISALLOW_COPY_AND_ASSIGN(ZoneStats);
 };
 
 }  // namespace compiler

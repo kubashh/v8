@@ -49,6 +49,8 @@ class JSContextSpecialization final : public AdvancedReducer {
 
   Reduction Reduce(Node* node) final;
 
+  DISALLOW_COPY_AND_ASSIGN(JSContextSpecialization);
+
  private:
   Reduction ReduceParameter(Node* node);
   Reduction ReduceJSLoadContext(Node* node);
@@ -69,8 +71,6 @@ class JSContextSpecialization final : public AdvancedReducer {
   Maybe<OuterContext> outer_;
   MaybeHandle<JSFunction> closure_;
   JSHeapBroker* const js_heap_broker_;
-
-  DISALLOW_COPY_AND_ASSIGN(JSContextSpecialization);
 };
 
 }  // namespace compiler

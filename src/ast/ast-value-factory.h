@@ -252,6 +252,8 @@ class AstStringConstants final {
     return &string_table_;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(AstStringConstants);
+
  private:
   Zone zone_;
   base::CustomMatcherHashMap string_table_;
@@ -260,8 +262,6 @@ class AstStringConstants final {
 #define F(name, str) AstRawString* name##_string_;
   AST_STRING_CONSTANTS(F)
 #undef F
-
-  DISALLOW_COPY_AND_ASSIGN(AstStringConstants);
 };
 
 class AstValueFactory {

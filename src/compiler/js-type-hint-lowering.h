@@ -154,6 +154,8 @@ class JSTypeHintLowering {
   LoweringResult BuildSoftDeopt(Node* effect, Node* control,
                                 DeoptimizeReason reson) const;
 
+  DISALLOW_COPY_AND_ASSIGN(JSTypeHintLowering);
+
  private:
   friend class JSSpeculativeBinopBuilder;
   Node* TryBuildSoftDeopt(FeedbackNexus& nexus, Node* effect, Node* control,
@@ -169,8 +171,6 @@ class JSTypeHintLowering {
   JSGraph* jsgraph_;
   Flags const flags_;
   Handle<FeedbackVector> feedback_vector_;
-
-  DISALLOW_COPY_AND_ASSIGN(JSTypeHintLowering);
 };
 
 }  // namespace compiler

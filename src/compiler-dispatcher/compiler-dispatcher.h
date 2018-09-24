@@ -109,6 +109,8 @@ class V8_EXPORT_PRIVATE CompilerDispatcher {
   void MemoryPressureNotification(v8::MemoryPressureLevel level,
                                   bool is_isolate_locked);
 
+  DISALLOW_COPY_AND_ASSIGN(CompilerDispatcher);
+
  private:
   FRIEND_TEST(CompilerDispatcherTest, EnqueueJob);
   FRIEND_TEST(CompilerDispatcherTest, EnqueueWithoutSFI);
@@ -205,8 +207,6 @@ class V8_EXPORT_PRIVATE CompilerDispatcher {
   // Test support.
   base::AtomicValue<bool> block_for_testing_;
   base::Semaphore semaphore_for_testing_;
-
-  DISALLOW_COPY_AND_ASSIGN(CompilerDispatcher);
 };
 
 }  // namespace internal

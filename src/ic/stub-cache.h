@@ -98,6 +98,8 @@ class StubCache {
   // The constructor is made public only for the purposes of testing.
   explicit StubCache(Isolate* isolate);
 
+  DISALLOW_COPY_AND_ASSIGN(StubCache);
+
  private:
   // The stub cache has a primary and secondary level.  The two levels have
   // different hashing algorithms in order to avoid simultaneous collisions
@@ -134,8 +136,6 @@ class StubCache {
 
   friend class Isolate;
   friend class SCTableReference;
-
-  DISALLOW_COPY_AND_ASSIGN(StubCache);
 };
 }  // namespace internal
 }  // namespace v8

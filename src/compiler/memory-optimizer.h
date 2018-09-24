@@ -40,6 +40,8 @@ class MemoryOptimizer final {
 
   void Optimize();
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(MemoryOptimizer);
+
  private:
   // An allocation group represents a set of allocations that have been folded
   // together.
@@ -57,12 +59,12 @@ class MemoryOptimizer final {
     PretenureFlag pretenure() const { return pretenure_; }
     Node* size() const { return size_; }
 
+    DISALLOW_IMPLICIT_CONSTRUCTORS(AllocationGroup);
+
    private:
     ZoneSet<NodeId> node_ids_;
     PretenureFlag const pretenure_;
     Node* const size_;
-
-    DISALLOW_IMPLICIT_CONSTRUCTORS(AllocationGroup);
   };
 
   // An allocation state is propagated on the effect paths through the graph.
@@ -85,6 +87,8 @@ class MemoryOptimizer final {
     Node* top() const { return top_; }
     intptr_t size() const { return size_; }
 
+    DISALLOW_COPY_AND_ASSIGN(AllocationState);
+
    private:
     AllocationState();
     explicit AllocationState(AllocationGroup* group);
@@ -95,8 +99,6 @@ class MemoryOptimizer final {
     // (max int if allocation folding is impossible on this path).
     intptr_t const size_;
     Node* const top_;
-
-    DISALLOW_COPY_AND_ASSIGN(AllocationState);
   };
 
   // An array of allocation states used to collect states on merges.
@@ -150,8 +152,6 @@ class MemoryOptimizer final {
   GraphAssembler graph_assembler_;
   PoisoningMitigationLevel poisoning_level_;
   AllocationFolding allocation_folding_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(MemoryOptimizer);
 };
 
 }  // namespace compiler

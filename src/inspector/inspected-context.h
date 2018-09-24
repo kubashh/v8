@@ -43,6 +43,8 @@ class InspectedContext {
   bool createInjectedScript(int sessionId);
   void discardInjectedScript(int sessionId);
 
+  DISALLOW_COPY_AND_ASSIGN(InspectedContext);
+
  private:
   friend class V8InspectorImpl;
   InspectedContext(V8InspectorImpl*, const V8ContextInfo&, int contextId);
@@ -59,8 +61,6 @@ class InspectedContext {
   std::unordered_set<int> m_reportedSessionIds;
   std::unordered_map<int, std::unique_ptr<InjectedScript>> m_injectedScripts;
   WeakCallbackData* m_weakCallbackData;
-
-  DISALLOW_COPY_AND_ASSIGN(InspectedContext);
 };
 
 }  // namespace v8_inspector

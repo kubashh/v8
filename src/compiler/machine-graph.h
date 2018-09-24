@@ -75,14 +75,14 @@ class V8_EXPORT_PRIVATE MachineGraph : public NON_EXPORTED_BASE(ZoneObject) {
   Graph* graph() const { return graph_; }
   Zone* zone() const { return graph()->zone(); }
 
+  DISALLOW_COPY_AND_ASSIGN(MachineGraph);
+
  protected:
   Graph* graph_;
   CommonOperatorBuilder* common_;
   MachineOperatorBuilder* machine_;
   CommonNodeCache cache_;
   Node* Dead_ = nullptr;
-
-  DISALLOW_COPY_AND_ASSIGN(MachineGraph);
 };
 
 }  // namespace compiler

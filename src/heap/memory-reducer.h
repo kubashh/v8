@@ -138,16 +138,19 @@ class V8_EXPORT_PRIVATE MemoryReducer {
     return state_.action == kDone && state_.started_gcs > 0;
   }
 
+  DISALLOW_COPY_AND_ASSIGN(MemoryReducer);
+
  private:
   class TimerTask : public v8::internal::CancelableTask {
    public:
     explicit TimerTask(MemoryReducer* memory_reducer);
 
+    DISALLOW_COPY_AND_ASSIGN(TimerTask);
+
    private:
     // v8::internal::CancelableTask overrides.
     void RunInternal() override;
     MemoryReducer* memory_reducer_;
-    DISALLOW_COPY_AND_ASSIGN(TimerTask);
   };
 
   void NotifyTimer(const Event& event);
@@ -162,7 +165,6 @@ class V8_EXPORT_PRIVATE MemoryReducer {
 
   // Used in cctest.
   friend class HeapTester;
-  DISALLOW_COPY_AND_ASSIGN(MemoryReducer);
 };
 
 }  // namespace internal

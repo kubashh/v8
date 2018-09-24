@@ -69,6 +69,8 @@ class IC {
   static void OnFeedbackChanged(Isolate* isolate, FeedbackNexus* nexus,
                                 JSFunction* host_function, const char* reason);
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(IC);
+
  protected:
   Address fp() const { return fp_; }
   Address pc() const { return *pc_address_; }
@@ -201,8 +203,6 @@ class IC {
   const char* slow_stub_reason_;
 
   FeedbackNexus nexus_;
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(IC);
 };
 
 

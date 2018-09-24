@@ -161,6 +161,8 @@ class V8_EXPORT_PRIVATE Node final {
 
   void Print() const;
 
+  DISALLOW_COPY_AND_ASSIGN(Node);
+
  private:
   struct Use;
   // Out of line storage for inputs when the number of inputs overflowed the
@@ -295,8 +297,6 @@ class V8_EXPORT_PRIVATE Node final {
   friend class Edge;
   friend class NodeMarkerBase;
   friend class NodeProperties;
-
-  DISALLOW_COPY_AND_ASSIGN(Node);
 };
 
 

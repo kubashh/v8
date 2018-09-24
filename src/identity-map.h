@@ -23,6 +23,8 @@ class IdentityMapBase {
   int capacity() const { return capacity_; }
   bool is_iterable() const { return is_iterable_; }
 
+  DISALLOW_COPY_AND_ASSIGN(IdentityMapBase);
+
  protected:
   // Allow Tester to access internals, including changing the address of objects
   // within the {keys_} array in order to simulate a moving GC.
@@ -77,8 +79,6 @@ class IdentityMapBase {
   Object** keys_;
   void** values_;
   bool is_iterable_;
-
-  DISALLOW_COPY_AND_ASSIGN(IdentityMapBase);
 };
 
 // Implements an identity map from object addresses to a given value type {V}.
@@ -169,10 +169,13 @@ class IdentityMap : public IdentityMapBase {
     Iterator begin() { return Iterator(map_, map_->NextIndex(-1)); }
     Iterator end() { return Iterator(map_, map_->capacity()); }
 
+    DISALLOW_COPY_AND_ASSIGN(IteratableScope);
+
    private:
     IdentityMap* map_;
-    DISALLOW_COPY_AND_ASSIGN(IteratableScope);
   };
+
+  DISALLOW_COPY_AND_ASSIGN(IdentityMap);
 
  protected:
   void** NewPointerArray(size_t length) override {
@@ -182,7 +185,6 @@ class IdentityMap : public IdentityMapBase {
 
  private:
   AllocationPolicy allocator_;
-  DISALLOW_COPY_AND_ASSIGN(IdentityMap);
 };
 
 }  // namespace internal

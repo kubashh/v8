@@ -31,7 +31,6 @@ class EnumCache : public Tuple2 {
   static const int kKeysOffset = kValue1Offset;
   static const int kIndicesOffset = kValue2Offset;
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(EnumCache);
 };
 
@@ -186,6 +185,8 @@ class DescriptorArray : public WeakFixedArray {
     return kFirstIndex + (descriptor_number * kEntrySize) + kEntryValueIndex;
   }
 
+  DISALLOW_IMPLICIT_CONSTRUCTORS(DescriptorArray);
+
  private:
   inline MaybeObject* get(int index) const;
   inline void set(int index, MaybeObject* value);
@@ -196,8 +197,6 @@ class DescriptorArray : public WeakFixedArray {
 
   // Swap first and second descriptor.
   inline void SwapSortedKeys(int first, int second);
-
-  DISALLOW_IMPLICIT_CONSTRUCTORS(DescriptorArray);
 };
 
 }  // namespace internal

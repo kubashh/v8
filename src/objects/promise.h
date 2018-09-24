@@ -40,7 +40,6 @@ class PromiseReactionJobTask : public Microtask {
   DECL_CAST(PromiseReactionJobTask)
   DECL_VERIFIER(PromiseReactionJobTask)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PromiseReactionJobTask);
 };
 
@@ -52,7 +51,6 @@ class PromiseFulfillReactionJobTask : public PromiseReactionJobTask {
   DECL_PRINTER(PromiseFulfillReactionJobTask)
   DECL_VERIFIER(PromiseFulfillReactionJobTask)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PromiseFulfillReactionJobTask);
 };
 
@@ -64,7 +62,6 @@ class PromiseRejectReactionJobTask : public PromiseReactionJobTask {
   DECL_PRINTER(PromiseRejectReactionJobTask)
   DECL_VERIFIER(PromiseRejectReactionJobTask)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PromiseRejectReactionJobTask);
 };
 
@@ -87,7 +84,6 @@ class PromiseResolveThenableJobTask : public Microtask {
   DECL_PRINTER(PromiseResolveThenableJobTask)
   DECL_VERIFIER(PromiseResolveThenableJobTask)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PromiseResolveThenableJobTask);
 };
 
@@ -108,7 +104,6 @@ class PromiseCapability : public Struct {
   DECL_PRINTER(PromiseCapability)
   DECL_VERIFIER(PromiseCapability)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PromiseCapability);
 };
 
@@ -152,7 +147,6 @@ class PromiseReaction : public Struct {
   DECL_PRINTER(PromiseReaction)
   DECL_VERIFIER(PromiseReaction)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(PromiseReaction);
 };
 

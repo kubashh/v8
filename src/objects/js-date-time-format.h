@@ -94,7 +94,6 @@ class JSDateTimeFormat : public JSObject {
   DECL_PRINTER(JSDateTimeFormat)
   DECL_VERIFIER(JSDateTimeFormat)
 
- private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(JSDateTimeFormat);
 };
 
