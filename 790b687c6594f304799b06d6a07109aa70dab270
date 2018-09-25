@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "854eed61_70064c96",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1933,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-25T15:00:49Z",
+      "side": 1,
+      "message": "This case doesn\u0027t quite match the style I\u0027d expect. I realize it\u0027s safe for now, but it could easily become wrong by adding more code between here and the return.",
+      "revId": "790b687c6594f304799b06d6a07109aa70dab270",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "313ba78b_be1dca4d",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-09-25T15:00:49Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "790b687c6594f304799b06d6a07109aa70dab270",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
