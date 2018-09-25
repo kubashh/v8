@@ -2090,9 +2090,13 @@ Node* WasmGraphBuilder::Throw(uint32_t exception_index,
       Operator::kNoProperties, StubCallMode::kCallWasmRuntimeStub);
   Node* call_target = mcgraph()->RelocatableIntPtrConstant(
       wasm::WasmCode::kWasmThrow, RelocInfo::WASM_STUB_CALL);
-  return SetEffect(SetControl(
+  Node* call = SetEffect(SetControl(
       graph()->NewNode(mcgraph()->common()->Call(call_descriptor), call_target,
                        except_obj, Effect(), Control())));
+  Node* throw_node =
+      graph()->NewNode(mcgraph()->common()->Throw(), Effect(), Control());
+  MergeControlToEnd(mcgraph(), throw_node);
+  return call;
 }
 
 void WasmGraphBuilder::BuildEncodeException32BitValue(Node* except_obj,
@@ -2138,9 +2142,13 @@ Node* WasmGraphBuilder::Rethrow(Node* except_obj) {
       Operator::kNoProperties, StubCallMode::kCallWasmRuntimeStub);
   Node* call_target = mcgraph()->RelocatableIntPtrConstant(
       wasm::WasmCode::kWasmThrow, RelocInfo::WASM_STUB_CALL);
-  return SetEffect(SetControl(
+  Node* call = SetEffect(SetControl(
       graph()->NewNode(mcgraph()->common()->Call(call_descriptor), call_target,
                        except_obj, Effect(), Control())));
+  Node* throw_node =
+      graph()->NewNode(mcgraph()->common()->Throw(), Effect(), Control());
+  MergeControlToEnd(mcgraph(), throw_node);
+  return call;
 }
 
 Node* WasmGraphBuilder::ExceptionTagEqual(Node* caught_tag,

@@ -422,7 +422,6 @@ class WasmGraphBuildingInterface {
       args[i] = value_args[i].node;
     }
     BUILD(Throw, imm.index, imm.exception, vec2vec(args));
-    Unreachable(decoder);
     EndControl(decoder, block);
   }
 
@@ -460,7 +459,6 @@ class WasmGraphBuildingInterface {
       // TODO(kschimpf): Generalize to allow more catches. Will force
       // moving no_catch code to END opcode.
       BUILD(Rethrow, exception);
-      Unreachable(decoder);
       EndControl(decoder, block);
     }
 
