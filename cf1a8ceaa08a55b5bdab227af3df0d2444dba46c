@@ -33,6 +33,24 @@
       "revId": "cf1a8ceaa08a55b5bdab227af3df0d2444dba46c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "768e7699_478a5a0f",
+        "filename": "test/intl/regress-888299.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-25T23:10:04Z",
+      "side": 1,
+      "message": "Actually, you only need this:\n\n  var i \u003d 0;\n  new Intl.DateTimeFormat(undefined, {\n    get hour() {\n      if (i \u003d\u003d 0) {\n        i \u003d 1;\n        return \u0027numeric\u0027;\n      }\n    }\n  });",
+      "parentUuid": "a4c64652_52d0c22e",
+      "revId": "cf1a8ceaa08a55b5bdab227af3df0d2444dba46c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
