@@ -424,9 +424,7 @@ WasmCode* NativeModule::AddImportWrapper(Handle<Code> code, uint32_t index) {
 WasmCode* NativeModule::AddInterpreterEntry(Handle<Code> code, uint32_t index) {
   WasmCode* ret = AddAnonymousCode(code, WasmCode::kInterpreterEntry);
   ret->index_ = Just(index);
-  base::LockGuard<base::Mutex> lock(&allocation_mutex_);
-  PatchJumpTable(index, ret->instruction_start(), WasmCode::kFlushICache);
-  set_code(index, ret);
+  InstallCode(ret);
   return ret;
 }
 
@@ -591,15 +589,11 @@ WasmCode* NativeModule::AddDeserializedCode(
   if (!code->protected_instructions_.is_empty()) {
     code->RegisterTrapHandlerData();
   }
-  set_code(index, code);
-  PatchJumpTable(index, code->instruction_start(), WasmCode::kFlushICache);
-  // Note: we do not flush the i-cache here, since the code needs to be
-  // relocated anyway. The caller is responsible for flushing the i-cache later.
+  InstallCode(code);
   return code;
 }
 
 void NativeModule::PublishCode(WasmCode* code) {
-  base::LockGuard<base::Mutex> lock(&allocation_mutex_);
   // Skip publishing code if there is an active redirection to the interpreter
   // for the given function index, in order to preserve the redirection.
   if (has_code(code->index()) &&
@@ -609,10 +603,7 @@ void NativeModule::PublishCode(WasmCode* code) {
   if (!code->protected_instructions_.is_empty()) {
     code->RegisterTrapHandlerData();
   }
-  DCHECK(!code->IsAnonymous());
-  set_code(code->index(), code);
-  PatchJumpTable(code->index(), code->instruction_start(),
-                 WasmCode::kFlushICache);
+  InstallCode(code);
 }
 
 std::vector<WasmCode*> NativeModule::SnapshotCodeTable() const {
@@ -642,12 +633,19 @@ WasmCode* NativeModule::CreateEmptyJumpTable(uint32_t num_wasm_functions) {
                       WasmCode::kOther);         // tier
 }
 
-void NativeModule::PatchJumpTable(uint32_t func_index, Address target,
-                                  WasmCode::FlushICache flush_icache) {
-  DCHECK_LE(module_->num_imported_functions, func_index);
-  uint32_t slot_idx = func_index - module_->num_imported_functions;
+void NativeModule::InstallCode(WasmCode* code) {
+  base::LockGuard<base::Mutex> lock(&allocation_mutex_);
+  DCHECK_LT(code->index(), num_functions());
+  DCHECK_LE(module_->num_imported_functions, code->index());
+
+  // Update code table.
+  code_table_[code->index() - module_->num_imported_functions] = code;
+
+  // Patch jump table.
+  uint32_t slot_idx = code->index() - module_->num_imported_functions;
   JumpTableAssembler::PatchJumpTableSlot(jump_table_->instruction_start(),
-                                         slot_idx, target, flush_icache);
+                                         slot_idx, code->instruction_start(),
+                                         WasmCode::kFlushICache);
 }
 
 Address NativeModule::AllocateForCode(size_t size) {
