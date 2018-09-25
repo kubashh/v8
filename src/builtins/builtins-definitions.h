@@ -1224,6 +1224,7 @@ namespace internal {
   TFC(WasmGrowMemory, WasmGrowMemory, 1)                                       \
   TFC(WasmStackGuard, NoContext, 1)                                            \
   TFC(WasmToNumber, TypeConversion, 1)                                         \
+  TFC(WasmThrow, WasmThrow, 1)                                                 \
   TFS(ThrowWasmTrapUnreachable)                                                \
   TFS(ThrowWasmTrapMemOutOfBounds)                                             \
   TFS(ThrowWasmTrapUnalignedAccess)                                            \
@@ -1495,6 +1496,7 @@ namespace internal {
   V(WasmGrowMemory)                      \
   V(WasmStackGuard)                      \
   V(WasmToNumber)                        \
+  V(WasmThrow)                           \
   V(DoubleToI)
 
 // The exception thrown in the following builtins are caught internally and will
