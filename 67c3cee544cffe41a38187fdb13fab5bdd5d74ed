@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1a90a7e_e71caf92",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-09-25T10:51:48Z",
+      "side": 1,
+      "message": "elif use_stdout:",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 16
+      },
+      "revId": "67c3cee544cffe41a38187fdb13fab5bdd5d74ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
