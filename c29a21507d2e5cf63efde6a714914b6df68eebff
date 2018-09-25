@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e94ebf4_2dd89021",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-25T13:17:33Z",
+      "side": 1,
+      "message": "That\u0027s the stack parameter count, right? Shouldn\u0027t we get this from the interface descriptor, similar to GrowMemory above?",
+      "range": {
+        "startLine": 2087,
+        "startChar": 48,
+        "endLine": 2087,
+        "endChar": 49
+      },
+      "revId": "c29a21507d2e5cf63efde6a714914b6df68eebff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0225475_848d360d",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-25T13:17:33Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 2133,
+        "startChar": 48,
+        "endLine": 2133,
+        "endChar": 49
+      },
+      "revId": "c29a21507d2e5cf63efde6a714914b6df68eebff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
