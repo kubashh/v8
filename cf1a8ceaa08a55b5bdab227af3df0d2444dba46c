@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47df4d4c_56e5805d",
+        "filename": "test/intl/regress-888299.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-25T23:06:53Z",
+      "side": 1,
+      "message": "nit: 2018",
+      "revId": "cf1a8ceaa08a55b5bdab227af3df0d2444dba46c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4c64652_52d0c22e",
+        "filename": "test/intl/regress-888299.js",
+        "patchSetId": 7
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-25T23:06:53Z",
+      "side": 1,
+      "message": "I don\u0027t feel strongly and I leave it to you to decide but I found the following easier to reason about when going through the spec and trying to understand the failure:\n\n  var i \u003d 0;\n  new Intl.DateTimeFormat(undefined, {\n    hour12: undefined,\n    weekday: undefined,\n    era: undefined,\n    year: undefined,\n    month: undefined,\n    day: undefined,\n    minute: undefined,\n    second: undefined,\n    timeZoneName: undefined,\n    get hour() {  if (i \u003d\u003d0 ) { i \u003d 1; return \u0027numeric\u0027} }\n  });",
+      "revId": "cf1a8ceaa08a55b5bdab227af3df0d2444dba46c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
