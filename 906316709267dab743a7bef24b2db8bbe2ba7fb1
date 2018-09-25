@@ -22,6 +22,30 @@
       "revId": "906316709267dab743a7bef24b2db8bbe2ba7fb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7566354f_75c7c1aa",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-25T14:06:40Z",
+      "side": 0,
+      "message": "Oh, haha. Removed it because I thought this applies to the jump table. Re-adding.",
+      "parentUuid": "cc2dd1bf_5a78ce0a",
+      "range": {
+        "startLine": 596,
+        "startChar": 0,
+        "endLine": 597,
+        "endChar": 80
+      },
+      "revId": "906316709267dab743a7bef24b2db8bbe2ba7fb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
