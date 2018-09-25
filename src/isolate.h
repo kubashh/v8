@@ -120,6 +120,10 @@ namespace interpreter {
 class Interpreter;
 }
 
+namespace compiler {
+class CompilerData;
+}
+
 namespace wasm {
 class WasmEngine;
 }
@@ -1464,6 +1468,11 @@ class Isolate : private HiddenFactory {
 
   interpreter::Interpreter* interpreter() const { return interpreter_; }
 
+  compiler::CompilerData* compiler_data() const { return compiler_data_; }
+  void set_compiler_data(compiler::CompilerData* data) {
+    compiler_data_ = data;
+  }
+
   AccountingAllocator* allocator() { return allocator_; }
 
   CompilerDispatcher* compiler_dispatcher() const {
@@ -1757,6 +1766,8 @@ class Isolate : private HiddenFactory {
   const AstStringConstants* ast_string_constants_;
 
   interpreter::Interpreter* interpreter_;
+
+  compiler::CompilerData* compiler_data_;
 
   CompilerDispatcher* compiler_dispatcher_;
 
