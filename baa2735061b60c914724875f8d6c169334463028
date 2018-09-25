@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6de51d0_7ac482b5",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T14:04:10Z",
+      "side": 1,
+      "message": "Should this be \u0027*\u0027 to allow the text before \u0027otherwise\u0027 keyword be a single-character non-whitespace string? E.g.\n\n  \u0027\\n  x otherwise\u0027\n\nwill not match the regexp above.",
+      "range": {
+        "startLine": 28,
+        "startChar": 32,
+        "endLine": 28,
+        "endChar": 33
+      },
+      "revId": "baa2735061b60c914724875f8d6c169334463028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7aed9488_d3abe3b2",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T14:04:10Z",
+      "side": 1,
+      "message": "The following expression will not match:\n\n  \u0027\\n  foobar  otherwise\u0027\n\nbecause it has more than a single character of whitespace between \u0027foobar\u0027 and \u0027otherwise\u0027. If this should be supported please add \u0027+\u0027 after \u0027\\s\u0027.",
+      "range": {
+        "startLine": 28,
+        "startChar": 33,
+        "endLine": 28,
+        "endChar": 35
+      },
+      "revId": "baa2735061b60c914724875f8d6c169334463028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "987ec6fc_92fd020a",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T14:04:10Z",
+      "side": 1,
+      "message": "IIUC the rules above, this will never match since we\u0027ll never replace \u0027otherwise\u0027 with \u0027_OtheSaLi\u0027 unless it\u0027s prefixed with non-whitespace word. Why is this rule necessary then?",
+      "range": {
+        "startLine": 50,
+        "startChar": 20,
+        "endLine": 50,
+        "endChar": 36
+      },
+      "revId": "baa2735061b60c914724875f8d6c169334463028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
