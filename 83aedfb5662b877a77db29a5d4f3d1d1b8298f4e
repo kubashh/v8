@@ -33,6 +33,24 @@
       "revId": "83aedfb5662b877a77db29a5d4f3d1d1b8298f4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6848e65_03111480",
+        "filename": "test/intl/regress-888299.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-09-25T22:21:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07c32a0f_8a995b67",
+      "revId": "83aedfb5662b877a77db29a5d4f3d1d1b8298f4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
