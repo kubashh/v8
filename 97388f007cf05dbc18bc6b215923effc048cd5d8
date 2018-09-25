@@ -22,6 +22,30 @@
       "revId": "97388f007cf05dbc18bc6b215923effc048cd5d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d42b7738_b21ce4e4",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-25T13:36:47Z",
+      "side": 1,
+      "message": "Yes, totally. TSan confirms.\nFixed by requiring the caller to hold the mutex.",
+      "parentUuid": "c075c1fd_8aafafa6",
+      "range": {
+        "startLine": 597,
+        "startChar": 0,
+        "endLine": 602,
+        "endChar": 3
+      },
+      "revId": "97388f007cf05dbc18bc6b215923effc048cd5d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
