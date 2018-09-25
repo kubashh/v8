@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe9d0f28_e5e06371",
+        "filename": "test/intl/regress-888299.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-25T20:57:45Z",
+      "side": 1,
+      "message": "You need to add all the flags as a comment from the clusterfuzz report. The `--expose-gc` flag exposes a gc() function. Please check that this test fails without your change as well.",
+      "revId": "83aedfb5662b877a77db29a5d4f3d1d1b8298f4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07c32a0f_8a995b67",
+        "filename": "test/intl/regress-888299.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-09-25T20:57:45Z",
+      "side": 1,
+      "message": "Can you please make a simpler repro test here? It\u0027s hard to understand this CL from your description as it sounds like just `new Intl.DateTimeFormat()` (ie. no options arg) should just result in an empty string and crash, but I can\u0027t repro this crash by just doing `new Intl.DateTimeFormat()`.",
+      "revId": "83aedfb5662b877a77db29a5d4f3d1d1b8298f4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
