@@ -24,6 +24,10 @@ module array {
         ExtractFixedArray(elements, first, count, capacity));
   }
 
+  macro NewElementsCapacity(capacity: Smi, newLength: Smi): Smi {
+    return SmiMax(CalculateNewElementsCapacity(capacity), newLength);
+  }
+
   macro FastSplice<FixedArrayType: type, ElementType: type>(
       args: constexpr Arguments, a: JSArray, length: Smi, newLength: Smi,
       lengthDelta: Smi, actualStart: Smi, insertCount: Smi,
@@ -35,12 +39,10 @@ module array {
     // If the spliced array is larger then the
     // source array, then allocate a new FixedArrayType to hold the result.
     let newElements: FixedArrayBase = elements;
-    if (elementsMap == kCOWMap || lengthDelta > 0) {
+    if (elementsMap == kCOWMap || elements.length < newLength) {
+      let newCapacity: Smi = NewElementsCapacity(elements.length, newLength);
       newElements =
-          Extract<FixedArrayType>(elements, 0, actualStart, newLength);
-      if (elementsMap == kCOWMap) {
-        newElements.map = elementsMap;
-      }
+          Extract<FixedArrayType>(elements, 0, actualStart, newCapacity);
       a.elements = newElements;
     }
 

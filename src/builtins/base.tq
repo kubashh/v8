@@ -774,6 +774,8 @@ macro AllowNonNumberElements(kind: ElementsKind): ElementsKind {
 extern macro AllocateZeroedFixedArray(intptr): FixedArray;
 extern macro AllocateZeroedFixedDoubleArray(intptr): FixedDoubleArray;
 
+extern macro CalculateNewElementsCapacity(Smi): Smi;
+
 extern macro CopyFixedArrayElements(
     constexpr ElementsKind, FixedArray, constexpr ElementsKind, FixedArray,
     intptr, intptr, intptr): void;
