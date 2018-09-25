@@ -321,7 +321,7 @@ DEFINE_BOOL_READONLY(internalize_on_the_fly, true,
                      "internalize string keys for generic keyed ICs on the fly")
 
 // Flags for optimization types.
-DEFINE_BOOL(optimize_for_size, false,
+DEFINE_BOOL(optimize_for_size, true,
             "Enables optimizations which favor memory size over execution "
             "speed")
 
@@ -908,7 +908,7 @@ DEFINE_BOOL(trace_deopt, false, "trace optimize function deoptimization")
 DEFINE_BOOL(trace_file_names, false,
             "include file names in trace-opt/trace-deopt output")
 DEFINE_BOOL(trace_interrupts, false, "trace interrupts when they are handled")
-DEFINE_BOOL(opt, true, "use adaptive optimizations")
+DEFINE_BOOL(opt, false, "use adaptive optimizations")
 DEFINE_BOOL(always_opt, false, "always try to optimize functions")
 DEFINE_BOOL(always_osr, false, "always try to OSR functions")
 DEFINE_BOOL(prepare_always_opt, false, "prepare for turning on always opt")
@@ -990,7 +990,7 @@ DEFINE_BOOL(sampling_heap_profiler_suppress_randomness, false,
 DEFINE_BOOL(use_idle_notification, true,
             "Use idle notification to reduce memory footprint.")
 // ic.cc
-DEFINE_BOOL(use_ic, true, "use inline caching")
+DEFINE_BOOL(use_ic, false, "use inline caching")
 DEFINE_BOOL(trace_ic, false,
             "trace inline cache state transitions for tools/ic-processor")
 DEFINE_IMPLICATION(trace_ic, log_code)
