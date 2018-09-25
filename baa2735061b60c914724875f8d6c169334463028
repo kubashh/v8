@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "d238f22e_dddb787c",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-09-25T14:32:21Z",
+      "side": 1,
+      "message": "Done. Good catch. Changed to a *, now both examples match.",
+      "parentUuid": "7aed9488_d3abe3b2",
+      "range": {
+        "startLine": 28,
+        "startChar": 33,
+        "endLine": 28,
+        "endChar": 35
+      },
+      "revId": "baa2735061b60c914724875f8d6c169334463028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "20712ec6_89ba17dd",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-09-25T14:32:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6de51d0_7ac482b5",
+      "range": {
+        "startLine": 28,
+        "startChar": 32,
+        "endLine": 28,
+        "endChar": 33
+      },
+      "revId": "baa2735061b60c914724875f8d6c169334463028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "987ec6fc_92fd020a",
         "filename": "tools/torque/format-torque.py",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2018-09-25T14:04:10Z",
       "side": 1,
       "message": "IIUC the rules above, this will never match since we\u0027ll never replace \u0027otherwise\u0027 with \u0027_OtheSaLi\u0027 unless it\u0027s prefixed with non-whitespace word. Why is this rule necessary then?",
+      "range": {
+        "startLine": 50,
+        "startChar": 20,
+        "endLine": 50,
+        "endChar": 36
+      },
+      "revId": "baa2735061b60c914724875f8d6c169334463028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ae7c8db_9c0e6a6e",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-09-25T14:32:21Z",
+      "side": 1,
+      "message": "Between the preprocess and postprocess step, clang-format runs the typescript formatter over the file, which in this case may move the otherwise (i.e. the _OtherSaLi) to the next line. In this the case, the formatting of the otherwise is correct. In the case that the otherwise was already on the next line, the formatting is done incorrectly by the clang-format, and, with the rule above, extra space needs to be inserted.",
+      "parentUuid": "987ec6fc_92fd020a",
       "range": {
         "startLine": 50,
         "startChar": 20,
