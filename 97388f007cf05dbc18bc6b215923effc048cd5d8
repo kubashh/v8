@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c075c1fd_8aafafa6",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-09-25T10:53:01Z",
+      "side": 1,
+      "message": "I think this check is now racing with the locked {InstallCode} below. It one thread performs this check, another thread could in between install a redirection before the mutex in {InstallCode} is taken. WDYT?",
+      "range": {
+        "startLine": 597,
+        "startChar": 0,
+        "endLine": 602,
+        "endChar": 3
+      },
+      "revId": "97388f007cf05dbc18bc6b215923effc048cd5d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
