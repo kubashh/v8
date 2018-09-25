@@ -2,6 +2,138 @@
   "comments": [
     {
       "key": {
+        "uuid": "74d1098a_56195a54",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T11:52:03Z",
+      "side": 1,
+      "message": "nit: line too long",
+      "revId": "67c3cee544cffe41a38187fdb13fab5bdd5d74ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fabcd02_56b60e70",
+        "filename": "tools/presubmit.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T11:52:03Z",
+      "side": 1,
+      "message": "nit: no need for semicolon",
+      "range": {
+        "startLine": 112,
+        "startChar": 13,
+        "endLine": 112,
+        "endChar": 14
+      },
+      "revId": "67c3cee544cffe41a38187fdb13fab5bdd5d74ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ef77f76_e500e466",
+        "filename": "tools/presubmit.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T11:52:03Z",
+      "side": 1,
+      "message": "nit: parentheses not required",
+      "range": {
+        "startLine": 116,
+        "startChar": 7,
+        "endLine": 116,
+        "endChar": 8
+      },
+      "revId": "67c3cee544cffe41a38187fdb13fab5bdd5d74ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaf7fb17_9a1a5e83",
+        "filename": "tools/presubmit.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T11:52:03Z",
+      "side": 1,
+      "message": "nit: \"path\" is probably a better name for this var, links are usually URLs",
+      "range": {
+        "startLine": 313,
+        "startChar": 11,
+        "endLine": 313,
+        "endChar": 15
+      },
+      "revId": "67c3cee544cffe41a38187fdb13fab5bdd5d74ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3917cd8_20c01b13",
+        "filename": "tools/presubmit.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T11:52:03Z",
+      "side": 1,
+      "message": "Looking at the code above, it\u0027s searching for format-torque in the tools directory of V8 repo, so not sure that this error message is correct.",
+      "range": {
+        "startLine": 331,
+        "startChar": 13,
+        "endLine": 331,
+        "endChar": 37
+      },
+      "revId": "67c3cee544cffe41a38187fdb13fab5bdd5d74ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f0b8a77_1433b1b3",
+        "filename": "tools/presubmit.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T11:52:03Z",
+      "side": 1,
+      "message": "This is equivalent to not having a timeout. Please just omit the parameter.",
+      "range": {
+        "startLine": 340,
+        "startChar": 63,
+        "endLine": 340,
+        "endChar": 69
+      },
+      "revId": "67c3cee544cffe41a38187fdb13fab5bdd5d74ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c1a90a7e_e71caf92",
         "filename": "tools/torque/format-torque.py",
         "patchSetId": 5
