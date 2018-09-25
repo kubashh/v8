@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "301d9c80_ded7a413",
+        "filename": "src/compiler/refs-map.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-25T15:20:05Z",
+      "side": 1,
+      "message": "Wrappers",
+      "range": {
+        "startLine": 36,
+        "startChar": 5,
+        "endLine": 36,
+        "endChar": 14
+      },
+      "revId": "00a0ee05c01e569dfb259961563a7cb11324b54e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33546252_edfd8545",
+        "filename": "src/compiler/refs-map.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-25T15:20:05Z",
+      "side": 1,
+      "message": "Can\u0027t you make define this alias with \u0027using\u0027 inside the cc file? It\u0027s not needed in the header.",
+      "revId": "00a0ee05c01e569dfb259961563a7cb11324b54e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

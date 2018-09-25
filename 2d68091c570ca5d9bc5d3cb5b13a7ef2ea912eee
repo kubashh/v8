@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "c455c0b0_064767ae",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-25T15:20:05Z",
+      "side": 1,
+      "message": "I think compiler pass usually means a one iteration over the AST/IR. Some compilers are so simple that they require only a single pass, TF not quite. (Maybe Fullcodegen only needed one?)",
+      "parentUuid": "82ef451a_d0c19134",
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6acdd3ad_07e2aabc",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 5
