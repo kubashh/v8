@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "7a8e5826_e820126b",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T14:53:37Z",
+      "side": 1,
+      "message": "Ah, I see why it works now and would have worked before. It is because spaces can be captured by the group before \\s as it only requires them to be non-newline.",
+      "parentUuid": "d238f22e_dddb787c",
+      "range": {
+        "startLine": 28,
+        "startChar": 33,
+        "endLine": 28,
+        "endChar": 35
+      },
+      "revId": "baa2735061b60c914724875f8d6c169334463028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "987ec6fc_92fd020a",
         "filename": "tools/torque/format-torque.py",
         "patchSetId": 2
@@ -140,6 +164,30 @@
       "revId": "baa2735061b60c914724875f8d6c169334463028",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a00562d_ed4a7355",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T14:53:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6ae7c8db_9c0e6a6e",
+      "range": {
+        "startLine": 50,
+        "startChar": 20,
+        "endLine": 50,
+        "endChar": 36
+      },
+      "revId": "baa2735061b60c914724875f8d6c169334463028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

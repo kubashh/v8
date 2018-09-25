@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b3f960a_c3258508",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-09-25T14:53:37Z",
+      "side": 1,
+      "message": "sorry, but another nit: please rewrite like this:\n\n  if not TorqueFormatProcessor().RunOnFiles(\n      input_api.AffectedFiles(\n          file_filter\u003dFilterTorqueFile, include_deletes\u003dFalse)):\n\nor like this:\n\n  if not TorqueFormatProcessor().RunOnFiles(\n      input_api.AffectedFiles(file_filter\u003dFilterTorqueFile,\n                              include_deletes\u003dFalse)):\n\nto stay consistent with the infra Python style",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 30
+      },
+      "revId": "c397b6916f652ead4d082f59292a96dbbaf5fa9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
