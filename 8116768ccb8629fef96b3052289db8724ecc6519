@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f472b392_94523a18",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-09-25T08:48:08Z",
+      "side": 1,
+      "message": "Nit: Could you add a \nDCHECK(type \u003d\u003d MachineType::Uint32() || type \u003d\u003d MachineType::Uint16() || type \u003d\u003d MachineType::Uint8());\n?",
+      "revId": "8116768ccb8629fef96b3052289db8724ecc6519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
