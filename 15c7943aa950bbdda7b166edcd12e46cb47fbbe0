@@ -192,6 +192,23 @@
       "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf120672_40ecbbf4",
+        "filename": "src/compiler/refs-map.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:49:35Z",
+      "side": 1,
+      "message": "You can remove this here and just pass a lambda [](){return nullptr;} in the constructor call in refs-map.cc",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
