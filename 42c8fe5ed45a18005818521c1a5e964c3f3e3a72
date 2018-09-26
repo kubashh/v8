@@ -22,6 +22,30 @@
       "revId": "42c8fe5ed45a18005818521c1a5e964c3f3e3a72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ade0e93f_24d2c394",
+        "filename": "gni/v8.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-09-26T11:49:56Z",
+      "side": 1,
+      "message": "It\u0027s a no opt if nothing is set. But I this is only relevant for executables and libraries.\n\nIs there a better place to put this?",
+      "parentUuid": "eaed828a_b0aca56c",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 0
+      },
+      "revId": "42c8fe5ed45a18005818521c1a5e964c3f3e3a72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
