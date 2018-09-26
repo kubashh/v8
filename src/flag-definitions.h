@@ -920,7 +920,7 @@ DEFINE_BOOL(external_reference_stats, false,
 #endif  // DEBUG
 
 // compilation-cache.cc
-DEFINE_BOOL(compilation_cache, true, "enable compilation cache")
+DEFINE_BOOL(compilation_cache, false, "enable compilation cache")
 
 DEFINE_BOOL(cache_prototype_transitions, true, "cache prototype transitions")
 
