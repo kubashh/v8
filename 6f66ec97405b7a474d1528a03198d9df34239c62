@@ -93,6 +93,30 @@
       "revId": "6f66ec97405b7a474d1528a03198d9df34239c62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "621b1586_1e86b3e7",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-09-26T17:41:32Z",
+      "side": 1,
+      "message": "Just checked both vector and deque report max_size() of 18446744073709551615 bytes on x64, and 4294967295 bytes on x32. I\u0027ll go ahead and land it as is. If you still have concerns about 2GB limit we can discuss it and revert the children storage back to deque.",
+      "parentUuid": "910b1529_50d80cf0",
+      "range": {
+        "startLine": 216,
+        "startChar": 7,
+        "endLine": 216,
+        "endChar": 13
+      },
+      "revId": "6f66ec97405b7a474d1528a03198d9df34239c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
