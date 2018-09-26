@@ -4,6 +4,7 @@
 
 #include "src/builtins/builtins-string-gen.h"
 
+#include "src/builtins/builtins-iterator-gen.h"
 #include "src/builtins/builtins-regexp-gen.h"
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
@@ -2359,8 +2360,8 @@ TF_BUILTIN(StringPrototypeIterator, CodeStubAssembler) {
       ToThisString(context, receiver, "String.prototype[Symbol.iterator]");
 
   Node* native_context = LoadNativeContext(context);
-  Node* map =
-      LoadContextElement(native_context, Context::STRING_ITERATOR_MAP_INDEX);
+  Node* map = LoadContextElement(native_context,
+                                 Context::INITIAL_STRING_ITERATOR_MAP_INDEX);
   Node* iterator = Allocate(JSStringIterator::kSize);
   StoreMapNoWriteBarrier(iterator, map);
   StoreObjectFieldRoot(iterator, JSValue::kPropertiesOrHashOffset,
@@ -2491,6 +2492,116 @@ TF_BUILTIN(StringIteratorPrototypeNext, StringBuiltinsAssembler) {
     ThrowTypeError(context, MessageTemplate::kIncompatibleMethodReceiver,
                    StringConstant("String Iterator.prototype.next"), iterator);
   }
+}
+
+// TODO(dhai): fix code duplication of this function with
+// GetIterator/IterableToList.
+TNode<BoolT> StringBuiltinsAssembler::IsStringWithNoCustomIteration(
+    TNode<Object> object, TNode<Context> context) {
+  Label if_false(this, Label::kDeferred), exit(this);
+  TVARIABLE(BoolT, var_result);
+
+  // Is this a string?
+  GotoIf(TaggedIsSmi(object), &if_false);
+  GotoIfNot(IsString(CAST(object)), &if_false);
+
+  // Load object[Symbol.iterator] and check if it's a function.
+  IteratorBuiltinsAssembler iterator_assembler(state());
+  TNode<Object> iterator_fn =
+      iterator_assembler.GetIteratorMethod(context, object);
+  GotoIf(TaggedIsSmi(iterator_fn), &if_false);
+  GotoIfNot(IsJSFunction(CAST(iterator_fn)), &if_false);
+
+  TNode<Context> native_context = LoadNativeContext(context);
+  // Check if the iterator function we got is the original one.
+  TNode<JSFunction> init_str_iter_fn = CAST(LoadContextElement(
+      native_context, Context::INITIAL_STRING_ITERATOR_FUN_INDEX));
+  GotoIf(WordNotEqual(iterator_fn, init_str_iter_fn), &if_false);
+
+  // Check if the string iterator prototype is unchanged.
+  TNode<Map> current_map = LoadMap(CAST(LoadContextElement(
+      native_context, Context::INITIAL_STRING_ITERATOR_PROTOTYPE_INDEX)));
+  TNode<Map> original_map = CAST(LoadContextElement(
+      native_context, Context::INITIAL_STRING_ITERATOR_PROTOTYPE_MAP_INDEX));
+  var_result = WordEqual(current_map, original_map);
+
+  Goto(&exit);
+
+  BIND(&if_false);
+  {
+    var_result = Int32FalseConstant();
+    Goto(&exit);
+  }
+
+  BIND(&exit);
+  return var_result.value();
+}
+
+TNode<JSArray> StringBuiltinsAssembler::StringToList(TNode<Context> context,
+                                                     TNode<String> string) {
+  CSA_ASSERT(this, IsStringWithNoCustomIteration(string, context));
+  const ElementsKind kind = PACKED_ELEMENTS;
+  TNode<IntPtrT> length = LoadStringLengthAsWord(string);
+  TNode<FixedArray> new_elements = AllocateZeroedFixedArray(length);
+
+  // The loop construction is extracted from CopyFixedArrayElements and
+  // StringIteratorPrototypeNext.
+  STATIC_ASSERT(FixedArray::kHeaderSize == FixedDoubleArray::kHeaderSize);
+  const int first_element_offset = FixedArray::kHeaderSize - kHeapObjectTag;
+  TNode<IntPtrT> first_to_element_offset =
+      ElementOffsetFromIndex(IntPtrConstant(0), kind, INTPTR_PARAMETERS, 0);
+  VARIABLE(
+      var_offset, MachineType::PointerRepresentation(),
+      IntPtrAdd(first_to_element_offset, IntPtrConstant(first_element_offset)));
+  TVARIABLE(IntPtrT, var_position, IntPtrConstant(0));
+  Label done(this), next_codepoint(this, {&var_position, &var_offset});
+
+  // Loop condition.
+  Branch(IntPtrLessThan(var_position.value(), length), &next_codepoint, &done);
+
+  BIND(&next_codepoint);
+  {
+    UnicodeEncoding encoding = UnicodeEncoding::UTF16;
+    TNode<Int32T> ch =
+        LoadSurrogatePairAt(string, length, var_position.value(), encoding);
+    TNode<String> value = StringFromSingleCodePoint(ch, encoding);
+
+    // TODO(dhai): when can we skip the barrier?
+    bool needs_write_barrier = true;
+    if (needs_write_barrier) {
+      Store(new_elements, var_offset.value(), value);
+    } else {
+      StoreNoWriteBarrier(MachineRepresentation::kTagged, new_elements,
+                          var_offset.value(), value);
+    }
+
+    // Increment the position.
+    TNode<IntPtrT> ch_length = LoadStringLengthAsWord(value);
+    var_position = IntPtrAdd(var_position.value(), ch_length);
+    // Loop condition.
+    GotoIfNot(IntPtrLessThan(var_position.value(), length), &done);
+
+    // Increment the array offset and continue the loop.
+    var_offset.Bind(
+        IntPtrAdd(var_offset.value(), IntPtrConstant(kPointerSize)));
+    Goto(&next_codepoint);
+  }
+
+  BIND(&done);
+  Node* native_context = LoadNativeContext(context);
+  Node* array_map = LoadJSArrayElementsMap(kind, native_context);
+
+  Node* result =
+      AllocateUninitializedJSArrayWithoutElements(array_map, SmiTag(length));
+  StoreObjectField(result, JSObject::kElementsOffset, new_elements);
+  return UncheckedCast<JSArray>(result);
+}
+
+TF_BUILTIN(StringToList, StringBuiltinsAssembler) {
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<String> string = CAST(Parameter(Descriptor::kSource));
+
+  Return(StringToList(context, string));
 }
 
 // -----------------------------------------------------------------------------
