@@ -920,6 +920,7 @@ ResourceConstraints::ResourceConstraints()
 
 void ResourceConstraints::ConfigureDefaults(uint64_t physical_memory,
                                             uint64_t virtual_memory_limit) {
+  physical_memory = 256 * i::MB;
   set_max_semi_space_size_in_kb(
       i::Heap::ComputeMaxSemiSpaceSize(physical_memory));
   set_max_old_space_size(i::Heap::ComputeMaxOldGenerationSize(physical_memory));
