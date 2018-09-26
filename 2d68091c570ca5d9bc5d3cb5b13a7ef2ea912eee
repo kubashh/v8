@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "0218dbe9_77d30555",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-26T13:58:18Z",
+      "side": 1,
+      "message": "Okay, fixing the wording.",
+      "parentUuid": "5e04755e_d038eefe",
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e757a2b_72c60520",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 5
@@ -128,6 +146,30 @@
       "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c594076e_a6d52cc0",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-26T13:58:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e757a2b_72c60520",
+      "range": {
+        "startLine": 1332,
+        "startChar": 2,
+        "endLine": 1339,
+        "endChar": 3
+      },
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
