@@ -1,0 +1,192 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ca101ab_dc7b2ccd",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2116,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "Let\u0027s call this string_iterator_function.",
+      "range": {
+        "startLine": 2116,
+        "startChar": 23,
+        "endLine": 2116,
+        "endChar": 54
+      },
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8446fb38_425ea869",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2121,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 2121,
+        "startChar": 9,
+        "endLine": 2121,
+        "endChar": 40
+      },
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5413110_a973e7b7",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "... and one for strings.",
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b88baf30_3414ab69",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "The same is true for arrays, so we don\u0027t need to mention that explicitly.",
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08f462c2_a733c653",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "Please clarify what is meant here or maybe just do it.",
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53c249da_55731573",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "This comment is not very useful (anymore?).",
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6399ac9_8704354e",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "\"StringToListFast\" sounds a little better. Just \"StringToList\" would be fine too.",
+      "range": {
+        "startLine": 290,
+        "startChar": 30,
+        "endLine": 290,
+        "endChar": 47
+      },
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8061bda8_81e65f78",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "Nit: put empty line above.",
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfca2b16_fe8956fc",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2555,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "We should assert IsStringWithNoCustomIteration here.",
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3905f787_2b52a2a0",
+        "filename": "src/builtins/builtins-string-gen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T11:35:50Z",
+      "side": 1,
+      "message": "Let\u0027s remove the last argument for now and give types to the others.",
+      "revId": "8aa7aaa2a7a9da7efa664d3b5820b306c69833ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
