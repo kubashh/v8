@@ -1,0 +1,197 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23271c5d_ba6759f1",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "This feels like it doesn\u0027t belong into the broker. Could you put it into a static function on PerIsolateCompilerCache, e.g.:\nstatic void PerIsolateCompilerCache::Setup(Isolate* isolate);",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29fb355d_722933de",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "This function is not supposed to be called more than once, so please replace the inner conditional with a CHECK_NULL(refs_).",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dd9e748_c1f1cf8b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "To make the code structure clearer please remove the else-branch and move the refs_ creation down below the Trace.\n\nSo overall it will look like this:\n\nif broker disabled, do stuff and return;\nif snapshot exists, do stuff and return;\nnow build the snapshot",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5edbdf1a_02a0f3e5",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "Please use\nTraceScope tracer(this, \"JSHeapBroker::SerializeShareableObjects\");\n\nMaybe even\nTraceScope tracer(this, \"JSHeapBroker::SerializeShareableObjects (building snapshot)\");",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4dfb08d_c5940aa0",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "This check can then be removed as obviously a newly created RefsMap is empty.",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e294ed5e_99150148",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "Nit: move the * into the parentheses or remove the parentheses or, my preference, write *data_storage \u003d\u003d nullptr",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bd1d6c6_6f8a0375",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2105,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a3a8ecc_f6fd5643",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "Please put a comment here (or into refs-map.h) explaining why we don\u0027t use the std hash table.",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "243e84d6_f7703c55",
+        "filename": "src/compiler/per-isolate-compiler-cache.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "unused",
+      "range": {
+        "startLine": 26,
+        "startChar": 26,
+        "endLine": 26,
+        "endChar": 42
+      },
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9ea56bb_c63f1ba4",
+        "filename": "src/compiler/per-isolate-compiler-cache.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "Let\u0027s put a DCHECK_NULL(refs_snapshot_) above, we should never overwrite a snapshot.",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf7581eb_45b9aacd",
+        "filename": "src/compiler/per-isolate-compiler-cache.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T07:45:47Z",
+      "side": 1,
+      "message": "Now the IsEmpty is a bit strange here. The PerIsolateCompilerCache shouldn\u0027t care about the contents of the map. You could perhaps add a DCHECK(refs-\u003eIsEmpty()) to SetSnapshot, though, as a sanity check.",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
