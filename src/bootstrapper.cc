@@ -2113,10 +2113,12 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     SimpleInstallFunction(isolate_, prototype, "valueOf",
                           Builtins::kStringPrototypeValueOf, 0, true);
 
-    SimpleInstallFunction(isolate_, prototype, factory->iterator_symbol(),
-                          "[Symbol.iterator]",
-                          Builtins::kStringPrototypeIterator, 0, true,
-                          DONT_ENUM, BuiltinFunctionId::kStringIterator);
+    Handle<JSFunction> string_iterator_function = SimpleInstallFunction(
+        isolate_, prototype, factory->iterator_symbol(), "[Symbol.iterator]",
+        Builtins::kStringPrototypeIterator, 0, true, DONT_ENUM,
+        BuiltinFunctionId::kStringIterator);
+    native_context()->set_initial_string_iterator_fun(
+        *string_iterator_function);
   }
 
   {  // --- S t r i n g I t e r a t o r ---
@@ -2141,8 +2143,13 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
         JS_STRING_ITERATOR_TYPE, JSStringIterator::kSize, 0,
         string_iterator_prototype, Builtins::kIllegal);
     string_iterator_function->shared()->set_native(false);
-    native_context()->set_string_iterator_map(
+
+    native_context()->set_initial_string_iterator_map(
         string_iterator_function->initial_map());
+    native_context()->set_initial_string_iterator_prototype(
+        *string_iterator_prototype);
+    native_context()->set_initial_string_iterator_prototype_map(
+        string_iterator_prototype->map());
   }
 
   {  // --- S y m b o l ---
