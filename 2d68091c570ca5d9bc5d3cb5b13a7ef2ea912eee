@@ -90,6 +90,47 @@
     },
     {
       "key": {
+        "uuid": "5e04755e_d038eefe",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-26T07:39:21Z",
+      "side": 1,
+      "message": "Right. Bytecode generator also needs only one pass.",
+      "parentUuid": "c455c0b0_064767ae",
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e757a2b_72c60520",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-09-26T07:39:21Z",
+      "side": 1,
+      "message": "I am wondering whether we could do this in SerializeStandardObjects rather than here. The code seems unrelated to broker construction.\n\nAlso, how is the compiler zone freed? I think we should store the compiler zone in the isolate and free it on isolate tear-down.",
+      "range": {
+        "startLine": 1332,
+        "startChar": 2,
+        "endLine": 1339,
+        "endChar": 3
+      },
+      "revId": "2d68091c570ca5d9bc5d3cb5b13a7ef2ea912eee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6acdd3ad_07e2aabc",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 5
