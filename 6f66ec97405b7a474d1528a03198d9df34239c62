@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3618e012_11fe8331",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-09-26T15:55:33Z",
+      "side": 1,
+      "message": "We\u0027d like to have it built lazily just in case the client never uses it. There\u0027s a DCHECK at 226. I\u0027ll put a CHECK here as well.",
+      "parentUuid": "f4d567c2_b9ea0be2",
+      "range": {
+        "startLine": 246,
+        "startChar": 1,
+        "endLine": 251,
+        "endChar": 3
+      },
+      "revId": "6f66ec97405b7a474d1528a03198d9df34239c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "07ff6a09_2184819e",
         "filename": "src/profiler/heap-snapshot-generator.h",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2018-09-26T04:01:36Z",
       "side": 1,
       "message": "What is the motivation for making it vector?\n\nI think edges_ and children_ are deques to work around 2GB limit that malloc imposes on vectors.\n\nSo this change will decrease the max heap size we can handle.",
+      "range": {
+        "startLine": 216,
+        "startChar": 7,
+        "endLine": 216,
+        "endChar": 13
+      },
+      "revId": "6f66ec97405b7a474d1528a03198d9df34239c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "910b1529_50d80cf0",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-09-26T15:55:33Z",
+      "side": 1,
+      "message": "We know the size of children by the time we allocate it. So it\u0027s nice to have them in a single chunk. Never heard about the limit. Where\u0027s it specified?",
+      "parentUuid": "07ff6a09_2184819e",
       "range": {
         "startLine": 216,
         "startChar": 7,
