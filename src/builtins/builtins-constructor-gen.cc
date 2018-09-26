@@ -361,11 +361,11 @@ Node* ConstructorBuiltinsAssembler::EmitCreateShallowArrayLiteral(
   TNode<JSArray> boilerplate = CAST(LoadBoilerplate(allocation_site));
 
   ParameterMode mode = OptimalParameterMode();
-  if (allocation_site_mode == TRACK_ALLOCATION_SITE) {
-    return CloneFastJSArray(context, boilerplate, mode, allocation_site);
-  } else {
-    return CloneFastJSArray(context, boilerplate, mode);
-  }
+  // if (allocation_site_mode == TRACK_ALLOCATION_SITE) {
+  //   return CloneFastJSArray(context, boilerplate, mode, allocation_site);
+  // } else {
+  return CloneFastJSArray(context, boilerplate, mode);
+  // }
 }
 
 TF_BUILTIN(CreateShallowArrayLiteral, ConstructorBuiltinsAssembler) {

@@ -2393,7 +2393,7 @@ IGNITION_HANDLER(CreateArrayLiteral, InterpreterAssembler) {
     ConstructorBuiltinsAssembler constructor_assembler(state());
     Node* result = constructor_assembler.EmitCreateShallowArrayLiteral(
         feedback_vector, slot_id, context, &call_runtime,
-        TRACK_ALLOCATION_SITE);
+        DONT_TRACK_ALLOCATION_SITE);
     SetAccumulator(result);
     Dispatch();
   }

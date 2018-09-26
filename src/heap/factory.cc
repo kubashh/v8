@@ -134,11 +134,11 @@ HeapObject* Factory::AllocateRawWithAllocationSite(
   WriteBarrierMode write_barrier_mode =
       space == NEW_SPACE ? SKIP_WRITE_BARRIER : UPDATE_WRITE_BARRIER;
   result->set_map_after_allocation(*map, write_barrier_mode);
-  if (!allocation_site.is_null()) {
-    AllocationMemento* alloc_memento = reinterpret_cast<AllocationMemento*>(
-        reinterpret_cast<Address>(result) + map->instance_size());
-    InitializeAllocationMemento(alloc_memento, *allocation_site);
-  }
+  // if (!allocation_site.is_null()) {
+  //   AllocationMemento* alloc_memento = reinterpret_cast<AllocationMemento*>(
+  //       reinterpret_cast<Address>(result) + map->instance_size());
+  //   InitializeAllocationMemento(alloc_memento, *allocation_site);
+  // }
   return result;
 }
 
@@ -1910,11 +1910,11 @@ Handle<JSObject> Factory::CopyJSObjectWithAllocationSite(
   Heap::CopyBlock(raw_clone->address(), source->address(), object_size);
   Handle<JSObject> clone(JSObject::cast(raw_clone), isolate());
 
-  if (!site.is_null()) {
-    AllocationMemento* alloc_memento = reinterpret_cast<AllocationMemento*>(
-        reinterpret_cast<Address>(raw_clone) + object_size);
-    InitializeAllocationMemento(alloc_memento, *site);
-  }
+  // if (!site.is_null()) {
+  //   AllocationMemento* alloc_memento = reinterpret_cast<AllocationMemento*>(
+  //       reinterpret_cast<Address>(raw_clone) + object_size);
+  //   InitializeAllocationMemento(alloc_memento, *site);
+  // }
 
   SLOW_DCHECK(clone->GetElementsKind() == source->GetElementsKind());
   FixedArrayBase* elements = FixedArrayBase::cast(source->elements());
