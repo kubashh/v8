@@ -524,6 +524,24 @@
       "revId": "376f31df7f85d232b45b96d56dd6d89c85a6eb28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91579982_e3d5aa2b",
+        "filename": "test/mjsunit/string-iterator2.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T13:14:17Z",
+      "side": 1,
+      "message": "You can just do\nstr[Symbol.iterator] \u003d function() { return ... }",
+      "parentUuid": "658627b1_0347e303",
+      "revId": "376f31df7f85d232b45b96d56dd6d89c85a6eb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
