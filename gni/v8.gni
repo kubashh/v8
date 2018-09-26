@@ -128,6 +128,8 @@ if (!build_with_chromium && is_clang) {
   v8_remove_configs += [ "//build/config/clang:find_bad_constructs" ]
 }
 
+v8_add_configs += [ "//build/config/compiler/pgo:default_pgo_flags" ]
+
 # All templates should be kept in sync.
 template("v8_source_set") {
   if (defined(invoker.split_count) && invoker.split_count > 1 &&
