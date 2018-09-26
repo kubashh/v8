@@ -512,7 +512,7 @@ inline uint32_t ComputeLongHash(uint64_t key) {
 }
 
 inline uint32_t ComputeSeededHash(uint32_t key, uint64_t seed) {
-  return ComputeUnseededHash(key ^ static_cast<uint32_t>(seed));
+  return ComputeLongHash(static_cast<uint64_t>(key) ^ seed);
 }
 
 inline uint32_t ComputePointerHash(void* ptr) {

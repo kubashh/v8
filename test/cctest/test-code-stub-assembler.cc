@@ -344,7 +344,9 @@ TEST(ComputeIntegerHash) {
     Handle<Smi> key(Smi::FromInt(k), isolate);
     Handle<Object> result = ft.Call(key).ToHandleChecked();
 
-    uint32_t hash = ComputeSeededHash(k, isolate->heap()->HashSeed());
+    const uint32_t kSmiMask = (1 << kSmiValueSize) - 1);
+    uint32_t hash =
+        ComputeSeededHash(k, isolate->heap()->HashSeed()) & kSmiMask;
     Smi* expected = Smi::FromInt(hash & Smi::kMaxValue);
     CHECK_EQ(expected, Smi::cast(*result));
   }
