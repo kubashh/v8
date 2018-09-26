@@ -1339,6 +1339,17 @@ void BytecodeGraphBuilder::VisitLdaNamedProperty() {
   environment()->BindAccumulator(node, Environment::kAttachFrameState);
 }
 
+void BytecodeGraphBuilder::VisitLdaNamedPropertyNoFeedback() {
+  PrepareEagerCheckpoint();
+  Node* object =
+      environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
+  Handle<Name> name(
+      Name::cast(bytecode_iterator().GetConstantForIndexOperand(1)), isolate());
+  const Operator* op = javascript()->LoadNamed(name, VectorSlotPair());
+  Node* node = NewNode(op, object);
+  environment()->BindAccumulator(node, Environment::kAttachFrameState);
+}
+
 void BytecodeGraphBuilder::VisitLdaKeyedProperty() {
   PrepareEagerCheckpoint();
   Node* key = environment()->LookupAccumulator();
@@ -1400,6 +1411,21 @@ void BytecodeGraphBuilder::BuildNamedStore(StoreMode store_mode) {
 
 void BytecodeGraphBuilder::VisitStaNamedProperty() {
   BuildNamedStore(StoreMode::kNormal);
+}
+
+void BytecodeGraphBuilder::VisitStaNamedPropertyNoFeedback() {
+  PrepareEagerCheckpoint();
+  Node* value = environment()->LookupAccumulator();
+  Node* object =
+      environment()->LookupRegister(bytecode_iterator().GetRegisterOperand(0));
+  Handle<Name> name(
+      Name::cast(bytecode_iterator().GetConstantForIndexOperand(1)), isolate());
+  LanguageMode language_mode =
+      static_cast<LanguageMode>(bytecode_iterator().GetFlagOperand(2));
+  const Operator* op =
+      javascript()->StoreNamed(language_mode, name, VectorSlotPair());
+  Node* node = NewNode(op, object, value);
+  environment()->RecordAfterState(node, Environment::kAttachFrameState);
 }
 
 void BytecodeGraphBuilder::VisitStaNamedOwnProperty() {
@@ -1791,19 +1817,19 @@ void BytecodeGraphBuilder::VisitCallAnyReceiver() {
 }
 
 void BytecodeGraphBuilder::VisitCallNoFeedback() {
-  PrepareEagerCheckpoint();
-  // CallNoFeedback is emitted only for one-shot code. Normally the compiler
-  // will not have to optimize one-shot code. But when the --always-opt or
-  // --stress-opt flags are set compiler is forced to optimize one-shot code.
-  // Emiting SoftDeopt to prevent compiler from inlining CallNoFeedback in
-  // one-shot.
-  Node* effect = environment()->GetEffectDependency();
-  Node* control = environment()->GetControlDependency();
+  // PrepareEagerCheckpoint();
+  // // CallNoFeedback is emitted only for one-shot code. Normally the compiler
+  // // will not have to optimize one-shot code. But when the --always-opt or
+  // // --stress-opt flags are set compiler is forced to optimize one-shot code.
+  // // Emiting SoftDeopt to prevent compiler from inlining CallNoFeedback in
+  // // one-shot.
+  // Node* effect = environment()->GetEffectDependency();
+  // Node* control = environment()->GetControlDependency();
 
-  JSTypeHintLowering::LoweringResult deoptimize =
-      type_hint_lowering().BuildSoftDeopt(effect, control,
-                                          DeoptimizeReason::kDeoptimizeNow);
-  ApplyEarlyReduction(deoptimize);
+  // JSTypeHintLowering::LoweringResult deoptimize =
+  //     type_hint_lowering().BuildSoftDeopt(effect, control,
+  //                                         DeoptimizeReason::kDeoptimizeNow);
+  // ApplyEarlyReduction(deoptimize);
 }
 
 void BytecodeGraphBuilder::VisitCallProperty() {
