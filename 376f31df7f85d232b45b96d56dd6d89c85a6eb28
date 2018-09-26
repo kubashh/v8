@@ -157,6 +157,132 @@
     },
     {
       "key": {
+        "uuid": "847d7989_0061be49",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2527,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T13:04:06Z",
+      "side": 1,
+      "message": "ing",
+      "parentUuid": "809456b3_7ab66535",
+      "range": {
+        "startLine": 2527,
+        "startChar": 5,
+        "endLine": 2527,
+        "endChar": 13
+      },
+      "revId": "376f31df7f85d232b45b96d56dd6d89c85a6eb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f02e5651_3a62b57a",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2527,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T13:04:06Z",
+      "side": 1,
+      "message": "\"Check if the string iterator prototype is unchanged.\"",
+      "revId": "376f31df7f85d232b45b96d56dd6d89c85a6eb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5afe62bd_fd48f0b7",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2533,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T13:04:06Z",
+      "side": 1,
+      "message": "Let\u0027s rename it_proto_map to current_map and init_it_map to original_map.",
+      "revId": "376f31df7f85d232b45b96d56dd6d89c85a6eb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4923978c_3557cb6c",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2547,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T13:04:06Z",
+      "side": 1,
+      "message": "This should be removed, see above.",
+      "revId": "376f31df7f85d232b45b96d56dd6d89c85a6eb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22d349db_272fe750",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2556,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T13:04:06Z",
+      "side": 1,
+      "message": "Please make this const.",
+      "revId": "376f31df7f85d232b45b96d56dd6d89c85a6eb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06886372_cb584716",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2558,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T13:04:06Z",
+      "side": 1,
+      "message": "Is your question which AllocationFlags to use? Looks good to me.",
+      "revId": "376f31df7f85d232b45b96d56dd6d89c85a6eb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6af77a5d_c0c0b215",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2565,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-26T13:04:06Z",
+      "side": 1,
+      "message": "Maybe you can just use AllocateZeroedFixedArray.",
+      "revId": "376f31df7f85d232b45b96d56dd6d89c85a6eb28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29196318_a0267f92",
         "filename": "test/mjsunit/string-iterator.js",
         "patchSetId": 6
