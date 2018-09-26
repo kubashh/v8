@@ -5,6 +5,7 @@
 #include "src/builtins/builtins-iterator-gen.h"
 #include "src/builtins/growable-fixed-array-gen.h"
 
+#include "src/builtins/builtins-string-gen.h"
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/builtins/builtins.h"
 #include "src/code-stub-assembler.h"
@@ -261,20 +262,33 @@ TF_BUILTIN(IterableToListMayPreserveHoles, IteratorBuiltinsAssembler) {
 }
 
 // This builtin loads the property Symbol.iterator as the iterator, and has a
-// fast path for fast arrays. In case of fast holey arrays, holes will be
-// converted to undefined to reflect iteration semantics. Note that replacement
-// by undefined is only correct when the NoElements protector is valid.
+// fast path for fast arrays and strings.
+// * In case of fast holey arrays, holes will be converted to undefined to
+// reflect iteration semantics. Note that replacement by undefined is only
+// correct when the NoElements protector is valid.
+// * In case of strings, the fast path is only taken if the original
+// Symbol.iterator is not replaced or modified.
+// TODO(dhai): remove duplicated checks among the checks and GetIteratorMethod.
 TF_BUILTIN(IterableToListWithSymbolLookup, IteratorBuiltinsAssembler) {
   TNode<Context> context = CAST(Parameter(Descriptor::kContext));
   TNode<Object> iterable = CAST(Parameter(Descriptor::kIterable));
 
-  Label slow_path(this);
+  Label slow_path(this), check_string(this);
 
-  GotoIfNot(IsFastJSArrayWithNoCustomIteration(iterable, context), &slow_path);
+  GotoIfNot(IsFastJSArrayWithNoCustomIteration(iterable, context),
+            &check_string);
   // Here we are guaranteed that iterable is a fast JSArray with an original
   // iterator.
   TailCallBuiltin(Builtins::kCloneFastJSArrayFillingHoles, context, iterable);
 
+  BIND(&check_string);
+  {
+    StringBuiltinsAssembler string_assembler(state());
+    GotoIfNot(string_assembler.IsStringWithNoCustomIteration(iterable, context),
+              &slow_path);
+    // Fast path for strings.
+    TailCallBuiltin(Builtins::kStringFastToList, context, iterable);
+  }
   BIND(&slow_path);
   {
     TNode<Object> iterator_fn = GetIteratorMethod(context, iterable);
