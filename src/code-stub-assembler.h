@@ -346,6 +346,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
     return CAST(p_o);
   }
 
+  TNode<Context> UnsafeCastObjectToContext(TNode<Object> p_o) {
+    return CAST(p_o);
+  }
+
   TNode<FixedDoubleArray> UnsafeCastObjectToFixedDoubleArray(
       TNode<Object> p_o) {
     return CAST(p_o);
@@ -402,6 +406,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   }
 
   TNode<Map> UnsafeCastObjectToMap(TNode<Object> p_o) { return CAST(p_o); }
+
+  TNode<JSObjectWithLength> RawCastObjectToJSObjectWithLength(
+      TNode<Object> p_o) {
+    return TNode<JSObjectWithLength>::UncheckedCast(p_o);
+  }
 
   Node* MatchesParameterMode(Node* value, ParameterMode mode);
 
@@ -857,6 +866,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Load the elements backing store of a JSObject.
   TNode<FixedArrayBase> LoadElements(SloppyTNode<JSObject> object);
   // Load the length of a JSArray instance.
+  TNode<Object> LoadJSObjectWithLength(SloppyTNode<JSObjectWithLength> array);
+  // Load the length of a JSArray instance.
   TNode<Number> LoadJSArrayLength(SloppyTNode<JSArray> array);
   // Load the length of a fast JSArray instance. Returns a positive Smi.
   TNode<Smi> LoadFastJSArrayLength(SloppyTNode<JSArray> array);
@@ -1114,6 +1125,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                                    int slot_index);
   TNode<Object> LoadContextElement(SloppyTNode<Context> context,
                                    SloppyTNode<IntPtrT> slot_index);
+  TNode<Object> LoadContextElement(TNode<Context> context,
+                                   TNode<Smi> slot_index);
   void StoreContextElement(SloppyTNode<Context> context, int slot_index,
                            SloppyTNode<Object> value);
   void StoreContextElement(SloppyTNode<Context> context,
@@ -1555,6 +1568,14 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
         WordNotEqual(LoadMap(base), LoadRoot(RootIndex::kFixedDoubleArrayMap)),
         cast_fail);
     return UncheckedCast<FixedDoubleArray>(base);
+  }
+
+  TNode<FixedArray> HeapObjectToSloppyArgumentsElements(TNode<HeapObject> base,
+                                                        Label* cast_fail) {
+    GotoIf(WordNotEqual(LoadMap(base),
+                        LoadRoot(RootIndex::kSloppyArgumentsElementsMap)),
+           cast_fail);
+    return UncheckedCast<FixedArray>(base);
   }
 
   TNode<Int32T> ConvertElementsKindToInt(TNode<Int32T> elements_kind) {

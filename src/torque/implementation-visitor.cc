@@ -78,6 +78,7 @@ void ImplementationVisitor::BeginModuleFile(Module* module) {
                   DashifyString(module->name()) + "-gen.h\"";
   }
   source << "\n";
+  source << "#include \"src/objects/arguments.h\"\n";
   source << "#include \"src/builtins/builtins-utils-gen.h\"\n";
   source << "#include \"src/builtins/builtins.h\"\n";
   source << "#include \"src/code-factory.h\"\n";

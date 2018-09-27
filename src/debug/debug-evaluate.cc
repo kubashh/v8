@@ -379,6 +379,7 @@ bool BuiltinToIntrinsicHasNoSideEffect(Builtins::Name builtin_id,
   V(Builtins::kArrayFilter, W(CreateDataProperty))                             \
   V(Builtins::kArrayMap, W(CreateDataProperty))                                \
   V(Builtins::kArrayPrototypeSlice, W(CreateDataProperty) W(SetKeyedProperty)) \
+  V(Builtins::kArraySlice, W(CreateDataProperty) W(SetKeyedProperty))          \
   /* TypedArrays */                                                            \
   V(Builtins::kTypedArrayConstructor,                                          \
     W(TypedArrayCopyElements) W(ThrowInvalidTypedArrayAlignment))              \
@@ -550,6 +551,7 @@ DebugInfo::SideEffectState BuiltinGetSideEffectState(Builtins::Name id) {
     case Builtins::kArrayPrototypeKeys:
     case Builtins::kArrayPrototypeLastIndexOf:
     case Builtins::kArrayPrototypeSlice:
+    case Builtins::kArraySlice:
     case Builtins::kArrayPrototypeSort:
     case Builtins::kArrayForEach:
     case Builtins::kArrayEvery:

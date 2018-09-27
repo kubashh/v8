@@ -26,6 +26,7 @@ type AbstractCode extends HeapObject generates 'TNode<AbstractCode>';
 type Code extends AbstractCode generates 'TNode<Code>';
 type JSReceiver extends HeapObject generates 'TNode<JSReceiver>';
 type Context extends HeapObject generates 'TNode<Context>';
+type NativeContext extends Context generates 'TNode<Context>';
 type String extends HeapObject generates 'TNode<String>';
 type Oddball extends HeapObject generates 'TNode<Oddball>';
 type HeapNumber extends HeapObject generates 'TNode<HeapNumber>';
@@ -35,7 +36,9 @@ type Numeric = Number|BigInt;
 type Boolean extends Oddball generates 'TNode<Oddball>';
 type JSProxy extends JSReceiver generates 'TNode<JSProxy>';
 type JSObject extends JSReceiver generates 'TNode<JSObject>';
-type JSArray extends JSObject generates 'TNode<JSArray>';
+type JSObjectWithLength extends JSObject
+    generates 'TNode<JSObjectWithLength>';
+type JSArray extends JSObjectWithLength generates 'TNode<JSArray>';
 type JSFunction extends JSObject generates 'TNode<JSFunction>';
 type JSBoundFunction extends JSObject generates 'TNode<JSBoundFunction>';
 type Callable = JSFunction|JSBoundFunction|JSProxy;
@@ -48,8 +51,24 @@ type FixedTypedArrayBase extends FixedArrayBase
     generates 'TNode<FixedTypedArrayBase>';
 type FixedTypedArray extends FixedTypedArrayBase
     generates 'TNode<FixedTypedArray>';
+type SloppyArgumentsElements extends FixedArray
+    generates 'TNode<FixedArray>';
 type NumberDictionary extends HeapObject
     generates 'TNode<NumberDictionary>';
+
+type NativeContextSlot generates 'TNode<IntPtrT>' constexpr 'int32_t';
+const FAST_ALIASED_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::FAST_ALIASED_ARGUMENTS_MAP_INDEX';
+const SLOW_ALIASED_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::SLOW_ALIASED_ARGUMENTS_MAP_INDEX';
+const STRICT_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::STRICT_ARGUMENTS_MAP_INDEX';
+const SLOPPY_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::SLOPPY_ARGUMENTS_MAP_INDEX';
+extern operator '[]' macro LoadContextElement(
+    NativeContext, NativeContextSlot): Object;
+
+extern operator '[]' macro LoadContextElement(Context, Smi): Object;
 
 type JSArrayBuffer extends JSObject generates 'TNode<JSArrayBuffer>';
 type JSArrayBufferView extends JSObject
@@ -126,10 +145,10 @@ const kAllFixedArrays: constexpr ExtractFixedArrayFlags
 const kFixedArrays: constexpr ExtractFixedArrayFlags
     generates 'ExtractFixedArrayFlag::kFixedArrays';
 
-const kFixedCOWArrayMapRootIndex:
-    constexpr RootIndex generates 'RootIndex::kFixedCOWArrayMap';
-const kEmptyFixedArrayRootIndex:
-    constexpr RootIndex generates 'RootIndex::kEmptyFixedArray';
+const kFixedCOWArrayMapRootIndex: constexpr RootIndex
+    generates 'RootIndex::kFixedCOWArrayMap';
+const kEmptyFixedArrayRootIndex: constexpr RootIndex
+    generates 'RootIndex::kEmptyFixedArray';
 
 const kInvalidArrayLength: constexpr MessageTemplate
     generates 'MessageTemplate::kInvalidArrayLength';
@@ -139,6 +158,18 @@ const kCalledOnNullOrUndefined: constexpr MessageTemplate
     generates 'MessageTemplate::kCalledOnNullOrUndefined';
 
 const kMaxSafeInteger: constexpr float64 generates 'kMaxSafeInteger';
+
+const kMaxRegularHeapObjectSize: constexpr int31
+    generates 'kMaxRegularHeapObjectSize';
+
+const kMaxNewSpaceFixedArrayElements: constexpr int31
+    generates 'FixedArray::kMaxRegularLength';
+const kSloppyArgumentsArgumentsIndex: constexpr int31
+    generates 'SloppyArgumentsElements::kArgumentsIndex';
+const kSloppyArgumentsContextIndex: constexpr int31
+    generates 'SloppyArgumentsElements::kContextIndex';
+const kSloppyArgumentsParameterMapStart: constexpr int31
+    generates 'SloppyArgumentsElements::kParameterMapStart';
 
 const kTruncateMinusZero: constexpr ToIntegerTruncationMode
     generates 'ToIntegerTruncationMode::kTruncateMinusZero';
@@ -358,9 +389,31 @@ extern operator '.length' macro GetArgumentsLength(constexpr Arguments): intptr;
 extern operator '[]' macro GetArgumentValue(
     constexpr Arguments, intptr): Object;
 
+// Forward declare Constexpr and UnsafeCasts to be used in Torque-implemented
+// conversions.
+macro FromConstexpr<A: type>(o: constexpr int31): A;
+macro FromConstexpr<A: type>(o: constexpr int32): A;
+macro FromConstexpr<A: type>(o: constexpr float64): A;
+macro FromConstexpr<A: type>(b: constexpr bool): A;
+macro FromConstexpr<A: type>(l: constexpr LanguageMode): A;
+macro FromConstexpr<A: type>(e: constexpr ElementsKind): A;
+macro FromConstexpr<A: type>(s: constexpr string): A;
+macro FromConstexpr<A: type>(c: constexpr NativeContextSlot): A;
+
+macro UnsafeCast<A: type>(n: Number): A;
+macro UnsafeCast<A: type>(o: Object): A;
+macro UnsafeCast<A: type>(context: Context, o: Object): A;
+
 extern macro TaggedIsSmi(Object): bool;
 extern macro TaggedIsNotSmi(Object): bool;
 extern macro TaggedIsPositiveSmi(Object): bool;
+
+extern macro BranchIfFastJSArray(Object, Context): never
+    labels Taken, NotTaken;
+extern macro BranchIfFastJSArrayForCopy(Object, Context): never
+    labels Taken, NotTaken;
+extern macro BranchIfNotFastJSArray(Object, Context): never
+    labels Taken, NotTaken;
 
 extern macro HeapObjectToJSDataView(HeapObject): JSDataView
     labels CastError;
@@ -373,6 +426,9 @@ extern macro HeapObjectToJSArray(HeapObject): JSArray
 extern macro HeapObjectToCallable(HeapObject): Callable
     labels CastError;
 extern macro HeapObjectToFixedArray(HeapObject): FixedArray
+    labels CastError;
+extern macro HeapObjectToSloppyArgumentsElements(HeapObject):
+    SloppyArgumentsElements
     labels CastError;
 extern macro HeapObjectToFixedDoubleArray(HeapObject): FixedDoubleArray
     labels CastError;
@@ -392,6 +448,10 @@ CastHeapObject<FixedArray>(o: HeapObject): FixedArray
 CastHeapObject<FixedDoubleArray>(o: HeapObject): FixedDoubleArray
     labels CastError {
   return HeapObjectToFixedDoubleArray(o) otherwise CastError;
+}
+CastHeapObject<SloppyArgumentsElements>(o: HeapObject): SloppyArgumentsElements
+    labels CastError {
+  return HeapObjectToSloppyArgumentsElements(o) otherwise CastError;
 }
 CastHeapObject<JSDataView>(o: HeapObject): JSDataView
     labels CastError {
@@ -427,6 +487,37 @@ Cast<Number>(o: Object): Number
   return TaggedToNumber(o) otherwise CastError;
 }
 
+macro BranchIfJSObjectWithLength(context: Context, o: Object): never
+    labels True, False {
+  const heapObject: HeapObject = Cast<HeapObject>(o) otherwise False;
+  if (IsJSArray(heapObject)) goto True;
+  const map: Map = heapObject.map;
+  const nativeContext: NativeContext = LoadNativeContext(context);
+  if (map == nativeContext[FAST_ALIASED_ARGUMENTS_MAP_INDEX]) goto True;
+  if (map == nativeContext[SLOW_ALIASED_ARGUMENTS_MAP_INDEX]) goto True;
+  if (map == nativeContext[STRICT_ARGUMENTS_MAP_INDEX]) goto True;
+  if (map != nativeContext[SLOPPY_ARGUMENTS_MAP_INDEX]) goto False;
+  goto True;
+}
+
+UnsafeCast<JSObjectWithLength>(
+    context: Context, o: Object): JSObjectWithLength {
+  assert(BranchIfJSObjectWithLength(context, o));
+  return RawCastObjectToJSObjectWithLength(o);
+}
+
+macro Cast<A: type>(context: Context, o: Object): A
+    labels CastError;
+Cast<JSObjectWithLength>(context: Context, o: Object): JSObjectWithLength
+    labels CastError {
+  try {
+    BranchIfJSObjectWithLength(context, o) otherwise Success, CastError;
+  }
+  label Success {
+    return UnsafeCast<JSObjectWithLength>(context, o);
+  }
+}
+
 extern macro AllocateHeapNumberWithValue(float64): HeapNumber;
 extern macro ChangeInt32ToTagged(int32): Number;
 extern macro ChangeUint32ToTagged(uint32): Number;
@@ -450,6 +541,8 @@ extern macro ChangeNumberToFloat64(Number): float64;
 extern macro ChangeFloat64ToUintPtr(float64): uintptr;
 extern macro ChangeInt32ToIntPtr(int32): intptr;   // Sign-extends.
 extern macro ChangeUint32ToWord(uint32): uintptr;  // Doesn't sign-extend.
+extern macro LoadNativeContext(Context): NativeContext;
+extern macro LoadJSArrayElementsMap(constexpr ElementsKind, Context): Map;
 
 extern macro NumberConstant(constexpr float64): Number;
 extern macro NumberConstant(constexpr int32): Number;
@@ -463,8 +556,8 @@ extern macro BoolConstant(constexpr bool): bool;
 extern macro StringConstant(constexpr string): String;
 extern macro LanguageModeConstant(constexpr LanguageMode): LanguageMode;
 extern macro Int32Constant(constexpr ElementsKind): ElementsKind;
+extern macro IntPtrConstant(constexpr NativeContextSlot): NativeContextSlot;
 
-macro FromConstexpr<A: type>(o: constexpr int31): A;
 FromConstexpr<intptr>(i: constexpr int31): intptr {
   return IntPtrConstant(i);
 }
@@ -489,7 +582,6 @@ FromConstexpr<Number>(i: constexpr int31): Number {
 FromConstexpr<float64>(i: constexpr int31): float64 {
   return Float64Constant(i);
 }
-macro FromConstexpr<A: type>(o: constexpr int32): A;
 FromConstexpr<intptr>(i: constexpr int32): intptr {
   return IntPtrConstant(i);
 }
@@ -499,28 +591,27 @@ FromConstexpr<int32>(i: constexpr int32): int32 {
 FromConstexpr<Number>(i: constexpr int32): Number {
   return NumberConstant(i);
 }
-macro FromConstexpr<A: type>(o: constexpr float64): A;
 FromConstexpr<Number>(f: constexpr float64): Number {
   return NumberConstant(f);
 }
-macro FromConstexpr<A: type>(b: constexpr bool): A;
 FromConstexpr<bool>(b: constexpr bool): bool {
   return BoolConstant(b);
 }
-macro FromConstexpr<A: type>(l: constexpr LanguageMode): A;
 FromConstexpr<LanguageMode>(b: constexpr LanguageMode): LanguageMode {
   return LanguageModeConstant(b);
 }
-macro FromConstexpr<A: type>(e: constexpr ElementsKind): A;
 FromConstexpr<ElementsKind>(e: constexpr ElementsKind): ElementsKind {
   return Int32Constant(e);
 }
-macro FromConstexpr<A: type>(s: constexpr string): A;
 FromConstexpr<String>(s: constexpr string): String {
   return StringConstant(s);
 }
 FromConstexpr<Object>(s: constexpr string): Object {
   return StringConstant(s);
+}
+FromConstexpr<NativeContextSlot>(c: constexpr NativeContextSlot):
+    NativeContextSlot {
+  return IntPtrConstant(c);
 }
 
 macro Convert<A: type>(i: constexpr int31): A {
@@ -607,6 +698,7 @@ Convert<intptr>(r: RawPtr): intptr {
 extern macro UnsafeCastNumberToHeapNumber(Number): HeapNumber;
 extern macro UnsafeCastObjectToFixedArrayBase(Object): FixedArrayBase;
 extern macro UnsafeCastObjectToFixedArray(Object): FixedArray;
+extern macro UnsafeCastObjectToContext(Object): Context;
 extern macro UnsafeCastObjectToFixedDoubleArray(Object): FixedDoubleArray;
 extern macro UnsafeCastObjectToHeapNumber(Object): HeapNumber;
 extern macro UnsafeCastObjectToCallable(Object): Callable;
@@ -620,11 +712,15 @@ extern macro UnsafeCastObjectToJSReceiver(Object): JSReceiver;
 extern macro UnsafeCastObjectToJSObject(Object): JSObject;
 extern macro UnsafeCastObjectToMap(Object): Map;
 
-macro UnsafeCast<A: type>(n: Number): A;
+// RawCasts should *never* be used anywhere in Torque code except for
+// in Torque-based UnsafeCast operators preceeded by an appropriate
+// type check().
+extern macro RawCastObjectToJSObjectWithLength(Object): JSArray;
+
 UnsafeCast<HeapNumber>(n: Number): HeapNumber {
   return UnsafeCastNumberToHeapNumber(n);
 }
-macro UnsafeCast<A: type>(o: Object): A;
+
 UnsafeCast<Object>(o: Object): Object {
   return o;
 }
@@ -670,15 +766,13 @@ UnsafeCast<Map>(o: Object): Map {
 UnsafeCast<FixedArrayBase>(o: Object): FixedArrayBase {
   return UnsafeCastObjectToFixedArrayBase(o);
 }
+UnsafeCast<Context>(o: Object): Context {
+  return UnsafeCastObjectToContext(o);
+}
 
 const kCOWMap: Map = UnsafeCast<Map>(LoadRoot(kFixedCOWArrayMapRootIndex));
 const kEmptyFixedArray: FixedArrayBase =
     UnsafeCast<FixedArrayBase>(LoadRoot(kEmptyFixedArrayRootIndex));
-
-extern macro BranchIfFastJSArray(Object, Context): never
-    labels Taken, NotTaken;
-extern macro BranchIfNotFastJSArray(Object, Context): never
-    labels Taken, NotTaken;
 
 macro EnsureFastJSArray(context: Context, object: Object) labels Bailout {
   if (BranchIfNotFastJSArray(object, context)) goto Bailout;
@@ -704,6 +798,8 @@ extern operator '.elements=' macro StoreElements(JSObject, FixedArrayBase);
 
 extern operator '.length' macro LoadJSTypedArrayLength(JSTypedArray): Smi;
 extern operator '.length' macro LoadJSArrayLength(JSArray): Number;
+extern operator '.length' macro LoadJSObjectWithLength(JSObjectWithLength):
+    Object;
 extern operator '.length_fast' macro LoadFastJSArrayLength(JSArray): Smi;
 extern operator '.length=' macro StoreJSArrayLength(JSArray, Smi);
 
@@ -807,6 +903,7 @@ extern macro ExtractFixedArray(
     FixedArrayBase, Smi, Smi, Smi,
     constexpr ExtractFixedArrayFlags): FixedArrayBase;
 
+extern builtin CloneFastJSArray(Context, Object): JSArray;
 extern builtin ExtractFastJSArray(Context, JSArray, Smi, Smi): JSArray;
 
 macro LoadElementNoHole<T: type>(a: JSArray, index: Smi): Object
@@ -895,4 +992,21 @@ macro ToIndex(input: Object, context: Context): Number
   }
 
   return value;
+}
+
+macro GetLengthProperty(context: Context, o: Object): Number {
+  try {
+    try {
+      const objectWithLength: JSObjectWithLength =
+          Cast<JSObjectWithLength>(context, o) otherwise Slow;
+      const rawLength: Object = objectWithLength.length;
+      return Cast<Smi>(rawLength) otherwise Slow;
+    }
+    label Slow deferred {
+      goto ToLength(GetProperty(context, o, kLengthString));
+    }
+  }
+  label ToLength(o: Object) deferred {
+    return ToLength_Inline(context, o);
+  }
 }
