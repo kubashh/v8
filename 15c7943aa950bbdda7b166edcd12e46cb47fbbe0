@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "1aa9ddb1_004750c8",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-27T07:11:37Z",
+      "side": 1,
+      "message": "Hmm it was already initialized (to nullptr). Why do you need to create a map right away in the constructor? Whenever we have a snapshot, we will throw that map away.",
+      "parentUuid": "66953ccb_ea5a6d0c",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1dd9e748_c1f1cf8b",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 11
@@ -393,6 +411,24 @@
       "side": 1,
       "message": "I think you meant DCHECK(!refs-\u003eIsEmpty()) ?\n\nOtherwise okay, removing the IsEmpty() check.",
       "parentUuid": "bf7581eb_45b9aacd",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "569d0ace_b19f7efe",
+        "filename": "src/compiler/per-isolate-compiler-cache.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-27T07:11:37Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "e9ce1aaa_6f8b76d1",
       "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

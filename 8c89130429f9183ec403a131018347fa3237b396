@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6e13362_49017cf6",
+        "filename": "src/compiler/per-isolate-compiler-cache.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-27T07:11:37Z",
+      "side": 1,
+      "message": "This is still using the wrong terminology.",
+      "revId": "8c89130429f9183ec403a131018347fa3237b396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47e33470_2ad6f6a4",
+        "filename": "src/isolate.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1759,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-27T07:11:37Z",
+      "side": 1,
+      "message": "There\u0027s no need to store the compiler zone again, it\u0027s already in the compiler cache.",
+      "revId": "8c89130429f9183ec403a131018347fa3237b396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
