@@ -4559,6 +4559,8 @@ void Heap::TearDown() {
   }
 #endif
 
+  isolate_->global_handles()->TearDown();
+
   UpdateMaximumCommitted();
 
   if (FLAG_verify_predictable || FLAG_fuzzer_gc_analysis) {
@@ -4644,8 +4646,6 @@ void Heap::TearDown() {
 
   delete scavenge_job_;
   scavenge_job_ = nullptr;
-
-  isolate_->global_handles()->TearDown();
 
   external_string_table_.TearDown();
 
