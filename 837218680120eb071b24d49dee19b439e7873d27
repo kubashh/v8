@@ -46,6 +46,30 @@
       "revId": "837218680120eb071b24d49dee19b439e7873d27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8f5bc8b_c408e8db",
+        "filename": "src/global-handles.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2018-09-27T11:38:36Z",
+      "side": 1,
+      "message": "The TEAR_DOWN state does not prohibit GC but seems to prevent most task-based helpers from running.\n\nThis is all about callbacks that free stuff when d8 is called with \u0027--invoke-weak-callbacks\u0027, right?\n\nIf we only care about the currently enqueued callbacks and not any potentially triggered followups, then indeed \n\n  1. gc_state_ \u003d TEAR_DOWN\n  2. DispatchPendingPhantomCallbacks(true)\n\nwould solve it as we are guaranteed to at least process anything that the last GC before tear down prepared.\n\nI would also move Heap::StartTearDown before EnsureSweepingCompleted in Isolate::Deinit.",
+      "parentUuid": "92ad9f97_75739339",
+      "range": {
+        "startLine": 1091,
+        "startChar": 33,
+        "endLine": 1091,
+        "endChar": 64
+      },
+      "revId": "837218680120eb071b24d49dee19b439e7873d27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
