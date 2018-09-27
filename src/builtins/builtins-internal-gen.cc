@@ -737,9 +737,9 @@ TNode<IntPtrT> InternalBuiltinsAssembler::GetPendingMicrotaskCount(
 
 void InternalBuiltinsAssembler::SetPendingMicrotaskCount(
     TNode<MicrotaskQueue> microtask_queue, TNode<IntPtrT> new_num_tasks) {
-  StoreObjectField(microtask_queue,
-                   MicrotaskQueue::kPendingMicrotaskCountOffset,
-                   SmiFromIntPtr(new_num_tasks));
+  StoreObjectFieldNoWriteBarrier(microtask_queue,
+                                 MicrotaskQueue::kPendingMicrotaskCountOffset,
+                                 SmiFromIntPtr(new_num_tasks));
 }
 
 TNode<FixedArray> InternalBuiltinsAssembler::GetQueuedMicrotasks(
