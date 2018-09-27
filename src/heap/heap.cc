@@ -4549,7 +4549,10 @@ void Heap::RegisterExternallyReferencedObject(Object** object) {
   }
 }
 
-void Heap::StartTearDown() { SetGCState(TEAR_DOWN); }
+void Heap::StartTearDown() {
+  SetGCState(TEAR_DOWN);
+  isolate_->global_handles()->TearDown();
+}
 
 void Heap::TearDown() {
   DCHECK_EQ(gc_state_, TEAR_DOWN);
@@ -4644,8 +4647,6 @@ void Heap::TearDown() {
 
   delete scavenge_job_;
   scavenge_job_ = nullptr;
-
-  isolate_->global_handles()->TearDown();
 
   external_string_table_.TearDown();
 
