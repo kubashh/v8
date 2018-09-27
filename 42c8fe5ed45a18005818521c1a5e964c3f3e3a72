@@ -46,6 +46,23 @@
       "revId": "42c8fe5ed45a18005818521c1a5e964c3f3e3a72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f1fea36_3b0c1d5b",
+        "filename": "gni/v8.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-09-27T07:08:40Z",
+      "side": 1,
+      "message": "Maybe just add it here? Do we distribute any shared library in a normal release build? We use those only for debug and guess there we\u0027d not have pgo builds.",
+      "revId": "42c8fe5ed45a18005818521c1a5e964c3f3e3a72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
