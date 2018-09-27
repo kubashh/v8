@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "80ab9f89_b5055f3a",
+        "filename": "src/compiler/per-isolate-compiler-cache.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-27T11:04:27Z",
+      "side": 1,
+      "message": "Now that this comment is in the same file as the other one, just merged them.",
+      "parentUuid": "a6e13362_49017cf6",
+      "revId": "8c89130429f9183ec403a131018347fa3237b396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47e33470_2ad6f6a4",
         "filename": "src/isolate.h",
         "patchSetId": 16
@@ -51,6 +69,24 @@
       "revId": "8c89130429f9183ec403a131018347fa3237b396",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4815dac_148db674",
+        "filename": "src/isolate.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 1759,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-27T11:04:27Z",
+      "side": 1,
+      "message": "Exactly, thanks.",
+      "parentUuid": "8b83e805_0eb4e8c3",
+      "revId": "8c89130429f9183ec403a131018347fa3237b396",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

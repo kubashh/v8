@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "8533b36f_07ce9649",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-27T11:04:27Z",
+      "side": 1,
+      "message": "Because whenever we don\u0027t (e.g. in some unit tests where we create a broker, but we don\u0027t call SerializeStandardObjects), the refs_ pointer is null.",
+      "parentUuid": "1aa9ddb1_004750c8",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1dd9e748_c1f1cf8b",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 11
@@ -432,6 +450,24 @@
       "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f0b95e0_a0ec98af",
+        "filename": "src/compiler/per-isolate-compiler-cache.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-09-27T11:04:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "569d0ace_b19f7efe",
+      "revId": "15c7943aa950bbdda7b166edcd12e46cb47fbbe0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
