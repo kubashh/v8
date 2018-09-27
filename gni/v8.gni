@@ -173,6 +173,7 @@ template("v8_executable") {
     configs += invoker.configs
     configs -= v8_remove_configs
     configs += v8_add_configs
+    configs += [ "//build/config/compiler/pgo:default_pgo_flags" ]
     if (is_linux) {
       # For enabling ASLR.
       ldflags = [ "-pie" ]
@@ -198,6 +199,7 @@ template("v8_component") {
     configs += invoker.configs
     configs -= v8_remove_configs
     configs += v8_add_configs
+    configs += [ "//build/config/compiler/pgo:default_pgo_flags" ]
   }
 }
 
