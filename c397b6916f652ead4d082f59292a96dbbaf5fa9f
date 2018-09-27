@@ -70,6 +70,30 @@
       "revId": "c397b6916f652ead4d082f59292a96dbbaf5fa9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "507025c0_166cc328",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-09-27T07:34:30Z",
+      "side": 1,
+      "message": "OK, should be fixed now.",
+      "parentUuid": "f0364131_a12481e3",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 30
+      },
+      "revId": "c397b6916f652ead4d082f59292a96dbbaf5fa9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
