@@ -70,6 +70,30 @@
       "revId": "837218680120eb071b24d49dee19b439e7873d27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8464a0ed_73a85845",
+        "filename": "src/global-handles.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-27T14:24:35Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s related to --invoke-weak-callbacks, at least that switch is not needed to reproduce.\nHappy to put it in Heap::StartTearDown. Currently {GlobalHandles::DispatchPendingPhantomCallbacks} is a private method, so I still call it via {GlobalHandles::TearDown}.\n\nWDYT about this order and design?",
+      "parentUuid": "e8f5bc8b_c408e8db",
+      "range": {
+        "startLine": 1091,
+        "startChar": 33,
+        "endLine": 1091,
+        "endChar": 64
+      },
+      "revId": "837218680120eb071b24d49dee19b439e7873d27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
