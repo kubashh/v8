@@ -1229,6 +1229,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
   const char* collector_reason = nullptr;
   GarbageCollector collector = SelectGarbageCollector(space, &collector_reason);
 
+  isolate()->gc_reason = static_cast<int>(gc_reason);
+
   if (!CanExpandOldGeneration(new_space()->Capacity())) {
     InvokeNearHeapLimitCallback();
   }
@@ -1333,6 +1335,8 @@ bool Heap::CollectGarbage(AllocationSpace space,
         GCFlagsForIncrementalMarking(),
         kGCCallbackScheduleIdleGarbageCollection);
   }
+
+  isolate()->gc_reason = -1;
 
   return next_gc_likely_to_collect_more;
 }

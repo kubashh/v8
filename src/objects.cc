@@ -15082,6 +15082,10 @@ void BytecodeArray::CopyBytecodesTo(BytecodeArray* to) {
 }
 
 void BytecodeArray::MakeOlder() {
+  if (Heap::FromWritableHeapObject(this)->isolate()->gc_reason ==
+      static_cast<int>(GarbageCollectionReason::kLowMemoryNotification))
+    return;
+
   // BytecodeArray is aged in concurrent marker.
   // The word must be completely within the byte code array.
   Address age_addr = address() + kBytecodeAgeOffset;

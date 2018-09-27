@@ -892,6 +892,10 @@ void ObjectStatsCollectorImpl::RecordVirtualBytecodeArrayDetails(
   RecordSimpleVirtualObjectStats(
       bytecode, bytecode->handler_table(),
       ObjectStats::BYTECODE_ARRAY_HANDLER_TABLE_TYPE);
+  if (bytecode->IsOld()) {
+    RecordSimpleVirtualObjectStats(nullptr, bytecode,
+                                   ObjectStats::OLD_BYTECODE_ARRAY_TYPE);
+  }
 }
 
 namespace {
