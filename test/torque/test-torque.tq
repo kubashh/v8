@@ -153,10 +153,11 @@ module test {
       check(GenericMacroTest<Object>(Null) == Null);
       check(GenericMacroTest<Object>(False) == False);
       check(GenericMacroTest<Object>(True) == True);
-      check(GenericMacroTestWithLabels<Smi>(0) otherwise Fail == Undefined);
-      check(GenericMacroTestWithLabels<Smi>(0) otherwise Fail == Undefined);
-      check(GenericMacroTestWithLabels<Object>(Null) otherwise Fail == Null);
-      check(GenericMacroTestWithLabels<Object>(False) otherwise Fail == False);
+      check((GenericMacroTestWithLabels<Smi>(0) otherwise Fail) == Undefined);
+      check((GenericMacroTestWithLabels<Smi>(0) otherwise Fail) == Undefined);
+      check((GenericMacroTestWithLabels<Object>(Null) otherwise Fail) == Null);
+      check(
+          (GenericMacroTestWithLabels<Object>(False) otherwise Fail) == False);
     }
     label Fail {
       unreachable;

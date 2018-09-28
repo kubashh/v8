@@ -224,16 +224,16 @@ struct CallExpression : Expression {
   CallExpression(SourcePosition pos, std::string callee, bool is_operator,
                  std::vector<TypeExpression*> generic_arguments,
                  std::vector<Expression*> arguments,
-                 std::vector<std::string> labels)
+                 std::vector<Statement*> otherwise)
       : Expression(kKind, pos),
         callee(pos, std::move(callee), std::move(generic_arguments)),
         is_operator(is_operator),
         arguments(std::move(arguments)),
-        labels(std::move(labels)) {}
+        otherwise(std::move(otherwise)) {}
   IdentifierExpression callee;
   bool is_operator;
   std::vector<Expression*> arguments;
-  std::vector<std::string> labels;
+  std::vector<Statement*> otherwise;
 };
 
 struct StructExpression : Expression {
