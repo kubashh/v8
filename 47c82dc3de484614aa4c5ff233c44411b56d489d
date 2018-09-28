@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a9d4ee3d_e6519130",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1131655
+      },
+      "writtenOn": "2018-09-28T08:04:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a51ca3b_c3210ce0",
+      "revId": "47c82dc3de484614aa4c5ff233c44411b56d489d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "21220cc0_63338657",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 3
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "ca8a67d6_cadd9b13",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1131655
+      },
+      "writtenOn": "2018-09-28T08:04:37Z",
+      "side": 1,
+      "message": "That is correct. I will have to look into how to refactor the code so that the script is created later. Will do it in a separate CL.\nAlthough I don\u0027t find this too bad either. It basically means we create a default script and fix it when we have more information later.\nPut a TODO.",
+      "parentUuid": "21220cc0_63338657",
+      "range": {
+        "startLine": 2272,
+        "startChar": 0,
+        "endLine": 2278,
+        "endChar": 3
+      },
+      "revId": "47c82dc3de484614aa4c5ff233c44411b56d489d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68cd4031_a5403386",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 3
@@ -56,6 +98,24 @@
       "revId": "47c82dc3de484614aa4c5ff233c44411b56d489d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce30154f_5b45f086",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1131655
+      },
+      "writtenOn": "2018-09-28T08:04:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68cd4031_a5403386",
+      "revId": "47c82dc3de484614aa4c5ff233c44411b56d489d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
