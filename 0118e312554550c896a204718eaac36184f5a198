@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9113fbf5_9924fae0",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-09-28T18:55:14Z",
+      "side": 1,
+      "message": "This change (and the one in line 277, right below) should not be necessary, as it\u0027s handled by the GotoIf in line 260. Or am I missing something?",
+      "range": {
+        "startLine": 275,
+        "startChar": 6,
+        "endLine": 275,
+        "endChar": 60
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce820e52_889d81da",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-09-28T18:55:14Z",
+      "side": 1,
+      "message": "This snippet should be moved up to right after the BIND, i.e. between lines 296 and 297. ToBigInt() (line 297) is an observable operation which Runtime::kAtomicStore will perform as well.",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 5
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "342d4ee5_00236f9f",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-09-28T18:55:14Z",
+      "side": 1,
+      "message": "nit: please drop this comment",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 73
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8d1df12_f809d60e",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-09-28T18:55:14Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need a \"return\" after \"UNREACHABLE()\".",
+      "range": {
+        "startLine": 140,
+        "startChar": 2,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "945f1b24_69dd5eb7",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-09-28T18:55:14Z",
+      "side": 1,
+      "message": "drop this please",
+      "range": {
+        "startLine": 395,
+        "startChar": 2,
+        "endLine": 396,
+        "endChar": 0
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "643b7065_75f887c1",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-09-28T18:55:14Z",
+      "side": 1,
+      "message": "These two new functions are only used for 64-bit operations, right? How do you feel about specializing them for that case, i.e. turning this \"if\" into a DCHECK, dropping lines 408-424, and calling them AtomicsLoad64 and AtomicsStore64 respectively?\n\nIf you think being consistent is more important, I\u0027m fine with that; personally I\u0027d prefer not to ship unused code.",
+      "range": {
+        "startLine": 397,
+        "startChar": 2,
+        "endLine": 397,
+        "endChar": 44
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28d1c2d4_afd93eb5",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-09-28T18:55:14Z",
+      "side": 1,
+      "message": "naming nit: let\u0027s be consistent with the other Atomics* functions here and spell \"Atomics\" with an \u0027s\u0027, i.e. \"AtomicsLoad\", \"AtomicsStore\".",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 14
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
