@@ -215,7 +215,13 @@ TF_BUILTIN(AtomicsLoad, SharedArrayBufferBuiltinsAssembler) {
   BIND(&u32);
   Return(ChangeUint32ToTagged(AtomicLoad(MachineType::Uint32(), backing_store,
                                          WordShl(index_word, 2))));
+#if V8_TARGET_ARCH_MIPS
+  BIND(&i64);
+  Return(CallRuntime(Runtime::kAtomicLoad, context, array, index_integer));
 
+  BIND(&u64);
+  Return(CallRuntime(Runtime::kAtomicLoad, context, array, index_integer));
+#else
   BIND(&i64);
   // This uses Uint64() intentionally: AtomicLoad is not implemented for
   // Int64(), which is fine because the machine instruction only cares
@@ -226,7 +232,7 @@ TF_BUILTIN(AtomicsLoad, SharedArrayBufferBuiltinsAssembler) {
   BIND(&u64);
   Return(BigIntFromUnsigned64(AtomicLoad(MachineType::Uint64(), backing_store,
                                          WordShl(index_word, 3))));
-
+#endif
   // This shouldn't happen, we've already validated the type.
   BIND(&other);
   Unreachable();
@@ -263,12 +269,12 @@ TF_BUILTIN(AtomicsStore, SharedArrayBufferBuiltinsAssembler) {
 #endif
 
   int32_t case_values[] = {
-      FIXED_INT8_ARRAY_TYPE,   FIXED_UINT8_ARRAY_TYPE, FIXED_INT16_ARRAY_TYPE,
-      FIXED_UINT16_ARRAY_TYPE, FIXED_INT32_ARRAY_TYPE, FIXED_UINT32_ARRAY_TYPE,
+      FIXED_INT8_ARRAY_TYPE,     FIXED_UINT8_ARRAY_TYPE,
+      FIXED_INT16_ARRAY_TYPE,    FIXED_UINT16_ARRAY_TYPE,
+      FIXED_INT32_ARRAY_TYPE,    FIXED_UINT32_ARRAY_TYPE,
+      FIXED_BIGINT64_ARRAY_TYPE, FIXED_BIGUINT64_ARRAY_TYPE,
   };
-  Label* case_labels[] = {
-      &u8, &u8, &u16, &u16, &u32, &u32,
-  };
+  Label* case_labels[] = {&u8, &u8, &u16, &u16, &u32, &u32, &u64, &u64};
   Switch(instance_type, &other, case_values, case_labels,
          arraysize(case_labels));
 
@@ -295,9 +301,13 @@ TF_BUILTIN(AtomicsStore, SharedArrayBufferBuiltinsAssembler) {
   TVARIABLE(UintPtrT, var_low);
   TVARIABLE(UintPtrT, var_high);
   BigIntToRawBytes(value_bigint, &var_low, &var_high);
+#if V8_TARGET_ARCH_MIPS
+  CallRuntime(Runtime::kAtomicStore, context, array, index_integer, value);
+#else
   Node* high = Is64() ? nullptr : static_cast<Node*>(var_high.value());
   AtomicStore(MachineRepresentation::kWord64, backing_store,
               WordShl(index_word, 3), var_low.value(), high);
+#endif
   Return(value_bigint);
 
   // This shouldn't happen, we've already validated the type.
