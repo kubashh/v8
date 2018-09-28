@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "68cbfa41_69167b9a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-28T08:29:51Z",
+      "side": 1,
+      "message": "Thanks, TODO is fine for me.\nWhat worries me is that anyone could already uses the script *before* it is being patched up here. Especially if it gets sent to DevTools before, this patching would have no effect probably.",
+      "parentUuid": "ca8a67d6_cadd9b13",
+      "range": {
+        "startLine": 2272,
+        "startChar": 0,
+        "endLine": 2278,
+        "endChar": 3
+      },
+      "revId": "47c82dc3de484614aa4c5ff233c44411b56d489d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68cd4031_a5403386",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 3
