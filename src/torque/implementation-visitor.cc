@@ -78,6 +78,7 @@ void ImplementationVisitor::BeginModuleFile(Module* module) {
                   DashifyString(module->name()) + "-gen.h\"";
   }
   source << "\n";
+  source << "#include \"src/objects/arguments.h\"\n";
   source << "#include \"src/builtins/builtins-utils-gen.h\"\n";
   source << "#include \"src/builtins/builtins.h\"\n";
   source << "#include \"src/code-factory.h\"\n";
@@ -1894,7 +1895,11 @@ VisitResult ImplementationVisitor::Visit(CallExpression* expr,
   bool has_template_arguments = !specialization_types.empty();
   for (Expression* arg : expr->arguments)
     arguments.parameters.push_back(Visit(arg));
-  arguments.labels = LabelsFromIdentifiers(expr->labels);
+
+  base::Optional<Label*> continue_after_call =
+      declarations()->DeclareLabel("after_call" + NewTempVariable());
+
+  arguments.labels = {};  // LabelsFromIdentifiers(expr->labels);
   VisitResult result;
   if (!has_template_arguments &&
       declarations()->Lookup(expr->callee.name)->IsValue()) {
@@ -1909,6 +1914,19 @@ VisitResult ImplementationVisitor::Visit(CallExpression* expr,
   if (is_tailcall) {
     result = {TypeOracle::GetNeverType(), ""};
   }
+  if (continue_after_call) {
+    GenerateLabelGoto(*continue_after_call);
+  }
+
+  for (Statement* statement : expr->otherwise) {
+    const Type* result_type = Visit(statement);
+    if (!result_type->IsNever()) {
+      ReportError("otherwise expression statement must never return");
+    }
+  }
+
+  if (continue_after_call) GenerateLabelBind(*continue_after_call);
+
   return result;
 }
 

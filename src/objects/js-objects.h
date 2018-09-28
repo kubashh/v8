@@ -1346,6 +1346,16 @@ class JSMessageObject : public JSObject {
       BodyDescriptor;
 };
 
+class JSObjectWithLength : public JSObject {
+ public:
+  // [length]: The length property.
+  DECL_ACCESSORS(length, Object)
+
+  // Layout description.
+  static const int kLengthOffset = JSObject::kHeaderSize;
+  static const int kSize = kLengthOffset + kPointerSize;
+};
+
 // The [Async-from-Sync Iterator] object
 // (proposal-async-iteration/#sec-async-from-sync-iterator-objects)
 // An object which wraps an ordinary Iterator and converts it to behave

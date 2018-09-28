@@ -52,6 +52,8 @@ type FixedTypedArrayBase extends FixedArrayBase
     generates 'TNode<FixedTypedArrayBase>';
 type FixedTypedArray extends FixedTypedArrayBase
     generates 'TNode<FixedTypedArray>';
+type SloppyArgumentsElements extends FixedArray
+    generates 'TNode<FixedArray>';
 type NumberDictionary extends HeapObject
     generates 'TNode<NumberDictionary>';
 
@@ -158,6 +160,18 @@ const kCalledOnNullOrUndefined: constexpr MessageTemplate
     generates 'MessageTemplate::kCalledOnNullOrUndefined';
 
 const kMaxSafeInteger: constexpr float64 generates 'kMaxSafeInteger';
+
+const kMaxRegularHeapObjectSize: constexpr int31
+    generates 'kMaxRegularHeapObjectSize';
+
+const kMaxNewSpaceFixedArrayElements: constexpr int31
+    generates 'FixedArray::kMaxRegularLength';
+const kSloppyArgumentsArgumentsIndex: constexpr int31
+    generates 'SloppyArgumentsElements::kArgumentsIndex';
+const kSloppyArgumentsContextIndex: constexpr int31
+    generates 'SloppyArgumentsElements::kContextIndex';
+const kSloppyArgumentsParameterMapStart: constexpr int31
+    generates 'SloppyArgumentsElements::kParameterMapStart';
 
 const kTruncateMinusZero: constexpr ToIntegerTruncationMode
     generates 'ToIntegerTruncationMode::kTruncateMinusZero';
@@ -377,9 +391,31 @@ extern operator '.length' macro GetArgumentsLength(constexpr Arguments): intptr;
 extern operator '[]' macro GetArgumentValue(
     constexpr Arguments, intptr): Object;
 
+// Forward declare Constexpr and UnsafeCasts to be used in Torque-implemented
+// conversions.
+macro FromConstexpr<A: type>(o: constexpr int31): A;
+macro FromConstexpr<A: type>(o: constexpr int32): A;
+macro FromConstexpr<A: type>(o: constexpr float64): A;
+macro FromConstexpr<A: type>(b: constexpr bool): A;
+macro FromConstexpr<A: type>(l: constexpr LanguageMode): A;
+macro FromConstexpr<A: type>(e: constexpr ElementsKind): A;
+macro FromConstexpr<A: type>(s: constexpr string): A;
+macro FromConstexpr<A: type>(c: constexpr NativeContextSlot): A;
+
+macro UnsafeCast<A: type>(n: Number): A;
+macro UnsafeCast<A: type>(o: Object): A;
+macro UnsafeCast<A: type>(context: Context, o: Object): A;
+
 extern macro TaggedIsSmi(Object): bool;
 extern macro TaggedIsNotSmi(Object): bool;
 extern macro TaggedIsPositiveSmi(Object): bool;
+
+extern macro BranchIfFastJSArray(Object, Context): never
+    labels Taken, NotTaken;
+extern macro BranchIfFastJSArrayForCopy(Object, Context): never
+    labels Taken, NotTaken;
+extern macro BranchIfNotFastJSArray(Object, Context): never
+    labels Taken, NotTaken;
 
 extern macro HeapObjectToJSDataView(HeapObject): JSDataView
     labels CastError;
@@ -392,6 +428,9 @@ extern macro HeapObjectToJSArray(HeapObject): JSArray
 extern macro HeapObjectToCallable(HeapObject): Callable
     labels CastError;
 extern macro HeapObjectToFixedArray(HeapObject): FixedArray
+    labels CastError;
+extern macro HeapObjectToSloppyArgumentsElements(HeapObject):
+    SloppyArgumentsElements
     labels CastError;
 extern macro HeapObjectToFixedDoubleArray(HeapObject): FixedDoubleArray
     labels CastError;
@@ -411,6 +450,10 @@ CastHeapObject<FixedArray>(o: HeapObject): FixedArray
 CastHeapObject<FixedDoubleArray>(o: HeapObject): FixedDoubleArray
     labels CastError {
   return HeapObjectToFixedDoubleArray(o) otherwise CastError;
+}
+CastHeapObject<SloppyArgumentsElements>(o: HeapObject): SloppyArgumentsElements
+    labels CastError {
+  return HeapObjectToSloppyArgumentsElements(o) otherwise CastError;
 }
 CastHeapObject<JSDataView>(o: HeapObject): JSDataView
     labels CastError {
@@ -486,7 +529,6 @@ extern macro LanguageModeConstant(constexpr LanguageMode): LanguageMode;
 extern macro Int32Constant(constexpr ElementsKind): ElementsKind;
 extern macro IntPtrConstant(constexpr NativeContextSlot): NativeContextSlot;
 
-macro FromConstexpr<A: type>(o: constexpr int31): A;
 FromConstexpr<intptr>(i: constexpr int31): intptr {
   return IntPtrConstant(i);
 }
@@ -511,7 +553,6 @@ FromConstexpr<Number>(i: constexpr int31): Number {
 FromConstexpr<float64>(i: constexpr int31): float64 {
   return Float64Constant(i);
 }
-macro FromConstexpr<A: type>(o: constexpr int32): A;
 FromConstexpr<intptr>(i: constexpr int32): intptr {
   return IntPtrConstant(i);
 }
@@ -521,30 +562,24 @@ FromConstexpr<int32>(i: constexpr int32): int32 {
 FromConstexpr<Number>(i: constexpr int32): Number {
   return NumberConstant(i);
 }
-macro FromConstexpr<A: type>(o: constexpr float64): A;
 FromConstexpr<Number>(f: constexpr float64): Number {
   return NumberConstant(f);
 }
-macro FromConstexpr<A: type>(b: constexpr bool): A;
 FromConstexpr<bool>(b: constexpr bool): bool {
   return BoolConstant(b);
 }
-macro FromConstexpr<A: type>(l: constexpr LanguageMode): A;
 FromConstexpr<LanguageMode>(b: constexpr LanguageMode): LanguageMode {
   return LanguageModeConstant(b);
 }
-macro FromConstexpr<A: type>(e: constexpr ElementsKind): A;
 FromConstexpr<ElementsKind>(e: constexpr ElementsKind): ElementsKind {
   return Int32Constant(e);
 }
-macro FromConstexpr<A: type>(s: constexpr string): A;
 FromConstexpr<String>(s: constexpr string): String {
   return StringConstant(s);
 }
 FromConstexpr<Object>(s: constexpr string): Object {
   return StringConstant(s);
 }
-macro FromConstexpr<A: type>(e: constexpr NativeContextSlot): A;
 FromConstexpr<NativeContextSlot>(c: constexpr NativeContextSlot):
     NativeContextSlot {
   return IntPtrConstant(c);
@@ -648,11 +683,14 @@ extern macro UnsafeCastObjectToJSReceiver(Object): JSReceiver;
 extern macro UnsafeCastObjectToJSObject(Object): JSObject;
 extern macro UnsafeCastObjectToMap(Object): Map;
 
-macro UnsafeCast<A: type>(n: Number): A;
+// RawCasts should *never* be used anywhere in Torque code except for
+// in Torque-based UnsafeCast operators preceeded by an appropriate
+// type check().
+extern macro RawCastObjectToJSObjectWithLength(Object): JSArray;
+
 UnsafeCast<HeapNumber>(n: Number): HeapNumber {
   return UnsafeCastNumberToHeapNumber(n);
 }
-macro UnsafeCast<A: type>(o: Object): A;
 UnsafeCast<Object>(o: Object): Object {
   return o;
 }
@@ -720,7 +758,6 @@ macro BranchIfJSArgumentsObjectWithLength(context: Context, o: Object): never
   goto True;
 }
 
-macro UnsafeCast<A: type>(context: Context, o: Object): A;
 UnsafeCast<JSArgumentsObjectWithLength>(
     context: Context, o: Object): JSArgumentsObjectWithLength {
   assert(BranchIfJSArgumentsObjectWithLength(context, o));
@@ -742,11 +779,6 @@ Cast<JSArgumentsObjectWithLength>(context: Context, o: Object):
 const kCOWMap: Map = UnsafeCast<Map>(LoadRoot(kFixedCOWArrayMapRootIndex));
 const kEmptyFixedArray: FixedArrayBase =
     UnsafeCast<FixedArrayBase>(LoadRoot(kEmptyFixedArrayRootIndex));
-
-extern macro BranchIfFastJSArray(Object, Context): never
-    labels Taken, NotTaken;
-extern macro BranchIfNotFastJSArray(Object, Context): never
-    labels Taken, NotTaken;
 
 macro EnsureFastJSArray(context: Context, object: Object) labels Bailout {
   if (BranchIfNotFastJSArray(object, context)) goto Bailout;
@@ -877,6 +909,7 @@ extern macro ExtractFixedArray(
     FixedArrayBase, Smi, Smi, Smi,
     constexpr ExtractFixedArrayFlags): FixedArrayBase;
 
+extern builtin CloneFastJSArray(Context, Object): JSArray;
 extern builtin ExtractFastJSArray(Context, JSArray, Smi, Smi): JSArray;
 
 macro LoadElementNoHole<T: type>(a: JSArray, index: Smi): Object
