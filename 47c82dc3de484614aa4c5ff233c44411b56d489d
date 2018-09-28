@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a51ca3b_c3210ce0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-28T07:36:03Z",
+      "side": 1,
+      "message": "Please add a description which sais what is actually being fixed here.",
+      "revId": "47c82dc3de484614aa4c5ff233c44411b56d489d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21220cc0_63338657",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-28T07:36:03Z",
+      "side": 1,
+      "message": "I am wondering why we need to do this here. Is this because with streaming compilation, the script will be created before the source mapping url is set? So we need to update it later?\nIn that case, I am wondering if it makes sense to create the script that early, especially if it then initially contains \"wrong\" values for source url and source_mapping_url. It might be better to create the script later, when all information is there.",
+      "range": {
+        "startLine": 2272,
+        "startChar": 0,
+        "endLine": 2278,
+        "endChar": 3
+      },
+      "revId": "47c82dc3de484614aa4c5ff233c44411b56d489d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68cd4031_a5403386",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3095,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-09-28T07:36:03Z",
+      "side": 1,
+      "message": "So now we set *either* the source url *or* the source mapping url. What\u0027s the motivation for that?\nPlease add a comment which explains that.",
+      "revId": "47c82dc3de484614aa4c5ff233c44411b56d489d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
