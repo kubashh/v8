@@ -323,12 +323,19 @@ void LookupIterator::InternalUpdateProtector() {
       }
     }
   } else if (*name_ == roots.next_string()) {
-    if (!isolate_->IsArrayIteratorLookupChainIntact()) return;
-    // Setting the next property of %ArrayIteratorPrototype% also needs to
-    // invalidate the array iterator protector.
     if (isolate_->IsInAnyContext(
             *holder_, Context::INITIAL_ARRAY_ITERATOR_PROTOTYPE_INDEX)) {
+      // Setting the next property of %ArrayIteratorPrototype% also needs to
+      // invalidate the array iterator protector.
+      if (!isolate_->IsArrayIteratorLookupChainIntact()) return;
       isolate_->InvalidateArrayIteratorProtector();
+    } else if (isolate_->IsInAnyContext(
+                   *holder_,
+                   Context::INITIAL_STRING_ITERATOR_PROTOTYPE_INDEX)) {
+      // Setting the next property of %StringIteratorPrototype% invalidates the
+      // string iterator protector.
+      if (!isolate_->IsStringIteratorLookupChainIntact()) return;
+      isolate_->InvalidateStringIteratorProtector();
     }
   } else if (*name_ == roots.species_symbol()) {
     if (!isolate_->IsArraySpeciesLookupChainIntact() &&
@@ -354,9 +361,18 @@ void LookupIterator::InternalUpdateProtector() {
     if (!isolate_->IsIsConcatSpreadableLookupChainIntact()) return;
     isolate_->InvalidateIsConcatSpreadableProtector();
   } else if (*name_ == roots.iterator_symbol()) {
-    if (!isolate_->IsArrayIteratorLookupChainIntact()) return;
     if (holder_->IsJSArray()) {
+      if (!isolate_->IsArrayIteratorLookupChainIntact()) return;
       isolate_->InvalidateArrayIteratorProtector();
+    } else if (*receiver_ == *holder_ &&
+               isolate_->IsInAnyContext(
+                   *holder_, Context::INITIAL_STRING_PROTOTYPE_INDEX)) {
+      // Setting the Symbol.iterator property of String.prototype invalidates
+      // the string iterator protector. Symbol.iterator can also be set on a
+      // String wrapper, but not a primitive string. We only support protector
+      // concerning primitive strings.
+      if (!isolate_->IsStringIteratorLookupChainIntact()) return;
+      isolate_->InvalidateStringIteratorProtector();
     }
   } else if (*name_ == roots.resolve_string()) {
     if (!isolate_->IsPromiseResolveLookupChainIntact()) return;
