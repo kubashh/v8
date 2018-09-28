@@ -108,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "d9f9c0a3_d078988f",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2278,
+      "author": {
+        "id": 1131655
+      },
+      "writtenOn": "2018-09-28T20:55:19Z",
+      "side": 1,
+      "message": "Removed TODO. We don\u0027t need sourceURL in either case. So, now it doesn\u0027t contain wrong info earlier either.",
+      "parentUuid": "68cbfa41_69167b9a",
+      "range": {
+        "startLine": 2272,
+        "startChar": 0,
+        "endLine": 2278,
+        "endChar": 3
+      },
+      "revId": "47c82dc3de484614aa4c5ff233c44411b56d489d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68cd4031_a5403386",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 3
