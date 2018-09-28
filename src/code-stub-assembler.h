@@ -1940,6 +1940,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<BoolT> IsSimpleObjectMap(TNode<Map> map);
   TNode<BoolT> IsStringInstanceType(SloppyTNode<Int32T> instance_type);
   TNode<BoolT> IsString(SloppyTNode<HeapObject> object);
+  TNode<Word32T> IsStringWrapperElementsKind(TNode<Map> map);
+
   TNode<BoolT> IsSymbolInstanceType(SloppyTNode<Int32T> instance_type);
   TNode<BoolT> IsSymbol(SloppyTNode<HeapObject> object);
   TNode<BoolT> IsUndetectableMap(SloppyTNode<Map> map);
