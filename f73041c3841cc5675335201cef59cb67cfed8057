@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "76279c23_01de3073",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T10:49:27Z",
+      "side": 1,
+      "message": "Let\u0027s leave it out until it\u0027s needed.",
+      "revId": "f73041c3841cc5675335201cef59cb67cfed8057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db9996e8_c14101a1",
         "filename": "src/lookup.cc",
         "patchSetId": 3
@@ -36,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "cbe42dfe_4ab35cfb",
+        "filename": "src/lookup.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T10:49:27Z",
+      "side": 1,
+      "message": "I think we should only do this if the receiver is the holder, see the comment in the test.",
+      "revId": "f73041c3841cc5675335201cef59cb67cfed8057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f86431b1_9df3a4ba",
         "filename": "src/lookup.cc",
         "patchSetId": 3
@@ -47,6 +81,63 @@
       "writtenOn": "2018-09-28T10:00:00Z",
       "side": 1,
       "message": "Same here, this should happen in the respective branches.",
+      "revId": "f73041c3841cc5675335201cef59cb67cfed8057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c582f46_5426d2a4",
+        "filename": "test/mjsunit/es6/string-iterator2.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T10:49:27Z",
+      "side": 1,
+      "message": "Please add the corresponding assertTrue before the modification of the prototype. Also in the other tests.",
+      "revId": "f73041c3841cc5675335201cef59cb67cfed8057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a370ff5f_f5bb37dd",
+        "filename": "test/mjsunit/es6/string-iterator4.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T10:49:27Z",
+      "side": 1,
+      "message": "Please use a different name, e.g. iterator_fn.",
+      "range": {
+        "startLine": 12,
+        "startChar": 4,
+        "endLine": 12,
+        "endChar": 8
+      },
+      "revId": "f73041c3841cc5675335201cef59cb67cfed8057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82c04b83_9a552547",
+        "filename": "test/mjsunit/es6/string-iterator4.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T10:49:27Z",
+      "side": 1,
+      "message": "I thought we didn\u0027t want this to invalidate the protector since we only optimize for primitive strings.",
       "revId": "f73041c3841cc5675335201cef59cb67cfed8057",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
