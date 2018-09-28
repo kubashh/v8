@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adcf617a_055ac2da",
+        "filename": "src/inspector/injected-script-source.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-09-28T17:42:26Z",
+      "side": 1,
+      "message": "startsWith ?",
+      "revId": "d96713265ec5b5ba839f9424e0820320b7c9633c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1fdc317_3c4914a0",
+        "filename": "src/inspector/injected-script-source.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-09-28T17:42:26Z",
+      "side": 1,
+      "message": "nit: const messageWithStack \u003d index !\u003d\u003d -1 ? stack.substr(index) : message;",
+      "revId": "d96713265ec5b5ba839f9424e0820320b7c9633c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
