@@ -50,6 +50,9 @@
   V(NUMBER_STRING_CACHE_TYPE)                    \
   V(OBJECT_PROPERTY_DICTIONARY_TYPE)             \
   V(OBJECT_TO_CODE_TYPE)                         \
+  V(OLD_BYTECODE_ARRAY_TYPE)                     \
+  V(OLD_BYTECODE_ARRAY_CONSTANT_POOL_TYPE)       \
+  V(OLD_BYTECODE_ARRAY_HANDLER_TABLE_TYPE)       \
   V(OPTIMIZED_CODE_LITERALS_TYPE)                \
   V(OTHER_CONTEXT_TYPE)                          \
   V(PROTOTYPE_USERS_TYPE)                        \

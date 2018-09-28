@@ -1859,6 +1859,10 @@ class Isolate : private HiddenFactory {
   friend class v8::SnapshotCreator;
   friend class v8::Unlocker;
 
+ public:
+  int gc_reason = -1;
+
+ private:
   DISALLOW_COPY_AND_ASSIGN(Isolate);
 };
 

@@ -875,6 +875,18 @@ void ObjectStatsCollectorImpl::
 
 void ObjectStatsCollectorImpl::RecordVirtualBytecodeArrayDetails(
     BytecodeArray* bytecode) {
+  if (bytecode->IsOld()) {
+    RecordSimpleVirtualObjectStats(nullptr, bytecode,
+                                   ObjectStats::OLD_BYTECODE_ARRAY_TYPE);
+    RecordSimpleVirtualObjectStats(
+        bytecode, bytecode->constant_pool(),
+        ObjectStats::OLD_BYTECODE_ARRAY_CONSTANT_POOL_TYPE);
+    RecordSimpleVirtualObjectStats(
+        bytecode, bytecode->handler_table(),
+        ObjectStats::OLD_BYTECODE_ARRAY_HANDLER_TABLE_TYPE);
+    return;
+  }
+
   RecordSimpleVirtualObjectStats(
       bytecode, bytecode->constant_pool(),
       ObjectStats::BYTECODE_ARRAY_CONSTANT_POOL_TYPE);
