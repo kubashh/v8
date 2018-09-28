@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "71c03bad_51d4b29e",
+        "filename": "src/isolate.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-28T14:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8605c30_3bd2f5ba",
+      "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27be51ff_ad485a42",
         "filename": "test/mjsunit/es6/string-iterator3.js",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "c0d89973_aa9bcedc",
+        "filename": "test/mjsunit/es6/string-iterator3.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-28T14:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27be51ff_ad485a42",
+      "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60e83c3e_c449867d",
         "filename": "test/mjsunit/es6/string-iterator4.js",
         "patchSetId": 4
@@ -50,6 +86,24 @@
       "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab1785ff_ec60d6a2",
+        "filename": "test/mjsunit/es6/string-iterator4.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-28T14:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60e83c3e_c449867d",
+      "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -73,6 +127,30 @@
       "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c594b69_461702c2",
+        "filename": "test/mjsunit/es6/string-iterator4.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-09-28T14:06:59Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "a2a0b39b_ae9acd50",
+      "range": {
+        "startLine": 19,
+        "startChar": 52,
+        "endLine": 19,
+        "endChar": 79
+      },
+      "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
