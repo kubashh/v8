@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee710785_bc1fa531",
+        "filename": "src/lookup.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T14:20:27Z",
+      "side": 0,
+      "message": "Benedikt, given that these checks are done in the corresponding place in all other branches, I think they should stay here (or be adapted in the other branches too).",
+      "revId": "7b11480f3bd92317c3fe97ae51b11cb7e1d97ec2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
