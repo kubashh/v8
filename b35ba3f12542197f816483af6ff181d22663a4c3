@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8605c30_3bd2f5ba",
+        "filename": "src/isolate.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T11:51:39Z",
+      "side": 1,
+      "message": "I think we should add a comment here or elsewhere that explains the semantics. How about:\n\nAs long as the StringIteratorProtector is valid, iterating over a string primitive is guaranteed to be unobservable and can thus be cut short. More precisely, the protector gets invalidated as soon as either String.prototype[Symbol.iterator] or String.prototype[Symbol.iterator]().next is overwritten. Note that the above guarantee does not apply to string objects (as opposed to primitives), since they could define their own Symbol.iterator.",
+      "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27be51ff_ad485a42",
+        "filename": "test/mjsunit/es6/string-iterator3.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T11:51:39Z",
+      "side": 1,
+      "message": "The spacing is unusual. Let\u0027s write\nreturn {next: () \u003d\u003e ({value: undefined, done: true})};\nSimilar elsewhere.",
+      "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60e83c3e_c449867d",
+        "filename": "test/mjsunit/es6/string-iterator4.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T11:51:39Z",
+      "side": 1,
+      "message": "function iterator_fn() { ... }",
+      "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2a0b39b_ae9acd50",
+        "filename": "test/mjsunit/es6/string-iterator4.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T11:51:39Z",
+      "side": 1,
+      "message": "It\u0027s not clear what that means.",
+      "range": {
+        "startLine": 19,
+        "startChar": 52,
+        "endLine": 19,
+        "endChar": 79
+      },
+      "revId": "b35ba3f12542197f816483af6ff181d22663a4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
