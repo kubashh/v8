@@ -122,10 +122,13 @@ enum HourOption {
   H_24,
 };
 
-static const std::vector<PatternData> CreateCommonData() {
+static const std::vector<PatternData> CreateCommonData(
+    const PatternData& hour_data) {
   std::vector<PatternData> build;
   for (const auto& item : GetPatternItems()) {
-    if (item.property != "hour") {
+    if (item.property == "hour") {
+      build.push_back(hour_data);
+    } else {
       build.push_back(
           PatternData(item.property, item.pairs, item.allowed_values));
     }
@@ -136,10 +139,9 @@ static const std::vector<PatternData> CreateCommonData() {
 static const std::vector<PatternData> CreateData(const char* digit2,
                                                  const char* numeric) {
   static std::vector<const char*> k2DigitNumeric = {"2-digit", "numeric"};
-  static const std::vector<PatternData> common = CreateCommonData();
-  std::vector<PatternData> build(common);
-  build.push_back(PatternData(
+  const std::vector<PatternData> common = CreateCommonData(PatternData(
       "hour", {{digit2, "2-digit"}, {numeric, "numeric"}}, &k2DigitNumeric));
+  std::vector<PatternData> build(common);
   return build;
 }
 
@@ -393,32 +395,6 @@ MaybeHandle<JSObject> JSDateTimeFormat::ResolvedOptions(
   pattern_unicode.toUTF8String(pattern);
   SetPropertyFromPattern(isolate, pattern, options);
   return options;
-}
-
-Maybe<std::string> JSDateTimeFormat::OptionsToSkeleton(
-    Isolate* isolate, Handle<JSReceiver> options) {
-  std::string result;
-  bool hour12;
-  Maybe<bool> maybe_get_hour12 = Intl::GetBoolOption(
-      isolate, options, "hour12", "Intl.DateTimeFormat", &hour12);
-  MAYBE_RETURN(maybe_get_hour12, Nothing<std::string>());
-  HourOption hour_option = HourOption::H_UNKNOWN;
-  if (maybe_get_hour12.FromJust()) {
-    hour_option = hour12 ? HourOption::H_12 : HourOption::H_24;
-  }
-
-  for (const auto& item : GetPatternData(hour_option)) {
-    std::unique_ptr<char[]> input;
-    Maybe<bool> maybe_get_option = Intl::GetStringOption(
-        isolate, options, item.property.c_str(), *(item.allowed_values),
-        "Intl.DateTimeFormat", &input);
-    MAYBE_RETURN(maybe_get_option, Nothing<std::string>());
-    if (maybe_get_option.FromJust()) {
-      DCHECK_NOT_NULL(input.get());
-      result += item.map.find(input.get())->second;
-    }
-  }
-  return Just(result);
 }
 
 namespace {
@@ -758,15 +734,43 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
           isolate, input_options, RequiredOption::kAny, DefaultsOption::kDate),
       JSDateTimeFormat);
 
+  // ResolveLocale currently get option of localeMatcher so we have to call
+  // ResolveLocale before "hour12" and "hourCycle".
   // 11. Let r be ResolveLocale( %DateTimeFormat%.[[AvailableLocales]],
   //     requestedLocales, opt, %DateTimeFormat%.[[RelevantExtensionKeys]],
   //     localeData).
-  const char* kService = "Intl.DateTimeFormat";
   Handle<JSObject> r;
   ASSIGN_RETURN_ON_EXCEPTION(
       isolate, r,
       Intl::ResolveLocale(isolate, "dateformat", requested_locales, options),
       JSDateTimeFormat);
+
+  // 6. Let hour12 be ? GetOption(options, "hour12", "boolean", undefined,
+  // undefined).
+  bool hour12;
+  Maybe<bool> maybe_get_hour12 = Intl::GetBoolOption(
+      isolate, options, "hour12", "Intl.DateTimeFormat", &hour12);
+  MAYBE_RETURN(maybe_get_hour12, Handle<JSDateTimeFormat>());
+  HourOption hour_option = HourOption::H_UNKNOWN;
+  if (maybe_get_hour12.FromJust()) {
+    hour_option = hour12 ? HourOption::H_12 : HourOption::H_24;
+  }
+
+  // 7. Let hourCycle be ? GetOption(options, "hourCycle", "string", « "h11",
+  // "h12", "h23", "h24" », undefined).
+  const char* kService = "Intl.DateTimeFormat";
+  static std::vector<const char*> hour_cycle_values = {"h11", "h12", "h23",
+                                                       "h24"};
+  std::unique_ptr<char[]> hour_cycle = nullptr;
+  Maybe<bool> maybe_hour_cycle = Intl::GetStringOption(
+      isolate, options, "hourCycle", hour_cycle_values, kService, &hour_cycle);
+  MAYBE_RETURN(maybe_hour_cycle, Handle<JSDateTimeFormat>());
+  // 8. If hour12 is not undefined, then
+  if (maybe_get_hour12.FromJust()) {
+    // a. Let hourCycle be null.
+    hour_cycle = nullptr;
+  }
+  // 9. Set opt.[[hc]] to hourCycle.
 
   Handle<String> locale_with_extension_str =
       isolate->factory()->NewStringFromStaticChars("localeWithExtension");
@@ -783,6 +787,31 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
       Intl::CreateICULocale(isolate, locale_with_extension);
   DCHECK(!icu_locale.isBogus());
 
+  // 17. Let timeZone be ? Get(options, "timeZone").
+  static std::vector<const char*> empty_values = {};
+  std::unique_ptr<char[]> timezone = nullptr;
+  Maybe<bool> maybe_timezone = Intl::GetStringOption(
+      isolate, options, "timeZone", empty_values, kService, &timezone);
+  MAYBE_RETURN(maybe_timezone, Handle<JSDateTimeFormat>());
+
+  // 22. For each row of Table 5, except the header row, do
+  std::string skeleton;
+  for (const auto& item : GetPatternData(hour_option)) {
+    std::unique_ptr<char[]> input;
+    // a. Let prop be the name given in the Property column of the row.
+    // b. Let value be ? GetOption(options, prop, "string", « the strings given
+    // in the Values column of the row », undefined).
+    Maybe<bool> maybe_get_option = Intl::GetStringOption(
+        isolate, options, item.property.c_str(), *(item.allowed_values),
+        "Intl.DateTimeFormat", &input);
+    MAYBE_RETURN(maybe_get_option, Handle<JSDateTimeFormat>());
+    if (maybe_get_option.FromJust()) {
+      DCHECK_NOT_NULL(input.get());
+      // c. Set opt.[[<prop>]] to value.
+      skeleton += item.map.find(input.get())->second;
+    }
+  }
+
   // We implement only best fit algorithm, but still need to check
   // if the formatMatcher values are in range.
   // 25. Let matcher be ? GetOption(options, "formatMatcher", "string",
@@ -798,30 +827,6 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
                             matcher_values, kService, &matcher_str);
   MAYBE_RETURN(maybe_found_matcher, Handle<JSDateTimeFormat>());
 
-  // 17. Let timeZone be ? Get(options, "timeZone").
-  static std::vector<const char*> empty_values = {};
-  std::unique_ptr<char[]> timezone = nullptr;
-  Maybe<bool> maybe_timezone = Intl::GetStringOption(
-      isolate, options, "timeZone", empty_values, kService, &timezone);
-  MAYBE_RETURN(maybe_timezone, Handle<JSDateTimeFormat>());
-
-  Maybe<std::string> maybe_skeleton =
-      JSDateTimeFormat::OptionsToSkeleton(isolate, options);
-  MAYBE_RETURN(maybe_skeleton, Handle<JSDateTimeFormat>());
-  std::string skeleton = maybe_skeleton.FromJust();
-
-  // 13. Set dateTimeFormat.[[Calendar]] to r.[[ca]].
-  std::unique_ptr<icu::Calendar> calendar(
-      CreateCalendar(isolate, icu_locale, timezone.get()));
-  // 18.b If the result of IsValidTimeZoneName(timeZone) is false, then
-  // i. Throw a RangeError exception.
-  if (calendar.get() == nullptr) {
-    THROW_NEW_ERROR(isolate,
-                    NewRangeError(MessageTemplate::kInvalidTimeZone,
-                                  isolate->factory()->NewStringFromAsciiChecked(
-                                      timezone.get())),
-                    JSDateTimeFormat);
-  }
   std::unique_ptr<icu::SimpleDateFormat> date_format(
       CreateICUDateFormat(isolate, icu_locale, skeleton));
   if (date_format.get() == nullptr) {
@@ -832,7 +837,6 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
       FATAL("Failed to create ICU date format, are ICU data files missing?");
     }
   }
-  date_format->adoptCalendar(calendar.release());
 
   // Set the locale
   // 12. Set dateTimeFormat.[[Locale]] to r.[[locale]].
@@ -841,6 +845,21 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
   Handle<Managed<icu::Locale>> managed_locale =
       Managed<icu::Locale>::FromRawPtr(isolate, 0, cloned_locale);
   date_time_format->set_icu_locale(*managed_locale);
+
+  // 13. Set dateTimeFormat.[[Calendar]] to r.[[ca]].
+  std::unique_ptr<icu::Calendar> calendar(
+      CreateCalendar(isolate, icu_locale, timezone.get()));
+
+  // 18.b If the result of IsValidTimeZoneName(timeZone) is false, then
+  // i. Throw a RangeError exception.
+  if (calendar.get() == nullptr) {
+    THROW_NEW_ERROR(isolate,
+                    NewRangeError(MessageTemplate::kInvalidTimeZone,
+                                  isolate->factory()->NewStringFromAsciiChecked(
+                                      timezone.get())),
+                    JSDateTimeFormat);
+  }
+  date_format->adoptCalendar(calendar.release());
 
   Handle<Managed<icu::SimpleDateFormat>> managed_format =
       Managed<icu::SimpleDateFormat>::FromUniquePtr(isolate, 0,
