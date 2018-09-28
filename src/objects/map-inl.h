@@ -739,6 +739,10 @@ int Map::SlackForArraySize(int old_size, int size_limit) {
   if (old_size < 4) {
     DCHECK_LE(1, max_slack);
     return 1;
+  } else if (old_size < 8) {
+    return Min(max_slack, 2);
+  } else if (old_size < 48) {
+    return Min(max_slack, 3);
   }
   return Min(max_slack, old_size / 4);
 }
