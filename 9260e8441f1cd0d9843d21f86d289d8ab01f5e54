@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e38dd4d_65907e22",
+        "filename": "src/lookup.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-09-28T14:30:00Z",
+      "side": 1,
+      "message": "This comment is misleading since we only looked at the holder. The receiver might be a different object. In particular, in the following example we are unnecessarily invalidating the protector:\n\nconst p \u003d \"\"[Symbol.iterator]().__proto__;\nlet x \u003d Object.create(p);\nx.next \u003d 42;\n\nSo at the very least the comment should be clarified. Perhaps it is acceptable that we needlessly invalidate the protector in the example.",
+      "revId": "9260e8441f1cd0d9843d21f86d289d8ab01f5e54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
