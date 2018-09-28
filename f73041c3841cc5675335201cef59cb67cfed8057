@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebe52dc5_b683698f",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-28T10:00:00Z",
+      "side": 1,
+      "message": "Since this is not used in TurboFan, you don\u0027t need to add it now.",
+      "revId": "f73041c3841cc5675335201cef59cb67cfed8057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db9996e8_c14101a1",
+        "filename": "src/lookup.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-28T10:00:00Z",
+      "side": 1,
+      "message": "Move these into the individual branches below.",
+      "revId": "f73041c3841cc5675335201cef59cb67cfed8057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f86431b1_9df3a4ba",
+        "filename": "src/lookup.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-09-28T10:00:00Z",
+      "side": 1,
+      "message": "Same here, this should happen in the respective branches.",
+      "revId": "f73041c3841cc5675335201cef59cb67cfed8057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
