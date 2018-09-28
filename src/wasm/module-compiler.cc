@@ -2274,6 +2274,7 @@ void AsyncCompileJob::FinishCompile() {
     MaybeHandle<String> src_map_str = isolate_->factory()->NewStringFromUtf8(
         CStrVector(module_object_->module()->source_map_url.c_str()), TENURED);
     script->set_source_mapping_url(*src_map_str.ToHandleChecked());
+    script->set_source_url(*isolate_->factory()->empty_string());
   }
   isolate_->debug()->OnAfterCompile(script);
 
@@ -3091,12 +3092,18 @@ Handle<Script> CreateWasmScript(Isolate* isolate,
 
   const int kBufferSize = 32;
   char buffer[kBufferSize];
-  int url_chars = SNPrintF(ArrayVector(buffer), "wasm://wasm/%08x", hash);
-  DCHECK(url_chars >= 0 && url_chars < kBufferSize);
-  MaybeHandle<String> url_str = isolate->factory()->NewStringFromOneByte(
-      Vector<const uint8_t>(reinterpret_cast<uint8_t*>(buffer), url_chars),
-      TENURED);
-  script->set_source_url(*url_str.ToHandleChecked());
+  if (source_map_url.size() != 0) {
+    MaybeHandle<String> src_map_str = isolate->factory()->NewStringFromUtf8(
+        CStrVector(source_map_url.c_str()), TENURED);
+    script->set_source_mapping_url(*src_map_str.ToHandleChecked());
+  } else {
+    int url_chars = SNPrintF(ArrayVector(buffer), "wasm://wasm/%08x", hash);
+    DCHECK(url_chars >= 0 && url_chars < kBufferSize);
+    MaybeHandle<String> url_str = isolate->factory()->NewStringFromOneByte(
+        Vector<const uint8_t>(reinterpret_cast<uint8_t*>(buffer), url_chars),
+        TENURED);
+    script->set_source_url(*url_str.ToHandleChecked());
+  }
 
   int name_chars = SNPrintF(ArrayVector(buffer), "wasm-%08x", hash);
   DCHECK(name_chars >= 0 && name_chars < kBufferSize);
@@ -3104,12 +3111,6 @@ Handle<Script> CreateWasmScript(Isolate* isolate,
       Vector<const uint8_t>(reinterpret_cast<uint8_t*>(buffer), name_chars),
       TENURED);
   script->set_name(*name_str.ToHandleChecked());
-
-  if (source_map_url.size() != 0) {
-    MaybeHandle<String> src_map_str = isolate->factory()->NewStringFromUtf8(
-        CStrVector(source_map_url.c_str()), TENURED);
-    script->set_source_mapping_url(*src_map_str.ToHandleChecked());
-  }
   return script;
 }
 
