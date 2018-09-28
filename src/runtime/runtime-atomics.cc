@@ -33,6 +33,16 @@ namespace {
 #pragma GCC diagnostic ignored "-Watomic-alignment"
 
 template <typename T>
+inline T LoadSeqCst(T* p) {
+  return __atomic_load_n(p, __ATOMIC_SEQ_CST);
+}
+
+template <typename T>
+inline void StoreSeqCst(T* p, T value) {
+  __atomic_store_n(p, value, __ATOMIC_SEQ_CST);
+}
+
+template <typename T>
 inline T ExchangeSeqCst(T* p, T value) {
   return __atomic_exchange_n(p, value, __ATOMIC_SEQ_CST);
 }
@@ -124,6 +134,17 @@ ATOMIC_OPS(uint32_t, 32, long)  /* NOLINT(runtime/int) */
 ATOMIC_OPS(int64_t, 64, __int64)
 ATOMIC_OPS(uint64_t, 64, __int64)
 
+template <typename T>
+inline T LoadSeqCst(T* p) {
+  UNREACHABLE();
+  return 0;
+}
+
+template <typename T>
+inline void StoreSeqCst(T* p, T value) {
+  UNREACHABLE();
+}
+
 #undef ATOMIC_OPS
 
 #undef InterlockedExchange32
@@ -211,6 +232,24 @@ inline Object* ToObject(Isolate* isolate, int64_t t) {
 inline Object* ToObject(Isolate* isolate, uint64_t t) {
   return *BigInt::FromUint64(isolate, t);
 }
+
+template <typename T>
+struct Load {
+  static inline Object* Do(Isolate* isolate, void* buffer, size_t index,
+                           Handle<Object> obj) {
+    T result = LoadSeqCst(static_cast<T*>(buffer) + index);
+    return ToObject(isolate, result);
+  }
+};
+
+template <typename T>
+struct Store {
+  static inline void Do(Isolate* isolate, void* buffer, size_t index,
+                        Handle<Object> obj) {
+    T value = FromObject<T>(obj);
+    StoreSeqCst(static_cast<T*>(buffer) + index, value);
+  }
+};
 
 template <typename T>
 struct Exchange {
@@ -343,6 +382,95 @@ Object* GetModifySetValueInBuffer(Arguments args, Isolate* isolate) {
   UNREACHABLE();
 }
 
+RUNTIME_FUNCTION(Runtime_AtomicLoad) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSTypedArray, sta, 0);
+  CONVERT_SIZE_ARG_CHECKED(index, 1);
+  CHECK(sta->GetBuffer()->is_shared());
+
+  uint8_t* source = static_cast<uint8_t*>(sta->GetBuffer()->backing_store()) +
+                    sta->byte_offset();
+
+  printf("Runtime atomics load, sta->type = (%d)\n", sta->type());
+
+  if (sta->type() >= kExternalBigInt64Array) {
+    Handle<BigInt> bigint;
+    // SharedArrayBuffers are not neuterable.
+    CHECK_LT(index, NumberToSize(sta->length()));
+    if (sta->type() == kExternalBigInt64Array) {
+      return Load<int64_t>::Do(isolate, source, index, bigint);
+    }
+    DCHECK(sta->type() == kExternalBigUint64Array);
+    return Load<uint64_t>::Do(isolate, source, index, bigint);
+  }
+
+  Handle<Object> value;
+  // SharedArrayBuffers are not neuterable.
+  CHECK_LT(index, NumberToSize(sta->length()));
+
+  switch (sta->type()) {
+#define TYPED_ARRAY_CASE(Type, typeName, TYPE, ctype) \
+  case kExternal##Type##Array:                        \
+    return Load<ctype>::Do(isolate, source, index, value);
+
+    INTEGER_TYPED_ARRAYS(TYPED_ARRAY_CASE)
+#undef TYPED_ARRAY_CASE
+
+    default:
+      break;
+  }
+
+  UNREACHABLE();
+}
+
+RUNTIME_FUNCTION(Runtime_AtomicStore) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSTypedArray, sta, 0);
+  CONVERT_SIZE_ARG_CHECKED(index, 1);
+  CONVERT_ARG_HANDLE_CHECKED(Object, value_obj, 2);
+  CHECK(sta->GetBuffer()->is_shared());
+
+  uint8_t* source = static_cast<uint8_t*>(sta->GetBuffer()->backing_store()) +
+                    sta->byte_offset();
+
+  if (sta->type() >= kExternalBigInt64Array) {
+    Handle<BigInt> bigint;
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, bigint,
+                                       BigInt::FromObject(isolate, value_obj));
+    // SharedArrayBuffers are not neuterable.
+    CHECK_LT(index, NumberToSize(sta->length()));
+    if (sta->type() == kExternalBigInt64Array) {
+      Store<int64_t>::Do(isolate, source, index, bigint);
+      return ReadOnlyRoots(isolate).undefined_value();
+    }
+    DCHECK(sta->type() == kExternalBigUint64Array);
+    Store<uint64_t>::Do(isolate, source, index, bigint);
+    return ReadOnlyRoots(isolate).undefined_value();
+  }
+
+  Handle<Object> value;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, value,
+                                     Object::ToInteger(isolate, value_obj));
+  // SharedArrayBuffers are not neuterable.
+  CHECK_LT(index, NumberToSize(sta->length()));
+
+  switch (sta->type()) {
+#define TYPED_ARRAY_CASE(Type, typeName, TYPE, ctype) \
+  case kExternal##Type##Array:                        \
+    Store<ctype>::Do(isolate, source, index, value);  \
+    return ReadOnlyRoots(isolate).undefined_value();
+    INTEGER_TYPED_ARRAYS(TYPED_ARRAY_CASE)
+#undef TYPED_ARRAY_CASE
+
+    default:
+      break;
+  }
+
+  UNREACHABLE();
+}
+
 RUNTIME_FUNCTION(Runtime_AtomicsExchange) {
   return GetModifySetValueInBuffer<Exchange>(args, isolate);
 }
@@ -436,6 +564,10 @@ RUNTIME_FUNCTION(Runtime_AtomicsXor) {
 #undef INTEGER_TYPED_ARRAYS
 
 #else
+
+RUNTIME_FUNCTION(Runtime_AtomicLoad) { UNREACHABLE(); }
+
+RUNTIME_FUNCTION(Runtime_AtomicStore) { UNREACHABLE(); }
 
 RUNTIME_FUNCTION(Runtime_AtomicsExchange) { UNREACHABLE(); }
 
