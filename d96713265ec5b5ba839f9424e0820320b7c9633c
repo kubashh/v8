@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bd746bf2_203af375",
+        "filename": "src/inspector/injected-script-source.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 665,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-09-28T18:32:56Z",
+      "side": 1,
+      "message": "as less methods we use in injected-script-source as less probability that we will call some random user code.",
+      "parentUuid": "adcf617a_055ac2da",
+      "revId": "d96713265ec5b5ba839f9424e0820320b7c9633c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1fdc317_3c4914a0",
         "filename": "src/inspector/injected-script-source.js",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "d96713265ec5b5ba839f9424e0820320b7c9633c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a8959f_1f3ed6ef",
+        "filename": "src/inspector/injected-script-source.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1125920
+      },
+      "writtenOn": "2018-09-28T18:32:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1fdc317_3c4914a0",
+      "revId": "d96713265ec5b5ba839f9424e0820320b7c9633c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
