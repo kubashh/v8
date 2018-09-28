@@ -1222,6 +1222,7 @@ class Isolate : private HiddenFactory {
   bool IsIsConcatSpreadableLookupChainIntact(JSReceiver* receiver);
   inline bool IsStringLengthOverflowIntact();
   inline bool IsArrayIteratorLookupChainIntact();
+  inline bool IsStringIteratorLookupChainIntact();
 
   // Make sure we do check for neutered array buffers.
   inline bool IsArrayBufferNeuteringIntact();
@@ -1263,6 +1264,7 @@ class Isolate : private HiddenFactory {
   void InvalidateIsConcatSpreadableProtector();
   void InvalidateStringLengthOverflowProtector();
   void InvalidateArrayIteratorProtector();
+  void InvalidateStringIteratorProtector();
   void InvalidateArrayBufferNeuteringProtector();
   V8_EXPORT_PRIVATE void InvalidatePromiseHookProtector();
   void InvalidatePromiseResolveProtector();

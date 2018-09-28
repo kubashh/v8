@@ -1454,6 +1454,9 @@ void JSHeapBroker::SerializeStandardObjects() {
   GetOrCreateData(f->promise_species_protector())
       ->AsPropertyCell()
       ->Serialize();
+  GetOrCreateData(f->string_iterator_protector())
+      ->AsPropertyCell()
+      ->Serialize();
   GetOrCreateData(f->promise_then_protector())->AsPropertyCell()->Serialize();
 
   // Builtins
