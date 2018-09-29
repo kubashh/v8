@@ -769,6 +769,8 @@ bool operator==(CheckMinusZeroParameters const& lhs,
   V(StringLessThanOrEqual, Operator::kNoProperties, 2, 0)        \
   V(ToBoolean, Operator::kNoProperties, 1, 0)                    \
   V(NewConsString, Operator::kNoProperties, 3, 0)                \
+  V(NewAwaitClosure, Operator::kNoProperties, 3, 0)              \
+  V(NewAwaitContext, Operator::kNoProperties, 1, 0)              \
   V(PoisonIndex, Operator::kNoProperties, 1, 0)
 
 #define EFFECT_DEPENDENT_OP_LIST(V)                  \

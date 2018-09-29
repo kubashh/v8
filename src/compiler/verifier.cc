@@ -1246,6 +1246,15 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       CheckValueInputIs(node, 2, Type::String());
       CheckTypeIs(node, Type::String());
       break;
+    case IrOpcode::kNewAwaitClosure:
+      CheckValueInputIs(node, 0, Type::OtherInternal());
+      CheckValueInputIs(node, 1, Type::OtherInternal());
+      CheckTypeIs(node, Type::Function());
+      break;
+    case IrOpcode::kNewAwaitContext:
+      CheckValueInputIs(node, 0, Type::Any());
+      CheckTypeIs(node, Type::OtherInternal());
+      break;
     case IrOpcode::kDelayedStringConstant:
       CheckTypeIs(node, Type::String());
       break;

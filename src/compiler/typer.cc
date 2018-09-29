@@ -2182,6 +2182,14 @@ Type Typer::Visitor::TypeNewArgumentsElements(Node* node) {
 
 Type Typer::Visitor::TypeNewConsString(Node* node) { return Type::String(); }
 
+Type Typer::Visitor::TypeNewAwaitClosure(Node* node) {
+  return Type::Function();
+}
+
+Type Typer::Visitor::TypeNewAwaitContext(Node* node) {
+  return Type::OtherInternal();
+}
+
 Type Typer::Visitor::TypeDelayedStringConstant(Node* node) {
   return Type::String();
 }

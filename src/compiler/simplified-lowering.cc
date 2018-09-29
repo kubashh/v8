@@ -3011,6 +3011,11 @@ class RepresentationSelector {
                    MachineRepresentation::kTaggedPointer);
         return;
       }
+      case IrOpcode::kNewAwaitClosure:
+      case IrOpcode::kNewAwaitContext: {
+        VisitInputs(node);
+        return SetOutput(node, MachineRepresentation::kTaggedPointer);
+      }
       case IrOpcode::kCheckFloat64Hole: {
         Type const input_type = TypeOf(node->InputAt(0));
         if (input_type.Is(Type::Number())) {

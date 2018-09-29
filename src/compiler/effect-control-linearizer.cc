@@ -848,6 +848,12 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
     case IrOpcode::kNewConsString:
       result = LowerNewConsString(node);
       break;
+    case IrOpcode::kNewAwaitClosure:
+      result = LowerNewAwaitClosure(node);
+      break;
+    case IrOpcode::kNewAwaitContext:
+      result = LowerNewAwaitContext(node);
+      break;
     case IrOpcode::kSameValue:
       result = LowerSameValue(node);
       break;
@@ -2987,6 +2993,59 @@ Node* EffectControlLinearizer::LowerNewConsString(Node* node) {
   __ StoreField(AccessBuilder::ForStringLength(), result, length);
   __ StoreField(AccessBuilder::ForConsStringFirst(), result, first);
   __ StoreField(AccessBuilder::ForConsStringSecond(), result, second);
+  return result;
+}
+
+Node* EffectControlLinearizer::LowerNewAwaitClosure(Node* node) {
+  Node* shared_info = node->InputAt(0);
+  Node* context = node->InputAt(1);
+  Node* code = node->InputAt(2);
+
+  Node* result = __ Allocate(
+      NOT_TENURED, __ Int32Constant(JSFunction::kSizeWithoutPrototype));
+  // TODO(bmeurer): Pass the map to the operator!
+  Node* result_map = __ LoadField(
+      AccessBuilder::ForContextSlot(
+          Context::STRICT_FUNCTION_WITHOUT_PROTOTYPE_MAP_INDEX),
+      __ LoadField(AccessBuilder::ForContextSlot(Context::NATIVE_CONTEXT_INDEX),
+                   context));
+  __ StoreField(AccessBuilder::ForMap(), result, result_map);
+  __ StoreField(AccessBuilder::ForJSObjectPropertiesOrHash(), result,
+                __ HeapConstant(factory()->empty_fixed_array()));
+  __ StoreField(AccessBuilder::ForJSObjectElements(), result,
+                __ HeapConstant(factory()->empty_fixed_array()));
+  __ StoreField(AccessBuilder::ForJSFunctionSharedFunctionInfo(), result,
+                shared_info);
+  __ StoreField(AccessBuilder::ForJSFunctionContext(), result, context);
+  __ StoreField(AccessBuilder::ForJSFunctionFeedbackCell(), result,
+                __ HeapConstant(factory()->many_closures_cell()));
+  __ StoreField(AccessBuilder::ForJSFunctionCode(), result, code);
+  return result;
+}
+
+Node* EffectControlLinearizer::LowerNewAwaitContext(Node* node) {
+  Node* generator = node->InputAt(0);
+
+  Node* context =
+      __ LoadField(AccessBuilder::ForJSGeneratorObjectContext(), generator);
+  Node* native_context = __ LoadField(
+      AccessBuilder::ForContextSlot(Context::NATIVE_CONTEXT_INDEX), context);
+
+  Node* result = __ Allocate(
+      NOT_TENURED,
+      __ Int32Constant(FixedArray::SizeFor(Context::MIN_CONTEXT_SLOTS)));
+  __ StoreField(AccessBuilder::ForMap(), result,
+                __ HeapConstant(factory()->await_context_map()));
+  __ StoreField(AccessBuilder::ForFixedArrayLength(), result,
+                __ SmiConstant(Context::MIN_CONTEXT_SLOTS));
+  __ StoreField(AccessBuilder::ForContextSlot(Context::SCOPE_INFO_INDEX),
+                result, __ HeapConstant(factory()->empty_scope_info()));
+  __ StoreField(AccessBuilder::ForContextSlot(Context::PREVIOUS_INDEX), result,
+                native_context);
+  __ StoreField(AccessBuilder::ForContextSlot(Context::EXTENSION_INDEX), result,
+                generator);
+  __ StoreField(AccessBuilder::ForContextSlot(Context::NATIVE_CONTEXT_INDEX),
+                result, native_context);
   return result;
 }
 

@@ -750,6 +750,12 @@ class V8_EXPORT_PRIVATE SimplifiedOperatorBuilder final
   // new-cons-string length, first, second
   const Operator* NewConsString();
 
+  // new-await-closure shared-info, context, code
+  const Operator* NewAwaitClosure();
+
+  // new-await-context generator
+  const Operator* NewAwaitContext();
+
   // ensure-writable-fast-elements object, elements
   const Operator* EnsureWritableFastElements();
 

@@ -135,6 +135,7 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
   Reduction ReduceStringPrototypeConcat(Node* node,
                                         Handle<SharedFunctionInfo> shared);
 
+  Reduction ReduceAsyncFunctionAwait(Node* node);
   Reduction ReduceAsyncFunctionPromiseCreate(Node* node);
   Reduction ReduceAsyncFunctionPromiseRelease(Node* node);
   Reduction ReducePromiseConstructor(Node* node);

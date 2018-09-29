@@ -3659,6 +3659,9 @@ Reduction JSCallReducer::ReduceJSCall(Node* node,
       return ReduceArrayIterator(node, IterationKind::kKeys);
     case Builtins::kTypedArrayPrototypeValues:
       return ReduceArrayIterator(node, IterationKind::kValues);
+    case Builtins::kAsyncFunctionAwaitCaught:
+    case Builtins::kAsyncFunctionAwaitUncaught:
+      return ReduceAsyncFunctionAwait(node);
     case Builtins::kAsyncFunctionPromiseCreate:
       return ReduceAsyncFunctionPromiseCreate(node);
     case Builtins::kAsyncFunctionPromiseRelease:
@@ -5490,6 +5493,65 @@ Reduction JSCallReducer::ReduceStringPrototypeConcat(
 
   ReplaceWithValue(node, value, effect, control);
   return Replace(value);
+}
+
+Reduction JSCallReducer::ReduceAsyncFunctionAwait(Node* node) {
+  DCHECK_EQ(IrOpcode::kJSCall, node->opcode());
+  DCHECK_EQ(5, node->op()->ValueInputCount());
+  Node* generator = NodeProperties::GetValueInput(node, 2);
+  Node* value = NodeProperties::GetValueInput(node, 3);
+  Node* outer_promise = NodeProperties::GetValueInput(node, 4);
+  Node* context = NodeProperties::GetContextInput(node);
+  Node* frame_state = NodeProperties::GetFrameStateInput(node);
+  Node* effect = NodeProperties::GetEffectInput(node);
+  Node* control = NodeProperties::GetControlInput(node);
+  if (!isolate()->IsPromiseHookProtectorIntact()) return NoChange();
+
+  // Install a code dependency on the promise hook protector cell.
+  dependencies()->DependOnProtector(
+      PropertyCellRef(js_heap_broker(), factory()->promise_hook_protector()));
+
+  Node* promise = effect =
+      graph()->NewNode(javascript()->CreatePromise(), context, effect);
+
+  // TODO(bmeurer): This is the wrong frame state.
+  effect = graph()->NewNode(javascript()->ResolvePromise(), promise, value,
+                            context, frame_state, effect, control);
+
+  // TODO(bmeurer): Rename to NewInternalContext, meaning that the
+  // identity of the context doesn't matter?
+  Node* closure_context =
+      graph()->NewNode(simplified()->NewAwaitContext(), generator);
+
+  // TODO(bmeurer): Rename to NewInternalClosure, meaning that the
+  // identity of the closure doesn't matter?
+  Handle<SharedFunctionInfo> resolve_shared_info(
+      native_context()->async_function_await_resolve_shared_fun(), isolate());
+  Node* on_fulfilled = graph()->NewNode(
+      simplified()->NewAwaitClosure(),
+      jsgraph()->HeapConstant(resolve_shared_info), closure_context,
+      jsgraph()->HeapConstant(
+          handle(resolve_shared_info->GetCode(), isolate())));
+
+  Handle<SharedFunctionInfo> reject_shared_info(
+      native_context()->async_function_await_reject_shared_fun(), isolate());
+  Node* on_rejected = graph()->NewNode(
+      simplified()->NewAwaitClosure(),
+      jsgraph()->HeapConstant(reject_shared_info), closure_context,
+      jsgraph()->HeapConstant(
+          handle(reject_shared_info->GetCode(), isolate())));
+
+  // TODO(bmeurer): We don't need to create this without promise hooks.
+  // TODO(bmeurer): PromiseSetHasHandler(throwaway)
+  Node* throwaway_promise = effect =
+      graph()->NewNode(javascript()->CreatePromise(), context, effect);
+
+  effect = graph()->NewNode(javascript()->PerformPromiseThen(), promise,
+                            on_fulfilled, on_rejected, throwaway_promise,
+                            context, frame_state, effect, control);
+
+  ReplaceWithValue(node, outer_promise, effect, control);
+  return Replace(outer_promise);
 }
 
 Reduction JSCallReducer::ReduceAsyncFunctionPromiseCreate(Node* node) {

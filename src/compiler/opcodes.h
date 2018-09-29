@@ -429,6 +429,8 @@
   V(NewSmiOrObjectElements)             \
   V(NewArgumentsElements)               \
   V(NewConsString)                      \
+  V(NewAwaitClosure)                    \
+  V(NewAwaitContext)                    \
   V(DelayedStringConstant)              \
   V(EnsureWritableFastElements)         \
   V(MaybeGrowFastElements)              \
