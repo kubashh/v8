@@ -2493,6 +2493,104 @@ TF_BUILTIN(StringIteratorPrototypeNext, StringBuiltinsAssembler) {
   }
 }
 
+TNode<BoolT> StringBuiltinsAssembler::IsStringPrimitiveWithNoCustomIteration(
+    TNode<Object> object, TNode<Context> context) {
+  Label if_false(this, Label::kDeferred), exit(this);
+  TVARIABLE(BoolT, var_result);
+
+  // Is this a string?
+  GotoIf(TaggedIsSmi(object), &if_false);
+  GotoIfNot(IsString(CAST(object)), &if_false);
+
+  // Check if this is a String wrapper.
+  GotoIf(IsStringWrapperElementsKind(LoadMap(CAST(object))), &if_false);
+
+  // Check that the String iterator hasn't been modified in a way that would
+  // affect iteration.
+  Node* protector_cell = LoadRoot(RootIndex::kStringIteratorProtector);
+  DCHECK(isolate()->heap()->string_iterator_protector()->IsPropertyCell());
+  var_result =
+      WordEqual(LoadObjectField(protector_cell, PropertyCell::kValueOffset),
+                SmiConstant(Isolate::kProtectorValid));
+
+  Goto(&exit);
+
+  BIND(&if_false);
+  {
+    var_result = Int32FalseConstant();
+    Goto(&exit);
+  }
+
+  BIND(&exit);
+  return var_result.value();
+}
+
+TNode<JSArray> StringBuiltinsAssembler::StringToList(TNode<Context> context,
+                                                     TNode<String> string) {
+  CSA_ASSERT(this, IsStringPrimitiveWithNoCustomIteration(string, context));
+  const ElementsKind kind = PACKED_ELEMENTS;
+  TNode<IntPtrT> length = LoadStringLengthAsWord(string);
+  TNode<FixedArray> new_elements = AllocateZeroedFixedArray(length);
+
+  // The loop construction is extracted from CopyFixedArrayElements and
+  // StringIteratorPrototypeNext.
+  STATIC_ASSERT(FixedArray::kHeaderSize == FixedDoubleArray::kHeaderSize);
+  const int first_element_offset = FixedArray::kHeaderSize - kHeapObjectTag;
+  TNode<IntPtrT> first_to_element_offset =
+      ElementOffsetFromIndex(IntPtrConstant(0), kind, INTPTR_PARAMETERS, 0);
+  VARIABLE(
+      var_offset, MachineType::PointerRepresentation(),
+      IntPtrAdd(first_to_element_offset, IntPtrConstant(first_element_offset)));
+  TVARIABLE(IntPtrT, var_position, IntPtrConstant(0));
+  Label done(this), next_codepoint(this, {&var_position, &var_offset});
+
+  // Loop condition.
+  Branch(IntPtrLessThan(var_position.value(), length), &next_codepoint, &done);
+
+  BIND(&next_codepoint);
+  {
+    const UnicodeEncoding encoding = UnicodeEncoding::UTF16;
+    TNode<Int32T> ch =
+        LoadSurrogatePairAt(string, length, var_position.value(), encoding);
+    TNode<String> value = StringFromSingleCodePoint(ch, encoding);
+
+    // TODO(dhai): when can we skip the barrier?
+    bool needs_write_barrier = true;
+    if (needs_write_barrier) {
+      Store(new_elements, var_offset.value(), value);
+    } else {
+      StoreNoWriteBarrier(MachineRepresentation::kTagged, new_elements,
+                          var_offset.value(), value);
+    }
+
+    // Increment the position.
+    TNode<IntPtrT> ch_length = LoadStringLengthAsWord(value);
+    var_position = IntPtrAdd(var_position.value(), ch_length);
+    // Loop condition.
+    GotoIfNot(IntPtrLessThan(var_position.value(), length), &done);
+
+    // Increment the array offset and continue the loop.
+    var_offset.Bind(
+        IntPtrAdd(var_offset.value(), IntPtrConstant(kPointerSize)));
+    Goto(&next_codepoint);
+  }
+
+  BIND(&done);
+  Node* native_context = LoadNativeContext(context);
+  Node* array_map = LoadJSArrayElementsMap(kind, native_context);
+
+  Node* result =
+      AllocateUninitializedJSArrayWithoutElements(array_map, SmiTag(length));
+  StoreObjectField(result, JSObject::kElementsOffset, new_elements);
+  return UncheckedCast<JSArray>(result);
+}
+
+TF_BUILTIN(StringToList, StringBuiltinsAssembler) {
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<String> string = CAST(Parameter(Descriptor::kSource));
+  Return(StringToList(context, string));
+}
+
 // -----------------------------------------------------------------------------
 // ES6 section B.2.3 Additional Properties of the String.prototype object
 
