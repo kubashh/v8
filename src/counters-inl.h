@@ -29,11 +29,20 @@ void RuntimeCallTimer::Pause(base::TimeTicks now) {
   DCHECK(IsStarted());
   elapsed_ += (now - start_ticks_);
   start_ticks_ = base::TimeTicks();
+  if (event_set_) {
+    long long count = 0;
+    PAPIstop(event_set_, &count);
+    counter_->add_event_count(count);
+  }
 }
 
 void RuntimeCallTimer::Resume(base::TimeTicks now) {
   DCHECK(!IsStarted());
   start_ticks_ = now;
+  if (event_set_) {
+    PAPIreset(event_set_);
+    PAPIstart(event_set_);
+  }
 }
 
 RuntimeCallTimer* RuntimeCallTimer::Stop() {

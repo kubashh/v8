@@ -18,6 +18,8 @@
 #include "src/tracing/trace-event.h"
 #include "src/tracing/traced-value.h"
 #include "src/tracing/tracing-category-observer.h"
+// TODO (sattlerf): def? location?
+#include "src/papi_event.h"
 
 namespace v8 {
 namespace internal {
@@ -650,7 +652,7 @@ class RuntimeCallCounter final {
  public:
   RuntimeCallCounter() : RuntimeCallCounter(nullptr) {}
   explicit RuntimeCallCounter(const char* name)
-      : name_(name), count_(0), time_(0) {}
+      : name_(name), count_(0), time_(0), event_count_(0) {}
   V8_NOINLINE void Reset();
   V8_NOINLINE void Dump(v8::tracing::TracedValue* value);
   void Add(RuntimeCallCounter* other);
@@ -663,6 +665,9 @@ class RuntimeCallCounter final {
   void Increment() { count_++; }
   void Add(base::TimeDelta delta) { time_ += delta.InMicroseconds(); }
 
+  int64_t event_count() const { return event_count_; }
+  void add_event_count(int64_t delta) { event_count_ += delta; }
+
  private:
   friend class RuntimeCallStats;
 
@@ -670,12 +675,16 @@ class RuntimeCallCounter final {
   int64_t count_;
   // Stored as int64_t so that its initialization can be deferred.
   int64_t time_;
+  int64_t event_count_;
 };
 
 // RuntimeCallTimer is used to keep track of the stack of currently active
 // timers used for properly measuring the own time of a RuntimeCallCounter.
 class RuntimeCallTimer final {
  public:
+  RuntimeCallTimer() = default;
+  RuntimeCallTimer(PAPIEventSet event_set) : event_set_(event_set) {}
+
   RuntimeCallCounter* counter() { return counter_; }
   void set_counter(RuntimeCallCounter* counter) { counter_ = counter; }
   RuntimeCallTimer* parent() const { return parent_.Value(); }
@@ -700,6 +709,7 @@ class RuntimeCallTimer final {
   base::AtomicValue<RuntimeCallTimer*> parent_;
   base::TimeTicks start_ticks_;
   base::TimeDelta elapsed_;
+  PAPIEventSet event_set_;
 };
 
 #define FOR_EACH_GC_COUNTER(V) \
@@ -1071,6 +1081,8 @@ class RuntimeCallStats final {
   RuntimeCallCounter* GetCounter(int counter_id) {
     return &counters_[counter_id];
   }
+  // TODO (sattlerf): make private
+  PAPIEventSet event_set_;
 
  private:
   // Top of a stack of active timers.
@@ -1142,7 +1154,8 @@ class RuntimeCallTimerScope {
   inline RuntimeCallTimerScope(Isolate* isolate, HeapObject* heap_object,
                                RuntimeCallCounterId counter_id);
   inline RuntimeCallTimerScope(RuntimeCallStats* stats,
-                               RuntimeCallCounterId counter_id) {
+                               RuntimeCallCounterId counter_id)
+      : timer_(stats->event_set_) {
     if (V8_LIKELY(!FLAG_runtime_stats || stats == nullptr)) return;
     stats_ = stats;
     stats_->Enter(&timer_, counter_id);
@@ -1663,7 +1676,8 @@ void HistogramTimer::Stop() {
 }
 
 RuntimeCallTimerScope::RuntimeCallTimerScope(Isolate* isolate,
-                                             RuntimeCallCounterId counter_id) {
+                                             RuntimeCallCounterId counter_id)
+    : timer_(isolate->counters()->runtime_call_stats()->event_set_) {
   if (V8_LIKELY(!FLAG_runtime_stats)) return;
   stats_ = isolate->counters()->runtime_call_stats();
   stats_->Enter(&timer_, counter_id);

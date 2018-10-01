@@ -119,6 +119,7 @@ class V8_EXPORT_PRIVATE GCTracer {
     static const char* Name(ScopeId id);
 
    private:
+    // TODO (sattlerf): add event tracking
     GCTracer* tracer_;
     ScopeId scope_;
     double start_time_;

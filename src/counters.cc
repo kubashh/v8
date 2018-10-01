@@ -318,14 +318,14 @@ class RuntimeCallStatEntries {
     if (total_call_count == 0) return;
     std::sort(entries.rbegin(), entries.rend());
     os << std::setw(50) << "Runtime Function/C++ Builtin" << std::setw(12)
-       << "Time" << std::setw(18) << "Count" << std::endl
-       << std::string(88, '=') << std::endl;
+       << "Time" << std::setw(18) << "Count" << addEventHeader() << std::endl
+       << std::string(88, '=') << addEventHeaderOffSet() << std::endl;
     for (Entry& entry : entries) {
       entry.SetTotal(total_time, total_call_count);
       entry.Print(os);
     }
-    os << std::string(88, '-') << std::endl;
-    Entry("Total", total_time, total_call_count).Print(os);
+    os << std::string(88, '-') << addEventFooterOffSet() << std::endl;
+    Entry("Total", total_time, total_call_count, total_event_count).Print(os);
   }
 
   // By default, the compiler will usually inline this, which results in a large
@@ -333,19 +333,22 @@ class RuntimeCallStatEntries {
   // instructions, and this function is invoked repeatedly by macros.
   V8_NOINLINE void Add(RuntimeCallCounter* counter) {
     if (counter->count() == 0) return;
-    entries.push_back(
-        Entry(counter->name(), counter->time(), counter->count()));
+    entries.push_back(Entry(counter->name(), counter->time(), counter->count(),
+                            counter->event_count()));
     total_time += counter->time();
     total_call_count += counter->count();
+    total_event_count += counter->event_count();
   }
 
  private:
   class Entry {
    public:
-    Entry(const char* name, base::TimeDelta time, uint64_t count)
+    Entry(const char* name, base::TimeDelta time, uint64_t count,
+          int64_t event_counter)
         : name_(name),
           time_(time.InMicroseconds()),
           count_(count),
+          event_counter_(event_counter),
           time_percent_(100),
           count_percent_(100) {}
 
@@ -363,6 +366,7 @@ class RuntimeCallStatEntries {
       os << std::setw(6) << time_percent_ << "%";
       os << std::setw(10) << count_ << " ";
       os << std::setw(6) << count_percent_ << "%";
+      os << std::setw(18) << (event_counter_ / count_);
       os << std::endl;
     }
 
@@ -380,11 +384,13 @@ class RuntimeCallStatEntries {
     const char* name_;
     int64_t time_;
     uint64_t count_;
+    int64_t event_counter_;
     double time_percent_;
     double count_percent_;
   };
 
   uint64_t total_call_count = 0;
+  int64_t total_event_count = 0;
   base::TimeDelta total_time;
   std::vector<Entry> entries;
 };
@@ -398,12 +404,14 @@ void RuntimeCallCounter::Dump(v8::tracing::TracedValue* value) {
   value->BeginArray(name_);
   value->AppendDouble(count_);
   value->AppendDouble(time_);
+  value->AppendDouble(event_count_);
   value->EndArray();
 }
 
 void RuntimeCallCounter::Add(RuntimeCallCounter* other) {
   count_ += other->count();
   time_ += other->time().InMicroseconds();
+  event_count_ += other->event_count();
 }
 
 void RuntimeCallTimer::Snapshot() {
@@ -440,6 +448,10 @@ RuntimeCallStats::RuntimeCallStats() : in_use_(false) {
       FOR_EACH_HANDLER_COUNTER(CALL_BUILTIN_COUNTER)  //
 #undef CALL_BUILTIN_COUNTER
   };
+
+  initPAPI();
+  // TODO (sattlerf): add flag
+  event_set_.initEventSet("PAPI_L1_DCM");
   for (int i = 0; i < kNumberOfCounters; i++) {
     this->counters_[i] = RuntimeCallCounter(kNames[i]);
   }
