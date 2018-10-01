@@ -44,8 +44,6 @@ class ObjectBuiltinsAssembler : public CodeStubAssembler {
 
   Node* IsSpecialReceiverMap(SloppyTNode<Map> map);
 
-  TNode<Word32T> IsStringWrapperElementsKind(TNode<Map> map);
-
   void ObjectAssignFast(TNode<Context> context, TNode<JSReceiver> to,
                         TNode<Object> from, Label* slow);
 };
@@ -158,14 +156,6 @@ Node* ObjectBuiltinsAssembler::IsSpecialReceiverMap(SloppyTNode<Map> map) {
              SelectConstant<BoolT>(IsSetWord32(LoadMapBitField(map), mask),
                                    is_special, Int32TrueConstant()));
   return is_special;
-}
-
-TNode<Word32T> ObjectBuiltinsAssembler::IsStringWrapperElementsKind(
-    TNode<Map> map) {
-  Node* kind = LoadMapElementsKind(map);
-  return Word32Or(
-      Word32Equal(kind, Int32Constant(FAST_STRING_WRAPPER_ELEMENTS)),
-      Word32Equal(kind, Int32Constant(SLOW_STRING_WRAPPER_ELEMENTS)));
 }
 
 TNode<BoolT> ObjectEntriesValuesBuiltinsAssembler::IsPropertyEnumerable(
