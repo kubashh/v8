@@ -117,6 +117,30 @@
       "revId": "6f66ec97405b7a474d1528a03198d9df34239c62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0371a5a1_1c048903",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-10-01T10:50:55Z",
+      "side": 1,
+      "message": "Here is the context for children deque: https://codereview.chromium.org/2595003002",
+      "parentUuid": "621b1586_1e86b3e7",
+      "range": {
+        "startLine": 216,
+        "startChar": 7,
+        "endLine": 216,
+        "endChar": 13
+      },
+      "revId": "6f66ec97405b7a474d1528a03198d9df34239c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
