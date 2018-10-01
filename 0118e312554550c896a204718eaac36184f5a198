@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "65d34ebb_ff7fa8b4",
+        "filename": "src/builtins/builtins-sharedarraybuffer-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-10-01T09:25:52Z",
+      "side": 1,
+      "message": "If I move this snippet to there, I get an error when generating snapshots in debug mode: \n\n\n#\n# Fatal error in ../../src/compiler/raw-machine-assembler.cc, line 471\n# Binding label without closing previous block:\n#    label:          (\u0026other:../../src/builtins/builtins-sharedarraybuffer-gen.cc:313)\n#    previous block: B57(\u0026u64:../../src/builtins/builtins-sharedarraybuffer-gen.cc:295) \u003c\u003d B55(\u0026check_passed:../../src/builtins/builtins-sharedarraybuffer-gen.cc:129) \u003c\u003d B42(\u0026done:../../src/code-stub-assembler.cc:5007) \u003c\u003d B41 \u003c\u003d B39(\u0026loop:../../src/code-stub-assembler.cc:5051)\n#\n#\n\n\nShould I create Runtime::kAtomicStore so it returns big int (currently it returns void)? Or to fix it somehow else?",
+      "parentUuid": "ce820e52_889d81da",
+      "range": {
+        "startLine": 304,
+        "startChar": 0,
+        "endLine": 306,
+        "endChar": 5
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "342d4ee5_00236f9f",
         "filename": "src/runtime/runtime-atomics.cc",
         "patchSetId": 2
@@ -68,6 +92,30 @@
       "revId": "0118e312554550c896a204718eaac36184f5a198",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "339f8d19_5b5d6a82",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-10-01T09:25:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "342d4ee5_00236f9f",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 73
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "1520b8d1_41be090a",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-10-01T09:25:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d8d1df12_f809d60e",
+      "range": {
+        "startLine": 140,
+        "startChar": 2,
+        "endLine": 140,
+        "endChar": 11
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "945f1b24_69dd5eb7",
         "filename": "src/runtime/runtime-atomics.cc",
         "patchSetId": 2
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "a0a11a00_4b0b222a",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-10-01T09:25:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "945f1b24_69dd5eb7",
+      "range": {
+        "startLine": 395,
+        "startChar": 2,
+        "endLine": 396,
+        "endChar": 0
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "643b7065_75f887c1",
         "filename": "src/runtime/runtime-atomics.cc",
         "patchSetId": 2
@@ -128,6 +224,30 @@
       "writtenOn": "2018-09-28T18:55:14Z",
       "side": 1,
       "message": "These two new functions are only used for 64-bit operations, right? How do you feel about specializing them for that case, i.e. turning this \"if\" into a DCHECK, dropping lines 408-424, and calling them AtomicsLoad64 and AtomicsStore64 respectively?\n\nIf you think being consistent is more important, I\u0027m fine with that; personally I\u0027d prefer not to ship unused code.",
+      "range": {
+        "startLine": 397,
+        "startChar": 2,
+        "endLine": 397,
+        "endChar": 44
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd8663aa_19744424",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-10-01T09:25:52Z",
+      "side": 1,
+      "message": "I like the idea. This code for other is never used, never tested and only inflates the executable.",
+      "parentUuid": "643b7065_75f887c1",
       "range": {
         "startLine": 397,
         "startChar": 2,
@@ -160,6 +280,30 @@
       "revId": "0118e312554550c896a204718eaac36184f5a198",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39c71355_d09a30e2",
+        "filename": "src/runtime/runtime.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-10-01T09:25:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "28d1c2d4_afd93eb5",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 14
+      },
+      "revId": "0118e312554550c896a204718eaac36184f5a198",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
