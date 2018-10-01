@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56105b56_2810cc26",
+        "filename": "src/compiler/simplified-lowering.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-01T13:38:57Z",
+      "side": 1,
+      "message": "Please add a comment explaining why it is done this way.",
+      "range": {
+        "startLine": 433,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 79
+      },
+      "revId": "2878617643643d5f77fba8ab61aa8cd95ab6fa1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
