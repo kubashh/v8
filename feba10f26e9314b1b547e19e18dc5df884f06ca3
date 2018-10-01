@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72983b71_16f8a51c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-01T07:36:41Z",
+      "side": 1,
+      "message": "Nit: Start sentences with capital letter, dot at the end.",
+      "range": {
+        "startLine": 1448,
+        "startChar": 2,
+        "endLine": 1448,
+        "endChar": 42
+      },
+      "revId": "feba10f26e9314b1b547e19e18dc5df884f06ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d67e9a0e_f18a65b4",
+        "filename": "src/isolate.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2692,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-01T07:36:41Z",
+      "side": 1,
+      "message": "Could you also set compiler_cache_ to nullptr here?",
+      "range": {
+        "startLine": 2692,
+        "startChar": 2,
+        "endLine": 2692,
+        "endChar": 26
+      },
+      "revId": "feba10f26e9314b1b547e19e18dc5df884f06ca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
