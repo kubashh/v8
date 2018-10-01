@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "df0523f6_89a66e27",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 2506,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-01T12:07:01Z",
+      "side": 1,
+      "message": "This is unnecessary since object is known to be a String (primitive), which can never be a JSValue (string wrapper).",
+      "revId": "5399ed5118ee56ab2f1c6d83e1b26d0dd77a915b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "519f82b1_af7252d5",
         "filename": "src/builtins/builtins-string-gen.cc",
         "patchSetId": 22
@@ -128,6 +145,23 @@
       "revId": "5399ed5118ee56ab2f1c6d83e1b26d0dd77a915b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d4d59ab_455703d8",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 2582,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-01T12:07:01Z",
+      "side": 1,
+      "message": "How about using AllocateUninitializedJSArrayWithElements here instead?",
+      "revId": "5399ed5118ee56ab2f1c6d83e1b26d0dd77a915b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
