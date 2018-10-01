@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f15166b7_c78ed8ee",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 2505,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T09:03:46Z",
+      "side": 1,
+      "message": "No need to state the obvious.",
+      "revId": "4ebc8a955a268f738b0b9de19170fa78af16807e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

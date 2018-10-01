@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbba51c9_a35ce41f",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T09:03:46Z",
+      "side": 1,
+      "message": "This is not entirely accurate anymore I think, as (at least in the case of strings) certain modifications are allowed.",
+      "range": {
+        "startLine": 266,
+        "startChar": 17,
+        "endLine": 266,
+        "endChar": 77
+      },
+      "revId": "80e5bf8d260ac40dcb6a3a5224f12fd1ff5c8f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82c8351c_0e72988f",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2501,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T09:03:46Z",
+      "side": 1,
+      "message": "No need to state the obvious.",
+      "revId": "80e5bf8d260ac40dcb6a3a5224f12fd1ff5c8f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a017ec0_cb7b05d0",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 20
+      },
+      "lineNbr": 2505,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T09:03:46Z",
+      "side": 1,
+      "message": "same",
+      "revId": "80e5bf8d260ac40dcb6a3a5224f12fd1ff5c8f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
