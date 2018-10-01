@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a90ca48a_3986c8e1",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-10-01T14:38:58Z",
+      "side": 1,
+      "message": "My thinking was that UTF-8 didn\u0027t seem necessary, as it\u0027s an ASCII-only string.\n\nHowever, Toon then gave the following explanation:\n\n\u003e InternalizeUtf8String is probably what you want since you need an internalized\n\u003e string as property name. NewStringFromAscii will cause an InternalizeString\n\u003e call later, possibly creating a copy and/or ThinString.\n\nSo, InternalizeUtf8String does seems better indeed.\n\n(There\u0027s also InternalizeOneByteString but it expects `Vector\u003cconst uint8_t\u003e string` so I\u0027m disqualifying that.)\n\n------\n\nMeta-comment: looking at existing usages of JSObject::AddProperty in bootstrapper.cc, there seem to be a few different approaches:\n\n- NewStringFromAsciiChecked(\"GeneratorFunction\"): 40 matches\n- NewStringFromStaticChars(\"Intl.ListFormat\"): 4 matches\n- InternalizeUtf8String(\"JSON\"): 55 matches\n\n(The number of matches refers to the occurrences in the entire bootstrapper.cc file -- not just for AddProperty.)\n\nI\u0027ll do a follow-up cleanup CL that switches to InternalizeUtf8String for property names consistently.",
+      "parentUuid": "ee814480_d83b8f8b",
+      "range": {
+        "startLine": 2098,
+        "startChar": 35,
+        "endLine": 2098,
+        "endChar": 60
+      },
+      "revId": "25a72e87fdfb7531a98441f4f23e1bfaa5475180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d1d174f_e110fbd5",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "25a72e87fdfb7531a98441f4f23e1bfaa5475180",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7959578f_38a35b4c",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-10-01T14:38:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d1d174f_e110fbd5",
+      "range": {
+        "startLine": 2106,
+        "startChar": 35,
+        "endLine": 2106,
+        "endChar": 60
+      },
+      "revId": "25a72e87fdfb7531a98441f4f23e1bfaa5475180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
