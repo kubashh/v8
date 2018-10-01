@@ -44,6 +44,7 @@ class StatsCounter;
   V(old_space_allocation_top_address, "Heap::OldSpaceAllocationTopAddress")    \
   V(old_space_allocation_limit_address,                                        \
     "Heap::OldSpaceAllocationLimitAddress")                                    \
+  V(heap_move_elements_function, "Heap::MoveElements()")                       \
   V(handle_scope_level_address, "HandleScope::level")                          \
   V(handle_scope_next_address, "HandleScope::next")                            \
   V(handle_scope_limit_address, "HandleScope::limit")                          \

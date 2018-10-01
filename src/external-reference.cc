@@ -430,6 +430,17 @@ ExternalReference ExternalReference::old_space_allocation_limit_address(
   return ExternalReference(isolate->heap()->OldSpaceAllocationLimitAddress());
 }
 
+void HeapMoveElements(Isolate* isolate, FixedArray* array, int dst_index,
+                      int src_index, int len) {
+  isolate->heap()->MoveElements(array, dst_index, src_index,
+                                UPDATE_WRITE_BARRIER);
+}
+
+ExternalReference ExternalReference::heap_move_elements_function(
+    Isolate* isolate) {
+  return ExternalReference(Redirect(FUNCTION_ADDR(HeapMoveElements)));
+}
+
 ExternalReference ExternalReference::handle_scope_level_address(
     Isolate* isolate) {
   return ExternalReference(HandleScope::current_level_address(isolate));
