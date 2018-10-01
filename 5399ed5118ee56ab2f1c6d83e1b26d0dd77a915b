@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "519f82b1_af7252d5",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 2536,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-01T09:28:52Z",
+      "side": 1,
+      "message": "I am not sure what value this comment is adding.",
+      "range": {
+        "startLine": 2535,
+        "startChar": 2,
+        "endLine": 2536,
+        "endChar": 33
+      },
+      "revId": "5399ed5118ee56ab2f1c6d83e1b26d0dd77a915b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a53d669_2498bdff",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 2570,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-01T09:28:52Z",
+      "side": 1,
+      "message": "Why do you need to duplicate the condition? Can\u0027t you move the check above into the loop? Or do you protect the var_offset increment below? If so, why?",
+      "range": {
+        "startLine": 2570,
+        "startChar": 4,
+        "endLine": 2570,
+        "endChar": 67
+      },
+      "revId": "5399ed5118ee56ab2f1c6d83e1b26d0dd77a915b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99c6e9d1_ffe64690",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 22
+      },
+      "lineNbr": 6011,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-01T09:28:52Z",
+      "side": 1,
+      "message": "Please ask Benedikt later whether this should be better two \u0027if (compare); return\u0027.",
+      "range": {
+        "startLine": 6006,
+        "startChar": 0,
+        "endLine": 6011,
+        "endChar": 1
+      },
+      "revId": "5399ed5118ee56ab2f1c6d83e1b26d0dd77a915b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
