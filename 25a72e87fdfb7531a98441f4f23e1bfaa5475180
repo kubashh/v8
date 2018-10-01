@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9496d415_3df4494a",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-10-01T16:09:50Z",
+      "side": 1,
+      "message": "Yeah, InternalizeUtf8String is definitely what you want here as it\u0027s a property key.",
+      "parentUuid": "a90ca48a_3986c8e1",
+      "range": {
+        "startLine": 2098,
+        "startChar": 35,
+        "endLine": 2098,
+        "endChar": 60
+      },
+      "revId": "25a72e87fdfb7531a98441f4f23e1bfaa5475180",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d1d174f_e110fbd5",
         "filename": "src/bootstrapper.cc",
         "patchSetId": 1
