@@ -1527,6 +1527,16 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
                            SMI_PARAMETERS);
   }
 
+  void HeapMoveElements(TNode<FixedArray> elements, TNode<Smi> dst_index,
+                        TNode<Smi> src_index, TNode<Smi> length);
+
+  void MemMove(TNode<FixedDoubleArray> elements, TNode<Smi> src_index,
+               TNode<Smi> dst_index, TNode<Smi> length);
+
+  void MemCopy(TNode<FixedDoubleArray> elements, TNode<Smi> src_index,
+               TNode<FixedDoubleArray> newElements, TNode<Smi> dst_index,
+               TNode<Smi> length);
+
   TNode<FixedArray> HeapObjectToFixedArray(TNode<HeapObject> base,
                                            Label* cast_fail);
 
@@ -1660,6 +1670,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   Node* CalculateNewElementsCapacity(Node* old_capacity,
                                      ParameterMode mode = INTPTR_PARAMETERS);
+
+  TNode<Smi> CalculateNewElementsCapacity(TNode<Smi> old_capacity) {
+    return CAST(CalculateNewElementsCapacity(old_capacity, SMI_PARAMETERS));
+  }
 
   // Tries to grow the |elements| array of given |object| to store the |key|
   // or bails out if the growing gap is too big. Returns new elements.

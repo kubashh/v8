@@ -4351,6 +4351,69 @@ void CodeStubAssembler::FillFixedDoubleArrayWithZero(
                  backing_store, IntPtrConstant(0), byte_length);
 }
 
+void CodeStubAssembler::HeapMoveElements(TNode<FixedArray> elements,
+                                         TNode<Smi> dst_index,
+                                         TNode<Smi> src_index,
+                                         TNode<Smi> length) {
+  TNode<IntPtrT> source_length = SmiUntag(length);
+  TNode<ExternalReference> heap_move_elements = ExternalConstant(
+      ExternalReference::heap_move_elements_function(isolate()));
+  Node* const isolate_ptr =
+      ExternalConstant(ExternalReference::isolate_address(isolate()));
+  CallCFunction5(MachineType::AnyTagged(), MachineType::Pointer(),
+                 MachineType::Pointer(), MachineType::IntPtr(),
+                 MachineType::IntPtr(), MachineType::IntPtr(),
+                 heap_move_elements, isolate_ptr, BitcastTaggedToWord(elements),
+                 SmiUntag(dst_index), SmiUntag(src_index), source_length);
+}
+
+void CodeStubAssembler::MemMove(TNode<FixedDoubleArray> elements,
+                                TNode<Smi> src_index, TNode<Smi> dst_index,
+                                TNode<Smi> length) {
+  const ElementsKind kind = HOLEY_DOUBLE_ELEMENTS;
+  TNode<IntPtrT> source_byte_length =
+      IntPtrMul(SmiUntag(length), IntPtrConstant(ElementsKindToByteSize(kind)));
+  static const int32_t fda_base_data_offset =
+      FixedDoubleArray::kHeaderSize - kHeapObjectTag;
+  TNode<IntPtrT> elements_intptr = BitcastTaggedToWord(elements);
+  TNode<IntPtrT> target_data_ptr = IntPtrAdd(
+      elements_intptr, ElementOffsetFromIndex(dst_index, kind, SMI_PARAMETERS,
+                                              fda_base_data_offset));
+  TNode<IntPtrT> source_data_ptr = IntPtrAdd(
+      elements_intptr, ElementOffsetFromIndex(src_index, kind, SMI_PARAMETERS,
+                                              fda_base_data_offset));
+  TNode<ExternalReference> memmove =
+      ExternalConstant(ExternalReference::libc_memmove_function());
+  CallCFunction3(MachineType::AnyTagged(), MachineType::Pointer(),
+                 MachineType::Pointer(), MachineType::UintPtr(), memmove,
+                 target_data_ptr, source_data_ptr, source_byte_length);
+}
+
+void CodeStubAssembler::MemCopy(TNode<FixedDoubleArray> elements,
+                                TNode<Smi> src_index,
+                                TNode<FixedDoubleArray> newElements,
+                                TNode<Smi> dst_index, TNode<Smi> length) {
+  const ElementsKind kind = HOLEY_DOUBLE_ELEMENTS;
+  TNode<IntPtrT> source_byte_length =
+      IntPtrMul(SmiUntag(length), IntPtrConstant(ElementsKindToByteSize(kind)));
+  static const int32_t fda_base_data_offset =
+      FixedDoubleArray::kHeaderSize - kHeapObjectTag;
+  TNode<IntPtrT> elements_intptr = BitcastTaggedToWord(elements);
+  TNode<IntPtrT> target_data_ptr = IntPtrAdd(
+      elements_intptr, ElementOffsetFromIndex(dst_index, kind, SMI_PARAMETERS,
+                                              fda_base_data_offset));
+  TNode<IntPtrT> new_elements_intptr = BitcastTaggedToWord(newElements);
+  TNode<IntPtrT> source_data_ptr =
+      IntPtrAdd(new_elements_intptr,
+                ElementOffsetFromIndex(src_index, kind, SMI_PARAMETERS,
+                                       fda_base_data_offset));
+  TNode<ExternalReference> memcpy =
+      ExternalConstant(ExternalReference::libc_memcpy_function());
+  CallCFunction3(MachineType::AnyTagged(), MachineType::Pointer(),
+                 MachineType::Pointer(), MachineType::UintPtr(), memcpy,
+                 target_data_ptr, source_data_ptr, source_byte_length);
+}
+
 void CodeStubAssembler::CopyFixedArrayElements(
     ElementsKind from_kind, Node* from_array, ElementsKind to_kind,
     Node* to_array, Node* first_element, Node* element_count, Node* capacity,

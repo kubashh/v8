@@ -774,6 +774,8 @@ macro AllowNonNumberElements(kind: ElementsKind): ElementsKind {
 extern macro AllocateZeroedFixedArray(intptr): FixedArray;
 extern macro AllocateZeroedFixedDoubleArray(intptr): FixedDoubleArray;
 
+extern macro CalculateNewElementsCapacity(Smi): Smi;
+
 extern macro CopyFixedArrayElements(
     constexpr ElementsKind, FixedArray, constexpr ElementsKind, FixedArray,
     intptr, intptr, intptr): void;
@@ -808,6 +810,10 @@ extern macro ExtractFixedArray(
     constexpr ExtractFixedArrayFlags): FixedArrayBase;
 
 extern builtin ExtractFastJSArray(Context, JSArray, Smi, Smi): JSArray;
+
+extern macro HeapMoveElements(FixedArray, Smi, Smi, Smi): void;
+extern macro MemMove(FixedDoubleArray, Smi, Smi, Smi): void;
+extern macro MemCopy(FixedDoubleArray, Smi, FixedDoubleArray, Smi, Smi): void;
 
 macro LoadElementNoHole<T: type>(a: JSArray, index: Smi): Object
     labels IfHole;
