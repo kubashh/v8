@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4bc0c17_08cf8993",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 26
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T15:01:25Z",
+      "side": 1,
+      "message": "Please reference the relevant v8 issue(s).",
+      "revId": "7073db36b3916b137102dbf9e3f57d210265cfcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8efa506_ff6d1ed0",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T15:01:25Z",
+      "side": 1,
+      "message": "if",
+      "range": {
+        "startLine": 266,
+        "startChar": 16,
+        "endLine": 266,
+        "endChar": 17
+      },
+      "revId": "7073db36b3916b137102dbf9e3f57d210265cfcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ae691a1_f6d4fd94",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T15:01:25Z",
+      "side": 1,
+      "message": "a way that changes",
+      "range": {
+        "startLine": 267,
+        "startChar": 6,
+        "endLine": 267,
+        "endChar": 10
+      },
+      "revId": "7073db36b3916b137102dbf9e3f57d210265cfcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1be5c99b_f112742e",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 2511,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T15:01:25Z",
+      "side": 1,
+      "message": "Nit: remove this empty line.",
+      "revId": "7073db36b3916b137102dbf9e3f57d210265cfcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2112b14b_6870c207",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 2538,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T15:01:25Z",
+      "side": 1,
+      "message": "Why do we care about FixedDoubleArrays here?",
+      "revId": "7073db36b3916b137102dbf9e3f57d210265cfcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baac4631_54c4dc43",
+        "filename": "src/builtins/builtins-string-gen.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 2560,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-01T15:01:25Z",
+      "side": 1,
+      "message": "I don\u0027t think we\u0027re planning to do anything further here, let\u0027s remove the TODO.",
+      "revId": "7073db36b3916b137102dbf9e3f57d210265cfcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
