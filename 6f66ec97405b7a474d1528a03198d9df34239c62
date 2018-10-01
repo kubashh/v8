@@ -141,6 +141,30 @@
       "revId": "6f66ec97405b7a474d1528a03198d9df34239c62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83a6847a_62cc1ec2",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-10-01T18:02:20Z",
+      "side": 1,
+      "message": "Thanks for the link. I read that.\n\nThe 2GB limit on a single allocation (which std::vector makes) is imposed by the sandbox. I guess that\u0027s to prevent improper indexing with 32-bits signed int type.\n\nHowever there\u0027s a global limit to the process data segment of 4GB on x64. https://cs.chromium.org/chromium/src/sandbox/constants.h?type\u003dcs\u0026g\u003d0\u0026l\u003d18\n\nProvided that we have already successfully allocated edges having 24 bytes per item (they fitted into 4GB), then total size of 8-byte sized children is less than 2GB, so we should be safe here.",
+      "parentUuid": "0371a5a1_1c048903",
+      "range": {
+        "startLine": 216,
+        "startChar": 7,
+        "endLine": 216,
+        "endChar": 13
+      },
+      "revId": "6f66ec97405b7a474d1528a03198d9df34239c62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
