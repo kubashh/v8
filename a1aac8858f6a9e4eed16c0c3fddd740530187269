@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62402cba_ec047fca",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-10-01T19:19:35Z",
+      "side": 1,
+      "message": "nit: make this a DCHECK (or CHECK, if you want Release-mode coverage) and drop the UNREACHABLE in line 401.",
+      "range": {
+        "startLine": 391,
+        "startChar": 2,
+        "endLine": 391,
+        "endChar": 4
+      },
+      "revId": "a1aac8858f6a9e4eed16c0c3fddd740530187269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07ca693e_a332c9d4",
+        "filename": "src/runtime/runtime-atomics.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-10-01T19:19:35Z",
+      "side": 1,
+      "message": "same here: (DCHECK or CHECK), less indentation below, and no UNREACHABLE.",
+      "range": {
+        "startLine": 415,
+        "startChar": 2,
+        "endLine": 415,
+        "endChar": 4
+      },
+      "revId": "a1aac8858f6a9e4eed16c0c3fddd740530187269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
