@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "945dddd0_0853efd9",
+        "filename": "src/isolate.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-01T10:27:11Z",
+      "side": 1,
+      "message": "Can you also add a note that String.prototype itself does not need to be guarded since per spec it\u0027s non-configurable and non-writable?",
+      "revId": "8ad897124a00b9a0bb3d6237815df4241d41b1c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
