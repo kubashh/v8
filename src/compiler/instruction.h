@@ -146,6 +146,15 @@ struct PrintableInstructionOperand {
 std::ostream& operator<<(std::ostream& os,
                          const PrintableInstructionOperand& op);
 
+class InstructionSequence;
+
+struct InstructionOperandAsJSON {
+  const RegisterConfiguration* register_configuration_;
+  const InstructionOperand* op_;
+  const InstructionSequence* code_;
+};
+
+std::ostream& operator<<(std::ostream& os, const InstructionOperandAsJSON& o);
 
 #define INSTRUCTION_OPERAND_CASTS(OperandType, OperandKind)      \
                                                                  \
@@ -993,6 +1002,13 @@ struct PrintableInstruction {
 };
 std::ostream& operator<<(std::ostream& os, const PrintableInstruction& instr);
 
+struct InstructionAsJSON {
+  const RegisterConfiguration* register_configuration_;
+  int index_;
+  const Instruction* instr_;
+  const InstructionSequence* code_;
+};
+std::ostream& operator<<(std::ostream& os, const InstructionAsJSON& i);
 
 class RpoNumber final {
  public:
@@ -1455,8 +1471,6 @@ class V8_EXPORT_PRIVATE InstructionBlock final
   bool must_deconstruct_frame_;
 };
 
-class InstructionSequence;
-
 struct PrintableInstructionBlock {
   const RegisterConfiguration* register_configuration_;
   const InstructionBlock* block_;
@@ -1465,6 +1479,14 @@ struct PrintableInstructionBlock {
 
 std::ostream& operator<<(std::ostream& os,
                          const PrintableInstructionBlock& printable_block);
+
+struct InstructionBlockAsJSON {
+  const RegisterConfiguration* register_configuration_;
+  const InstructionBlock* block_;
+  const InstructionSequence* code_;
+};
+
+std::ostream& operator<<(std::ostream& os, const InstructionBlockAsJSON& b);
 
 typedef ZoneDeque<Constant> ConstantDeque;
 typedef std::map<int, Constant, std::less<int>,
@@ -1478,7 +1500,7 @@ typedef ZoneVector<InstructionBlock*> InstructionBlocks;
 
 // Forward declarations.
 struct PrintableInstructionSequence;
-
+struct InstructionSequenceAsJSON;
 
 // Represents architecture-specific generated code before, during, and after
 // register allocation.
@@ -1647,6 +1669,8 @@ class V8_EXPORT_PRIVATE InstructionSequence final
  private:
   friend V8_EXPORT_PRIVATE std::ostream& operator<<(
       std::ostream& os, const PrintableInstructionSequence& code);
+  friend V8_EXPORT_PRIVATE std::ostream& operator<<(
+      std::ostream& os, const InstructionSequenceAsJSON& s);
 
   typedef ZoneMap<const Instruction*, SourcePosition> SourcePositionMap;
 
@@ -1677,9 +1701,15 @@ struct PrintableInstructionSequence {
   const RegisterConfiguration* register_configuration_;
   const InstructionSequence* sequence_;
 };
+struct InstructionSequenceAsJSON {
+  const RegisterConfiguration* register_configuration_;
+  const InstructionSequence* sequence_;
+};
 
 V8_EXPORT_PRIVATE std::ostream& operator<<(
     std::ostream& os, const PrintableInstructionSequence& code);
+V8_EXPORT_PRIVATE std::ostream& operator<<(std::ostream& os,
+                                           const InstructionSequenceAsJSON& s);
 
 }  // namespace compiler
 }  // namespace internal
