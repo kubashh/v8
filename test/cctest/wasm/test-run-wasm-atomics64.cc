@@ -85,7 +85,8 @@ void RunU16BinOp(ExecutionTier tier, WasmOpcode wasm_op,
       r.builder().WriteMemory(&memory[0], initial);
       CHECK_EQ(initial, r.Call(*j));
       uint16_t expected = expected_op(*i, *j);
-      CHECK_EQ(expected, r.builder().ReadMemory(&memory[0]));
+      uint16_t ret_value = r.builder().ReadMemory(&memory[0]);
+      CHECK_EQ(expected, ret_value);
     }
   }
 }
@@ -113,7 +114,8 @@ void RunU8BinOp(ExecutionTier execution_tier, WasmOpcode wasm_op,
       r.builder().WriteMemory(&memory[0], initial);
       CHECK_EQ(initial, r.Call(*j));
       uint8_t expected = expected_op(*i, *j);
-      CHECK_EQ(expected, r.builder().ReadMemory(&memory[0]));
+      uint8_t ret_value = r.builder().ReadMemory(&memory[0]);
+      CHECK_EQ(expected, ret_value);
     }
   }
 }
