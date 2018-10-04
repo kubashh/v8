@@ -4546,6 +4546,130 @@ void CodeStubAssembler::FillFixedDoubleArrayWithZero(
                  backing_store, IntPtrConstant(0), byte_length);
 }
 
+void CodeStubAssembler::JumpIfNotInNewSpace(Node* node,
+                                            Label* not_in_new_space) {
+  Label finished(this);
+  TNode<IntPtrT> node_word = BitcastTaggedToWord(node);
+  TNode<IntPtrT> node_page = PageFromAddress(node_word);
+  {
+    TNode<IntPtrT> page_flags = UncheckedCast<IntPtrT>(Load(
+        MachineType::IntPtr(), node_page, IntPtrConstant(Page::kFlagsOffset)));
+    GotoIf(WordEqual(WordAnd(page_flags,
+                             IntPtrConstant(MemoryChunk::kIsInNewSpaceMask)),
+                     IntPtrConstant(0)),
+           not_in_new_space);
+    Goto(&finished);
+  }
+
+  BIND(&finished);
+}
+
+void CodeStubAssembler::MoveElements(TNode<FixedArrayBase> elements,
+                                     ElementsKind kind, TNode<Smi> dst_index,
+                                     TNode<Smi> src_index, TNode<Smi> length) {
+  Label finished(this);
+  Label needs_barrier(this);
+
+  // The write barrier can be ignored if {elements} is in new space, or if
+  // we have a SMI or double ElementsKind.
+  if (IsObjectElementsKind(kind)) {
+    JumpIfNotInNewSpace(elements, &needs_barrier);
+  }
+
+  TNode<IntPtrT> source_byte_length =
+      IntPtrMul(SmiUntag(length), IntPtrConstant(ElementsKindToByteSize(kind)));
+  static const int32_t fa_base_data_offset =
+      FixedArrayBase::kHeaderSize - kHeapObjectTag;
+  TNode<IntPtrT> elements_intptr = BitcastTaggedToWord(elements);
+  TNode<IntPtrT> target_data_ptr = IntPtrAdd(
+      elements_intptr, ElementOffsetFromIndex(dst_index, kind, SMI_PARAMETERS,
+                                              fa_base_data_offset));
+  TNode<IntPtrT> source_data_ptr = IntPtrAdd(
+      elements_intptr, ElementOffsetFromIndex(src_index, kind, SMI_PARAMETERS,
+                                              fa_base_data_offset));
+  TNode<ExternalReference> memmove =
+      ExternalConstant(ExternalReference::libc_memmove_function());
+  CallCFunction3(MachineType::AnyTagged(), MachineType::Pointer(),
+                 MachineType::Pointer(), MachineType::UintPtr(), memmove,
+                 target_data_ptr, source_data_ptr, source_byte_length);
+  Goto(&finished);
+
+  if (IsObjectElementsKind(kind)) {
+    BIND(&needs_barrier);
+    {
+      const TNode<IntPtrT> first = SmiUntag(src_index);
+      const TNode<IntPtrT> last = IntPtrAdd(first, SmiUntag(length));
+
+      // If dst_index is less than src_index, then walk forward.
+      Label walk_forward(this);
+      Label walk_backward(this);
+      BranchIfSmiLessThanOrEqual(dst_index, src_index, &walk_forward,
+                                 &walk_backward);
+      BIND(&walk_forward);
+      {
+        // Make a loop for the stores.
+        const TNode<IntPtrT> delta =
+            IntPtrMul(IntPtrSub(first, SmiUntag(dst_index)),
+                      IntPtrConstant(ElementsKindToByteSize(kind)));
+
+        BuildFastFixedArrayForEach(
+            elements, kind, first, last,
+            [=](Node* array, Node* offset) {
+              Node* element = Load(MachineType::AnyTagged(), array, offset);
+              Node* delta_offset = IntPtrSub(offset, delta);
+              Store(array, delta_offset, element);
+            },
+            INTPTR_PARAMETERS, ForEachDirection::kForward);
+        Goto(&finished);
+      }
+
+      BIND(&walk_backward);
+      {
+        // Make a loop for the stores.
+        const TNode<IntPtrT> delta =
+            IntPtrMul(IntPtrSub(SmiUntag(dst_index), first),
+                      IntPtrConstant(ElementsKindToByteSize(kind)));
+
+        BuildFastFixedArrayForEach(
+            elements, kind, first, last,
+            [=](Node* array, Node* offset) {
+              Node* element = Load(MachineType::AnyTagged(), array, offset);
+              Store(array, IntPtrAdd(offset, delta), element);
+            },
+            INTPTR_PARAMETERS, ForEachDirection::kReverse);
+        Goto(&finished);
+      }
+    }
+  }
+  BIND(&finished);
+}
+
+void CodeStubAssembler::MemCopy(TNode<FixedDoubleArray> src_elements,
+                                TNode<Smi> src_index,
+                                TNode<FixedDoubleArray> dst_elements,
+                                TNode<Smi> dst_index, TNode<Smi> length) {
+  const ElementsKind kind = HOLEY_DOUBLE_ELEMENTS;
+  TNode<IntPtrT> source_byte_length =
+      IntPtrMul(SmiUntag(length), IntPtrConstant(ElementsKindToByteSize(kind)));
+  static const int32_t fda_base_data_offset =
+      FixedDoubleArray::kHeaderSize - kHeapObjectTag;
+  TNode<IntPtrT> src_elements_intptr = BitcastTaggedToWord(src_elements);
+  TNode<IntPtrT> source_data_ptr =
+      IntPtrAdd(src_elements_intptr,
+                ElementOffsetFromIndex(src_index, kind, SMI_PARAMETERS,
+                                       fda_base_data_offset));
+  TNode<IntPtrT> dst_elements_intptr = BitcastTaggedToWord(dst_elements);
+  TNode<IntPtrT> dst_data_ptr =
+      IntPtrAdd(dst_elements_intptr,
+                ElementOffsetFromIndex(dst_index, kind, SMI_PARAMETERS,
+                                       fda_base_data_offset));
+  TNode<ExternalReference> memcpy =
+      ExternalConstant(ExternalReference::libc_memcpy_function());
+  CallCFunction3(MachineType::AnyTagged(), MachineType::Pointer(),
+                 MachineType::Pointer(), MachineType::UintPtr(), memcpy,
+                 dst_data_ptr, source_data_ptr, source_byte_length);
+}
+
 void CodeStubAssembler::CopyFixedArrayElements(
     ElementsKind from_kind, Node* from_array, ElementsKind to_kind,
     Node* to_array, Node* first_element, Node* element_count, Node* capacity,
