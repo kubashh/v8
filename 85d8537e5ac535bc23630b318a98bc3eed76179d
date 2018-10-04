@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b88ae25_d6b19b36",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-04T13:30:25Z",
+      "side": 1,
+      "message": "If HeapMoveElements/MemMove had the same name, say \"MoveElements\", then it would be possible to actually use a generic.\n\nMoveArrayElements\u003cFixedArrayType: type\u003e(\n      elements: FixedArrayType, dstIndex: Smi, srcIndex: Smi, count: Smi,\n      holeStartIndex: Smi, holeEndIndex: Smi): void {\n    MoveElements(typedElements, dstIndex, srcIndex, count);\n    for (let k : Smi \u003d holeStartIndex; k \u003c holeEndIndex; ++k) {\n      StoreArrayHole(typedElements, k);\n    }\n  }",
+      "range": {
+        "startLine": 27,
+        "startChar": 2,
+        "endLine": 29,
+        "endChar": 54
+      },
+      "revId": "85d8537e5ac535bc23630b318a98bc3eed76179d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe37d281_5f99fb15",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-04T13:30:25Z",
+      "side": 1,
+      "message": "This would look more idiomatic as a for-loop.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 5
+      },
+      "revId": "85d8537e5ac535bc23630b318a98bc3eed76179d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17e52ee4_586edc06",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-04T13:30:25Z",
+      "side": 1,
+      "message": "This would look more idiomatic as a for-loop.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 5
+      },
+      "revId": "85d8537e5ac535bc23630b318a98bc3eed76179d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78b48306_462ba502",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-04T13:30:25Z",
+      "side": 1,
+      "message": "This would be better as an overloaded function compared to a generic:\nmacro CopyElements(\n      elements: FixedArray, srcIndex: Smi, newElements: FixedArray,\n      dstIndex: Smi, length: Smi): void {",
+      "range": {
+        "startLine": 59,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 41
+      },
+      "revId": "85d8537e5ac535bc23630b318a98bc3eed76179d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e767d4c_0246f4b2",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-04T13:30:25Z",
+      "side": 1,
+      "message": "nit: for-loop",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 24
+      },
+      "revId": "85d8537e5ac535bc23630b318a98bc3eed76179d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbf78a01_7581d133",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-04T13:30:25Z",
+      "side": 1,
+      "message": "s/FixedArrayBase/FixedDoubleArray/",
+      "range": {
+        "startLine": 79,
+        "startChar": 16,
+        "endLine": 79,
+        "endChar": 74
+      },
+      "revId": "85d8537e5ac535bc23630b318a98bc3eed76179d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6024f65b_cdc647dc",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-04T13:30:25Z",
+      "side": 1,
+      "message": "Could this be a helper function?",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 5
+      },
+      "revId": "85d8537e5ac535bc23630b318a98bc3eed76179d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9489580c_1c645ef8",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-04T13:30:25Z",
+      "side": 1,
+      "message": "HeapMoveElements and MemMove have the same interface and the same specification. Giving them the same name would enable generic code.",
+      "range": {
+        "startLine": 1530,
+        "startChar": 0,
+        "endLine": 1534,
+        "endChar": 56
+      },
+      "revId": "85d8537e5ac535bc23630b318a98bc3eed76179d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
