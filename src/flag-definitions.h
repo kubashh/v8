@@ -1265,7 +1265,7 @@ DEFINE_BOOL(log_function_events, false,
 DEFINE_BOOL(prof, false,
             "Log statistical profiling information (implies --log-code).")
 
-DEFINE_BOOL(detailed_line_info, false,
+DEFINE_BOOL(detailed_line_info, true,
             "Always generate detailed line information for CPU profiling.")
 
 #if defined(ANDROID)
