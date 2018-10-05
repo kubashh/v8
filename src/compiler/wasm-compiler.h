@@ -135,6 +135,7 @@ class WasmGraphBuilder {
     kCanOmitBoundsCheck = false
   };
   enum UseRetpoline : bool { kRetpoline = true, kNoRetpoline = false };
+  enum UseRootRegister : bool { kRootRegister = true, kNoRootRegister = false };
 
   WasmGraphBuilder(wasm::ModuleEnv* env, Zone* zone, MachineGraph* mcgraph,
                    wasm::FunctionSig* sig,
@@ -490,7 +491,9 @@ class WasmGraphBuilder {
 V8_EXPORT_PRIVATE CallDescriptor* GetWasmCallDescriptor(
     Zone* zone, wasm::FunctionSig* signature,
     WasmGraphBuilder::UseRetpoline use_retpoline =
-        WasmGraphBuilder::kNoRetpoline);
+        WasmGraphBuilder::kNoRetpoline,
+    WasmGraphBuilder::UseRootRegister use_root_register =
+        WasmGraphBuilder::kNoRootRegister);
 
 V8_EXPORT_PRIVATE CallDescriptor* GetI32WasmCallDescriptor(
     Zone* zone, CallDescriptor* call_descriptor);

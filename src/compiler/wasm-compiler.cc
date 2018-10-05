@@ -4563,8 +4563,9 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
           args[pos++] = undefined_node;
         }
 
-        auto call_descriptor = Linkage::GetJSCallDescriptor(
-            graph()->zone(), false, wasm_count + 1, CallDescriptor::kNoFlags);
+        auto call_descriptor =
+            Linkage::GetJSCallDescriptor(graph()->zone(), false, wasm_count + 1,
+                                         CallDescriptor::kCanUseRoots);
 
         // Convert wasm numbers to JS values.
         pos = AddArgumentNodes(args, pos, wasm_count, sig_);
@@ -4628,7 +4629,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
         auto call_descriptor = Linkage::GetStubCallDescriptor(
             mcgraph()->zone(), ArgumentsAdaptorDescriptor{}, 1 + wasm_count,
-            CallDescriptor::kNoFlags, Operator::kNoProperties);
+            CallDescriptor::kCanUseRoots, Operator::kNoProperties);
 
         // Convert wasm numbers to JS values.
         pos = AddArgumentNodes(args, pos, wasm_count, sig_);
@@ -4653,7 +4654,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
         auto call_descriptor = Linkage::GetStubCallDescriptor(
             graph()->zone(), CallTrampolineDescriptor{}, wasm_count + 1,
-            CallDescriptor::kNoFlags, Operator::kNoProperties,
+            CallDescriptor::kCanUseRoots, Operator::kNoProperties,
             StubCallMode::kCallWasmRuntimeStub);
 
         // Convert wasm numbers to JS values.
@@ -4993,7 +4994,9 @@ MaybeHandle<Code> CompileWasmImportCallWrapper(
   func_name.Truncate(SNPrintF(func_name, "wasm-to-js#%d", index));
 
   // Schedule and compile to machine code.
-  CallDescriptor* incoming = GetWasmCallDescriptor(&zone, sig);
+  CallDescriptor* incoming =
+      GetWasmCallDescriptor(&zone, sig, WasmGraphBuilder::kNoRetpoline,
+                            WasmGraphBuilder::kRootRegister);
   if (machine.Is32()) {
     incoming = GetI32WasmCallDescriptor(&zone, incoming);
   }
@@ -5347,7 +5350,8 @@ class LinkageLocationAllocator {
 // General code uses the above configuration data.
 CallDescriptor* GetWasmCallDescriptor(
     Zone* zone, wasm::FunctionSig* fsig,
-    WasmGraphBuilder::UseRetpoline use_retpoline) {
+    WasmGraphBuilder::UseRetpoline use_retpoline,
+    WasmGraphBuilder::UseRootRegister use_root_register) {
   // The '+ 1' here is to accomodate the instance object as first parameter.
   LocationSignature::Builder locations(zone, fsig->return_count(),
                                        fsig->parameter_count() + 1);
@@ -5394,7 +5398,10 @@ CallDescriptor* GetWasmCallDescriptor(
   CallDescriptor::Kind kind = CallDescriptor::kCallWasmFunction;
 
   CallDescriptor::Flags flags =
-      use_retpoline ? CallDescriptor::kRetpoline : CallDescriptor::kNoFlags;
+      (use_retpoline ? CallDescriptor::kRetpoline : CallDescriptor::kNoFlags) |
+      (use_root_register ? CallDescriptor::kCanUseRoots
+                         : CallDescriptor::kNoFlags);
+
   return new (zone) CallDescriptor(             // --
       kind,                                     // kind
       target_type,                              // target MachineType
