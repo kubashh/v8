@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d87ba50_160a0a85",
+        "filename": "src/compiler/instruction.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-10-05T14:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0fcf204_7b93edc5",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 253,
+        "endChar": 79
+      },
+      "revId": "b8c4b56842e464a2cff03909cd419ed3bbcab801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de8273b7_fd325474",
         "filename": "tools/turbolizer/src/sequence-view.ts",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-04T11:15:43Z",
       "side": 1,
       "message": "This whole file is great! We actually have all the information to connect an instruction-id to the corresponding nodes and code-offsets, but currently there is no straight-forward API in source-resolver to do it, and doing it without the source resolver would be a bit of a mess. I will look into this, there is a chance we can get links without much effort!",
+      "range": {
+        "startLine": 93,
+        "startChar": 6,
+        "endLine": 94,
+        "endChar": 38
+      },
+      "revId": "b8c4b56842e464a2cff03909cd419ed3bbcab801",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb1a4bdb_5d600b8b",
+        "filename": "tools/turbolizer/src/sequence-view.ts",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-10-05T14:55:22Z",
+      "side": 1,
+      "message": "Sounds good to me!",
+      "parentUuid": "de8273b7_fd325474",
       "range": {
         "startLine": 93,
         "startChar": 6,
