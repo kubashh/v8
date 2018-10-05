@@ -22,6 +22,30 @@
       "revId": "4f711eda2b65b5c4c877d8b706d6c7ed1da5d4da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74966913_ceceddbb",
+        "filename": "src/math-random.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-10-05T07:17:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a92a0a8b_c3db595c",
+      "range": {
+        "startLine": 46,
+        "startChar": 6,
+        "endLine": 46,
+        "endChar": 78
+      },
+      "revId": "4f711eda2b65b5c4c877d8b706d6c7ed1da5d4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
