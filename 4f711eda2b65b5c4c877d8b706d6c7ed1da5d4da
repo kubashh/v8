@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a92a0a8b_c3db595c",
+        "filename": "src/math-random.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-10-05T06:31:58Z",
+      "side": 1,
+      "message": "We should just use MurmurHash that we use to initialize the isolate-wide RNG: https://cs.chromium.org/chromium/src/v8/src/base/utils/random-number-generator.cc?sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d214",
+      "range": {
+        "startLine": 46,
+        "startChar": 6,
+        "endLine": 46,
+        "endChar": 78
+      },
+      "revId": "4f711eda2b65b5c4c877d8b706d6c7ed1da5d4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
