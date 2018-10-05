@@ -2448,21 +2448,30 @@ bool PipelineImpl::SelectInstructions(Linkage* linkage) {
     std::unique_ptr<const RegisterConfiguration> config;
     config.reset(RegisterConfiguration::RestrictGeneralRegisters(registers));
     AllocateRegisters(config.get(), call_descriptor, run_verifier);
-  } else if (data->info()->GetPoisoningMitigationLevel() !=
-             PoisoningMitigationLevel::kDontPoison) {
-    AllocateRegisters(RegisterConfiguration::Poisoning(), call_descriptor,
-                      run_verifier);
 #if defined(V8_TARGET_ARCH_IA32) && defined(V8_EMBEDDED_BUILTINS)
-  } else if (Builtins::IsBuiltinId(data->info()->builtin_index())) {
-    // TODO(v8:6666): Extend support to user code. Ensure that
-    // it is mutually exclusive with the Poisoning configuration above; and that
-    // it cooperates with restricted allocatable registers above.
+  } else if ((linkage->GetIncomingDescriptor()->flags() &
+              CallDescriptor::kCanUseRoots)) {
+    DCHECK(info()->code_kind() == Code::Kind::OPTIMIZED_FUNCTION ||
+           info()->code_kind() == Code::Kind::BYTECODE_HANDLER ||
+           info()->code_kind() == Code::Kind::STUB ||
+           info()->code_kind() == Code::Kind::BUILTIN ||
+           info()->code_kind() == Code::Kind::JS_TO_WASM_FUNCTION ||
+           info()->code_kind() == Code::Kind::WASM_TO_JS_FUNCTION);
+    // printf("preserve\n");
+    // TODO(v8:6666): Ensure that that this configuration cooperates with
+    // restricted allocatable registers above, i.e. that we guarantee a
+    // restricted configuration cannot allocate kRootRegister on ia32.
     static_assert(kRootRegister == kSpeculationPoisonRegister,
                   "The following checks assume root equals poison register");
     CHECK_IMPLIES(FLAG_embedded_builtins, !FLAG_untrusted_code_mitigations);
     AllocateRegisters(RegisterConfiguration::PreserveRootIA32(),
                       call_descriptor, run_verifier);
 #endif  // defined(V8_TARGET_ARCH_IA32) && defined(V8_EMBEDDED_BUILTINS)
+  } else if (data->info()->GetPoisoningMitigationLevel() !=
+             PoisoningMitigationLevel::kDontPoison) {
+    DCHECK(info()->code_kind() != Code::Kind::REGEXP);
+    AllocateRegisters(RegisterConfiguration::Poisoning(), call_descriptor,
+                      run_verifier);
   } else {
     AllocateRegisters(RegisterConfiguration::Default(), call_descriptor,
                       run_verifier);
@@ -2535,7 +2544,15 @@ std::ostream& operator<<(std::ostream& out, const InstructionStartsAsJSON& s) {
 void PipelineImpl::AssembleCode(Linkage* linkage) {
   PipelineData* data = this->data_;
   data->BeginPhaseKind("code generation");
+
   data->InitializeCodeGenerator(linkage);
+
+#if defined(V8_TARGET_ARCH_IA32) && defined(V8_EMBEDDED_BUILTINS)
+  code_generator()->tasm()->set_ebx_addressable(
+      (linkage->GetIncomingDescriptor()->flags() &
+       CallDescriptor::kCanUseRoots) != CallDescriptor::kCanUseRoots);
+#endif
+
   Run<AssembleCodePhase>();
   if (data->info()->trace_turbo_json_enabled()) {
     TurboJsonFile json_of(data->info(), std::ios_base::app);

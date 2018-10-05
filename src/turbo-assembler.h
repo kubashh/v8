@@ -68,6 +68,10 @@ class V8_EXPORT_PRIVATE TurboAssemblerBase : public Assembler {
   static bool IsAddressableThroughRootRegister(
       Isolate* isolate, const ExternalReference& reference);
 
+  void set_ebx_addressable(bool is_addressable) {
+    is_ebx_addressable_ = is_addressable;
+  }
+
  protected:
   TurboAssemblerBase(const AssemblerOptions& options, void* buffer,
                      int buffer_size)
