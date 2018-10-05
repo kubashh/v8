@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af81e068_7f2247d9",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2452,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-05T11:16:46Z",
+      "side": 1,
+      "message": "Not: Do we really need the two parens?",
+      "range": {
+        "startLine": 2452,
+        "startChar": 12,
+        "endLine": 2452,
+        "endChar": 14
+      },
+      "revId": "1b9f2dcc1408529fe7693273b0513ede369f06ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d75e4750_877a24c0",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2460,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-05T11:16:46Z",
+      "side": 1,
+      "message": "Stray printf?",
+      "range": {
+        "startLine": 2460,
+        "startChar": 4,
+        "endLine": 2460,
+        "endChar": 28
+      },
+      "revId": "1b9f2dcc1408529fe7693273b0513ede369f06ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "998b3d5a_48fa79d8",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2466,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-05T11:16:46Z",
+      "side": 1,
+      "message": "I am confused here - should not this just say CHECK(!FLAG_untrusted_code_mitigations)?\n\nIt seems the code would be wrong if untrusted-code-mitigations flag was on, regardless of embedded-builtins (at least for OPTIMIZED_FUNCTION it would be really wrong).",
+      "range": {
+        "startLine": 2466,
+        "startChar": 4,
+        "endLine": 2466,
+        "endChar": 76
+      },
+      "revId": "1b9f2dcc1408529fe7693273b0513ede369f06ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
