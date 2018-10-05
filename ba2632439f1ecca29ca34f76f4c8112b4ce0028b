@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17ede93b_d87d2711",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1469,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-05T11:38:59Z",
+      "side": 1,
+      "message": "To keep the code more readable and make it easier to undo these changes later, I think it would be better to extend GotoIf with an IsSafetyCheck argument.",
+      "range": {
+        "startLine": 1467,
+        "startChar": 8,
+        "endLine": 1469,
+        "endChar": 27
+      },
+      "revId": "ba2632439f1ecca29ca34f76f4c8112b4ce0028b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0250db26_2535d895",
+        "filename": "src/compiler/property-access-builder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-05T11:38:59Z",
+      "side": 1,
+      "message": "Can we exclude non-pointer representations here?",
+      "range": {
+        "startLine": 249,
+        "startChar": 23,
+        "endLine": 250,
+        "endChar": 32
+      },
+      "revId": "ba2632439f1ecca29ca34f76f4c8112b4ce0028b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
