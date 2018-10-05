@@ -275,8 +275,8 @@ bool IsCompatibleSignature(const Signature& sig, const TypeVector& types,
   if (sig.parameter_types.types.size() > types.size()) return false;
   // TODO(danno): The test below is actually insufficient. The labels'
   // parameters must be checked too. ideally, the named part of
-  // LabelDeclarationVector would be factored out so that the label count and
-  // parameter types could be passed separately.
+  // ParameterizedLabelDeclarationVector would be factored out so that the label
+  // count and parameter types could be passed separately.
   if (sig.labels.size() != labels.size()) return false;
   for (auto current : types) {
     if (i == sig.parameter_types.types.end()) {

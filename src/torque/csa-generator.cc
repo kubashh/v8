@@ -219,7 +219,8 @@ void CSAGenerator::EmitInstruction(
 
   std::vector<std::string> label_names;
   std::vector<std::vector<std::string>> var_names;
-  const LabelDeclarationVector& labels = instruction.macro->signature().labels;
+  const ParameterizedLabelDeclarationVector& labels =
+      instruction.macro->signature().labels;
   DCHECK_EQ(labels.size(), instruction.label_blocks.size());
   for (size_t i = 0; i < labels.size(); ++i) {
     TypeVector label_parameters = labels[i].types;

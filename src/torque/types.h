@@ -398,12 +398,13 @@ struct LabelDefinition {
 
 typedef std::vector<LabelDefinition> LabelDefinitionVector;
 
-struct LabelDeclaration {
+struct ParameterizedLabelDeclaration {
   std::string name;
   TypeVector types;
 };
 
-typedef std::vector<LabelDeclaration> LabelDeclarationVector;
+typedef std::vector<ParameterizedLabelDeclaration>
+    ParameterizedLabelDeclarationVector;
 
 struct ParameterTypes {
   TypeVector types;
@@ -417,7 +418,7 @@ struct Signature {
   NameVector parameter_names;
   ParameterTypes parameter_types;
   const Type* return_type;
-  LabelDeclarationVector labels;
+  ParameterizedLabelDeclarationVector labels;
   bool HasSameTypesAs(const Signature& other) const;
 };
 

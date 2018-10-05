@@ -633,6 +633,8 @@ ACCESSORS(JSDate, hour, Object, kHourOffset)
 ACCESSORS(JSDate, min, Object, kMinOffset)
 ACCESSORS(JSDate, sec, Object, kSecOffset)
 
+ACCESSORS(JSObjectWithLength, length, Object, kLengthOffset)
+
 SMI_ACCESSORS(JSMessageObject, type, kTypeOffset)
 ACCESSORS(JSMessageObject, argument, Object, kArgumentsOffset)
 ACCESSORS(JSMessageObject, script, Script, kScriptOffset)

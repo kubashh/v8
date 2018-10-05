@@ -12,9 +12,10 @@ namespace internal {
 namespace torque {
 
 Signature FileVisitor::MakeSignature(const CallableNodeSignature* signature) {
-  LabelDeclarationVector definition_vector;
+  ParameterizedLabelDeclarationVector definition_vector;
   for (const auto& label : signature->labels) {
-    LabelDeclaration def = {label.name, GetTypeVector(label.types)};
+    ParameterizedLabelDeclaration def = {label.name,
+                                         GetTypeVector(label.types)};
     definition_vector.push_back(def);
   }
   Signature result{signature->parameters.names,

@@ -177,6 +177,7 @@ class Stack {
   explicit Stack(std::vector<T> v) : elements_(std::move(v)) {}
   size_t Size() const { return elements_.size(); }
   const T& Peek(BottomOffset from_bottom) const {
+    if (from_bottom.offset >= elements_.size()) ReportError("Internal error");
     return elements_.at(from_bottom.offset);
   }
   void Poke(BottomOffset from_bottom, T x) {

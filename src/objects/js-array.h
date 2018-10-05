@@ -20,10 +20,9 @@ namespace internal {
 //    - fast, backing storage is a FixedArray and length <= elements.length();
 //       Please note: push and pop can be used to grow and shrink the array.
 //    - slow, backing storage is a HashTable with numbers as keys.
-class JSArray : public JSObject {
+class JSArray : public JSObjectWithLength {
  public:
-  // [length]: The length property.
-  DECL_ACCESSORS(length, Object)
+  inline void set_length(Object* length);
 
   // Overload the length setter to skip write barrier when the length
   // is set to a smi. This matches the set function on FixedArray.
@@ -79,8 +78,7 @@ class JSArray : public JSObject {
   static const int kPreallocatedArrayElements = 4;
 
   // Layout description.
-  static const int kLengthOffset = JSObject::kHeaderSize;
-  static const int kSize = kLengthOffset + kPointerSize;
+  static const int kSize = JSObjectWithLength::kSize;
 
   static const int kLengthDescriptorIndex = 0;
 
