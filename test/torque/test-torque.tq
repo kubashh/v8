@@ -154,9 +154,9 @@ module test {
       check(GenericMacroTest<Object>(Null) == Null);
       check(GenericMacroTest<Object>(False) == False);
       check(GenericMacroTest<Object>(True) == True);
-      check(GenericMacroTestWithLabels<Smi>(0) otherwise Fail == Undefined);
-      check(GenericMacroTestWithLabels<Smi>(0) otherwise Fail == Undefined);
-      check(GenericMacroTestWithLabels<Object>(smi0) otherwise Fail == smi0);
+      check((GenericMacroTestWithLabels<Smi>(0) otherwise Fail) == Undefined);
+      check((GenericMacroTestWithLabels<Smi>(0) otherwise Fail) == Undefined);
+      check((GenericMacroTestWithLabels<Object>(smi0) otherwise Fail) == smi0);
       try {
         GenericMacroTestWithLabels<Object>(False) otherwise Expected;
       }
