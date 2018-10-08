@@ -128,6 +128,182 @@
       ]
     },
     {
+      "name": "ArrayLiteralInitialSpreadSmallSmiMap",
+      "path": ["ArrayLiteralInitialSpreadSmallSmiMap"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadSmallSmiMap\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadLargeSmiMap",
+      "path": ["ArrayLiteralInitialSpreadLargeSmiMap"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadLargeSmiMap\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadSmallDoubleMap",
+      "path": ["ArrayLiteralInitialSpreadSmallDoubleMap"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadSmallDoubleMap\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadLargeDoubleMap",
+      "path": ["ArrayLiteralInitialSpreadLargeDoubleMap"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadLargeDoubleMap\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadSmallStringMap",
+      "path": ["ArrayLiteralInitialSpreadSmallStringMap"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadSmallStringMap\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadLargeStringMap",
+      "path": ["ArrayLiteralInitialSpreadLargeStringMap"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadLargeStringMap\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadSmallObjectMap",
+      "path": ["ArrayLiteralInitialSpreadSmallObjectMap"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadSmallObjectMap\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadLargeObjectMap",
+      "path": ["ArrayLiteralInitialSpreadLargeObjectMap"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadLargeObjectMap\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadSmallSmiSet",
+      "path": ["ArrayLiteralInitialSpreadSmallSmiSet"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadSmallSmiSet\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadLargeSmiSet",
+      "path": ["ArrayLiteralInitialSpreadLargeSmiSet"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadLargeSmiSet\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadSmallDoubleSet",
+      "path": ["ArrayLiteralInitialSpreadSmallDoubleSet"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadSmallDoubleSet\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadLargeDoubleSet",
+      "path": ["ArrayLiteralInitialSpreadLargeDoubleSet"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadLargeDoubleSet\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadSmallStringSet",
+      "path": ["ArrayLiteralInitialSpreadSmallStringSet"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadSmallStringSet\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadLargeStringSet",
+      "path": ["ArrayLiteralInitialSpreadLargeStringSet"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadLargeStringSet\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadSmallObjectSet",
+      "path": ["ArrayLiteralInitialSpreadSmallObjectSet"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadSmallObjectSet\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
+      "name": "ArrayLiteralInitialSpreadLargeObjectSet",
+      "path": ["ArrayLiteralInitialSpreadLargeObjectSet"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-ArrayLiteralInitialSpreadLargeObjectSet\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "ForOf"},
+        {"name": "Spread"}
+      ]
+    },
+    {
       "name": "ArrayLiteralSpread",
       "path": ["ArrayLiteralSpread"],
       "main": "run.js",
