@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "882ac2d6_aa63d8ec",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4558,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-08T13:23:54Z",
+      "side": 1,
+      "message": "I\u0027m curious: what\u0027s the difference between this and MemoryChunk::kPointersToHereAreInterestingMask? If I didn\u0027t misunderstand, Ulan suggested using this to skip the write barrier (see https://crbug.com/v8/8138).\n\nAlso, wouldn\u0027t\n\n Branch(cond, not_in_new_space, \u0026finished) \n\nproduce better code? We could even eliminate the comparison to 0 if we invert the targets:\n\n Branch(WordAnd(...), \u0026finished, not_in_new_space)",
+      "revId": "1c8140d3fd58fba8989d7ee2bc9b3eb4cdf8f644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
