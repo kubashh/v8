@@ -314,7 +314,7 @@ Node* CodeStubAssembler::MatchesParameterMode(Node* value, ParameterMode mode) {
   if (mode == SMI_PARAMETERS) {
     return TaggedIsSmi(value);
   } else {
-    return Int32Constant(1);
+    return IntPtrConstant(1);
   }
 }
 
@@ -4544,6 +4544,161 @@ void CodeStubAssembler::FillFixedDoubleArrayWithZero(
   CallCFunction3(MachineType::Pointer(), MachineType::Pointer(),
                  MachineType::IntPtr(), MachineType::UintPtr(), memset,
                  backing_store, IntPtrConstant(0), byte_length);
+}
+
+void CodeStubAssembler::JumpIfNotInNewSpace(Node* node,
+                                            Label* not_in_new_space) {
+  Label finished(this);
+  TNode<IntPtrT> node_word = BitcastTaggedToWord(node);
+  TNode<IntPtrT> node_page = PageFromAddress(node_word);
+  {
+    TNode<IntPtrT> page_flags = UncheckedCast<IntPtrT>(Load(
+        MachineType::IntPtr(), node_page, IntPtrConstant(Page::kFlagsOffset)));
+    GotoIf(WordEqual(WordAnd(page_flags,
+                             IntPtrConstant(MemoryChunk::kIsInNewSpaceMask)),
+                     IntPtrConstant(0)),
+           not_in_new_space);
+    Goto(&finished);
+  }
+
+  BIND(&finished);
+}
+
+void CodeStubAssembler::MoveElements(ElementsKind kind,
+                                     TNode<FixedArrayBase> elements,
+                                     TNode<IntPtrT> dst_index,
+                                     TNode<IntPtrT> src_index,
+                                     TNode<IntPtrT> length) {
+  Label finished(this);
+  Label needs_barrier(this);
+
+  // The write barrier can be ignored if {elements} is in new space, or if
+  // we have a SMI or double ElementsKind.
+  if (IsObjectElementsKind(kind)) {
+    JumpIfNotInNewSpace(elements, &needs_barrier);
+  }
+
+  const TNode<IntPtrT> source_byte_length =
+      IntPtrMul(length, IntPtrConstant(ElementsKindToByteSize(kind)));
+  static const int32_t fa_base_data_offset =
+      FixedArrayBase::kHeaderSize - kHeapObjectTag;
+  TNode<IntPtrT> elements_intptr = BitcastTaggedToWord(elements);
+  TNode<IntPtrT> target_data_ptr =
+      IntPtrAdd(elements_intptr,
+                ElementOffsetFromIndex(dst_index, kind, INTPTR_PARAMETERS,
+                                       fa_base_data_offset));
+  TNode<IntPtrT> source_data_ptr =
+      IntPtrAdd(elements_intptr,
+                ElementOffsetFromIndex(src_index, kind, INTPTR_PARAMETERS,
+                                       fa_base_data_offset));
+  TNode<ExternalReference> memmove =
+      ExternalConstant(ExternalReference::libc_memmove_function());
+  CallCFunction3(MachineType::Pointer(), MachineType::Pointer(),
+                 MachineType::Pointer(), MachineType::UintPtr(), memmove,
+                 target_data_ptr, source_data_ptr, source_byte_length);
+
+  if (IsObjectElementsKind(kind)) {
+    Goto(&finished);
+    BIND(&needs_barrier);
+    {
+      const TNode<IntPtrT> begin = src_index;
+      const TNode<IntPtrT> end = IntPtrAdd(begin, length);
+
+      // If dst_index is less than src_index, then walk forward.
+      const TNode<IntPtrT> delta =
+          IntPtrMul(IntPtrSub(dst_index, begin),
+                    IntPtrConstant(ElementsKindToByteSize(kind)));
+      auto loop_body = [=](Node* array, Node* offset) {
+        Node* const element = Load(MachineType::AnyTagged(), array, offset);
+        Node* const delta_offset = IntPtrAdd(offset, delta);
+        Store(array, delta_offset, element);
+      };
+
+      Label iterate_forward(this);
+      Label iterate_backward(this);
+      Branch(IntPtrLessThan(delta, IntPtrConstant(0)), &iterate_forward,
+             &iterate_backward);
+      BIND(&iterate_forward);
+      {
+        // Make a loop for the stores.
+        BuildFastFixedArrayForEach(elements, kind, begin, end, loop_body,
+                                   INTPTR_PARAMETERS,
+                                   ForEachDirection::kForward);
+        Goto(&finished);
+      }
+
+      BIND(&iterate_backward);
+      {
+        BuildFastFixedArrayForEach(elements, kind, begin, end, loop_body,
+                                   INTPTR_PARAMETERS,
+                                   ForEachDirection::kReverse);
+        Goto(&finished);
+      }
+    }
+    BIND(&finished);
+  }
+}
+
+void CodeStubAssembler::CopyElements(ElementsKind kind,
+                                     TNode<FixedArrayBase> dst_elements,
+                                     TNode<IntPtrT> dst_index,
+                                     TNode<FixedArrayBase> src_elements,
+                                     TNode<IntPtrT> src_index,
+                                     TNode<IntPtrT> length) {
+  Label finished(this);
+  Label needs_barrier(this);
+
+  TNode<IntPtrT> source_byte_length =
+      IntPtrMul(length, IntPtrConstant(ElementsKindToByteSize(kind)));
+  static const int32_t fa_base_data_offset =
+      FixedArrayBase::kHeaderSize - kHeapObjectTag;
+
+  TNode<IntPtrT> src_offset_start = ElementOffsetFromIndex(
+      src_index, kind, INTPTR_PARAMETERS, fa_base_data_offset);
+  TNode<IntPtrT> dst_offset_start = ElementOffsetFromIndex(
+      dst_index, kind, INTPTR_PARAMETERS, fa_base_data_offset);
+
+  // The write barrier can be ignored if {dst_elements} is in new space, or if
+  // we have a SMI or double ElementsKind.
+  if (IsObjectElementsKind(kind)) {
+    JumpIfNotInNewSpace(dst_elements, &needs_barrier);
+  }
+
+  TNode<IntPtrT> src_elements_intptr = BitcastTaggedToWord(src_elements);
+  TNode<IntPtrT> source_data_ptr =
+      IntPtrAdd(src_elements_intptr, src_offset_start);
+  TNode<IntPtrT> dst_elements_intptr = BitcastTaggedToWord(dst_elements);
+  TNode<IntPtrT> dst_data_ptr =
+      IntPtrAdd(dst_elements_intptr, dst_offset_start);
+  TNode<ExternalReference> memcpy =
+      ExternalConstant(ExternalReference::libc_memcpy_function());
+  CallCFunction3(MachineType::Pointer(), MachineType::Pointer(),
+                 MachineType::Pointer(), MachineType::UintPtr(), memcpy,
+                 dst_data_ptr, source_data_ptr, source_byte_length);
+
+  if (IsObjectElementsKind(kind)) {
+    Goto(&finished);
+    BIND(&needs_barrier);
+    {
+      const TNode<IntPtrT> begin = src_offset_start;
+      const TNode<IntPtrT> end = IntPtrAdd(begin, source_byte_length);
+      const TNode<IntPtrT> offset_offset =
+          IntPtrSub(src_offset_start, dst_offset_start);
+      // Make a loop for the stores.
+      BuildFastLoop(
+          begin, end,
+          [this, src_elements, offset_offset, dst_elements](Node* offset) {
+            Node* const element =
+                Load(MachineType::AnyTagged(), src_elements, offset);
+            Node* offset_translation = IntPtrAdd(offset, offset_offset);
+            Store(dst_elements, offset_translation, element);
+          },
+          kPointerSize, INTPTR_PARAMETERS, IndexAdvanceMode::kPost);
+
+      Goto(&finished);
+    }
+    BIND(&finished);
+  }
 }
 
 void CodeStubAssembler::CopyFixedArrayElements(
