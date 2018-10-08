@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64a1346d_c9896637",
+        "filename": "test/js-perf-test/ArrayLiteralInitialSpreadSmallSmiSet/run.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-08T09:07:29Z",
+      "side": 1,
+      "message": "This is really testing the same thing as Iterate.\nCan you rename Keys to IterateUsingLength and change Iterate to use \u0027iterator.next().done\u0027 instead of the bounds check as condition? YOu\u0027ll have to rewrite the loop slightly.",
+      "revId": "73f4b7f8a9d2e17bfffc88886fa3bd594866bc69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
