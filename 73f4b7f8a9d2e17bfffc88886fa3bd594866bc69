@@ -16,6 +16,24 @@
       "revId": "73f4b7f8a9d2e17bfffc88886fa3bd594866bc69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd341178_b89bc7f5",
+        "filename": "test/js-perf-test/ArrayLiteralInitialSpreadSmallSmiSet/run.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-10-08T09:39:46Z",
+      "side": 1,
+      "message": "Instead, I renamed Iterate to IterateWithLength, and change Keys to use \u0027next().done\u0027.",
+      "parentUuid": "64a1346d_c9896637",
+      "revId": "73f4b7f8a9d2e17bfffc88886fa3bd594866bc69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
