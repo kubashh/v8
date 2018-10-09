@@ -15,6 +15,7 @@
 #include "src/heap/mark-compact-inl.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking.h"
+#include "src/heap/object-locking.h"
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/worklist.h"
@@ -236,17 +237,17 @@ class ConcurrentMarkingVisitor final
 
   int VisitConsString(Map* map, ConsString* object) {
     int size = ConsString::BodyDescriptor::SizeOf(map, object);
-    return VisitWithSnapshot(map, object, size, size);
+    return VisitLocked(map, object, size, size);
   }
 
   int VisitSlicedString(Map* map, SlicedString* object) {
     int size = SlicedString::BodyDescriptor::SizeOf(map, object);
-    return VisitWithSnapshot(map, object, size, size);
+    return VisitLocked(map, object, size, size);
   }
 
   int VisitThinString(Map* map, ThinString* object) {
     int size = ThinString::BodyDescriptor::SizeOf(map, object);
-    return VisitWithSnapshot(map, object, size, size);
+    return VisitLocked(map, object, size, size);
   }
 
   // ===========================================================================
@@ -436,7 +437,7 @@ class ConcurrentMarkingVisitor final
     int used_size = map->UsedInstanceSize();
     DCHECK_LE(used_size, size);
     DCHECK_GE(used_size, T::kHeaderSize);
-    return VisitWithSnapshot(map, object, used_size, size);
+    return VisitLocked(map, object, used_size, size);
   }
 
   template <typename T>
@@ -481,6 +482,16 @@ class ConcurrentMarkingVisitor final
                          reinterpret_cast<Object**>(object->map_slot()));
     T::BodyDescriptor::IterateBody(map, object, size, &visitor);
     return slot_snapshot_;
+  }
+
+  template <typename T>
+  int VisitLocked(Map* map, T* object, int used_size, int size) {
+    if (!ShouldVisit(object)) return 0;
+    ObjectLocking::Lock(object);
+    VisitPointer(object, reinterpret_cast<Object**>(object->map_slot()));
+    T::BodyDescriptor::IterateBody(map, object, used_size, this);
+    ObjectLocking::Unlock(object);
+    return size;
   }
 
   ConcurrentMarking::MarkingWorklist::View shared_;
