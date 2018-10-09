@@ -540,6 +540,7 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
   chunk->wasted_memory_ = 0;
   chunk->young_generation_bitmap_ = nullptr;
   chunk->local_tracker_ = nullptr;
+  chunk->lock_bitmap_ = nullptr;
 
   chunk->external_backing_store_bytes_[ExternalBackingStoreType::kArrayBuffer] =
       0;
@@ -577,6 +578,8 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
   }
 
   chunk->reservation_ = std::move(reservation);
+
+  chunk->AllocateLockBitmap();
 
   return chunk;
 }
@@ -1189,6 +1192,7 @@ void MemoryChunk::ReleaseAllocatedMemory() {
   ReleaseInvalidatedSlots();
   if (local_tracker_ != nullptr) ReleaseLocalTracker();
   if (young_generation_bitmap_ != nullptr) ReleaseYoungGenerationBitmap();
+  if (lock_bitmap_) ReleaseLockBitmap();
 
   if (IsPagedSpace()) {
     Page* page = static_cast<Page*>(this);
@@ -1328,6 +1332,17 @@ void MemoryChunk::ReleaseYoungGenerationBitmap() {
   DCHECK_NOT_NULL(young_generation_bitmap_);
   free(young_generation_bitmap_);
   young_generation_bitmap_ = nullptr;
+}
+
+void MemoryChunk::AllocateLockBitmap() {
+  DCHECK_NULL(lock_bitmap_);
+  lock_bitmap_ = static_cast<Bitmap*>(calloc(1, Bitmap::kSize));
+}
+
+void MemoryChunk::ReleaseLockBitmap() {
+  DCHECK_NOT_NULL(lock_bitmap_);
+  free(lock_bitmap_);
+  lock_bitmap_ = nullptr;
 }
 
 // -----------------------------------------------------------------------------
