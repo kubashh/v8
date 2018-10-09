@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6d4e200a_ef974272",
+        "filename": "test/cctest/test-poison-disasm-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-09T05:11:40Z",
+      "side": 1,
+      "message": "Oops, done.",
+      "parentUuid": "2ac0f410_7f6bd372",
+      "range": {
+        "startLine": 21,
+        "startChar": 48,
+        "endLine": 21,
+        "endChar": 54
+      },
+      "revId": "c25da5b0f711f18bedd3385cbc2eaefdc64a12cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ae0c86f_82345bfc",
         "filename": "test/cctest/test-poison-disasm-arm.cc",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-08T15:33:22Z",
       "side": 1,
       "message": "I guess some of these could be constants to be able to reuse with other tests.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 0
+      },
+      "revId": "c25da5b0f711f18bedd3385cbc2eaefdc64a12cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ad18258_954046c5",
+        "filename": "test/cctest/test-poison-disasm-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-09T05:11:40Z",
+      "side": 1,
+      "message": "Yes, indeed.",
+      "parentUuid": "9ae0c86f_82345bfc",
       "range": {
         "startLine": 50,
         "startChar": 0,
