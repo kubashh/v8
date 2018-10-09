@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e9f1bc2a_af4a346b",
+        "filename": "src/builtins/builtins-async-function-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-09T18:57:20Z",
+      "side": 1,
+      "message": "I\u0027m currently refactoring async functions in a way that the generator object (which will be named JSAsyncFunctionObject in the future) will carry the outer promise for the async function. This way you can always get to the outer promise from the generator. That should make it easier to implement this, right?",
+      "parentUuid": "1c722359_2df82674",
+      "revId": "7a9ddb4d8e33a1823e5a62170b3d98c230df8a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da5bb309_31308454",
         "filename": "src/builtins/builtins-async-function-gen.cc",
         "patchSetId": 4
