@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0305dfa2_2e76d74f",
+        "filename": "test/js-perf-test/ArrayLiteralInitialSpreadLargeSmiMap/run.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-09T16:38:46Z",
+      "side": 1,
+      "message": "Nit: remove space :)",
+      "range": {
+        "startLine": 9,
+        "startChar": 58,
+        "endLine": 9,
+        "endChar": 59
+      },
+      "revId": "7acfc2338428625404cae7c408971e0d848cb312",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31da339e_2c1bdfda",
+        "filename": "test/js-perf-test/ArrayLiteralInitialSpreadLargeSmiMap/run.js",
+        "patchSetId": 12
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-09T16:38:46Z",
+      "side": 1,
+      "message": "Calling this \"kv\" is confusing, maybe just replace with \"x\" everywhere.",
+      "range": {
+        "startLine": 41,
+        "startChar": 11,
+        "endLine": 41,
+        "endChar": 13
+      },
+      "revId": "7acfc2338428625404cae7c408971e0d848cb312",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
