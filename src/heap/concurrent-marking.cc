@@ -15,6 +15,7 @@
 #include "src/heap/mark-compact-inl.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking.h"
+#include "src/heap/object-locking.h"
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/worklist.h"
@@ -213,26 +214,17 @@ class ConcurrentMarkingVisitor final
 
   int VisitConsString(Map* map, ConsString* object) {
     int size = ConsString::BodyDescriptor::SizeOf(map, object);
-    const SlotSnapshot& snapshot = MakeSlotSnapshot(map, object, size);
-    if (!ShouldVisit(object)) return 0;
-    VisitPointersInSnapshot(object, snapshot);
-    return size;
+    return VisitLocked(map, object, size);
   }
 
   int VisitSlicedString(Map* map, SlicedString* object) {
     int size = SlicedString::BodyDescriptor::SizeOf(map, object);
-    const SlotSnapshot& snapshot = MakeSlotSnapshot(map, object, size);
-    if (!ShouldVisit(object)) return 0;
-    VisitPointersInSnapshot(object, snapshot);
-    return size;
+    return VisitLocked(map, object, size);
   }
 
   int VisitThinString(Map* map, ThinString* object) {
     int size = ThinString::BodyDescriptor::SizeOf(map, object);
-    const SlotSnapshot& snapshot = MakeSlotSnapshot(map, object, size);
-    if (!ShouldVisit(object)) return 0;
-    VisitPointersInSnapshot(object, snapshot);
-    return size;
+    return VisitLocked(map, object, size);
   }
 
   // ===========================================================================
@@ -417,10 +409,8 @@ class ConcurrentMarkingVisitor final
     int used_size = map->UsedInstanceSize();
     DCHECK_LE(used_size, size);
     DCHECK_GE(used_size, T::kHeaderSize);
-    const SlotSnapshot& snapshot = MakeSlotSnapshot(map, object, used_size);
-    if (!ShouldVisit(object)) return 0;
-    VisitPointersInSnapshot(object, snapshot);
-    return size;
+    if (VisitLocked(map, object, used_size)) return size;
+    return 0;
   }
 
   template <typename T>
@@ -457,6 +447,24 @@ class ConcurrentMarkingVisitor final
                          reinterpret_cast<Object**>(object->map_slot()));
     T::BodyDescriptor::IterateBody(map, object, size, &visitor);
     return slot_snapshot_;
+  }
+
+  template <typename T>
+  int VisitUsingSnapshot(Map* map, T* object, int size) {
+    const SlotSnapshot& snapshot = MakeSlotSnapshot(map, object, size);
+    if (!ShouldVisit(object)) return 0;
+    VisitPointersInSnapshot(object, snapshot);
+    return size;
+  }
+
+  template <typename T>
+  int VisitLocked(Map* map, T* object, int size) {
+    if (!ShouldVisit(object)) return 0;
+    ObjectLocking::Lock(object);
+    VisitPointer(object, reinterpret_cast<Object**>(object->map_slot()));
+    T::BodyDescriptor::IterateBody(map, object, size, this);
+    ObjectLocking::Unlock(object);
+    return size;
   }
 
   ConcurrentMarking::MarkingWorklist::View shared_;
