@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b4189f73_d08c2f2c",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-10T11:20:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57f0d1ac_9cd53919",
+      "revId": "200dd69e82a43b052acc3d1b33ddfb85b4f85766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83f82301_2cf18222",
         "filename": "src/deoptimizer.cc",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-10-10T09:27:32Z",
       "side": 1,
       "message": "isolate()-\u003eheap()-\u003eroots_array_start() will also give you the address. Perhaps a helper method since there\u0027s 4 callsites?",
+      "revId": "200dd69e82a43b052acc3d1b33ddfb85b4f85766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bf9a35b_dbe6ad70",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-10T11:20:30Z",
+      "side": 1,
+      "message": "I\u0027ve changed the code. Jaro, what do you think, should I introduce a helper?",
+      "parentUuid": "83f82301_2cf18222",
       "revId": "200dd69e82a43b052acc3d1b33ddfb85b4f85766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "200dd69e82a43b052acc3d1b33ddfb85b4f85766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75bca2ff_6ac66b3a",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-10T11:20:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "81cab392_1fe9b71c",
+      "revId": "200dd69e82a43b052acc3d1b33ddfb85b4f85766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
