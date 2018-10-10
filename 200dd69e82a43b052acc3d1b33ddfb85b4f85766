@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57f0d1ac_9cd53919",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-10T09:27:32Z",
+      "side": 1,
+      "message": "Suggestion: kShouldInitializeRootRegister or similar?",
+      "revId": "200dd69e82a43b052acc3d1b33ddfb85b4f85766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83f82301_2cf18222",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-10T09:27:32Z",
+      "side": 1,
+      "message": "isolate()-\u003eheap()-\u003eroots_array_start() will also give you the address. Perhaps a helper method since there\u0027s 4 callsites?",
+      "revId": "200dd69e82a43b052acc3d1b33ddfb85b4f85766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81cab392_1fe9b71c",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-10T09:27:32Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "200dd69e82a43b052acc3d1b33ddfb85b4f85766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
