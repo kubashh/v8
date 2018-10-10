@@ -34,6 +34,41 @@
       "revId": "54fd6fe88c013ebf3892bbec09195bd37c5e9248",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ac63129_45b715cf",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-10-10T15:43:17Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll opt for an in-person explanation tomorrow.",
+      "parentUuid": "656e0c85_70c82a9d",
+      "revId": "54fd6fe88c013ebf3892bbec09195bd37c5e9248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "311eb658_de41d7f2",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-10-10T15:43:17Z",
+      "side": 1,
+      "message": "Can you change the name in the TODO here?",
+      "revId": "54fd6fe88c013ebf3892bbec09195bd37c5e9248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
