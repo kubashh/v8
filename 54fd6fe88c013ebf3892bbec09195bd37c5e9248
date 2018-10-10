@@ -16,6 +16,24 @@
       "revId": "54fd6fe88c013ebf3892bbec09195bd37c5e9248",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "656e0c85_70c82a9d",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-10T12:16:01Z",
+      "side": 1,
+      "message": "It ends the control of the catch-all arm here. This path maps [kTry, ..., kCatch, x, ..., kEnd] to the semantically equivalent [kTry, ..., kCatch, x, ..., kCatchAll, kRethrow, kEnd] here. Similar to how the case of kThrow above, the kRethrow path also needs to end control of the current catch block. When the exception is not handled by any of the typed catch blocks it is rethrown and will either leave the function or make the stack unwinder re-enter the current function in a different place (both of these cases end control flow).",
+      "parentUuid": "14b088c6_5479ebfe",
+      "revId": "54fd6fe88c013ebf3892bbec09195bd37c5e9248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
