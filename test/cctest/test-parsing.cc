@@ -6578,6 +6578,44 @@ TEST(BasicImportExportParsing) {
   }
 }
 
+TEST(NamespaceExportParsing) {
+  // clang-format off
+  const char* kSources[] = {
+      "export * as arguments from 'bar'",
+      "export * as await from 'bar'",
+      "export * as default from 'bar'",
+      "export * as enum from 'bar'",
+      "export * as foo from 'bar'",
+      "export * as for from 'bar'",
+      "export * as let from 'bar'",
+      "export * as static from 'bar'",
+      "export * as yield from 'bar'",
+  };
+  // clang-format on
+
+  i::FLAG_harmony_namespace_exports = true;
+  i::Isolate* isolate = CcTest::i_isolate();
+  i::Factory* factory = isolate->factory();
+
+  v8::HandleScope handles(CcTest::isolate());
+  v8::Local<v8::Context> context = v8::Context::New(CcTest::isolate());
+  v8::Context::Scope context_scope(context);
+
+  isolate->stack_guard()->SetStackLimit(i::GetCurrentStackPosition() -
+                                        128 * 1024);
+
+  for (unsigned b = 0; b < 2; ++b) {
+    for (unsigned i = 0; i < arraysize(kSources); ++i) {
+      i::Handle<i::String> source =
+          factory->NewStringFromAsciiChecked(kSources[i]);
+
+      i::Handle<i::Script> script = factory->NewScript(source);
+      i::ParseInfo info(isolate, script);
+      info.set_module();
+      CHECK(i::parsing::ParseProgram(&info, isolate));
+    }
+  }
+}
 
 TEST(ImportExportParsingErrors) {
   // clang-format off
@@ -6643,6 +6681,13 @@ TEST(ImportExportParsingErrors) {
       "import * as x, * as y from 'm.js';",
       "import {x}, {y} from 'm.js';",
       "import * as x, {y} from 'm.js';",
+
+      "export *;",
+      "export * as;",
+      "export * as foo;",
+      "export * as foo from;",
+      "export * as foo from ';",
+      "export * as ,foo from 'bar'",
   };
   // clang-format on
 
