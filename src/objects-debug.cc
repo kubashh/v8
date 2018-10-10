@@ -1963,6 +1963,7 @@ void JSDateTimeFormat::JSDateTimeFormatVerify(Isolate* isolate) {
   VerifyObjectField(isolate, kICULocaleOffset);
   VerifyObjectField(isolate, kICUSimpleDateFormatOffset);
   VerifyObjectField(isolate, kBoundFormatOffset);
+  VerifyObjectField(isolate, kICUDateIntervalFormatOffset);
 }
 
 void JSListFormat::JSListFormatVerify(Isolate* isolate) {

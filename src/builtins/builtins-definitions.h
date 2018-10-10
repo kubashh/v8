@@ -1360,8 +1360,12 @@ namespace internal {
   CPP(DateTimeFormatInternalFormat)                                    \
   /* ecma402 #sec-intl.datetimeformat.prototype.format */              \
   CPP(DateTimeFormatPrototypeFormat)                                   \
+  /* ecma402 #sec-intl.datetimeformat.prototype.formatrange */         \
+  CPP(DateTimeFormatPrototypeFormatRange)                              \
   /* ecma402 #sec-intl.datetimeformat.prototype.formattoparts */       \
   CPP(DateTimeFormatPrototypeFormatToParts)                            \
+  /* ecma402 #sec-intl.datetimeformat.prototype.formatrangetoparts */  \
+  CPP(DateTimeFormatPrototypeFormatRangeToParts)                       \
   /* ecma402 #sec-intl.datetimeformat.prototype.resolvedoptions */     \
   CPP(DateTimeFormatPrototypeResolvedOptions)                          \
   /* ecma402 #sec-intl.datetimeformat.supportedlocalesof */            \
