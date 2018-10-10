@@ -11,6 +11,8 @@
 #include "src/parsing/preparser-logger.h"
 #include "src/pending-compilation-error-handler.h"
 
+#include "src/ptrstore.h"
+
 namespace v8 {
 namespace internal {
 
@@ -850,13 +852,26 @@ struct PreParserFormalParameters : FormalParametersBase {
         ZoneThreadedList<VariableProxy, VariableProxy::PreParserNext>;
 
     Parameter(VariableZoneThreadedListType* variables, bool is_rest)
-        : variables_(variables), is_rest(is_rest) {}
+       // : variables_(variables), is_rest(is_rest) 
+    {
+      var_store.setPtr(variables);
+      var_store.setStorage(is_rest);
+        }
     Parameter** next() { return &next_parameter; }
     Parameter* const* next() const { return &next_parameter; }
 
-    VariableZoneThreadedListType* variables_;
+    VariableZoneThreadedListType *variables_() const {
+      return var_store.getPtr();
+    }
+
+    bool is_rest() const {
+      return var_store.getStorage();
+    }
+
+    //VariableZoneThreadedListType* variables_;
+    StoragePtr<VariableZoneThreadedListType*, 1> var_store;
     Parameter* next_parameter = nullptr;
-    bool is_rest : 1;
+    //bool is_rest : 1;
   };
   explicit PreParserFormalParameters(DeclarationScope* scope)
       : FormalParametersBase(scope) {}
@@ -1727,17 +1742,17 @@ class PreParser : public ParserBase<PreParser> {
     if (track_unresolved_variables_) {
       DCHECK(FLAG_lazy_inner_functions);
       for (auto parameter : parameters) {
-        DCHECK_IMPLIES(is_simple, parameter->variables_ != nullptr);
-        DCHECK_IMPLIES(is_simple, parameter->variables_->LengthForTest() == 1);
+        DCHECK_IMPLIES(is_simple, parameter->variables_() != nullptr);
+        DCHECK_IMPLIES(is_simple, parameter->variables_()->LengthForTest() == 1);
         // Make sure each parameter is added only once even if it's a
         // destructuring parameter which contains multiple names.
         bool add_parameter = true;
-        if (parameter->variables_ != nullptr) {
-          for (auto variable : (*parameter->variables_)) {
+        if (parameter->variables_() != nullptr) { // TODO (sattlerf):
+          for (auto variable : (*parameter->variables_())) {
             // We declare the parameter name for all names, but only create a
             // parameter entry for the first one.
             scope->DeclareParameterName(variable->raw_name(),
-                                        parameter->is_rest, ast_value_factory(),
+                                        parameter->is_rest(), ast_value_factory(),
                                         true, add_parameter);
             add_parameter = false;
           }
@@ -1747,7 +1762,7 @@ class PreParser : public ParserBase<PreParser> {
           // parameter count.
           DCHECK(!is_simple);
           scope->DeclareParameterName(ast_value_factory()->empty_string(),
-                                      parameter->is_rest, ast_value_factory(),
+                                      parameter->is_rest(), ast_value_factory(),
                                       false, add_parameter);
         }
       }

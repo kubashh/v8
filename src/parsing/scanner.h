@@ -18,6 +18,8 @@
 #include "src/unicode-decoder.h"
 #include "src/unicode.h"
 
+#include "src/ptrstore.h"
+
 namespace v8 {
 namespace internal {
 
@@ -507,8 +509,8 @@ class Scanner {
 
     Vector<byte> backing_store_;
     int position_;
-    bool is_one_byte_;
-    bool is_used_;
+    bool is_one_byte_ : 1;
+    bool is_used_ : 1;
 
     DISALLOW_COPY_AND_ASSIGN(LiteralBuffer);
   };
@@ -518,17 +520,27 @@ class Scanner {
   class LiteralScope {
    public:
     explicit LiteralScope(Scanner* scanner)
-        : buffer_(&scanner->next().literal_chars), complete_(false) {
-      buffer_->Start();
+        //: 
+         // buffer_(&scanner->next().literal_chars)
+         // , complete_(false) 
+    {
+      buff_store.setPtr(&scanner->next().literal_chars);
+      buffer_()->Start();
     }
     ~LiteralScope() {
-      if (!complete_) buffer_->Drop();
+      if (!buff_store.getStorage()) buffer_()->Drop();
     }
-    void Complete() { complete_ = true; }
+    void Complete() { 
+      buff_store.setStorage(true);
+      //complete_ = true; 
+    }
 
    private:
-    LiteralBuffer* buffer_;
-    bool complete_;
+    LiteralBuffer *buffer_() const { return buff_store.getPtr(); }
+
+    StoragePtr<LiteralBuffer*, 1> buff_store;
+    //LiteralBuffer* buffer_;
+    //bool complete_;
   };
 
   // The current and look-ahead token.

@@ -25,6 +25,8 @@
 #include "src/parsing/token.h"
 #include "src/zone/zone-chunk-list.h"
 
+#include "src/ptrstore.h"
+
 namespace v8 {
 namespace internal {
 

@@ -18,6 +18,8 @@
 #include "src/parsing/preparser.h"
 #include "src/zone/zone-chunk-list.h"
 
+#include "src/ptrstore.h"
+
 namespace v8 {
 
 class ScriptCompiler;
@@ -86,21 +88,34 @@ struct ParserFormalParameters : FormalParametersBase {
     Parameter(const AstRawString* name, Expression* pattern,
               Expression* initializer, int position,
               int initializer_end_position, bool is_rest)
-        : name(name),
+        : namen(name),
           pattern(pattern),
-          initializer(initializer),
+          //initializer(initializer),
           position(position),
-          initializer_end_position(initializer_end_position),
-          is_rest(is_rest) {}
-    const AstRawString* name;
+          initializer_end_position(initializer_end_position)//,
+          //is_rest(is_rest) 
+    {
+      name_store.setPtr(initializer);
+      name_store.setStorage(is_rest);
+
+    }
+    const AstRawString* namen;
+    StoragePtr<Expression*, 1> name_store;
+    const AstRawString* name() const { return namen;//name_store.getPtr(); 
+    }
     Expression* pattern;
-    Expression* initializer;
+    //Expression* initializer;
+    Expression *initializer() const {
+      return name_store.getPtr();
+    }
     int position;
     int initializer_end_position;
-    bool is_rest;
+    //bool is_rest;
+    inline bool is_rest() const { return name_store.getStorage(); }
+
     Parameter* next_parameter = nullptr;
     bool is_simple() const {
-      return pattern->IsVariableProxy() && initializer == nullptr && !is_rest;
+      return pattern->IsVariableProxy() && initializer() == nullptr && !is_rest();
     }
 
     Parameter** next() { return &next_parameter; }
@@ -938,15 +953,15 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
       bool is_simple, bool* has_duplicate = nullptr) {
     if (!is_simple) scope->SetHasNonSimpleParameters();
     for (auto parameter : parameters) {
-      bool is_optional = parameter->initializer != nullptr;
+      bool is_optional = parameter->initializer() != nullptr;
       // If the parameter list is simple, declare the parameters normally with
       // their names. If the parameter list is not simple, declare a temporary
       // for each parameter - the corresponding named variable is declared by
       // BuildParamerterInitializationBlock.
       scope->DeclareParameter(
-          is_simple ? parameter->name : ast_value_factory()->empty_string(),
+          is_simple ? parameter->name() : ast_value_factory()->empty_string(),
           is_simple ? VariableMode::kVar : VariableMode::kTemporary,
-          is_optional, parameter->is_rest, has_duplicate, ast_value_factory(),
+          is_optional, parameter->is_rest(), has_duplicate, ast_value_factory(),
           parameter->position);
     }
   }
