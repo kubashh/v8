@@ -25,6 +25,15 @@
 namespace v8 {
 namespace internal {
 
+namespace {
+
+#if defined(V8_TARGET_ARCH_IA32)
+constexpr bool reinitialize_root_register = FLAG_embedded_builtins;
+#else
+constexpr bool reinitialize_root_register = true;
+#endif
+}
+
 // {FrameWriter} offers a stack writer abstraction for writing
 // FrameDescriptions. The main service the class provides is managing
 // {top_offset_}, i.e. the offset of the next slot to write to.
@@ -929,6 +938,13 @@ void Deoptimizer::DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
     Register fp_reg = InterpretedFrame::fp_register();
     output_frame->SetRegister(fp_reg.code(), fp_value);
   }
+  if (reinitialize_root_register) {
+    // Initialize the root register.
+    ExternalReference roots_array_start =
+        ExternalReference::roots_array_start(isolate());
+    output_frame->SetRegister(kRootRegister.code(),
+                              roots_array_start.address() + kRootRegisterBias);
+  }
 
   if (FLAG_enable_embedded_constant_pool) {
     // For the bottommost output frame the constant pool pointer can be gotten
@@ -1123,6 +1139,14 @@ void Deoptimizer::DoComputeArgumentsAdaptorFrame(
   intptr_t fp_value = top_address + frame_writer.top_offset();
   output_frame->SetFp(fp_value);
 
+  if (reinitialize_root_register) {
+    // Initialize the root register.
+    ExternalReference roots_array_start =
+        ExternalReference::roots_array_start(isolate());
+    output_frame->SetRegister(kRootRegister.code(),
+                              roots_array_start.address() + kRootRegisterBias);
+  }
+
   if (FLAG_enable_embedded_constant_pool) {
     // Read the caller's constant pool from the previous frame.
     const intptr_t caller_cp =
@@ -1247,6 +1271,13 @@ void Deoptimizer::DoComputeConstructStubFrame(TranslatedFrame* translated_frame,
   if (is_topmost) {
     Register fp_reg = JavaScriptFrame::fp_register();
     output_frame->SetRegister(fp_reg.code(), fp_value);
+  }
+  if (reinitialize_root_register) {
+    // Initialize the root register.
+    ExternalReference roots_array_start =
+        ExternalReference::roots_array_start(isolate());
+    output_frame->SetRegister(kRootRegister.code(),
+                              roots_array_start.address() + kRootRegisterBias);
   }
 
   if (FLAG_enable_embedded_constant_pool) {
@@ -1637,6 +1668,13 @@ void Deoptimizer::DoComputeBuiltinContinuation(
 
   const intptr_t fp_value = top_address + frame_writer.top_offset();
   output_frame->SetFp(fp_value);
+  if (reinitialize_root_register) {
+    // Initialize the root register.
+    ExternalReference roots_array_start =
+        ExternalReference::roots_array_start(isolate());
+    output_frame->SetRegister(kRootRegister.code(),
+                              roots_array_start.address() + kRootRegisterBias);
+  }
 
   DCHECK_EQ(output_frame_size_above_fp, frame_writer.top_offset());
 
