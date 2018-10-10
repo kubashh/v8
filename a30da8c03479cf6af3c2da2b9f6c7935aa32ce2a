@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d2704f6_612f3e20",
+        "filename": "src/isolate.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-10T12:43:23Z",
+      "side": 1,
+      "message": "Actually, please remove the brackets here (sorry).",
+      "range": {
+        "startLine": 1248,
+        "startChar": 11,
+        "endLine": 1248,
+        "endChar": 12
+      },
+      "revId": "a30da8c03479cf6af3c2da2b9f6c7935aa32ce2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "633dfa3e_c5f30fe7",
+        "filename": "src/isolate.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1254,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-10T12:43:23Z",
+      "side": 1,
+      "message": "Please remove.",
+      "range": {
+        "startLine": 1254,
+        "startChar": 65,
+        "endLine": 1254,
+        "endChar": 74
+      },
+      "revId": "a30da8c03479cf6af3c2da2b9f6c7935aa32ce2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c258fc5d_14f276c7",
+        "filename": "src/isolate.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-10T12:43:23Z",
+      "side": 1,
+      "message": "Actually it does, doesn\u0027t it?",
+      "revId": "a30da8c03479cf6af3c2da2b9f6c7935aa32ce2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
