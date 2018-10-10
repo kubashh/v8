@@ -52,6 +52,24 @@
       "revId": "1c8140d3fd58fba8989d7ee2bc9b3eb4cdf8f644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4da6ce7e_3e932631",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4558,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-10-10T11:50:56Z",
+      "side": 1,
+      "message": "Interesting! At the location where it\u0027s used, it looks like it\u0027s code that only runs on 32 bit, so the WordAnd is a Word32And, which is something Branch() can deal with. In general, I\u0027ll be conservative and express things as a compare.",
+      "parentUuid": "81cbfaf5_a3045fc0",
+      "revId": "1c8140d3fd58fba8989d7ee2bc9b3eb4cdf8f644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
