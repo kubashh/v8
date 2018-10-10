@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3738bd47_05a2bd52",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-10T13:35:21Z",
+      "side": 1,
+      "message": "The names DoMoveElements and TorqueMoveElements don\u0027t convey their difference. Same for DoCopyElements and TorqueCopyElements.\n\nFor DoCopyElements, the only difference is the argument types. I think overloading the same name is better.\n\nFor DoMoveElements, It does fill holes in addition to TorqueMoveElements. I think this get\u0027s cleaner if this was a separate function \nFillHoles(elements, holeStartIndex, holeEndIndex)\nsince it uses an almost disjoint set of arguments anyway.",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fddf9ce_814096f9",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-10T13:35:21Z",
+      "side": 1,
+      "message": "Why not just name this MoveElements? Overloads are fine here I think, since it does the same thing. Same below.",
+      "range": {
+        "startLine": 886,
+        "startChar": 6,
+        "endLine": 886,
+        "endChar": 24
+      },
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1607f4cd_fdee07a2",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4550,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-10T13:35:21Z",
+      "side": 1,
+      "message": "This could be TNode\u003cObject\u003e",
+      "range": {
+        "startLine": 4550,
+        "startChar": 4,
+        "endLine": 4550,
+        "endChar": 9
+      },
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "557cf3ff_1cd68c3f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-10T13:35:21Z",
+      "side": 1,
+      "message": "In general, capturing by reference ([\u0026]) is the better pattern, for variables and labels that shouldn\u0027t be copied. In this case, it doesn\u0027t matter",
+      "range": {
+        "startLine": 4620,
+        "startChar": 24,
+        "endLine": 4620,
+        "endChar": 25
+      },
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0476c6b1_70b3fd25",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4660,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-10T13:35:21Z",
+      "side": 1,
+      "message": "This function is not correct if dst_elements \u003d\u003d src_elements. We should CSA_ASSERT this.",
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
