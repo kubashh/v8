@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "72572058_323240d0",
+        "filename": "src/builtins/array-splice.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-10-10T14:42:25Z",
+      "side": 1,
+      "message": "I won\u0027t do the rename since we currently don\u0027t allow overloading between generics and regular macros (we\u0027ve got a todo on the torque backlog).\n\nI created a hole filling method that is separate, which seems to work well.",
+      "parentUuid": "3738bd47_05a2bd52",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fddf9ce_814096f9",
         "filename": "src/builtins/base.tq",
         "patchSetId": 12
@@ -45,6 +69,30 @@
       "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87af8ae8_328f5fcf",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-10-10T14:42:25Z",
+      "side": 1,
+      "message": "There is a conflict with overloading between externally declared macros and defined macros with a different number of arguments. Per our conversation, you\u0027ve got an idea to address it and that lets us cut down on all these special names! :)",
+      "parentUuid": "4fddf9ce_814096f9",
+      "range": {
+        "startLine": 886,
+        "startChar": 6,
+        "endLine": 886,
+        "endChar": 24
+      },
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "05451df9_b3ab88b5",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4550,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-10-10T14:42:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1607f4cd_fdee07a2",
+      "range": {
+        "startLine": 4550,
+        "startChar": 4,
+        "endLine": 4550,
+        "endChar": 9
+      },
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "557cf3ff_1cd68c3f",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 12
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "2a46093b_a5c3d496",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-10-10T14:42:25Z",
+      "side": 1,
+      "message": "Ah, thanks. I fixed it here and in CopyElements.",
+      "parentUuid": "557cf3ff_1cd68c3f",
+      "range": {
+        "startLine": 4620,
+        "startChar": 24,
+        "endLine": 4620,
+        "endChar": 25
+      },
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0476c6b1_70b3fd25",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 12
@@ -108,6 +204,24 @@
       "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2c4f5d2_fa3e3049",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 4660,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-10-10T14:42:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0476c6b1_70b3fd25",
+      "revId": "965d2ce252580bc964ea2b198c8dd54d43ef4903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
