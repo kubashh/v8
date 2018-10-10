@@ -18,7 +18,9 @@
 #include "src/objects/js-date-time-format-inl.h"
 
 #include "unicode/calendar.h"
+#include "unicode/dtitvfmt.h"
 #include "unicode/dtptngen.h"
+#include "unicode/fieldpos.h"
 #include "unicode/gregocal.h"
 #include "unicode/numsys.h"
 #include "unicode/smpdtfmt.h"
@@ -678,6 +680,27 @@ std::unique_ptr<icu::Calendar> CreateCalendar(Isolate* isolate,
   return calendar;
 }
 
+std::unique_ptr<icu::DateIntervalFormat> CreateICUDateIntervalFormat(
+    Isolate* isolate, const icu::Locale& icu_locale,
+    const std::string& skeleton) {
+  icu::Locale no_extension_locale(icu_locale.getBaseName());
+  UErrorCode status = U_ZERO_ERROR;
+  std::unique_ptr<icu::DateTimePatternGenerator> generator(
+      icu::DateTimePatternGenerator::createInstance(no_extension_locale,
+                                                    status));
+  icu::UnicodeString pattern;
+  if (U_SUCCESS(status)) {
+    pattern =
+        generator->getBestPattern(icu::UnicodeString(skeleton.c_str()), status);
+  }
+  status = U_ZERO_ERROR;
+  std::unique_ptr<icu::DateIntervalFormat> date_interval_format(
+      icu::DateIntervalFormat::createInstance(pattern, icu_locale, status));
+  if (U_FAILURE(status)) return std::unique_ptr<icu::DateIntervalFormat>();
+  CHECK_NOT_NULL(date_interval_format.get());
+  return date_interval_format;
+}
+
 std::unique_ptr<icu::SimpleDateFormat> CreateICUDateFormat(
     Isolate* isolate, const icu::Locale& icu_locale,
     const std::string& skeleton) {
@@ -836,6 +859,14 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
     }
   }
 
+  std::unique_ptr<icu::DateIntervalFormat> date_interval_format(
+      CreateICUDateIntervalFormat(isolate, icu_locale, skeleton));
+  if (date_interval_format.get() == nullptr) {
+    FATAL(
+        "Failed to create ICU date interval format, are ICU data interval "
+        "files missing?");
+  }
+
   // Set the locale
   // 12. Set dateTimeFormat.[[Locale]] to r.[[locale]].
   icu::Locale* cloned_locale = icu_locale.clone();
@@ -857,12 +888,18 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
                                       timezone.get())),
                     JSDateTimeFormat);
   }
+  date_interval_format->setTimeZone(calendar->getTimeZone());
   date_format->adoptCalendar(calendar.release());
 
   Handle<Managed<icu::SimpleDateFormat>> managed_format =
       Managed<icu::SimpleDateFormat>::FromUniquePtr(isolate, 0,
                                                     std::move(date_format));
   date_time_format->set_icu_simple_date_format(*managed_format);
+
+  Handle<Managed<icu::DateIntervalFormat>> managed_interval_format =
+      Managed<icu::DateIntervalFormat>::FromUniquePtr(
+          isolate, 0, std::move(date_interval_format));
+  date_time_format->set_icu_date_interval_format(*managed_interval_format);
   return date_time_format;
 }
 
@@ -976,5 +1013,37 @@ MaybeHandle<Object> JSDateTimeFormat::FormatToParts(
   JSObject::ValidateElements(*result);
   return result;
 }
+
+MaybeHandle<String> JSDateTimeFormat::FormatRange(
+    Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
+    double x_date_value, double y_date_value) {
+  icu::DateIntervalFormat* date_interval_format =
+      date_time_format->icu_date_interval_format()->raw();
+  CHECK_NOT_NULL(date_interval_format);
+
+  icu::DateInterval interval(x_date_value, y_date_value);
+
+  icu::UnicodeString result;
+  icu::FieldPosition fpos;
+  UErrorCode status = U_ZERO_ERROR;
+  date_interval_format->format(&interval, result, fpos, status);
+  CHECK(U_SUCCESS(status));
+
+  return Intl::ToString(isolate, result);
+}
+
+MaybeHandle<Object> JSDateTimeFormat::FormatRangeToParts(
+    Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
+    double x_date_value, double y_date_value) {
+  Factory* factory = isolate->factory();
+  icu::SimpleDateFormat* format =
+      date_time_format->icu_simple_date_format()->raw();
+  CHECK_NOT_NULL(format);
+  Handle<JSArray> result = factory->NewJSArray(0);
+
+  JSObject::ValidateElements(*result);
+  return result;
+}
+
 }  // namespace internal
 }  // namespace v8

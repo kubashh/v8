@@ -221,7 +221,9 @@ DEFINE_IMPLICATION(harmony_class_fields, harmony_private_fields)
   HARMONY_INPROGRESS_BASE(V)                     \
   V(harmony_locale, "Intl.Locale")               \
   V(harmony_intl_list_format, "Intl.ListFormat") \
-  V(harmony_intl_segmenter, "Intl.Segmenter")
+  V(harmony_intl_segmenter, "Intl.Segmenter")    \
+  V(harmony_intl_date_time_format_format_range,  \
+    "Intl.DateTimeFormat.formatRange")
 #else
 #define HARMONY_INPROGRESS(V) HARMONY_INPROGRESS_BASE(V)
 #endif

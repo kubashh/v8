@@ -225,6 +225,102 @@ BUILTIN(DateTimeFormatPrototypeFormatToParts) {
       isolate, JSDateTimeFormat::FormatToParts(isolate, dtf, date_value));
 }
 
+BUILTIN(DateTimeFormatPrototypeFormatRange) {
+  const char* const method = "Intl.DateTimeFormat.prototype.formatRange";
+  HandleScope handle_scope(isolate);
+  CHECK_RECEIVER(JSObject, date_format_holder, method);
+  Factory* factory = isolate->factory();
+
+  if (!date_format_holder->IsJSDateTimeFormat()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kIncompatibleMethodReceiver,
+                              factory->NewStringFromAsciiChecked(method),
+                              date_format_holder));
+  }
+  Handle<JSDateTimeFormat> dtf =
+      Handle<JSDateTimeFormat>::cast(date_format_holder);
+
+  Handle<Object> x = args.atOrUndefined(isolate, 1);
+  if (x->IsUndefined(isolate)) {
+    x = factory->NewNumber(JSDate::CurrentTimeValue(isolate));
+  } else {
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, x,
+                                       Object::ToNumber(isolate, args.at(1)));
+  }
+
+  double x_date_value = DateCache::TimeClip(x->Number());
+  if (std::isnan(x_date_value)) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewRangeError(MessageTemplate::kInvalidTimeValue));
+  }
+
+  Handle<Object> y = args.atOrUndefined(isolate, 2);
+  if (y->IsUndefined(isolate)) {
+    y = factory->NewNumber(JSDate::CurrentTimeValue(isolate));
+  } else {
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, y,
+                                       Object::ToNumber(isolate, args.at(2)));
+  }
+
+  double y_date_value = DateCache::TimeClip(y->Number());
+  if (std::isnan(y_date_value)) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewRangeError(MessageTemplate::kInvalidTimeValue));
+  }
+
+  RETURN_RESULT_OR_FAILURE(
+      isolate,
+      JSDateTimeFormat::FormatRange(isolate, dtf, x_date_value, y_date_value));
+}
+
+BUILTIN(DateTimeFormatPrototypeFormatRangeToParts) {
+  const char* const method = "Intl.DateTimeFormat.prototype.formatRangeToParts";
+  HandleScope handle_scope(isolate);
+  CHECK_RECEIVER(JSObject, date_format_holder, method);
+  Factory* factory = isolate->factory();
+
+  if (!date_format_holder->IsJSDateTimeFormat()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewTypeError(MessageTemplate::kIncompatibleMethodReceiver,
+                              factory->NewStringFromAsciiChecked(method),
+                              date_format_holder));
+  }
+  Handle<JSDateTimeFormat> dtf =
+      Handle<JSDateTimeFormat>::cast(date_format_holder);
+
+  Handle<Object> x = args.atOrUndefined(isolate, 1);
+  if (x->IsUndefined(isolate)) {
+    x = factory->NewNumber(JSDate::CurrentTimeValue(isolate));
+  } else {
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, x,
+                                       Object::ToNumber(isolate, args.at(1)));
+  }
+
+  double x_date_value = DateCache::TimeClip(x->Number());
+  if (std::isnan(x_date_value)) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewRangeError(MessageTemplate::kInvalidTimeValue));
+  }
+
+  Handle<Object> y = args.atOrUndefined(isolate, 2);
+  if (y->IsUndefined(isolate)) {
+    y = factory->NewNumber(JSDate::CurrentTimeValue(isolate));
+  } else {
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, y,
+                                       Object::ToNumber(isolate, args.at(2)));
+  }
+
+  double y_date_value = DateCache::TimeClip(y->Number());
+  if (std::isnan(y_date_value)) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate, NewRangeError(MessageTemplate::kInvalidTimeValue));
+  }
+
+  RETURN_RESULT_OR_FAILURE(
+      isolate, JSDateTimeFormat::FormatRangeToParts(isolate, dtf, x_date_value,
+                                                    y_date_value));
+}
+
 namespace {
 Handle<JSFunction> CreateBoundFunction(Isolate* isolate,
                                        Handle<JSObject> object,

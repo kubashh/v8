@@ -22,6 +22,8 @@ ACCESSORS(JSDateTimeFormat, icu_locale, Managed<icu::Locale>, kICULocaleOffset);
 ACCESSORS(JSDateTimeFormat, icu_simple_date_format,
           Managed<icu::SimpleDateFormat>, kICUSimpleDateFormatOffset)
 ACCESSORS(JSDateTimeFormat, bound_format, Object, kBoundFormatOffset);
+ACCESSORS(JSDateTimeFormat, icu_date_interval_format,
+          Managed<icu::DateIntervalFormat>, kICUDateIntervalFormatOffset)
 
 CAST_ACCESSOR(JSDateTimeFormat);
 
