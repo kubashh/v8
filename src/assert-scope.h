@@ -9,6 +9,8 @@
 #include "src/base/macros.h"
 #include "src/globals.h"
 
+#include "src/ptrstore.h"
+
 namespace v8 {
 namespace internal {
 
@@ -45,8 +47,13 @@ class PerThreadAssertScope {
   void Release();
 
  private:
-  PerThreadAssertData* data_;
-  bool old_state_;
+  StoragePtr<PerThreadAssertData *, 1> data_store;
+  //PerThreadAssertData* data_;
+  //bool old_state_;
+
+  PerThreadAssertData* data_() const { return data_store.getPtr(); }
+
+  bool old_state_() const { return data_store.getStorage(); }
 
   DISALLOW_COPY_AND_ASSIGN(PerThreadAssertScope);
 };

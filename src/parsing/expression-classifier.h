@@ -205,9 +205,9 @@ class ExpressionClassifierBase {
 
  protected:
   typename Types::Base* base_;
-  unsigned invalid_productions_ : kUnusedError;
+  unsigned invalid_productions_;// : kUnusedError;
   STATIC_ASSERT(kUnusedError <= 15);
-  unsigned is_non_simple_parameter_list_ : 1;
+  unsigned is_non_simple_parameter_list_;// : 1;
 };
 
 template <typename Types>
