@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "e5debdea_993b4ea1",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1624,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-10T15:54:46Z",
+      "side": 1,
+      "message": "Ack. Sounds good, lets do that.",
+      "parentUuid": "9ac63129_45b715cf",
+      "revId": "54fd6fe88c013ebf3892bbec09195bd37c5e9248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "311eb658_de41d7f2",
         "filename": "src/wasm/function-body-decoder.cc",
         "patchSetId": 1
@@ -69,6 +87,24 @@
       "revId": "54fd6fe88c013ebf3892bbec09195bd37c5e9248",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "157bcab5_5a79d6ab",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-10T15:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "311eb658_de41d7f2",
+      "revId": "54fd6fe88c013ebf3892bbec09195bd37c5e9248",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
