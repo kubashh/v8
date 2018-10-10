@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd3ef50c_9860e065",
+        "filename": "test/mjsunit/es6/map-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-10T11:34:37Z",
+      "side": 1,
+      "message": "Please just spell this out, makes it easier to read. Also get rid of this variable.",
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2562f17e_28727fbe",
+        "filename": "test/mjsunit/es6/map-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-10T11:34:37Z",
+      "side": 1,
+      "message": "Let\u0027s also assert this for the SetIteratorProtector in all Map tests, and similarly for MapIteratorProtector in the Set tests. Also add corresponding assertion after the modification below.",
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9de4956_322df6c0",
+        "filename": "test/mjsunit/es6/map-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-10T11:34:37Z",
+      "side": 1,
+      "message": "Nit: you can remove this part.",
+      "range": {
+        "startLine": 17,
+        "startChar": 24,
+        "endLine": 17,
+        "endChar": 43
+      },
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b62359e8_11fcb264",
+        "filename": "test/mjsunit/es6/map-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-10T11:34:37Z",
+      "side": 1,
+      "message": "Nit: remove blank",
+      "range": {
+        "startLine": 17,
+        "startChar": 47,
+        "endLine": 17,
+        "endChar": 48
+      },
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ed8f168_f9277dff",
+        "filename": "test/mjsunit/es6/map-iterator-2.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-10T11:34:37Z",
+      "side": 1,
+      "message": "No need to repeat this in all tests.",
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fcc24de_34e17859",
+        "filename": "test/mjsunit/es6/set-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-10T11:34:37Z",
+      "side": 1,
+      "message": "Nit: swap these two lines (also further below).",
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
