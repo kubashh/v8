@@ -40,7 +40,6 @@
 #include "src/objects/js-relative-time-format-inl.h"
 #include "src/objects/js-segmenter-inl.h"
 #endif  // V8_INTL_SUPPORT
-#include "src/objects/js-weak-refs-inl.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/microtask-inl.h"
 #include "src/objects/microtask-queue-inl.h"
@@ -268,16 +267,6 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
     case JS_MAP_KEY_VALUE_ITERATOR_TYPE:
     case JS_MAP_VALUE_ITERATOR_TYPE:
       JSMapIterator::cast(this)->JSMapIteratorPrint(os);
-      break;
-    case JS_WEAK_CELL_TYPE:
-      JSWeakCell::cast(this)->JSWeakCellPrint(os);
-      break;
-    case JS_WEAK_FACTORY_TYPE:
-      JSWeakFactory::cast(this)->JSWeakFactoryPrint(os);
-      break;
-    case JS_WEAK_FACTORY_CLEANUP_ITERATOR_TYPE:
-      JSWeakFactoryCleanupIterator::cast(this)
-          ->JSWeakFactoryCleanupIteratorPrint(os);
       break;
     case JS_WEAK_MAP_TYPE:
       JSWeakMap::cast(this)->JSWeakMapPrint(os);
@@ -1271,30 +1260,6 @@ void JSSetIterator::JSSetIteratorPrint(std::ostream& os) {  // NOLINT
 void JSMapIterator::JSMapIteratorPrint(std::ostream& os) {  // NOLINT
   JSObjectPrintHeader(os, this, "JSMapIterator");
   JSCollectionIteratorPrint(os);
-}
-
-void JSWeakCell::JSWeakCellPrint(std::ostream& os) {
-  JSObjectPrintHeader(os, this, "JSWeakCell");
-  os << "\n - factory: " << Brief(factory());
-  os << "\n - target: " << Brief(target());
-  os << "\n - prev: " << Brief(prev());
-  os << "\n - next: " << Brief(next());
-  os << "\n";
-}
-
-void JSWeakFactory::JSWeakFactoryPrint(std::ostream& os) {
-  JSObjectPrintHeader(os, this, "JSWeakFactory");
-  os << "\n - cleanup: " << Brief(cleanup());
-  os << "\n - active_cells: " << Brief(active_cells());
-  os << "\n - cleared_cells: " << Brief(cleared_cells());
-  os << "\n";
-}
-
-void JSWeakFactoryCleanupIterator::JSWeakFactoryCleanupIteratorPrint(
-    std::ostream& os) {
-  JSObjectPrintHeader(os, this, "JSWeakFactoryCleanupIterator");
-  os << "\n - factory: " << Brief(factory());
-  os << "\n";
 }
 
 void JSWeakMap::JSWeakMapPrint(std::ostream& os) {  // NOLINT

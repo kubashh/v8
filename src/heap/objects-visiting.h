@@ -24,7 +24,6 @@ class JSArrayBuffer;
 class JSDataView;
 class JSRegExp;
 class JSTypedArray;
-class JSWeakCell;
 class JSWeakCollection;
 class UncompiledDataWithoutPreParsedScope;
 class UncompiledDataWithPreParsedScope;
@@ -132,11 +131,6 @@ class NewSpaceVisitor : public HeapVisitor<int, ConcreteVisitor> {
   }
 
   int VisitSharedFunctionInfo(Map* map, SharedFunctionInfo* object) {
-    UNREACHABLE();
-    return 0;
-  }
-
-  int VisitJSWeakCell(Map* map, JSWeakCell* js_weak_cell) {
     UNREACHABLE();
     return 0;
   }
