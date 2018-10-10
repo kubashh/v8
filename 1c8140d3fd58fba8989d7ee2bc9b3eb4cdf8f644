@@ -34,6 +34,24 @@
       "revId": "1c8140d3fd58fba8989d7ee2bc9b3eb4cdf8f644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81cbfaf5_a3045fc0",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4558,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-10T09:50:04Z",
+      "side": 1,
+      "message": "Interesting.. Isn\u0027t it just basically a typecast that\u0027s needed? We do use this pattern e.g. here: https://cs.chromium.org/chromium/src/v8/src/code-stub-assembler.cc?l\u003d1171\u0026rcl\u003d668b404640ee55f3f700640e7b6ff533e49c6af0\n\nAnyway, I\u0027m fine with either way.",
+      "parentUuid": "a80d897b_4e4f49f8",
+      "revId": "1c8140d3fd58fba8989d7ee2bc9b3eb4cdf8f644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
