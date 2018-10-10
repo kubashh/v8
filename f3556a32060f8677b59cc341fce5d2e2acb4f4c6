@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "adf4c54e_ff5a75a2",
+        "filename": "test/mjsunit/es6/map-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-10-10T12:20:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd3ef50c_9860e065",
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2562f17e_28727fbe",
         "filename": "test/mjsunit/es6/map-iterator-1.js",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bdd62a4_1e93b1ca",
+        "filename": "test/mjsunit/es6/map-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-10-10T12:20:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2562f17e_28727fbe",
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +118,54 @@
     },
     {
       "key": {
+        "uuid": "4615699d_966fce53",
+        "filename": "test/mjsunit/es6/map-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-10-10T12:20:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9de4956_322df6c0",
+      "range": {
+        "startLine": 17,
+        "startChar": 24,
+        "endLine": 17,
+        "endChar": 43
+      },
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3986855a_f6914170",
+        "filename": "test/mjsunit/es6/map-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-10-10T12:20:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b62359e8_11fcb264",
+      "range": {
+        "startLine": 17,
+        "startChar": 47,
+        "endLine": 17,
+        "endChar": 48
+      },
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ed8f168_f9277dff",
         "filename": "test/mjsunit/es6/map-iterator-2.js",
         "patchSetId": 3
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "482226e5_510ba31c",
+        "filename": "test/mjsunit/es6/map-iterator-2.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-10-10T12:20:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ed8f168_f9277dff",
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7fcc24de_34e17859",
         "filename": "test/mjsunit/es6/set-iterator-1.js",
         "patchSetId": 3
@@ -113,6 +215,24 @@
       "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f1d98a8_40089a8a",
+        "filename": "test/mjsunit/es6/set-iterator-1.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1297124
+      },
+      "writtenOn": "2018-10-10T12:20:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fcc24de_34e17859",
+      "revId": "f3556a32060f8677b59cc341fce5d2e2acb4f4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
