@@ -4766,6 +4766,20 @@ void Genesis::InitializeGlobal_harmony_intl_relative_time_format() {
                         false);
 }
 
+void Genesis::InitializeGlobal_harmony_intl_date_time_format_format_range() {
+  if (!FLAG_harmony_intl_date_time_format_format_range) return;
+  Handle<JSObject> prototype(
+      JSObject::cast(
+          native_context()->intl_date_time_format_function()->prototype()),
+      isolate_);
+  SimpleInstallFunction(isolate_, prototype, "formatRange",
+                        Builtins::kDateTimeFormatPrototypeFormatRange, 2,
+                        false);
+  SimpleInstallFunction(isolate_, prototype, "formatRangeToParts",
+                        Builtins::kDateTimeFormatPrototypeFormatRangeToParts, 2,
+                        false);
+}
+
 void Genesis::InitializeGlobal_harmony_intl_segmenter() {
   if (!FLAG_harmony_intl_segmenter) return;
   Handle<JSObject> intl = Handle<JSObject>::cast(
