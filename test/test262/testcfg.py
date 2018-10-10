@@ -59,7 +59,6 @@ FEATURE_FLAGS = {
 }
 
 SKIPPED_FEATURES = set(['Object.fromEntries',
-                        'export-star-as-namespace-from-module',
                         'class-fields-private',
                         'class-static-fields-private',
                         'class-methods-private',
