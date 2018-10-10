@@ -1236,6 +1236,30 @@ class Isolate : private HiddenFactory {
   bool IsIsConcatSpreadableLookupChainIntact(JSReceiver* receiver);
   inline bool IsStringLengthOverflowIntact();
   inline bool IsArrayIteratorLookupChainIntact();
+  // The MapIterator protector protects the original iterating behaviors of
+  // JS_MAP_KEY_ITERATOR_TYPE (keys() of JSMap) and JS_MAP_VALUE_ITERATOR_TYPE
+  // (values() of Map). It does not protect the behavior of
+  // JS_MAP_KEY_VALUE_ITERATOR_TYPE, which is the behavior of entries() and
+  // [Symbol.iterator](). The protector is invalidated when:
+  // * next property is changed in an object whose lookup of next leads up to
+  // %MapIteratorPrototype%.
+  // * Symbol.iterator prototype is changed on an object whose lookup of
+  // Symbol.iterator leads up to %IteratorPrototype%. This means that changing
+  // Symbol.iterator on a SetIterator object can also invalidate the
+  // MapIterator protector.
+  inline bool IsMapIteratorLookupChainIntact();
+  // The SetIterator protector protects the original iterating behavior of
+  // JS_SET_VALUE_ITERATOR_TYPE, which is the behavior of keys(), values(), and
+  // [Symbol.iterator]() of JSSet. It does not protect the behavior of
+  // JS_SET_KEY_VALUE_ITERATOR_TYPE, which is the behavior of entries(). The
+  // protector is invalidated when:
+  // * next property is changed in an object whose lookup of next leads up to
+  // %SetIteratorPrototype%.
+  // * Symbol.iterator prototype is changed on an object whose lookup of
+  // Symbol.iterator leads up to %SetPrototype% OR %IteratorPrototype%. This
+  // means that changing Symbol.iterator on a MapIterator object can also
+  // invalidate the SetIterator protector.
+  inline bool IsSetIteratorLookupChainIntact();
 
   // The StringIteratorProtector protects the original string iterating behavior
   // for primitive strings. As long as the StringIteratorProtector is valid,
@@ -1289,6 +1313,8 @@ class Isolate : private HiddenFactory {
   void InvalidateIsConcatSpreadableProtector();
   void InvalidateStringLengthOverflowProtector();
   void InvalidateArrayIteratorProtector();
+  void InvalidateMapIteratorProtector();
+  void InvalidateSetIteratorProtector();
   void InvalidateStringIteratorProtector();
   void InvalidateArrayBufferNeuteringProtector();
   V8_EXPORT_PRIVATE void InvalidatePromiseHookProtector();
