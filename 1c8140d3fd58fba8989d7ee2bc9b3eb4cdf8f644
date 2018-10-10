@@ -16,6 +16,24 @@
       "revId": "1c8140d3fd58fba8989d7ee2bc9b3eb4cdf8f644",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a80d897b_4e4f49f8",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4558,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-10-10T09:45:11Z",
+      "side": 1,
+      "message": "Hi Jakob,\n\nAs it turns out, the 2nd optimization you point out isn\u0027t available...the Branch needs at least a word32 representation and the WordAnd operation doesn\u0027t offer that (the CSA verifier fired on this). Per discussion with Tebbi@, it appears the right thing to do is perform a comparison with zero...the resulting code should be adequate.",
+      "parentUuid": "882ac2d6_aa63d8ec",
+      "revId": "1c8140d3fd58fba8989d7ee2bc9b3eb4cdf8f644",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
