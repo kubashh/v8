@@ -152,7 +152,8 @@ declare_args() {
   v8_check_microtasks_scopes_consistency = ""
 
   # Enable mitigations for executing untrusted code.
-  v8_untrusted_code_mitigations = true
+  v8_untrusted_code_mitigations =
+      v8_current_cpu != "x86" && v8_current_cpu != "x64"
 
   # Enable minor mark compact.
   v8_enable_minor_mc = true
