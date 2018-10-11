@@ -128,8 +128,12 @@ class BaseCommand(object):
     abort_called[0] = True
     try:
       self._kill_process(process)
-    except OSError:
-      pass
+      print 'Attempted to kill process %d' % process.pid
+      sys.stdout.flush()
+    except OSError as e:
+      print 'Error killing process %d' % process.pid
+      print e
+      sys.stdout.flush()
 
   def __str__(self):
     return self.to_string()
