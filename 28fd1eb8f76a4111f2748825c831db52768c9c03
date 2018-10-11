@@ -117,6 +117,30 @@
       "revId": "28fd1eb8f76a4111f2748825c831db52768c9c03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "935d6072_16002769",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-10-11T15:13:25Z",
+      "side": 1,
+      "message": "Thanks for the details Michael! [unrelated to this CL] personally I find v8_current_cpu a bit confusing. Is there any chance we could rename it to v8_current_target_cpu or similar, and put a comment somewhere that this is always the same as v8_target_cpu except for multi-arch correctness fuzzer builds?",
+      "parentUuid": "dc8ae860_46c801b9",
+      "range": {
+        "startLine": 156,
+        "startChar": 7,
+        "endLine": 156,
+        "endChar": 20
+      },
+      "revId": "28fd1eb8f76a4111f2748825c831db52768c9c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
