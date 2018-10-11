@@ -612,7 +612,9 @@ class UnlinkWeakNextScope {
  private:
   HeapObject* object_;
   Object* next_;
+#ifdef DEBUG
   DisallowHeapAllocation no_gc_;
+#endif  // DEBUG
 };
 
 template <class AllocatorT>

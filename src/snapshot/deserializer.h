@@ -190,7 +190,9 @@ class StringTableInsertionKey : public StringTableKey {
   uint32_t ComputeHashField(String* string);
 
   String* string_;
+#ifdef DEBUG
   DisallowHeapAllocation no_gc;
+#endif  // DEBUG
 };
 
 }  // namespace internal

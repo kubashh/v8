@@ -2195,9 +2195,11 @@ class CodePageMemoryModificationScope {
   MemoryChunk* chunk_;
   bool scope_active_;
 
+#ifdef DEBUG
   // Disallow any GCs inside this scope, as a relocation of the underlying
   // object would change the {MemoryChunk} that this scope targets.
   DisallowHeapAllocation no_heap_allocation_;
+#endif
 };
 
 // Visitor class to verify interior pointers in spaces that do not contain
@@ -2288,7 +2290,9 @@ class HeapIterator {
  private:
   HeapObject* NextObject();
 
+#ifdef DEBUG
   DisallowHeapAllocation no_heap_allocation_;
+#endif
 
   Heap* heap_;
   HeapObjectsFiltering filtering_;

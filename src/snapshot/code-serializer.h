@@ -79,7 +79,9 @@ class CodeSerializer : public Serializer<> {
   bool SerializeReadOnlyObject(HeapObject* obj, HowToCode how_to_code,
                                WhereToPoint where_to_point, int skip);
 
+#ifdef DEBUG
   DisallowHeapAllocation no_gc_;
+#endif  // DEBUG
   uint32_t source_hash_;
   std::vector<uint32_t> stub_keys_;
   DISALLOW_COPY_AND_ASSIGN(CodeSerializer);

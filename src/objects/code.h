@@ -364,7 +364,9 @@ class Code : public HeapObject, public NeverReadOnlySpaceObject {
     Code* current_code_;
     Isolate* isolate_;
 
+#ifdef DEBUG
     DisallowHeapAllocation no_gc;
+#endif
     DISALLOW_COPY_AND_ASSIGN(OptimizedCodeIterator)
   };
 

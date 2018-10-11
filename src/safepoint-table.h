@@ -154,7 +154,9 @@ class SafepointTable {
   static void PrintBits(std::ostream& os,  // NOLINT
                         uint8_t byte, int digits);
 
+#ifdef DEBUG
   DisallowHeapAllocation no_allocation_;
+#endif
   Address instruction_start_;
   uint32_t stack_slots_;
   unsigned length_;

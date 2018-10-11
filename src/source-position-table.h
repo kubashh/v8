@@ -111,7 +111,9 @@ class V8_EXPORT_PRIVATE SourcePositionTableIterator {
   Handle<ByteArray> table_;
   int index_ = 0;
   PositionTableEntry current_;
+#ifdef DEBUG
   DisallowHeapAllocation no_gc;
+#endif  // DEBUG
 };
 
 }  // namespace internal
