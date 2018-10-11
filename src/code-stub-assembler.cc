@@ -962,9 +962,10 @@ void CodeStubAssembler::Bind(Label* label) { CodeAssembler::Bind(label); }
 #endif  // DEBUG
 
 TNode<Float64T> CodeStubAssembler::LoadDoubleWithHoleCheck(
-    TNode<FixedDoubleArray> array, TNode<Smi> index, Label* if_hole) {
+    TNode<FixedDoubleArray> array, Node* index, ParameterMode mode,
+    Label* if_hole) {
   return LoadFixedDoubleArrayElement(array, index, MachineType::Float64(), 0,
-                                     SMI_PARAMETERS, if_hole);
+                                     mode, if_hole);
 }
 
 void CodeStubAssembler::BranchIfPrototypesHaveNoElements(

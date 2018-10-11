@@ -863,6 +863,8 @@ extern operator '[]=' macro StoreFixedDoubleArrayElementSmi(
 
 extern macro LoadDoubleWithHoleCheck(FixedDoubleArray, Smi): float64
     labels IfHole;
+extern macro LoadDoubleWithHoleCheck(FixedDoubleArray, intptr): float64
+    labels IfHole;
 extern macro StoreFixedDoubleArrayHoleSmi(FixedDoubleArray, Smi): void;
 
 extern macro Call(Context, Callable, Object): Object;
@@ -911,10 +913,10 @@ macro TorqueCopyElements(
       count);
 }
 
-macro LoadElementNoHole<T: type>(a: JSArray, index: Smi): Object
+macro LoadElementNoHole<T: type>(a: JSArray, index: intptr): Object
     labels IfHole;
 
-LoadElementNoHole<FixedArray>(a: JSArray, index: Smi): Object
+LoadElementNoHole<FixedArray>(a: JSArray, index: intptr): Object
     labels IfHole {
   try {
     let elements: FixedArray =
@@ -930,7 +932,7 @@ LoadElementNoHole<FixedArray>(a: JSArray, index: Smi): Object
   }
 }
 
-LoadElementNoHole<FixedDoubleArray>(a: JSArray, index: Smi): Object
+LoadElementNoHole<FixedDoubleArray>(a: JSArray, index: intptr): Object
     labels IfHole {
   try {
     let elements: FixedDoubleArray =

@@ -73,10 +73,10 @@ module array {
   }
 
   macro VisitAllElements<FixedArrayType: type>(
-      context: Context, a: JSArray, len: Smi, callbackfn: Callable,
+      context: Context, a: JSArray, len: intptr, callbackfn: Callable,
       thisArg: Object): void
-      labels Bailout(Smi) {
-    let k: Smi = 0;
+      labels Bailout(intptr) {
+    let k: intptr = 0;
     const map: Map = a.map;
 
     try {
@@ -85,12 +85,12 @@ module array {
         // Ensure that the map didn't change.
         if (map != a.map) goto Slow;
         // Ensure that we haven't walked beyond a possibly updated length.
-        if (k >= a.length) goto Slow;
+        if (Convert<Smi>(k) >= a.length) goto Slow;
 
         try {
           const value: Object =
               LoadElementNoHole<FixedArrayType>(a, k) otherwise FoundHole;
-          Call(context, callbackfn, thisArg, value, k, a);
+          Call(context, callbackfn, thisArg, value, SmiTag(k), a);
         }
         label FoundHole {
           // If we found the hole, we need to bail out if the initial
@@ -109,10 +109,11 @@ module array {
   macro FastArrayForEach(
       context: Context, o: JSReceiver, len: Number, callbackfn: Callable,
       thisArg: Object): Object
-      labels Bailout(Smi) {
-    let k: Smi = 0;
+      labels Bailout(intptr) {
+    let k: intptr = 0;
     try {
       const smiLen: Smi = Cast<Smi>(len) otherwise Slow;
+      const intLen: intptr = Convert<intptr>(smiLen);
       const a: JSArray = Cast<JSArray>(o) otherwise Slow;
       const map: Map = a.map;
 
@@ -122,10 +123,10 @@ module array {
 
       if (IsElementsKindGreaterThan(elementsKind, HOLEY_ELEMENTS)) {
         VisitAllElements<FixedDoubleArray>(
-            context, a, smiLen, callbackfn, thisArg)
+            context, a, intLen, callbackfn, thisArg)
             otherwise Bailout;
       } else {
-        VisitAllElements<FixedArray>(context, a, smiLen, callbackfn, thisArg)
+        VisitAllElements<FixedArray>(context, a, intLen, callbackfn, thisArg)
             otherwise Bailout;
       }
     }
@@ -165,8 +166,8 @@ module array {
         return FastArrayForEach(context, o, len, callbackfn, thisArg)
             otherwise Bailout;
       }
-      label Bailout(kValue: Smi) deferred {
-        k = kValue;
+      label Bailout(kValue: intptr) deferred {
+        k = Convert<Smi>(kValue);
       }
 
       return ArrayForEachTorqueContinuation(
