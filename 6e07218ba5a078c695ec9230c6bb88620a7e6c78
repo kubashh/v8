@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "13ea9888_03bf61ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-10-11T17:00:10Z",
+      "side": 1,
+      "message": "Argh, always the same mistake :)",
+      "parentUuid": "67f4b3fe_8d2d4e9b",
+      "revId": "6e07218ba5a078c695ec9230c6bb88620a7e6c78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06315b16_6e193a58",
         "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2018-10-11T15:48:45Z",
       "side": 1,
       "message": "This is a little weird to comment this out. Was this intended?",
+      "revId": "6e07218ba5a078c695ec9230c6bb88620a7e6c78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b07fde_6c38e3c4",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-10-11T17:00:10Z",
+      "side": 1,
+      "message": "I thought it makes it more obvious that this parameter is unused. We still want to give it a name though.\n\nThe style guide explicitly suggest that, and shows it in an example:\nhttps://google.github.io/styleguide/cppguide.html#Function_Declarations_and_Definitions\n\"Unused parameters that might not be obvious should comment out the variable name in the function definition: [...]\"",
+      "parentUuid": "06315b16_6e193a58",
       "revId": "6e07218ba5a078c695ec9230c6bb88620a7e6c78",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
