@@ -10,6 +10,7 @@
 #include "src/parsing/parser-base.h"
 #include "src/parsing/preparser-logger.h"
 #include "src/pending-compilation-error-handler.h"
+#include "src/pointer-with-storage.h"
 
 namespace v8 {
 namespace internal {
