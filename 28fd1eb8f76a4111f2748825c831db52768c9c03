@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "411f2739_e3f889fe",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-10-11T12:13:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be v8_target_cpu? We want to enable the mitigations on Arm simulator builds (where the host cpu is x86). I\u0027m not sure what the relationship is between v8_current_cpu and v8_host/target_cpu.",
+      "range": {
+        "startLine": 156,
+        "startChar": 7,
+        "endLine": 156,
+        "endChar": 20
+      },
+      "revId": "28fd1eb8f76a4111f2748825c831db52768c9c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31831ea4_8fa76dce",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-10-11T12:13:16Z",
+      "side": 1,
+      "message": "Let\u0027s not add x64 as this is unrelated to kRoots register (and I would rather we specify based on platforms that support SI rather than architectures, since the two are unrelated).",
+      "range": {
+        "startLine": 156,
+        "startChar": 29,
+        "endLine": 156,
+        "endChar": 56
+      },
+      "revId": "28fd1eb8f76a4111f2748825c831db52768c9c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
