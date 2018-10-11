@@ -293,13 +293,6 @@ function freezeArray(input) {
   return array;
 }
 
-/* Make JS array[] out of InternalArray */
-function makeArray(input) {
-  var array = [];
-  %MoveArrayContents(input, array);
-  return array;
-}
-
 /**
  * Returns an Object that contains all of supported locales for a given
  * service.
@@ -376,14 +369,6 @@ function canonicalizeLocaleList(locales) {
 function initializeLocaleList(locales) {
   return freezeArray(canonicalizeLocaleList(locales));
 }
-
-// ECMA 402 section 8.2.1
-DEFINE_METHOD(
-  GlobalIntl,
-  getCanonicalLocales(locales) {
-    return makeArray(canonicalizeLocaleList(locales));
-  }
-);
 
 // Save references to Intl objects and methods we use, for added security.
 var savedObjects = {
