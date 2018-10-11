@@ -154,44 +154,6 @@ const std::vector<PatternData> GetPatternData(HourOption option) {
   }
 }
 
-void SetPropertyFromPattern(Isolate* isolate, const std::string& pattern,
-                            Handle<JSObject> options) {
-  Factory* factory = isolate->factory();
-  const std::vector<PatternItem> items = GetPatternItems();
-  for (const auto& item : items) {
-    for (const auto& pair : item.pairs) {
-      if (pattern.find(pair.pattern) != std::string::npos) {
-        // After we find the first pair in the item which matching the pattern,
-        // we set the property and look for the next item in kPatternItems.
-        CHECK(JSReceiver::CreateDataProperty(
-                  isolate, options,
-                  factory->NewStringFromAsciiChecked(item.property.c_str()),
-                  factory->NewStringFromAsciiChecked(pair.value.c_str()),
-                  kDontThrow)
-                  .FromJust());
-        break;
-      }
-    }
-  }
-  // hour12
-  // b. If p is "hour12", then
-  //  i. Let hc be dtf.[[HourCycle]].
-  //  ii. If hc is "h11" or "h12", let v be true.
-  //  iii. Else if, hc is "h23" or "h24", let v be false.
-  //  iv. Else, let v be undefined.
-  if (pattern.find('h') != std::string::npos) {
-    CHECK(JSReceiver::CreateDataProperty(
-              isolate, options, factory->NewStringFromStaticChars("hour12"),
-              factory->true_value(), kDontThrow)
-              .FromJust());
-  } else if (pattern.find('H') != std::string::npos) {
-    CHECK(JSReceiver::CreateDataProperty(
-              isolate, options, factory->NewStringFromStaticChars("hour12"),
-              factory->false_value(), kDontThrow)
-              .FromJust());
-  }
-}
-
 std::string GetGMTTzID(Isolate* isolate, const std::string& input) {
   std::string ret = "Etc/GMT";
   switch (input.length()) {
@@ -388,7 +350,79 @@ MaybeHandle<JSObject> JSDateTimeFormat::ResolvedOptions(
   icu_simple_date_format->toPattern(pattern_unicode);
   std::string pattern;
   pattern_unicode.toUTF8String(pattern);
-  SetPropertyFromPattern(isolate, pattern, options);
+  const std::vector<PatternItem>& items = GetPatternItems();
+  for (const auto& item : items) {
+    for (const auto& pair : item.pairs) {
+      if (pattern.find(pair.pattern) != std::string::npos) {
+        // After we find the first pair in the item which matching the pattern,
+        // we set the property and look for the next item in kPatternItems.
+        CHECK(JSReceiver::CreateDataProperty(
+                  isolate, options,
+                  factory->NewStringFromAsciiChecked(item.property.c_str()),
+                  factory->NewStringFromAsciiChecked(pair.value.c_str()),
+                  kDontThrow)
+                  .FromJust());
+        break;
+      }
+    }
+  }
+  // hour12
+  // b. If p is "hour12", then
+  //  i. Let hc be dtf.[[HourCycle]].
+  //  ii. If hc is "h11" or "h12", let v be true.
+  //  iii. Else if, hc is "h23" or "h24", let v be false.
+  //  iv. Else, let v be undefined.
+  if (pattern.find('h') != std::string::npos) {
+    CHECK(JSReceiver::CreateDataProperty(
+              isolate, options, factory->NewStringFromStaticChars("hour12"),
+              factory->true_value(), kDontThrow)
+              .FromJust());
+  } else if (pattern.find('H') != std::string::npos) {
+    CHECK(JSReceiver::CreateDataProperty(
+              isolate, options, factory->NewStringFromStaticChars("hour12"),
+              factory->false_value(), kDontThrow)
+              .FromJust());
+  }
+
+  // hourCycle
+  // ecma-402/#sec-properties-of-intl-datetimeformat-instances
+  //  [[HourCycle]] is a String value indicating whether the 12-hour format
+  //  ("h11", "h12") or the 24-hour format ("h23", "h24") should be used. "h11"
+  //  and "h23" start with hour 0 and go up to 11 and 23 respectively. "h12" and
+  //  "h24" start with hour 1 and go up to 12 and 24. [[HourCycle]] is only used
+  //  when [[Hour]] is not undefined.
+  // http://userguide.icu-project.org/formatparse/datetime
+  //  h hour in am/pm (1~12)
+  //  H hour in day (0~23)
+  //  k hour in day (1~24)
+  //  K hour in am/pm (0~11)
+  // Therefore the mapping is
+  //  K = h11
+  //  h = h12
+  //  H = h23
+  //  k = h24
+  if (pattern.find('K') != std::string::npos) {
+    CHECK(JSReceiver::CreateDataProperty(
+              isolate, options, factory->NewStringFromStaticChars("hourCycle"),
+              factory->NewStringFromStaticChars("h11"), kDontThrow)
+              .FromJust());
+  } else if (pattern.find('h') != std::string::npos) {
+    CHECK(JSReceiver::CreateDataProperty(
+              isolate, options, factory->NewStringFromStaticChars("hourCycle"),
+              factory->NewStringFromStaticChars("h12"), kDontThrow)
+              .FromJust());
+  } else if (pattern.find('H') != std::string::npos) {
+    CHECK(JSReceiver::CreateDataProperty(
+              isolate, options, factory->NewStringFromStaticChars("hourCycle"),
+              factory->NewStringFromStaticChars("h23"), kDontThrow)
+              .FromJust());
+  } else if (pattern.find('k') != std::string::npos) {
+    CHECK(JSReceiver::CreateDataProperty(
+              isolate, options, factory->NewStringFromStaticChars("hourCycle"),
+              factory->NewStringFromStaticChars("h24"), kDontThrow)
+              .FromJust());
+  }
+
   return options;
 }
 
