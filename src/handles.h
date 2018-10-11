@@ -139,6 +139,13 @@ class Handle final : public HandleBase {
     }
   };
 
+  // Provide function object for location ordering.
+  struct less_than : public std::binary_function<Handle<T>, Handle<T>, bool> {
+    V8_INLINE bool operator()(Handle<T> lhs, Handle<T> rhs) const {
+      return lhs.address() < rhs.address();
+    }
+  };
+
   // Provide function object for location hashing.
   struct hash : public std::unary_function<Handle<T>, size_t> {
     V8_INLINE size_t operator()(Handle<T> const& handle) const {
