@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eefed4ee_f6febd3e",
+        "filename": "src/parsing/expression-classifier.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-11T11:55:40Z",
+      "side": 1,
+      "message": "The comment seems to be outdated.",
+      "revId": "9c679965d4d344e1626450c440b8dac593e2d1d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
