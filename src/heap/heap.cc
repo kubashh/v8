@@ -5054,7 +5054,6 @@ HeapIterator::HeapIterator(Heap* heap,
   object_iterator_ = space_iterator_->next()->GetObjectIterator();
 }
 
-
 HeapIterator::~HeapIterator() {
   heap_->heap_iterator_end();
 #ifdef DEBUG
