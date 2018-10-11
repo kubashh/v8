@@ -1145,6 +1145,10 @@ class PreParser : public ParserBase<PreParser> {
     return PreParserStatement::Default();
   }
 
+  V8_INLINE void GetUnexpectedTokenMessage(Token::Value token,
+                                           MessageTemplate::Template* message,
+                                           Scanner::Location* location,
+                                           const char** arg) {}
   V8_INLINE void ParseAndRewriteGeneratorFunctionBody(
       int pos, FunctionKind kind, PreParserStatementList body, bool* ok) {
     ParseStatementList(body, Token::RBRACE, ok);
