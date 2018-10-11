@@ -22,6 +22,30 @@
       "revId": "baaa4b46cd8d9212f23e34509c55a1c2e1ac06e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ed35679_911a7468",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-10-11T11:35:42Z",
+      "side": 1,
+      "message": "It\u0027s fine... we\u0027d actually want to catch additional exceptions from the new code.",
+      "parentUuid": "89e682c7_e3e7da95",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 24
+      },
+      "revId": "baaa4b46cd8d9212f23e34509c55a1c2e1ac06e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
