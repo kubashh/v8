@@ -93,6 +93,30 @@
       "revId": "28fd1eb8f76a4111f2748825c831db52768c9c03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc8ae860_46c801b9",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-10-11T13:31:11Z",
+      "side": 1,
+      "message": "Using current vs. target makes hardly a difference I think, except for our correctness fuzzer builds.\n\nHere a list of what I think it looks like:\nstandard x64 build:\n- current_cpu \u003d\u003d target_cpu \u003d\u003d v8_current_cpu \u003d\u003d v8_target_cpu \u003d\u003d x64\narm64 simulator build:\n- current_cpu \u003d\u003d target_cpu \u003d\u003d x64\n- v8_current_cpu \u003d\u003d v8_target_cpu \u003d\u003d arm64\nnative arm64 cross-compile:\nmost V8 targets will be compiled twice, once with target and once with snapshot toolchain:\nfor target toolchain:\n- current_cpu \u003d\u003d target_cpu \u003d\u003d v8_current_cpu \u003d\u003d v8_target_cpu \u003d\u003d arm64\nfor snapshot toolchain:\n- current_cpu \u003d\u003d target_cpu \u003d\u003d x64\n- v8_current_cpu \u003d\u003d v8_target_cpu \u003d\u003d arm64\nNote that v8_current_cpu would be arm64 in all cases\n\nNow the correctness fuzzer config is tricky:\nhttps://cs.chromium.org/chromium/src/v8/BUILD.gn?q\u003dBUILD\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d3430\nHere v8_target_cpu is x64, but we build several d8s with different cpus, so v8 is built several times each with v8_current_cpu\u003dx64, v8_current_cpu\u003darm, etc.\n\nI think if we\u0027d use v8_target_cpu above, we\u0027d switch off mitigations on the arm/arm64 builds of the correctness fuzzer.\n\nAlso to be sure what we\u0027re doing I suggest adding a simple print statement in a GN file in one of the V8 targets and print out the value of v8_untrusted_code_mitigations. Then try this with each of above build configurations and see if there are any surprises.",
+      "parentUuid": "411f2739_e3f889fe",
+      "range": {
+        "startLine": 156,
+        "startChar": 7,
+        "endLine": 156,
+        "endChar": 20
+      },
+      "revId": "28fd1eb8f76a4111f2748825c831db52768c9c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
