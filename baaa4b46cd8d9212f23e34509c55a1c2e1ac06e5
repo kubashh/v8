@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89e682c7_e3e7da95",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-10-11T11:34:14Z",
+      "side": 1,
+      "message": "else:?",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 24
+      },
+      "revId": "baaa4b46cd8d9212f23e34509c55a1c2e1ac06e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
