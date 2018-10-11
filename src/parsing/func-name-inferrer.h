@@ -8,6 +8,8 @@
 #include "src/zone/zone-chunk-list.h"
 #include "src/zone/zone.h"
 
+#include "src/ptrstore.h"
+
 namespace v8 {
 namespace internal {
 
@@ -80,15 +82,26 @@ class FuncNameInferrer : public ZoneObject {
   }
 
  private:
-  enum NameType {
+  enum NameType : uint8_t {
     kEnclosingConstructorName,
     kLiteralName,
     kVariableName
   };
   struct Name {
-    Name(const AstRawString* name, NameType type) : name(name), type(type) {}
-    const AstRawString* name;
-    NameType type;
+    Name(const AstRawString* name, NameType type) {
+      name_and_type_.SetPointer(name);
+      name_and_type_.SetStorage(type);
+    }
+
+    // const AstRawString* name;
+    // NameType type : 2;
+    PointerWithStorageBits<const AstRawString*, 2> name_and_type_;
+    inline const AstRawString* name() const {
+      return name_and_type_.GetPointer();
+    }
+    inline NameType type() const {
+      return static_cast<NameType>(name_and_type_.GetStorage());
+    }
   };
 
   void Enter() { entries_stack_.push_back(names_stack_.size()); }

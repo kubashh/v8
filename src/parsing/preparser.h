@@ -11,6 +11,8 @@
 #include "src/parsing/preparser-logger.h"
 #include "src/pending-compilation-error-handler.h"
 
+#include "src/ptrstore.h"
+
 namespace v8 {
 namespace internal {
 
