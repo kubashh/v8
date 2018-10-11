@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67f4b3fe_8d2d4e9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-10-11T15:48:45Z",
+      "side": 1,
+      "message": "s/Less/Fewer",
+      "revId": "6e07218ba5a078c695ec9230c6bb88620a7e6c78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06315b16_6e193a58",
+        "filename": "src/wasm/baseline/x64/liftoff-assembler-x64.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-10-11T15:48:45Z",
+      "side": 1,
+      "message": "This is a little weird to comment this out. Was this intended?",
+      "revId": "6e07218ba5a078c695ec9230c6bb88620a7e6c78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
