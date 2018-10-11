@@ -45,6 +45,54 @@
       "revId": "28fd1eb8f76a4111f2748825c831db52768c9c03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b860db5f_8f90b938",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-11T13:15:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31831ea4_8fa76dce",
+      "range": {
+        "startLine": 156,
+        "startChar": 29,
+        "endLine": 156,
+        "endChar": 56
+      },
+      "revId": "28fd1eb8f76a4111f2748825c831db52768c9c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6168fa10_b17fa7f8",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-11T13:15:08Z",
+      "side": 1,
+      "message": "Chatted offline with machenbach to confirm that v8_current_cpu is what we want. He\u0027ll chime in here with a more detailed explanation, thanks :)",
+      "parentUuid": "411f2739_e3f889fe",
+      "range": {
+        "startLine": 156,
+        "startChar": 7,
+        "endLine": 156,
+        "endChar": 20
+      },
+      "revId": "28fd1eb8f76a4111f2748825c831db52768c9c03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
