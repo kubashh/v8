@@ -25,6 +25,8 @@
 #include "src/parsing/token.h"
 #include "src/zone/zone-chunk-list.h"
 
+#include "src/ptrstore.h"
+
 namespace v8 {
 namespace internal {
 
@@ -420,21 +422,21 @@ class ParserBase {
 
     class FunctionOrEvalRecordingScope {
      public:
-      explicit FunctionOrEvalRecordingScope(FunctionState* state)
-          : state_(state) {
-        prev_value_ = state->contains_function_or_eval_;
+      explicit FunctionOrEvalRecordingScope(FunctionState* state) {
+        state_store.setPtr(state);
+        state_store.setStorage(state->contains_function_or_eval_);
         state->contains_function_or_eval_ = false;
       }
       ~FunctionOrEvalRecordingScope() {
-        bool found = state_->contains_function_or_eval_;
+        bool found = state_store.getPtr()->contains_function_or_eval_;
         if (!found) {
-          state_->contains_function_or_eval_ = prev_value_;
+          state_store.getPtr()->contains_function_or_eval_ =
+              state_store.getStorage();
         }
       }
 
      private:
-      FunctionState* state_;
-      bool prev_value_;
+      StoragePtr<FunctionState*, 1> state_store;
     };
 
    private:
