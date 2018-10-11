@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90cb9668_314c3531",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-10-11T13:21:48Z",
+      "side": 1,
+      "message": "This is the first time that we change reachability from the \"decoder backend\" (i.e. the turbofan graph builder). So far, reachability was completely determined by the backend-independent code in function-body-decoder-impl.h. This will only become relevant once other backends (currently only Liftoff) also implement exception handling, but it would be nice anyway to keep this backend-independent. Do you think that\u0027s easily doable?",
+      "revId": "b7f1334e747da5a6f09dfdec12f63d6f17613601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
