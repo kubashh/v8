@@ -124,78 +124,80 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
     BIND(&ok);
   }
 
-  void ArrayBuiltinsAssembler::FilterResultGenerator() {
-    // 7. Let A be ArraySpeciesCreate(O, 0).
-    // This version of ArraySpeciesCreate will create with the correct
-    // ElementsKind in the fast case.
-    GenerateArraySpeciesCreate();
-  }
-
-  Node* ArrayBuiltinsAssembler::FilterProcessor(Node* k_value, Node* k) {
-    // ii. Let selected be ToBoolean(? Call(callbackfn, T, kValue, k, O)).
-    Node* selected = CallJS(CodeFactory::Call(isolate()), context(),
-                            callbackfn(), this_arg(), k_value, k, o());
-    Label true_continue(this, &to_), false_continue(this);
-    BranchIfToBooleanIsTrue(selected, &true_continue, &false_continue);
-    BIND(&true_continue);
-    // iii. If selected is true, then...
-    {
-      Label after_work(this, &to_);
-      Node* kind = nullptr;
-
-      // If a() is a JSArray, we can have a fast path.
-      Label fast(this);
-      Label runtime(this);
-      Label object_push_pre(this), object_push(this), double_push(this);
-      BranchIfFastJSArray(a(), context(), &fast, &runtime);
-
-      BIND(&fast);
-      {
-        GotoIf(WordNotEqual(LoadJSArrayLength(a()), to_.value()), &runtime);
-        kind = EnsureArrayPushable(LoadMap(a()), &runtime);
-        GotoIf(IsElementsKindGreaterThan(kind, HOLEY_SMI_ELEMENTS),
-               &object_push_pre);
-
-        BuildAppendJSArray(HOLEY_SMI_ELEMENTS, a(), k_value, &runtime);
-        Goto(&after_work);
-      }
-
-      BIND(&object_push_pre);
-      {
-        Branch(IsElementsKindGreaterThan(kind, HOLEY_ELEMENTS), &double_push,
-               &object_push);
-      }
-
-      BIND(&object_push);
-      {
-        BuildAppendJSArray(HOLEY_ELEMENTS, a(), k_value, &runtime);
-        Goto(&after_work);
-      }
-
-      BIND(&double_push);
-      {
-        BuildAppendJSArray(HOLEY_DOUBLE_ELEMENTS, a(), k_value, &runtime);
-        Goto(&after_work);
-      }
-
-      BIND(&runtime);
-      {
-        // 1. Perform ? CreateDataPropertyOrThrow(A, ToString(to), kValue).
-        CallRuntime(Runtime::kCreateDataProperty, context(), a(), to_.value(),
-                    k_value);
-        Goto(&after_work);
-      }
-
-      BIND(&after_work);
-      {
-        // 2. Increase to by 1.
-        to_.Bind(NumberInc(to_.value()));
-        Goto(&false_continue);
-      }
+  /*
+    void ArrayBuiltinsAssembler::FilterResultGenerator() {
+      // 7. Let A be ArraySpeciesCreate(O, 0).
+      // This version of ArraySpeciesCreate will create with the correct
+      // ElementsKind in the fast case.
+      GenerateArraySpeciesCreate();
     }
-    BIND(&false_continue);
-    return a();
-  }
+
+    Node* ArrayBuiltinsAssembler::FilterProcessor(Node* k_value, Node* k) {
+      // ii. Let selected be ToBoolean(? Call(callbackfn, T, kValue, k, O)).
+      Node* selected = CallJS(CodeFactory::Call(isolate()), context(),
+                              callbackfn(), this_arg(), k_value, k, o());
+      Label true_continue(this, &to_), false_continue(this);
+      BranchIfToBooleanIsTrue(selected, &true_continue, &false_continue);
+      BIND(&true_continue);
+      // iii. If selected is true, then...
+      {
+        Label after_work(this, &to_);
+        Node* kind = nullptr;
+
+        // If a() is a JSArray, we can have a fast path.
+        Label fast(this);
+        Label runtime(this);
+        Label object_push_pre(this), object_push(this), double_push(this);
+        BranchIfFastJSArray(a(), context(), &fast, &runtime);
+
+        BIND(&fast);
+        {
+          GotoIf(WordNotEqual(LoadJSArrayLength(a()), to_.value()), &runtime);
+          kind = EnsureArrayPushable(LoadMap(a()), &runtime);
+          GotoIf(IsElementsKindGreaterThan(kind, HOLEY_SMI_ELEMENTS),
+                 &object_push_pre);
+
+          BuildAppendJSArray(HOLEY_SMI_ELEMENTS, a(), k_value, &runtime);
+          Goto(&after_work);
+        }
+
+        BIND(&object_push_pre);
+        {
+          Branch(IsElementsKindGreaterThan(kind, HOLEY_ELEMENTS), &double_push,
+                 &object_push);
+        }
+
+        BIND(&object_push);
+        {
+          BuildAppendJSArray(HOLEY_ELEMENTS, a(), k_value, &runtime);
+          Goto(&after_work);
+        }
+
+        BIND(&double_push);
+        {
+          BuildAppendJSArray(HOLEY_DOUBLE_ELEMENTS, a(), k_value, &runtime);
+          Goto(&after_work);
+        }
+
+        BIND(&runtime);
+        {
+          // 1. Perform ? CreateDataPropertyOrThrow(A, ToString(to), kValue).
+          CallRuntime(Runtime::kCreateDataProperty, context(), a(), to_.value(),
+                      k_value);
+          Goto(&after_work);
+        }
+
+        BIND(&after_work);
+        {
+          // 2. Increase to by 1.
+          to_.Bind(NumberInc(to_.value()));
+          Goto(&false_continue);
+        }
+      }
+      BIND(&false_continue);
+      return a();
+    }
+  */
 
   void ArrayBuiltinsAssembler::MapResultGenerator() {
     GenerateArraySpeciesCreate(len_);
@@ -2723,7 +2725,7 @@ TF_BUILTIN(TypedArrayPrototypeReduceRight, ArrayBuiltinsAssembler) {
       &ArrayBuiltinsAssembler::ReducePostLoopAction,
       ForEachDirection::kReverse);
 }
-
+/*
 TF_BUILTIN(ArrayFilterLoopContinuation, ArrayBuiltinsAssembler) {
   TNode<Context> context = CAST(Parameter(Descriptor::kContext));
   TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
@@ -2818,7 +2820,7 @@ TF_BUILTIN(ArrayFilter, ArrayBuiltinsAssembler) {
       Builtins::CallableFor(isolate(), Builtins::kArrayFilterLoopContinuation),
       MissingPropertyMode::kSkip);
 }
-
+*/
 TF_BUILTIN(ArrayMapLoopContinuation, ArrayBuiltinsAssembler) {
   TNode<Context> context = CAST(Parameter(Descriptor::kContext));
   TNode<Object> receiver = CAST(Parameter(Descriptor::kReceiver));
