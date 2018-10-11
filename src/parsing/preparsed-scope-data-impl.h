@@ -85,7 +85,9 @@ class BaseConsumedPreParsedScopeData : public ConsumedPreParsedScopeData {
 
      private:
       ByteData* consumed_data_;
+#ifdef DEBUG
       DisallowHeapAllocation no_gc;
+#endif
     };
 
     void SetPosition(int position) { index_ = position; }

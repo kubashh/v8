@@ -5,6 +5,7 @@
 #include "src/zone/zone.h"
 
 #include <cstring>
+//#include <iostream>
 
 #include "src/asan.h"
 #include "src/utils.h"
@@ -42,6 +43,9 @@ Zone::Zone(AccountingAllocator* allocator, const char* name,
 }
 
 Zone::~Zone() {
+  //if (allocation_size_ > 0)
+  //  std::cout << "Bytes, " << allocation_size_ << '\n';
+
   allocator_->ZoneDestruction(this);
   DeleteAll();
 

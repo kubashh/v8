@@ -70,32 +70,38 @@ class PerThreadAssertData final {
 
 template <PerThreadAssertType kType, bool kAllow>
 PerThreadAssertScope<kType, kAllow>::PerThreadAssertScope()
-    : data_(PerThreadAssertData::GetCurrent()) {
-  if (data_ == nullptr) {
-    data_ = new PerThreadAssertData();
-    PerThreadAssertData::SetCurrent(data_);
+    //: data_(PerThreadAssertData::GetCurrent()) 
+{
+  data_store.setPtr(PerThreadAssertData::GetCurrent());
+  if (data_() == nullptr) {
+    //data_ = new PerThreadAssertData();
+    data_store.setPtr(new PerThreadAssertData());
+    PerThreadAssertData::SetCurrent(data_());
   }
-  data_->IncrementLevel();
-  old_state_ = data_->Get(kType);
-  data_->Set(kType, kAllow);
+  auto *data = data_();
+  data->IncrementLevel();
+  //old_state_ = data->Get(kType);
+  data_store.setStorage(data->Get(kType));
+  data->Set(kType, kAllow);
 }
 
 
 template <PerThreadAssertType kType, bool kAllow>
 PerThreadAssertScope<kType, kAllow>::~PerThreadAssertScope() {
-  if (data_ == nullptr) return;
+  if (data_() == nullptr) return;
   Release();
 }
 
 template <PerThreadAssertType kType, bool kAllow>
 void PerThreadAssertScope<kType, kAllow>::Release() {
-  DCHECK_NOT_NULL(data_);
-  data_->Set(kType, old_state_);
-  if (data_->DecrementLevel()) {
+  auto *data =  data_();
+  DCHECK_NOT_NULL(data);
+  data->Set(kType, old_state_());
+  if (data->DecrementLevel()) {
     PerThreadAssertData::SetCurrent(nullptr);
-    delete data_;
+    delete data;
   }
-  data_ = nullptr;
+  data_store.setPtr(nullptr);
 }
 
 // static
