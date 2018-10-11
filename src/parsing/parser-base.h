@@ -959,14 +959,25 @@ class ParserBase {
                                      bool parenthesized_formals, bool is_async,
                                      bool* ok) {
     if (classifier()->is_valid_binding_pattern()) {
-      // A simple arrow formal parameter: IDENTIFIER => BODY.
-      if (!impl()->IsIdentifier(expr)) {
+      if (is_async && !classifier()->is_valid_async_arrow_formal_parameters()) {
+        const typename ExpressionClassifier::Error& error =
+            classifier()->async_arrow_formal_parameters_error();
+        ReportClassifierError(error);
+        *ok = false;
+      } else if (!impl()->IsIdentifier(expr)) {
         impl()->ReportMessageAt(scanner()->location(),
                                 MessageTemplate::kUnexpectedToken,
                                 Token::String(scanner()->current_token()));
         *ok = false;
+      } else {
+        // A simple arrow formal parameter: IDENTIFIER => BODY.
       }
-    } else if (!classifier()->is_valid_arrow_formal_parameters()) {
+      return;
+    }
+
+    DCHECK(!is_async || classifier()->is_valid_async_arrow_formal_parameters());
+
+    if (!classifier()->is_valid_arrow_formal_parameters()) {
       // If after parsing the expr, we see an error but the expression is
       // neither a valid binding pattern nor a valid parenthesized formal
       // parameter list, show the "arrow formal parameters" error if the formals
@@ -974,12 +985,6 @@ class ParserBase {
       const typename ExpressionClassifier::Error& error =
           parenthesized_formals ? classifier()->arrow_formal_parameters_error()
                                 : classifier()->binding_pattern_error();
-      ReportClassifierError(error);
-      *ok = false;
-    }
-    if (is_async && !classifier()->is_valid_async_arrow_formal_parameters()) {
-      const typename ExpressionClassifier::Error& error =
-          classifier()->async_arrow_formal_parameters_error();
       ReportClassifierError(error);
       *ok = false;
     }
