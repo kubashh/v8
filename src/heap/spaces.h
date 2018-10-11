@@ -380,6 +380,7 @@ class MemoryChunk {
       + kPointerSize * kNumberOfCategories
       // FreeListCategory categories_[kNumberOfCategories]
       + kPointerSize  // LocalArrayBufferTracker* local_tracker_
+      + kPointerSize  // Bitmap* lock_bitmap_
       + kIntptrSize   // std::atomic<intptr_t> young_generation_live_byte_count_
       + kPointerSize;  // Bitmap* young_generation_bitmap_
 
@@ -524,6 +525,9 @@ class MemoryChunk {
   void AllocateYoungGenerationBitmap();
   void ReleaseYoungGenerationBitmap();
 
+  void AllocateLockBitmap();
+  void ReleaseLockBitmap();
+
   Address area_start() { return area_start_; }
   Address area_end() { return area_end_; }
   size_t area_size() { return static_cast<size_t>(area_end() - area_start()); }
@@ -649,6 +653,8 @@ class MemoryChunk {
 
   base::ListNode<MemoryChunk>& list_node() { return list_node_; }
 
+  Bitmap* lock_bitmap() const { return lock_bitmap_; }
+
  protected:
   static MemoryChunk* Initialize(Heap* heap, Address base, size_t size,
                                  Address area_start, Address area_end,
@@ -731,6 +737,8 @@ class MemoryChunk {
 
   LocalArrayBufferTracker* local_tracker_;
 
+  Bitmap* lock_bitmap_;
+
   std::atomic<intptr_t> young_generation_live_byte_count_;
   Bitmap* young_generation_bitmap_;
 
@@ -754,7 +762,6 @@ static_assert(sizeof(std::atomic<intptr_t>) == kPointerSize,
 
 static_assert(kMaxRegularHeapObjectSize <= MemoryChunk::kAllocatableMemory,
               "kMaxRegularHeapObjectSize <= MemoryChunk::kAllocatableMemory");
-
 
 // -----------------------------------------------------------------------------
 // A page is a memory chunk of a size 512K. Large object pages may be larger.
