@@ -5,6 +5,7 @@
 #ifndef V8_INSPECTOR_STRING_UTIL_H_
 #define V8_INSPECTOR_STRING_UTIL_H_
 
+#include <stdint.h>
 #include <memory>
 
 #include "src/base/logging.h"
@@ -60,6 +61,14 @@ class StringUtil {
   static std::unique_ptr<protocol::Value> parseJSON(const StringView& json);
 };
 
+// A read-only sequence of uninterpreted bytes with reference-counted storage.
+class Binary {
+ public:
+  String toBase64() const { UNIMPLEMENTED(); }
+  static Binary createFromBase64(const String& base64, bool* success) {
+    UNIMPLEMENTED();
+  }
+};
 }  // namespace protocol
 
 v8::Local<v8::String> toV8String(v8::Isolate*, const String16&);
