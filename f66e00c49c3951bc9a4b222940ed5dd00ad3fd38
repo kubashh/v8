@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "056e6ad4_06e99e64",
+        "filename": "src/inspector/string-util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-10-12T18:48:29Z",
+      "side": 1,
+      "message": "Accidental?",
+      "revId": "f66e00c49c3951bc9a4b222940ed5dd00ad3fd38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95e6b363_206d97e1",
+        "filename": "src/inspector/string-util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-10-12T18:48:29Z",
+      "side": 1,
+      "message": "Please add a comment telling that Binary is only referenced, but never called, because js_protocol.pdl does not define any binary fields.",
+      "revId": "f66e00c49c3951bc9a4b222940ed5dd00ad3fd38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b08710ec_3fd56d21",
+        "filename": "src/inspector/string-util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-10-12T18:48:29Z",
+      "side": 1,
+      "message": "I think you\u0027ll need \"toBytes\" and \"fromBytes\" later on, when proceeding with binary format. Perhaps add them right away?",
+      "revId": "f66e00c49c3951bc9a4b222940ed5dd00ad3fd38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
