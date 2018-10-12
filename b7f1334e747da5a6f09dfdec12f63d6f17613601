@@ -16,6 +16,24 @@
       "revId": "b7f1334e747da5a6f09dfdec12f63d6f17613601",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0118820c_ea1741a5",
+        "filename": "src/wasm/function-body-decoder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-12T10:56:54Z",
+      "side": 1,
+      "message": "Ack. As discussed offline, I share your discomfort with this non-explicit updating of the reachability and was hesitant about it too. However there already is another place where this is done already[1]. That being said, I\u0027ll try to make this dependency more explicit by using an out-parameter in the {CatchException} and {CatchAll} interface method and upload a separate CL for this.\n\n[1] https://cs.chromium.org/chromium/src/v8/src/wasm/baseline/liftoff-compiler.cc?type\u003dcs\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d1374",
+      "parentUuid": "90cb9668_314c3531",
+      "revId": "b7f1334e747da5a6f09dfdec12f63d6f17613601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
