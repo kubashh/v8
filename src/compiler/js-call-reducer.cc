@@ -253,8 +253,9 @@ Reduction JSCallReducer::ReduceObjectConstructor(Node* node) {
   Node* effect = NodeProperties::GetEffectInput(node);
 
   // We can fold away the Object(x) call if |x| is definitely not a primitive.
-  if (NodeProperties::CanBePrimitive(isolate(), value, effect)) {
-    if (!NodeProperties::CanBeNullOrUndefined(isolate(), value, effect)) {
+  if (NodeProperties::CanBePrimitive(js_heap_broker(), value, effect)) {
+    if (!NodeProperties::CanBeNullOrUndefined(js_heap_broker(), value,
+                                              effect)) {
       // Turn the {node} into a {JSToObject} call if we know that
       // the {value} cannot be null or undefined.
       NodeProperties::ReplaceValueInputs(node, value);
@@ -295,7 +296,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeApply(Node* node) {
 
     // If {arguments_list} cannot be null or undefined, we don't need
     // to expand this {node} to control-flow.
-    if (!NodeProperties::CanBeNullOrUndefined(isolate(), arguments_list,
+    if (!NodeProperties::CanBeNullOrUndefined(js_heap_broker(), arguments_list,
                                               effect)) {
       // Massage the value inputs appropriately.
       node->ReplaceInput(0, target);
@@ -408,7 +409,7 @@ Reduction JSCallReducer::ReduceFunctionPrototypeBind(Node* node) {
   // definitely a constructor or not a constructor.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   DCHECK_NE(0, receiver_maps.size());
@@ -570,7 +571,7 @@ Reduction JSCallReducer::ReduceObjectGetPrototype(Node* node, Node* object) {
   // Try to determine the {object} map.
   ZoneHandleSet<Map> object_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), object, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), object, effect,
                                         &object_maps);
   if (result != NodeProperties::kNoReceiverMaps) {
     Handle<Map> candidate_map = object_maps[0];
@@ -731,7 +732,7 @@ Reduction JSCallReducer::ReduceObjectPrototypeIsPrototypeOf(Node* node) {
   // the ToObject step of Object.prototype.isPrototypeOf is a no-op).
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   for (size_t i = 0; i < receiver_maps.size(); ++i) {
@@ -1026,7 +1027,7 @@ Reduction JSCallReducer::ReduceArrayForEach(Node* node,
                        : jsgraph()->UndefinedConstant();
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
@@ -1216,7 +1217,7 @@ Reduction JSCallReducer::ReduceArrayReduce(Node* node,
 
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
@@ -1493,7 +1494,7 @@ Reduction JSCallReducer::ReduceArrayMap(Node* node,
                        : jsgraph()->UndefinedConstant();
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
@@ -1705,7 +1706,7 @@ Reduction JSCallReducer::ReduceArrayFilter(Node* node,
                        : jsgraph()->UndefinedConstant();
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
@@ -1988,7 +1989,7 @@ Reduction JSCallReducer::ReduceArrayFind(Node* node, ArrayFindVariant variant,
                        : jsgraph()->UndefinedConstant();
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
@@ -2302,7 +2303,7 @@ Reduction JSCallReducer::ReduceArrayEvery(Node* node,
                        : jsgraph()->UndefinedConstant();
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
@@ -2563,7 +2564,8 @@ Reduction JSCallReducer::ReduceArrayIndexOfIncludes(
   }
 
   Handle<Map> receiver_map;
-  if (!NodeProperties::GetMapWitness(isolate(), node).ToHandle(&receiver_map))
+  if (!NodeProperties::GetMapWitness(js_heap_broker(), node)
+           .ToHandle(&receiver_map))
     return NoChange();
 
   if (!CanInlineArrayIteratingBuiltin(isolate(), receiver_map))
@@ -2649,7 +2651,7 @@ Reduction JSCallReducer::ReduceArraySome(Node* node,
                        : jsgraph()->UndefinedConstant();
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
@@ -2884,7 +2886,7 @@ Reduction JSCallReducer::ReduceCallApiFunction(
   // callback based on those.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   for (size_t i = 0; i < receiver_maps.size(); ++i) {
@@ -3300,7 +3302,8 @@ Reduction JSCallReducer::ReduceJSCall(Node* node) {
 
     // Update the JSCall operator on {node}.
     ConvertReceiverMode const convert_mode =
-        NodeProperties::CanBeNullOrUndefined(isolate(), bound_this, effect)
+        NodeProperties::CanBeNullOrUndefined(js_heap_broker(), bound_this,
+                                             effect)
             ? ConvertReceiverMode::kAny
             : ConvertReceiverMode::kNotNullOrUndefined;
     NodeProperties::ChangeOp(
@@ -4350,7 +4353,7 @@ Reduction JSCallReducer::ReduceArrayPrototypePush(Node* node) {
   // Try to determine the {receiver} map(s).
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   DCHECK_NE(0, receiver_maps.size());
@@ -4462,7 +4465,7 @@ Reduction JSCallReducer::ReduceArrayPrototypePop(Node* node) {
 
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   DCHECK_NE(0, receiver_maps.size());
@@ -4581,7 +4584,7 @@ Reduction JSCallReducer::ReduceArrayPrototypeShift(Node* node) {
 
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   DCHECK_NE(0, receiver_maps.size());
@@ -4786,7 +4789,7 @@ Reduction JSCallReducer::ReduceArrayPrototypeSlice(Node* node) {
   // Try to determine the {receiver} map.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
 
@@ -4874,7 +4877,7 @@ Reduction JSCallReducer::ReduceArrayIterator(Node* node, IterationKind kind) {
   // Check if we know that {receiver} is a valid JSReceiver.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   DCHECK_NE(0, receiver_maps.size());
@@ -4895,14 +4898,14 @@ Reduction JSCallReducer::ReduceArrayIterator(Node* node, IterationKind kind) {
 
 namespace {
 
-bool InferIteratedObjectMaps(Isolate* isolate, Node* iterator,
+bool InferIteratedObjectMaps(JSHeapBroker* broker, Node* iterator,
                              ZoneHandleSet<Map>* iterated_object_maps) {
   DCHECK_EQ(IrOpcode::kJSCreateArrayIterator, iterator->opcode());
   Node* iterated_object = NodeProperties::GetValueInput(iterator, 0);
   Node* effect = NodeProperties::GetEffectInput(iterator);
 
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate, iterated_object, effect,
+      NodeProperties::InferReceiverMaps(broker, iterated_object, effect,
                                         iterated_object_maps);
   return result != NodeProperties::kNoReceiverMaps;
 }
@@ -4929,7 +4932,8 @@ Reduction JSCallReducer::ReduceArrayIteratorPrototypeNext(Node* node) {
 
   // Try to infer the [[IteratedObject]] maps from the {iterator}.
   ZoneHandleSet<Map> iterated_object_maps;
-  if (!InferIteratedObjectMaps(isolate(), iterator, &iterated_object_maps)) {
+  if (!InferIteratedObjectMaps(js_heap_broker(), iterator,
+                               &iterated_object_maps)) {
     return NoChange();
   }
   DCHECK_NE(0, iterated_object_maps.size());
@@ -5371,7 +5375,7 @@ Reduction JSCallReducer::ReduceStringIteratorPrototypeNext(Node* node) {
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
   Node* context = NodeProperties::GetContextInput(node);
-  if (NodeProperties::HasInstanceTypeWitness(isolate(), receiver, effect,
+  if (NodeProperties::HasInstanceTypeWitness(js_heap_broker(), receiver, effect,
                                              JS_STRING_ITERATOR_TYPE)) {
     Node* string = effect = graph()->NewNode(
         simplified()->LoadField(AccessBuilder::ForJSStringIteratorString()),
@@ -5780,7 +5784,7 @@ Reduction JSCallReducer::ReducePromisePrototypeCatch(Node* node) {
   // Check if we know something about {receiver} already.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   DCHECK_NE(0, receiver_maps.size());
@@ -5857,7 +5861,7 @@ Reduction JSCallReducer::ReducePromisePrototypeFinally(Node* node) {
   // Check if we know something about {receiver} already.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   DCHECK_NE(0, receiver_maps.size());
@@ -6010,7 +6014,7 @@ Reduction JSCallReducer::ReducePromisePrototypeThen(Node* node) {
   // Check if we know something about {receiver} already.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult infer_receiver_maps_result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (infer_receiver_maps_result == NodeProperties::kNoReceiverMaps) {
     return NoChange();
@@ -6079,7 +6083,7 @@ Reduction JSCallReducer::ReducePromiseResolveTrampoline(Node* node) {
   // Check if we know something about {receiver} already.
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult infer_receiver_maps_result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (infer_receiver_maps_result == NodeProperties::kNoReceiverMaps) {
     return NoChange();
@@ -6275,8 +6279,8 @@ Reduction JSCallReducer::ReduceMapPrototypeGet(Node* node) {
   Node* control = NodeProperties::GetControlInput(node);
   Node* key = NodeProperties::GetValueInput(node, 2);
 
-  if (!NodeProperties::HasInstanceTypeWitness(isolate(), receiver, effect,
-                                              JS_MAP_TYPE))
+  if (!NodeProperties::HasInstanceTypeWitness(js_heap_broker(), receiver,
+                                              effect, JS_MAP_TYPE))
     return NoChange();
 
   Node* table = effect = graph()->NewNode(
@@ -6320,8 +6324,8 @@ Reduction JSCallReducer::ReduceMapPrototypeHas(Node* node) {
   Node* control = NodeProperties::GetControlInput(node);
   Node* key = NodeProperties::GetValueInput(node, 2);
 
-  if (!NodeProperties::HasInstanceTypeWitness(isolate(), receiver, effect,
-                                              JS_MAP_TYPE))
+  if (!NodeProperties::HasInstanceTypeWitness(js_heap_broker(), receiver,
+                                              effect, JS_MAP_TYPE))
     return NoChange();
 
   Node* table = effect = graph()->NewNode(
@@ -6361,7 +6365,7 @@ Reduction JSCallReducer::ReduceCollectionIteration(
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
   if (NodeProperties::HasInstanceTypeWitness(
-          isolate(), receiver, effect,
+          js_heap_broker(), receiver, effect,
           InstanceTypeForCollectionKind(collection_kind))) {
     Node* js_create_iterator = effect = graph()->NewNode(
         javascript()->CreateCollectionIterator(collection_kind, iteration_kind),
@@ -6379,7 +6383,7 @@ Reduction JSCallReducer::ReduceCollectionPrototypeSize(
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
   if (NodeProperties::HasInstanceTypeWitness(
-          isolate(), receiver, effect,
+          js_heap_broker(), receiver, effect,
           InstanceTypeForCollectionKind(collection_kind))) {
     Node* table = effect = graph()->NewNode(
         simplified()->LoadField(AccessBuilder::ForJSCollectionTable()),
@@ -6420,7 +6424,7 @@ Reduction JSCallReducer::ReduceCollectionIteratorPrototypeNext(
   InstanceType receiver_instance_type;
   ZoneHandleSet<Map> receiver_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), receiver, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), receiver, effect,
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return NoChange();
   DCHECK_NE(0, receiver_maps.size());
@@ -6698,7 +6702,7 @@ Reduction JSCallReducer::ReduceArrayBufferViewAccessor(
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
 
-  if (NodeProperties::HasInstanceTypeWitness(isolate(), receiver, effect,
+  if (NodeProperties::HasInstanceTypeWitness(js_heap_broker(), receiver, effect,
                                              instance_type)) {
     // Load the {receiver}s field.
     Node* value = effect = graph()->NewNode(simplified()->LoadField(access),
@@ -6784,7 +6788,7 @@ Reduction JSCallReducer::ReduceDataViewAccess(Node* node, DataViewAccess access,
   }
 
   // Only do stuff if the {receiver} is really a DataView.
-  if (NodeProperties::HasInstanceTypeWitness(isolate(), receiver, effect,
+  if (NodeProperties::HasInstanceTypeWitness(js_heap_broker(), receiver, effect,
                                              JS_DATA_VIEW_TYPE)) {
     // Check that the {offset} is within range for the {receiver}.
     HeapObjectMatcher m(receiver);
@@ -6971,7 +6975,7 @@ Reduction JSCallReducer::ReduceDatePrototypeGetTime(Node* node) {
   Node* receiver = NodeProperties::GetValueInput(node, 1);
   Node* effect = NodeProperties::GetEffectInput(node);
   Node* control = NodeProperties::GetControlInput(node);
-  if (NodeProperties::HasInstanceTypeWitness(isolate(), receiver, effect,
+  if (NodeProperties::HasInstanceTypeWitness(js_heap_broker(), receiver, effect,
                                              JS_DATE_TYPE)) {
     Node* value = effect = graph()->NewNode(
         simplified()->LoadField(AccessBuilder::ForJSDateValue()), receiver,
@@ -7035,7 +7039,7 @@ Reduction JSCallReducer::ReduceRegExpPrototypeTest(Node* node) {
   // Check if we know something about the {regexp}.
   ZoneHandleSet<Map> regexp_maps;
   NodeProperties::InferReceiverMapsResult result =
-      NodeProperties::InferReceiverMaps(isolate(), regexp, effect,
+      NodeProperties::InferReceiverMaps(js_heap_broker(), regexp, effect,
                                         &regexp_maps);
 
   bool need_map_check = false;
