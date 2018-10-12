@@ -63,6 +63,22 @@
   assertSame(wc.holdings, holdings);
 })();
 
+(function TestMakeCellWithNonObject() {
+  let wf = new WeakFactory();
+  assertThrows(() => wf.makeCell(1), TypeError);
+  assertThrows(() => wf.makeCell(), TypeError);
+})();
+
+(function TestMakeCellTargetAndHoldingsSameValue() {
+  let wf = new WeakFactory();
+  let obj = {a: 1};
+  // SameValue(target, holdings) not ok
+  assertThrows(() => wf.makeCell(obj, obj), TypeError);
+  // target == holdings ok
+  let holdings = {a: 1};
+  let wc = wf.makeCell(obj, holdings);
+})();
+
 (function TestMakeCellWithoutWeakFactory() {
   assertThrows(() => WeakFactory.prototype.makeCell.call({}, {}), TypeError);
 })();

@@ -34,15 +34,27 @@ BUILTIN(WeakFactoryConstructor) {
 
 BUILTIN(WeakFactoryMakeCell) {
   HandleScope scope(isolate);
+  const char* method = "WeakFactory.makeCell";
 
-  CHECK_RECEIVER(JSWeakFactory, weak_factory, "WeakFactory.makeCell");
+  CHECK_RECEIVER(JSWeakFactory, weak_factory, method);
 
   Handle<Object> object = args.atOrUndefined(isolate, 1);
-  // TODO(marja): if the type is not an object, throw TypeError. Ditto for
-  // SameValue(target, holdings).
+  if (!object->IsJSObject()) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate,
+        NewTypeError(MessageTemplate::kMakeCellTargetMustBeObject,
+                     isolate->factory()->NewStringFromAsciiChecked(method),
+                     object));
+  }
   Handle<JSObject> js_object = Handle<JSObject>::cast(object);
-
   Handle<Object> holdings = args.atOrUndefined(isolate, 2);
+  if (object->SameValue(*holdings)) {
+    THROW_NEW_ERROR_RETURN_FAILURE(
+        isolate,
+        NewTypeError(MessageTemplate::kMakeCellTargetAndHoldingsMustNotBeSame,
+                     isolate->factory()->NewStringFromAsciiChecked(method),
+                     object));
+  }
 
   // TODO(marja): Realms.
 
