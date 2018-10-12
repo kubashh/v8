@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8ef711c6_45d6b9fc",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-12T04:44:04Z",
+      "side": 1,
+      "message": "Nit: Elsewhere we say collection.find(...) !\u003d collection.end().",
+      "range": {
+        "startLine": 1487,
+        "startChar": 27,
+        "endLine": 1487,
+        "endChar": 32
+      },
+      "revId": "e1ddff4d522c3034f4676a7231d49b782c26c0a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c58d6d7_90d838c6",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-12T04:44:04Z",
+      "side": 1,
+      "message": "Perhaps unorder set would be better (using handle.address() as a key).",
+      "range": {
+        "startLine": 535,
+        "startChar": 2,
+        "endLine": 535,
+        "endChar": 9
+      },
+      "revId": "e1ddff4d522c3034f4676a7231d49b782c26c0a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "659b6092_efff35cb",
+        "filename": "src/handles.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-12T04:44:04Z",
+      "side": 1,
+      "message": "As discussed elsewhere, I would prefer not to have this function. For sure, we do not function here because it is only useful when you have canonical handle scope.",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 4
+      },
+      "revId": "e1ddff4d522c3034f4676a7231d49b782c26c0a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
