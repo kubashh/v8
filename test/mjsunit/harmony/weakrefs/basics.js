@@ -31,6 +31,36 @@
   assertEquals(wc.toString(), "[object WeakCell]");
   assertNotSame(wc.__proto__, Object.prototype);
   assertSame(wc.__proto__.__proto__, Object.prototype);
+  assertEquals(wc.holdings, undefined);
+})();
+
+(function TestMakeCellWithHoldings() {
+  let wf = new WeakFactory();
+  let obj = {a: 1};
+  let holdings = {b: 2};
+  let wc = wf.makeCell(obj, holdings);
+  assertSame(wc.holdings, holdings);
+})();
+
+(function TestMakeCellWithHoldingsSetHoldings() {
+  let wf = new WeakFactory();
+  let obj = {a: 1};
+  let holdings = {b: 2};
+  let wc = wf.makeCell(obj, holdings);
+  assertSame(wc.holdings, holdings);
+  wc.holdings = 5;
+  assertSame(wc.holdings, holdings);
+})();
+
+(function TestMakeCellWithHoldingsSetHoldingsStrict() {
+  "use strict";
+  let wf = new WeakFactory();
+  let obj = {a: 1};
+  let holdings = {b: 2};
+  let wc = wf.makeCell(obj, holdings);
+  assertSame(wc.holdings, holdings);
+  assertThrows(() => { wc.holdings = 5; }, TypeError);
+  assertSame(wc.holdings, holdings);
 })();
 
 (function TestMakeCellWithoutWeakFactory() {
