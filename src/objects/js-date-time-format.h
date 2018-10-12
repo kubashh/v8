@@ -67,6 +67,8 @@ class JSDateTimeFormat : public JSObject {
       Handle<Object> options, RequiredOption required, DefaultsOption defaults,
       const char* service);
 
+  Handle<String> HourCycleAsString() const;
+
   DECL_CAST(JSDateTimeFormat)
 
 // Layout description.
@@ -74,6 +76,7 @@ class JSDateTimeFormat : public JSObject {
   V(kICULocaleOffset, kPointerSize)           \
   V(kICUSimpleDateFormatOffset, kPointerSize) \
   V(kBoundFormatOffset, kPointerSize)         \
+  V(kFlagsOffset, kPointerSize)               \
   /* Total size. */                           \
   V(kSize, 0)
 
@@ -81,9 +84,34 @@ class JSDateTimeFormat : public JSObject {
                                 JS_DATE_TIME_FORMAT_FIELDS)
 #undef JS_DATE_TIME_FORMAT_FIELDS
 
+  enum HourCycle {
+    UNDEFINED,
+    H11,  // hour in am/pm (0~11). ICU pattern K or KK
+    H12,  // hour in am/pm (1~12). ICU pattern h or hh
+    H23,  // hour in day (0~23). ICU pattern H or HH
+    H24,  // hour in day (1~24). ICU pattern k or kk
+
+    COUNT
+  };
+  inline void set_hour_cycle(HourCycle hour_cycle);
+  inline HourCycle hour_cycle() const;
+
+// Bit positions in |flags|.
+#define FLAGS_BIT_FIELDS(V, _) V(HourCycleBits, HourCycle, 3, _)
+
+  DEFINE_BIT_FIELDS(FLAGS_BIT_FIELDS)
+#undef FLAGS_BIT_FIELDS
+
+  STATIC_ASSERT(HourCycle::UNDEFINED <= HourCycleBits::kMax);
+  STATIC_ASSERT(HourCycle::H11 <= HourCycleBits::kMax);
+  STATIC_ASSERT(HourCycle::H12 <= HourCycleBits::kMax);
+  STATIC_ASSERT(HourCycle::H23 <= HourCycleBits::kMax);
+  STATIC_ASSERT(HourCycle::H24 <= HourCycleBits::kMax);
+
   DECL_ACCESSORS(icu_locale, Managed<icu::Locale>)
   DECL_ACCESSORS(icu_simple_date_format, Managed<icu::SimpleDateFormat>)
   DECL_ACCESSORS(bound_format, Object)
+  DECL_INT_ACCESSORS(flags)
 
   DECL_PRINTER(JSDateTimeFormat)
   DECL_VERIFIER(JSDateTimeFormat)

@@ -54,7 +54,7 @@ for (var prop in options) {
 }
 
 var expectedProperties = [
-  'calendar', 'day', 'era', 'hour12', 'hour', 'locale',
+  'calendar', 'day', 'era', 'hour12', 'hour', 'hourCycle', 'locale',
   'minute', 'month', 'numberingSystem',
   'second', 'timeZone', 'timeZoneName', 'weekday', 'year'
 ];
