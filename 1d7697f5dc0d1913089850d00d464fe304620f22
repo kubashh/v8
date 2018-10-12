@@ -1,0 +1,297 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba971d9a_8d5b8e2f",
+        "filename": "src/assert-scope.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Should you have inline functions like set_data() and set_old_state() for setting purposes?",
+      "range": {
+        "startLine": 72,
+        "startChar": 2,
+        "endLine": 72,
+        "endChar": 68
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c60fe326_31974d1b",
+        "filename": "src/assert-scope.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s applicable to use auto here, since the type is not clear.",
+      "range": {
+        "startLine": 91,
+        "startChar": 2,
+        "endLine": 91,
+        "endChar": 7
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f20e431b_235791c2",
+        "filename": "src/assert-scope.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": ".",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 21
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b33a4c6e_f4a4dc07",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Ok looks like you didn\u0027t clean these up yet, remember to do it before sending for review :)",
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33c67d52_b4f4a335",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Not sure if \"const\" is meaningful here, since we can always set / get the bool part of the PointerWithStorageBits independently. Does it somehow prevent re-setting it now that it\u0027s const bool? I guess not? If not, you should make it just bool.",
+      "range": {
+        "startLine": 126,
+        "startChar": 35,
+        "endLine": 126,
+        "endChar": 45
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3288c43_553cc6fd",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Why this change? (Would be good for the CL description to also refer to other reordering changes if you plan to do them in this CL.)",
+      "range": {
+        "startLine": 998,
+        "startChar": 2,
+        "endLine": 999,
+        "endChar": 36
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2822cf7_2ba16e7a",
+        "filename": "src/parsing/expression-classifier.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Why?",
+      "range": {
+        "startLine": 208,
+        "startChar": 2,
+        "endLine": 210,
+        "endChar": 41
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a1a3a05_02cf6862",
+        "filename": "src/parsing/parser.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Here and elsewhere: should be in the same include block in the correct place, not separated with newline",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 37
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6cc23710_b81eb2a3",
+        "filename": "src/parsing/parser.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Style nit: -\u003e Expression* initializer()",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 28
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "844e4614_621966e0",
+        "filename": "src/parsing/preparsed-scope-data-impl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Ah, this def is another unrelated change to this CL... so the CL has 3 kinds of changes: PointerWithStorage, reordering, making no_gc debug only. The description should reflect that.",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 6
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1df31b8_71e682dd",
+        "filename": "src/parsing/preparser.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t be added here since this file doesn\u0027t use it.",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 14,
+        "endChar": 0
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32b2c5b4_5205cc9b",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Since it contains a private part too, this should be a class.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 6
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d42b003_85ec78ae",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-12T07:46:35Z",
+      "side": 1,
+      "message": "Ok the naming is correct now, but I think it\u0027s more typical to use the \"in-mask\" style, e.g., kPointerMask instead of kMaskOutStorageBits.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 41
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
