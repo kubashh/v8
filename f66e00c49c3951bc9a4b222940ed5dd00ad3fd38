@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "16f08d7e_a114da0d",
+        "filename": "src/inspector/string-util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1280850
+      },
+      "writtenOn": "2018-10-12T21:30:49Z",
+      "side": 1,
+      "message": "Yeah, I had forgotten to remove it, but now that I added data() / size() I think it should stay, it\u0027s where uint8_t is defined.\n\nhttp://pubs.opengroup.org/onlinepubs/009695399/basedefs/stdint.h.html",
+      "parentUuid": "056e6ad4_06e99e64",
+      "revId": "f66e00c49c3951bc9a4b222940ed5dd00ad3fd38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95e6b363_206d97e1",
         "filename": "src/inspector/string-util.h",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "69d2296c_498df455",
+        "filename": "src/inspector/string-util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1280850
+      },
+      "writtenOn": "2018-10-12T21:30:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95e6b363_206d97e1",
+      "revId": "f66e00c49c3951bc9a4b222940ed5dd00ad3fd38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b08710ec_3fd56d21",
         "filename": "src/inspector/string-util.h",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2018-10-12T18:48:29Z",
       "side": 1,
       "message": "I think you\u0027ll need \"toBytes\" and \"fromBytes\" later on, when proceeding with binary format. Perhaps add them right away?",
+      "revId": "f66e00c49c3951bc9a4b222940ed5dd00ad3fd38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1602e5eb_3bbc94fd",
+        "filename": "src/inspector/string-util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1280850
+      },
+      "writtenOn": "2018-10-12T21:30:49Z",
+      "side": 1,
+      "message": "For now I added the data() and size() accessors.",
+      "parentUuid": "b08710ec_3fd56d21",
       "revId": "f66e00c49c3951bc9a4b222940ed5dd00ad3fd38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

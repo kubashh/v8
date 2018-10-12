@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfe3be4d_bbc1f75c",
+        "filename": "src/inspector/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1280850
+      },
+      "writtenOn": "2018-10-12T21:30:49Z",
+      "side": 1,
+      "message": "I noticed this was still using the .json so I updated this file to use .pdl everywhere.\n\nThis matters because I\u0027m planning to not have the .json reflect the change to binary, maybe.",
+      "range": {
+        "startLine": 35,
+        "startChar": 5,
+        "endLine": 35,
+        "endChar": 20
+      },
+      "revId": "c27bab11416e90db33829b5cc7551f01d653f186",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
