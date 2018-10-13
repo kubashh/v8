@@ -127,9 +127,7 @@ Handle<JSObject> JSV8BreakIterator::ResolvedOptions(
   return result;
 }
 
-void JSV8BreakIterator::AdoptText(
-    Isolate* isolate, Handle<JSV8BreakIterator> break_iterator_holder,
-    Handle<String> text) {
+void JSV8BreakIterator::AdoptText(Isolate* isolate, Handle<String> text) {
   icu::UnicodeString* u_text;
   int length = text->length();
   text = String::Flatten(isolate, text);
@@ -143,12 +141,11 @@ void JSV8BreakIterator::AdoptText(
 
   Handle<Managed<icu::UnicodeString>> new_u_text =
       Managed<icu::UnicodeString>::FromRawPtr(isolate, 0, u_text);
-  break_iterator_holder->set_unicode_string(*new_u_text);
+  set_unicode_string(*new_u_text);
 
-  icu::BreakIterator* break_iterator =
-      break_iterator_holder->break_iterator()->raw();
-  CHECK_NOT_NULL(break_iterator);
-  break_iterator->setText(*u_text);
+  icu::BreakIterator* icu_break_iterator = break_iterator()->raw();
+  CHECK_NOT_NULL(icu_break_iterator);
+  icu_break_iterator->setText(*u_text);
 }
 
 Handle<String> JSV8BreakIterator::TypeAsString() const {
@@ -163,6 +160,26 @@ Handle<String> JSV8BreakIterator::TypeAsString() const {
       return GetReadOnlyRoots().line_string_handle();
     case Type::COUNT:
       UNREACHABLE();
+  }
+}
+
+Handle<String> JSV8BreakIterator::BreakTypeAsString() const {
+  CHECK_NOT_NULL(break_iterator()->raw());
+
+  int32_t status = break_iterator()->raw()->getRuleStatus();
+  // Keep return values in sync with JavaScript BreakType enum.
+  if (status >= UBRK_WORD_NONE && status < UBRK_WORD_NONE_LIMIT) {
+    return GetReadOnlyRoots().none_string_handle();
+  } else if (status >= UBRK_WORD_NUMBER && status < UBRK_WORD_NUMBER_LIMIT) {
+    return GetReadOnlyRoots().number_string_handle();
+  } else if (status >= UBRK_WORD_LETTER && status < UBRK_WORD_LETTER_LIMIT) {
+    return GetReadOnlyRoots().letter_string_handle();
+  } else if (status >= UBRK_WORD_KANA && status < UBRK_WORD_KANA_LIMIT) {
+    return GetReadOnlyRoots().kana_string_handle();
+  } else if (status >= UBRK_WORD_IDEO && status < UBRK_WORD_IDEO_LIMIT) {
+    return GetReadOnlyRoots().ideo_string_handle();
+  } else {
+    return GetReadOnlyRoots().unknown_string_handle();
   }
 }
 
