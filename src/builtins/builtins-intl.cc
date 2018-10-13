@@ -1098,29 +1098,58 @@ BUILTIN(V8BreakIteratorPrototypeResolvedOptions) {
   return *JSV8BreakIterator::ResolvedOptions(isolate, break_iterator);
 }
 
-BUILTIN(V8BreakIteratorPrototypeAdoptText) {
-  const char* const method = "get Intl.v8BreakIterator.prototype.adoptText";
-  HandleScope scope(isolate);
+#define V8_BREAK_ITERATOR_INTERNAL_FROM_INT_LIST(V) \
+  V(First, first, first, 0)                         \
+  V(Next, next, next, 0)                            \
+  V(Current, current, current, 0)
 
-  CHECK_RECEIVER(JSV8BreakIterator, break_iterator, method);
-
-  Handle<Object> bound_adopt_text(break_iterator->bound_adopt_text(), isolate);
-  if (!bound_adopt_text->IsUndefined(isolate)) {
-    DCHECK(bound_adopt_text->IsJSFunction());
-    return *bound_adopt_text;
+#define IMPL_V8_BREAK_ITERATOR_INTERNAL(name, method)                       \
+  BUILTIN(V8BreakIteratorInternal##name) {                                  \
+    HandleScope scope(isolate);                                             \
+    Handle<Context> context = Handle<Context>(isolate->context(), isolate); \
+    Handle<JSV8BreakIterator> holder = Handle<JSV8BreakIterator>(           \
+        JSV8BreakIterator::cast(context->get(static_cast<int>(              \
+            Intl::BoundFunctionContextSlot::kBoundFunction))),              \
+        isolate);                                                           \
+    icu::BreakIterator* iterator = holder->break_iterator()->raw();         \
+    CHECK_NOT_NULL(iterator);                                               \
+    return *isolate->factory()->NewNumberFromInt(iterator->method());       \
   }
 
-  Handle<JSFunction> new_bound_adopt_text_function = CreateBoundFunction(
-      isolate, break_iterator, Builtins::kV8BreakIteratorInternalAdoptText, 1);
-  break_iterator->set_bound_adopt_text(*new_bound_adopt_text_function);
-  return *new_bound_adopt_text_function;
-}
+#define IMPL_V8_BREAK_ITERATOR_PROTOTYPE(name, method, field, num_args)       \
+  BUILTIN(V8BreakIteratorPrototype##name) {                                   \
+    const char* const kService =                                              \
+        "get Intl.v8BreakIterator.prototype.##method";                        \
+    HandleScope scope(isolate);                                               \
+    CHECK_RECEIVER(JSV8BreakIterator, holder, kService);                      \
+    Handle<Object> bound(holder->bound_##field(), isolate);                   \
+    if (!bound->IsUndefined(isolate)) {                                       \
+      DCHECK(bound->IsJSFunction());                                          \
+      return *bound;                                                          \
+    }                                                                         \
+    Handle<JSFunction> new_bound = CreateBoundFunction(                       \
+        isolate, holder, Builtins::kV8BreakIteratorInternal##name, num_args); \
+    holder->set_bound_##field(*new_bound);                                    \
+    return *new_bound;                                                        \
+  }
+
+#define IMPL_V8_BREAK_ITERATOR_METHODS(name, method, field, num_args) \
+  IMPL_V8_BREAK_ITERATOR_INTERNAL(name, method)                       \
+  IMPL_V8_BREAK_ITERATOR_PROTOTYPE(name, method, field, num_args)
+
+V8_BREAK_ITERATOR_INTERNAL_FROM_INT_LIST(IMPL_V8_BREAK_ITERATOR_METHODS)
+IMPL_V8_BREAK_ITERATOR_PROTOTYPE(BreakType, breakType, break_type, 0)
+IMPL_V8_BREAK_ITERATOR_PROTOTYPE(AdoptText, adoptText, adopt_text, 1)
+
+#undef IMPL_V8_BREAK_ITERATOR_PROTOTYPE
+#undef IMPL_V8_BREAK_ITERATOR_INTERNAL
+#undef IMPL_V8_BREAK_ITERATOR_METHODS
+#undef V8_BREAK_ITERATOR_INTERNAL_FROM_INT_LIST
 
 BUILTIN(V8BreakIteratorInternalAdoptText) {
   HandleScope scope(isolate);
   Handle<Context> context = Handle<Context>(isolate->context(), isolate);
-
-  Handle<JSV8BreakIterator> break_iterator_holder = Handle<JSV8BreakIterator>(
+  Handle<JSV8BreakIterator> iterator = Handle<JSV8BreakIterator>(
       JSV8BreakIterator::cast(context->get(
           static_cast<int>(Intl::BoundFunctionContextSlot::kBoundFunction))),
       isolate);
@@ -1130,163 +1159,19 @@ BUILTIN(V8BreakIteratorInternalAdoptText) {
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, text,
                                      Object::ToString(isolate, input_text));
 
-  JSV8BreakIterator::AdoptText(isolate, break_iterator_holder, text);
+  iterator->AdoptText(isolate, text);
   return ReadOnlyRoots(isolate).undefined_value();
-}
-
-BUILTIN(V8BreakIteratorPrototypeFirst) {
-  const char* const method = "get Intl.v8BreakIterator.prototype.first";
-  HandleScope scope(isolate);
-
-  CHECK_RECEIVER(JSV8BreakIterator, break_iterator_holder, method);
-
-  Handle<Object> bound_first(break_iterator_holder->bound_first(), isolate);
-  if (!bound_first->IsUndefined(isolate)) {
-    DCHECK(bound_first->IsJSFunction());
-    return *bound_first;
-  }
-
-  Handle<JSFunction> new_bound_first_function =
-      CreateBoundFunction(isolate, break_iterator_holder,
-                          Builtins::kV8BreakIteratorInternalFirst, 0);
-  break_iterator_holder->set_bound_first(*new_bound_first_function);
-  return *new_bound_first_function;
-}
-
-BUILTIN(V8BreakIteratorInternalFirst) {
-  HandleScope scope(isolate);
-  Handle<Context> context = Handle<Context>(isolate->context(), isolate);
-
-  Handle<JSV8BreakIterator> break_iterator_holder = Handle<JSV8BreakIterator>(
-      JSV8BreakIterator::cast(context->get(
-          static_cast<int>(Intl::BoundFunctionContextSlot::kBoundFunction))),
-      isolate);
-
-  icu::BreakIterator* break_iterator =
-      break_iterator_holder->break_iterator()->raw();
-  CHECK_NOT_NULL(break_iterator);
-
-  return *isolate->factory()->NewNumberFromInt(break_iterator->first());
-}
-
-BUILTIN(V8BreakIteratorPrototypeNext) {
-  const char* const method = "get Intl.v8BreakIterator.prototype.next";
-  HandleScope scope(isolate);
-
-  CHECK_RECEIVER(JSV8BreakIterator, break_iterator_holder, method);
-
-  Handle<Object> bound_next(break_iterator_holder->bound_next(), isolate);
-  if (!bound_next->IsUndefined(isolate)) {
-    DCHECK(bound_next->IsJSFunction());
-    return *bound_next;
-  }
-
-  Handle<JSFunction> new_bound_next_function =
-      CreateBoundFunction(isolate, break_iterator_holder,
-                          Builtins::kV8BreakIteratorInternalNext, 0);
-  break_iterator_holder->set_bound_next(*new_bound_next_function);
-  return *new_bound_next_function;
-}
-
-BUILTIN(V8BreakIteratorInternalNext) {
-  HandleScope scope(isolate);
-  Handle<Context> context = Handle<Context>(isolate->context(), isolate);
-
-  Handle<JSV8BreakIterator> break_iterator_holder = Handle<JSV8BreakIterator>(
-      JSV8BreakIterator::cast(context->get(
-          static_cast<int>(Intl::BoundFunctionContextSlot::kBoundFunction))),
-      isolate);
-
-  icu::BreakIterator* break_iterator =
-      break_iterator_holder->break_iterator()->raw();
-  CHECK_NOT_NULL(break_iterator);
-
-  return *isolate->factory()->NewNumberFromInt(break_iterator->next());
-}
-
-BUILTIN(V8BreakIteratorPrototypeCurrent) {
-  const char* const method = "get Intl.v8BreakIterator.prototype.current";
-  HandleScope scope(isolate);
-
-  CHECK_RECEIVER(JSV8BreakIterator, break_iterator_holder, method);
-
-  Handle<Object> bound_current(break_iterator_holder->bound_current(), isolate);
-  if (!bound_current->IsUndefined(isolate)) {
-    DCHECK(bound_current->IsJSFunction());
-    return *bound_current;
-  }
-
-  Handle<JSFunction> new_bound_current_function =
-      CreateBoundFunction(isolate, break_iterator_holder,
-                          Builtins::kV8BreakIteratorInternalCurrent, 0);
-  break_iterator_holder->set_bound_current(*new_bound_current_function);
-  return *new_bound_current_function;
-}
-
-BUILTIN(V8BreakIteratorInternalCurrent) {
-  HandleScope scope(isolate);
-  Handle<Context> context = Handle<Context>(isolate->context(), isolate);
-
-  Handle<JSV8BreakIterator> break_iterator_holder = Handle<JSV8BreakIterator>(
-      JSV8BreakIterator::cast(context->get(
-          static_cast<int>(Intl::BoundFunctionContextSlot::kBoundFunction))),
-      isolate);
-
-  icu::BreakIterator* break_iterator =
-      break_iterator_holder->break_iterator()->raw();
-  CHECK_NOT_NULL(break_iterator);
-
-  return *isolate->factory()->NewNumberFromInt(break_iterator->current());
-}
-
-BUILTIN(V8BreakIteratorPrototypeBreakType) {
-  const char* const method = "get Intl.v8BreakIterator.prototype.breakType";
-  HandleScope scope(isolate);
-
-  CHECK_RECEIVER(JSV8BreakIterator, break_iterator_holder, method);
-
-  Handle<Object> bound_break_type(break_iterator_holder->bound_break_type(),
-                                  isolate);
-  if (!bound_break_type->IsUndefined(isolate)) {
-    DCHECK(bound_break_type->IsJSFunction());
-    return *bound_break_type;
-  }
-
-  Handle<JSFunction> new_bound_break_type_function =
-      CreateBoundFunction(isolate, break_iterator_holder,
-                          Builtins::kV8BreakIteratorInternalBreakType, 0);
-  break_iterator_holder->set_bound_break_type(*new_bound_break_type_function);
-  return *new_bound_break_type_function;
 }
 
 BUILTIN(V8BreakIteratorInternalBreakType) {
   HandleScope scope(isolate);
   Handle<Context> context = Handle<Context>(isolate->context(), isolate);
-
-  Handle<JSV8BreakIterator> break_iterator_holder = Handle<JSV8BreakIterator>(
+  Handle<JSV8BreakIterator> iterator = Handle<JSV8BreakIterator>(
       JSV8BreakIterator::cast(context->get(
           static_cast<int>(Intl::BoundFunctionContextSlot::kBoundFunction))),
       isolate);
 
-  icu::BreakIterator* break_iterator =
-      break_iterator_holder->break_iterator()->raw();
-  CHECK_NOT_NULL(break_iterator);
-
-  int32_t status = break_iterator->getRuleStatus();
-  // Keep return values in sync with JavaScript BreakType enum.
-  if (status >= UBRK_WORD_NONE && status < UBRK_WORD_NONE_LIMIT) {
-    return *isolate->factory()->NewStringFromStaticChars("none");
-  } else if (status >= UBRK_WORD_NUMBER && status < UBRK_WORD_NUMBER_LIMIT) {
-    return ReadOnlyRoots(isolate).number_string();
-  } else if (status >= UBRK_WORD_LETTER && status < UBRK_WORD_LETTER_LIMIT) {
-    return *isolate->factory()->NewStringFromStaticChars("letter");
-  } else if (status >= UBRK_WORD_KANA && status < UBRK_WORD_KANA_LIMIT) {
-    return *isolate->factory()->NewStringFromStaticChars("kana");
-  } else if (status >= UBRK_WORD_IDEO && status < UBRK_WORD_IDEO_LIMIT) {
-    return *isolate->factory()->NewStringFromStaticChars("ideo");
-  } else {
-    return *isolate->factory()->NewStringFromStaticChars("unknown");
-  }
+  return *iterator->BreakTypeAsString();
 }
 
 }  // namespace internal

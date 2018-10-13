@@ -25,22 +25,26 @@
   V(_, collation_string, "collation")                               \
   V(_, currency_string, "currency")                                 \
   V(_, currencyDisplay_string, "currencyDisplay")                   \
+  V(_, ideo_string, "ideo")                                         \
   V(_, ignorePunctuation_string, "ignorePunctuation")               \
   V(_, Invalid_Date_string, "Invalid Date")                         \
   V(_, integer_string, "integer")                                   \
+  V(_, kana_string, "kana")                                         \
+  V(_, letter_string, "letter")                                     \
   V(_, literal_string, "literal")                                   \
   V(_, locale_string, "locale")                                     \
   V(_, localeWithExtension_string, "localeWithExtension")           \
   V(_, lower_string, "lower")                                       \
   V(_, maximumFractionDigits_string, "maximumFractionDigits")       \
   V(_, maximumSignificantDigits_string, "maximumSignificantDigits") \
-  V(_, nan_string, "nan")                                           \
   V(_, minimumFractionDigits_string, "minimumFractionDigits")       \
   V(_, minimumIntegerDigits_string, "minimumIntegerDigits")         \
   V(_, minimumSignificantDigits_string, "minimumSignificantDigits") \
   V(_, minusSign_string, "minusSign")                               \
   V(_, minute_string, "minute")                                     \
   V(_, month_string, "month")                                       \
+  V(_, nan_string, "nan")                                           \
+  V(_, none_string, "none")                                         \
   V(_, numberingSystem_string, "numberingSystem")                   \
   V(_, numeric_string, "numeric")                                   \
   V(_, percentSign_string, "percentSign")                           \
@@ -52,6 +56,7 @@
   V(_, timeZone_string, "timeZone")                                 \
   V(_, timeZoneName_string, "timeZoneName")                         \
   V(_, type_string, "type")                                         \
+  V(_, unknown_string, "unknown")                                   \
   V(_, upper_string, "upper")                                       \
   V(_, usage_string, "usage")                                       \
   V(_, useGrouping_string, "useGrouping")                           \
