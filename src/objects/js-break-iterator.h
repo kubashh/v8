@@ -32,14 +32,13 @@ class JSV8BreakIterator : public JSObject {
   static Handle<JSObject> ResolvedOptions(
       Isolate* isolate, Handle<JSV8BreakIterator> break_iterator);
 
-  static void AdoptText(Isolate* isolate,
-                        Handle<JSV8BreakIterator> break_iterator_holder,
-                        Handle<String> text);
+  void AdoptText(Isolate* isolate, Handle<String> text);
 
   enum class Type { CHARACTER, WORD, SENTENCE, LINE, COUNT };
   inline void set_type(Type type);
   inline Type type() const;
 
+  Handle<String> BreakTypeAsString() const;
   Handle<String> TypeAsString() const;
 
   DECL_CAST(JSV8BreakIterator)
