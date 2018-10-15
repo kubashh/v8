@@ -52,6 +52,7 @@ class MarkBit {
 
   friend class IncrementalMarking;
   friend class ConcurrentMarkingMarkbits;
+  friend class Locking;
   friend class Marking;
 };
 
@@ -194,6 +195,27 @@ inline void Bitmap::ClearBitsInCell<AccessMode::ATOMIC>(uint32_t cell_index,
                                                         uint32_t mask) {
   base::AsAtomic32::SetBits(cells() + cell_index, 0u, mask);
 }
+
+class Locking : public AllStatic {
+ public:
+  V8_INLINE static bool TryLock(MarkBit bit) {
+    return bit.Set<AccessMode::ATOMIC>();
+  }
+
+  V8_INLINE static void Lock(MarkBit bit) {
+    while (!TryLock(bit)) {
+    }
+  }
+
+  V8_INLINE static void Unlock(MarkBit bit) {
+    DCHECK(IsLocked(bit));
+    bit.Clear<AccessMode::ATOMIC>();
+  }
+
+  V8_INLINE static bool IsLocked(MarkBit bit) {
+    return bit.Get<AccessMode::ATOMIC>();
+  }
+};
 
 class Marking : public AllStatic {
  public:
