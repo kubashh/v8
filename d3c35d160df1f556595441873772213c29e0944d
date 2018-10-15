@@ -16,6 +16,24 @@
       "revId": "d3c35d160df1f556595441873772213c29e0944d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d48c7af_1b7ae06f",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-10-15T20:23:16Z",
+      "side": 1,
+      "message": "Hmm, interesting. That may have been back when mtrofin was still thinking about moving the JS API further \"outside\" the V8 public API. But as of now there\u0027s no C++ API for this (there may be again soon, but it seems like that should be covered by some sort of test).",
+      "parentUuid": "b795b365_fd97a810",
+      "revId": "d3c35d160df1f556595441873772213c29e0944d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
