@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee8280ba_e92de3d1",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2348,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-15T17:20:45Z",
+      "side": 1,
+      "message": "I\u0027m afraid this may not work for this kind of code:\nlet q \u003d { [\"z\"]: blah \u003d class { static y \u003d this.name } }",
+      "revId": "528e8152ba1f2def2c4446d2c6466266d7eec00c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
