@@ -1607,6 +1607,14 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
     return UncheckedCast<FixedDoubleArray>(base);
   }
 
+  TNode<FixedArray> HeapObjectToSloppyArgumentsElements(TNode<HeapObject> base,
+                                                        Label* cast_fail) {
+    GotoIf(WordNotEqual(LoadMap(base),
+                        LoadRoot(RootIndex::kSloppyArgumentsElementsMap)),
+           cast_fail);
+    return UncheckedCast<FixedArray>(base);
+  }
+
   TNode<Int32T> ConvertElementsKindToInt(TNode<Int32T> elements_kind) {
     return UncheckedCast<Int32T>(elements_kind);
   }
