@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "606e29bc_f665cac9",
+        "filename": "src/parsing/expression-classifier.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-15T11:05:04Z",
+      "side": 1,
+      "message": "I\u0027d leave this as it is in the existing code, it doesn\u0027t do any harm and maybe something is added to this class in the future...",
+      "parentUuid": "12906584_d32d8786",
+      "range": {
+        "startLine": 208,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 41
+      },
+      "revId": "5221206d014772f93f3c14c9bcf03091d348879d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0b4a136e_c2cf1b40",
         "filename": "src/parsing/func-name-inferrer.h",
         "patchSetId": 12
