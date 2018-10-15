@@ -3119,7 +3119,7 @@ class RepresentationSelector {
                 VisitUnop(
                     node,
                     UseInfo(MachineRepresentation::kFloat64, Truncation::Any()),
-                    MachineRepresentation::kFloat64, Type::Number());
+                    MachineRepresentation::kFloat64);
               }
               break;
             case CheckFloat64HoleMode::kNeverReturnHole:
