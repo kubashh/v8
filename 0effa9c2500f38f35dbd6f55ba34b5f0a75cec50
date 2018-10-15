@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0caee99_6a170909",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-10-15T10:27:32Z",
+      "side": 1,
+      "message": "I find this hard to read. The existing code is definitely a bit repetitive but it\u0027s pretty straightforward to read and the functions are small anyways",
+      "revId": "0effa9c2500f38f35dbd6f55ba34b5f0a75cec50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd09c9b9_a9bdddf7",
+        "filename": "src/objects/js-break-iterator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-10-15T10:27:32Z",
+      "side": 1,
+      "message": "We shouldn\u0027t have member functions that allocate because the GC could move `this` leading to an incorrect result when looking up other member functions in this function",
+      "revId": "0effa9c2500f38f35dbd6f55ba34b5f0a75cec50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
