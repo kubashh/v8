@@ -80,21 +80,11 @@ MacroAssembler::MacroAssembler(Isolate* isolate,
   }
 }
 
-static const int64_t kInvalidRootRegisterDelta = -1;
-
-int64_t TurboAssembler::RootRegisterDelta(ExternalReference other) {
-  if (predictable_code_size() &&
-      (other.address() < reinterpret_cast<Address>(isolate()) ||
-       other.address() >= reinterpret_cast<Address>(isolate() + 1))) {
-    return kInvalidRootRegisterDelta;
-  }
-  return RootRegisterOffsetForExternalReference(isolate(), other);
-}
 
 void MacroAssembler::Load(Register destination, ExternalReference source) {
   if (root_array_available_ && options().enable_root_array_delta_access) {
-    int64_t delta = RootRegisterDelta(source);
-    if (delta != kInvalidRootRegisterDelta && is_int32(delta)) {
+    intptr_t delta = RootRegisterOffsetForExternalReference(isolate(), source);
+    if (is_int32(delta)) {
       movp(destination, Operand(kRootRegister, static_cast<int32_t>(delta)));
       return;
     }
@@ -118,8 +108,9 @@ void MacroAssembler::Load(Register destination, ExternalReference source) {
 
 void MacroAssembler::Store(ExternalReference destination, Register source) {
   if (root_array_available_ && options().enable_root_array_delta_access) {
-    int64_t delta = RootRegisterDelta(destination);
-    if (delta != kInvalidRootRegisterDelta && is_int32(delta)) {
+    intptr_t delta =
+        RootRegisterOffsetForExternalReference(isolate(), destination);
+    if (is_int32(delta)) {
       movp(Operand(kRootRegister, static_cast<int32_t>(delta)), source);
       return;
     }
@@ -159,8 +150,8 @@ void TurboAssembler::LoadRootRelative(Register destination, int32_t offset) {
 void TurboAssembler::LoadAddress(Register destination,
                                  ExternalReference source) {
   if (root_array_available_ && options().enable_root_array_delta_access) {
-    int64_t delta = RootRegisterDelta(source);
-    if (delta != kInvalidRootRegisterDelta && is_int32(delta)) {
+    intptr_t delta = RootRegisterOffsetForExternalReference(isolate(), source);
+    if (is_int32(delta)) {
       leap(destination, Operand(kRootRegister, static_cast<int32_t>(delta)));
       return;
     }
@@ -175,15 +166,39 @@ void TurboAssembler::LoadAddress(Register destination,
   Move(destination, source);
 }
 
-Operand TurboAssembler::ExternalOperand(ExternalReference target,
+Operand TurboAssembler::ExternalOperand(ExternalReference reference,
                                         Register scratch) {
   if (root_array_available_ && options().enable_root_array_delta_access) {
-    int64_t delta = RootRegisterDelta(target);
-    if (delta != kInvalidRootRegisterDelta && is_int32(delta)) {
+    int64_t delta =
+        RootRegisterOffsetForExternalReference(isolate(), reference);
+    if (is_int32(delta)) {
       return Operand(kRootRegister, static_cast<int32_t>(delta));
     }
   }
-  Move(scratch, target);
+  if (root_array_available_ && options().isolate_independent_code) {
+    if (IsAddressableThroughRootRegister(isolate(), reference)) {
+      // Some external references can be efficiently loaded as an offset from
+      // kRootRegister.
+      intptr_t offset =
+          RootRegisterOffsetForExternalReference(isolate(), reference);
+      CHECK(is_int32(offset));
+      return Operand(kRootRegister, static_cast<int32_t>(offset));
+    } else {
+      // Otherwise, do a memory load from the external reference table.
+
+      // Encode as an index into the external reference table stored on the
+      // isolate.
+      ExternalReferenceEncoder encoder(isolate());
+      ExternalReferenceEncoder::Value v = encoder.Encode(reference.address());
+      CHECK(!v.is_from_api());
+
+      movp(scratch,
+           Operand(kRootRegister,
+                   RootRegisterOffsetForExternalReferenceIndex(v.index())));
+      return Operand(scratch, 0);
+    }
+  }
+  Move(scratch, reference);
   return Operand(scratch, 0);
 }
 

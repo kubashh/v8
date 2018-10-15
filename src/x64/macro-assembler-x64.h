@@ -515,8 +515,6 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   int smi_count = 0;
   int heap_object_count = 0;
 
-  int64_t RootRegisterDelta(ExternalReference other);
-
   // Returns a register holding the smi value. The register MUST NOT be
   // modified. It may be the "smi 1 constant" register.
   Register GetSmiConstant(Smi* value);

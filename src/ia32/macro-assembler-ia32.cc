@@ -41,6 +41,13 @@ MacroAssembler::MacroAssembler(Isolate* isolate,
     code_object_ = Handle<HeapObject>::New(
         *isolate->factory()->NewSelfReferenceMarker(), isolate);
   }
+#ifdef V8_TARGET_ARCH_IA32
+  // Fake it as long as we use indirections through an embedded external
+  // reference. This will let us implement indirections without a real
+  // root register.
+  // TODO(jgruber, v8:6666): Remove once a real root register exists.
+  set_root_array_available(FLAG_embedded_builtins);
+#endif  // V8_EMBEDDED_BUILTINS
 }
 
 void TurboAssembler::InitializeRootRegister() {
@@ -129,6 +136,40 @@ void MacroAssembler::PushRoot(RootIndex index) {
   } else {
     Push(Smi::cast(*object));
   }
+}
+
+Operand TurboAssembler::ExternalOperand(ExternalReference reference,
+                                        Register scratch) {
+  Assembler::AllowExplicitEbxAccessScope read_only_access(this);
+  if (root_array_available_ && options().enable_root_array_delta_access) {
+    intptr_t offset =
+        RootRegisterOffsetForExternalReference(isolate(), reference);
+    return Operand(kRootRegister, offset);
+  }
+  if (root_array_available_ && options().isolate_independent_code) {
+    if (IsAddressableThroughRootRegister(isolate(), reference)) {
+      // Some external references can be efficiently loaded as an offset from
+      // kRootRegister.
+      intptr_t offset =
+          RootRegisterOffsetForExternalReference(isolate(), reference);
+      return Operand(kRootRegister, offset);
+    } else {
+      // Otherwise, do a memory load from the external reference table.
+
+      // Encode as an index into the external reference table stored on the
+      // isolate.
+      ExternalReferenceEncoder encoder(isolate());
+      ExternalReferenceEncoder::Value v = encoder.Encode(reference.address());
+      CHECK(!v.is_from_api());
+
+      mov(scratch,
+          Operand(kRootRegister,
+                  RootRegisterOffsetForExternalReferenceIndex(v.index())));
+      return Operand(scratch, 0);
+    }
+  }
+  Move(scratch, Immediate(reference));
+  return Operand(scratch, 0);
 }
 
 void TurboAssembler::LoadFromConstantsTable(Register destination,
@@ -421,7 +462,7 @@ void MacroAssembler::MaybeDropFrames() {
   // Check whether we need to drop frames to restart a function on the stack.
   ExternalReference restart_fp =
       ExternalReference::debug_restart_fp_address(isolate());
-  mov(eax, StaticVariable(restart_fp));
+  mov(eax, ExternalOperand(restart_fp, eax));
   test(eax, eax);
   j(not_zero, BUILTIN_CODE(isolate(), FrameDropperTrampoline),
     RelocInfo::CODE_TARGET);
