@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f48b392_7262b249",
+        "filename": "src/regexp/ia32/regexp-macro-assembler-ia32.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-15T11:54:42Z",
+      "side": 1,
+      "message": "Nit: Newline afterwards.",
+      "revId": "2da3d239882a4c2e8d7b13d1150dd43a08730747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
