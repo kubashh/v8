@@ -42,12 +42,12 @@ MacroAssembler::MacroAssembler(Isolate* isolate,
         *isolate->factory()->NewSelfReferenceMarker(), isolate);
   }
 
-#ifdef V8_EMBEDDED_BUILTINS
+#ifdef V8_TARGET_ARCH_IA32
   // Fake it as long as we use indirections through an embedded external
   // reference. This will let us implement indirections without a real
   // root register.
   // TODO(jgruber, v8:6666): Remove once a real root register exists.
-  if (FLAG_embedded_builtins) set_root_array_available(true);
+  set_root_array_available(FLAG_embedded_builtins);
 #endif  // V8_EMBEDDED_BUILTINS
 }
 
