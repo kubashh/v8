@@ -10,6 +10,7 @@
 #include "src/base/hashmap.h"
 #include "src/globals.h"
 #include "src/objects.h"
+#include "src/pointer-with-storage.h"
 #include "src/zone/zone.h"
 
 namespace v8 {
@@ -120,12 +121,11 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
     void Reparent(DeclarationScope* new_parent) const;
 
    private:
-    Scope* outer_scope_;
+    PointerWithStorageBits<Scope*, bool, 1> outer_scope_and_calls_eval_;
     Scope* top_inner_scope_;
     VariableProxy* top_unresolved_;
     base::ThreadedList<Variable>::Iterator top_local_;
     base::ThreadedList<Declaration>::Iterator top_decl_;
-    const bool outer_scope_calls_eval_;
   };
 
   enum class DeserializationMode { kIncludingVariables, kScopesOnly };
@@ -970,9 +970,6 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
 
   void SetDefaults();
 
-  // If the scope is a function scope, this is the function kind.
-  const FunctionKind function_kind_;
-
   bool has_simple_parameters_ : 1;
   // This scope contains an "use asm" annotation.
   bool asm_module_ : 1;
@@ -995,6 +992,9 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
 #endif
   bool is_skipped_function_ : 1;
   bool has_inferred_function_name_ : 1;
+
+  // If the scope is a function scope, this is the function kind.
+  const FunctionKind function_kind_;
 
   // Parameter list in source order.
   ZonePtrList<Variable> params_;
