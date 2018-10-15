@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0ca5e830_6a57f039",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-10-15T12:06:35Z",
+      "side": 1,
+      "message": "I am confused by the naming mismatch in Heap::Iterate* methods and these constants.\n\nFor example, \"strong roots\" in the heap context doesn\u0027t include read-only roots.\nBut in this file \"strong roots\" includes the read-only roots.\nIf I see \"strong roots\" in code base somewhere, I would not know the meaning without understanding the full context.\n\nLet\u0027s fix the terms \"roots\", \"strong roots\" to either always include ReadOnlyRoots or always exclude them.\n\nSo either the heap or this file should mention explicitly that they exclude/include read-only roots. Something like, Heap::IterateStrongRootsExcludingReadOnly() or kFirstStrongOrReadOnlyRoot here.\n\nI realize that these makes the name more verbose, but that would give us unambiguous concepts.",
+      "parentUuid": "d8dadc97_b831acc5",
+      "range": {
+        "startLine": 373,
+        "startChar": 2,
+        "endLine": 373,
+        "endChar": 55
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e985a78_d8e5057f",
         "filename": "src/roots.h",
         "patchSetId": 1
