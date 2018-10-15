@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c4f15cb_cdc8d55e",
+        "filename": "src/roots.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-15T14:09:22Z",
+      "side": 1,
+      "message": "Should we have static asserts that RO roots begin at 0 and strong roots begin right after RO roots?",
+      "revId": "02b57b107ccb04bfddc6b7b623d60d1f5ad27223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
