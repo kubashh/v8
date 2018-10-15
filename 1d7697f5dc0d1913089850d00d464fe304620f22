@@ -225,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "dadcb99d_528658dd",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-15T09:46:01Z",
+      "side": 1,
+      "message": "Hmm, why does it matter that the return type is const bool?",
+      "parentUuid": "46e8276e_f630c51d",
+      "range": {
+        "startLine": 126,
+        "startChar": 35,
+        "endLine": 126,
+        "endChar": 45
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3288c43_553cc6fd",
         "filename": "src/ast/scopes.h",
         "patchSetId": 10
