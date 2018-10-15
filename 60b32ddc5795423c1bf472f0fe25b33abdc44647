@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bc5212f_db7a3689",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-10-15T10:34:20Z",
+      "side": 1,
+      "message": "Why does this include read-only roots?",
+      "range": {
+        "startLine": 373,
+        "startChar": 2,
+        "endLine": 373,
+        "endChar": 55
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e985a78_d8e5057f",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-10-15T10:34:20Z",
+      "side": 1,
+      "message": "Why does this include read-only roots?",
+      "range": {
+        "startLine": 445,
+        "startChar": 2,
+        "endLine": 445,
+        "endChar": 75
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8165b42_4b161a8f",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-10-15T10:34:20Z",
+      "side": 1,
+      "message": "The name does not mention that it is iterating read-only roots.",
+      "range": {
+        "startLine": 446,
+        "startChar": 11,
+        "endLine": 446,
+        "endChar": 29
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8847f685_993cf827",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-10-15T10:34:20Z",
+      "side": 1,
+      "message": "Should this be end of mutable roots?",
+      "range": {
+        "startLine": 450,
+        "startChar": 39,
+        "endLine": 450,
+        "endChar": 67
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8106e7a0_d998a73b",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-10-15T10:34:20Z",
+      "side": 1,
+      "message": "This doesn\u0027t match the function name. I would expect kFirstStrongMutableRoot.",
+      "range": {
+        "startLine": 463,
+        "startChar": 49,
+        "endLine": 463,
+        "endChar": 66
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4be0322c_9dcf0068",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-10-15T10:34:20Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 466,
+        "startChar": 50,
+        "endLine": 466,
+        "endChar": 65
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
