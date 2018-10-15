@@ -16,6 +16,24 @@
       "revId": "02b57b107ccb04bfddc6b7b623d60d1f5ad27223",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc802c82_092182ea",
+        "filename": "src/roots.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-10-15T14:27:03Z",
+      "side": 1,
+      "message": "This file defines all of those things, so it feels odd to have a static assert to say the same thing. E.g.\nkFirstRoot \u003d 0, kFirstReadOnlyRoot \u003d kFirstRoot\nstatic_assert(kFirstRoot \u003d\u003d 0)\n\nIt would be more useful to have that assert at a place where that assumption was used. I\u0027ve added one for \"strong roots begin right after RO roots\" to strong_or_read_only_roots_begin and strong_or_read_only_roots_end.\n\nIf you think of more places I can add more.",
+      "parentUuid": "5c4f15cb_cdc8d55e",
+      "revId": "02b57b107ccb04bfddc6b7b623d60d1f5ad27223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
