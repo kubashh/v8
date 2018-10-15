@@ -16,6 +16,24 @@
       "revId": "528e8152ba1f2def2c4446d2c6466266d7eec00c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c984d2c_54f0b1a3",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2348,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-10-15T18:30:23Z",
+      "side": 1,
+      "message": "That already works:\n\n  let q \u003d { [\"z\"]: blah \u003d class { static y \u003d this.name } }\n  print(q.z.y \u003d\u003d\u003d q.z.name); // true",
+      "parentUuid": "ee8280ba_e92de3d1",
+      "revId": "528e8152ba1f2def2c4446d2c6466266d7eec00c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
