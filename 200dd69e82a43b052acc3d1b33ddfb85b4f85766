@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "bc34d315_3be4b12a",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 943,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-10-15T19:45:36Z",
+      "side": 1,
+      "message": "With the new bottleneck, there is no need for a helper. Thanks!",
+      "parentUuid": "5bf9a35b_dbe6ad70",
+      "revId": "200dd69e82a43b052acc3d1b33ddfb85b4f85766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81cab392_1fe9b71c",
         "filename": "src/deoptimizer.cc",
         "patchSetId": 1
