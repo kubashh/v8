@@ -899,6 +899,7 @@ torque_files = [
   "src/builtins/base.tq",
   "src/builtins/array.tq",
   "src/builtins/array-copywithin.tq",
+  "src/builtins/array-filter.tq",
   "src/builtins/array-foreach.tq",
   "src/builtins/array-lastindexof.tq",
   "src/builtins/array-reverse.tq",

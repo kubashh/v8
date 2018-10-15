@@ -235,6 +235,9 @@ extern macro ThrowTypeError(
     Context, constexpr MessageTemplate, Object, Object, Object): never;
 extern macro ArraySpeciesCreate(Context, Object, Number): JSReceiver;
 extern macro InternalArrayCreate(Context, Number): JSArray;
+extern macro BuildAppendJSArray(constexpr ElementsKind, JSArray, Object): void
+    labels Bailout;
+
 extern macro EnsureArrayPushable(Map): ElementsKind
     labels Bailout;
 extern macro EnsureArrayLengthWritable(Map) labels Bailout;
@@ -475,6 +478,7 @@ extern macro ChangeInt32ToIntPtr(int32): intptr;   // Sign-extends.
 extern macro ChangeUint32ToWord(uint32): uintptr;  // Doesn't sign-extend.
 extern macro LoadNativeContext(Context): NativeContext;
 extern macro LoadJSArrayElementsMap(constexpr ElementsKind, Context): Map;
+extern macro LoadJSArrayElementsMap(ElementsKind, Context): Map;
 
 extern macro NumberConstant(constexpr float64): Number;
 extern macro NumberConstant(constexpr int32): Number;
