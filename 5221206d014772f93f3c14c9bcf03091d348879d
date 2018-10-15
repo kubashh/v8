@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "12906584_d32d8786",
+        "filename": "src/parsing/expression-classifier.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T10:56:59Z",
+      "side": 1,
+      "message": "I did not say it reduces size, just that we don\u0027t need it because removing the bit field does not increase the size.\nIf you like I can just remove this from the cl.",
+      "parentUuid": "fd95828c_63ca2b4e",
+      "range": {
+        "startLine": 208,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 41
+      },
+      "revId": "5221206d014772f93f3c14c9bcf03091d348879d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0b4a136e_c2cf1b40",
         "filename": "src/parsing/func-name-inferrer.h",
         "patchSetId": 12
@@ -45,6 +69,30 @@
       "revId": "5221206d014772f93f3c14c9bcf03091d348879d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5a81a98_05125555",
+        "filename": "src/parsing/func-name-inferrer.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T10:56:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b4a136e_c2cf1b40",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 25
+      },
+      "revId": "5221206d014772f93f3c14c9bcf03091d348879d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,54 @@
     },
     {
       "key": {
+        "uuid": "4c5f4978_19afcbf1",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T10:56:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27f2aa60_dc389cc0",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 7
+      },
+      "revId": "5221206d014772f93f3c14c9bcf03091d348879d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec949efb_ce84ce03",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T10:56:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a022827_5b7f5a8a",
+      "range": {
+        "startLine": 1,
+        "startChar": 8,
+        "endLine": 1,
+        "endChar": 30
+      },
+      "revId": "5221206d014772f93f3c14c9bcf03091d348879d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "516edd82_359cb5c0",
         "filename": "src/pointer-with-storage.h",
         "patchSetId": 12
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "b9748a71_19752f1f",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T10:56:59Z",
+      "side": 1,
+      "message": "makes sense",
+      "parentUuid": "516edd82_359cb5c0",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 8
+      },
+      "revId": "5221206d014772f93f3c14c9bcf03091d348879d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce9a6f0c_ee779357",
         "filename": "src/pointer-with-storage.h",
         "patchSetId": 12
@@ -137,6 +257,30 @@
       "revId": "5221206d014772f93f3c14c9bcf03091d348879d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "383ae17d_1a3d88af",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T10:56:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce9a6f0c_ee779357",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 5
+      },
+      "revId": "5221206d014772f93f3c14c9bcf03091d348879d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
