@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "efe629e4_c19c1d79",
+        "filename": "src/builtins/builtins-intl.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-10-15T20:38:18Z",
+      "side": 1,
+      "message": "If you feel ok to leave the current shape of src/builtins/builtins-intl.cc ASIS I can abandon this CL. I thought you and Adam like me to clean up it and make the code more reusable.",
+      "parentUuid": "a0caee99_6a170909",
+      "revId": "0effa9c2500f38f35dbd6f55ba34b5f0a75cec50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd09c9b9_a9bdddf7",
         "filename": "src/objects/js-break-iterator.cc",
         "patchSetId": 4
