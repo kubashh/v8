@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "b6d43dcf_9bfc8913",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-10-15T13:21:01Z",
+      "side": 1,
+      "message": "Good point about the Heap method. I\u0027ll spell it the enum values and accessors in roots.h and leave that Heap alone.",
+      "parentUuid": "0ca5e830_6a57f039",
+      "range": {
+        "startLine": 373,
+        "startChar": 2,
+        "endLine": 373,
+        "endChar": 55
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e985a78_d8e5057f",
         "filename": "src/roots.h",
         "patchSetId": 1
