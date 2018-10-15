@@ -22,6 +22,30 @@
       "revId": "8dd93a267f8b871acda07ce2a70f957e8de83507",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e022fdad_ba1cc6f6",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 5058,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "ea320f64_95826314",
+      "range": {
+        "startLine": 5058,
+        "startChar": 0,
+        "endLine": 5058,
+        "endChar": 1
+      },
+      "revId": "8dd93a267f8b871acda07ce2a70f957e8de83507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

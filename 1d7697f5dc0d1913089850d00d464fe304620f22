@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c7abe4b3_d82c9be5",
+        "filename": "src/assert-scope.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba971d9a_8d5b8e2f",
+      "range": {
+        "startLine": 72,
+        "startChar": 2,
+        "endLine": 72,
+        "endChar": 68
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c60fe326_31974d1b",
         "filename": "src/assert-scope.cc",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "515c28ea_6ed49a0f",
+        "filename": "src/assert-scope.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c60fe326_31974d1b",
+      "range": {
+        "startLine": 91,
+        "startChar": 2,
+        "endLine": 91,
+        "endChar": 7
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8da7fa6f_631d7cf2",
+        "filename": "src/assert-scope.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f20e431b_235791c2",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 21
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b33a4c6e_f4a4dc07",
         "filename": "src/ast/scopes.h",
         "patchSetId": 10
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "92e7c26f_a9fa4282",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b33a4c6e_f4a4dc07",
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33c67d52_b4f4a335",
         "filename": "src/ast/scopes.h",
         "patchSetId": 10
@@ -99,6 +189,30 @@
       "writtenOn": "2018-10-12T07:46:35Z",
       "side": 1,
       "message": "Not sure if \"const\" is meaningful here, since we can always set / get the bool part of the PointerWithStorageBits independently. Does it somehow prevent re-setting it now that it\u0027s const bool? I guess not? If not, you should make it just bool.",
+      "range": {
+        "startLine": 126,
+        "startChar": 35,
+        "endLine": 126,
+        "endChar": 45
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46e8276e_f630c51d",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "It does not prevent setting the bit to a different value. But it communicates the intend and the return type of GetStorage meaning the compiler sees the bool as const.",
+      "parentUuid": "33c67d52_b4f4a335",
       "range": {
         "startLine": 126,
         "startChar": 35,
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "3522104f_211ccdd6",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Better member packing",
+      "parentUuid": "c3288c43_553cc6fd",
+      "range": {
+        "startLine": 998,
+        "startChar": 2,
+        "endLine": 999,
+        "endChar": 36
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a2822cf7_2ba16e7a",
         "filename": "src/parsing/expression-classifier.h",
         "patchSetId": 10
@@ -145,6 +283,30 @@
       "writtenOn": "2018-10-12T07:46:35Z",
       "side": 1,
       "message": "Why?",
+      "range": {
+        "startLine": 208,
+        "startChar": 2,
+        "endLine": 210,
+        "endChar": 41
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1517e16_6249d6a6",
+        "filename": "src/parsing/expression-classifier.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "We don\u0027t need to compress anything here because the size of the type does not change and without bitfiles accesses to the members are a bit cheaper. It made a difference regarding parse-time when I tried it on my machine. I\u0027m a bit unsure so because it could behave differently on smaller architectures.",
+      "parentUuid": "a2822cf7_2ba16e7a",
       "range": {
         "startLine": 208,
         "startChar": 2,
@@ -180,6 +342,30 @@
     },
     {
       "key": {
+        "uuid": "dcffb064_d20a5e93",
+        "filename": "src/parsing/parser.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a1a3a05_02cf6862",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 37
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6cc23710_b81eb2a3",
         "filename": "src/parsing/parser.h",
         "patchSetId": 10
@@ -200,6 +386,30 @@
       "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "034475dc_f8a7c042",
+        "filename": "src/parsing/parser.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cc23710_b81eb2a3",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 28
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -226,6 +436,30 @@
     },
     {
       "key": {
+        "uuid": "c1b72ec5_d92e281f",
+        "filename": "src/parsing/preparsed-scope-data-impl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "move this one into a other cl",
+      "parentUuid": "844e4614_621966e0",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 6
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1df31b8_71e682dd",
         "filename": "src/parsing/preparser.h",
         "patchSetId": 10
@@ -246,6 +480,30 @@
       "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5805f483_7b1ca1d7",
+        "filename": "src/parsing/preparser.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1df31b8_71e682dd",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 14,
+        "endChar": 0
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -272,6 +530,30 @@
     },
     {
       "key": {
+        "uuid": "fdc7e48a_c61b3b98",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32b2c5b4_5205cc9b",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 6
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0d42b003_85ec78ae",
         "filename": "src/pointer-with-storage.h",
         "patchSetId": 10
@@ -292,6 +574,30 @@
       "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db1d717b_5cb059b8",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-15T07:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d42b003_85ec78ae",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 41
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
