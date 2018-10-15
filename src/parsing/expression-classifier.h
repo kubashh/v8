@@ -183,25 +183,17 @@ class ExpressionClassifierBase {
 #endif
     // Propagate errors from inner, but don't overwrite already recorded
     // errors.
-    unsigned non_arrow_inner_invalid_productions =
-        inner->invalid_productions_ & ~ArrowFormalParametersProduction;
-    if (non_arrow_inner_invalid_productions) {
-      unsigned errors = non_arrow_inner_invalid_productions & productions &
-                        ~this->invalid_productions_;
-      // The result will continue to be a valid arrow formal parameters if the
-      // inner expression is a valid binding pattern.
-      if (productions & ArrowFormalParametersProduction) {
-        if (is_valid_arrow_formal_parameters() &&
-            !inner->is_valid_binding_pattern()) {
-          errors |= ArrowFormalParametersProduction;
-        }
-      }
-      if (errors != 0) {
-        static_cast<ErrorTracker*>(this)->AccumulateErrorImpl(
-            inner, productions, errors);
-        this->invalid_productions_ |= errors;
-      }
-    }
+    unsigned filter = productions & ~this->invalid_productions_;
+    unsigned errors =
+        ~ArrowFormalParametersProduction & inner->invalid_productions_ & filter;
+    static const unsigned shift =
+        kArrowFormalParametersProduction - kBindingPatternProduction;
+    unsigned binding_as_arrow =
+        (inner->invalid_productions_ & BindingPatternProduction) << shift;
+    errors |= binding_as_arrow & filter;
+    static_cast<ErrorTracker*>(this)->AccumulateErrorImpl(inner, productions,
+                                                          errors);
+    this->invalid_productions_ |= errors;
     static_cast<ErrorTracker*>(this)->RewindErrors(inner);
   }
 
@@ -297,16 +289,20 @@ class ExpressionClassifierErrorTracker
 
   void AccumulateErrorImpl(ExpressionClassifier<Types>* const inner,
                            unsigned productions, unsigned errors) {
+    unsigned non_arrow_errors = errors & ~TP::ArrowFormalParametersProduction;
     // Traverse the list of errors reported by the inner classifier
     // to copy what's necessary.
     int binding_pattern_index = inner->reported_errors_end_;
-    for (int i = inner->reported_errors_begin_; i < inner->reported_errors_end_;
-         i++) {
-      int k = this->reported_errors_->at(i).kind;
-      if (errors & (1 << k)) this->Copy(i);
+    for (int i = inner->reported_errors_begin_; errors != 0; i++) {
+      int mask = 1 << this->reported_errors_->at(i).kind;
+      if ((non_arrow_errors & mask) != 0) {
+        errors ^= mask;
+        this->Copy(i);
+      }
       // Check if it's a BP error that has to be copied to an AFP error.
-      if (k == ErrorKind::kBindingPatternProduction &&
+      if (mask == TP::BindingPatternProduction &&
           (errors & TP::ArrowFormalParametersProduction) != 0) {
+        errors ^= TP::ArrowFormalParametersProduction;
         if (this->reported_errors_end_ <= i) {
           // If the BP error itself has not already been copied,
           // copy it now and change it to an AFP error.
