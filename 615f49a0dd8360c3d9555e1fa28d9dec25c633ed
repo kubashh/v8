@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f72462b2_90456fec",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-10-15T12:35:59Z",
+      "side": 1,
+      "message": "{}",
+      "revId": "615f49a0dd8360c3d9555e1fa28d9dec25c633ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
