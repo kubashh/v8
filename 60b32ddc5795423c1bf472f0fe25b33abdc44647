@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d8dadc97_b831acc5",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-10-15T11:14:29Z",
+      "side": 1,
+      "message": "I need a list to iterate that includes everything except for the Smis. The read-only roots _are_ strong. We ignore them for GC because they\u0027re so strong that it\u0027s not necessary:)\n\nI initially wanted to call it kFirstHeapObjectRoot and kLastHeapObjectRoot but that\u0027s misleading as it excludes the string table which is also a HeapObject.\n\nSo in the end I settled for calling these strong and calling the non-read-only ones explicitly mutable.\n\nHappy to make name changes if you think of better ones!",
+      "parentUuid": "1bc5212f_db7a3689",
+      "range": {
+        "startLine": 373,
+        "startChar": 2,
+        "endLine": 373,
+        "endChar": 55
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e985a78_d8e5057f",
         "filename": "src/roots.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a7f2d64_f1a4446d",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-10-15T11:14:29Z",
+      "side": 1,
+      "message": "As explained above.",
+      "parentUuid": "3e985a78_d8e5057f",
+      "range": {
+        "startLine": 445,
+        "startChar": 2,
+        "endLine": 445,
+        "endChar": 75
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "1e19d81f_376f1688",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-10-15T11:14:29Z",
+      "side": 1,
+      "message": "It doesn\u0027t but there\u0027s a function has Mutable in its name. I hoped that would make the contrast clear (+ the comment above does say that it does).",
+      "parentUuid": "a8165b42_4b161a8f",
+      "range": {
+        "startLine": 446,
+        "startChar": 11,
+        "endLine": 446,
+        "endChar": 29
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8847f685_993cf827",
         "filename": "src/roots.h",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "440cf0ad_1e1132e5",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-10-15T11:14:29Z",
+      "side": 1,
+      "message": "Ooops. I\u0027m surprised this didn\u0027t cause any failures as it would have failed to iterate over the roots during GC.",
+      "parentUuid": "8847f685_993cf827",
+      "range": {
+        "startLine": 450,
+        "startChar": 39,
+        "endLine": 450,
+        "endChar": 67
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "3afeaad4_52c86ebe",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-10-15T11:14:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8106e7a0_d998a73b",
+      "range": {
+        "startLine": 463,
+        "startChar": 49,
+        "endLine": 463,
+        "endChar": 66
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4be0322c_9dcf0068",
         "filename": "src/roots.h",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f037e5e9_907b9eeb",
+        "filename": "src/roots.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-10-15T11:14:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4be0322c_9dcf0068",
+      "range": {
+        "startLine": 466,
+        "startChar": 50,
+        "endLine": 466,
+        "endChar": 65
+      },
+      "revId": "60b32ddc5795423c1bf472f0fe25b33abdc44647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
