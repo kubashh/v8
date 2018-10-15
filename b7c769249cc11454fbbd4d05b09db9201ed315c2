@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0510f1cd_2c6cd2d6",
+        "filename": "src/parsing/expression-classifier.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-15T13:59:37Z",
+      "side": 1,
+      "message": "Maybe add a comment like\n// Convert BindingPatternProduction error from the inner classifier to the ArrowFormalParametersProduction error if the latter is not reported yet and passes the filter.",
+      "revId": "b7c769249cc11454fbbd4d05b09db9201ed315c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
