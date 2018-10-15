@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b795b365_fd97a810",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2018-10-15T16:50:06Z",
+      "side": 1,
+      "message": "I vaguely remember discussion about these, and had an impression that compile may be initiated by the embedder. I guess I was mistaken.",
+      "revId": "d3c35d160df1f556595441873772213c29e0944d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
