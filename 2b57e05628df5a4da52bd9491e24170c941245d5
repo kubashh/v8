@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df684336_a3f04949",
+        "filename": "infra/config/cq.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-10-15T10:15:41Z",
+      "side": 1,
+      "message": "Note that this will include header files in the subdirectories too, e.g. include/libplatform/libplatform.h. If this is undesired, please let me know and I\u0027ll update the regexp like this:\n\n  path_regexp: \"include/[^/]+\\\\.h\"\n\nThis will ensure that only header files residing directly in include directory will trigger the builder on CQ.",
+      "range": {
+        "startLine": 121,
+        "startChar": 22,
+        "endLine": 121,
+        "endChar": 36
+      },
+      "revId": "2b57e05628df5a4da52bd9491e24170c941245d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
