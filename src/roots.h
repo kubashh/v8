@@ -22,6 +22,7 @@ class Isolate;
 class Map;
 class String;
 class Symbol;
+class RootVisitor;
 
 // Defines all the read-only roots in Heap.
 #define STRONG_READ_ONLY_ROOT_LIST(V)                                          \
@@ -355,10 +356,6 @@ enum class RootIndex : uint16_t {
   kFirstRoot = 0,
   kLastRoot = kRootListLength - 1,
 
-  // kStringTable is not a strong root.
-  kFirstStrongRoot = kFirstRoot,
-  kLastStrongRoot = kStringTable - 1,
-
 #define ROOT(...) +1
   kReadOnlyRootsCount = 0 READ_ONLY_ROOT_LIST(ROOT),
   kImmortalImmovableRootsCount =
@@ -366,6 +363,16 @@ enum class RootIndex : uint16_t {
 #undef ROOT
   kFirstReadOnlyRoot = kFirstRoot,
   kLastReadOnlyRoot = kFirstReadOnlyRoot + kReadOnlyRootsCount - 1,
+
+  // The strong roots visited by the garbage collector (not including read-only
+  // roots).
+  kFirstStrongMutableRoot = kLastReadOnlyRoot + 1,
+  // (kStringTable is not a strong root).
+  kLastStrongMutableRoot = kStringTable - 1,
+
+  // All of the strong roots including read-only roots.
+  kFirstStrongRoot = kFirstRoot,
+  kLastStrongRoot = kLastStrongMutableRoot,
 
   // All immortal immovable roots including read only ones.
   kFirstImmortalImmovableRoot = kFirstReadOnlyRoot,
@@ -428,18 +435,35 @@ class RootsTable {
   }
 
  private:
-  Object** read_only_roots_begin() {
-    return &roots_[static_cast<size_t>(RootIndex::kFirstReadOnlyRoot)];
+  Object** begin() {
+    return &roots_[static_cast<size_t>(RootIndex::kFirstRoot)];
   }
-  inline Object** read_only_roots_end() {
-    return &roots_[static_cast<size_t>(RootIndex::kLastReadOnlyRoot) + 1];
+  Object** end() {
+    return &roots_[static_cast<size_t>(RootIndex::kLastRoot) + 1];
   }
 
+  // Used for iterating over all of the read-only and mutable strong roots.
   Object** strong_roots_begin() {
     return &roots_[static_cast<size_t>(RootIndex::kFirstStrongRoot)];
   }
   Object** strong_roots_end() {
     return &roots_[static_cast<size_t>(RootIndex::kLastStrongRoot) + 1];
+  }
+
+  // The read-only, strong mutable and Smi roots as defined by these accessors
+  // are all disjoint.
+  Object** read_only_roots_begin() {
+    return &roots_[static_cast<size_t>(RootIndex::kFirstReadOnlyRoot)];
+  }
+  Object** read_only_roots_end() {
+    return &roots_[static_cast<size_t>(RootIndex::kLastReadOnlyRoot) + 1];
+  }
+
+  Object** strong_mutable_roots_begin() {
+    return &roots_[static_cast<size_t>(RootIndex::kFirstStrongMutableRoot)];
+  }
+  Object** strong_mutable_roots_end() {
+    return &roots_[static_cast<size_t>(RootIndex::kLastStrongMutableRoot) + 1];
   }
 
   Object** smi_roots_begin() {
@@ -462,6 +486,7 @@ class RootsTable {
   friend class Heap;
   friend class Factory;
   friend class ReadOnlyRoots;
+  friend class RootsSerializer;
 };
 
 class ReadOnlyRoots {
@@ -480,8 +505,13 @@ class ReadOnlyRoots {
   V8_INLINE Map* MapForFixedTypedArray(ElementsKind elements_kind);
   V8_INLINE FixedTypedArrayBase* EmptyFixedTypedArrayForMap(const Map* map);
 
+  // Iterate over all the read-only roots. This is not necessary for garbage
+  // collection and is usually only performed as part of (de)serialization or
+  // heap verification.
+  void Iterate(RootVisitor* visitor);
+
  private:
-  const RootsTable& roots_table_;
+  RootsTable& roots_table_;
 };
 
 }  // namespace internal

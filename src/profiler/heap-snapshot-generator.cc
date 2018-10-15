@@ -1427,7 +1427,8 @@ bool V8HeapExplorer::IterateAndExtractReferences(
   // first. Otherwise a particular JSFunction object could set
   // its custom name to a generic builtin.
   RootsReferencesExtractor extractor(this);
-  heap_->IterateRoots(&extractor, VISIT_ONLY_STRONG_FOR_SERIALIZATION);
+  ReadOnlyRoots(heap_).Iterate(&extractor);
+  heap_->IterateRoots(&extractor, VISIT_ONLY_STRONG);
   extractor.SetVisitingWeakRoots();
   heap_->IterateWeakGlobalHandles(&extractor);
 
