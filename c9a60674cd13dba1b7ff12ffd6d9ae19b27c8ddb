@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "69811d4c_f5cb3978",
+        "filename": "src/parsing/token.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-10-15T11:32:38Z",
+      "side": 1,
+      "message": "I wish there was a better way to check that this doesn\u0027t change from future refactorings other than the comment",
+      "revId": "c9a60674cd13dba1b7ff12ffd6d9ae19b27c8ddb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
