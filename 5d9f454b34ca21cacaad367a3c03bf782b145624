@@ -16,6 +16,24 @@
       "revId": "5d9f454b34ca21cacaad367a3c03bf782b145624",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98cb193c_85cfd4a4",
+        "filename": "src/builtins/builtins-async-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-16T06:42:58Z",
+      "side": 1,
+      "message": "These promises have no slack.",
+      "parentUuid": "0b6c975e_653930be",
+      "revId": "5d9f454b34ca21cacaad367a3c03bf782b145624",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
