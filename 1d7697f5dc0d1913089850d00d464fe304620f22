@@ -249,6 +249,30 @@
     },
     {
       "key": {
+        "uuid": "f21e308d_4cd89ef3",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T19:25:44Z",
+      "side": 1,
+      "message": "I think this const used to guarantee that the value is set only in the constructor.\nWell... we could dive even further into template magic and disable the payload setter and update methods if the payload type is const. See std::enable_if.\nWdyt?",
+      "parentUuid": "dadcb99d_528658dd",
+      "range": {
+        "startLine": 126,
+        "startChar": 35,
+        "endLine": 126,
+        "endChar": 45
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3288c43_553cc6fd",
         "filename": "src/ast/scopes.h",
         "patchSetId": 10
@@ -340,6 +364,30 @@
       "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36ed10ee_99300211",
+        "filename": "src/parsing/expression-classifier.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T19:25:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d1517e16_6249d6a6",
+      "range": {
+        "startLine": 208,
+        "startChar": 2,
+        "endLine": 210,
+        "endChar": 41
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
