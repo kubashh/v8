@@ -1,0 +1,484 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea1ef309_07893e1c",
+        "filename": "src/assert-scope.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "It would be useful to have a constructor with pointer and \"storage\" value.",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2a7c21b_5981114e",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a63fcf94_5d6b8d07",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "Does it make sense to also implement -\u003e operator?",
+      "range": {
+        "startLine": 167,
+        "startChar": 32,
+        "endLine": 167,
+        "endChar": 44
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50ea59de_498d0bc2",
+        "filename": "src/parsing/func-name-inferrer.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "I guess this cast is not needed.",
+      "range": {
+        "startLine": 100,
+        "startChar": 13,
+        "endLine": 100,
+        "endChar": 34
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dab76230_3e322538",
+        "filename": "src/parsing/parser.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "It would be nice to have a constructor.",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58e6d023_ee502290",
+        "filename": "src/parsing/rewriter.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "Please move this block a bit up right after the factory_.\n\nAnd we could have packed the bools into the pointers :)",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6296806d_1b0fc0d2",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "Maybe even\n  int position_:30;",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31e78dae_b97b9815",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "Ctor.",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39cb620e_08490b68",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "StoredType",
+      "range": {
+        "startLine": 16,
+        "startChar": 60,
+        "endLine": 16,
+        "endChar": 71
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c8d602d_90fa9b2a",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "How about PointerWithPayload ?",
+      "range": {
+        "startLine": 29,
+        "startChar": 6,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aea3913_3c6adbbf",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "This is the alignment of the pointer values while you probably meant to check alignment of the pointed type.\nHow about parameterizing the class with the actual type like this:\n  PointerWithPayload\u003cScope, bool, 1\u003e blah?\n\nOnce you do this you could also implement operator*().",
+      "range": {
+        "startLine": 32,
+        "startChar": 6,
+        "endLine": 32,
+        "endChar": 26
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32f1d26f_e8de6b26",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "Maybe\n  does not have",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 27
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c87067e_7fe64d75",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "uintptr_t{1} and the outer cast would not be needed.",
+      "range": {
+        "startLine": 38,
+        "startChar": 21,
+        "endLine": 38,
+        "endChar": 29
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5318c842_f6f2b7fd",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "uintptr_t{1} instead of cast.",
+      "range": {
+        "startLine": 39,
+        "startChar": 57,
+        "endLine": 39,
+        "endChar": 58
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b44c3fd6_fa6e5dd6",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "Dereferencing seems to be a const operation.",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f79c181e_72a9998f",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "How about Payload?",
+      "range": {
+        "startLine": 48,
+        "startChar": 23,
+        "endLine": 48,
+        "endChar": 33
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63695d78_97cad4db",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "Please group get/set methods of the same thing together.",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22950a79_21a2cc6d",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "DCHECK_EQ",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e9aa31a_6a7ce266",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "kStorageMask",
+      "range": {
+        "startLine": 55,
+        "startChar": 64,
+        "endLine": 55,
+        "endChar": 77
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4edaac37_10053c20",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "DCHECK_EQ",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78fd88cf_f0c3e306",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "DCHECK_EQ",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28e30390_d533768e",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "kPointerMask",
+      "range": {
+        "startLine": 61,
+        "startChar": 27,
+        "endLine": 61,
+        "endChar": 40
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bacb2937_9522e14c",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19bafb15_f04e051b",
+        "filename": "src/pointer-with-storage.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-16T07:45:51Z",
+      "side": 1,
+      "message": "uintptr_t or even Address",
+      "range": {
+        "startLine": 66,
+        "startChar": 2,
+        "endLine": 66,
+        "endChar": 10
+      },
+      "revId": "19c801062c8ea46e588647688d8378693a907444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
