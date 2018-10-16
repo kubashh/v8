@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0495ce5_5bec0ee9",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-10-16T10:36:20Z",
+      "side": 1,
+      "message": "E.g. https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8932602105304215728/+/steps/Num_Fuzz_-_scavenge/0/logs/regress-crbug-882233-2/0",
+      "revId": "9b7977d2b55aba3aa092eaccf9f63b0e4f5a1420",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
