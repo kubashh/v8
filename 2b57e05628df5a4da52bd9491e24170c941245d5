@@ -22,6 +22,76 @@
       "revId": "2b57e05628df5a4da52bd9491e24170c941245d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "352306eb_abffd514",
+        "filename": "infra/config/cq.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-10-16T12:31:24Z",
+      "side": 1,
+      "message": "It\u0027s find as it is.",
+      "parentUuid": "df684336_a3f04949",
+      "range": {
+        "startLine": 121,
+        "startChar": 22,
+        "endLine": 121,
+        "endChar": 36
+      },
+      "revId": "2b57e05628df5a4da52bd9491e24170c941245d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "16a4bf3d_711a6648",
+        "filename": "infra/config/cq.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-10-16T12:31:24Z",
+      "side": 1,
+      "message": "nit: \\\\.",
+      "range": {
+        "startLine": 122,
+        "startChar": 29,
+        "endLine": 122,
+        "endChar": 30
+      },
+      "revId": "2b57e05628df5a4da52bd9491e24170c941245d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "288976a2_a9bf1c95",
+        "filename": "infra/config/cq.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-10-16T12:31:24Z",
+      "side": 1,
+      "message": "This is not really on my radar. Could you update the comment to reflect the new changes? E.g. after this change a path regexp for api.cc and the header files should be added. Or maybe we can add it already now and keep the bots experimental with a higher percentage?\n\nCould you also add the bug https://crbug.com/v8/8058 to the comment now, as after this change git blame will not be helpful anymore.",
+      "range": {
+        "startLine": 129,
+        "startChar": 26,
+        "endLine": 130,
+        "endChar": 29
+      },
+      "revId": "2b57e05628df5a4da52bd9491e24170c941245d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
