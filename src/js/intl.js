@@ -47,13 +47,6 @@ var AVAILABLE_LOCALES = {
   'segmenter': UNDEFINED,
 };
 
-/* Make JS array[] out of InternalArray */
-function makeArray(input) {
-  var array = [];
-  %MoveArrayContents(input, array);
-  return array;
-}
-
 /**
  * Returns an InternalArray where all locales are canonicalized and duplicates
  * removed.
@@ -87,14 +80,6 @@ function canonicalizeLocaleList(locales) {
 
   return seen;
 }
-
-// ECMA 402 section 8.2.1
-DEFINE_METHOD(
-  GlobalIntl,
-  getCanonicalLocales(locales) {
-    return makeArray(canonicalizeLocaleList(locales));
-  }
-);
 
 // Save references to Intl objects and methods we use, for added security.
 var savedObjects = {
