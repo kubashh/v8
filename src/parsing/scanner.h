@@ -15,6 +15,7 @@
 #include "src/globals.h"
 #include "src/messages.h"
 #include "src/parsing/token.h"
+#include "src/pointer-with-payload.h"
 #include "src/unicode-decoder.h"
 #include "src/unicode.h"
 
@@ -501,8 +502,8 @@ class Scanner {
 
     Vector<byte> backing_store_;
     int position_;
-    bool is_one_byte_;
-    bool is_used_;
+    bool is_one_byte_ : 1;
+    bool is_used_ : 1;
 
     DISALLOW_COPY_AND_ASSIGN(LiteralBuffer);
   };
@@ -512,17 +513,18 @@ class Scanner {
   class LiteralScope {
    public:
     explicit LiteralScope(Scanner* scanner)
-        : buffer_(&scanner->next().literal_chars), complete_(false) {
-      buffer_->Start();
+        : buffer_and_complete_(&scanner->next().literal_chars) {
+      buffer_()->Start();
     }
     ~LiteralScope() {
-      if (!complete_) buffer_->Drop();
+      if (!buffer_and_complete_.GetPayload()) buffer_()->Drop();
     }
-    void Complete() { complete_ = true; }
+    void Complete() { buffer_and_complete_.SetPayload(true); }
 
    private:
-    LiteralBuffer* buffer_;
-    bool complete_;
+    LiteralBuffer* buffer_() const { return buffer_and_complete_.GetPointer(); }
+
+    PointerWithPayload<LiteralBuffer, bool, 1> buffer_and_complete_;
   };
 
   // The current and look-ahead token.
@@ -531,10 +533,10 @@ class Scanner {
     LiteralBuffer literal_chars;
     LiteralBuffer raw_literal_chars;
     Token::Value token = Token::UNINITIALIZED;
+    Token::Value contextual_token = Token::UNINITIALIZED;
     MessageTemplate::Template invalid_template_escape_message =
         MessageTemplate::kNone;
     Location invalid_template_escape_location;
-    Token::Value contextual_token = Token::UNINITIALIZED;
     uint32_t smi_value_ = 0;
     bool after_line_terminator = false;
   };
