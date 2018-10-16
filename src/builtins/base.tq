@@ -52,6 +52,8 @@ type FixedTypedArrayBase extends FixedArrayBase
     generates 'TNode<FixedTypedArrayBase>';
 type FixedTypedArray extends FixedTypedArrayBase
     generates 'TNode<FixedTypedArray>';
+type SloppyArgumentsElements extends FixedArray
+    generates 'TNode<FixedArray>';
 type NumberDictionary extends HeapObject
     generates 'TNode<NumberDictionary>';
 
@@ -158,6 +160,18 @@ const kCalledOnNullOrUndefined: constexpr MessageTemplate
     generates 'MessageTemplate::kCalledOnNullOrUndefined';
 
 const kMaxSafeInteger: constexpr float64 generates 'kMaxSafeInteger';
+
+const kMaxRegularHeapObjectSize: constexpr int31
+    generates 'kMaxRegularHeapObjectSize';
+
+const kMaxNewSpaceFixedArrayElements: constexpr int31
+    generates 'FixedArray::kMaxRegularLength';
+const kSloppyArgumentsArgumentsIndex: constexpr int31
+    generates 'SloppyArgumentsElements::kArgumentsIndex';
+const kSloppyArgumentsContextIndex: constexpr int31
+    generates 'SloppyArgumentsElements::kContextIndex';
+const kSloppyArgumentsParameterMapStart: constexpr int31
+    generates 'SloppyArgumentsElements::kParameterMapStart';
 
 const kTruncateMinusZero: constexpr ToIntegerTruncationMode
     generates 'ToIntegerTruncationMode::kTruncateMinusZero';
@@ -399,6 +413,9 @@ extern macro HeapObjectToFixedArray(HeapObject): FixedArray
     labels CastError;
 extern macro HeapObjectToFixedDoubleArray(HeapObject): FixedDoubleArray
     labels CastError;
+extern macro HeapObjectToSloppyArgumentsElements(HeapObject):
+    SloppyArgumentsElements
+    labels CastError;
 extern macro TaggedToNumber(Object): Number
     labels CastError;
 
@@ -415,6 +432,10 @@ CastHeapObject<FixedArray>(o: HeapObject): FixedArray
 CastHeapObject<FixedDoubleArray>(o: HeapObject): FixedDoubleArray
     labels CastError {
   return HeapObjectToFixedDoubleArray(o) otherwise CastError;
+}
+CastHeapObject<SloppyArgumentsElements>(o: HeapObject): SloppyArgumentsElements
+    labels CastError {
+  return HeapObjectToSloppyArgumentsElements(o) otherwise CastError;
 }
 CastHeapObject<JSDataView>(o: HeapObject): JSDataView
     labels CastError {
@@ -748,8 +769,15 @@ const kEmptyFixedArray: FixedArrayBase =
 
 extern macro BranchIfFastJSArray(Object, Context): never
     labels Taken, NotTaken;
+extern macro BranchIfFastJSArrayForCopy(Object, Context): never
+    labels Taken, NotTaken;
 extern macro BranchIfNotFastJSArray(Object, Context): never
     labels Taken, NotTaken;
+macro BranchIfNotFastJSArrayForCopy(implicit context: Context)(o: Object):
+    never
+    labels Taken, NotTaken {
+  BranchIfFastJSArrayForCopy(o, context) otherwise NotTaken, Taken;
+}
 
 macro EnsureFastJSArray(context: Context, object: Object) labels Bailout {
   if (BranchIfNotFastJSArray(object, context)) goto Bailout;
@@ -877,6 +905,7 @@ extern macro Call(
 extern macro Call(
     Context, Callable, Object, Object, Object, Object, Object, Object): Object;
 
+extern builtin CloneFastJSArray(Context, Object): JSArray;
 extern macro ExtractFixedArray(FixedArrayBase, Smi, Smi, Smi): FixedArrayBase;
 extern macro ExtractFixedArray(
     FixedArrayBase, Smi, Smi, Smi,
