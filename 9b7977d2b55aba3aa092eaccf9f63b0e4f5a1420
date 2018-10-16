@@ -16,6 +16,24 @@
       "revId": "9b7977d2b55aba3aa092eaccf9f63b0e4f5a1420",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7d35693_dee79e3e",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 718,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-10-16T10:52:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c0495ce5_5bec0ee9",
+      "revId": "9b7977d2b55aba3aa092eaccf9f63b0e4f5a1420",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
