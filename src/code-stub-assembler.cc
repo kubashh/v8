@@ -1111,13 +1111,13 @@ void CodeStubAssembler::BranchIfFastJSArrayForCopy(Node* object, Node* context,
 }
 
 void CodeStubAssembler::GotoIfForceSlowPath(Label* if_true) {
-#ifdef V8_ENABLE_FORCE_SLOW_PATH
+  //#ifdef V8_ENABLE_FORCE_SLOW_PATH
   Node* const force_slow_path_addr =
       ExternalConstant(ExternalReference::force_slow_path(isolate()));
   Node* const force_slow = Load(MachineType::Uint8(), force_slow_path_addr);
 
   GotoIf(force_slow, if_true);
-#endif
+  //#endif
 }
 
 void CodeStubAssembler::GotoIfDebugExecutionModeChecksSideEffects(
