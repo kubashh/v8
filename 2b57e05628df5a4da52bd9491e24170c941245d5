@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "064887a0_3c7389f7",
+        "filename": "infra/config/cq.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-10-16T12:48:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16a4bf3d_711a6648",
+      "range": {
+        "startLine": 122,
+        "startChar": 29,
+        "endLine": 122,
+        "endChar": 30
+      },
+      "revId": "2b57e05628df5a4da52bd9491e24170c941245d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "288976a2_a9bf1c95",
         "filename": "infra/config/cq.cfg",
         "patchSetId": 1
@@ -92,6 +116,30 @@
       "revId": "2b57e05628df5a4da52bd9491e24170c941245d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde899f2_37767393",
+        "filename": "infra/config/cq.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-10-16T12:48:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "288976a2_a9bf1c95",
+      "range": {
+        "startLine": 129,
+        "startChar": 26,
+        "endLine": 130,
+        "endChar": 29
+      },
+      "revId": "2b57e05628df5a4da52bd9491e24170c941245d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
