@@ -19,17 +19,41 @@
 //
 // For the code that runs in the signal handler itself, see handler-inside.cc.
 
+#include "src/trap-handler/handler-inside-win.h"
+#include "src/trap-handler/trap-handler.h"
+
+#include <Windows.h>
+#undef CONST  // windows.h defines CONST which conflicts with the one in
+              // src/flags.h
+
 namespace v8 {
 namespace internal {
 namespace trap_handler {
 
 #if V8_TRAP_HANDLER_SUPPORTED
-bool RegisterDefaultTrapHandler() {
-  // Not yet implemented
-  return false;
-}
-#endif
+namespace {
+// A handle to our registered exception handler, so that we can remove it
+// again later.
+void* g_registered_handler = nullptr;
+}  // namespace
+#endif  // V8_TRAP_HANDLER_SUPPORTED
 
+#if V8_TRAP_HANDLER_SUPPORTED
+bool RegisterDefaultTrapHandler() {
+  constexpr ULONG first = TRUE;
+  g_registered_handler = AddVectoredExceptionHandler(first, HandleWasmTrap);
+
+  return nullptr != g_registered_handler;
+}
+#endif  // V8_TRAP_HANDLER_SUPPORTED
+
+void RestoreOriginalHandler() {
+#if V8_TRAP_HANDLER_SUPPORTED
+  if (g_registered_handler) {
+    RemoveVectoredExceptionHandler(g_registered_handler);
+  }
+#endif  // V8_TRAP_HANDLER_SUPPORTED
+}
 }  // namespace trap_handler
 }  // namespace internal
 }  // namespace v8
