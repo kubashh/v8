@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "edd88dc9_045ff317",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T15:34:22Z",
+      "side": 1,
+      "message": "endMapped",
+      "range": {
+        "startLine": 58,
+        "startChar": 10,
+        "endLine": 58,
+        "endChar": 12
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61db261b_4a4dcf87",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T15:34:22Z",
+      "side": 1,
+      "message": "s/startMapped/start/\nIt is not necessary to compute startMapped, since when it\u0027s different from start, then this loop won\u0027t execute anyway.",
+      "range": {
+        "startLine": 61,
+        "startChar": 28,
+        "endLine": 61,
+        "endChar": 39
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3732f1ef_5234d645",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T15:34:22Z",
+      "side": 1,
+      "message": "This can just be SmiMax(parameterMapLength, start). Same reasoning as above.",
+      "range": {
+        "startLine": 73,
+        "startChar": 30,
+        "endLine": 73,
+        "endChar": 76
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78c9e050_19aaeaa5",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T15:34:22Z",
+      "side": 1,
+      "message": "Just a remark: It took me a while to realize why this is safe and cannot overflow. That\u0027s an interesting case, it would be nice to verify this kind of thing.",
+      "range": {
+        "startLine": 103,
+        "startChar": 12,
+        "endLine": 103,
+        "endChar": 45
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c566cce2_407033de",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T15:34:22Z",
+      "side": 1,
+      "message": "nit: const",
+      "range": {
+        "startLine": 179,
+        "startChar": 6,
+        "endLine": 179,
+        "endChar": 10
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
