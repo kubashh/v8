@@ -126,6 +126,44 @@ TARGET_TEST_F(CodeAssemblerTest, IntPtrMul) {
   }
 }
 
+TARGET_TEST_F(CodeAssemblerTest, IntPtrDiv) {
+  CodeAssemblerTestState state(this);
+  CodeAssemblerForTest m(&state);
+  {
+    Node* a = m.Parameter(0);
+    Node* b = m.Int32Constant(100);
+    Node* div = m.IntPtrDiv(a, b);
+    EXPECT_THAT(div, IsIntPtrDiv(a, b));
+  }
+  // x / 1  => x
+  {
+    Node* a = m.Parameter(0);
+    Node* b = m.Int32Constant(1);
+    Node* div = m.IntPtrDiv(a, b);
+    EXPECT_THAT(div, a);
+  }
+  // CONST_a / CONST_b  => CONST_c
+  {
+    Node* a = m.IntPtrConstant(100);
+    Node* b = m.IntPtrConstant(5);
+    Node* div = m.IntPtrDiv(a, b);
+    EXPECT_THAT(div, IsIntPtrConstant(20));
+  }
+  {
+    TNode<IntPtrT> a = m.IntPtrConstant(100);
+    TNode<IntPtrT> b = m.IntPtrConstant(5);
+    TNode<IntPtrT> div = m.IntPtrDiv(a, b);
+    EXPECT_THAT(div, IsIntPtrConstant(20));
+  }
+  // x / 2^CONST  => x >> CONST
+  {
+    Node* a = m.Parameter(0);
+    Node* b = m.IntPtrConstant(1 << 3);
+    Node* div = m.IntPtrDiv(a, b);
+    EXPECT_THAT(div, IsWordSar(a, IsIntPtrConstant(3)));
+  }
+}
+
 TARGET_TEST_F(CodeAssemblerTest, WordShl) {
   CodeAssemblerTestState state(this);
   CodeAssemblerForTest m(&state);

@@ -945,11 +945,16 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   }
 
   TNode<WordT> IntPtrAdd(SloppyTNode<WordT> left, SloppyTNode<WordT> right);
+  TNode<WordT> IntPtrDiv(SloppyTNode<WordT> left, SloppyTNode<WordT> right);
   TNode<WordT> IntPtrSub(SloppyTNode<WordT> left, SloppyTNode<WordT> right);
   TNode<WordT> IntPtrMul(SloppyTNode<WordT> left, SloppyTNode<WordT> right);
   TNode<IntPtrT> IntPtrAdd(TNode<IntPtrT> left, TNode<IntPtrT> right) {
     return Signed(
         IntPtrAdd(static_cast<Node*>(left), static_cast<Node*>(right)));
+  }
+  TNode<IntPtrT> IntPtrDiv(TNode<IntPtrT> left, TNode<IntPtrT> right) {
+    return Signed(
+        IntPtrDiv(static_cast<Node*>(left), static_cast<Node*>(right)));
   }
   TNode<IntPtrT> IntPtrSub(TNode<IntPtrT> left, TNode<IntPtrT> right) {
     return Signed(
