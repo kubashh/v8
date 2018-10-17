@@ -16,6 +16,24 @@
       "revId": "11123d7b1afa4a75a4d96f066aee30b05b124a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ba7d8ec_bb5b33d0",
+        "filename": "test/unittests/compiler/code-assembler-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T14:54:51Z",
+      "side": 1,
+      "message": "Avoiding the casts is a bit difficult, without changing gmock. I would recommend to just use Node* everywhere here to keep it simple and consistent. I don\u0027t think there is too much of a point in typing the tests, although it\u0027s a pity :)",
+      "parentUuid": "95f20ac8_4bd7b2f8",
+      "revId": "11123d7b1afa4a75a4d96f066aee30b05b124a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
