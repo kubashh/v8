@@ -273,6 +273,30 @@
     },
     {
       "key": {
+        "uuid": "2c510878_f20370ee",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-17T09:07:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f21e308d_4cd89ef3",
+      "range": {
+        "startLine": 126,
+        "startChar": 35,
+        "endLine": 126,
+        "endChar": 45
+      },
+      "revId": "1d7697f5dc0d1913089850d00d464fe304620f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3288c43_553cc6fd",
         "filename": "src/ast/scopes.h",
         "patchSetId": 10
