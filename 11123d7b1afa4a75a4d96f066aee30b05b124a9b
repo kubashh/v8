@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95f20ac8_4bd7b2f8",
+        "filename": "test/unittests/compiler/code-assembler-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-10-17T14:05:10Z",
+      "side": 1,
+      "message": "Tobias, I\u0027m not sure if I found the right balance of converting current, untyped code to TNodes.  If I try to type IsIntPtrDiv, this spiders out to the existing node-test-utils testing infrastructure.\nIs there a better way to cast or avoid this casting?\nThanks.",
+      "revId": "11123d7b1afa4a75a4d96f066aee30b05b124a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c2fbe1d8_2bcb04ae",
+        "filename": "src/builtins/array-join.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-10-17T14:05:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9b3c355_c673abec",
+      "revId": "7af7bb3c62b66563c3e8a49a2b5d1a5e3db3eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b595cce6_08497484",
         "filename": "src/builtins/array-join.tq",
         "patchSetId": 1
@@ -39,6 +57,30 @@
       "revId": "7af7bb3c62b66563c3e8a49a2b5d1a5e3db3eaf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49d7abe1_84f03d9d",
+        "filename": "src/builtins/array-join.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-10-17T14:05:10Z",
+      "side": 1,
+      "message": "Done, converted to intptr.  My follow up CL changing the Buffer encoding (removing runs of separators), this variable should go away.",
+      "parentUuid": "b595cce6_08497484",
+      "range": {
+        "startLine": 228,
+        "startChar": 4,
+        "endLine": 228,
+        "endChar": 35
+      },
+      "revId": "7af7bb3c62b66563c3e8a49a2b5d1a5e3db3eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
