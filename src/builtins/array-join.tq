@@ -185,7 +185,8 @@ module array {
     const nofSeparatorsInt: intptr = Signed(nofSeparators);
     const sepsLen: intptr = separatorLength * nofSeparatorsInt;
     // Detect integer overflow
-    if (nofSeparatorsInt <= 0 || sepsLen <= 0) deferred {
+    // TODO(tebbi): Replace with overflow-checked multiplication.
+    if (sepsLen / separatorLength != nofSeparatorsInt) deferred {
         ThrowRangeError(context, kInvalidStringLength);
       }
 
