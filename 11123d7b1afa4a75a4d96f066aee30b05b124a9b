@@ -34,6 +34,24 @@
       "revId": "11123d7b1afa4a75a4d96f066aee30b05b124a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5af598fd_b038b1a2",
+        "filename": "test/unittests/compiler/code-assembler-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-10-17T15:26:12Z",
+      "side": 1,
+      "message": "Since I removed the IntPtrDiv method that accepted SloppyTNodes (only accepts TNode\u003cIntPtr\u003e now), it\u0027s bit more work to make all these untyped Nodes and have to unchecked cast it back to an IntPtrT node.  So I\u0027ll just stick with these few unsightly TNode -\u003e Node* casts, if that\u0027s okay.\nThanks.",
+      "parentUuid": "6ba7d8ec_bb5b33d0",
+      "revId": "11123d7b1afa4a75a4d96f066aee30b05b124a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
