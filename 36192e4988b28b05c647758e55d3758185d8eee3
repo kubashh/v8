@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ce977ee_7a715180",
+        "filename": "src/pointer-with-payload.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-17T09:20:50Z",
+      "side": 1,
+      "message": "I don\u0027t think this is worth the template magic, because:\n- the additional template parameter is confusing (but required so that we don\u0027t disable the instantiation of the whole class template but only this function)\n- if the user gets an error here, it\u0027s too easy to just SetPayload\u003cbool\u003e(my_bool); which will circumvent the const correctness intentions.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 3
+      },
+      "revId": "36192e4988b28b05c647758e55d3758185d8eee3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
