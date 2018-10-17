@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10bbf444_b81a5bd2",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T11:44:27Z",
+      "side": 1,
+      "message": "If we actually had a HeapObject version of BranchIfFastJSArray, this should become:\n\nreturn Cast\u003cFastJSArray\u003e(TaggedToHeapObject(o) otherwise CastError)\n      otherwise CastError;\n\nThat\u0027s essentially the body of the generic Cast\u003cT\u003e(HeapObject), just with the context parameter added. Too bad we don\u0027t have a generic way to express this. Perhaps implicit parameters on generic methods should be implicitly deleted if they are not needed in the specialization.",
+      "range": {
+        "startLine": 834,
+        "startChar": 0,
+        "endLine": 838,
+        "endChar": 3
+      },
+      "revId": "15f24091e1f33ddba9ba91ed3d54bcadaf70cb3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01ae91be_28aaaf84",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T11:44:27Z",
+      "side": 1,
+      "message": "This is not necessary. I wouldn\u0027t add it unless there is a TNode\u003cHeapObject\u003e overload on the CSA side.\nActually, I think we should only expose the HeapObject version, backed by a corresponding CSA version that doesn\u0027t do the Smi-check.",
+      "range": {
+        "startLine": 872,
+        "startChar": 0,
+        "endLine": 873,
+        "endChar": 27
+      },
+      "revId": "15f24091e1f33ddba9ba91ed3d54bcadaf70cb3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50d9edb3_8d9f37b3",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 14
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T11:44:27Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 876,
+        "startChar": 0,
+        "endLine": 877,
+        "endChar": 27
+      },
+      "revId": "15f24091e1f33ddba9ba91ed3d54bcadaf70cb3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
