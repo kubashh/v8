@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9b3c355_c673abec",
+        "filename": "src/builtins/array-join.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T10:09:02Z",
+      "side": 1,
+      "message": "Could you add a TODO (tebbi) here to replace this with overflow-checked addition?",
+      "revId": "7af7bb3c62b66563c3e8a49a2b5d1a5e3db3eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b595cce6_08497484",
+        "filename": "src/builtins/array-join.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T10:09:02Z",
+      "side": 1,
+      "message": "If nofSeparators was intptr instead of uintptr all the way, there would be no need to cast to signed later.\nIn general, I think it is better to use intptr rather than uintptr unless there is a reason to do so (like loading a value where we need the complete value range of uintptr).",
+      "range": {
+        "startLine": 228,
+        "startChar": 4,
+        "endLine": 228,
+        "endChar": 35
+      },
+      "revId": "7af7bb3c62b66563c3e8a49a2b5d1a5e3db3eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7c09262_b7397236",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-10-17T10:09:02Z",
+      "side": 1,
+      "message": "This division only works for signed values, so the signature should be\nTNode\u003cIntPtrT\u003e IntPtrDiv(TNode\u003cIntPtrT\u003e left, TNode\u003cIntPtrT\u003e right)\nright away. The reason the other operations are defined for WordT is that they work uniformly both for signed and unsigned values.",
+      "range": {
+        "startLine": 948,
+        "startChar": 2,
+        "endLine": 948,
+        "endChar": 76
+      },
+      "revId": "7af7bb3c62b66563c3e8a49a2b5d1a5e3db3eaf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
