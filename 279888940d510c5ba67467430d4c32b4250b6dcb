@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6a402f6d_9d673810",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-17T21:21:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edd88dc9_045ff317",
+      "range": {
+        "startLine": 58,
+        "startChar": 10,
+        "endLine": 58,
+        "endChar": 12
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61db261b_4a4dcf87",
         "filename": "src/builtins/array-slice.tq",
         "patchSetId": 15
@@ -45,6 +69,30 @@
       "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91724cd8_c2662e2b",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-17T21:21:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61db261b_4a4dcf87",
+      "range": {
+        "startLine": 61,
+        "startChar": 28,
+        "endLine": 61,
+        "endChar": 39
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c2c356fc_d97759cf",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-17T21:21:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3732f1ef_5234d645",
+      "range": {
+        "startLine": 73,
+        "startChar": 30,
+        "endLine": 73,
+        "endChar": 76
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78c9e050_19aaeaa5",
         "filename": "src/builtins/array-slice.tq",
         "patchSetId": 15
@@ -82,6 +154,30 @@
       "writtenOn": "2018-10-17T15:34:22Z",
       "side": 1,
       "message": "Just a remark: It took me a while to realize why this is safe and cannot overflow. That\u0027s an interesting case, it would be nice to verify this kind of thing.",
+      "range": {
+        "startLine": 103,
+        "startChar": 12,
+        "endLine": 103,
+        "endChar": 45
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96831bbd_aba4a7e3",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-17T21:21:29Z",
+      "side": 1,
+      "message": "Yes. This is why I thought that having an Index class that actually made sure that the values of an index are within range [0, MAX_SMI] would be useful.",
+      "parentUuid": "78c9e050_19aaeaa5",
       "range": {
         "startLine": 103,
         "startChar": 12,
@@ -114,6 +210,30 @@
       "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "301f94ac_0b246fa8",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-17T21:21:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c566cce2_407033de",
+      "range": {
+        "startLine": 179,
+        "startChar": 6,
+        "endLine": 179,
+        "endChar": 10
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
