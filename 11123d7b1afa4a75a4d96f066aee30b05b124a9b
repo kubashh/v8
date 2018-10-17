@@ -52,6 +52,24 @@
       "revId": "11123d7b1afa4a75a4d96f066aee30b05b124a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2d0f0a3_376d39b5",
+        "filename": "test/unittests/compiler/code-assembler-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-10-17T15:32:31Z",
+      "side": 1,
+      "message": "Tobias, actually, when you meant \"just use Node* everywhere\", did you mean change CodeAssembler::IntPtrDiv\u0027s argument types to only accept Node*/SloppyTNode\u003cIntPtrT\u003e (and the tests)? or just the temp variables in these tests in code-assembler-unittests?",
+      "parentUuid": "5af598fd_b038b1a2",
+      "revId": "11123d7b1afa4a75a4d96f066aee30b05b124a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
