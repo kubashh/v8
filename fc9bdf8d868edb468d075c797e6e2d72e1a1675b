@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4c59ad0_1005363f",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1741,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "Are we moving away from the old naming scheme? We used it quite consistently in the old CSA world. I guess the main benefit was that the name would distinguish between functions installed on the prototype and functions installed on the object itself.\n\nI\u0027m fine with both ways but imo we should pick one and stay consistent.",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3538974f_37eb811b",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "The runtime function checks\n\n JSObject::PrototypeHasNoElements(isolate, *object) \u0026\u0026 !object-\u003eHasComplexElements()\n\nDo we not need this here?",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b89abf75_18c1b308",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "Can this ever happen? We just checked against args.length before the call.",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13b0492f_dfbaf2a2",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "Hmm we should make it explicit that the result of AllocateJSArray is in new space (both the JSArray itself and its elements)? At least conceptually JSArray allocation allocs two objects and the second could trigger gc. In practice its currently fine since we alloc both JSArray and its elements in one go. Doesn\u0027t have to be in this CL though.\n\n\nAnd comment two: this looks like a candidate callsite for Michael\u0027s recently-added memcpy helper instead of the loop.",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbea9a0f_ddb4e235",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "Likewise this could also use memcpy / CodeStubAssembler::CopyElements.",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07694bfe_83b597ca",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "Not sure I understand this comment. Should this be \u0027Start can be less than zero\u0027?\n\nHow can len be \u003c 0? Even if the length property is negative, Step 3 in the algorithm is \n\n len \u003d ToLength(o.length)\n\nand ToLength only returns non-negative numbers. Could this turn into an assertion?",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1adbc8b3_0dbbc059",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "Would it make sense to add IsFastAliasedArgumentsMap / IsSloppyArgumentsMap / IsStrictArgumentsMap helpers? We have similar things everywhere in CSA.",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa64ff25_cd100648",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "Just a reminder, Runtime::kTrySliceSimpleNonFastElements can be removed together with ArrayPrototypeSlice.",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8070cec7_4ef7cbac",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "At this point, just for clarity, we could assert \n\n 0 \u003c\u003d k \u003c\u003d length\n 0 \u003c\u003d final \u003c\u003d length\n 0 \u003c\u003d count \u003c\u003d length",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaa2297a_fa51ab78",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "q: Does \u0027Cast\u003c\u003e() otherwise unreachable\u0027 generate a runtime check?",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b2c519d_9b309cfb",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "Back when Simon was working on sort, we briefly discussed similar types but decided not to use them because they implied a safety that doesn\u0027t exist - e.g. the array can go slow but the type would still remain FastJSArray.\n\nSo my question is, has this changed? What\u0027s a volatile type? What happens if we successfully cast to a FastJSArray, then call into user JS code (which may mutate the array)? If we have a FastJSArray, is it guaranteed that the actual array is fast at all possible points?",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed2ff637_abc02f44",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "With the order change these two lines become unreachable.",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e9ac276_978ec035",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-18T09:27:38Z",
+      "side": 1,
+      "message": "Are you planning to remove ArrayPrototypeSlice in a follow-up?",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
