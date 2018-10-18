@@ -5831,6 +5831,38 @@ TNode<BoolT> CodeStubAssembler::IsPrototypeTypedArrayPrototype(
   return WordEqual(proto_of_proto, typed_array_prototype);
 }
 
+TNode<BoolT> CodeStubAssembler::IsFastAliasedArgumentsMap(
+    TNode<Context> context, TNode<Map> map) {
+  TNode<Context> const native_context = LoadNativeContext(context);
+  TNode<Object> const arguments_map = LoadContextElement(
+      native_context, Context::FAST_ALIASED_ARGUMENTS_MAP_INDEX);
+  return WordEqual(arguments_map, map);
+}
+
+TNode<BoolT> CodeStubAssembler::IsSlowAliasedArgumentsMap(
+    TNode<Context> context, TNode<Map> map) {
+  TNode<Context> const native_context = LoadNativeContext(context);
+  TNode<Object> const arguments_map = LoadContextElement(
+      native_context, Context::SLOW_ALIASED_ARGUMENTS_MAP_INDEX);
+  return WordEqual(arguments_map, map);
+}
+
+TNode<BoolT> CodeStubAssembler::IsSloppyArgumentsMap(TNode<Context> context,
+                                                     TNode<Map> map) {
+  TNode<Context> const native_context = LoadNativeContext(context);
+  TNode<Object> const arguments_map =
+      LoadContextElement(native_context, Context::SLOPPY_ARGUMENTS_MAP_INDEX);
+  return WordEqual(arguments_map, map);
+}
+
+TNode<BoolT> CodeStubAssembler::IsStrictArgumentsMap(TNode<Context> context,
+                                                     TNode<Map> map) {
+  TNode<Context> const native_context = LoadNativeContext(context);
+  TNode<Object> const arguments_map =
+      LoadContextElement(native_context, Context::STRICT_ARGUMENTS_MAP_INDEX);
+  return WordEqual(arguments_map, map);
+}
+
 TNode<BoolT> CodeStubAssembler::TaggedIsCallable(TNode<Object> object) {
   return Select<BoolT>(
       TaggedIsSmi(object), [=] { return Int32FalseConstant(); },
