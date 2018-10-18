@@ -694,7 +694,7 @@ class ParserBase {
   }
 
   bool Check(Token::Value token) {
-    Token::Value next = peek();
+    Token::Value next = scanner()->peek();
     if (next == token) {
       Consume(next);
       return true;
@@ -3412,10 +3412,6 @@ ParserBase<Impl>::ParseFunctionExpression(bool* ok) {
   if (impl()->ParsingDynamicFunctionDeclaration()) {
     // We don't want dynamic functions to actually declare their name
     // "anonymous". We just want that name in the toString().
-    if (stack_overflow()) {
-      *ok = false;
-      return impl()->NullExpression();
-    }
     Consume(Token::IDENTIFIER);
     DCHECK(scanner()->CurrentMatchesContextual(Token::ANONYMOUS));
   } else if (peek_any_identifier()) {
@@ -4484,10 +4480,6 @@ ParserBase<Impl>::ParseAsyncFunctionLiteral(bool* ok) {
   if (impl()->ParsingDynamicFunctionDeclaration()) {
     // We don't want dynamic functions to actually declare their name
     // "anonymous". We just want that name in the toString().
-    if (stack_overflow()) {
-      *ok = false;
-      return impl()->NullExpression();
-    }
     Consume(Token::IDENTIFIER);
     DCHECK(scanner()->CurrentMatchesContextual(Token::ANONYMOUS));
   } else if (peek_any_identifier()) {
