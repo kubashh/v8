@@ -19,6 +19,8 @@ namespace trap_handler {
 // TODO(eholk): Support trap handlers on other platforms.
 #if V8_TARGET_ARCH_X64 && V8_OS_LINUX && !V8_OS_ANDROID
 #define V8_TRAP_HANDLER_SUPPORTED true
+#elif V8_TARGET_ARCH_X64 && V8_OS_WIN
+#define V8_TRAP_HANDLER_SUPPORTED true
 #else
 #define V8_TRAP_HANDLER_SUPPORTED false
 #endif
@@ -79,7 +81,10 @@ inline int* GetThreadInWasmThreadLocalAddress() {
   return &g_thread_in_wasm_code;
 }
 
-inline bool IsThreadInWasm() { return g_thread_in_wasm_code; }
+// On Windows, asan installs its own exception handler which maps shadow
+// memory. Since our exception handler may be executed before the asan exception
+// handler, we have to make sure that asan shadow memory is not accessed here.
+DISABLE_ASAN inline bool IsThreadInWasm() { return g_thread_in_wasm_code; }
 
 inline void SetThreadInWasm() {
   if (IsTrapHandlerEnabled()) {
