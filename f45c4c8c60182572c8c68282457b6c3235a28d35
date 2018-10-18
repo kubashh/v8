@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3f1f78d_b4927cd4",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-10-18T08:33:02Z",
+      "side": 1,
+      "message": "Nit: Unneeded?",
+      "revId": "f45c4c8c60182572c8c68282457b6c3235a28d35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
