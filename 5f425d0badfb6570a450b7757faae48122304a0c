@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3a57459_ce11125a",
+        "filename": "test/intl/segmenter/segment-iterator-ownPropertyDescriptor.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-10-19T10:52:33Z",
+      "side": 1,
+      "message": "nit: checkGetterProperty",
+      "revId": "5f425d0badfb6570a450b7757faae48122304a0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
