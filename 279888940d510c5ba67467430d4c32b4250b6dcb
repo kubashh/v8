@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "5d7e67d9_d3d99eb9",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 15
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "96831bbd_aba4a7e3",
+      "range": {
+        "startLine": 103,
+        "startChar": 12,
+        "endLine": 103,
+        "endChar": 45
+      },
+      "revId": "279888940d510c5ba67467430d4c32b4250b6dcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c566cce2_407033de",
         "filename": "src/builtins/array-slice.tq",
         "patchSetId": 15

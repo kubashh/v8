@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8f2f4927_0b15c4cc",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1741,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "As discussed, I will fix this name up after I know I can remove the old implementation.",
+      "parentUuid": "f4c59ad0_1005363f",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3538974f_37eb811b",
         "filename": "src/builtins/array-slice.tq",
         "patchSetId": 18
@@ -33,6 +51,24 @@
       "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71b6e025_8d631bf8",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "I don\u0027t think these are necessary for arguments objects, since complex elements would have a led to a map transition which would fail the map check that gates calling this function. However, a IsNoElementsProtectorCellInvalid check does seem to be necessary.",
+      "parentUuid": "3538974f_37eb811b",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "bba4afce_01941bf4",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Yes, since args.length can be different from sourceElements.length.",
+      "parentUuid": "b89abf75_18c1b308",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13b0492f_dfbaf2a2",
         "filename": "src/builtins/array-slice.tq",
         "patchSetId": 18
@@ -67,6 +121,24 @@
       "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9da97b77_eaa968d8",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13b0492f_dfbaf2a2",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "14f20671_91ace4a1",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbea9a0f_ddb4e235",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "07694bfe_83b597ca",
         "filename": "src/builtins/array-slice.tq",
         "patchSetId": 18
@@ -101,6 +191,24 @@
       "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a16976f_2ea71298",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Very, very good catch. There was a bug in base.tq where the ToLength wasn\u0027t applied to argument arguments length in the GetLengthProperty macro. Now fixed this and tightened up + tested a few additional cases.",
+      "parentUuid": "07694bfe_83b597ca",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "8d7dde43_89ebe58f",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Good idea. Done.",
+      "parentUuid": "1adbc8b3_0dbbc059",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa64ff25_cd100648",
         "filename": "src/builtins/array-slice.tq",
         "patchSetId": 18
@@ -135,6 +261,24 @@
       "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d36f212_6d2ace68",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fa64ff25_cd100648",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "b1d28792_aaec6d5a",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8070cec7_4ef7cbac",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aaa2297a_fa51ab78",
         "filename": "src/builtins/array.tq",
         "patchSetId": 18
@@ -166,6 +328,24 @@
       "writtenOn": "2018-10-18T09:27:38Z",
       "side": 1,
       "message": "q: Does \u0027Cast\u003c\u003e() otherwise unreachable\u0027 generate a runtime check?",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae1dd430_ed02781c",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Yes, it does leave behind a runtime check. Theoretically, we should change the code so that it is passed in a FastJSArray in the first place, but in the absence of that, this check seems reasonable.",
+      "parentUuid": "aaa2297a_fa51ab78",
       "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "44a1b2f3_4dc8557a",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "As discussed, we will (soon) be adding explicitly volatile types which will track the use cases you describe and flag improper usage (e.g. usage after intermediary calls).",
+      "parentUuid": "7b2c519d_9b309cfb",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed2ff637_abc02f44",
         "filename": "src/builtins/base.tq",
         "patchSetId": 18
@@ -206,6 +404,24 @@
     },
     {
       "key": {
+        "uuid": "d6483c6d_20313ca3",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "ed2ff637_abc02f44",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e9ac276_978ec035",
         "filename": "src/debug/debug-evaluate.cc",
         "patchSetId": 18
@@ -220,6 +436,24 @@
       "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "794145b8_681e4f58",
+        "filename": "src/debug/debug-evaluate.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-10-19T06:09:51Z",
+      "side": 1,
+      "message": "You bet. Want to keep the old code in there for now in case we need to roll back. :-)",
+      "parentUuid": "3e9ac276_978ec035",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
