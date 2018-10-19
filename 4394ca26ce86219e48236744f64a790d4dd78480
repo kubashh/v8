@@ -16,6 +16,24 @@
       "revId": "4394ca26ce86219e48236744f64a790d4dd78480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ad987ee_dfbdd15f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-10-19T18:44:04Z",
+      "side": 1,
+      "message": "so the test is try to figure out we implement the different mode of line break correctly. There are no easy way to test that without checking the concrete result of how icu break the line but I don\u0027t want to do that. So what I did is for several different languages, I break the line in different mode and count the number of segments. And verify the loose break more segments than normal and normal break more than strict. What I really should test is loose \u003e\u003d normal and normal \u003e\u003d strict. But if all mode break the same number of tokens it still not showing us the problem. so in some language I compare \u003e\u003d. In the icu62, I compare for English, French and Korean that loose \u003d\u003d normal, but that is too restrict and therefore an incorrect expectation. In icu63, the loose mode now break more token than normal so I correct it to a comparison of \u003e\u003d. This is needed to address one of two breakage for jshin to land icu63 (see https://chromium-review.googlesource.com/c/v8/v8/+/1289369/4)",
+      "parentUuid": "f2518a94_0a005cc9",
+      "revId": "4394ca26ce86219e48236744f64a790d4dd78480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
