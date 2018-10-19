@@ -91,16 +91,6 @@ RUNTIME_FUNCTION(Runtime_CanonicalizeLanguageTag) {
   return *isolate->factory()->NewStringFromAsciiChecked(canonicalized.c_str());
 }
 
-RUNTIME_FUNCTION(Runtime_AvailableLocalesOf) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(String, service, 0);
-  Handle<JSObject> locales;
-  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
-      isolate, locales, Intl::AvailableLocalesOf(isolate, service));
-  return *locales;
-}
-
 RUNTIME_FUNCTION(Runtime_GetDefaultICULocale) {
   HandleScope scope(isolate);
 
