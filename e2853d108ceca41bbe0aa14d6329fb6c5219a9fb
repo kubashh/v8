@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdd15f5f_5abe66f2",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 24
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-19T06:40:00Z",
+      "side": 1,
+      "message": "Unintended copy\u0026paste?",
+      "revId": "e2853d108ceca41bbe0aa14d6329fb6c5219a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b79f6f72_93b92415",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 24
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-19T06:40:00Z",
+      "side": 1,
+      "message": "fyi, this smi fast path is also implemented in ToLength_Inline. This branch could be \n\n return ToLength_Inline(a.length)",
+      "revId": "e2853d108ceca41bbe0aa14d6329fb6c5219a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
