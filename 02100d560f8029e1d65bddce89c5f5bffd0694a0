@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ede61fe_a2a80350",
+        "filename": "src/pointer-with-payload.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2018-10-19T17:46:04Z",
+      "side": 1,
+      "message": "I think this needs to be: !!(foo \u0026 bar) for MSVC. This CL passes V8\u0027s MSVC bots which is a release build.",
+      "range": {
+        "startLine": 91,
+        "startChar": 14,
+        "endLine": 91,
+        "endChar": 40
+      },
+      "revId": "02100d560f8029e1d65bddce89c5f5bffd0694a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
