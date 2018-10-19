@@ -652,6 +652,12 @@ class ParserBase {
   void set_script_id(int id) { script_id_ = id; }
 
   V8_INLINE Token::Value peek() {
+    if (GetCurrentStackPosition() < stack_limit_) {
+      // Any further calls to Next or peek will return the illegal token.
+      // The current call must return the next token, which might already
+      // have been peek'ed.
+      set_stack_overflow();
+    }
     if (stack_overflow()) return Token::ILLEGAL;
     return scanner()->peek();
   }
@@ -682,19 +688,13 @@ class ParserBase {
 
   void Consume(Token::Value token) {
     Token::Value next = scanner()->Next();
-    if (GetCurrentStackPosition() < stack_limit_) {
-      // Any further calls to Next or peek will return the illegal token.
-      // The current call must return the next token, which might already
-      // have been peek'ed.
-      set_stack_overflow();
-    }
     USE(next);
     USE(token);
     DCHECK_EQ(next, token);
   }
 
   bool Check(Token::Value token) {
-    Token::Value next = peek();
+    Token::Value next = scanner()->peek();
     if (next == token) {
       Consume(next);
       return true;
@@ -3412,10 +3412,6 @@ ParserBase<Impl>::ParseFunctionExpression(bool* ok) {
   if (impl()->ParsingDynamicFunctionDeclaration()) {
     // We don't want dynamic functions to actually declare their name
     // "anonymous". We just want that name in the toString().
-    if (stack_overflow()) {
-      *ok = false;
-      return impl()->NullExpression();
-    }
     Consume(Token::IDENTIFIER);
     DCHECK(scanner()->CurrentMatchesContextual(Token::ANONYMOUS));
   } else if (peek_any_identifier()) {
@@ -4226,7 +4222,7 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
   base::ElapsedTimer timer;
   if (V8_UNLIKELY(FLAG_log_function_events)) timer.Start();
 
-  DCHECK_EQ(Token::ARROW, peek());
+  DCHECK_EQ(Token::ARROW, scanner()->peek());
   if (scanner_->HasLineTerminatorBeforeNext()) {
     // ASI inserts `;` after arrow parameters if a line terminator is found.
     // `=> ...` is never a valid expression, so report as syntax error.
@@ -4484,10 +4480,6 @@ ParserBase<Impl>::ParseAsyncFunctionLiteral(bool* ok) {
   if (impl()->ParsingDynamicFunctionDeclaration()) {
     // We don't want dynamic functions to actually declare their name
     // "anonymous". We just want that name in the toString().
-    if (stack_overflow()) {
-      *ok = false;
-      return impl()->NullExpression();
-    }
     Consume(Token::IDENTIFIER);
     DCHECK(scanner()->CurrentMatchesContextual(Token::ANONYMOUS));
   } else if (peek_any_identifier()) {
