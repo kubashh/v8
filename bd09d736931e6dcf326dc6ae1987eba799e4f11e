@@ -139,6 +139,24 @@
       "revId": "bd09d736931e6dcf326dc6ae1987eba799e4f11e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64c88afc_828c5528",
+        "filename": "test/cctest/test-constantpool.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-19T08:29:57Z",
+      "side": 1,
+      "message": "The advantage of if-defining it is that we can get rid of  PatchConstantPoolAccessInstruction on all other platforms.",
+      "parentUuid": "1ae9dcb1_0ffae1b7",
+      "revId": "bd09d736931e6dcf326dc6ae1987eba799e4f11e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
