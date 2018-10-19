@@ -38,7 +38,7 @@ for (const locale of ["en", "fr", "ja", "zh", "ko"]) {
   }
 }
 // In Japanese
-// Just test the break count in loose mode is greater than normal mode.
+// Just test the break count in loose mode is greater or equal to normal mode.
 assertTrue(breakCounts["ja-loose"] > breakCounts["ja-normal"]);
 // and test the break count in normal mode is greater than strict mode.
 assertTrue(breakCounts["ja-normal"] > breakCounts["ja-strict"]);
@@ -47,10 +47,11 @@ assertTrue(breakCounts["ja-normal"] > breakCounts["ja-strict"]);
 assertTrue(breakCounts["zh-loose"] > breakCounts["zh-normal"]);
 // and test the break count in normal mode is greater than strict mode.
 assertTrue(breakCounts["zh-normal"] > breakCounts["zh-strict"]);
-// In English, French and Korean
-assertEquals(breakCounts["en-loose"], breakCounts["en-normal"]);
-assertEquals(breakCounts["fr-loose"], breakCounts["fr-normal"]);
-assertEquals(breakCounts["ko-loose"], breakCounts["ko-normal"]);
+// In English, French and Korean break count in loose mode is equal or greater
+// than normal mode.
+assertTrue(breakCounts["en-loose"] >= breakCounts["en-normal"]);
+assertTrue(breakCounts["fr-loose"] >= breakCounts["fr-normal"]);
+assertTrue(breakCounts["ko-loose"] >= breakCounts["ko-normal"]);
 // and test the break count in normal mode is greater than strict mode.
 assertTrue(breakCounts["en-normal"] > breakCounts["en-strict"]);
 assertTrue(breakCounts["fr-normal"] > breakCounts["fr-strict"]);
