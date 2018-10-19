@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6bcb8f76_70995e37",
+        "filename": "src/arm/macro-assembler-arm.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-19T08:28:57Z",
+      "side": 1,
+      "message": "Not yet. There are two usages left in several macro-assemblers, see ContextMemOperand in this file. I can do it in a follow up, because it involves creating macro-assembler-XX-inl.h header files.",
+      "parentUuid": "f5fcbc87_585ebfa5",
+      "revId": "bd09d736931e6dcf326dc6ae1987eba799e4f11e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39f9520c_2e77fbaf",
         "filename": "src/constant-pool.h",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "bd09d736931e6dcf326dc6ae1987eba799e4f11e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a61b3146_57c9d2c8",
+        "filename": "src/constant-pool.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-19T08:28:57Z",
+      "side": 1,
+      "message": "Just plain Copy+Paste.",
+      "parentUuid": "39f9520c_2e77fbaf",
+      "revId": "bd09d736931e6dcf326dc6ae1987eba799e4f11e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "d30d2222_2716d00d",
+        "filename": "src/mips/macro-assembler-mips.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-19T08:28:57Z",
+      "side": 1,
+      "message": "As discussed above, we can do this in a follow up. At the end of the file there are two functions that use definitions from contexts.h, which should go into an ...-inl.h header.",
+      "parentUuid": "8c4f0e3d_8939f704",
+      "revId": "bd09d736931e6dcf326dc6ae1987eba799e4f11e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a5ec60a_0fb7b607",
         "filename": "test/cctest/test-constantpool.cc",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2018-10-19T07:14:55Z",
       "side": 1,
       "message": "Where did this come from?",
+      "revId": "bd09d736931e6dcf326dc6ae1987eba799e4f11e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ae9dcb1_0ffae1b7",
+        "filename": "test/cctest/test-constantpool.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-19T08:28:57Z",
+      "side": 1,
+      "message": "PPC is the only user of the constant pool builder. I hence #if defined the constant pool to only be included for PPC, and the test needs the same.",
+      "parentUuid": "5a5ec60a_0fb7b607",
       "revId": "bd09d736931e6dcf326dc6ae1987eba799e4f11e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
