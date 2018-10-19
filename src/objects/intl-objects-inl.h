@@ -12,6 +12,7 @@
 namespace v8 {
 namespace internal {
 
+/*
 inline Intl::Type Intl::TypeFromInt(int type_int) {
   STATIC_ASSERT(Intl::Type::kNumberFormat == 0);
   DCHECK_LE(Intl::Type::kNumberFormat, type_int);
@@ -22,6 +23,7 @@ inline Intl::Type Intl::TypeFromInt(int type_int) {
 inline Intl::Type Intl::TypeFromSmi(Smi* type) {
   return TypeFromInt(Smi::ToInt(type));
 }
+*/
 
 }  // namespace internal
 }  // namespace v8
