@@ -7,7 +7,6 @@
 #endif  // V8_INTL_SUPPORT
 
 #include "src/objects/intl-objects.h"
-#include "src/objects/intl-objects-inl.h"
 
 #include <algorithm>
 #include <memory>
@@ -254,29 +253,6 @@ std::set<std::string> Intl::GetAvailableLocales(const ICUService service) {
 
 namespace {
 
-// TODO(gsathya): Remove this once we port ResolveLocale to C++.
-ICUService StringToICUService(Handle<String> service) {
-  std::unique_ptr<char[]> service_cstr = service->ToCString();
-  if (strcmp(service_cstr.get(), "collator") == 0) {
-    return ICUService::kCollator;
-  } else if (strcmp(service_cstr.get(), "numberformat") == 0) {
-    return ICUService::kNumberFormat;
-  } else if (strcmp(service_cstr.get(), "dateformat") == 0) {
-    return ICUService::kDateFormat;
-  } else if (strcmp(service_cstr.get(), "breakiterator") == 0) {
-    return ICUService::kBreakIterator;
-  } else if (strcmp(service_cstr.get(), "pluralrules") == 0) {
-    return ICUService::kPluralRules;
-  } else if (strcmp(service_cstr.get(), "relativetimeformat") == 0) {
-    return ICUService::kRelativeDateTimeFormatter;
-  } else if (strcmp(service_cstr.get(), "listformat") == 0) {
-    return ICUService::kListFormatter;
-  } else if (service->IsUtf8EqualTo(CStrVector("segmenter"))) {
-    return ICUService::kSegmenter;
-  }
-  UNREACHABLE();
-}
-
 const char* ICUServiceToString(ICUService service) {
   switch (service) {
     case ICUService::kCollator:
@@ -301,25 +277,6 @@ const char* ICUServiceToString(ICUService service) {
 
 }  // namespace
 
-V8_WARN_UNUSED_RESULT MaybeHandle<JSObject> Intl::AvailableLocalesOf(
-    Isolate* isolate, Handle<String> service) {
-  Factory* factory = isolate->factory();
-  std::set<std::string> results =
-      Intl::GetAvailableLocales(StringToICUService(service));
-  Handle<JSObject> locales = factory->NewJSObjectWithNullProto();
-
-  int32_t i = 0;
-  for (auto iter = results.begin(); iter != results.end(); ++iter) {
-    RETURN_ON_EXCEPTION(
-        isolate,
-        JSObject::SetOwnPropertyIgnoreAttributes(
-            locales, factory->NewStringFromAsciiChecked(iter->c_str()),
-            factory->NewNumber(i++), NONE),
-        JSObject);
-  }
-  return locales;
-}
-
 std::string Intl::DefaultLocale(Isolate* isolate) {
   if (isolate->default_locale().empty()) {
     icu::Locale default_locale;
@@ -339,20 +296,6 @@ std::string Intl::DefaultLocale(Isolate* isolate) {
     DCHECK(!isolate->default_locale().empty());
   }
   return isolate->default_locale();
-}
-
-bool Intl::IsObjectOfType(Isolate* isolate, Handle<Object> input,
-                          Intl::Type expected_type) {
-  if (!input->IsJSObject()) return false;
-  Handle<JSObject> obj = Handle<JSObject>::cast(input);
-
-  Handle<Symbol> marker = isolate->factory()->intl_initialized_marker_symbol();
-  Handle<Object> tag = JSReceiver::GetDataProperty(obj, marker);
-
-  if (!tag->IsSmi()) return false;
-
-  Intl::Type type = Intl::TypeFromSmi(Smi::cast(*tag));
-  return type == expected_type;
 }
 
 // See ecma402/#legacy-constructor.

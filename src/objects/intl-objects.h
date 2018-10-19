@@ -36,32 +36,10 @@ class JSCollator;
 
 class Intl {
  public:
-  enum Type {
-    kNumberFormat = 0,
-    kCollator,
-    kDateTimeFormat,
-    kPluralRules,
-    kBreakIterator,
-    kLocale,
-
-    kTypeCount
-  };
-
   enum class BoundFunctionContextSlot {
     kBoundFunction = Context::MIN_CONTEXT_SLOTS,
     kLength
   };
-
-  inline static Intl::Type TypeFromInt(int type);
-  inline static Intl::Type TypeFromSmi(Smi* type);
-
-  // Checks if the given object has the expected_type based by looking
-  // up a private symbol on the object.
-  //
-  // TODO(gsathya): This should just be an instance type check once we
-  // move all the Intl objects to C++.
-  static bool IsObjectOfType(Isolate* isolate, Handle<Object> object,
-                             Intl::Type expected_type);
 
   // Gets the ICU locales for a given service. If there is a locale with a
   // script tag then the locales also include a locale without the script; eg,
@@ -74,9 +52,6 @@ class Intl {
   // for given locale NumberingSystem constructor produces the same digits as
   // NumberFormat/Calendar would.
   static std::string GetNumberingSystem(const icu::Locale& icu_locale);
-
-  static V8_WARN_UNUSED_RESULT MaybeHandle<JSObject> AvailableLocalesOf(
-      Isolate* isolate, Handle<String> service);
 
   static V8_WARN_UNUSED_RESULT MaybeHandle<JSObject> SupportedLocalesOf(
       Isolate* isolate, ICUService service, Handle<Object> locales_in,
