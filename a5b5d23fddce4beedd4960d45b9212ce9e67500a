@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2934d6c3_37a172bb",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1850,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-10-22T14:37:38Z",
+      "side": 1,
+      "message": "Hmm, this is a bit weird that we\u0027re creating a version on the stack and then immediately copying to the heap. I guess it\u0027s fine for now.\n\nCan you use clone here? http://icu-project.org/apiref/icu4c/classicu_1_1UnicodeString.html#a39e9f4b1b60238d34f157faade1ddd0f",
+      "revId": "a5b5d23fddce4beedd4960d45b9212ce9e67500a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19e29fd0_4051ac02",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-10-22T14:37:38Z",
+      "side": 1,
+      "message": "nit: ToICUUnicodeString?",
+      "range": {
+        "startLine": 222,
+        "startChar": 28,
+        "endLine": 222,
+        "endChar": 43
+      },
+      "revId": "a5b5d23fddce4beedd4960d45b9212ce9e67500a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
