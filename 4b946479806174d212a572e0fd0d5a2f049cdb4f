@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f078c0ce_9ca745b1",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1174099
+      },
+      "writtenOn": "2018-10-22T15:55:42Z",
+      "side": 1,
+      "message": "Some of the comments in handler-inside.cc refer to signal handlers, but will also now be used in the context of Windows exception handlers. At the very least, the comments should be revised. But we should also re-review everything in there that will now run in Windows exception handler context to make sure that it’s all suitable.",
+      "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5e7d61a_73821b7d",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1174099
+      },
+      "writtenOn": "2018-10-22T15:55:42Z",
+      "side": 1,
+      "message": "Do you really need a temporary variable for “context”? Just combine these two lines.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 31
+      },
+      "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d807f9bf_6ea368a9",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1174099
+      },
+      "writtenOn": "2018-10-22T15:55:42Z",
+      "side": 1,
+      "message": "For correctness, this ought to be WINAPI, although it doesn’t have an effect for x86_64.\n\nThe same applies in the test.",
+      "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc23093b_e65132e4",
+        "filename": "src/trap-handler/handler-outside-win.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1174099
+      },
+      "writtenOn": "2018-10-22T15:55:42Z",
+      "side": 1,
+      "message": "Usually just \u003cwindows.h\u003e",
+      "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
