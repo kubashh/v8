@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "6b32950b_f459f9fc",
+        "filename": "include/v8-wasm-trap-handler-win.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-22T22:48:51Z",
+      "side": 1,
+      "message": "Typo: \"one\"",
+      "range": {
+        "startLine": 18,
+        "startChar": 53,
+        "endLine": 18,
+        "endChar": 55
+      },
+      "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17cd0f55_91809c8f",
+        "filename": "include/v8-wasm-trap-handler-win.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-22T22:48:51Z",
+      "side": 1,
+      "message": "Suggestion: You might want to write \"EXCEPTION_POINTERS*\" rather than \"LPEXCEPTION_POINTERS\".  It\u0027s arguably more readable to use \"*\" rather than the \"LP\"/\"P\" prefix.  The latter is a Windowsism which presumably dates back to when there was a distinction between short and long pointers.",
+      "range": {
+        "startLine": 23,
+        "startChar": 37,
+        "endLine": 23,
+        "endChar": 57
+      },
+      "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f078c0ce_9ca745b1",
         "filename": "src/trap-handler/handler-inside-win.cc",
         "patchSetId": 10
@@ -13,6 +59,23 @@
       "writtenOn": "2018-10-22T15:55:42Z",
       "side": 1,
       "message": "Some of the comments in handler-inside.cc refer to signal handlers, but will also now be used in the context of Windows exception handlers. At the very least, the comments should be revised. But we should also re-review everything in there that will now run in Windows exception handler context to make sure that it’s all suitable.",
+      "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87f5916a_70676656",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-22T22:48:51Z",
+      "side": 1,
+      "message": "Nit: Add empty line after #includes",
       "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +133,23 @@
       "writtenOn": "2018-10-22T15:55:42Z",
       "side": 1,
       "message": "Usually just \u003cwindows.h\u003e",
+      "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38eab0d7_52336145",
+        "filename": "src/trap-handler/handler-outside-win.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-22T22:48:51Z",
+      "side": 1,
+      "message": "Nit: The name doesn\u0027t really match the functionality, since the function removes the handler from the chain.",
       "revId": "4b946479806174d212a572e0fd0d5a2f049cdb4f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
