@@ -15,6 +15,7 @@
 #include "src/heap/mark-compact-inl.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking.h"
+#include "src/heap/object-locking.h"
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/worklist.h"
@@ -238,18 +239,15 @@ class ConcurrentMarkingVisitor final
   // ===========================================================================
 
   int VisitConsString(Map* map, ConsString* object) {
-    int size = ConsString::BodyDescriptor::SizeOf(map, object);
-    return VisitWithSnapshot(map, object, size, size);
+    return VisitStringLocked(object);
   }
 
   int VisitSlicedString(Map* map, SlicedString* object) {
-    int size = SlicedString::BodyDescriptor::SizeOf(map, object);
-    return VisitWithSnapshot(map, object, size, size);
+    return VisitStringLocked(object);
   }
 
   int VisitThinString(Map* map, ThinString* object) {
-    int size = ThinString::BodyDescriptor::SizeOf(map, object);
-    return VisitWithSnapshot(map, object, size, size);
+    return VisitStringLocked(object);
   }
 
   // ===========================================================================
@@ -275,11 +273,11 @@ class ConcurrentMarkingVisitor final
   // ===========================================================================
 
   int VisitFixedArray(Map* map, FixedArray* object) {
-    return VisitLeftTrimmableArray(map, object);
+    return VisitLeftTrimmableArrayLocked(object);
   }
 
   int VisitFixedDoubleArray(Map* map, FixedDoubleArray* object) {
-    return VisitLeftTrimmableArray(map, object);
+    return VisitLeftTrimmableArrayLocked(object);
   }
 
   // ===========================================================================
@@ -435,11 +433,7 @@ class ConcurrentMarkingVisitor final
 
   template <typename T>
   int VisitJSObjectSubclass(Map* map, T* object) {
-    int size = T::BodyDescriptor::SizeOf(map, object);
-    int used_size = map->UsedInstanceSize();
-    DCHECK_LE(used_size, size);
-    DCHECK_GE(used_size, T::kHeaderSize);
-    return VisitWithSnapshot(map, object, used_size, size);
+    return VisitJSObjectLocked(object);
   }
 
   template <typename T>
@@ -484,6 +478,51 @@ class ConcurrentMarkingVisitor final
                          reinterpret_cast<Object**>(object->map_slot()));
     T::BodyDescriptor::IterateBody(map, object, size, &visitor);
     return slot_snapshot_;
+  }
+
+  template <typename T>
+  int VisitStringLocked(T* object) {
+    if (!ShouldVisit(object)) return 0;
+    ObjectLocking::Lock(object);
+    Map* map = object->map();
+    int size = T::BodyDescriptor::SizeOf(map, object);
+    VisitPointer(object, reinterpret_cast<Object**>(object->map_slot()));
+    T::BodyDescriptor::IterateBody(map, object, size, this);
+    ObjectLocking::Unlock(object);
+    return size;
+  }
+
+  template <typename T>
+  int VisitJSObjectLocked(T* object) {
+    if (!ShouldVisit(object)) return 0;
+    ObjectLocking::Lock(object);
+    Map* map = object->map();
+    int size = T::BodyDescriptor::SizeOf(map, object);
+    int used_size = map->UsedInstanceSize();
+    DCHECK_LE(used_size, size);
+    DCHECK_GE(used_size, T::kHeaderSize);
+    VisitPointer(object, reinterpret_cast<Object**>(object->map_slot()));
+    T::BodyDescriptor::IterateBody(map, object, used_size, this);
+    ObjectLocking::Unlock(object);
+    return size;
+  }
+
+  template <typename T>
+  int VisitLeftTrimmableArrayLocked(T* object) {
+    if (!ShouldVisit(object)) return 0;
+    ObjectLocking::Lock(object);
+    if (object->IsFiller()) {
+      ObjectLocking::Unlock(object);
+      return 0;
+    }
+    Map* map = object->map();
+    Object* length = object->unchecked_synchronized_length();
+    DCHECK(length->IsSmi());
+    int size = T::SizeFor(Smi::ToInt(length));
+    VisitPointer(object, reinterpret_cast<Object**>(object->map_slot()));
+    T::BodyDescriptor::IterateBody(map, object, size, this);
+    ObjectLocking::Unlock(object);
+    return size;
   }
 
   ConcurrentMarking::MarkingWorklist::View shared_;
