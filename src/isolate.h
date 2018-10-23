@@ -83,6 +83,7 @@ class InnerPointerToCodeCache;
 class Logger;
 class MaterializedObjectStore;
 class Microtask;
+class MicrotaskQueue;
 class OptimizingCompileDispatcher;
 class PromiseOnStack;
 class RegExpStack;
@@ -519,6 +520,7 @@ typedef std::vector<HeapObject*> DebugObjectCache;
   V(const intptr_t*, api_external_references, nullptr)                        \
   V(AddressToIndexHashMap*, external_reference_map, nullptr)                  \
   V(HeapObjectToIndexHashMap*, root_index_map, nullptr)                       \
+  V(MicrotaskQueue*, default_microtask_queue, nullptr)                        \
   V(CompilationStatistics*, turbo_statistics, nullptr)                        \
   V(CodeTracer*, code_tracer, nullptr)                                        \
   V(uint32_t, per_isolate_assert_data, 0xFFFFFFFFu)                           \
@@ -1451,6 +1453,10 @@ class Isolate : private HiddenFactory {
 
   Address promise_hook_or_async_event_delegate_address() {
     return reinterpret_cast<Address>(&promise_hook_or_async_event_delegate_);
+  }
+
+  Address default_microtask_queue_address() {
+    return reinterpret_cast<Address>(&default_microtask_queue_);
   }
 
   Address promise_hook_or_debug_is_active_or_async_event_delegate_address() {
