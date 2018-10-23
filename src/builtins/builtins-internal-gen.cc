@@ -736,8 +736,10 @@ TNode<IntPtrT> InternalBuiltinsAssembler::GetDefaultMicrotaskQueue() {
 
 TNode<IntPtrT> InternalBuiltinsAssembler::GetMicrotaskQueue(
     TNode<Context> context) {
-  return UncheckedCast<IntPtrT>(BitcastTaggedToWord(
-      LoadContextElement(context, Context::MICROTASK_QUEUE_POINTER)));
+  TNode<PodArray<void*>> external_pointers = UncheckedCast<PodArray<void*>>(
+      LoadContextElement(context, Context::EXTERNAL_POINTERS_INDEX));
+  return LoadObjectField<IntPtrT>(external_pointers,
+                                  Context::MICROTASK_QUEUE_INDEX);
 }
 
 TNode<IntPtrT> InternalBuiltinsAssembler::GetMicrotaskRingBuffer(
