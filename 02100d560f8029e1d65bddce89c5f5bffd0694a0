@@ -22,6 +22,30 @@
       "revId": "02100d560f8029e1d65bddce89c5f5bffd0694a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f1d0ef7_57927e1a",
+        "filename": "src/pointer-with-payload.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1293609
+      },
+      "writtenOn": "2018-10-23T10:40:40Z",
+      "side": 1,
+      "message": "This DCHECK checks if the bit pattern of the new_payload is the same after applying the kPayLoadMask. If this would not be the case, the payload has bits set in places that are out of the range of our reserved space.",
+      "parentUuid": "6ede61fe_a2a80350",
+      "range": {
+        "startLine": 91,
+        "startChar": 14,
+        "endLine": 91,
+        "endChar": 40
+      },
+      "revId": "02100d560f8029e1d65bddce89c5f5bffd0694a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
