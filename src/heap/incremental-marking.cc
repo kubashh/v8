@@ -165,13 +165,13 @@ void IncrementalMarking::NotifyLeftTrimming(HeapObject* from, HeapObject* to) {
   if (FLAG_concurrent_marking) {
     // We need to mark the array black before overwriting its map and length
     // so that the concurrent marker does not observe inconsistent state.
-    Marking::WhiteToGrey<kAtomicity>(old_mark_bit);
-    if (Marking::GreyToBlack<kAtomicity>(old_mark_bit)) {
-      // The concurrent marker will not mark the array. We need to push the
-      // new array start in marking deque to ensure that it will be marked.
-      marked_black_due_to_left_trimming = true;
-    }
-    DCHECK(Marking::IsBlack<kAtomicity>(old_mark_bit));
+    // Marking::WhiteToGrey<kAtomicity>(old_mark_bit);
+    // if (Marking::GreyToBlack<kAtomicity>(old_mark_bit)) {
+    //   // The concurrent marker will not mark the array. We need to push the
+    //   // new array start in marking deque to ensure that it will be marked.
+    //   marked_black_due_to_left_trimming = true;
+    // }
+    // DCHECK(Marking::IsBlack<kAtomicity>(old_mark_bit));
   }
 
   if (Marking::IsBlack<kAtomicity>(old_mark_bit) &&

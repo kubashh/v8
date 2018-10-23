@@ -553,6 +553,8 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
   chunk->young_generation_bitmap_ = nullptr;
   chunk->marking_bitmap_ = nullptr;
   chunk->local_tracker_ = nullptr;
+  chunk->lock_bitmap_ = nullptr;
+  chunk->marking_lock_ = 0;
 
   chunk->external_backing_store_bytes_[ExternalBackingStoreType::kArrayBuffer] =
       0;
@@ -591,6 +593,8 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
   }
 
   chunk->reservation_ = std::move(reservation);
+
+  chunk->AllocateLockBitmap();
 
   return chunk;
 }
@@ -1217,6 +1221,7 @@ void MemoryChunk::ReleaseAllocatedMemory() {
   if (local_tracker_ != nullptr) ReleaseLocalTracker();
   if (young_generation_bitmap_ != nullptr) ReleaseYoungGenerationBitmap();
   if (marking_bitmap_ != nullptr) ReleaseMarkingBitmap();
+  if (lock_bitmap_) ReleaseLockBitmap();
 
   if (IsPagedSpace()) {
     Page* page = static_cast<Page*>(this);
@@ -1367,6 +1372,21 @@ void MemoryChunk::ReleaseMarkingBitmap() {
   DCHECK_NOT_NULL(marking_bitmap_);
   free(marking_bitmap_);
   marking_bitmap_ = nullptr;
+}
+
+void MemoryChunk::AllocateLockBitmap() {
+#ifndef V8_MARKING_LOCK_PER_PAGE
+  DCHECK_NULL(lock_bitmap_);
+  lock_bitmap_ = static_cast<Bitmap*>(calloc(1, Bitmap::kSize));
+#endif  //  V8_MARKING_LOCK_PER_PAGE
+}
+
+void MemoryChunk::ReleaseLockBitmap() {
+#ifndef V8_MARKING_LOCK_PER_PAGE
+  DCHECK_NOT_NULL(lock_bitmap_);
+  free(lock_bitmap_);
+  lock_bitmap_ = nullptr;
+#endif  //  V8_MARKING_LOCK_PER_PAGE
 }
 
 // -----------------------------------------------------------------------------

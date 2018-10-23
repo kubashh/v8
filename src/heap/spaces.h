@@ -379,6 +379,8 @@ class MemoryChunk {
       + kPointerSize * kNumberOfCategories
       // FreeListCategory categories_[kNumberOfCategories]
       + kPointerSize  // LocalArrayBufferTracker* local_tracker_
+      + kPointerSize  // Bitmap* lock_bitmap_
+      + kPointerSize  // uintptr_t marking_lock_
       + kIntptrSize   // std::atomic<intptr_t> young_generation_live_byte_count_
       + kPointerSize;  // Bitmap* young_generation_bitmap_
 
@@ -518,6 +520,9 @@ class MemoryChunk {
   void AllocateMarkingBitmap();
   void ReleaseMarkingBitmap();
 
+  void AllocateLockBitmap();
+  void ReleaseLockBitmap();
+
   Address area_start() { return area_start_; }
   Address area_end() { return area_end_; }
   size_t area_size() { return static_cast<size_t>(area_end() - area_start()); }
@@ -643,6 +648,8 @@ class MemoryChunk {
 
   base::ListNode<MemoryChunk>& list_node() { return list_node_; }
 
+  Bitmap* lock_bitmap() const { return lock_bitmap_; }
+
  protected:
   static MemoryChunk* Initialize(Heap* heap, Address base, size_t size,
                                  Address area_start, Address area_end,
@@ -727,6 +734,11 @@ class MemoryChunk {
 
   LocalArrayBufferTracker* local_tracker_;
 
+  // Per word marking lock.
+  Bitmap* lock_bitmap_;
+  // Per page marking lock.
+  uintptr_t marking_lock_;
+
   std::atomic<intptr_t> young_generation_live_byte_count_;
   Bitmap* young_generation_bitmap_;
 
@@ -742,6 +754,7 @@ class MemoryChunk {
   friend class MemoryChunkValidator;
   friend class MinorMarkingState;
   friend class MinorNonAtomicMarkingState;
+  friend class ObjectLocking;
   friend class PagedSpace;
 };
 
@@ -750,7 +763,6 @@ static_assert(sizeof(std::atomic<intptr_t>) == kPointerSize,
 
 static_assert(kMaxRegularHeapObjectSize <= MemoryChunk::kAllocatableMemory,
               "kMaxRegularHeapObjectSize <= MemoryChunk::kAllocatableMemory");
-
 
 // -----------------------------------------------------------------------------
 // A page is a memory chunk of a size 512K. Large object pages may be larger.

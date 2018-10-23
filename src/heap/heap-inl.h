@@ -12,6 +12,7 @@
 // write barrier here!
 #include "src/heap/heap-write-barrier.h"
 #include "src/heap/heap.h"
+#include "src/heap/object-locking.h"
 
 #include "src/base/atomic-utils.h"
 #include "src/base/platform/platform.h"
@@ -607,6 +608,13 @@ void Heap::IncrementExternalBackingStoreBytes(ExternalBackingStoreType type,
 void Heap::DecrementExternalBackingStoreBytes(ExternalBackingStoreType type,
                                               size_t amount) {
   base::CheckedDecrement(&backing_store_bytes_, amount);
+}
+
+void Heap::NotifyObjectLayoutChangeDone(HeapObject* object) {
+  if (locked_layout_change_object_) {
+    ObjectLocking::Unlock(object);
+    locked_layout_change_object_ = nullptr;
+  }
 }
 
 AlwaysAllocateScope::AlwaysAllocateScope(Isolate* isolate)
