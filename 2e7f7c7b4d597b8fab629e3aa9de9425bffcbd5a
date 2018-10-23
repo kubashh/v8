@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a05124b_6d0e3c88",
+        "filename": "src/compiler/mips/instruction-selector-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-23T11:19:28Z",
+      "side": 1,
+      "message": "nit: Why not just \"projection0\" here?",
+      "range": {
+        "startLine": 781,
+        "startChar": 24,
+        "endLine": 781,
+        "endChar": 63
+      },
+      "revId": "2e7f7c7b4d597b8fab629e3aa9de9425bffcbd5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
