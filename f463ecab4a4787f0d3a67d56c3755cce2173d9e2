@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a448b317_e87f229d",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-10-24T14:10:46Z",
+      "side": 1,
+      "message": "You\u0027ll need to Smi check this and also check that it is a JSFunction - currently this crashes:\n\n   let ta \u003d new Uint8Array([1, 2, 3]);\n   ta[Symbol.iterator] \u003d 1;\n   Uint8Array.from(ta);\n\nCan you add a test (in a new file) for this \u0026 another non-function case?",
+      "range": {
+        "startLine": 1704,
+        "startChar": 13,
+        "endLine": 1704,
+        "endChar": 24
+      },
+      "revId": "f463ecab4a4787f0d3a67d56c3755cce2173d9e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
