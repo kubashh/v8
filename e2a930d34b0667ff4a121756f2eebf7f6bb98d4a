@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c21ca72d_ceaeb125",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-10-24T09:35:08Z",
+      "side": 1,
+      "message": "I wonder if this gets resolved at all when MB calls gn through python...",
+      "range": {
+        "startLine": 668,
+        "startChar": 62,
+        "endLine": 668,
+        "endChar": 72
+      },
+      "revId": "e2a930d34b0667ff4a121756f2eebf7f6bb98d4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
