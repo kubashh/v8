@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "098bda85_e8efffab",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-10-24T09:32:37Z",
+      "side": 1,
+      "message": "You\u0027ll need to Smi check this first with TaggedIsSmi - that\u0027s why you have to CAST the source from Object to HeapObject here (but it\u0027s an unsafe cast, as is).",
+      "range": {
+        "startLine": 1687,
+        "startChar": 14,
+        "endLine": 1687,
+        "endChar": 28
+      },
+      "revId": "13221a948dad671272ada6a23dc54d4bb369ef43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
