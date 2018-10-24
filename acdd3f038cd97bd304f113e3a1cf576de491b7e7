@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b7fcd4a_41a9b792",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T07:52:23Z",
+      "side": 1,
+      "message": "I think it makes sense to move this whole constness check to a separate function.",
+      "revId": "acdd3f038cd97bd304f113e3a1cf576de491b7e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
