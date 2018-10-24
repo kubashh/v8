@@ -121,8 +121,6 @@ namespace internal {
   V(PROMISE_REJECT_REACTION_JOB_TASK_TYPE)                         \
   V(PROMISE_RESOLVE_THENABLE_JOB_TASK_TYPE)                        \
                                                                    \
-  V(MICROTASK_QUEUE_TYPE)                                          \
-                                                                   \
   V(ALLOCATION_SITE_TYPE)                                          \
                                                                    \
   V(FIXED_ARRAY_TYPE)                                              \
@@ -341,8 +339,7 @@ namespace internal {
   V(_, PROMISE_REJECT_REACTION_JOB_TASK_TYPE, PromiseRejectReactionJobTask,   \
     promise_reject_reaction_job_task)                                         \
   V(_, PROMISE_RESOLVE_THENABLE_JOB_TASK_TYPE, PromiseResolveThenableJobTask, \
-    promise_resolve_thenable_job_task)                                        \
-  V(_, MICROTASK_QUEUE_TYPE, MicrotaskQueue, microtask_queue)
+    promise_resolve_thenable_job_task)
 
 // Adapts one STRUCT_LIST_GENERATOR entry to the STRUCT_LIST entry
 #define STRUCT_LIST_ADAPTER(V, NAME, Name, name) V(NAME, Name, name)
