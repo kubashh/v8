@@ -1002,10 +1002,13 @@ class Isolate : private HiddenFactory {
   const IsolateData* isolate_data() const { return heap_.isolate_data(); }
   IsolateData* isolate_data() { return heap_.isolate_data(); }
 
-  RootsTable& roots_table() { return isolate_data()->roots(); }
+  // Generated code can embed this address to get access to the roots table,
+  // external reference table and builtins table entries.
+  Address base_address() const {
+    return isolate_data()->isolate_base_address();
+  }
 
-  // Generated code can embed this address to get access to the roots.
-  Object** roots_array_start() { return roots_table().roots_; }
+  RootsTable& roots_table() { return isolate_data()->roots(); }
 
   // kRootRegister may be used to address any location that falls into this
   // region. Fields outside this region are not guaranteed to live at a static

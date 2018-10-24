@@ -1021,10 +1021,9 @@ void TurboAssembler::Uxtw(const Register& rd, const Register& rn) {
 }
 
 void TurboAssembler::InitializeRootRegister() {
-  ExternalReference roots_array_start =
-      ExternalReference::roots_array_start(isolate());
-  Mov(kRootRegister, Operand(roots_array_start));
-  Add(kRootRegister, kRootRegister, kRootRegisterBias);
+  ExternalReference base_address =
+      ExternalReference::isolate_base_address(isolate());
+  Mov(kRootRegister, Operand(base_address));
 }
 
 

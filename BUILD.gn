@@ -1912,6 +1912,7 @@ v8_source_set("v8_base") {
     "src/compiler/zone-stats.h",
     "src/constant-pool.cc",
     "src/constant-pool.h",
+    "src/constants-arch.h",
     "src/contexts-inl.h",
     "src/contexts.cc",
     "src/contexts.h",

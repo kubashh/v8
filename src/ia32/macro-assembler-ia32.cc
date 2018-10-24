@@ -50,10 +50,9 @@ void TurboAssembler::InitializeRootRegister() {
   // removed.
   if (!FLAG_embedded_builtins) return;
 
-  ExternalReference roots_array_start =
-      ExternalReference::roots_array_start(isolate());
-  Move(kRootRegister, Immediate(roots_array_start));
-  add(kRootRegister, Immediate(kRootRegisterBias));
+  ExternalReference base_address =
+      ExternalReference::isolate_base_address(isolate());
+  Move(kRootRegister, Immediate(base_address));
 }
 
 void TurboAssembler::VerifyRootRegister() {
@@ -62,8 +61,7 @@ void TurboAssembler::VerifyRootRegister() {
   DCHECK(FLAG_embedded_builtins);
 
   Label root_register_ok;
-  cmp(Operand(kRootRegister,
-              IsolateData::kMagicNumberOffset - kRootRegisterBias),
+  cmp(Operand(kRootRegister, IsolateData::base_to_magic_number_offset()),
       Immediate(IsolateData::kRootRegisterSentinel));
   j(equal, &root_register_ok);
   int3();
@@ -89,12 +87,11 @@ void TurboAssembler::LoadRoot(Register destination, RootIndex index) {
       return;
     }
   }
-  ExternalReference roots_array_start =
-      ExternalReference::roots_array_start(isolate());
-  mov(destination, Immediate(static_cast<int>(index)));
+  ExternalReference base_address =
+      ExternalReference::isolate_base_address(isolate());
   lea(destination,
-      Operand(destination, times_pointer_size, roots_array_start.address(),
-              RelocInfo::EXTERNAL_REFERENCE));
+      Operand(base_address.address(), RelocInfo::EXTERNAL_REFERENCE));
+  mov(destination, Operand(destination, RootRegisterOffsetForRootIndex(index)));
 }
 
 void TurboAssembler::CompareRoot(Register with, Register scratch,
@@ -105,10 +102,10 @@ void TurboAssembler::CompareRoot(Register with, Register scratch,
     return;
   }
 #endif  // V8_EMBEDDED_BUILTINS
-  ExternalReference roots_array_start =
-      ExternalReference::roots_array_start(isolate());
+  ExternalReference base_address =
+      ExternalReference::isolate_base_address(isolate());
   mov(scratch, Immediate(static_cast<int>(index)));
-  cmp(with, Operand(scratch, times_pointer_size, roots_array_start.address(),
+  cmp(with, Operand(scratch, times_pointer_size, base_address.address(),
                     RelocInfo::EXTERNAL_REFERENCE));
 }
 

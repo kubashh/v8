@@ -23,13 +23,13 @@ class WasmBuiltinsAssembler : public CodeStubAssembler {
 
   TNode<Code> LoadBuiltinFromFrame(Builtins::Name id) {
     TNode<Object> instance = LoadInstanceFromFrame();
-    TNode<IntPtrT> roots = UncheckedCast<IntPtrT>(
+    TNode<IntPtrT> base_address = UncheckedCast<IntPtrT>(
         Load(MachineType::Pointer(), instance,
-             IntPtrConstant(WasmInstanceObject::kRootsArrayAddressOffset -
+             IntPtrConstant(WasmInstanceObject::kIsolateBaseAddressOffset -
                             kHeapObjectTag)));
-    TNode<Code> target = UncheckedCast<Code>(Load(
-        MachineType::TaggedPointer(), roots,
-        IntPtrConstant(IsolateData::kBuiltinsTableOffset + id * kPointerSize)));
+    TNode<Code> target = UncheckedCast<Code>(
+        Load(MachineType::TaggedPointer(), base_address,
+             IntPtrConstant(IsolateData::base_to_builtin_slot_offset(id))));
     return target;
   }
 
