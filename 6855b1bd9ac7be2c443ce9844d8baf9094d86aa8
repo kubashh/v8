@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1c75f34_02b0c72a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-10-24T13:48:11Z",
+      "side": 1,
+      "message": "It is not guaranteed that FinishCompile is called after tiering is completed.",
+      "revId": "6855b1bd9ac7be2c443ce9844d8baf9094d86aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
