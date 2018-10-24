@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da5d54da_54f9a65a",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-24T14:00:15Z",
+      "side": 1,
+      "message": "Let\u0027s make it a little clearer by saying\n- |items| is the only argument, and\n- the receiver is the Array function.",
+      "revId": "c83d4e07f574ac5ddd86515c5fff0d32149faf92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6216ba5_d3fab474",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-24T14:00:15Z",
+      "side": 1,
+      "message": "It might make sense to check the argc before loading the array function.",
+      "revId": "c83d4e07f574ac5ddd86515c5fff0d32149faf92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
