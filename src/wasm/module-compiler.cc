@@ -104,6 +104,8 @@ class CompilationState {
   bool SetFinisherIsRunning(bool value);
   void ScheduleFinisherTask();
 
+  bool HasOutstandingCompilation() const;
+
   void Abort();
 
   Isolate* isolate() const { return isolate_; }
@@ -2504,9 +2506,6 @@ class AsyncCompileJob::PrepareAndStartCompile : public CompileStep {
         module->functions.size() - module->num_imported_functions;
 
     if (num_functions == 0) {
-      // Tiering has nothing to do if module is empty.
-      job_->tiering_completed_ = true;
-
       // Degenerate case of an empty module.
       job_->FinishCompile(true);
       return;
@@ -2538,12 +2537,10 @@ class AsyncCompileJob::PrepareAndStartCompile : public CompileStep {
                 }
                 // If a foreground task or a finisher is pending, we rely on
                 // FinishModule to remove the job.
-                if (job->pending_foreground_task_ ||
-                    job->outstanding_finishers_.load() > 0) {
-                  job->tiering_completed_ = true;
-                  return;
+                if (!job->pending_foreground_task_ &&
+                    job->outstanding_finishers_.load() == 0) {
+                  job->isolate_->wasm_engine()->RemoveCompileJob(job);
                 }
-                job->isolate_->wasm_engine()->RemoveCompileJob(job);
                 return;
               case CompilationEvent::kFailedCompilation: {
                 // Tier-up compilation should not fail if baseline compilation
@@ -2635,7 +2632,8 @@ class AsyncCompileJob::FinishModule : public CompileStep {
     // by a callback.
     DCHECK_EQ(CompileMode::kTiering,
               job_->native_module_->compilation_state()->compile_mode());
-    if (job_->tiering_completed_) {
+    if (!job_->native_module_->compilation_state()
+             ->HasOutstandingCompilation()) {
       job_->isolate_->wasm_engine()->RemoveCompileJob(job_);
     }
   }
@@ -2829,9 +2827,6 @@ bool AsyncStreamingProcessor::Deserialize(Vector<const uint8_t> module_bytes,
   auto owned_wire_bytes = OwnedVector<uint8_t>::Of(wire_bytes);
   job_->wire_bytes_ = ModuleWireBytes(owned_wire_bytes.as_vector());
   job_->native_module_->set_wire_bytes(std::move(owned_wire_bytes));
-
-  // Job should now behave as if it's fully compiled.
-  job_->tiering_completed_ = true;
 
   SaveContext saved_context(job_->isolate_);
   job_->isolate_->set_context(*job_->native_context_);
@@ -3064,6 +3059,12 @@ bool CompilationState::SetFinisherIsRunning(bool value) {
 void CompilationState::ScheduleFinisherTask() {
   foreground_task_runner_->PostTask(
       base::make_unique<FinishCompileTask>(this, &foreground_task_manager_));
+}
+
+bool CompilationState::HasOutstandingCompilation() const {
+  base::MutexGuard mutex_guard(&mutex_);
+  return !baseline_compilation_units_.empty() ||
+         !tiering_compilation_units_.empty();
 }
 
 void CompilationState::Abort() {
