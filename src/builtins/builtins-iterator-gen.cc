@@ -262,24 +262,10 @@ TF_BUILTIN(IterableToListMayPreserveHoles, IteratorBuiltinsAssembler) {
   TailCallBuiltin(Builtins::kIterableToList, context, iterable, iterator_fn);
 }
 
-// This builtin loads the property Symbol.iterator as the iterator, and has fast
-// paths for fast arrays, for primitive strings, for sets and set iterators, and
-// for map iterators. These fast paths will only be taken if Symbol.iterator and
-// the Iterator prototype are not modified in a way that changes the original
-// iteration behavior.
-// * In case of fast holey arrays, holes will be converted to undefined to
-//   reflect iteration semantics. Note that replacement by undefined is only
-//   correct when the NoElements protector is valid.
-// * In case of map/set iterators, there is an additional requirement that the
-//   iterator is not partially consumed. To be spec-compliant, after spreading
-//   the iterator is set to be exhausted.
-TF_BUILTIN(IterableToListWithSymbolLookup, IteratorBuiltinsAssembler) {
-  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
-  TNode<Object> iterable = CAST(Parameter(Descriptor::kIterable));
-
-  Label slow_path(this), check_string(this), check_map(this), check_set(this);
-
-  GotoIfForceSlowPath(&slow_path);
+void IteratorBuiltinsAssembler::FastIterableToList(TNode<Context> context,
+                                                   TNode<Object> iterable,
+                                                   Label* slow) {
+  Label check_string(this), check_map(this), check_set(this);
 
   GotoIfNot(IsFastJSArrayWithNoCustomIteration(iterable, context),
             &check_string);
@@ -312,11 +298,33 @@ TF_BUILTIN(IterableToListWithSymbolLookup, IteratorBuiltinsAssembler) {
   {
     Label set_fast_call(this);
     BranchIfIterableWithOriginalValueSetIterator(state(), iterable, context,
-                                                 &set_fast_call, &slow_path);
+                                                 &set_fast_call, slow);
 
     BIND(&set_fast_call);
     TailCallBuiltin(Builtins::kSetOrSetIteratorToList, context, iterable);
   }
+}
+
+// This builtin loads the property Symbol.iterator as the iterator, and has fast
+// paths for fast arrays, for primitive strings, for sets and set iterators, and
+// for map iterators. These fast paths will only be taken if Symbol.iterator and
+// the Iterator prototype are not modified in a way that changes the original
+// iteration behavior.
+// * In case of fast holey arrays, holes will be converted to undefined to
+//   reflect iteration semantics. Note that replacement by undefined is only
+//   correct when the NoElements protector is valid.
+// * In case of map/set iterators, there is an additional requirement that the
+//   iterator is not partially consumed. To be spec-compliant, after spreading
+//   the iterator is set to be exhausted.
+TF_BUILTIN(IterableToListWithSymbolLookup, IteratorBuiltinsAssembler) {
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> iterable = CAST(Parameter(Descriptor::kIterable));
+
+  Label slow_path(this);
+
+  GotoIfForceSlowPath(&slow_path);
+
+  FastIterableToList(context, iterable, &slow_path);
 
   BIND(&slow_path);
   {
