@@ -16,6 +16,24 @@
       "revId": "6855b1bd9ac7be2c443ce9844d8baf9094d86aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "036d6088_2bf94033",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-10-24T15:03:29Z",
+      "side": 1,
+      "message": "Right, good catch. I checked uses of that flag and concluded that we should remove it altogether. Did that here: https://crrev.com/c/1297321\nAnd rebased this CL on top of that.",
+      "parentUuid": "d1c75f34_02b0c72a",
+      "revId": "6855b1bd9ac7be2c443ce9844d8baf9094d86aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
