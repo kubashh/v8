@@ -3017,6 +3017,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
       SloppyTNode<SharedFunctionInfo> shared_info,
       Label* if_compile_lazy = nullptr);
 
+  // Get the Smi builtin_id from the SFI, if any
+  TNode<Smi> GetSharedFunctionInfoBuiltinId(
+      SloppyTNode<SharedFunctionInfo> shared_info, Label* if_not_builtin);
+
   Node* AllocateFunctionWithMapAndContext(Node* map, Node* shared_info,
                                           Node* context);
 
