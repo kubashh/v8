@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1084ef5_76ea53f5",
+        "filename": "src/builtins/builtins-regexp-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-24T05:31:51Z",
+      "side": 1,
+      "message": "Please turn this into a helper (as separate CL maybe). This looks horrible.",
+      "revId": "7909a37c1bb765743c056decbe46abd72a4d043c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1106aaad_62cc725d",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 973,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-24T05:31:51Z",
+      "side": 1,
+      "message": "You might not want to land it like this...",
+      "revId": "7909a37c1bb765743c056decbe46abd72a4d043c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
