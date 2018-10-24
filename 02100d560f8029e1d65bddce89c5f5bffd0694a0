@@ -46,6 +46,30 @@
       "revId": "02100d560f8029e1d65bddce89c5f5bffd0694a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88714b84_35fbcc22",
+        "filename": "src/pointer-with-payload.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001934
+      },
+      "writtenOn": "2018-10-24T14:11:45Z",
+      "side": 1,
+      "message": "Yes, but MSVC complains about the way it is written. To be specific, the issue is a compile time error and not a runtime error. I wrote a fix. https://chromium-review.googlesource.com/c/v8/v8/+/1297991",
+      "parentUuid": "3f1d0ef7_57927e1a",
+      "range": {
+        "startLine": 91,
+        "startChar": 14,
+        "endLine": 91,
+        "endChar": 40
+      },
+      "revId": "02100d560f8029e1d65bddce89c5f5bffd0694a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
