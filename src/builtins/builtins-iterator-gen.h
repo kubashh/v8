@@ -59,6 +59,9 @@ class IteratorBuiltinsAssembler : public CodeStubAssembler {
   // following the ECMAscript operation with the same name.
   TNode<JSArray> IterableToList(TNode<Context> context, TNode<Object> iterable,
                                 TNode<Object> iterator_fn);
+
+  void FastIterableToList(TNode<Context> context, TNode<Object> iterable,
+                          Label* slow);
 };
 
 }  // namespace internal
