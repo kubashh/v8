@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2e1f9be1_9e79a992",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1310033
+      },
+      "writtenOn": "2018-10-24T13:31:42Z",
+      "side": 1,
+      "message": "Sure, I\u0027ll include it in the next patchset. Please let me know if it\u0027s sufficient.",
+      "parentUuid": "eec60885_d98b004c",
+      "revId": "957813f602880bde5d177c0d99ef566d91db9ccd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2c8d6b2_b0f84cc6",
         "filename": "src/builtins/builtins-typed-array-gen.cc",
         "patchSetId": 2
