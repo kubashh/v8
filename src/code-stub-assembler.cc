@@ -12985,6 +12985,16 @@ TNode<Code> CodeStubAssembler::LoadBuiltin(TNode<Smi> builtin_id) {
            table_index));
 }
 
+TNode<Smi> CodeStubAssembler::GetSharedFunctionInfoBuiltinId(
+    SloppyTNode<SharedFunctionInfo> shared_info, Label* if_not_builtin) {
+  TNode<Object> sfi_data =
+      LoadObjectField(shared_info, SharedFunctionInfo::kFunctionDataOffset);
+
+  // IsSmi: Is builtin
+  GotoIf(TaggedIsNotSmi(sfi_data), if_not_builtin);
+  return CAST(sfi_data);
+}
+
 TNode<Code> CodeStubAssembler::GetSharedFunctionInfoCode(
     SloppyTNode<SharedFunctionInfo> shared_info, Label* if_compile_lazy) {
   TNode<Object> sfi_data =
