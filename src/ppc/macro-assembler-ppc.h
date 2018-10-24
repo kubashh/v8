@@ -168,10 +168,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   static int ActivationFrameAlignment();
 
   void InitializeRootRegister() {
-    ExternalReference roots_array_start =
-        ExternalReference::roots_array_start(isolate());
-    mov(kRootRegister, Operand(roots_array_start));
-    addi(kRootRegister, kRootRegister, Operand(kRootRegisterBias));
+    ExternalReference base_address =
+        ExternalReference::isolate_base_address(isolate());
+    mov(kRootRegister, Operand(base_address));
   }
 
   // These exist to provide portability between 32 and 64bit
