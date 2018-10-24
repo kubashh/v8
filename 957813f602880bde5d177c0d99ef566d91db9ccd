@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "eec60885_d98b004c",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1686,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-24T12:08:28Z",
+      "side": 1,
+      "message": "Can you please add a description of the approach below. Given that we so far we otherwise don\u0027t use such an approach to bypass calls to `o[@@iterator]`, it deserves some more documentation for other developers to be able to understand what this does and why it\u0027s correct.",
+      "revId": "957813f602880bde5d177c0d99ef566d91db9ccd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2c8d6b2_b0f84cc6",
         "filename": "src/builtins/builtins-typed-array-gen.cc",
         "patchSetId": 2
@@ -13,6 +30,23 @@
       "writtenOn": "2018-10-24T12:02:29Z",
       "side": 1,
       "message": "You can remove this helper and just compare the result of LoadObjectField(shared_info, SharedFunctionInfo::kFunctionDataOffset) directly to SmiConstant(Builtins::kTypedArrayPrototypeValues)",
+      "revId": "957813f602880bde5d177c0d99ef566d91db9ccd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd6e2e73_308cbe88",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1700,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-24T12:08:28Z",
+      "side": 1,
+      "message": "You can only do this if you know that the `%ArrayIteratorPrototype%.next()` is untouched. You can guarantee that by checking the existing ArrayIteratorProtector.",
       "revId": "957813f602880bde5d177c0d99ef566d91db9ccd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
