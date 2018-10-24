@@ -141,6 +141,22 @@ bool Context::HasSameSecurityTokenAs(Context* that) const {
 NATIVE_CONTEXT_FIELDS(NATIVE_CONTEXT_FIELD_ACCESSORS)
 #undef NATIVE_CONTEXT_FIELD_ACCESSORS
 
+#define NATIVE_CONTEXT_EXTERNAL_POINTER_ACCESSORS(index, type, name) \
+  void Context::set_##name(type* value) {                            \
+    DCHECK(IsNativeContext());                                       \
+    external_pointers()->set(index, value);                          \
+  }                                                                  \
+  bool Context::is_##name(type* value) const {                       \
+    DCHECK(IsNativeContext());                                       \
+    return name() == value;                                          \
+  }                                                                  \
+  type* Context::name() const {                                      \
+    DCHECK(IsNativeContext());                                       \
+    return static_cast<type*>(external_pointers()->get(index));      \
+  }
+NATIVE_CONTEXT_EXTERNAL_POINTERS(NATIVE_CONTEXT_EXTERNAL_POINTER_ACCESSORS)
+#undef NATIVE_CONTEXT_EXTERNAL_POINTER_ACCESSORS
+
 #define CHECK_FOLLOWS2(v1, v2) STATIC_ASSERT((v1 + 1) == (v2))
 #define CHECK_FOLLOWS4(v1, v2, v3, v4) \
   CHECK_FOLLOWS2(v1, v2);              \

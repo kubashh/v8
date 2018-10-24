@@ -1357,6 +1357,8 @@ Handle<NativeContext> Factory::NewNativeContext() {
   context->set_serialized_objects(*empty_fixed_array());
   context->set_dirty_js_weak_factories(
       ReadOnlyRoots(isolate()).undefined_value());
+  context->set_external_pointers(*PodArray<void*>::New(
+      isolate(), Context::NATIVE_CONTEXT_EXTERNAL_POINTER_SLOTS, TENURED));
   return context;
 }
 
