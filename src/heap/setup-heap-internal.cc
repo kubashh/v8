@@ -23,7 +23,6 @@
 #include "src/objects/dictionary.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/map.h"
-#include "src/objects/microtask-queue.h"
 #include "src/objects/microtask.h"
 #include "src/objects/module.h"
 #include "src/objects/promise.h"
@@ -762,8 +761,6 @@ void Heap::CreateInitialObjects() {
   Handle<FeedbackCell> many_closures_cell =
       factory->NewManyClosuresCell(factory->undefined_value());
   set_many_closures_cell(*many_closures_cell);
-
-  set_default_microtask_queue(*factory->NewMicrotaskQueue());
 
   {
     Handle<FixedArray> empty_sloppy_arguments_elements =
