@@ -392,6 +392,16 @@ module test {
       j++;
     }
     check(sum == 7);
+
+    j = 0;
+    try {
+      for (;;) {
+        if (++j == 10) goto Exit;
+      }
+    }
+    label Exit {
+      check(j == 10);
+    }
   }
 
   macro TestSubtyping(x: Smi) {
@@ -409,7 +419,7 @@ module test {
     }
   }
 
-  macro TypeswitchExample(x: Number | FixedArray): int32 {
+  macro TypeswitchExample(x: Number|FixedArray): int32 {
     let result: int32 = 0;
     typeswitch (IncrementIfSmi<(Number | FixedArray)>(x)) {
       case (x: FixedArray): {
