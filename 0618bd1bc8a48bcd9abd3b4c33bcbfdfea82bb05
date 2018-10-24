@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3ece799_ec9dd390",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "Oh man.. reading this comment again still hurts, we could remove one level of indirection here.",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0ae5d87_0d878ac8",
+        "filename": "src/constants-arch.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "Maybe:\n\n #else \n #error Unsupported target architecture.",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f2fef80_f0e3ac14",
+        "filename": "src/disassembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "Please update the comment (in the .h) to say \u0027root-register-relative\u0027 to clarify that the bias is already included.",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "326750a5_c39f15b9",
+        "filename": "src/disassembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "IMO we should keep exposing size data from IsolateData. Callers shouldn\u0027t need these implementation details.. Was there a reason to hide it?",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2de84dca_acdcb204",
+        "filename": "src/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right, it was expected to point at roots_, now it points at roots_ + bias.",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d84bc18d_e7e615b2",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "These helpers duplicate functionality we already have in TurboAssembler, can we remove those?",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79cf40af_bf7f6b85",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "Is it the DCHECK that\u0027s blocking constexpr\u0027ification?",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efdc5224_432e4c95",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "I don\u0027t think this one is needed, Builtins::Name will implicitly cast to int.",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d801e670_95d0c63f",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "IMO this renaming adds confusion. Having parts of the codebase refer to \u0027base\u0027 and other parts to \u0027root\u0027 doesn\u0027t seem like a good state to be in :)",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca2d5f35_b91f2158",
+        "filename": "src/isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 1,
+      "message": "Nit: we could make this more general and just say \u0027isolate-specific data\u0027. Also please document that this is what kRootRegister is set to. \n\nI\u0027d kinda prefer not mixing \u0027base\u0027 and \u0027root\u0027 terms, but no very strong opinion.",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

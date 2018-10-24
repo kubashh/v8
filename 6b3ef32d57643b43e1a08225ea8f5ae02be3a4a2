@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "333fffcd_e47f61ed",
+        "filename": "src/objects.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-24T13:07:28Z",
+      "side": 0,
+      "message": "Nice.",
+      "revId": "6b3ef32d57643b43e1a08225ea8f5ae02be3a4a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
