@@ -466,10 +466,9 @@ class V8_EXPORT_PRIVATE TurboAssembler : public TurboAssemblerBase {
   void CallRuntimeWithCEntry(Runtime::FunctionId fid, Register centry);
 
   void InitializeRootRegister() {
-    ExternalReference roots_array_start =
-        ExternalReference::roots_array_start(isolate());
-    Move(kRootRegister, roots_array_start);
-    addp(kRootRegister, Immediate(kRootRegisterBias));
+    ExternalReference base_address =
+        ExternalReference::isolate_base_address(isolate());
+    Move(kRootRegister, base_address);
   }
 
   void SaveRegisters(RegList registers);

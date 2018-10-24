@@ -994,11 +994,11 @@ TNode<Object> CodeAssembler::LoadRoot(RootIndex root_index) {
   // TODO(jgruber): In theory we could generate better code for this by
   // letting the macro assembler decide how to load from the roots list. In most
   // cases, it would boil down to loading from a fixed kRootRegister offset.
-  Node* roots_array_start =
-      ExternalConstant(ExternalReference::roots_array_start(isolate()));
-  size_t offset = static_cast<size_t>(root_index) * kPointerSize;
-  return UncheckedCast<Object>(Load(MachineType::AnyTagged(), roots_array_start,
-                                    IntPtrConstant(offset)));
+  Node* base_address =
+      ExternalConstant(ExternalReference::isolate_base_address(isolate()));
+  int offset = IsolateData::base_to_root_slot_offset(root_index);
+  return UncheckedCast<Object>(
+      Load(MachineType::AnyTagged(), base_address, IntPtrConstant(offset)));
 }
 
 Node* CodeAssembler::Store(Node* base, Node* value) {
@@ -1058,10 +1058,10 @@ Node* CodeAssembler::AtomicCompareExchange(MachineType type, Node* base,
 
 Node* CodeAssembler::StoreRoot(RootIndex root_index, Node* value) {
   DCHECK(!RootsTable::IsImmortalImmovable(root_index));
-  Node* roots_array_start =
-      ExternalConstant(ExternalReference::roots_array_start(isolate()));
-  size_t offset = static_cast<size_t>(root_index) * kPointerSize;
-  return StoreNoWriteBarrier(MachineRepresentation::kTagged, roots_array_start,
+  Node* base_address =
+      ExternalConstant(ExternalReference::isolate_base_address(isolate()));
+  int offset = IsolateData::base_to_root_slot_offset(root_index);
+  return StoreNoWriteBarrier(MachineRepresentation::kTagged, base_address,
                              IntPtrConstant(offset), value);
 }
 

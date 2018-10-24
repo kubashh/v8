@@ -701,7 +701,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         frame_access_state()->IncreaseSPDelta(1);
         Operand virtual_call_target_register(
             kRootRegister,
-            IsolateData::kVirtualCallTargetRegisterOffset - kRootRegisterBias);
+            IsolateData::base_to_virtual_call_target_register_offset());
         __ mov(eax, i.InputOperand(0));
         __ add(eax, Immediate(Code::kHeaderSize - kHeapObjectTag));
         __ mov(virtual_call_target_register, eax);

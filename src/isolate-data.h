@@ -6,6 +6,7 @@
 #define V8_ISOLATE_DATA_H_
 
 #include "src/builtins/builtins.h"
+#include "src/constants-arch.h"
 #include "src/external-reference-table.h"
 #include "src/roots.h"
 #include "src/utils.h"
@@ -26,26 +27,44 @@ class IsolateData final {
  public:
   IsolateData() = default;
 
-// Layout description.
-#define FIELDS(V)                                                         \
-  /* roots_ */                                                            \
-  V(kRootsTableOffset, RootsTable::kEntriesCount* kPointerSize)           \
-  V(kRootsTableEndOffset, 0)                                              \
-  /* external_reference_table_ */                                         \
-  V(kExternalReferenceTableOffset, ExternalReferenceTable::SizeInBytes()) \
-  V(kExternalReferenceTableEndOffset, 0)                                  \
-  /* builtins_ */                                                         \
-  V(kBuiltinsTableOffset, Builtins::builtin_count* kPointerSize)          \
-  V(kBuiltinsTableEndOffset, 0)                                           \
-  /* magic_number_ */                                                     \
-  V(kMagicNumberOffset, kIntptrSize)                                      \
-  /* virtual_call_target_register_ */                                     \
-  V(kVirtualCallTargetRegisterOffset, kPointerSize)                       \
-  /* Total size. */                                                       \
-  V(kSize, 0)
+  // The value of the root register.
+  Address isolate_base_address() const {
+    return reinterpret_cast<Address>(this) + kBaseOffset;
+  }
 
-  DEFINE_FIELD_OFFSET_CONSTANTS(0, FIELDS)
-#undef FIELDS
+  static constexpr int base_to_roots_table_offset() {
+    return kRootsTableOffset - kBaseOffset;
+  }
+
+  static constexpr int base_to_root_slot_offset(RootIndex root_index) {
+    return base_to_roots_table_offset() + RootsTable::offset_of(root_index);
+  }
+
+  static constexpr int base_to_external_reference_table_offset() {
+    return kExternalReferenceTableOffset - kBaseOffset;
+  }
+
+  static constexpr int base_to_builtins_table_offset() {
+    return kBuiltinsTableOffset - kBaseOffset;
+  }
+
+  // TODO(ishell): remove in favour of typified id version.
+  static int base_to_builtin_slot_offset(int builtin_index) {
+    DCHECK(Builtins::IsBuiltinId(builtin_index));
+    return base_to_builtins_table_offset() + builtin_index * kPointerSize;
+  }
+
+  static int base_to_builtin_slot_offset(Builtins::Name id) {
+    return base_to_builtins_table_offset() + id * kPointerSize;
+  }
+
+  static constexpr int base_to_magic_number_offset() {
+    return kMagicNumberOffset - kBaseOffset;
+  }
+
+  static constexpr int base_to_virtual_call_target_register_offset() {
+    return kVirtualCallTargetRegisterOffset - kBaseOffset;
+  }
 
   // Returns true if this address points to data stored in this instance.
   // If it's the case then the value can be accessed indirectly through the
@@ -70,6 +89,21 @@ class IsolateData final {
   static constexpr intptr_t kRootRegisterSentinel = 0xcafeca11;
 
  private:
+  static constexpr intptr_t kBaseOffset = kRootRegisterBias;
+
+// Static layout definition.
+#define FIELDS(V)                                                         \
+  V(kRootsTableOffset, RootsTable::kEntriesCount* kPointerSize)           \
+  V(kExternalReferenceTableOffset, ExternalReferenceTable::SizeInBytes()) \
+  V(kBuiltinsTableOffset, Builtins::builtin_count* kPointerSize)          \
+  V(kMagicNumberOffset, kIntptrSize)                                      \
+  V(kVirtualCallTargetRegisterOffset, kPointerSize)                       \
+  /* Total size. */                                                       \
+  V(kSize, 0)
+
+  DEFINE_FIELD_OFFSET_CONSTANTS(0, FIELDS)
+#undef FIELDS
+
   RootsTable roots_;
 
   ExternalReferenceTable external_reference_table_;

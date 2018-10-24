@@ -1912,10 +1912,9 @@ void MacroAssembler::LoadNativeContextSlot(int index, Register dst) {
 
 
 void TurboAssembler::InitializeRootRegister() {
-  ExternalReference roots_array_start =
-      ExternalReference::roots_array_start(isolate());
-  mov(kRootRegister, Operand(roots_array_start));
-  add(kRootRegister, kRootRegister, Operand(kRootRegisterBias));
+  ExternalReference base_address =
+      ExternalReference::isolate_base_address(isolate());
+  mov(kRootRegister, Operand(base_address));
 }
 
 void MacroAssembler::SmiTag(Register reg, SBit s) {
