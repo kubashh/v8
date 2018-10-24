@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f6091e4_528184ab",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 994,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "Yeah.. TF is not good yet at generating code for external references.",
+      "parentUuid": "d3ece799_ec9dd390",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0ae5d87_0d878ac8",
         "filename": "src/constants-arch.h",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d35f4a4a_f8c6a7e9",
+        "filename": "src/constants-arch.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0ae5d87_0d878ac8",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "269b29f7_6750d5a6",
+        "filename": "src/disassembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f2fef80_f0e3ac14",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "326750a5_c39f15b9",
         "filename": "src/disassembler.cc",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02dc6ce0_69468797",
+        "filename": "src/disassembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "My motivation was: \n1) the IsolateData should only care about predictable layout of itself and once we found a starting offset of the respective sub-table we should deal with the sub-table directly regardless of what the IsolateData thinks about the sub-table size.\n2) in order to avoid confusion between offsets in the IsolateData object itself and root-register-relative offsets.",
+      "parentUuid": "326750a5_c39f15b9",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "4e412444_ffec629a",
+        "filename": "src/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "Ah true. Thanks!",
+      "parentUuid": "2de84dca_acdcb204",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d84bc18d_e7e615b2",
         "filename": "src/isolate-data.h",
         "patchSetId": 3
@@ -101,6 +191,24 @@
       "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "debbd938_2baebc49",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "I was planning to do that in a follow-up CL.",
+      "parentUuid": "d84bc18d_e7e615b2",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "7c8bf331_9ef938ba",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "Yes. I think we may drop this check once we switch to Builtins::Name instead of raw ints.",
+      "parentUuid": "79cf40af_bf7f6b85",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "efdc5224_432e4c95",
         "filename": "src/isolate-data.h",
         "patchSetId": 3
@@ -135,6 +261,24 @@
       "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c5dc103_7302ea5a",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "I think we should eventually switch to using Builtins::Name instead of raw ints as we did for root indices.",
+      "parentUuid": "efdc5224_432e4c95",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "df233416_93a97e13",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "After offline discussions we decided to name the thing \"isolate_root\" and keep the kRootRegister name.",
+      "parentUuid": "d801e670_95d0c63f",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca2d5f35_b91f2158",
         "filename": "src/isolate.h",
         "patchSetId": 3
@@ -169,6 +331,24 @@
       "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "264c6b8d_4b623754",
+        "filename": "src/isolate.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-24T15:18:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca2d5f35_b91f2158",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
