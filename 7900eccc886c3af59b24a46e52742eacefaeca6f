@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5d17e1de_f61032fa",
+        "filename": "src/compiler/effect-control-linearizer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-24T04:32:54Z",
+      "side": 1,
+      "message": "I\u0027m not sure we\u0027ll find the map before, but it seems common that this is followed by a CheckMaps later. So maybe we should teach the MemoryOptimizer to do simple map load propopagation?",
+      "parentUuid": "adcbf71f_5c9923a6",
+      "range": {
+        "startLine": 1601,
+        "startChar": 23,
+        "endLine": 1601,
+        "endChar": 65
+      },
+      "revId": "7900eccc886c3af59b24a46e52742eacefaeca6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a7aa29a_d6f61570",
         "filename": "src/compiler/js-typed-lowering.cc",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-23T20:29:56Z",
       "side": 1,
       "message": "Was this a bug before?",
+      "range": {
+        "startLine": 47,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 61
+      },
+      "revId": "7900eccc886c3af59b24a46e52742eacefaeca6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "551099bf_28d974d7",
+        "filename": "src/compiler/js-typed-lowering.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-24T04:32:54Z",
+      "side": 1,
+      "message": "No. Previously StrictEqual and Equal bytecodes would never collect Oddball feedback.",
+      "parentUuid": "4a7aa29a_d6f61570",
       "range": {
         "startLine": 47,
         "startChar": 8,
