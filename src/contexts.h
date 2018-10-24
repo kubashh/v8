@@ -13,6 +13,7 @@ namespace internal {
 class JSGlobalObject;
 class JSGlobalProxy;
 class JSWeakFactory;
+class MicrotaskQueue;
 class NativeContext;
 class RegExpMatchInfo;
 
@@ -107,6 +108,7 @@ enum ContextLookupFlags {
 #define NATIVE_CONTEXT_FIELDS(V)                                               \
   V(GLOBAL_PROXY_INDEX, JSGlobalProxy, global_proxy_object)                    \
   V(EMBEDDER_DATA_INDEX, FixedArray, embedder_data)                            \
+  V(EXTERNAL_POINTERS_INDEX, PodArray<void*>, external_pointers)               \
   /* Below is alpha-sorted */                                                  \
   V(ACCESSOR_PROPERTY_DESCRIPTOR_MAP_INDEX, Map,                               \
     accessor_property_descriptor_map)                                          \
@@ -266,9 +268,6 @@ enum ContextLookupFlags {
   V(PROMISE_ALL_RESOLVE_ELEMENT_SHARED_FUN, SharedFunctionInfo,                \
     promise_all_resolve_element_shared_fun)                                    \
   V(PROMISE_PROTOTYPE_INDEX, JSObject, promise_prototype)                      \
-  /* TODO(ishell): [ptr-compr] this field contains a pointer to a C++ */       \
-  /* object */                                                                 \
-  V(MICROTASK_QUEUE_POINTER, Object, microtask_queue_pointer)                  \
   V(REGEXP_EXEC_FUNCTION_INDEX, JSFunction, regexp_exec_function)              \
   V(REGEXP_FUNCTION_INDEX, JSFunction, regexp_function)                        \
   V(REGEXP_LAST_MATCH_INFO_INDEX, RegExpMatchInfo, regexp_last_match_info)     \
@@ -350,6 +349,9 @@ enum ContextLookupFlags {
   V(UINT8_CLAMPED_ARRAY_FUN_INDEX, JSFunction, uint8_clamped_array_fun)        \
   NATIVE_CONTEXT_INTRINSIC_FUNCTIONS(V)                                        \
   NATIVE_CONTEXT_IMPORTED_FIELDS(V)
+
+#define NATIVE_CONTEXT_EXTERNAL_POINTERS(V) \
+  V(MICROTASK_QUEUE_INDEX, MicrotaskQueue, microtask_queue)
 
 // A table of all script contexts. Every loaded top-level script with top-level
 // lexical declarations contributes its ScriptContext into this table.
@@ -484,6 +486,14 @@ class Context : public FixedArray, public NeverReadOnlySpaceObject {
     WHITE_LIST_INDEX = MIN_CONTEXT_SLOTS + 1
   };
 
+  enum ExternalPointers {
+#define EXTERNAL_POINTER_SLOT(index, type, name) index,
+    NATIVE_CONTEXT_EXTERNAL_POINTERS(EXTERNAL_POINTER_SLOT)
+#undef EXTERNAL_POINTER_SLOT
+
+        NATIVE_CONTEXT_EXTERNAL_POINTER_SLOTS,
+  };
+
   // A region of native context entries containing maps for functions created
   // by Builtins::kFastNewClosure.
   static const int FIRST_FUNCTION_MAP_INDEX = SLOPPY_FUNCTION_MAP_INDEX;
@@ -570,6 +580,13 @@ class Context : public FixedArray, public NeverReadOnlySpaceObject {
   inline type* name() const;
   NATIVE_CONTEXT_FIELDS(NATIVE_CONTEXT_FIELD_ACCESSORS)
 #undef NATIVE_CONTEXT_FIELD_ACCESSORS
+
+#define NATIVE_CONTEXT_EXTERNAL_POINTER_ACCESSORS(index, type, name) \
+  inline void set_##name(type* value);                               \
+  inline bool is_##name(type* value) const;                          \
+  inline type* name() const;
+  NATIVE_CONTEXT_EXTERNAL_POINTERS(NATIVE_CONTEXT_EXTERNAL_POINTER_ACCESSORS)
+#undef NATIVE_CONTEXT_EXTERNAL_POINTER_ACCESSORS
 
   // Lookup the slot called name, starting with the current context.
   // There are three possibilities:

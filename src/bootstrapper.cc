@@ -2509,8 +2509,6 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     // etc. We should probably come up with a more principled approach once
     // the JavaScript builtins are gone.
     JSObject::MigrateSlowToFast(promise_fun, 0, "Bootstrapping");
-
-    native_context()->set_microtask_queue_pointer(0);
   }
 
   {  // -- R e g E x p
@@ -5861,8 +5859,7 @@ Genesis::Genesis(
   }
 
   if (!isolate->serializer_enabled()) {
-    native_context()->set_microtask_queue_pointer(
-        reinterpret_cast<Object*>(isolate->default_microtask_queue()));
+    native_context()->set_microtask_queue(isolate->default_microtask_queue());
   }
 
   // Install experimental natives. Do not include them into the
