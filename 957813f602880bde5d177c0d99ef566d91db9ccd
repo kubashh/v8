@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2c8d6b2_b0f84cc6",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1693,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-10-24T12:02:29Z",
+      "side": 1,
+      "message": "You can remove this helper and just compare the result of LoadObjectField(shared_info, SharedFunctionInfo::kFunctionDataOffset) directly to SmiConstant(Builtins::kTypedArrayPrototypeValues)",
+      "revId": "957813f602880bde5d177c0d99ef566d91db9ccd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
