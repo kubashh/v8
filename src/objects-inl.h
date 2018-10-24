@@ -798,6 +798,7 @@ Map* HeapObject::map() const {
 
 void HeapObject::set_map(Map* value) {
   if (value != nullptr) {
+    Heap::FromWritableHeapObject(this)->NotifyObjectLayoutChangeDone(this);
 #ifdef VERIFY_HEAP
     Heap::FromWritableHeapObject(this)->VerifyObjectLayoutChange(this, value);
 #endif
@@ -817,6 +818,7 @@ Map* HeapObject::synchronized_map() const {
 
 void HeapObject::synchronized_set_map(Map* value) {
   if (value != nullptr) {
+    Heap::FromWritableHeapObject(this)->NotifyObjectLayoutChangeDone(this);
 #ifdef VERIFY_HEAP
     Heap::FromWritableHeapObject(this)->VerifyObjectLayoutChange(this, value);
 #endif
@@ -833,6 +835,7 @@ void HeapObject::synchronized_set_map(Map* value) {
 // Unsafe accessor omitting write barrier.
 void HeapObject::set_map_no_write_barrier(Map* value) {
   if (value != nullptr) {
+    Heap::FromWritableHeapObject(this)->NotifyObjectLayoutChangeDone(this);
 #ifdef VERIFY_HEAP
     Heap::FromWritableHeapObject(this)->VerifyObjectLayoutChange(this, value);
 #endif

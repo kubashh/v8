@@ -116,6 +116,9 @@ declare_args() {
   # Sets -dV8_CONCURRENT_MARKING
   v8_enable_concurrent_marking = true
 
+  # Sets -dV8_MARKING_LOCK_PER_PAGE
+  v8_marking_lock_per_page = false
+
   # Enables various testing features.
   v8_enable_test_features = ""
 
@@ -395,6 +398,9 @@ config("features") {
   }
   if (v8_enable_concurrent_marking) {
     defines += [ "V8_CONCURRENT_MARKING" ]
+  }
+  if (v8_marking_lock_per_page) {
+    defines += [ "V8_MARKING_LOCK_PER_PAGE" ]
   }
   if (v8_check_microtasks_scopes_consistency) {
     defines += [ "V8_CHECK_MICROTASKS_SCOPES_CONSISTENCY" ]
@@ -2065,6 +2071,7 @@ v8_source_set("v8_base") {
     "src/heap/marking.h",
     "src/heap/memory-reducer.cc",
     "src/heap/memory-reducer.h",
+    "src/heap/object-locking.h",
     "src/heap/object-stats.cc",
     "src/heap/object-stats.h",
     "src/heap/objects-visiting-inl.h",
