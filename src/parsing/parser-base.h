@@ -3648,7 +3648,6 @@ void ParserBase<Impl>::ParseFormalParameterList(FormalParametersT* parameters) {
       }
       parameters->has_rest = Check(Token::ELLIPSIS);
       ParseFormalParameter(parameters);
-      RETURN_IF_PARSE_ERROR_CUSTOM(Void);
 
       if (parameters->has_rest) {
         parameters->is_simple = false;
@@ -3668,6 +3667,7 @@ void ParserBase<Impl>::ParseFormalParameterList(FormalParametersT* parameters) {
     }
   }
 
+  RETURN_IF_PARSE_ERROR_CUSTOM(Void);
   impl()->DeclareFormalParameters(parameters);
 }
 
@@ -3729,11 +3729,12 @@ typename ParserBase<Impl>::BlockT ParserBase<Impl>::ParseVariableDeclarations(
 
       if (IsLexicalVariableMode(parsing_result->descriptor.mode)) {
         ValidateLetPattern();
-        RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
       }
     }
     Scanner::Location variable_loc = scanner()->location();
 
+    // TODO(verwaest): Remove once we have FailureExpression.
+    RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
     bool single_name = impl()->IsIdentifier(pattern);
     if (single_name) {
       impl()->PushVariableName(impl()->AsIdentifier(pattern));
@@ -3747,14 +3748,15 @@ typename ParserBase<Impl>::BlockT ParserBase<Impl>::ParseVariableDeclarations(
 
       ExpressionClassifier classifier(this);
       value = ParseAssignmentExpression(var_context != kForStatement);
-      RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
       ValidateExpression();
-      RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
       variable_loc.end_pos = end_position();
 
       if (!parsing_result->first_initializer_loc.IsValid()) {
         parsing_result->first_initializer_loc = variable_loc;
       }
+
+      // TODO(verwaest): Remove once we have FailureExpression.
+      RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
 
       // Don't infer if it is "a = function(){...}();"-like expression.
       if (single_name) {
@@ -3803,14 +3805,12 @@ typename ParserBase<Impl>::BlockT ParserBase<Impl>::ParseVariableDeclarations(
       // and adding VariableProxies to the Scope (see bug 4699).
       impl()->DeclareAndInitializeVariables(
           init_block, &parsing_result->descriptor, &decl, names);
-      RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
     }
   } while (Check(Token::COMMA));
 
   parsing_result->bindings_loc =
       Scanner::Location(bindings_start, end_position());
 
-  DCHECK(!scanner()->has_parser_error_set());
   return init_block;
 }
 
@@ -3880,13 +3880,14 @@ ParserBase<Impl>::ParseHoistableDeclaration(
     bool is_strict_reserved;
     bool is_await = false;
     name = ParseIdentifierOrStrictReservedWord(&is_strict_reserved, &is_await);
-    RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
     name_validity = is_strict_reserved ? kFunctionNameIsStrictReserved
                                        : kFunctionNameValidityUnknown;
     variable_name = name;
   }
 
   FuncNameInferrerState fni_state(&fni_);
+  // TODO(verwaest): Remove once we have FailureIdentifier.
+  RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
   impl()->PushEnclosingName(name);
 
   FunctionKind kind = FunctionKindFor(flags);
@@ -3894,7 +3895,6 @@ ParserBase<Impl>::ParseHoistableDeclaration(
   FunctionLiteralT function = impl()->ParseFunctionLiteral(
       name, scanner()->location(), name_validity, kind, pos,
       FunctionLiteral::kDeclaration, language_mode(), nullptr);
-  RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
 
   // In ES6, a function behaves as a lexical binding, except in
   // a script scope, or the initial scope of eval or another function.
@@ -3911,6 +3911,7 @@ ParserBase<Impl>::ParseHoistableDeclaration(
                                   !scope()->is_declaration_scope() &&
                                   flags == ParseFunctionFlag::kIsNormal;
 
+  RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
   return impl()->DeclareFunction(variable_name, function, mode, pos,
                                  is_sloppy_block_function, names);
 }
@@ -3945,15 +3946,14 @@ typename ParserBase<Impl>::StatementT ParserBase<Impl>::ParseClassDeclaration(
   } else {
     bool is_await = false;
     name = ParseIdentifierOrStrictReservedWord(&is_strict_reserved, &is_await);
-    RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
     variable_name = name;
   }
 
   ExpressionClassifier no_classifier(this);
   ExpressionT value = ParseClassLiteral(name, scanner()->location(),
                                         is_strict_reserved, class_token_pos);
-  RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
   int end_pos = position();
+  RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
   return impl()->DeclareClass(variable_name, value, names, class_token_pos,
                               end_pos);
 }
@@ -3971,17 +3971,13 @@ ParserBase<Impl>::ParseNativeDeclaration() {
   Consume(Token::FUNCTION);
   // Allow "eval" or "arguments" for backward compatibility.
   IdentifierT name = ParseIdentifier(kAllowRestrictedIdentifiers);
-  RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
   Expect(Token::LPAREN);
-  RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
   if (peek() != Token::RPAREN) {
     do {
       ParseIdentifier(kAllowRestrictedIdentifiers);
-      RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
     } while (Check(Token::COMMA));
   }
   Expect(Token::RPAREN);
-  RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
   Expect(Token::SEMICOLON);
   RETURN_IF_PARSE_ERROR_CUSTOM(NullStatement);
   return impl()->DeclareNative(name, pos);
@@ -4029,14 +4025,13 @@ void ParserBase<Impl>::ParseFunctionBody(
     if (body_type == FunctionBodyType::kExpression) {
       ExpressionClassifier classifier(this);
       ExpressionT expression = ParseAssignmentExpression(accept_IN);
-      RETURN_IF_PARSE_ERROR_VOID;
       ValidateExpression();
-      RETURN_IF_PARSE_ERROR_VOID;
 
+      // TODO(verwaest): Remove once we have FailureExpression.
+      RETURN_IF_PARSE_ERROR_VOID;
       if (IsAsyncFunction(kind)) {
         BlockT block = factory()->NewBlock(1, true);
         impl()->RewriteAsyncFunctionBody(body, block, expression);
-        RETURN_IF_PARSE_ERROR_VOID;
       } else {
         body->Add(BuildReturnStatement(expression, expression->position()),
                   zone());
@@ -4052,16 +4047,12 @@ void ParserBase<Impl>::ParseFunctionBody(
 
       if (IsAsyncGeneratorFunction(kind)) {
         impl()->ParseAndRewriteAsyncGeneratorFunctionBody(pos, kind, body);
-        RETURN_IF_PARSE_ERROR_VOID;
       } else if (IsGeneratorFunction(kind)) {
         impl()->ParseAndRewriteGeneratorFunctionBody(pos, kind, body);
-        RETURN_IF_PARSE_ERROR_VOID;
       } else if (IsAsyncFunction(kind)) {
         ParseAsyncFunctionBody(inner_scope, body);
-        RETURN_IF_PARSE_ERROR_VOID;
       } else {
         ParseStatementList(body, closing_token);
-        RETURN_IF_PARSE_ERROR_VOID;
       }
 
       if (IsDerivedConstructor(kind)) {
@@ -4070,7 +4061,6 @@ void ParserBase<Impl>::ParseFunctionBody(
                   zone());
       }
       Expect(closing_token);
-      RETURN_IF_PARSE_ERROR_VOID;
     }
   }
 
@@ -4092,7 +4082,6 @@ void ParserBase<Impl>::ParseFunctionBody(
     DCHECK_EQ(function_scope, inner_scope->outer_scope());
     impl()->SetLanguageMode(function_scope, inner_scope->language_mode());
     BlockT init_block = impl()->BuildParameterInitializationBlock(parameters);
-    RETURN_IF_PARSE_ERROR_VOID;
 
     if (is_sloppy(inner_scope->language_mode())) {
       impl()->InsertSloppyBlockFunctionVarBindings(inner_scope);
@@ -4106,7 +4095,6 @@ void ParserBase<Impl>::ParseFunctionBody(
     inner_scope->set_end_position(end_position());
     if (inner_scope->FinalizeBlockScope() != nullptr) {
       impl()->CheckConflictingVarDeclarations(inner_scope);
-      RETURN_IF_PARSE_ERROR_VOID;
       impl()->InsertShadowingVarBindingInitializers(inner_block);
     } else {
       inner_block->set_scope(nullptr);
@@ -4118,7 +4106,6 @@ void ParserBase<Impl>::ParseFunctionBody(
   }
 
   ValidateFormalParameters(language_mode(), allow_duplicate_parameters);
-  RETURN_IF_PARSE_ERROR_VOID;
 
   if (!IsArrowFunction(kind)) {
     // Declare arguments after parsing the function since lexical 'arguments'
@@ -4127,6 +4114,7 @@ void ParserBase<Impl>::ParseFunctionBody(
     function_scope->DeclareArguments(ast_value_factory());
   }
 
+  RETURN_IF_PARSE_ERROR_VOID;
   impl()->DeclareFunctionNameVar(function_name, function_type, function_scope);
 }
 
