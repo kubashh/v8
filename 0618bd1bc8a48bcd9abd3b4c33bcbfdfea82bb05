@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "55b37e3a_93ab6311",
+        "filename": "src/disassembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-25T07:10:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "02dc6ce0_69468797",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2de84dca_acdcb204",
         "filename": "src/ia32/macro-assembler-ia32.cc",
         "patchSetId": 3
@@ -206,6 +224,24 @@
       "side": 1,
       "message": "I was planning to do that in a follow-up CL.",
       "parentUuid": "d84bc18d_e7e615b2",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2b2959b_7ccbbf62",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-25T07:10:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "debbd938_2baebc49",
       "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -282,6 +318,24 @@
     },
     {
       "key": {
+        "uuid": "b955d083_7c208dcc",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-25T07:10:57Z",
+      "side": 1,
+      "message": "Personally I\u0027ve always preferred using ints as builtin indices over the Name enum. It\u0027s just so clunky to write and use. I use it only when referring to a specific builtin by name. I guess we may be able to improve this with some refactoring love..",
+      "parentUuid": "7c5dc103_7302ea5a",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d801e670_95d0c63f",
         "filename": "src/isolate-data.h",
         "patchSetId": 3
@@ -311,6 +365,24 @@
       "side": 1,
       "message": "After offline discussions we decided to name the thing \"isolate_root\" and keep the kRootRegister name.",
       "parentUuid": "d801e670_95d0c63f",
+      "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c8104101_97725c71",
+        "filename": "src/isolate-data.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-25T07:10:57Z",
+      "side": 1,
+      "message": "Ack thanks, sgtm.",
+      "parentUuid": "df233416_93a97e13",
       "revId": "0618bd1bc8a48bcd9abd3b4c33bcbfdfea82bb05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
