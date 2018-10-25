@@ -22,6 +22,30 @@
       "revId": "d1eb62129657caf84012fd94ab761088872b0e05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ec21dff_d7c686b3",
+        "filename": "src/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-25T13:21:40Z",
+      "side": 0,
+      "message": "Below where? I wasn\u0027t totally consistent - my guideline was to remove the isolate_independent_code condition where we could access with at most a single load (i.e. not going through the builtins constants table).\n\nThinking about this again, in this case it may not be valid to remove it here since generated code can easily try to push heap objects here that we cannot load through HeapObjectAsOperand. I\u0027ll back this out, nice catch.",
+      "parentUuid": "1cfb79f9_cb8f69a2",
+      "range": {
+        "startLine": 1343,
+        "startChar": 31,
+        "endLine": 1343,
+        "endChar": 66
+      },
+      "revId": "d1eb62129657caf84012fd94ab761088872b0e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
