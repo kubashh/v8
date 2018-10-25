@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "58990cc4_7e25b496",
+        "filename": "src/builtins/builtins-internal-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-10-25T11:06:02Z",
+      "side": 1,
+      "message": "This tail call doesn\u0027t mess with the stack, so it should be fairly straight-forward, and we can still remove the complex case.",
+      "parentUuid": "90dfb01c_391dd608",
+      "revId": "31f2a821c9c5c278ce44dd6fe190a3618a0548be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5e648851_3e6ca065",
         "filename": "src/snapshot/snapshot-common.cc",
         "patchSetId": 7
