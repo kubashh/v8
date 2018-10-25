@@ -3593,11 +3593,11 @@ void ParserBase<Impl>::ParseFormalParameter(FormalParametersT* parameters) {
 
   FuncNameInferrerState fni_state(&fni_);
   ExpressionT pattern = ParseBindingPattern();
+  // TODO(verwaest): Remove once we have FailureExpression.
   RETURN_IF_PARSE_ERROR_CUSTOM(Void);
   if (!impl()->IsIdentifier(pattern)) {
     parameters->is_simple = false;
     ValidateFormalParameterInitializer();
-    RETURN_IF_PARSE_ERROR_CUSTOM(Void);
   }
 
   ExpressionT initializer = impl()->NullExpression();
@@ -3609,14 +3609,13 @@ void ParserBase<Impl>::ParseFormalParameter(FormalParametersT* parameters) {
     {
       ExpressionClassifier init_classifier(this);
       initializer = ParseAssignmentExpression(true);
-      RETURN_IF_PARSE_ERROR_CUSTOM(Void);
       ValidateExpression();
-      RETURN_IF_PARSE_ERROR_CUSTOM(Void);
       ValidateFormalParameterInitializer();
-      RETURN_IF_PARSE_ERROR_CUSTOM(Void);
       parameters->is_simple = false;
     }
     classifier()->RecordNonSimpleParameter();
+    // TODO(verwaest): Remove once we have FailureExpression.
+    RETURN_IF_PARSE_ERROR_CUSTOM(Void);
     impl()->SetFunctionNameFromIdentifierRef(initializer, pattern);
   }
 
