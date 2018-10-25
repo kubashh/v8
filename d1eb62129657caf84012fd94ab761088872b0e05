@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cfb79f9_cb8f69a2",
+        "filename": "src/ia32/macro-assembler-ia32.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-10-25T13:17:44Z",
+      "side": 0,
+      "message": "Why is this going away here but not below?",
+      "range": {
+        "startLine": 1343,
+        "startChar": 31,
+        "endLine": 1343,
+        "endChar": 66
+      },
+      "revId": "d1eb62129657caf84012fd94ab761088872b0e05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
