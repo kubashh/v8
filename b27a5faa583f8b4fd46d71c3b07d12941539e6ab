@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26601a24_cc9a6bea",
+        "filename": "src/profiler/cpu-profiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-10-25T17:42:43Z",
+      "side": 1,
+      "message": "AddSampleForTest",
+      "revId": "b27a5faa583f8b4fd46d71c3b07d12941539e6ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21e154ac_b582da6d",
+        "filename": "src/profiler/cpu-profiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2018-10-25T17:42:43Z",
+      "side": 1,
+      "message": "It would be great if we could DCHECK that.",
+      "revId": "b27a5faa583f8b4fd46d71c3b07d12941539e6ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
