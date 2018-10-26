@@ -24,6 +24,8 @@ class ArrayBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
   typedef std::function<void(ArrayBuiltinsAssembler* masm)> PostLoopAction;
 
   enum class MissingPropertyMode { kSkip, kUseUndefined };
+  typedef std::function<void(ArrayBuiltinsAssembler* masm, Node* k)>
+      FirstHoleAction;
 
   void FindResultGenerator();
 
@@ -56,6 +58,7 @@ class ArrayBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
   Node* FilterProcessor(Node* k_value, Node* k);
 
   void MapResultGenerator();
+  void MapFirstHoleAction(Node* index);
 
   void TypedArrayMapResultGenerator();
 
@@ -67,6 +70,7 @@ class ArrayBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
   Node* TypedArrayMapProcessor(Node* k_value, Node* k);
 
   void NullPostLoopAction();
+  void NullFirstHoleAction(Node* index);
 
   // Uses memset to effectively initialize the given FixedArray with Smi zeroes.
   void FillFixedArrayWithSmiZero(TNode<FixedArray> array,
@@ -127,7 +131,9 @@ class ArrayBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
       const CallResultProcessor& processor, const PostLoopAction& action,
       const Callable& slow_case_continuation,
       MissingPropertyMode missing_property_mode,
-      ForEachDirection direction = ForEachDirection::kForward);
+      ForEachDirection direction = ForEachDirection::kForward,
+      const FirstHoleAction& hole_action =
+          &ArrayBuiltinsAssembler::NullFirstHoleAction);
   void InitIteratingArrayBuiltinLoopContinuation(
       TNode<Context> context, TNode<Object> receiver, Node* callbackfn,
       Node* this_arg, Node* a, TNode<JSReceiver> o, Node* initial_k,
@@ -141,7 +147,9 @@ class ArrayBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
   void GenerateIteratingArrayBuiltinLoopContinuation(
       const CallResultProcessor& processor, const PostLoopAction& action,
       MissingPropertyMode missing_property_mode,
-      ForEachDirection direction = ForEachDirection::kForward);
+      ForEachDirection direction = ForEachDirection::kForward,
+      const FirstHoleAction& first_hole_action =
+          &ArrayBuiltinsAssembler::NullFirstHoleAction);
 
   void TailCallArrayConstructorStub(
       const Callable& callable, TNode<Context> context,
@@ -191,12 +199,14 @@ class ArrayBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
                                    Label* array_changed, ParameterMode mode,
                                    ForEachDirection direction,
                                    MissingPropertyMode missing_property_mode,
+                                   const FirstHoleAction& first_hole_action,
                                    TNode<Smi> length);
 
   void HandleFastElements(const CallResultProcessor& processor,
                           const PostLoopAction& action, Label* slow,
                           ForEachDirection direction,
-                          MissingPropertyMode missing_property_mode);
+                          MissingPropertyMode missing_property_mode,
+                          const FirstHoleAction& first_hole_action);
 
   // Perform ArraySpeciesCreate (ES6 #sec-arrayspeciescreate).
   // This version is specialized to create a zero length array
@@ -204,7 +214,13 @@ class ArrayBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
   void GenerateArraySpeciesCreate();
 
   // Perform ArraySpeciesCreate (ES6 #sec-arrayspeciescreate).
-  void GenerateArraySpeciesCreate(TNode<Number> len);
+  // By default for arrays, this will create holey array so that clients of this
+  // don't have to take care about the transition to holey elements kind (for
+  // example, when used by Array.prototype.map, the callback function can delete
+  // elements and so create holes). When setting |start_with_holey_array| to
+  // false, the client must take care of the transition itself.
+  void GenerateArraySpeciesCreate(TNode<Number> len,
+                                  bool start_with_holey_array = true);
 
   Node* callbackfn_ = nullptr;
   TNode<JSReceiver> o_;
@@ -218,6 +234,7 @@ class ArrayBuiltinsAssembler : public BaseBuiltinsFromDSLAssembler {
   Variable k_;
   Variable a_;
   Variable to_;
+  TVariable<BoolT> first_hole_acted_;
   Label fully_spec_compliant_;
   ElementsKind source_elements_kind_ = ElementsKind::NO_ELEMENTS;
 };
