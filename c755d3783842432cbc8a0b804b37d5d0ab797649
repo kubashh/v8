@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18d14867_0848c4b3",
+        "filename": "src/compiler/mips/code-generator-mips.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-10-26T14:59:14Z",
+      "side": 1,
+      "message": "Why is this unreachable? It looks like it\u0027s still generated in the instruction-selector.",
+      "revId": "c755d3783842432cbc8a0b804b37d5d0ab797649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
