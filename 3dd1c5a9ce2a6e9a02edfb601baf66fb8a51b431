@@ -79,6 +79,24 @@
       "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3af245e1_66b496d9",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-26T19:22:53Z",
+      "side": 1,
+      "message": "To elaborate a little: Some versions of Clang would compile \"*(volatile int *)0\" to a ud2 instruction instead of a memory access.  Maybe some versions generate a hlt instead, or maybe the test here is passing because jumping into the tail of whatever instruction is generated for CrashOnPurpose() happens to work.\n\nAnother alternative here is to map some memory as executable, write a faulting instruction into that, try executing it, and verify that the fault handler sees the expected value of %rip.  That is probably the best way of testing this, especially since V8 presumably already has some helper code for mapping memory as executable.\n\nBTW, I am glad to see you are adding unit tests for the fault handler!\n\nCould you add some more unit tests to test the rest of the fault handler\u0027s functionality (not in this CL)?  e.g. Test registering some code with RegisterHandlerData() and check that the handler recognises it correctly.  Those tests could be shared between platforms.",
+      "parentUuid": "712fb15c_53dc5a1a",
+      "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
