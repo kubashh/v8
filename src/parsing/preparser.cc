@@ -426,8 +426,27 @@ void PreParser::DeclareAndInitializeVariables(
     const DeclarationDescriptor* declaration_descriptor,
     const DeclarationParsingResult::Declaration* declaration,
     ZonePtrList<const AstRawString>* names, bool* ok) {
-  if (declaration->pattern.variables_ != nullptr) {
-    for (auto variable : *(declaration->pattern.variables_)) {
+  //if (declaration->pattern.variables__ != nullptr) {
+  if (!declaration->pattern.variables_.is_empty()) {
+    //if (declaration->pattern.IsInSingleVariableProxyMode()) {
+    //  declaration_descriptor->scope->RemoveUnresolved(
+    //      declaration->pattern.single_variable_);
+    //  Variable* var = scope()->DeclareVariableName(
+    //      declaration->pattern.single_variable_->raw_name(),
+    //      declaration_descriptor->mode);
+    //  MarkLoopVariableAsAssigned(declaration_descriptor->scope, var,
+    //                             declaration_descriptor->declaration_kind);
+    //  // This is only necessary if there is an initializer, but we don't have
+    //  // that information here.  Consequently, the preparser sometimes says
+    //  // maybe-assigned where the parser (correctly) says never-assigned.
+    //  if (names) {
+    //    names->Add(declaration->pattern.single_variable_->raw_name(), zone());
+    //  }
+    //} else {
+    // TODO : replace later with single loop after iterators work
+    if (declaration->pattern.variables_.IsSingle()) {
+      auto variable = declaration->pattern.variables_.first();
+
       declaration_descriptor->scope->RemoveUnresolved(variable);
       Variable* var = scope()->DeclareVariableName(
           variable->raw_name(), declaration_descriptor->mode);
@@ -439,7 +458,25 @@ void PreParser::DeclareAndInitializeVariables(
       if (names) {
         names->Add(variable->raw_name(), zone());
       }
+
+    } else {
+      for (auto variable :
+           const_cast<DeclarationParsingResult::Declaration*>(declaration)
+               ->pattern.variables_) {
+        declaration_descriptor->scope->RemoveUnresolved(variable);
+        Variable* var = scope()->DeclareVariableName(
+            variable->raw_name(), declaration_descriptor->mode);
+        MarkLoopVariableAsAssigned(declaration_descriptor->scope, var,
+                                   declaration_descriptor->declaration_kind);
+        // This is only necessary if there is an initializer, but we don't have
+        // that information here.  Consequently, the preparser sometimes says
+        // maybe-assigned where the parser (correctly) says never-assigned.
+        if (names) {
+          names->Add(variable->raw_name(), zone());
+        }
+      }
     }
+    //}
   }
 }
 

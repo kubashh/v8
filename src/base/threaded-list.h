@@ -161,12 +161,13 @@ class ThreadedListBase final : public BaseClass {
       return *this;
     }
 
-   private:
     explicit Iterator(T** entry) : entry_(entry) {}
 
     T** entry_;
+   private: // TODO: move back later
 
     friend class ThreadedListBase;
+    friend class TinyZoneThreadedList;
   };
 
   class ConstIterator final {
@@ -190,13 +191,17 @@ class ThreadedListBase final : public BaseClass {
     }
     const T* operator*() const { return *entry_; }
 
-   private:
     explicit ConstIterator(T* const* entry) : entry_(entry) {}
 
     T* const* entry_;
+   private: // TODO: move back later
 
     friend class ThreadedListBase;
+    friend class TinyZoneThreadedList;
   };
+
+  using iterator = Iterator;
+  using const_iterator = ConstIterator;
 
   Iterator begin() { return Iterator(&head_); }
   Iterator end() { return Iterator(tail_); }

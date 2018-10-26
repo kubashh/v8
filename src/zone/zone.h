@@ -14,6 +14,7 @@
 #include "src/splay-tree.h"
 #include "src/utils.h"
 #include "src/zone/accounting-allocator.h"
+#include "src/pointer-with-payload.h"
 
 #ifndef ZONE_NAME
 #define STRINGIFY(x) #x
@@ -305,6 +306,219 @@ using ZonePtrList = ZoneList<T*>;
 // into a Zone.
 template <typename T, typename TLTraits = base::ThreadedListTraits<T>>
 using ZoneThreadedList = base::ThreadedListBase<T, ZoneObject, TLTraits>;
+
+template <typename T, typename TLTraits = base::ThreadedListTraits<T>>
+class TinyZoneThreadedList {
+  using ListType = ZoneThreadedList<T, TLTraits>;
+
+public:
+ TinyZoneThreadedList()  // : single_var_(nullptr)
+ {
+   list_.SetStorage(true);
+   // single_var_.SetStorage(true);
+ }
+ TinyZoneThreadedList(ListType* list) { //: list_(list) {//, is_single_(false) {
+   list_.SetPointer(list);
+   list_.SetStorage(false);
+   DCHECK_NOT_NULL(list);
+   DCHECK_NE(0, list->LengthForTest());
+ }
+
+ void setList(ListType* list) {
+   if (!list) return;
+
+   DCHECK_NOT_NULL(list);
+   DCHECK_NE(0, list->LengthForTest());
+   //list_ = list;
+   list_.SetPointer(list);
+   //is_single_ = false;
+   list_.SetStorage(false);
+ }
+
+ void Add(T* item, Zone* zone) {
+   if (!single_var_.GetPointer()) {
+     //single_var_ = item;
+     single_var_.SetPointer(item);
+     return;
+   }
+
+   if (IsSingle()) {
+     Transform(zone);
+   }
+
+   list_->Add(item);
+
+   //if (is_single_) {
+   //  if (single_var_) {
+   //    Transform(zone);
+   //    list_->Add(item);
+   //  } else {
+   //    single_var_ = item;
+   //  }
+   //} else {
+   //  return list_->Add(item);
+   //}
+ }
+
+ void Append(TinyZoneThreadedList& other, Zone* zone) {
+   if (other.is_empty()) {
+     return;
+   }
+
+   if (!IsSingle()) {
+     single_var_ = other.single_var_;
+     //is_single_ = other.is_single_;
+     return;
+   }
+
+   if (IsSingle()) {
+     Transform(zone);
+   }
+
+   if (other.IsSingle()) {
+     list_->Add(other.single_var_.GetPointer());
+   } else {
+     list_->Append(std::move(*other.list_.GetPointer()));
+   }
+
+   //if (is_single_) {
+   //  if (other.IsSingle()) {
+   //    if (single_var_ && other.first()) {
+   //      Transform(zone);
+   //      list_->Add(other.first());
+   //    } else {
+   //      single_var_ = other.single_var_;
+   //    }
+   //  } else {
+   //    Transform(zone);
+   //    list_->Append(std::move(*other.list_));
+   //  }
+   //} else {
+   //  if (other.IsSingle()) {
+   //    if (other.first()) {
+   //      list_->Add(other.first());
+   //    }
+   //  } else {
+   //    list_->Append(std::move(*other.list_));
+   //  }
+   //}
+ }
+
+ bool is_empty() const {
+   if (single_var_.GetPointer()) {
+     return false;
+   } else {
+     return true;
+   }
+   //if (is_single_) {
+   //  if (single_var_) {
+   //    return false;
+   //  } else {
+   //    return true;
+   //  }
+   //} else {
+   //  return list_->is_empty();
+   //}
+ }
+
+ T* first() const {
+   if (IsSingle()) {
+     return single_var_.GetPointer();
+   } else {
+     return list_.GetPointer()->first();
+   }
+ }
+
+ int LengthForTest() const {
+   if (IsSingle()) {
+     if (single_var_.GetPointer()) {
+       return 1;
+     } else {
+       return 0;
+     }
+   } else {
+     return list_.GetPointer()->LengthForTest();
+   }
+ }
+
+ V8_INLINE bool IsSingle() const {
+   //return is_single_;
+   return single_var_.GetStorage();
+ }
+
+ ListType *GETLIST() const {
+   return list_.GetPointer();
+ }
+
+ using iterator = typename ListType::iterator;
+ using const_iterator = typename ListType::const_iterator;
+
+ iterator begin() {
+   if (IsSingle()) {
+     DCHECK(false);
+     //return iterator(&single_var_);
+     return list_->begin();
+   } else {
+     return list_->begin();
+   }
+ }
+
+ iterator end() {
+   if (IsSingle()) {
+     DCHECK(false);
+     //if (single_var_.GetPointer()) {
+     //  return iterator(TLTraits::next(single_var_.GetPointer()));
+     //} else {
+     //  return iterator(&single_var_);
+     //}
+     return list_->end();
+   } else {
+     return list_->end();
+   }
+ }
+
+ const_iterator begin() const {
+   if (IsSingle()) {
+     DCHECK(false);
+     //return const_iterator(&single_var_);
+     return const_cast<const ListType*>(list_.GetPointer())->begin();
+   } else {
+     return const_cast<const ListType*>(list_.GetPointer())->begin();
+   }
+ }
+
+ const_iterator end() const {
+   if (IsSingle()) {
+     DCHECK(false);
+     //if (single_var_.GetPointer()) {
+     //  return const_iterator(TLTraits::next(single_var_.GetPointer()));
+     //} else {
+     //  return const_iterator(&single_var_);
+     //}
+     return const_cast<const ListType*>(list_.GetPointer())->end();
+   } else {
+     return const_cast<const ListType*>(list_.GetPointer())->end();
+   }
+ }
+
+private:
+ void Transform(Zone* zone) {
+   DCHECK(IsSingle());
+   T* tmp = single_var_.GetPointer();
+   DCHECK_NOT_NULL(tmp);
+
+   list_.SetPointer(new (zone) ListType());
+   list_->Add(tmp);
+   //is_single_ = false;
+   list_.SetStorage(false);
+ }
+
+ union {
+   PointerWithPayload<T*, bool, 1> single_var_;
+   PointerWithPayload<ListType*, bool, 1> list_;
+ };
+ //bool is_single_ = true;
+};
 
 // A zone splay tree.  The config type parameter encapsulates the
 // different configurations of a concrete splay tree (see splay-tree.h).

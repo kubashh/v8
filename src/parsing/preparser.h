@@ -91,7 +91,9 @@ class PreParserExpression {
       ZoneThreadedList<VariableProxy, VariableProxy::PreParserNext>;
 
   PreParserExpression()
-      : code_(TypeField::encode(kNull)), variables_(nullptr) {}
+      : code_(TypeField::encode(kNull)) {
+    //setSingleVariableMode();
+  }
 
   static PreParserExpression Null() { return PreParserExpression(); }
 
@@ -100,9 +102,24 @@ class PreParserExpression {
     return PreParserExpression(TypeField::encode(kExpression), variables);
   }
 
+  static PreParserExpression Default(
+      const TinyZoneThreadedList<VariableProxy, VariableProxy::PreParserNext>&
+          variables) {
+    return PreParserExpression(TypeField::encode(kExpression), variables);
+  }
+
+  //static PreParserExpression Default(VariableProxy* variable) {
+  //  return PreParserExpression(TypeField::encode(kExpression), variable);
+  //}
+
   static PreParserExpression Spread(const PreParserExpression& expression) {
+    //if (expression.IsInSingleVariableProxyMode()) {
+    //  return PreParserExpression(TypeField::encode(kSpreadExpression),
+    //                             expression.single_variable_);
+    //} else {
     return PreParserExpression(TypeField::encode(kSpreadExpression),
                                expression.variables_);
+    //}
   }
 
   static PreParserExpression FromIdentifier(const PreParserIdentifier& id,
@@ -110,6 +127,9 @@ class PreParserExpression {
                                             Zone* zone) {
     PreParserExpression expression(TypeField::encode(kIdentifierExpression) |
                                    IdentifierTypeField::encode(id.type_));
+    //return PreParserExpression(TypeField::encode(kIdentifierExpression) |
+    //                               IdentifierTypeField::encode(id.type_),
+    //                           variable);
     expression.AddVariable(variable, zone);
     return expression;
   }
@@ -120,12 +140,41 @@ class PreParserExpression {
                                              Zone* zone) {
     if (op == Token::COMMA) {
       // Possibly an arrow function parameter list.
-      if (left.variables_ == nullptr) {
+      //if (left.variables__ == nullptr) {
+      if (left.variables_.is_empty()) {
+        //if (right.IsInSingleVariableProxyMode()) {
+        //  return PreParserExpression(TypeField::encode(kExpression),
+        //                             right.single_variable_);
+        //} else {
+        //  return PreParserExpression(TypeField::encode(kExpression),
+        //                             right.variables__);
+        //}
         return PreParserExpression(TypeField::encode(kExpression),
-                                   right.variables_);
+                                     right.variables_);
       }
-      if (right.variables_ != nullptr) {
-        left.variables_->Append(std::move(*right.variables_));
+      //if (right.variables__ != nullptr) {
+      if (!right.variables_.is_empty()) {
+
+        //if (right.IsInSingleVariableProxyMode()) {
+        //  left.AddVariable(right.single_variable_, zone);
+        //} else {
+        //  if (left.IsInSingleVariableProxyMode()) {
+        //    VariableProxy *tmp = left.single_variable_;
+        //    left.variables__ = new (zone) VariableZoneThreadedListType();
+        //    left.variables__->Add(tmp);
+        //    left.setNotSingleVariableMode();
+        //  } else {
+        //    left.variables__->Append(std::move(*right.variables__));
+        //  }
+        //}
+        PreParserExpression ppe(TypeField::encode(kExpression),
+                               left.variables_);
+        ppe.variables_.Append(
+            const_cast<TinyZoneThreadedList<VariableProxy,
+                                            VariableProxy::PreParserNext>&>(
+                right.variables_),
+            zone);
+        return ppe;
       }
       return PreParserExpression(TypeField::encode(kExpression),
                                  left.variables_);
@@ -135,6 +184,14 @@ class PreParserExpression {
 
   static PreParserExpression Assignment(
       VariableZoneThreadedListType* variables) {
+    return PreParserExpression(TypeField::encode(kExpression) |
+                                   ExpressionTypeField::encode(kAssignment),
+                               variables);
+  }
+
+  static PreParserExpression Assignment(
+      const TinyZoneThreadedList<VariableProxy, VariableProxy::PreParserNext>&
+          variables) {
     return PreParserExpression(TypeField::encode(kExpression) |
                                    ExpressionTypeField::encode(kAssignment),
                                variables);
@@ -331,11 +388,12 @@ class PreParserExpression {
   PreParserExpression* operator->() { return this; }
 
   void set_is_private_field() {
-    if (variables_ != nullptr) {
+    //if (variables_ != nullptr) {
+    if (!variables_.is_empty()) {
       DCHECK(IsIdentifier());
       DCHECK(AsIdentifier().IsPrivateName());
-      DCHECK_EQ(1, variables_->LengthForTest());
-      variables_->first()->set_is_private_field();
+      DCHECK_EQ(1, variables_.LengthForTest());
+      variables_.first()->set_is_private_field();
     }
   }
 
@@ -348,6 +406,10 @@ class PreParserExpression {
   void set_scope(Scope* scope) {}
   void set_suspend_count(int suspend_count) {}
 
+//  VariableZoneThreadedListType *variables() {
+//    return variables__;
+//  }
+//
  private:
   enum Type {
     kNull,
@@ -372,23 +434,62 @@ class PreParserExpression {
     kAssignment
   };
 
+  //bool IsInSingleVariableProxyMode() const {
+  //  // return false;
+  //  return Foo::decode(code_);
+  //}
+
+  //void setSingleVariableMode() { code_ = Foo::encode(true); }
+  //void setNotSingleVariableMode() { code_ = Foo::encode(false); }
+
   explicit PreParserExpression(
       uint32_t expression_code,
       VariableZoneThreadedListType* variables = nullptr)
-      : code_(expression_code), variables_(variables) {}
+      : code_(expression_code) {
+    variables_.setList(variables);
+  }
+
+  explicit PreParserExpression(
+      uint32_t expression_code,
+      const TinyZoneThreadedList<VariableProxy, VariableProxy::PreParserNext>&
+          variables)
+      : code_(expression_code) {
+    variables_ = variables;
+  }
+
+  //explicit PreParserExpression(uint32_t expression_code,
+  //                             VariableProxy* variable)
+  //    : code_(expression_code), single_variable_(variable) {
+  //  setSingleVariableMode();
+  //}
 
   void AddVariable(VariableProxy* variable, Zone* zone) {
     if (variable == nullptr) {
       return;
     }
-    if (variables_ == nullptr) {
-      variables_ = new (zone) VariableZoneThreadedListType();
-    }
-    variables_->Add(variable);
+
+    //if (IsInSingleVariableProxyMode()) {
+    //  if (single_variable_ == nullptr) {
+    //    single_variable_ = variable;
+    //  } else {
+    //    VariableProxy *tmp = single_variable_;
+    //    variables__ = new (zone) VariableZoneThreadedListType();
+    //    variables__->Add(tmp);
+    //    variables__->Add(variable);
+    //    setNotSingleVariableMode();
+    //  }
+    //} else {
+    //  DCHECK_NOT_NULL(variables__);
+      //if (variables__ == nullptr) {
+      //  variables__ = new (zone) VariableZoneThreadedListType();
+      //}
+    variables_.Add(variable, zone);
+    //}
   }
 
   // The first three bits are for the Type.
   typedef BitField<Type, 0, 3> TypeField;
+  //typedef BitField<bool, TypeField::kNext, 1> Foo;
 
   // The high order bit applies only to nodes which would inherit from the
   // Expression ASTNode --- This is by necessity, due to the fact that
@@ -409,7 +510,14 @@ class PreParserExpression {
   uint32_t code_;
   // If the PreParser is used in the variable tracking mode, PreParserExpression
   // accumulates variables in that expression.
-  VariableZoneThreadedListType* variables_;
+  //union {
+  //  VariableZoneThreadedListType* variables__;
+  //  VariableProxy *single_variable_;
+  //};
+
+  TinyZoneThreadedList<VariableProxy, VariableProxy::PreParserNext> variables_;
+
+  // ZoneThreadedList<VariableProxy, VariableProxy::PreParserNext>;
 
   friend class PreParser;
   friend class PreParserFactory;
@@ -429,12 +537,24 @@ class PreParserExpressionList {
   PreParserExpressionList() : PreParserExpressionList(0) {}
   PreParserExpressionList* operator->() { return this; }
   void Add(const PreParserExpression& expression, Zone* zone) {
-    if (expression.variables_ != nullptr) {
+    //if (expression.variables__ != nullptr) {
+    if (!expression.variables_.is_empty()) {
       DCHECK_NOT_NULL(zone);
       if (variables_ == nullptr) {
         variables_ = new (zone) VariableZoneThreadedListType();
       }
-      variables_->Append(std::move(*expression.variables_));
+      //if (expression.IsInSingleVariableProxyMode()) {
+      //  variables_->Add(expression.single_variable_);
+      //} else {
+      //  variables_->Append(std::move(*expression.variables__));
+      //}
+
+      // TODO (sattlerf): improve
+      if (expression.variables_.IsSingle()) {
+        variables_->Add(expression.variables_.first());
+      } else {
+        variables_->Append(std::move(*expression.variables_.GETLIST()));
+      }
     }
     ++length_;
   }
@@ -642,7 +762,8 @@ class PreParserFactory {
                                          const PreParserExpression& left,
                                          const PreParserExpression& right,
                                          int pos) {
-    return PreParserExpression::BinaryOperation(left, op, right, zone_);
+    return PreParserExpression::BinaryOperation(
+        const_cast<PreParserExpression&>(left), op, right, zone_);
   }
   PreParserExpression NewCompareOperation(Token::Value op,
                                           const PreParserExpression& left,
@@ -1130,8 +1251,10 @@ class PreParser : public ParserBase<PreParser> {
     }
     catch_info->scope->DeclareCatchVariableName(catch_name);
 
-    if (catch_info->pattern.variables_ != nullptr) {
-      for (auto variable : *catch_info->pattern.variables_) {
+    //if (catch_info->pattern.variables__ != nullptr) {
+    // TODO (sattlerf): remove
+    if (!catch_info->pattern.variables_.is_empty()) {
+      for (auto variable : catch_info->pattern.variables_) {
         scope()->DeclareVariableName(variable->raw_name(), VariableMode::kLet);
       }
     }
@@ -1380,9 +1503,20 @@ class PreParser : public ParserBase<PreParser> {
   V8_INLINE void MarkPatternAsAssigned(const PreParserExpression& expression) {
     // TODO(marja): To be able to produce the same errors, the preparser needs
     // to start tracking which expressions are variables and which are assigned.
-    if (expression.variables_ != nullptr) {
-      for (auto variable : *expression.variables_) {
-        variable->set_is_assigned();
+    //if (expression.variables__ != nullptr) {
+    if (!expression.variables_.is_empty()) {
+      //if (expression.IsInSingleVariableProxyMode()) {
+      //  expression.single_variable_->set_is_assigned();
+      //  return;
+      //}
+      // TODO : replace later with single loop after iterators work
+      if (expression.variables_.IsSingle()) {
+        expression.variables_.first()->set_is_assigned();
+      } else {
+        for (auto variable :
+             const_cast<PreParserExpression&>(expression).variables_) {
+          variable->set_is_assigned();
+        }
       }
     }
   }
@@ -1390,9 +1524,14 @@ class PreParser : public ParserBase<PreParser> {
   V8_INLINE void MarkExpressionAsAssigned(
       const PreParserExpression& expression) {
     if (IsIdentifier(expression)) {
-      DCHECK_NOT_NULL(expression.variables_);
-      DCHECK_EQ(1, expression.variables_->LengthForTest());
-      expression.variables_->first()->set_is_assigned();
+      //if (expression.IsInSingleVariableProxyMode()) {
+      //  DCHECK_NOT_NULL(expression.single_variable_);
+      //  expression.single_variable_->set_is_assigned();
+      //} else {
+      //DCHECK_NOT_NULL(expression.variables_);
+      DCHECK_EQ(1, expression.variables_.LengthForTest());
+      expression.variables_.first()->set_is_assigned();
+      //}
     }
   }
 
@@ -1664,20 +1803,33 @@ class PreParser : public ParserBase<PreParser> {
                                     int initializer_end_position,
                                     bool is_rest) {
     DeclarationScope* scope = parameters->scope;
-    if (pattern.variables_ == nullptr) {
+    //if (pattern.variables__ == nullptr) {
+    // TODO : replace later with single loop after iterators work
+    if (pattern.variables_.is_empty()) {
       scope->DeclareParameterName(ast_value_factory()->empty_string(), is_rest,
                                   ast_value_factory(), false, true);
+    } else if (pattern.variables_.IsSingle()) {
+      // We declare the parameter name for all names, but only create a
+      // parameter entry for the first one.
+      //auto it = pattern.variables_.begin();
+      auto first = pattern.variables_.first();
+      if (scope->LookupLocal(first->raw_name()) != nullptr) {
+        classifier()->RecordDuplicateFormalParameterError(
+            Scanner::Location::invalid());
+      }
+      scope->DeclareParameterName(first->raw_name(), is_rest, ast_value_factory(),
+                                  true, true);
     } else {
       // We declare the parameter name for all names, but only create a
       // parameter entry for the first one.
-      auto it = pattern.variables_->begin();
+      auto it = pattern.variables_.begin();
       if (scope->LookupLocal(it->raw_name()) != nullptr) {
         classifier()->RecordDuplicateFormalParameterError(
             Scanner::Location::invalid());
       }
       scope->DeclareParameterName(it->raw_name(), is_rest, ast_value_factory(),
                                   true, true);
-      for (++it; it != pattern.variables_->end(); ++it) {
+      for (++it; it != pattern.variables_.end(); ++it) {
         if (scope->LookupLocal(it->raw_name()) != nullptr) {
           classifier()->RecordDuplicateFormalParameterError(
               Scanner::Location::invalid());
@@ -1697,15 +1849,26 @@ class PreParser : public ParserBase<PreParser> {
   V8_INLINE void DeclareArrowFunctionFormalParameters(
       PreParserFormalParameters* parameters, const PreParserExpression& params,
       const Scanner::Location& params_loc, bool* ok) {
-    if (params.variables_ != nullptr) {
-      Scope* scope = parameters->scope;
-      for (auto variable : *params.variables_) {
-        if (scope->LookupLocal(variable->raw_name())) {
-          classifier()->RecordDuplicateFormalParameterError(
-              Scanner::Location::invalid());
+    //if (params.variables__ != nullptr) {
+    if (!params.variables_.is_empty()) {
+      //if (params.IsInSingleVariableProxyMode()) {
+      //  Scope* scope = parameters->scope;
+      //  if (scope->LookupLocal(params.single_variable_->raw_name())) {
+      //    classifier()->RecordDuplicateFormalParameterError(
+      //        Scanner::Location::invalid());
+      //  }
+      //  scope->DeclareVariableName(params.single_variable_->raw_name(),
+      //                             VariableMode::kVar);
+      //} else {
+        Scope* scope = parameters->scope;
+        for (auto variable : params.variables_) {
+          if (scope->LookupLocal(variable->raw_name())) {
+            classifier()->RecordDuplicateFormalParameterError(
+                Scanner::Location::invalid());
+          }
+          scope->DeclareVariableName(variable->raw_name(), VariableMode::kVar);
         }
-        scope->DeclareVariableName(variable->raw_name(), VariableMode::kVar);
-      }
+      //}
     }
   }
 

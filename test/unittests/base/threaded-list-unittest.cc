@@ -8,6 +8,7 @@
 
 #include "src/base/threaded-list.h"
 #include "testing/gtest-support.h"
+#include "src/zone/zone.h"
 
 namespace v8 {
 namespace base {
