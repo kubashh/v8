@@ -455,6 +455,7 @@ Parser::Parser(ParseInfo* info)
   set_allow_harmony_import_meta(FLAG_harmony_import_meta);
   set_allow_harmony_numeric_separator(FLAG_harmony_numeric_separator);
   set_allow_harmony_private_fields(FLAG_harmony_private_fields);
+  set_allow_harmony_private_methods(FLAG_harmony_private_methods);
   for (int feature = 0; feature < v8::Isolate::kUseCounterFeatureCount;
        ++feature) {
     use_counts_[feature] = 0;
@@ -890,8 +891,8 @@ FunctionLiteral* Parser::DoParseFunction(Isolate* isolate, ParseInfo* info,
 
     DCHECK_EQ(ok, !scanner_.has_parser_error_set());
     if (ok) {
-      result->set_requires_instance_fields_initializer(
-          info->requires_instance_fields_initializer());
+      result->set_requires_instance_elements_initializer(
+          info->requires_instance_elements_initializer());
     }
     // Make sure the results agree.
     DCHECK(ok == (result != nullptr));
@@ -3192,6 +3193,17 @@ void Parser::DeclareClassProperty(const AstRawString* class_name,
     return;
   }
 
+  if (is_private) {
+    DCHECK(allow_harmony_private_methods() || allow_harmony_private_fields());
+    DCHECK(!is_static);
+    DCHECK(!is_computed_name);
+    Variable* private_name_var = CreateSyntheticContextVariable(property_name);
+    RETURN_IF_PARSE_ERROR_VOID;
+    property->set_private_name_var(private_name_var);
+    class_info->properties->Add(property, zone());
+    return;
+  }
+
   if (kind != ClassLiteralProperty::FIELD) {
     class_info->properties->Add(property, zone());
     return;
@@ -3202,15 +3214,13 @@ void Parser::DeclareClassProperty(const AstRawString* class_name,
   if (is_static) {
     DCHECK(allow_harmony_static_fields());
     DCHECK_EQ(kind, ClassLiteralProperty::FIELD);
-    DCHECK(!is_private);
     class_info->static_fields->Add(property, zone());
   } else {
-    class_info->instance_fields->Add(property, zone());
+    class_info->instance_elements->Add(property, zone());
   }
 
   if (is_computed_name) {
     DCHECK_EQ(kind, ClassLiteralProperty::FIELD);
-    DCHECK(!is_private);
     // We create a synthetic variable name here so that scope
     // analysis doesn't dedupe the vars.
     Variable* computed_name_var =
@@ -3220,25 +3230,17 @@ void Parser::DeclareClassProperty(const AstRawString* class_name,
     property->set_computed_name_var(computed_name_var);
     class_info->properties->Add(property, zone());
   }
-
-  if (kind == ClassLiteralProperty::FIELD && is_private) {
-    Variable* private_field_name_var =
-        CreateSyntheticContextVariable(property_name);
-    RETURN_IF_PARSE_ERROR_VOID;
-    property->set_private_field_name_var(private_field_name_var);
-    class_info->properties->Add(property, zone());
-  }
 }
 
 FunctionLiteral* Parser::CreateInitializerFunction(
     const char* name, DeclarationScope* scope,
     ZonePtrList<ClassLiteral::Property>* fields) {
   DCHECK_EQ(scope->function_kind(),
-            FunctionKind::kClassFieldsInitializerFunction);
+            FunctionKind::kClassElementsInitializerFunction);
   // function() { .. class fields initializer .. }
   ZonePtrList<Statement>* statements = NewStatementList(1);
-  InitializeClassFieldsStatement* static_fields =
-      factory()->NewInitializeClassFieldsStatement(fields, kNoSourcePosition);
+  InitializeClassElementsStatement* static_fields =
+      factory()->NewInitializeClassElementsStatement(fields, kNoSourcePosition);
   statements->Add(static_fields, zone());
   return factory()->NewFunctionLiteral(
       ast_value_factory()->GetOneByteString(name), scope, statements, 0, 0, 0,
@@ -3283,18 +3285,18 @@ Expression* Parser::RewriteClassLiteral(Scope* block_scope,
         class_info->static_fields);
   }
 
-  FunctionLiteral* instance_fields_initializer_function = nullptr;
-  if (class_info->has_instance_class_fields) {
-    instance_fields_initializer_function = CreateInitializerFunction(
-        "<instance_fields_initializer>", class_info->instance_fields_scope,
-        class_info->instance_fields);
-    class_info->constructor->set_requires_instance_fields_initializer(true);
+  FunctionLiteral* instance_elements_initializer_function = nullptr;
+  if (class_info->has_instance_class_elements) {
+    instance_elements_initializer_function = CreateInitializerFunction(
+        "<instance_elements_initializer>", class_info->instance_elements_scope,
+        class_info->instance_elements);
+    class_info->constructor->set_requires_instance_elements_initializer(true);
   }
 
   ClassLiteral* class_literal = factory()->NewClassLiteral(
       block_scope, class_info->variable, class_info->extends,
       class_info->constructor, class_info->properties,
-      static_fields_initializer, instance_fields_initializer_function, pos,
+      static_fields_initializer, instance_elements_initializer_function, pos,
       end_pos, class_info->has_name_static_property,
       class_info->has_static_computed_names, class_info->is_anonymous);
 
@@ -3323,7 +3325,7 @@ bool Parser::IsPropertyWithPrivateFieldKey(Expression* expression) {
   if (!property->key()->IsVariableProxy()) return false;
   VariableProxy* key = property->key()->AsVariableProxy();
 
-  return key->is_private_field();
+  return key->is_private_name();
 }
 
 void Parser::InsertShadowingVarBindingInitializers(Block* inner_block) {
