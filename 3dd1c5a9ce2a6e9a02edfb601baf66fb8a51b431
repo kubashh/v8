@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6dbe2355_dd997186",
+        "filename": "src/trap-handler/handler-outside-win.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-26T18:58:31Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this check that the handler wasn\u0027t registered already, maybe with a CHECK?  Otherwise this will lose the original value of g_registered_handler.",
+      "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c62f04d9_096cc4a0",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-26T18:58:31Z",
+      "side": 1,
+      "message": "Nit: Maybe add a \"g_\" prefix to indicate that it is global state?",
+      "range": {
+        "startLine": 16,
+        "startChar": 5,
+        "endLine": 16,
+        "endChar": 25
+      },
+      "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86705a5f_1f2c3053",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-26T18:58:31Z",
+      "side": 1,
+      "message": "Nit: the argument is called \"first\".  \"last\u003d0\" would seem to imply \"first\u003d1\" which is misleading.\n\nYou might want to instead pass the argument as \"AddVectoredExceptionHandler(/* first\u003d */ 0, TestHandler)\".",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 28
+      },
+      "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "712fb15c_53dc5a1a",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-26T18:58:31Z",
+      "side": 1,
+      "message": "Eh?  Why is this valid for this test?  This might be assuming that CrashOnPurpose() gets compiled to a single-byte instruction, which is not a good assumption!\n\nAlternatives:\n\n* Use asm(\"hlt\") -- that\u0027s a single byte.  But I\u0027m not sure whether it\u0027s a good idea to use inline assembly on Windows.\n* Use setjmp()/longjmp() to escape from the fault handler.  But then this doesn\u0027t test the return path for VEH.",
+      "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
