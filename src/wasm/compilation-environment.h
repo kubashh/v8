@@ -79,6 +79,10 @@ class CompilationState {
 
   void CancelAndWait();
 
+  void SetError(uint32_t func_index, ResultBase error_result);
+
+  const ResultBase& GetError() const;
+
  private:
   friend class NativeModule;
   CompilationState() = delete;
