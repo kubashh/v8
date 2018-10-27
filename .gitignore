@@ -5,6 +5,7 @@
 *.idb
 *.lib
 *.log
+# there are 3 *.log files used as test fixtures
 *.map
 *.mk
 *.ncb
@@ -107,3 +108,4 @@ tools/turbolizer/build
 tools/turbolizer/.rpt2_cache
 tools/turbolizer/deploy
 
+#
