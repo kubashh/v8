@@ -105,10 +105,10 @@ bool Runtime::NeedsExactContext(FunctionId id) {
       // us to usually eliminate the catch context for the implicit
       // try-catch in async function.
       return false;
-    case Runtime::kAddPrivateField:
+    case Runtime::kAddPrivateName:
     case Runtime::kCopyDataProperties:
     case Runtime::kCreateDataProperty:
-    case Runtime::kCreatePrivateFieldSymbol:
+    case Runtime::kCreatePrivateNameSymbol:
     case Runtime::kReThrow:
     case Runtime::kThrow:
     case Runtime::kThrowApplyNonFunction:
