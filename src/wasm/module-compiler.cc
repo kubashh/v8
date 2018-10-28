@@ -400,8 +400,8 @@ WasmCode* LazyCompileFunction(Isolate* isolate, NativeModule* native_module,
                     module_start + func->code.offset(),
                     module_start + func->code.end_offset()};
 
-  WasmCompilationUnit unit(isolate->wasm_engine(), native_module, body,
-                           func_index, isolate->counters());
+  WasmCompilationUnit unit(native_module, body, func_index,
+                           isolate->counters());
   CompilationEnv env = native_module->CreateCompilationEnv();
   unit.ExecuteCompilation(
       &env, Impl(native_module->compilation_state())->detected_features());
@@ -493,7 +493,7 @@ class CompilationUnitBuilder {
                                                   Vector<const uint8_t> bytes,
                                                   ExecutionTier mode) {
     return base::make_unique<WasmCompilationUnit>(
-        compilation_state()->wasm_engine(), native_module_,
+        native_module_,
         FunctionBody{function->sig, buffer_offset, bytes.begin(), bytes.end()},
         function->func_index,
         compilation_state()->isolate()->async_counters().get(), mode);

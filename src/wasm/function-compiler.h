@@ -37,8 +37,8 @@ class WasmCompilationUnit final {
   // typically means to hold a std::shared_ptr<Counters>).
   // If used exclusively from a foreground thread, Isolate::counters() may be
   // used by callers to pass Counters.
-  WasmCompilationUnit(WasmEngine*, NativeModule*, FunctionBody, int index,
-                      Counters*, ExecutionTier = GetDefaultExecutionTier());
+  WasmCompilationUnit(NativeModule*, FunctionBody, int index, Counters*,
+                      ExecutionTier = GetDefaultExecutionTier());
 
   ~WasmCompilationUnit();
 
@@ -58,7 +58,6 @@ class WasmCompilationUnit final {
   friend class LiftoffCompilationUnit;
   friend class compiler::TurbofanWasmCompilationUnit;
 
-  WasmEngine* wasm_engine_;
   FunctionBody func_body_;
   Counters* counters_;
   int func_index_;

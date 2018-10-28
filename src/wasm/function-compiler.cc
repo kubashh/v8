@@ -35,12 +35,10 @@ ExecutionTier WasmCompilationUnit::GetDefaultExecutionTier() {
   return FLAG_liftoff ? ExecutionTier::kBaseline : ExecutionTier::kOptimized;
 }
 
-WasmCompilationUnit::WasmCompilationUnit(WasmEngine* wasm_engine,
-                                         NativeModule* native_module,
+WasmCompilationUnit::WasmCompilationUnit(NativeModule* native_module,
                                          FunctionBody body, int index,
                                          Counters* counters, ExecutionTier mode)
-    : wasm_engine_(wasm_engine),
-      func_body_(body),
+    : func_body_(body),
       counters_(counters),
       func_index_(index),
       native_module_(native_module),
@@ -126,8 +124,8 @@ bool WasmCompilationUnit::CompileWasmFunction(Isolate* isolate,
                              wire_bytes.start() + function->code.offset(),
                              wire_bytes.start() + function->code.end_offset()};
 
-  WasmCompilationUnit unit(isolate->wasm_engine(), native_module, function_body,
-                           function->func_index, isolate->counters(), mode);
+  WasmCompilationUnit unit(native_module, function_body, function->func_index,
+                           isolate->counters(), mode);
   CompilationEnv env = native_module->CreateCompilationEnv();
   unit.ExecuteCompilation(&env, detected);
   return !unit.failed();

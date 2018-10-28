@@ -5213,7 +5213,7 @@ bool TurbofanWasmCompilationUnit::BuildGraphForWasmFunction(
   WasmGraphBuilder builder(env, mcgraph->zone(), mcgraph,
                            wasm_unit_->func_body_.sig, source_positions);
   wasm::VoidResult graph_construction_result = wasm::BuildTFGraph(
-      wasm_unit_->wasm_engine_->allocator(),
+      wasm_unit_->native_module_->wasm_engine()->allocator(),
       wasm_unit_->native_module_->enabled_features(), env->module, &builder,
       detected, wasm_unit_->func_body_, node_origins);
   if (graph_construction_result.failed()) {
@@ -5238,7 +5238,7 @@ bool TurbofanWasmCompilationUnit::BuildGraphForWasmFunction(
 
   if (wasm_unit_->func_index_ >= FLAG_trace_wasm_ast_start &&
       wasm_unit_->func_index_ < FLAG_trace_wasm_ast_end) {
-    PrintRawWasmCode(wasm_unit_->wasm_engine_->allocator(),
+    PrintRawWasmCode(wasm_unit_->native_module_->wasm_engine()->allocator(),
                      wasm_unit_->func_body_, env->module, wasm::kPrintLocals);
   }
   if (FLAG_trace_wasm_decode_time) {
@@ -5269,7 +5269,7 @@ void TurbofanWasmCompilationUnit::ExecuteCompilation(
   double decode_ms = 0;
   size_t node_count = 0;
 
-  Zone zone(wasm_unit_->wasm_engine_->allocator(), ZONE_NAME);
+  Zone zone(wasm_unit_->native_module()->wasm_engine()->allocator(), ZONE_NAME);
   MachineGraph* mcgraph = new (&zone) MachineGraph(
       new (&zone) Graph(&zone), new (&zone) CommonOperatorBuilder(&zone),
       new (&zone) MachineOperatorBuilder(
@@ -5318,10 +5318,10 @@ void TurbofanWasmCompilationUnit::ExecuteCompilation(
   }
 
   std::unique_ptr<OptimizedCompilationJob> job(Pipeline::NewWasmCompilationJob(
-      &info, wasm_unit_->wasm_engine_, mcgraph, call_descriptor,
-      source_positions, node_origins, wasm_unit_->func_body_,
-      const_cast<wasm::WasmModule*>(env->module), wasm_unit_->native_module_,
-      wasm_unit_->func_index_, env->module->origin));
+      &info, mcgraph, call_descriptor, source_positions, node_origins,
+      wasm_unit_->func_body_, const_cast<wasm::WasmModule*>(env->module),
+      wasm_unit_->native_module_, wasm_unit_->func_index_,
+      env->module->origin));
   if (job->ExecuteJob() == CompilationJob::SUCCEEDED) {
     wasm_unit_->SetResult(info.wasm_code());
   }

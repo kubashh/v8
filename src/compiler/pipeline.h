@@ -47,12 +47,11 @@ class Pipeline : public AllStatic {
 
   // Returns a new compilation job for the WebAssembly compilation info.
   static OptimizedCompilationJob* NewWasmCompilationJob(
-      OptimizedCompilationInfo* info, wasm::WasmEngine* wasm_engine,
-      MachineGraph* mcgraph, CallDescriptor* call_descriptor,
-      SourcePositionTable* source_positions, NodeOriginTable* node_origins,
-      wasm::FunctionBody function_body, wasm::WasmModule* wasm_module,
-      wasm::NativeModule* native_module, int function_index,
-      wasm::ModuleOrigin wasm_origin);
+      OptimizedCompilationInfo* info, MachineGraph* mcgraph,
+      CallDescriptor* call_descriptor, SourcePositionTable* source_positions,
+      NodeOriginTable* node_origins, wasm::FunctionBody function_body,
+      wasm::WasmModule* wasm_module, wasm::NativeModule* native_module,
+      int function_index, wasm::ModuleOrigin wasm_origin);
 
   // Run the pipeline on a machine graph and generate code.
   static MaybeHandle<Code> GenerateCodeForWasmStub(

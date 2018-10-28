@@ -1881,7 +1881,8 @@ bool LiftoffCompilationUnit::ExecuteCompilation(CompilationEnv* env,
     compile_timer.Start();
   }
 
-  Zone zone(wasm_unit_->wasm_engine_->allocator(), "LiftoffCompilationZone");
+  Zone zone(wasm_unit_->native_module()->wasm_engine()->allocator(),
+            "LiftoffCompilationZone");
   const WasmModule* module = env ? env->module : nullptr;
   auto call_descriptor =
       compiler::GetWasmCallDescriptor(&zone, wasm_unit_->func_body_.sig);
