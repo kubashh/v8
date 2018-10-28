@@ -189,7 +189,7 @@ uint32_t TestingModuleBuilder::AddBytes(Vector<const byte> bytes) {
 
 CompilationEnv TestingModuleBuilder::CreateCompilationEnv() {
   return {
-      test_module_ptr_,
+      test_module_ptr_, isolate_->counters(),
       trap_handler::IsTrapHandlerEnabled() ? kUseTrapHandler : kNoTrapHandler,
       runtime_exception_support_, lower_simd()};
 }
@@ -420,7 +420,7 @@ void WasmFunctionCompiler::Build(const byte* start, const byte* end) {
   NativeModule* native_module =
       builder_->instance_object()->module_object()->native_module();
   WasmCompilationUnit unit(native_module, func_body, function_->func_index,
-                           isolate()->counters(), tier);
+                           tier);
   WasmFeatures unused_detected_features;
   unit.ExecuteCompilation(&env, &unused_detected_features);
   CHECK(!unit.failed());

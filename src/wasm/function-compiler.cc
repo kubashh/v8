@@ -37,9 +37,8 @@ ExecutionTier WasmCompilationUnit::GetDefaultExecutionTier() {
 
 WasmCompilationUnit::WasmCompilationUnit(NativeModule* native_module,
                                          FunctionBody body, int index,
-                                         Counters* counters, ExecutionTier mode)
+                                         ExecutionTier mode)
     : func_body_(body),
-      counters_(counters),
       func_index_(index),
       native_module_(native_module),
       mode_(mode) {
@@ -64,11 +63,11 @@ WasmCompilationUnit::~WasmCompilationUnit() = default;
 void WasmCompilationUnit::ExecuteCompilation(CompilationEnv* env,
                                              WasmFeatures* detected) {
   const WasmModule* module = native_module_->module();
-  auto size_histogram =
-      SELECT_WASM_COUNTER(counters_, module->origin, wasm, function_size_bytes);
+  auto size_histogram = SELECT_WASM_COUNTER(env->counters, module->origin, wasm,
+                                            function_size_bytes);
   size_histogram->AddSample(
       static_cast<int>(func_body_.end - func_body_.start));
-  auto timed_histogram = SELECT_WASM_COUNTER(counters_, module->origin,
+  auto timed_histogram = SELECT_WASM_COUNTER(env->counters, module->origin,
                                              wasm_compile, function_time);
   TimedHistogramScope wasm_compile_function_time_scope(timed_histogram);
 
@@ -125,20 +124,20 @@ bool WasmCompilationUnit::CompileWasmFunction(Isolate* isolate,
                              wire_bytes.start() + function->code.end_offset()};
 
   WasmCompilationUnit unit(native_module, function_body, function->func_index,
-                           isolate->counters(), mode);
-  CompilationEnv env = native_module->CreateCompilationEnv();
+                           mode);
+  CompilationEnv env = native_module->CreateCompilationEnv(isolate->counters());
   unit.ExecuteCompilation(&env, detected);
   return !unit.failed();
 }
 
-void WasmCompilationUnit::SetResult(WasmCode* code) {
+void WasmCompilationUnit::SetResult(CompilationEnv* env, WasmCode* code) {
   DCHECK_NULL(result_);
   result_ = code;
   native_module()->PublishCode(code);
 
-  counters_->wasm_generated_code_size()->Increment(
+  env->counters->wasm_generated_code_size()->Increment(
       static_cast<int>(code->instructions().size()));
-  counters_->wasm_reloc_size()->Increment(
+  env->counters->wasm_reloc_size()->Increment(
       static_cast<int>(code->reloc_info().size()));
 }
 

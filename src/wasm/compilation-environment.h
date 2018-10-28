@@ -10,6 +10,9 @@
 
 namespace v8 {
 namespace internal {
+
+class Counters;
+
 namespace wasm {
 
 class CompilationState;
@@ -31,6 +34,9 @@ struct CompilationEnv {
   // A pointer to the decoded module's static representation.
   const WasmModule* const module;
 
+  // Counters to update for this compilation.
+  Counters* const counters;
+
   // True if trap handling should be used in compiled code, rather than
   // compiling in bounds checks for each memory access.
   const UseTrapHandler use_trap_handler;
@@ -50,11 +56,12 @@ struct CompilationEnv {
 
   const LowerSimd lower_simd;
 
-  constexpr CompilationEnv(const WasmModule* module,
+  constexpr CompilationEnv(const WasmModule* module, Counters* counters,
                            UseTrapHandler use_trap_handler,
                            RuntimeExceptionSupport runtime_exception_support,
                            LowerSimd lower_simd = kNoLowerSimd)
       : module(module),
+        counters(counters),
         use_trap_handler(use_trap_handler),
         runtime_exception_support(runtime_exception_support),
         min_memory_size(module ? module->initial_pages * uint64_t{kWasmPageSize}
