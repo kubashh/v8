@@ -5319,9 +5319,8 @@ void TurbofanWasmCompilationUnit::ExecuteCompilation(
 
   std::unique_ptr<OptimizedCompilationJob> job(Pipeline::NewWasmCompilationJob(
       &info, mcgraph, call_descriptor, source_positions, node_origins,
-      wasm_unit_->func_body_, const_cast<wasm::WasmModule*>(env->module),
-      wasm_unit_->native_module_, wasm_unit_->func_index_,
-      env->module->origin));
+      wasm_unit_->func_body_, wasm_unit_->native_module_,
+      wasm_unit_->func_index_));
   if (job->ExecuteJob() == CompilationJob::SUCCEEDED) {
     wasm_unit_->SetResult(info.wasm_code());
   }
