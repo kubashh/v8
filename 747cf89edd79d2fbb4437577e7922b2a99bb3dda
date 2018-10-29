@@ -22,6 +22,30 @@
       "revId": "747cf89edd79d2fbb4437577e7922b2a99bb3dda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdc53235_399f1d90",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-10-29T13:31:06Z",
+      "side": 1,
+      "message": "Good catch, done. Much nicer indeed.",
+      "parentUuid": "9d23f923_a5d2d892",
+      "range": {
+        "startLine": 701,
+        "startChar": 65,
+        "endLine": 701,
+        "endChar": 73
+      },
+      "revId": "747cf89edd79d2fbb4437577e7922b2a99bb3dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
