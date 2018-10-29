@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "10a8e489_7440b263",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-29T11:30:43Z",
+      "side": 1,
+      "message": "Do you mean the cast in this line? I think I could actually use the templatized Load version instead.\n\nI kinda like RawPtrT because it documents that these variables / parameters contain a real pointer and not some arbitrary word value.",
+      "parentUuid": "f9d8a414_592d044b",
+      "range": {
+        "startLine": 1152,
+        "startChar": 6,
+        "endLine": 1152,
+        "endChar": 28
+      },
+      "revId": "b1a5a18d73c18e896af5c52ff47a55d532a01c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f375053c_8be7aa93",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 3
