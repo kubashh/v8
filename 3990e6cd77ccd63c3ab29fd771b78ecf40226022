@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54e26811_8a930d4c",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2845,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-10-29T11:37:54Z",
+      "side": 1,
+      "message": "I think we should unconditionally clear it in clear_unidentifiable_error(). If we had a stack overflow, we\u0027ll hit it soon afterwards again anyway.",
+      "revId": "3990e6cd77ccd63c3ab29fd771b78ecf40226022",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
