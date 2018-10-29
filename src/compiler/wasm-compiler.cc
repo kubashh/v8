@@ -4937,7 +4937,7 @@ MaybeHandle<Code> CompileJSToWasmWrapper(Isolate* isolate,
   Node* control = nullptr;
   Node* effect = nullptr;
 
-  wasm::CompilationEnv env(nullptr, wasm::kNoTrapHandler,
+  wasm::CompilationEnv env(nullptr, isolate->counters(), wasm::kNoTrapHandler,
                            wasm::kRuntimeExceptionSupport);
   WasmWrapperGraphBuilder builder(&zone, &env, &jsgraph, sig, nullptr,
                                   StubCallMode::kCallOnHeapBuiltin);
@@ -5047,7 +5047,7 @@ MaybeHandle<Code> CompileWasmImportCallWrapper(Isolate* isolate,
   SourcePositionTable* source_position_table =
       source_positions ? new (&zone) SourcePositionTable(&graph) : nullptr;
 
-  wasm::CompilationEnv env(nullptr, wasm::kNoTrapHandler,
+  wasm::CompilationEnv env(nullptr, isolate->counters(), wasm::kNoTrapHandler,
                            wasm::kRuntimeExceptionSupport);
 
   WasmWrapperGraphBuilder builder(&zone, &env, &jsgraph, sig,
@@ -5321,7 +5321,7 @@ void TurbofanWasmCompilationUnit::ExecuteCompilation(
       const_cast<wasm::WasmModule*>(env->module), wasm_unit_->native_module_,
       wasm_unit_->func_index_, env->module->origin));
   if (job->ExecuteJob() == CompilationJob::SUCCEEDED) {
-    wasm_unit_->SetResult(info.wasm_code());
+    wasm_unit_->SetResult(env, info.wasm_code());
   }
   if (FLAG_trace_wasm_decode_time) {
     double pipeline_ms = pipeline_timer.Elapsed().InMillisecondsF();
@@ -5333,7 +5333,7 @@ void TurbofanWasmCompilationUnit::ExecuteCompilation(
         decode_ms, node_count, pipeline_ms);
   }
   // TODO(bradnelson): Improve histogram handling of size_t.
-  wasm_unit_->counters_->wasm_compile_function_peak_memory_bytes()->AddSample(
+  env->counters->wasm_compile_function_peak_memory_bytes()->AddSample(
       static_cast<int>(mcgraph->graph()->zone()->allocation_size()));
 }
 
