@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9089effa_b9dc747c",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-10-29T16:22:50Z",
+      "side": 1,
+      "message": "Please stick to one way of formatting comments.\n\nHere in this CL, you have a table: https://chromium-review.googlesource.com/c/v8/v8/+/1301646\n\nbut here we just have inline comments with the name? I\u0027m not sure if the comments below are useful.\n\nI like the table version",
+      "revId": "236cd1e4f132921bf9314380d426ca6bd47f86d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
