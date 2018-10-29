@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a208de8_42ae7de1",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4423,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-10-29T08:09:14Z",
+      "side": 1,
+      "message": "Due to relaxed DCHECK in consume we can turn this back into Consume.",
+      "revId": "220ab9e71f441d04452ac63a6f0314d4381b6864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
