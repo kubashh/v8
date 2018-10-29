@@ -2814,6 +2814,7 @@ bool Parser::SkipFunction(
 
   Scanner::BookmarkScope bookmark(scanner());
   bookmark.Set();
+  bool had_stack_overflow = stack_overflow();
 
   // With no cached data, we partially parse the function, without building an
   // AST. This gathers the data needed to build a lazy function.
@@ -2840,6 +2841,9 @@ bool Parser::SkipFunction(
     // to identify the actual error.
     bookmark.Apply();
     function_scope->ResetAfterPreparsing(ast_value_factory(), true);
+    if (!had_stack_overflow && stack_overflow()) {
+      pending_error_handler()->clear_stack_overflow();
+    }
     pending_error_handler()->clear_unidentifiable_error();
     return false;
   } else if (pending_error_handler()->has_pending_error()) {

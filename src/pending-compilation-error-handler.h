@@ -47,6 +47,11 @@ class PendingCompilationErrorHandler {
     stack_overflow_ = true;
   }
 
+  void clear_stack_overflow() {
+    has_pending_error_ = false;
+    stack_overflow_ = false;
+  }
+
   bool has_pending_error() const { return has_pending_error_; }
   bool has_pending_warnings() const { return !warning_messages_.empty(); }
 
