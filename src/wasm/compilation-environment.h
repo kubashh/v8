@@ -14,6 +14,7 @@ namespace wasm {
 
 class CompilationState;
 class NativeModule;
+class ResultBase;
 
 enum RuntimeExceptionSupport : bool {
   kRuntimeExceptionSupport = true,
@@ -71,6 +72,10 @@ class CompilationState {
   ~CompilationState();
 
   void CancelAndWait();
+
+  void SetError(uint32_t func_index, const ResultBase& error_result);
+
+  const ResultBase& GetError() const;
 
  private:
   friend class NativeModule;
