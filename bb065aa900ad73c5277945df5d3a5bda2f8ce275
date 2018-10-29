@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6ea2fb_cf83cac6",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 4423,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-10-29T08:19:09Z",
+      "side": 0,
+      "message": "Hmm, why is this gone now?",
+      "range": {
+        "startLine": 4423,
+        "startChar": 4,
+        "endLine": 4423,
+        "endChar": 26
+      },
+      "revId": "bb065aa900ad73c5277945df5d3a5bda2f8ce275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
