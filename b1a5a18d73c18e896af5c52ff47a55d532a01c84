@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9d8a414_592d044b",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-29T10:10:25Z",
+      "side": 1,
+      "message": "(Thinking out loud) To be honest, I don\u0027t see much of a value in RawPtrT if we have to cast to it. Probably just a typedef to WordT would be fine here.",
+      "range": {
+        "startLine": 1152,
+        "startChar": 6,
+        "endLine": 1152,
+        "endChar": 28
+      },
+      "revId": "b1a5a18d73c18e896af5c52ff47a55d532a01c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f375053c_8be7aa93",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3863,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-29T10:10:25Z",
+      "side": 1,
+      "message": "Here for example...",
+      "revId": "b1a5a18d73c18e896af5c52ff47a55d532a01c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9cb8cb0_1d3041f3",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-29T10:10:25Z",
+      "side": 1,
+      "message": "It would be nicer if all these functions returned TNode\u003cHeapObject\u003e.",
+      "revId": "b1a5a18d73c18e896af5c52ff47a55d532a01c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cffaffc_64706a24",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 3212,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-29T10:10:25Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "b1a5a18d73c18e896af5c52ff47a55d532a01c84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

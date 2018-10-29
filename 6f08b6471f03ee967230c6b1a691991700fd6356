@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7f5540c_0949e6ad",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3849,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-10-29T10:10:25Z",
+      "side": 0,
+      "message": "You dropped this comment here but didn\u0027t drop similar comments in other places.",
+      "revId": "6f08b6471f03ee967230c6b1a691991700fd6356",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
