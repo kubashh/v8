@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5af23e35_6a03ea73",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-10-29T12:49:54Z",
+      "side": 1,
+      "message": "As discussed offline: We should try calling the UnaryExpression method here, with an additional out parameter whether it was a numeric value which is a valid LHS for MultiplicativeExpression.",
+      "revId": "6ce883515b07ac7f13e8d813f752f10677191a24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
