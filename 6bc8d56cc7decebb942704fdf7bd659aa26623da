@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43ec0e95_a04ab9fb",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-29T18:17:30Z",
+      "side": 1,
+      "message": "Can you make these two accesses volatile, please?  Otherwise the compiler is likely to optimise away ReadFromTestMemory().",
+      "revId": "6bc8d56cc7decebb942704fdf7bd659aa26623da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b368b42_c392eaa3",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2018-10-29T18:17:30Z",
+      "side": 1,
+      "message": "Nit: should be \"memory accesses do...\" (plural)",
+      "range": {
+        "startLine": 60,
+        "startChar": 64,
+        "endLine": 60,
+        "endChar": 80
+      },
+      "revId": "6bc8d56cc7decebb942704fdf7bd659aa26623da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
