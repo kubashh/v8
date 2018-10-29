@@ -16,6 +16,24 @@
       "revId": "6ce883515b07ac7f13e8d813f752f10677191a24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8eca8e4_283eb287",
+        "filename": "src/asmjs/asm-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-29T12:51:35Z",
+      "side": 1,
+      "message": "Ack. Interesting idea, I\u0027ll dwell on it a while and try to come up with a follow-up CL for it. Thanks!",
+      "parentUuid": "5af23e35_6a03ea73",
+      "revId": "6ce883515b07ac7f13e8d813f752f10677191a24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
