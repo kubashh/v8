@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5232d1c5_7ef9a7b9",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1174099
+      },
+      "writtenOn": "2018-10-29T15:07:52Z",
+      "side": 1,
+      "message": "Also check that *(cast\u003ctype*\u003e(g_start_address)) \u003d\u003d 42, to test not just that the handler ran, but that execution resumed as intended.",
+      "revId": "ab5e26cf7a251478673e9121aa7517050a40ac7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
