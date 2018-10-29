@@ -25,7 +25,8 @@ ArrayBuiltinsAssembler::ArrayBuiltinsAssembler(
       k_(this, MachineRepresentation::kTagged),
       a_(this, MachineRepresentation::kTagged),
       to_(this, MachineRepresentation::kTagged, SmiConstant(0)),
-      fully_spec_compliant_(this, {&k_, &a_, &to_}) {}
+      first_hole_acted_(Int32FalseConstant(), this),
+      fully_spec_compliant_(this, {&k_, &a_, &to_, &first_hole_acted_}) {}
 
 void ArrayBuiltinsAssembler::FindResultGenerator() {
   a_.Bind(UndefinedConstant());
@@ -198,7 +199,50 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
   }
 
   void ArrayBuiltinsAssembler::MapResultGenerator() {
-    GenerateArraySpeciesCreate(len_);
+    GenerateArraySpeciesCreate(len_, false);
+  }
+
+  void ArrayBuiltinsAssembler::MapFirstHoleAction(Node* index) {
+    TNode<Int32T> from_kind = LoadElementsKind(a());
+    CSA_ASSERT(this, IsFastElementsKind(from_kind));
+
+    Node* const native_context = LoadNativeContext(context());
+    TVARIABLE(Map, target_map,
+              LoadJSArrayElementsMap(HOLEY_SMI_ELEMENTS, native_context));
+    Label done(this), smi_transition(this), double_transition(this),
+        object_transition(this), transition_in_runtime(this);
+
+    GotoIf(Word32Equal(from_kind, Int32Constant(PACKED_SMI_ELEMENTS)),
+           &smi_transition);
+    GotoIf(Word32Equal(from_kind, Int32Constant(PACKED_DOUBLE_ELEMENTS)),
+           &double_transition);
+    GotoIf(Word32Equal(from_kind, Int32Constant(PACKED_ELEMENTS)),
+           &object_transition);
+    Goto(&done);
+
+    BIND(&smi_transition);
+    TransitionElementsKind(a(), target_map.value(), PACKED_SMI_ELEMENTS,
+                           HOLEY_SMI_ELEMENTS, true, &transition_in_runtime);
+    Goto(&done);
+
+    BIND(&double_transition);
+    target_map = LoadJSArrayElementsMap(HOLEY_DOUBLE_ELEMENTS, native_context);
+    TransitionElementsKind(a(), target_map.value(), PACKED_DOUBLE_ELEMENTS,
+                           HOLEY_DOUBLE_ELEMENTS, true, &transition_in_runtime);
+    Goto(&done);
+
+    BIND(&object_transition);
+    target_map = LoadJSArrayElementsMap(HOLEY_ELEMENTS, native_context);
+    TransitionElementsKind(a(), target_map.value(), PACKED_ELEMENTS,
+                           HOLEY_ELEMENTS, true, &transition_in_runtime);
+    Goto(&done);
+
+    BIND(&transition_in_runtime);
+    CallRuntime(Runtime::kTransitionElementsKind, context(), a(),
+                target_map.value());
+    Goto(&done);
+
+    BIND(&done);
   }
 
   void ArrayBuiltinsAssembler::TypedArrayMapResultGenerator() {
@@ -271,13 +315,24 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
     {
       // iii. Perform ? CreateDataPropertyOrThrow(A, Pk, mapped_value).
       Node* const native_context = LoadNativeContext(context());
-      Node* const fast_map = LoadContextElement(
-          native_context, Context::JS_ARRAY_HOLEY_ELEMENTS_MAP_INDEX);
+      TVARIABLE(Map, object_map,
+                LoadJSArrayElementsMap(PACKED_ELEMENTS, native_context));
+      Label holey_smi_object(this), store_object_map(this);
 
+      GotoIf(Word32Equal(kind, Int32Constant(HOLEY_SMI_ELEMENTS)),
+             &holey_smi_object);
+      CSA_ASSERT(this, Word32Equal(kind, Int32Constant(PACKED_SMI_ELEMENTS)));
+      Goto(&store_object_map);
+
+      BIND(&holey_smi_object);
+      object_map = LoadJSArrayElementsMap(HOLEY_ELEMENTS, native_context);
+      Goto(&store_object_map);
+
+      BIND(&store_object_map);
       // Since this transition is only a map change, just do it right here.
       // Since a() doesn't have an allocation site, it's safe to do the
       // map store directly, otherwise I'd call TransitionElementsKind().
-      StoreMap(a(), fast_map);
+      StoreMap(a(), object_map.value());
       Goto(&array_fast);
     }
 
@@ -292,20 +347,31 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
     {
       // iii. Perform ? CreateDataPropertyOrThrow(A, Pk, mapped_value).
       Node* const native_context = LoadNativeContext(context());
-      Node* const double_map = LoadContextElement(
-          native_context, Context::JS_ARRAY_HOLEY_DOUBLE_ELEMENTS_MAP_INDEX);
+      TVARIABLE(Map, double_map,
+                LoadJSArrayElementsMap(PACKED_DOUBLE_ELEMENTS, native_context));
 
-      const ElementsKind kFromKind = HOLEY_SMI_ELEMENTS;
-      const ElementsKind kToKind = HOLEY_DOUBLE_ELEMENTS;
-      const bool kIsJSArray = true;
+      Label holey_smi_double(this),
+          transition_in_runtime(this, Label::kDeferred);
 
-      Label transition_in_runtime(this, Label::kDeferred);
-      TransitionElementsKind(a(), double_map, kFromKind, kToKind, kIsJSArray,
+      GotoIf(Word32Equal(kind, Int32Constant(HOLEY_SMI_ELEMENTS)),
+             &holey_smi_double);
+      CSA_ASSERT(this, Word32Equal(kind, Int32Constant(PACKED_SMI_ELEMENTS)));
+      TransitionElementsKind(a(), double_map.value(), PACKED_SMI_ELEMENTS,
+                             PACKED_DOUBLE_ELEMENTS, true,
+                             &transition_in_runtime);
+      Goto(&array_double);
+
+      BIND(&holey_smi_double);
+      double_map =
+          LoadJSArrayElementsMap(HOLEY_DOUBLE_ELEMENTS, native_context);
+      TransitionElementsKind(a(), double_map.value(), HOLEY_SMI_ELEMENTS,
+                             HOLEY_DOUBLE_ELEMENTS, true,
                              &transition_in_runtime);
       Goto(&array_double);
 
       BIND(&transition_in_runtime);
-      CallRuntime(Runtime::kTransitionElementsKind, context(), a(), double_map);
+      CallRuntime(Runtime::kTransitionElementsKind, context(), a(),
+                  double_map.value());
       Goto(&array_double);
     }
 
@@ -380,6 +446,8 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
 
   void ArrayBuiltinsAssembler::NullPostLoopAction() {}
 
+  void ArrayBuiltinsAssembler::NullFirstHoleAction(Node* index) {}
+
   void ArrayBuiltinsAssembler::FillFixedArrayWithSmiZero(
       TNode<FixedArray> array, TNode<Smi> smi_length) {
     CSA_ASSERT(this, Word32BinaryNot(IsFixedDoubleArray(array)));
@@ -426,9 +494,8 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
       const char* name, const BuiltinResultGenerator& generator,
       const CallResultProcessor& processor, const PostLoopAction& action,
       const Callable& slow_case_continuation,
-      MissingPropertyMode missing_property_mode, ForEachDirection direction) {
-    Label non_array(this), array_changes(this, {&k_, &a_, &to_});
-
+      MissingPropertyMode missing_property_mode, ForEachDirection direction,
+      const FirstHoleAction& first_hole_action) {
     // TODO(danno): Seriously? Do we really need to throw the exact error
     // message on null and undefined so that the webkit tests pass?
     Label throw_null_undefined_exception(this, Label::kDeferred);
@@ -488,11 +555,11 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
 
     generator(this);
 
+    first_hole_acted_ = Int32FalseConstant();
     HandleFastElements(processor, action, &fully_spec_compliant_, direction,
-                       missing_property_mode);
+                       missing_property_mode, first_hole_action);
 
     BIND(&fully_spec_compliant_);
-
     Node* result =
         CallStub(slow_case_continuation, context(), receiver(), callbackfn(),
                  this_arg(), a_.value(), o(), k_.value(), len(), to_.value());
@@ -600,8 +667,9 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
 
   void ArrayBuiltinsAssembler::GenerateIteratingArrayBuiltinLoopContinuation(
       const CallResultProcessor& processor, const PostLoopAction& action,
-      MissingPropertyMode missing_property_mode, ForEachDirection direction) {
-    Label loop(this, {&k_, &a_, &to_});
+      MissingPropertyMode missing_property_mode, ForEachDirection direction,
+      const FirstHoleAction& first_hole_action) {
+    Label loop(this, {&k_, &a_, &to_, &first_hole_acted_});
     Label after_loop(this);
     Goto(&loop);
     BIND(&loop);
@@ -628,7 +696,17 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
             HasProperty(context(), o(), k(), kHasProperty);
 
         // d. If kPresent is true, then
-        GotoIf(IsFalse(k_present), &done_element);
+        Label if_present(this), if_not_present(this);
+        Branch(IsTrue(k_present), &if_present, &if_not_present);
+
+        BIND(&if_not_present);
+        GotoIf(first_hole_acted_.value(), &done_element);
+        // First hole encounter.
+        first_hole_action(this, k());
+        first_hole_acted_ = Int32TrueConstant();
+        Goto(&done_element);
+
+        BIND(&if_present);
       }
 
       // i. Let kValue be Get(O, Pk).
@@ -707,14 +785,16 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
   void ArrayBuiltinsAssembler::VisitAllFastElementsOneKind(
       ElementsKind kind, const CallResultProcessor& processor,
       Label* array_changed, ParameterMode mode, ForEachDirection direction,
-      MissingPropertyMode missing_property_mode, TNode<Smi> length) {
+      MissingPropertyMode missing_property_mode,
+      const FirstHoleAction& first_hole_action, TNode<Smi> length) {
     Comment("begin VisitAllFastElementsOneKind");
     // We only use this kind of processing if the no-elements protector is
     // in place at the start. We'll continue checking during array iteration.
     CSA_ASSERT(this, Word32BinaryNot(IsNoElementsProtectorCellInvalid()));
     VARIABLE(original_map, MachineRepresentation::kTagged);
     original_map.Bind(LoadMap(o()));
-    VariableList list({&original_map, &a_, &k_, &to_}, zone());
+    VariableList list({&original_map, &a_, &k_, &to_, &first_hole_acted_},
+                      zone());
     Node* start = IntPtrOrSmiConstant(0, mode);
     Node* end = TaggedToParameter(length, mode);
     IndexAdvanceMode advance_mode = direction == ForEachDirection::kReverse
@@ -764,6 +844,13 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
 
           BIND(&hole_element);
           if (missing_property_mode == MissingPropertyMode::kSkip) {
+            Label first_hole_done(this);
+            GotoIf(first_hole_acted_.value(), &first_hole_done);
+            first_hole_action(this, index);
+            first_hole_acted_ = Int32TrueConstant();
+            Goto(&first_hole_done);
+
+            BIND(&first_hole_done);
             // The NoElementsProtectorCell could go invalid during callbacks.
             Branch(IsNoElementsProtectorCellInvalid(), array_changed,
                    &one_element_done);
@@ -785,7 +872,8 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
   void ArrayBuiltinsAssembler::HandleFastElements(
       const CallResultProcessor& processor, const PostLoopAction& action,
       Label* slow, ForEachDirection direction,
-      MissingPropertyMode missing_property_mode) {
+      MissingPropertyMode missing_property_mode,
+      const FirstHoleAction& first_hole_action) {
     Label switch_on_elements_kind(this), fast_elements(this),
         maybe_double_elements(this), fast_double_elements(this);
 
@@ -807,7 +895,8 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
     BIND(&fast_elements);
     {
       VisitAllFastElementsOneKind(PACKED_ELEMENTS, processor, slow, mode,
-                                  direction, missing_property_mode, smi_len);
+                                  direction, missing_property_mode,
+                                  first_hole_action, smi_len);
 
       action(this);
 
@@ -822,7 +911,8 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
     BIND(&fast_double_elements);
     {
       VisitAllFastElementsOneKind(PACKED_DOUBLE_ELEMENTS, processor, slow, mode,
-                                  direction, missing_property_mode, smi_len);
+                                  direction, missing_property_mode,
+                                  first_hole_action, smi_len);
 
       action(this);
 
@@ -879,7 +969,8 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
   }
 
   // Perform ArraySpeciesCreate (ES6 #sec-arrayspeciescreate).
-  void ArrayBuiltinsAssembler::GenerateArraySpeciesCreate(TNode<Number> len) {
+  void ArrayBuiltinsAssembler::GenerateArraySpeciesCreate(
+      TNode<Number> len, bool start_with_holey_array) {
     Label runtime(this, Label::kDeferred), done(this);
 
     Node* const original_map = LoadMap(o());
@@ -905,12 +996,16 @@ Node* ArrayBuiltinsAssembler::FindProcessor(Node* k_value, Node* k) {
     // that create output arrays aren't guaranteed to be called for every
     // element in the input array (maybe the callback deletes an element).
     const ElementsKind elements_kind =
-        GetHoleyElementsKind(GetInitialFastElementsKind());
+        start_with_holey_array
+            ? GetHoleyElementsKind(GetInitialFastElementsKind())
+            : GetInitialFastElementsKind();
     TNode<Context> native_context = LoadNativeContext(context());
     TNode<Map> array_map =
         LoadJSArrayElementsMap(elements_kind, native_context);
-    a_.Bind(AllocateJSArray(PACKED_SMI_ELEMENTS, array_map, len, len, nullptr,
-                            CodeStubAssembler::SMI_PARAMETERS));
+    Node* array = AllocateJSArray(PACKED_SMI_ELEMENTS, array_map, len, len,
+                                  nullptr, CodeStubAssembler::SMI_PARAMETERS);
+    FillFixedArrayWithSmiZero(CAST(LoadElements(array)), CAST(len));
+    a_.Bind(array);
 
     Goto(&done);
 
@@ -2711,7 +2806,8 @@ TF_BUILTIN(ArrayMapLoopContinuation, ArrayBuiltinsAssembler) {
 
   GenerateIteratingArrayBuiltinLoopContinuation(
       &ArrayBuiltinsAssembler::SpecCompliantMapProcessor,
-      &ArrayBuiltinsAssembler::NullPostLoopAction, MissingPropertyMode::kSkip);
+      &ArrayBuiltinsAssembler::NullPostLoopAction, MissingPropertyMode::kSkip,
+      ForEachDirection::kForward, &ArrayBuiltinsAssembler::MapFirstHoleAction);
 }
 
 TF_BUILTIN(ArrayMapLoopEagerDeoptContinuation, ArrayBuiltinsAssembler) {
@@ -2769,7 +2865,8 @@ TF_BUILTIN(ArrayMap, ArrayBuiltinsAssembler) {
       &ArrayBuiltinsAssembler::FastMapProcessor,
       &ArrayBuiltinsAssembler::NullPostLoopAction,
       Builtins::CallableFor(isolate(), Builtins::kArrayMapLoopContinuation),
-      MissingPropertyMode::kSkip);
+      MissingPropertyMode::kSkip, ForEachDirection::kForward,
+      &ArrayBuiltinsAssembler::MapFirstHoleAction);
 }
 
 TF_BUILTIN(TypedArrayPrototypeMap, ArrayBuiltinsAssembler) {
