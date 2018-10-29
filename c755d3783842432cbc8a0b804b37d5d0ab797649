@@ -16,6 +16,24 @@
       "revId": "c755d3783842432cbc8a0b804b37d5d0ab797649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f25582e_a91bb1f2",
+        "filename": "src/compiler/mips/code-generator-mips.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 1192879
+      },
+      "writtenOn": "2018-10-29T09:18:29Z",
+      "side": 1,
+      "message": "It is not used in any test at the time when the patch was uploaded. I will implement it and upload it as a part of another CL (this and atomic binops)",
+      "parentUuid": "18d14867_0848c4b3",
+      "revId": "c755d3783842432cbc8a0b804b37d5d0ab797649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
