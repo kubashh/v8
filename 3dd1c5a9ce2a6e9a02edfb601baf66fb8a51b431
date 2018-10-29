@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "28db55b6_0fb1a15d",
+        "filename": "src/trap-handler/handler-outside-win.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-10-29T13:28:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6dbe2355_dd997186",
+      "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c62f04d9_096cc4a0",
         "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
         "patchSetId": 13
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "d2c5300e_24b44b48",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-10-29T13:28:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c62f04d9_096cc4a0",
+      "range": {
+        "startLine": 16,
+        "startChar": 5,
+        "endLine": 16,
+        "endChar": 25
+      },
+      "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86705a5f_1f2c3053",
         "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
         "patchSetId": 13
@@ -62,6 +104,30 @@
       "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad4702f9_dfd4a306",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-10-29T13:28:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86705a5f_1f2c3053",
+      "range": {
+        "startLine": 26,
+        "startChar": 20,
+        "endLine": 26,
+        "endChar": 28
+      },
+      "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -97,6 +163,24 @@
       "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feae7158_567e02d2",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-10-29T13:28:20Z",
+      "side": 1,
+      "message": "I did it with a different approach now. I allocate one page of virtual memory and set the permission to kNoAccess. Accessing this page will then cause an exception. In the exception handler I can then change the permission of the memory to kReadWrite, so that I can just continue execution without changing RIP.\n\nI will think about how we can add unit tests for the trap-handler.",
+      "parentUuid": "3af245e1_66b496d9",
+      "revId": "3dd1c5a9ce2a6e9a02edfb601baf66fb8a51b431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
