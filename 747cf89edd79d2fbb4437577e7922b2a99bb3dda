@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d23f923_a5d2d892",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-29T13:27:37Z",
+      "side": 1,
+      "message": "suggestion: This seems to be the only call-site of {CompilationState::GetError} AFAICT. If that is the case then we could instead switch to the Impl here and completely remove it from the public API. WDYT?",
+      "range": {
+        "startLine": 701,
+        "startChar": 65,
+        "endLine": 701,
+        "endChar": 73
+      },
+      "revId": "747cf89edd79d2fbb4437577e7922b2a99bb3dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
