@@ -2306,9 +2306,11 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
       return result;
     }
     case ParsePropertyKind::kSpread:
-      ReportUnexpectedTokenAt(
-          Scanner::Location(name_token_position, name_expression->position()),
-          name_token);
+      if (!has_error()) {
+        ReportUnexpectedTokenAt(
+            Scanner::Location(name_token_position, name_expression->position()),
+            name_token);
+      }
       return impl()->NullLiteralProperty();
   }
   UNREACHABLE();
