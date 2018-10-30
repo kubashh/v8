@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20491d3a_36b7e171",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-30T12:04:25Z",
+      "side": 1,
+      "message": "I think this must be removed too.\n\nConsider:\nlhs is BigInt, rhs is Number  \u003d\u003e Number\nlhs is BigInt, rhs is Numeric \u003d\u003e BigInt",
+      "range": {
+        "startLine": 409,
+        "startChar": 19,
+        "endLine": 409,
+        "endChar": 36
+      },
+      "revId": "208e735d7045d24a7f17b4ae020e47d89c4ff503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e1ef3d4_e97d3fd5",
+        "filename": "src/compiler/typer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-10-30T12:04:25Z",
+      "side": 1,
+      "message": "Please add this comment above:\nIn order to maintain monotonicity, this condition is intentionally asymmetric.",
+      "revId": "208e735d7045d24a7f17b4ae020e47d89c4ff503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
