@@ -180,6 +180,7 @@ class TestCase(testcase.D8TestCase):
 
   def _get_suite_flags(self):
     return (
+        ["--no-arguments"] +  # disable top-level arguments in d8
         (["--throws"] if "negative" in self.test_record else []) +
         (["--allow-natives-syntax"]
          if "detachArrayBuffer.js" in self.test_record.get("includes", [])
