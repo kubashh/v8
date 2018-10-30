@@ -16,6 +16,24 @@
       "revId": "236cd1e4f132921bf9314380d426ca6bd47f86d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14cda1ad_b1f7925c",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-10-30T00:04:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9089effa_b9dc747c",
+      "revId": "236cd1e4f132921bf9314380d426ca6bd47f86d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
