@@ -359,7 +359,7 @@ base::Optional<ParseResult> MakeExternalMacro(
       transitioning, name, operator_name, args, return_type, labels);
   Declaration* result;
   if (generic_parameters.empty()) {
-    result = MakeNode<StandardDeclaration>(macro, nullptr);
+    result = MakeNode<StandardDeclaration>(macro, base::nullopt);
   } else {
     result = MakeNode<GenericDeclaration>(macro, generic_parameters);
   }
@@ -470,15 +470,15 @@ base::Optional<ParseResult> MakeTypeDeclaration(
   return ParseResult{result};
 }
 
-base::Optional<ParseResult> MakeExplicitModuleDeclaration(
+base::Optional<ParseResult> MakeModuleDeclaration(
     ParseResultIterator* child_results) {
   auto name = child_results->NextAs<std::string>();
   if (!IsSnakeCase(name)) {
     NamingConventionError("Module", name, "snake_case");
   }
   auto declarations = child_results->NextAs<std::vector<Declaration*>>();
-  Declaration* result = MakeNode<ExplicitModuleDeclaration>(
-      std::move(name), std::move(declarations));
+  Declaration* result =
+      MakeNode<ModuleDeclaration>(std::move(name), std::move(declarations));
   return ParseResult{result};
 }
 
@@ -521,7 +521,7 @@ base::Optional<ParseResult> MakeExternalBuiltin(
       transitioning, js_linkage, name, args, return_type);
   Declaration* result;
   if (generic_parameters.empty()) {
-    result = MakeNode<StandardDeclaration>(builtin, nullptr);
+    result = MakeNode<StandardDeclaration>(builtin, base::nullopt);
   } else {
     result = MakeNode<GenericDeclaration>(builtin, generic_parameters);
   }
@@ -536,7 +536,7 @@ base::Optional<ParseResult> MakeExternalRuntime(
   auto return_type = child_results->NextAs<TypeExpression*>();
   ExternalRuntimeDeclaration* runtime = MakeNode<ExternalRuntimeDeclaration>(
       transitioning, name, args, return_type);
-  Declaration* result = MakeNode<StandardDeclaration>(runtime, nullptr);
+  Declaration* result = MakeNode<StandardDeclaration>(runtime, base::nullopt);
   return ParseResult{result};
 }
 
@@ -1418,7 +1418,7 @@ struct TorqueGrammar : Grammar {
   Symbol moduleDeclaration = {
       Rule({Token("module"), &identifier, Token("{"),
             List<Declaration*>(&declaration), Token("}")},
-           MakeExplicitModuleDeclaration)};
+           MakeModuleDeclaration)};
 
   Symbol file = {Rule({&file, &moduleDeclaration}, AddGlobalDeclaration),
                  Rule({&file, &declaration}, AddGlobalDeclaration), Rule({})};
