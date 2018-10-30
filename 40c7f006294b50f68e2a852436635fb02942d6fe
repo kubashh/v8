@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f99b7cd0_30c11932",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-10-30T13:06:18Z",
+      "side": 1,
+      "message": "Apparently we have a helper for that now: LoadJSArrayBufferViewBuffer",
+      "revId": "40c7f006294b50f68e2a852436635fb02942d6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
