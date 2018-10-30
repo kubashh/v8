@@ -538,13 +538,6 @@ void TypedArrayBuiltinsAssembler::ConstructByTypedArray(
   BIND(&done);
 }
 
-Node* TypedArrayBuiltinsAssembler::LoadDataPtr(Node* typed_array) {
-  CSA_ASSERT(this, IsJSTypedArray(typed_array));
-  Node* elements = LoadElements(typed_array);
-  CSA_ASSERT(this, IsFixedTypedArray(elements));
-  return LoadFixedTypedArrayBackingStore(CAST(elements));
-}
-
 TNode<BoolT> TypedArrayBuiltinsAssembler::ByteLengthIsValid(
     TNode<Number> byte_length) {
   Label smi(this), done(this);
@@ -978,17 +971,6 @@ TNode<JSArrayBuffer> TypedArrayBuiltinsAssembler::GetBuffer(
 
   BIND(&done);
   return CAST(var_result.value());
-}
-
-TNode<JSTypedArray> TypedArrayBuiltinsAssembler::ValidateTypedArray(
-    TNode<Context> context, TNode<Object> obj, const char* method_name) {
-  // If it is not a typed array, throw
-  ThrowIfNotInstanceType(context, obj, JS_TYPED_ARRAY_TYPE, method_name);
-
-  // If the typed array's buffer is detached, throw
-  ThrowIfArrayBufferViewBufferIsDetached(context, CAST(obj), method_name);
-
-  return CAST(obj);
 }
 
 void TypedArrayBuiltinsAssembler::SetTypedArraySource(

@@ -201,7 +201,6 @@ enum ContextLookupFlags {
   V(INT16_ARRAY_FUN_INDEX, JSFunction, int16_array_fun)                        \
   V(INT32_ARRAY_FUN_INDEX, JSFunction, int32_array_fun)                        \
   V(INT8_ARRAY_FUN_INDEX, JSFunction, int8_array_fun)                          \
-  V(INTERNAL_ARRAY_FUNCTION_INDEX, JSFunction, internal_array_function)        \
   V(ITERATOR_RESULT_MAP_INDEX, Map, iterator_result_map)                       \
   V(INTL_DATE_TIME_FORMAT_FUNCTION_INDEX, JSFunction,                          \
     intl_date_time_format_function)                                            \

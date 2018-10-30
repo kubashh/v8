@@ -4297,7 +4297,7 @@ UNINITIALIZED_TEST(LoadedAtStartupScripts) {
     CHECK_EQ(count_by_type[i::Script::TYPE_INSPECTOR], 0);
 
     i::Handle<i::Script> native_array_script =
-        FindScript(i_isolate, scripts, "native array.js").ToHandleChecked();
+        FindScript(i_isolate, scripts, "native prologue.js").ToHandleChecked();
     CHECK_EQ(native_array_script->type(), i::Script::TYPE_NATIVE);
 
     i::Handle<i::Script> gc_script =

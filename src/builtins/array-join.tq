@@ -17,6 +17,14 @@ module array {
 
   transitioning builtin LoadJoinElement<T: type>(
       context: Context, receiver: JSReceiver, k: Number): Object {
+    const typedArray: JSTypedArray = UnsafeCast<JSTypedArray>(receiver);
+    return LoadFixedTypedArrayElementAsTagged(
+        typedArray.data_ptr, UnsafeCast<Smi>(k), KindForArrayType<T>(),
+        SMI_PARAMETERS);
+  }
+
+  LoadJoinElement<GenericElementsAccessor>(
+      context: Context, receiver: JSReceiver, k: Number): Object {
     return GetProperty(receiver, k);
   }
 
@@ -228,15 +236,16 @@ module array {
         buffer.fixedArray, buffer.index, sep, r);
   }
 
-  transitioning macro ArrayJoinImpl(
-      context: Context, receiver: JSReceiver, sep: String, lengthNumber: Number,
-      useToLocaleString: constexpr bool, locales: Object, options: Object,
+  transitioning macro ArrayJoinImpl(implicit context: Context)(
+      receiver: JSReceiver, sep: String, lengthNumber: Number,
+      checkAccessor: constexpr bool, useToLocaleString: constexpr bool,
+      locales: Object, options: Object,
       initialLoadJoinElement: LoadJoinElementFn): String {
     const initialMap: Map = receiver.map;
     const len: uintptr = Convert<uintptr>(lengthNumber);
     const separatorLength: intptr = sep.length;
     let nofSeparators: intptr = 0;
-    let loadJoinElements: LoadJoinElementFn = initialLoadJoinElement;
+    let loadJoinElement: LoadJoinElementFn = initialLoadJoinElement;
     let buffer: Buffer = BufferInit(len, sep);
 
     // 6. Let k be 0.
@@ -248,19 +257,24 @@ module array {
         // a. If k > 0, let R be the string-concatenation of R and sep.
         nofSeparators = nofSeparators + 1;
 
-        // Verify the current LoadJoinElement specialization can safely be
-        // used. Otherwise, fall back to generic element access (see
-        // LoadJoinElement<GenericElementsAccessor>).
-        if (loadJoinElements != LoadJoinElement<GenericElementsAccessor>&&
-            CannotUseSameArrayAccessor(initialMap, lengthNumber, receiver))
-          deferred {
-            loadJoinElements = LoadJoinElement<GenericElementsAccessor>;
-          }
+        // Only check array access and fall back to the generic element access
+        // only if it is needed. For TypedArrays, side-effects are mitigated
+        // upfront by ValidateTypedArray.
+        if constexpr (checkAccessor) {
+          // Verify the current LoadJoinElement specialization can safely be
+          // used. Otherwise, fall back to generic element access (see
+          // LoadJoinElement<GenericElementsAccessor>).
+          if (loadJoinElement != LoadJoinElement<GenericElementsAccessor>&&
+              CannotUseSameArrayAccessor(initialMap, lengthNumber, receiver))
+            deferred {
+              loadJoinElement = LoadJoinElement<GenericElementsAccessor>;
+            }
+        }
       }
 
       // b. Let element be ? Get(O, ! ToString(k)).
       const element: Object =
-          loadJoinElements(context, receiver, Convert<Number>(k++));
+          loadJoinElement(context, receiver, Convert<Number>(k++));
 
       // c. If element is undefined or null, let next be the empty String;
       //    otherwise, let next be ? ToString(element).
@@ -296,12 +310,18 @@ module array {
     return BufferJoin(buffer, sep);
   }
 
-  transitioning macro ArrayJoin(implicit context: Context)(
-      useToLocaleString: constexpr bool, receiver: JSReceiver, sep: String,
-      lenNumber: Number, locales: Object, options: Object): Object {
+  transitioning macro ArrayJoin<T: type>(
+      context: Context, useToLocaleString: constexpr bool, receiver: JSReceiver,
+      sep: String, lenNumber: Number, locales: Object, options: Object): Object;
+
+  ArrayJoin<JSArray>(
+      context: Context, useToLocaleString: constexpr bool, receiver: JSReceiver,
+      sep: String, lenNumber: Number, locales: Object,
+      options: Object): Object {
+    const checkAccessor: constexpr bool = true;
     const map: Map = receiver.map;
     const kind: ElementsKind = map.elements_kind;
-    let loadJoinElements: LoadJoinElementFn;
+    let loadJoinElement: LoadJoinElementFn;
 
     try {
       const array: JSArray = Cast<JSArray>(receiver) otherwise IfSlowPath;
@@ -310,9 +330,9 @@ module array {
       if (IsNoElementsProtectorCellInvalid()) goto IfSlowPath;
 
       if (IsElementsKindLessThanOrEqual(kind, HOLEY_ELEMENTS)) {
-        loadJoinElements = LoadJoinElement<FastSmiOrObjectElements>;
+        loadJoinElement = LoadJoinElement<FastSmiOrObjectElements>;
       } else if (IsElementsKindLessThanOrEqual(kind, HOLEY_DOUBLE_ELEMENTS)) {
-        loadJoinElements = LoadJoinElement<FastDoubleElements>;
+        loadJoinElement = LoadJoinElement<FastDoubleElements>;
       } else if (kind == DICTIONARY_ELEMENTS)
         deferred {
           const dict: NumberDictionary =
@@ -329,7 +349,7 @@ module array {
               ThrowRangeError(context, kInvalidStringLength);
             }
           } else {
-            loadJoinElements = LoadJoinElement<DictionaryElements>;
+            loadJoinElement = LoadJoinElement<DictionaryElements>;
           }
         }
       else {
@@ -337,23 +357,84 @@ module array {
       }
     }
     label IfSlowPath {
-      loadJoinElements = LoadJoinElement<GenericElementsAccessor>;
+      loadJoinElement = LoadJoinElement<GenericElementsAccessor>;
     }
     return ArrayJoinImpl(
-        context, receiver, sep, lenNumber, useToLocaleString, locales, options,
-        loadJoinElements);
+        receiver, sep, lenNumber, checkAccessor, useToLocaleString, locales,
+        options, loadJoinElement);
+  }
+
+  ArrayJoin<JSTypedArray>(
+      context: Context, useToLocaleString: constexpr bool, receiver: JSReceiver,
+      sep: String, lenNumber: Number, locales: Object,
+      options: Object): Object {
+    const checkAccessor: constexpr bool = false;
+
+    let loadJoinElement: LoadJoinElementFn;
+    const map: Map = receiver.map;
+    const kind: ElementsKind = map.elements_kind;
+    if (IsElementsKindGreaterThan(kind, UINT32_ELEMENTS)) {
+      if (kind == INT32_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedInt32Array>;
+      } else if (kind == FLOAT32_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedFloat32Array>;
+      } else if (kind == FLOAT64_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedFloat64Array>;
+      } else if (kind == UINT8_CLAMPED_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedUint8ClampedArray>;
+      } else if (kind == BIGUINT64_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedBigUint64Array>;
+      } else if (kind == BIGINT64_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedBigInt64Array>;
+      } else {
+        unreachable;
+      }
+    } else {
+      if (kind == UINT8_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedUint8Array>;
+      } else if (kind == INT8_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedInt8Array>;
+      } else if (kind == UINT16_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedUint16Array>;
+      } else if (kind == INT16_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedInt16Array>;
+      } else if (kind == UINT32_ELEMENTS) {
+        loadJoinElement = LoadJoinElement<FixedUint32Array>;
+      } else {
+        unreachable;
+      }
+    }
+    return ArrayJoinImpl(
+        receiver, sep, lenNumber, checkAccessor, useToLocaleString, locales,
+        options, loadJoinElement);
   }
 
   transitioning builtin ArrayJoinWithToLocaleString(
       context: Context, receiver: JSReceiver, sep: String, len: Number,
       locales: Object, options: Object): Object {
-    return ArrayJoin(true, receiver, sep, len, locales, options);
+    return ArrayJoin<JSArray>(
+        context, true, receiver, sep, len, locales, options);
   }
 
   transitioning builtin ArrayJoinWithoutToLocaleString(
       context: Context, receiver: JSReceiver, sep: String, len: Number,
       locales: Object, options: Object): Object {
-    return ArrayJoin(false, receiver, sep, len, locales, options);
+    return ArrayJoin<JSArray>(
+        context, false, receiver, sep, len, locales, options);
+  }
+
+  transitioning builtin TypedArrayJoinWithToLocaleString(
+      context: Context, receiver: JSReceiver, sep: String, len: Number,
+      locales: Object, options: Object): Object {
+    return ArrayJoin<JSTypedArray>(
+        context, true, receiver, sep, len, locales, options);
+  }
+
+  transitioning builtin TypedArrayJoinWithoutToLocaleString(
+      context: Context, receiver: JSReceiver, sep: String, len: Number,
+      locales: Object, options: Object): Object {
+    return ArrayJoin<JSTypedArray>(
+        context, false, receiver, sep, len, locales, options);
   }
 
   // The Join Stack detects cyclical calls to Array Join builtins
@@ -465,14 +546,10 @@ module array {
   }
 
   // Main entry point for all builtins using Array Join functionality.
-  transitioning macro CycleProtectedArrayJoin(implicit context: Context)(
-      useToLocaleString: constexpr bool, receiver: Object, sepObj: Object,
-      locales: Object, options: Object): Object {
-    // 1. Let O be ? ToObject(this value).
-    const o: JSReceiver = ToObject_Inline(context, receiver);
-
-    // 2. Let len be ? ToLength(? Get(O, "length")).
-    const len: Number = GetLengthProperty(o);
+  transitioning macro CycleProtectedArrayJoin<T: type>(
+      implicit context: Context)(
+      useToLocaleString: constexpr bool, o: JSReceiver, len: Number,
+      sepObj: Object, locales: Object, options: Object): Object {
     // 3. If separator is undefined, let sep be the single-element String ",".
     // 4. Else, let sep be ? ToString(separator).
     let sep: String =
@@ -503,8 +580,15 @@ module array {
   transitioning javascript builtin ArrayPrototypeJoin(
       context: Context, receiver: Object, ...arguments): Object {
     const separator: Object = arguments[0];
-    return CycleProtectedArrayJoin(
-        false, receiver, separator, Undefined, Undefined);
+
+    // 1. Let O be ? ToObject(this value).
+    const o: JSReceiver = ToObject_Inline(context, receiver);
+
+    // 2. Let len be ? ToLength(? Get(O, "length")).
+    const len: Number = GetLengthProperty(o);
+
+    return CycleProtectedArrayJoin<JSArray>(
+        false, o, len, separator, Undefined, Undefined);
   }
 
   // https://tc39.github.io/ecma262/#sec-array.prototype.toLocaleString
@@ -512,7 +596,15 @@ module array {
       context: Context, receiver: Object, ...arguments): Object {
     const locales: Object = arguments[0];
     const options: Object = arguments[1];
-    return CycleProtectedArrayJoin(true, receiver, ',', locales, options);
+
+    // 1. Let O be ? ToObject(this value).
+    const o: JSReceiver = ToObject_Inline(context, receiver);
+
+    // 2. Let len be ? ToLength(? Get(O, "length")).
+    const len: Number = GetLengthProperty(o);
+
+    return CycleProtectedArrayJoin<JSArray>(
+        true, o, len, ',', locales, options);
   }
 
   // https://tc39.github.io/ecma262/#sec-array.prototype.toString
@@ -534,5 +626,36 @@ module array {
     label NotCallable {
       return ObjectToString(context, array);
     }
+  }
+
+  // https://tc39.github.io/ecma262/#sec-%typedarray%.prototype.join
+  transitioning javascript builtin TypedArrayPrototypeJoin(
+      context: Context, receiver: Object, ...arguments): Object {
+    const separator: Object = arguments[0];
+
+    // Spec: ValidateTypedArray is applied to the this value prior to evaluating
+    // the algorithm.
+    const typedArray: JSTypedArray =
+        ValidateTypedArray(context, receiver, '%TypedArray%.prototype.join');
+    const length: Smi = typedArray.length;
+
+    return CycleProtectedArrayJoin<JSTypedArray>(
+        false, typedArray, length, separator, Undefined, Undefined);
+  }
+
+  // https://tc39.github.io/ecma262/#sec-array.prototype.toLocaleString
+  transitioning javascript builtin TypedArrayPrototypeToLocaleString(
+      context: Context, receiver: Object, ...arguments): Object {
+    const locales: Object = arguments[0];
+    const options: Object = arguments[1];
+
+    // Spec: ValidateTypedArray is applied to the this value prior to evaluating
+    // the algorithm.
+    const typedArray: JSTypedArray = ValidateTypedArray(
+        context, receiver, '%TypedArray%.prototype.toLocaleString');
+    const length: Smi = typedArray.length;
+
+    return CycleProtectedArrayJoin<JSTypedArray>(
+        true, typedArray, length, ',', locales, options);
   }
 }

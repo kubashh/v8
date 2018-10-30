@@ -4,52 +4,13 @@
 
 module typed_array {
   extern runtime TypedArraySortFast(Context, Object): JSTypedArray;
-  extern macro ValidateTypedArray(
-      Context, Object, constexpr string): JSTypedArray;
 
-  extern macro LoadFixedTypedArrayElementAsTagged(
-      RawPtr, Smi, constexpr ElementsKind, constexpr ParameterMode): Object;
   extern macro StoreFixedTypedArrayElementFromTagged(
       Context, FixedTypedArrayBase, Smi, Object, constexpr ElementsKind,
       constexpr ParameterMode);
 
   type LoadFn = builtin(Context, JSTypedArray, Smi) => Object;
   type StoreFn = builtin(Context, JSTypedArray, Smi, Object) => Object;
-
-  macro KindForArrayType<T: type>(): constexpr ElementsKind;
-  KindForArrayType<FixedUint8Array>(): constexpr ElementsKind {
-    return UINT8_ELEMENTS;
-  }
-  KindForArrayType<FixedInt8Array>(): constexpr ElementsKind {
-    return INT8_ELEMENTS;
-  }
-  KindForArrayType<FixedUint16Array>(): constexpr ElementsKind {
-    return UINT16_ELEMENTS;
-  }
-  KindForArrayType<FixedInt16Array>(): constexpr ElementsKind {
-    return INT16_ELEMENTS;
-  }
-  KindForArrayType<FixedUint32Array>(): constexpr ElementsKind {
-    return UINT32_ELEMENTS;
-  }
-  KindForArrayType<FixedInt32Array>(): constexpr ElementsKind {
-    return INT32_ELEMENTS;
-  }
-  KindForArrayType<FixedFloat32Array>(): constexpr ElementsKind {
-    return FLOAT32_ELEMENTS;
-  }
-  KindForArrayType<FixedFloat64Array>(): constexpr ElementsKind {
-    return FLOAT64_ELEMENTS;
-  }
-  KindForArrayType<FixedUint8ClampedArray>(): constexpr ElementsKind {
-    return UINT8_CLAMPED_ELEMENTS;
-  }
-  KindForArrayType<FixedBigUint64Array>(): constexpr ElementsKind {
-    return BIGUINT64_ELEMENTS;
-  }
-  KindForArrayType<FixedBigInt64Array>(): constexpr ElementsKind {
-    return BIGINT64_ELEMENTS;
-  }
 
   builtin LoadFixedElement<T: type>(
       context: Context, array: JSTypedArray, index: Smi): Object {

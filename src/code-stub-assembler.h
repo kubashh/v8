@@ -390,6 +390,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
     return CAST(p_o);
   }
 
+  TNode<JSTypedArray> UnsafeCastObjectToJSTypedArray(TNode<Object> p_o) {
+    return CAST(p_o);
+  }
+
   TNode<FixedTypedArrayBase> UnsafeCastObjectToFixedTypedArrayBase(
       TNode<Object> p_o) {
     return CAST(p_o);
@@ -1153,6 +1157,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
       MachineType machine_type = MachineType::Float64());
   TNode<RawPtrT> LoadFixedTypedArrayBackingStore(
       TNode<FixedTypedArrayBase> typed_array);
+  Node* LoadDataPtr(Node* typed_array);
   Node* LoadFixedTypedArrayElementAsTagged(
       Node* data_pointer, Node* index_node, ElementsKind elements_kind,
       ParameterMode parameter_mode = INTPTR_PARAMETERS);
@@ -1567,8 +1572,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   TNode<JSReceiver> ArraySpeciesCreate(TNode<Context> context,
                                        TNode<Object> originalArray,
                                        TNode<Number> len);
-  TNode<JSReceiver> InternalArrayCreate(TNode<Context> context,
-                                        TNode<Number> len);
 
   void FillFixedArrayWithValue(ElementsKind kind, Node* array, Node* from_index,
                                Node* to_index, RootIndex value_root_index,
@@ -2794,6 +2797,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Store value to an elements array with given elements kind.
   void StoreElement(Node* elements, ElementsKind kind, Node* index, Node* value,
                     ParameterMode mode);
+
+  TNode<JSTypedArray> ValidateTypedArray(TNode<Context> context,
+                                         TNode<Object> obj,
+                                         const char* method_name);
 
   void EmitBigTypedArrayElementStore(TNode<JSTypedArray> object,
                                      TNode<FixedTypedArrayBase> elements,

@@ -148,6 +148,43 @@ type FixedUint8ClampedArray extends FixedTypedArray;
 type FixedBigUint64Array extends FixedTypedArray;
 type FixedBigInt64Array extends FixedTypedArray;
 
+macro KindForArrayType<T: type>(): constexpr ElementsKind;
+KindForArrayType<FixedUint8Array>(): constexpr ElementsKind {
+  return UINT8_ELEMENTS;
+}
+KindForArrayType<FixedInt8Array>(): constexpr ElementsKind {
+  return INT8_ELEMENTS;
+}
+KindForArrayType<FixedUint16Array>(): constexpr ElementsKind {
+  return UINT16_ELEMENTS;
+}
+KindForArrayType<FixedInt16Array>(): constexpr ElementsKind {
+  return INT16_ELEMENTS;
+}
+KindForArrayType<FixedUint32Array>(): constexpr ElementsKind {
+  return UINT32_ELEMENTS;
+}
+KindForArrayType<FixedInt32Array>(): constexpr ElementsKind {
+  return INT32_ELEMENTS;
+}
+KindForArrayType<FixedFloat32Array>(): constexpr ElementsKind {
+  return FLOAT32_ELEMENTS;
+}
+KindForArrayType<FixedFloat64Array>(): constexpr ElementsKind {
+  return FLOAT64_ELEMENTS;
+}
+KindForArrayType<FixedUint8ClampedArray>(): constexpr ElementsKind {
+  return UINT8_CLAMPED_ELEMENTS;
+}
+KindForArrayType<FixedBigUint64Array>(): constexpr ElementsKind {
+  return BIGUINT64_ELEMENTS;
+}
+KindForArrayType<FixedBigInt64Array>(): constexpr ElementsKind {
+  return BIGINT64_ELEMENTS;
+}
+extern macro ValidateTypedArray(
+    Context, Object, constexpr string): JSTypedArray;
+
 const kFixedDoubleArrays: constexpr ExtractFixedArrayFlags
     generates 'ExtractFixedArrayFlag::kFixedDoubleArrays';
 const kAllFixedArrays: constexpr ExtractFixedArrayFlags
@@ -268,7 +305,6 @@ extern macro ThrowTypeError(
     Context, constexpr MessageTemplate, Object, Object, Object): never;
 extern macro ArraySpeciesCreate(Context, Object, Number): JSReceiver;
 extern macro ArrayCreate(implicit context: Context)(Number): JSArray;
-extern macro InternalArrayCreate(Context, Number): JSArray;
 extern macro EnsureArrayPushable(Map): ElementsKind
     labels Bailout;
 extern macro EnsureArrayLengthWritable(Map) labels Bailout;
@@ -737,6 +773,7 @@ extern macro UnsafeCastObjectToSmi(Object): Smi;
 extern macro UnsafeCastObjectToNumber(Object): Number;
 extern macro UnsafeCastObjectToHeapObject(Object): HeapObject;
 extern macro UnsafeCastObjectToJSArray(Object): JSArray;
+extern macro UnsafeCastObjectToJSTypedArray(Object): JSTypedArray;
 extern macro UnsafeCastObjectToFixedTypedArrayBase(Object): FixedTypedArrayBase;
 extern macro UnsafeCastObjectToNumberDictionary(Object): NumberDictionary;
 extern macro UnsafeCastObjectToJSReceiver(Object): JSReceiver;
@@ -775,6 +812,9 @@ UnsafeCast<HeapObject>(o: Object): HeapObject {
 }
 UnsafeCast<JSArray>(o: Object): JSArray {
   return UnsafeCastObjectToJSArray(o);
+}
+UnsafeCast<JSTypedArray>(o: Object): JSTypedArray {
+  return UnsafeCastObjectToJSTypedArray(o);
 }
 UnsafeCast<FixedTypedArrayBase>(o: Object): FixedTypedArrayBase {
   return UnsafeCastObjectToFixedTypedArrayBase(o);
@@ -957,6 +997,8 @@ macro StoreFixedDoubleArrayElementWithSmiIndex(
     array: FixedDoubleArray, index: Smi, value: float64) {
   StoreFixedDoubleArrayElement(array, index, value, SMI_PARAMETERS);
 }
+extern macro LoadFixedTypedArrayElementAsTagged(
+    RawPtr, Smi, constexpr ElementsKind, constexpr ParameterMode): Object;
 extern macro GetNumberDictionaryNumberOfElements(NumberDictionary): Smi;
 
 extern macro BasicLoadNumberDictionaryElement(NumberDictionary, intptr): Object

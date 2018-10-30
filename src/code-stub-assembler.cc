@@ -2240,6 +2240,13 @@ TNode<BigInt> CodeStubAssembler::BigIntFromUint64(TNode<UintPtrT> value) {
   return var_result.value();
 }
 
+Node* CodeStubAssembler::LoadDataPtr(Node* typed_array) {
+  CSA_ASSERT(this, IsJSTypedArray(typed_array));
+  Node* elements = LoadElements(typed_array);
+  CSA_ASSERT(this, IsFixedTypedArray(elements));
+  return LoadFixedTypedArrayBackingStore(CAST(elements));
+}
+
 Node* CodeStubAssembler::LoadFixedTypedArrayElementAsTagged(
     Node* data_pointer, Node* index_node, ElementsKind elements_kind,
     ParameterMode parameter_mode) {
@@ -10135,6 +10142,17 @@ Node* CodeStubAssembler::PrepareValueForWriteToTypedArray(
   return var_result.value();
 }
 
+TNode<JSTypedArray> CodeStubAssembler::ValidateTypedArray(
+    TNode<Context> context, TNode<Object> obj, const char* method_name) {
+  // If it is not a typed array, throw
+  ThrowIfNotInstanceType(context, obj, JS_TYPED_ARRAY_TYPE, method_name);
+
+  // If the typed array's buffer is detached, throw
+  ThrowIfArrayBufferViewBufferIsDetached(context, CAST(obj), method_name);
+
+  return CAST(obj);
+}
+
 void CodeStubAssembler::EmitBigTypedArrayElementStore(
     TNode<JSTypedArray> object, TNode<FixedTypedArrayBase> elements,
     TNode<IntPtrT> intptr_key, TNode<Object> value, TNode<Context> context,
@@ -12786,14 +12804,6 @@ TNode<JSReceiver> CodeStubAssembler::ArraySpeciesCreate(TNode<Context> context,
                                                         TNode<Number> len) {
   TNode<JSReceiver> constructor =
       CAST(CallRuntime(Runtime::kArraySpeciesConstructor, context, o));
-  return Construct(context, constructor, len);
-}
-
-TNode<JSReceiver> CodeStubAssembler::InternalArrayCreate(TNode<Context> context,
-                                                         TNode<Number> len) {
-  TNode<Context> native_context = LoadNativeContext(context);
-  TNode<JSReceiver> constructor = CAST(LoadContextElement(
-      native_context, Context::INTERNAL_ARRAY_FUNCTION_INDEX));
   return Construct(context, constructor, len);
 }
 

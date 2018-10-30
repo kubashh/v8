@@ -241,9 +241,6 @@ class Genesis {
   };
   Handle<JSFunction> CreateArrayBuffer(Handle<String> name,
                                        ArrayBufferKind array_buffer_kind);
-  Handle<JSFunction> InstallInternalArray(Handle<JSObject> target,
-                                          const char* name,
-                                          ElementsKind elements_kind);
   bool InstallNatives(GlobalContextType context_type);
 
   Handle<JSFunction> InstallTypedArray(const char* name,
@@ -1660,6 +1657,7 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
         *info);
   }
 
+  Handle<JSFunction> array_prototype_to_string_fun;
   {  // --- A r r a y ---
     Handle<JSFunction> array_function = InstallFunction(
         isolate_, global, "Array", JS_ARRAY_TYPE, JSArray::kSize, 0,
@@ -1776,8 +1774,9 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                           Builtins::kArrayReduceRight, 1, false);
     SimpleInstallFunction(isolate_, proto, "toLocaleString",
                           Builtins::kArrayPrototypeToLocaleString, 0, false);
-    SimpleInstallFunction(isolate_, proto, "toString",
-                          Builtins::kArrayPrototypeToString, 0, false);
+    array_prototype_to_string_fun =
+        SimpleInstallFunction(isolate_, proto, "toString",
+                              Builtins::kArrayPrototypeToString, 0, false);
   }
 
   {  // --- A r r a y I t e r a t o r ---
@@ -3231,6 +3230,8 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                           Builtins::kTypedArrayPrototypeIncludes, 1, false);
     SimpleInstallFunction(isolate_, prototype, "indexOf",
                           Builtins::kTypedArrayPrototypeIndexOf, 1, false);
+    SimpleInstallFunction(isolate_, prototype, "join",
+                          Builtins::kTypedArrayPrototypeJoin, 1, false);
     SimpleInstallFunction(isolate_, prototype, "lastIndexOf",
                           Builtins::kTypedArrayPrototypeLastIndexOf, 1, false);
     SimpleInstallFunction(isolate_, prototype, "map",
@@ -3251,6 +3252,11 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
                           Builtins::kTypedArrayPrototypeSort, 1, false);
     SimpleInstallFunction(isolate_, prototype, "subarray",
                           Builtins::kTypedArrayPrototypeSubArray, 2, false);
+    SimpleInstallFunction(isolate_, prototype, "toLocaleString",
+                          Builtins::kTypedArrayPrototypeToLocaleString, 0,
+                          false);
+    InstallFunction(isolate_, prototype, array_prototype_to_string_fun,
+                    factory->toString_string());
   }
 
   {  // -- T y p e d A r r a y s
@@ -4913,45 +4919,6 @@ Handle<JSFunction> Genesis::CreateArrayBuffer(
   return array_buffer_fun;
 }
 
-
-Handle<JSFunction> Genesis::InstallInternalArray(Handle<JSObject> target,
-                                                 const char* name,
-                                                 ElementsKind elements_kind) {
-  // --- I n t e r n a l   A r r a y ---
-  // An array constructor on the builtins object that works like
-  // the public Array constructor, except that its prototype
-  // doesn't inherit from Object.prototype.
-  // To be used only for internal work by builtins. Instances
-  // must not be leaked to user code.
-  Handle<JSObject> prototype =
-      factory()->NewJSObject(isolate()->object_function(), TENURED);
-  Handle<JSFunction> array_function =
-      InstallFunction(isolate(), target, name, JS_ARRAY_TYPE, JSArray::kSize, 0,
-                      prototype, Builtins::kInternalArrayConstructor);
-
-  array_function->shared()->DontAdaptArguments();
-
-  Handle<Map> original_map(array_function->initial_map(), isolate());
-  Handle<Map> initial_map = Map::Copy(isolate(), original_map, "InternalArray");
-  initial_map->set_elements_kind(elements_kind);
-  JSFunction::SetInitialMap(array_function, initial_map, prototype);
-
-  // Make "length" magic on instances.
-  Map::EnsureDescriptorSlack(isolate(), initial_map, 1);
-
-  PropertyAttributes attribs = static_cast<PropertyAttributes>(
-      DONT_ENUM | DONT_DELETE);
-
-  {  // Add length.
-    Descriptor d = Descriptor::AccessorConstant(
-        factory()->length_string(), factory()->array_length_accessor(),
-        attribs);
-    initial_map->AppendDescriptor(&d);
-  }
-
-  return array_function;
-}
-
 bool Genesis::InstallNatives(GlobalContextType context_type) {
   HandleScope scope(isolate());
 
@@ -4966,8 +4933,6 @@ bool Genesis::InstallNatives(GlobalContextType context_type) {
   Handle<JSObject> extras_utils =
       factory()->NewJSObject(isolate()->object_function());
   native_context()->set_extras_utils_object(*extras_utils);
-
-  InstallInternalArray(extras_utils, "InternalPackedArray", PACKED_ELEMENTS);
 
   // v8.createPromise(parent)
   Handle<JSFunction> promise_internal_constructor =
@@ -5011,20 +4976,6 @@ bool Genesis::InstallNatives(GlobalContextType context_type) {
         CreateFunction(isolate(), factory()->empty_string(), JS_VALUE_TYPE,
                        JSValue::kSize, 0, prototype, Builtins::kIllegal);
     native_context()->set_opaque_reference_function(*opaque_reference_fun);
-  }
-
-  // InternalArrays should not use Smi-Only array optimizations. There are too
-  // many places in the C++ runtime code (e.g. RegEx) that assume that
-  // elements in InternalArrays can be set to non-Smi values without going
-  // through a common bottleneck that would make the SMI_ONLY -> FAST_ELEMENT
-  // transition easy to trap. Moreover, they rarely are smi-only.
-  {
-    HandleScope scope(isolate());
-    Handle<JSObject> utils =
-        Handle<JSObject>::cast(isolate()->natives_utils_object());
-    Handle<JSFunction> array_function =
-        InstallInternalArray(utils, "InternalArray", HOLEY_ELEMENTS);
-    native_context()->set_internal_array_function(*array_function);
   }
 
   // Run the rest of the native scripts.
@@ -5130,16 +5081,6 @@ bool Genesis::InstallNatives(GlobalContextType context_type) {
     // This is necessary to enable fast checks for absence of elements
     // on Array.prototype and below.
     proto->set_elements(ReadOnlyRoots(heap()).empty_fixed_array());
-  }
-
-  // Install InternalArray.prototype.concat
-  {
-    Handle<JSFunction> array_constructor(
-        native_context()->internal_array_function(), isolate());
-    Handle<JSObject> proto(JSObject::cast(array_constructor->prototype()),
-                           isolate());
-    SimpleInstallFunction(isolate(), proto, "concat", Builtins::kArrayConcat, 1,
-                          false);
   }
 
   InstallBuiltinFunctionIds();
