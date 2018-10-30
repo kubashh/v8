@@ -1357,11 +1357,13 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
   ArchOpcode opcode = ArchOpcodeField::decode(instr->opcode());
 
   switch (opcode) {
-    case kArchComment: {
-      Address comment_string = i.InputExternalReference(0).address();
-      __ RecordComment(reinterpret_cast<const char*>(comment_string));
+    case kArchComment:
+#ifdef V8_TARGET_ARCH_S390X
+      __ RecordComment(reinterpret_cast<const char*>(i.InputInt64(0)));
+#else
+      __ RecordComment(reinterpret_cast<const char*>(i.InputInt32(0)));
+#endif
       break;
-    }
     case kArchCallCodeObject: {
       if (HasRegisterInput(instr, 0)) {
         __ AddP(ip, i.InputRegister(0),
@@ -3040,7 +3042,6 @@ void CodeGenerator::AssembleReturn(InstructionOperand* pop) {
     }
   }
   if (pop->IsImmediate()) {
-    DCHECK_EQ(Constant::kInt32, g.ToConstant(pop).type());
     pop_count += g.ToConstant(pop).ToInt32();
   } else {
     __ Drop(g.ToRegister(pop));

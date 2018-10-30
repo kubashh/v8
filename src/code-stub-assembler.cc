@@ -533,6 +533,18 @@ TNode<Smi> CodeStubAssembler::SmiFromInt32(SloppyTNode<Int32T> value) {
       WordShl(value_intptr, SmiShiftBitsConstant()));
 }
 
+TNode<BoolT> CodeStubAssembler::IsValidPositiveSmi(TNode<IntPtrT> value) {
+  intptr_t constant_value;
+  if (ToIntPtrConstant(value, constant_value)) {
+    return (static_cast<uintptr_t>(constant_value) <=
+            static_cast<uintptr_t>(Smi::kMaxValue))
+               ? Int32TrueConstant()
+               : Int32FalseConstant();
+  }
+
+  return UintPtrLessThanOrEqual(value, IntPtrConstant(Smi::kMaxValue));
+}
+
 TNode<Smi> CodeStubAssembler::SmiTag(SloppyTNode<IntPtrT> value) {
   int32_t constant_value;
   if (ToInt32Constant(value, constant_value) && Smi::IsValid(constant_value)) {
@@ -1023,6 +1035,19 @@ void CodeStubAssembler::GotoIfForceSlowPath(Label* if_true) {
 
 Node* CodeStubAssembler::AllocateRaw(Node* size_in_bytes, AllocationFlags flags,
                                      Node* top_address, Node* limit_address) {
+  // TODO(jgruber, chromium:848672): TNodeify AllocateRaw.
+  // TODO(jgruber, chromium:848672): Call FatalProcessOutOfMemory if this fails.
+  {
+    intptr_t constant_value;
+    if (ToIntPtrConstant(size_in_bytes, constant_value)) {
+      CHECK(Internals::IsValidSmi(constant_value));
+      CHECK_GT(constant_value, 0);
+    } else {
+      CSA_CHECK(this,
+                IsValidPositiveSmi(UncheckedCast<IntPtrT>(size_in_bytes)));
+    }
+  }
+
   Node* top = Load(MachineType::Pointer(), top_address);
   Node* limit = Load(MachineType::Pointer(), limit_address);
 
@@ -8791,13 +8816,14 @@ void CodeStubAssembler::EmitBigTypedArrayElementStore(
     TNode<JSTypedArray> object, TNode<FixedTypedArrayBase> elements,
     TNode<IntPtrT> intptr_key, TNode<Object> value, TNode<Context> context,
     Label* opt_if_neutered) {
+  TNode<BigInt> bigint_value = ToBigInt(context, value);
+
   if (opt_if_neutered != nullptr) {
-    // Check if buffer has been neutered.
+    // Check if buffer has been neutered. Must happen after {ToBigInt}!
     Node* buffer = LoadObjectField(object, JSArrayBufferView::kBufferOffset);
     GotoIf(IsDetachedBuffer(buffer), opt_if_neutered);
   }
 
-  TNode<BigInt> bigint_value = ToBigInt(context, value);
   TNode<RawPtrT> backing_store = LoadFixedTypedArrayBackingStore(elements);
   TNode<IntPtrT> offset = ElementOffsetFromIndex(intptr_key, BIGINT64_ELEMENTS,
                                                  INTPTR_PARAMETERS, 0);
