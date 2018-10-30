@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "22ec5255_b52d6329",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-10-30T09:37:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43ec0e95_a04ab9fb",
+      "revId": "6bc8d56cc7decebb942704fdf7bd659aa26623da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1b368b42_c392eaa3",
         "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
         "patchSetId": 17
@@ -39,6 +57,30 @@
       "revId": "6bc8d56cc7decebb942704fdf7bd659aa26623da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c08fd313_ed9bdebf",
+        "filename": "test/unittests/wasm/trap-handler-win-unittest.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-10-30T09:37:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b368b42_c392eaa3",
+      "range": {
+        "startLine": 60,
+        "startChar": 64,
+        "endLine": 60,
+        "endChar": 80
+      },
+      "revId": "6bc8d56cc7decebb942704fdf7bd659aa26623da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
