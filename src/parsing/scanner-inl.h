@@ -335,7 +335,7 @@ V8_INLINE Token::Value Scanner::ScanIdentifierOrKeywordInner(
     uc32 c = ScanIdentifierUnicodeEscape();
     DCHECK(!unicode_cache_->IsIdentifierStart(-1));
     if (c == '\\' || !unicode_cache_->IsIdentifierStart(c)) {
-      return Token::ILLEGAL;
+      return IllegalToken();
     }
     AddLiteralChar(c);
   }
@@ -360,7 +360,7 @@ V8_INLINE Token::Value Scanner::SkipWhiteSpace() {
   // Return whether or not we skipped any characters.
   if (source_pos() == start_position) {
     DCHECK_NE('0', c0_);
-    return Token::ILLEGAL;
+    return IllegalToken();
   }
 
   return Token::WHITESPACE;
