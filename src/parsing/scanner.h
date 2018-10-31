@@ -239,7 +239,7 @@ class Scanner {
   // Sets the Scanner into an error state to stop further scanning and terminate
   // the parsing by only returning ILLEGAL tokens after that.
   V8_INLINE void set_parser_error() {
-    if (!source_->has_parser_error()) {
+    if (!has_parser_error()) {
       c0_ = kEndOfInput;
       source_->set_parser_error();
       for (TokenDesc& desc : token_storage_) {
@@ -252,7 +252,8 @@ class Scanner {
     source_->reset_parser_error_flag();
   }
   V8_INLINE bool has_parser_error() const {
-    return source_->has_parser_error();
+    DCHECK_EQ(source_->has_parser_error(), peek() == Token::ILLEGAL);
+    return peek() == Token::ILLEGAL;
   }
 
   // Representation of an interval of source positions.
