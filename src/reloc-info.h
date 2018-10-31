@@ -57,7 +57,6 @@ class RelocInfo {
     RELATIVE_CODE_TARGET,  // LAST_CODE_TARGET_MODE
     EMBEDDED_OBJECT,       // LAST_GCED_ENUM
 
-    JS_TO_WASM_CALL,
     WASM_CALL,  // FIRST_SHAREABLE_RELOC_MODE
     WASM_STUB_CALL,
 
@@ -166,11 +165,8 @@ class RelocInfo {
   static constexpr bool IsWasmReference(Mode mode) {
     return IsWasmPtrReference(mode);
   }
-  static constexpr bool IsJsToWasmCall(Mode mode) {
-    return mode == JS_TO_WASM_CALL;
-  }
   static constexpr bool IsWasmPtrReference(Mode mode) {
-    return mode == WASM_CALL || mode == JS_TO_WASM_CALL;
+    return mode == WASM_CALL;
   }
 
   static bool IsOnlyForSerializer(Mode mode) {
@@ -221,15 +217,12 @@ class RelocInfo {
 
   Address wasm_call_address() const;
   Address wasm_stub_call_address() const;
-  Address js_to_wasm_address() const;
 
   uint32_t wasm_call_tag() const;
 
   void set_wasm_call_address(
       Address, ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
   void set_wasm_stub_call_address(
-      Address, ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
-  void set_js_to_wasm_address(
       Address, ICacheFlushMode icache_flush_mode = FLUSH_ICACHE_IF_NEEDED);
 
   void set_target_address(
