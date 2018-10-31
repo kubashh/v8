@@ -15,6 +15,7 @@
 #include "src/heap/mark-compact-inl.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/marking.h"
+#include "src/heap/object-locking.h"
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/objects-visiting.h"
 #include "src/heap/worklist.h"
@@ -245,18 +246,15 @@ class ConcurrentMarkingVisitor final
   // ===========================================================================
 
   int VisitConsString(Map* map, ConsString* object) {
-    int size = ConsString::BodyDescriptor::SizeOf(map, object);
-    return VisitWithSnapshot(map, object, size, size);
+    return VisitStringLocked(object);
   }
 
   int VisitSlicedString(Map* map, SlicedString* object) {
-    int size = SlicedString::BodyDescriptor::SizeOf(map, object);
-    return VisitWithSnapshot(map, object, size, size);
+    return VisitStringLocked(object);
   }
 
   int VisitThinString(Map* map, ThinString* object) {
-    int size = ThinString::BodyDescriptor::SizeOf(map, object);
-    return VisitWithSnapshot(map, object, size, size);
+    return VisitStringLocked(object);
   }
 
   // ===========================================================================
@@ -282,11 +280,23 @@ class ConcurrentMarkingVisitor final
   // ===========================================================================
 
   int VisitFixedArray(Map* map, FixedArray* object) {
-    return VisitLeftTrimmableArray(map, object);
+    return VisitLeftTrimmableArrayLocked(object);
   }
 
   int VisitFixedDoubleArray(Map* map, FixedDoubleArray* object) {
-    return VisitLeftTrimmableArray(map, object);
+    return VisitLeftTrimmableArrayLocked(object);
+  }
+
+  // Left trimmg may leave fillers on the marking work list.
+  int VisitDataObject(Map* map, HeapObject* object) {
+    if (object->IsFiller()) {
+      return VisitLeftTrimmableArrayLocked(object);
+    }
+    return BaseClass::VisitDataObject(map, object);
+  }
+
+  int VisitFreeSpace(Map* map, FreeSpace* object) {
+    return VisitLeftTrimmableArrayLocked(object);
   }
 
   // ===========================================================================
@@ -441,11 +451,7 @@ class ConcurrentMarkingVisitor final
 
   template <typename T>
   int VisitJSObjectSubclass(Map* map, T* object) {
-    int size = T::BodyDescriptor::SizeOf(map, object);
-    int used_size = map->UsedInstanceSize();
-    DCHECK_LE(used_size, size);
-    DCHECK_GE(used_size, T::kHeaderSize);
-    return VisitWithSnapshot(map, object, used_size, size);
+    return VisitJSObjectLocked(object);
   }
 
   template <typename T>
@@ -489,6 +495,81 @@ class ConcurrentMarkingVisitor final
     visitor.VisitPointer(object, ObjectSlot(object->map_slot().address()));
     T::BodyDescriptor::IterateBody(map, object, size, &visitor);
     return slot_snapshot_;
+  }
+
+  template <typename T>
+  int VisitStringLocked(T* object) {
+    ObjectLocking::Lock(object);
+    CHECK(marking_state_.GreyToBlack(object));
+    Map* map = object->map();
+    int size = T::BodyDescriptor::SizeOf(map, object);
+    VisitPointer(object, ObjectSlot(object->map_slot().address()));
+    T::BodyDescriptor::IterateBody(map, object, size, this);
+    ObjectLocking::Unlock(object);
+    return size;
+  }
+
+  template <typename T>
+  int VisitJSObjectLocked(T* object) {
+    ObjectLocking::Lock(object);
+    CHECK(marking_state_.GreyToBlack(object));
+    Map* map = object->map();
+    int size = T::BodyDescriptor::SizeOf(map, object);
+    int used_size = map->UsedInstanceSize();
+    DCHECK_LE(used_size, size);
+    DCHECK_GE(used_size, T::kHeaderSize);
+    VisitPointer(object, ObjectSlot(object->map_slot().address()));
+    T::BodyDescriptor::IterateBody(map, object, used_size, this);
+    ObjectLocking::Unlock(object);
+    return size;
+  }
+
+  int VisitFixedArrayNonLocked(Map* map, FixedArray* object) {
+    CHECK(marking_state_.GreyToBlack(object));
+    Object* length = object->unchecked_synchronized_length();
+    DCHECK(length->IsSmi());
+    int size = FixedArray::SizeFor(Smi::ToInt(length));
+    VisitPointer(object, ObjectSlot(object->map_slot().address()));
+    FixedArray::BodyDescriptor::IterateBody(map, object, size, this);
+    return size;
+  }
+
+  int VisitFixedDoubleArrayNonLocked(Map* map, FixedDoubleArray* object) {
+    CHECK(marking_state_.GreyToBlack(object));
+    Object* length = object->unchecked_synchronized_length();
+    DCHECK(length->IsSmi());
+    int size = FixedDoubleArray::SizeFor(Smi::ToInt(length));
+    VisitPointer(object, ObjectSlot(object->map_slot().address()));
+    FixedDoubleArray::BodyDescriptor::IterateBody(map, object, size, this);
+    return size;
+  }
+
+  int VisitLeftTrimmableArrayLocked(HeapObject* object) {
+    Page* page = Page::FromAddress(object->address());
+    base::MutexGuard lock(page->left_trimming_mutex());
+
+    Heap* heap = page->heap();
+    HeapObject* current = object;
+    while (current->IsFiller()) {
+      marking_state_.GreyToBlack(current);
+      Address next = reinterpret_cast<Address>(current);
+      if (current->map() == ReadOnlyRoots(heap).one_pointer_filler_map()) {
+        next += kPointerSize;
+      } else if (current->map() ==
+                 ReadOnlyRoots(heap).two_pointer_filler_map()) {
+        next += 2 * kPointerSize;
+      } else {
+        next += current->Size();
+      }
+      current = reinterpret_cast<HeapObject*>(next);
+    }
+    object = current;
+    CHECK(object->IsFixedArray() || object->IsFixedDoubleArray());
+    if (object->IsFixedDoubleArray()) {
+      return VisitFixedDoubleArrayNonLocked(object->map(),
+                                            FixedDoubleArray::cast(object));
+    }
+    return VisitFixedArrayNonLocked(object->map(), FixedArray::cast(object));
   }
 
   ConcurrentMarking::MarkingWorklist::View shared_;

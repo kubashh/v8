@@ -70,6 +70,52 @@ int MarkingVisitor<fixed_array_mode, retaining_path_mode,
 
 template <FixedArrayVisitationMode fixed_array_mode,
           TraceRetainingPathMode retaining_path_mode, typename MarkingState>
+int MarkingVisitor<fixed_array_mode, retaining_path_mode, MarkingState>::
+    VisitLeftTrimmedFixedArrayFromFiller(Map* map, HeapObject* object) {
+  CHECK(object->IsFiller());
+  HeapObject* current = object;
+  while (current->IsFiller()) {
+    marking_state()->GreyToBlack(current);
+    Address next = reinterpret_cast<Address>(current);
+    if (current->map() == ReadOnlyRoots(heap_).one_pointer_filler_map()) {
+      next += kPointerSize;
+    } else if (current->map() ==
+               ReadOnlyRoots(heap_).two_pointer_filler_map()) {
+      next += 2 * kPointerSize;
+    } else {
+      next += current->Size();
+    }
+    current = reinterpret_cast<HeapObject*>(next);
+  }
+  object = current;
+  CHECK(object->IsFixedArray() || object->IsFixedDoubleArray());
+  if (object->IsFixedDoubleArray()) {
+    return Parent::VisitFixedDoubleArray(object->map(),
+                                         FixedDoubleArray::cast(object));
+  }
+  return VisitFixedArray(object->map(), FixedArray::cast(object));
+}
+
+template <FixedArrayVisitationMode fixed_array_mode,
+          TraceRetainingPathMode retaining_path_mode, typename MarkingState>
+int MarkingVisitor<fixed_array_mode, retaining_path_mode,
+                   MarkingState>::VisitDataObject(Map* map,
+                                                  HeapObject* object) {
+  if (object->IsFiller()) {
+    return VisitLeftTrimmedFixedArrayFromFiller(map, object);
+  }
+  return Parent::VisitDataObject(map, object);
+}
+
+template <FixedArrayVisitationMode fixed_array_mode,
+          TraceRetainingPathMode retaining_path_mode, typename MarkingState>
+int MarkingVisitor<fixed_array_mode, retaining_path_mode,
+                   MarkingState>::VisitFreeSpace(Map* map, FreeSpace* object) {
+  return VisitLeftTrimmedFixedArrayFromFiller(map, object);
+}
+
+template <FixedArrayVisitationMode fixed_array_mode,
+          TraceRetainingPathMode retaining_path_mode, typename MarkingState>
 template <typename T>
 V8_INLINE int
 MarkingVisitor<fixed_array_mode, retaining_path_mode,
