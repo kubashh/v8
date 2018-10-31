@@ -820,6 +820,7 @@ class Heap {
   // The old size is the size of the object before layout change.
   void NotifyObjectLayoutChange(HeapObject* object, int old_size,
                                 const DisallowHeapAllocation&);
+  V8_INLINE void NotifyObjectLayoutChangeDone(HeapObject* object);
 
 #ifdef VERIFY_HEAP
   // This function checks that either
@@ -1970,6 +1971,7 @@ class Heap {
   bool force_oom_ = false;
   bool delay_sweeper_tasks_for_testing_ = false;
 
+  HeapObject* locked_layout_change_object_ = nullptr;
   HeapObject* pending_layout_change_object_ = nullptr;
 
   base::Mutex unprotected_memory_chunks_mutex_;
