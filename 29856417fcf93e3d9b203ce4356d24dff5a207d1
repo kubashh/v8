@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4efec14d_4a6cf320",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-31T09:46:11Z",
+      "side": 1,
+      "message": "nit: Let\u0027s add a comment that the caller is responsible for holding the compilation state mutex.",
+      "range": {
+        "startLine": 171,
+        "startChar": 9,
+        "endLine": 171,
+        "endChar": 16
+      },
+      "revId": "29856417fcf93e3d9b203ce4356d24dff5a207d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2287464f_f32fe8e6",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-31T09:46:11Z",
+      "side": 1,
+      "message": "suggestion: I wonder if it is really an advantage for this vector to be part of the task or if it would be easier to understand to have this in {CompilationStateImpl}. This field must be locked by the compilation state mutex anyways. No strong opinion, just food for thought. :)",
+      "range": {
+        "startLine": 191,
+        "startChar": 27,
+        "endLine": 191,
+        "endChar": 39
+      },
+      "revId": "29856417fcf93e3d9b203ce4356d24dff5a207d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4920e8e_3e6a0a17",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3086,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-31T09:46:11Z",
+      "side": 1,
+      "message": "question: There doesn\u0027t seem to be any mechanism to reset {log_codes_task_} to null in case the foreground task is cancelled. Is that a problem or is that OK?",
+      "range": {
+        "startLine": 3086,
+        "startChar": 4,
+        "endLine": 3086,
+        "endChar": 19
+      },
+      "revId": "29856417fcf93e3d9b203ce4356d24dff5a207d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
