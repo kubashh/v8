@@ -582,6 +582,7 @@ void LiveRange::AdvanceLastProcessedMarker(
 LiveRange* LiveRange::SplitAt(LifetimePosition position, Zone* zone) {
   int new_id = TopLevel()->GetNextChildId();
   LiveRange* child = new (zone) LiveRange(new_id, representation(), TopLevel());
+  child->set_bundle(bundle_);
   // If we split, we do so because we're about to switch registers or move
   // to/from a slot, so there's no value in connecting hints.
   DetachAt(position, child, zone, DoNotConnectHints);
@@ -811,6 +812,17 @@ void LiveRange::Print(bool with_children) const {
   Print(RegisterConfiguration::Default(), with_children);
 }
 
+bool LiveRange::RegisterFromBundle(int* hint) const {
+  if (bundle_ == nullptr || bundle_->reg() == kUnassignedRegister) return false;
+  *hint = bundle_->reg();
+  TRACE("Register hint from Bundle is %d\n", *hint);
+  return true;
+}
+
+void LiveRange::UpdateBundleRegister(int reg) const {
+  if (bundle_ == nullptr || bundle_->reg() != kUnassignedRegister) return;
+  bundle_->set_reg(reg);
+}
 
 struct TopLevelLiveRange::SpillMoveInsertionList : ZoneObject {
   SpillMoveInsertionList(int gap_index, InstructionOperand* operand,
@@ -1525,11 +1537,21 @@ SpillRange* RegisterAllocationData::AssignSpillRangeToLiveRange(
     DCHECK(!range->IsSplinter());
     spill_range = new (allocation_zone()) SpillRange(range, allocation_zone());
   }
+  DCHECK_NOT_NULL(spill_range);
   range->set_spill_type(TopLevelLiveRange::SpillType::kSpillRange);
 
   int spill_range_index =
       range->IsSplinter() ? range->splintered_from()->vreg() : range->vreg();
 
+  if (range->bundle() != nullptr) {
+    SpillRange* from_bundle = range->bundle()->spill_range();
+    if (from_bundle == nullptr) {
+      range->bundle()->set_spill_range(spill_range);
+    } else if (from_bundle != spill_range) {
+      from_bundle->TryMerge(spill_range);
+      spill_range = from_bundle;
+    }
+  }
   spill_ranges()[spill_range_index] = spill_range;
 
   return spill_range;
@@ -2538,6 +2560,73 @@ bool LiveRangeBuilder::NextIntervalStartsInDifferentBlocks(
   return block->rpo_number() < next_block->rpo_number();
 }
 
+void BundleBuilder::BuildBundles() {
+  TRACE("Build bundles\n");
+  // Process the blocks in reverse order.
+  for (int block_id = code()->InstructionBlockCount() - 1; block_id >= 0;
+       --block_id) {
+    InstructionBlock* block =
+        code()->InstructionBlockAt(RpoNumber::FromInt(block_id));
+    TRACE("Block B%d\n", block_id);
+    for (auto phi : block->phis()) {
+      LiveRange* out_range =
+          data()->GetOrCreateLiveRangeFor(phi->virtual_register());
+      LiveRangeBundle* out = out_range->bundle();
+      if (out == nullptr) {
+        out = new (data()->allocation_zone()) LiveRangeBundle();
+        out->AddRange(out_range);
+      }
+      TRACE("Processing phi for v%d with %d:%d\n", phi->virtual_register(),
+            out_range->TopLevel()->vreg(), out_range->relative_id());
+      for (auto input : phi->operands()) {
+        LiveRange* input_range = data()->GetOrCreateLiveRangeFor(input);
+        TRACE("Input value v%d with range %d:%d\n", input,
+              input_range->TopLevel()->vreg(), input_range->relative_id());
+        LiveRangeBundle* input_bundle = input_range->bundle();
+        if (input_bundle != nullptr) {
+          TRACE("Merge\n");
+          if (out->Merge(input_bundle))
+            TRACE("Merged %d and %d to %d\n", phi->virtual_register(), input,
+                  out->id());
+        } else {
+          TRACE("Add\n");
+          if (out->AddRange(input_range))
+            TRACE("Added %d and %d to %d\n", phi->virtual_register(), input,
+                  out->id());
+        }
+      }
+    }
+    TRACE("Done block B%d\n", block_id);
+  }
+}
+
+int LiveRangeBundle::bundle_id = 0;
+bool LiveRangeBundle::Merge(LiveRangeBundle* other) {
+  if (other == this) return true;
+
+  auto iter1 = uses_.begin();
+  auto iter2 = other->uses_.begin();
+
+  while (iter1 != uses_.end() && iter2 != other->uses_.end()) {
+    if (iter1->start > iter2->end) {
+      ++iter2;
+    } else if (iter2->start > iter1->end) {
+      ++iter1;
+    } else {
+      return false;
+    }
+  }
+  // We can merge
+  for (auto it = other->ranges.begin(); it != other->ranges.end(); ++it) {
+    (*it)->set_bundle(this);
+    InsertUses((*it)->first_interval());
+  }
+  ranges.insert(ranges.end(), other->ranges.begin(), other->ranges.end());
+  other->ranges.clear();
+
+  return true;
+}
+
 RegisterAllocator::RegisterAllocator(RegisterAllocationData* data,
                                      RegisterKind kind)
     : data_(data),
@@ -2858,6 +2947,7 @@ void LinearScanAllocator::SetLiveRangeAssignedRegister(LiveRange* range,
   data()->MarkAllocated(range->representation(), reg);
   range->set_assigned_register(reg);
   range->SetUseHints(reg);
+  range->UpdateBundleRegister(reg);
   if (range->IsTopLevel() && range->TopLevel()->is_phi()) {
     data()->GetPhiMapValueFor(range->TopLevel())->set_assigned_register(reg);
   }
@@ -3055,7 +3145,8 @@ void LinearScanAllocator::ProcessCurrentRange(LiveRange* current) {
 bool LinearScanAllocator::TryAllocatePreferredReg(
     LiveRange* current, const Vector<LifetimePosition>& free_until_pos) {
   int hint_register;
-  if (current->FirstHintPosition(&hint_register) != nullptr) {
+  if (current->FirstHintPosition(&hint_register) != nullptr ||
+      current->RegisterFromBundle(&hint_register)) {
     TRACE(
         "Found reg hint %s (free until [%d) for live range %d:%d (end %d[).\n",
         RegisterName(hint_register), free_until_pos[hint_register].value(),
@@ -3160,6 +3251,7 @@ void LinearScanAllocator::AllocateBlockedReg(LiveRange* current) {
     use_pos[i] = block_pos[i] = LifetimePosition::MaxPosition();
   }
 
+  int preferred = kUnassignedRegister;
   for (LiveRange* range : active_live_ranges()) {
     int cur_reg = range->assigned_register();
     bool is_fixed_or_cant_spill =
@@ -3239,7 +3331,7 @@ void LinearScanAllocator::AllocateBlockedReg(LiveRange* current) {
     }
   }
 
-  int reg = codes[0];
+  int reg = preferred == kUnassignedRegister ? codes[0] : preferred;
   for (int i = 1; i < num_codes; ++i) {
     int code = codes[i];
     if (use_pos[code] > use_pos[reg]) {
@@ -3316,7 +3408,8 @@ void LinearScanAllocator::SplitAndSpillIntersecting(LiveRange* current) {
       // current live-range is larger than their end.
       DCHECK(LifetimePosition::ExistsGapPositionBetween(current->Start(),
                                                         next_pos->pos()));
-      SpillBetweenUntil(range, spill_pos, current->Start(), next_pos->pos());
+      SpillBetweenUntil(range, spill_pos, current->Start(),
+                        Min(current->End(), next_pos->pos()));
     }
     it = ActiveToHandled(it);
   }
@@ -3359,7 +3452,6 @@ void LinearScanAllocator::SplitAndSpillIntersecting(LiveRange* current) {
   }
 }
 
-
 bool LinearScanAllocator::TryReuseSpillForPhi(TopLevelLiveRange* range) {
   if (!range->is_phi()) return false;
 
@@ -3392,56 +3484,81 @@ bool LinearScanAllocator::TryReuseSpillForPhi(TopLevelLiveRange* range) {
   }
 
   // Only continue if more than half of the operands are spilled.
-  if (spilled_count * 2 <= phi->operands().size()) {
-    return false;
-  }
+  if (spilled_count * 2 <= phi->operands().size()) return false;
 
-  // Try to merge the spilled operands and count the number of merged spilled
-  // operands.
-  DCHECK_NOT_NULL(first_op);
-  SpillRange* first_op_spill = first_op->TopLevel()->GetSpillRange();
-  size_t num_merged = 1;
-  for (size_t i = 1; i < phi->operands().size(); i++) {
-    int op = phi->operands()[i];
-    TopLevelLiveRange* op_range = data()->live_ranges()[op];
-    if (!op_range->HasSpillRange()) continue;
-    SpillRange* op_spill = op_range->GetSpillRange();
-    if (op_spill == first_op_spill || first_op_spill->TryMerge(op_spill)) {
-      num_merged++;
+  if (FLAG_turbo_precoalesce_phi_inputs) {
+    LiveRangeBundle* bundle = range->bundle();
+    size_t num_merged = 0;
+    if (bundle == nullptr) return false;
+    for (auto op : phi->operands()) {
+      TopLevelLiveRange* op_range = data()->live_ranges()[op];
+      if (op_range->bundle() == bundle) {
+        num_merged++;
+      }
     }
-  }
+    if (num_merged * 2 <= phi->operands().size()) {
+      return false;
+    }
 
-  // Only continue if enough operands could be merged to the
-  // same spill slot.
-  if (num_merged * 2 <= phi->operands().size() ||
-      AreUseIntervalsIntersecting(first_op_spill->interval(),
-                                  range->first_interval())) {
-    return false;
-  }
+    // If the range does not need register soon, spill it to the merged
+    // spill range.
+    LifetimePosition next_pos = range->Start();
+    if (next_pos.IsGapPosition()) next_pos = next_pos.NextStart();
+    UsePosition* pos = range->NextUsePositionRegisterIsBeneficial(next_pos);
+    if (pos == nullptr) {
+      Spill(range);
+      return true;
+    } else if (pos->pos() > range->Start().NextStart()) {
+      SpillBetween(range, range->Start(), pos->pos());
+      return true;
+    }
+  } else {
+    // Try to merge the spilled operands and count the number of merged spilled
+    // operands.
+    DCHECK_NOT_NULL(first_op);
+    SpillRange* first_op_spill = first_op->TopLevel()->GetSpillRange();
+    size_t num_merged = 1;
+    for (size_t i = 1; i < phi->operands().size(); i++) {
+      int op = phi->operands()[i];
+      TopLevelLiveRange* op_range = data()->live_ranges()[op];
+      if (!op_range->HasSpillRange()) continue;
+      SpillRange* op_spill = op_range->GetSpillRange();
+      if (op_spill == first_op_spill || first_op_spill->TryMerge(op_spill)) {
+        num_merged++;
+      }
+    }
+    // Only continue if enough operands could be merged to the
+    // same spill slot.
+    if (num_merged * 2 <= phi->operands().size() ||
+        AreUseIntervalsIntersecting(first_op_spill->interval(),
+                                    range->first_interval())) {
+      return false;
+    }
 
-  // If the range does not need register soon, spill it to the merged
-  // spill range.
-  LifetimePosition next_pos = range->Start();
-  if (next_pos.IsGapPosition()) next_pos = next_pos.NextStart();
-  UsePosition* pos = range->NextUsePositionRegisterIsBeneficial(next_pos);
-  if (pos == nullptr) {
-    SpillRange* spill_range =
-        range->TopLevel()->HasSpillRange()
-            ? range->TopLevel()->GetSpillRange()
-            : data()->AssignSpillRangeToLiveRange(range->TopLevel());
-    bool merged = first_op_spill->TryMerge(spill_range);
-    if (!merged) return false;
-    Spill(range);
-    return true;
-  } else if (pos->pos() > range->Start().NextStart()) {
-    SpillRange* spill_range =
-        range->TopLevel()->HasSpillRange()
-            ? range->TopLevel()->GetSpillRange()
-            : data()->AssignSpillRangeToLiveRange(range->TopLevel());
-    bool merged = first_op_spill->TryMerge(spill_range);
-    if (!merged) return false;
-    SpillBetween(range, range->Start(), pos->pos());
-    return true;
+    // If the range does not need register soon, spill it to the merged
+    // spill range.
+    LifetimePosition next_pos = range->Start();
+    if (next_pos.IsGapPosition()) next_pos = next_pos.NextStart();
+    UsePosition* pos = range->NextUsePositionRegisterIsBeneficial(next_pos);
+    if (pos == nullptr) {
+      SpillRange* spill_range =
+          range->TopLevel()->HasSpillRange()
+              ? range->TopLevel()->GetSpillRange()
+              : data()->AssignSpillRangeToLiveRange(range->TopLevel());
+      bool merged = first_op_spill->TryMerge(spill_range);
+      if (!merged) return false;
+      Spill(range);
+      return true;
+    } else if (pos->pos() > range->Start().NextStart()) {
+      SpillRange* spill_range =
+          range->TopLevel()->HasSpillRange()
+              ? range->TopLevel()->GetSpillRange()
+              : data()->AssignSpillRangeToLiveRange(range->TopLevel());
+      bool merged = first_op_spill->TryMerge(spill_range);
+      if (!merged) return false;
+      SpillBetween(range, range->Start(), pos->pos());
+      return true;
+    }
   }
   return false;
 }

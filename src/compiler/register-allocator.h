@@ -304,10 +304,10 @@ class V8_EXPORT_PRIVATE UsePosition final
   DISALLOW_COPY_AND_ASSIGN(UsePosition);
 };
 
-
 class SpillRange;
 class RegisterAllocationData;
 class TopLevelLiveRange;
+class LiveRangeBundle;
 
 // Representation of SSA values' live ranges as a collection of (continuous)
 // intervals over the instruction ordering.
@@ -431,6 +431,12 @@ class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
   void Print(const RegisterConfiguration* config, bool with_children) const;
   void Print(bool with_children) const;
 
+  void set_bundle(LiveRangeBundle* bundle) { bundle_ = bundle; }
+  LiveRangeBundle* bundle() const { return bundle_; }
+  bool RegisterFromBundle(int* hint) const;
+  void UpdateBundleRegister(int reg) const;
+  void UpdateBundleSpillState() const;
+
  private:
   friend class TopLevelLiveRange;
   explicit LiveRange(int relative_id, MachineRepresentation rep,
@@ -467,10 +473,81 @@ class V8_EXPORT_PRIVATE LiveRange : public NON_EXPORTED_BASE(ZoneObject) {
   mutable UsePosition* current_hint_position_;
   // Cache the last position splintering stopped at.
   mutable UsePosition* splitting_pointer_;
+  LiveRangeBundle* bundle_ = nullptr;
 
   DISALLOW_COPY_AND_ASSIGN(LiveRange);
 };
 
+class LiveRangeBundle : public ZoneObject {
+ public:
+  bool AddRange(LiveRange* range) {
+    DCHECK_NULL(range->bundle());
+    if (UsesOverlap(range->first_interval())) return false;
+    ranges.push_back(range);
+    range->set_bundle(this);
+    InsertUses(range->first_interval());
+    return true;
+  }
+
+  bool Merge(LiveRangeBundle* other);
+
+  int id() { return id_; }
+
+  int reg() { return reg_; }
+
+  void set_reg(int reg) {
+    DCHECK_EQ(reg_, kUnassignedRegister);
+    reg_ = reg;
+  }
+
+  void set_spill_range(SpillRange* spill_range) {
+    DCHECK(spill_range_ == nullptr || spill_range_ == spill_range);
+    spill_range_ = spill_range;
+  }
+
+  SpillRange* spill_range() const { return spill_range_; }
+
+ private:
+  static int bundle_id;
+  class Range {
+   public:
+    Range(int s, int e) : start(s), end(e) {}
+    Range(LifetimePosition s, LifetimePosition e)
+        : start(s.value()), end(e.value()) {}
+    int start;
+    int end;
+  };
+
+  struct RangeOrdering {
+    bool operator()(const Range left, const Range right) {
+      return left.start < right.start;
+    }
+  };
+  bool UsesOverlap(UseInterval* interval) {
+    auto use = uses_.begin();
+    while (interval != nullptr && use != uses_.end()) {
+      if (use->end <= interval->start().value()) {
+        ++use;
+      } else if (interval->end().value() <= use->start) {
+        interval = interval->next();
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+  void InsertUses(UseInterval* interval) {
+    while (interval != nullptr) {
+      uses_.insert({interval->start(), interval->end()});
+      interval = interval->next();
+    }
+  }
+  std::vector<LiveRange*> ranges;
+  std::set<Range, RangeOrdering> uses_;
+  int id_ = bundle_id++;
+  int reg_ = kUnassignedRegister;
+  SpillRange* spill_range_ = nullptr;
+};
 
 class V8_EXPORT_PRIVATE TopLevelLiveRange final : public LiveRange {
  public:
@@ -956,6 +1033,17 @@ class LiveRangeBuilder final : public ZoneObject {
   DISALLOW_COPY_AND_ASSIGN(LiveRangeBuilder);
 };
 
+class BundleBuilder final : public ZoneObject {
+ public:
+  explicit BundleBuilder(RegisterAllocationData* data) : data_(data) {}
+
+  void BuildBundles();
+
+ private:
+  RegisterAllocationData* data() const { return data_; }
+  InstructionSequence* code() const { return data_->code(); }
+  RegisterAllocationData* data_;
+};
 
 class RegisterAllocator : public ZoneObject {
  public:

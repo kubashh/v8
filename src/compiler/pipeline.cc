@@ -1773,6 +1773,14 @@ struct BuildLiveRangesPhase {
   }
 };
 
+struct BuildBundlesPhase {
+  static const char* phase_name() { return "build live range bundles"; }
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    BundleBuilder builder(data->register_allocation_data());
+    builder.BuildBundles();
+  }
+};
 
 struct SplinterLiveRangesPhase {
   static const char* phase_name() { return "splinter live ranges"; }
@@ -2703,6 +2711,10 @@ void PipelineImpl::AllocateRegisters(const RegisterConfiguration* config,
   Run<MeetRegisterConstraintsPhase>();
   Run<ResolvePhisPhase>();
   Run<BuildLiveRangesPhase>();
+  if (FLAG_turbo_precoalesce_phi_inputs) {
+    Run<BuildBundlesPhase>();
+  }
+
   TraceSequence(info(), data, config, "before register allocation");
   if (verifier != nullptr) {
     CHECK(!data->register_allocation_data()->ExistsUseWithoutDefinition());
