@@ -118,7 +118,8 @@ void CSAGenerator::EmitInstruction(const ModuleConstantInstruction& instruction,
   } else if (results.size() == 1) {
     out_ << results[0] << " = ";
   }
-  out_ << instruction.constant->constant_name() << "()";
+  out_ << instruction.constant->ExternalAssemblerName() << "(state())."
+       << instruction.constant->constant_name() << "()";
   if (type->IsStructType()) {
     out_ << ".Flatten();\n";
   } else {
@@ -170,7 +171,8 @@ void CSAGenerator::EmitInstruction(const CallCsaMacroInstruction& instruction,
            << return_type->GetGeneratedTNodeTypeName() << ">(";
     }
   }
-  out_ << instruction.macro->name() << "(";
+  out_ << instruction.macro->external_assembler_name() << "(state())."
+       << instruction.macro->ExternalName() << "(";
   PrintCommaSeparatedList(out_, args);
   if (return_type->IsStructType()) {
     out_ << ").Flatten();\n";
@@ -243,7 +245,8 @@ void CSAGenerator::EmitInstruction(
     PrintCommaSeparatedList(out_, results);
     out_ << ") = ";
   }
-  out_ << instruction.macro->name() << "(";
+  out_ << instruction.macro->external_assembler_name() << "(state())."
+       << instruction.macro->ExternalName() << "(";
   PrintCommaSeparatedList(out_, args);
   bool first = args.empty();
   for (size_t i = 0; i < label_names.size(); ++i) {
@@ -291,8 +294,8 @@ void CSAGenerator::EmitInstruction(const CallBuiltinInstruction& instruction,
   std::vector<const Type*> result_types =
       LowerType(instruction.builtin->signature().return_type);
   if (instruction.is_tailcall) {
-    out_ << "   TailCallBuiltin(Builtins::k" << instruction.builtin->name()
-         << ", ";
+    out_ << "   TailCallBuiltin(Builtins::k"
+         << instruction.builtin->ExternalName() << ", ";
     PrintCommaSeparatedList(out_, arguments);
     out_ << ");\n";
   } else {
@@ -301,7 +304,8 @@ void CSAGenerator::EmitInstruction(const CallBuiltinInstruction& instruction,
       stack->Push(FreshNodeName());
       out_ << "    TNode<" << generated_type << "> " << stack->Top() << " = ";
       if (generated_type != "Object") out_ << "CAST(";
-      out_ << "CallBuiltin(Builtins::k" << instruction.builtin->name() << ", ";
+      out_ << "CallBuiltin(Builtins::k" << instruction.builtin->ExternalName()
+           << ", ";
       PrintCommaSeparatedList(out_, arguments);
       if (generated_type != "Object") out_ << ")";
       out_ << ");\n";
@@ -310,8 +314,8 @@ void CSAGenerator::EmitInstruction(const CallBuiltinInstruction& instruction,
       DCHECK_EQ(0, result_types.size());
       // TODO(tebbi): Actually, builtins have to return a value, so we should
       // not have to handle this case.
-      out_ << "    CallBuiltin(Builtins::k" << instruction.builtin->name()
-           << ", ";
+      out_ << "    CallBuiltin(Builtins::k"
+           << instruction.builtin->ExternalName() << ", ";
       PrintCommaSeparatedList(out_, arguments);
       out_ << ");\n";
     }
@@ -364,7 +368,7 @@ void CSAGenerator::EmitInstruction(const CallRuntimeInstruction& instruction,
   }
   if (instruction.is_tailcall) {
     out_ << "    TailCallRuntime(Runtime::k"
-         << instruction.runtime_function->name() << ", ";
+         << instruction.runtime_function->ExternalName() << ", ";
     PrintCommaSeparatedList(out_, arguments);
     out_ << ");\n";
   } else {
@@ -372,14 +376,14 @@ void CSAGenerator::EmitInstruction(const CallRuntimeInstruction& instruction,
       stack->Push(FreshNodeName());
       out_ << "    TNode<" << result_types[0]->GetGeneratedTNodeTypeName()
            << "> " << stack->Top() << " = CAST(CallRuntime(Runtime::k"
-           << instruction.runtime_function->name() << ", ";
+           << instruction.runtime_function->ExternalName() << ", ";
       PrintCommaSeparatedList(out_, arguments);
       out_ << "));\n";
       out_ << "    USE(" << stack->Top() << ");\n";
     } else {
       DCHECK_EQ(0, result_types.size());
       out_ << "    CallRuntime(Runtime::k"
-           << instruction.runtime_function->name() << ", ";
+           << instruction.runtime_function->ExternalName() << ", ";
       PrintCommaSeparatedList(out_, arguments);
       out_ << ");\n";
       if (return_type == TypeOracle::GetNeverType()) {

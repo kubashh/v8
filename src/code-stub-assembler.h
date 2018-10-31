@@ -3106,7 +3106,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
 
   void PerformStackCheck(TNode<Context> context);
 
- protected:
   // Implements DescriptorArray::Search().
   void DescriptorLookup(SloppyTNode<Name> unique_name,
                         SloppyTNode<DescriptorArray> descriptors,

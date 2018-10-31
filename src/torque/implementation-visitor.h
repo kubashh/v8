@@ -284,10 +284,6 @@ class ImplementationVisitor : public FileVisitor {
   };
 
  private:
-  std::string GetBaseAssemblerName(Module* module);
-
-  std::string GetDSLAssemblerName(Module* module);
-
   // {StackScope} records the stack height at creation time and reconstructs it
   // when being destructed by emitting a {DeleteRangeInstruction}, except for
   // the slots protected by {StackScope::Yield}. Calling {Yield(v)} deletes all
