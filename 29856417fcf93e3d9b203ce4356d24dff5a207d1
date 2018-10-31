@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "f78e7e6c_012aa766",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-31T10:42:06Z",
+      "side": 1,
+      "message": "Ack. Fine with me.",
+      "parentUuid": "65c9aeea_d4d7c470",
+      "range": {
+        "startLine": 191,
+        "startChar": 27,
+        "endLine": 191,
+        "endChar": 39
+      },
+      "revId": "29856417fcf93e3d9b203ce4356d24dff5a207d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4920e8e_3e6a0a17",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "Hm, shoudln\u0027t be a problem, since {CancelAndWait} is only being called when the CompilationState dies. In that case, there is no need to reset the field.",
       "parentUuid": "d4920e8e_3e6a0a17",
+      "range": {
+        "startLine": 3086,
+        "startChar": 4,
+        "endLine": 3086,
+        "endChar": 19
+      },
+      "revId": "29856417fcf93e3d9b203ce4356d24dff5a207d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "391b3b2c_4e4b32fe",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3086,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-10-31T10:42:06Z",
+      "side": 1,
+      "message": "Ack. Makes sense.",
+      "parentUuid": "4070ef21_5d9847e3",
       "range": {
         "startLine": 3086,
         "startChar": 4,
