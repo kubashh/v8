@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0c65b838_912f07af",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-10-31T10:01:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4efec14d_4a6cf320",
+      "range": {
+        "startLine": 171,
+        "startChar": 9,
+        "endLine": 171,
+        "endChar": 16
+      },
+      "revId": "29856417fcf93e3d9b203ce4356d24dff5a207d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2287464f_f32fe8e6",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "65c9aeea_d4d7c470",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-10-31T10:01:10Z",
+      "side": 1,
+      "message": "I think I really prefer it this way. If the vector is stored on the compilation state, there is the additional invariant of \"if the vector contains elements, there must be a scheduled foreground task\". If we encapsulate it this way, it\u0027s pretty obvious. If there is a task, it also has the vector (which is non-empty). If there is no task, there is also no vector where you could accidentally add the pointer.",
+      "parentUuid": "2287464f_f32fe8e6",
+      "range": {
+        "startLine": 191,
+        "startChar": 27,
+        "endLine": 191,
+        "endChar": 39
+      },
+      "revId": "29856417fcf93e3d9b203ce4356d24dff5a207d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4920e8e_3e6a0a17",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "29856417fcf93e3d9b203ce4356d24dff5a207d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4070ef21_5d9847e3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3086,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-10-31T10:01:10Z",
+      "side": 1,
+      "message": "Hm, shoudln\u0027t be a problem, since {CancelAndWait} is only being called when the CompilationState dies. In that case, there is no need to reset the field.",
+      "parentUuid": "d4920e8e_3e6a0a17",
+      "range": {
+        "startLine": 3086,
+        "startChar": 4,
+        "endLine": 3086,
+        "endChar": 19
+      },
+      "revId": "29856417fcf93e3d9b203ce4356d24dff5a207d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
