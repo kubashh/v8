@@ -276,7 +276,7 @@ Token::Value Scanner::PeekAhead() {
 Token::Value Scanner::SkipSingleHTMLComment() {
   if (is_module_) {
     ReportScannerError(source_pos(), MessageTemplate::kHtmlCommentInModule);
-    return Token::ILLEGAL;
+    return IllegalToken();
   }
   return SkipSingleLineComment();
 }
@@ -378,7 +378,7 @@ Token::Value Scanner::SkipMultiLineComment() {
   }
 
   // Unterminated multi-line comment.
-  return Token::ILLEGAL;
+  return IllegalToken();
 }
 
 Token::Value Scanner::ScanHtmlComment() {
@@ -554,13 +554,13 @@ Token::Value Scanner::ScanString() {
       return Token::STRING;
     }
     if (c0_ == kEndOfInput || unibrow::IsStringLiteralLineTerminator(c0_)) {
-      return Token::ILLEGAL;
+      return IllegalToken();
     }
     if (c0_ == '\\') {
       Advance();
       // TODO(verwaest): Check whether we can remove the additional check.
       if (c0_ == kEndOfInput || !ScanEscape<false>()) {
-        return Token::ILLEGAL;
+        return IllegalToken();
       }
       continue;
     }
@@ -572,7 +572,7 @@ Token::Value Scanner::ScanPrivateName() {
   if (!allow_harmony_private_fields()) {
     ReportScannerError(source_pos(),
                        MessageTemplate::kInvalidOrUnexpectedToken);
-    return Token::ILLEGAL;
+    return IllegalToken();
   }
 
   LiteralScope literal(this);
@@ -581,7 +581,7 @@ Token::Value Scanner::ScanPrivateName() {
   if (!unicode_cache_->IsIdentifierStart(Peek())) {
     ReportScannerError(source_pos(),
                        MessageTemplate::kInvalidOrUnexpectedToken);
-    return Token::ILLEGAL;
+    return IllegalToken();
   }
 
   AddLiteralCharAdvance();
@@ -859,10 +859,10 @@ Token::Value Scanner::ScanNumber(bool seen_period) {
     // we have already seen a decimal point of the float
     AddLiteralChar('.');
     if (allow_harmony_numeric_separator() && c0_ == '_') {
-      return Token::ILLEGAL;
+      return IllegalToken();
     }
     // we know we have at least one digit
-    if (!ScanDecimalDigits()) return Token::ILLEGAL;
+    if (!ScanDecimalDigits()) return IllegalToken();
   } else {
     // if the first character is '0' we must check for octals and hex
     if (c0_ == '0') {
@@ -873,19 +873,19 @@ Token::Value Scanner::ScanNumber(bool seen_period) {
       if (c0_ == 'x' || c0_ == 'X') {
         AddLiteralCharAdvance();
         kind = HEX;
-        if (!ScanHexDigits()) return Token::ILLEGAL;
+        if (!ScanHexDigits()) return IllegalToken();
       } else if (c0_ == 'o' || c0_ == 'O') {
         AddLiteralCharAdvance();
         kind = OCTAL;
-        if (!ScanOctalDigits()) return Token::ILLEGAL;
+        if (!ScanOctalDigits()) return IllegalToken();
       } else if (c0_ == 'b' || c0_ == 'B') {
         AddLiteralCharAdvance();
         kind = BINARY;
-        if (!ScanBinaryDigits()) return Token::ILLEGAL;
+        if (!ScanBinaryDigits()) return IllegalToken();
       } else if (IsOctalDigit(c0_)) {
         kind = IMPLICIT_OCTAL;
         if (!ScanImplicitOctalDigits(start_pos, &kind)) {
-          return Token::ILLEGAL;
+          return IllegalToken();
         }
         if (kind == DECIMAL_WITH_LEADING_ZERO) {
           at_start = false;
@@ -895,7 +895,7 @@ Token::Value Scanner::ScanNumber(bool seen_period) {
       } else if (allow_harmony_numeric_separator() && c0_ == '_') {
         ReportScannerError(Location(source_pos(), source_pos() + 1),
                            MessageTemplate::kZeroDigitNumericSeparator);
-        return Token::ILLEGAL;
+        return IllegalToken();
       }
     }
 
@@ -906,7 +906,7 @@ Token::Value Scanner::ScanNumber(bool seen_period) {
         uint64_t value = 0;
         // scan subsequent decimal digits
         if (!ScanDecimalAsSmi(&value)) {
-          return Token::ILLEGAL;
+          return IllegalToken();
         }
 
         if (next().literal_chars.one_byte_literal().length() <= 10 &&
@@ -923,14 +923,14 @@ Token::Value Scanner::ScanNumber(bool seen_period) {
         }
       }
 
-      if (!ScanDecimalDigits()) return Token::ILLEGAL;
+      if (!ScanDecimalDigits()) return IllegalToken();
       if (c0_ == '.') {
         seen_period = true;
         AddLiteralCharAdvance();
         if (allow_harmony_numeric_separator() && c0_ == '_') {
-          return Token::ILLEGAL;
+          return IllegalToken();
         }
-        if (!ScanDecimalDigits()) return Token::ILLEGAL;
+        if (!ScanDecimalDigits()) return IllegalToken();
       }
     }
   }
@@ -946,7 +946,7 @@ Token::Value Scanner::ScanNumber(bool seen_period) {
     if (length > kMaxBigIntCharacters) {
       ReportScannerError(Location(start_pos, source_pos()),
                          MessageTemplate::kBigIntTooBig);
-      return Token::ILLEGAL;
+      return IllegalToken();
     }
 
     is_bigint = true;
@@ -956,12 +956,12 @@ Token::Value Scanner::ScanNumber(bool seen_period) {
     DCHECK(kind != HEX);  // 'e'/'E' must be scanned as part of the hex number
 
     if (!(kind == DECIMAL || kind == DECIMAL_WITH_LEADING_ZERO))
-      return Token::ILLEGAL;
+      return IllegalToken();
 
     // scan exponent
     AddLiteralCharAdvance();
 
-    if (!ScanSignedInteger()) return Token::ILLEGAL;
+    if (!ScanSignedInteger()) return IllegalToken();
   }
 
   // The source character immediately following a numeric literal must
@@ -969,7 +969,7 @@ Token::Value Scanner::ScanNumber(bool seen_period) {
   // section 7.8.3, page 17 (note that we read only one decimal digit
   // if the value is 0).
   if (IsDecimalDigit(c0_) || unicode_cache_->IsIdentifierStart(c0_)) {
-    return Token::ILLEGAL;
+    return IllegalToken();
   }
 
   literal.Complete();
@@ -1020,7 +1020,7 @@ Token::Value Scanner::ScanIdentifierOrKeywordInnerSlow(LiteralScope* literal,
       // DCHECK(!unicode_cache_->IsIdentifierPart('\\'));
       DCHECK(!unicode_cache_->IsIdentifierPart(-1));
       if (c == '\\' || !unicode_cache_->IsIdentifierPart(c)) {
-        return Token::ILLEGAL;
+        return IllegalToken();
       }
       AddLiteralChar(c);
     } else if (unicode_cache_->IsIdentifierPart(c0_) ||
