@@ -202,8 +202,7 @@ void CheckNotDeferredStatement(Statement* statement) {
   }
 }
 
-Expression* MakeCall(const std::string& callee, bool is_operator,
-                     const std::vector<TypeExpression*>& generic_arguments,
+Expression* MakeCall(IdentifierExpression* callee,
                      const std::vector<Expression*>& arguments,
                      const std::vector<Statement*>& otherwise) {
   std::vector<std::string> labels;
@@ -232,20 +231,27 @@ Expression* MakeCall(const std::string& callee, bool is_operator,
 
   // Create nested try-label expression for all of the temporary Labels that
   // were created.
-  Expression* result = MakeNode<CallExpression>(
-      callee, false, generic_arguments, arguments, labels);
+  Expression* result = MakeNode<CallExpression>(callee, arguments, labels);
   for (auto* label : temp_labels) {
     result = MakeNode<TryLabelExpression>(result, label);
   }
   return result;
 }
 
+Expression* MakeCall(const std::string& callee,
+                     const std::vector<TypeExpression*>& generic_arguments,
+                     const std::vector<Expression*>& arguments,
+                     const std::vector<Statement*>& otherwise) {
+  return MakeCall(MakeNode<IdentifierExpression>(callee, generic_arguments),
+                  arguments, otherwise);
+}
+
 base::Optional<ParseResult> MakeCall(ParseResultIterator* child_results) {
-  auto callee = child_results->NextAs<std::string>();
-  auto generic_args = child_results->NextAs<TypeList>();
+  auto callee = child_results->NextAs<LocationExpression*>();
   auto args = child_results->NextAs<std::vector<Expression*>>();
   auto otherwise = child_results->NextAs<std::vector<Statement*>>();
-  return ParseResult{MakeCall(callee, false, generic_args, args, otherwise)};
+  return ParseResult{
+      MakeCall(IdentifierExpression::cast(callee), args, otherwise)};
 }
 
 base::Optional<ParseResult> MakeBinaryOperator(
@@ -253,7 +259,7 @@ base::Optional<ParseResult> MakeBinaryOperator(
   auto left = child_results->NextAs<Expression*>();
   auto op = child_results->NextAs<std::string>();
   auto right = child_results->NextAs<Expression*>();
-  return ParseResult{MakeCall(op, true, TypeList{},
+  return ParseResult{MakeCall(op, TypeList{},
                               std::vector<Expression*>{left, right},
                               std::vector<Statement*>{})};
 }
@@ -262,7 +268,7 @@ base::Optional<ParseResult> MakeUnaryOperator(
     ParseResultIterator* child_results) {
   auto op = child_results->NextAs<std::string>();
   auto e = child_results->NextAs<Expression*>();
-  return ParseResult{MakeCall(op, true, TypeList{}, std::vector<Expression*>{e},
+  return ParseResult{MakeCall(op, TypeList{}, std::vector<Expression*>{e},
                               std::vector<Statement*>{})};
 }
 
@@ -657,11 +663,10 @@ base::Optional<ParseResult> MakeTypeswitchStatement(
     }
     BlockStatement* case_block;
     if (i < cases.size() - 1) {
-      value =
-          MakeCall("Cast", false, std::vector<TypeExpression*>{cases[i].type},
-                   std::vector<Expression*>{value},
-                   std::vector<Statement*>{MakeNode<ExpressionStatement>(
-                       MakeNode<IdentifierExpression>("_NextCase"))});
+      value = MakeCall("Cast", std::vector<TypeExpression*>{cases[i].type},
+                       std::vector<Expression*>{value},
+                       std::vector<Statement*>{MakeNode<ExpressionStatement>(
+                           MakeNode<IdentifierExpression>("_NextCase"))});
       case_block = MakeNode<BlockStatement>();
     } else {
       case_block = current_block;
@@ -839,11 +844,14 @@ base::Optional<ParseResult> MakeExpressionWithSource(
 
 base::Optional<ParseResult> MakeIdentifierExpression(
     ParseResultIterator* child_results) {
+  auto namespace_qualification =
+      child_results->NextAs<std::vector<std::string>>();
   auto name = child_results->NextAs<std::string>();
   auto generic_arguments =
       child_results->NextAs<std::vector<TypeExpression*>>();
   LocationExpression* result = MakeNode<IdentifierExpression>(
-      std::move(name), std::move(generic_arguments));
+      std::move(namespace_qualification), std::move(name),
+      std::move(generic_arguments));
   return ParseResult{result};
 }
 
@@ -1172,10 +1180,16 @@ struct TorqueGrammar : Grammar {
                                  IncrementDecrementOperator::kDecrement>)};
 
   // Result: LocationExpression*
-  Symbol locationExpression = {
+  Symbol identifierExpression = {
       Rule(
-          {&identifier, TryOrDefault<TypeList>(&genericSpecializationTypeList)},
+          {List<std::string>(Sequence({&identifier, Token("::")})), &identifier,
+           TryOrDefault<TypeList>(&genericSpecializationTypeList)},
           MakeIdentifierExpression),
+  };
+
+  // Result: LocationExpression*
+  Symbol locationExpression = {
+      Rule({&identifierExpression}),
       Rule({&primaryExpression, Token("."), &identifier},
            MakeFieldAccessExpression),
       Rule({&primaryExpression, Token("["), expression, Token("]")},
@@ -1186,10 +1200,8 @@ struct TorqueGrammar : Grammar {
       {Token("("), List<Expression*>(expression, Token(",")), Token(")")})};
 
   // Result: Expression*
-  Symbol callExpression = {
-      Rule({&identifier, TryOrDefault<TypeList>(&genericSpecializationTypeList),
-            &argumentList, optionalOtherwise},
-           MakeCall)};
+  Symbol callExpression = {Rule(
+      {&identifierExpression, &argumentList, optionalOtherwise}, MakeCall)};
 
   // Result: Expression*
   Symbol primaryExpression = {

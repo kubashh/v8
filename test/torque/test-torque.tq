@@ -598,4 +598,9 @@ module test {
       assert(b == 5);
     }
   }
+
+  macro TestQualifiedAccess() {
+    let s: Smi = 0;
+    check(!array::IsJSArray(s));
+  }
 }
