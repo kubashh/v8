@@ -64,7 +64,7 @@ namespace internal {
   V(TryCatchStatement)            \
   V(TryFinallyStatement)          \
   V(DebuggerStatement)            \
-  V(InitializeClassFieldsStatement)
+  V(InitializeClassElementsStatement)
 
 #define LITERAL_NODE_LIST(V) \
   V(RegExpLiteral)           \
@@ -1572,9 +1572,9 @@ class VariableProxy final : public Expression {
         HoleCheckModeField::update(bit_field_, HoleCheckMode::kRequired);
   }
 
-  bool is_private_field() const { return IsPrivateField::decode(bit_field_); }
-  void set_is_private_field() {
-    bit_field_ = IsPrivateField::update(bit_field_, true);
+  bool is_private_name() const { return IsPrivateName::decode(bit_field_); }
+  void set_is_private_name() {
+    bit_field_ = IsPrivateName::update(bit_field_, true);
   }
 
   // Bind this proxy to the variable var.
@@ -1605,7 +1605,7 @@ class VariableProxy final : public Expression {
                   IsAssignedField::encode(false) |
                   IsResolvedField::encode(false) |
                   HoleCheckModeField::encode(HoleCheckMode::kElided) |
-                  IsPrivateField::encode(false);
+                  IsPrivateName::encode(false);
   }
 
   explicit VariableProxy(const VariableProxy* copy_from);
@@ -1617,7 +1617,7 @@ class VariableProxy final : public Expression {
   class IsNewTargetField : public BitField<bool, IsResolvedField::kNext, 1> {};
   class HoleCheckModeField
       : public BitField<HoleCheckMode, IsNewTargetField::kNext, 1> {};
-  class IsPrivateField : public BitField<bool, HoleCheckModeField::kNext, 1> {};
+  class IsPrivateName : public BitField<bool, HoleCheckModeField::kNext, 1> {};
 
   union {
     const AstRawString* raw_name_;  // if !is_resolved_
@@ -2375,11 +2375,11 @@ class FunctionLiteral final : public Expression {
     function_literal_id_ = function_literal_id;
   }
 
-  void set_requires_instance_fields_initializer(bool value) {
-    bit_field_ = RequiresInstanceFieldsInitializer::update(bit_field_, value);
+  void set_requires_instance_elements_initializer(bool value) {
+    bit_field_ = RequiresInstanceElementsInitializer::update(bit_field_, value);
   }
-  bool requires_instance_fields_initializer() const {
-    return RequiresInstanceFieldsInitializer::decode(bit_field_);
+  bool requires_instance_elements_initializer() const {
+    return RequiresInstanceElementsInitializer::decode(bit_field_);
   }
 
   ProducedPreParsedScopeData* produced_preparsed_scope_data() const {
@@ -2414,7 +2414,7 @@ class FunctionLiteral final : public Expression {
                   HasDuplicateParameters::encode(has_duplicate_parameters ==
                                                  kHasDuplicateParameters) |
                   DontOptimizeReasonField::encode(BailoutReason::kNoReason) |
-                  RequiresInstanceFieldsInitializer::encode(false) |
+                  RequiresInstanceElementsInitializer::encode(false) |
                   HasBracesField::encode(has_braces) | IIFEBit::encode(false);
     if (eager_compile_hint == kShouldEagerCompile) SetShouldEagerCompile();
     DCHECK_EQ(body == nullptr, expected_property_count < 0);
@@ -2426,10 +2426,10 @@ class FunctionLiteral final : public Expression {
   class HasDuplicateParameters : public BitField<bool, Pretenure::kNext, 1> {};
   class DontOptimizeReasonField
       : public BitField<BailoutReason, HasDuplicateParameters::kNext, 8> {};
-  class RequiresInstanceFieldsInitializer
+  class RequiresInstanceElementsInitializer
       : public BitField<bool, DontOptimizeReasonField::kNext, 1> {};
   class HasBracesField
-      : public BitField<bool, RequiresInstanceFieldsInitializer::kNext, 1> {};
+      : public BitField<bool, RequiresInstanceElementsInitializer::kNext, 1> {};
   class IIFEBit : public BitField<bool, HasBracesField::kNext, 1> {};
 
   int expected_property_count_;
@@ -2471,13 +2471,11 @@ class ClassLiteralProperty final : public LiteralProperty {
     return private_or_computed_name_var_;
   }
 
-  void set_private_field_name_var(Variable* var) {
-    DCHECK_EQ(FIELD, kind());
+  void set_private_name_var(Variable* var) {
     DCHECK(is_private());
     private_or_computed_name_var_ = var;
   }
-  Variable* private_field_name_var() const {
-    DCHECK_EQ(FIELD, kind());
+  Variable* private_name_var() const {
     DCHECK(is_private());
     return private_or_computed_name_var_;
   }
@@ -2494,19 +2492,27 @@ class ClassLiteralProperty final : public LiteralProperty {
   Variable* private_or_computed_name_var_;
 };
 
-class InitializeClassFieldsStatement final : public Statement {
+class InitializeClassElementsStatement final : public Statement {
  public:
   typedef ClassLiteralProperty Property;
 
   ZonePtrList<Property>* fields() const { return fields_; }
+  ZonePtrList<Property>* methods_or_accessors() const {
+    return methods_or_accessors_;
+  }
 
  private:
   friend class AstNodeFactory;
 
-  InitializeClassFieldsStatement(ZonePtrList<Property>* fields, int pos)
-      : Statement(pos, kInitializeClassFieldsStatement), fields_(fields) {}
+  InitializeClassElementsStatement(ZonePtrList<Property>* fields,
+                                   ZonePtrList<Property>* methods_or_accessors,
+                                   int pos)
+      : Statement(pos, kInitializeClassElementsStatement),
+        fields_(fields),
+        methods_or_accessors_(methods_or_accessors) {}
 
   ZonePtrList<Property>* fields_;
+  ZonePtrList<Property>* methods_or_accessors_;
 };
 
 class ClassLiteral final : public Expression {
@@ -2538,8 +2544,8 @@ class ClassLiteral final : public Expression {
     return static_fields_initializer_;
   }
 
-  FunctionLiteral* instance_fields_initializer_function() const {
-    return instance_fields_initializer_function_;
+  FunctionLiteral* instance_elements_initializer_function() const {
+    return instance_elements_initializer_function_;
   }
 
  private:
@@ -2548,7 +2554,7 @@ class ClassLiteral final : public Expression {
   ClassLiteral(Scope* scope, Variable* class_variable, Expression* extends,
                FunctionLiteral* constructor, ZonePtrList<Property>* properties,
                FunctionLiteral* static_fields_initializer,
-               FunctionLiteral* instance_fields_initializer_function,
+               FunctionLiteral* instance_elements_initializer_function,
                int start_position, int end_position,
                bool has_name_static_property, bool has_static_computed_names,
                bool is_anonymous)
@@ -2560,8 +2566,8 @@ class ClassLiteral final : public Expression {
         constructor_(constructor),
         properties_(properties),
         static_fields_initializer_(static_fields_initializer),
-        instance_fields_initializer_function_(
-            instance_fields_initializer_function) {
+        instance_elements_initializer_function_(
+            instance_elements_initializer_function) {
     bit_field_ |= HasNameStaticProperty::encode(has_name_static_property) |
                   HasStaticComputedNames::encode(has_static_computed_names) |
                   IsAnonymousExpression::encode(is_anonymous);
@@ -2574,7 +2580,7 @@ class ClassLiteral final : public Expression {
   FunctionLiteral* constructor_;
   ZonePtrList<Property>* properties_;
   FunctionLiteral* static_fields_initializer_;
-  FunctionLiteral* instance_fields_initializer_function_;
+  FunctionLiteral* instance_elements_initializer_function_;
   class HasNameStaticProperty
       : public BitField<bool, Expression::kNextBitFieldIndex, 1> {};
   class HasStaticComputedNames
@@ -3300,12 +3306,12 @@ class AstNodeFactory final {
       FunctionLiteral* constructor,
       ZonePtrList<ClassLiteral::Property>* properties,
       FunctionLiteral* static_fields_initializer,
-      FunctionLiteral* instance_fields_initializer_function, int start_position,
-      int end_position, bool has_name_static_property,
+      FunctionLiteral* instance_elements_initializer_function,
+      int start_position, int end_position, bool has_name_static_property,
       bool has_static_computed_names, bool is_anonymous) {
     return new (zone_) ClassLiteral(
         scope, variable, extends, constructor, properties,
-        static_fields_initializer, instance_fields_initializer_function,
+        static_fields_initializer, instance_elements_initializer_function,
         start_position, end_position, has_name_static_property,
         has_static_computed_names, is_anonymous);
   }
@@ -3370,9 +3376,11 @@ class AstNodeFactory final {
     return new (zone_) ImportCallExpression(args, pos);
   }
 
-  InitializeClassFieldsStatement* NewInitializeClassFieldsStatement(
-      ZonePtrList<ClassLiteral::Property>* args, int pos) {
-    return new (zone_) InitializeClassFieldsStatement(args, pos);
+  InitializeClassElementsStatement* NewInitializeClassElementsStatement(
+      ZonePtrList<ClassLiteral::Property>* fields,
+      ZonePtrList<ClassLiteral::Property>* methods_or_accessors, int pos) {
+    return new (zone_)
+        InitializeClassElementsStatement(fields, methods_or_accessors, pos);
   }
 
   Zone* zone() const { return zone_; }

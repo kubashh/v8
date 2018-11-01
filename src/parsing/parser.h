@@ -264,6 +264,7 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
       SET_ALLOW(harmony_dynamic_import);
       SET_ALLOW(harmony_import_meta);
       SET_ALLOW(harmony_private_fields);
+      SET_ALLOW(harmony_private_methods);
       SET_ALLOW(eval_cache);
 #undef SET_ALLOW
     }
@@ -329,7 +330,8 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   Variable* CreateSyntheticContextVariable(const AstRawString* synthetic_name);
   FunctionLiteral* CreateInitializerFunction(
       const char* name, DeclarationScope* scope,
-      ZonePtrList<ClassLiteral::Property>* fields);
+      ZonePtrList<ClassLiteral::Property>* fields,
+      ZonePtrList<ClassLiteral::Property>* methods_or_accessors);
   V8_INLINE Statement* DeclareClass(const AstRawString* variable_name,
                                     Expression* value,
                                     ZonePtrList<const AstRawString>* names,
