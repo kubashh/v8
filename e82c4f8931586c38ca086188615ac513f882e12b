@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f03bc5f7_e8291671",
+        "filename": "src/base/functional.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1152444
+      },
+      "writtenOn": "2018-11-01T06:43:27Z",
+      "side": 1,
+      "message": "I don\u0027t think that this is how it works.\nstd::unary_function is basically an annotation on a class, like iterator tags. std::function on the other hand is a container that can wrap anything which can be called like a function.\nI think we should just drop the unary_function and binary_function inheritance without replacing it with anything else. A class providing an \"operator()\" can already be wrapped in a std::function and is recognized by std::is_invocable and friends.",
+      "revId": "e82c4f8931586c38ca086188615ac513f882e12b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
