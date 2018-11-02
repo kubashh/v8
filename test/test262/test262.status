@@ -607,14 +607,6 @@
   # https://bugs.chromium.org/p/v8/issues/detail?id=8099
   'intl402/NumberFormat/prototype/format/format-negative-numbers': [FAIL],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=8382
-  'intl402/RelativeTimeFormat/prototype/formatToParts/en-us-numeric-auto': [FAIL],
-  'intl402/RelativeTimeFormat/prototype/formatToParts/en-us-numeric-always': [FAIL],
-  'intl402/RelativeTimeFormat/prototype/formatToParts/en-us-style-short': [FAIL],
-  'intl402/RelativeTimeFormat/prototype/formatToParts/pl-pl-style-short': [FAIL],
-  'intl402/RelativeTimeFormat/prototype/formatToParts/pl-pl-style-long': [FAIL],
-  'intl402/RelativeTimeFormat/prototype/formatToParts/pl-pl-style-narrow': [FAIL],
-
   # await tests that require flags
   'language/expressions/await/async-generator-interleaved': ['--harmony-await-optimization'],
   'language/expressions/await/await-monkey-patched-promise': ['--harmony-await-optimization'],
