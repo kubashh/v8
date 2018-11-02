@@ -1122,7 +1122,7 @@ enum FunctionKind : uint8_t {
   kSetterFunction,
   kAsyncFunction,
   kModule,
-  kClassFieldsInitializerFunction,
+  kClassElementsInitializerFunction,
 
   kDefaultBaseConstructor,
   kDefaultDerivedConstructor,
@@ -1171,7 +1171,7 @@ inline bool IsConciseMethod(FunctionKind kind) {
          kind == FunctionKind::kConciseGeneratorMethod ||
          kind == FunctionKind::kAsyncConciseMethod ||
          kind == FunctionKind::kAsyncConciseGeneratorMethod ||
-         kind == FunctionKind::kClassFieldsInitializerFunction;
+         kind == FunctionKind::kClassElementsInitializerFunction;
 }
 
 inline bool IsGetterFunction(FunctionKind kind) {
@@ -1207,8 +1207,8 @@ inline bool IsClassConstructor(FunctionKind kind) {
   return IsBaseConstructor(kind) || IsDerivedConstructor(kind);
 }
 
-inline bool IsClassFieldsInitializerFunction(FunctionKind kind) {
-  return kind == FunctionKind::kClassFieldsInitializerFunction;
+inline bool IsClassElementsInitializerFunction(FunctionKind kind) {
+  return kind == FunctionKind::kClassElementsInitializerFunction;
 }
 
 inline bool IsConstructable(FunctionKind kind) {
@@ -1242,8 +1242,8 @@ inline std::ostream& operator<<(std::ostream& os, FunctionKind kind) {
       return os << "AsyncFunction";
     case FunctionKind::kModule:
       return os << "Module";
-    case FunctionKind::kClassFieldsInitializerFunction:
-      return os << "ClassFieldsInitializerFunction";
+    case FunctionKind::kClassElementsInitializerFunction:
+      return os << "ClassElementsInitializerFunction";
     case FunctionKind::kDefaultBaseConstructor:
       return os << "DefaultBaseConstructor";
     case FunctionKind::kDefaultDerivedConstructor:

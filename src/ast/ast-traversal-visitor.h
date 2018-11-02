@@ -484,8 +484,8 @@ void AstTraversalVisitor<Subclass>::VisitClassLiteral(ClassLiteral* expr) {
   if (expr->static_fields_initializer() != nullptr) {
     RECURSE_EXPRESSION(Visit(expr->static_fields_initializer()));
   }
-  if (expr->instance_fields_initializer_function() != nullptr) {
-    RECURSE_EXPRESSION(Visit(expr->instance_fields_initializer_function()));
+  if (expr->instance_elements_initializer_function() != nullptr) {
+    RECURSE_EXPRESSION(Visit(expr->instance_elements_initializer_function()));
   }
   ZonePtrList<ClassLiteral::Property>* props = expr->properties();
   for (int i = 0; i < props->length(); ++i) {
@@ -498,16 +498,26 @@ void AstTraversalVisitor<Subclass>::VisitClassLiteral(ClassLiteral* expr) {
 }
 
 template <class Subclass>
-void AstTraversalVisitor<Subclass>::VisitInitializeClassFieldsStatement(
-    InitializeClassFieldsStatement* stmt) {
+void AstTraversalVisitor<Subclass>::VisitInitializeClassElementsStatement(
+    InitializeClassElementsStatement* stmt) {
   PROCESS_NODE(stmt);
-  ZonePtrList<ClassLiteral::Property>* props = stmt->fields();
-  for (int i = 0; i < props->length(); ++i) {
-    ClassLiteralProperty* prop = props->at(i);
-    if (!prop->key()->IsLiteral()) {
-      RECURSE(Visit(prop->key()));
+
+  ZonePtrList<ClassLiteral::Property>* methods_or_accessors =
+      stmt->methods_or_accessors();
+  if (methods_or_accessors != nullptr) {
+    for (int i = 0; i < methods_or_accessors->length(); ++i) {
+      ClassLiteralProperty* prop = methods_or_accessors->at(i);
+      RECURSE(Visit(prop->value()));
     }
-    RECURSE(Visit(prop->value()));
+  }
+
+  ZonePtrList<ClassLiteral::Property>* fields = stmt->fields();
+  for (int i = 0; i < fields->length(); ++i) {
+    ClassLiteralProperty* field = fields->at(i);
+    if (!field->key()->IsLiteral()) {
+      RECURSE(Visit(field->key()));
+    }
+    RECURSE(Visit(field->value()));
   }
 }
 
