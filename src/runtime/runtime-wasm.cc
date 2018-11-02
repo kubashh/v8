@@ -25,7 +25,7 @@ namespace internal {
 
 namespace {
 
-Context* GetNativeContextFromWasmInstanceOnStackTop(Isolate* isolate) {
+WasmInstanceObject* GetWasmInstanceOnStackTop(Isolate* isolate) {
   StackFrameIterator it(isolate, isolate->thread_local_top());
   // On top: C entry stub.
   DCHECK_EQ(StackFrame::EXIT, it.frame()->type());
@@ -33,7 +33,11 @@ Context* GetNativeContextFromWasmInstanceOnStackTop(Isolate* isolate) {
   // Next: the wasm compiled frame.
   DCHECK(it.frame()->is_wasm_compiled());
   WasmCompiledFrame* frame = WasmCompiledFrame::cast(it.frame());
-  return frame->wasm_instance()->native_context();
+  return frame->wasm_instance();
+}
+
+Context* GetNativeContextFromWasmInstanceOnStackTop(Isolate* isolate) {
+  return GetWasmInstanceOnStackTop(isolate)->native_context();
 }
 
 class ClearThreadInWasmScope {
@@ -250,6 +254,66 @@ RUNTIME_FUNCTION(Runtime_WasmCompileLazy) {
   Address entrypoint = wasm::CompileLazy(
       isolate, instance->module_object()->native_module(), func_index);
   return reinterpret_cast<Object*>(entrypoint);
+}
+
+RUNTIME_FUNCTION(Runtime_WasmAtomicWake) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(3, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(WasmInstanceObject, instance, 0);
+  CONVERT_NUMBER_CHECKED(uint32_t, address, Uint32, args[1]);
+  CONVERT_NUMBER_CHECKED(int32_t, count, Int32, args[2]);
+
+  DCHECK(instance->has_memory_object());
+  Handle<JSArrayBuffer> array_buffer(instance->memory_object()->array_buffer(),
+                                     isolate);
+
+  // Validation should have failed if the memory was not shared.
+  DCHECK(array_buffer->is_shared());
+
+  // TODO(adamk): This should be guaranteed by the caller, figure out
+  // how we want to do this.
+  CHECK_LT(address, array_buffer->byte_length());
+  return FutexEmulation::Wake(array_buffer, address, count);
+}
+
+RUNTIME_FUNCTION(Runtime_WasmAtomicWait32) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(4, args.length());
+  CONVERT_NUMBER_CHECKED(uint32_t, offset, Uint32, args[0]);
+  CONVERT_NUMBER_CHECKED(int32_t, index, Int32, args[1]);
+  CONVERT_NUMBER_CHECKED(int32_t, value, Int32, args[2]);
+  // TODO(adamk): {timeout} is meant to be an i64, so need
+  // to pass it in as 2-3 Smis :(
+  CONVERT_NUMBER_CHECKED(int32_t, timeout, Int32, args[2]);
+
+  Handle<WasmInstanceObject> instance(GetWasmInstanceOnStackTop(isolate),
+                                      isolate);
+  DCHECK(instance->has_memory_object());
+  Handle<JSArrayBuffer> array_buffer(instance->memory_object()->array_buffer(),
+                                     isolate);
+
+  // Validation should have failed if the memory was not shared.
+  DCHECK(array_buffer->is_shared());
+
+  // TODO(adamk): Is this checked by validation elsewhere?
+  // if (!isolate->allow_atomics_wait()) {
+  //  THROW_NEW_ERROR_RETURN_FAILURE(
+  //      isolate, NewTypeError(MessageTemplate::kAtomicsWaitNotAllowed));
+  //}
+
+  size_t address = offset + index;
+
+  // TODO(adamk): refactor FutexEmulation to return numbers.
+  Handle<Object> result(
+      FutexEmulation::Wait(isolate, array_buffer, address, value, timeout),
+      isolate);
+  if (*result == ReadOnlyRoots(isolate).not_equal()) {
+    return Smi::FromInt(1);
+  } else if (*result == ReadOnlyRoots(isolate).timed_out()) {
+    return Smi::FromInt(2);
+  }
+  DCHECK(*result == ReadOnlyRoots(isolate).ok());
+  return Smi::FromInt(0);
 }
 
 }  // namespace internal
