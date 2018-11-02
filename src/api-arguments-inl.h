@@ -10,6 +10,7 @@
 #include "src/api-inl.h"
 #include "src/debug/debug.h"
 #include "src/objects/api-callbacks.h"
+#include "src/objects/slots-inl.h"
 #include "src/tracing/trace-event.h"
 #include "src/vm-state-inl.h"
 
@@ -20,13 +21,18 @@ CustomArgumentsBase::CustomArgumentsBase(Isolate* isolate)
     : Relocatable(isolate) {}
 
 template <typename T>
+CustomArguments<T>::~CustomArguments() {
+  begin().store(kReturnValueOffset, ObjectPtr(kHandleZapValue));
+}
+
+template <typename T>
 template <typename V>
 Handle<V> CustomArguments<T>::GetReturnValue(Isolate* isolate) {
   // Check the ReturnValue.
-  Object** handle = &this->begin()[kReturnValueOffset];
+  ObjectSlot handle = this->begin() + kReturnValueOffset;
   // Nothing was set, return empty handle as per previous behaviour.
   if ((*handle)->IsTheHole(isolate)) return Handle<V>();
-  Handle<V> result = Handle<V>::cast(Handle<Object>(handle));
+  Handle<V> result = Handle<V>::cast(Handle<Object>(handle.location()));
   result->VerifyApiCallResultType();
   return result;
 }
@@ -61,8 +67,7 @@ inline JSObject* FunctionCallbackArguments::holder() {
   }                                                                      \
   VMState<EXTERNAL> state(ISOLATE);                                      \
   ExternalCallbackScope call_scope(ISOLATE, FUNCTION_ADDR(F));           \
-  PropertyCallbackInfo<API_RETURN_TYPE> callback_info(                   \
-      reinterpret_cast<Address*>(begin()));
+  PropertyCallbackInfo<API_RETURN_TYPE> callback_info(values_);
 
 #define PREPARE_CALLBACK_INFO_FAIL_SIDE_EFFECT_CHECK(ISOLATE, F, RETURN_VALUE, \
                                                      API_RETURN_TYPE)          \
@@ -71,8 +76,7 @@ inline JSObject* FunctionCallbackArguments::holder() {
   }                                                                            \
   VMState<EXTERNAL> state(ISOLATE);                                            \
   ExternalCallbackScope call_scope(ISOLATE, FUNCTION_ADDR(F));                 \
-  PropertyCallbackInfo<API_RETURN_TYPE> callback_info(                         \
-      reinterpret_cast<Address*>(begin()));
+  PropertyCallbackInfo<API_RETURN_TYPE> callback_info(values_);
 
 #define CREATE_NAMED_CALLBACK(FUNCTION, TYPE, RETURN_TYPE, API_RETURN_TYPE,   \
                               INFO_FOR_SIDE_EFFECT)                           \
@@ -138,9 +142,7 @@ Handle<Object> FunctionCallbackArguments::Call(CallHandlerInfo* handler) {
   }
   VMState<EXTERNAL> state(isolate);
   ExternalCallbackScope call_scope(isolate, FUNCTION_ADDR(f));
-  FunctionCallbackInfo<v8::Value> info(reinterpret_cast<Address*>(begin()),
-                                       reinterpret_cast<Address*>(argv_),
-                                       argc_);
+  FunctionCallbackInfo<v8::Value> info(values_, argv_, argc_);
   f(info);
   return GetReturnValue<Object>(isolate);
 }

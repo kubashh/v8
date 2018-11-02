@@ -91,7 +91,11 @@ class ObjectSlot : public SlotBase<ObjectSlot> {
   explicit ObjectSlot(SlotBase<T> slot) : SlotBase(slot.address()) {}
 
   Object* operator*() const { return *reinterpret_cast<Object**>(address()); }
-  void store(Object* value) { *reinterpret_cast<Object**>(address()) = value; }
+  Object* operator[](int index) const {
+    return *reinterpret_cast<Object**>(address() + index * kPointerSize);
+  }
+  inline void store(Object* value);
+  inline void store(int index, Object* value);
 
   inline Object* Relaxed_Load() const;
   inline Object* Relaxed_Load(int offset) const;

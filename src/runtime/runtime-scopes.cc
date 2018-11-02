@@ -12,6 +12,7 @@
 #include "src/frames-inl.h"
 #include "src/isolate-inl.h"
 #include "src/message-template.h"
+#include "src/objects/heap-object-inl.h"
 #include "src/objects/module-inl.h"
 #include "src/runtime/runtime-utils.h"
 
@@ -580,7 +581,7 @@ RUNTIME_FUNCTION(Runtime_NewSloppyArguments) {
 RUNTIME_FUNCTION(Runtime_NewArgumentsElements) {
   HandleScope scope(isolate);
   DCHECK_EQ(3, args.length());
-  Object** frame = reinterpret_cast<Object**>(args[0]);
+  Object** frame = reinterpret_cast<Object**>(args[0]->ptr());
   CONVERT_SMI_ARG_CHECKED(length, 1);
   CONVERT_SMI_ARG_CHECKED(mapped_count, 2);
   Handle<FixedArray> result =
