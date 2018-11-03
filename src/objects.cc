@@ -1252,6 +1252,11 @@ bool Object::ToInt32(int32_t* value) {
   return false;
 }
 
+// static constexpr object declarations need a definition to make the
+// compiler happy.
+constexpr ObjectPtr Smi::kZero;
+constexpr ObjectPtr SharedFunctionInfo::kNoSharedNameSentinel;
+
 Handle<SharedFunctionInfo> FunctionTemplateInfo::GetOrCreateSharedFunctionInfo(
     Isolate* isolate, Handle<FunctionTemplateInfo> info,
     MaybeHandle<Name> maybe_name) {
@@ -2352,12 +2357,12 @@ Map* Map::GetPrototypeChainRootMap(Isolate* isolate) const {
 }
 
 // static
-Smi* Object::GetOrCreateHash(Isolate* isolate, Object* key) {
+Address Object::GetOrCreateHash(Isolate* isolate, Object* key) {
   DisallowHeapAllocation no_gc;
-  return key->GetOrCreateHash(isolate);
+  return key->GetOrCreateHash(isolate).ptr();
 }
 
-Smi* Object::GetOrCreateHash(Isolate* isolate) {
+Smi Object::GetOrCreateHash(Isolate* isolate) {
   DisallowHeapAllocation no_gc;
   Object* hash = Object::GetSimpleHash(this);
   if (hash->IsSmi()) return Smi::cast(hash);
@@ -2567,7 +2572,7 @@ Brief::Brief(const MaybeObject v) : value(v.ptr()) {}
 
 std::ostream& operator<<(std::ostream& os, const Brief& v) {
   MaybeObject maybe_object(v.value);
-  Smi* smi;
+  Smi smi;
   HeapObject* heap_object;
   if (maybe_object->ToSmi(&smi)) {
     smi->SmiPrint(os);
@@ -6827,7 +6832,7 @@ Object* JSReceiver::GetIdentityHash() {
 }
 
 // static
-Smi* JSReceiver::CreateIdentityHash(Isolate* isolate, JSReceiver* key) {
+Smi JSReceiver::CreateIdentityHash(Isolate* isolate, JSReceiver* key) {
   DisallowHeapAllocation no_gc;
   int hash = isolate->GenerateIdentityHash(PropertyArray::HashField::kMax);
   DCHECK_NE(PropertyArray::kNoHashSentinel, hash);
@@ -6836,7 +6841,7 @@ Smi* JSReceiver::CreateIdentityHash(Isolate* isolate, JSReceiver* key) {
   return Smi::FromInt(hash);
 }
 
-Smi* JSReceiver::GetOrCreateIdentityHash(Isolate* isolate) {
+Smi JSReceiver::GetOrCreateIdentityHash(Isolate* isolate) {
   DisallowHeapAllocation no_gc;
 
   int hash = GetIdentityHashHelper(this);
@@ -10497,7 +10502,7 @@ Handle<WeakArrayList> PrototypeUsers::Add(Isolate* isolate,
   if (empty_slot != kNoEmptySlotsMarker) {
     DCHECK_GE(empty_slot, kFirstIndex);
     CHECK_LT(empty_slot, array->length());
-    int next_empty_slot = Smi::ToInt(array->Get(empty_slot)->cast<Smi>());
+    int next_empty_slot = array->Get(empty_slot).ToSmi().value();
 
     array->Set(empty_slot, HeapObjectReference::Weak(*value));
     if (assigned_index != nullptr) *assigned_index = empty_slot;
@@ -16616,7 +16621,7 @@ MaybeHandle<JSRegExp> JSRegExp::Initialize(Handle<JSRegExp> regexp,
     RETURN_ON_EXCEPTION(
         isolate,
         JSReceiver::SetProperty(isolate, regexp, factory->lastIndex_string(),
-                                Handle<Smi>(Smi::kZero, isolate),
+                                Handle<Smi>(Smi::zero(), isolate),
                                 LanguageMode::kStrict),
         JSRegExp);
   }
@@ -16645,7 +16650,7 @@ class RegExpKey : public HashTableKey {
   }
 
   Handle<String> string_;
-  Smi* flags_;
+  Smi flags_;
 };
 
 Handle<String> OneByteStringKey::AsHandle(Isolate* isolate) {
@@ -17681,7 +17686,7 @@ void CompilationCacheTable::Age() {
     int value_index = entry_index + 1;
 
     if (get(entry_index)->IsNumber()) {
-      Smi* count = Smi::cast(get(value_index));
+      Smi count = Smi::cast(get(value_index));
       count = Smi::FromInt(count->value() - 1);
       if (count->value() == 0) {
         NoWriteBarrierSet(this, entry_index, the_hole_value);
@@ -17940,8 +17945,8 @@ template <typename Dictionary>
 struct EnumIndexComparator {
   explicit EnumIndexComparator(Dictionary* dict) : dict(dict) {}
   bool operator()(Address a, Address b) {
-    PropertyDetails da(dict->DetailsAt(reinterpret_cast<Smi*>(a)->value()));
-    PropertyDetails db(dict->DetailsAt(reinterpret_cast<Smi*>(b)->value()));
+    PropertyDetails da(dict->DetailsAt(Smi(a).value()));
+    PropertyDetails db(dict->DetailsAt(Smi(b).value()));
     return da.dictionary_index() < db.dictionary_index();
   }
   Dictionary* dict;
@@ -18385,7 +18390,7 @@ double JSDate::CurrentTimeValue(Isolate* isolate) {
 
 
 // static
-Object* JSDate::GetField(Object* object, Smi* index) {
+Object* JSDate::GetField(Object* object, Smi index) {
   return JSDate::cast(object)->DoGetField(
       static_cast<FieldIndex>(index->value()));
 }
@@ -18787,7 +18792,7 @@ MaybeHandle<Name> FunctionTemplateInfo::TryGetCachedPropertyName(
   return MaybeHandle<Name>();
 }
 
-Smi* Smi::LexicographicCompare(Isolate* isolate, Smi* x, Smi* y) {
+Address Smi::LexicographicCompare(Isolate* isolate, Smi x, Smi y) {
   DisallowHeapAllocation no_allocation;
   DisallowJavascriptExecution no_js(isolate);
 
@@ -18795,12 +18800,13 @@ Smi* Smi::LexicographicCompare(Isolate* isolate, Smi* x, Smi* y) {
   int y_value = Smi::ToInt(y);
 
   // If the integers are equal so are the string representations.
-  if (x_value == y_value) return Smi::FromInt(0);
+  if (x_value == y_value) return Smi::FromInt(0).ptr();
 
   // If one of the integers is zero the normal integer order is the
   // same as the lexicographic order of the string representations.
-  if (x_value == 0 || y_value == 0)
-    return Smi::FromInt(x_value < y_value ? -1 : 1);
+  if (x_value == 0 || y_value == 0) {
+    return Smi::FromInt(x_value < y_value ? -1 : 1).ptr();
+  }
 
   // If only one of the integers is negative the negative number is
   // smallest because the char code of '-' is less than the char code
@@ -18811,8 +18817,8 @@ Smi* Smi::LexicographicCompare(Isolate* isolate, Smi* x, Smi* y) {
   uint32_t x_scaled = x_value;
   uint32_t y_scaled = y_value;
   if (x_value < 0 || y_value < 0) {
-    if (y_value >= 0) return Smi::FromInt(-1);
-    if (x_value >= 0) return Smi::FromInt(1);
+    if (y_value >= 0) return Smi::FromInt(-1).ptr();
+    if (x_value >= 0) return Smi::FromInt(1).ptr();
     x_scaled = -x_value;
     y_scaled = -y_value;
   }
@@ -18858,9 +18864,9 @@ Smi* Smi::LexicographicCompare(Isolate* isolate, Smi* x, Smi* y) {
     tie = 1;
   }
 
-  if (x_scaled < y_scaled) return Smi::FromInt(-1);
-  if (x_scaled > y_scaled) return Smi::FromInt(1);
-  return Smi::FromInt(tie);
+  if (x_scaled < y_scaled) return Smi::FromInt(-1).ptr();
+  if (x_scaled > y_scaled) return Smi::FromInt(1).ptr();
+  return Smi::FromInt(tie).ptr();
 }
 
 // Force instantiation of template instances class.

@@ -778,8 +778,6 @@ enum class OptimizationStatus {
   kLiteMode = 1 << 12,
 };
 
-Smi* SmiLexicographicCompare(Smi* x_value, Smi* y_value);
-
 }  // namespace internal
 }  // namespace v8
 
