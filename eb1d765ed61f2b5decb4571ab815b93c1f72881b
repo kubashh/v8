@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9de67fff_f9a709b0",
+        "filename": "src/torque/declarable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-11-03T11:26:59Z",
+      "side": 1,
+      "message": "Don\u0027t masking declarations end up in the result vector? Do you make sure the resolution works correctly be implicitly relying on the order of the addition to the result vector?",
+      "range": {
+        "startLine": 131,
+        "startChar": 9,
+        "endLine": 131,
+        "endChar": 19
+      },
+      "revId": "eb1d765ed61f2b5decb4571ab815b93c1f72881b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
