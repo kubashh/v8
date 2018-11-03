@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "536f618c_2a5326d0",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-03T01:48:08Z",
+      "side": 1,
+      "message": "This reinterpret_cast will go away when Code is ported to the new design.",
+      "range": {
+        "startLine": 139,
+        "startChar": 40,
+        "endLine": 139,
+        "endChar": 65
+      },
+      "revId": "c9ec34a6daf0e0137fa043d6b1d459febbddab23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
