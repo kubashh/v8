@@ -355,7 +355,7 @@ Literal* Parser::ExpressionFromLiteral(Token::Value token, int pos) {
   return nullptr;
 }
 
-Expression* Parser::NewV8Intrinsic(const AstRawString* name,
+V8_INLINE Expression* Parser::NewV8Intrinsic(const AstRawString* name,
                                    const ScopedPtrList<Expression>& args,
                                    int pos) {
   if (extension_ != nullptr) {
@@ -1456,7 +1456,7 @@ Statement* Parser::DeclareFunction(const AstRawString* variable_name,
   return factory()->EmptyStatement();
 }
 
-Statement* Parser::DeclareClass(const AstRawString* variable_name,
+V8_INLINE Statement* Parser::DeclareClass(const AstRawString* variable_name,
                                 Expression* value,
                                 ZonePtrList<const AstRawString>* names,
                                 int class_token_pos, int end_pos) {
@@ -1471,7 +1471,7 @@ Statement* Parser::DeclareClass(const AstRawString* variable_name,
       factory()->NewExpressionStatement(assignment, kNoSourcePosition));
 }
 
-Statement* Parser::DeclareNative(const AstRawString* name, int pos) {
+V8_INLINE Statement* Parser::DeclareNative(const AstRawString* name, int pos) {
   // Make sure that the function containing the native declaration
   // isn't lazily compiled. The extension structures are only
   // accessible while parsing the first time not when reparsing
@@ -1536,7 +1536,7 @@ bool Parser::ContainsLabel(ZonePtrList<const AstRawString>* labels,
   return false;
 }
 
-Block* Parser::IgnoreCompletion(Statement* statement) {
+V8_INLINE Block* Parser::IgnoreCompletion(Statement* statement) {
   Block* block = factory()->NewBlock(1, true);
   block->statements()->Add(statement, zone());
   return block;
@@ -2908,7 +2908,7 @@ Block* Parser::BuildParameterInitializationBlock(
   return init_block;
 }
 
-Scope* Parser::NewHiddenCatchScope() {
+V8_INLINE Scope* Parser::NewHiddenCatchScope() {
   Scope* catch_scope = NewScopeWithParent(scope(), CATCH_SCOPE);
   catch_scope->DeclareLocal(ast_value_factory()->dot_catch_string(),
                             VariableMode::kVar);
@@ -3045,7 +3045,7 @@ ZonePtrList<Statement>* Parser::ParseFunction(
   return body;
 }
 
-void Parser::DeclareClassVariable(const AstRawString* name,
+V8_INLINE void Parser::DeclareClassVariable(const AstRawString* name,
                                   ClassInfo* class_info, int class_token_pos) {
 #ifdef DEBUG
   scope()->SetScopeName(name);
@@ -3079,7 +3079,7 @@ Variable* Parser::CreateSyntheticContextVariable(const AstRawString* name) {
 // following fields of class_info, as appropriate:
 //   - constructor
 //   - properties
-void Parser::DeclareClassProperty(const AstRawString* class_name,
+V8_INLINE void Parser::DeclareClassProperty(const AstRawString* class_name,
                                   ClassLiteralProperty* property,
                                   const AstRawString* property_name,
                                   ClassLiteralProperty::Kind kind,
@@ -3158,7 +3158,7 @@ FunctionLiteral* Parser::CreateInitializerFunction(
 //   - properties
 //   - has_name_static_property
 //   - has_static_computed_names
-Expression* Parser::RewriteClassLiteral(Scope* block_scope,
+V8_INLINE Expression* Parser::RewriteClassLiteral(Scope* block_scope,
                                         const AstRawString* name,
                                         ClassInfo* class_info, int pos,
                                         int end_pos) {
@@ -3532,7 +3532,7 @@ Expression* Parser::ExpressionListToExpression(
 }
 
 // This method completes the desugaring of the body of async_function.
-void Parser::RewriteAsyncFunctionBody(ZonePtrList<Statement>* body,
+V8_INLINE void Parser::RewriteAsyncFunctionBody(ZonePtrList<Statement>* body,
                                       Block* block, Expression* return_value) {
   // function async_function() {
   //   .generator_object = %_AsyncFunctionEnter();
@@ -3549,7 +3549,7 @@ void Parser::RewriteAsyncFunctionBody(ZonePtrList<Statement>* body,
   body->Add(block, zone());
 }
 
-void Parser::RewriteDestructuringAssignments() {
+V8_INLINE void Parser::RewriteDestructuringAssignments() {
   const auto& assignments =
       function_state_->destructuring_assignments_to_rewrite();
   auto it = assignments.rbegin();
@@ -3572,7 +3572,7 @@ void Parser::RewriteDestructuringAssignments() {
   }
 }
 
-void Parser::QueueDestructuringAssignmentForRewriting(
+V8_INLINE void Parser::QueueDestructuringAssignmentForRewriting(
     RewritableExpression* expr) {
   function_state_->AddDestructuringAssignment(expr);
 }
