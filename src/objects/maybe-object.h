@@ -83,6 +83,13 @@ class MaybeObject {
     DCHECK(!HasWeakHeapObjectTag(ptr_));
     return T::cast(reinterpret_cast<Object*>(ptr_));
   }
+  // Replacement for the above, temporarily separate for incremental transition.
+  // TODO(3770): Get rid of the duplication.
+  template <typename T>
+  T cast2() const {
+    DCHECK(!HasWeakHeapObjectTag(ptr_));
+    return T::cast(ObjectPtr(ptr_));
+  }
 
   static MaybeObject FromSmi(Smi smi) {
     DCHECK(HAS_SMI_TAG(smi->ptr()));
@@ -92,6 +99,11 @@ class MaybeObject {
   static MaybeObject FromObject(Object* object) {
     DCHECK(!HasWeakHeapObjectTag(object));
     return MaybeObject(object->ptr());
+  }
+
+  static MaybeObject FromObject(ObjectPtr object) {
+    DCHECK(!HasWeakHeapObjectTag(object.ptr()));
+    return MaybeObject(object.ptr());
   }
 
   static inline MaybeObject MakeWeak(MaybeObject object);
