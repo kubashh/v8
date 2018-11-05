@@ -192,6 +192,8 @@ class SnapshotWriter {
         // Create nicer symbol names for the default mode.
         fprintf(fp, "__asm__(V8_ASM_LABEL(\"Builtins_%s\"));\n",
                 i::Builtins::name(i));
+        fprintf(fp, "__asm__(V8_ASM_TYPE(\"Builtins_%s\"));\n",
+                i::Builtins::name(i));
       } else {
         fprintf(fp, "__asm__(V8_ASM_LABEL(\"%s_Builtins_%s\"));\n",
                 embedded_variant, i::Builtins::name(i));
