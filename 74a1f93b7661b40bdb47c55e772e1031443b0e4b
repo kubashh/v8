@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "0b58d20a_3213e2cd",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-05T15:16:51Z",
+      "side": 1,
+      "message": "Can\u0027t you chain constructors?\n\n : Block(nullptr, labels, 0, ignore_completion_value) {}",
+      "range": {
+        "startLine": 347,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 60
+      },
+      "revId": "74a1f93b7661b40bdb47c55e772e1031443b0e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6529633e_bd053b42",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-05T15:16:51Z",
+      "side": 1,
+      "message": "Here as well I guess:\n\n  : LabeledBlock(nullptr, labels, 0, ignore_completion_value) {}",
+      "range": {
+        "startLine": 370,
+        "startChar": 0,
+        "endLine": 372,
+        "endChar": 35
+      },
+      "revId": "74a1f93b7661b40bdb47c55e772e1031443b0e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d9eaa53b_be466bfc",
         "filename": "src/objects.cc",
         "patchSetId": 2
@@ -65,6 +111,29 @@
         "startChar": 26,
         "endLine": 212,
         "endChar": 54
+      },
+      "revId": "74a1f93b7661b40bdb47c55e772e1031443b0e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b28e214c_9ddb27eb",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-05T15:16:51Z",
+      "side": 1,
+      "message": "this is not used outside the following block.",
+      "range": {
+        "startLine": 1775,
+        "startChar": 0,
+        "endLine": 1776,
+        "endChar": 62
       },
       "revId": "74a1f93b7661b40bdb47c55e772e1031443b0e4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
