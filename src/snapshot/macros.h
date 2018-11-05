@@ -42,10 +42,23 @@
 #define V8_ASM_DECLARE(NAME) ".local " V8_ASM_MANGLE_LABEL NAME "\n"
 #endif
 #endif
+#if defined(V8_TARGET_ARCH_ARM) || defined(V8_TARGET_ARCH_ARM64)
+#define V8_ASM_FUNCTION_MARKER "%function"
+#else
+#define V8_ASM_FUNCTION_MARKER "@function"
+#endif  // !V8_TARGET_ARCH_ARM && !V8_TARGET_ARCH_ARM64
 
 // Align to kCodeAlignment.
 #define V8_ASM_BALIGN32 ".balign 32\n"
 #define V8_ASM_LABEL(NAME) V8_ASM_MANGLE_LABEL NAME ":\n"
+
+#if defined(V8_OS_WIN)
+#define V8_ASM_TYPE(NAME) \
+  ".def " V8_ASM_MANGLE_LABEL NAME "; .scl 3; .type 32; .endef;\n"
+#else
+#define V8_ASM_TYPE(NAME) \
+  ".type " V8_ASM_MANGLE_LABEL NAME ", " V8_ASM_FUNCTION_MARKER "\n"
+#endif  // !V8_OS_WIN
 
 // clang-format off
 #if defined(V8_OS_AIX)
