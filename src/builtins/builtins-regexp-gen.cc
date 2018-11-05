@@ -256,6 +256,9 @@ TNode<JSRegExpResult> RegExpBuiltinsAssembler::ConstructNewResultFromMatchInfo(
         native_context, Context::SLOW_OBJECT_WITH_NULL_PROTOTYPE_MAP));
     TNode<NameDictionary> properties =
         AllocateNameDictionary(NameDictionary::kInitialCapacity);
+    CallRuntime(Runtime::kLogNameDictionary, context,
+                StringConstant("RegExp::ConstructNewResultFromMatchInfo"),
+                properties);
 
     TNode<JSObject> group_object =
         CAST(AllocateJSObjectFromMap(map, properties));

@@ -238,6 +238,7 @@ class Logger : public CodeEventListener {
   void MapCreate(Map* map);
   void MapDetails(Map* map);
 
+  void NameDictionaryCreate(const char* caller, NameDictionary* dict);
 
   void SharedLibraryEvent(const std::string& library_path, uintptr_t start,
                           uintptr_t end, intptr_t aslr_slide);

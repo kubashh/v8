@@ -13,6 +13,7 @@
 #include "src/debug/debug.h"
 #include "src/frames-inl.h"
 #include "src/isolate-inl.h"
+#include "src/log.h"
 #include "src/message-template.h"
 #include "src/objects/js-array-inl.h"
 #include "src/parsing/parse-info.h"
@@ -609,5 +610,19 @@ RUNTIME_FUNCTION(Runtime_GetInitializerFunction) {
   Handle<Object> initializer = JSReceiver::GetDataProperty(constructor, key);
   return *initializer;
 }
+
+RUNTIME_FUNCTION(Runtime_LogNameDictionary) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(2, args.length());
+
+  CONVERT_ARG_HANDLE_CHECKED(String, caller, 0);
+  CONVERT_ARG_HANDLE_CHECKED(NameDictionary, dictionary, 1);
+
+  if (FLAG_trace_name_dictionary) {
+    LOG(isolate, NameDictionaryCreate(caller->ToCString().get(), *dictionary));
+  }
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
 }  // namespace internal
 }  // namespace v8

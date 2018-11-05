@@ -151,7 +151,6 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
     case HASH_TABLE_TYPE:
     case ORDERED_HASH_MAP_TYPE:
     case ORDERED_HASH_SET_TYPE:
-    case NAME_DICTIONARY_TYPE:
     case GLOBAL_DICTIONARY_TYPE:
     case SIMPLE_NUMBER_DICTIONARY_TYPE:
     case STRING_TABLE_TYPE:
@@ -159,6 +158,9 @@ void HeapObject::HeapObjectPrint(std::ostream& os) {  // NOLINT
       break;
     case NUMBER_DICTIONARY_TYPE:
       NumberDictionary::cast(this)->NumberDictionaryPrint(os);
+      break;
+    case NAME_DICTIONARY_TYPE:
+      NameDictionary::cast(this)->PrintNameDictionaryDetails(os);
       break;
     case EPHEMERON_HASH_TABLE_TYPE:
       EphemeronHashTable::cast(this)->EphemeronHashTablePrint(os);
@@ -973,6 +975,10 @@ void PrintWeakArrayElements(std::ostream& os, T* array) {
 
 void FixedArray::FixedArrayPrint(std::ostream& os) {  // NOLINT
   PrintFixedArrayWithHeader(os, this, "FixedArray");
+}
+
+void NameDictionary::PrintNameDictionaryDetails(std::ostream& os) {
+  PrintHashTableWithHeader(os, this, "NameDictionary");
 }
 
 void ObjectHashTable::ObjectHashTablePrint(std::ostream& os) {
