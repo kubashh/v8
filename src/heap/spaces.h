@@ -1290,12 +1290,14 @@ class V8_EXPORT_PRIVATE MemoryAllocator {
   // should be tried first.
   template <MemoryAllocator::AllocationMode alloc_mode = kRegular,
             typename SpaceType>
+  EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
   Page* AllocatePage(size_t size, SpaceType* owner, Executability executable);
 
   LargePage* AllocateLargePage(size_t size, LargeObjectSpace* owner,
                                Executability executable);
 
   template <MemoryAllocator::FreeMode mode = kFull>
+  EXPORT_TEMPLATE_DECLARE(V8_EXPORT_PRIVATE)
   void Free(MemoryChunk* chunk);
 
   // Returns allocated spaces in bytes.
