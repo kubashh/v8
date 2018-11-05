@@ -2475,6 +2475,12 @@ void StringBuiltinsAssembler::BranchIfStringPrimitiveWithNoCustomIteration(
   GotoIf(TaggedIsSmi(object), if_false);
   GotoIfNot(IsString(CAST(object)), if_false);
 
+  TNode<IntPtrT> const length = LoadStringLengthAsWord(CAST(object));
+  // Use string length as conservative approximation of number of codepoints.
+  GotoIf(
+      IntPtrGreaterThan(length, IntPtrConstant(JSArray::kMaxFastArrayLength)),
+      if_false);
+
   // Check that the String iterator hasn't been modified in a way that would
   // affect iteration.
   Node* protector_cell = LoadRoot(RootIndex::kStringIteratorProtector);
