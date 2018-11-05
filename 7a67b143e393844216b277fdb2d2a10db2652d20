@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b6f605e_a8496b8f",
+        "filename": "src/api-arguments-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-11-05T16:25:34Z",
+      "side": 1,
+      "message": "nit: rename to slot to be less confusing",
+      "range": {
+        "startLine": 32,
+        "startChar": 13,
+        "endLine": 32,
+        "endChar": 19
+      },
+      "revId": "7a67b143e393844216b277fdb2d2a10db2652d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42893141_f3b92448",
+        "filename": "src/api-arguments.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-11-05T16:25:34Z",
+      "side": 1,
+      "message": "perhaps there should be PropertyCallbackArguments::store_at instead of offsetting from a slot?",
+      "range": {
+        "startLine": 18,
+        "startChar": 9,
+        "endLine": 18,
+        "endChar": 14
+      },
+      "revId": "7a67b143e393844216b277fdb2d2a10db2652d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "445ba90a_eed035e3",
+        "filename": "src/api-arguments.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-11-05T16:25:34Z",
+      "side": 1,
+      "message": "I think that if this returned an Address* (which feels semantically valid), and/or we added offsetted slot accessors to CustomArguments, then we could remove the new ObjectSlot methods (operator[] and ::store(int,...)).",
+      "range": {
+        "startLine": 48,
+        "startChar": 9,
+        "endLine": 48,
+        "endChar": 19
+      },
+      "revId": "7a67b143e393844216b277fdb2d2a10db2652d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6ae2f1f_68a11104",
+        "filename": "src/arguments.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-11-05T16:25:34Z",
+      "side": 1,
+      "message": "not here since it\u0027s churn, but maybe this deserves renaming to first/last_slot()",
+      "range": {
+        "startLine": 68,
+        "startChar": 13,
+        "endLine": 68,
+        "endChar": 27
+      },
+      "revId": "7a67b143e393844216b277fdb2d2a10db2652d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
