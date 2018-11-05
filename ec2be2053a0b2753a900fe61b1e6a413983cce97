@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30e27fdb_15b19f6a",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-05T08:21:24Z",
+      "side": 1,
+      "message": "nit: For clarity I\u0027d keep this as \u0027GetReceiverLengthFromSortState\u0027, since there\u0027s other things with a length in sort state (kPendingRunsIdx).",
+      "revId": "ec2be2053a0b2753a900fe61b1e6a413983cce97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
