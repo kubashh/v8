@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9eaa53b_be466bfc",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14196,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-11-05T15:06:01Z",
+      "side": 1,
+      "message": "I vaguely remember getting errors when assuming that lit-\u003ebody()!\u003dnullptr and lit-\u003eShouldEagerCompile() are equivalent. Is this now safe? Maybe we could add a debug-only flag on FunctionLiteral for \"body is initialised\"?",
+      "range": {
+        "startLine": 14196,
+        "startChar": 6,
+        "endLine": 14196,
+        "endChar": 31
+      },
+      "revId": "74a1f93b7661b40bdb47c55e772e1031443b0e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2ddcd6f_1769d7c2",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-11-05T15:06:01Z",
+      "side": 1,
+      "message": "maybe this should be ScopedStatementList (and remove StatementList) to match the preparser?",
+      "range": {
+        "startLine": 212,
+        "startChar": 26,
+        "endLine": 212,
+        "endChar": 54
+      },
+      "revId": "74a1f93b7661b40bdb47c55e772e1031443b0e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
