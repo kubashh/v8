@@ -2640,7 +2640,7 @@ Isolate* Isolate::New(IsolateAllocationMode mode) {
   // Construct Isolate object in the allocated memory.
   void* isolate_ptr = isolate_allocator->isolate_memory();
   Isolate* isolate = new (isolate_ptr) Isolate(std::move(isolate_allocator));
-  DCHECK_IMPLIES(mode == IsolateAllocationMode::kAllocateInV8Heap,
+  DCHECK_IMPLIES(mode == IsolateAllocationMode::kInV8Heap,
                  IsAligned(isolate->isolate_root(), size_t{4} * GB));
 
 #ifdef DEBUG
