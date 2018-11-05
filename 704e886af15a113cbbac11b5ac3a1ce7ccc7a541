@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a14be625_9b4d7780",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-05T15:02:30Z",
+      "side": 1,
+      "message": "I guess it should be okay here to just say \n`return streaming-\u003eError(\"not enough code section bytes\");`",
+      "revId": "704e886af15a113cbbac11b5ac3a1ce7ccc7a541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
