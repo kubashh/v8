@@ -543,10 +543,9 @@ module array {
   }
 
   // Used for OOB asserts in Copy* builtins.
-  transitioning macro GetReceiverLengthProperty(implicit context: Context)(
-      sortState: FixedArray): Smi {
-    return Cast<Smi>(GetLengthProperty(GetReceiver(sortState)))
-        otherwise unreachable;
+  transitioning macro GetLengthFromSortState(implicit context: Context)(
+      sortState: FixedArray): Number {
+    return GetLengthProperty(GetReceiver(sortState));
   }
 
   transitioning macro CopyToTempArray(
@@ -556,7 +555,7 @@ module array {
   labels Bailout {
     assert(srcPos >= 0);
     assert(dstPos >= 0);
-    assert(srcPos <= GetReceiverLengthProperty(sortState) - length);
+    assert(srcPos <= GetLengthFromSortState(sortState) - length);
     assert(dstPos <= tempArray.length - length);
 
     let srcIdx: Smi = srcPos;
@@ -577,7 +576,7 @@ module array {
     assert(srcPos >= 0);
     assert(dstPos >= 0);
     assert(srcPos <= tempArray.length - length);
-    assert(dstPos <= GetReceiverLengthProperty(sortState) - length);
+    assert(dstPos <= GetLengthFromSortState(sortState) - length);
 
     let store: StoreFn = GetStoreFn(sortState);
 
@@ -603,8 +602,8 @@ module array {
       srcPos: Smi, dstPos: Smi, length: Smi): Smi {
     assert(srcPos >= 0);
     assert(dstPos >= 0);
-    assert(srcPos <= GetReceiverLengthProperty(sortState) - length);
-    assert(dstPos <= GetReceiverLengthProperty(sortState) - length);
+    assert(srcPos <= GetLengthFromSortState(sortState) - length);
+    assert(dstPos <= GetLengthFromSortState(sortState) - length);
 
     try {
       let load: LoadFn = GetLoadFn(sortState);
