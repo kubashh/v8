@@ -46,6 +46,7 @@
 // Align to kCodeAlignment.
 #define V8_ASM_BALIGN32 ".balign 32\n"
 #define V8_ASM_LABEL(NAME) V8_ASM_MANGLE_LABEL NAME ":\n"
+#define V8_ASM_TYPE(NAME) ".type " V8_ASM_MANGLE_LABEL NAME ", @function\n"
 
 // clang-format off
 #if defined(V8_OS_AIX)
