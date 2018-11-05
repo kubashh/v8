@@ -16,6 +16,24 @@
       "revId": "7542d04666884e4cf334b000f2d09e725862e8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d7576b7_793deeb2",
+        "filename": "src/builtins/array-join.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-11-05T13:59:33Z",
+      "side": 1,
+      "message": "Yup, verified. The string case atleast has array-functions-prototype-misc.js and the separator case has a number of tests like test-strings/OneByteArrayJoin that do `new Array(n).join`",
+      "parentUuid": "578803cb_b70db704",
+      "revId": "7542d04666884e4cf334b000f2d09e725862e8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
