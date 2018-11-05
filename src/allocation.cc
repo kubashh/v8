@@ -74,6 +74,13 @@ v8::PageAllocator* GetPlatformPageAllocator() {
   return page_allocator.Get();
 }
 
+v8::PageAllocator* SetPlatformPageAllocatorForTesting(
+    v8::PageAllocator* new_page_allocator) {
+  v8::PageAllocator* old_page_allocator = GetPlatformPageAllocator();
+  *page_allocator.Pointer() = new_page_allocator;
+  return old_page_allocator;
+}
+
 void* Malloced::New(size_t size) {
   void* result = AllocWithRetry(size);
   if (result == nullptr) {
