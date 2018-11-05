@@ -118,6 +118,30 @@
     },
     {
       "key": {
+        "uuid": "2a13a1aa_afaffb54",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-05T15:17:07Z",
+      "side": 1,
+      "message": "I removed Scoped from StatementList and ExpressionList to avoid being overly wordy. Both are always Scoped.",
+      "parentUuid": "f2ddcd6f_1769d7c2",
+      "range": {
+        "startLine": 212,
+        "startChar": 26,
+        "endLine": 212,
+        "endChar": 54
+      },
+      "revId": "74a1f93b7661b40bdb47c55e772e1031443b0e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b28e214c_9ddb27eb",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 2
