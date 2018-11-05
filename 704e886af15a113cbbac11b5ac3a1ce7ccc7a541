@@ -16,6 +16,24 @@
       "revId": "704e886af15a113cbbac11b5ac3a1ce7ccc7a541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50801757_bbbc35a6",
+        "filename": "src/wasm/streaming-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-05T15:18:42Z",
+      "side": 1,
+      "message": "Yes, should be equivalent. Done.",
+      "parentUuid": "a14be625_9b4d7780",
+      "revId": "704e886af15a113cbbac11b5ac3a1ce7ccc7a541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
