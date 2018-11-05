@@ -16,6 +16,7 @@
 #include "src/heap/mark-compact.h"
 #include "src/isolate.h"
 #include "src/objects/compilation-cache-inl.h"
+#include "src/objects/hash-table-inl.h"
 #include "src/objects/js-collection-inl.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/slots.h"
@@ -539,8 +540,35 @@ void ObjectStatsCollectorImpl::RecordVirtualJSObjectDetails(JSObject* object) {
     CHECK_EQ(PROPERTY_ARRAY_TYPE, properties->map()->instance_type());
   } else {
     NameDictionary* properties = object->property_dictionary();
-    RecordHashTableVirtualObjectStats(
-        object, properties, ObjectStats::OBJECT_PROPERTY_DICTIONARY_TYPE);
+    int capacity = properties->Capacity();
+    if (capacity <= 2) {
+      RecordHashTableVirtualObjectStats(
+          object, properties, ObjectStats::SMALL_DICT_CAPACITY_2_TYPE);
+    } else if (capacity <= 4) {
+      RecordHashTableVirtualObjectStats(
+          object, properties, ObjectStats::SMALL_DICT_CAPACITY_4_TYPE);
+    } else if (capacity <= 8) {
+      RecordHashTableVirtualObjectStats(
+          object, properties, ObjectStats::SMALL_DICT_CAPACITY_8_TYPE);
+    } else if (capacity <= 16) {
+      RecordHashTableVirtualObjectStats(
+          object, properties, ObjectStats::SMALL_DICT_CAPACITY_16_TYPE);
+    } else if (capacity <= 32) {
+      RecordHashTableVirtualObjectStats(
+          object, properties, ObjectStats::SMALL_DICT_CAPACITY_32_TYPE);
+    } else if (capacity <= 64) {
+      RecordHashTableVirtualObjectStats(
+          object, properties, ObjectStats::SMALL_DICT_CAPACITY_64_TYPE);
+    } else if (capacity <= 128) {
+      RecordHashTableVirtualObjectStats(
+          object, properties, ObjectStats::SMALL_DICT_CAPACITY_128_TYPE);
+    } else if (capacity <= 256) {
+      RecordHashTableVirtualObjectStats(
+          object, properties, ObjectStats::SMALL_DICT_CAPACITY_256_TYPE);
+    } else {
+      RecordHashTableVirtualObjectStats(
+          object, properties, ObjectStats::OBJECT_PROPERTY_DICTIONARY_TYPE);
+    }
   }
   // Elements.
   FixedArrayBase* elements = object->elements();

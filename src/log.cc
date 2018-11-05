@@ -1679,6 +1679,19 @@ void Logger::ICEvent(const char* type, bool keyed, Map* map, Object* key,
   msg.WriteToLogFile();
 }
 
+void Logger::NameDictionaryCreate(const char* caller, NameDictionary* dict) {
+  DisallowHeapAllocation no_gc;
+  if (!log_->IsEnabled() || !FLAG_trace_name_dictionary) return;
+
+  Log::MessageBuilder msg(log_);
+  msg << "caller" << kNext << caller << kNext
+      << timer_.Elapsed().InMicroseconds() << kNext;
+  std::ostringstream buffer;
+  dict->PrintNameDictionaryDetails(buffer);
+  msg << buffer.str().c_str();
+  msg.WriteToLogFile();
+}
+
 void Logger::MapEvent(const char* type, Map* from, Map* to, const char* reason,
                       HeapObject* name_or_sfi) {
   DisallowHeapAllocation no_gc;

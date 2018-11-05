@@ -70,7 +70,15 @@
   V(SOURCE_POSITION_TABLE_TYPE)                  \
   V(UNCOMPILED_JS_FUNCTION_TYPE)                 \
   V(UNCOMPILED_SHARED_FUNCTION_INFO_TYPE)        \
-  V(WEAK_NEW_SPACE_OBJECT_TO_CODE_TYPE)
+  V(WEAK_NEW_SPACE_OBJECT_TO_CODE_TYPE)          \
+  V(SMALL_DICT_CAPACITY_2_TYPE)                  \
+  V(SMALL_DICT_CAPACITY_4_TYPE)                  \
+  V(SMALL_DICT_CAPACITY_8_TYPE)                  \
+  V(SMALL_DICT_CAPACITY_16_TYPE)                 \
+  V(SMALL_DICT_CAPACITY_32_TYPE)                 \
+  V(SMALL_DICT_CAPACITY_64_TYPE)                 \
+  V(SMALL_DICT_CAPACITY_128_TYPE)                \
+  V(SMALL_DICT_CAPACITY_256_TYPE)
 
 namespace v8 {
 namespace internal {
@@ -89,7 +97,7 @@ class ObjectStats {
 #define DEFINE_VIRTUAL_INSTANCE_TYPE(type) type,
     VIRTUAL_INSTANCE_TYPE_LIST(DEFINE_VIRTUAL_INSTANCE_TYPE)
 #undef DEFINE_FIXED_ARRAY_SUB_INSTANCE_TYPE
-        LAST_VIRTUAL_TYPE = WEAK_NEW_SPACE_OBJECT_TO_CODE_TYPE,
+        LAST_VIRTUAL_TYPE = SMALL_DICT_CAPACITY_256_TYPE,
   };
 
   // ObjectStats are kept in two arrays, counts and sizes. Related stats are

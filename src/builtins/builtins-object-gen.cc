@@ -1131,6 +1131,9 @@ TF_BUILTIN(CreateObjectWithoutProperties, ObjectBuiltinsAssembler) {
     map.Bind(LoadContextElement(native_context,
                                 Context::SLOW_OBJECT_WITH_NULL_PROTOTYPE_MAP));
     properties.Bind(AllocateNameDictionary(NameDictionary::kInitialCapacity));
+    CallRuntime(Runtime::kLogNameDictionary, context,
+                StringConstant("Object.create(null) without properties"),
+                properties.value());
     Goto(&instantiate_map);
   }
 
@@ -1226,6 +1229,8 @@ TF_BUILTIN(ObjectCreate, ObjectBuiltinsAssembler) {
       map.Bind(LoadContextElement(
           context, Context::SLOW_OBJECT_WITH_NULL_PROTOTYPE_MAP));
       properties.Bind(AllocateNameDictionary(NameDictionary::kInitialCapacity));
+      CallRuntime(Runtime::kLogNameDictionary, context,
+                  StringConstant("Object.create(null)"), properties.value());
       Goto(&instantiate_map);
     }
 
@@ -1543,6 +1548,8 @@ Node* ObjectBuiltinsAssembler::FromPropertyDescriptor(Node* context,
     // We want to preallocate the slots for value, writable, get, set,
     // enumerable and configurable - a total of 6
     TNode<NameDictionary> properties = AllocateNameDictionary(6);
+    CallRuntime(Runtime::kLogNameDictionary, context,
+                StringConstant("FromPropertyDescriptor"), properties);
     Node* js_desc = AllocateJSObjectFromMap(map, properties);
 
     Label bailout(this, Label::kDeferred);

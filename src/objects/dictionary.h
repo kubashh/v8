@@ -190,6 +190,7 @@ class NameDictionary
     : public BaseNameDictionary<NameDictionary, NameDictionaryShape> {
  public:
   DECL_CAST(NameDictionary)
+  void PrintNameDictionaryDetails(std::ostream& os);
 
   static const int kEntryDetailsIndex = 2;
   static const int kInitialCapacity = 2;

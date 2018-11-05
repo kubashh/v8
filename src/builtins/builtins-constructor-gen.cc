@@ -214,6 +214,8 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewObject(Node* context,
   BIND(&allocate_properties);
   {
     properties.Bind(AllocateNameDictionary(NameDictionary::kInitialCapacity));
+    CallRuntime(Runtime::kLogNameDictionary, context,
+                StringConstant("EmitFastNewObject"), properties.value());
     Goto(&instantiate_map);
   }
 

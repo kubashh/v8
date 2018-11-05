@@ -8376,12 +8376,26 @@ i::Address* Isolate::GetDataFromSnapshotOnce(size_t index) {
 void Isolate::GetHeapStatistics(HeapStatistics* heap_statistics) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   i::Heap* heap = isolate->heap();
+
+  size_t small_dict_type_size = 0;
+  for (size_t type_index = 0; type_index < NumberOfTrackedHeapObjectTypes();
+       type_index++) {
+    v8::HeapObjectStatistics object_statistics;
+    if (GetHeapObjectStatisticsAtLastGC(&object_statistics, type_index)) {
+      std::string object_type = object_statistics.object_type();
+      if (object_type.find("SMALL_DICT_CAPACITY_") != std::string::npos) {
+        small_dict_type_size += object_statistics.object_size();
+      }
+    }
+  }
+
   heap_statistics->total_heap_size_ = heap->CommittedMemory();
   heap_statistics->total_heap_size_executable_ =
       heap->CommittedMemoryExecutable();
   heap_statistics->total_physical_size_ = heap->CommittedPhysicalMemory();
   heap_statistics->total_available_size_ = heap->Available();
-  heap_statistics->used_heap_size_ = heap->SizeOfObjects();
+  heap_statistics->used_heap_size_ =
+      heap->SizeOfObjects() - small_dict_type_size;
   heap_statistics->heap_size_limit_ = heap->MaxReserved();
   // TODO(7424): There is no public API for the {WasmEngine} yet. Once such an
   // API becomes available we should report the malloced memory separately. For
@@ -8415,9 +8429,25 @@ bool Isolate::GetHeapSpaceStatistics(HeapSpaceStatistics* space_statistics,
   i::Heap* heap = isolate->heap();
   i::Space* space = heap->space(static_cast<int>(index));
 
+  size_t small_dict_type_size = 0;
+  std::string space_name(heap->GetSpaceName(static_cast<int>(index)));
+  if (space_name.find("old_space") != std::string::npos) {
+    for (size_t type_index = 0; type_index < NumberOfTrackedHeapObjectTypes();
+         type_index++) {
+      v8::HeapObjectStatistics object_statistics;
+      if (GetHeapObjectStatisticsAtLastGC(&object_statistics, type_index)) {
+        std::string object_type = object_statistics.object_type();
+        if (object_type.find("SMALL_DICT_CAPACITY_") != std::string::npos) {
+          small_dict_type_size += object_statistics.object_size();
+        }
+      }
+    }
+  }
+
   space_statistics->space_name_ = heap->GetSpaceName(static_cast<int>(index));
   space_statistics->space_size_ = space->CommittedMemory();
-  space_statistics->space_used_size_ = space->SizeOfObjects();
+  space_statistics->space_used_size_ =
+      space->SizeOfObjects() - small_dict_type_size;
   space_statistics->space_available_size_ = space->Available();
   space_statistics->physical_space_size_ = space->CommittedPhysicalMemory();
   return true;

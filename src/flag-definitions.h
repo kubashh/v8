@@ -990,6 +990,9 @@ DEFINE_BOOL(trace_maps, false, "trace map creation")
 DEFINE_BOOL(trace_maps_details, true, "also log map details")
 DEFINE_IMPLICATION(trace_maps, log_code)
 
+DEFINE_BOOL(trace_name_dictionary, false, "trace name dictionary creation")
+DEFINE_IMPLICATION(trace_name_dictionary, log_code)
+
 // parser.cc
 DEFINE_BOOL(allow_natives_syntax, false, "allow natives syntax")
 

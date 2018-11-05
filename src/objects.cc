@@ -1356,6 +1356,9 @@ MaybeHandle<JSObject> JSObject::New(Handle<JSFunction> constructor,
     Handle<NameDictionary> dictionary =
         NameDictionary::New(isolate, NameDictionary::kInitialCapacity);
     result->SetProperties(*dictionary);
+    if (FLAG_trace_name_dictionary) {
+      LOG(isolate, NameDictionaryCreate("JSObject::New", *dictionary));
+    }
   }
   isolate->counters()->constructed_objects()->Increment();
   isolate->counters()->constructed_objects_runtime()->Increment();
@@ -4443,6 +4446,14 @@ void MigrateFastToSlow(Handle<JSObject> object, Handle<Map> new_map,
   }
   Handle<NameDictionary> dictionary =
       NameDictionary::New(isolate, property_count);
+  if (FLAG_trace_name_dictionary) {
+    if (new_map->is_prototype_map()) {
+      LOG(isolate,
+          NameDictionaryCreate("MigrateFastToSlow (prototype)", *dictionary));
+    } else {
+      LOG(isolate, NameDictionaryCreate("MigrateFastToSlow", *dictionary));
+    }
+  }
 
   Handle<DescriptorArray> descs(map->instance_descriptors(), isolate);
   for (int i = 0; i < real_size; i++) {
