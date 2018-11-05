@@ -14193,7 +14193,7 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
   // don't have the information yet. They're set later in
   // SetSharedFunctionFlagsFromLiteral (compiler.cc), when the function is
   // really parsed and compiled.
-  if (lit->body() != nullptr) {
+  if (lit->ShouldEagerCompile()) {
     shared_info->set_length(lit->function_length());
     shared_info->set_has_duplicate_parameters(lit->has_duplicate_parameters());
     shared_info->SetExpectedNofPropertiesFromEstimate(lit);
