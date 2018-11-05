@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a79f6b90_530e89ec",
+        "filename": "src/objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 14196,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-05T15:14:58Z",
+      "side": 1,
+      "message": "Yeah this used to be more complex. By now it\u0027s pretty straightforward:\n\nhttps://cs.chromium.org/chromium/src/v8/src/parsing/parser.cc?rcl\u003d62f18490da8f661cf881193e0f1cf07671564663\u0026l\u003d2739 and https://cs.chromium.org/chromium/src/v8/src/parsing/parser.cc?rcl\u003d62f18490da8f661cf881193e0f1cf07671564663\u0026l\u003d2535",
+      "parentUuid": "d9eaa53b_be466bfc",
+      "range": {
+        "startLine": 14196,
+        "startChar": 6,
+        "endLine": 14196,
+        "endChar": 31
+      },
+      "revId": "74a1f93b7661b40bdb47c55e772e1031443b0e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f2ddcd6f_1769d7c2",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 2
