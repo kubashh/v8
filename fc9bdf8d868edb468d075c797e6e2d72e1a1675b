@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "35482e11_e90f9c07",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1741,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-11-05T17:53:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8f2f4927_0b15c4cc",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3538974f_37eb811b",
         "filename": "src/builtins/array-slice.tq",
         "patchSetId": 18
@@ -352,6 +370,24 @@
     },
     {
       "key": {
+        "uuid": "0d29e354_754c665a",
+        "filename": "src/builtins/array.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-11-05T17:53:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ae1dd430_ed02781c",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b2c519d_9b309cfb",
         "filename": "src/builtins/base.tq",
         "patchSetId": 18
@@ -396,6 +432,24 @@
         "id": 1162439
       },
       "writtenOn": "2018-10-19T06:40:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "44a1b2f3_4dc8557a",
+      "revId": "fc9bdf8d868edb468d075c797e6e2d72e1a1675b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58219702_9af355e4",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 18
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-11-05T17:53:53Z",
       "side": 1,
       "message": "Ack",
       "parentUuid": "44a1b2f3_4dc8557a",

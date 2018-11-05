@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f654a0d3_b8043433",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 24
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-11-05T17:53:53Z",
+      "side": 1,
+      "message": "There was a bug in the formatter surrounding \u0027case\u0027 statement, which I have also fixed in this CL.",
+      "parentUuid": "fdd15f5f_5abe66f2",
+      "revId": "e2853d108ceca41bbe0aa14d6329fb6c5219a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b79f6f72_93b92415",
         "filename": "src/builtins/base.tq",
         "patchSetId": 24
