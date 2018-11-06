@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51e90b99_ca91f97b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-11-06T13:27:51Z",
+      "side": 1,
+      "message": "More important than the above is what the implication of this change is. \n\nThis change requires that ICU 63 or above be used when building v8. It has to be mentioned in the CL description.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 30
+      },
+      "revId": "9f08b2e8828c543b8b79d9e174ea61cbbd3395e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
