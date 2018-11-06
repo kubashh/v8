@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb05f2b8_20d7debc",
+        "filename": "src/snapshot/macros.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-06T09:44:49Z",
+      "side": 1,
+      "message": "Suggestion: since we only have three cases overall (win, arm/arm64, other), wdyt about folding the FUNCTION_MARKER definition into here? Something like:\n\n #if windows\n #define V8_ASM_TYPE(NAME) \\\n     /* comment explaining .scl 3 and .type 32 :) */ \\\n     \".def \" V8_ASM_MANGLE_LABEL NAME \"; .scl 3; .type 32; .endef;\\n\"\n #elif arm\n #define V8_ASM_TYPE(NAME) \\\n  \".type \" V8_ASM_MANGLE_LABEL NAME \", %function\\n\"\n #else\n #define V8_ASM_TYPE(NAME) \\\n  \".type \" V8_ASM_MANGLE_LABEL NAME \", @function\\n\"\n #endif",
+      "revId": "ca52ddbed2d907868453d8ebe847de9a9d3360c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9dae890_595b9fa0",
+        "filename": "src/snapshot/macros.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-06T09:44:49Z",
+      "side": 1,
+      "message": "Nit: I\u0027d name this V8_ASM_DECLARE_FUNCTION or similar, maybe (as a small cleanup) it could include the symbol declaration as well so mksnapshot would only emit a single \n\n V8_ASM_DECLARE_FUNCTION(name) \n\nline per builtin.",
+      "revId": "ca52ddbed2d907868453d8ebe847de9a9d3360c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ead8a4ec_d2144b58",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-06T09:44:49Z",
+      "side": 1,
+      "message": "For consistency we should also emit V8_ASM_TYPE here for the non-default variant.",
+      "revId": "ca52ddbed2d907868453d8ebe847de9a9d3360c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
