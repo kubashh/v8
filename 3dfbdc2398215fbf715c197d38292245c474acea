@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16594c87_613903c9",
+        "filename": "src/arguments.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-11-06T09:44:43Z",
+      "side": 1,
+      "message": "add a comment that arguments are in reverse order?",
+      "range": {
+        "startLine": 68,
+        "startChar": 13,
+        "endLine": 68,
+        "endChar": 23
+      },
+      "revId": "3dfbdc2398215fbf715c197d38292245c474acea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e005964f_ba456c49",
+        "filename": "src/objects/slots-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-11-06T09:44:43Z",
+      "side": 1,
+      "message": "nit: there could be a non-const location() override to avoid this cast (here and in MaybeObjectSlot)",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 18,
+        "endChar": 56
+      },
+      "revId": "3dfbdc2398215fbf715c197d38292245c474acea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
