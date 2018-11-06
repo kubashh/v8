@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "656d6c19_7b1d45ef",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-06T09:55:23Z",
+      "side": 1,
+      "message": "Nit: const is not our usual style here",
+      "revId": "494704ad66626feec76325dbfc541121b31b33ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
