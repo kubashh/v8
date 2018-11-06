@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2d27f3c0_f3978078",
+        "filename": "src/arguments.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-06T19:10:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16594c87_613903c9",
+      "range": {
+        "startLine": 68,
+        "startChar": 13,
+        "endLine": 68,
+        "endChar": 23
+      },
+      "revId": "3dfbdc2398215fbf715c197d38292245c474acea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e005964f_ba456c49",
         "filename": "src/objects/slots-inl.h",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "3dfbdc2398215fbf715c197d38292245c474acea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5854456_a5d4e5a2",
+        "filename": "src/objects/slots-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-06T19:10:16Z",
+      "side": 1,
+      "message": "I agree, but I\u0027ll punt on that for now. I\u0027m tempted to change the type of address_ to Address*, so as to reduce the number of required casts and be more similar to Handle. I\u0027ll explore how well that goes in a separate CL; introducing a helper would be an alternative.",
+      "parentUuid": "e005964f_ba456c49",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 18,
+        "endChar": 56
+      },
+      "revId": "3dfbdc2398215fbf715c197d38292245c474acea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
