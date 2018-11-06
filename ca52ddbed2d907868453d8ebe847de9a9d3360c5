@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "098706e6_08708fcd",
+        "filename": "src/snapshot/macros.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-11-06T12:05:08Z",
+      "side": 1,
+      "message": "Yes, that\u0027s more readable, thanks!",
+      "parentUuid": "cb05f2b8_20d7debc",
+      "revId": "ca52ddbed2d907868453d8ebe847de9a9d3360c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9dae890_595b9fa0",
         "filename": "src/snapshot/macros.h",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "58c467e8_722404b8",
+        "filename": "src/snapshot/macros.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-11-06T12:05:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9dae890_595b9fa0",
+      "revId": "ca52ddbed2d907868453d8ebe847de9a9d3360c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ead8a4ec_d2144b58",
         "filename": "src/snapshot/mksnapshot.cc",
         "patchSetId": 3
@@ -50,6 +86,24 @@
       "revId": "ca52ddbed2d907868453d8ebe847de9a9d3360c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b13945d_e47986cf",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-11-06T12:05:08Z",
+      "side": 1,
+      "message": "Yes, additionally, I followed your suggestion in macros.h to declare a macro that combined the LABEL \u0026 TYPE directives.",
+      "parentUuid": "ead8a4ec_d2144b58",
+      "revId": "ca52ddbed2d907868453d8ebe847de9a9d3360c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
