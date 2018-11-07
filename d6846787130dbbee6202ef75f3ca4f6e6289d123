@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb6ce83d_eca42d6d",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T11:25:15Z",
+      "side": 0,
+      "message": "These changes in CSA were blocking pointer compression from being enabled. So I removed them while I\u0027m here in order to be able to run pointer compression try bot on this CL.",
+      "revId": "d6846787130dbbee6202ef75f3ca4f6e6289d123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
