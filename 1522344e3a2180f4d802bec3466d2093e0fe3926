@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "296cb73c_d2fd1ad0",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-07T07:17:04Z",
+      "side": 1,
+      "message": "Please also remove this.",
+      "revId": "1522344e3a2180f4d802bec3466d2093e0fe3926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
