@@ -3076,21 +3076,26 @@ TNode<MutableHeapNumber> CodeStubAssembler::AllocateMutableHeapNumber() {
 }
 
 TNode<Object> CodeStubAssembler::CloneIfMutablePrimitive(TNode<Object> object) {
-  TVARIABLE(Object, result, object);
-  Label done(this);
+  if (!FLAG_unbox_double_fields) {
+    // MutableHeapNumbers are only used when FLAG_unbox_double_fields is false
+    TVARIABLE(Object, result, object);
+    Label done(this);
 
-  GotoIf(TaggedIsSmi(object), &done);
-  GotoIfNot(IsMutableHeapNumber(UncheckedCast<HeapObject>(object)), &done);
-  {
-    // Mutable heap number found --- allocate a clone.
-    TNode<Float64T> value =
-        LoadHeapNumberValue(UncheckedCast<HeapNumber>(object));
-    result = AllocateMutableHeapNumberWithValue(value);
-    Goto(&done);
+    GotoIf(TaggedIsSmi(object), &done);
+    GotoIfNot(IsMutableHeapNumber(UncheckedCast<HeapObject>(object)), &done);
+    {
+      // Mutable heap number found --- allocate a clone.
+      TNode<Float64T> value =
+          LoadHeapNumberValue(UncheckedCast<HeapNumber>(object));
+      result = AllocateMutableHeapNumberWithValue(value);
+      Goto(&done);
+    }
+
+    BIND(&done);
+    return result.value();
   }
 
-  BIND(&done);
-  return result.value();
+  return object;
 }
 
 TNode<MutableHeapNumber> CodeStubAssembler::AllocateMutableHeapNumberWithValue(
@@ -5044,6 +5049,13 @@ void CodeStubAssembler::CopyPropertyArrayValues(Node* from_array,
   Comment("[ CopyPropertyArrayValues");
 
   bool needs_write_barrier = barrier_mode == UPDATE_WRITE_BARRIER;
+
+  if (!FLAG_unbox_double_fields && destroy_source == DestroySource::kNo) {
+    // PropertyArray may contain MutableHeapNumbers, which will be cloned on the
+    // heap, requiring a write barrier.
+    needs_write_barrier = true;
+  }
+
   Node* start = IntPtrOrSmiConstant(0, mode);
   ElementsKind kind = PACKED_ELEMENTS;
   BuildFastFixedArrayForEach(
