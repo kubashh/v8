@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b9bdb5a_9fcb8a20",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T19:32:12Z",
+      "side": 1,
+      "message": "if (!FLAG_track_double_fields) return object;\n...\n\nthe out-of-object properties are never boxed and we still need this for the property array cloning case.",
+      "revId": "b094fa560e0037103a212776b647e33a88a02b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81844c96_0397a8c5",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5053,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T19:32:12Z",
+      "side": 1,
+      "message": "if (FLAG_track_double_fields \u0026\u0026",
+      "range": {
+        "startLine": 5053,
+        "startChar": 2,
+        "endLine": 5053,
+        "endChar": 35
+      },
+      "revId": "b094fa560e0037103a212776b647e33a88a02b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
