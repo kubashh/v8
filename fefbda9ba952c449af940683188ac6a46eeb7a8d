@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5cbfe2d4_fee4c381",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3647,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T21:31:20Z",
+      "side": 1,
+      "message": "may_use_mutable_heap_numbers",
+      "range": {
+        "startLine": 3647,
+        "startChar": 15,
+        "endLine": 3647,
+        "endChar": 34
+      },
+      "revId": "fefbda9ba952c449af940683188ac6a46eeb7a8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71867311_fa0c56a9",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3665,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T21:31:20Z",
+      "side": 1,
+      "message": "Something like this would also be pointer-compression friendly :)\n\nif (may_use_mutable_heap_numbers) {\n  TNode\u003cObject\u003e field \u003d LoadObjectField(source, field_offset);\n  field \u003d CloneIfMutablePrimitive(field);\n  Node* result_offset \u003d IntPtrAdd(field_offset, field_offset_difference);\n  StoreObjectField(object, result_offset, field);\n} else {\n  // Copy fields as raw data.\n  TNode\u003cIntPtrT\u003e field \u003d\n        LoadObjectField\u003cIntPtrT\u003e(source, field_offset);\n  Node* result_offset \u003d IntPtrAdd(field_offset, field_offset_difference);\n  StoreObjectFieldNoWriteBarrier(object, result_offset, field);\n}",
+      "revId": "fefbda9ba952c449af940683188ac6a46eeb7a8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
