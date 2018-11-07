@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac6ae81_5de55c6c",
+        "filename": "tools/try_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-11-07T19:25:55Z",
+      "side": 0,
+      "message": "Please add the other linux64 trybot now to the default set.",
+      "range": {
+        "startLine": 35,
+        "startChar": 32,
+        "endLine": 35,
+        "endChar": 0
+      },
+      "revId": "9d27ec3aacf76b8131c323dd57968209e6f6ff4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
