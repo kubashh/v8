@@ -57,6 +57,30 @@
       "revId": "b094fa560e0037103a212776b647e33a88a02b99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59a80f67_64fde6cf",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 5053,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T19:54:20Z",
+      "side": 1,
+      "message": "So, just \nif (destroy_source \u003d\u003d DestroySource::kNo) {",
+      "parentUuid": "81844c96_0397a8c5",
+      "range": {
+        "startLine": 5053,
+        "startChar": 2,
+        "endLine": 5053,
+        "endChar": 35
+      },
+      "revId": "b094fa560e0037103a212776b647e33a88a02b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
