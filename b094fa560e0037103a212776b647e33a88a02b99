@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "8a404288_bea2caef",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-11-07T20:22:07Z",
+      "side": 1,
+      "message": "er, the above, and also make sure to use a write barrier in the in-object fields case?",
+      "parentUuid": "30094d99_67b0ebda",
+      "revId": "b094fa560e0037103a212776b647e33a88a02b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81844c96_0397a8c5",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 1
