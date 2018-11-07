@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "054a32a0_bf4f29dc",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5048,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T21:38:37Z",
+      "side": 1,
+      "message": "Maybe just || to the previous line.",
+      "range": {
+        "startLine": 5048,
+        "startChar": 6,
+        "endLine": 5048,
+        "endChar": 42
+      },
+      "revId": "fefbda9ba952c449af940683188ac6a46eeb7a8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5cbfe2d4_fee4c381",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 2
