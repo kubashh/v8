@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e6a07126_99b9110d",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2578,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T12:47:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71caae28_00f8e18a",
+      "range": {
+        "startLine": 2578,
+        "startChar": 27,
+        "endLine": 2578,
+        "endChar": 68
+      },
+      "revId": "cd7694ac315479ad3d6dc7b2760d2dfdbf810907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79f14501_25232318",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 1
@@ -117,6 +141,54 @@
     },
     {
       "key": {
+        "uuid": "2b674181_48ca490c",
+        "filename": "src/globals.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T12:47:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44e3e428_642c57e7",
+      "range": {
+        "startLine": 445,
+        "startChar": 0,
+        "endLine": 445,
+        "endChar": 75
+      },
+      "revId": "cd7694ac315479ad3d6dc7b2760d2dfdbf810907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19ecc682_32964810",
+        "filename": "src/globals.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T12:47:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "081410ad_1aff920a",
+      "range": {
+        "startLine": 445,
+        "startChar": 7,
+        "endLine": 445,
+        "endChar": 20
+      },
+      "revId": "cd7694ac315479ad3d6dc7b2760d2dfdbf810907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e346272c_4843071b",
         "filename": "src/objects/maybe-object.h",
         "patchSetId": 1
@@ -161,6 +233,30 @@
       "revId": "cd7694ac315479ad3d6dc7b2760d2dfdbf810907",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32cba7ed_3d4c37d1",
+        "filename": "src/objects/maybe-object.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T12:47:20Z",
+      "side": 1,
+      "message": "Ah, true. Leftover from earlier versions of the CL.",
+      "parentUuid": "1c5dac8b_68aa43e0",
+      "range": {
+        "startLine": 142,
+        "startChar": 1,
+        "endLine": 143,
+        "endChar": 9
+      },
+      "revId": "cd7694ac315479ad3d6dc7b2760d2dfdbf810907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
