@@ -1065,8 +1065,10 @@ void AccessorAssembler::CheckFieldType(TNode<DescriptorArray> descriptors,
         descriptors, UncheckedCast<IntPtrT>(name_index));
     const Address kNoneType = FieldType::None().ptr();
     const Address kAnyType = FieldType::Any().ptr();
-    DCHECK_NE(kNoneType, kClearedWeakHeapObject);
-    DCHECK_NE(kAnyType, kClearedWeakHeapObject);
+    DCHECK_NE(static_cast<uint32_t>(kNoneType),
+              kLower32bitClearedWeakHeapObject);
+    DCHECK_NE(static_cast<uint32_t>(kAnyType),
+              kLower32bitClearedWeakHeapObject);
     // FieldType::None can't hold any value.
     GotoIf(WordEqual(BitcastMaybeObjectToWord(field_type),
                      IntPtrConstant(kNoneType)),

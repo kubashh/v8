@@ -1671,7 +1671,7 @@ void MacroAssembler::JumpToInstructionStream(Address entry) {
 
 void MacroAssembler::LoadWeakValue(Register out, Register in,
                                    Label* target_if_cleared) {
-  CmpP(in, Operand(kClearedWeakHeapObject));
+  Cmp32(in, Operand(kLower32bitClearedWeakHeapObject));
   beq(target_if_cleared);
 
   AndP(out, in, Operand(~kWeakHeapObjectMask));
