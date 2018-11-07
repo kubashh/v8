@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "42142cc7_200327b6",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T19:44:11Z",
+      "side": 1,
+      "message": "As I figured out while I was answering your comment in other CL, this flag is a runtime flag so, so we are \"safe\" only because it\u0027s on during mksnapshot time. I think it\u0027s more correct to always assume it\u0027s on. Let\u0027s not check FLAG_track_double_fields here at all. And while you are \"here\" could you please also remove checking of this flag in EmitCreateShallowObjectLiteral()?\n\nSorry for the noise.",
+      "parentUuid": "8b9bdb5a_9fcb8a20",
+      "revId": "b094fa560e0037103a212776b647e33a88a02b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81844c96_0397a8c5",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 1
