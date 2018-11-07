@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d066ff6_d858809d",
+        "filename": "src/allocation.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2018-11-07T07:57:10Z",
+      "side": 1,
+      "message": "Sets the given... allocator and returns ...",
+      "range": {
+        "startLine": 89,
+        "startChar": 7,
+        "endLine": 89,
+        "endChar": 8
+      },
+      "revId": "40c696977bfe045a08e7cbd8eb2a13d4f0d607c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
