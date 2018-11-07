@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "30094d99_67b0ebda",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2018-11-07T20:21:32Z",
+      "side": 1,
+      "message": "Happy to, but let me make sure I understand the request first, because it seems in conflict with the first comment:\n\nA) assume we are always tracking double fields (still need to check FLAG_unbox_double_fields, which is disabled for 32bit arches)\nB) remove the `FLAG_track_double_fields` bit from the assignment to may_use_mutable_heap_numbers in EmitCreateShallowObjectLiteral()\n\nIs that about right?",
+      "parentUuid": "42142cc7_200327b6",
+      "revId": "b094fa560e0037103a212776b647e33a88a02b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81844c96_0397a8c5",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 1
