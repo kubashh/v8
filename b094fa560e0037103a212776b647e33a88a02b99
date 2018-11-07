@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "6d18055d_aebc98a8",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-07T20:44:20Z",
+      "side": 1,
+      "message": "B) yes\nA) yes and no. Always assume FLAG_track_double_fields in order to ensure that snapshotted builtins will also work if someone disable this flag via V8 option.\n\nRegarding FLAG_unbox_double_fields:\nWhen we copy out-of-object properties (which are stored in properties array) we need to call CloneIfMutablePrimitive() and we should always assume that the allocation may happen (so we need the write barrier), because out-of-object doubles are always stored in MutableHeapNumbers.\n\nWhen we copy in-object properties we don\u0027t need to call CloneIfMutablePrimitive() at all if FLAG_unbox_double_fields is on and therefore we can use no-barrier stores. But when FLAG_unbox_double_fields is off, then we must use CloneIfMutablePrimitive() and assume allocations.\nLet\u0027s do this as a quick fix.\n\nAs a follow-up CL I\u0027d suggest to unify copying of in-object properties with EmitCreateShallowObjectLiteral() which has an optimization of copying of fields as raw data before it sees the first mutable heap number and once this happens it switches to the slower loop which triggers WB.",
+      "parentUuid": "8a404288_bea2caef",
+      "revId": "b094fa560e0037103a212776b647e33a88a02b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81844c96_0397a8c5",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 1
