@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "081410ad_1aff920a",
+        "filename": "src/globals.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-11-07T11:39:14Z",
+      "side": 1,
+      "message": "language nit (here and elsewhere) -\u003e \"lower 32 bits\"",
+      "range": {
+        "startLine": 445,
+        "startChar": 7,
+        "endLine": 445,
+        "endChar": 20
+      },
+      "revId": "cd7694ac315479ad3d6dc7b2760d2dfdbf810907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e346272c_4843071b",
+        "filename": "src/objects/maybe-object.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-11-07T11:39:14Z",
+      "side": 1,
+      "message": "Is this correct? I don\u0027t see any added roots...",
+      "range": {
+        "startLine": 142,
+        "startChar": 1,
+        "endLine": 143,
+        "endChar": 9
+      },
+      "revId": "cd7694ac315479ad3d6dc7b2760d2dfdbf810907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
