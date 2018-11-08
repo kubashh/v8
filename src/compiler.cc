@@ -453,7 +453,7 @@ std::unique_ptr<UnoptimizedCompilationJob> ExecuteUnoptimizedCompileJobs(
     // with a validation error or another error that could be solve by falling
     // through to standard unoptimized compile.
   }
-  ZoneVector<FunctionLiteral*> eager_inner_literals(0, parse_info->zone());
+  std::vector<FunctionLiteral*> eager_inner_literals;
   std::unique_ptr<UnoptimizedCompilationJob> job(
       interpreter::Interpreter::NewCompilationJob(
           parse_info, literal, allocator, &eager_inner_literals));
@@ -539,7 +539,7 @@ MaybeHandle<SharedFunctionInfo> GenerateUnoptimizedCodeForToplevel(
       // through to standard unoptimized compile.
     }
 
-    ZoneVector<FunctionLiteral*> eager_inner_literals(0, parse_info->zone());
+    std::vector<FunctionLiteral*> eager_inner_literals;
     {
       std::unique_ptr<UnoptimizedCompilationJob> job(
           interpreter::Interpreter::NewCompilationJob(
