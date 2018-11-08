@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47162ffb_6c617cba",
+        "filename": "test/cctest/test-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-11-08T09:06:35Z",
+      "side": 1,
+      "message": "This looks like a test not really compatible with sanitizers. I.e. if at some point due to a sanitizer change the instrumentations take even more memory, this might start failing again.\n\nCould this just bail out in sanitizer builds?",
+      "range": {
+        "startLine": 909,
+        "startChar": 71,
+        "endLine": 909,
+        "endChar": 76
+      },
+      "revId": "263cd10f5b05b05d9ebe1eacd919e3c67b31d8f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
