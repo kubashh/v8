@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd117c2f_b9628612",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3651,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-08T16:29:06Z",
+      "side": 1,
+      "message": "TNode\u003cIntPtrT\u003e should help",
+      "range": {
+        "startLine": 3651,
+        "startChar": 20,
+        "endLine": 3651,
+        "endChar": 25
+      },
+      "revId": "dcd550c4a787d906be2a927146620372c0209f2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
