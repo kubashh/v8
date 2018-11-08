@@ -3566,7 +3566,7 @@ void AccessorAssembler::GenerateCloneObjectIC_Slow() {
 
 void AccessorAssembler::GenerateCloneObjectIC() {
   typedef CloneObjectWithVectorDescriptor Descriptor;
-  Node* source = Parameter(Descriptor::kSource);
+  TNode<HeapObject> source = CAST(Parameter(Descriptor::kSource));
   Node* flags = Parameter(Descriptor::kFlags);
   Node* slot = Parameter(Descriptor::kSlot);
   Node* vector = Parameter(Descriptor::kVector);
@@ -3576,7 +3576,6 @@ void AccessorAssembler::GenerateCloneObjectIC() {
   Label miss(this, Label::kDeferred), try_polymorphic(this, Label::kDeferred),
       try_megamorphic(this, Label::kDeferred);
 
-  CSA_SLOW_ASSERT(this, TaggedIsNotSmi(source));
   Node* source_map = LoadMap(UncheckedCast<HeapObject>(source));
   GotoIf(IsDeprecatedMap(source_map), &miss);
   TNode<MaybeObject> feedback = TryMonomorphicCase(
@@ -3598,7 +3597,7 @@ void AccessorAssembler::GenerateCloneObjectIC() {
 
     // The IC fast case should only be taken if the result map a compatible
     // elements kind with the source object.
-    TNode<FixedArrayBase> source_elements = LoadElements(source);
+    TNode<FixedArrayBase> source_elements = LoadElements(CAST(source));
 
     auto flags = ExtractFixedArrayFlag::kAllFixedArraysDontCopyCOW;
     var_elements = CAST(CloneFixedArray(source_elements, flags));
@@ -3636,19 +3635,38 @@ void AccessorAssembler::GenerateCloneObjectIC() {
     Node* source_start = LoadMapInobjectPropertiesStartInWords(source_map);
     Node* source_size = LoadMapInstanceSizeInWords(source_map);
     Node* result_start = LoadMapInobjectPropertiesStartInWords(result_map);
-    Node* field_offset_difference =
-        TimesPointerSize(IntPtrSub(result_start, source_start));
-    BuildFastLoop(source_start, source_size,
-                  [=](Node* field_index) {
-                    Node* field_offset = TimesPointerSize(field_index);
-                    TNode<Object> field = LoadObjectField(source, field_offset);
-                    field = CloneIfMutablePrimitive(field);
-                    Node* result_offset =
-                        IntPtrAdd(field_offset, field_offset_difference);
-                    StoreObjectFieldNoWriteBarrier(object, result_offset,
-                                                   field);
-                  },
-                  1, INTPTR_PARAMETERS, IndexAdvanceMode::kPost);
+    TNode<IntPtrT> field_offset_difference = UncheckedCast<IntPtrT>(
+        TimesPointerSize(IntPtrSub(result_start, source_start)));
+
+    // If MutableHeapNumbers may be present in-object, allocations may occur
+    // within this loop, thus the write barrier is required.
+    //
+    // TODO(caitp): skip the write barrier until the first MutableHeapNumber
+    // field is found
+    const bool may_use_mutable_heap_numbers = !FLAG_unbox_double_fields;
+
+    BuildFastLoop(
+        source_start, source_size,
+        [=](Node* field_index) {
+          TNode<IntPtrT> field_offset =
+              UncheckedCast<IntPtrT>(TimesPointerSize(field_index));
+
+          if (may_use_mutable_heap_numbers) {
+            TNode<Object> field = LoadObjectField(source, field_offset);
+            field = CloneIfMutablePrimitive(field);
+            TNode<IntPtrT> result_offset =
+                IntPtrAdd(field_offset, field_offset_difference);
+            StoreObjectField(object, result_offset, field);
+          } else {
+            // Copy fields as raw data.
+            TNode<IntPtrT> field =
+                LoadObjectField<IntPtrT>(source, field_offset);
+            TNode<IntPtrT> result_offset =
+                IntPtrAdd(field_offset, field_offset_difference);
+            StoreObjectFieldNoWriteBarrier(object, result_offset, field);
+          }
+        },
+        1, INTPTR_PARAMETERS, IndexAdvanceMode::kPost);
     Return(object);
   }
 
