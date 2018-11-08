@@ -6,7 +6,6 @@
 
 #include <algorithm>
 #include <memory>
-#include <queue>
 
 #include "src/api-inl.h"
 #include "src/asmjs/asm-js.h"
@@ -453,7 +452,7 @@ std::unique_ptr<UnoptimizedCompilationJob> ExecuteUnoptimizedCompileJobs(
     // with a validation error or another error that could be solve by falling
     // through to standard unoptimized compile.
   }
-  ZoneVector<FunctionLiteral*> eager_inner_literals(0, parse_info->zone());
+  std::vector<FunctionLiteral*> eager_inner_literals;
   std::unique_ptr<UnoptimizedCompilationJob> job(
       interpreter::Interpreter::NewCompilationJob(
           parse_info, literal, allocator, &eager_inner_literals));
@@ -513,12 +512,12 @@ MaybeHandle<SharedFunctionInfo> GenerateUnoptimizedCodeForToplevel(
       isolate->factory()->NewSharedFunctionInfoForLiteral(parse_info->literal(),
                                                           script, true);
 
-  std::queue<FunctionLiteral*> queue;
-  queue.push(parse_info->literal());
+  std::vector<FunctionLiteral*> queue;
+  queue.push_back(parse_info->literal());
 
   while (!queue.empty()) {
-    FunctionLiteral* literal = queue.front();
-    queue.pop();
+    FunctionLiteral* literal = queue.back();
+    queue.pop_back();
     Handle<SharedFunctionInfo> shared_info =
         Compiler::GetSharedFunctionInfo(literal, script, isolate);
     // TODO(rmcilroy): Fix this and DCHECK !is_compiled() once Full-Codegen dies
@@ -539,23 +538,15 @@ MaybeHandle<SharedFunctionInfo> GenerateUnoptimizedCodeForToplevel(
       // through to standard unoptimized compile.
     }
 
-    ZoneVector<FunctionLiteral*> eager_inner_literals(0, parse_info->zone());
-    {
-      std::unique_ptr<UnoptimizedCompilationJob> job(
-          interpreter::Interpreter::NewCompilationJob(
-              parse_info, literal, allocator, &eager_inner_literals));
+    // Inner functions that need to be compiled eagerly are added to the queue.
+    std::unique_ptr<UnoptimizedCompilationJob> job(
+        interpreter::Interpreter::NewCompilationJob(parse_info, literal,
+                                                    allocator, &queue));
 
-      if (job->ExecuteJob() == CompilationJob::FAILED ||
-          FinalizeUnoptimizedCompilationJob(job.get(), shared_info, isolate) ==
-              CompilationJob::FAILED) {
-        return MaybeHandle<SharedFunctionInfo>();
-      }
-    }
-
-    // Add eagerly compiled inner literals to the queue. The compilation order
-    // is not important, so breadth-first traversal is not a requirement.
-    for (FunctionLiteral* inner_literal : eager_inner_literals) {
-      queue.push(inner_literal);
+    if (job->ExecuteJob() == CompilationJob::FAILED ||
+        FinalizeUnoptimizedCompilationJob(job.get(), shared_info, isolate) ==
+            CompilationJob::FAILED) {
+      return MaybeHandle<SharedFunctionInfo>();
     }
   }
 
