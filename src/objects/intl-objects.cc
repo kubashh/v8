@@ -1775,5 +1775,27 @@ MaybeHandle<JSObject> Intl::CachedOrNew(Isolate* isolate,
   }
 }
 
+Intl::HourCycle Intl::GetHourCycle(const char* str) {
+  if (str[0] == 'h' && strlen(str) == 3) {
+    switch (str[2]) {
+      case '1':
+        if (str[1] == '1') return Intl::HourCycle::kH11;
+        break;
+      case '2':
+        if (str[1] == '1') return Intl::HourCycle::kH12;
+        break;
+      case '3':
+        if (str[1] == '2') return Intl::HourCycle::kH23;
+        break;
+      case '4':
+        if (str[1] == '2') return Intl::HourCycle::kH24;
+        break;
+      default:
+        break;
+    }
+  }
+  return Intl::HourCycle::kUndefined;
+}
+
 }  // namespace internal
 }  // namespace v8

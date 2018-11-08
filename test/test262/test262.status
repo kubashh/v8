@@ -537,9 +537,6 @@
   'intl402/NumberFormat/ignore-invalid-unicode-ext-values': [FAIL],
   'intl402/DateTimeFormat/ignore-invalid-unicode-ext-values': [FAIL],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=7482
-  'intl402/DateTimeFormat/prototype/resolvedOptions/resolved-locale-with-hc-unicode': [FAIL],
-
   # https://bugs.chromium.org/p/v8/issues/detail?id=7483
   'annexB/built-ins/Function/createdynfn-html-close-comment-params': [FAIL],
 
@@ -619,7 +616,6 @@
   # to be either marked as bugs with issues filed for them or as deliberate
   # incompatibilities if the test cases turn out to be broken or ambiguous.
   # Some of these are related to v8:4361 in being visible side effects from Intl.
-  'intl402/DateTimeFormat/prototype/resolvedOptions/hourCycle': [FAIL],
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=7833
   'built-ins/Atomics/wait/cannot-suspend-throws': [SKIP],

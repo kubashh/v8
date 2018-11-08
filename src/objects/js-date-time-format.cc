@@ -91,7 +91,11 @@ const std::vector<PatternItem> GetPatternItems() {
                   {{"HH", "2-digit"},
                    {"H", "numeric"},
                    {"hh", "2-digit"},
-                   {"h", "numeric"}},
+                   {"h", "numeric"},
+                   {"kk", "2-digit"},
+                   {"k", "numeric"},
+                   {"KK", "2-digit"},
+                   {"K", "numeric"}},
                   k2DigitNumeric),
       PatternItem("minute", {{"mm", "2-digit"}, {"m", "numeric"}},
                   k2DigitNumeric),
@@ -118,12 +122,6 @@ class PatternData {
   std::vector<const char*> allowed_values;
 };
 
-enum HourOption {
-  H_UNKNOWN,
-  H_12,
-  H_24,
-};
-
 const std::vector<PatternData> CreateCommonData(const PatternData& hour_data) {
   std::vector<PatternData> build;
   for (const PatternItem& item : GetPatternItems()) {
@@ -144,17 +142,36 @@ const std::vector<PatternData> CreateData(const char* digit2,
                   {"2-digit", "numeric"}));
 }
 
-const std::vector<PatternData> GetPatternData(HourOption option) {
+// According to "Date Field Symbol Table" in
+// http://userguide.icu-project.org/formatparse/datetime
+// Symbol | Meaning              | Example(s)
+//   h      hour in am/pm (1~12)    h    7
+//                                  hh   07
+//   H      hour in day (0~23)      H    0
+//                                  HH   0
+//   k      hour in day (1~24)      k    24
+//                                  kk   24
+//   K      hour in am/pm (0~11)    K    0
+//                                  KK   00
+const std::vector<PatternData> GetPatternData(Intl::HourCycle hour_cycle) {
   const std::vector<PatternData> data = CreateData("jj", "j");
+  const std::vector<PatternData> data_h11 = CreateData("KK", "K");
   const std::vector<PatternData> data_h12 = CreateData("hh", "h");
-  const std::vector<PatternData> data_h24 = CreateData("HH", "H");
-  switch (option) {
-    case HourOption::H_12:
+  const std::vector<PatternData> data_h23 = CreateData("HH", "H");
+  const std::vector<PatternData> data_h24 = CreateData("kk", "k");
+  switch (hour_cycle) {
+    case Intl::HourCycle::kH11:
+      return data_h11;
+    case Intl::HourCycle::kH12:
       return data_h12;
-    case HourOption::H_24:
+    case Intl::HourCycle::kH23:
+      return data_h23;
+    case Intl::HourCycle::kH24:
       return data_h24;
-    case HourOption::H_UNKNOWN:
+    case Intl::HourCycle::kUndefined:
       return data;
+    default:
+      UNREACHABLE();
   }
 }
 
@@ -404,7 +421,7 @@ MaybeHandle<JSObject> JSDateTimeFormat::ResolvedOptions(
               .FromJust());
   }
 
-  const std::vector<PatternItem> items = GetPatternItems();
+  const std::vector<PatternItem>& items = GetPatternItems();
   for (const auto& item : items) {
     for (const auto& pair : item.pairs) {
       if (pattern.find(pair.pattern) != std::string::npos) {
@@ -743,6 +760,24 @@ std::unique_ptr<icu::SimpleDateFormat> CreateICUDateFormat(
   return date_format;
 }
 
+// Figure out the default of HourCycle from pattern string
+Intl::HourCycle HourCycleDefault(icu::SimpleDateFormat* date_format) {
+  icu::UnicodeString pattern_unicode;
+  date_format->toPattern(pattern_unicode);
+  std::string pattern;
+  pattern_unicode.toUTF8String(pattern);
+  if (pattern.find("K") != std::string::npos) {
+    return Intl::HourCycle::kH11;
+  } else if (pattern.find("h") != std::string::npos) {
+    return Intl::HourCycle::kH12;
+  } else if (pattern.find("H") != std::string::npos) {
+    return Intl::HourCycle::kH23;
+  } else if (pattern.find("k") != std::string::npos) {
+    return Intl::HourCycle::kH24;
+  }
+  return Intl::HourCycle::kUndefined;
+}
+
 }  // namespace
 
 enum FormatMatcherOption { kBestFit, kBasic };
@@ -751,13 +786,13 @@ enum FormatMatcherOption { kBestFit, kBasic };
 MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
     Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
     Handle<Object> locales, Handle<Object> input_options) {
+  date_time_format->set_flags(0);
   // 1. Let requestedLocales be ? CanonicalizeLocaleList(locales).
   Maybe<std::vector<std::string>> maybe_requested_locales =
       Intl::CanonicalizeLocaleList(isolate, locales);
   MAYBE_RETURN(maybe_requested_locales, Handle<JSDateTimeFormat>());
   std::vector<std::string> requested_locales =
       maybe_requested_locales.FromJust();
-
   // 2. Let options be ? ToDateTimeOptions(options, "any", "date").
   Handle<JSObject> options;
   ASSIGN_RETURN_ON_EXCEPTION(
@@ -780,24 +815,18 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
   Maybe<bool> maybe_get_hour12 = Intl::GetBoolOption(
       isolate, options, "hour12", "Intl.DateTimeFormat", &hour12);
   MAYBE_RETURN(maybe_get_hour12, Handle<JSDateTimeFormat>());
-  HourOption hour_option = HourOption::H_UNKNOWN;
-  if (maybe_get_hour12.FromJust()) {
-    hour_option = hour12 ? HourOption::H_12 : HourOption::H_24;
-  }
 
   // 7. Let hourCycle be ? GetOption(options, "hourCycle", "string", « "h11",
   // "h12", "h23", "h24" », undefined).
   Maybe<Intl::HourCycle> maybe_hour_cycle =
       Intl::GetHourCycle(isolate, options, "Intl.DateTimeFormat");
   MAYBE_RETURN(maybe_hour_cycle, MaybeHandle<JSDateTimeFormat>());
-  // TODO(ftang): uncomment the following line and handle hour_cycle.
-  // Intl::HourCycle hour_cycle = maybe_hour_cycle.FromJust();
+  Intl::HourCycle hour_cycle = maybe_hour_cycle.FromJust();
 
   // 8. If hour12 is not undefined, then
   if (maybe_get_hour12.FromJust()) {
     // a. Let hourCycle be null.
-    // TODO(ftang): uncomment the following line and handle hour_cycle.
-    // hour_cycle = Intl::HourCycle::kUndefined;
+    hour_cycle = Intl::HourCycle::kUndefined;
   }
   // 9. Set opt.[[hc]] to hourCycle.
   // TODO(ftang): change behavior based on hour_cycle.
@@ -805,10 +834,7 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
   // ecma402/#sec-intl.datetimeformat-internal-slots
   // The value of the [[RelevantExtensionKeys]] internal slot is
   // « "ca", "nu", "hc" ».
-  //
-  // TODO(ftang): Add "hc" to this list of keys:
-  // https://bugs.chromium.org/p/v8/issues/detail?id=7482
-  std::set<std::string> relevant_extension_keys = {"nu", "ca"};
+  std::set<std::string> relevant_extension_keys = {"nu", "ca", "hc"};
 
   // 10. Let localeData be %DateTimeFormat%.[[LocaleData]].
   // 11. Let r be ResolveLocale( %DateTimeFormat%.[[AvailableLocales]],
@@ -819,10 +845,17 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
       isolate, JSDateTimeFormat::GetAvailableLocales(), requested_locales,
       locale_matcher, relevant_extension_keys);
 
-  // TODO(ftang): Make sure that "nu" key doesn't have "native",
-  // "traditio" or "finance" values.
   icu::Locale icu_locale = r.icu_locale;
   DCHECK(!icu_locale.isBogus());
+
+  if (hour_cycle == Intl::HourCycle::kUndefined) {
+    if (r.extensions.find("hc") != r.extensions.end()) {
+      hour_cycle = Intl::GetHourCycle(r.extensions.at("hc").c_str());
+    }
+  }
+
+  // TODO(ftang): Make sure that "nu" key doesn't have "native",
+  // "traditio" or "finance" values.
 
   // 17. Let timeZone be ? Get(options, "timeZone").
   const std::vector<const char*> empty_values;
@@ -832,9 +865,23 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
                             "Intl.DateTimeFormat", &timezone);
   MAYBE_RETURN(maybe_timezone, Handle<JSDateTimeFormat>());
 
+  std::unique_ptr<icu::Calendar> calendar(
+      CreateCalendar(isolate, icu_locale, timezone.get()));
+
+  // 18.b If the result of IsValidTimeZoneName(timeZone) is false, then
+  // i. Throw a RangeError exception.
+  if (calendar.get() == nullptr) {
+    THROW_NEW_ERROR(isolate,
+                    NewRangeError(MessageTemplate::kInvalidTimeZone,
+                                  isolate->factory()->NewStringFromAsciiChecked(
+                                      timezone.get())),
+                    JSDateTimeFormat);
+  }
+
+  bool has_hour_option = false;
   // 22. For each row of Table 5, except the header row, do
   std::string skeleton;
-  for (const auto& item : GetPatternData(hour_option)) {
+  for (const PatternData item : GetPatternData(hour_cycle)) {
     std::unique_ptr<char[]> input;
     // a. Let prop be the name given in the Property column of the row.
     // b. Let value be ? GetOption(options, prop, "string", « the strings given
@@ -844,6 +891,9 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
         "Intl.DateTimeFormat", &input);
     MAYBE_RETURN(maybe_get_option, Handle<JSDateTimeFormat>());
     if (maybe_get_option.FromJust()) {
+      if (item.property == "hour") {
+        has_hour_option = true;
+      }
       DCHECK_NOT_NULL(input.get());
       // c. Set opt.[[<prop>]] to value.
       skeleton += item.map.find(input.get())->second;
@@ -876,29 +926,57 @@ MaybeHandle<JSDateTimeFormat> JSDateTimeFormat::Initialize(
     }
   }
 
-  // Set the locale
-  // 12. Set dateTimeFormat.[[Locale]] to r.[[locale]].
-  icu::Locale* cloned_locale = icu_locale.clone();
-  CHECK_NOT_NULL(cloned_locale);
-  Handle<Managed<icu::Locale>> managed_locale =
-      Managed<icu::Locale>::FromRawPtr(isolate, 0, cloned_locale);
-  date_time_format->set_icu_locale(*managed_locale);
-
+  // The creation of Calendar depends on timeZone so we have to put 13 after 17.
+  // Also date_format is not created until here.
   // 13. Set dateTimeFormat.[[Calendar]] to r.[[ca]].
-  std::unique_ptr<icu::Calendar> calendar(
-      CreateCalendar(isolate, icu_locale, timezone.get()));
-
-  // 18.b If the result of IsValidTimeZoneName(timeZone) is false, then
-  // i. Throw a RangeError exception.
-  if (calendar.get() == nullptr) {
-    THROW_NEW_ERROR(isolate,
-                    NewRangeError(MessageTemplate::kInvalidTimeZone,
-                                  isolate->factory()->NewStringFromAsciiChecked(
-                                      timezone.get())),
-                    JSDateTimeFormat);
-  }
   date_format->adoptCalendar(calendar.release());
 
+  // 29. If dateTimeFormat.[[Hour]] is not undefined, then
+  if (has_hour_option) {
+    // a. Let hcDefault be dataLocaleData.[[hourCycle]].
+    Intl::HourCycle hc_default = HourCycleDefault(date_format.get());
+    // b. Let hc be dateTimeFormat.[[HourCycle]].
+    Intl::HourCycle hc = hour_cycle;
+    // c. If hc is null, then
+    if (hc == Intl::HourCycle::kUndefined) {
+      // i. Set hc to hcDefault.
+      hc = hc_default;
+    }
+    // d. If hour12 is not undefined, then
+    if (maybe_get_hour12.FromJust()) {
+      // i. If hour12 is true, then
+      if (hour12) {
+        // 1. If hcDefault is "h11" or "h23", then
+        if (hc_default == Intl::HourCycle::kH11 ||
+            hc_default == Intl::HourCycle::kH23) {
+          // a. Set hc to "h11".
+          hc = Intl::HourCycle::kH11;
+          // 2. Else,
+        } else {
+          // a. Set hc to "h12".
+          hc = Intl::HourCycle::kH12;
+        }
+        // ii. Else,
+      } else {
+        // 2.  If hcDefault is "h11" or "h23", then
+        if (hc_default == Intl::HourCycle::kH11 ||
+            hc_default == Intl::HourCycle::kH23) {
+          // a. Set hc to "h23".
+          hc = Intl::HourCycle::kH23;
+          // 3. Else,
+        } else {
+          // a. Set hc to "h24".
+          hc = Intl::HourCycle::kH24;
+        }
+      }
+    }
+    // e.  Set dateTimeFormat.[[HourCycle]] to hc.
+    date_time_format->set_hour_cycle(hc);
+    // 30. Else
+  } else {
+    // a. Set dateTimeFormat.[[HourCycle]] to undefined.
+    date_time_format->set_hour_cycle(Intl::HourCycle::kUndefined);
+  }
   Handle<Managed<icu::SimpleDateFormat>> managed_format =
       Managed<icu::SimpleDateFormat>::FromUniquePtr(isolate, 0,
                                                     std::move(date_format));
@@ -1022,6 +1100,23 @@ std::set<std::string> JSDateTimeFormat::GetAvailableLocales() {
   const icu::Locale* icu_available_locales =
       icu::DateFormat::getAvailableLocales(num_locales);
   return Intl::BuildLocaleSet(icu_available_locales, num_locales);
+}
+
+Handle<String> JSDateTimeFormat::HourCycleAsString() const {
+  switch (hour_cycle()) {
+    case Intl::HourCycle::kUndefined:
+      return GetReadOnlyRoots().undefined_string_handle();
+    case Intl::HourCycle::kH11:
+      return GetReadOnlyRoots().h11_string_handle();
+    case Intl::HourCycle::kH12:
+      return GetReadOnlyRoots().h12_string_handle();
+    case Intl::HourCycle::kH23:
+      return GetReadOnlyRoots().h23_string_handle();
+    case Intl::HourCycle::kH24:
+      return GetReadOnlyRoots().h24_string_handle();
+    default:
+      UNREACHABLE();
+  }
 }
 
 }  // namespace internal
