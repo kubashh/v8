@@ -3638,15 +3638,34 @@ void AccessorAssembler::GenerateCloneObjectIC() {
     Node* result_start = LoadMapInobjectPropertiesStartInWords(result_map);
     Node* field_offset_difference =
         TimesPointerSize(IntPtrSub(result_start, source_start));
+
+    // If MutableHeapNumbers may be present in-object, allocations may occur
+    // within this loop, thus the write barrier is required.
+    //
+    // TODO(caitp): skip the write barrier until the first MutableHeapNumber
+    // field is found
+    const bool may_use_mutable_heap_numbers = !FLAG_unbox_double_fields;
+
     BuildFastLoop(source_start, source_size,
                   [=](Node* field_index) {
                     Node* field_offset = TimesPointerSize(field_index);
-                    TNode<Object> field = LoadObjectField(source, field_offset);
-                    field = CloneIfMutablePrimitive(field);
-                    Node* result_offset =
-                        IntPtrAdd(field_offset, field_offset_difference);
-                    StoreObjectFieldNoWriteBarrier(object, result_offset,
-                                                   field);
+
+                    if (may_use_mutable_heap_numbers) {
+                      TNode<Object> field =
+                          LoadObjectField(source, field_offset);
+                      field = CloneIfMutablePrimitive(field);
+                      TNode<IntPtrT> result_offset =
+                          IntPtrAdd(field_offset, field_offset_difference);
+                      StoreObjectField(object, result_offset, field);
+                    } else {
+                      // Copy fields as raw data.
+                      TNode<IntPtrT> field =
+                          LoadObjectField<IntPtrT>(source, field_offset);
+                      TNode<IntPtrT> result_offset =
+                          IntPtrAdd(field_offset, field_offset_difference);
+                      StoreObjectFieldNoWriteBarrier(object, result_offset,
+                                                     field);
+                    }
                   },
                   1, INTPTR_PARAMETERS, IndexAdvanceMode::kPost);
     Return(object);
