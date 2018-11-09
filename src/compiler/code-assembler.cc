@@ -1866,6 +1866,25 @@ void CodeAssemblerState::PopExceptionHandler() {
   exception_handler_labels_.pop_back();
 }
 
+CodeAssemblerScopedExceptionHandler::CodeAssemblerScopedExceptionHandler(
+    CodeAssembler* assembler, CodeAssemblerLabel* label,
+    TypedCodeAssemblerVariable<Object>* exception)
+    : assembler_(label != nullptr ? assembler : nullptr) {
+  if (label != nullptr) {
+    label_ = std::unique_ptr<CodeAssemblerExceptionHandlerLabel>(
+        new CodeAssemblerExceptionHandlerLabel(assembler,
+                                               CodeAssemblerLabel::kDeferred));
+    CodeAssembler::Label skip(assembler);
+    assembler->Goto(&skip);
+    TNode<Object> e;
+    assembler->Bind(&**label_, &e);
+    *exception = e;
+    assembler->Goto(label);
+    assembler->Bind(&skip);
+    assembler_->state()->PushExceptionHandler(label_->get());
+  }
+}
+
 }  // namespace compiler
 
 Address CheckObjectType(Object* value, Address raw_type, String* location) {

@@ -75,6 +75,8 @@ void ImplementationVisitor::BeginModuleFile(Module* module) {
       << "using Node = compiler::Node;\n"
       << "using CatchLabel = compiler::CodeAssemblerExceptionHandlerLabel;\n"
       << "using ScopedCatch = compiler::CodeAssemblerScopedExceptionHandler;\n"
+      << "template <class... Ts>\n"
+      << "using PLabel = compiler::CodeAssemblerParameterizedLabel<Ts...>;\n"
       << "\n";
 
   std::string upper_name(module->name());
@@ -84,7 +86,7 @@ void ImplementationVisitor::BeginModuleFile(Module* module) {
       std::string("V8_TORQUE_") + upper_name + "_FROM_DSL_BASE_H__";
   header << "#ifndef " << headerDefine << "\n";
   header << "#define " << headerDefine << "\n\n";
-    header << "#include \"src/torque-assembler.h\"";
+  header << "#include \"src/code-stub-assembler.h\"";
   header << "\n\n ";
 
   header << "namespace v8 {\n"
@@ -92,11 +94,11 @@ void ImplementationVisitor::BeginModuleFile(Module* module) {
          << "\n";
 
   header << "class " << module->ExternalName()
-         << ": public TorqueAssembler {\n";
+         << ": public CodeStubAssembler {\n";
   header << " public:\n";
-  header
-      << "  explicit " << module->ExternalName()
-      << "(compiler::CodeAssemblerState* state) : TorqueAssembler(state) {}\n";
+  header << "  explicit " << module->ExternalName()
+         << "(compiler::CodeAssemblerState* state) : CodeStubAssembler(state) "
+            "{}\n";
 
   header << "\n";
   header << "  using Node = compiler::Node;\n";
