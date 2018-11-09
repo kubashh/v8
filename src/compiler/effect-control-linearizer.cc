@@ -809,6 +809,9 @@ bool EffectControlLinearizer::TryWireInStateEffect(Node* node,
     case IrOpcode::kObjectIsMinusZero:
       result = LowerObjectIsMinusZero(node);
       break;
+    case IrOpcode::kNumberIsMinusZero:
+      result = LowerNumberIsMinusZero(node);
+      break;
     case IrOpcode::kObjectIsNaN:
       result = LowerObjectIsNaN(node);
       break;
@@ -2676,13 +2679,40 @@ Node* EffectControlLinearizer::LowerObjectIsMinusZero(Node* node) {
 
   // Check if {value} contains -0.
   Node* value_value = __ LoadField(AccessBuilder::ForHeapNumberValue(), value);
-  __ Goto(&done,
-          __ Float64Equal(
-              __ Float64Div(__ Float64Constant(1.0), value_value),
-              __ Float64Constant(-std::numeric_limits<double>::infinity())));
+  if (machine()->Is64()) {
+    Node* value64 = __ BitcastFloat64ToInt64(value_value);
+    __ Goto(&done,
+            __ Word64Equal(value64, __ Int64Constant(0x8000000000000000LL)));
+  } else {
+    Node* value_lo = __ Float64ExtractLowWord32(value_value);
+    __ GotoIfNot(__ Word32Equal(value_lo, __ Int32Constant(0x00000000)), &done,
+                 zero);
+    Node* value_hi = __ Float64ExtractHighWord32(value_value);
+    __ Goto(&done, __ Word32Equal(value_hi, __ Int32Constant(0x80000000)));
+  }
 
   __ Bind(&done);
   return done.PhiAt(0);
+}
+
+Node* EffectControlLinearizer::LowerNumberIsMinusZero(Node* node) {
+  Node* value = node->InputAt(0);
+
+  if (machine()->Is64()) {
+    Node* value64 = __ BitcastFloat64ToInt64(value);
+    return __ Word64Equal(value64, __ Int64Constant(0x8000000000000000LL));
+  } else {
+    auto done = __ MakeLabel(MachineRepresentation::kBit);
+
+    Node* value_lo = __ Float64ExtractLowWord32(value);
+    __ GotoIfNot(__ Word32Equal(value_lo, __ Int32Constant(0x00000000)), &done,
+                 __ Int32Constant(0));
+    Node* value_hi = __ Float64ExtractHighWord32(value);
+    __ Goto(&done, __ Word32Equal(value_hi, __ Int32Constant(0x80000000)));
+
+    __ Bind(&done);
+    return done.PhiAt(0);
+  }
 }
 
 Node* EffectControlLinearizer::LowerObjectIsNaN(Node* node) {
