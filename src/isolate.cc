@@ -70,6 +70,9 @@
 #include "src/wasm/wasm-objects.h"
 #include "src/zone/accounting-allocator.h"
 
+extern const uint8_t* v8_Default_embedded_blob_;
+extern const uint32_t v8_Default_embedded_blob_size_;
+
 namespace v8 {
 namespace internal {
 
@@ -85,12 +88,15 @@ namespace internal {
 #define TRACE_ISOLATE(tag)
 #endif
 
-extern const uint8_t* DefaultEmbeddedBlob();
-extern uint32_t DefaultEmbeddedBlobSize();
+const uint8_t* DefaultEmbeddedBlob() { return v8_Default_embedded_blob_; }
+uint32_t DefaultEmbeddedBlobSize() { return v8_Default_embedded_blob_size_; }
 
 #ifdef V8_MULTI_SNAPSHOTS
-extern const uint8_t* TrustedEmbeddedBlob();
-extern uint32_t TrustedEmbeddedBlobSize();
+extern const uint8_t* v8_Trusted_embedded_blob_;
+extern const uint32_t v8_Trusted_embedded_blob_size_;
+
+const uint8_t* TrustedEmbeddedBlob() { return v8_Trusted_embedded_blob_; }
+uint32_t TrustedEmbeddedBlobSize() { return v8_Trusted_embedded_blob_size_; }
 #endif
 
 namespace {
