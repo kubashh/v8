@@ -341,7 +341,6 @@ T RecipSqrt(T a) {
 
 #define TO_BYTE(val) static_cast<byte>(val)
 #define WASM_SIMD_OP(op) kSimdPrefix, TO_BYTE(op)
-#define WASM_SIMD_SPLAT(Type, x) x, WASM_SIMD_OP(kExpr##Type##Splat)
 #define WASM_SIMD_UNOP(op, x) x, WASM_SIMD_OP(op)
 #define WASM_SIMD_BINOP(op, x, y) x, y, WASM_SIMD_OP(op)
 #define WASM_SIMD_SHIFT_OP(op, shift, x) x, WASM_SIMD_OP(op), TO_BYTE(shift)
@@ -1716,26 +1715,24 @@ WASM_SIMD_TEST(F32x4AddHoriz) {
 // Test shuffle ops.
 void RunShuffleOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
                       WasmOpcode simd_op,
-                      const std::array<int8_t, kSimd128Size>& shuffle) {
+                      const std::array<byte, kSimd128Size>& shuffle) {
   // Test the original shuffle.
-  RunBinaryLaneOpTest<int8_t>(execution_tier, lower_simd, simd_op, shuffle);
+  RunBinaryLaneOpTest<byte>(execution_tier, lower_simd, simd_op, shuffle);
 
   // Test a non-canonical (inputs reversed) version of the shuffle.
-  std::array<int8_t, kSimd128Size> other_shuffle(shuffle);
+  std::array<byte, kSimd128Size> other_shuffle(shuffle);
   for (size_t i = 0; i < shuffle.size(); ++i) other_shuffle[i] ^= kSimd128Size;
-  RunBinaryLaneOpTest<int8_t>(execution_tier, lower_simd, simd_op,
-                              other_shuffle);
+  RunBinaryLaneOpTest<byte>(execution_tier, lower_simd, simd_op, other_shuffle);
 
   // Test the swizzle (one-operand) version of the shuffle.
-  std::array<int8_t, kSimd128Size> swizzle(shuffle);
+  std::array<byte, kSimd128Size> swizzle(shuffle);
   for (size_t i = 0; i < shuffle.size(); ++i) swizzle[i] &= (kSimd128Size - 1);
-  RunBinaryLaneOpTest<int8_t>(execution_tier, lower_simd, simd_op, swizzle);
+  RunBinaryLaneOpTest<byte>(execution_tier, lower_simd, simd_op, swizzle);
 
   // Test the non-canonical swizzle (one-operand) version of the shuffle.
-  std::array<int8_t, kSimd128Size> other_swizzle(shuffle);
+  std::array<byte, kSimd128Size> other_swizzle(shuffle);
   for (size_t i = 0; i < shuffle.size(); ++i) other_swizzle[i] |= kSimd128Size;
-  RunBinaryLaneOpTest<int8_t>(execution_tier, lower_simd, simd_op,
-                              other_swizzle);
+  RunBinaryLaneOpTest<byte>(execution_tier, lower_simd, simd_op, other_swizzle);
 }
 
 #if V8_TARGET_ARCH_ARM || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_MIPS || \
@@ -1780,7 +1777,7 @@ enum ShuffleKey {
       kNumShuffleKeys
 };
 
-using Shuffle = std::array<int8_t, kSimd128Size>;
+using Shuffle = std::array<byte, kSimd128Size>;
 using ShuffleMap = std::map<ShuffleKey, const Shuffle>;
 
 ShuffleMap test_shuffles = {
@@ -1858,7 +1855,7 @@ SHUFFLE_LIST(SHUFFLE_TEST)
 
 // Test shuffles that blend the two vectors (elements remain in their lanes.)
 WASM_SIMD_TEST(S8x16Blend) {
-  std::array<int8_t, kSimd128Size> expected;
+  std::array<byte, kSimd128Size> expected;
   for (int bias = 1; bias < kSimd128Size; bias++) {
     for (int i = 0; i < bias; i++) expected[i] = i;
     for (int i = bias; i < kSimd128Size; i++) expected[i] = i + kSimd128Size;
@@ -1868,7 +1865,7 @@ WASM_SIMD_TEST(S8x16Blend) {
 
 // Test shuffles that concatenate the two vectors.
 WASM_SIMD_TEST(S8x16Concat) {
-  std::array<int8_t, kSimd128Size> expected;
+  std::array<byte, kSimd128Size> expected;
   // n is offset or bias of concatenation.
   for (int n = 1; n < kSimd128Size; ++n) {
     int i = 0;
@@ -1952,6 +1949,173 @@ void RunWasmCode(ExecutionTier execution_tier, LowerSimd lower_simd,
   CHECK_EQ(1, r.Call());
   for (size_t i = 0; i < kSimd128Size; i++) {
     (*result)[i] = ReadLittleEndianValue<int8_t>(&src0[i]);
+  }
+}
+
+// #define WASM_SIMD_UNOP(op, x) x, WASM_SIMD_OP(op)
+// #define WASM_SIMD_BINOP(op, x, y) x, y, WASM_SIMD_OP(op)
+// #define WASM_SIMD_SHIFT_OP(op, shift, x) x, WASM_SIMD_OP(op), TO_BYTE(shift)
+// #define WASM_SIMD_CONCAT_OP(op, bytes, x, y) \
+//   x, y, WASM_SIMD_OP(op), TO_BYTE(bytes)
+// #define WASM_SIMD_SELECT(format, x, y, z) x, y, z,
+// WASM_SIMD_OP(kExprS128Select) #define WASM_SIMD_F32x4_SPLAT(x) x,
+// WASM_SIMD_OP(kExprF32x4Splat)
+// #define WASM_SIMD_F32x4_EXTRACT_LANE(lane, x) \
+//   x, WASM_SIMD_OP(kExprF32x4ExtractLane), TO_BYTE(lane)
+// #define WASM_SIMD_F32x4_REPLACE_LANE(lane, x, y) \
+//   x, y, WASM_SIMD_OP(kExprF32x4ReplaceLane), TO_BYTE(lane)
+
+// #define WASM_SIMD_I32x4_SPLAT(x) x, WASM_SIMD_OP(kExprI32x4Splat)
+// #define WASM_SIMD_I32x4_EXTRACT_LANE(lane, x) \
+//   x, WASM_SIMD_OP(kExprI32x4ExtractLane), TO_BYTE(lane)
+// #define WASM_SIMD_I32x4_REPLACE_LANE(lane, x, y) \
+//   x, y, WASM_SIMD_OP(kExprI32x4ReplaceLane), TO_BYTE(lane)
+
+// #define WASM_SIMD_I16x8_SPLAT(x) x, WASM_SIMD_OP(kExprI16x8Splat)
+// #define WASM_SIMD_I16x8_EXTRACT_LANE(lane, x) \
+//   x, WASM_SIMD_OP(kExprI16x8ExtractLane), TO_BYTE(lane)
+// #define WASM_SIMD_I16x8_REPLACE_LANE(lane, x, y) \
+//   x, y, WASM_SIMD_OP(kExprI16x8ReplaceLane), TO_BYTE(lane)
+
+// #define WASM_SIMD_I8x16_SPLAT(x) x, WASM_SIMD_OP(kExprI8x16Splat)
+// #define WASM_SIMD_I8x16_EXTRACT_LANE(lane, x) \
+//   x, WASM_SIMD_OP(kExprI8x16ExtractLane), TO_BYTE(lane)
+// #define WASM_SIMD_I8x16_REPLACE_LANE(lane, x, y) \
+//   x, y, WASM_SIMD_OP(kExprI8x16ReplaceLane), TO_BYTE(lane)
+
+// #define WASM_SIMD_S8x16_SHUFFLE_OP(opcode, m, x, y)                        \
+//   x, y, WASM_SIMD_OP(opcode), TO_BYTE(m[0]), TO_BYTE(m[1]), TO_BYTE(m[2]), \
+//       TO_BYTE(m[3]), TO_BYTE(m[4]), TO_BYTE(m[5]), TO_BYTE(m[6]),          \
+//       TO_BYTE(m[7]), TO_BYTE(m[8]), TO_BYTE(m[9]), TO_BYTE(m[10]),         \
+//       TO_BYTE(m[11]), TO_BYTE(m[12]), TO_BYTE(m[13]), TO_BYTE(m[14]),      \
+//       TO_BYTE(m[15])
+
+// #define WASM_SIMD_LOAD_MEM(index) \
+//   index, WASM_SIMD_OP(kExprS128LoadMem), ZERO_ALIGNMENT, ZERO_OFFSET
+// #define WASM_SIMD_STORE_MEM(index, val) \
+//   index, val, WASM_SIMD_OP(kExprS128StoreMem), ZERO_ALIGNMENT, ZERO_OFFSET
+
+enum SimdType {
+  kS128,
+};
+
+enum SimdOp {
+  kLoadGlobal0,
+  kLoadGlobal1,
+  kS8x16Shuffle,
+  kI8x16Add,
+  kF32x4Add,
+
+  kLastLeafOp = kLoadGlobal1,
+};
+
+static SimdOp leaf_ops[] = {kLoadGlobal0, kLoadGlobal1};
+static SimdOp simd_ops[] = {kLoadGlobal0, kLoadGlobal1, kS8x16Shuffle,
+                            kI8x16Add, kF32x4Add};
+
+void CopyCode(std::vector<byte>* buffer, byte* code, size_t code_size) {
+  for (size_t i = 0; i < code_size; ++i) buffer->push_back(code[i]);
+}
+
+void BuildSimdOp(std::vector<byte>* buffer, SimdOp op, int depth) {
+  v8::base::RandomNumberGenerator* rng = CcTest::random_number_generator();
+  size_t num_operands;
+  SimdType operand_type[3];
+  switch (op) {
+    case kLoadGlobal0:
+    case kLoadGlobal1:
+      num_operands = 0;
+      break;
+    case kS8x16Shuffle:
+    case kI8x16Add:
+    case kF32x4Add:
+      num_operands = 2;
+      operand_type[0] = kS128;
+      operand_type[1] = kS128;
+      break;
+    default:
+      UNREACHABLE();
+      break;
+  }
+  DCHECK_GE(3UL, num_operands);
+  // For leaf opcodes (num_operands == 0), we skip this loop.
+  for (size_t i = 0; i < num_operands; ++i) {
+    SimdOp* opcodes;
+    size_t num_opcodes;
+    if (depth > 16) {
+      opcodes = leaf_ops;
+      num_opcodes = arraysize(leaf_ops);  // TODO use std::array?
+    } else {
+      switch (operand_type[i]) {
+        case kS128:
+          opcodes = simd_ops;
+          num_opcodes = arraysize(simd_ops);  // TODO use std::array?
+          break;
+        default:
+          UNREACHABLE();
+          break;
+      }
+    }
+    SimdOp operand_op;
+    operand_op = opcodes[rng->NextInt(num_opcodes)];
+    BuildSimdOp(buffer, operand_op, depth + 1);
+  }
+
+  // Generate code for op.
+  switch (op) {
+    case kLoadGlobal0:
+    case kLoadGlobal1: {
+      byte code[] = {WASM_GET_GLOBAL(op - kLoadGlobal0)};
+      CopyCode(buffer, code, arraysize(code));
+      break;
+    }
+    case kS8x16Shuffle: {
+      byte code[] = {WASM_SIMD_OP(kExprS8x16Shuffle)};
+      CopyCode(buffer, code, arraysize(code));
+      Shuffle s = GetRandomTestShuffle(rng);
+      CopyCode(buffer, &s[0], kSimd128Size);
+      break;
+    }
+    case kI8x16Add: {
+      byte code[] = {WASM_SIMD_OP(kExprI8x16Add)};
+      CopyCode(buffer, code, arraysize(code));
+      break;
+    }
+    case kF32x4Add: {
+      byte code[] = {WASM_SIMD_OP(kExprF32x4Mul)};
+      CopyCode(buffer, code, arraysize(code));
+      break;
+    }
+    default:
+      UNREACHABLE();
+      break;
+  }
+}
+
+void BuildSimdProgram(std::vector<byte>* buffer) {
+  BuildSimdOp(buffer, kS8x16Shuffle, 1);
+  byte code[] = {kExprSetGlobal, static_cast<byte>(0), WASM_ONE};
+  CopyCode(buffer, code, arraysize(code));
+}
+
+// Test randomly generated SIMD functions.
+WASM_SIMD_COMPILED_TEST(SimdFuzz) {
+  for (int i = 0; i < 100; ++i) {
+    std::vector<byte> buffer;
+    BuildSimdProgram(&buffer);
+
+    // Run the code using the interpreter to get the expected result.
+    std::array<int8_t, kSimd128Size> expected;
+    RunWasmCode(kExecuteInterpreter, kNoLowerSimd, buffer, &expected);
+    // Run the SIMD or scalar lowered compiled code and compare results.
+    DCHECK_NE(kExecuteInterpreter, execution_mode);
+    std::array<int8_t, kSimd128Size> result;
+    RunWasmCode(execution_mode, lower_simd, buffer, &result);
+    printf("\n");
+    for (size_t j = 0; j < kSimd128Size; ++j) {
+      printf("%i, ", (int)result[j]);
+      CHECK_EQ(result[j], expected[j]);
+    }
   }
 }
 
@@ -2335,7 +2499,6 @@ WASM_SIMD_TEST(SimdLoadStoreLoad) {
 #undef WASM_SIMD_CHECK_SPLAT_F32x4_ESTIMATE
 #undef TO_BYTE
 #undef WASM_SIMD_OP
-#undef WASM_SIMD_SPLAT
 #undef WASM_SIMD_UNOP
 #undef WASM_SIMD_BINOP
 #undef WASM_SIMD_SHIFT_OP
