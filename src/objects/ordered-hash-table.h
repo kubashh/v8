@@ -614,6 +614,59 @@ class OrderedHashSetHandler
       Isolate* isolate, Handle<SmallOrderedHashSet> table);
 };
 
+class OrderedNameDictionary
+    : public OrderedHashTable<OrderedNameDictionary, 3> {
+ public:
+  DECL_CAST(OrderedNameDictionary)
+
+  static Handle<OrderedNameDictionary> Add(Isolate* isolate,
+                                           Handle<OrderedNameDictionary> table,
+                                           Handle<Name> key,
+                                           Handle<Object> value,
+                                           PropertyDetails details);
+
+  static HeapObject* GetEmpty(ReadOnlyRoots ro_roots);
+  static inline RootIndex GetMapRootIndex();
+  static inline bool Is(Handle<HeapObject> table);
+
+  static const int kValueOffset = 1;
+  static const int kPropertyDetailsOffset = 2;
+};
+
+class SmallOrderedNameDictionary
+    : public SmallOrderedHashTable<SmallOrderedNameDictionary> {
+ public:
+  DECL_CAST(SmallOrderedNameDictionary)
+
+  DECL_PRINTER(SmallOrderedNameDictionary)
+
+  static const int kKeyIndex = 0;
+  static const int kValueIndex = 1;
+  static const int kPropertyDetailsIndex = 2;
+
+  static const int kEntrySize = 3;
+
+  // Adds |value| to |table|, if the capacity isn't enough, a new
+  // table is created. The original |table| is returned if there is
+  // capacity to store |value| otherwise the new table is returned.
+  static MaybeHandle<SmallOrderedNameDictionary> Add(
+      Isolate* isolate, Handle<SmallOrderedNameDictionary> table,
+      Handle<Name> key, Handle<Object> value, PropertyDetails details);
+  static inline bool Is(Handle<HeapObject> table);
+  static inline RootIndex GetMapRootIndex();
+};
+
+class OrderedNameDicitionaryHandler
+    : public OrderedHashTableHandler<SmallOrderedNameDictionary,
+                                     OrderedNameDictionary> {
+ public:
+  static Handle<HeapObject> Add(Isolate* isolate, Handle<HeapObject> table,
+                                Handle<Name> key, Handle<Object> value,
+                                PropertyDetails details);
+  static Handle<OrderedNameDictionary> AdjustRepresentation(
+      Isolate* isolate, Handle<SmallOrderedNameDictionary> table);
+};
+
 class JSCollectionIterator : public JSObject {
  public:
   // [table]: the backing hash table mapping keys to values.
