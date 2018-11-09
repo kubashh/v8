@@ -12826,22 +12826,36 @@ void InvalidateOnePrototypeValidityCellInternal(Map* map) {
 }
 
 void InvalidatePrototypeChainsInternal(Map* map) {
-  InvalidateOnePrototypeValidityCellInternal(map);
+  std::set<Map*> work_queue;
+  std::set<Map*> done;
+  work_queue.insert(map);
 
-  Object* maybe_proto_info = map->prototype_info();
-  if (!maybe_proto_info->IsPrototypeInfo()) return;
-  PrototypeInfo* proto_info = PrototypeInfo::cast(maybe_proto_info);
-  WeakArrayList* prototype_users =
-      WeakArrayList::cast(proto_info->prototype_users());
-  // For now, only maps register themselves as users.
-  for (int i = PrototypeUsers::kFirstIndex; i < prototype_users->length();
-       ++i) {
-    HeapObject* heap_object;
-    if (prototype_users->Get(i)->GetHeapObjectIfWeak(&heap_object) &&
-        heap_object->IsMap()) {
-      // Walk the prototype chain (backwards, towards leaf objects) if
-      // necessary.
-      InvalidatePrototypeChainsInternal(Map::cast(heap_object));
+  while (!work_queue.empty()) {
+    auto it = work_queue.begin();
+    work_queue.erase(it);
+    done.insert(*it);
+
+    InvalidateOnePrototypeValidityCellInternal(*it);
+
+    Object* maybe_proto_info = (*it)->prototype_info();
+    if (!maybe_proto_info->IsPrototypeInfo()) continue;
+    PrototypeInfo* proto_info = PrototypeInfo::cast(maybe_proto_info);
+    WeakArrayList* prototype_users =
+        WeakArrayList::cast(proto_info->prototype_users());
+
+    // For now, only maps register themselves as users.
+    for (int i = PrototypeUsers::kFirstIndex; i < prototype_users->length();
+         ++i) {
+      HeapObject* heap_object;
+      if (prototype_users->Get(i)->GetHeapObjectIfWeak(&heap_object) &&
+          heap_object->IsMap()) {
+        // Walk the prototype chain (backwards, towards leaf objects) if
+        // necessary.
+        Map* prototype_user = Map::cast(heap_object);
+        if (done.find(prototype_user) == done.end()) {
+          work_queue.insert(prototype_user);
+        }
+      }
     }
   }
 }
@@ -15603,6 +15617,21 @@ Maybe<bool> JSObject::SetPrototype(Handle<JSObject> object,
   Handle<Map> new_map = Map::TransitionToPrototype(isolate, map, value);
   DCHECK(new_map->prototype() == *value);
   JSObject::MigrateToMap(real_receiver, new_map);
+
+  if (map->is_prototype_map()) {
+    Handle<Object> maybe_proto_info(map->prototype_info(), isolate);
+    if (maybe_proto_info->IsPrototypeInfo()) {
+      Handle<PrototypeInfo> proto_info =
+          Handle<PrototypeInfo>::cast(maybe_proto_info);
+      if (proto_info->prototype_users()->IsWeakArrayList() &&
+          WeakArrayList::cast(proto_info->prototype_users())->length() > 0) {
+        new_map->set_is_prototype_map(true);
+        Handle<PrototypeInfo> new_proto_info =
+            Map::GetOrCreatePrototypeInfo(new_map, isolate);
+        new_proto_info->set_prototype_users(proto_info->prototype_users());
+      }
+    }
+  }
 
   DCHECK(size == object->Size());
   return Just(true);
