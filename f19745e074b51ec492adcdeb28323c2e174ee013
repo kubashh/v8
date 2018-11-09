@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbb93e8a_090de50b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-09T14:17:16Z",
+      "side": 1,
+      "message": "nit: should, proper",
+      "revId": "f19745e074b51ec492adcdeb28323c2e174ee013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feef6fb3_da6b178b",
+        "filename": "src/builtins/builtins-iterator-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-09T14:17:16Z",
+      "side": 1,
+      "message": "nit: I think we have\n\n TVARIABLE(Type, Name, DefaultValue)\n\nAlso, s/varable/var/.",
+      "revId": "f19745e074b51ec492adcdeb28323c2e174ee013",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
