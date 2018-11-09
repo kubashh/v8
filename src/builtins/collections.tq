@@ -1,0 +1,51 @@
+// Copyright 2018 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+module collections {
+  transitioning macro LoadKeyValuePair(implicit context: Context)(
+      o: Object, abortIfMayHaveSideEffects: constexpr bool): KeyValuePair
+      labels MayHaveSideEffects {
+    typeswitch (o) {
+      case (a: FastJSArray): {
+        const length: Smi = a.length;
+        typeswitch (a.elements) {
+          case (elements: FixedArray): {
+            return KeyValuePair{
+              length > 0 ? LoadElementOrUndefined(elements, 0) : Undefined,
+              length > 1 ? LoadElementOrUndefined(elements, 1) : Undefined
+            };
+          }
+          case (elements: FixedDoubleArray): {
+            return KeyValuePair{
+              length > 0 ? LoadDoubleElementOrUndefined(elements, 0) :
+                           Undefined,
+              length > 1 ? LoadDoubleElementOrUndefined(elements, 1) : Undefined
+            };
+          }
+          case (Object): deferred {
+            unreachable;
+          }
+        }
+      }
+      case (receiver: JSReceiver): {
+        if constexpr (abortIfMayHaveSideEffects) {
+          goto MayHaveSideEffects;
+        } else {
+          return KeyValuePair{
+            GetProperty(receiver, Convert<Smi>(0)),
+            GetProperty(receiver, Convert<Smi>(1))
+          };
+        }
+      }
+      case (o: Object): deferred {
+        ThrowTypeError(context, kIteratorValueNotAnObject, o);
+      }
+    }
+  }
+
+  transitioning macro LoadKeyValuePair(implicit context: Context)(o: Object):
+      KeyValuePair {
+    return LoadKeyValuePair(o, false) otherwise unreachable;
+  }
+}

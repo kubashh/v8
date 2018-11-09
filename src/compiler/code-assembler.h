@@ -12,6 +12,7 @@
 // Do not include anything from src/compiler here!
 #include "src/allocation.h"
 #include "src/base/macros.h"
+#include "src/base/optional.h"
 #include "src/builtins/builtins.h"
 #include "src/code-factory.h"
 #include "src/globals.h"
@@ -59,7 +60,6 @@ class PromiseFulfillReactionJobTask;
 class PromiseReaction;
 class PromiseReactionJobTask;
 class PromiseRejectReactionJobTask;
-class TorqueAssembler;
 class WeakFactoryCleanupJobTask;
 class Zone;
 
@@ -810,11 +810,27 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void Branch(SloppyTNode<IntegralT> condition, Label* true_label,
               Label* false_label);
 
-  template <class... Ts>
-  using PLabel = compiler::CodeAssemblerParameterizedLabel<Ts...>;
+  template <class T>
+  TNode<T> Uninitialized() {
+    return {};
+  }
+
+  template <class... T>
+  void Bind(CodeAssemblerParameterizedLabel<T...>* label, TNode<T>*... phis) {
+    Bind(label->plain_label());
+    label->CreatePhis(phis...);
+  }
+  template <class... T, class... Args>
+  void Branch(TNode<BoolT> condition,
+              CodeAssemblerParameterizedLabel<T...>* if_true,
+              CodeAssemblerParameterizedLabel<T...>* if_false, Args... args) {
+    if_true->AddInputs(args...);
+    if_false->AddInputs(args...);
+    Branch(condition, if_true->plain_label(), if_false->plain_label());
+  }
 
   template <class... T, class... Args>
-  void Goto(PLabel<T...>* label, Args... args) {
+  void Goto(CodeAssemblerParameterizedLabel<T...>* label, Args... args) {
     label->AddInputs(args...);
     Goto(label->plain_label());
   }
@@ -1497,7 +1513,6 @@ class CodeAssemblerParameterizedLabel
       : CodeAssemblerParameterizedLabelBase(assembler, kArity, type) {}
 
  private:
-  friend class internal::TorqueAssembler;
   friend class CodeAssembler;
 
   void AddInputs(TNode<Types>... inputs) {
@@ -1583,16 +1598,25 @@ class CodeAssemblerScopedExceptionHandler {
  public:
   CodeAssemblerScopedExceptionHandler(CodeAssembler* assembler,
                                       CodeAssemblerExceptionHandlerLabel* label)
-      : assembler_(assembler) {
-    assembler_->state()->PushExceptionHandler(label);
+      : assembler_(label != nullptr ? assembler : nullptr) {
+    if (label) {
+      assembler_->state()->PushExceptionHandler(label);
+    }
   }
 
+  CodeAssemblerScopedExceptionHandler(
+      CodeAssembler* assembler, CodeAssemblerLabel* label,
+      TypedCodeAssemblerVariable<Object>* exception);
+
   ~CodeAssemblerScopedExceptionHandler() {
-    assembler_->state()->PopExceptionHandler();
+    if (assembler_ != nullptr) {
+      assembler_->state()->PopExceptionHandler();
+    }
   }
 
  private:
   CodeAssembler* assembler_;
+  base::Optional<std::unique_ptr<CodeAssemblerExceptionHandlerLabel>> label_;
 };
 
 }  // namespace compiler
