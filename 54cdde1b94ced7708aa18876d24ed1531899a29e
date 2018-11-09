@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01d4d87b_f1030c05",
+        "filename": "src/deoptimizer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-11-09T13:57:54Z",
+      "side": 1,
+      "message": "Drive-by fix to show the right input index.",
+      "range": {
+        "startLine": 190,
+        "startChar": 6,
+        "endLine": 190,
+        "endChar": 49
+      },
+      "revId": "54cdde1b94ced7708aa18876d24ed1531899a29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
