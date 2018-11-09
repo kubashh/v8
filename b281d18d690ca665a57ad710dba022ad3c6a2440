@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba2c9a77_033330fe",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2720,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-09T10:49:45Z",
+      "side": 1,
+      "message": "Maybe add a comment that this is the destructuring assignment case.",
+      "revId": "b281d18d690ca665a57ad710dba022ad3c6a2440",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
