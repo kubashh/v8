@@ -494,7 +494,17 @@ module array {
     const o: JSReceiver = ToObject_Inline(context, receiver);
 
     // 2. Let len be ? ToLength(? Get(O, "length")).
-    const len: Number = GetLengthProperty(o);
+    let len: Number;
+    // Only handle valid array lengths. Although the spec allows larger values,
+    // this matches historical V8 behavior.
+    try {
+      len = GetLengthPropertyRaw(o) otherwise IfNonJSArrayLength;
+    }
+    label IfNonJSArrayLength(length: Number) deferred {
+      if (length > kMaxUInt32) ThrowTypeError(context, kInvalidArrayLength);
+      len = length;
+    }
+
     // 3. If separator is undefined, let sep be the single-element String ",".
     // 4. Else, let sep be ? ToString(separator).
     let sep: String =
