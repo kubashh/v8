@@ -22,6 +22,30 @@
       "revId": "54cdde1b94ced7708aa18876d24ed1531899a29e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c9a1bee_8ff22a2a",
+        "filename": "src/deoptimizer.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-11-12T09:50:45Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "01d4d87b_f1030c05",
+      "range": {
+        "startLine": 190,
+        "startChar": 6,
+        "endLine": 190,
+        "endChar": 49
+      },
+      "revId": "54cdde1b94ced7708aa18876d24ed1531899a29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

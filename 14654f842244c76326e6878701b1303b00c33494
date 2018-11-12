@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54733ba3_6339ee9a",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-11-12T09:50:45Z",
+      "side": 0,
+      "message": "Does this mean we have to remove the newline in other places, too?",
+      "range": {
+        "startLine": 965,
+        "startChar": 56,
+        "endLine": 965,
+        "endChar": 58
+      },
+      "revId": "14654f842244c76326e6878701b1303b00c33494",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
