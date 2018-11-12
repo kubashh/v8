@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "27c4f2fe_ebf414ce",
+        "filename": "src/compiler/backend/code-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-11-12T17:23:35Z",
+      "side": 1,
+      "message": "I\u0027d favor dropping the multiplication.",
+      "range": {
+        "startLine": 1003,
+        "startChar": 42,
+        "endLine": 1003,
+        "endChar": 76
+      },
+      "revId": "c85d408918c44936c84327dd4df37ad95a1be1aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
