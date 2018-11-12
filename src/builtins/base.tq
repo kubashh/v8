@@ -169,6 +169,7 @@ const kCalledNonCallable: constexpr MessageTemplate
 const kCalledOnNullOrUndefined: constexpr MessageTemplate
     generates 'MessageTemplate::kCalledOnNullOrUndefined';
 
+const kMaxUInt32: constexpr uint32 generates 'kMaxUInt32';
 const kMaxSafeInteger: constexpr float64 generates 'kMaxSafeInteger';
 const kStringMaxLength: constexpr int31 generates 'String::kMaxLength';
 const kFixedArrayMaxLength:
@@ -565,6 +566,7 @@ extern macro ChangeNonnegativeNumberToUintPtr(Number): uintptr;
 
 extern macro NumberConstant(constexpr float64): Number;
 extern macro NumberConstant(constexpr int32): Number;
+extern macro NumberConstant(constexpr uint32): Number;
 extern macro IntPtrConstant(constexpr int31): intptr;
 extern macro IntPtrConstant(constexpr int32): intptr;
 extern macro Int32Constant(constexpr int31): int31;
@@ -601,6 +603,10 @@ FromConstexpr<Number>(i: constexpr int31): Number {
 }
 FromConstexpr<float64>(i: constexpr int31): float64 {
   return Float64Constant(i);
+}
+macro FromConstexpr<A: type>(o: constexpr uint32): A;
+FromConstexpr<Number>(i: constexpr uint32): Number {
+  return NumberConstant(i);
 }
 macro FromConstexpr<A: type>(o: constexpr int32): A;
 FromConstexpr<intptr>(i: constexpr int32): intptr {
