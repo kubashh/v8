@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09efaf99_4bf2d80a",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-12T13:34:56Z",
+      "side": 1,
+      "message": "You use `flags` here, but reading the bytes may have failed and the value you got in return in undefined. I think you should check for an error before using this value.",
+      "range": {
+        "startLine": 1503,
+        "startChar": 10,
+        "endLine": 1503,
+        "endChar": 15
+      },
+      "revId": "bdf8a2c29f4fe41bee1ef09d4d0ef2b32e959ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abd154ed_b96c8bb8",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-12T13:34:56Z",
+      "side": 1,
+      "message": "Can you add unit tests here for the changes to the module decoder? The unittests are also a good documentation of what we expect from the decoder.",
+      "revId": "bdf8a2c29f4fe41bee1ef09d4d0ef2b32e959ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
