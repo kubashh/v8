@@ -36,6 +36,7 @@
 #include "src/heap/mark-compact-inl.h"
 #include "src/heap/mark-compact.h"
 #include "src/heap/memory-reducer.h"
+#include "src/heap/object-locking.h"
 #include "src/heap/object-stats.h"
 #include "src/heap/objects-visiting-inl.h"
 #include "src/heap/objects-visiting.h"
@@ -2526,6 +2527,9 @@ FixedArrayBase* Heap::LeftTrimFixedArray(FixedArrayBase* object,
   }
   CHECK_NOT_NULL(object);
   DCHECK(CanMoveObjectStart(object));
+
+  ObjectLocking::Lock(object);
+
   // Add custom visitor to concurrent marker if new left-trimmable type
   // is added.
   DCHECK(object->IsFixedArray() || object->IsFixedDoubleArray());
@@ -2606,6 +2610,7 @@ FixedArrayBase* Heap::LeftTrimFixedArray(FixedArrayBase* object,
   }
 #endif  // ENABLE_SLOW_DCHECKS
 
+  ObjectLocking::Unlock(object);
   return new_object;
 }
 
@@ -2964,7 +2969,8 @@ void Heap::RegisterDeserializedObjectsForBlackAllocation(
 void Heap::NotifyObjectLayoutChange(HeapObject* object, int size,
                                     const DisallowHeapAllocation&) {
   if (incremental_marking()->IsMarking()) {
-    incremental_marking()->MarkBlackAndPush(object);
+    ObjectLocking::Lock(object);
+    locked_layout_change_object_ = object;
     if (incremental_marking()->IsCompacting() &&
         MayContainRecordedSlots(object)) {
       MemoryChunk::FromHeapObject(object)->RegisterObjectWithInvalidatedSlots(

@@ -933,6 +933,13 @@ class MarkingVisitor final
   V8_INLINE int VisitTransitionArray(Map* map, TransitionArray* object);
   V8_INLINE int VisitJSWeakCell(Map* map, JSWeakCell* object);
 
+  // Left-trimming may leave fillers on the worklist.
+  V8_INLINE int VisitDataObject(Map* map, HeapObject* object);
+  V8_INLINE int VisitFreeSpace(Map* map, FreeSpace* object);
+
+  V8_INLINE int VisitLeftTrimmedFixedArrayFromFiller(Map* map,
+                                                     HeapObject* object);
+
   // ObjectVisitor implementation.
   V8_INLINE void VisitPointer(HeapObject* host, ObjectSlot p) final;
   V8_INLINE void VisitPointer(HeapObject* host, MaybeObjectSlot p) final;
