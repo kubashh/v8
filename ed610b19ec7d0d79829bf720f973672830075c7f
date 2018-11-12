@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e5cd73e_0831e06f",
+        "filename": "src/objects/ordered-hash-table-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-12T14:36:08Z",
+      "side": 1,
+      "message": "Can\u0027t this be verified in GetDataEntry?",
+      "revId": "ed610b19ec7d0d79829bf720f973672830075c7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01ff490c_7e083749",
+        "filename": "src/objects/ordered-hash-table-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-12T14:36:08Z",
+      "side": 1,
+      "message": "the kNotFound check should just happen in SetDataEntry, no need to do it here I think.",
+      "revId": "ed610b19ec7d0d79829bf720f973672830075c7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aa488ed_3de42e74",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1574,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-12T14:36:08Z",
+      "side": 1,
+      "message": "Since you verify the entry in ValueAt you technically don\u0027t need these kind of checks in the tests.",
+      "revId": "ed610b19ec7d0d79829bf720f973672830075c7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3edd2d5_c2bd23d7",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1577,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-12T14:36:08Z",
+      "side": 1,
+      "message": "You want direct pointer comparison here and below (SameValue is too permissive):\n\n  CHECK_EQ(*found, *value);",
+      "revId": "ed610b19ec7d0d79829bf720f973672830075c7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ea119a1_f192cc15",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1663,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-12T14:36:08Z",
+      "side": 1,
+      "message": "key1",
+      "revId": "ed610b19ec7d0d79829bf720f973672830075c7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4d78b79_69cd5657",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-12T14:36:08Z",
+      "side": 1,
+      "message": "CHECK_NE(PropertyDetails::Empty().AsSmi(), found.AsSmi());",
+      "revId": "ed610b19ec7d0d79829bf720f973672830075c7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2773106e_c652f1da",
+        "filename": "test/cctest/test-orderedhashtable.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1673,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2018-11-12T14:36:08Z",
+      "side": 1,
+      "message": "CHECK_EQ not needed.",
+      "revId": "ed610b19ec7d0d79829bf720f973672830075c7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
