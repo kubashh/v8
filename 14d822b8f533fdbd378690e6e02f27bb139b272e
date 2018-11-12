@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c43c562_103654c1",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-11-12T04:51:53Z",
+      "side": 1,
+      "message": "Not thrilled with the name, have any suggestions about the name or approach?",
+      "revId": "14d822b8f533fdbd378690e6e02f27bb139b272e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
