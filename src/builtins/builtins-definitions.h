@@ -1216,6 +1216,7 @@ namespace internal {
   /* Wasm */                                                                   \
   ASM(WasmCompileLazy)                                                         \
   TFC(WasmAllocateHeapNumber, AllocateHeapNumber, 1)                           \
+  TFC(WasmAtomicWake, WasmAtomicWake, 1)                                       \
   TFC(WasmCallJavaScript, CallTrampoline, 1)                                   \
   TFC(WasmMemoryGrow, WasmMemoryGrow, 1)                                       \
   TFC(WasmRecordWrite, RecordWrite, 1)                                         \
@@ -1513,6 +1514,7 @@ namespace internal {
 #define WASM_RUNTIME_STUB_LIST(V, VTRAP) \
   FOREACH_WASM_TRAPREASON(VTRAP)         \
   V(WasmAllocateHeapNumber)              \
+  V(WasmAtomicWake)                      \
   V(WasmCallJavaScript)                  \
   V(WasmMemoryGrow)                      \
   V(WasmRecordWrite)                     \

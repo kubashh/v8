@@ -98,6 +98,19 @@ TF_BUILTIN(WasmThrow, WasmBuiltinsAssembler) {
   TailCallRuntimeWithCEntry(Runtime::kThrow, centry, context, exception);
 }
 
+TF_BUILTIN(WasmAtomicWake, WasmBuiltinsAssembler) {
+  TNode<Object> address = UncheckedParameter(Descriptor::kAddress);
+  TNode<Object> count = UncheckedParameter(Descriptor::kCount);
+
+  TNode<Object> instance = LoadInstanceFromFrame();
+  TNode<Code> centry = LoadCEntryFromInstance(instance);
+
+  TNode<Smi> result_smi = UncheckedCast<Smi>(
+      CallRuntimeWithCEntry(Runtime::kWasmAtomicWake, centry,
+                            NoContextConstant(), instance, address, count));
+  ReturnRaw(SmiToInt32(result_smi));
+}
+
 TF_BUILTIN(WasmMemoryGrow, WasmBuiltinsAssembler) {
   TNode<Int32T> num_pages =
       UncheckedCast<Int32T>(Parameter(Descriptor::kNumPages));
