@@ -411,6 +411,7 @@ bool IsJSCompatibleSignature(const FunctionSig* sig);
   V(I64UConvertSatF64, 0xfc07, l_d)
 
 #define FOREACH_ATOMIC_OPCODE(V)                \
+  V(I32AtomicWake, 0xfe00, i_ii)                \
   V(I32AtomicLoad, 0xfe10, i_i)                 \
   V(I64AtomicLoad, 0xfe11, l_i)                 \
   V(I32AtomicLoad8U, 0xfe12, i_i)               \
