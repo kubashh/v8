@@ -246,6 +246,7 @@ class ParserBase {
         allow_harmony_dynamic_import_(false),
         allow_harmony_import_meta_(false),
         allow_harmony_private_fields_(false),
+        allow_harmony_private_methods_(false),
         allow_eval_cache_(true) {
     pointer_buffer_.reserve(128);
   }
@@ -276,6 +277,13 @@ class ParserBase {
   }
   void set_allow_harmony_private_fields(bool allow) {
     scanner()->set_allow_harmony_private_fields(allow);
+  }
+
+  bool allow_harmony_private_methods() const {
+    return scanner()->allow_harmony_private_methods();
+  }
+  void set_allow_harmony_private_methods(bool allow) {
+    scanner()->set_allow_harmony_private_methods(allow);
   }
 
   uintptr_t stack_limit() const { return stack_limit_; }
@@ -1008,7 +1016,8 @@ class ParserBase {
 
   ExpressionT ParsePropertyName(IdentifierT* name, ParsePropertyKind* kind,
                                 ParseFunctionFlags* flags,
-                                bool* is_computed_name, bool* is_private);
+                                bool* is_computed_name, bool* is_private,
+                                bool* is_static);
   ExpressionT ParseObjectLiteral();
   ClassLiteralPropertyT ParseClassPropertyDefinition(
       ClassLiteralChecker* checker, ClassInfo* class_info,
@@ -1438,6 +1447,7 @@ class ParserBase {
   bool allow_harmony_dynamic_import_;
   bool allow_harmony_import_meta_;
   bool allow_harmony_private_fields_;
+  bool allow_harmony_private_methods_;
   bool allow_eval_cache_;
 };
 
@@ -1589,7 +1599,8 @@ ParserBase<Impl>::ParseIdentifierNameOrPrivateName() {
   int pos = position();
   IdentifierT name;
   ExpressionT key;
-  if (allow_harmony_private_fields() && Check(Token::PRIVATE_NAME)) {
+  if ((allow_harmony_private_methods() || allow_harmony_private_fields()) &&
+      Check(Token::PRIVATE_NAME)) {
     name = impl()->GetSymbol();
     auto key_proxy =
         impl()->ExpressionFromIdentifier(name, pos, InferName::kNo);
@@ -1965,9 +1976,6 @@ inline bool ParsePropertyKindFromToken(Token::Value token,
     case Token::SEMICOLON:
       *kind = ParsePropertyKind::kClassField;
       return true;
-    case Token::PRIVATE_NAME:
-      *kind = ParsePropertyKind::kClassField;
-      return true;
     default:
       break;
   }
@@ -1992,7 +2000,7 @@ inline bool ParseAsAccessor(Token::Value token, Token::Value contextual_token,
 template <class Impl>
 typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParsePropertyName(
     IdentifierT* name, ParsePropertyKind* kind, ParseFunctionFlags* flags,
-    bool* is_computed_name, bool* is_private) {
+    bool* is_computed_name, bool* is_private, bool* is_static) {
   DCHECK_EQ(ParsePropertyKind::kNotSet, *kind);
   DCHECK_EQ(*flags, ParseFunctionFlag::kIsNormal);
   DCHECK(!*is_computed_name);
@@ -2014,11 +2022,64 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParsePropertyName(
     *kind = ParsePropertyKind::kMethod;
   }
 
-  if (*kind == ParsePropertyKind::kNotSet && Check(Token::IDENTIFIER) &&
-      !ParseAsAccessor(peek(), scanner()->current_contextual_token(), kind)) {
+  if (peek() == Token::PRIVATE_NAME) {
+    if (*is_static ||
+        !(allow_harmony_private_fields() || allow_harmony_private_methods())) {
+      return impl()->FailureExpression();
+    }
+
+    *is_private = true;
+    Consume(Token::PRIVATE_NAME);
+    if (peek() == Token::LPAREN && !allow_harmony_private_methods()) {
+      return impl()->FailureExpression();
+    }
     *name = impl()->GetSymbol();
     impl()->PushLiteralName(*name);
-    return factory()->NewStringLiteral(*name, position());
+
+    if (*kind == ParsePropertyKind::kNotSet) {
+      ParsePropertyKindFromToken(peek(), kind);
+    }
+
+    switch (*kind) {
+      case ParsePropertyKind::kMethod:
+        if (allow_harmony_private_methods()) {
+          return factory()->NewStringLiteral(*name, position());
+        }
+        break;
+      case ParsePropertyKind::kClassField:
+        if (allow_harmony_private_fields()) {
+          return factory()->NewStringLiteral(*name, position());
+        }
+        break;
+      case ParsePropertyKind::kShorthand:
+        if (peek() != Token::COMMA) {
+          return factory()->NewStringLiteral(*name, position());
+        }
+        break;
+      default:
+        // Allow ASI.
+        return factory()->NewStringLiteral(*name, position());
+    }
+  }
+
+  if (*kind == ParsePropertyKind::kNotSet && Check(Token::IDENTIFIER)) {
+    if (!ParseAsAccessor(peek(), scanner()->current_contextual_token(), kind)) {
+      *name = impl()->GetSymbol();
+      impl()->PushLiteralName(*name);
+      return factory()->NewStringLiteral(*name, position());
+    }
+    // Private accessors
+    if (peek() == Token::PRIVATE_NAME) {
+      if (!*is_static && allow_harmony_private_methods()) {
+        *is_private = true;
+        Consume(Token::PRIVATE_NAME);
+        *name = impl()->GetSymbol();
+        impl()->PushLiteralName(*name);
+        return factory()->NewStringLiteral(*name, position());
+      }
+
+      return impl()->FailureExpression();
+    }
   }
 
   int pos = peek_position();
@@ -2127,8 +2188,9 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
   ParsePropertyKind kind = ParsePropertyKind::kNotSet;
 
   Token::Value name_token = peek();
-  DCHECK_IMPLIES(name_token == Token::PRIVATE_NAME,
-                 allow_harmony_private_fields());
+  DCHECK_IMPLIES(
+      name_token == Token::PRIVATE_NAME,
+      allow_harmony_private_fields() || allow_harmony_private_methods());
 
   int property_beg_pos = scanner()->peek_location().beg_pos;
   int name_token_position = property_beg_pos;
@@ -2146,23 +2208,24 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
       *name = impl()->GetSymbol();  // TODO(bakkot) specialize on 'static'
       name_expression = factory()->NewStringLiteral(*name, position());
     } else if (peek() == Token::PRIVATE_NAME) {
-      DCHECK(allow_harmony_private_fields());
       // TODO(gsathya): Make a better error message for this.
       ReportUnexpectedToken(Next());
       return impl()->NullLiteralProperty();
     } else {
       *is_static = true;
-      name_expression = ParsePropertyName(name, &kind, &function_flags,
-                                          is_computed_name, is_private);
+      name_expression =
+          ParsePropertyName(name, &kind, &function_flags, is_computed_name,
+                            is_private, is_static);
     }
-  } else if (name_token == Token::PRIVATE_NAME) {
-    Consume(Token::PRIVATE_NAME);
-    *is_private = true;
-    *name = impl()->GetSymbol();
-    name_expression = factory()->NewStringLiteral(*name, position());
   } else {
-    name_expression = ParsePropertyName(name, &kind, &function_flags,
-                                        is_computed_name, is_private);
+    name_expression = ParsePropertyName(
+        name, &kind, &function_flags, is_computed_name, is_private, is_static);
+  }
+
+  if (name_expression->IsFailureExpression()) {
+    // TODO(joyee): Make a better error message for this.
+    ReportUnexpectedToken(Next());
+    return impl()->NullLiteralProperty();
   }
 
   if (!class_info->has_name_static_property && *is_static &&
@@ -2344,13 +2407,16 @@ ParserBase<Impl>::ParseObjectPropertyDefinition(bool* has_seen_proto,
   int next_end_pos = peek_end_position();
 
   bool is_private = false;
+  bool is_static = false;
   ExpressionT name_expression = ParsePropertyName(
-      &name, &kind, &function_flags, is_computed_name, &is_private);
+      &name, &kind, &function_flags, is_computed_name, &is_private, &is_static);
 
-  if (is_private) {
-    // TODO(joyee): private names in object literals should be Syntax Errors
-    // https://tc39.github.io/proposal-private-methods/#prod-PropertyDefinition
-  }
+  // TODO(joyee): private names or static in object literals should
+  // be Syntax Errors
+  // https://tc39.github.io/proposal-private-methods/#prod-PropertyDefinition
+  DCHECK(!is_private);
+  DCHECK(!is_static);
+
   switch (kind) {
     case ParsePropertyKind::kSpread:
       DCHECK_EQ(function_flags, ParseFunctionFlag::kIsNormal);
@@ -4257,7 +4323,7 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseClassLiteral(
     FuncNameInferrerState fni_state(&fni_);
     bool is_computed_name = false;  // Classes do not care about computed
                                     // property names here.
-    bool is_static;
+    bool is_static = false;
     bool is_private = false;
     ClassLiteralProperty::Kind property_kind;
     ExpressionClassifier property_classifier(this);
