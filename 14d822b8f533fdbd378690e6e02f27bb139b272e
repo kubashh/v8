@@ -34,6 +34,24 @@
       "revId": "14d822b8f533fdbd378690e6e02f27bb139b272e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b47f4ce8_51520d97",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2018-11-12T09:24:44Z",
+      "side": 1,
+      "message": "Yeah, I was trying to avoid all that comes with BranchIfNumberLess (2x TaggedIsSmi, Branch, and SmiEqual) in the fast path case.\n\nBut it sounds like it\u0027s a bit much, I\u0027ve reverted and just does the check all the time.",
+      "parentUuid": "df5a2b1a_aa8592a3",
+      "revId": "14d822b8f533fdbd378690e6e02f27bb139b272e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
