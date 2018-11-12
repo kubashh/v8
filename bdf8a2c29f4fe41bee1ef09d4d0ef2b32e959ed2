@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "283ff5ed_c71ed419",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1503,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-12T23:00:45Z",
+      "side": 1,
+      "message": "I\u0027m not sure I see the issue. `consume_u32v` may return an incomplete value, but it doesn\u0027t look like it ever returns a undefined value in the C++ sense. If we use it here, we may get an extra error message, but it would have been somewhat correct anyway, since we already started to parse a non-zero u32v value. In any case, I added some failed/return checks.",
+      "parentUuid": "09efaf99_4bf2d80a",
+      "range": {
+        "startLine": 1503,
+        "startChar": 10,
+        "endLine": 1503,
+        "endChar": 15
+      },
+      "revId": "bdf8a2c29f4fe41bee1ef09d4d0ef2b32e959ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "abd154ed_b96c8bb8",
         "filename": "test/unittests/wasm/module-decoder-unittest.cc",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "bdf8a2c29f4fe41bee1ef09d4d0ef2b32e959ed2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb611538_07c07569",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-12T23:00:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abd154ed_b96c8bb8",
+      "revId": "bdf8a2c29f4fe41bee1ef09d4d0ef2b32e959ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
