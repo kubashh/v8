@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "174ad1e8_0df2bfc1",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T23:03:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "234db0fe_bb4463cf",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9adce5b_2399921a",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "964f31b8_46119cff",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T23:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9adce5b_2399921a",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "ff67d090_4f8ec8c9",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T23:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7859d25_19d7c184",
+      "range": {
+        "startLine": 1028,
+        "startChar": 54,
+        "endLine": 1028,
+        "endChar": 69
+      },
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a563d9e_bc9406eb",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 6
@@ -70,6 +130,24 @@
       "writtenOn": "2018-11-13T20:06:12Z",
       "side": 1,
       "message": "When does this happen? A private field with a non private constructor?",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "391a45ee_f9ac9f2d",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 5863,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T23:03:38Z",
+      "side": 1,
+      "message": "Looks like git add -p failures during experiments. Removed.",
+      "parentUuid": "8a563d9e_bc9406eb",
       "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "d21f888b_40c779f1",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T23:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a529c999_282069fb",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea47abf6_dd776fc7",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 6
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "bd7d3db4_e9a0de28",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5183,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T23:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea47abf6_dd776fc7",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a69142f_b175f2b0",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 6
@@ -124,6 +238,24 @@
       "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd42993f_24bef36d",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5301,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T23:03:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a69142f_b175f2b0",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
