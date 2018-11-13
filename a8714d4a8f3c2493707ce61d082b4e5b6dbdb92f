@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "234db0fe_bb4463cf",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T20:06:12Z",
+      "side": 1,
+      "message": "You can create an accessor here for the flag",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9adce5b_2399921a",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T20:06:12Z",
+      "side": 1,
+      "message": "This can be removed.",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7859d25_19d7c184",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T20:06:12Z",
+      "side": 1,
+      "message": "I don\u0027t think this is necessary",
+      "range": {
+        "startLine": 1028,
+        "startChar": 54,
+        "endLine": 1028,
+        "endChar": 69
+      },
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a563d9e_bc9406eb",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 5863,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T20:06:12Z",
+      "side": 1,
+      "message": "When does this happen? A private field with a non private constructor?",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a529c999_282069fb",
+        "filename": "src/parsing/scanner.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T20:06:12Z",
+      "side": 1,
+      "message": "All the changes here can be reverted",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea47abf6_dd776fc7",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5183,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T20:06:12Z",
+      "side": 1,
+      "message": "Please add tests with\n* more than one private method\n* more than one accessor pair\n* private method and accessor\n* public methods, static methods",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a69142f_b175f2b0",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5301,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T20:06:12Z",
+      "side": 1,
+      "message": "#a \u003d\u003e {}\nasync #a \u003d\u003e {}",
+      "revId": "a8714d4a8f3c2493707ce61d082b4e5b6dbdb92f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
