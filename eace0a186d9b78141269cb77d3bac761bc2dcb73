@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2056639_4461d0ec",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-11-13T06:30:17Z",
+      "side": 1,
+      "message": "Maybe it makes sense to split into platform dependent files and choose the right one in the build config?",
+      "range": {
+        "startLine": 213,
+        "startChar": 14,
+        "endLine": 213,
+        "endChar": 23
+      },
+      "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
