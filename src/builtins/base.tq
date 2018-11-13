@@ -276,7 +276,7 @@ extern macro ArraySpeciesCreate(Context, Object, Number): JSReceiver;
 extern macro ArrayCreate(implicit context: Context)(Number): JSArray;
 extern macro InternalArrayCreate(Context, Number): JSArray;
 extern macro EnsureArrayPushable(Map): ElementsKind
-    labels Bailout;
+labels Bailout;
 extern macro EnsureArrayLengthWritable(Map) labels Bailout;
 // TODO: Reduce duplication once varargs are supported in macros.
 extern macro Construct(implicit context: Context)(
@@ -362,19 +362,19 @@ extern operator '!=' macro Float64NotEqual(float64, float64): bool;
 extern operator '>' macro Float64GreaterThan(float64, float64): bool;
 
 extern operator '==' macro BranchIfNumberEqual(Number, Number): never
-    labels Taken, NotTaken;
+labels Taken, NotTaken;
 extern operator '!=' macro BranchIfNumberNotEqual(Number, Number): never
-    labels Taken, NotTaken;
+labels Taken, NotTaken;
 extern operator '<' macro BranchIfNumberLessThan(Number, Number): never
-    labels Taken, NotTaken;
+labels Taken, NotTaken;
 extern operator '<=' macro BranchIfNumberLessThanOrEqual(Number, Number): never
-    labels Taken, NotTaken;
+labels Taken, NotTaken;
 
 extern operator '>' macro BranchIfNumberGreaterThan(Number, Number): never
-    labels Taken, NotTaken;
-extern operator '>=' macro BranchIfNumberGreaterThanOrEqual(Number, Number):
-    never
-    labels Taken, NotTaken;
+labels Taken, NotTaken;
+extern operator '>=' macro BranchIfNumberGreaterThanOrEqual(
+    Number, Number): never
+labels Taken, NotTaken;
 
 extern operator '==' macro WordEqual(Object, Object): bool;
 extern operator '!=' macro WordNotEqual(Object, Object): bool;
@@ -459,88 +459,88 @@ extern macro TaggedIsPositiveSmi(Object): bool;
 extern macro IsValidPositiveSmi(intptr): bool;
 
 extern macro HeapObjectToJSDataView(HeapObject): JSDataView
-    labels CastError;
+labels CastError;
 extern macro TaggedToHeapObject(Object): HeapObject
-    labels CastError;
+labels CastError;
 extern macro TaggedToSmi(Object): Smi
-    labels CastError;
+labels CastError;
 extern macro HeapObjectToJSArray(HeapObject): JSArray
-    labels CastError;
+labels CastError;
 extern macro HeapObjectToCallable(HeapObject): Callable
-    labels CastError;
+labels CastError;
 extern macro HeapObjectToFixedArray(HeapObject): FixedArray
-    labels CastError;
+labels CastError;
 extern macro HeapObjectToFixedDoubleArray(HeapObject): FixedDoubleArray
-    labels CastError;
+labels CastError;
 extern macro HeapObjectToString(HeapObject): String
-    labels CastError;
+labels CastError;
 extern macro HeapObjectToConstructor(HeapObject): Constructor
-    labels CastError;
+labels CastError;
 extern macro HeapObjectToHeapNumber(HeapObject): HeapNumber
-    labels CastError;
+labels CastError;
 extern macro HeapObjectToSloppyArgumentsElements(HeapObject):
     SloppyArgumentsElements
-    labels CastError;
+labels CastError;
 extern macro TaggedToNumber(Object): Number
-    labels CastError;
+labels CastError;
 
 macro CastHeapObject<A: type>(o: HeapObject): A
-    labels CastError;
+labels CastError;
 CastHeapObject<HeapObject>(o: HeapObject): HeapObject
-    labels CastError {
+labels CastError {
   return o;
 }
 CastHeapObject<FixedArray>(o: HeapObject): FixedArray
-    labels CastError {
+labels CastError {
   return HeapObjectToFixedArray(o) otherwise CastError;
 }
 CastHeapObject<FixedDoubleArray>(o: HeapObject): FixedDoubleArray
-    labels CastError {
+labels CastError {
   return HeapObjectToFixedDoubleArray(o) otherwise CastError;
 }
 CastHeapObject<SloppyArgumentsElements>(o: HeapObject): SloppyArgumentsElements
-    labels CastError {
+labels CastError {
   return HeapObjectToSloppyArgumentsElements(o) otherwise CastError;
 }
 CastHeapObject<JSDataView>(o: HeapObject): JSDataView
-    labels CastError {
+labels CastError {
   return HeapObjectToJSDataView(o) otherwise CastError;
 }
 CastHeapObject<Callable>(o: HeapObject): Callable
-    labels CastError {
+labels CastError {
   return HeapObjectToCallable(o) otherwise CastError;
 }
 CastHeapObject<JSArray>(o: HeapObject): JSArray
-    labels CastError {
+labels CastError {
   return HeapObjectToJSArray(o) otherwise CastError;
 }
 CastHeapObject<String>(o: HeapObject): String
-    labels CastError {
+labels CastError {
   return HeapObjectToString(o) otherwise CastError;
 }
 CastHeapObject<Constructor>(o: HeapObject): Constructor
-    labels CastError {
+labels CastError {
   return HeapObjectToConstructor(o) otherwise CastError;
 }
 
 macro Cast<A: type>(o: HeapObject): A
-    labels CastError {
+labels CastError {
   return CastHeapObject<A>(o) otherwise CastError;
 }
 
 // CastHeapObject allows this default-implementation to be non-recursive.
 // Otherwise the generated CSA code might run into infinite recursion.
 macro Cast<A: type>(o: Object): A
-    labels CastError {
+labels CastError {
   return CastHeapObject<A>(TaggedToHeapObject(o) otherwise CastError)
       otherwise CastError;
 }
 Cast<Smi>(o: Object): Smi
-    labels CastError {
+labels CastError {
   return TaggedToSmi(o) otherwise CastError;
 }
 Cast<Number>(o: Object): Number
-    labels CastError {
+labels CastError {
   return TaggedToNumber(o) otherwise CastError;
 }
 
@@ -822,7 +822,7 @@ extern macro RawCastObjectToFastJSArrayForCopy(Object): FastJSArrayForCopy;
 
 macro BranchIfJSArgumentsObjectWithLength(implicit context: Context)(o: Object):
     never
-    labels True, False {
+labels True, False {
   const heapObject: HeapObject = Cast<HeapObject>(o) otherwise False;
   const map: Map = heapObject.map;
   if (IsFastAliasedArgumentsMap(map)) goto True;
@@ -840,7 +840,7 @@ UnsafeCast<JSArgumentsObjectWithLength>(implicit context: Context)(o: Object):
 
 Cast<JSArgumentsObjectWithLength>(implicit context: Context)(o: Object):
     JSArgumentsObjectWithLength
-    labels CastError {
+labels CastError {
   if (BranchIfJSArgumentsObjectWithLength(o)) {
     return UnsafeCast<JSArgumentsObjectWithLength>(o);
   } else {
@@ -854,7 +854,7 @@ UnsafeCast<FastJSArray>(implicit context: Context)(o: Object): FastJSArray {
 }
 
 Cast<FastJSArray>(implicit context: Context)(o: Object): FastJSArray
-    labels CastError {
+labels CastError {
   if (BranchIfFastJSArray(o, context)) {
     return UnsafeCast<FastJSArray>(o);
   } else {
@@ -863,7 +863,7 @@ Cast<FastJSArray>(implicit context: Context)(o: Object): FastJSArray
 }
 
 Cast<FastJSArray>(implicit context: Context)(ho: HeapObject): FastJSArray
-    labels CastError {
+labels CastError {
   if (BranchIfFastJSArray(ho, context)) {
     return UnsafeCast<FastJSArray>(ho);
   } else {
@@ -879,7 +879,7 @@ UnsafeCast<FastJSArrayForCopy>(implicit context: Context)(o: Object):
 
 Cast<FastJSArrayForCopy>(implicit context: Context)(o: Object):
     FastJSArrayForCopy
-    labels CastError {
+labels CastError {
   if (BranchIfFastJSArrayForCopy(o, context)) {
     return UnsafeCast<FastJSArrayForCopy>(o);
   } else {
@@ -893,7 +893,7 @@ UnsafeCast<JSFunction>(implicit context: Context)(o: Object): JSFunction {
 }
 
 Cast<JSFunction>(implicit context: Context)(o: Object): JSFunction
-    labels CastError {
+labels CastError {
   if (IsJSFunction(Cast<HeapObject>(o) otherwise CastError)) {
     return UnsafeCast<JSFunction>(o);
   } else {
@@ -902,7 +902,7 @@ Cast<JSFunction>(implicit context: Context)(o: Object): JSFunction
 }
 
 Cast<Map>(o: Object): Map
-    labels CastError {
+labels CastError {
   if (IsMap(Cast<HeapObject>(o) otherwise CastError)) {
     return UnsafeCast<Map>(o);
   } else {
@@ -911,7 +911,7 @@ Cast<Map>(o: Object): Map
 }
 
 Cast<JSReceiver>(o: Object): JSReceiver
-    labels CastError {
+labels CastError {
   if (IsJSReceiver(Cast<HeapObject>(o) otherwise CastError)) {
     return UnsafeCast<JSReceiver>(o);
   } else {
@@ -924,14 +924,13 @@ const kEmptyFixedArray: FixedArrayBase =
     UnsafeCast<FixedArrayBase>(LoadRoot(kEmptyFixedArrayRootIndex));
 
 extern macro BranchIfFastJSArray(Object, Context): never
-    labels Taken, NotTaken;
+labels Taken, NotTaken;
 extern macro BranchIfFastJSArrayForCopy(Object, Context): never
-    labels Taken, NotTaken;
+labels Taken, NotTaken;
 extern macro BranchIfNotFastJSArray(Object, Context): never
-    labels Taken, NotTaken;
-macro BranchIfNotFastJSArrayForCopy(implicit context: Context)(o: Object):
-    never
-    labels Taken, NotTaken {
+labels Taken, NotTaken;
+macro BranchIfNotFastJSArrayForCopy(implicit context: Context)(o: Object): never
+labels Taken, NotTaken {
   BranchIfFastJSArrayForCopy(o, context) otherwise NotTaken, Taken;
 }
 
@@ -1006,7 +1005,7 @@ macro StoreFixedDoubleArrayElementWithSmiIndex(
 extern macro GetNumberDictionaryNumberOfElements(NumberDictionary): Smi;
 
 extern macro BasicLoadNumberDictionaryElement(NumberDictionary, intptr): Object
-    labels NotData, IfHole;
+labels NotData, IfHole;
 extern macro BasicStoreNumberDictionaryElement(NumberDictionary, intptr, Object)
 labels NotData, IfHole, ReadOnly;
 
@@ -1061,9 +1060,9 @@ extern operator '[]=' macro StoreFixedDoubleArrayElementSmi(
     FixedDoubleArray, Smi, float64): void;
 
 extern macro LoadDoubleWithHoleCheck(FixedDoubleArray, Smi): float64
-    labels IfHole;
+labels IfHole;
 extern macro LoadDoubleWithHoleCheck(FixedDoubleArray, intptr): float64
-    labels IfHole;
+labels IfHole;
 extern macro StoreFixedDoubleArrayHoleSmi(FixedDoubleArray, Smi): void;
 
 macro GetObjectFunction(implicit context: Context)(): JSFunction {
@@ -1125,10 +1124,10 @@ macro TorqueCopyElements(
 }
 
 transitioning macro LoadElementNoHole<T: type>(a: JSArray, index: Smi): Object
-    labels IfHole;
+labels IfHole;
 
 LoadElementNoHole<FixedArray>(a: JSArray, index: Smi): Object
-    labels IfHole {
+labels IfHole {
   try {
     let elements: FixedArray =
         Cast<FixedArray>(a.elements) otherwise Unexpected;
@@ -1144,7 +1143,7 @@ LoadElementNoHole<FixedArray>(a: JSArray, index: Smi): Object
 }
 
 LoadElementNoHole<FixedDoubleArray>(a: JSArray, index: Smi): Object
-    labels IfHole {
+labels IfHole {
   try {
     let elements: FixedDoubleArray =
         Cast<FixedDoubleArray>(a.elements) otherwise Unexpected;
@@ -1156,9 +1155,8 @@ LoadElementNoHole<FixedDoubleArray>(a: JSArray, index: Smi): Object
   }
 }
 
-extern macro TransitionElementsKind(JSObject, Map, ElementsKind, ElementsKind):
-    void
-    labels Bailout;
+extern macro TransitionElementsKind(
+    JSObject, Map, ElementsKind, ElementsKind): void labels Bailout;
 
 extern macro IsCallable(HeapObject): bool;
 extern macro IsJSArray(HeapObject): bool;
@@ -1190,7 +1188,7 @@ macro NumberIsNaN(number: Number): bool {
 }
 
 extern macro BranchIfToBooleanIsTrue(Object): never
-    labels Taken, NotTaken;
+labels Taken, NotTaken;
 
 macro ToBoolean(obj: Object): bool {
   if (BranchIfToBooleanIsTrue(obj)) {
@@ -1201,7 +1199,7 @@ macro ToBoolean(obj: Object): bool {
 }
 
 macro ToIndex(input: Object, context: Context): Number
-    labels RangeError {
+labels RangeError {
   if (input == Undefined) {
     return 0;
   }
@@ -1241,7 +1239,7 @@ extern macro AllocateSeqOneByteString(implicit context: Context)(uint32):
 extern macro AllocateSeqTwoByteString(implicit context: Context)(uint32):
     String;
 extern macro TryIntPtrAdd(intptr, intptr): intptr
-    labels IfOverflow;
+labels IfOverflow;
 
 extern builtin ObjectToString(Context, Object): Object;
 extern builtin StringRepeat(Context, String, Number): String;

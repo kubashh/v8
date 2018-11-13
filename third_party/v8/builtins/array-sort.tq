@@ -13,7 +13,7 @@
 //
 // https://github.com/python/cpython/blob/master/Objects/listsort.txt
 
-module array {
+namespace array {
   // All accessors bail to the GenericElementsAccessor if assumptions checked
   // by "CanUseSameAccessor<>" are violated:
   //  Generic <- FastPackedSmi
@@ -351,7 +351,7 @@ module array {
 
   macro CallCompareFn(
       context: Context, sortState: FixedArray, x: Object, y: Object): Number
-      labels Bailout {
+  labels Bailout {
     const userCmpFn: Object = sortState[kUserCmpFnIdx];
     const sortCompare: CompareBuiltinFn =
         UnsafeCast<CompareBuiltinFn>(sortState[kSortComparePtrIdx]);
@@ -489,7 +489,7 @@ module array {
   macro CallLoad(
       context: Context, sortState: FixedArray, load: LoadFn,
       elements: HeapObject, index: Smi): Object
-      labels Bailout {
+  labels Bailout {
     const result: Object = load(context, sortState, elements, index);
     EnsureSuccess(sortState) otherwise Bailout;
     return result;
@@ -522,7 +522,7 @@ module array {
   macro CallGallopRight(
       context: Context, sortState: FixedArray, load: LoadFn, key: Object,
       base: Smi, length: Smi, hint: Smi, useTempArray: Boolean): Smi
-      labels Bailout {
+  labels Bailout {
     const result: Smi = GallopRight(
         context, sortState, load, key, base, length, hint, useTempArray);
     EnsureSuccess(sortState) otherwise Bailout;
@@ -532,15 +532,15 @@ module array {
   macro CallGallopLeft(
       context: Context, sortState: FixedArray, load: LoadFn, key: Object,
       base: Smi, length: Smi, hint: Smi, useTempArray: Boolean): Smi
-      labels Bailout {
+  labels Bailout {
     const result: Smi = GallopLeft(
         context, sortState, load, key, base, length, hint, useTempArray);
     EnsureSuccess(sortState) otherwise Bailout;
     return result;
   }
 
-  transitioning macro CallMergeAt(
-      context: Context, sortState: FixedArray, i: Smi)
+  transitioning macro
+      CallMergeAt(context: Context, sortState: FixedArray, i: Smi)
   labels Bailout {
     MergeAt(context, sortState, i);
     EnsureSuccess(sortState) otherwise Bailout;
@@ -729,7 +729,7 @@ module array {
   // length is always an ascending sequence.
   macro CountAndMakeRun(
       context: Context, sortState: FixedArray, lowArg: Smi, high: Smi): Smi
-      labels Bailout {
+  labels Bailout {
     assert(lowArg < high);
 
     let elements: HeapObject = ReloadElements(sortState);
@@ -803,8 +803,8 @@ module array {
 
   // Merges the two runs at stack indices i and i + 1.
   // Returns kFailure if we need to bailout, kSuccess otherwise.
-  transitioning builtin MergeAt(
-      context: Context, sortState: FixedArray, i: Smi): Smi {
+  transitioning builtin
+  MergeAt(context: Context, sortState: FixedArray, i: Smi): Smi {
     const stackSize: Smi = GetPendingRunsSize(sortState);
 
     // We are only allowed to either merge the two top-most runs, or leave
@@ -882,8 +882,8 @@ module array {
     }
   }
 
-  macro LoadElementsOrTempArray(
-      useTempArray: Boolean, sortState: FixedArray): HeapObject {
+  macro LoadElementsOrTempArray(useTempArray: Boolean, sortState: FixedArray):
+      HeapObject {
     return useTempArray == True ? GetTempArray(sortState) :
                                   ReloadElements(sortState);
   }
@@ -1583,8 +1583,8 @@ module array {
 
   // Regardless of invariants, merge all runs on the stack until only one
   // remains. This is used at the end of the mergesort.
-  transitioning macro MergeForceCollapse(
-      context: Context, sortState: FixedArray)
+  transitioning macro
+      MergeForceCollapse(context: Context, sortState: FixedArray)
   labels Bailout {
     let pendingRuns: FixedArray =
         UnsafeCast<FixedArray>(sortState[kPendingRunsIdx]);
@@ -1627,8 +1627,8 @@ module array {
         CanUseSameAccessor<GenericElementsAccessor>;
   }
 
-  transitioning macro ArrayTimSortImpl(
-      context: Context, sortState: FixedArray, length: Smi)
+  transitioning macro
+      ArrayTimSortImpl(context: Context, sortState: FixedArray, length: Smi)
   labels Bailout {
     InitializeSortState(sortState);
 
@@ -1671,8 +1671,8 @@ module array {
             UnsafeCast<FixedArray>(sortState[kPendingRunsIdx]), 0) == length);
   }
 
-  transitioning builtin ArrayTimSort(
-      context: Context, sortState: FixedArray, length: Smi): Object {
+  transitioning builtin
+  ArrayTimSort(context: Context, sortState: FixedArray, length: Smi): Object {
     try {
       ArrayTimSortImpl(context, sortState, length)
           otherwise Slow;
@@ -1705,8 +1705,8 @@ module array {
   extern runtime PrepareElementsForSort(Context, Object, Number): Smi;
 
   // https://tc39.github.io/ecma262/#sec-array.prototype.sort
-  transitioning javascript builtin ArrayPrototypeSort(
-      context: Context, receiver: Object, ...arguments): Object {
+  transitioning javascript builtin
+  ArrayPrototypeSort(context: Context, receiver: Object, ...arguments): Object {
     // 1. If comparefn is not undefined and IsCallable(comparefn) is false,
     //    throw a TypeError exception.
     const comparefnObj: Object = arguments[0];

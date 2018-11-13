@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-module array {
+namespace array {
   macro HandleSimpleArgumentsSlice(
       context: Context, args: JSArgumentsObjectWithLength, start: Smi,
       count: Smi): JSArray
-      labels Bailout {
+  labels Bailout {
     // If the resulting array doesn't fit in new space, use the slow path.
     if (count >= kMaxNewSpaceFixedArrayElements) goto Bailout;
 
@@ -29,7 +29,7 @@ module array {
   macro HandleFastAliasedSloppyArgumentsSlice(
       context: Context, args: JSArgumentsObjectWithLength, start: Smi,
       count: Smi): JSArray
-      labels Bailout {
+  labels Bailout {
     // If the resulting array doesn't fit in new space, use the slow path.
     if (count >= kMaxNewSpaceFixedArrayElements) goto Bailout;
 
@@ -82,9 +82,9 @@ module array {
   }
 
   macro HandleFastSlice(
-      context: Context, o: Object, startNumber: Number, countNumber: Number):
-      JSArray
-      labels Bailout {
+      context: Context, o: Object, startNumber: Number,
+      countNumber: Number): JSArray
+  labels Bailout {
     const start: Smi = Cast<Smi>(startNumber) otherwise Bailout;
     const count: Smi = Cast<Smi>(countNumber) otherwise Bailout;
     assert(start >= 0);
@@ -118,8 +118,8 @@ module array {
   }
 
   // https://tc39.github.io/ecma262/#sec-array.prototype.slice
-  transitioning javascript builtin ArraySlice(
-      context: Context, receiver: Object, ...arguments): Object {
+  transitioning javascript builtin
+  ArraySlice(context: Context, receiver: Object, ...arguments): Object {
     // Handle array cloning case if the receiver is a fast array.
     if (arguments.length == 0) {
       typeswitch (receiver) {

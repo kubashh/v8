@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-module typed_array {
+namespace typed_array {
   extern runtime TypedArraySortFast(Context, Object): JSTypedArray;
   extern macro TypedArrayBuiltinsAssembler::ValidateTypedArray(
       Context, Object, constexpr string): JSTypedArray;
@@ -70,7 +70,7 @@ module typed_array {
   transitioning macro CallCompareWithDetachedCheck(
       context: Context, array: JSTypedArray, comparefn: Callable, a: Object,
       b: Object): Number
-      labels Detached {
+  labels Detached {
     // a. Let v be ? ToNumber(? Call(comparefn, undefined, x, y)).
     const v: Number =
         ToNumber_Inline(context, Call(context, comparefn, Undefined, a, b));

@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-module array {
+namespace array {
   macro LoadWithHoleCheck<Elements: type>(
       elements: FixedArrayBase, index: Smi): Object
-      labels IfHole;
+  labels IfHole;
 
   LoadWithHoleCheck<FixedArray>(elements: FixedArrayBase, index: Smi): Object
-      labels IfHole {
+  labels IfHole {
     const elements: FixedArray = UnsafeCast<FixedArray>(elements);
     const element: Object = elements[index];
     if (element == Hole) goto IfHole;
@@ -17,7 +17,7 @@ module array {
 
   LoadWithHoleCheck<FixedDoubleArray>(elements: FixedArrayBase, index: Smi):
       Object
-      labels IfHole {
+  labels IfHole {
     const elements: FixedDoubleArray = UnsafeCast<FixedDoubleArray>(elements);
     const element: float64 = LoadDoubleWithHoleCheck(elements, index)
         otherwise IfHole;
@@ -82,7 +82,7 @@ module array {
   macro TryFastArrayLastIndexOf(
       context: Context, receiver: JSReceiver, searchElement: Object,
       from: Number): Object
-      labels Slow {
+  labels Slow {
     const array: FastJSArray = Cast<FastJSArray>(receiver) otherwise Slow;
     const length: Smi = array.length;
     if (length == 0) return SmiConstant(-1);
