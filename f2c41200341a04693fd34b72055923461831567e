@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84b3e7f1_268b6466",
+        "filename": "src/builtins/array-join.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-13T07:19:24Z",
+      "side": 1,
+      "message": "Bonus points for using JSArray::kMaxArrayIndex :)",
+      "revId": "f2c41200341a04693fd34b72055923461831567e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
