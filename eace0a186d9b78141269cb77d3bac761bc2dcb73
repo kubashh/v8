@@ -46,6 +46,30 @@
       "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37402ff8_304e1afe",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-11-13T08:01:48Z",
+      "side": 1,
+      "message": "No strong opinions here. We probably expect this file to not change a lot, right? In that case this is probably fine.",
+      "parentUuid": "30f46961_79c317a6",
+      "range": {
+        "startLine": 213,
+        "startChar": 14,
+        "endLine": 213,
+        "endChar": 23
+      },
+      "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
