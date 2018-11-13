@@ -22,6 +22,30 @@
       "revId": "dbf46bf2e7bfebf7e0a38c7695faa71a96c35916",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41cd012e_4160597c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-13T12:20:41Z",
+      "side": 1,
+      "message": "The callback shouldn\u0027t be part of {PrepareAndStartCompile} IMO. Moving it out makes it easier to find it and refactor it. Additionally it makes the captures of the callback more explicit.\n\nAny objections to this code move?",
+      "parentUuid": "07bae846_928afb4d",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 30
+      },
+      "revId": "dbf46bf2e7bfebf7e0a38c7695faa71a96c35916",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
