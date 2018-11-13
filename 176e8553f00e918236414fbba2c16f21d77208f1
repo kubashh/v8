@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "92508cc1_fbc48055",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T19:25:33Z",
+      "side": 1,
+      "message": "When --harmony-private-methods is not set and we detect a private method, do we need to throw an error?",
+      "parentUuid": "2c7730bd_f7a04f85",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0e5e6a57_8956904c",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 4
@@ -30,6 +48,30 @@
       "writtenOn": "2018-11-13T17:36:41Z",
       "side": 1,
       "message": "Seems like static isn\u0027t implemented so this isn\u0027t needed for now.",
+      "range": {
+        "startLine": 1020,
+        "startChar": 0,
+        "endLine": 1020,
+        "endChar": 47
+      },
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9882e4aa_1765506a",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T19:25:33Z",
+      "side": 1,
+      "message": "Yes - I\u0027ve looked into the error handling a bit and I realized that we probably don\u0027t have to fail in ParsePropertyName(). The error can just be thrown after this returns with the necessary information for checking, that can be lift later eventually if we plan to implement the whole set of features.",
+      "parentUuid": "0e5e6a57_8956904c",
       "range": {
         "startLine": 1020,
         "startChar": 0,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "a4e445a4_005e296f",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T19:25:33Z",
+      "side": 1,
+      "message": "It is not implemented. I\u0027ll add a TODO.",
+      "parentUuid": "64864f91_e79f789c",
+      "range": {
+        "startLine": 2026,
+        "startChar": 8,
+        "endLine": 2026,
+        "endChar": 18
+      },
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7221fc5d_87ea39bd",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 4
@@ -76,6 +142,24 @@
       "writtenOn": "2018-11-13T17:36:41Z",
       "side": 1,
       "message": "I think you want to report an error here? We report an error and then use use FailureExpression to signal that there\u0027s an error. It\u0027s seems like you\u0027re using FailureExpression to have someone else report an error",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26ba8989_7002e447",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T19:25:33Z",
+      "side": 1,
+      "message": "I\u0027ll error in the caller later.",
+      "parentUuid": "7221fc5d_87ea39bd",
       "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -99,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "715c34ea_312b56d9",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2043,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T19:25:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "316de20a_c58838f9",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78b89278_8e3bef26",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 4
@@ -110,6 +212,24 @@
       "writtenOn": "2018-11-13T17:36:41Z",
       "side": 1,
       "message": "Why do we need to do this here? I don\u0027t think we need to special case for accessors.",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88597bf5_db907309",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2078,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T19:25:33Z",
+      "side": 1,
+      "message": "Yes, this all can be removed.",
+      "parentUuid": "78b89278_8e3bef26",
       "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -153,6 +273,30 @@
       "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "639acf68_af3b7a01",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2193,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T19:25:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6aca7237_af9ef711",
+      "range": {
+        "startLine": 2193,
+        "startChar": 40,
+        "endLine": 2193,
+        "endChar": 70
+      },
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -226,6 +370,24 @@
     },
     {
       "key": {
+        "uuid": "3d9792f2_4343abcd",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2229,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T19:25:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b24b701_c797bebd",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdb1cebb_d784bba3",
         "filename": "src/parsing/scanner.cc",
         "patchSetId": 4
@@ -257,6 +419,24 @@
       "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec367a07_464c7266",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5207,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T19:25:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "903deb9b_e550c4a5",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
