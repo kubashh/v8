@@ -144,17 +144,19 @@ class EmbeddedFileWriter {
     const bool is_default_variant =
         std::strcmp(embedded_variant_, kDefaultEmbeddedVariant) == 0;
 
-    for (int i = 0; i < i::Builtins::builtin_count; i++) {
-      if (!blob->ContainsBuiltin(i)) continue;
+    for (int i = 0; i < i::EmbeddedData::kBuiltinCount; i++) {
+      const int builtin_index = MapEmbeddedIndexToBuiltinIndex(i);
+
+      if (!blob->ContainsBuiltin(builtin_index)) continue;
 
       char builtin_symbol[kTemporaryStringLength];
       if (is_default_variant) {
         // Create nicer symbol names for the default mode.
         i::SNPrintF(i::Vector<char>(builtin_symbol), "Builtins_%s",
-                    i::Builtins::name(i));
+                    i::Builtins::name(builtin_index));
       } else {
         i::SNPrintF(i::Vector<char>(builtin_symbol), "%s_Builtins_%s",
-                    embedded_variant_, i::Builtins::name(i));
+                    embedded_variant_, i::Builtins::name(builtin_index));
       }
 
       // Labels created here will show up in backtraces. We check in
@@ -164,8 +166,9 @@ class EmbeddedFileWriter {
       w->DeclareFunctionBegin(builtin_symbol);
       WriteBinaryContentsAsInlineAssembly(
           w,
-          reinterpret_cast<const uint8_t*>(blob->InstructionStartOfBuiltin(i)),
-          blob->PaddedInstructionSizeOfBuiltin(i));
+          reinterpret_cast<const uint8_t*>(
+              blob->InstructionStartOfBuiltin(builtin_index)),
+          blob->PaddedInstructionSizeOfBuiltin(builtin_index));
       w->DeclareFunctionEnd(builtin_symbol);
     }
     w->Newline();
