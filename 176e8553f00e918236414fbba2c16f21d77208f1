@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9615ed94_aed207e3",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2225,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-13T14:11:10Z",
+      "side": 1,
+      "message": "The point of FailureExpression is that we can keep running for longer if something fails without additional branches. Hence we should immediately ReportUnexpectedToken where we detect the failure, and just return failure expression and continue running here without the branch.",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
