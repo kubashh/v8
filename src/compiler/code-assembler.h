@@ -12,6 +12,7 @@
 // Do not include anything from src/compiler here!
 #include "src/allocation.h"
 #include "src/base/macros.h"
+#include "src/base/optional.h"
 #include "src/builtins/builtins.h"
 #include "src/code-factory.h"
 #include "src/globals.h"
@@ -840,6 +841,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
     label->CreatePhis(phis...);
   }
   template <class... T, class... Args>
+
   void Branch(TNode<BoolT> condition,
               CodeAssemblerParameterizedLabel<T...>* if_true,
               CodeAssemblerParameterizedLabel<T...>* if_false, Args... args) {
