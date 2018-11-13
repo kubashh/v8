@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "85c9eb04_5f1326c9",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-13T09:45:01Z",
+      "side": 1,
+      "message": ";)\n\nNah for windows I took the simplest route and just emitted everything as bytes. Data emission could still be refactored to be smarter about which directives to pick, but I don\u0027t think it\u0027s too important.",
+      "parentUuid": "9807f233_93c850d3",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 21
+      },
+      "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2056639_4461d0ec",
         "filename": "src/snapshot/embedded-file-writer.cc",
         "patchSetId": 21
