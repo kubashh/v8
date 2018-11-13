@@ -22,6 +22,30 @@
       "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30f46961_79c317a6",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-13T07:16:13Z",
+      "side": 1,
+      "message": "Maybe, I don\u0027t have a strong opinion. The reason I didn\u0027t go for it initially was that the split isn\u0027t too clean (OSX/WIN/AIX/everything else) and this file isn\u0027t that huge anyways. Do you prefer a split?",
+      "parentUuid": "d2056639_4461d0ec",
+      "range": {
+        "startLine": 213,
+        "startChar": 14,
+        "endLine": 213,
+        "endChar": 23
+      },
+      "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
