@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9807f233_93c850d3",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2018-11-13T09:42:01Z",
+      "side": 1,
+      "message": "no TBYTE? https://msdn.microsoft.com/en-us/library/e3zfxb7e.aspx :)",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 21
+      },
+      "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2056639_4461d0ec",
         "filename": "src/snapshot/embedded-file-writer.cc",
         "patchSetId": 21
