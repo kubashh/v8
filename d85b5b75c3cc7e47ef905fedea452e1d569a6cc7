@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e94b192_887d405e",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5337,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 0,
+      "message": "I don\u0027t understand these changes. Why did public fields flags change to private methods?",
+      "revId": "d85b5b75c3cc7e47ef905fedea452e1d569a6cc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c93fd86_51f866e0",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5372,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 0,
+      "message": "Why did this get removed?",
+      "revId": "d85b5b75c3cc7e47ef905fedea452e1d569a6cc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

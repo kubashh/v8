@@ -2,6 +2,160 @@
   "comments": [
     {
       "key": {
+        "uuid": "2c7730bd_f7a04f85",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "--harmony-private-methods imply --harmony-private-fields\n\nThis is unnecessary",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e5e6a57_8956904c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "Seems like static isn\u0027t implemented so this isn\u0027t needed for now.",
+      "range": {
+        "startLine": 1020,
+        "startChar": 0,
+        "endLine": 1020,
+        "endChar": 47
+      },
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64864f91_e79f789c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "Is static not implemented yet? Can you add a TODO?",
+      "range": {
+        "startLine": 2026,
+        "startChar": 8,
+        "endLine": 2026,
+        "endChar": 18
+      },
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7221fc5d_87ea39bd",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "I think you want to report an error here? We report an error and then use use FailureExpression to signal that there\u0027s an error. It\u0027s seems like you\u0027re using FailureExpression to have someone else report an error",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "316de20a_c58838f9",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2043,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "This seems unnecessarily complicated. \n\nI don\u0027t think you need the switch statement at all -- you can just fall out and we will return a string literal at the end of this function.",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78b89278_8e3bef26",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2078,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "Why do we need to do this here? I don\u0027t think we need to special case for accessors.",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "507ec0b7_17beb536",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2098,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "You can just expand this switch to parse private names like this:\n\n    case Token::PRIVATE_NAME:\n      is_array_index \u003d false;\n      *is_private \u003d true;\n      Consume(Token::PRIVATE_NAME);\n      *name \u003d impl()-\u003eGetSymbol();\n\n      if (*kind \u003d\u003d ParsePropertyKind::kNotSet) {\n        ParsePropertyKindFromToken(peek(), kind);\n      }\n\n      if (!allow_harmony_private_methods() \u0026\u0026\n          (IsAccessor(*kind) || *kind \u003d\u003d ParsePropertyKind::kMethod)) {\n        ReportUnexpectedToken(scanner()-\u003ecurrent_token());\n        return impl()-\u003eFailureExpression();\n      }\n\n      break;",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aca7237_af9ef711",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2193,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "nit: Not necessary",
+      "range": {
+        "startLine": 2193,
+        "startChar": 40,
+        "endLine": 2193,
+        "endChar": 70
+      },
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9615ed94_aed207e3",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 4
@@ -49,6 +203,57 @@
       "side": 1,
       "message": "You should just set *name to impl()-\u003eEmptyIdentifierString() as well in the failure case then.",
       "parentUuid": "0a136b8b_485be978",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b24b701_c797bebd",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2229,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "As toon says -- there should be no manual checking here.",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdb1cebb_d784bba3",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "--harmony-private-methods implies this --harmony-private-fields. There\u0027s no way to ship private methods without fields, so it\u0027s fine to couple these flags.\n\nYou can remove all the changes to scanner.",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "903deb9b_e550c4a5",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5207,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-13T17:36:41Z",
+      "side": 1,
+      "message": "Unless I\u0027m missing something, `#constructor` can not be a PrivateName as per:\nhttps://tc39.github.io/proposal-class-fields/#sec-static-semantics-early-errors",
       "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
