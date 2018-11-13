@@ -70,6 +70,30 @@
       "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90cdee63_71d44ac3",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-13T08:23:19Z",
+      "side": 1,
+      "message": "Yeah it really shouldn\u0027t change at all once stabilized.",
+      "parentUuid": "37402ff8_304e1afe",
+      "range": {
+        "startLine": 213,
+        "startChar": 14,
+        "endLine": 213,
+        "endChar": 23
+      },
+      "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
