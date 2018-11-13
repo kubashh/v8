@@ -248,6 +248,7 @@ class ParserBase {
         allow_harmony_dynamic_import_(false),
         allow_harmony_import_meta_(false),
         allow_harmony_private_fields_(false),
+        allow_harmony_private_methods_(false),
         allow_eval_cache_(true) {
     pointer_buffer_.reserve(128);
   }
@@ -278,6 +279,13 @@ class ParserBase {
   }
   void set_allow_harmony_private_fields(bool allow) {
     scanner()->set_allow_harmony_private_fields(allow);
+  }
+
+  bool allow_harmony_private_methods() const {
+    return scanner()->allow_harmony_private_methods();
+  }
+  void set_allow_harmony_private_methods(bool allow) {
+    scanner()->set_allow_harmony_private_methods(allow);
   }
 
   uintptr_t stack_limit() const { return stack_limit_; }
@@ -1017,8 +1025,8 @@ class ParserBase {
       bool* is_static, bool* is_private);
   void CheckClassFieldName(IdentifierT name, bool is_static);
   void CheckClassMethodName(IdentifierT name, ParsePropertyKind type,
-                            ParseFunctionFlags flags, bool is_static,
-                            bool* has_seen_constructor);
+                            ParseFunctionFlags flags, bool is_private,
+                            bool is_static, bool* has_seen_constructor);
   ExpressionT ParseMemberInitializer(ClassInfo* class_info, int beg_pos,
                                      bool is_static);
   ObjectLiteralPropertyT ParseObjectPropertyDefinition(bool* has_seen_proto,
@@ -1412,6 +1420,7 @@ class ParserBase {
   bool allow_harmony_dynamic_import_;
   bool allow_harmony_import_meta_;
   bool allow_harmony_private_fields_;
+  bool allow_harmony_private_methods_;
   bool allow_eval_cache_;
 };
 
@@ -1944,9 +1953,6 @@ inline bool ParsePropertyKindFromToken(Token::Value token,
     case Token::SEMICOLON:
       *kind = ParsePropertyKind::kClassField;
       return true;
-    case Token::PRIVATE_NAME:
-      *kind = ParsePropertyKind::kClassField;
-      return true;
     default:
       break;
   }
@@ -2009,6 +2015,13 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParsePropertyName(
   bool is_array_index;
   uint32_t index;
   switch (peek()) {
+    case Token::PRIVATE_NAME:
+      *is_private = true;
+      is_array_index = false;
+      Consume(Token::PRIVATE_NAME);
+      *name = impl()->GetSymbol();
+      break;
+
     case Token::STRING:
       Consume(Token::STRING);
       *name = impl()->GetSymbol();
@@ -2119,7 +2132,6 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
       *name = impl()->GetSymbol();  // TODO(bakkot) specialize on 'static'
       name_expression = factory()->NewStringLiteral(*name, position());
     } else if (peek() == Token::PRIVATE_NAME) {
-      DCHECK(allow_harmony_private_fields());
       // TODO(gsathya): Make a better error message for this.
       ReportUnexpectedToken(Next());
       return impl()->NullLiteralProperty();
@@ -2128,14 +2140,16 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
       name_expression = ParsePropertyName(name, &kind, &function_flags,
                                           is_computed_name, is_private);
     }
-  } else if (name_token == Token::PRIVATE_NAME) {
-    Consume(Token::PRIVATE_NAME);
-    *is_private = true;
-    *name = impl()->GetSymbol();
-    name_expression = factory()->NewStringLiteral(*name, position());
   } else {
     name_expression = ParsePropertyName(name, &kind, &function_flags,
                                         is_computed_name, is_private);
+  }
+
+  // TODO(joyee): support static private methods
+  if ((IsAccessor(kind) || kind == ParsePropertyKind::kMethod) && *is_private &&
+      (*is_static || !allow_harmony_private_methods())) {
+    ReportUnexpectedToken(Next());
+    return impl()->NullLiteralProperty();
   }
 
   if (!class_info->has_name_static_property && *is_static &&
@@ -2190,7 +2204,8 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
 
       if (!*is_computed_name) {
         CheckClassMethodName(*name, ParsePropertyKind::kMethod, function_flags,
-                             *is_static, &class_info->has_seen_constructor);
+                             *is_private, *is_static,
+                             &class_info->has_seen_constructor);
       }
 
       FunctionKind kind = MethodKindFor(function_flags);
@@ -2221,7 +2236,8 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
 
       if (!*is_computed_name) {
         CheckClassMethodName(*name, kind, ParseFunctionFlag::kIsNormal,
-                             *is_static, &class_info->has_seen_constructor);
+                             *is_private, *is_static,
+                             &class_info->has_seen_constructor);
         // Make sure the name expression is a string since we need a Name for
         // Runtime_DefineAccessorPropertyUnchecked and since we can determine
         // this statically we can skip the extra runtime check.
@@ -2326,6 +2342,7 @@ ParserBase<Impl>::ParseObjectPropertyDefinition(bool* has_seen_proto,
     // TODO(joyee): private names in object literals should be Syntax Errors
     // https://tc39.github.io/proposal-private-methods/#prod-PropertyDefinition
   }
+
   switch (kind) {
     case ParsePropertyKind::kSpread:
       DCHECK_EQ(function_flags, ParseFunctionFlag::kIsNormal);
@@ -5824,7 +5841,7 @@ template <typename Impl>
 void ParserBase<Impl>::CheckClassMethodName(IdentifierT name,
                                             ParsePropertyKind type,
                                             ParseFunctionFlags flags,
-                                            bool is_static,
+                                            bool is_private, bool is_static,
                                             bool* has_seen_constructor) {
   DCHECK(type == ParsePropertyKind::kMethod || IsAccessor(type));
 
@@ -5835,7 +5852,15 @@ void ParserBase<Impl>::CheckClassMethodName(IdentifierT name,
       ReportMessage(MessageTemplate::kStaticPrototype);
       return;
     }
+  } else if (impl()->IdentifierEquals(name,
+                                      avf->private_constructor_string())) {
+    ReportMessage(MessageTemplate::kConstructorIsPrivate);
+    return;
   } else if (impl()->IdentifierEquals(name, avf->constructor_string())) {
+    if (is_private) {
+      ReportMessage(MessageTemplate::kConstructorIsPrivate);
+      return;
+    }
     if (flags != ParseFunctionFlag::kIsNormal || IsAccessor(type)) {
       MessageTemplate msg = (flags & ParseFunctionFlag::kIsGenerator) != 0
                                 ? MessageTemplate::kConstructorIsGenerator
