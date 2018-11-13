@@ -16,6 +16,24 @@
       "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a136b8b_485be978",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2225,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-13T16:34:18Z",
+      "side": 1,
+      "message": "Thanks. I ran into a DCHECK added by https://chromium-review.googlesource.com/c/v8/v8/+/1329691 when I did that:\n\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8930068557453115584/+/steps/Check/0/logs/PrivateStaticClassFie../0\n\nWhen I continued running from there, *name would a nullptr in the Parser implementation so later we will be dereferencing a nullptr when we \"flatten\" the name_expression with the `NewStringLiteral(*name, ..)` call in L2319. \n\nI could skip that call when the underlying pointer of name isn\u0027t nullptr, and continue parsing the function literal for the private accessors there, which should return nullptr because the next token should be ILLEGAL by now - is that the correct approach to handle it?",
+      "parentUuid": "9615ed94_aed207e3",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
