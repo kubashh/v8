@@ -94,6 +94,30 @@
       "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e012863_7d4beba5",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2018-11-13T09:23:55Z",
+      "side": 1,
+      "message": "I\u0027m less sure because we\u0027ll also get directives for lines, maybe frame unwinding and types as well (we might decorate the signature for improved debuggability). However I\u0027m okay with having one file and if I end up adding too many I\u0027ll separate it.",
+      "parentUuid": "90cdee63_71d44ac3",
+      "range": {
+        "startLine": 213,
+        "startChar": 14,
+        "endLine": 213,
+        "endChar": 23
+      },
+      "revId": "eace0a186d9b78141269cb77d3bac761bc2dcb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
