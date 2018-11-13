@@ -34,6 +34,24 @@
       "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "111880af_03ae0f35",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 2225,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-13T16:41:19Z",
+      "side": 1,
+      "message": "You should just set *name to impl()-\u003eEmptyIdentifierString() as well in the failure case then.",
+      "parentUuid": "0a136b8b_485be978",
+      "revId": "176e8553f00e918236414fbba2c16f21d77208f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
