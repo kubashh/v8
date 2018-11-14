@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0504237d_b0f7cd70",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-14T20:01:51Z",
+      "side": 1,
+      "message": "What about passing in a bool allow_private rather than a bool* is_private where you just use the pointer as a bool essentially? You don\u0027t need the duplicate branch above, you can simply take this branch here if (!allow_private). You\u0027ll just run a little more code in the syntax error case, which doesn\u0027t matter.",
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
