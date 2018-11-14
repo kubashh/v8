@@ -615,11 +615,12 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
 
   // Finds free variables of this scope. This mutates the unresolved variables
   // list along the way, so full resolution cannot be done afterwards.
-  // If a ParseInfo* is passed, non-free variables will be resolved.
-  template <typename T>
-  void ResolveScopesThenForEachVariable(DeclarationScope* max_outer_scope,
-                                        T variable_proxy_stackvisitor,
-                                        ParseInfo* info = nullptr);
+  inline void AnalyzePartially(
+      DeclarationScope* max_outer_scope, AstNodeFactory* ast_node_factory,
+      base::ThreadedList<VariableProxy>* new_unresolved_list);
+  inline void CollectNonLocals(DeclarationScope* max_outer_scope,
+                               Isolate* isolate, ParseInfo* info,
+                               Handle<StringSet>* non_locals);
 
   // Predicates.
   bool MustAllocate(Variable* var);
