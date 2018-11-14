@@ -1074,6 +1074,13 @@ DEFINE_BOOL(serialization_statistics, false,
 DEFINE_UINT(serialization_chunk_size, 4096,
             "Custom size for serialization chunks")
 
+// nojit mode / JIT-less V8. Design doc: goo.gl/kRnhVe
+#ifdef V8_NOJIT_MODE
+DEFINE_BOOL(nojit, false, "Disable code generation at runtime.")
+#else
+DEFINE_BOOL_READONLY(nojit, false, "Disable code generation at runtime.")
+#endif
+
 // Regexp
 DEFINE_BOOL(regexp_optimization, true, "generate optimized regexp code")
 DEFINE_BOOL(regexp_mode_modifiers, false, "enable inline flags in regexp.")
