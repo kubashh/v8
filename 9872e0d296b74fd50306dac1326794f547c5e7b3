@@ -16,6 +16,24 @@
       "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c076db7a_7e23e47b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-14T20:38:26Z",
+      "side": 1,
+      "message": "The is_private pointer is written on L2015 in the same way as the kind pointer, the caller uses it as a out parameter to build the ClassLiteralProperty later. Is there any other way to pass that information back other than a bool*?\n\nI did try using a bool for the caller to signal whether private is allowed (I actually used the name allow_private when I did that) but the message reported from the object literal cases would point after the private name if we don\u0027t special case, I was not sure if that would be important or not. WDYT?",
+      "parentUuid": "0504237d_b0f7cd70",
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
