@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40ea94c8_8477384d",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-14T10:49:24Z",
+      "side": 1,
+      "message": "I don\u0027t quite follow why this needs to be complicated. Isn\u0027t something like this enough :\n\n  Intl::HourCycle Intl::GetHourCycle(std::string hc) {\n    if (hc \u003d\u003d \"h11\") return Intl::HourCycle::kH11;\n    if (hc \u003d\u003d \"h12\") return Intl::HourCycle::kH12;\n    if (hc \u003d\u003d \"h23\") return Intl::HourCycle::kH23;\n    if (hc \u003d\u003d \"h24\") return Intl::HourCycle::kH24;\n    return Intl::HourCycle::kUndefined;\n  }",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe80f2bc_b487db28",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-14T10:49:24Z",
+      "side": 1,
+      "message": "Should this be on DateTimeFormat and not Intl?",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00b76e57_e7d22aa2",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-14T10:49:24Z",
+      "side": 1,
+      "message": "What does this pattern look like? Can you give me an example? Just to better understand this method better.",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa40f294_48d2c21b",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-14T10:49:24Z",
+      "side": 1,
+      "message": "Where is this from?",
+      "range": {
+        "startLine": 416,
+        "startChar": 0,
+        "endLine": 420,
+        "endChar": 37
+      },
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f2d9124_4efa5d20",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-14T10:49:24Z",
+      "side": 1,
+      "message": "Where are all these comments from?",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06540458_ba346406",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-14T10:49:24Z",
+      "side": 1,
+      "message": "why is this not const ref?",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
