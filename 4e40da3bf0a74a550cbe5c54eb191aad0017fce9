@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "23be5f08_277e2ccc",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2143,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-14T12:46:57Z",
+      "side": 1,
+      "message": "I prefer passing in booleans over passing out booleans through pointers.",
+      "parentUuid": "7f424829_5e94c7ed",
+      "revId": "4e40da3bf0a74a550cbe5c54eb191aad0017fce9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "464369a7_3fc1c67e",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 7
