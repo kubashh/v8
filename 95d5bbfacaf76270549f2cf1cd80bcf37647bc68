@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "efa51fc4_df89b750",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-11-14T22:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40ea94c8_8477384d",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe80f2bc_b487db28",
         "filename": "src/objects/intl-objects.h",
         "patchSetId": 12
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "42c16d7e_52bba03d",
+        "filename": "src/objects/intl-objects.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-11-14T22:08:04Z",
+      "side": 1,
+      "message": "I likely need to use this in js-locale later.",
+      "parentUuid": "fe80f2bc_b487db28",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00b76e57_e7d22aa2",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 12
@@ -47,6 +83,24 @@
       "writtenOn": "2018-11-14T10:49:24Z",
       "side": 1,
       "message": "What does this pattern look like? Can you give me an example? Just to better understand this method better.",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "872f98f0_30a6b68c",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-11-14T22:08:04Z",
+      "side": 1,
+      "message": "look at those under availableFormats{}  in https://cs.chromium.org/search/?q\u003dthird_party/icu.*.txt+availableFormats\u0026sq\u003dpackage:chromium\u0026type\u003dcs\n\nThe one  left of {\" is the \"skeleton\" and the inside the {\"\"} is the \"pattern\". \nfor example, look at Japanese\nhttps://cs.chromium.org/chromium/src/third_party/icu/source/data/locales/ja.txt?type\u003dcs\u0026q\u003dthird_party/icu.*ja.txt+availableFormats\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d256\n\n                hm{\"aK:mm\"}\nThis mean when we ask for display \"h\" and \"m\", the format is \"aK:mm\" and see \nhttp://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table\nabout the meaning of \"h\", \"m\", \"a\", \"K\", and \"mm\".",
+      "parentUuid": "00b76e57_e7d22aa2",
       "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "0613c52a_ff65eb66",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-11-14T22:08:04Z",
+      "side": 1,
+      "message": "https://www.ecma-international.org/ecma-402/#sec-intl.datetimeformat.prototype.resolvedoptions",
+      "parentUuid": "aa40f294_48d2c21b",
+      "range": {
+        "startLine": 416,
+        "startChar": 0,
+        "endLine": 420,
+        "endChar": 37
+      },
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f2d9124_4efa5d20",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 12
@@ -87,6 +165,24 @@
       "writtenOn": "2018-11-14T10:49:24Z",
       "side": 1,
       "message": "Where are all these comments from?",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3dd0fe2_0b2b42e7",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-11-14T22:08:04Z",
+      "side": 1,
+      "message": "part of https://www.ecma-international.org/ecma-402/#sec-initializedatetimeformat\nbut some of them are implemented inside ICU",
+      "parentUuid": "0f2d9124_4efa5d20",
       "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -107,6 +203,24 @@
       "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "728beb84_41915c29",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-11-14T22:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06540458_ba346406",
+      "revId": "95d5bbfacaf76270549f2cf1cd80bcf37647bc68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
