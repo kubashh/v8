@@ -1384,12 +1384,7 @@ Scope* Scope::GetOuterScopeWithContext() {
 
 Handle<StringSet> DeclarationScope::CollectNonLocals(
     Isolate* isolate, ParseInfo* info, Handle<StringSet> non_locals) {
-  ResolveScopesThenForEachVariable(this,
-                                   [=, &non_locals](VariableProxy* proxy) {
-                                     non_locals = StringSet::Add(
-                                         isolate, non_locals, proxy->name());
-                                   },
-                                   info);
+  Scope::CollectNonLocals(this, isolate, info, &non_locals);
   return non_locals;
 }
 
@@ -1462,16 +1457,7 @@ void DeclarationScope::AnalyzePartially(AstNodeFactory* ast_node_factory) {
     // Try to resolve unresolved variables for this Scope and migrate those
     // which cannot be resolved inside. It doesn't make sense to try to resolve
     // them in the outer Scopes here, because they are incomplete.
-    ResolveScopesThenForEachVariable(
-        this, [=, &new_unresolved_list](VariableProxy* proxy) {
-          // Don't copy unresolved references to the script scope, unless it's a
-          // reference to a private name or method. In that case keep it so we
-          // can fail later.
-          if (!outer_scope_->is_script_scope() || proxy->is_private_name()) {
-            VariableProxy* copy = ast_node_factory->CopyVariableProxy(proxy);
-            new_unresolved_list.AddFront(copy);
-          }
-        });
+    Scope::AnalyzePartially(this, ast_node_factory, &new_unresolved_list);
 
     // Migrate function_ to the right Zone.
     if (function_ != nullptr) {
