@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4c83ae0f_5d66efaf",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-11-14T23:06:00Z",
+      "side": 1,
+      "message": "They are, but I think this is the right order because unops go ahead of binops - I opened a PR on the repo yesterday to fix it - https://github.com/WebAssembly/simd/pull/54/files.",
+      "parentUuid": "c67204de_b79336ce",
+      "revId": "5751133069c3bcdace47654fb96d58d1e2145849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ca720ffb_40174c7d",
         "filename": "src/wasm/wasm-opcodes.h",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-11-14T21:42:00Z",
       "side": 1,
       "message": "Should this be 8x16 instead of 1x16? Similar for other AnyTrue and AllTrue ops.",
+      "revId": "5751133069c3bcdace47654fb96d58d1e2145849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f586c863_41453721",
+        "filename": "src/wasm/wasm-opcodes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-11-14T23:06:00Z",
+      "side": 1,
+      "message": "This more of a V8ism that I\u0027d like to leave in for now, and handle in a follow up refactoring change because this needs to be consistent with all the backends. I think this was to indicate that these were boolean types.",
+      "parentUuid": "ca720ffb_40174c7d",
       "revId": "5751133069c3bcdace47654fb96d58d1e2145849",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
