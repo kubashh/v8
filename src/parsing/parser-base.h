@@ -1212,10 +1212,6 @@ class ParserBase {
     return true;
   }
 
-  bool IsValidPattern(ExpressionT expression) {
-    return expression->IsObjectLiteral() || expression->IsArrayLiteral();
-  }
-
   // Due to hoisting, the value of a 'var'-declared variable may actually change
   // even if the code contains only the "initial" assignment, namely when that
   // assignment occurs inside a loop.  For example:
@@ -2690,7 +2686,7 @@ ParserBase<Impl>::ParseAssignmentExpression() {
   }
 
   // Destructuring assignmment.
-  if (V8_UNLIKELY(IsValidPattern(expression) && op == Token::ASSIGN)) {
+  if (V8_UNLIKELY(expression->IsValidPattern() && op == Token::ASSIGN)) {
     ValidateAssignmentPattern();
 
     // This is definitely not an expression so don't accumulate
@@ -4454,7 +4450,7 @@ bool ParserBase<Impl>::IsValidReferenceExpression(ExpressionT expression) {
 template <typename Impl>
 void ParserBase<Impl>::CheckDestructuringElement(ExpressionT expression,
                                                  int begin, int end) {
-  if (!IsValidPattern(expression) && !expression->IsAssignment() &&
+  if (!expression->IsValidPattern() && !expression->IsAssignment() &&
       !IsValidReferenceExpression(expression)) {
     if (expression->IsProperty()) ValidateExpression();
     classifier()->RecordAssignmentPatternError(
