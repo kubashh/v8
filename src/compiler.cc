@@ -318,9 +318,8 @@ void InstallBytecodeArray(Handle<BytecodeArray> bytecode_array,
   Handle<Code> code;
   {
     CodeSpaceMemoryModificationScope code_allocation(isolate->heap());
-
-    code = isolate->factory()->CopyCode(
-        BUILTIN_CODE(isolate, InterpreterEntryTrampoline));
+    code = isolate->factory()->CopyCode(Handle<Code>::cast(
+        isolate->factory()->interpreter_entry_trampoline_for_profiling()));
   }
 
   Handle<InterpreterData> interpreter_data = Handle<InterpreterData>::cast(

@@ -663,6 +663,7 @@ class Heap {
   void UnregisterStrongRoots(ObjectSlot start);
 
   void SetBuiltinsConstantsTable(FixedArray* cache);
+  void SetInterpreterEntryTrampolineForProfiling(Code* code);
 
   // Add weak_factory into the dirty_js_weak_factories list.
   void AddDirtyJSWeakFactory(

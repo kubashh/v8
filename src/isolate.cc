@@ -3168,6 +3168,16 @@ bool Isolate::Init(StartupDeserializer* des) {
     }
   }
   setup_delegate_->SetupBuiltins(this);
+  if (create_heap_objects) {
+    // Create a copy of the the interpreter entry trampoline and store it
+    // on the root list. It is used as a template for further copies that
+    // may later be created to help profile interpreted code.
+    CodeSpaceMemoryModificationScope code_allocation(&heap_);
+    HandleScope handle_scope(this);
+    Handle<Code> code =
+        factory()->CopyCode(BUILTIN_CODE(this, InterpreterEntryTrampoline));
+    heap_.SetInterpreterEntryTrampolineForProfiling(*code);
+  }
   if (FLAG_embedded_builtins) {
     if (create_heap_objects && serializer_enabled()) {
       builtins_constants_table_builder_->Finalize();
