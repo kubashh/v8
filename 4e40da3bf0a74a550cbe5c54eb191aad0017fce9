@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "464369a7_3fc1c67e",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5282,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-14T10:29:43Z",
+      "side": 1,
+      "message": "Please add public fields as well",
+      "revId": "4e40da3bf0a74a550cbe5c54eb191aad0017fce9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c2b638a_c4b65436",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5308,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-14T10:29:43Z",
+      "side": 1,
+      "message": "Add object literals",
+      "revId": "4e40da3bf0a74a550cbe5c54eb191aad0017fce9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f82a18b8_95d47201",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 5324,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-14T10:29:43Z",
+      "side": 1,
+      "message": "* computed private getter\n* computed private setter",
+      "revId": "4e40da3bf0a74a550cbe5c54eb191aad0017fce9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
