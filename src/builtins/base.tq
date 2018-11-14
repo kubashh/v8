@@ -67,6 +67,8 @@ const ARRAY_JOIN_STACK_INDEX: constexpr NativeContextSlot
     generates 'Context::ARRAY_JOIN_STACK_INDEX';
 const OBJECT_FUNCTION_INDEX: constexpr NativeContextSlot
     generates 'Context::OBJECT_FUNCTION_INDEX';
+const ITERATOR_RESULT_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::ITERATOR_RESULT_MAP_INDEX';
 extern operator '[]' macro LoadContextElement(
     NativeContext, NativeContextSlot): Object;
 extern operator '[]=' macro StoreContextElement(
@@ -1261,4 +1263,9 @@ struct IteratorRecord {
 
   // iteratorRecord.[[NextMethod]]
   next: Object;
+}
+
+struct KeyValuePair {
+  key: Object;
+  value: Object;
 }

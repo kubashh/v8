@@ -1,0 +1,39 @@
+// Copyright 2018 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+namespace object {
+  transitioning builtin
+  ObjectFromEntries(implicit context: Context)(iterable: Object): Object {
+    try {
+      if (IsNullOrUndefined(iterable)) goto Throw;
+      const objectFunction: JSFunction = GetObjectFunction();
+      const map: Map = Cast<Map>(objectFunction.prototype_or_initial_map)
+          otherwise unreachable;
+      const result: JSObject =
+          UnsafeCast<JSObject>(AllocateJSObjectFromMap(map));
+      const fastIteratorResultMap: Map =
+          Cast<Map>(LoadNativeContext(context)[ITERATOR_RESULT_MAP_INDEX])
+          otherwise unreachable;
+      let i: IteratorRecord = iterator::GetIterator(iterable);
+      try {
+        assert(!IsNullOrUndefined(i.object));
+        while (true) {
+          const step: Object = iterator::IteratorStep(i, fastIteratorResultMap)
+              otherwise return result;
+          const iteratorValue: Object =
+              iterator::IteratorValue(step, fastIteratorResultMap);
+          const pair: KeyValuePair = collections::LoadKeyValuePair(
+              iteratorValue, false) otherwise unreachable;
+          CreateDataProperty(result, pair.key, pair.value);
+        }
+      } catch (e) deferred {
+        iterator::IteratorCloseOnException(i, e);
+      }
+      unreachable;
+    }
+    label Throw deferred {
+      ThrowTypeError(context, kNotIterable);
+    }
+  }
+}
