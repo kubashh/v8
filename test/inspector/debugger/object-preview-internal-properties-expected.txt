@@ -172,18 +172,8 @@ expression: (new Set([[1,2]])).entries()
     [0] : {
         value : {
             description : Array(2)
-            overflow : false
+            overflow : true
             properties : [
-                [0] : {
-                    name : 0
-                    type : number
-                    value : 1
-                }
-                [1] : {
-                    name : 1
-                    type : number
-                    value : 2
-                }
             ]
             subtype : array
             type : object

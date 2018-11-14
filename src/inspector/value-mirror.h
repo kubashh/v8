@@ -56,7 +56,7 @@ class ValueMirror {
       int* nameLimit, int* indexLimit,
       std::unique_ptr<protocol::Runtime::ObjectPreview>*) {}
   virtual void buildEntryPreview(
-      v8::Local<v8::Context> context, int* nameLimit, int* indexLimit,
+      v8::Local<v8::Context> context,
       std::unique_ptr<protocol::Runtime::ObjectPreview>*) {}
   virtual v8::Local<v8::Value> v8Value() = 0;
 

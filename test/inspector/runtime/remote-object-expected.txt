@@ -726,13 +726,8 @@ Running test: testMap
                     }
                     value : {
                         description : Object
-                        overflow : false
+                        overflow : true
                         properties : [
-                            [0] : {
-                                name : b
-                                type : number
-                                value : 2
-                            }
                         ]
                         type : object
                     }
@@ -786,13 +781,8 @@ Running test: testMap
                 [0] : {
                     value : {
                         description : Object
-                        overflow : false
+                        overflow : true
                         properties : [
-                            [0] : {
-                                name : b
-                                type : number
-                                value : 2
-                            }
                         ]
                         type : object
                     }
@@ -863,13 +853,8 @@ Running test: testMap
                     }
                     value : {
                         description : Object
-                        overflow : false
+                        overflow : true
                         properties : [
-                            [0] : {
-                                name : b
-                                type : number
-                                value : 2
-                            }
                         ]
                         type : object
                     }
@@ -1134,34 +1119,6 @@ Running test: testWeakMap
                         description : global
                         overflow : true
                         properties : [
-                            [0] : {
-                                name : setTimeout
-                                type : function
-                                value : 
-                            }
-                            [1] : {
-                                name : inspector
-                                type : object
-                                value : Object
-                            }
-                            [2] : {
-                                name : a
-                                subtype : map
-                                type : object
-                                value : Map(1)
-                            }
-                            [3] : {
-                                name : re
-                                subtype : regexp
-                                type : object
-                                value : /w+/g
-                            }
-                            [4] : {
-                                name : m
-                                subtype : map
-                                type : object
-                                value : Map(1)
-                            }
                         ]
                         type : object
                     }
@@ -1218,34 +1175,6 @@ Running test: testWeakSet
                         description : global
                         overflow : true
                         properties : [
-                            [0] : {
-                                name : setTimeout
-                                type : function
-                                value : 
-                            }
-                            [1] : {
-                                name : inspector
-                                type : object
-                                value : Object
-                            }
-                            [2] : {
-                                name : a
-                                subtype : map
-                                type : object
-                                value : Map(1)
-                            }
-                            [3] : {
-                                name : re
-                                subtype : regexp
-                                type : object
-                                value : /w+/g
-                            }
-                            [4] : {
-                                name : m
-                                subtype : map
-                                type : object
-                                value : Map(1)
-                            }
                         ]
                         type : object
                     }

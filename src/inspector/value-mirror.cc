@@ -276,8 +276,7 @@ String16 descriptionForEntry(v8::Local<v8::Context> context,
     auto wrapper = ValueMirror::create(context, tmp);
     if (wrapper) {
       std::unique_ptr<ObjectPreview> preview;
-      int limit = 5;
-      wrapper->buildEntryPreview(context, &limit, &limit, &preview);
+      wrapper->buildEntryPreview(context, &preview);
       if (preview) {
         key = preview->getDescription(String16());
         if (preview->getType() == RemoteObject::TypeEnum::String) {
@@ -293,8 +292,7 @@ String16 descriptionForEntry(v8::Local<v8::Context> context,
     auto wrapper = ValueMirror::create(context, tmp);
     if (wrapper) {
       std::unique_ptr<ObjectPreview> preview;
-      int limit = 5;
-      wrapper->buildEntryPreview(context, &limit, &limit, &preview);
+      wrapper->buildEntryPreview(context, &preview);
       if (preview) {
         value = preview->getDescription(String16());
         if (preview->getType() == RemoteObject::TypeEnum::String) {
@@ -337,8 +335,7 @@ class PrimitiveValueMirror final : public ValueMirror {
     return Response::OK();
   }
 
-  void buildEntryPreview(v8::Local<v8::Context> context, int* nameLimit,
-                         int* indexLimit,
+  void buildEntryPreview(v8::Local<v8::Context> context,
                          std::unique_ptr<ObjectPreview>* preview) override {
     *preview =
         ObjectPreview::create()
@@ -400,8 +397,7 @@ class NumberMirror final : public ValueMirror {
                   .setValue(description(&unserializable))
                   .build();
   }
-  void buildEntryPreview(v8::Local<v8::Context> context, int* nameLimit,
-                         int* indexLimit,
+  void buildEntryPreview(v8::Local<v8::Context> context,
                          std::unique_ptr<ObjectPreview>* preview) override {
     bool unserializable = false;
     *preview = ObjectPreview::create()
@@ -455,7 +451,7 @@ class BigIntMirror final : public ValueMirror {
   }
 
   void buildEntryPreview(
-      v8::Local<v8::Context> context, int* nameLimit, int* indexLimit,
+      v8::Local<v8::Context> context,
       std::unique_ptr<protocol::Runtime::ObjectPreview>* preview) override {
     *preview = ObjectPreview::create()
                    .setType(RemoteObject::TypeEnum::Bigint)
@@ -608,8 +604,7 @@ class FunctionMirror final : public ValueMirror {
                   .setValue(String16())
                   .build();
   }
-  void buildEntryPreview(v8::Local<v8::Context> context, int* nameLimit,
-                         int* indexLimit,
+  void buildEntryPreview(v8::Local<v8::Context> context,
                          std::unique_ptr<ObjectPreview>* preview) override {
     *preview = ObjectPreview::create()
                    .setType(RemoteObject::TypeEnum::Function)
@@ -849,12 +844,12 @@ class ObjectMirror final : public ValueMirror {
                                result);
   }
 
-  void buildEntryPreview(v8::Local<v8::Context> context, int* nameLimit,
-                         int* indexLimit,
+  void buildEntryPreview(v8::Local<v8::Context> context,
                          std::unique_ptr<ObjectPreview>* result) override {
+    int zeroPropertyLimit = 0;
     buildObjectPreviewInternal(context, true /* forEntry */,
-                               false /* generatePreviewForTable */, nameLimit,
-                               indexLimit, result);
+                               false /* generatePreviewForTable */,
+                               &zeroPropertyLimit, &zeroPropertyLimit, result);
   }
 
   void buildPropertyPreview(v8::Local<v8::Context> context,
@@ -935,13 +930,11 @@ class ObjectMirror final : public ValueMirror {
           entriesPreview = protocol::Array<EntryPreview>::create();
           for (const auto& entry : entries) {
             std::unique_ptr<ObjectPreview> valuePreview;
-            entry.value->buildEntryPreview(context, nameLimit, indexLimit,
-                                           &valuePreview);
+            entry.value->buildEntryPreview(context, &valuePreview);
             if (!valuePreview) continue;
             std::unique_ptr<ObjectPreview> keyPreview;
             if (entry.key) {
-              entry.key->buildEntryPreview(context, nameLimit, indexLimit,
-                                           &keyPreview);
+              entry.key->buildEntryPreview(context, &keyPreview);
               if (!keyPreview) continue;
             }
             std::unique_ptr<EntryPreview> entryPreview =
