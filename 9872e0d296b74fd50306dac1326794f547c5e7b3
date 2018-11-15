@@ -162,6 +162,24 @@
     },
     {
       "key": {
+        "uuid": "78514933_bedadcd3",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-15T12:17:38Z",
+      "side": 1,
+      "message": "Both ParseClassPropertyDefinition() and ParseObjectPropertyDefinition() have some of these out parameters as pointers, should I make a PropertyInfo local to them and assign the booleans back to those out parameters, or refactor them all (and make the PropertyInfo local to ParseClassLiteral() and ParseObjectLiteral() in this patch?",
+      "parentUuid": "7b909d89_2d10d5cb",
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "352b34ce_f7c9fd8b",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 8
