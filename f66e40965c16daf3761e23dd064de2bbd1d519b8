@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "537508e9_c18cf322",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-11-15T08:27:26Z",
+      "side": 1,
+      "message": "Whoops, sorry, wrong CL description. Fixed it.",
+      "parentUuid": "facd1b71_4bb6a00f",
+      "revId": "f66e40965c16daf3761e23dd064de2bbd1d519b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bb67ea7c_0763f916",
         "filename": "src/builtins/collections.tq",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2018-11-15T08:20:10Z",
       "side": 1,
       "message": "The interface is a bit weird (passing both a boolean \u0026 label and the bool controls whether the label may be taken). Would it make sense to structure like this:\n\n LoadKeyValuePair(Context, Object) : KeyValuePair labels IfMayHaveSideEffects { ... }\n\n LoadKeyValuePair(Context, Object) : KeyValuePair {\n  try {\n   LoadKeyValuePair(Context, Object) otherwise Generic;\n  }\n  label Generic {\n   return KeyValuePair{\n    GetProperty(receiver, Convert\u003cSmi\u003e(0)),\n    GetProperty(receiver, Convert\u003cSmi\u003e(1))\n   };\n  }\n }\n\nIt\u0027d make CSA callsites much cleaner and would avoid the confusing thing below where we call with \u0027otherwise unreachable\u0027 but the label is ignored anyways due to passing \u0027false\u0027 (could easily be misunderstood as guaranteeing no-side-effects).",
+      "revId": "f66e40965c16daf3761e23dd064de2bbd1d519b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c90958e4_80d5cb94",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-11-15T08:27:26Z",
+      "side": 1,
+      "message": "Yes, this would be better. However, you notice that the two signatures you propose are the same, Torque currently only looks at the parameter types and not labels to determine uniqueness. This would currently generate a duplicate declaration error. \n\nPerhaps it makes sense to fix that first.",
+      "parentUuid": "bb67ea7c_0763f916",
       "revId": "f66e40965c16daf3761e23dd064de2bbd1d519b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
