@@ -105,6 +105,24 @@
       "revId": "f66e40965c16daf3761e23dd064de2bbd1d519b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb0bf02b_ffdbb9e9",
+        "filename": "src/builtins/collections.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2018-11-15T08:53:38Z",
+      "side": 1,
+      "message": "Excellent suggestions, all. In fact, I like the different name better, since it makes it clear that the semantic is slightly different. Renamed to LoadKeyValuePairNoSideEffects and implemented you proposal. Thanks.",
+      "parentUuid": "94898e60_4058c8b9",
+      "revId": "f66e40965c16daf3761e23dd064de2bbd1d519b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
