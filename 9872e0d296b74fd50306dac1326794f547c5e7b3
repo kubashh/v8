@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7e24ed90_9af0e9ba",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-15T09:54:53Z",
+      "side": 1,
+      "message": "Why is this check happening here? This null ptr check for a bool is weird.",
+      "range": {
+        "startLine": 2010,
+        "startChar": 0,
+        "endLine": 2014,
+        "endChar": 7
+      },
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0504237d_b0f7cd70",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 8
@@ -67,6 +90,52 @@
       "side": 1,
       "message": "Yes, essentially ParsePropertyName needs two piece of \"storage\" at the moment:\n\n- one to inform the caller whether it encounters a private name (in the class literal case)\n- one from the caller to know whether it should error when encounter a private name (in both the object literal and a class literal where the static keyword is already encountered)\n\nBefore private methods are parsed, these information are accessed in-place in the older part of the diff starting from L2126 instead of being passing between functions.\n\nThere is another piece of information which I have not implemented in the follow-up patch: whether a complementary private accessor is already parsed, if true one accessor needs to retrieve the synthetic variable associated with the other one and share it, otherwise an early error needs to be thrown either here or later during scope analysis.\n\nThe state we need is roughly a subset of what\u0027s inside a ClassLiteralProperty, but that also contains the value of the property, not just the key, kind, is_private and var, so it\u0027s currently built later when the value is also parsed.",
       "parentUuid": "fc4412b2_7d74b098",
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "352b34ce_f7c9fd8b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-15T09:54:53Z",
+      "side": 1,
+      "message": "Why is this required?",
+      "range": {
+        "startLine": 2024,
+        "startChar": 0,
+        "endLine": 2024,
+        "endChar": 48
+      },
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d25a2b8d_2c9cc7f0",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2147,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-15T09:54:53Z",
+      "side": 1,
+      "message": "use the variable as its more readable",
+      "range": {
+        "startLine": 2147,
+        "startChar": 72,
+        "endLine": 2147,
+        "endChar": 76
+      },
       "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
