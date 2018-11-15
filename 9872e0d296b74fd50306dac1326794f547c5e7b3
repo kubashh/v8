@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ec32bff6_78c6ed56",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-15T10:03:16Z",
+      "side": 1,
+      "message": "It\u0027s from the object literal caller case so that it can tell ParsePropertyName to error when it encounters a private name - I *think* I could make it an `bool allow_private` which is `!*is_static` in the class literal case (for the static private accessors), and just false in the object literal case, though. WDYT?",
+      "parentUuid": "7e24ed90_9af0e9ba",
+      "range": {
+        "startLine": 2010,
+        "startChar": 0,
+        "endLine": 2014,
+        "endChar": 7
+      },
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0504237d_b0f7cd70",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 8
@@ -107,6 +131,30 @@
       "writtenOn": "2018-11-15T09:54:53Z",
       "side": 1,
       "message": "Why is this required?",
+      "range": {
+        "startLine": 2024,
+        "startChar": 0,
+        "endLine": 2024,
+        "endChar": 48
+      },
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1b84d93_416ca4b1",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-15T10:03:16Z",
+      "side": 1,
+      "message": "Otherwise it will DCHECK on L2242 when we convert the result into a string literal",
+      "parentUuid": "352b34ce_f7c9fd8b",
       "range": {
         "startLine": 2024,
         "startChar": 0,
