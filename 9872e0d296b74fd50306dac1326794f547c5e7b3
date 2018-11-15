@@ -216,6 +216,24 @@
     },
     {
       "key": {
+        "uuid": "eb90f679_f03a6216",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-15T16:55:27Z",
+      "side": 1,
+      "message": "I tried refactoring the callers but it looks like we will need to change quite a few places to put all these out parameters into one struct (both where the out parameters are read and where they are written), so I left a TODO for this patch. I can submit a follow-on later.",
+      "parentUuid": "af74f704_1d222c0f",
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "352b34ce_f7c9fd8b",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 8
