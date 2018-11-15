@@ -198,6 +198,24 @@
     },
     {
       "key": {
+        "uuid": "af74f704_1d222c0f",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-15T14:04:19Z",
+      "side": 1,
+      "message": "\u003e Both ParseClassPropertyDefinition() and ParseObjectPropertyDefinition() have some of these out parameters as pointers, should I make a PropertyInfo local to them and assign the booleans back to those out parameters, or refactor them all (and make the PropertyInfo local to ParseClassLiteral() and ParseObjectLiteral() in this patch?\n\nWhy only use PropertyInfo here and continue using boolean pointers elsewhere? If we\u0027re cleaning up boolean pointers then it seems natural to be me that we\u0027d want to clean it up everywhere.\n\nI wonder if that should be a separate follow on CL though.",
+      "parentUuid": "4032ae8d_53ba037f",
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "352b34ce_f7c9fd8b",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 8
