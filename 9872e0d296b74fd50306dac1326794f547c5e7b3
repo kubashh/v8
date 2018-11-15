@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "7b909d89_2d10d5cb",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-15T10:13:57Z",
+      "side": 1,
+      "message": "So I think you should have a\n\nstruct PropertyInfo {\n  IdentifierT name;\n  ParseFunctionFlags flags;\n  ParsePropertyKind kind;\n  bool is_computed_name : 1;\n  bool is_private : 1;\n  bool is_static : 1;\n};\n\nand change the method to ParsePropertyName(struct PropertyInfo* info, bool allow_private) {\n...\n}\n\n and then change this branch to if (!allow_private || (...)) { and drop the if (is_private \u003d\u003d ...) branch above. There\u0027s no reason to duplicate it.",
+      "parentUuid": "2a118c82_6adead3f",
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "352b34ce_f7c9fd8b",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 8
