@@ -180,6 +180,24 @@
     },
     {
       "key": {
+        "uuid": "4032ae8d_53ba037f",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-15T12:24:18Z",
+      "side": 1,
+      "message": "Also, if we have a struct like PropertyInfo, it seems reasonable to make it a member of ClassLiteralProperty and ObjectLiteralProperty so that we can just return these information as part of the LiteralProperty returned by ParseClassPropertyDefinition() and ParseObjectPropertyDefinition() instead of making them out parameters for those two methods.",
+      "parentUuid": "78514933_bedadcd3",
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "352b34ce_f7c9fd8b",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 8
