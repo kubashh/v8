@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fb718744_1ae438ef",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-15T10:13:43Z",
+      "side": 1,
+      "message": "I think passing in a allow_private makes more sense than to do a null ptr check on a bool.",
+      "parentUuid": "ec32bff6_78c6ed56",
+      "range": {
+        "startLine": 2010,
+        "startChar": 0,
+        "endLine": 2014,
+        "endChar": 7
+      },
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0504237d_b0f7cd70",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 8
@@ -164,6 +188,30 @@
       "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5aa6a597_8b7b27d0",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2024,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-11-15T10:13:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d1b84d93_416ca4b1",
+      "range": {
+        "startLine": 2024,
+        "startChar": 0,
+        "endLine": 2024,
+        "endChar": 48
+      },
+      "revId": "9872e0d296b74fd50306dac1326794f547c5e7b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
