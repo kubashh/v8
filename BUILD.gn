@@ -1611,6 +1611,8 @@ v8_source_set("v8_base") {
     "src/ast/scopes-inl.h",
     "src/ast/scopes.cc",
     "src/ast/scopes.h",
+    "src/ast/source-range-remover.cc",
+    "src/ast/source-range-remover.h",
     "src/ast/variables.cc",
     "src/ast/variables.h",
     "src/bailout-reason.cc",
