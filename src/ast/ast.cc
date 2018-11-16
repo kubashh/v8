@@ -165,6 +165,23 @@ bool Expression::IsAccessorFunctionDefinition() const {
   return IsFunctionLiteral() && IsAccessorFunction(AsFunctionLiteral()->kind());
 }
 
+bool Statement::IsBreak() const {
+  switch (node_type()) {
+#define BREAK_NODE_LIST(V) \
+  V(ContinueStatement)     \
+  V(BreakStatement)        \
+  V(ReturnStatement)
+#define GENERATE_CASE(Node) \
+  case k##Node:             \
+    return static_cast<const Node*>(this)->IsBreak();
+    BREAK_NODE_LIST(GENERATE_CASE)
+#undef GENERATE_CASE
+#undef BREAK_NODE_LIST
+    default:
+      return false;
+  }
+}
+
 bool Statement::IsJump() const {
   switch (node_type()) {
 #define JUMP_NODE_LIST(V) \

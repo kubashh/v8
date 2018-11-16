@@ -184,6 +184,7 @@ class AstNode: public ZoneObject {
 
 class Statement : public AstNode {
  public:
+  bool IsBreak() const;
   bool IsJump() const;
 
  protected:
@@ -739,6 +740,7 @@ class ExpressionStatement final : public Statement {
  public:
   void set_expression(Expression* e) { expression_ = e; }
   Expression* expression() const { return expression_; }
+  bool IsBreak() const { return expression_->IsThrow(); }
   bool IsJump() const { return expression_->IsThrow(); }
 
  private:
@@ -753,6 +755,7 @@ class ExpressionStatement final : public Statement {
 
 class JumpStatement : public Statement {
  public:
+  bool IsBreak() const { return true; }
   bool IsJump() const { return true; }
 
  protected:

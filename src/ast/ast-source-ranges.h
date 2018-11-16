@@ -269,6 +269,8 @@ class SourceRangeMap final : public ZoneObject {
  public:
   explicit SourceRangeMap(Zone* zone) : map_(zone) {}
 
+  void Erase(ZoneObject* node) { map_.erase(node); }
+
   AstNodeSourceRanges* Find(ZoneObject* node) {
     auto it = map_.find(node);
     if (it == map_.end()) return nullptr;
