@@ -9,6 +9,7 @@
 
 #include "builtins-generated/bytecodes-builtins-list.h"
 #include "src/ast/prettyprinter.h"
+#include "src/ast/source-range-remover.h"
 #include "src/bootstrapper.h"
 #include "src/compiler.h"
 #include "src/counters-inl.h"
@@ -154,6 +155,16 @@ void MaybePrintAst(ParseInfo* parse_info,
 #endif  // DEBUG
 }
 
+void RemoveRedundantSourceRanges(ParseInfo* parse_info,
+                                 UnoptimizedCompilationInfo* compilation_info) {
+  if (compilation_info->has_source_range_map()) {
+    SourceRangeRemover remover(parse_info->stack_limit(),
+                               compilation_info->literal(),
+                               compilation_info->source_range_map());
+    remover.Run();
+  }
+}
+
 bool ShouldPrintBytecode(Handle<SharedFunctionInfo> shared) {
   if (!FLAG_print_bytecode) return false;
 
@@ -191,6 +202,7 @@ InterpreterCompilationJob::Status InterpreterCompilationJob::ExecuteJobImpl() {
   // Print AST if flag is enabled. Note, if compiling on a background thread
   // then ASTs from different functions may be intersperse when printed.
   MaybePrintAst(parse_info(), compilation_info());
+  RemoveRedundantSourceRanges(parse_info(), compilation_info());
 
   generator()->GenerateBytecode(stack_limit());
 

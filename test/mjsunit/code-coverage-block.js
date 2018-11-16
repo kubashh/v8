@@ -246,8 +246,7 @@ function g() {}                           // 0000
  {"start":224,"end":237,"count":12},
  {"start":273,"end":277,"count":0},
  {"start":412,"end":416,"count":12},
- {"start":462,"end":475,"count":12},
- {"start":620,"end":622,"count":0}]
+ {"start":462,"end":475,"count":12}]
 );
 
 TestCoverage(
@@ -376,10 +375,10 @@ TestCoverage("try/catch/finally statements with early return",
 [{"start":0,"end":449,"count":1},
  {"start":1,"end":151,"count":1},
  {"start":67,"end":70,"count":0},
- {"start":89,"end":150,"count":0},
+ {"start":91,"end":150,"count":0},
  {"start":201,"end":401,"count":1},
  {"start":267,"end":270,"count":0},
- {"start":319,"end":400,"count":0}]
+ {"start":321,"end":400,"count":0}]
 );
 
 TestCoverage(
@@ -411,11 +410,11 @@ TestCoverage(
 [{"start":0,"end":1099,"count":1},
  {"start":1,"end":151,"count":1},
  {"start":67,"end":70,"count":0},
- {"start":89,"end":150,"count":0},
+ {"start":91,"end":150,"count":0},
  {"start":201,"end":351,"count":1},
- {"start":284,"end":350,"count":0},
+ {"start":286,"end":350,"count":0},
  {"start":401,"end":701,"count":1},
- {"start":569,"end":700,"count":0},
+ {"start":603,"end":700,"count":0},
  {"start":561,"end":568,"count":0},  // TODO(jgruber): Sorting.
  {"start":751,"end":1051,"count":1},
  {"start":817,"end":820,"count":0},
@@ -436,8 +435,8 @@ TestCoverage(
 `,
 [{"start":0,"end":399,"count":1},
  {"start":1,"end":351,"count":1},
- {"start":154,"end":204,"count":0},
- {"start":226,"end":303,"count":0}]
+ {"start":154,"end":176,"count":0},
+ {"start":254,"end":276,"count":0}]
 );
 
 TestCoverage(
@@ -466,12 +465,11 @@ TestCoverage(
 `,
 [{"start":0,"end":999,"count":1},
  {"start":1,"end":951,"count":1},
- {"start":152,"end":202,"count":0},
- {"start":285,"end":353,"count":0},
+ {"start":152,"end":168,"count":0},
+ {"start":287,"end":310,"count":0},
  {"start":472,"end":503,"count":0},
  {"start":626,"end":653,"count":0},
- {"start":768,"end":803,"count":0},
- {"start":867,"end":869,"count":0}]
+ {"start":770,"end":803,"count":0}]
 );
 
 TestCoverage(
@@ -500,7 +498,7 @@ TestCoverage(
  {"start":271,"end":403,"count":2},
  {"start":379,"end":403,"count":0},
  {"start":509,"end":653,"count":2},
- {"start":621,"end":653,"count":0}]
+ {"start":623,"end":653,"count":0}]
 );
 
 TestCoverage(
@@ -847,7 +845,7 @@ Util.escape("foo.bar");                   // 0400
 [{"start":0,"end":449,"count":1},
  {"start":64,"end":351,"count":1},
  {"start":112,"end":203,"count":0},
- {"start":268,"end":350,"count":0}]
+ {"start":303,"end":350,"count":0}]
 );
 
 TestCoverage(
@@ -879,17 +877,62 @@ TestCoverage(
  {"start":1,"end":151,"count":1},
  {"start":118,"end":137,"count":0},
  {"start":201,"end":351,"count":1},
- {"start":277,"end":318,"count":0},
+ {"start":279,"end":318,"count":0},
  {"start":401,"end":525,"count":1},
  {"start":475,"end":486,"count":0},
  {"start":503,"end":523,"count":0},
  {"start":551,"end":651,"count":1},
  {"start":622,"end":639,"count":0},
  {"start":701,"end":801,"count":1},
- {"start":773,"end":791,"count":0},
+ {"start":774,"end":791,"count":0},
  {"start":851,"end":1001,"count":1},
  {"start":920,"end":928,"count":0},
  {"start":929,"end":965,"count":0}]
+);
+
+TestCoverage(
+"terminal break statement",
+`
+while (true) {                            // 0000
+  const b = false                         // 0050
+  break                                   // 0100
+}                                         // 0150
+while (true) {                            // 0200
+  if (true) {                             // 0250
+    break                                 // 0300
+  }                                       // 0350
+}                                         // 0400
+`,
+[{"start":0,"end":449,"count":1},
+ {"start":353,"end":401,"count":0}]
+);
+
+TestCoverage(
+"terminal return statement",
+`
+function a () {                           // 0000
+  const b = false                         // 0050
+  return 1                                // 0100
+}                                         // 0150
+const b = (early) => {                    // 0200
+  if (early) {                            // 0250
+    return 2                              // 0300
+  }                                       // 0350
+  return 3                                // 0400
+}                                         // 0450
+const c = () => {                         // 0500
+  if (true) {                             // 0550
+    return                                // 0600
+  }                                       // 0650
+}                                         // 0700
+a(); b(false); b(true); c()               // 0750
+`,
+[{"start":0,"end":799,"count":1},
+ {"start":0,"end":151,"count":1},
+ {"start":210,"end":451,"count":2},
+ {"start":263,"end":450,"count":1},
+ {"start":510,"end":701,"count":1},
+ {"start":653,"end":700,"count":0}]
 );
 
 %DebugToggleBlockCoverage(false);
