@@ -21,6 +21,7 @@
 #include "src/objects/object-macros.h"
 
 namespace U_ICU_NAMESPACE {
+class DateIntervalFormat;
 class Locale;
 class SimpleDateFormat;
 }  // namespace U_ICU_NAMESPACE
@@ -60,6 +61,14 @@ class JSDateTimeFormat : public JSObject {
       Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
       double date_value);
 
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> FormatRange(
+      Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
+      double x_date_value, double y_date_value);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<Object> FormatRangeToParts(
+      Isolate* isolate, Handle<JSDateTimeFormat> date_time_format,
+      double x_date_value, double y_date_value);
+
   // ecma-402/#sec-todatetimeoptions
   enum class RequiredOption { kDate, kTime, kAny };
   enum class DefaultsOption { kDate, kTime, kAll };
@@ -76,11 +85,12 @@ class JSDateTimeFormat : public JSObject {
   DECL_CAST(JSDateTimeFormat)
 
 // Layout description.
-#define JS_DATE_TIME_FORMAT_FIELDS(V)         \
-  V(kICULocaleOffset, kPointerSize)           \
-  V(kICUSimpleDateFormatOffset, kPointerSize) \
-  V(kBoundFormatOffset, kPointerSize)         \
-  /* Total size. */                           \
+#define JS_DATE_TIME_FORMAT_FIELDS(V)           \
+  V(kICULocaleOffset, kPointerSize)             \
+  V(kICUSimpleDateFormatOffset, kPointerSize)   \
+  V(kBoundFormatOffset, kPointerSize)           \
+  V(kICUDateIntervalFormatOffset, kPointerSize) \
+  /* Total size. */                             \
   V(kSize, 0)
 
   DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize,
@@ -90,6 +100,7 @@ class JSDateTimeFormat : public JSObject {
   DECL_ACCESSORS(icu_locale, Managed<icu::Locale>)
   DECL_ACCESSORS(icu_simple_date_format, Managed<icu::SimpleDateFormat>)
   DECL_ACCESSORS(bound_format, Object)
+  DECL_ACCESSORS(icu_date_interval_format, Managed<icu::DateIntervalFormat>)
 
   DECL_PRINTER(JSDateTimeFormat)
   DECL_VERIFIER(JSDateTimeFormat)
