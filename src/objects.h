@@ -140,6 +140,7 @@
 //     - SharedFunctionInfo
 //     - Struct
 //       - AccessorInfo
+//       - AsmWasmData
 //       - PromiseReaction
 //       - PromiseCapability
 //       - AccessorPair
@@ -701,6 +702,7 @@ class ZoneForwardList;
   V(AccessCheckNeeded)                         \
   V(AllocationSite)                            \
   V(ArrayList)                                 \
+  V(AsmWasmData)                               \
   V(BigInt)                                    \
   V(BigIntWrapper)                             \
   V(ObjectBoilerplateDescription)              \
@@ -905,6 +907,7 @@ class ZoneForwardList;
 // List of object types that have a single unique instance type.
 #define INSTANCE_TYPE_CHECKERS_SINGLE_BASE(V)                            \
   V(AllocationSite, ALLOCATION_SITE_TYPE)                                \
+  V(AsmWasmData, TUPLE2_TYPE)                                            \
   V(BigInt, BIGINT_TYPE)                                                 \
   V(ObjectBoilerplateDescription, OBJECT_BOILERPLATE_DESCRIPTION_TYPE)   \
   V(BreakPoint, TUPLE2_TYPE)                                             \

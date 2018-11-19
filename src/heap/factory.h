@@ -27,7 +27,7 @@ namespace internal {
 
 // Forward declarations.
 class AliasedArgumentsEntry;
-class ObjectBoilerplateDescription;
+class AsmWasmData;
 class BreakPoint;
 class BreakPointInfo;
 class CallableTask;
@@ -53,6 +53,7 @@ class LoadHandler;
 class ModuleInfo;
 class NativeContext;
 class NewFunctionArgs;
+class ObjectBoilerplateDescription;
 class PreParsedScopeData;
 class PromiseResolveThenableJobTask;
 class RegExpMatchInfo;
@@ -63,6 +64,7 @@ class TemplateObjectDescription;
 class UncompiledDataWithoutPreParsedScope;
 class UncompiledDataWithPreParsedScope;
 class WasmExportedFunctionData;
+class WasmModuleObject;
 class WeakFactoryCleanupJobTask;
 struct SourceRange;
 template <typename T>
@@ -925,6 +927,9 @@ class V8_EXPORT_PRIVATE Factory {
   Handle<JSPromise> NewJSPromise(PretenureFlag pretenure = NOT_TENURED);
 
   Handle<CallHandlerInfo> NewCallHandlerInfo(bool has_no_side_effect = false);
+
+  Handle<AsmWasmData> NewAsmWasmData(Handle<WasmModuleObject> module,
+                                     Handle<HeapNumber> uses_bitset);
 
   HeapObject* NewForTest(Handle<Map> map, PretenureFlag pretenure) {
     return New(map, pretenure);

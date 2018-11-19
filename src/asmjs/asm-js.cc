@@ -36,11 +36,6 @@ namespace internal {
 const char* const AsmJs::kSingleFunctionName = "__single_function__";
 
 namespace {
-enum WasmDataEntries {
-  kWasmDataCompiledModule,
-  kWasmDataUsesBitSet,
-  kWasmDataEntryCount,
-};
 
 Handle<Object> StdlibMathMember(Isolate* isolate, Handle<JSReceiver> stdlib,
                                 Handle<Name> name) {
@@ -295,10 +290,8 @@ UnoptimizedCompilationJob::Status AsmJsCompilationJob::FinalizeJobImpl(
   compile_time_ = compile_timer.Elapsed().InMillisecondsF();
 
   // The result is a compiled module and serialized standard library uses.
-  Handle<FixedArray> result =
-      isolate->factory()->NewFixedArray(kWasmDataEntryCount);
-  result->set(kWasmDataCompiledModule, *compiled);
-  result->set(kWasmDataUsesBitSet, *uses_bitset);
+  Handle<AsmWasmData> result =
+      isolate->factory()->NewAsmWasmData(compiled, uses_bitset);
   compilation_info()->SetAsmWasmData(result);
 
   RecordHistograms(isolate);
@@ -354,16 +347,14 @@ inline bool IsValidAsmjsMemorySize(size_t size) {
 
 MaybeHandle<Object> AsmJs::InstantiateAsmWasm(Isolate* isolate,
                                               Handle<SharedFunctionInfo> shared,
-                                              Handle<FixedArray> wasm_data,
+                                              Handle<AsmWasmData> wasm_data,
                                               Handle<JSReceiver> stdlib,
                                               Handle<JSReceiver> foreign,
                                               Handle<JSArrayBuffer> memory) {
   base::ElapsedTimer instantiate_timer;
   instantiate_timer.Start();
-  Handle<HeapNumber> uses_bitset(
-      HeapNumber::cast(wasm_data->get(kWasmDataUsesBitSet)), isolate);
-  Handle<WasmModuleObject> module(
-      WasmModuleObject::cast(wasm_data->get(kWasmDataCompiledModule)), isolate);
+  Handle<HeapNumber> uses_bitset(wasm_data->uses_bitset(), isolate);
+  Handle<WasmModuleObject> module(wasm_data->compiled_module(), isolate);
   Handle<Script> script(Script::cast(shared->script()), isolate);
   // TODO(mstarzinger): The position currently points to the module definition
   // but should instead point to the instantiation site (more intuitive).
