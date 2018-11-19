@@ -3366,6 +3366,9 @@ void Assembler::RecordRelocInfo(RelocInfo::Mode rmode, intptr_t data) {
   reloc_info_writer.Write(&rinfo);
 }
 
+DEFINE_REGISTER_NAMES(Register, GENERAL_REGISTERS)
+DEFINE_REGISTER_NAMES(XMMRegister, DOUBLE_REGISTERS)
+
 }  // namespace internal
 }  // namespace v8
 

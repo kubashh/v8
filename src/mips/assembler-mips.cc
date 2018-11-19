@@ -4183,6 +4183,10 @@ Register UseScratchRegisterScope::Acquire() {
 
 bool UseScratchRegisterScope::hasAvailable() const { return *available_ != 0; }
 
+DEFINE_REGISTER_NAMES(Register, GENERAL_REGISTERS)
+DEFINE_REGISTER_NAMES(FPURegister, DOUBLE_REGISTERS)
+DEFINE_REGISTER_NAMES(MSARegister, SIMD128_REGISTERS)
+
 }  // namespace internal
 }  // namespace v8
 

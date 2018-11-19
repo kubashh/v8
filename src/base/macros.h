@@ -286,6 +286,10 @@ struct Use {
 // have defined behavior.
 #define ITERATE_PACK(...) USE(0, ((__VA_ARGS__), 0)...)
 
+#define NUM_ARGS(...) (decltype(::v8::base::NumArgsHelper(__VA_ARGS__))::value)
+template <typename... Args>
+std::integral_constant<size_t, sizeof...(Args)> NumArgsHelper(Args...);
+
 }  // namespace base
 }  // namespace v8
 

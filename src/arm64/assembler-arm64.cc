@@ -5052,6 +5052,9 @@ void PatchingAssembler::PatchSubSp(uint32_t immediate) {
   sub(sp, sp, immediate);
 }
 
+// TODO(arm64): Improve register printing.
+DEFINE_REGISTER_NAMES(CPURegister, GENERAL_REGISTERS)
+
 }  // namespace internal
 }  // namespace v8
 

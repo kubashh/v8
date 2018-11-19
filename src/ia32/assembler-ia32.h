@@ -1895,6 +1895,10 @@ class EnsureSpace {
 #endif
 };
 
+// Declare {RegisterName} methods for the register types.
+DECLARE_REGISTER_NAMES(Register)
+DECLARE_REGISTER_NAMES(XMMRegister)
+
 }  // namespace internal
 }  // namespace v8
 

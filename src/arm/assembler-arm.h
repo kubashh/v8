@@ -1757,6 +1757,14 @@ class UseScratchRegisterScope {
   VfpRegList old_available_vfp_;
 };
 
+// Declare {RegisterName} methods for the register types.
+DECLARE_REGISTER_NAMES(Register);
+DECLARE_REGISTER_NAMES(SwVfpRegister);
+DECLARE_REGISTER_NAMES(DwVfpRegister);
+DECLARE_REGISTER_NAMES(LowDwVfpRegister);
+DECLARE_REGISTER_NAMES(QwNeonRegister);
+DECLARE_REGISTER_NAMES(CRegister);
+
 }  // namespace internal
 }  // namespace v8
 

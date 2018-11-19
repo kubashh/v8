@@ -526,10 +526,24 @@ class RegisterBase {
   int reg_code_;
 };
 
-template <typename SubType, int kAfterLastRegister>
-inline std::ostream& operator<<(std::ostream& os,
-                                RegisterBase<SubType, kAfterLastRegister> reg) {
-  return reg.is_valid() ? os << "r" << reg.code() : os << "<invalid reg>";
+// Helper macros to define a {RegisterName} method based on a macro list
+// containing all names.
+#define DECLARE_REGISTER_NAMES(RegType)                                      \
+  extern const char* const RegisterNames_##RegType[];                        \
+  inline const char* RegisterName(RegType reg) {                             \
+    return reg.is_valid() ? RegisterNames_##RegType[reg.code()] : "invalid"; \
+  }
+#define DEFINE_REGISTER_NAMES_NAME(name) #name,
+#define DEFINE_REGISTER_NAMES(RegType, LIST)                    \
+  const char* const RegisterNames_##RegType[] = {               \
+      LIST(DEFINE_REGISTER_NAMES_NAME)};                        \
+  STATIC_ASSERT(NUM_ARGS(LIST(DEFINE_REGISTER_NAMES_NAME) 0) == \
+                RegType::kNumRegisters + 1);
+
+template <typename RegType,
+          typename = decltype(RegisterName(std::declval<RegType>()))>
+inline std::ostream& operator<<(std::ostream& os, RegType reg) {
+  return os << RegisterName(reg);
 }
 
 }  // namespace internal

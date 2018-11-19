@@ -5016,6 +5016,9 @@ int RelocInfo::GetDeoptimizationId(Isolate* isolate, DeoptimizeKind kind) {
   return Deoptimizer::GetDeoptimizationId(isolate, target_address(), kind);
 }
 
+DEFINE_REGISTER_NAMES(Register, GENERAL_REGISTERS)
+DEFINE_REGISTER_NAMES(XMMRegister, DOUBLE_REGISTERS)
+
 }  // namespace internal
 }  // namespace v8
 
