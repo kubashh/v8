@@ -540,6 +540,8 @@ class ParserBase {
           properties(parser->impl()->NewClassPropertyList(4)),
           static_fields(parser->impl()->NewClassPropertyList(4)),
           instance_fields(parser->impl()->NewClassPropertyList(4)),
+          instance_methods_or_accessors(
+              parser->impl()->NewClassPropertyList(4)),
           constructor(parser->impl()->NullExpression()),
           has_seen_constructor(false),
           has_name_static_property(false),
@@ -555,6 +557,7 @@ class ParserBase {
     typename Types::ClassPropertyList properties;
     typename Types::ClassPropertyList static_fields;
     typename Types::ClassPropertyList instance_fields;
+    typename Types::ClassPropertyList instance_methods_or_accessors;
     FunctionLiteralT constructor;
 
     bool has_seen_constructor;
@@ -1021,8 +1024,10 @@ class ParserBase {
   void CheckClassMethodName(IdentifierT name, ParsePropertyKind type,
                             ParseFunctionFlags flags, bool is_static,
                             bool* has_seen_constructor);
-  ExpressionT ParseMemberInitializer(ClassInfo* class_info, int beg_pos,
-                                     bool is_static);
+  ExpressionT ParseClassMemberInitializer(FunctionKind* kind, IdentifierT* name,
+                                          int name_token_position,
+                                          ClassInfo* class_info, int beg_pos,
+                                          bool is_static);
   ObjectLiteralPropertyT ParseObjectPropertyDefinition(bool* has_seen_proto,
                                                        bool* is_computed_name,
                                                        bool* is_rest_property);
@@ -2174,8 +2179,9 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
         if (!*is_computed_name) {
           CheckClassFieldName(*name, *is_static);
         }
-        ExpressionT initializer =
-            ParseMemberInitializer(class_info, property_beg_pos, *is_static);
+        ExpressionT initializer = ParseClassMemberInitializer(
+            nullptr, name, name_token_position, class_info, property_beg_pos,
+            *is_static);
         ExpectSemicolon();
         ClassLiteralPropertyT result = factory()->NewClassLiteralProperty(
             name_expression, initializer, *property_kind, *is_static,
@@ -2197,6 +2203,7 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
       //    async '*' PropertyName '(' StrictFormalParameters ')'
       //        '{' FunctionBody '}'
 
+      *property_kind = ClassLiteralProperty::METHOD;
       if (!*is_computed_name) {
         CheckClassMethodName(*name, ParsePropertyKind::kMethod, function_flags,
                              *is_static, &class_info->has_seen_constructor);
@@ -2210,12 +2217,18 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
                            : FunctionKind::kBaseConstructor;
       }
 
-      ExpressionT value = impl()->ParseFunctionLiteral(
-          *name, scanner()->location(), kSkipFunctionNameCheck, kind,
-          name_token_position, FunctionLiteral::kAccessorOrMethod,
-          language_mode(), nullptr);
+      ExpressionT value;
+      if (*is_private) {
+        value = ParseClassMemberInitializer(&kind, name, name_token_position,
+                                            class_info, property_beg_pos,
+                                            *is_static);
+      } else {
+        value = impl()->ParseFunctionLiteral(
+            *name, scanner()->location(), kSkipFunctionNameCheck, kind,
+            name_token_position, FunctionLiteral::kAccessorOrMethod,
+            language_mode(), nullptr);
+      }
 
-      *property_kind = ClassLiteralProperty::METHOD;
       ClassLiteralPropertyT result = factory()->NewClassLiteralProperty(
           name_expression, value, *property_kind, *is_static, *is_computed_name,
           *is_private);
@@ -2227,6 +2240,8 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
     case ParsePropertyKind::kAccessorSetter: {
       DCHECK_EQ(function_flags, ParseFunctionFlag::kIsNormal);
       bool is_get = kind == ParsePropertyKind::kAccessorGetter;
+      *property_kind =
+          is_get ? ClassLiteralProperty::GETTER : ClassLiteralProperty::SETTER;
 
       if (!*is_computed_name) {
         CheckClassMethodName(*name, kind, ParseFunctionFlag::kIsNormal,
@@ -2240,14 +2255,18 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
 
       FunctionKind kind = is_get ? FunctionKind::kGetterFunction
                                  : FunctionKind::kSetterFunction;
+      ExpressionT value;
+      if (*is_private) {
+        value = ParseClassMemberInitializer(&kind, name, name_token_position,
+                                            class_info, property_beg_pos,
+                                            *is_static);
+      } else {
+        value = impl()->ParseFunctionLiteral(
+            *name, scanner()->location(), kSkipFunctionNameCheck, kind,
+            name_token_position, FunctionLiteral::kAccessorOrMethod,
+            language_mode(), nullptr);
+      }
 
-      FunctionLiteralT value = impl()->ParseFunctionLiteral(
-          *name, scanner()->location(), kSkipFunctionNameCheck, kind,
-          name_token_position, FunctionLiteral::kAccessorOrMethod,
-          language_mode(), nullptr);
-
-      *property_kind =
-          is_get ? ClassLiteralProperty::GETTER : ClassLiteralProperty::SETTER;
       ClassLiteralPropertyT result = factory()->NewClassLiteralProperty(
           name_expression, value, *property_kind, *is_static, *is_computed_name,
           *is_private);
@@ -2269,8 +2288,12 @@ ParserBase<Impl>::ParseClassPropertyDefinition(
 }
 
 template <typename Impl>
-typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseMemberInitializer(
-    ClassInfo* class_info, int beg_pos, bool is_static) {
+typename ParserBase<Impl>::ExpressionT
+ParserBase<Impl>::ParseClassMemberInitializer(FunctionKind* kind,
+                                              IdentifierT* name,
+                                              int name_token_position,
+                                              ClassInfo* class_info,
+                                              int beg_pos, bool is_static) {
   DeclarationScope* initializer_scope =
       is_static ? class_info->static_fields_scope
                 : class_info->instance_members_scope;
@@ -2284,22 +2307,31 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseMemberInitializer(
   }
 
   ExpressionT initializer;
-  if (Check(Token::ASSIGN)) {
+  if (kind != nullptr) {
     FunctionState initializer_state(&function_state_, &scope_,
                                     initializer_scope);
-    ExpressionClassifier expression_classifier(this);
+    initializer = impl()->ParseFunctionLiteral(
+        *name, scanner()->location(), kSkipFunctionNameCheck, *kind,
+        name_token_position, FunctionLiteral::kAccessorOrMethod,
+        language_mode(), nullptr);
+  } else {  // fields
+    if (Check(Token::ASSIGN)) {
+      FunctionState initializer_state(&function_state_, &scope_,
+                                      initializer_scope);
+      ExpressionClassifier expression_classifier(this);
 
-    AcceptINScope scope(this, true);
-    initializer = ParseAssignmentExpression();
-    ValidateExpression();
+      AcceptINScope scope(this, true);
+      initializer = ParseAssignmentExpression();
+      ValidateExpression();
 
-    // TODO(gsathya): In the future, this could be changed to be
-    // called once for all the class field initializers, instead of
-    // rewriting after each class field initializer, improving
-    // performance.
-    impl()->RewriteDestructuringAssignments();
-  } else {
-    initializer = factory()->NewUndefinedLiteral(kNoSourcePosition);
+      // TODO(gsathya): In the future, this could be changed to be
+      // called once for all the class field initializers, instead of
+      // rewriting after each class field initializer, improving
+      // performance.
+      impl()->RewriteDestructuringAssignments();
+    } else {
+      initializer = factory()->NewUndefinedLiteral(kNoSourcePosition);
+    }
   }
 
   initializer_scope->set_end_position(end_position());
