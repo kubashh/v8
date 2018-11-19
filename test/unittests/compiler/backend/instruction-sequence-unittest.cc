@@ -5,6 +5,7 @@
 #include "test/unittests/compiler/backend/instruction-sequence-unittest.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/compiler/pipeline.h"
+#include "src/register-configuration.h"
 #include "test/unittests/test-utils.h"
 #include "testing/gmock/include/gmock/gmock.h"
 
@@ -12,30 +13,9 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
-static const char*
-    general_register_names_[RegisterConfiguration::kMaxGeneralRegisters];
-static const char*
-    double_register_names_[RegisterConfiguration::kMaxFPRegisters];
-static char register_names_[10 * (RegisterConfiguration::kMaxGeneralRegisters +
-                                  RegisterConfiguration::kMaxFPRegisters)];
-
 namespace {
 static int allocatable_codes[InstructionSequenceTest::kDefaultNRegs] = {
     0, 1, 2, 3, 4, 5, 6, 7};
-}
-
-static void InitializeRegisterNames() {
-  char* loc = register_names_;
-  for (int i = 0; i < RegisterConfiguration::kMaxGeneralRegisters; ++i) {
-    general_register_names_[i] = loc;
-    loc += base::OS::SNPrintF(loc, 100, "gp_%d", i);
-    *loc++ = 0;
-  }
-  for (int i = 0; i < RegisterConfiguration::kMaxFPRegisters; ++i) {
-    double_register_names_[i] = loc;
-    loc += base::OS::SNPrintF(loc, 100, "fp_%d", i) + 1;
-    *loc++ = 0;
-  }
 }
 
 InstructionSequenceTest::InstructionSequenceTest()
@@ -44,9 +24,7 @@ InstructionSequenceTest::InstructionSequenceTest()
       num_double_registers_(kDefaultNRegs),
       instruction_blocks_(zone()),
       current_block_(nullptr),
-      block_returns_(false) {
-  InitializeRegisterNames();
-}
+      block_returns_(false) {}
 
 void InstructionSequenceTest::SetNumRegs(int num_general_registers,
                                          int num_double_registers) {
@@ -90,11 +68,7 @@ const RegisterConfiguration* InstructionSequenceTest::config() {
         num_general_registers_, num_double_registers_, num_general_registers_,
         num_double_registers_, allocatable_codes, allocatable_codes,
         kSimpleFPAliasing ? RegisterConfiguration::OVERLAP
-                          : RegisterConfiguration::COMBINE,
-        general_register_names_,
-        double_register_names_,  // float register names
-        double_register_names_,
-        double_register_names_));  // SIMD 128 register names
+                          : RegisterConfiguration::COMBINE));
   }
   return config_.get();
 }
