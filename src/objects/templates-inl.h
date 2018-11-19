@@ -22,26 +22,33 @@ SMI_ACCESSORS(TemplateInfo, number_of_properties, kNumberOfProperties)
 ACCESSORS(TemplateInfo, property_list, Object, kPropertyListOffset)
 ACCESSORS(TemplateInfo, property_accessors, Object, kPropertyAccessorsOffset)
 
+#define EXTRA_ACCESSORS(Name, CamelName, Type)                                 \
+  Type* FunctionTemplateInfo::Get##CamelName() {                               \
+    HeapObject* extra = rare_data();                                           \
+    HeapObject* undefined = GetReadOnlyRoots().undefined_value();              \
+    return extra == undefined ? undefined                                      \
+                              : FunctionTemplateRareData::cast(extra)->Name(); \
+  }                                                                            \
+  inline void FunctionTemplateInfo::Set##CamelName(                            \
+      Handle<FunctionTemplateInfo> function_template_info,                     \
+      Handle<Type> Name) {                                                     \
+    /* preserve this as there may be allocation */                             \
+    HeapObject* extra = function_template_info->rare_data();                   \
+    Isolate* isolate = function_template_info->GetIsolate();                   \
+    HeapObject* undefined = ReadOnlyRoots(isolate).undefined_value();          \
+    if (extra == undefined) {                                                  \
+      extra = EnsureFunctionTemplateRareData(isolate, function_template_info); \
+    }                                                                          \
+    FunctionTemplateRareData::cast(extra)->set_##Name(*Name);                  \
+  }
+
 ACCESSORS(FunctionTemplateInfo, call_code, Object, kCallCodeOffset)
-ACCESSORS(FunctionTemplateInfo, prototype_template, Object,
-          kPrototypeTemplateOffset)
-ACCESSORS(FunctionTemplateInfo, prototype_provider_template, Object,
-          kPrototypeProviderTemplateOffset)
-ACCESSORS(FunctionTemplateInfo, parent_template, Object, kParentTemplateOffset)
-ACCESSORS(FunctionTemplateInfo, named_property_handler, Object,
-          kNamedPropertyHandlerOffset)
-ACCESSORS(FunctionTemplateInfo, indexed_property_handler, Object,
-          kIndexedPropertyHandlerOffset)
-ACCESSORS(FunctionTemplateInfo, instance_template, Object,
-          kInstanceTemplateOffset)
 ACCESSORS(FunctionTemplateInfo, class_name, Object, kClassNameOffset)
 ACCESSORS(FunctionTemplateInfo, signature, Object, kSignatureOffset)
-ACCESSORS(FunctionTemplateInfo, instance_call_handler, Object,
-          kInstanceCallHandlerOffset)
-ACCESSORS(FunctionTemplateInfo, access_check_info, Object,
-          kAccessCheckInfoOffset)
 ACCESSORS(FunctionTemplateInfo, shared_function_info, Object,
           kSharedFunctionInfoOffset)
+ACCESSORS(FunctionTemplateInfo, rare_data, HeapObject,
+          kFunctionTemplateRareDataOffset)
 ACCESSORS(FunctionTemplateInfo, cached_property_name, Object,
           kCachedPropertyNameOffset)
 SMI_ACCESSORS(FunctionTemplateInfo, length, kLengthOffset)
@@ -58,12 +65,38 @@ BOOL_ACCESSORS(FunctionTemplateInfo, flag, do_not_cache, kDoNotCacheBit)
 BOOL_ACCESSORS(FunctionTemplateInfo, flag, accept_any_receiver,
                kAcceptAnyReceiver)
 SMI_ACCESSORS(FunctionTemplateInfo, flag, kFlagOffset)
+EXTRA_ACCESSORS(prototype_template, PrototypeTemplate, Object)
+EXTRA_ACCESSORS(prototype_provider_template, PrototypeProviderTemplate, Object)
+EXTRA_ACCESSORS(parent_template, ParentTemplate, Object)
+EXTRA_ACCESSORS(named_property_handler, NamedPropertyHandler, Object)
+EXTRA_ACCESSORS(indexed_property_handler, IndexedPropertyHandler, Object)
+EXTRA_ACCESSORS(instance_template, InstanceTemplate, Object)
+EXTRA_ACCESSORS(instance_call_handler, InstanceCallHandler, Object)
+EXTRA_ACCESSORS(access_check_info, AccessCheckInfo, Object)
+
+ACCESSORS(FunctionTemplateRareData, prototype_template, Object,
+          kPrototypeTemplateOffset)
+ACCESSORS(FunctionTemplateRareData, prototype_provider_template, Object,
+          kPrototypeProviderTemplateOffset)
+ACCESSORS(FunctionTemplateRareData, parent_template, Object,
+          kParentTemplateOffset)
+ACCESSORS(FunctionTemplateRareData, named_property_handler, Object,
+          kNamedPropertyHandlerOffset)
+ACCESSORS(FunctionTemplateRareData, indexed_property_handler, Object,
+          kIndexedPropertyHandlerOffset)
+ACCESSORS(FunctionTemplateRareData, instance_template, Object,
+          kInstanceTemplateOffset)
+ACCESSORS(FunctionTemplateRareData, instance_call_handler, Object,
+          kInstanceCallHandlerOffset)
+ACCESSORS(FunctionTemplateRareData, access_check_info, Object,
+          kAccessCheckInfoOffset)
 
 ACCESSORS(ObjectTemplateInfo, constructor, Object, kConstructorOffset)
 ACCESSORS(ObjectTemplateInfo, data, Object, kDataOffset)
 
 CAST_ACCESSOR(TemplateInfo)
 CAST_ACCESSOR(FunctionTemplateInfo)
+CAST_ACCESSOR(FunctionTemplateRareData)
 CAST_ACCESSOR(ObjectTemplateInfo)
 
 bool FunctionTemplateInfo::instantiated() {
@@ -80,7 +113,7 @@ bool FunctionTemplateInfo::BreakAtEntry() {
 }
 
 FunctionTemplateInfo* FunctionTemplateInfo::GetParent(Isolate* isolate) {
-  Object* parent = parent_template();
+  Object* parent = GetParentTemplate();
   return parent->IsUndefined(isolate) ? nullptr
                                       : FunctionTemplateInfo::cast(parent);
 }
@@ -92,7 +125,7 @@ ObjectTemplateInfo* ObjectTemplateInfo::GetParent(Isolate* isolate) {
   while (true) {
     constructor = constructor->GetParent(isolate);
     if (constructor == nullptr) return nullptr;
-    Object* maybe_obj = constructor->instance_template();
+    Object* maybe_obj = constructor->GetInstanceTemplate();
     if (!maybe_obj->IsUndefined(isolate)) {
       return ObjectTemplateInfo::cast(maybe_obj);
     }

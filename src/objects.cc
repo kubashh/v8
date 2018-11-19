@@ -1310,12 +1310,22 @@ bool FunctionTemplateInfo::IsTemplateFor(Map map) {
   // see if the required one occurs.
   while (type->IsFunctionTemplateInfo()) {
     if (type == this) return true;
-    type = FunctionTemplateInfo::cast(type)->parent_template();
+    type = FunctionTemplateInfo::cast(type)->GetParentTemplate();
   }
   // Didn't find the required type in the inheritance chain.
   return false;
 }
 
+// static
+FunctionTemplateRareData* FunctionTemplateInfo::EnsureFunctionTemplateRareData(
+    Isolate* isolate, Handle<FunctionTemplateInfo> function_template_info) {
+  Handle<Struct> struct_obj =
+      isolate->factory()->NewStruct(FUNCTION_TEMPLATE_RARE_DATA_TYPE, TENURED);
+  Handle<FunctionTemplateRareData> extra_info =
+      i::Handle<FunctionTemplateRareData>::cast(struct_obj);
+  function_template_info->set_rare_data(*extra_info);
+  return *extra_info;
+}
 
 // static
 Handle<TemplateList> TemplateList::New(Isolate* isolate, int size) {
@@ -18753,7 +18763,7 @@ AccessCheckInfo* AccessCheckInfo::Get(Isolate* isolate,
   Object* maybe_constructor = receiver->map()->GetConstructor();
   if (maybe_constructor->IsFunctionTemplateInfo()) {
     Object* data_obj =
-        FunctionTemplateInfo::cast(maybe_constructor)->access_check_info();
+        FunctionTemplateInfo::cast(maybe_constructor)->GetAccessCheckInfo();
     if (data_obj->IsUndefined(isolate)) return nullptr;
     return AccessCheckInfo::cast(data_obj);
   }
@@ -18764,7 +18774,7 @@ AccessCheckInfo* AccessCheckInfo::Get(Isolate* isolate,
   if (!constructor->shared()->IsApiFunction()) return nullptr;
 
   Object* data_obj =
-      constructor->shared()->get_api_func_data()->access_check_info();
+      constructor->shared()->get_api_func_data()->GetAccessCheckInfo();
   if (data_obj->IsUndefined(isolate)) return nullptr;
 
   return AccessCheckInfo::cast(data_obj);

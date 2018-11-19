@@ -44,13 +44,8 @@ class TemplateInfo : public Struct, public NeverReadOnlySpaceObject {
   DISALLOW_IMPLICIT_CONSTRUCTORS(TemplateInfo);
 };
 
-// See the api-exposed FunctionTemplate for more information.
-class FunctionTemplateInfo : public TemplateInfo {
+class FunctionTemplateRareData : public Struct {
  public:
-  // Handler invoked when calling an instance of this FunctionTemplateInfo.
-  // Either CallInfoHandler or Undefined.
-  DECL_ACCESSORS(call_code, Object)
-
   // ObjectTemplateInfo or Undefined, used for the prototype property of the
   // resulting JSFunction instance of this FunctionTemplate.
   DECL_ACCESSORS(prototype_template, Object)
@@ -76,6 +71,47 @@ class FunctionTemplateInfo : public TemplateInfo {
   // upon first instantiation if it's Undefined.
   DECL_ACCESSORS(instance_template, Object)
 
+  // Either a CallHandlerInfo or Undefined. If an instance_call_handler is
+  // provided the instances created from the associated JSFunction are marked as
+  // callable.
+  DECL_ACCESSORS(instance_call_handler, Object)
+
+  DECL_ACCESSORS(access_check_info, Object)
+
+  DECL_CAST(FunctionTemplateRareData)
+
+  // Dispatched behavior.
+  DECL_PRINTER(FunctionTemplateRareData)
+  DECL_VERIFIER(FunctionTemplateRareData)
+
+  static const int kPrototypeTemplateOffset = HeapObject::kHeaderSize;
+  static const int kPrototypeProviderTemplateOffset =
+      kPrototypeTemplateOffset + kPointerSize;
+  static const int kParentTemplateOffset =
+      kPrototypeProviderTemplateOffset + kPointerSize;
+  static const int kNamedPropertyHandlerOffset =
+      kParentTemplateOffset + kPointerSize;
+  static const int kIndexedPropertyHandlerOffset =
+      kNamedPropertyHandlerOffset + kPointerSize;
+  static const int kInstanceTemplateOffset =
+      kIndexedPropertyHandlerOffset + kPointerSize;
+  static const int kInstanceCallHandlerOffset =
+      kInstanceTemplateOffset + kPointerSize;
+  static const int kAccessCheckInfoOffset =
+      kInstanceCallHandlerOffset + kPointerSize;
+  static const int kSize = kAccessCheckInfoOffset + kPointerSize;
+
+ private:
+  DISALLOW_IMPLICIT_CONSTRUCTORS(FunctionTemplateRareData);
+};
+
+// See the api-exposed FunctionTemplate for more information.
+class FunctionTemplateInfo : public TemplateInfo {
+ public:
+  // Handler invoked when calling an instance of this FunctionTemplateInfo.
+  // Either CallInfoHandler or Undefined.
+  DECL_ACCESSORS(call_code, Object)
+
   DECL_ACCESSORS(class_name, Object)
 
   // If the signature is a FunctionTemplateInfo it is used to check whether the
@@ -83,13 +119,50 @@ class FunctionTemplateInfo : public TemplateInfo {
   // it is an instance of the signature FunctionTemplateInfo or any of the
   // receiver's prototypes are.
   DECL_ACCESSORS(signature, Object)
+  DECL_ACCESSORS(rare_data, HeapObject)
+
+  static FunctionTemplateRareData* EnsureFunctionTemplateRareData(
+      Isolate* isolate, Handle<FunctionTemplateInfo> function_template_info);
+
+#define DECL_EXTRA_ACCESSORS(Name, CamelName, Type) \
+  inline Type* Get##CamelName();                    \
+  static inline void Set##CamelName(                \
+      Handle<FunctionTemplateInfo> function_template_info, Handle<Type> Name);
+
+  // ObjectTemplateInfo or Undefined, used for the prototype property of the
+  // resulting JSFunction instance of this FunctionTemplate.
+  DECL_EXTRA_ACCESSORS(prototype_template, PrototypeTemplate, Object)
+
+  // In the case the prototype_template is Undefined we use the
+  // prototype_provider_template to retrieve the instance prototype. Either
+  // contains an ObjectTemplateInfo or Undefined.
+  DECL_EXTRA_ACCESSORS(prototype_provider_template, PrototypeProviderTemplate,
+                       Object)
+
+  // Used to create prototype chains. The parent_template's prototype is set as
+  // __proto__ of this FunctionTemplate's instance prototype. Is either a
+  // FunctionTemplateInfo or Undefined.
+  DECL_EXTRA_ACCESSORS(parent_template, ParentTemplate, Object)
+
+  // Returns an InterceptorInfo or Undefined for named properties.
+  DECL_EXTRA_ACCESSORS(named_property_handler, NamedPropertyHandler, Object)
+  // Returns an InterceptorInfo or Undefined for indexed properties/elements.
+  DECL_EXTRA_ACCESSORS(indexed_property_handler, IndexedPropertyHandler, Object)
+
+  // An ObjectTemplateInfo that is used when instantiating the JSFunction
+  // associated with this FunctionTemplateInfo. Contains either an
+  // ObjectTemplateInfo or Undefined. A default instance_template is assigned
+  // upon first instantiation if it's Undefined.
+  DECL_EXTRA_ACCESSORS(instance_template, InstanceTemplate, Object)
 
   // Either a CallHandlerInfo or Undefined. If an instance_call_handler is
   // provided the instances created from the associated JSFunction are marked as
   // callable.
-  DECL_ACCESSORS(instance_call_handler, Object)
+  DECL_EXTRA_ACCESSORS(instance_call_handler, InstanceCallHandler, Object)
 
-  DECL_ACCESSORS(access_check_info, Object)
+  DECL_EXTRA_ACCESSORS(access_check_info, AccessCheckInfo, Object)
+#undef DECL_EXTRA_ACCESSORS
+
   DECL_ACCESSORS(shared_function_info, Object)
 
   // Internal field to store a flag bitfield.
@@ -135,24 +208,12 @@ class FunctionTemplateInfo : public TemplateInfo {
   static const int kInvalidSerialNumber = 0;
 
   static const int kCallCodeOffset = TemplateInfo::kHeaderSize;
-  static const int kPrototypeTemplateOffset = kCallCodeOffset + kPointerSize;
-  static const int kPrototypeProviderTemplateOffset =
-      kPrototypeTemplateOffset + kPointerSize;
-  static const int kParentTemplateOffset =
-      kPrototypeProviderTemplateOffset + kPointerSize;
-  static const int kNamedPropertyHandlerOffset =
-      kParentTemplateOffset + kPointerSize;
-  static const int kIndexedPropertyHandlerOffset =
-      kNamedPropertyHandlerOffset + kPointerSize;
-  static const int kInstanceTemplateOffset =
-      kIndexedPropertyHandlerOffset + kPointerSize;
-  static const int kClassNameOffset = kInstanceTemplateOffset + kPointerSize;
+  static const int kClassNameOffset = kCallCodeOffset + kPointerSize;
   static const int kSignatureOffset = kClassNameOffset + kPointerSize;
-  static const int kInstanceCallHandlerOffset = kSignatureOffset + kPointerSize;
-  static const int kAccessCheckInfoOffset =
-      kInstanceCallHandlerOffset + kPointerSize;
+  static const int kFunctionTemplateRareDataOffset =
+      kSignatureOffset + kPointerSize;
   static const int kSharedFunctionInfoOffset =
-      kAccessCheckInfoOffset + kPointerSize;
+      kFunctionTemplateRareDataOffset + kPointerSize;
   static const int kFlagOffset = kSharedFunctionInfoOffset + kPointerSize;
   static const int kLengthOffset = kFlagOffset + kPointerSize;
   static const int kCachedPropertyNameOffset = kLengthOffset + kPointerSize;
