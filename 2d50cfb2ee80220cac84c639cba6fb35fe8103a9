@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "984a2cea_85252aa3",
+        "filename": "src/ast/source-range-remover.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-19T09:43:54Z",
+      "side": 1,
+      "message": "Nit: The comment in either the header or here is fine, I wouldn\u0027t duplicate it.",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "376caf32_231f058a",
+        "filename": "src/ast/source-range-remover.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-19T09:43:54Z",
+      "side": 1,
+      "message": "Suggestion: would it be a possibility to make this more generic? \n\nI don\u0027t think we need to care about the kind of the last enclosed statement - what we do care about is whether the current enclosing statement has a continuation counter, and whether the last enclosed statement has a continuation counter.\n\nThe algorithm could be:\n\n if (enclosing_stmt has continuation counter \u0026\u0026 \n     last_enclosed_stmt has continuation count) {\n  remove last_enclosed_stmt\u0027s continuation counter\n  // Note that we didn\u0027t last_enclosed_stmt\u0027s other possible counters.\n }\n\nSee also the comments in the test file.",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6148e739_234cd5a8",
+        "filename": "src/ast/source-range-remover.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-19T09:43:54Z",
+      "side": 1,
+      "message": "Please comment extensively what this does and why. Also a more descriptive name would nice, e.g. RemoveTrailingContinuationSourceRangeVisitor (likewise in the filename). Or maybe RemoveRedundantSourceRangeVisitor?",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ab1e26a_50785a43",
+        "filename": "src/ast/source-range-remover.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-19T09:43:54Z",
+      "side": 1,
+      "message": "Nit: capitalize first word.",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7625137d_2679138c",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-19T09:43:54Z",
+      "side": 1,
+      "message": "Perhaps ParseFunction/ParseProgram in parsing.cc would be a better spot for this?",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "057d5624_1f157702",
+        "filename": "test/mjsunit/code-coverage-block.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-19T09:43:54Z",
+      "side": 1,
+      "message": "Couldn\u0027t we also catch this case if we used a more generic solution: \n\n remove the trailing statement\u0027s continuation counter if the enclosing statement has  a continuation counter",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f89bd61d_caa6c4f8",
+        "filename": "test/mjsunit/code-coverage-block.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-19T09:43:54Z",
+      "side": 1,
+      "message": "Likewise here.",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
