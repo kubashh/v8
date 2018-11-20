@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00f3525d_4bd9c81b",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-20T09:27:36Z",
+      "side": 1,
+      "message": "While it could be possible to return two values from a builtin, I think it\u0027s against the calling conventions used in V8.\n\nReturning a pointer to a raw value isn\u0027t common either, I wanted to avoid boxing the value again, which would defeat the purpose of the builtin.\n\nCould you please indicate me the best way to solve this?",
+      "revId": "6dd8274ead38338fdac85ccaa85b988a9e964244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6ddee0e_34843240",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-20T09:27:36Z",
+      "side": 1,
+      "message": "For more context; the Wasm\u0027s int64 lowering pass will pass the int64 value as a projection or as two separate values. However the Parameter node has an output arity of one, which traps when trying to use it in a projection and as described here the second value isn\u0027t reachable.\n\nCould you please indicate me how to solve this one too? Thanks!",
+      "revId": "6dd8274ead38338fdac85ccaa85b988a9e964244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "298902fb_eb0f3ef5",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-20T09:27:36Z",
+      "side": 1,
+      "message": "Hack to work arround the Int64 lowering pass, see comment/revew in NewBigInt for more information.",
+      "revId": "6dd8274ead38338fdac85ccaa85b988a9e964244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e112793_10683005",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-20T09:27:36Z",
+      "side": 1,
+      "message": "I did a few of this kind of changes; I\u0027m happy to split them in another PR.",
+      "revId": "6dd8274ead38338fdac85ccaa85b988a9e964244",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
