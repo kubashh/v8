@@ -44,6 +44,12 @@ deps = {
     'url': Var('chromium_url') + '/chromium/src/third_party/fuchsia-sdk.git' + '@' + 'ac40df877fbffc53aa4513b9c5becab4b686fa70',
     'condition': 'checkout_fuchsia',
   },
+  'src/third_party/nasm': {
+      'url': Var('chromium_url') + '/chromium/deps/nasm.git' + '@' +
+      'a0a6951e259bd347c133969740348bb5ebb468c4'
+  },
+  'src/third_party/yasm/source/patched-yasm':
+    Var('chromium_url') + '/chromium/deps/yasm/patched-yasm.git' + '@' + '720b70524a4424b15fc57e82263568c8ba0496ad',
   'v8/third_party/googletest/src':
     Var('chromium_url') + '/external/github.com/google/googletest.git' + '@' + '879ac092fde0a19e1b3a61b2546b2a422b1528bc',
   'v8/third_party/jinja2':
