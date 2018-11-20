@@ -23,6 +23,9 @@ enum DataDirective {
 
 static constexpr char kDefaultEmbeddedVariant[] = "Default";
 
+// Roughly, the maximal text line width when writing out the byte stream.
+static const int kTextWidth = 100;
+
 // The platform-dependent logic for emitting assembly code for the generated
 // embedded.S file.
 class PlatformDependentEmbeddedFileWriter final {
@@ -59,8 +62,6 @@ class PlatformDependentEmbeddedFileWriter final {
  private:
   void DeclareSymbolGlobal(const char* name);
 
-  static const char* DirectiveAsString(DataDirective directive);
-
  private:
   FILE* fp_ = nullptr;
 };
@@ -76,8 +77,12 @@ class PlatformDependentEmbeddedFileWriter final {
 // The variant is usually "Default" but can be modified in multisnapshot builds.
 class EmbeddedFileWriter {
  public:
-  void SetEmbeddedFile(const char* embedded_cpp_file) {
-    embedded_cpp_path_ = embedded_cpp_file;
+  void SetEmbeddedFile(const char* embedded_src_path) {
+    embedded_src_path_ = embedded_src_path;
+  }
+
+  void SetEmbeddedFileInlineAsm(const char* embedded_src_path) {
+    embedded_src_inline_asm_path_ = embedded_src_path;
   }
 
   void SetEmbeddedVariant(const char* embedded_variant) {
@@ -86,13 +91,14 @@ class EmbeddedFileWriter {
 
   void WriteEmbedded(const i::EmbeddedData* blob) const {
     MaybeWriteEmbeddedFile(blob);
+    MaybeWriteEmbeddedFileInlineAsm();
   }
 
  private:
   void MaybeWriteEmbeddedFile(const i::EmbeddedData* blob) const {
-    if (embedded_cpp_path_ == nullptr) return;
+    if (embedded_src_path_ == nullptr) return;
 
-    FILE* fp = GetFileDescriptorOrDie(embedded_cpp_path_);
+    FILE* fp = GetFileDescriptorOrDie(embedded_src_path_, "wb");
 
     PlatformDependentEmbeddedFileWriter writer;
     writer.SetFile(fp);
@@ -105,10 +111,56 @@ class EmbeddedFileWriter {
     fclose(fp);
   }
 
-  static FILE* GetFileDescriptorOrDie(const char* filename) {
-    FILE* fp = v8::base::OS::FOpen(filename, "wb");
+  void MaybeWriteEmbeddedFileInlineAsm() const {
+    if (embedded_src_path_ == nullptr ||
+        embedded_src_inline_asm_path_ == nullptr) {
+      return;
+    }
+
+#if defined(_MSC_VER) && !defined(__clang__)
+    // clang on windows sets both __clang__ and _MSC_VER, MSVC sets only
+    // _MSC_VER.
+    i::PrintF("Only supported on clang windows builds.\n");
+    exit(1);
+#else
+    // This takes the generated assembly file and transforms it into a .cc file
+    // with inline assembly by wrapping each line in quotes and sticking them
+    // inside a __asm__() call.
+    //
+    // Clang builds on windows are the only use-case for this. Some background:
+    // On windows, ninja passes all assembly files to Windows MASM, which - for
+    // some reason - becomes excrutiatingly slow when given a large data stream.
+    // We work around this on clang builds by generating a .cc file with inline
+    // assembly instead.
+
+    FILE* in_fp = GetFileDescriptorOrDie(embedded_src_path_, "r");
+    FILE* out_fp = GetFileDescriptorOrDie(embedded_src_inline_asm_path_, "wb");
+
+    fprintf(out_fp, "__asm__(\n");
+
+    // Fudged since we're not perfect about following kTextWidth.
+    const int kBufferSize = kTextWidth << 1;
+    char buffer[kBufferSize];
+    char* string;
+    while ((string = fgets(buffer, kBufferSize, in_fp)) != nullptr) {
+      // Delete trailing newlines.
+      int length = static_cast<int>(strnlen(string, kBufferSize));
+      if (length > 0 && string[length - 1] == '\n') string[length - 1] = '\0';
+      // Write with an indent and wrapped in quotes.
+      fprintf(out_fp, "  \"%s\\n\"\n", string);
+    }
+
+    fprintf(out_fp, ");\n");
+
+    fclose(in_fp);
+    fclose(out_fp);
+#endif
+  }
+
+  static FILE* GetFileDescriptorOrDie(const char* filename, const char* mode) {
+    FILE* fp = v8::base::OS::FOpen(filename, mode);
     if (fp == nullptr) {
-      i::PrintF("Unable to open file \"%s\" for writing.\n", filename);
+      i::PrintF("Unable to open file \"%s\".\n", filename);
       exit(1);
     }
     return fp;
@@ -263,7 +315,6 @@ class EmbeddedFileWriter {
 
   static int WriteLineEndIfNeeded(PlatformDependentEmbeddedFileWriter* w,
                                   int current_line_length, int write_size) {
-    static const int kTextWidth = 100;
     // Check if adding ',0xFF...FF\n"' would force a line wrap. This doesn't use
     // the actual size of the string to be written to determine this so it's
     // more conservative than strictly needed.
@@ -303,7 +354,8 @@ class EmbeddedFileWriter {
     if (current_line_length != 0) w->Newline();
   }
 
-  const char* embedded_cpp_path_ = nullptr;
+  const char* embedded_src_path_ = nullptr;
+  const char* embedded_src_inline_asm_path_ = nullptr;
   const char* embedded_variant_ = kDefaultEmbeddedVariant;
 };
 

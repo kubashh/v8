@@ -9,6 +9,14 @@
 namespace v8 {
 namespace internal {
 
+// V8_CC_MSVC is true for both MSVC and clang on windows. clang can handle
+// __asm__-style inline assembly but MSVC cannot, and thus we need a more
+// precise compiler detection that can distinguish between the two. clang on
+// windows sets both __clang__ and _MSC_VER, MSVC sets only _MSC_VER.
+#if defined(_MSC_VER) && !defined(__clang__)
+#define V8_COMPILER_IS_MSVC
+#endif
+
 // Platform-independent bits.
 // -----------------------------------------------------------------------------
 
@@ -25,10 +33,19 @@ DataDirective PointerSizeDirective() {
 
 }  // namespace
 
-// static
-const char* PlatformDependentEmbeddedFileWriter::DirectiveAsString(
-    DataDirective directive) {
-#ifndef V8_OS_WIN
+const char* DirectiveAsString(DataDirective directive) {
+#if defined(V8_OS_WIN) && defined(V8_COMPILER_IS_MSVC)
+  switch (directive) {
+    case kByte:
+      return "BYTE";
+    case kLong:
+      return "DWORD";
+    case kQuad:
+      return "QWORD";
+    default:
+      UNREACHABLE();
+  }
+#else
   switch (directive) {
     case kByte:
       return ".byte";
@@ -40,17 +57,6 @@ const char* PlatformDependentEmbeddedFileWriter::DirectiveAsString(
       return ".octa";
   }
   UNREACHABLE();
-#else
-  switch (directive) {
-    case kByte:
-      return "BYTE";
-    case kLong:
-      return "DWORD";
-    case kQuad:
-      return "QWORD";
-    default:
-      UNREACHABLE();
-  }
 #endif
 }
 
@@ -209,12 +215,19 @@ int PlatformDependentEmbeddedFileWriter::IndentedDataDirective(
   return fprintf(fp_, "  %s ", DirectiveAsString(directive));
 }
 
-// V8_OS_WIN
+// V8_OS_WIN (MSVC)
 // -----------------------------------------------------------------------------
 
-#elif defined(V8_OS_WIN)
+#elif defined(V8_OS_WIN) && defined(V8_COMPILER_IS_MSVC)
 
 // See https://docs.microsoft.com/en-us/cpp/assembler/masm/directives-reference.
+
+// Symbols are prefixed with an underscore on 32-bit architectures.
+#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64)
+#define SYMBOL_PREFIX ""
+#else
+#define SYMBOL_PREFIX "_"
+#endif
 
 void PlatformDependentEmbeddedFileWriter::SectionText() {
   fprintf(fp_, ".CODE\n");
@@ -231,32 +244,20 @@ void PlatformDependentEmbeddedFileWriter::SectionRoData() {
 void PlatformDependentEmbeddedFileWriter::DeclareUint32(const char* name,
                                                         uint32_t value) {
   DeclareSymbolGlobal(name);
-#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64)
-  fprintf(fp_, "%s %s %d\n", name, DirectiveAsString(kLong), value);
-#else
-  fprintf(fp_, "_%s %s %d\n", name, DirectiveAsString(kLong), value);
-#endif
+  fprintf(fp_, "%s%s %s %d\n", SYMBOL_PREFIX, name, DirectiveAsString(kLong),
+          value);
 }
 
 void PlatformDependentEmbeddedFileWriter::DeclarePointerToSymbol(
     const char* name, const char* target) {
   DeclareSymbolGlobal(name);
-#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64)
-  fprintf(fp_, "%s %s %s\n", name, DirectiveAsString(PointerSizeDirective()),
-          target);
-#else
-  fprintf(fp_, "_%s %s _%s\n", name, DirectiveAsString(PointerSizeDirective()),
-          target);
-#endif
+  fprintf(fp_, "%s%s %s %s%s\n", SYMBOL_PREFIX, name,
+          DirectiveAsString(PointerSizeDirective()), SYMBOL_PREFIX, target);
 }
 
 void PlatformDependentEmbeddedFileWriter::DeclareSymbolGlobal(
     const char* name) {
-#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64)
-  fprintf(fp_, "PUBLIC %s\n", name);
-#else
-  fprintf(fp_, "PUBLIC _%s\n", name);
-#endif
+  fprintf(fp_, "PUBLIC %s%s\n", SYMBOL_PREFIX, name);
 }
 
 void PlatformDependentEmbeddedFileWriter::AlignToCodeAlignment() {
@@ -270,28 +271,17 @@ void PlatformDependentEmbeddedFileWriter::Comment(const char* string) {
 }
 
 void PlatformDependentEmbeddedFileWriter::DeclareLabel(const char* name) {
-#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64)
-  fprintf(fp_, "%s LABEL %s\n", name, DirectiveAsString(kByte));
-#else
-  fprintf(fp_, "_%s LABEL %s\n", name, DirectiveAsString(kByte));
-#endif
+  fprintf(fp_, "%s%s LABEL %s\n", SYMBOL_PREFIX, name,
+          DirectiveAsString(kByte));
 }
 
 void PlatformDependentEmbeddedFileWriter::DeclareFunctionBegin(
     const char* name) {
-#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64)
-  fprintf(fp_, "%s PROC\n", name);
-#else
-  fprintf(fp_, "_%s PROC\n", name);
-#endif
+  fprintf(fp_, "%s%s PROC\n", SYMBOL_PREFIX, name);
 }
 
 void PlatformDependentEmbeddedFileWriter::DeclareFunctionEnd(const char* name) {
-#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64)
-  fprintf(fp_, "%s ENDP\n", name);
-#else
-  fprintf(fp_, "_%s ENDP\n", name);
-#endif
+  fprintf(fp_, "%s%s ENDP\n", SYMBOL_PREFIX, name);
 }
 
 int PlatformDependentEmbeddedFileWriter::HexLiteral(uint64_t value) {
@@ -312,6 +302,98 @@ int PlatformDependentEmbeddedFileWriter::IndentedDataDirective(
     DataDirective directive) {
   return fprintf(fp_, "  %s ", DirectiveAsString(directive));
 }
+
+#undef SYMBOL_PREFIX
+
+// V8_OS_WIN (clang)
+// -----------------------------------------------------------------------------
+
+#elif defined(V8_OS_WIN) && !defined(V8_COMPILER_IS_MSVC)
+
+// Symbols are prefixed with an underscore on 32-bit architectures.
+#if defined(V8_TARGET_ARCH_X64) || defined(V8_TARGET_ARCH_ARM64)
+#define SYMBOL_PREFIX ""
+#else
+#define SYMBOL_PREFIX "_"
+#endif
+
+void PlatformDependentEmbeddedFileWriter::SectionText() {
+  fprintf(fp_, ".section .text\n");
+}
+
+void PlatformDependentEmbeddedFileWriter::SectionData() {
+  fprintf(fp_, ".section .data\n");
+}
+
+void PlatformDependentEmbeddedFileWriter::SectionRoData() {
+  fprintf(fp_, ".section .rodata\n");
+}
+
+void PlatformDependentEmbeddedFileWriter::DeclareUint32(const char* name,
+                                                        uint32_t value) {
+  DeclareSymbolGlobal(name);
+  DeclareLabel(name);
+  IndentedDataDirective(kLong);
+  fprintf(fp_, "%d", value);
+  Newline();
+}
+
+void PlatformDependentEmbeddedFileWriter::DeclarePointerToSymbol(
+    const char* name, const char* target) {
+  DeclareSymbolGlobal(name);
+  DeclareLabel(name);
+  fprintf(fp_, "  %s %s%s\n", DirectiveAsString(PointerSizeDirective()),
+          SYMBOL_PREFIX, target);
+}
+
+void PlatformDependentEmbeddedFileWriter::DeclareSymbolGlobal(
+    const char* name) {
+  fprintf(fp_, ".global %s%s\n", SYMBOL_PREFIX, name);
+}
+
+void PlatformDependentEmbeddedFileWriter::AlignToCodeAlignment() {
+  fprintf(fp_, ".balign 32\n");
+}
+
+void PlatformDependentEmbeddedFileWriter::Comment(const char* string) {
+  fprintf(fp_, "// %s\n", string);
+}
+
+void PlatformDependentEmbeddedFileWriter::DeclareLabel(const char* name) {
+  fprintf(fp_, "%s%s:\n", SYMBOL_PREFIX, name);
+}
+
+void PlatformDependentEmbeddedFileWriter::DeclareFunctionBegin(
+    const char* name) {
+  DeclareLabel(name);
+
+  // The directives for inserting debugging information on Windows come
+  // from the PE (Portable Executable) and COFF (Common Object File Format)
+  // standards. Documented here:
+  // https://docs.microsoft.com/en-us/windows/desktop/debug/pe-format
+  //
+  // .scl 2 means StorageClass external.
+  // .type 32 means Type Representation Function.
+  fprintf(fp_, ".def %s%s; .scl 2; .type 32; .endef;\n", SYMBOL_PREFIX, name);
+}
+
+void PlatformDependentEmbeddedFileWriter::DeclareFunctionEnd(const char* name) {
+}
+
+int PlatformDependentEmbeddedFileWriter::HexLiteral(uint64_t value) {
+  return fprintf(fp_, "0x%" PRIx64, value);
+}
+
+void PlatformDependentEmbeddedFileWriter::FilePrologue() {}
+
+void PlatformDependentEmbeddedFileWriter::FileEpilogue() {}
+
+int PlatformDependentEmbeddedFileWriter::IndentedDataDirective(
+    DataDirective directive) {
+  return fprintf(fp_, "  %s ", DirectiveAsString(directive));
+}
+
+#undef SYMBOL_PREFIX
 
 // Everything but AIX, Windows, or OSX.
 // -----------------------------------------------------------------------------
@@ -399,6 +481,8 @@ int PlatformDependentEmbeddedFileWriter::IndentedDataDirective(
 }
 
 #endif
+
+#undef V8_COMPILER_IS_MSVC
 
 }  // namespace internal
 }  // namespace v8
