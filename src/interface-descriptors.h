@@ -15,70 +15,73 @@
 namespace v8 {
 namespace internal {
 
-#define INTERFACE_DESCRIPTOR_LIST(V)  \
-  V(CppBuiltinAdaptor)                \
-  V(CEntry1ArgvOnStack)               \
-  V(Allocate)                         \
-  V(Void)                             \
-  V(ContextOnly)                      \
-  V(NoContext)                        \
-  V(Load)                             \
-  V(LoadWithVector)                   \
-  V(LoadGlobal)                       \
-  V(LoadGlobalWithVector)             \
-  V(Store)                            \
-  V(StoreWithVector)                  \
-  V(StoreTransition)                  \
-  V(StoreGlobal)                      \
-  V(StoreGlobalWithVector)            \
-  V(FastNewFunctionContext)           \
-  V(FastNewObject)                    \
-  V(RecordWrite)                      \
-  V(TypeConversion)                   \
-  V(TypeConversionStackParameter)     \
-  V(Typeof)                           \
-  V(AsyncFunctionStackParameter)      \
-  V(CallFunction)                     \
-  V(CallVarargs)                      \
-  V(CallForwardVarargs)               \
-  V(CallWithSpread)                   \
-  V(CallWithArrayLike)                \
-  V(CallTrampoline)                   \
-  V(ConstructStub)                    \
-  V(ConstructVarargs)                 \
-  V(ConstructForwardVarargs)          \
-  V(ConstructWithSpread)              \
-  V(ConstructWithArrayLike)           \
-  V(JSTrampoline)                     \
-  V(Abort)                            \
-  V(AllocateHeapNumber)               \
-  V(ArrayConstructor)                 \
-  V(ArrayNoArgumentConstructor)       \
-  V(ArraySingleArgumentConstructor)   \
-  V(ArrayNArgumentsConstructor)       \
-  V(Compare)                          \
-  V(BinaryOp)                         \
-  V(StringAt)                         \
-  V(StringSubstring)                  \
-  V(GetProperty)                      \
-  V(ArgumentsAdaptor)                 \
-  V(ApiCallback)                      \
-  V(ApiGetter)                        \
-  V(GrowArrayElements)                \
-  V(NewArgumentsElements)             \
-  V(InterpreterDispatch)              \
-  V(InterpreterPushArgsThenCall)      \
-  V(InterpreterPushArgsThenConstruct) \
-  V(InterpreterCEntry1)               \
-  V(InterpreterCEntry2)               \
-  V(ResumeGenerator)                  \
-  V(FrameDropperTrampoline)           \
-  V(RunMicrotasks)                    \
-  V(WasmMemoryGrow)                   \
-  V(WasmThrow)                        \
-  V(WasmAtomicWake)                   \
-  V(WasmI32AtomicWait)                \
-  V(CloneObjectWithVector)            \
+#define INTERFACE_DESCRIPTOR_LIST(V)     \
+  V(CppBuiltinAdaptor)                   \
+  V(CEntry1ArgvOnStack)                  \
+  V(Allocate)                            \
+  V(Void)                                \
+  V(ContextOnly)                         \
+  V(NoContext)                           \
+  V(Load)                                \
+  V(LoadWithVector)                      \
+  V(LoadGlobal)                          \
+  V(LoadGlobalWithVector)                \
+  V(Store)                               \
+  V(StoreWithVector)                     \
+  V(StoreTransition)                     \
+  V(StoreGlobal)                         \
+  V(StoreGlobalWithVector)               \
+  V(FastNewFunctionContext)              \
+  V(FastNewObject)                       \
+  V(RecordWrite)                         \
+  V(TypeConversion)                      \
+  V(TypeConversionStackParameter)        \
+  V(Typeof)                              \
+  V(AsyncFunctionStackParameter)         \
+  V(CallFunction)                        \
+  V(CallVarargs)                         \
+  V(CallForwardVarargs)                  \
+  V(CallWithSpread)                      \
+  V(CallWithArrayLike)                   \
+  V(CallTrampoline)                      \
+  V(ConstructStub)                       \
+  V(ConstructVarargs)                    \
+  V(ConstructForwardVarargs)             \
+  V(ConstructWithSpread)                 \
+  V(ConstructWithArrayLike)              \
+  V(JSTrampoline)                        \
+  V(Abort)                               \
+  V(AllocateHeapNumber)                  \
+  V(ArrayConstructor)                    \
+  V(ArrayNoArgumentConstructor)          \
+  V(ArraySingleArgumentConstructor)      \
+  V(ArrayNArgumentsConstructor)          \
+  V(Compare)                             \
+  V(BinaryOp)                            \
+  V(StringAt)                            \
+  V(StringSubstring)                     \
+  V(GetProperty)                         \
+  V(ArgumentsAdaptor)                    \
+  V(ApiCallback)                         \
+  V(ApiGetter)                           \
+  V(GrowArrayElements)                   \
+  V(NewArgumentsElements)                \
+  V(InterpreterDispatch)                 \
+  V(InterpreterPushArgsThenCall)         \
+  V(InterpreterPushArgsThenConstruct)    \
+  V(InterpreterCEntry1)                  \
+  V(InterpreterCEntry2)                  \
+  V(ResumeGenerator)                     \
+  V(FrameDropperTrampoline)              \
+  V(RunMicrotasks)                       \
+  V(WasmMemoryGrow)                      \
+  V(WasmThrow)                           \
+  V(WasmAtomicWake)                      \
+  V(WasmI32AtomicWait)                   \
+  V(CloneObjectWithVector)               \
+  V(WasmToJavaScriptTypeConversion)      \
+  V(HackyWasmToJavaScriptTypeConversion) \
+  V(JavaScriptToWasmTypeConversion)      \
   BUILTIN_LIST_TFS(V)
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
@@ -1104,6 +1107,35 @@ class WasmThrowDescriptor final : public CallInterfaceDescriptor {
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result 1
                                     MachineType::AnyTagged())  // kException
   DECLARE_DESCRIPTOR(WasmThrowDescriptor, CallInterfaceDescriptor)
+};
+
+class WasmToJavaScriptTypeConversionDescriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kArgument)
+  DEFINE_PARAMETER_TYPES(MachineType::Int64())  // kArgument
+  DECLARE_DESCRIPTOR(WasmToJavaScriptTypeConversionDescriptor,
+                     CallInterfaceDescriptor)
+};
+
+class HackyWasmToJavaScriptTypeConversionDescriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kLow, kHigh)
+  DEFINE_PARAMETER_TYPES(MachineType::Int32(),  // kLow
+                         MachineType::Int32())  // kHigh
+  DECLARE_DESCRIPTOR(HackyWasmToJavaScriptTypeConversionDescriptor,
+                     CallInterfaceDescriptor)
+};
+
+class JavaScriptToWasmTypeConversionDescriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kArgument)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::IntPtr(),     // result 1
+                                    MachineType::AnyTagged())  // kArgument
+  DECLARE_DESCRIPTOR(JavaScriptToWasmTypeConversionDescriptor,
+                     CallInterfaceDescriptor)
 };
 
 class WasmAtomicWakeDescriptor final : public CallInterfaceDescriptor {

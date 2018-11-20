@@ -5,6 +5,7 @@
 #include "src/builtins/builtins-utils-gen.h"
 #include "src/code-stub-assembler.h"
 #include "src/objects-inl.h"
+#include "src/objects/bigint.h"
 #include "src/wasm/wasm-objects.h"
 #include "src/wasm/wasm-opcodes.h"
 
@@ -176,6 +177,17 @@ TF_BUILTIN(WasmMemoryGrow, WasmBuiltinsAssembler) {
 
   BIND(&num_pages_out_of_range);
   ReturnRaw(Int32Constant(-1));
+}
+
+TF_BUILTIN(WasmNewBigInt, WasmBuiltinsAssembler) {
+  TNode<Code> target = LoadBuiltinFromFrame(Builtins::kNewBigInt);
+  Node* context = IntPtrConstant(0);  // null context
+
+  TNode<Object> low = UncheckedParameter(Descriptor::kLow);
+  TNode<Object> high = UncheckedParameter(Descriptor::kHigh);
+
+  TailCallStub(HackyWasmToJavaScriptTypeConversionDescriptor(), target, context,
+               low, high);
 }
 
 #define DECLARE_ENUM(name)                                                \
