@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1eea7f9a_f9188310",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-11-20T13:08:04Z",
+      "side": 1,
+      "message": "FunctionTemplateInfo objects.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "6a1af5e34ee941b6429c9d87c51c33b44a034b24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16ddb141_26da6c0c",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-11-20T13:08:04Z",
+      "side": 1,
+      "message": "uncomment?",
+      "range": {
+        "startLine": 1928,
+        "startChar": 0,
+        "endLine": 1929,
+        "endChar": 24
+      },
+      "revId": "6a1af5e34ee941b6429c9d87c51c33b44a034b24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00179132_6bb8bab8",
+        "filename": "src/objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-11-20T13:08:04Z",
+      "side": 1,
+      "message": "Can we make this have a check whether the rare data exists, and only allocate if-so - that means we can call it everywhere without checking (and it ensure we have rare data sound more like what it does) - maybe split the ensure check into an inline function, and rename this function AllocateFunctionTemplateRareData?",
+      "range": {
+        "startLine": 1322,
+        "startChar": 1,
+        "endLine": 1327,
+        "endChar": 21
+      },
+      "revId": "6a1af5e34ee941b6429c9d87c51c33b44a034b24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa868d1a_9f42f699",
+        "filename": "src/objects/templates-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-11-20T13:08:04Z",
+      "side": 1,
+      "message": "RARE_ACCESSORS ?",
+      "range": {
+        "startLine": 25,
+        "startChar": 8,
+        "endLine": 25,
+        "endChar": 13
+      },
+      "revId": "6a1af5e34ee941b6429c9d87c51c33b44a034b24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0252141_01a8a187",
+        "filename": "src/objects/templates-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-11-20T13:08:04Z",
+      "side": 1,
+      "message": "Unintended comment?",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 54
+      },
+      "revId": "6a1af5e34ee941b6429c9d87c51c33b44a034b24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a612e50c_a376d4c7",
+        "filename": "src/objects/templates-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-11-20T13:08:04Z",
+      "side": 1,
+      "message": "if (extra-\u003eIsUndefined(isolate)) {",
+      "range": {
+        "startLine": 37,
+        "startChar": 3,
+        "endLine": 38,
+        "endChar": 31
+      },
+      "revId": "6a1af5e34ee941b6429c9d87c51c33b44a034b24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdc6eaf0_e2cee893",
+        "filename": "src/objects/templates-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-11-20T13:08:04Z",
+      "side": 1,
+      "message": "Let\u0027s just do EnsureFunctionTemplateRareData... at the top and avoid the check with undefined here.",
+      "range": {
+        "startLine": 39,
+        "startChar": 6,
+        "endLine": 39,
+        "endChar": 78
+      },
+      "revId": "6a1af5e34ee941b6429c9d87c51c33b44a034b24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
