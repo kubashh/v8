@@ -1443,8 +1443,8 @@ void InstanceBuilder::WriteGlobalValue(const WasmGlobal& global, double num) {
                                       static_cast<int32_t>(num));
       break;
     case kWasmI64:
-      // TODO(titzer): initialization of imported i64 globals.
-      UNREACHABLE();
+      WriteLittleEndianValue<int64_t>(GetRawGlobalPtr<int64_t>(global),
+                                      static_cast<int64_t>(num));
       break;
     case kWasmF32:
       WriteLittleEndianValue<float>(GetRawGlobalPtr<float>(global),
@@ -1561,6 +1561,8 @@ int InstanceBuilder::ProcessImports(Handle<WasmInstanceObject> instance) {
   int num_imported_tables = 0;
   int num_imported_mutable_globals = 0;
 
+  WasmFeatures enabled_features = WasmFeaturesFromIsolate(isolate_);
+
   DCHECK_EQ(module_->import_table.size(), sanitized_imports_.size());
   int num_imports = static_cast<int>(module_->import_table.size());
   NativeModule* native_module = instance->module_object()->native_module();
@@ -1583,7 +1585,8 @@ int InstanceBuilder::ProcessImports(Handle<WasmInstanceObject> instance) {
         DCHECK_EQ(num_imported_functions, func_index);
         auto js_receiver = Handle<JSReceiver>::cast(value);
         FunctionSig* expected_sig = module_->functions[func_index].sig;
-        auto kind = compiler::GetWasmImportCallKind(js_receiver, expected_sig);
+        auto kind = compiler::GetWasmImportCallKind(js_receiver, expected_sig,
+                                                    enabled_features.bigint);
         switch (kind) {
           case compiler::WasmImportCallKind::kLinkError:
             ReportLinkError(
@@ -1747,7 +1750,11 @@ int InstanceBuilder::ProcessImports(Handle<WasmInstanceObject> instance) {
 
         // The mutable-global proposal allows importing i64 values, but only if
         // they are passed as a WebAssembly.Global object.
+        //
+        // However, the bigint proposal allows importing constant i64 values,
+        // as non WebAssembly.Global object.
         if (global.type == kWasmI64 &&
+            !(enabled_.bigint && value->IsBigInt()) &&
             !(enabled_.mut_global && value->IsWasmGlobalObject())) {
           ReportLinkError("global import cannot have type i64", index,
                           module_name, import_name);
@@ -1806,6 +1813,10 @@ int InstanceBuilder::ProcessImports(Handle<WasmInstanceObject> instance) {
               return -1;
             }
             WriteGlobalValue(global, value->Number());
+          } else if (enabled_.bigint && value->IsBigInt()) {
+            BigInt* bigint = BigInt::cast(*value);
+
+            WriteGlobalValue(global, bigint->AsInt64());
           } else {
             ReportLinkError(
                 "global import must be a number or WebAssembly.Global object",
