@@ -1071,7 +1071,21 @@ template("run_mksnapshot") {
 
     args += invoker.args
 
-    if (v8_enable_embedded_builtins) {
+    if (v8_enable_embedded_builtins && is_win && is_clang) {
+      outputs += [ "$target_gen_dir/embedded${suffix}.cc" ]
+      args += [
+        "--embedded_src",
+        rebase_path("$target_gen_dir/embedded${suffix}.S", root_build_dir),
+        "--embedded_src_inline_asm",
+        rebase_path("$target_gen_dir/embedded${suffix}.cc", root_build_dir),
+      ]
+      if (invoker.embedded_variant != "") {
+        args += [
+          "--embedded_variant",
+          invoker.embedded_variant,
+        ]
+      }
+    } else if (v8_enable_embedded_builtins) {
       outputs += [ "$target_gen_dir/embedded${suffix}.S" ]
       args += [
         "--embedded_src",
@@ -1278,7 +1292,9 @@ if (v8_use_snapshot && !v8_use_external_startup_data) {
       "src/setup-isolate-deserialize.cc",
     ]
 
-    if (v8_enable_embedded_builtins) {
+    if (v8_enable_embedded_builtins && is_win && is_clang) {
+      sources += [ "$target_gen_dir/embedded.cc" ]
+    } else if (v8_enable_embedded_builtins) {
       sources += [ "$target_gen_dir/embedded.S" ]
     } else {
       sources += [ "src/snapshot/embedded-empty.cc" ]
@@ -1325,7 +1341,20 @@ if (v8_use_snapshot && v8_use_external_startup_data) {
     # Do not publicize any header to remove build dependency.
     public = []
 
-    if (v8_enable_embedded_builtins) {
+    if (v8_enable_embedded_builtins && is_win && is_clang) {
+      sources += [ "$target_gen_dir/embedded.cc" ]
+
+      if (v8_use_multi_snapshots) {
+        sources += [ "$target_gen_dir/embedded_trusted.cc" ]
+
+        if (use_jumbo_build == true) {
+          jumbo_excluded_sources = [
+            # Duplicated symbols with embedded.cc
+            "$target_gen_dir/embedded_trusted.cc",
+          ]
+        }
+      }
+    } else if (v8_enable_embedded_builtins) {
       sources += [ "$target_gen_dir/embedded.S" ]
 
       if (v8_use_multi_snapshots) {
