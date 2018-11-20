@@ -37,8 +37,6 @@
 namespace v8 {
 namespace internal {
 
-const auto GetRegConfig = RegisterConfiguration::Default;
-
 //------------------------------------------------------------------------------
 
 // Decoder decodes and disassembles instructions into an output buffer.
@@ -112,7 +110,7 @@ void Decoder::PrintRegister(int reg) {
 
 // Print the double FP register name according to the active name converter.
 void Decoder::PrintDRegister(int reg) {
-  Print(GetRegConfig()->GetDoubleRegisterName(reg));
+  Print(RegisterName(DoubleRegister::from_code(reg)));
 }
 
 // Print SoftwareInterrupt codes. Factoring this out reduces the complexity of
@@ -938,12 +936,11 @@ const char* NameConverter::NameOfConstant(byte* addr) const {
 }
 
 const char* NameConverter::NameOfCPURegister(int reg) const {
-  return v8::internal::GetRegConfig()->GetGeneralRegisterName(reg);
+  return RegisterName(i::Register::from_code(reg));
 }
 
 const char* NameConverter::NameOfByteCPURegister(int reg) const {
   UNREACHABLE();  // S390 does not have the concept of a byte register
-  return "nobytereg";
 }
 
 const char* NameConverter::NameOfXMMRegister(int reg) const {
