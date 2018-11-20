@@ -319,9 +319,7 @@ void BlockAssessments::Print() const {
     // Use operator<< so we can write the assessment on the same
     // line. Since we need a register configuration, just pick
     // Turbofan for now.
-    PrintableInstructionOperand wrapper = {RegisterConfiguration::Default(),
-                                           op};
-    os << wrapper << " : ";
+    os << PrintableInstructionOperand{op} << " : ";
     if (assessment->kind() == AssessmentKind::Final) {
       os << "v" << FinalAssessment::cast(assessment)->virtual_register();
     } else {

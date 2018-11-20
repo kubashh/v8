@@ -24,8 +24,6 @@
 namespace v8 {
 namespace internal {
 
-const auto GetRegConfig = RegisterConfiguration::Default;
-
 // This macro provides a platform independent use of sscanf. The reason for
 // SScanF not being implemented in a platform independent way through
 // ::v8::internal::OS in the same way as SNPrintF is that the
@@ -290,7 +288,7 @@ void S390Debugger::Debug() {
             for (int i = 0; i < kNumRegisters; i++) {
               value = GetRegisterValue(i);
               PrintF("    %3s: %08" V8PRIxPTR,
-                     GetRegConfig()->GetGeneralRegisterName(i), value);
+                     RegisterName(Register::from_code(i)), value);
               if ((argc == 3 && strcmp(arg2, "fp") == 0) && i < 8 &&
                   (i % 2) == 0) {
                 dvalue = GetRegisterPairDoubleValue(i);
@@ -305,7 +303,7 @@ void S390Debugger::Debug() {
             for (int i = 0; i < kNumRegisters; i++) {
               value = GetRegisterValue(i);
               PrintF("     %3s: %08" V8PRIxPTR " %11" V8PRIdPTR,
-                     GetRegConfig()->GetGeneralRegisterName(i), value, value);
+                     RegisterName(Register::from_code(i)), value, value);
               if ((argc == 3 && strcmp(arg2, "fp") == 0) && i < 8 &&
                   (i % 2) == 0) {
                 dvalue = GetRegisterPairDoubleValue(i);
@@ -321,7 +319,7 @@ void S390Debugger::Debug() {
               float fvalue = GetFPFloatRegisterValue(i);
               uint32_t as_words = bit_cast<uint32_t>(fvalue);
               PrintF("%3s: %f 0x%08x\n",
-                     GetRegConfig()->GetDoubleRegisterName(i), fvalue,
+                     RegisterName(DoubleRegister::from_code(i)), fvalue,
                      as_words);
             }
           } else if (strcmp(arg1, "alld") == 0) {
@@ -329,7 +327,7 @@ void S390Debugger::Debug() {
               dvalue = GetFPDoubleRegisterValue(i);
               uint64_t as_words = bit_cast<uint64_t>(dvalue);
               PrintF("%3s: %f 0x%08x %08x\n",
-                     GetRegConfig()->GetDoubleRegisterName(i), dvalue,
+                     RegisterName(DoubleRegister::from_code(i)), dvalue,
                      static_cast<uint32_t>(as_words >> 32),
                      static_cast<uint32_t>(as_words & 0xFFFFFFFF));
             }
