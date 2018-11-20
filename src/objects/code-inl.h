@@ -14,6 +14,7 @@
 #include "src/objects/maybe-object-inl.h"
 #include "src/objects/smi-inl.h"
 #include "src/v8memory.h"
+#include "src/wasm/wasm-objects-inl.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -28,6 +29,7 @@ CAST_ACCESSOR(CodeDataContainer)
 CAST_ACCESSOR(DependentCode)
 CAST_ACCESSOR(DeoptimizationData)
 CAST_ACCESSOR(SourcePositionTableWithFrameCache)
+CAST_ACCESSOR(AsmWasmData)
 
 ACCESSORS(SourcePositionTableWithFrameCache, source_position_table, ByteArray,
           kSourcePositionTableIndex)

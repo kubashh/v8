@@ -240,6 +240,13 @@ uint32_t WasmTableObject::current_length() { return functions()->length(); }
 
 bool WasmMemoryObject::has_maximum_pages() { return maximum_pages() >= 0; }
 
+// AsmWasmData
+ACCESSORS(AsmWasmData, managed_native_module, Managed<wasm::NativeModule>,
+          kManagedNativeModuleOffset)
+ACCESSORS(AsmWasmData, export_wrappers, FixedArray, kExportWrappersOffset)
+ACCESSORS(AsmWasmData, asm_js_offset_table, ByteArray, kAsmJsOffsetTableOffset)
+ACCESSORS(AsmWasmData, uses_bitset, HeapNumber, kUsesBitsetOffset)
+
 #include "src/objects/object-macros-undef.h"
 
 }  // namespace internal

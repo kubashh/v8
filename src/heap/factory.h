@@ -27,7 +27,7 @@ namespace internal {
 
 // Forward declarations.
 class AliasedArgumentsEntry;
-class ObjectBoilerplateDescription;
+class AsmWasmData;
 class BreakPoint;
 class BreakPointInfo;
 class CallableTask;
@@ -53,6 +53,7 @@ class LoadHandler;
 class ModuleInfo;
 class NativeContext;
 class NewFunctionArgs;
+class ObjectBoilerplateDescription;
 class PreParsedScopeData;
 class PromiseResolveThenableJobTask;
 class RegExpMatchInfo;
@@ -63,6 +64,7 @@ class TemplateObjectDescription;
 class UncompiledDataWithoutPreParsedScope;
 class UncompiledDataWithPreParsedScope;
 class WasmExportedFunctionData;
+class WasmModuleObject;
 class WeakFactoryCleanupJobTask;
 struct SourceRange;
 template <typename T>

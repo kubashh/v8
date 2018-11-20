@@ -20,6 +20,7 @@ class ByteArray;
 class BytecodeArray;
 class CodeDataContainer;
 class MaybeObject;
+class WasmModuleObject;
 
 namespace interpreter {
 class Register;
@@ -904,10 +905,8 @@ class SourcePositionTableWithFrameCache : public Tuple2 {
 
   DECL_CAST(SourcePositionTableWithFrameCache)
 
-  static const int kSourcePositionTableIndex = Struct::kHeaderSize;
-  static const int kStackFrameCacheIndex =
-      kSourcePositionTableIndex + kPointerSize;
-  static const int kSize = kStackFrameCacheIndex + kPointerSize;
+  static const int kSourcePositionTableIndex = kValue1Offset;
+  static const int kStackFrameCacheIndex = kValue2Offset;
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(SourcePositionTableWithFrameCache);
