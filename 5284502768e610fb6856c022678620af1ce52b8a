@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "d31c3583_081d5751",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4625,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-20T14:45:11Z",
+      "side": 1,
+      "message": "Maybe\n  if (FLAG_track_constant_fields) return NumberOfFields();\nor",
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4d1846e_7fea6895",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4630,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-20T14:45:11Z",
+      "side": 1,
+      "message": "... or\n  \u0026\u0026 (!FLAG_track_constant_fields || descriptors-\u003eGetDetails(i).constness() \u003d\u003d PropertyConstness::kMutable)",
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7749c12c_a0dc2ee6",
         "filename": "src/objects/map-inl.h",
         "patchSetId": 1
@@ -18,6 +52,53 @@
         "startChar": 4,
         "endLine": 153,
         "endChar": 69
+      },
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85a87ed0_10409aa0",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-20T14:45:11Z",
+      "side": 1,
+      "message": "The hard limit is kMaxNumberOfDescriptors. But I guess we may just add a couple of STATIC_ASSERTs that kMaxNumberOfDescriptors \u003e kMaxFastProperties \u003e kFastPropertiesSoftLimit.",
+      "parentUuid": "7749c12c_a0dc2ee6",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 153,
+        "endChar": 69
+      },
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4623e827_72a7c161",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-20T14:45:11Z",
+      "side": 1,
+      "message": "Why not NumberOfMutableFields() ?",
+      "range": {
+        "startLine": 157,
+        "startChar": 19,
+        "endLine": 157,
+        "endChar": 33
       },
       "revId": "5284502768e610fb6856c022678620af1ce52b8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
