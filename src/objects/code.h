@@ -20,6 +20,7 @@ class ByteArray;
 class BytecodeArray;
 class CodeDataContainer;
 class MaybeObject;
+class WasmModuleObject;
 
 namespace interpreter {
 class Register;
@@ -904,13 +905,24 @@ class SourcePositionTableWithFrameCache : public Tuple2 {
 
   DECL_CAST(SourcePositionTableWithFrameCache)
 
-  static const int kSourcePositionTableIndex = Struct::kHeaderSize;
-  static const int kStackFrameCacheIndex =
-      kSourcePositionTableIndex + kPointerSize;
-  static const int kSize = kStackFrameCacheIndex + kPointerSize;
+  static const int kSourcePositionTableIndex = kValue1Offset;
+  static const int kStackFrameCacheIndex = kValue2Offset;
 
  private:
   DISALLOW_IMPLICIT_CONSTRUCTORS(SourcePositionTableWithFrameCache);
+};
+
+class AsmWasmData : public Tuple2 {
+ public:
+  DECL_ACCESSORS(compiled_module, WasmModuleObject)
+  DECL_ACCESSORS(uses_bitset, HeapNumber)
+
+  DECL_CAST(AsmWasmData)
+  DECL_PRINTER(AsmWasmData)
+  DECL_VERIFIER(AsmWasmData)
+
+  static const int kCompiledModuleOffset = kValue1Offset;
+  static const int kUsesBitSetOffset = kValue2Offset;
 };
 
 }  // namespace internal

@@ -1734,6 +1734,14 @@ void ArrayBoilerplateDescription::ArrayBoilerplateDescriptionVerify(
   VerifyObjectField(isolate, kConstantElementsOffset);
 }
 
+void AsmWasmData::AsmWasmDataVerify(Isolate* isolate) {
+  CHECK(IsAsmWasmData());
+  CHECK(compiled_module()->IsWasmModuleObject());
+  VerifyObjectField(isolate, kCompiledModuleOffset);
+  CHECK(uses_bitset()->IsHeapNumber());
+  VerifyObjectField(isolate, kUsesBitSetOffset);
+}
+
 void WasmDebugInfo::WasmDebugInfoVerify(Isolate* isolate) {
   CHECK(IsWasmDebugInfo());
   VerifyObjectField(isolate, kInstanceOffset);

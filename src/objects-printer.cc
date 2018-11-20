@@ -1759,6 +1759,13 @@ void ArrayBoilerplateDescription::ArrayBoilerplateDescriptionPrint(
   os << "\n";
 }
 
+void AsmWasmData::AsmWasmDataPrint(std::ostream& os) {  // NOLINT
+  HeapObject::PrintHeader(os, "AsmWasmData");
+  os << "\n - compiled module: " << Brief(compiled_module());
+  os << "\n - uses bitset: " << uses_bitset()->value();
+  os << "\n";
+}
+
 void WasmDebugInfo::WasmDebugInfoPrint(std::ostream& os) {  // NOLINT
   HeapObject::PrintHeader(os, "WasmDebugInfo");
   os << "\n - wasm_instance: " << Brief(wasm_instance());

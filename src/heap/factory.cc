@@ -4117,6 +4117,15 @@ Handle<CallHandlerInfo> Factory::NewCallHandlerInfo(bool has_no_side_effect) {
   return info;
 }
 
+Handle<AsmWasmData> Factory::NewAsmWasmData(Handle<WasmModuleObject> module,
+                                            Handle<HeapNumber> uses_bitset) {
+  Handle<AsmWasmData> result =
+      Handle<AsmWasmData>::cast(NewStruct(TUPLE2_TYPE, TENURED));
+  result->set_compiled_module(*module);
+  result->set_uses_bitset(*uses_bitset);
+  return result;
+}
+
 // static
 NewFunctionArgs NewFunctionArgs::ForWasm(
     Handle<String> name,

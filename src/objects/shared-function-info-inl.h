@@ -456,15 +456,15 @@ void SharedFunctionInfo::set_interpreter_data(
 }
 
 bool SharedFunctionInfo::HasAsmWasmData() const {
-  return function_data()->IsFixedArray();
+  return function_data()->IsTuple2();
 }
 
-FixedArray* SharedFunctionInfo::asm_wasm_data() const {
+AsmWasmData* SharedFunctionInfo::asm_wasm_data() const {
   DCHECK(HasAsmWasmData());
-  return FixedArray::cast(function_data());
+  return AsmWasmData::cast(function_data());
 }
 
-void SharedFunctionInfo::set_asm_wasm_data(FixedArray* data) {
+void SharedFunctionInfo::set_asm_wasm_data(AsmWasmData* data) {
   DCHECK(function_data() == Smi::FromEnum(Builtins::kCompileLazy) ||
          HasUncompiledData() || HasAsmWasmData());
   set_function_data(data);
