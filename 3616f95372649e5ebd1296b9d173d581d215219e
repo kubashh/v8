@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef3aedcc_d371c342",
+        "filename": "test/mjsunit/regress/regress-crbug-906870.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-11-20T08:52:02Z",
+      "side": 1,
+      "message": "Please, also do the opposite case and Math.max (both cases).",
+      "range": {
+        "startLine": 8,
+        "startChar": 19,
+        "endLine": 8,
+        "endChar": 37
+      },
+      "revId": "3616f95372649e5ebd1296b9d173d581d215219e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
