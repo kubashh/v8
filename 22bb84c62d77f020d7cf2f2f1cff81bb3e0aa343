@@ -34,6 +34,24 @@
       "revId": "22bb84c62d77f020d7cf2f2f1cff81bb3e0aa343",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7f5ffde_2cf47b31",
+        "filename": "test/unittests/compiler/backend/instruction-sequence-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-20T17:05:01Z",
+      "side": 0,
+      "message": "Indeed, I don\u0027t see anyone relying on the exact number of registers. So using whatever the platform gives us should be equally good.\nDone!",
+      "parentUuid": "26e405c2_c9e205f8",
+      "revId": "22bb84c62d77f020d7cf2f2f1cff81bb3e0aa343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "80232c51_b9e462e2",
+        "filename": "src/arm/simulator-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-20T17:05:01Z",
+      "side": 1,
+      "message": "Nope, removed.",
+      "parentUuid": "e6f1bae6_356a92c2",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "7a2ae3403baa63f733b5ecaf1e6e85d829ac0806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12564bcd_e3cc617d",
         "filename": "src/compiler/backend/register-allocator-verifier.cc",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a3d7821b_599dd38c",
+        "filename": "src/compiler/backend/register-allocator-verifier.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-20T17:05:01Z",
+      "side": 1,
+      "message": "Good catch, done.",
+      "parentUuid": "12564bcd_e3cc617d",
+      "range": {
+        "startLine": 320,
+        "startChar": 13,
+        "endLine": 321,
+        "endChar": 24
+      },
+      "revId": "7a2ae3403baa63f733b5ecaf1e6e85d829ac0806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4984dde_3f5e8179",
         "filename": "src/register-configuration.h",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "7a2ae3403baa63f733b5ecaf1e6e85d829ac0806",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36e441c0_b7800d18",
+        "filename": "src/register-configuration.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-20T17:05:01Z",
+      "side": 1,
+      "message": "Oops, this is a leftover from a state where I changed the methods here to call RegisterName instead. This needed the definition of the Register types.\nNow it\u0027s not needed any more. Removed.",
+      "parentUuid": "d4984dde_3f5e8179",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 31
+      },
+      "revId": "7a2ae3403baa63f733b5ecaf1e6e85d829ac0806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
