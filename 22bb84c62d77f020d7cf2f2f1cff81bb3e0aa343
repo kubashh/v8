@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad309111_2e6aac1a",
+        "filename": "test/unittests/compiler/backend/instruction-sequence-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-20T11:16:05Z",
+      "side": 0,
+      "message": "Note: Running this test with debug output enabled might actually crash now, because we might use more registers than the platform provides. I am not sure how this can easily be fixed, and I am not sure if it\u0027s worth it. WDYT?",
+      "revId": "22bb84c62d77f020d7cf2f2f1cff81bb3e0aa343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
