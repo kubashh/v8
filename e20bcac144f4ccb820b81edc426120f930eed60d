@@ -71,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "cb121a20_cbbe0c49",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-11-20T08:33:56Z",
+      "side": 1,
+      "message": "nit: not this CL, but would you replace \"item which matching the pattern\" with \"item which matches the pattern\" ? \n\nAlternatively, \n\nOnce the first pair matching the pattern is identified in the item, set the property and move on to next item in kPatternItems.\n\nOr, just remove the comment.",
+      "range": {
+        "startLine": 444,
+        "startChar": 8,
+        "endLine": 445,
+        "endChar": 75
+      },
+      "revId": "e20bcac144f4ccb820b81edc426120f930eed60d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1127d1b9_e41e304e",
         "filename": "src/objects/js-date-time-format.cc",
         "patchSetId": 14
