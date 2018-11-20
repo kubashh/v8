@@ -4622,6 +4622,17 @@ int Map::NumberOfFields() const {
   return result;
 }
 
+int Map::NumberOfMutableFields() const {
+  DescriptorArray* descriptors = instance_descriptors();
+  int result = 0;
+  for (int i = 0; i < NumberOfOwnDescriptors(); i++) {
+    if (descriptors->GetDetails(i).location() == kField &&
+        descriptors->GetDetails(i).constness() == PropertyConstness::kMutable)
+      result++;
+  }
+  return result;
+}
+
 bool Map::HasOutOfObjectProperties() const {
   return GetInObjectProperties() < NumberOfFields();
 }

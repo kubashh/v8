@@ -453,6 +453,7 @@ class Map : public HeapObjectPtr {
   inline int GetInObjectPropertyOffset(int index) const;
 
   int NumberOfFields() const;
+  int NumberOfMutableFields() const;
 
   bool HasOutOfObjectProperties() const;
 
