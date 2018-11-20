@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7749c12c_a0dc2ee6",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-11-20T14:27:52Z",
+      "side": 1,
+      "message": "Is there some hard limit on overall field count we should check?",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 153,
+        "endChar": 69
+      },
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
