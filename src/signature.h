@@ -27,7 +27,7 @@ class Signature : public ZoneObject {
   size_t parameter_count() const { return parameter_count_; }
 
   T GetParam(size_t index) const {
-    DCHECK(index < parameter_count_);
+    DCHECK_LT(index, parameter_count_);
     return reps_[return_count_ + index];
   }
 

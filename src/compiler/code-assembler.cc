@@ -220,6 +220,8 @@ Handle<Code> CodeAssembler::GenerateCode(CodeAssemblerState* state,
 
 bool CodeAssembler::Is64() const { return raw_assembler()->machine()->Is64(); }
 
+bool CodeAssembler::Is32() const { return raw_assembler()->machine()->Is32(); }
+
 bool CodeAssembler::IsFloat64RoundUpSupported() const {
   return raw_assembler()->machine()->Float64RoundUp().IsSupported();
 }
@@ -1087,7 +1089,7 @@ Node* CodeAssembler::Retain(Node* value) {
 }
 
 Node* CodeAssembler::Projection(int index, Node* value) {
-  DCHECK(index < value->op()->ValueOutputCount());
+  DCHECK_LT(index, value->op()->ValueOutputCount());
   return raw_assembler()->Projection(index, value);
 }
 
