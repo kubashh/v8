@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 namespace typed_array {
+  #include "src/builtins/builtins-typed-array-gen.h"
+
   extern runtime TypedArraySortFast(Context, Object): JSTypedArray;
   extern macro TypedArrayBuiltinsAssembler::ValidateTypedArray(
       Context, Object, constexpr string): JSTypedArray;

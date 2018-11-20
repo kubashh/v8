@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 namespace array {
+  #include "src/builtins/builtins-array-gen.h"
+
   // Naming convention from elements.cc. We have a similar intent but implement
   // fastpaths using generics instead of using a class hierarchy for elements
   // kinds specific implementations.

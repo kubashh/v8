@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 namespace collections {
+  #include "src/builtins/builtins-collections-gen.h"
+
   macro LoadKeyValuePairNoSideEffects(implicit context: Context)(o: Object):
       KeyValuePair
       labels MayHaveSideEffects {

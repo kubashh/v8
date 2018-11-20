@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 namespace iterator {
+  #include "src/builtins/builtins-iterator-gen.h"
+
   // Returned from IteratorBuiltinsAssembler::GetIterator().
   struct IteratorRecord {
     // iteratorRecord.[[Iterator]]

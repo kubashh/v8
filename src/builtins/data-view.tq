@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 namespace data_view {
+  #include "src/builtins/builtins-data-view-gen.h"
+
   extern operator '.buffer'
       macro LoadJSArrayBufferViewBuffer(JSArrayBufferView): JSArrayBuffer;
   extern operator '.byte_length'
