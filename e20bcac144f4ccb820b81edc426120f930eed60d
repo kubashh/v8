@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "751be52e_da8624a3",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-11-20T08:26:29Z",
+      "side": 1,
+      "message": "Gee. that argument name is kinda lame :-). \n\nYou don\u0027t have to convert to UTF-8. Just use UnicodeString\u0027s indexOf(char16_t c) or\nindexOf(Uchar32 c) instead of std::string\u0027s find below. See\nhttp://icu-project.org/apiref/icu4c/classicu_1_1UnicodeString.html#a51d4a7cb33c92dfa153d76f11aaba1eb .\n\nThen, you can just use |pattern| instead of |unicode.",
+      "range": {
+        "startLine": 31,
+        "startChar": 55,
+        "endLine": 31,
+        "endChar": 62
+      },
+      "revId": "e20bcac144f4ccb820b81edc426120f930eed60d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee130f2e_cc0b1c37",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-11-20T08:26:29Z",
+      "side": 1,
+      "message": "nit: s/pattern_unicode/pattern/",
+      "range": {
+        "startLine": 47,
+        "startChar": 2,
+        "endLine": 49,
+        "endChar": 39
+      },
+      "revId": "e20bcac144f4ccb820b81edc426120f930eed60d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8c84782_09a34886",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-11-20T08:26:29Z",
+      "side": 1,
+      "message": "nit: Isn\u0027t it \"00\"?",
+      "range": {
+        "startLine": 171,
+        "startChar": 36,
+        "endLine": 171,
+        "endChar": 42
+      },
+      "revId": "e20bcac144f4ccb820b81edc426120f930eed60d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1127d1b9_e41e304e",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-11-20T08:26:29Z",
+      "side": 1,
+      "message": "Lines 888-920 are also included in https://chromium-review.googlesource.com/c/v8/v8/+/1339243 . \nAddress my nits in that CL, submit it (once reviewed) and rebase this CL.",
+      "range": {
+        "startLine": 888,
+        "startChar": 1,
+        "endLine": 920,
+        "endChar": 3
+      },
+      "revId": "e20bcac144f4ccb820b81edc426120f930eed60d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1950fd4a_28371ab6",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-11-20T08:26:29Z",
+      "side": 1,
+      "message": "where is |calendar| created?",
+      "range": {
+        "startLine": 1013,
+        "startChar": 1,
+        "endLine": 1014,
+        "endChar": 0
+      },
+      "revId": "e20bcac144f4ccb820b81edc426120f930eed60d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
