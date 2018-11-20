@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6f1bae6_356a92c2",
+        "filename": "src/arm/simulator-arm.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-11-20T13:26:58Z",
+      "side": 1,
+      "message": "nit: Is the include still needed?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 39
+      },
+      "revId": "7a2ae3403baa63f733b5ecaf1e6e85d829ac0806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12564bcd_e3cc617d",
+        "filename": "src/compiler/backend/register-allocator-verifier.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-11-20T13:26:58Z",
+      "side": 1,
+      "message": "nit: Comment no longer applies, let\u0027s drop it.",
+      "range": {
+        "startLine": 320,
+        "startChar": 13,
+        "endLine": 321,
+        "endChar": 24
+      },
+      "revId": "7a2ae3403baa63f733b5ecaf1e6e85d829ac0806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4984dde_3f5e8179",
+        "filename": "src/register-configuration.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-11-20T13:26:58Z",
+      "side": 1,
+      "message": "question: Why is this include needed now? Would it be sufficient to have it only in the corresponding cc-file? Could you elaborate?",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 31
+      },
+      "revId": "7a2ae3403baa63f733b5ecaf1e6e85d829ac0806",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -16,6 +16,24 @@
       "revId": "22bb84c62d77f020d7cf2f2f1cff81bb3e0aa343",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26e405c2_c9e205f8",
+        "filename": "test/unittests/compiler/backend/instruction-sequence-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-11-20T13:26:58Z",
+      "side": 0,
+      "message": "Would the tests still make sense if we reduce the number of allocatable registers to be in bounds for all architectures? It would sure be nice to not have this unittest crash when someone debugs it.",
+      "parentUuid": "ad309111_2e6aac1a",
+      "revId": "22bb84c62d77f020d7cf2f2f1cff81bb3e0aa343",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
