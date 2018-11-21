@@ -34,6 +34,24 @@
       "revId": "8bd8e0fa65a8b907dbb786e4748949c6eb25fbc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9673693e_0b76aa1d",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-21T08:56:54Z",
+      "side": 1,
+      "message": "Fair enough. I guess I was confused by the old way then :)",
+      "parentUuid": "6b76923a_9dcc5054",
+      "revId": "8bd8e0fa65a8b907dbb786e4748949c6eb25fbc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
