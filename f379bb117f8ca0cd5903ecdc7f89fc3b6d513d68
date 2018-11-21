@@ -16,6 +16,24 @@
       "revId": "f379bb117f8ca0cd5903ecdc7f89fc3b6d513d68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "183b9c0f_ea0762ff",
+        "filename": "src/arm/assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-11-21T14:22:04Z",
+      "side": 0,
+      "message": "Good catch, thanks!",
+      "parentUuid": "b5fc8c52_2084a42e",
+      "revId": "f379bb117f8ca0cd5903ecdc7f89fc3b6d513d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

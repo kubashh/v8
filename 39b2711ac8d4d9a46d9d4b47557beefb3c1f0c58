@@ -16,6 +16,24 @@
       "revId": "39b2711ac8d4d9a46d9d4b47557beefb3c1f0c58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "527add8e_3f8edd58",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5206,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-11-21T14:22:04Z",
+      "side": 1,
+      "message": "We\u0027ve checked that it is not empty above in line 5182, so I guess this is here to document that we should have already left the function if the pool is empty.",
+      "parentUuid": "85639c95_778c136b",
+      "revId": "39b2711ac8d4d9a46d9d4b47557beefb3c1f0c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
