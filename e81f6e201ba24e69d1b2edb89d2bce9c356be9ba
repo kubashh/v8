@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "517e1348_eca8a25c",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-21T11:39:09Z",
+      "side": 1,
+      "message": "Nit: omit the {} here and below",
+      "revId": "e81f6e201ba24e69d1b2edb89d2bce9c356be9ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
