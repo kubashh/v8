@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81a8e4c9_b6845989",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-11-21T11:40:19Z",
+      "side": 1,
+      "message": "os \u003c\u003c \"[-B\" \u003c\u003c rpo_number \u003c\u003c \"-\";\nif (block-\u003eIsDeferred()) os \u003c\u003c \"(deferred)\";",
+      "range": {
+        "startLine": 1173,
+        "startChar": 4,
+        "endLine": 1174,
+        "endChar": 43
+      },
+      "revId": "e266b8a6809ebeb761af462c6e93b4152f4f2c69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1336aa8_2b56b0ba",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-11-21T11:40:19Z",
+      "side": 1,
+      "message": "Would it be easy to avoid the snprintf?",
+      "range": {
+        "startLine": 1215,
+        "startChar": 19,
+        "endLine": 1215,
+        "endChar": 29
+      },
+      "revId": "e266b8a6809ebeb761af462c6e93b4152f4f2c69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
