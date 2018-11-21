@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d3c33c8a_d9382dce",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T14:47:17Z",
+      "side": 1,
+      "message": "nit: \"f32\" is usually written with lower-case f.",
+      "revId": "36bb89fb24eb9477fd3daea2f6d9962e8a23e310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f0dd4b57_716be82c",
         "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
         "patchSetId": 1
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "A DCHECK causes the compiler to fall over, which it does for certain tests. To avoid this other ports ignore it and assume that this section of code is never run, I have added an explicit error in the case that this code is run to avoid any possible security bugs.",
       "parentUuid": "f0dd4b57_716be82c",
+      "revId": "36bb89fb24eb9477fd3daea2f6d9962e8a23e310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb5d0e48_1a6c48ff",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T14:47:17Z",
+      "side": 1,
+      "message": "I guess this is because we currently support \u003c2GB wasm memory only. Please leave a TODO(7881) here so we do not forget about this.",
+      "parentUuid": "5d85d0aa_beef47fd",
       "revId": "36bb89fb24eb9477fd3daea2f6d9962e8a23e310",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -69,6 +104,24 @@
       "revId": "36bb89fb24eb9477fd3daea2f6d9962e8a23e310",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a84cb92_89ba7f78",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T14:47:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cc4467f8_146ab5b0",
+      "revId": "36bb89fb24eb9477fd3daea2f6d9962e8a23e310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
