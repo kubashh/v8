@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd2d9123_d25a7874",
+        "filename": "tools/snapshot/asm_to_inline_asm.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-11-21T19:49:51Z",
+      "side": 1,
+      "message": "You can combine them on the same line:\n\n  with open(in_filename, \u0027r\u0027) as infile, open(out_filename, \u0027r\u0027) as outfile:\n\nThis is supported starting with Python 2.7, which all of our machines should have.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 45
+      },
+      "revId": "4d15388401dcf0324d53fdaac0fb56bd8f4a02eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18519dc8_62148e7e",
+        "filename": "tools/snapshot/asm_to_inline_asm.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-11-21T19:49:51Z",
+      "side": 1,
+      "message": "I\u0027d recommend using single quotes for strings in the whole file: this is consistent with style used in infrastructure Python code and will allow you to avoid escaping double-quotes in this string. You can also use rstrip directly on the string object, i.e. no need to \u0027import string\u0027 above. Finally, you can use %-replacement for this simple case. The resulting line will look like this:\n\n  outfile.write(\u0027  \"%s\\\\n\"\\n\u0027 % line.rstrip())",
+      "range": {
+        "startLine": 25,
+        "startChar": 22,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "4d15388401dcf0324d53fdaac0fb56bd8f4a02eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60392cb2_a29ea444",
+        "filename": "tools/snapshot/asm_to_inline_asm.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-11-21T19:49:51Z",
+      "side": 1,
+      "message": "Please use argparse:\n\n  import argparse\n  ...\n\n  parser \u003d argparse.ArgumentParser(description\u003d__doc__)\n  parser.add_argument(\u0027input\u0027, help\u003d\u0027Name of the input assembly file\u0027)\n  parser.add_argument(\u0027output\u0027, help\u003d\u0027Name of the target CC file\u0027)\n  args \u003d parser.parse_args()\n  sys.exit(asm_to_inl_asm(args.input, args.output))\n\nThen there is no need for usage() above. The argparse will validate the arguments and generate nice usage message:\n\n  $ python test.py\n  usage: test.py [-h] input output\n  test.py: error: too few arguments\n  \n  $ python test.py --help\n  usage: test.py [-h] input output\n\n  Converts a given file in clang assembly syntax to a corresponding\n  representation in inline assembly. Specifically, this is used to convert\n  embedded.S to embedded.cc for Windows clang builds.\n\n  positional arguments:\n    input       Name of the input assembly file\n    output      Name of the target CC file\n\n  optional arguments:\n    -h, --help  show this help message and exit",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "4d15388401dcf0324d53fdaac0fb56bd8f4a02eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
