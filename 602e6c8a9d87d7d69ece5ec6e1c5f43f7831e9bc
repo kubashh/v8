@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77e61c22_c8f0da9e",
+        "filename": "tools/turbolizer/src/code-view.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-11-21T10:41:50Z",
+      "side": 1,
+      "message": "leftover?",
+      "revId": "602e6c8a9d87d7d69ece5ec6e1c5f43f7831e9bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dfeb4e9_5eb8091f",
+        "filename": "tools/turbolizer/src/code-view.ts",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2018-11-21T10:41:50Z",
+      "side": 1,
+      "message": "dito",
+      "revId": "602e6c8a9d87d7d69ece5ec6e1c5f43f7831e9bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
