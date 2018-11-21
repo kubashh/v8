@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "7f9486df_1f67e0e4",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4630,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-21T10:22:11Z",
+      "side": 1,
+      "message": "Exactly, so we can skip checking the constness (the FLAG_track_constant_fields is a constant, so the compiler can remove the second part away if it\u0027s off).",
+      "parentUuid": "c733cd1b_4a8bc039",
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7749c12c_a0dc2ee6",
         "filename": "src/objects/map-inl.h",
         "patchSetId": 1
@@ -125,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "157a1f95_97c21140",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-21T10:22:11Z",
+      "side": 1,
+      "message": "I like your idea of counting both all fields and mutable fields and then do the safe heuristics here.",
+      "parentUuid": "48f65d97_1ba4b3cb",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 153,
+        "endChar": 69
+      },
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4623e827_72a7c161",
         "filename": "src/objects/map-inl.h",
         "patchSetId": 1
@@ -169,6 +211,30 @@
       "revId": "5284502768e610fb6856c022678620af1ce52b8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d234168f_4eddfd72",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-21T10:22:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f7a0673c_00fe6e08",
+      "range": {
+        "startLine": 157,
+        "startChar": 19,
+        "endLine": 157,
+        "endChar": 33
+      },
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
