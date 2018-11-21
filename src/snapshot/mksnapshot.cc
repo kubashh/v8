@@ -274,6 +274,7 @@ int main(int argc, char** argv) {
 
     i::EmbeddedFileWriter embedded_writer;
     embedded_writer.SetEmbeddedFile(i::FLAG_embedded_src);
+    embedded_writer.SetEmbeddedFileInlineAsm(i::FLAG_embedded_src_inline_asm);
     embedded_writer.SetEmbeddedVariant(i::FLAG_embedded_variant);
 
     std::unique_ptr<char> embed_script(
