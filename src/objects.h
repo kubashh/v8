@@ -1088,7 +1088,7 @@ typedef Object* ObjectArgType;
 typedef RegExpMatchInfo* RegExpMatchInfoArgType;
 typedef ScriptContextTable* ScriptContextTableArgType;
 typedef SharedFunctionInfo* SharedFunctionInfoArgType;
-typedef SimpleNumberDictionary* SimpleNumberDictionaryArgType;
+typedef SimpleNumberDictionary SimpleNumberDictionaryArgType;
 typedef Smi SmiArgType;
 typedef String* StringArgType;
 typedef Symbol* SymbolArgType;
@@ -1567,6 +1567,7 @@ class MapWord {
  private:
   // HeapObject calls the private constructor and directly reads the value.
   friend class HeapObject;
+  friend class HeapObjectPtr;
 
   explicit MapWord(Address value) : value_(value) {}
 
