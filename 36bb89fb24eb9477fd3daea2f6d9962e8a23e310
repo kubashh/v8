@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0dd4b57_716be82c",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T11:28:47Z",
+      "side": 1,
+      "message": "This should just be a DCHECK, such that we fail already when generating the code.",
+      "revId": "36bb89fb24eb9477fd3daea2f6d9962e8a23e310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7ec5bc0_0a13e3e5",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T11:28:47Z",
+      "side": 1,
+      "message": "Will this overwrite the src_addr register? Is this always allowed, i.e. is it guaranteed that the register has no further uses after this Load?",
+      "revId": "36bb89fb24eb9477fd3daea2f6d9962e8a23e310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b55ec847_4ac550c9",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T11:28:47Z",
+      "side": 1,
+      "message": "Same here: Should be DCHECK.",
+      "revId": "36bb89fb24eb9477fd3daea2f6d9962e8a23e310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6af333c_db81c82c",
+        "filename": "src/wasm/baseline/arm/liftoff-assembler-arm.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T11:28:47Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "36bb89fb24eb9477fd3daea2f6d9962e8a23e310",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
