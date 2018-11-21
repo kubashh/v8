@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a3606127_9962280d",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2018-11-21T11:58:28Z",
+      "side": 1,
+      "message": "max_prefix_length is used to ensure that I only use the number of characters that this column is wide. For instance, a short block of length 4 only gets \"[-B\". Hence the snprintf.",
+      "parentUuid": "81a8e4c9_b6845989",
+      "range": {
+        "startLine": 1173,
+        "startChar": 4,
+        "endLine": 1174,
+        "endChar": 43
+      },
+      "revId": "e266b8a6809ebeb761af462c6e93b4152f4f2c69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f1336aa8_2b56b0ba",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 1
