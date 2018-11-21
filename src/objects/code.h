@@ -82,7 +82,7 @@ class Code : public HeapObjectPtr {
   void ClearEmbeddedObjects(Heap* heap);
 
   // [deoptimization_data]: Array containing data for deopt.
-  DECL_ACCESSORS(deoptimization_data, FixedArray)
+  DECL_ACCESSORS2(deoptimization_data, FixedArray)
 
   // [source_position_table]: ByteArray for the source positions table or
   // SourcePositionTableWithFrameCache.
@@ -684,7 +684,7 @@ class DependentCode : public WeakFixedArray {
 };
 
 // BytecodeArray represents a sequence of interpreter bytecodes.
-class BytecodeArray : public FixedArrayBasePtr {
+class BytecodeArray : public FixedArrayBase {
  public:
   enum Age {
     kNoAgeBytecodeAge = 0,
@@ -742,7 +742,7 @@ class BytecodeArray : public FixedArrayBasePtr {
   inline void set_bytecode_age(Age age);
 
   // Accessors for the constant pool.
-  DECL_ACCESSORS(constant_pool, FixedArray)
+  DECL_ACCESSORS2(constant_pool, FixedArray)
 
   // Accessors for handler table containing offsets of exception handlers.
   DECL_ACCESSORS2(handler_table, ByteArray)
@@ -809,7 +809,7 @@ class BytecodeArray : public FixedArrayBasePtr {
 
   class BodyDescriptor;
 
-  OBJECT_CONSTRUCTORS(BytecodeArray, FixedArrayBasePtr);
+  OBJECT_CONSTRUCTORS(BytecodeArray, FixedArrayBase);
 };
 
 // DeoptimizationData is a fixed array used to hold the deoptimization data for
@@ -818,7 +818,7 @@ class BytecodeArray : public FixedArrayBasePtr {
 // the literal array will contain these functions.
 //
 // It can be empty.
-class DeoptimizationData : public FixedArrayPtr {
+class DeoptimizationData : public FixedArray {
  public:
   // Layout description.  Indices in the array.
   static const int kTranslationByteArrayIndex = 0;
@@ -844,7 +844,7 @@ class DeoptimizationData : public FixedArrayPtr {
 
   DECL_ELEMENT_ACCESSORS(TranslationByteArray, ByteArray)
   DECL_ELEMENT_ACCESSORS(InlinedFunctionCount, Smi)
-  DECL_ELEMENT_ACCESSORS(LiteralArray, FixedArray*)
+  DECL_ELEMENT_ACCESSORS(LiteralArray, FixedArray)
   DECL_ELEMENT_ACCESSORS(OsrBytecodeOffset, Smi)
   DECL_ELEMENT_ACCESSORS(OsrPcOffset, Smi)
   DECL_ELEMENT_ACCESSORS(OptimizationId, Smi)
@@ -896,7 +896,7 @@ class DeoptimizationData : public FixedArrayPtr {
 
   static int LengthFor(int entry_count) { return IndexForEntry(entry_count); }
 
-  OBJECT_CONSTRUCTORS(DeoptimizationData, FixedArrayPtr)
+  OBJECT_CONSTRUCTORS(DeoptimizationData, FixedArray)
 };
 
 class SourcePositionTableWithFrameCache : public Tuple2 {

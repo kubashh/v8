@@ -303,8 +303,8 @@ class SharedFunctionInfo : public HeapObject, public NeverReadOnlySpaceObject {
   inline BytecodeArray GetDebugBytecodeArray() const;
   inline void SetDebugBytecodeArray(BytecodeArray bytecode);
   inline bool HasAsmWasmData() const;
-  inline FixedArray* asm_wasm_data() const;
-  inline void set_asm_wasm_data(FixedArray* data);
+  inline FixedArray asm_wasm_data() const;
+  inline void set_asm_wasm_data(FixedArray data);
 
   // A brief note to clear up possible confusion:
   // builtin_id corresponds to the auto-generated
