@@ -597,7 +597,7 @@ void PrintDictionaryElements(std::ostream& os, FixedArrayBase* elements) {
 }
 
 void PrintSloppyArgumentElements(std::ostream& os, ElementsKind kind,
-                                 SloppyArgumentsElements* elements) {
+                                 SloppyArgumentsElements elements) {
   FixedArray* arguments_store = elements->arguments();
   os << "\n    0: context: " << Brief(elements->context())
      << "\n    1: arguments_store: " << Brief(arguments_store)
@@ -1021,7 +1021,8 @@ void EphemeronHashTable::EphemeronHashTablePrint(std::ostream& os) {
 
 void ObjectBoilerplateDescription::ObjectBoilerplateDescriptionPrint(
     std::ostream& os) {
-  PrintFixedArrayWithHeader(os, this, "ObjectBoilerplateDescription");
+  PrintFixedArrayWithHeader(os, reinterpret_cast<FixedArray*>(ptr()),
+                            "ObjectBoilerplateDescription");
 }
 
 void PropertyArray::PropertyArrayPrint(std::ostream& os) {  // NOLINT
@@ -2136,7 +2137,7 @@ void JSSegmenter::JSSegmenterPrint(std::ostream& os) {  // NOLINT
 #endif  // V8_INTL_SUPPORT
 
 namespace {
-void PrintScopeInfoList(ScopeInfo* scope_info, std::ostream& os,
+void PrintScopeInfoList(ScopeInfo scope_info, std::ostream& os,
                         const char* list_name, int nof_internal_slots,
                         int start, int length) {
   if (length <= 0) return;
@@ -2156,7 +2157,7 @@ void PrintScopeInfoList(ScopeInfo* scope_info, std::ostream& os,
 }  // namespace
 
 void ScopeInfo::ScopeInfoPrint(std::ostream& os) {  // NOLINT
-  HeapObject::PrintHeader(os, "ScopeInfo");
+  PrintHeader(os, "ScopeInfo");
   if (length() == 0) {
     os << "\n - length = 0\n";
     return;
@@ -2198,7 +2199,7 @@ void ScopeInfo::ScopeInfoPrint(std::ostream& os) {  // NOLINT
   }
   os << "\n - length: " << length();
   if (length() > 0) {
-    PrintScopeInfoList(this, os, "context slots", Context::MIN_CONTEXT_SLOTS,
+    PrintScopeInfoList(*this, os, "context slots", Context::MIN_CONTEXT_SLOTS,
                        ContextLocalNamesIndex(), ContextLocalCount());
     // TODO(neis): Print module stuff if present.
   }

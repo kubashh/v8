@@ -14,10 +14,12 @@
 namespace v8 {
 namespace internal {
 
+OBJECT_CONSTRUCTORS_IMPL(ObjectBoilerplateDescription, FixedArrayPtr)
 SMI_ACCESSORS(ObjectBoilerplateDescription, flags,
               FixedArray::OffsetOfElementAt(kLiteralTypeOffset));
 
-CAST_ACCESSOR(ClassBoilerplate)
+OBJECT_CONSTRUCTORS_IMPL(ClassBoilerplate, FixedArrayPtr)
+CAST_ACCESSOR2(ClassBoilerplate)
 
 BIT_FIELD_ACCESSORS(ClassBoilerplate, flags, install_class_name_accessor,
                     ClassBoilerplate::Flags::InstallClassNameAccessorBit)

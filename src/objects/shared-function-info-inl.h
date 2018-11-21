@@ -284,7 +284,7 @@ void SharedFunctionInfo::DontAdaptArguments() {
 
 bool SharedFunctionInfo::IsInterpreted() const { return HasBytecodeArray(); }
 
-ScopeInfo* SharedFunctionInfo::scope_info() const {
+ScopeInfo SharedFunctionInfo::scope_info() const {
   Object* maybe_scope_info = name_or_scope_info();
   if (maybe_scope_info->IsScopeInfo()) {
     return ScopeInfo::cast(maybe_scope_info);
@@ -292,7 +292,7 @@ ScopeInfo* SharedFunctionInfo::scope_info() const {
   return ScopeInfo::Empty(GetIsolate());
 }
 
-void SharedFunctionInfo::set_scope_info(ScopeInfo* scope_info,
+void SharedFunctionInfo::set_scope_info(ScopeInfo scope_info,
                                         WriteBarrierMode mode) {
   // Move the existing name onto the ScopeInfo.
   Object* name = name_or_scope_info();
@@ -305,10 +305,8 @@ void SharedFunctionInfo::set_scope_info(ScopeInfo* scope_info,
   if (HasInferredName() && inferred_name()->length() != 0) {
     scope_info->SetInferredFunctionName(inferred_name());
   }
-  WRITE_FIELD(this, kNameOrScopeInfoOffset,
-              reinterpret_cast<Object*>(scope_info));
-  CONDITIONAL_WRITE_BARRIER(this, kNameOrScopeInfoOffset,
-                            reinterpret_cast<Object*>(scope_info), mode);
+  WRITE_FIELD(this, kNameOrScopeInfoOffset, scope_info);
+  CONDITIONAL_WRITE_BARRIER(this, kNameOrScopeInfoOffset, scope_info, mode);
 }
 
 ACCESSORS(SharedFunctionInfo, raw_outer_scope_info_or_feedback_metadata,
@@ -321,7 +319,7 @@ HeapObject* SharedFunctionInfo::outer_scope_info() const {
 }
 
 bool SharedFunctionInfo::HasOuterScopeInfo() const {
-  ScopeInfo* outer_info = nullptr;
+  ScopeInfo outer_info;
   if (!is_compiled()) {
     if (!outer_scope_info()->IsScopeInfo()) return false;
     outer_info = ScopeInfo::cast(outer_scope_info());
@@ -332,7 +330,7 @@ bool SharedFunctionInfo::HasOuterScopeInfo() const {
   return outer_info->length() > 0;
 }
 
-ScopeInfo* SharedFunctionInfo::GetOuterScopeInfo() const {
+ScopeInfo SharedFunctionInfo::GetOuterScopeInfo() const {
   DCHECK(HasOuterScopeInfo());
   if (!is_compiled()) return ScopeInfo::cast(outer_scope_info());
   return scope_info()->OuterScopeInfo();
@@ -613,7 +611,7 @@ bool SharedFunctionInfo::HasInferredName() {
 String* SharedFunctionInfo::inferred_name() {
   Object* maybe_scope_info = name_or_scope_info();
   if (maybe_scope_info->IsScopeInfo()) {
-    ScopeInfo* scope_info = ScopeInfo::cast(maybe_scope_info);
+    ScopeInfo scope_info = ScopeInfo::cast(maybe_scope_info);
     if (scope_info->HasInferredFunctionName()) {
       Object* name = ScopeInfo::cast(maybe_scope_info)->InferredFunctionName();
       if (name->IsString()) return String::cast(name);

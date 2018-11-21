@@ -222,7 +222,7 @@ class BreakPointInfo : public Tuple2 {
 };
 
 // Holds information related to block code coverage.
-class CoverageInfo : public FixedArray {
+class CoverageInfo : public FixedArrayPtr {
  public:
   int SlotCount() const;
 
@@ -238,7 +238,7 @@ class CoverageInfo : public FixedArray {
     return slot_count * kSlotIndexCount + kFirstSlotIndex;
   }
 
-  DECL_CAST(CoverageInfo)
+  DECL_CAST2(CoverageInfo)
 
   // Print debug info.
   void Print(std::unique_ptr<char[]> function_name);
@@ -257,7 +257,7 @@ class CoverageInfo : public FixedArray {
   static const int kSlotBlockCountIndex = 2;
   static const int kSlotIndexCount = 3;
 
-  DISALLOW_IMPLICIT_CONSTRUCTORS(CoverageInfo);
+  OBJECT_CONSTRUCTORS(CoverageInfo, FixedArrayPtr);
 };
 
 // Holds breakpoint related information. This object is used by inspector.
