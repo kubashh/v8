@@ -111,6 +111,11 @@ MapWord HeapObjectPtr::map_word() const {
       reinterpret_cast<Address>(RELAXED_READ_FIELD(this, kMapOffset)));
 }
 
+void HeapObjectPtr::set_map_word(MapWord map_word) {
+  RELAXED_WRITE_FIELD(this, kMapOffset,
+                      reinterpret_cast<Object*>(map_word.value_));
+}
+
 WriteBarrierMode HeapObjectPtr::GetWriteBarrierMode(
     const DisallowHeapAllocation& promise) {
   Heap* heap = Heap::FromWritableHeapObject(this);

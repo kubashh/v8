@@ -36,6 +36,13 @@ CAST_ACCESSOR(WasmTableObject)
   }                                                    \
   ACCESSORS(holder, name, type, offset)
 
+// TODO(3770): Replacement for the above, temporarily separate.
+#define OPTIONAL_ACCESSORS2(holder, name, type, offset) \
+  bool holder::has_##name() {                           \
+    return !READ_FIELD(this, offset)->IsUndefined();    \
+  }                                                     \
+  ACCESSORS2(holder, name, type, offset)
+
 #define READ_PRIMITIVE_FIELD(p, type, offset) \
   (*reinterpret_cast<type const*>(FIELD_ADDR(p, offset)))
 
@@ -57,8 +64,8 @@ ACCESSORS(WasmModuleObject, export_wrappers, FixedArray, kExportWrappersOffset)
 ACCESSORS(WasmModuleObject, script, Script, kScriptOffset)
 ACCESSORS(WasmModuleObject, weak_instance_list, WeakArrayList,
           kWeakInstanceListOffset)
-OPTIONAL_ACCESSORS(WasmModuleObject, asm_js_offset_table, ByteArray,
-                   kAsmJsOffsetTableOffset)
+OPTIONAL_ACCESSORS2(WasmModuleObject, asm_js_offset_table, ByteArray,
+                    kAsmJsOffsetTableOffset)
 OPTIONAL_ACCESSORS(WasmModuleObject, breakpoint_infos, FixedArray,
                    kBreakPointInfosOffset)
 wasm::NativeModule* WasmModuleObject::native_module() const {
@@ -208,8 +215,8 @@ ImportedFunctionEntry::ImportedFunctionEntry(
 }
 
 // WasmExceptionObject
-ACCESSORS(WasmExceptionObject, serialized_signature, PodArray<wasm::ValueType>,
-          kSerializedSignatureOffset)
+ACCESSORS2(WasmExceptionObject, serialized_signature, PodArray<wasm::ValueType>,
+           kSerializedSignatureOffset)
 ACCESSORS(WasmExceptionObject, exception_tag, HeapObject, kExceptionTagOffset)
 
 // WasmExportedFunctionData
