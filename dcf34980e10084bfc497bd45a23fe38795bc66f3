@@ -22,6 +22,30 @@
       "revId": "dcf34980e10084bfc497bd45a23fe38795bc66f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b18542fb_2a490b57",
+        "filename": "BUILD.gn",
+        "patchSetId": 9
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-21T15:32:08Z",
+      "side": 1,
+      "message": "As discussed offline, I\u0027m not convinced multiple (is_win \u0026\u0026 is_clang) checks will be cleaner than the current solution. If you don\u0027t mind, I\u0027ll leave this in its current form.",
+      "parentUuid": "1dbd47e1_fac3c094",
+      "range": {
+        "startLine": 1085,
+        "startChar": 6,
+        "endLine": 1090,
+        "endChar": 7
+      },
+      "revId": "dcf34980e10084bfc497bd45a23fe38795bc66f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
