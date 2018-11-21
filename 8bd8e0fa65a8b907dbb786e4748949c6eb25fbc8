@@ -16,6 +16,24 @@
       "revId": "8bd8e0fa65a8b907dbb786e4748949c6eb25fbc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b76923a_9dcc5054",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-11-21T08:49:36Z",
+      "side": 1,
+      "message": "Actually, I much prefer the new way of comparing because it makes it very explicit that you compare with Smi 0. \n\nTo me, the old way was hacky because it was not obvious that Smi 0 would still be equal to null.",
+      "parentUuid": "10e28435_5fde31be",
+      "revId": "8bd8e0fa65a8b907dbb786e4748949c6eb25fbc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
