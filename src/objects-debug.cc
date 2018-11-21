@@ -822,7 +822,7 @@ void SloppyArgumentsElements::SloppyArgumentsElementsVerify(Isolate* isolate,
   CHECK(IsFixedArray());
   CHECK_GE(length(), 2);
   CHECK_EQ(map(), ReadOnlyRoots(isolate).sloppy_arguments_elements_map());
-  Context* context_object = Context::cast(context());
+  Context context_object = context();
   FixedArray* arg_elements = FixedArray::cast(arguments());
   if (arg_elements->length() == 0) {
     CHECK(arg_elements == ReadOnlyRoots(isolate).empty_fixed_array());
