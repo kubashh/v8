@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85639c95_778c136b",
+        "filename": "src/arm/assembler-arm.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5206,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-11-21T13:47:06Z",
+      "side": 1,
+      "message": "Does this have to be true here? We don\u0027t check if the pool is empty before calling this function (regardless of the value of force_emit).",
+      "revId": "39b2711ac8d4d9a46d9d4b47557beefb3c1f0c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

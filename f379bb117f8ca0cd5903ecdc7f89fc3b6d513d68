@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5fc8c52_2084a42e",
+        "filename": "src/arm/assembler-arm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1221720
+      },
+      "writtenOn": "2018-11-21T13:47:06Z",
+      "side": 0,
+      "message": "Looks like this has been removed unintentionally? (Hence the compilation error).",
+      "revId": "f379bb117f8ca0cd5903ecdc7f89fc3b6d513d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
