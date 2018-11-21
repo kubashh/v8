@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "c733cd1b_4a8bc039",
+        "filename": "src/objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4630,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-11-21T06:03:04Z",
+      "side": 1,
+      "message": "Are not all fields mutable when constant field tracking is off?",
+      "parentUuid": "a4d1846e_7fea6895",
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7749c12c_a0dc2ee6",
         "filename": "src/objects/map-inl.h",
         "patchSetId": 1
@@ -83,6 +101,30 @@
     },
     {
       "key": {
+        "uuid": "48f65d97_1ba4b3cb",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-11-21T06:03:04Z",
+      "side": 1,
+      "message": "Unfortunately, even if NumberOfMutableFields() is low, the overall number of fields might be high, so we might need some protection.",
+      "parentUuid": "85a87ed0_10409aa0",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 153,
+        "endChar": 69
+      },
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4623e827_72a7c161",
         "filename": "src/objects/map-inl.h",
         "patchSetId": 1
@@ -94,6 +136,30 @@
       "writtenOn": "2018-11-20T14:45:11Z",
       "side": 1,
       "message": "Why not NumberOfMutableFields() ?",
+      "range": {
+        "startLine": 157,
+        "startChar": 19,
+        "endLine": 157,
+        "endChar": 33
+      },
+      "revId": "5284502768e610fb6856c022678620af1ce52b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7a0673c_00fe6e08",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-11-21T06:03:04Z",
+      "side": 1,
+      "message": "In some workloads, objects are used as hash tables and those objects often have all fields constant. If we use NumberOfMutableFields here, then those objects would never go to dictionary mode.",
+      "parentUuid": "4623e827_72a7c161",
       "range": {
         "startLine": 157,
         "startChar": 19,
