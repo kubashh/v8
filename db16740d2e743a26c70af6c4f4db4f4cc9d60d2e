@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05271b65_f2d60034",
+        "filename": "src/compiler/backend/instruction.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2018-11-21T12:30:39Z",
+      "side": 1,
+      "message": "hyper-nit: that is not a comma. separator?",
+      "range": {
+        "startLine": 367,
+        "startChar": 10,
+        "endLine": 367,
+        "endChar": 15
+      },
+      "revId": "db16740d2e743a26c70af6c4f4db4f4cc9d60d2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
