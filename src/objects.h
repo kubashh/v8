@@ -430,8 +430,8 @@ enum InstanceType : uint16_t {
   GLOBAL_DICTIONARY_TYPE,
   NUMBER_DICTIONARY_TYPE,
   SIMPLE_NUMBER_DICTIONARY_TYPE,  // LAST_DICTIONARY_TYPE
-  STRING_TABLE_TYPE,              // LAST_HASH_TABLE_TYPE
-  EPHEMERON_HASH_TABLE_TYPE,
+  STRING_TABLE_TYPE,
+  EPHEMERON_HASH_TABLE_TYPE,  // LAST_HASH_TABLE_TYPE
   SCOPE_INFO_TYPE,
   SCRIPT_CONTEXT_TABLE_TYPE,
   AWAIT_CONTEXT_TYPE,  // FIRST_CONTEXT_TYPE
@@ -558,7 +558,7 @@ enum InstanceType : uint16_t {
   LAST_FIXED_ARRAY_TYPE = WITH_CONTEXT_TYPE,
   // Boundaries for testing if given HeapObject is a subclass of HashTable
   FIRST_HASH_TABLE_TYPE = HASH_TABLE_TYPE,
-  LAST_HASH_TABLE_TYPE = STRING_TABLE_TYPE,
+  LAST_HASH_TABLE_TYPE = EPHEMERON_HASH_TABLE_TYPE,
   // Boundaries for testing if given HeapObject is a subclass of Dictionary
   FIRST_DICTIONARY_TYPE = ORDERED_HASH_MAP_TYPE,
   LAST_DICTIONARY_TYPE = SIMPLE_NUMBER_DICTIONARY_TYPE,
@@ -1084,7 +1084,7 @@ typedef Object* ObjectArgType;
 typedef RegExpMatchInfo* RegExpMatchInfoArgType;
 typedef ScriptContextTable* ScriptContextTableArgType;
 typedef SharedFunctionInfo* SharedFunctionInfoArgType;
-typedef SimpleNumberDictionary* SimpleNumberDictionaryArgType;
+typedef SimpleNumberDictionary SimpleNumberDictionaryArgType;
 typedef Smi SmiArgType;
 typedef String* StringArgType;
 typedef Symbol* SymbolArgType;
@@ -1563,6 +1563,7 @@ class MapWord {
  private:
   // HeapObject calls the private constructor and directly reads the value.
   friend class HeapObject;
+  friend class HeapObjectPtr;
 
   explicit MapWord(Address value) : value_(value) {}
 

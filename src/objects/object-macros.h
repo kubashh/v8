@@ -27,6 +27,15 @@
  protected:                                       \
   explicit inline Type(Address ptr);
 
+#define OBJECT_CONSTRUCTORS_T2(Type, Super, Template1, Template2) \
+ public:                                                          \
+  constexpr Type() : Super<Template1, Template2>() {}             \
+  Type* operator->() { return this; }                             \
+  const Type* operator->() const { return this; }                 \
+                                                                  \
+ protected:                                                       \
+  explicit inline Type(Address ptr);
+
 #define OBJECT_CONSTRUCTORS_IMPL(Type, Super) \
   inline Type::Type(Address ptr) : Super(ptr) { SLOW_DCHECK(Is##Type()); }
 
@@ -106,6 +115,24 @@
   Type Type::cast(ObjectPtr object) { return Type(object.ptr()); }            \
   Type Type::unchecked_cast(const Object* object) {                           \
     return bit_cast<Type>(ObjectPtr(object->ptr()));                          \
+  }
+
+#define CAST_ACCESSOR_T2(Type, Template1, Template2)                         \
+  template <typename Template1, typename Template2>                          \
+  Type<Template1, Template2> Type<Template1, Template2>::cast(Object* obj) { \
+    return Type<Template1, Template2>(obj->ptr());                           \
+  }                                                                          \
+                                                                             \
+  template <typename Template1, typename Template2>                          \
+  const Type<Template1, Template2> Type<Template1, Template2>::cast(         \
+      const Object* obj) {                                                   \
+    return Type<Template1, Template2>(obj->ptr());                           \
+  }                                                                          \
+                                                                             \
+  template <typename Template1, typename Template2>                          \
+  Type<Template1, Template2> Type<Template1, Template2>::cast(               \
+      ObjectPtr object) {                                                    \
+    return Type<Template1, Template2>(object.ptr());                         \
   }
 
 #define INT_ACCESSORS(holder, name, offset)                         \

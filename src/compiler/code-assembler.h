@@ -354,13 +354,16 @@ template <class T, class U>
 struct is_subtype {
   static const bool value = std::is_base_of<U, T>::value ||
                             (std::is_base_of<U, HeapObject>::value &&
-                             std::is_base_of<HeapObjectPtr, T>::value);
+                             std::is_base_of<HeapObjectPtr, T>::value) ||
+                            (std::is_base_of<U, FixedArray>::value &&
+                             std::is_base_of<FixedArrayPtr, T>::value);
 };
 // TODO(3770): Temporary; remove after migration.
 template <>
 struct is_subtype<Smi, Object> {
   static const bool value = true;
 };
+
 template <class T1, class T2, class U>
 struct is_subtype<UnionT<T1, T2>, U> {
   static const bool value =
