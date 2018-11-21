@@ -2485,6 +2485,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return LoadFixedArrayElement(CAST(container), key_index, kKeyToValueOffset);
   }
 
+  TNode<Object> LoadKeyByKeyIndex(TNode<DescriptorArray> container,
+                                  TNode<IntPtrT> key_index);
   TNode<Uint32T> LoadDetailsByKeyIndex(TNode<DescriptorArray> container,
                                        TNode<IntPtrT> key_index);
   TNode<Object> LoadValueByKeyIndex(TNode<DescriptorArray> container,
@@ -3220,7 +3222,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Uint32T> DescriptorArrayGetDetails(TNode<DescriptorArray> descriptors,
                                            TNode<Uint32T> descriptor_number);
 
-  typedef std::function<void(TNode<UintPtrT> descriptor_key_index)>
+  typedef std::function<void(TNode<IntPtrT> descriptor_key_index)>
       ForEachDescriptorBodyFunction;
 
   void DescriptorArrayForEach(VariableList& variable_list,

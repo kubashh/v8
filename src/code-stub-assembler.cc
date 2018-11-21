@@ -2902,8 +2902,8 @@ void CodeStubAssembler::EnsureArrayLengthWritable(TNode<Map> map,
 
   int length_index = JSArray::kLengthDescriptorIndex;
 #ifdef DEBUG
-  TNode<Name> maybe_length = CAST(LoadWeakFixedArrayElement(
-      descriptors, DescriptorArray::ToKeyIndex(length_index)));
+  TNode<Name> maybe_length = CAST(LoadKeyByKeyIndex(
+      descriptors, IntPtrConstant(DescriptorArray::ToKeyIndex(length_index))));
   CSA_ASSERT(this,
              WordEqual(maybe_length, LoadRoot(RootIndex::klength_string)));
 #endif
@@ -8230,6 +8230,11 @@ TNode<IntPtrT> CodeStubAssembler::EntryToIndex(TNode<IntPtrT> entry,
                                                field_index));
 }
 
+TNode<Object> CodeStubAssembler::LoadKeyByKeyIndex(
+    TNode<DescriptorArray> container, TNode<IntPtrT> key_index) {
+  return CAST(LoadWeakFixedArrayElement(container, key_index, 0));
+}
+
 TNode<Uint32T> CodeStubAssembler::LoadDetailsByKeyIndex(
     TNode<DescriptorArray> container, TNode<IntPtrT> key_index) {
   const int kKeyToDetailsOffset =
@@ -8809,18 +8814,13 @@ void CodeStubAssembler::LookupBinary(TNode<Name> unique_name,
 void CodeStubAssembler::DescriptorArrayForEach(
     VariableList& variable_list, TNode<Uint32T> start_descriptor,
     TNode<Uint32T> end_descriptor, const ForEachDescriptorBodyFunction& body) {
-  TNode<IntPtrT> start_index =
-      IntPtrAdd(IntPtrConstant(DescriptorArray::ToKeyIndex(0)),
-                EntryIndexToIndex<DescriptorArray>(start_descriptor));
-
-  TNode<IntPtrT> end_index =
-      IntPtrAdd(IntPtrConstant(DescriptorArray::ToKeyIndex(0)),
-                EntryIndexToIndex<DescriptorArray>(end_descriptor));
+  TNode<IntPtrT> start_index = ToKeyIndex<DescriptorArray>(start_descriptor);
+  TNode<IntPtrT> end_index = ToKeyIndex<DescriptorArray>(end_descriptor);
 
   BuildFastLoop(variable_list, start_index, end_index,
                 [=](Node* index) {
-                  TNode<UintPtrT> descriptor_key_index =
-                      TNode<UintPtrT>::UncheckedCast(index);
+                  TNode<IntPtrT> descriptor_key_index =
+                      TNode<IntPtrT>::UncheckedCast(index);
                   body(descriptor_key_index);
                 },
                 DescriptorArray::kEntrySize, INTPTR_PARAMETERS,
@@ -8842,9 +8842,9 @@ void CodeStubAssembler::ForEachEnumerableOwnProperty(
 
   DescriptorArrayForEach(
       list, Unsigned(Int32Constant(0)), nof_descriptors,
-      [=, &var_stable](TNode<UintPtrT> descriptor_key_index) {
+      [=, &var_stable](TNode<IntPtrT> descriptor_key_index) {
         TNode<Name> next_key =
-            CAST(LoadWeakFixedArrayElement(descriptors, descriptor_key_index));
+            CAST(LoadKeyByKeyIndex(descriptors, descriptor_key_index));
 
         TVARIABLE(Object, var_value, SmiConstant(0));
         Label callback(this), next_iteration(this);
@@ -13640,9 +13640,10 @@ void CodeStubAssembler::GotoIfInitialPrototypePropertiesModified(
       // Assert that the name is correct. This essentially checks that
       // the descriptor index corresponds to the insertion order in
       // the bootstrapper.
-      CSA_ASSERT(this, WordEqual(LoadWeakFixedArrayElement(
+      CSA_ASSERT(this, WordEqual(LoadKeyByKeyIndex(
                                      descriptors,
-                                     DescriptorArray::ToKeyIndex(descriptor)),
+                                     IntPtrConstant(DescriptorArray::ToKeyIndex(
+                                         descriptor))),
                                  LoadRoot(properties[i].name_root_index)));
 
       TNode<Uint32T> details =

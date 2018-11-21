@@ -333,14 +333,9 @@ TNode<Object> AccessorAssembler::LoadDescriptorValue(TNode<Map> map,
 TNode<MaybeObject> AccessorAssembler::LoadDescriptorValueOrFieldType(
     TNode<Map> map, SloppyTNode<IntPtrT> descriptor) {
   TNode<DescriptorArray> descriptors = LoadMapDescriptors(map);
-  TNode<IntPtrT> scaled_descriptor =
+  TNode<IntPtrT> key_index =
       IntPtrMul(descriptor, IntPtrConstant(DescriptorArray::kEntrySize));
-  TNode<IntPtrT> value_index = IntPtrAdd(
-      scaled_descriptor, IntPtrConstant(DescriptorArray::kFirstIndex +
-                                        DescriptorArray::kEntryValueIndex));
-  CSA_ASSERT(this, UintPtrLessThan(descriptor, LoadAndUntagWeakFixedArrayLength(
-                                                   descriptors)));
-  return LoadWeakFixedArrayElement(descriptors, value_index);
+  return LoadFieldTypeByKeyIndex(descriptors, key_index);
 }
 
 void AccessorAssembler::HandleLoadICSmiHandlerCase(
@@ -986,13 +981,11 @@ void AccessorAssembler::HandleStoreICTransitionMapHandlerCase(
   TNode<IntPtrT> last_key_index = UncheckedCast<IntPtrT>(IntPtrAdd(
       IntPtrConstant(DescriptorArray::ToKeyIndex(-1)), IntPtrMul(nof, factor)));
   if (flags & kValidateTransitionHandler) {
-    Node* key = LoadWeakFixedArrayElement(descriptors, last_key_index);
+    Node* key = LoadKeyByKeyIndex(descriptors, last_key_index);
     GotoIf(WordNotEqual(key, p->name), miss);
   } else {
-    CSA_ASSERT(this,
-               WordEqual(BitcastMaybeObjectToWord(LoadWeakFixedArrayElement(
-                             descriptors, last_key_index)),
-                         p->name));
+    CSA_ASSERT(this, WordEqual(LoadKeyByKeyIndex(descriptors, last_key_index),
+                               p->name));
   }
   Node* details = LoadDetailsByKeyIndex(descriptors, last_key_index);
   if (flags & kValidateTransitionHandler) {
