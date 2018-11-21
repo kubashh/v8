@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48dfd6b4_514ea8ac",
+        "filename": "src/parsing/preparsed-scope-data-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T09:21:17Z",
+      "side": 1,
+      "message": "nit: please drop this ifdef.",
+      "revId": "cdc76276a2777d7a0d4c36bfa7e68e1c29dbc7b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa381dbd_01bf9c12",
+        "filename": "src/parsing/preparsed-scope-data-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T09:21:17Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "cdc76276a2777d7a0d4c36bfa7e68e1c29dbc7b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6a0eb19_4ab3d58a",
+        "filename": "src/parsing/preparsed-scope-data-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T09:21:17Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "cdc76276a2777d7a0d4c36bfa7e68e1c29dbc7b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09b4fe2d_a4e51823",
+        "filename": "src/parsing/preparsed-scope-data-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T09:21:17Z",
+      "side": 1,
+      "message": "Please default-initialize this field:\nData data_{};\nor\nData data_ \u003d {};",
+      "revId": "cdc76276a2777d7a0d4c36bfa7e68e1c29dbc7b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11640307_e492ebdb",
+        "filename": "src/parsing/preparsed-scope-data-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-21T09:21:17Z",
+      "side": 1,
+      "message": "Better just add a default value to the field below, and use \"\u003d default\" here.",
+      "revId": "cdc76276a2777d7a0d4c36bfa7e68e1c29dbc7b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
