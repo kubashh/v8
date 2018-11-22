@@ -28,7 +28,7 @@
 #include "src/objects/allocation-site-inl.h"
 #include "src/objects/api-callbacks-inl.h"
 #include "src/objects/descriptor-array.h"
-#include "src/objects/literal-objects.h"
+#include "src/objects/literal-objects-inl.h"
 #include "src/objects/scope-info.h"
 #include "src/objects/script-inl.h"
 #include "src/profiler/heap-profiler.h"
@@ -122,7 +122,7 @@ void Heap::SetRootNoScriptSharedFunctionInfos(Object* value) {
   roots_table()[RootIndex::kNoScriptSharedFunctionInfos] = value;
 }
 
-void Heap::SetMessageListeners(TemplateList* value) {
+void Heap::SetMessageListeners(TemplateList value) {
   roots_table()[RootIndex::kMessageListeners] = value;
 }
 

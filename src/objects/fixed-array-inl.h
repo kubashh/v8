@@ -20,8 +20,10 @@ namespace internal {
 
 OBJECT_CONSTRUCTORS_IMPL(FixedArrayBasePtr, HeapObjectPtr)
 OBJECT_CONSTRUCTORS_IMPL(FixedArrayPtr, FixedArrayBasePtr)
+OBJECT_CONSTRUCTORS_IMPL(ArrayList, FixedArrayPtr)
+OBJECT_CONSTRUCTORS_IMPL(TemplateList, FixedArrayPtr)
 
-CAST_ACCESSOR(ArrayList)
+CAST_ACCESSOR2(ArrayList)
 CAST_ACCESSOR(ByteArray)
 CAST_ACCESSOR(FixedArray)
 CAST_ACCESSOR2(FixedArrayPtr)
@@ -29,7 +31,7 @@ CAST_ACCESSOR(FixedArrayBase)
 CAST_ACCESSOR2(FixedArrayBasePtr)
 CAST_ACCESSOR(FixedDoubleArray)
 CAST_ACCESSOR(FixedTypedArrayBase)
-CAST_ACCESSOR(TemplateList)
+CAST_ACCESSOR2(TemplateList)
 CAST_ACCESSOR(WeakFixedArray)
 CAST_ACCESSOR(WeakArrayList)
 
@@ -393,30 +395,30 @@ HeapObject* WeakArrayList::Iterator::Next() {
 }
 
 int ArrayList::Length() const {
-  if (FixedArray::cast(this)->length() == 0) return 0;
-  return Smi::ToInt(FixedArray::cast(this)->get(kLengthIndex));
+  if (FixedArray::cast(*this)->length() == 0) return 0;
+  return Smi::ToInt(FixedArray::cast(*this)->get(kLengthIndex));
 }
 
 void ArrayList::SetLength(int length) {
-  return FixedArray::cast(this)->set(kLengthIndex, Smi::FromInt(length));
+  return FixedArray::cast(*this)->set(kLengthIndex, Smi::FromInt(length));
 }
 
 Object* ArrayList::Get(int index) const {
-  return FixedArray::cast(this)->get(kFirstIndex + index);
+  return FixedArray::cast(*this)->get(kFirstIndex + index);
 }
 
 ObjectSlot ArrayList::Slot(int index) {
-  return HeapObject::RawField(this, OffsetOfElementAt(kFirstIndex + index));
+  return RawField(OffsetOfElementAt(kFirstIndex + index));
 }
 
 void ArrayList::Set(int index, Object* obj, WriteBarrierMode mode) {
-  FixedArray::cast(this)->set(kFirstIndex + index, obj, mode);
+  FixedArray::cast(*this)->set(kFirstIndex + index, obj, mode);
 }
 
 void ArrayList::Clear(int index, Object* undefined) {
   DCHECK(undefined->IsUndefined());
-  FixedArray::cast(this)->set(kFirstIndex + index, undefined,
-                              SKIP_WRITE_BARRIER);
+  FixedArray::cast(*this)->set(kFirstIndex + index, undefined,
+                               SKIP_WRITE_BARRIER);
 }
 
 int ByteArray::Size() { return RoundUp(length() + kHeaderSize, kPointerSize); }
@@ -863,15 +865,15 @@ const FixedTypedArray<Traits>* FixedTypedArray<Traits>::cast(
 }
 
 int TemplateList::length() const {
-  return Smi::ToInt(FixedArray::cast(this)->get(kLengthIndex));
+  return Smi::ToInt(FixedArray::cast(*this)->get(kLengthIndex));
 }
 
 Object* TemplateList::get(int index) const {
-  return FixedArray::cast(this)->get(kFirstElementIndex + index);
+  return FixedArray::cast(*this)->get(kFirstElementIndex + index);
 }
 
 void TemplateList::set(int index, Object* value) {
-  FixedArray::cast(this)->set(kFirstElementIndex + index, value);
+  FixedArray::cast(*this)->set(kFirstElementIndex + index, value);
 }
 
 }  // namespace internal

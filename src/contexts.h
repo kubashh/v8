@@ -363,10 +363,9 @@ enum ContextLookupFlags {
 //
 // The table is a fixed array, its first slot is the current used count and
 // the subsequent slots 1..used contain ScriptContexts.
-class ScriptContextTable : public FixedArray {
+class ScriptContextTable : public FixedArrayPtr {
  public:
-  // Conversions.
-  static inline ScriptContextTable* cast(Object* context);
+  DECL_CAST2(ScriptContextTable)
 
   struct LookupResult {
     int context_index;
@@ -399,7 +398,7 @@ class ScriptContextTable : public FixedArray {
   static const int kFirstContextSlotIndex = 1;
   static const int kMinLength = kFirstContextSlotIndex;
 
-  DISALLOW_IMPLICIT_CONSTRUCTORS(ScriptContextTable);
+  OBJECT_CONSTRUCTORS(ScriptContextTable, FixedArrayPtr);
 };
 
 // JSFunctions are pairs (context, function code), sometimes also called
@@ -499,7 +498,7 @@ class Context : public FixedArrayPtr {
   int GetErrorsThrown();
 
   // Direct slot access.
-  inline void set_scope_info(ScopeInfo* scope_info);
+  inline void set_scope_info(ScopeInfo scope_info);
   inline Context previous();
   inline void set_previous(Context context);
 
@@ -510,7 +509,7 @@ class Context : public FixedArrayPtr {
   inline void set_extension(HeapObject* object);
   JSObject* extension_object();
   JSReceiver* extension_receiver();
-  ScopeInfo* scope_info();
+  ScopeInfo scope_info();
 
   // Find the module context (assuming there is one) and return the associated
   // module object.

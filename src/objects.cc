@@ -3620,7 +3620,7 @@ void HeapObject::HeapObjectShortPrint(std::ostream& os) {  // NOLINT
       break;
     }
     case SCOPE_INFO_TYPE: {
-      ScopeInfo* scope = ScopeInfo::cast(this);
+      ScopeInfo scope = ScopeInfo::cast(this);
       os << "<ScopeInfo";
       if (scope->length()) os << " " << scope->scope_type() << " ";
       os << "[" << scope->length() << "]>";
@@ -10443,15 +10443,15 @@ Handle<FixedArray> ArrayList::Elements(Isolate* isolate,
   int length = array->Length();
   Handle<FixedArray> result = isolate->factory()->NewFixedArray(length);
   // Do not copy the first entry, i.e., the length.
-  array->CopyTo(kFirstIndex, *result, 0, length);
+  array->CopyTo(kFirstIndex, FixedArrayPtr::cast(*result), 0, length);
   return result;
 }
 
 namespace {
 
-Handle<FixedArray> EnsureSpaceInFixedArray(Isolate* isolate,
-                                           Handle<FixedArray> array,
-                                           int length) {
+Handle<FixedArrayPtr> EnsureSpaceInFixedArray(Isolate* isolate,
+                                              Handle<FixedArrayPtr> array,
+                                              int length) {
   int capacity = array->length();
   if (capacity < length) {
     int new_capacity = length;
@@ -10468,7 +10468,8 @@ Handle<FixedArray> EnsureSpaceInFixedArray(Isolate* isolate,
 Handle<ArrayList> ArrayList::EnsureSpace(Isolate* isolate,
                                          Handle<ArrayList> array, int length) {
   const bool empty = (array->length() == 0);
-  auto ret = EnsureSpaceInFixedArray(isolate, array, kFirstIndex + length);
+  Handle<FixedArrayPtr> ret =
+      EnsureSpaceInFixedArray(isolate, array, kFirstIndex + length);
   if (empty) {
     ret->set_map_no_write_barrier(array->GetReadOnlyRoots().array_list_map());
 
@@ -10622,9 +10623,8 @@ Handle<RegExpMatchInfo> RegExpMatchInfo::ReserveCaptures(
     Isolate* isolate, Handle<RegExpMatchInfo> match_info, int capture_count) {
   DCHECK_GE(match_info->length(), kLastMatchOverhead);
   const int required_length = kFirstCaptureIndex + capture_count;
-  Handle<FixedArray> result =
-      EnsureSpaceInFixedArray(isolate, match_info, required_length);
-  return Handle<RegExpMatchInfo>::cast(result);
+  return Handle<RegExpMatchInfo>::cast(
+      EnsureSpaceInFixedArray(isolate, match_info, required_length));
 }
 
 // static
@@ -13999,7 +13999,7 @@ bool SharedFunctionInfo::HasCoverageInfo() const {
   return has_coverage_info;
 }
 
-CoverageInfo* SharedFunctionInfo::GetCoverageInfo() const {
+CoverageInfo SharedFunctionInfo::GetCoverageInfo() const {
   DCHECK(HasCoverageInfo());
   return CoverageInfo::cast(GetDebugInfo()->coverage_info());
 }
@@ -14337,7 +14337,7 @@ void SharedFunctionInfo::SetFunctionTokenPosition(int function_token_position,
 int SharedFunctionInfo::StartPosition() const {
   Object* maybe_scope_info = name_or_scope_info();
   if (maybe_scope_info->IsScopeInfo()) {
-    ScopeInfo* info = ScopeInfo::cast(maybe_scope_info);
+    ScopeInfo info = ScopeInfo::cast(maybe_scope_info);
     if (info->HasPositionInfo()) {
       return info->StartPosition();
     }
@@ -14354,7 +14354,7 @@ int SharedFunctionInfo::StartPosition() const {
 int SharedFunctionInfo::EndPosition() const {
   Object* maybe_scope_info = name_or_scope_info();
   if (maybe_scope_info->IsScopeInfo()) {
-    ScopeInfo* info = ScopeInfo::cast(maybe_scope_info);
+    ScopeInfo info = ScopeInfo::cast(maybe_scope_info);
     if (info->HasPositionInfo()) {
       return info->EndPosition();
     }
@@ -14386,7 +14386,7 @@ int SharedFunctionInfo::FunctionLiteralId(Isolate* isolate) const {
 void SharedFunctionInfo::SetPosition(int start_position, int end_position) {
   Object* maybe_scope_info = name_or_scope_info();
   if (maybe_scope_info->IsScopeInfo()) {
-    ScopeInfo* info = ScopeInfo::cast(maybe_scope_info);
+    ScopeInfo info = ScopeInfo::cast(maybe_scope_info);
     if (info->HasPositionInfo()) {
       info->SetPositionInfo(start_position, end_position);
     }
@@ -14635,7 +14635,7 @@ void Code::PrintDeoptLocation(FILE* out, const char* str, Address pc) {
 
 
 bool Code::CanDeoptAt(Address pc) {
-  DeoptimizationData* deopt_data =
+  DeoptimizationData deopt_data =
       DeoptimizationData::cast(deoptimization_data());
   Address code_start_address = InstructionStart();
   for (int i = 0; i < deopt_data->DeoptCount(); i++) {
@@ -14718,7 +14718,7 @@ bool Code::Inlines(SharedFunctionInfo* sfi) {
   // We can only check for inlining for optimized code.
   DCHECK(is_optimized_code());
   DisallowHeapAllocation no_gc;
-  DeoptimizationData* const data =
+  DeoptimizationData const data =
       DeoptimizationData::cast(deoptimization_data());
   if (data->length() == 0) return false;
   if (data->SharedFunctionInfo() == sfi) return true;
@@ -15113,7 +15113,7 @@ void Code::Disassemble(const char* name, std::ostream& os, Address current_pc) {
   }
 
   if (kind() == OPTIMIZED_FUNCTION) {
-    DeoptimizationData* data =
+    DeoptimizationData data =
         DeoptimizationData::cast(this->deoptimization_data());
     data->DeoptimizationDataPrint(os);
   }
@@ -15441,14 +15441,13 @@ void Code::SetMarkedForDeoptimization(const char* reason) {
   set_marked_for_deoptimization(true);
   if (FLAG_trace_deopt &&
       (deoptimization_data() != GetReadOnlyRoots().empty_fixed_array())) {
-    DeoptimizationData* deopt_data =
+    DeoptimizationData deopt_data =
         DeoptimizationData::cast(deoptimization_data());
     CodeTracer::Scope scope(GetHeap()->isolate()->GetCodeTracer());
     PrintF(scope.file(),
            "[marking dependent code " V8PRIxPTR_FMT
            " (opt #%d) for deoptimization, reason: %s]\n",
-           reinterpret_cast<intptr_t>(this),
-           deopt_data->OptimizationId()->value(), reason);
+           ptr(), deopt_data->OptimizationId()->value(), reason);
   }
 }
 

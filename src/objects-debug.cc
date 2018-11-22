@@ -695,6 +695,10 @@ void FixedArray::FixedArrayVerify(Isolate* isolate) {
   }
 }
 
+void FixedArrayPtr::FixedArrayVerify(Isolate* isolate) {
+  reinterpret_cast<FixedArray*>(ptr())->FixedArrayVerify(isolate);
+}
+
 void WeakFixedArray::WeakFixedArrayVerify(Isolate* isolate) {
   for (int i = 0; i < length(); i++) {
     MaybeObject::VerifyMaybeObjectPointer(isolate, Get(i));
@@ -1071,7 +1075,7 @@ void SharedFunctionInfo::SharedFunctionInfoVerify(Isolate* isolate) {
   CHECK_EQ(expected_map_index, function_map_index());
 
   if (scope_info()->length() > 0) {
-    ScopeInfo* info = scope_info();
+    ScopeInfo info = scope_info();
     CHECK(kind() == info->function_kind());
     CHECK_EQ(kind() == kModule, info->scope_type() == MODULE_SCOPE);
   }
