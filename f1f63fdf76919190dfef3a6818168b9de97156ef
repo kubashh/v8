@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cabe4b82_f5dc27bd",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 8233,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "Name",
+      "range": {
+        "startLine": 8233,
+        "startChar": 6,
+        "endLine": 8233,
+        "endChar": 12
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "426dd7a4_f3b97e3e",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 8269,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "Name",
+      "range": {
+        "startLine": 8269,
+        "startChar": 6,
+        "endLine": 8269,
+        "endChar": 12
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24034601_c783fff9",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "s/descriptor_entry/descriptor/ here and below to be in sync with naming in runtime.",
+      "range": {
+        "startLine": 3235,
+        "startChar": 55,
+        "endLine": 3235,
+        "endChar": 71
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bad11937_5b309d9a",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "Signed(",
+      "range": {
+        "startLine": 218,
+        "startChar": 30,
+        "endLine": 218,
+        "endChar": 52
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0f9adf8_90b0031f",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "Signed(",
+      "range": {
+        "startLine": 494,
+        "startChar": 32,
+        "endLine": 494,
+        "endChar": 54
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b8be771_bb5d9134",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "Signed(",
+      "range": {
+        "startLine": 524,
+        "startChar": 32,
+        "endLine": 524,
+        "endChar": 55
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a79a1d0_21b8d9cf",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "Signed(",
+      "range": {
+        "startLine": 826,
+        "startChar": 29,
+        "endLine": 826,
+        "endChar": 53
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa17b7d8_1cddba28",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "TNode\u003cName\u003e",
+      "range": {
+        "startLine": 986,
+        "startChar": 4,
+        "endLine": 986,
+        "endChar": 9
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "036766d8_ae3f7eea",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "Signed(",
+      "range": {
+        "startLine": 1252,
+        "startChar": 30,
+        "endLine": 1252,
+        "endChar": 53
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc90f39e_6cda6ff1",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1584,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-11-22T09:36:26Z",
+      "side": 1,
+      "message": "Signed(",
+      "range": {
+        "startLine": 1584,
+        "startChar": 32,
+        "endLine": 1584,
+        "endChar": 54
+      },
+      "revId": "f1f63fdf76919190dfef3a6818168b9de97156ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
