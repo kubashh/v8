@@ -52,6 +52,24 @@
       "revId": "8bd8e0fa65a8b907dbb786e4748949c6eb25fbc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8f414fe6_a6abd5b5",
+        "filename": "src/snapshot/deserializer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-22T01:02:38Z",
+      "side": 1,
+      "message": "We do have another way: .is_null(). I chose to compare against Smi::kZero here to reflect the semantics: this isn\u0027t so much a nullptr (connotation: undefined/uninitialized/nonexistent) as a specifically chosen sentinel value (base_pointer() either points to the FixedTypedArray itself or to Smi::kZero, to distinguish external from on-heap typed arrays).",
+      "parentUuid": "9673693e_0b76aa1d",
+      "revId": "8bd8e0fa65a8b907dbb786e4748949c6eb25fbc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
