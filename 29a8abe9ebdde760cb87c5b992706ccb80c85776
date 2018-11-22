@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d7ec57f_e86311ce",
+        "filename": "src/compiler/verifier.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2018-11-22T09:23:05Z",
+      "side": 1,
+      "message": "Why can this be negative?",
+      "revId": "29a8abe9ebdde760cb87c5b992706ccb80c85776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
