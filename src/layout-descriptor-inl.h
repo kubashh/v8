@@ -6,14 +6,21 @@
 #define V8_LAYOUT_DESCRIPTOR_INL_H_
 
 #include "src/layout-descriptor.h"
+
 #include "src/objects-inl.h"
 #include "src/objects/descriptor-array.h"
 #include "src/objects/smi.h"
 
+// Has to be the last include (doesn't have include guards):
+#include "src/objects/object-macros.h"
+
 namespace v8 {
 namespace internal {
 
-LayoutDescriptor* LayoutDescriptor::FromSmi(Smi smi) {
+OBJECT_CONSTRUCTORS_IMPL(LayoutDescriptor, ByteArray)
+CAST_ACCESSOR2(LayoutDescriptor)
+
+LayoutDescriptor LayoutDescriptor::FromSmi(Smi smi) {
   return LayoutDescriptor::cast(smi);
 }
 
@@ -41,8 +48,7 @@ bool LayoutDescriptor::InobjectUnboxedField(int inobject_properties,
   return details.field_index() < inobject_properties;
 }
 
-
-LayoutDescriptor* LayoutDescriptor::FastPointerLayout() {
+LayoutDescriptor LayoutDescriptor::FastPointerLayout() {
   return LayoutDescriptor::FromSmi(Smi::zero());
 }
 
@@ -61,13 +67,11 @@ bool LayoutDescriptor::GetIndexes(int field_index, int* layout_word_index,
   return true;
 }
 
-
-LayoutDescriptor* LayoutDescriptor::SetRawData(int field_index) {
+LayoutDescriptor LayoutDescriptor::SetRawData(int field_index) {
   return SetTagged(field_index, false);
 }
 
-
-LayoutDescriptor* LayoutDescriptor::SetTagged(int field_index, bool tagged) {
+LayoutDescriptor LayoutDescriptor::SetTagged(int field_index, bool tagged) {
   int layout_word_index = 0;
   int layout_bit_index = 0;
 
@@ -82,9 +86,9 @@ LayoutDescriptor* LayoutDescriptor::SetTagged(int field_index, bool tagged) {
       value |= layout_mask;
     }
     set_layout_word(layout_word_index, value);
-    return this;
+    return *this;
   } else {
-    uint32_t value = static_cast<uint32_t>(Smi::ToInt(this));
+    uint32_t value = static_cast<uint32_t>(Smi::ToInt(*this));
     if (tagged) {
       value &= ~layout_mask;
     } else {
@@ -111,14 +115,14 @@ bool LayoutDescriptor::IsTagged(int field_index) {
     uint32_t value = get_layout_word(layout_word_index);
     return (value & layout_mask) == 0;
   } else {
-    uint32_t value = static_cast<uint32_t>(Smi::ToInt(this));
+    uint32_t value = static_cast<uint32_t>(Smi::ToInt(*this));
     return (value & layout_mask) == 0;
   }
 }
 
 
 bool LayoutDescriptor::IsFastPointerLayout() {
-  return this == FastPointerLayout();
+  return *this == FastPointerLayout();
 }
 
 
@@ -134,13 +138,12 @@ int LayoutDescriptor::capacity() {
   return IsSlowLayout() ? (length() * kBitsPerByte) : kBitsInSmiLayout;
 }
 
-
-LayoutDescriptor* LayoutDescriptor::cast_gc_safe(Object* object) {
+LayoutDescriptor LayoutDescriptor::cast_gc_safe(Object* object) {
   // The map word of the object can be a forwarding pointer during
   // object evacuation phase of GC. Since the layout descriptor methods
   // for checking whether a field is tagged or not do not depend on the
   // object map, it should be safe.
-  return reinterpret_cast<LayoutDescriptor*>(object);
+  return LayoutDescriptor::unchecked_cast(object);
 }
 
 int LayoutDescriptor::GetSlowModeBackingStoreLength(int length) {
@@ -182,8 +185,8 @@ int LayoutDescriptor::CalculateCapacity(Map map, DescriptorArray* descriptors,
   return layout_descriptor_length;
 }
 
-LayoutDescriptor* LayoutDescriptor::Initialize(
-    LayoutDescriptor* layout_descriptor, Map map, DescriptorArray* descriptors,
+LayoutDescriptor LayoutDescriptor::Initialize(
+    LayoutDescriptor layout_descriptor, Map map, DescriptorArray* descriptors,
     int num_descriptors) {
   DisallowHeapAllocation no_allocation;
   int inobject_properties = map->GetInObjectProperties();
@@ -248,5 +251,7 @@ bool LayoutDescriptorHelper::IsTagged(int offset_in_bytes) {
 
 }  // namespace internal
 }  // namespace v8
+
+#include "src/objects/object-macros-undef.h"
 
 #endif  // V8_LAYOUT_DESCRIPTOR_INL_H_
