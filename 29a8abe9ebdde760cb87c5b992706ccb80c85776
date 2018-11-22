@@ -33,6 +33,24 @@
       "revId": "29a8abe9ebdde760cb87c5b992706ccb80c85776",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54efc3ab_6c9369ca",
+        "filename": "test/mjsunit/regress/regress-crbug-906043.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-11-22T09:35:38Z",
+      "side": 1,
+      "message": "Bonus points for the same name as in C++.",
+      "parentUuid": "f26ec0b4_f12b26e8",
+      "revId": "29a8abe9ebdde760cb87c5b992706ccb80c85776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
