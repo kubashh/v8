@@ -16,6 +16,23 @@
       "revId": "29a8abe9ebdde760cb87c5b992706ccb80c85776",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f26ec0b4_f12b26e8",
+        "filename": "test/mjsunit/regress/regress-crbug-906043.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-22T09:31:17Z",
+      "side": 1,
+      "message": "nit: I\u0027m always a bit conflicted with these magic numbers in tests. On the one hand it almost doesn\u0027t seem worth the trouble of e.g. creating a runtime function that exposes the real kMaxArguments constant. Then again it could avoid pain if the constant ever changes, and it makes the tests more readable. Up to you.. Maybe we could at least define a constant in mjsunit.js as a middle ground?",
+      "revId": "29a8abe9ebdde760cb87c5b992706ccb80c85776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
