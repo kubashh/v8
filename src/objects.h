@@ -1069,7 +1069,7 @@ enum class ElementTypes { kAll, kStringAndSymbol };
 typedef AbstractCode* AbstractCodeArgType;
 typedef ByteArray* ByteArrayArgType;
 typedef FixedArray* FixedArrayArgType;
-typedef FixedDoubleArray* FixedDoubleArrayArgType;
+typedef FixedDoubleArray FixedDoubleArrayArgType;
 typedef Foreign* ForeignArgType;
 typedef HeapObject* HeapObjectArgType;
 typedef JSArray* JSArrayArgType;
