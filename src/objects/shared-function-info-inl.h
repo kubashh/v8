@@ -457,12 +457,12 @@ bool SharedFunctionInfo::HasAsmWasmData() const {
   return function_data()->IsFixedArray();
 }
 
-FixedArray* SharedFunctionInfo::asm_wasm_data() const {
+FixedArray SharedFunctionInfo::asm_wasm_data() const {
   DCHECK(HasAsmWasmData());
   return FixedArray::cast(function_data());
 }
 
-void SharedFunctionInfo::set_asm_wasm_data(FixedArray* data) {
+void SharedFunctionInfo::set_asm_wasm_data(FixedArray data) {
   DCHECK(function_data() == Smi::FromEnum(Builtins::kCompileLazy) ||
          HasUncompiledData() || HasAsmWasmData());
   set_function_data(data);

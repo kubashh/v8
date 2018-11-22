@@ -92,12 +92,12 @@ void Heap::SetInterpreterEntryReturnPCOffset(int pc_offset) {
   set_interpreter_entry_return_pc_offset(Smi::FromInt(pc_offset));
 }
 
-void Heap::SetSerializedObjects(FixedArray* objects) {
+void Heap::SetSerializedObjects(FixedArray objects) {
   DCHECK(isolate()->serializer_enabled());
   set_serialized_objects(objects);
 }
 
-void Heap::SetSerializedGlobalProxySizes(FixedArray* sizes) {
+void Heap::SetSerializedGlobalProxySizes(FixedArray sizes) {
   DCHECK(isolate()->serializer_enabled());
   set_serialized_global_proxy_sizes(sizes);
 }
@@ -1409,8 +1409,8 @@ void Heap::StartIdleIncrementalMarking(
                           gc_callback_flags);
 }
 
-void Heap::MoveElements(FixedArray* array, int dst_index, int src_index,
-                        int len, WriteBarrierMode mode) {
+void Heap::MoveElements(FixedArray array, int dst_index, int src_index, int len,
+                        WriteBarrierMode mode) {
   if (len == 0) return;
 
   DCHECK(array->map() != ReadOnlyRoots(this).fixed_cow_array_map());
@@ -2503,7 +2503,7 @@ namespace {
 
 class LeftTrimmerVerifierRootVisitor : public RootVisitor {
  public:
-  explicit LeftTrimmerVerifierRootVisitor(FixedArrayBase* to_check)
+  explicit LeftTrimmerVerifierRootVisitor(FixedArrayBase to_check)
       : to_check_(to_check) {}
 
   void VisitRootPointers(Root root, const char* description, ObjectSlot start,
@@ -2514,7 +2514,7 @@ class LeftTrimmerVerifierRootVisitor : public RootVisitor {
   }
 
  private:
-  FixedArrayBase* to_check_;
+  FixedArrayBase to_check_;
 
   DISALLOW_COPY_AND_ASSIGN(LeftTrimmerVerifierRootVisitor);
 };
@@ -2532,13 +2532,13 @@ bool MayContainRecordedSlots(HeapObject* object) {
 }
 }  // namespace
 
-FixedArrayBase* Heap::LeftTrimFixedArray(FixedArrayBase* object,
-                                         int elements_to_trim) {
+FixedArrayBase Heap::LeftTrimFixedArray(FixedArrayBase object,
+                                        int elements_to_trim) {
   if (elements_to_trim == 0) {
     // This simplifies reasoning in the rest of the function.
     return object;
   }
-  CHECK_NOT_NULL(object);
+  CHECK(!object.is_null());
   DCHECK(CanMoveObjectStart(object));
   // Add custom visitor to concurrent marker if new left-trimmable type
   // is added.
@@ -2582,7 +2582,7 @@ FixedArrayBase* Heap::LeftTrimFixedArray(FixedArrayBase* object,
   RELAXED_WRITE_FIELD(object, bytes_to_trim + kPointerSize,
                       Smi::FromInt(len - elements_to_trim));
 
-  FixedArrayBase* new_object =
+  FixedArrayBase new_object =
       FixedArrayBase::cast(HeapObject::FromAddress(new_start));
 
   // Remove recorded slots for the new map and length offset.
@@ -2623,7 +2623,7 @@ FixedArrayBase* Heap::LeftTrimFixedArray(FixedArrayBase* object,
   return new_object;
 }
 
-void Heap::RightTrimFixedArray(FixedArrayBase* object, int elements_to_trim) {
+void Heap::RightTrimFixedArray(FixedArrayBase object, int elements_to_trim) {
   const int len = object->length();
   DCHECK_LE(elements_to_trim, len);
   DCHECK_GE(elements_to_trim, 0);
@@ -2652,12 +2652,12 @@ void Heap::RightTrimWeakFixedArray(WeakFixedArray* object,
   // collection: When marking, we record the weak slots, and shrinking
   // invalidates them.
   DCHECK_EQ(gc_state(), MARK_COMPACT);
-  CreateFillerForArray<WeakFixedArray>(object, elements_to_trim,
-                                       elements_to_trim * kPointerSize);
+  CreateFillerForArray<WeakFixedArray*>(object, elements_to_trim,
+                                        elements_to_trim * kPointerSize);
 }
 
 template <typename T>
-void Heap::CreateFillerForArray(T* object, int elements_to_trim,
+void Heap::CreateFillerForArray(T object, int elements_to_trim,
                                 int bytes_to_trim) {
   DCHECK(object->IsFixedArrayBase() || object->IsByteArray() ||
          object->IsWeakFixedArray());
@@ -5263,7 +5263,7 @@ void Heap::UnregisterStrongRoots(ObjectSlot start) {
   }
 }
 
-void Heap::SetBuiltinsConstantsTable(FixedArray* cache) {
+void Heap::SetBuiltinsConstantsTable(FixedArray cache) {
   set_builtins_constants_table(cache);
 }
 
@@ -5567,7 +5567,7 @@ void Heap::GenerationalBarrierSlow(HeapObject* object, Address slot,
   heap->store_buffer()->InsertEntry(slot);
 }
 
-void Heap::GenerationalBarrierForElementsSlow(Heap* heap, FixedArray* array,
+void Heap::GenerationalBarrierForElementsSlow(Heap* heap, FixedArray array,
                                               int offset, int length) {
   for (int i = 0; i < length; i++) {
     if (!InNewSpace(array->get(offset + i))) continue;

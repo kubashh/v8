@@ -22,7 +22,7 @@
 namespace v8 {
 namespace internal {
 
-OBJECT_CONSTRUCTORS_IMPL(ScriptContextTable, FixedArrayPtr)
+OBJECT_CONSTRUCTORS_IMPL(ScriptContextTable, FixedArray)
 CAST_ACCESSOR2(ScriptContextTable)
 
 int ScriptContextTable::used() const { return Smi::ToInt(get(kUsedSlotIndex)); }
@@ -41,7 +41,7 @@ Handle<Context> ScriptContextTable::GetContext(Isolate* isolate,
       FixedArray::get(*table, i + kFirstContextSlotIndex, isolate));
 }
 
-OBJECT_CONSTRUCTORS_IMPL(Context, FixedArrayPtr)
+OBJECT_CONSTRUCTORS_IMPL(Context, FixedArray)
 NEVER_READ_ONLY_SPACE_IMPL(Context)
 CAST_ACCESSOR2(Context)
 CAST_ACCESSOR2(NativeContext)

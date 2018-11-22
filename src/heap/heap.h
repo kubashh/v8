@@ -342,7 +342,7 @@ class Heap {
                                                         Address slot,
                                                         HeapObject* value);
   V8_EXPORT_PRIVATE static void GenerationalBarrierForElementsSlow(
-      Heap* heap, FixedArray* array, int offset, int length);
+      Heap* heap, FixedArray array, int offset, int length);
   V8_EXPORT_PRIVATE static void GenerationalBarrierForCodeSlow(
       Code host, RelocInfo* rinfo, HeapObject* value);
   V8_EXPORT_PRIVATE static void MarkingBarrierSlow(HeapObject* object,
@@ -366,7 +366,7 @@ class Heap {
 
   // Move len elements within a given array from src_index index to dst_index
   // index.
-  void MoveElements(FixedArray* array, int dst_index, int src_index, int len,
+  void MoveElements(FixedArray array, int dst_index, int src_index, int len,
                     WriteBarrierMode mode = UPDATE_WRITE_BARRIER);
 
   // Initialize a filler object to keep the ability to iterate over the heap
@@ -381,7 +381,7 @@ class Heap {
           ClearFreedMemoryMode::kDontClearFreedMemory);
 
   template <typename T>
-  void CreateFillerForArray(T* object, int elements_to_trim, int bytes_to_trim);
+  void CreateFillerForArray(T object, int elements_to_trim, int bytes_to_trim);
 
   bool CanMoveObjectStart(HeapObject* object);
 
@@ -389,10 +389,10 @@ class Heap {
 
   // Trim the given array from the left. Note that this relocates the object
   // start and hence is only valid if there is only a single reference to it.
-  FixedArrayBase* LeftTrimFixedArray(FixedArrayBase* obj, int elements_to_trim);
+  FixedArrayBase LeftTrimFixedArray(FixedArrayBase obj, int elements_to_trim);
 
   // Trim the given array from the right.
-  void RightTrimFixedArray(FixedArrayBase* obj, int elements_to_trim);
+  void RightTrimFixedArray(FixedArrayBase obj, int elements_to_trim);
   void RightTrimWeakFixedArray(WeakFixedArray* obj, int elements_to_trim);
 
   // Converts the given boolean condition to JavaScript boolean value.
@@ -520,8 +520,8 @@ class Heap {
   inline int NextDebuggingId();
   inline int GetNextTemplateSerialNumber();
 
-  void SetSerializedObjects(FixedArray* objects);
-  void SetSerializedGlobalProxySizes(FixedArray* sizes);
+  void SetSerializedObjects(FixedArray objects);
+  void SetSerializedGlobalProxySizes(FixedArray sizes);
 
   // For post mortem debugging.
   void RememberUnmappedPage(Address page, bool compacted);
@@ -663,7 +663,7 @@ class Heap {
 
   // Sets the stub_cache_ (only used when expanding the dictionary).
   V8_INLINE void SetRootCodeStubs(SimpleNumberDictionary value);
-  V8_INLINE void SetRootMaterializedObjects(FixedArray* objects);
+  V8_INLINE void SetRootMaterializedObjects(FixedArray objects);
   V8_INLINE void SetRootScriptList(Object* value);
   V8_INLINE void SetRootStringTable(StringTable value);
   V8_INLINE void SetRootNoScriptSharedFunctionInfos(Object* value);
@@ -681,7 +681,7 @@ class Heap {
   void RegisterStrongRoots(ObjectSlot start, ObjectSlot end);
   void UnregisterStrongRoots(ObjectSlot start);
 
-  void SetBuiltinsConstantsTable(FixedArray* cache);
+  void SetBuiltinsConstantsTable(FixedArray cache);
 
   // A full copy of the interpreter entry trampoline, used as a template to
   // create copies of the builtin at runtime. The copies are used to create

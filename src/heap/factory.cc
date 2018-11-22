@@ -306,8 +306,7 @@ Handle<FixedArray> Factory::NewFixedArrayWithFiller(RootIndex map_root_index,
 template <typename T>
 Handle<T> Factory::NewFixedArrayWithMap(RootIndex map_root_index, int length,
                                         PretenureFlag pretenure) {
-  static_assert(std::is_base_of<FixedArray, T>::value ||
-                    std::is_base_of<FixedArrayPtr, T>::value,
+  static_assert(std::is_base_of<FixedArray, T>::value,
                 "T must be a descendant of FixedArray");
   // Zero-length case must be handled outside, where the knowledge about
   // the map is.
@@ -498,8 +497,7 @@ Handle<FixedArrayBase> Factory::NewFixedDoubleArray(int length,
       AllocateRawWithImmortalMap(size, pretenure, map, kDoubleAligned);
   Handle<FixedDoubleArray> array(FixedDoubleArray::cast(result), isolate());
   array->set_length(length);
-  // TODO(3770): Drop explicit cast after migrating FixedArrayBase*.
-  return Handle<FixedArrayBase>(array.location());
+  return array;
 }
 
 Handle<FixedArrayBase> Factory::NewFixedDoubleArrayWithHoles(
@@ -1954,10 +1952,10 @@ Handle<JSObject> Factory::CopyJSObjectWithAllocationSite(
   }
 
   SLOW_DCHECK(clone->GetElementsKind() == source->GetElementsKind());
-  FixedArrayBase* elements = FixedArrayBase::cast(source->elements());
+  FixedArrayBase elements = source->elements();
   // Update elements if necessary.
   if (elements->length() > 0) {
-    FixedArrayBase* elem = nullptr;
+    FixedArrayBase elem;
     if (elements->map() == *fixed_cow_array_map()) {
       elem = elements;
     } else if (source->HasDoubleElements()) {
@@ -2048,20 +2046,10 @@ Handle<FixedArray> Factory::CopyFixedArrayWithMap(Handle<FixedArray> array,
                                                   Handle<Map> map) {
   return CopyArrayWithMap(array, map);
 }
-// TODO(3770): Replacement for the above, temporarily separate.
-Handle<FixedArrayPtr> Factory::CopyFixedArrayWithMap(
-    Handle<FixedArrayPtr> array, Handle<Map> map) {
-  return CopyArrayWithMap(array, map);
-}
 
 Handle<FixedArray> Factory::CopyFixedArrayAndGrow(Handle<FixedArray> array,
                                                   int grow_by,
                                                   PretenureFlag pretenure) {
-  return CopyArrayAndGrow(array, grow_by, pretenure);
-}
-// TODO(3770): Replacement for the above, temporarily separate.
-Handle<FixedArrayPtr> Factory::CopyFixedArrayAndGrow(
-    Handle<FixedArrayPtr> array, int grow_by, PretenureFlag pretenure) {
   return CopyArrayAndGrow(array, grow_by, pretenure);
 }
 
@@ -3300,9 +3288,7 @@ Handle<JSTypedArray> Factory::NewJSTypedArray(ExternalArrayType type,
       static_cast<int>(length), type,
       static_cast<uint8_t*>(buffer->backing_store()) + byte_offset, pretenure);
   Handle<Map> map = JSObject::GetElementsTransitionMap(obj, elements_kind);
-  // TODO(3770): Drop explicit cast after migrating FixedArrayBase*.
-  JSObject::SetMapAndElements(obj, map,
-                              Handle<FixedArrayBase>(elements.location()));
+  JSObject::SetMapAndElements(obj, map, elements);
   return obj;
 }
 
