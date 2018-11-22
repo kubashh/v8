@@ -69,6 +69,24 @@
       "revId": "29a8abe9ebdde760cb87c5b992706ccb80c85776",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97f5fe75_ad638f80",
+        "filename": "test/mjsunit/regress/regress-crbug-906043.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2018-11-22T09:44:34Z",
+      "side": 1,
+      "message": "We do this for things like %MaxSmi and %StringMaxLength which change per architecture so I think it makes sense. For this CL I\u0027d err on the side of caution and change as little as possible, to reduce merge risk. I can do a follow-up that adds a %MaxArguments runtime function.",
+      "parentUuid": "54efc3ab_6c9369ca",
+      "revId": "29a8abe9ebdde760cb87c5b992706ccb80c85776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
