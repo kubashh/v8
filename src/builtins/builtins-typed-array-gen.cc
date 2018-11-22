@@ -202,9 +202,8 @@ TF_BUILTIN(TypedArrayInitialize, TypedArrayBuiltinsAssembler) {
                                    MachineType::PointerRepresentation());
     StoreObjectFieldNoWriteBarrier(buffer, JSArrayBuffer::kBackingStoreOffset,
                                    SmiConstant(0));
-    for (int offset = JSArrayBuffer::kSize;
-         offset < JSArrayBuffer::kSizeWithEmbedderFields;
-         offset += kTaggedSize) {
+    for (int i = 0; i < v8::ArrayBuffer::kEmbedderFieldCount; i++) {
+      int offset = JSArrayBuffer::kSize + i * kPointerSize;
       StoreObjectFieldNoWriteBarrier(buffer, offset, SmiConstant(0));
     }
 

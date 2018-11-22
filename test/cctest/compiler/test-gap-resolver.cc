@@ -171,7 +171,8 @@ class InterpreterState {
       InstructionOperand source = FromKey(it->second);
       InstructionOperand destination = FromKey(it->first);
       MoveOperands mo(source, destination);
-      os << PrintableMoveOperands{&mo};
+      PrintableMoveOperands pmo = {GetRegConfig(), &mo};
+      os << pmo;
     }
     return os;
   }

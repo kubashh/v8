@@ -179,7 +179,7 @@ class RootVisitor;
   /* Canonical empty values */                                                 \
   V(EnumCache*, empty_enum_cache, EmptyEnumCache)                              \
   V(PropertyArray, empty_property_array, EmptyPropertyArray)                   \
-  V(ByteArray*, empty_byte_array, EmptyByteArray)                              \
+  V(ByteArray, empty_byte_array, EmptyByteArray)                               \
   V(ObjectBoilerplateDescription, empty_object_boilerplate_description,        \
     EmptyObjectBoilerplateDescription)                                         \
   V(ArrayBoilerplateDescription*, empty_array_boilerplate_description,         \
@@ -218,10 +218,10 @@ class RootVisitor;
   /* Marker for self-references during code-generation */                      \
   V(HeapObject*, self_reference_marker, SelfReferenceMarker)                   \
   /* Canonical trampoline RelocInfo */                                         \
-  V(ByteArray*, off_heap_trampoline_relocation_info,                           \
+  V(ByteArray, off_heap_trampoline_relocation_info,                            \
     OffHeapTrampolineRelocationInfo)                                           \
   /* Hash seed */                                                              \
-  V(ByteArray*, hash_seed, HashSeed)
+  V(ByteArray, hash_seed, HashSeed)
 
 // Mutable roots that are known to be immortal immovable, for which we can
 // safely skip write barriers.
@@ -257,6 +257,8 @@ class RootVisitor;
   V(FixedArray*, single_character_string_cache, SingleCharacterStringCache)   \
   V(FixedArray*, string_split_cache, StringSplitCache)                        \
   V(FixedArray*, regexp_multiple_cache, RegExpMultipleCache)                  \
+  /* Lists and dictionaries */                                                \
+  V(MicrotaskQueue*, default_microtask_queue, DefaultMicrotaskQueue)          \
   /* Indirection lists for isolate-independent builtins */                    \
   V(FixedArray*, builtins_constants_table, BuiltinsConstantsTable)            \
   /* JS Entries */                                                            \

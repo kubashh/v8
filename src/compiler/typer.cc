@@ -328,14 +328,7 @@ class Typer::Visitor : public Reducer {
         current = Weaken(node, current, previous);
       }
 
-      if (V8_UNLIKELY(!previous.Is(current))) {
-        std::ostringstream ostream;
-        previous.PrintTo(ostream);
-        ostream << " -> ";
-        current.PrintTo(ostream);
-        FATAL("UpdateType error for operator %s:\n%s\n",
-              IrOpcode::Mnemonic(node->opcode()), ostream.str().c_str());
-      }
+      CHECK(previous.Is(current));
 
       NodeProperties::SetType(node, current);
       if (!current.Is(previous)) {

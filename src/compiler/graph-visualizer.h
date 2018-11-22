@@ -17,6 +17,7 @@ namespace v8 {
 namespace internal {
 
 class OptimizedCompilationInfo;
+class RegisterConfiguration;
 class SharedFunctionInfo;
 class SourcePosition;
 namespace compiler {
@@ -156,6 +157,7 @@ std::ostream& operator<<(std::ostream& os,
                          const AsC1VRegisterAllocationData& ac);
 
 struct InstructionOperandAsJSON {
+  const RegisterConfiguration* register_configuration_;
   const InstructionOperand* op_;
   const InstructionSequence* code_;
 };
@@ -163,6 +165,7 @@ struct InstructionOperandAsJSON {
 std::ostream& operator<<(std::ostream& os, const InstructionOperandAsJSON& o);
 
 struct InstructionAsJSON {
+  const RegisterConfiguration* register_configuration_;
   int index_;
   const Instruction* instr_;
   const InstructionSequence* code_;
@@ -170,6 +173,7 @@ struct InstructionAsJSON {
 std::ostream& operator<<(std::ostream& os, const InstructionAsJSON& i);
 
 struct InstructionBlockAsJSON {
+  const RegisterConfiguration* register_configuration_;
   const InstructionBlock* block_;
   const InstructionSequence* code_;
 };
@@ -177,6 +181,7 @@ struct InstructionBlockAsJSON {
 std::ostream& operator<<(std::ostream& os, const InstructionBlockAsJSON& b);
 
 struct InstructionSequenceAsJSON {
+  const RegisterConfiguration* register_configuration_;
   const InstructionSequence* sequence_;
 };
 std::ostream& operator<<(std::ostream& os, const InstructionSequenceAsJSON& s);

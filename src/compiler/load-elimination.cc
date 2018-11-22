@@ -22,7 +22,7 @@ bool IsRename(Node* node) {
     case IrOpcode::kCheckHeapObject:
     case IrOpcode::kFinishRegion:
     case IrOpcode::kTypeGuard:
-      return !node->IsDead();
+      return true;
     default:
       return false;
   }

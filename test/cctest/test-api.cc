@@ -2760,8 +2760,7 @@ TEST(InternalFieldsSubclassing) {
               .FromJust());
     // Create various levels of subclasses to stress instance size calculation.
     const int kMaxNofProperties =
-        i::JSObject::kMaxInObjectProperties -
-        nof_embedder_fields * i::kEmbedderDataSlotSizeInTaggedSlots;
+        i::JSObject::kMaxInObjectProperties - nof_embedder_fields;
     // Select only a few values to speed up the test.
     int sizes[] = {0,
                    1,
@@ -2870,7 +2869,7 @@ THREADED_TEST(GlobalObjectHasRealIndexedProperty) {
 
 static void CheckAlignedPointerInInternalField(Local<v8::Object> obj,
                                                void* value) {
-  CHECK(HAS_SMI_TAG(reinterpret_cast<i::Address>(value)));
+  CHECK_EQ(0, static_cast<int>(reinterpret_cast<uintptr_t>(value) & 0x1));
   obj->SetAlignedPointerInInternalField(0, value);
   CcTest::CollectAllGarbage();
   CHECK_EQ(value, obj->GetAlignedPointerFromInternalField(0));

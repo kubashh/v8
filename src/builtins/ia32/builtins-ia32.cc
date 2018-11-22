@@ -820,6 +820,8 @@ static void AdvanceBytecodeOffsetOrReturn(MacroAssembler* masm,
 void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   ProfileEntryHookStub::MaybeCallEntryHook(masm);
 
+  __ VerifyRootRegister();
+
   Register closure = edi;
 
   Register feedback_vector = ecx;
@@ -939,6 +941,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ mov(
       kJavaScriptCallCodeStartRegister,
       Operand(kInterpreterDispatchTableRegister, ecx, times_pointer_size, 0));
+  __ VerifyRootRegister();
   __ call(kJavaScriptCallCodeStartRegister);
   masm->isolate()->heap()->SetInterpreterEntryReturnPCOffset(masm->pc_offset());
 
@@ -962,6 +965,7 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ bind(&do_return);
   // The return value is in eax.
   LeaveInterpreterFrame(masm, edx, ecx);
+  __ VerifyRootRegister();
   __ ret(0);
 }
 

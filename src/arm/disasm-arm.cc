@@ -35,9 +35,12 @@
 #include "src/base/platform/platform.h"
 #include "src/disasm.h"
 #include "src/macro-assembler.h"
+#include "src/register-configuration.h"
 
 namespace v8 {
 namespace internal {
+
+const auto GetRegConfig = RegisterConfiguration::Default;
 
 //------------------------------------------------------------------------------
 
@@ -2675,7 +2678,7 @@ const char* NameConverter::NameOfConstant(byte* addr) const {
 
 
 const char* NameConverter::NameOfCPURegister(int reg) const {
-  return RegisterName(i::Register::from_code(reg));
+  return v8::internal::GetRegConfig()->GetGeneralRegisterName(reg);
 }
 
 

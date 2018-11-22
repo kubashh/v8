@@ -16,7 +16,6 @@
 #include "src/objects/data-handler-inl.h"
 #include "src/objects/debug-objects-inl.h"
 #include "src/objects/embedder-data-array-inl.h"
-#include "src/objects/embedder-data-slot-inl.h"
 #include "src/objects/hash-table-inl.h"
 #include "src/objects/js-array-buffer-inl.h"
 #include "src/objects/js-array-inl.h"
@@ -46,6 +45,7 @@
 #include "src/objects/js-weak-refs-inl.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/microtask-inl.h"
+#include "src/objects/microtask-queue-inl.h"
 #include "src/objects/module-inl.h"
 #include "src/objects/promise-inl.h"
 #include "src/objects/stack-frame-info-inl.h"
@@ -625,12 +625,12 @@ void PrintSloppyArgumentElements(std::ostream& os, ElementsKind kind,
   }
 }
 
-void PrintEmbedderData(std::ostream& os, EmbedderDataSlot slot) {
+void PrintEmbedderData(std::ostream& os, ObjectSlot slot) {
   DisallowHeapAllocation no_gc;
-  Object* value = slot.load_tagged();
+  Object* value = *slot;
   os << Brief(value);
-  void* raw_pointer;
-  if (slot.ToAlignedPointer(&raw_pointer)) {
+  if (value->IsSmi()) {
+    void* raw_pointer = reinterpret_cast<void*>(value->ptr());
     os << ", aligned pointer: " << raw_pointer;
   }
 }
@@ -728,8 +728,9 @@ static void JSObjectPrintBody(std::ostream& os,
   if (embedder_fields > 0) {
     os << " - embedder fields = {";
     for (int i = 0; i < embedder_fields; i++) {
+      ObjectSlot embedder_data_slot = obj->GetEmbedderFieldSlot(i);
       os << "\n    ";
-      PrintEmbedderData(os, EmbedderDataSlot(obj, i));
+      PrintEmbedderData(os, embedder_data_slot);
     }
     os << "\n }\n";
   }
@@ -993,9 +994,9 @@ void PrintWeakArrayElements(std::ostream& os, T* array) {
 void EmbedderDataArray::EmbedderDataArrayPrint(std::ostream& os) {
   PrintHeader(os, "EmbedderDataArray");
   os << "\n - length: " << length();
-  EmbedderDataSlot start(*this, 0);
-  EmbedderDataSlot end(*this, length());
-  for (EmbedderDataSlot slot = start; slot < end; ++slot) {
+  ObjectSlot start(slots_start());
+  ObjectSlot end(slots_end());
+  for (ObjectSlot slot = start; slot < end; ++slot) {
     os << "\n    ";
     PrintEmbedderData(os, slot);
   }
@@ -2249,9 +2250,10 @@ void LayoutDescriptor::Print() {
 
 void LayoutDescriptor::ShortPrint(std::ostream& os) {
   if (IsSmi()) {
-    os << this;  // Print tagged value for easy use with "jld" gdb macro.
+    // Print tagged value for easy use with "jld" gdb macro.
+    os << reinterpret_cast<void*>(ptr());
   } else {
-    os << Brief(this);
+    os << Brief(*this);
   }
 }
 
@@ -2261,7 +2263,7 @@ void LayoutDescriptor::Print(std::ostream& os) {  // NOLINT
     os << "<all tagged>";
   } else if (IsSmi()) {
     os << "fast";
-    PrintBitMask(os, static_cast<uint32_t>(Smi::ToInt(this)));
+    PrintBitMask(os, static_cast<uint32_t>(Smi::ToInt(*this)));
   } else if (IsOddball() && IsUninitialized()) {
     os << "<uninitialized>";
   } else {
@@ -2299,6 +2301,13 @@ void UncompiledDataWithPreParsedScope::UncompiledDataWithPreParsedScopePrint(
   os << "\n - start position: " << start_position();
   os << "\n - end position: " << end_position();
   os << "\n - pre_parsed_scope_data: " << Brief(pre_parsed_scope_data());
+  os << "\n";
+}
+
+void MicrotaskQueue::MicrotaskQueuePrint(std::ostream& os) {  // NOLINT
+  HeapObject::PrintHeader(os, "MicrotaskQueue");
+  os << "\n - pending_microtask_count: " << pending_microtask_count();
+  os << "\n - queue: " << Brief(queue());
   os << "\n";
 }
 
@@ -2606,7 +2615,7 @@ V8_EXPORT_PRIVATE extern void _v8_internal_Print_LayoutDescriptor(
   if (!o->IsLayoutDescriptor()) {
     printf("Please provide a layout descriptor\n");
   } else {
-    reinterpret_cast<i::LayoutDescriptor*>(object)->Print();
+    i::LayoutDescriptor::cast(o)->Print();
   }
 }
 

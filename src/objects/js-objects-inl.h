@@ -11,7 +11,6 @@
 #include "src/heap/heap-write-barrier.h"
 #include "src/keys.h"
 #include "src/lookup-inl.h"
-#include "src/objects/embedder-data-slot-inl.h"
 #include "src/objects/property-array-inl.h"
 #include "src/objects/shared-function-info.h"
 #include "src/objects/slots.h"
@@ -248,12 +247,8 @@ int JSObject::GetHeaderSize(const Map map) {
 int JSObject::GetEmbedderFieldCount(const Map map) {
   int instance_size = map->instance_size();
   if (instance_size == kVariableSizeSentinel) return 0;
-  // Internal objects do follow immediately after the header, whereas in-object
-  // properties are at the end of the object. Therefore there is no need
-  // to adjust the index here.
-  return (((instance_size - GetHeaderSize(map)) >> kPointerSizeLog2) -
-          map->GetInObjectProperties()) /
-         kEmbedderDataSlotSizeInTaggedSlots;
+  return ((instance_size - GetHeaderSize(map)) >> kPointerSizeLog2) -
+         map->GetInObjectProperties();
 }
 
 int JSObject::GetEmbedderFieldCount() const {
@@ -262,22 +257,48 @@ int JSObject::GetEmbedderFieldCount() const {
 
 int JSObject::GetEmbedderFieldOffset(int index) {
   DCHECK(index < GetEmbedderFieldCount() && index >= 0);
-  // Internal objects do follow immediately after the header, whereas in-object
-  // properties are at the end of the object. Therefore there is no need
-  // to adjust the index here.
-  return GetHeaderSize() + (kEmbedderDataSlotSize * index);
+  return GetHeaderSize() + (kPointerSize * index);
 }
 
 Object* JSObject::GetEmbedderField(int index) {
-  return EmbedderDataSlot(this, index).load_tagged();
+  DCHECK(index < GetEmbedderFieldCount() && index >= 0);
+  // Internal objects do follow immediately after the header, whereas in-object
+  // properties are at the end of the object. Therefore there is no need
+  // to adjust the index here.
+  return READ_FIELD(this, GetHeaderSize() + (kPointerSize * index));
+}
+
+Address JSObject::GetEmbedderFieldRaw(int index) {
+  return GetEmbedderField(index)->ptr();
+}
+
+ObjectSlot JSObject::GetEmbedderFieldSlot(int index) {
+  return ObjectSlot(FIELD_ADDR(this, GetEmbedderFieldOffset(index)));
 }
 
 void JSObject::SetEmbedderField(int index, Object* value) {
-  EmbedderDataSlot::store_tagged(this, index, value);
+  DCHECK(index < GetEmbedderFieldCount() && index >= 0);
+  // Internal objects do follow immediately after the header, whereas in-object
+  // properties are at the end of the object. Therefore there is no need
+  // to adjust the index here.
+  int offset = GetHeaderSize() + (kPointerSize * index);
+  WRITE_FIELD(this, offset, value);
+  WRITE_BARRIER(this, offset, value);
 }
 
 void JSObject::SetEmbedderField(int index, Smi value) {
-  EmbedderDataSlot(this, index).store_smi(value);
+  SetEmbedderFieldRaw(index, value->ptr());
+}
+
+void JSObject::SetEmbedderFieldRaw(int index, Address value) {
+  DCHECK(index < GetEmbedderFieldCount() && index >= 0);
+  // Internal objects do follow immediately after the header, whereas in-object
+  // properties are at the end of the object. Therefore there is no need
+  // to adjust the index here.
+  int offset = GetHeaderSize() + (kPointerSize * index);
+  Address field_addr = FIELD_ADDR(this, offset);
+  base::Relaxed_Store(reinterpret_cast<base::AtomicWord*>(field_addr),
+                      static_cast<base::AtomicWord>(value));
 }
 
 bool JSObject::IsUnboxedDoubleField(FieldIndex index) {
@@ -881,7 +902,7 @@ bool JSGlobalProxy::IsDetachedFrom(JSGlobalObject* global) const {
 
 inline int JSGlobalProxy::SizeWithEmbedderFields(int embedder_field_count) {
   DCHECK_GE(embedder_field_count, 0);
-  return kSize + embedder_field_count * kEmbedderDataSlotSize;
+  return kSize + embedder_field_count * kPointerSize;
 }
 
 ACCESSORS(JSIteratorResult, value, Object, kValueOffset)

@@ -22,6 +22,7 @@
 #include "src/objects/dictionary.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/map.h"
+#include "src/objects/microtask-queue.h"
 #include "src/objects/microtask.h"
 #include "src/objects/module.h"
 #include "src/objects/promise.h"
@@ -502,8 +503,7 @@ bool Heap::CreateInitialMaps() {
                  code_data_container)
 
     ALLOCATE_MAP(JS_MESSAGE_OBJECT_TYPE, JSMessageObject::kSize, message_object)
-    ALLOCATE_MAP(JS_OBJECT_TYPE, JSObject::kHeaderSize + kEmbedderDataSlotSize,
-                 external)
+    ALLOCATE_MAP(JS_OBJECT_TYPE, JSObject::kHeaderSize + kPointerSize, external)
     external_map()->set_is_extensible(false);
 #undef ALLOCATE_PRIMITIVE_MAP
 #undef ALLOCATE_VARSIZE_MAP
@@ -775,6 +775,8 @@ void Heap::CreateInitialObjects() {
   // Allocate FeedbackCell for cases where we don't collect feedback.
   Handle<FeedbackCell> no_feedback_cell = factory->NewNoFeedbackCell();
   set_no_feedback_cell(*no_feedback_cell);
+
+  set_default_microtask_queue(*factory->NewMicrotaskQueue());
 
   {
     Handle<FixedArray> empty_sloppy_arguments_elements =

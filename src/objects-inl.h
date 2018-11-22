@@ -568,7 +568,6 @@ CAST_ACCESSOR(Foreign)
 CAST_ACCESSOR2(GlobalDictionary)
 CAST_ACCESSOR(HeapObject)
 CAST_ACCESSOR(HeapNumber)
-CAST_ACCESSOR(LayoutDescriptor)
 CAST_ACCESSOR(MutableHeapNumber)
 CAST_ACCESSOR2(OrderedNameDictionary)
 CAST_ACCESSOR2(NameDictionary)
@@ -1521,13 +1520,13 @@ void NumberDictionary::set_requires_slow_elements() {
   set(kMaxNumberKeyIndex, Smi::FromInt(kRequiresSlowElementsMask));
 }
 
-DEFINE_DEOPT_ELEMENT_ACCESSORS(TranslationByteArray, ByteArray)
+DEFINE_DEOPT_ELEMENT_ACCESSORS2(TranslationByteArray, ByteArray)
 DEFINE_DEOPT_ELEMENT_ACCESSORS2(InlinedFunctionCount, Smi)
 DEFINE_DEOPT_ELEMENT_ACCESSORS(LiteralArray, FixedArray)
 DEFINE_DEOPT_ELEMENT_ACCESSORS2(OsrBytecodeOffset, Smi)
 DEFINE_DEOPT_ELEMENT_ACCESSORS2(OsrPcOffset, Smi)
 DEFINE_DEOPT_ELEMENT_ACCESSORS2(OptimizationId, Smi)
-DEFINE_DEOPT_ELEMENT_ACCESSORS(InliningPositions, PodArray<InliningPosition>)
+DEFINE_DEOPT_ELEMENT_ACCESSORS2(InliningPositions, PodArray<InliningPosition>)
 
 DEFINE_DEOPT_ENTRY_ACCESSORS(BytecodeOffsetRaw, Smi)
 DEFINE_DEOPT_ENTRY_ACCESSORS(TranslationIndex, Smi)
@@ -1544,7 +1543,7 @@ FreeSpace* FreeSpace::next() {
 #ifdef DEBUG
   Heap* heap = Heap::FromWritableHeapObject(this);
   DCHECK_IMPLIES(map() != heap->isolate()->root(RootIndex::kFreeSpaceMap),
-                 !heap->deserialization_complete() && map().is_null());
+                 !heap->deserialization_complete() && map() == nullptr);
 #endif
   DCHECK_LE(kNextOffset + kPointerSize, relaxed_read_size());
   return reinterpret_cast<FreeSpace*>(Memory<Address>(address() + kNextOffset));
@@ -1555,7 +1554,7 @@ void FreeSpace::set_next(FreeSpace* next) {
 #ifdef DEBUG
   Heap* heap = Heap::FromWritableHeapObject(this);
   DCHECK_IMPLIES(map() != heap->isolate()->root(RootIndex::kFreeSpaceMap),
-                 !heap->deserialization_complete() && map().is_null());
+                 !heap->deserialization_complete() && map() == nullptr);
 #endif
   DCHECK_LE(kNextOffset + kPointerSize, relaxed_read_size());
   base::Relaxed_Store(
@@ -1588,7 +1587,7 @@ int HeapObject::SizeFromMap(Map map) const {
   }
   if (instance_type == BYTE_ARRAY_TYPE) {
     return ByteArray::SizeFor(
-        reinterpret_cast<const ByteArray*>(this)->synchronized_length());
+        ByteArray::unchecked_cast(this)->synchronized_length());
   }
   if (instance_type == BYTECODE_ARRAY_TYPE) {
     return BytecodeArray::SizeFor(

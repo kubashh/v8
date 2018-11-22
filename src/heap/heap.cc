@@ -46,7 +46,6 @@
 #include "src/heap/stress-scavenge-observer.h"
 #include "src/heap/sweeper.h"
 #include "src/interpreter/interpreter.h"
-#include "src/microtask-queue.h"
 #include "src/objects/data-handler.h"
 #include "src/objects/hash-table-inl.h"
 #include "src/objects/maybe-object.h"
@@ -3871,16 +3870,6 @@ void Heap::IterateStrongRoots(RootVisitor* v, VisitMode mode) {
   }
   v->Synchronize(VisitorSynchronization::kStrongRoots);
 
-  // Iterate over pending Microtasks stored in MicrotaskQueues.
-  MicrotaskQueue* default_microtask_queue = isolate_->default_microtask_queue();
-  if (default_microtask_queue) {
-    MicrotaskQueue* microtask_queue = default_microtask_queue;
-    do {
-      microtask_queue->IterateMicrotasks(v);
-      microtask_queue = microtask_queue->next();
-    } while (microtask_queue != default_microtask_queue);
-  }
-
   // Iterate over the partial snapshot cache unless serializing or
   // deserializing.
   if (mode != VISIT_FOR_SERIALIZATION) {
@@ -4041,7 +4030,7 @@ void Heap::RecordStats(HeapStats* stats, bool take_snapshot) {
       memory_allocator()->Size() + memory_allocator()->Available();
   *stats->os_error = base::OS::GetLastError();
   *stats->malloced_memory = isolate_->allocator()->GetCurrentMemoryUsage();
-  *stats->malloced_peak_memory = isolate_->allocator()->GetPeakMemoryUsage();
+  *stats->malloced_peak_memory = isolate_->allocator()->GetMaxMemoryUsage();
   if (take_snapshot) {
     HeapIterator iterator(this);
     for (HeapObject* obj = iterator.next(); obj != nullptr;
@@ -4543,13 +4532,15 @@ EmbedderHeapTracer* Heap::GetEmbedderHeapTracer() const {
 
 void Heap::TracePossibleWrapper(JSObject* js_object) {
   DCHECK(js_object->IsApiWrapper());
-  if (js_object->GetEmbedderFieldCount() < 2) return;
-  void* pointer0;
-  void* pointer1;
-  if (EmbedderDataSlot(js_object, 0).ToAlignedPointer(&pointer0) && pointer0 &&
-      EmbedderDataSlot(js_object, 1).ToAlignedPointer(&pointer1)) {
-    local_embedder_heap_tracer()->AddWrapperToTrace(
-        std::pair<void*, void*>(pointer0, pointer1));
+  if (js_object->GetEmbedderFieldCount() >= 2 &&
+      js_object->GetEmbedderField(0) &&
+      js_object->GetEmbedderField(0) != ReadOnlyRoots(this).undefined_value() &&
+      js_object->GetEmbedderField(1) != ReadOnlyRoots(this).undefined_value()) {
+    DCHECK_EQ(0,
+              reinterpret_cast<intptr_t>(js_object->GetEmbedderField(0)) % 2);
+    local_embedder_heap_tracer()->AddWrapperToTrace(std::pair<void*, void*>(
+        reinterpret_cast<void*>(js_object->GetEmbedderField(0)),
+        reinterpret_cast<void*>(js_object->GetEmbedderField(1))));
   }
 }
 

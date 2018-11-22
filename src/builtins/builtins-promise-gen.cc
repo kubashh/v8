@@ -42,8 +42,8 @@ void PromiseBuiltinsAssembler::PromiseInit(Node* promise) {
                                  SmiConstant(Smi::zero()));
   StoreObjectFieldNoWriteBarrier(promise, JSPromise::kFlagsOffset,
                                  SmiConstant(Smi::zero()));
-  for (int offset = JSPromise::kSize;
-       offset < JSPromise::kSizeWithEmbedderFields; offset += kTaggedSize) {
+  for (int i = 0; i < v8::Promise::kEmbedderFieldCount; i++) {
+    int offset = JSPromise::kSize + i * kPointerSize;
     StoreObjectFieldNoWriteBarrier(promise, offset, SmiConstant(Smi::zero()));
   }
 }
@@ -76,8 +76,8 @@ Node* PromiseBuiltinsAssembler::AllocateAndSetJSPromise(
   STATIC_ASSERT(JSPromise::kStatusShift == 0);
   StoreObjectFieldNoWriteBarrier(instance, JSPromise::kFlagsOffset,
                                  SmiConstant(status));
-  for (int offset = JSPromise::kSize;
-       offset < JSPromise::kSizeWithEmbedderFields; offset += kTaggedSize) {
+  for (int i = 0; i < v8::Promise::kEmbedderFieldCount; i++) {
+    int offset = JSPromise::kSize + i * kPointerSize;
     StoreObjectFieldNoWriteBarrier(instance, offset, SmiConstant(0));
   }
 
@@ -377,7 +377,7 @@ void PromiseBuiltinsAssembler::PerformPromiseThen(
     Node* microtask = AllocatePromiseReactionJobTask(
         var_map.value(), context, argument, var_handler.value(),
         result_promise_or_capability);
-    CallBuiltin(Builtins::kEnqueueMicrotask, context, microtask);
+    CallBuiltin(Builtins::kEnqueueMicrotask, NoContextConstant(), microtask);
     Goto(&done);
   }
 
@@ -531,7 +531,7 @@ Node* PromiseBuiltinsAssembler::TriggerPromiseReactions(
         STATIC_ASSERT(PromiseReaction::kPromiseOrCapabilityOffset ==
                       PromiseReactionJobTask::kPromiseOrCapabilityOffset);
       }
-      CallBuiltin(Builtins::kEnqueueMicrotask, context, current);
+      CallBuiltin(Builtins::kEnqueueMicrotask, NoContextConstant(), current);
       Goto(&loop);
     }
     BIND(&done_loop);

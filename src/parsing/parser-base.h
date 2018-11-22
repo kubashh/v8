@@ -910,8 +910,10 @@ class ParserBase {
     }
   }
 
-  void ValidateArrowFormalParameters(ExpressionT expr) {
-    if (!next_arrow_formals_parenthesized_) {
+  void ValidateArrowFormalParameters(ExpressionT expr,
+                                     bool parenthesized_formals,
+                                     bool is_async) {
+    if (!parenthesized_formals) {
       // A simple arrow formal parameter: async? IDENTIFIER => BODY.
       if (!impl()->IsIdentifier(expr)) {
         if (classifier()->is_valid_binding_pattern()) {
@@ -928,7 +930,7 @@ class ParserBase {
     } else if (!classifier()->is_valid_arrow_formal_parameters()) {
       ReportClassifierError(classifier()->arrow_formal_parameters_error());
     } else {
-      DCHECK_IMPLIES(IsAsyncFunction(next_arrow_function_kind_),
+      DCHECK_IMPLIES(is_async,
                      classifier()->is_valid_async_arrow_formal_parameters());
     }
   }
@@ -1194,12 +1196,12 @@ class ParserBase {
   // left-hand side of assignments). Although ruled out by ECMA as early errors,
   // we allow calls for web compatibility and rewrite them to a runtime throw.
   V8_INLINE ExpressionT
-  RewriteInvalidReferenceExpression(ExpressionT expression, int beg_pos,
-                                    int end_pos, MessageTemplate message);
-  ExpressionT RewriteInvalidReferenceExpression(ExpressionT expression,
-                                                int beg_pos, int end_pos,
-                                                MessageTemplate message,
-                                                ParseErrorType type);
+  CheckAndRewriteReferenceExpression(ExpressionT expression, int beg_pos,
+                                     int end_pos, MessageTemplate message);
+  ExpressionT CheckAndRewriteReferenceExpression(ExpressionT expression,
+                                                 int beg_pos, int end_pos,
+                                                 MessageTemplate message,
+                                                 ParseErrorType type);
 
   bool IsValidReferenceExpression(ExpressionT expression);
 
@@ -1400,9 +1402,6 @@ class ParserBase {
   int function_literal_id_;
   int script_id_;
 
-  FunctionKind next_arrow_function_kind_ = FunctionKind::kArrowFunction;
-
-  bool next_arrow_formals_parenthesized_ = false;
   bool accept_IN_ = true;
 
   bool allow_natives_;
@@ -1676,8 +1675,6 @@ ParserBase<Impl>::ParsePrimaryExpression() {
               classifier()->async_arrow_formal_parameters_error());
           return impl()->FailureExpression();
         }
-
-        next_arrow_function_kind_ = FunctionKind::kAsyncArrowFunction;
         infer = InferName::kNo;
       }
     }
@@ -1718,7 +1715,6 @@ ParserBase<Impl>::ParsePrimaryExpression() {
         // ()=>x.  The continuation that consumes the => is in
         // ParseAssignmentExpression.
         if (peek() != Token::ARROW) ReportUnexpectedToken(Token::RPAREN);
-        next_arrow_formals_parenthesized_ = true;
         return factory()->NewEmptyParentheses(beg_pos);
       }
       // Heuristically try to detect immediately called functions before
@@ -1732,11 +1728,7 @@ ParserBase<Impl>::ParsePrimaryExpression() {
       Expect(Token::RPAREN);
       // Parenthesized parameters have to be followed immediately by an arrow to
       // be valid.
-      if (peek() == Token::ARROW) {
-        next_arrow_formals_parenthesized_ = true;
-      } else {
-        ArrowFormalParametersUnexpectedToken();
-      }
+      if (peek() != Token::ARROW) ArrowFormalParametersUnexpectedToken();
       return expr;
     }
 
@@ -2640,10 +2632,10 @@ ParserBase<Impl>::ParseAssignmentExpression() {
   Scope::Snapshot scope_snapshot(scope());
   int rewritable_length = static_cast<int>(
       function_state_->destructuring_assignments_to_rewrite().size());
+  bool is_async = peek() == Token::ASYNC && PeekAhead() != Token::ARROW;
+  bool parenthesized_formals =
+      (is_async ? PeekAhead() : peek()) == Token::LPAREN;
 
-  DCHECK_IMPLIES(!has_error(),
-                 FunctionKind::kArrowFunction == next_arrow_function_kind_);
-  DCHECK_IMPLIES(!has_error(), !next_arrow_formals_parenthesized_);
   ExpressionT expression = ParseConditionalExpression();
 
   Token::Value op = peek();
@@ -2664,7 +2656,7 @@ ParserBase<Impl>::ParseAssignmentExpression() {
   // Arrow functions.
   if (V8_UNLIKELY(op == Token::ARROW)) {
     Scanner::Location arrow_loc = scanner()->peek_location();
-    ValidateArrowFormalParameters(expression);
+    ValidateArrowFormalParameters(expression, parenthesized_formals, is_async);
     // This reads strangely, but is correct: it checks whether any
     // sub-expression of the parameter list failed to be a valid formal
     // parameter initializer. Since YieldExpressions are banned anywhere
@@ -2674,11 +2666,9 @@ ParserBase<Impl>::ParseAssignmentExpression() {
     ValidateFormalParameterInitializer();
 
     Scanner::Location loc(lhs_beg_pos, end_position());
-    DeclarationScope* scope = NewFunctionScope(next_arrow_function_kind_);
-
-    // Reset to default.
-    next_arrow_function_kind_ = FunctionKind::kArrowFunction;
-    next_arrow_formals_parenthesized_ = false;
+    DeclarationScope* scope =
+        NewFunctionScope(is_async ? FunctionKind::kAsyncArrowFunction
+                                  : FunctionKind::kArrowFunction);
 
     // Because the arrow's parameters were parsed in the outer scope,
     // we need to fix up the scope chain appropriately.
@@ -2733,11 +2723,9 @@ ParserBase<Impl>::ParseAssignmentExpression() {
   // assignment pattern-related errors.
   Accumulate(~ExpressionClassifier::AssignmentPatternProduction);
 
-  if (V8_UNLIKELY(!IsValidReferenceExpression(expression))) {
-    expression = RewriteInvalidReferenceExpression(
-        expression, lhs_beg_pos, end_position(),
-        MessageTemplate::kInvalidLhsInAssignment);
-  }
+  expression = CheckAndRewriteReferenceExpression(
+      expression, lhs_beg_pos, end_position(),
+      MessageTemplate::kInvalidLhsInAssignment);
   impl()->MarkExpressionAsAssigned(expression);
 
   Consume(op);
@@ -3001,11 +2989,9 @@ ParserBase<Impl>::ParsePrefixExpression() {
   CheckStackOverflow();
 
   ExpressionT expression = ParseUnaryExpression();
-  if (V8_UNLIKELY(!IsValidReferenceExpression(expression))) {
-    expression = RewriteInvalidReferenceExpression(
-        expression, beg_pos, end_position(),
-        MessageTemplate::kInvalidLhsInPrefixOp);
-  }
+  expression = CheckAndRewriteReferenceExpression(
+      expression, beg_pos, end_position(),
+      MessageTemplate::kInvalidLhsInPrefixOp);
   impl()->MarkExpressionAsAssigned(expression);
 
   return factory()->NewCountOperation(op, true /* prefix */, expression,
@@ -3071,11 +3057,9 @@ ParserBase<Impl>::ParsePostfixExpression() {
   if (!scanner()->HasLineTerminatorBeforeNext() && Token::IsCountOp(peek())) {
     BindingPatternUnexpectedToken();
 
-    if (V8_UNLIKELY(!IsValidReferenceExpression(expression))) {
-      expression = RewriteInvalidReferenceExpression(
-          expression, lhs_beg_pos, end_position(),
-          MessageTemplate::kInvalidLhsInPostfixOp);
-    }
+    expression = CheckAndRewriteReferenceExpression(
+        expression, lhs_beg_pos, end_position(),
+        MessageTemplate::kInvalidLhsInPostfixOp);
     impl()->MarkExpressionAsAssigned(expression);
 
     Token::Value next = Next();
@@ -3155,8 +3139,6 @@ ParserBase<Impl>::ParseLeftHandSideContinuation(ExpressionT result) {
                   classifier()->async_arrow_formal_parameters_error());
               return impl()->FailureExpression();
             }
-            next_arrow_function_kind_ = FunctionKind::kAsyncArrowFunction;
-            next_arrow_formals_parenthesized_ = true;
             if (args.length()) {
               // async ( Arguments ) => ...
               return impl()->ExpressionListToExpression(args);
@@ -3363,6 +3345,7 @@ ParserBase<Impl>::ParseImportExpressions() {
   classifier()->RecordPatternError(scanner()->peek_location(),
                                    MessageTemplate::kUnexpectedToken,
                                    Token::String(Token::IMPORT));
+
   Consume(Token::IMPORT);
   int pos = position();
   if (allow_harmony_import_meta() && peek() == Token::PERIOD) {
@@ -4430,27 +4413,27 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseTemplateLiteral(
 
 template <typename Impl>
 typename ParserBase<Impl>::ExpressionT
-ParserBase<Impl>::RewriteInvalidReferenceExpression(ExpressionT expression,
-                                                    int beg_pos, int end_pos,
-                                                    MessageTemplate message) {
-  return RewriteInvalidReferenceExpression(expression, beg_pos, end_pos,
-                                           message, kReferenceError);
+ParserBase<Impl>::CheckAndRewriteReferenceExpression(ExpressionT expression,
+                                                     int beg_pos, int end_pos,
+                                                     MessageTemplate message) {
+  return CheckAndRewriteReferenceExpression(expression, beg_pos, end_pos,
+                                            message, kReferenceError);
 }
 
 template <typename Impl>
 typename ParserBase<Impl>::ExpressionT
-ParserBase<Impl>::RewriteInvalidReferenceExpression(ExpressionT expression,
-                                                    int beg_pos, int end_pos,
-                                                    MessageTemplate message,
-                                                    ParseErrorType type) {
-  DCHECK(!IsValidReferenceExpression(expression));
-  if (impl()->IsIdentifier(expression)) {
-    DCHECK(is_strict(language_mode()));
-    DCHECK(impl()->IsEvalOrArguments(impl()->AsIdentifier(expression)));
-
+ParserBase<Impl>::CheckAndRewriteReferenceExpression(ExpressionT expression,
+                                                     int beg_pos, int end_pos,
+                                                     MessageTemplate message,
+                                                     ParseErrorType type) {
+  if (impl()->IsIdentifier(expression) && is_strict(language_mode()) &&
+      impl()->IsEvalOrArguments(impl()->AsIdentifier(expression))) {
     ReportMessageAt(Scanner::Location(beg_pos, end_pos),
                     MessageTemplate::kStrictEvalArguments, kSyntaxError);
     return impl()->FailureExpression();
+  }
+  if (expression->IsValidReferenceExpression()) {
+    return expression;
   }
   if (expression->IsCall() && !expression->AsCall()->is_tagged_template()) {
     // If it is a call, make it a runtime error for legacy web compatibility.
@@ -5427,7 +5410,8 @@ typename ParserBase<Impl>::StatementT ParserBase<Impl>::ParseForStatement(
     int lhs_end_pos = end_position();
 
     bool is_for_each = CheckInOrOf(&for_info.mode);
-    bool is_destructuring = is_for_each && expression->IsValidPattern();
+    bool is_destructuring = is_for_each && (expression->IsArrayLiteral() ||
+                                            expression->IsObjectLiteral());
 
     if (is_destructuring) {
       ValidateAssignmentPattern();
@@ -5562,9 +5546,8 @@ ParserBase<Impl>::ParseForEachStatementWithoutDeclarations(
     ForInfo* for_info, ZonePtrList<const AstRawString>* labels,
     ZonePtrList<const AstRawString>* own_labels) {
   // Initializer is reference followed by in/of.
-  if (V8_UNLIKELY(!expression->IsValidPattern() &&
-                  !IsValidReferenceExpression(expression))) {
-    expression = RewriteInvalidReferenceExpression(
+  if (!expression->IsArrayLiteral() && !expression->IsObjectLiteral()) {
+    expression = CheckAndRewriteReferenceExpression(
         expression, lhs_beg_pos, lhs_end_pos, MessageTemplate::kInvalidLhsInFor,
         kSyntaxError);
   }
@@ -5764,15 +5747,13 @@ typename ParserBase<Impl>::StatementT ParserBase<Impl>::ParseForAwaitStatement(
     ExpressionT lhs = each_variable = ParseLeftHandSideExpression();
     int lhs_end_pos = end_position();
 
-    if (lhs->IsValidPattern()) {
+    if (lhs->IsArrayLiteral() || lhs->IsObjectLiteral()) {
       ValidateAssignmentPattern();
     } else {
       ValidateExpression();
-      if (V8_UNLIKELY(!IsValidReferenceExpression(lhs))) {
-        each_variable = RewriteInvalidReferenceExpression(
-            lhs, lhs_beg_pos, lhs_end_pos, MessageTemplate::kInvalidLhsInFor,
-            kSyntaxError);
-      }
+      each_variable = CheckAndRewriteReferenceExpression(
+          lhs, lhs_beg_pos, lhs_end_pos, MessageTemplate::kInvalidLhsInFor,
+          kSyntaxError);
     }
   }
 

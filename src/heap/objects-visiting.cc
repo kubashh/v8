@@ -98,7 +98,7 @@ Object* VisitWeakList2(Heap* heap, Object* list, WeakObjectRetainer* retainer) {
         head = retained;
       } else {
         // Subsequent elements in the list.
-        DCHECK(!tail.is_null());
+        DCHECK(tail);
         WeakListVisitor<T>::SetWeakNext(tail, retained);
         if (record_slots) {
           HeapObject* slot_holder = WeakListVisitor<T>::WeakNextHolder(tail);

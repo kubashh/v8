@@ -39,6 +39,8 @@
 namespace v8 {
 namespace internal {
 
+const auto GetRegConfig = RegisterConfiguration::Default;
+
 //------------------------------------------------------------------------------
 
 // Decoder decodes and disassembles instructions into an output buffer.
@@ -118,7 +120,7 @@ void Decoder::PrintRegister(int reg) {
 
 // Print the double FP register name according to the active name converter.
 void Decoder::PrintDRegister(int reg) {
-  Print(RegisterName(DoubleRegister::from_code(reg)));
+  Print(GetRegConfig()->GetDoubleRegisterName(reg));
 }
 
 
@@ -1495,16 +1497,18 @@ const char* NameConverter::NameOfConstant(byte* addr) const {
 
 
 const char* NameConverter::NameOfCPURegister(int reg) const {
-  return RegisterName(i::Register::from_code(reg));
+  return v8::internal::GetRegConfig()->GetGeneralRegisterName(reg);
 }
 
 const char* NameConverter::NameOfByteCPURegister(int reg) const {
   UNREACHABLE();  // PPC does not have the concept of a byte register
+  return "nobytereg";
 }
 
 
 const char* NameConverter::NameOfXMMRegister(int reg) const {
   UNREACHABLE();  // PPC does not have any XMM registers
+  return "noxmmreg";
 }
 
 const char* NameConverter::NameInCode(byte* addr) const {

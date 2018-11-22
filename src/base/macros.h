@@ -385,7 +385,7 @@ constexpr inline T RoundUp(T x) {
 }
 
 template <typename T, typename U>
-constexpr inline bool IsAligned(T value, U alignment) {
+inline bool IsAligned(T value, U alignment) {
   return (value & (alignment - 1)) == 0;
 }
 

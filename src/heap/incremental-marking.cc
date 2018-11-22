@@ -705,7 +705,7 @@ void IncrementalMarking::UpdateWeakReferencesAfterScavenge() {
       [](EphemeronHashTable slot_in, EphemeronHashTable* slot_out) -> bool {
         EphemeronHashTable forwarded = ForwardingAddress(slot_in);
 
-        if (!forwarded.is_null()) {
+        if (forwarded) {
           *slot_out = forwarded;
           return true;
         }

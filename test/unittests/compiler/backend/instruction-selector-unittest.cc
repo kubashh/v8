@@ -47,9 +47,11 @@ InstructionSelectorTest::Stream InstructionSelectorTest::StreamBuilder::Build(
       PoisoningMitigationLevel::kPoisonAll);
   selector.SelectInstructions();
   if (FLAG_trace_turbo) {
+    PrintableInstructionSequence printable = {RegisterConfiguration::Default(),
+                                              &sequence};
     StdoutStream{} << "=== Code sequence after instruction selection ==="
                    << std::endl
-                   << PrintableInstructionSequence{&sequence};
+                   << printable;
   }
   Stream s;
   s.virtual_registers_ = selector.GetVirtualRegistersForTesting();

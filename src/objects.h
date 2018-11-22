@@ -165,6 +165,7 @@
 //           - PromiseFulfillReactionJobTask
 //           - PromiseRejectReactionJobTask
 //         - PromiseResolveThenableJobTask
+//       - MicrotaskQueue
 //       - Module
 //       - ModuleInfoEntry
 //     - FeedbackCell
@@ -417,6 +418,8 @@ enum InstanceType : uint16_t {
   PROMISE_RESOLVE_THENABLE_JOB_TASK_TYPE,
   WEAK_FACTORY_CLEANUP_JOB_TASK_TYPE,  // LAST_MICROTASK_TYPE
 
+  MICROTASK_QUEUE_TYPE,
+
   ALLOCATION_SITE_TYPE,
   EMBEDDER_DATA_ARRAY_TYPE,
   // FixedArrays.
@@ -430,8 +433,8 @@ enum InstanceType : uint16_t {
   GLOBAL_DICTIONARY_TYPE,
   NUMBER_DICTIONARY_TYPE,
   SIMPLE_NUMBER_DICTIONARY_TYPE,  // LAST_DICTIONARY_TYPE
-  STRING_TABLE_TYPE,
-  EPHEMERON_HASH_TABLE_TYPE,  // LAST_HASH_TABLE_TYPE
+  STRING_TABLE_TYPE,              // LAST_HASH_TABLE_TYPE
+  EPHEMERON_HASH_TABLE_TYPE,
   SCOPE_INFO_TYPE,
   SCRIPT_CONTEXT_TABLE_TYPE,
   AWAIT_CONTEXT_TYPE,  // FIRST_CONTEXT_TYPE
@@ -558,7 +561,7 @@ enum InstanceType : uint16_t {
   LAST_FIXED_ARRAY_TYPE = WITH_CONTEXT_TYPE,
   // Boundaries for testing if given HeapObject is a subclass of HashTable
   FIRST_HASH_TABLE_TYPE = HASH_TABLE_TYPE,
-  LAST_HASH_TABLE_TYPE = EPHEMERON_HASH_TABLE_TYPE,
+  LAST_HASH_TABLE_TYPE = STRING_TABLE_TYPE,
   // Boundaries for testing if given HeapObject is a subclass of Dictionary
   FIRST_DICTIONARY_TYPE = ORDERED_HASH_MAP_TYPE,
   LAST_DICTIONARY_TYPE = SIMPLE_NUMBER_DICTIONARY_TYPE,
@@ -651,6 +654,7 @@ class LayoutDescriptor;
 class LookupIterator;
 class FieldType;
 class MaybeObjectSlot;
+class MicrotaskQueue;
 class Module;
 class ModuleInfoEntry;
 class ObjectHashTable;
@@ -1067,7 +1071,7 @@ enum class ElementTypes { kAll, kStringAndSymbol };
 
 // TODO(3770): Get rid of this indirection when the migration is complete.
 typedef AbstractCode* AbstractCodeArgType;
-typedef ByteArray* ByteArrayArgType;
+typedef ByteArray ByteArrayArgType;
 typedef FixedArray* FixedArrayArgType;
 typedef FixedDoubleArray FixedDoubleArrayArgType;
 typedef Foreign* ForeignArgType;

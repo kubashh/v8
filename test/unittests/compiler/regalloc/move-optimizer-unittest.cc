@@ -53,16 +53,18 @@ class MoveOptimizerTest : public InstructionSequenceTest {
   void Optimize() {
     WireBlocks();
     if (FLAG_trace_turbo) {
+      PrintableInstructionSequence printable = {config(), sequence()};
       StdoutStream{}
           << "----- Instruction sequence before move optimization -----\n"
-          << PrintableInstructionSequence{sequence()};
+          << printable;
     }
     MoveOptimizer move_optimizer(zone(), sequence());
     move_optimizer.Run();
     if (FLAG_trace_turbo) {
+      PrintableInstructionSequence printable = {config(), sequence()};
       StdoutStream{}
           << "----- Instruction sequence after move optimization -----\n"
-          << PrintableInstructionSequence{sequence()};
+          << printable;
     }
   }
 

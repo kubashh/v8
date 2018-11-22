@@ -10,7 +10,6 @@
 #include "src/compiler/graph.h"
 #include "src/compiler/schedule.h"
 #include "src/compiler/state-values-utils.h"
-#include "src/register-configuration.h"
 #include "src/source-position.h"
 
 namespace v8 {
@@ -119,15 +118,19 @@ bool LocationOperand::IsCompatible(LocationOperand* op) {
   }
 }
 
-void InstructionOperand::Print() const {
+void InstructionOperand::Print(const RegisterConfiguration* config) const {
   PrintableInstructionOperand wrapper;
+  wrapper.register_configuration_ = config;
   wrapper.op_ = *this;
   StdoutStream{} << wrapper << std::endl;
 }
 
+void InstructionOperand::Print() const { Print(GetRegConfig()); }
+
 std::ostream& operator<<(std::ostream& os,
                          const PrintableInstructionOperand& printable) {
   const InstructionOperand& op = printable.op_;
+  const RegisterConfiguration* conf = printable.register_configuration_;
   switch (op.kind()) {
     case InstructionOperand::UNALLOCATED: {
       const UnallocatedOperand* unalloc = UnallocatedOperand::cast(&op);
@@ -140,11 +143,12 @@ std::ostream& operator<<(std::ostream& os,
           return os;
         case UnallocatedOperand::FIXED_REGISTER:
           return os << "(="
-                    << Register::from_code(unalloc->fixed_register_index())
+                    << conf->GetGeneralRegisterName(
+                           unalloc->fixed_register_index())
                     << ")";
         case UnallocatedOperand::FIXED_FP_REGISTER:
           return os << "(="
-                    << DoubleRegister::from_code(
+                    << conf->GetDoubleRegisterName(
                            unalloc->fixed_register_index())
                     << ")";
         case UnallocatedOperand::MUST_HAVE_REGISTER:
@@ -179,20 +183,22 @@ std::ostream& operator<<(std::ostream& os,
       } else if (op.IsFPStackSlot()) {
         os << "[fp_stack:" << allocated.index();
       } else if (op.IsRegister()) {
-        const char* name =
-            allocated.register_code() < Register::kNumRegisters
-                ? RegisterName(Register::from_code(allocated.register_code()))
-                : Assembler::GetSpecialRegisterName(allocated.register_code());
-        os << "[" << name << "|R";
+        os << "["
+           << GetRegConfig()->GetGeneralOrSpecialRegisterName(
+                  allocated.register_code())
+           << "|R";
       } else if (op.IsDoubleRegister()) {
-        os << "[" << DoubleRegister::from_code(allocated.register_code())
+        os << "["
+           << GetRegConfig()->GetDoubleRegisterName(allocated.register_code())
            << "|R";
       } else if (op.IsFloatRegister()) {
-        os << "[" << FloatRegister::from_code(allocated.register_code())
+        os << "["
+           << GetRegConfig()->GetFloatRegisterName(allocated.register_code())
            << "|R";
       } else {
         DCHECK(op.IsSimd128Register());
-        os << "[" << Simd128Register::from_code(allocated.register_code())
+        os << "["
+           << GetRegConfig()->GetSimd128RegisterName(allocated.register_code())
            << "|R";
       }
       if (allocated.IsExplicit()) {
@@ -244,15 +250,23 @@ std::ostream& operator<<(std::ostream& os,
   UNREACHABLE();
 }
 
-void MoveOperands::Print() const {
-  StdoutStream{} << PrintableInstructionOperand{destination()} << " = "
-                 << PrintableInstructionOperand{source()} << std::endl;
+void MoveOperands::Print(const RegisterConfiguration* config) const {
+  StdoutStream os;
+  PrintableInstructionOperand wrapper;
+  wrapper.register_configuration_ = config;
+  wrapper.op_ = destination();
+  os << wrapper << " = ";
+  wrapper.op_ = source();
+  os << wrapper << std::endl;
 }
+
+void MoveOperands::Print() const { Print(GetRegConfig()); }
 
 std::ostream& operator<<(std::ostream& os,
                          const PrintableMoveOperands& printable) {
   const MoveOperands& mo = *printable.move_operands_;
-  PrintableInstructionOperand printable_op = {mo.destination()};
+  PrintableInstructionOperand printable_op = {printable.register_configuration_,
+                                              mo.destination()};
   os << printable_op;
   if (!mo.source().Equals(mo.destination())) {
     printable_op.op_ = mo.source();
@@ -352,9 +366,14 @@ bool Instruction::AreMovesRedundant() const {
   return true;
 }
 
-void Instruction::Print() const {
-  StdoutStream{} << PrintableInstruction{this} << std::endl;
+void Instruction::Print(const RegisterConfiguration* config) const {
+  PrintableInstruction wrapper;
+  wrapper.instr_ = this;
+  wrapper.register_configuration_ = config;
+  StdoutStream{} << wrapper << std::endl;
 }
+
+void Instruction::Print() const { Print(GetRegConfig()); }
 
 std::ostream& operator<<(std::ostream& os,
                          const PrintableParallelMove& printable) {
@@ -364,7 +383,8 @@ std::ostream& operator<<(std::ostream& os,
     if (move->IsEliminated()) continue;
     if (!first) os << " ";
     first = false;
-    os << PrintableMoveOperands{move};
+    PrintableMoveOperands pmo = {printable.register_configuration_, move};
+    os << pmo;
   }
   return os;
 }
@@ -379,13 +399,15 @@ void ReferenceMap::RecordReference(const AllocatedOperand& op) {
 std::ostream& operator<<(std::ostream& os, const ReferenceMap& pm) {
   os << "{";
   bool first = true;
+  PrintableInstructionOperand poi = {GetRegConfig(), InstructionOperand()};
   for (const InstructionOperand& op : pm.reference_operands_) {
     if (!first) {
       os << ";";
     } else {
       first = false;
     }
-    os << PrintableInstructionOperand{op};
+    poi.op_ = op;
+    os << poi;
   }
   return os << "}";
 }
@@ -491,12 +513,16 @@ std::ostream& operator<<(std::ostream& os, const FlagsCondition& fc) {
 std::ostream& operator<<(std::ostream& os,
                          const PrintableInstruction& printable) {
   const Instruction& instr = *printable.instr_;
+  PrintableInstructionOperand printable_op = {printable.register_configuration_,
+                                              InstructionOperand()};
   os << "gap ";
   for (int i = Instruction::FIRST_GAP_POSITION;
        i <= Instruction::LAST_GAP_POSITION; i++) {
     os << "(";
     if (instr.parallel_moves()[i] != nullptr) {
-      os << PrintableParallelMove{instr.parallel_moves()[i]};
+      PrintableParallelMove ppm = {printable.register_configuration_,
+                                   instr.parallel_moves()[i]};
+      os << ppm;
     }
     os << ") ";
   }
@@ -505,7 +531,8 @@ std::ostream& operator<<(std::ostream& os,
   if (instr.OutputCount() > 1) os << "(";
   for (size_t i = 0; i < instr.OutputCount(); i++) {
     if (i > 0) os << ", ";
-    os << PrintableInstructionOperand{*instr.OutputAt(i)};
+    printable_op.op_ = *instr.OutputAt(i);
+    os << printable_op;
   }
 
   if (instr.OutputCount() > 1) os << ") = ";
@@ -522,7 +549,8 @@ std::ostream& operator<<(std::ostream& os,
   }
   if (instr.InputCount() > 0) {
     for (size_t i = 0; i < instr.InputCount(); i++) {
-      os << " " << PrintableInstructionOperand{*instr.InputAt(i)};
+      printable_op.op_ = *instr.InputAt(i);
+      os << " " << printable_op;
     }
   }
   return os;
@@ -656,6 +684,7 @@ static InstructionBlock* InstructionBlockFor(Zone* zone,
 std::ostream& operator<<(std::ostream& os,
                          const PrintableInstructionBlock& printable_block) {
   const InstructionBlock* block = printable_block.block_;
+  const RegisterConfiguration* config = printable_block.register_configuration_;
   const InstructionSequence* code = printable_block.code_;
 
   os << "B" << block->rpo_number();
@@ -678,17 +707,20 @@ std::ostream& operator<<(std::ostream& os,
   os << std::endl;
 
   for (const PhiInstruction* phi : block->phis()) {
-    os << "     phi: " << PrintableInstructionOperand{phi->output()} << " =";
+    PrintableInstructionOperand printable_op = {config, phi->output()};
+    os << "     phi: " << printable_op << " =";
     for (int input : phi->operands()) {
       os << " v" << input;
     }
     os << std::endl;
   }
 
+  PrintableInstruction printable_instr;
+  printable_instr.register_configuration_ = config;
   for (int j = block->first_instruction_index();
        j <= block->last_instruction_index(); j++) {
-    os << "   " << std::setw(5) << j << ": "
-       << PrintableInstruction{code->InstructionAt(j)} << std::endl;
+    printable_instr.instr_ = code->InstructionAt(j);
+    os << "   " << std::setw(5) << j << ": " << printable_instr << std::endl;
   }
 
   os << " successors:";
@@ -974,15 +1006,26 @@ void InstructionSequence::SetSourcePosition(const Instruction* instr,
   source_positions_.insert(std::make_pair(instr, value));
 }
 
-void InstructionSequence::Print() const {
-  StdoutStream{} << PrintableInstructionSequence{this} << std::endl;
+void InstructionSequence::Print(const RegisterConfiguration* config) const {
+  PrintableInstructionSequence wrapper;
+  wrapper.register_configuration_ = config;
+  wrapper.sequence_ = this;
+  StdoutStream{} << wrapper << std::endl;
 }
 
-void InstructionSequence::PrintBlock(int block_id) const {
+void InstructionSequence::Print() const { Print(GetRegConfig()); }
+
+void InstructionSequence::PrintBlock(const RegisterConfiguration* config,
+                                     int block_id) const {
   RpoNumber rpo = RpoNumber::FromInt(block_id);
   const InstructionBlock* block = InstructionBlockAt(rpo);
   CHECK(block->rpo_number() == rpo);
-  StdoutStream{} << PrintableInstructionBlock{block, this} << std::endl;
+  PrintableInstructionBlock printable_block = {config, block, this};
+  StdoutStream{} << printable_block << std::endl;
+}
+
+void InstructionSequence::PrintBlock(int block_id) const {
+  PrintBlock(GetRegConfig(), block_id);
 }
 
 const RegisterConfiguration*
@@ -1066,7 +1109,8 @@ std::ostream& operator<<(std::ostream& os,
        it != code.constants_.end(); ++i, ++it) {
     os << "CST#" << i << ": v" << it->first << " = " << it->second << "\n";
   }
-  PrintableInstructionBlock printable_block = {nullptr, printable.sequence_};
+  PrintableInstructionBlock printable_block = {
+      printable.register_configuration_, nullptr, printable.sequence_};
   for (int i = 0; i < code.InstructionBlockCount(); i++) {
     printable_block.block_ = code.InstructionBlockAt(RpoNumber::FromInt(i));
     os << printable_block;

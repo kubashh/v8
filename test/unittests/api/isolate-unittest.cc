@@ -74,7 +74,8 @@ using IncumbentContextTest = TestWithIsolate;
 
 // Check that Isolate::GetIncumbentContext() returns the correct one in basic
 // scenarios.
-TEST_F(IncumbentContextTest, Basic) {
+#if !defined(V8_USE_ADDRESS_SANITIZER)
+TEST_F(IncumbentContextTest, MAYBE_Basic) {
   auto Str = [&](const char* s) {
     return String::NewFromUtf8(isolate(), s, NewStringType::kNormal)
         .ToLocalChecked();
@@ -136,5 +137,6 @@ TEST_F(IncumbentContextTest, Basic) {
     EXPECT_EQ(global_c, Run(context_a, "funcA()"));
   }
 }
+#endif  // !defined(V8_USE_ADDRESS_SANITIZER)
 
 }  // namespace v8

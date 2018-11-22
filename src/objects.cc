@@ -60,6 +60,7 @@
 #include "src/objects/frame-array-inl.h"
 #include "src/objects/hash-table-inl.h"
 #include "src/objects/js-array-inl.h"
+#include "src/register-configuration.h"
 #ifdef V8_INTL_SUPPORT
 #include "src/objects/js-break-iterator.h"
 #include "src/objects/js-collator.h"
@@ -86,6 +87,7 @@
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/map.h"
 #include "src/objects/microtask-inl.h"
+#include "src/objects/microtask-queue-inl.h"
 #include "src/objects/module-inl.h"
 #include "src/objects/promise-inl.h"
 #include "src/objects/slots-atomic-inl.h"
@@ -1414,8 +1416,6 @@ int JSObject::GetHeaderSize(InstanceType type,
       return JSAsyncFunctionObject::kSize;
     case JS_ASYNC_GENERATOR_OBJECT_TYPE:
       return JSAsyncGeneratorObject::kSize;
-    case JS_ASYNC_FROM_SYNC_ITERATOR_TYPE:
-      return JSAsyncFromSyncIterator::kSize;
     case JS_GLOBAL_PROXY_TYPE:
       return JSGlobalProxy::kSize;
     case JS_GLOBAL_OBJECT_TYPE:
@@ -1453,8 +1453,6 @@ int JSObject::GetHeaderSize(InstanceType type,
       return JSWeakCell::kSize;
     case JS_WEAK_FACTORY_TYPE:
       return JSWeakFactory::kSize;
-    case JS_WEAK_FACTORY_CLEANUP_ITERATOR_TYPE:
-      return JSWeakFactoryCleanupIterator::kSize;
     case JS_WEAK_MAP_TYPE:
       return JSWeakMap::kSize;
     case JS_WEAK_SET_TYPE:
@@ -1509,8 +1507,6 @@ int JSObject::GetHeaderSize(InstanceType type,
       return WasmModuleObject::kSize;
     case WASM_TABLE_TYPE:
       return WasmTableObject::kSize;
-    case WASM_EXCEPTION_TYPE:
-      return WasmExceptionObject::kSize;
     default:
       UNREACHABLE();
   }
@@ -4725,7 +4721,7 @@ void Map::DeprecateTransitionTree(Isolate* isolate) {
 // Installs |new_descriptors| over the current instance_descriptors to ensure
 // proper sharing of descriptor arrays.
 void Map::ReplaceDescriptors(Isolate* isolate, DescriptorArray* new_descriptors,
-                             LayoutDescriptor* new_layout_descriptor) {
+                             LayoutDescriptor new_layout_descriptor) {
   // Don't overwrite the empty descriptor array or initial map's descriptors.
   if (NumberOfOwnDescriptors() == 0 || GetBackPointer()->IsUndefined(isolate)) {
     return;
@@ -5484,7 +5480,7 @@ void Map::EnsureDescriptorSlack(Isolate* isolate, Handle<Map> map, int slack) {
 
   DisallowHeapAllocation no_allocation;
   // The descriptors are still the same, so keep the layout descriptor.
-  LayoutDescriptor* layout_descriptor = map->GetLayoutDescriptor();
+  LayoutDescriptor layout_descriptor = map->GetLayoutDescriptor();
 
   if (old_size == 0) {
     map->UpdateDescriptors(*new_descriptors, layout_descriptor);
@@ -5615,7 +5611,7 @@ int AccessorInfo::AppendUnique(Isolate* isolate, Handle<Object> descriptors,
 }
 
 static bool ContainsMap(MapHandles const& maps, Map map) {
-  DCHECK(!map.is_null());
+  DCHECK_NOT_NULL(map);
   for (Handle<Map> current : maps) {
     if (!current.is_null() && *current == map) return true;
   }
@@ -5638,7 +5634,7 @@ Map Map::FindElementsKindTransitionedMap(Isolate* isolate,
     Map root_map = FindRootMap(isolate);
     if (!EquivalentToForElementsKindTransition(root_map)) return Map();
     root_map = root_map->LookupElementsTransitionMap(isolate, kind);
-    DCHECK(!root_map.is_null());
+    DCHECK_NOT_NULL(root_map);
     // Starting from the next existing elements kind transition try to
     // replay the property transitions that does not involve instance rewriting
     // (ElementsTransitionAndStoreStub does not support that).
@@ -14107,7 +14103,6 @@ void JSFunction::CalculateInstanceSizeHelper(InstanceType instance_type,
                                              int* in_object_properties) {
   DCHECK_LE(static_cast<unsigned>(requested_embedder_fields),
             JSObject::kMaxEmbedderFields);
-  requested_embedder_fields *= kEmbedderDataSlotSizeInTaggedSlots;
   int header_size = JSObject::GetHeaderSize(instance_type, has_prototype_slot);
   int max_nof_fields =
       (JSObject::kMaxInstanceSize - header_size) >> kPointerSizeLog2;
@@ -14911,13 +14906,18 @@ void DeoptimizationData::DeoptimizationDataPrint(std::ostream& os) {  // NOLINT
 
         case Translation::FLOAT_REGISTER: {
           int reg_code = iterator.Next();
-          os << "{input=" << FloatRegister::from_code(reg_code) << "}";
+          os << "{input="
+             << RegisterConfiguration::Default()->GetFloatRegisterName(reg_code)
+             << "}";
           break;
         }
 
         case Translation::DOUBLE_REGISTER: {
           int reg_code = iterator.Next();
-          os << "{input=" << DoubleRegister::from_code(reg_code) << "}";
+          os << "{input="
+             << RegisterConfiguration::Default()->GetDoubleRegisterName(
+                    reg_code)
+             << "}";
           break;
         }
 

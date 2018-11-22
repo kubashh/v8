@@ -596,10 +596,7 @@ void Serializer::ObjectSerializer::SerializeObject() {
   Map map = object_->map();
   AllocationSpace space =
       MemoryChunk::FromAddress(object_->address())->owner()->identity();
-  // Young generation large objects are tenured.
-  if (space == NEW_LO_SPACE) {
-    space = LO_SPACE;
-  }
+  DCHECK(space != NEW_LO_SPACE);
   SerializePrologue(space, size, map);
 
   // Serialize the rest of the object.

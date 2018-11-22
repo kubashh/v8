@@ -18,7 +18,6 @@
 #include "src/objects/data-handler-inl.h"
 #include "src/objects/debug-objects-inl.h"
 #include "src/objects/embedder-data-array-inl.h"
-#include "src/objects/embedder-data-slot-inl.h"
 #include "src/objects/hash-table-inl.h"
 #include "src/objects/js-array-inl.h"
 #ifdef V8_INTL_SUPPORT
@@ -47,6 +46,7 @@
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/maybe-object.h"
 #include "src/objects/microtask-inl.h"
+#include "src/objects/microtask-queue-inl.h"
 #include "src/objects/module-inl.h"
 #include "src/objects/promise-inl.h"
 #include "src/objects/stack-frame-info-inl.h"
@@ -678,10 +678,8 @@ void AliasedArgumentsEntry::AliasedArgumentsEntryVerify(Isolate* isolate) {
 }
 
 void EmbedderDataArray::EmbedderDataArrayVerify(Isolate* isolate) {
-  EmbedderDataSlot start(*this, 0);
-  EmbedderDataSlot end(*this, length());
-  for (EmbedderDataSlot slot = start; slot < end; ++slot) {
-    Object* e = slot.load_tagged();
+  for (int i = 0; i < length(); i++) {
+    Object* e = get(i);
     Object::VerifyPointer(isolate, e);
   }
 }
@@ -1383,6 +1381,13 @@ void PromiseReactionJobTask::PromiseReactionJobTaskVerify(Isolate* isolate) {
   CHECK(promise_or_capability()->IsJSPromise() ||
         promise_or_capability()->IsPromiseCapability() ||
         promise_or_capability()->IsUndefined(isolate));
+}
+
+void MicrotaskQueue::MicrotaskQueueVerify(Isolate* isolate) {
+  CHECK(IsMicrotaskQueue());
+  VerifyHeapPointer(isolate, queue());
+  VerifySmiField(kPendingMicrotaskCountOffset);
+  CHECK_LE(pending_microtask_count(), queue()->length());
 }
 
 void PromiseFulfillReactionJobTask::PromiseFulfillReactionJobTaskVerify(

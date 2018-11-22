@@ -52,7 +52,6 @@
 #include "src/objects-inl.h"
 #include "src/objects/api-callbacks.h"
 #include "src/objects/embedder-data-array-inl.h"
-#include "src/objects/embedder-data-slot-inl.h"
 #include "src/objects/hash-table-inl.h"
 #include "src/objects/heap-object.h"
 #include "src/objects/js-array-inl.h"
@@ -943,6 +942,7 @@ void ResourceConstraints::ConfigureDefaults(uint64_t physical_memory,
   set_max_semi_space_size_in_kb(
       i::Heap::ComputeMaxSemiSpaceSize(physical_memory));
   set_max_old_space_size(i::Heap::ComputeMaxOldGenerationSize(physical_memory));
+  set_max_zone_pool_size(i::AccountingAllocator::kMaxPoolSize);
 
   if (virtual_memory_limit > 0 && i::kRequiresCodeRange) {
     // Reserve no more than 1/8 of the memory for the code range, but at most
@@ -958,10 +958,12 @@ void SetResourceConstraints(i::Isolate* isolate,
   size_t semi_space_size = constraints.max_semi_space_size_in_kb();
   size_t old_space_size = constraints.max_old_space_size();
   size_t code_range_size = constraints.code_range_size();
+  size_t max_pool_size = constraints.max_zone_pool_size();
   if (semi_space_size != 0 || old_space_size != 0 || code_range_size != 0) {
     isolate->heap()->ConfigureHeap(semi_space_size, old_space_size,
                                    code_range_size);
   }
+  isolate->allocator()->ConfigureSegmentPool(max_pool_size);
 
   if (constraints.stack_limit() != nullptr) {
     uintptr_t limit = reinterpret_cast<uintptr_t>(constraints.stack_limit());
@@ -1185,7 +1187,16 @@ Context::BackupIncumbentScope::~BackupIncumbentScope() {
   isolate->set_top_backup_incumbent_scope(prev_);
 }
 
-STATIC_ASSERT(i::Internals::kEmbedderDataSlotSize == i::kEmbedderDataSlotSize);
+static void* DecodeSmiToAligned(i::Object* value, const char* location) {
+  Utils::ApiCheck(value->IsSmi(), location, "Not a Smi");
+  return reinterpret_cast<void*>(value);
+}
+
+static i::Smi EncodeAlignedAsSmi(void* value, const char* location) {
+  i::Smi smi(reinterpret_cast<i::Address>(value));
+  Utils::ApiCheck(smi->IsSmi(), location, "Pointer is not aligned");
+  return smi;
+}
 
 static i::Handle<i::EmbedderDataArray> EmbedderDataFor(Context* context,
                                                        int index, bool can_grow,
@@ -1225,8 +1236,7 @@ v8::Local<v8::Value> Context::SlowGetEmbedderData(int index) {
       EmbedderDataFor(this, index, false, location);
   if (data.is_null()) return Local<Value>();
   i::Isolate* isolate = Utils::OpenHandle(this)->GetIsolate();
-  i::Handle<i::Object> result(i::EmbedderDataSlot(*data, index).load_tagged(),
-                              isolate);
+  i::Handle<i::Object> result(data->get(index), isolate);
   return Utils::ToLocal(result);
 }
 
@@ -1237,7 +1247,7 @@ void Context::SetEmbedderData(int index, v8::Local<Value> value) {
       EmbedderDataFor(this, index, true, location);
   if (data.is_null()) return;
   i::Handle<i::Object> val = Utils::OpenHandle(*value);
-  i::EmbedderDataSlot::store_tagged(*data, index, *val);
+  data->set(index, *val);
   DCHECK_EQ(*Utils::OpenHandle(*value),
             *Utils::OpenHandle(*GetEmbedderData(index)));
 }
@@ -1248,10 +1258,7 @@ void* Context::SlowGetAlignedPointerFromEmbedderData(int index) {
   i::Handle<i::EmbedderDataArray> data =
       EmbedderDataFor(this, index, false, location);
   if (data.is_null()) return nullptr;
-  void* result;
-  Utils::ApiCheck(i::EmbedderDataSlot(*data, index).ToAlignedPointer(&result),
-                  location, "Pointer is not aligned");
-  return result;
+  return DecodeSmiToAligned(data->get(index), location);
 }
 
 
@@ -1259,8 +1266,7 @@ void Context::SetAlignedPointerInEmbedderData(int index, void* value) {
   const char* location = "v8::Context::SetAlignedPointerInEmbedderData()";
   i::Handle<i::EmbedderDataArray> data =
       EmbedderDataFor(this, index, true, location);
-  bool ok = i::EmbedderDataSlot(*data, index).store_aligned_pointer(value);
-  Utils::ApiCheck(ok, location, "Pointer is not aligned");
+  data->set(index, EncodeAlignedAsSmi(value, location));
   DCHECK_EQ(value, GetAlignedPointerFromEmbedderData(index));
 }
 
@@ -5791,8 +5797,9 @@ Local<Value> v8::Object::SlowGetInternalField(int index) {
   i::Handle<i::JSReceiver> obj = Utils::OpenHandle(this);
   const char* location = "v8::Object::GetInternalField()";
   if (!InternalFieldOK(obj, index, location)) return Local<Value>();
-  i::Handle<i::Object> value(i::JSObject::cast(*obj)->GetEmbedderField(index),
-                             obj->GetIsolate());
+  i::Handle<i::Object> value(
+      i::Handle<i::JSObject>::cast(obj)->GetEmbedderField(index),
+      obj->GetIsolate());
   return Utils::ToLocal(value);
 }
 
@@ -5808,20 +5815,16 @@ void* v8::Object::SlowGetAlignedPointerFromInternalField(int index) {
   i::Handle<i::JSReceiver> obj = Utils::OpenHandle(this);
   const char* location = "v8::Object::GetAlignedPointerFromInternalField()";
   if (!InternalFieldOK(obj, index, location)) return nullptr;
-  void* result;
-  Utils::ApiCheck(i::EmbedderDataSlot(i::JSObject::cast(*obj), index)
-                      .ToAlignedPointer(&result),
-                  location, "Unaligned pointer");
-  return result;
+  return DecodeSmiToAligned(
+      i::Handle<i::JSObject>::cast(obj)->GetEmbedderField(index), location);
 }
 
 void v8::Object::SetAlignedPointerInInternalField(int index, void* value) {
   i::Handle<i::JSReceiver> obj = Utils::OpenHandle(this);
   const char* location = "v8::Object::SetAlignedPointerInInternalField()";
   if (!InternalFieldOK(obj, index, location)) return;
-  Utils::ApiCheck(i::EmbedderDataSlot(i::JSObject::cast(*obj), index)
-                      .store_aligned_pointer(value),
-                  location, "Unaligned pointer");
+  i::Handle<i::JSObject>::cast(obj)->SetEmbedderField(
+      index, EncodeAlignedAsSmi(value, location));
   DCHECK_EQ(value, GetAlignedPointerFromInternalField(index));
 }
 
@@ -5830,8 +5833,8 @@ void v8::Object::SetAlignedPointerInInternalFields(int argc, int indices[],
   i::Handle<i::JSReceiver> obj = Utils::OpenHandle(this);
   const char* location = "v8::Object::SetAlignedPointerInInternalFields()";
   i::DisallowHeapAllocation no_gc;
-  i::JSObject* js_obj = i::JSObject::cast(*obj);
-  int nof_embedder_fields = js_obj->GetEmbedderFieldCount();
+  i::JSObject* object = i::JSObject::cast(*obj);
+  int nof_embedder_fields = object->GetEmbedderFieldCount();
   for (int i = 0; i < argc; i++) {
     int index = indices[i];
     if (!Utils::ApiCheck(index < nof_embedder_fields, location,
@@ -5839,9 +5842,7 @@ void v8::Object::SetAlignedPointerInInternalFields(int argc, int indices[],
       return;
     }
     void* value = values[i];
-    Utils::ApiCheck(
-        i::EmbedderDataSlot(js_obj, index).store_aligned_pointer(value),
-        location, "Unaligned pointer");
+    object->SetEmbedderField(index, EncodeAlignedAsSmi(value, location));
     DCHECK_EQ(value, GetAlignedPointerFromInternalField(index));
   }
 }
@@ -8462,8 +8463,8 @@ void Isolate::GetHeapStatistics(HeapStatistics* heap_statistics) {
       isolate->wasm_engine()->allocator()->GetCurrentMemoryUsage();
   heap_statistics->external_memory_ = isolate->heap()->external_memory();
   heap_statistics->peak_malloced_memory_ =
-      isolate->allocator()->GetPeakMemoryUsage() +
-      isolate->wasm_engine()->allocator()->GetPeakMemoryUsage();
+      isolate->allocator()->GetMaxMemoryUsage() +
+      isolate->wasm_engine()->allocator()->GetMaxMemoryUsage();
   heap_statistics->number_of_native_contexts_ = heap->NumberOfNativeContexts();
   heap_statistics->number_of_detached_contexts_ =
       heap->NumberOfDetachedContexts();
@@ -8752,6 +8753,7 @@ void Isolate::MemoryPressureNotification(MemoryPressureLevel level) {
           ? isolate->thread_manager()->IsLockedByCurrentThread()
           : i::ThreadId::Current().Equals(isolate->thread_id());
   isolate->heap()->MemoryPressureNotification(level, on_isolate_thread);
+  isolate->allocator()->MemoryPressureNotification(level);
 }
 
 void Isolate::EnableMemorySavingsMode() {

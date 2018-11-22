@@ -12,29 +12,47 @@ namespace v8 {
 namespace internal {
 namespace compiler {
 
+static const char*
+    general_register_names_[RegisterConfiguration::kMaxGeneralRegisters];
+static const char*
+    double_register_names_[RegisterConfiguration::kMaxFPRegisters];
+static char register_names_[10 * (RegisterConfiguration::kMaxGeneralRegisters +
+                                  RegisterConfiguration::kMaxFPRegisters)];
+
 namespace {
-constexpr int kMaxNumAllocatable =
-    Max(Register::kNumRegisters, DoubleRegister::kNumRegisters);
-static std::array<int, kMaxNumAllocatable> kAllocatableCodes =
-    base::make_array<kMaxNumAllocatable>(
-        [](size_t i) { return static_cast<int>(i); });
+static int allocatable_codes[InstructionSequenceTest::kDefaultNRegs] = {
+    0, 1, 2, 3, 4, 5, 6, 7};
+}
+
+static void InitializeRegisterNames() {
+  char* loc = register_names_;
+  for (int i = 0; i < RegisterConfiguration::kMaxGeneralRegisters; ++i) {
+    general_register_names_[i] = loc;
+    loc += base::OS::SNPrintF(loc, 100, "gp_%d", i);
+    *loc++ = 0;
+  }
+  for (int i = 0; i < RegisterConfiguration::kMaxFPRegisters; ++i) {
+    double_register_names_[i] = loc;
+    loc += base::OS::SNPrintF(loc, 100, "fp_%d", i) + 1;
+    *loc++ = 0;
+  }
 }
 
 InstructionSequenceTest::InstructionSequenceTest()
     : sequence_(nullptr),
-      num_general_registers_(Register::kNumRegisters),
-      num_double_registers_(DoubleRegister::kNumRegisters),
+      num_general_registers_(kDefaultNRegs),
+      num_double_registers_(kDefaultNRegs),
       instruction_blocks_(zone()),
       current_block_(nullptr),
-      block_returns_(false) {}
+      block_returns_(false) {
+  InitializeRegisterNames();
+}
 
 void InstructionSequenceTest::SetNumRegs(int num_general_registers,
                                          int num_double_registers) {
   CHECK(!config_);
   CHECK(instructions_.empty());
   CHECK(instruction_blocks_.empty());
-  CHECK_GE(Register::kNumRegisters, num_general_registers);
-  CHECK_GE(DoubleRegister::kNumRegisters, num_double_registers);
   num_general_registers_ = num_general_registers;
   num_double_registers_ = num_double_registers;
 }
@@ -70,10 +88,13 @@ const RegisterConfiguration* InstructionSequenceTest::config() {
   if (!config_) {
     config_.reset(new RegisterConfiguration(
         num_general_registers_, num_double_registers_, num_general_registers_,
-        num_double_registers_, kAllocatableCodes.data(),
-        kAllocatableCodes.data(),
+        num_double_registers_, allocatable_codes, allocatable_codes,
         kSimpleFPAliasing ? RegisterConfiguration::OVERLAP
-                          : RegisterConfiguration::COMBINE));
+                          : RegisterConfiguration::COMBINE,
+        general_register_names_,
+        double_register_names_,  // float register names
+        double_register_names_,
+        double_register_names_));  // SIMD 128 register names
   }
   return config_.get();
 }

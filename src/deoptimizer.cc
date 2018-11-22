@@ -496,7 +496,7 @@ Deoptimizer::Deoptimizer(Isolate* isolate, JSFunction* function,
 
   DCHECK_NE(from, kNullAddress);
   compiled_code_ = FindOptimizedCode();
-  DCHECK(!compiled_code_.is_null());
+  DCHECK_NOT_NULL(compiled_code_);
 
   DCHECK(function->IsJSFunction());
   trace_scope_ = FLAG_trace_deopt
@@ -724,7 +724,7 @@ void Deoptimizer::DoComputeOutputFrames() {
   }
 
   BailoutId node_id = input_data->BytecodeOffset(bailout_id_);
-  ByteArray* translations = input_data->TranslationByteArray();
+  ByteArray translations = input_data->TranslationByteArray();
   unsigned translation_index =
       input_data->TranslationIndex(bailout_id_)->value();
 
@@ -1705,10 +1705,10 @@ void Deoptimizer::DoComputeBuiltinContinuation(
         SNPrintF(
             str,
             "tagged argument count %s (will be untagged by continuation)\n",
-            RegisterName(Register::from_code(code)));
+            config->GetGeneralRegisterName(code));
       } else {
         SNPrintF(str, "builtin register argument %s\n",
-                 RegisterName(Register::from_code(code)));
+                 config->GetGeneralRegisterName(code));
       }
     }
     frame_writer.PushTranslatedValue(
@@ -1924,7 +1924,7 @@ void TranslationBuffer::Add(int32_t value) {
   } while (bits != 0);
 }
 
-TranslationIterator::TranslationIterator(ByteArray* buffer, int index)
+TranslationIterator::TranslationIterator(ByteArray buffer, int index)
     : buffer_(buffer), index_(index) {
   DCHECK(index >= 0 && index < buffer->length());
 }
@@ -3189,8 +3189,9 @@ int TranslatedState::CreateNextTranslatedValue(
       }
       Float32 value = registers->GetFloatRegister(input_reg);
       if (trace_file != nullptr) {
-        PrintF(trace_file, "%e ; %s (float)", value.get_scalar(),
-               RegisterName(FloatRegister::from_code(input_reg)));
+        PrintF(
+            trace_file, "%e ; %s (float)", value.get_scalar(),
+            RegisterConfiguration::Default()->GetFloatRegisterName(input_reg));
       }
       TranslatedValue translated_value = TranslatedValue::NewFloat(this, value);
       frame.Add(translated_value);
@@ -3206,8 +3207,9 @@ int TranslatedState::CreateNextTranslatedValue(
       }
       Float64 value = registers->GetDoubleRegister(input_reg);
       if (trace_file != nullptr) {
-        PrintF(trace_file, "%e ; %s (double)", value.get_scalar(),
-               RegisterName(DoubleRegister::from_code(input_reg)));
+        PrintF(
+            trace_file, "%e ; %s (double)", value.get_scalar(),
+            RegisterConfiguration::Default()->GetDoubleRegisterName(input_reg));
       }
       TranslatedValue translated_value =
           TranslatedValue::NewDouble(this, value);
