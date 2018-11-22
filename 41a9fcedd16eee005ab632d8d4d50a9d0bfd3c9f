@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1579c6a_a863ec77",
+        "filename": "tools/snapshot/asm_to_inline_asm.py",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-11-22T10:19:27Z",
+      "side": 1,
+      "message": "nit: change this to sing quotes too please",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 3
+      },
+      "revId": "41a9fcedd16eee005ab632d8d4d50a9d0bfd3c9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
