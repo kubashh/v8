@@ -963,7 +963,7 @@ PipelineCompilationJob::Status PipelineCompilationJob::FinalizeJobImpl(
   }
 
   compilation_info()->SetCode(code);
-  compilation_info()->context()->native_context()->AddOptimizedCode(*code);
+  compilation_info()->native_context()->AddOptimizedCode(*code);
   RegisterWeakObjectsInOptimizedCode(code, isolate);
   return SUCCEEDED;
 }
@@ -1037,7 +1037,7 @@ struct GraphBuilderPhase {
 namespace {
 
 Maybe<OuterContext> GetModuleContext(Handle<JSFunction> closure) {
-  Context* current = closure->context();
+  Context current = closure->context();
   size_t distance = 0;
   while (!current->IsNativeContext()) {
     if (current->IsModuleContext()) {
