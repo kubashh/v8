@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4769ff8_63a254a5",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-22T17:16:19Z",
+      "side": 1,
+      "message": "Why introduce this bool* rather than simply assigning to prop_info-\u003eis_computed_name?",
+      "revId": "a3074ab6fed9d69f8f918b585236f1064d816a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47562491_5c15664c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2557,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-22T17:16:19Z",
+      "side": 1,
+      "message": "Why not move this into ParsePropertyInfo as well? is_static and is_private also don\u0027t make sense for this case... I think it\u0027s ok to add them all and then verify that the others aren\u0027t set (unless there\u0027s a parser failure)",
+      "revId": "a3074ab6fed9d69f8f918b585236f1064d816a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
