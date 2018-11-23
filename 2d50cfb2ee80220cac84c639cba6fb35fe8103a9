@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "12f99c3a_bb6e3ffe",
+        "filename": "src/ast/source-range-remover.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-23T22:49:41Z",
+      "side": 1,
+      "message": "removed comment from .cc file in favor of detailed comment in .h file.",
+      "parentUuid": "984a2cea_85252aa3",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "376caf32_231f058a",
         "filename": "src/ast/source-range-remover.cc",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02b49772_2e4aa324",
+        "filename": "src/ast/source-range-remover.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-23T22:49:41Z",
+      "side": 1,
+      "message": "A generic solution has been implemented; we now only ensure that the final statement passes the IsJump() check, with a special case for IfStatements().\n\nIt still seems worthwhile to enforce that the final statement falls within the IsJump category of statement, otherwise you screw up counters when a block or function terminates with a for() or while() statement, e.g.,\n\nfunction g() {}                           // 0000\n!function() {                             // 0050\n  for (var i \u003d 0; i \u003c 12; i++) g();       // 0100\n  for (var i \u003d 0; i \u003c 12; i++) {          // 0150\n    g();                                  // 0200\n  }                                       // 0250\n  for (var i \u003d 0; false; i++) g();        // 0300\n  for (var i \u003d 0; true; i++) break;       // 0350\n  for (var i \u003d 0; i \u003c 12; i++) {          // 0400\n    if (i % 3 \u003d\u003d 0) g(); else g();        // 0450\n  }                                       // 0500\n}();                                      // 0550",
+      "parentUuid": "376caf32_231f058a",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "482a8262_454908b5",
+        "filename": "src/ast/source-range-remover.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-23T22:49:41Z",
+      "side": 1,
+      "message": "I opted for RemoveRedundantSourceRangeVisitor; I\u0027ve added a detailed comment at the top of the header.",
+      "parentUuid": "6148e739_234cd5a8",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ab1e26a_50785a43",
         "filename": "src/ast/source-range-remover.h",
         "patchSetId": 3
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "1d67f691_2bef7181",
+        "filename": "src/ast/source-range-remover.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-23T22:49:41Z",
+      "side": 1,
+      "message": "removed this comment.",
+      "parentUuid": "6ab1e26a_50785a43",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7625137d_2679138c",
         "filename": "src/interpreter/interpreter.cc",
         "patchSetId": 3
@@ -84,6 +156,24 @@
       "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b93054c_0ff4cf5c",
+        "filename": "src/interpreter/interpreter.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-23T22:49:41Z",
+      "side": 1,
+      "message": "I\u0027ve moved the logic to parsing.cc.",
+      "parentUuid": "7625137d_2679138c",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +208,24 @@
       "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9b3ab10_c85abc28",
+        "filename": "test/mjsunit/code-coverage-block.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-23T22:49:41Z",
+      "side": 1,
+      "message": "I\u0027ve updated this test to demonstrate that our generic solution allows the terminal \u0027}\u0027 and trailing whitespace to be caught.",
+      "parentUuid": "f89bd61d_caa6c4f8",
+      "revId": "2d50cfb2ee80220cac84c639cba6fb35fe8103a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
