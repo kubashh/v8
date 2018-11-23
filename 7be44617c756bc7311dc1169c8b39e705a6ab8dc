@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37a6c00b_767cc457",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-11-23T08:53:44Z",
+      "side": 1,
+      "message": "nit: Shouldn\u0027t this be just {String} instead of {HeapObjectPtr}? I see only one use-site in {ExternalStringTable::AddString} where the argument is a {String} anyways.",
+      "range": {
+        "startLine": 2026,
+        "startChar": 41,
+        "endLine": 2026,
+        "endChar": 54
+      },
+      "revId": "7be44617c756bc7311dc1169c8b39e705a6ab8dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
