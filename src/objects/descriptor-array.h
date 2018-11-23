@@ -68,7 +68,7 @@ class DescriptorArray : public WeakFixedArray {
                            Handle<FixedArray> indices);
 
   // Accessors for fetching instance descriptor at descriptor number.
-  inline Name* GetKey(int descriptor_number);
+  inline Name GetKey(int descriptor_number);
   inline ObjectSlot GetKeySlot(int descriptor_number);
   inline Object* GetStrongValue(int descriptor_number);
   inline void SetValue(int descriptor_number, Object* value);
@@ -81,13 +81,13 @@ class DescriptorArray : public WeakFixedArray {
   inline int GetFieldIndex(int descriptor_number);
   inline FieldType GetFieldType(int descriptor_number);
 
-  inline Name* GetSortedKey(int descriptor_number);
+  inline Name GetSortedKey(int descriptor_number);
   inline int GetSortedKeyIndex(int descriptor_number);
   inline void SetSortedKey(int pointer, int descriptor_number);
 
   // Accessor for complete descriptor.
   inline void Set(int descriptor_number, Descriptor* desc);
-  inline void Set(int descriptor_number, Name* key, MaybeObject value,
+  inline void Set(int descriptor_number, Name key, MaybeObject value,
                   PropertyDetails details);
   void Replace(int descriptor_number, Descriptor* descriptor);
 
@@ -116,12 +116,12 @@ class DescriptorArray : public WeakFixedArray {
   void Sort();
 
   // Search the instance descriptors for given name.
-  V8_INLINE int Search(Name* name, int number_of_own_descriptors);
-  V8_INLINE int Search(Name* name, Map map);
+  V8_INLINE int Search(Name name, int number_of_own_descriptors);
+  V8_INLINE int Search(Name name, Map map);
 
   // As the above, but uses DescriptorLookupCache and updates it when
   // necessary.
-  V8_INLINE int SearchWithCache(Isolate* isolate, Name* name, Map map);
+  V8_INLINE int SearchWithCache(Isolate* isolate, Name name, Map map);
 
   bool IsEqualUpTo(DescriptorArray* desc, int nof_descriptors);
 

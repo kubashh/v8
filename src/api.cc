@@ -2404,9 +2404,9 @@ class IsIdentifierHelper {
  public:
   IsIdentifierHelper() : is_identifier_(false), first_char_(true) {}
 
-  bool Check(i::String* string) {
-    i::ConsString* cons_string = i::String::VisitFlat(this, string, 0);
-    if (cons_string == nullptr) return is_identifier_;
+  bool Check(i::String string) {
+    i::ConsString cons_string = i::String::VisitFlat(this, string, 0);
+    if (cons_string.is_null()) return is_identifier_;
     // We don't support cons strings here.
     return false;
   }
@@ -5196,9 +5196,9 @@ static inline const uint16_t* Align(const uint16_t* chars) {
 class ContainsOnlyOneByteHelper {
  public:
   ContainsOnlyOneByteHelper() : is_one_byte_(true) {}
-  bool Check(i::String* string) {
-    i::ConsString* cons_string = i::String::VisitFlat(this, string, 0);
-    if (cons_string == nullptr) return is_one_byte_;
+  bool Check(i::String string) {
+    i::ConsString cons_string = i::String::VisitFlat(this, string, 0);
+    if (cons_string.is_null()) return is_one_byte_;
     return CheckCons(cons_string);
   }
   void VisitOneByteString(const uint8_t* chars, int length) {
@@ -5237,20 +5237,18 @@ class ContainsOnlyOneByteHelper {
   }
 
  private:
-  bool CheckCons(i::ConsString* cons_string) {
+  bool CheckCons(i::ConsString cons_string) {
     while (true) {
       // Check left side if flat.
-      i::String* left = cons_string->first();
-      i::ConsString* left_as_cons =
-          i::String::VisitFlat(this, left, 0);
+      i::String left = cons_string->first();
+      i::ConsString left_as_cons = i::String::VisitFlat(this, left, 0);
       if (!is_one_byte_) return false;
       // Check right side if flat.
-      i::String* right = cons_string->second();
-      i::ConsString* right_as_cons =
-          i::String::VisitFlat(this, right, 0);
+      i::String right = cons_string->second();
+      i::ConsString right_as_cons = i::String::VisitFlat(this, right, 0);
       if (!is_one_byte_) return false;
       // Standard recurse/iterate trick.
-      if (left_as_cons != nullptr && right_as_cons != nullptr) {
+      if (!left_as_cons.is_null() && !right_as_cons.is_null()) {
         if (left->length() < right->length()) {
           CheckCons(left_as_cons);
           cons_string = right_as_cons;
@@ -5263,12 +5261,12 @@ class ContainsOnlyOneByteHelper {
         continue;
       }
       // Descend left in place.
-      if (left_as_cons != nullptr) {
+      if (!left_as_cons.is_null()) {
         cons_string = left_as_cons;
         continue;
       }
       // Descend right in place.
-      if (right_as_cons != nullptr) {
+      if (!right_as_cons.is_null()) {
         cons_string = right_as_cons;
         continue;
       }
@@ -5492,16 +5490,15 @@ class Utf8WriterVisitor {
   DISALLOW_IMPLICIT_CONSTRUCTORS(Utf8WriterVisitor);
 };
 
-
-static bool RecursivelySerializeToUtf8(i::String* current,
+static bool RecursivelySerializeToUtf8(i::String current,
                                        Utf8WriterVisitor* writer,
                                        int recursion_budget) {
   while (!writer->IsDone()) {
-    i::ConsString* cons_string = i::String::VisitFlat(writer, current);
-    if (cons_string == nullptr) return true;  // Leaf node.
+    i::ConsString cons_string = i::String::VisitFlat(writer, current);
+    if (cons_string.is_null()) return true;  // Leaf node.
     if (recursion_budget <= 0) return false;
     // Must write the left branch first.
-    i::String* first = cons_string->first();
+    i::String first = cons_string->first();
     bool success = RecursivelySerializeToUtf8(first,
                                               writer,
                                               recursion_budget - 1);
@@ -5608,7 +5605,7 @@ bool v8::String::IsExternalOneByte() const {
 void v8::String::VerifyExternalStringResource(
     v8::String::ExternalStringResource* value) const {
   i::DisallowHeapAllocation no_allocation;
-  i::String* str = *Utils::OpenHandle(this);
+  i::String str = *Utils::OpenHandle(this);
   const v8::String::ExternalStringResource* expected;
 
   if (str->IsThinString()) {
@@ -5627,7 +5624,7 @@ void v8::String::VerifyExternalStringResource(
 void v8::String::VerifyExternalStringResourceBase(
     v8::String::ExternalStringResourceBase* value, Encoding encoding) const {
   i::DisallowHeapAllocation no_allocation;
-  i::String* str = *Utils::OpenHandle(this);
+  i::String str = *Utils::OpenHandle(this);
   const v8::String::ExternalStringResourceBase* expected;
   Encoding expectedEncoding;
 
@@ -5655,15 +5652,14 @@ void v8::String::VerifyExternalStringResourceBase(
 String::ExternalStringResource* String::GetExternalStringResourceSlow() const {
   i::DisallowHeapAllocation no_allocation;
   typedef internal::Internals I;
-  i::String* str = *Utils::OpenHandle(this);
+  i::String str = *Utils::OpenHandle(this);
 
   if (str->IsThinString()) {
     str = i::ThinString::cast(str)->actual();
   }
 
   if (i::StringShape(str).IsExternalTwoByte()) {
-    void* value = I::ReadField<void*>(reinterpret_cast<i::Address>(str),
-                                      I::kStringResourceOffset);
+    void* value = I::ReadField<void*>(str.ptr(), I::kStringResourceOffset);
     return reinterpret_cast<String::ExternalStringResource*>(value);
   }
   return nullptr;
@@ -5674,13 +5670,13 @@ String::ExternalStringResourceBase* String::GetExternalStringResourceBaseSlow(
   i::DisallowHeapAllocation no_allocation;
   typedef internal::Internals I;
   ExternalStringResourceBase* resource = nullptr;
-  i::String* str = *Utils::OpenHandle(this);
+  i::String str = *Utils::OpenHandle(this);
 
   if (str->IsThinString()) {
     str = i::ThinString::cast(str)->actual();
   }
 
-  internal::Address string = reinterpret_cast<internal::Address>(str);
+  internal::Address string = str.ptr();
   int type = I::GetInstanceType(string) & I::kFullStringRepresentationMask;
   *encoding_out = static_cast<Encoding>(type & I::kStringEncodingMask);
   if (i::StringShape(str).IsExternalOneByte() ||
@@ -5694,7 +5690,7 @@ String::ExternalStringResourceBase* String::GetExternalStringResourceBaseSlow(
 const v8::String::ExternalOneByteStringResource*
 v8::String::GetExternalOneByteStringResource() const {
   i::DisallowHeapAllocation no_allocation;
-  i::String* str = *Utils::OpenHandle(this);
+  i::String str = *Utils::OpenHandle(this);
   if (i::StringShape(str).IsExternalOneByte()) {
     return i::ExternalOneByteString::cast(str)->resource();
   } else if (str->IsThinString()) {
@@ -6605,7 +6601,7 @@ Local<String> v8::String::NewExternal(
 bool v8::String::MakeExternal(v8::String::ExternalStringResource* resource) {
   i::DisallowHeapAllocation no_allocation;
 
-  i::String* obj = *Utils::OpenHandle(this);
+  i::String obj = *Utils::OpenHandle(this);
 
   if (obj->IsThinString()) {
     obj = i::ThinString::cast(obj)->actual();
@@ -6634,7 +6630,7 @@ bool v8::String::MakeExternal(
     v8::String::ExternalOneByteStringResource* resource) {
   i::DisallowHeapAllocation no_allocation;
 
-  i::String* obj = *Utils::OpenHandle(this);
+  i::String obj = *Utils::OpenHandle(this);
 
   if (obj->IsThinString()) {
     obj = i::ThinString::cast(obj)->actual();
@@ -6661,7 +6657,7 @@ bool v8::String::MakeExternal(
 
 bool v8::String::CanMakeExternal() {
   i::DisallowHeapAllocation no_allocation;
-  i::String* obj = *Utils::OpenHandle(this);
+  i::String obj = *Utils::OpenHandle(this);
 
   if (obj->IsThinString()) {
     obj = i::ThinString::cast(obj)->actual();
@@ -9742,7 +9738,7 @@ void debug::GlobalLexicalScopeNames(
     i::Handle<i::ScopeInfo> scope_info(context->scope_info(), isolate);
     int local_count = scope_info->ContextLocalCount();
     for (int j = 0; j < local_count; ++j) {
-      i::String* name = scope_info->ContextLocalName(j);
+      i::String name = scope_info->ContextLocalName(j);
       if (i::ScopeInfo::VariableIsSynthetic(name)) continue;
       names->Append(Utils::ToLocal(handle(name, isolate)));
     }

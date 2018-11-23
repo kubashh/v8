@@ -326,14 +326,13 @@ void Heap::UpdateAllocationsHash(uint32_t value) {
       StringHasher::AddCharacterCore(raw_allocations_hash_, c2);
 }
 
-
-void Heap::RegisterExternalString(String* string) {
+void Heap::RegisterExternalString(String string) {
   DCHECK(string->IsExternalString());
   DCHECK(!string->IsThinString());
   external_string_table_.AddString(string);
 }
 
-void Heap::UpdateExternalString(String* string, size_t old_payload,
+void Heap::UpdateExternalString(String string, size_t old_payload,
                                 size_t new_payload) {
   DCHECK(string->IsExternalString());
   Page* page = Page::FromHeapObject(string);
@@ -346,10 +345,10 @@ void Heap::UpdateExternalString(String* string, size_t old_payload,
         ExternalBackingStoreType::kExternalString, new_payload - old_payload);
 }
 
-void Heap::FinalizeExternalString(String* string) {
+void Heap::FinalizeExternalString(String string) {
   DCHECK(string->IsExternalString());
   Page* page = Page::FromHeapObject(string);
-  ExternalString* ext_string = ExternalString::cast(string);
+  ExternalString ext_string = ExternalString::cast(string);
 
   page->DecrementExternalBackingStoreBytes(
       ExternalBackingStoreType::kExternalString,
@@ -357,8 +356,7 @@ void Heap::FinalizeExternalString(String* string) {
 
   v8::String::ExternalStringResourceBase** resource_addr =
       reinterpret_cast<v8::String::ExternalStringResourceBase**>(
-          reinterpret_cast<byte*>(string) + ExternalString::kResourceOffset -
-          kHeapObjectTag);
+          string.ptr() + ExternalString::kResourceOffset - kHeapObjectTag);
 
   // Dispose of the C++ object if it has not already been disposed.
   if (*resource_addr != nullptr) {
@@ -579,7 +577,7 @@ void Heap::UpdateAllocationSite(Map map, HeapObject* object,
   (*pretenuring_feedback)[reinterpret_cast<AllocationSite*>(key)]++;
 }
 
-void Heap::ExternalStringTable::AddString(String* string) {
+void Heap::ExternalStringTable::AddString(String string) {
   DCHECK(string->IsExternalString());
   DCHECK(!Contains(string));
 

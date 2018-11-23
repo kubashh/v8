@@ -19,10 +19,10 @@ class DescriptorLookupCache {
  public:
   // Lookup descriptor index for (map, name).
   // If absent, kAbsent is returned.
-  inline int Lookup(Map source, Name* name);
+  inline int Lookup(Map source, Name name);
 
   // Update an element in the cache.
-  inline void Update(Map source, Name* name, int result);
+  inline void Update(Map source, Name name, int result);
 
   // Clear the cache.
   void Clear();
@@ -33,17 +33,17 @@ class DescriptorLookupCache {
   DescriptorLookupCache() {
     for (int i = 0; i < kLength; ++i) {
       keys_[i].source = Map();
-      keys_[i].name = nullptr;
+      keys_[i].name = Name();
       results_[i] = kAbsent;
     }
   }
 
-  static inline int Hash(Map source, Name* name);
+  static inline int Hash(Map source, Name name);
 
   static const int kLength = 64;
   struct Key {
     Map source;
-    Name* name;
+    Name name;
   };
 
   Key keys_[kLength];
