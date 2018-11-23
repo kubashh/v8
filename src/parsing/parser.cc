@@ -10,6 +10,7 @@
 #include "src/ast/ast-function-literal-id-reindexer.h"
 #include "src/ast/ast-traversal-visitor.h"
 #include "src/ast/ast.h"
+#include "src/ast/remove-redundant-source-range-visitor.h"
 #include "src/bailout-reason.h"
 #include "src/base/platform/platform.h"
 #include "src/char-predicates-inl.h"
@@ -502,6 +503,9 @@ FunctionLiteral* Parser::ParseProgram(Isolate* isolate, ParseInfo* info) {
     LOG(isolate,
         FunctionEvent(event_name, script->id(), ms, start, end, "", 0));
   }
+
+  RemoveRedundantSourceRanges(info, result);
+
   return result;
 }
 
@@ -690,6 +694,9 @@ FunctionLiteral* Parser::ParseFunction(Isolate* isolate, ParseInfo* info,
                       function_scope->end_position(), function_name.get(),
                       strlen(function_name.get())));
   }
+
+  RemoveRedundantSourceRanges(info, result);
+
   return result;
 }
 
@@ -1502,6 +1509,15 @@ Block* Parser::IgnoreCompletion(Statement* statement) {
   Block* block = factory()->NewBlock(1, true);
   block->statements()->Add(statement, zone());
   return block;
+}
+
+void Parser::RemoveRedundantSourceRanges(ParseInfo* parse_info,
+                                         Expression* root) {
+  if (root != nullptr && parse_info->source_range_map() != nullptr) {
+    RemoveRedundantSourceRangeVisitor remover(stack_limit_, root,
+                                              parse_info->source_range_map());
+    remover.Run();
+  }
 }
 
 Expression* Parser::RewriteReturn(Expression* return_value, int pos) {
