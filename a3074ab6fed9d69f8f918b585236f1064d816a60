@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6057f9fe_d38d23dd",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-23T01:57:56Z",
+      "side": 1,
+      "message": "The first switch case below will reassign `*is_computed_name \u003d true` for `ParsePropertyKind::kSpread`, I can also change all the reference to `*is_computed_name` below to `prop_info-\u003eis_computed_name`, that will result in a bigger diff, but I guess we might as well just refactor them all. WDYT?",
+      "parentUuid": "f4769ff8_63a254a5",
+      "revId": "a3074ab6fed9d69f8f918b585236f1064d816a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "47562491_5c15664c",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2018-11-22T17:16:19Z",
       "side": 1,
       "message": "Why not move this into ParsePropertyInfo as well? is_static and is_private also don\u0027t make sense for this case... I think it\u0027s ok to add them all and then verify that the others aren\u0027t set (unless there\u0027s a parser failure)",
+      "revId": "a3074ab6fed9d69f8f918b585236f1064d816a60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dd315a4_ed93fb31",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2557,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-23T01:57:56Z",
+      "side": 1,
+      "message": "\u003e Why not move this into ParsePropertyInfo as well? is_static and is_private also don\u0027t make sense for this case... I think it\u0027s ok to add them all and then verify that the others aren\u0027t set (unless there\u0027s a parser failure)\n\nGood idea, we already have things like `function_flags` for non-function properties anyway.",
+      "parentUuid": "47562491_5c15664c",
       "revId": "a3074ab6fed9d69f8f918b585236f1064d816a60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
