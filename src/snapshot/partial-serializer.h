@@ -6,7 +6,6 @@
 #define V8_SNAPSHOT_PARTIAL_SERIALIZER_H_
 
 #include "src/address-map.h"
-#include "src/contexts.h"
 #include "src/snapshot/serializer.h"
 
 namespace v8 {
@@ -22,7 +21,7 @@ class PartialSerializer : public Serializer {
   ~PartialSerializer() override;
 
   // Serialize the objects reachable from a single object pointer.
-  void Serialize(Context* o, bool include_global_proxy);
+  void Serialize(Context** o, bool include_global_proxy);
 
   bool can_be_rehashed() const { return can_be_rehashed_; }
 
@@ -42,7 +41,7 @@ class PartialSerializer : public Serializer {
   // Indicates whether we only serialized hash tables that we can rehash.
   // TODO(yangguo): generalize rehashing, and remove this flag.
   bool can_be_rehashed_;
-  Context context_;
+  Context* context_;
 
   // Used to store serialized data for embedder fields.
   SnapshotByteSink embedder_fields_sink_;
