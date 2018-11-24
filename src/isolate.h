@@ -376,17 +376,12 @@ class ThreadLocalTop {
   Isolate* isolate_ = nullptr;
   // The context where the current execution method is created and for variable
   // lookups.
-  // TODO(3770): This field is read/written from generated code, so it would
-  // be cleaner to make it an "Address raw_context_", and construct a Context
-  // object in the getter. Same for {pending_handler_context_} below. In the
-  // meantime, assert that the memory layout is the same.
-  STATIC_ASSERT(sizeof(Context) == kPointerSize);
-  Context context_;
+  Context* context_ = nullptr;
   ThreadId thread_id_ = ThreadId::Invalid();
   Object* pending_exception_ = nullptr;
 
   // Communication channel between Isolate::FindHandler and the CEntry.
-  Context pending_handler_context_;
+  Context* pending_handler_context_ = nullptr;
   Address pending_handler_entrypoint_ = kNullAddress;
   Address pending_handler_constant_pool_ = kNullAddress;
   Address pending_handler_fp_ = kNullAddress;
@@ -675,9 +670,9 @@ class Isolate final : private HiddenFactory {
   Address get_address_from_id(IsolateAddressId id);
 
   // Access to top context (where the current function object was created).
-  Context context() { return thread_local_top_.context_; }
-  inline void set_context(Context context);
-  Context* context_address() { return &thread_local_top_.context_; }
+  Context* context() { return thread_local_top_.context_; }
+  inline void set_context(Context* context);
+  Context** context_address() { return &thread_local_top_.context_; }
 
   THREAD_LOCAL_TOP_ACCESSOR(SaveContext*, save_context)
 
@@ -695,7 +690,7 @@ class Isolate final : private HiddenFactory {
 
   inline bool has_pending_exception();
 
-  THREAD_LOCAL_TOP_ADDRESS(Context, pending_handler_context)
+  THREAD_LOCAL_TOP_ADDRESS(Context*, pending_handler_context)
   THREAD_LOCAL_TOP_ADDRESS(Address, pending_handler_entrypoint)
   THREAD_LOCAL_TOP_ADDRESS(Address, pending_handler_constant_pool)
   THREAD_LOCAL_TOP_ADDRESS(Address, pending_handler_fp)
@@ -923,7 +918,7 @@ class Isolate final : private HiddenFactory {
 
   // Returns the current native context.
   inline Handle<NativeContext> native_context();
-  inline NativeContext raw_native_context();
+  inline NativeContext* raw_native_context();
 
   Handle<Context> GetIncumbentContext();
 
@@ -1223,7 +1218,7 @@ class Isolate final : private HiddenFactory {
   // The version with an explicit context parameter can be used when
   // Isolate::context is not set up, e.g. when calling directly into C++ from
   // CSA.
-  bool IsNoElementsProtectorIntact(Context context);
+  bool IsNoElementsProtectorIntact(Context* context);
   bool IsNoElementsProtectorIntact();
 
   bool IsArrayOrObjectOrStringPrototype(Object* object);

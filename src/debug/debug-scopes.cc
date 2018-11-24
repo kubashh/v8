@@ -183,13 +183,13 @@ void ScopeIterator::TryParseAndRetrieveScopes(ScopeIterator::Option option) {
 
 void ScopeIterator::UnwrapEvaluationContext() {
   if (!context_->IsDebugEvaluateContext()) return;
-  Context current = *context_;
+  Context* current = *context_;
   do {
     Object* wrapped = current->get(Context::WRAPPED_CONTEXT_INDEX);
     if (wrapped->IsContext()) {
       current = Context::cast(wrapped);
     } else {
-      DCHECK(!current->previous().is_null());
+      DCHECK_NOT_NULL(current->previous());
       current = current->previous();
     }
   } while (current->IsDebugEvaluateContext());
@@ -283,7 +283,7 @@ void ScopeIterator::Next() {
     DCHECK_NOT_NULL(current_scope_);
     do {
       if (current_scope_->NeedsContext()) {
-        DCHECK(!context_->previous().is_null());
+        DCHECK_NOT_NULL(context_->previous());
         context_ = handle(context_->previous(), isolate_);
       }
       DCHECK_IMPLIES(InInnerScope(), current_scope_->outer_scope() != nullptr);

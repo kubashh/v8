@@ -329,6 +329,7 @@ class HandleScopeImplementer {
  public:
   explicit HandleScopeImplementer(Isolate* isolate)
       : isolate_(isolate),
+        microtask_context_(nullptr),
         spare_(nullptr),
         call_depth_(0),
         microtasks_depth_(0),
@@ -402,12 +403,12 @@ class HandleScopeImplementer {
   inline void LeaveMicrotaskContext();
   inline Handle<Context> MicrotaskContext();
   inline bool MicrotaskContextIsLastEnteredContext() const {
-    return !microtask_context_.is_null() &&
+    return microtask_context_ &&
            entered_context_count_during_microtasks_ == entered_contexts_.size();
   }
 
-  inline void SaveContext(Context context);
-  inline Context RestoreContext();
+  inline void SaveContext(Context* context);
+  inline Context* RestoreContext();
   inline bool HasSavedContexts();
 
   inline DetachableVector<Address*>* blocks() { return &blocks_; }
@@ -424,7 +425,7 @@ class HandleScopeImplementer {
     blocks_.detach();
     entered_contexts_.detach();
     saved_contexts_.detach();
-    microtask_context_ = Context();
+    microtask_context_ = nullptr;
     entered_context_count_during_microtasks_ = 0;
     spare_ = nullptr;
     last_handle_before_deferred_block_ = nullptr;
@@ -435,7 +436,7 @@ class HandleScopeImplementer {
     DCHECK(blocks_.empty());
     DCHECK(entered_contexts_.empty());
     DCHECK(saved_contexts_.empty());
-    DCHECK(microtask_context_.is_null());
+    DCHECK(!microtask_context_);
 
     blocks_.free();
     entered_contexts_.free();
@@ -453,10 +454,10 @@ class HandleScopeImplementer {
   Isolate* isolate_;
   DetachableVector<Address*> blocks_;
   // Used as a stack to keep track of entered contexts.
-  DetachableVector<Context> entered_contexts_;
+  DetachableVector<Context*> entered_contexts_;
   // Used as a stack to keep track of saved contexts.
-  DetachableVector<Context> saved_contexts_;
-  Context microtask_context_;
+  DetachableVector<Context*> saved_contexts_;
+  Context* microtask_context_;
   Address* spare_;
   int call_depth_;
   int microtasks_depth_;
@@ -510,12 +511,14 @@ v8::MicrotasksPolicy HandleScopeImplementer::microtasks_policy() const {
   return microtasks_policy_;
 }
 
-void HandleScopeImplementer::SaveContext(Context context) {
+
+void HandleScopeImplementer::SaveContext(Context* context) {
   saved_contexts_.push_back(context);
 }
 
-Context HandleScopeImplementer::RestoreContext() {
-  Context last_context = saved_contexts_.back();
+
+Context* HandleScopeImplementer::RestoreContext() {
+  Context* last_context = saved_contexts_.back();
   saved_contexts_.pop_back();
   return last_context;
 }
@@ -541,13 +544,13 @@ bool HandleScopeImplementer::LastEnteredContextWas(Handle<Context> context) {
 }
 
 void HandleScopeImplementer::EnterMicrotaskContext(Handle<Context> context) {
-  DCHECK(microtask_context_.is_null());
+  DCHECK(!microtask_context_);
   microtask_context_ = *context;
   entered_context_count_during_microtasks_ = entered_contexts_.size();
 }
 
 void HandleScopeImplementer::LeaveMicrotaskContext() {
-  microtask_context_ = Context();
+  microtask_context_ = nullptr;
   entered_context_count_during_microtasks_ = 0;
 }
 

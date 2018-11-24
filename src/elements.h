@@ -229,7 +229,7 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> ArrayConstructInitializeElements(
     Handle<JSArray> array, Arguments* args);
 
 // Called directly from CSA.
-void CopyFastNumberJSArrayElementsToTypedArray(Address raw_context,
+void CopyFastNumberJSArrayElementsToTypedArray(Context* context,
                                                JSArray* source,
                                                JSTypedArray* destination,
                                                uintptr_t length,
