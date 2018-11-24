@@ -1380,14 +1380,35 @@ Handle<Symbol> Factory::NewPrivateNameSymbol() {
   return symbol;
 }
 
+Handle<Context> Factory::NewContext(RootIndex map_root_index, int size,
+                                    int variadic_part_length,
+                                    PretenureFlag pretenure) {
+  DCHECK(RootsTable::IsImmortalImmovable(map_root_index));
+  DCHECK_LE(Context::kTodoHeaderSize, size);
+  DCHECK(IsAligned(size, kTaggedSize));
+  DCHECK_LE(Context::MIN_CONTEXT_SLOTS, variadic_part_length);
+  DCHECK_LE(Context::SizeFor(variadic_part_length), size);
+
+  Map map = Map::cast(isolate()->root(map_root_index));
+  HeapObject* result = AllocateRawWithImmortalMap(size, pretenure, map);
+  Handle<Context> context(Context::cast(result), isolate());
+  context->set_length(variadic_part_length);
+  if (size > Context::kTodoHeaderSize) {
+    ObjectSlot start = context->RawField(Context::kTodoHeaderSize);
+    ObjectSlot end = context->RawField(size);
+    size_t slot_count = end - start;
+    MemsetPointer(start, *undefined_value(), slot_count);
+  }
+  return context;
+}
+
 Handle<NativeContext> Factory::NewNativeContext() {
-  Map map = *native_context_map();
-  HeapObject* result =
-      AllocateRawWithImmortalMap(map->instance_size(), TENURED, map);
-  Handle<NativeContext> context(NativeContext::cast(result), isolate());
-  context->set_length(NativeContext::NATIVE_CONTEXT_SLOTS);
-  MemsetPointer(ObjectSlot(context->address() + NativeContext::kHeaderSize),
-                *undefined_value(), NativeContext::NATIVE_CONTEXT_SLOTS);
+  Handle<NativeContext> context = Handle<NativeContext>::cast(
+      NewContext(RootIndex::kNativeContextMap, NativeContext::kSize,
+                 NativeContext::NATIVE_CONTEXT_SLOTS, TENURED));
+  context->set_scope_info(ReadOnlyRoots(isolate()).empty_scope_info());
+  context->set_previous(Context::unchecked_cast(Smi::zero()));
+  context->set_extension(*the_hole_value());
   context->set_native_context(*context);
   context->set_errors_thrown(Smi::zero());
   context->set_math_random_index(Smi::zero());
@@ -1399,8 +1420,10 @@ Handle<NativeContext> Factory::NewNativeContext() {
 Handle<Context> Factory::NewScriptContext(Handle<NativeContext> outer,
                                           Handle<ScopeInfo> scope_info) {
   DCHECK_EQ(scope_info->scope_type(), SCRIPT_SCOPE);
-  Handle<Context> context = NewFixedArrayWithMap<Context>(
-      RootIndex::kScriptContextMap, scope_info->ContextLength(), TENURED);
+  int variadic_part_length = scope_info->ContextLength();
+  Handle<Context> context = NewContext(RootIndex::kScriptContextMap,
+                                       Context::SizeFor(variadic_part_length),
+                                       variadic_part_length, TENURED);
   context->set_scope_info(*scope_info);
   context->set_previous(*outer);
   context->set_extension(*the_hole_value());
@@ -1421,8 +1444,10 @@ Handle<Context> Factory::NewModuleContext(Handle<Module> module,
                                           Handle<NativeContext> outer,
                                           Handle<ScopeInfo> scope_info) {
   DCHECK_EQ(scope_info->scope_type(), MODULE_SCOPE);
-  Handle<Context> context = NewFixedArrayWithMap<Context>(
-      RootIndex::kModuleContextMap, scope_info->ContextLength(), TENURED);
+  int variadic_part_length = scope_info->ContextLength();
+  Handle<Context> context = NewContext(RootIndex::kModuleContextMap,
+                                       Context::SizeFor(variadic_part_length),
+                                       variadic_part_length, TENURED);
   context->set_scope_info(*scope_info);
   context->set_previous(*outer);
   context->set_extension(*module);
@@ -1433,8 +1458,6 @@ Handle<Context> Factory::NewModuleContext(Handle<Module> module,
 
 Handle<Context> Factory::NewFunctionContext(Handle<Context> outer,
                                             Handle<ScopeInfo> scope_info) {
-  int length = scope_info->ContextLength();
-  DCHECK_LE(Context::MIN_CONTEXT_SLOTS, length);
   RootIndex mapRootIndex;
   switch (scope_info->scope_type()) {
     case EVAL_SCOPE:
@@ -1446,7 +1469,10 @@ Handle<Context> Factory::NewFunctionContext(Handle<Context> outer,
     default:
       UNREACHABLE();
   }
-  Handle<Context> context = NewFixedArrayWithMap<Context>(mapRootIndex, length);
+  int variadic_part_length = scope_info->ContextLength();
+  Handle<Context> context =
+      NewContext(mapRootIndex, Context::SizeFor(variadic_part_length),
+                 variadic_part_length, NOT_TENURED);
   context->set_scope_info(*scope_info);
   context->set_previous(*outer);
   context->set_extension(*the_hole_value());
@@ -1457,9 +1483,13 @@ Handle<Context> Factory::NewFunctionContext(Handle<Context> outer,
 Handle<Context> Factory::NewCatchContext(Handle<Context> previous,
                                          Handle<ScopeInfo> scope_info,
                                          Handle<Object> thrown_object) {
+  DCHECK_EQ(scope_info->scope_type(), CATCH_SCOPE);
   STATIC_ASSERT(Context::MIN_CONTEXT_SLOTS == Context::THROWN_OBJECT_INDEX);
-  Handle<Context> context = NewFixedArrayWithMap<Context>(
-      RootIndex::kCatchContextMap, Context::MIN_CONTEXT_SLOTS + 1);
+  // TODO(ishell): Take the details from CatchContext class.
+  int variadic_part_length = Context::MIN_CONTEXT_SLOTS + 1;
+  Handle<Context> context = NewContext(RootIndex::kCatchContextMap,
+                                       Context::SizeFor(variadic_part_length),
+                                       variadic_part_length, NOT_TENURED);
   context->set_scope_info(*scope_info);
   context->set_previous(*previous);
   context->set_extension(*the_hole_value());
@@ -1478,8 +1508,11 @@ Handle<Context> Factory::NewDebugEvaluateContext(Handle<Context> previous,
   Handle<HeapObject> ext = extension.is_null()
                                ? Handle<HeapObject>::cast(the_hole_value())
                                : Handle<HeapObject>::cast(extension);
-  Handle<Context> c = NewFixedArrayWithMap<Context>(
-      RootIndex::kDebugEvaluateContextMap, Context::MIN_CONTEXT_SLOTS + 2);
+  // TODO(ishell): Take the details from DebugEvaluateContextContext class.
+  int variadic_part_length = Context::MIN_CONTEXT_SLOTS + 2;
+  Handle<Context> c = NewContext(RootIndex::kDebugEvaluateContextMap,
+                                 Context::SizeFor(variadic_part_length),
+                                 variadic_part_length, NOT_TENURED);
   c->set_scope_info(*scope_info);
   c->set_previous(*previous);
   c->set_native_context(previous->native_context());
@@ -1492,8 +1525,12 @@ Handle<Context> Factory::NewDebugEvaluateContext(Handle<Context> previous,
 Handle<Context> Factory::NewWithContext(Handle<Context> previous,
                                         Handle<ScopeInfo> scope_info,
                                         Handle<JSReceiver> extension) {
-  Handle<Context> context = NewFixedArrayWithMap<Context>(
-      RootIndex::kWithContextMap, Context::MIN_CONTEXT_SLOTS);
+  DCHECK_EQ(scope_info->scope_type(), WITH_SCOPE);
+  // TODO(ishell): Take the details from WithContext class.
+  int variadic_part_length = Context::MIN_CONTEXT_SLOTS;
+  Handle<Context> context = NewContext(RootIndex::kWithContextMap,
+                                       Context::SizeFor(variadic_part_length),
+                                       variadic_part_length, NOT_TENURED);
   context->set_scope_info(*scope_info);
   context->set_previous(*previous);
   context->set_extension(*extension);
@@ -1504,8 +1541,10 @@ Handle<Context> Factory::NewWithContext(Handle<Context> previous,
 Handle<Context> Factory::NewBlockContext(Handle<Context> previous,
                                          Handle<ScopeInfo> scope_info) {
   DCHECK_EQ(scope_info->scope_type(), BLOCK_SCOPE);
-  Handle<Context> context = NewFixedArrayWithMap<Context>(
-      RootIndex::kBlockContextMap, scope_info->ContextLength());
+  int variadic_part_length = scope_info->ContextLength();
+  Handle<Context> context = NewContext(RootIndex::kBlockContextMap,
+                                       Context::SizeFor(variadic_part_length),
+                                       variadic_part_length, NOT_TENURED);
   context->set_scope_info(*scope_info);
   context->set_previous(*previous);
   context->set_extension(*the_hole_value());
@@ -1514,11 +1553,13 @@ Handle<Context> Factory::NewBlockContext(Handle<Context> previous,
 }
 
 Handle<Context> Factory::NewBuiltinContext(Handle<NativeContext> native_context,
-                                           int length) {
-  DCHECK_GE(length, Context::MIN_CONTEXT_SLOTS);
-  Handle<Context> context =
-      NewFixedArrayWithMap<Context>(RootIndex::kFunctionContextMap, length);
+                                           int variadic_part_length) {
+  DCHECK_LE(Context::MIN_CONTEXT_SLOTS, variadic_part_length);
+  Handle<Context> context = NewContext(RootIndex::kFunctionContextMap,
+                                       Context::SizeFor(variadic_part_length),
+                                       variadic_part_length, NOT_TENURED);
   context->set_scope_info(ReadOnlyRoots(isolate()).empty_scope_info());
+  context->set_previous(*native_context);
   context->set_extension(*the_hole_value());
   context->set_native_context(*native_context);
   return context;
