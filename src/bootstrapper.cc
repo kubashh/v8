@@ -57,7 +57,7 @@ namespace internal {
 
 void SourceCodeCache::Initialize(Isolate* isolate, bool create_heap_objects) {
   cache_ = create_heap_objects ? ReadOnlyRoots(isolate).empty_fixed_array()
-                               : nullptr;
+                               : FixedArray();
 }
 
 bool SourceCodeCache::Lookup(Isolate* isolate, Vector<const char> name,
