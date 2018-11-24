@@ -25,6 +25,7 @@ namespace internal {
   V(Code)                                \
   V(CodeDataContainer)                   \
   V(ConsString)                          \
+  V(Context)                             \
   V(DataHandler)                         \
   V(DataObject)                          \
   V(EmbedderDataArray)                   \
