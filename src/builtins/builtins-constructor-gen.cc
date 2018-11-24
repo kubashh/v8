@@ -255,17 +255,17 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewFunctionContext(
                                  SmiTag(length));
 
   // Set up the fixed slots.
-  StoreFixedArrayElement(function_context, Context::SCOPE_INFO_INDEX,
-                         scope_info, SKIP_WRITE_BARRIER);
-  StoreFixedArrayElement(function_context, Context::PREVIOUS_INDEX, context,
-                         SKIP_WRITE_BARRIER);
-  StoreFixedArrayElement(function_context, Context::EXTENSION_INDEX,
-                         TheHoleConstant(), SKIP_WRITE_BARRIER);
+  StoreObjectFieldNoWriteBarrier(function_context, Context::kScopeInfoOffset,
+                                 scope_info);
+  StoreObjectFieldNoWriteBarrier(function_context, Context::kPreviousOffset,
+                                 context);
+  StoreObjectFieldNoWriteBarrier(function_context, Context::kExtensionOffset,
+                                 TheHoleConstant());
 
   // Copy the native context from the previous context.
-  Node* native_context = LoadNativeContext(context);
-  StoreFixedArrayElement(function_context, Context::NATIVE_CONTEXT_INDEX,
-                         native_context, SKIP_WRITE_BARRIER);
+  TNode<Context> native_context = LoadNativeContext(context);
+  StoreObjectFieldNoWriteBarrier(function_context,
+                                 Context::kNativeContextOffset, native_context);
 
   // Initialize the rest of the slots to undefined.
   Node* undefined = UndefinedConstant();

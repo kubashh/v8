@@ -744,12 +744,21 @@ void FixedDoubleArray::FixedDoubleArrayVerify(Isolate* isolate) {
   }
 }
 
-void Context::ContextVerify(Isolate* isolate) { FixedArrayPtrVerify(isolate); }
+void Context::ContextVerify(Isolate* isolate) {
+  VerifySmiField(kLengthOffset);
+  VerifyObjectField(isolate, kScopeInfoOffset);
+  VerifyObjectField(isolate, kPreviousOffset);
+  VerifyObjectField(isolate, kExtensionOffset);
+  VerifyObjectField(isolate, kNativeContextOffset);
+  for (int i = 0; i < length(); i++) {
+    VerifyObjectField(isolate, OffsetOfElementAt(i));
+  }
+}
 
 void NativeContext::NativeContextVerify(Isolate* isolate) {
+  ContextVerify(isolate);
   CHECK_EQ(length(), NativeContext::NATIVE_CONTEXT_SLOTS);
   CHECK_EQ(kSize, map()->instance_size());
-  FixedArrayPtrVerify(isolate);
 }
 
 void FeedbackMetadata::FeedbackMetadataVerify(Isolate* isolate) {

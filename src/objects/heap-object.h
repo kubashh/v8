@@ -140,6 +140,12 @@ class HeapObjectPtr : public ObjectPtr {
 #endif
   void HeapObjectVerify(Isolate* isolate);
 
+#ifdef VERIFY_HEAP
+  inline void VerifyObjectField(Isolate* isolate, int offset);
+  inline void VerifySmiField(int offset);
+  inline void VerifyMaybeObjectField(Isolate* isolate, int offset);
+#endif
+
   static const int kMapOffset = HeapObject::kMapOffset;
 
   OBJECT_CONSTRUCTORS(HeapObjectPtr, ObjectPtr)
