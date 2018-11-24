@@ -110,6 +110,7 @@ class HeapObjectPtr : public ObjectPtr {
 
   inline ObjectSlot map_slot();
   inline MapWord map_word() const;
+  inline void set_map_word(MapWord map_word);
 
   inline WriteBarrierMode GetWriteBarrierMode(
       const DisallowHeapAllocation& promise);
@@ -123,6 +124,9 @@ class HeapObjectPtr : public ObjectPtr {
   bool is_null() const { return ptr() == kNullAddress; }
 
   bool IsHeapObject() const { return true; }
+  // Note that this is a lie. Strictly speaking, this function should check
+  // that ptr() has a heap object tag. However, some subclasses have fast
+  // paths where they use Smi representation for their ptr().
   bool IsHeapObjectPtr() const { return true; }
 
   inline ReadOnlyRoots GetReadOnlyRoots() const;
