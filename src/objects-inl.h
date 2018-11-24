@@ -1521,7 +1521,7 @@ FreeSpace* FreeSpace::next() {
 #ifdef DEBUG
   Heap* heap = Heap::FromWritableHeapObject(this);
   DCHECK_IMPLIES(map() != heap->isolate()->root(RootIndex::kFreeSpaceMap),
-                 !heap->deserialization_complete() && map().is_null());
+                 !heap->deserialization_complete() && map() == nullptr);
 #endif
   DCHECK_LE(kNextOffset + kPointerSize, relaxed_read_size());
   return reinterpret_cast<FreeSpace*>(Memory<Address>(address() + kNextOffset));
@@ -1532,7 +1532,7 @@ void FreeSpace::set_next(FreeSpace* next) {
 #ifdef DEBUG
   Heap* heap = Heap::FromWritableHeapObject(this);
   DCHECK_IMPLIES(map() != heap->isolate()->root(RootIndex::kFreeSpaceMap),
-                 !heap->deserialization_complete() && map().is_null());
+                 !heap->deserialization_complete() && map() == nullptr);
 #endif
   DCHECK_LE(kNextOffset + kPointerSize, relaxed_read_size());
   base::Relaxed_Store(

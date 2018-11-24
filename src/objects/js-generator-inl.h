@@ -22,7 +22,7 @@ CAST_ACCESSOR(JSGeneratorObject)
 CAST_ACCESSOR(AsyncGeneratorRequest)
 
 ACCESSORS(JSGeneratorObject, function, JSFunction, kFunctionOffset)
-ACCESSORS2(JSGeneratorObject, context, Context, kContextOffset)
+ACCESSORS(JSGeneratorObject, context, Context, kContextOffset)
 ACCESSORS(JSGeneratorObject, receiver, Object, kReceiverOffset)
 ACCESSORS(JSGeneratorObject, input_or_debug_pos, Object, kInputOrDebugPosOffset)
 SMI_ACCESSORS(JSGeneratorObject, resume_mode, kResumeModeOffset)

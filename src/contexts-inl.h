@@ -44,21 +44,27 @@ Handle<Context> ScriptContextTable::GetContext(Isolate* isolate,
       FixedArray::get(*table, i + kFirstContextSlotIndex, isolate));
 }
 
-OBJECT_CONSTRUCTORS_IMPL(Context, FixedArrayPtr)
-NEVER_READ_ONLY_SPACE_IMPL(Context)
-CAST_ACCESSOR2(Context)
-CAST_ACCESSOR2(NativeContext)
+// static
+Context* Context::cast(Object* context) {
+  DCHECK(context->IsContext());
+  return reinterpret_cast<Context*>(context);
+}
+
+NativeContext* NativeContext::cast(Object* context) {
+  DCHECK(context->IsNativeContext());
+  return reinterpret_cast<NativeContext*>(context);
+}
 
 void Context::set_scope_info(ScopeInfo* scope_info) {
   set(SCOPE_INFO_INDEX, scope_info);
 }
 
-Context Context::previous() {
+Context* Context::previous() {
   Object* result = get(PREVIOUS_INDEX);
-  DCHECK(IsBootstrappingOrValidParentContext(result, *this));
-  return Context::unchecked_cast(result);
+  DCHECK(IsBootstrappingOrValidParentContext(result, this));
+  return reinterpret_cast<Context*>(result);
 }
-void Context::set_previous(Context context) { set(PREVIOUS_INDEX, context); }
+void Context::set_previous(Context* context) { set(PREVIOUS_INDEX, context); }
 
 Object* Context::next_context_link() { return get(Context::NEXT_CONTEXT_LINK); }
 
@@ -70,13 +76,13 @@ void Context::set_extension(HeapObject* object) {
   set(EXTENSION_INDEX, object);
 }
 
-NativeContext Context::native_context() const {
+NativeContext* Context::native_context() const {
   Object* result = get(NATIVE_CONTEXT_INDEX);
   DCHECK(IsBootstrappingOrNativeContext(this->GetIsolate(), result));
-  return NativeContext::unchecked_cast(result);
+  return reinterpret_cast<NativeContext*>(result);
 }
 
-void Context::set_native_context(NativeContext context) {
+void Context::set_native_context(NativeContext* context) {
   set(NATIVE_CONTEXT_INDEX, context);
 }
 
@@ -116,7 +122,7 @@ bool Context::IsScriptContext() const {
   return map()->instance_type() == SCRIPT_CONTEXT_TYPE;
 }
 
-bool Context::HasSameSecurityTokenAs(Context that) const {
+bool Context::HasSameSecurityTokenAs(Context* that) const {
   return this->native_context()->security_token() ==
          that->native_context()->security_token();
 }
@@ -224,11 +230,9 @@ void NativeContext::set_microtask_queue(MicrotaskQueue* microtask_queue) {
                      reinterpret_cast<intptr_t>(microtask_queue));
 }
 
-OBJECT_CONSTRUCTORS_IMPL(NativeContext, Context)
+#include "src/objects/object-macros-undef.h"
 
 }  // namespace internal
 }  // namespace v8
-
-#include "src/objects/object-macros-undef.h"
 
 #endif  // V8_CONTEXTS_INL_H_

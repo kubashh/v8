@@ -27,8 +27,8 @@ bool Isolate::FromWritableHeapObject(HeapObject* obj, Isolate** isolate) {
   return true;
 }
 
-void Isolate::set_context(Context context) {
-  DCHECK(context.is_null() || context->IsContext());
+void Isolate::set_context(Context* context) {
+  DCHECK(context == nullptr || context->IsContext());
   thread_local_top_.context_ = context;
 }
 
@@ -36,7 +36,7 @@ Handle<NativeContext> Isolate::native_context() {
   return handle(context()->native_context(), this);
 }
 
-NativeContext Isolate::raw_native_context() {
+NativeContext* Isolate::raw_native_context() {
   return context()->native_context();
 }
 
