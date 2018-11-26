@@ -873,22 +873,8 @@ void Scope::Snapshot::Reparent(DeclarationScope* new_parent) const {
   }
 
   Scope* outer_scope_ = outer_scope_and_calls_eval_.GetPointer();
-  if (outer_scope_->unresolved_list_.first() != top_unresolved_) {
-    // If the marked VariableProxy (snapshoted) is not the first, we need to
-    // find it and move all VariableProxys up to that point into the new_parent,
-    // then we restore the snapshoted state by reinitializing the outer_scope
-    // list.
-    {
-      auto iter = outer_scope_->unresolved_list_.begin();
-      while (*iter != top_unresolved_) {
-        ++iter;
-      }
-      outer_scope_->unresolved_list_.Rewind(iter);
-    }
-
-    new_parent->unresolved_list_ = std::move(outer_scope_->unresolved_list_);
-    outer_scope_->unresolved_list_.ReinitializeHead(top_unresolved_);
-  }
+  new_parent->unresolved_list_.MoveTail(&outer_scope_->unresolved_list_,
+                                        top_unresolved_);
 
   // Move temporaries allocated for complex parameter initializers.
   DeclarationScope* outer_closure = outer_scope_->GetClosureScope();
@@ -1183,7 +1169,7 @@ void Scope::DeclareCatchVariableName(const AstRawString* name) {
 void Scope::AddUnresolved(VariableProxy* proxy) {
   DCHECK(!already_resolved_);
   DCHECK(!proxy->is_resolved());
-  unresolved_list_.AddFront(proxy);
+  unresolved_list_.Add(proxy);
 }
 
 Variable* DeclarationScope::DeclareDynamicGlobal(const AstRawString* name,
@@ -1445,7 +1431,7 @@ void Scope::AnalyzePartially(
       if (!max_outer_scope->outer_scope()->is_script_scope() ||
           proxy->is_private_name()) {
         VariableProxy* copy = ast_node_factory->CopyVariableProxy(proxy);
-        new_unresolved_list->AddFront(copy);
+        new_unresolved_list->Add(copy);
       }
     } else if (var != Scope::kDummyPreParserVariable &&
                var != Scope::kDummyPreParserLexicalVariable) {

@@ -135,7 +135,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
    private:
     PointerWithPayload<Scope, bool, 1> outer_scope_and_calls_eval_;
     Scope* top_inner_scope_;
-    VariableProxy* top_unresolved_;
+    base::ThreadedList<VariableProxy>::Iterator top_unresolved_;
     base::ThreadedList<Variable>::Iterator top_local_;
   };
 
@@ -1070,7 +1070,7 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
 Scope::Snapshot::Snapshot(Scope* scope)
     : outer_scope_and_calls_eval_(scope, scope->scope_calls_eval_),
       top_inner_scope_(scope->inner_scope_),
-      top_unresolved_(scope->unresolved_list_.first()),
+      top_unresolved_(scope->unresolved_list_.end()),
       top_local_(scope->GetClosureScope()->locals_.end()) {
   // Reset in order to record eval calls during this Snapshot's lifetime.
   outer_scope_and_calls_eval_.GetPointer()->scope_calls_eval_ = false;
