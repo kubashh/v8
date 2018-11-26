@@ -558,12 +558,12 @@ namespace internal {
   F(LoadElementWithInterceptor, 2, 1)        \
   F(LoadGlobalIC_Miss, 3, 1)                 \
   F(LoadGlobalIC_Slow, 3, 1)                 \
-  F(LoadIC_Miss, 4, 1)                       \
+  F(NamedLoadIC_Miss, 4, 1)                  \
   F(LoadPropertyWithInterceptor, 5, 1)       \
   F(StoreCallbackProperty, 6, 1)             \
   F(StoreGlobalIC_Miss, 4, 1)                \
   F(StoreGlobalIC_Slow, 5, 1)                \
-  F(StoreIC_Miss, 5, 1)                      \
+  F(NamedStoreIC_Miss, 5, 1)                 \
   F(StoreInArrayLiteralIC_Slow, 5, 1)        \
   F(StorePropertyWithInterceptor, 5, 1)      \
   F(CloneObjectIC_Miss, 4, 1)

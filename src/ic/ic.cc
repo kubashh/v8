@@ -2158,7 +2158,7 @@ void StoreInArrayLiteralIC::Store(Handle<JSArray> array, Handle<Object> index,
 // Static IC stub generators.
 //
 
-RUNTIME_FUNCTION(Runtime_LoadIC_Miss) {
+RUNTIME_FUNCTION(Runtime_NamedLoadIC_Miss) {
   HandleScope scope(isolate);
   DCHECK_EQ(4, args.length());
   // Runtime functions don't follow the IC's calling convention.
@@ -2171,24 +2171,10 @@ RUNTIME_FUNCTION(Runtime_LoadIC_Miss) {
   // LoadIC miss handler if the handler misses. Since the vector Nexus is
   // set up outside the IC, handle that here.
   FeedbackSlotKind kind = vector->GetKind(vector_slot);
-  if (IsLoadICKind(kind)) {
-    LoadIC ic(isolate, vector, vector_slot);
-    ic.UpdateState(receiver, key);
-    RETURN_RESULT_OR_FAILURE(isolate, ic.Load(receiver, key));
-
-  } else if (IsLoadGlobalICKind(kind)) {
-    DCHECK_EQ(isolate->native_context()->global_proxy(), *receiver);
-    receiver = isolate->global_object();
-    LoadGlobalIC ic(isolate, vector, vector_slot);
-    ic.UpdateState(receiver, key);
-    RETURN_RESULT_OR_FAILURE(isolate, ic.Load(key));
-
-  } else {
-    DCHECK(IsKeyedLoadICKind(kind));
-    KeyedLoadIC ic(isolate, vector, vector_slot);
-    ic.UpdateState(receiver, key);
-    RETURN_RESULT_OR_FAILURE(isolate, ic.Load(receiver, key));
-  }
+  DCHECK(IsLoadICKind(kind));
+  LoadIC ic(isolate, vector, vector_slot);
+  ic.UpdateState(receiver, key);
+  RETURN_RESULT_OR_FAILURE(isolate, ic.Load(receiver, key));
 }
 
 RUNTIME_FUNCTION(Runtime_LoadGlobalIC_Miss) {
@@ -2267,7 +2253,7 @@ RUNTIME_FUNCTION(Runtime_KeyedLoadIC_Miss) {
   RETURN_RESULT_OR_FAILURE(isolate, ic.Load(receiver, key));
 }
 
-RUNTIME_FUNCTION(Runtime_StoreIC_Miss) {
+RUNTIME_FUNCTION(Runtime_NamedStoreIC_Miss) {
   HandleScope scope(isolate);
   DCHECK_EQ(5, args.length());
   // Runtime functions don't follow the IC's calling convention.
@@ -2278,22 +2264,10 @@ RUNTIME_FUNCTION(Runtime_StoreIC_Miss) {
   Handle<Name> key = args.at<Name>(4);
   FeedbackSlot vector_slot = FeedbackVector::ToSlot(slot->value());
   FeedbackSlotKind kind = vector->GetKind(vector_slot);
-  if (IsStoreICKind(kind) || IsStoreOwnICKind(kind)) {
-    StoreIC ic(isolate, vector, vector_slot);
-    ic.UpdateState(receiver, key);
-    RETURN_RESULT_OR_FAILURE(isolate, ic.Store(receiver, key, value));
-  } else if (IsStoreGlobalICKind(kind)) {
-    DCHECK_EQ(isolate->native_context()->global_proxy(), *receiver);
-    receiver = isolate->global_object();
-    StoreGlobalIC ic(isolate, vector, vector_slot);
-    ic.UpdateState(receiver, key);
-    RETURN_RESULT_OR_FAILURE(isolate, ic.Store(key, value));
-  } else {
-    DCHECK(IsKeyedStoreICKind(kind));
-    KeyedStoreIC ic(isolate, vector, vector_slot);
-    ic.UpdateState(receiver, key);
-    RETURN_RESULT_OR_FAILURE(isolate, ic.Store(receiver, key, value));
-  }
+  DCHECK(IsStoreICKind(kind) || IsStoreOwnICKind(kind));
+  StoreIC ic(isolate, vector, vector_slot);
+  ic.UpdateState(receiver, key);
+  RETURN_RESULT_OR_FAILURE(isolate, ic.Store(receiver, key, value));
 }
 
 RUNTIME_FUNCTION(Runtime_StoreGlobalIC_Miss) {

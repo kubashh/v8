@@ -2434,7 +2434,7 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LoadICParameters* p,
   {
     Comment("LoadIC_BytecodeHandler_miss");
 
-    exit_point->ReturnCallRuntime(Runtime::kLoadIC_Miss, p->context,
+    exit_point->ReturnCallRuntime(Runtime::kNamedLoadIC_Miss, p->context,
                                   p->receiver, p->name, p->slot, p->vector);
   }
 }
@@ -2475,8 +2475,8 @@ void AccessorAssembler::LoadIC(const LoadICParameters* p) {
   }
 
   BIND(&miss);
-  direct_exit.ReturnCallRuntime(Runtime::kLoadIC_Miss, p->context, p->receiver,
-                                p->name, p->slot, p->vector);
+  direct_exit.ReturnCallRuntime(Runtime::kNamedLoadIC_Miss, p->context,
+                                p->receiver, p->name, p->slot, p->vector);
 }
 
 void AccessorAssembler::LoadIC_Noninlined(const LoadICParameters* p,
@@ -2552,8 +2552,8 @@ void AccessorAssembler::LoadIC_Uninitialized(const LoadICParameters* p) {
                             LoadRoot(RootIndex::kuninitialized_symbol),
                             SKIP_WRITE_BARRIER, 0, SMI_PARAMETERS);
 
-    TailCallRuntime(Runtime::kLoadIC_Miss, p->context, p->receiver, p->name,
-                    p->slot, p->vector);
+    TailCallRuntime(Runtime::kNamedLoadIC_Miss, p->context, p->receiver,
+                    p->name, p->slot, p->vector);
   }
 }
 
@@ -2926,7 +2926,7 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
   }
   BIND(&miss);
   {
-    TailCallRuntime(Runtime::kStoreIC_Miss, p->context, p->value, p->slot,
+    TailCallRuntime(Runtime::kNamedStoreIC_Miss, p->context, p->value, p->slot,
                     p->vector, p->receiver, p->name);
   }
 }
@@ -3231,8 +3231,8 @@ void AccessorAssembler::GenerateLoadIC_Megamorphic() {
   HandleLoadICHandlerCase(&p, CAST(var_handler.value()), &miss, &direct_exit);
 
   BIND(&miss);
-  direct_exit.ReturnCallRuntime(Runtime::kLoadIC_Miss, context, receiver, name,
-                                slot, vector);
+  direct_exit.ReturnCallRuntime(Runtime::kNamedLoadIC_Miss, context, receiver,
+                                name, slot, vector);
 }
 
 void AccessorAssembler::GenerateLoadIC_Noninlined() {
@@ -3261,8 +3261,8 @@ void AccessorAssembler::GenerateLoadIC_Noninlined() {
   HandleLoadICHandlerCase(&p, CAST(var_handler.value()), &miss, &direct_exit);
 
   BIND(&miss);
-  direct_exit.ReturnCallRuntime(Runtime::kLoadIC_Miss, context, receiver, name,
-                                slot, vector);
+  direct_exit.ReturnCallRuntime(Runtime::kNamedLoadIC_Miss, context, receiver,
+                                name, slot, vector);
 }
 
 void AccessorAssembler::GenerateLoadIC_Uninitialized() {

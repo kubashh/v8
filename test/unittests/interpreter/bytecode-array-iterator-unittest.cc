@@ -65,7 +65,7 @@ TEST_F(BytecodeArrayIteratorTest, IteratesBytecodeArray) {
       .StoreAccumulatorInRegister(param)
       .CallRuntimeForPair(Runtime::kLoadLookupSlotForCall, param, pair)
       .ForInPrepare(triple, forin_feedback_slot)
-      .CallRuntime(Runtime::kLoadIC_Miss, reg_0)
+      .CallRuntime(Runtime::kNamedLoadIC_Miss, reg_0)
       .Debugger()
       .LoadGlobal(name, load_global_feedback_slot,
                   TypeofMode::NOT_INSIDE_TYPEOF)
@@ -259,7 +259,7 @@ TEST_F(BytecodeArrayIteratorTest, IteratesBytecodeArray) {
   EXPECT_EQ(iterator.current_bytecode(), Bytecode::kCallRuntime);
   EXPECT_EQ(iterator.current_offset(), offset);
   EXPECT_EQ(iterator.current_operand_scale(), OperandScale::kSingle);
-  EXPECT_EQ(iterator.GetRuntimeIdOperand(0), Runtime::kLoadIC_Miss);
+  EXPECT_EQ(iterator.GetRuntimeIdOperand(0), Runtime::kNamedLoadIC_Miss);
   EXPECT_EQ(iterator.GetRegisterOperand(1).index(), reg_0.index());
   EXPECT_EQ(iterator.GetRegisterCountOperand(2), 1u);
   CHECK(!iterator.done());
