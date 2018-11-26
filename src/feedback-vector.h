@@ -493,6 +493,7 @@ class FeedbackMetadata : public HeapObject {
 
  private:
   friend class AccessorAssembler;
+  friend class CodeStubAssembler;
 
   // Raw accessors to the encoded slot data.
   inline int32_t get(int index) const;
@@ -570,10 +571,13 @@ class FeedbackMetadataIterator {
 class FeedbackNexus final {
  public:
   FeedbackNexus(Handle<FeedbackVector> vector, FeedbackSlot slot)
-      : vector_handle_(vector),
-        vector_(nullptr),
-        slot_(slot),
-        kind_(vector->GetKind(slot)) {}
+      : vector_handle_(vector), vector_(nullptr), slot_(slot) {
+    if (!vector.is_null()) {
+      kind_ = vector->GetKind(slot);
+    } else {
+      kind_ = FeedbackSlotKind::kInvalid;
+    }
+  }
   FeedbackNexus(FeedbackVector* vector, FeedbackSlot slot)
       : vector_(vector), slot_(slot), kind_(vector->GetKind(slot)) {}
 

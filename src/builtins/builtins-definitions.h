@@ -212,7 +212,7 @@ namespace internal {
   TFH(LoadIC_StringWrapperLength, LoadWithVector)                              \
   TFH(LoadIC_Uninitialized, LoadWithVector)                                    \
   TFH(StoreGlobalIC_Slow, StoreWithVector)                                     \
-  TFH(StoreIC_Uninitialized, StoreWithVector)                                  \
+  TFH(StoreIC_Uninitialized, StoreWithVectorFlag)                              \
   TFH(StoreInArrayLiteralIC_Slow, StoreWithVector)                             \
                                                                                \
   /* Microtask helpers */                                                      \
@@ -630,12 +630,12 @@ namespace internal {
   TFH(KeyedLoadIC_Megamorphic, LoadWithVector)                                 \
   TFH(KeyedLoadICTrampoline, Load)                                             \
   TFH(KeyedLoadICTrampoline_Megamorphic, Load)                                 \
-  TFH(StoreGlobalIC, StoreGlobalWithVector)                                    \
-  TFH(StoreGlobalICTrampoline, StoreGlobal)                                    \
-  TFH(StoreIC, StoreWithVector)                                                \
-  TFH(StoreICTrampoline, Store)                                                \
-  TFH(KeyedStoreIC, StoreWithVector)                                           \
-  TFH(KeyedStoreICTrampoline, Store)                                           \
+  TFH(StoreGlobalIC, StoreGlobalWithVectorFlag)                                \
+  TFH(StoreGlobalICTrampoline, StoreGlobalWithFlag)                            \
+  TFH(StoreIC, StoreWithVectorFlag)                                            \
+  TFH(StoreICTrampoline, StoreWithFlag)                                        \
+  TFH(KeyedStoreIC, StoreWithVectorFlag)                                       \
+  TFH(KeyedStoreICTrampoline, StoreWithFlag)                                   \
   TFH(StoreInArrayLiteralIC, StoreWithVector)                                  \
   TFH(LoadGlobalIC, LoadGlobalWithVector)                                      \
   TFH(LoadGlobalICInsideTypeof, LoadGlobalWithVector)                          \

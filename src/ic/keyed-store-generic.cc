@@ -69,6 +69,8 @@ class KeyedStoreGenericAssembler : public AccessorAssembler {
 
   // If language mode is not provided it is deduced from the feedback slot's
   // kind.
+  // TODO(mythria): language mode is passed to the ICs. Use that instead of
+  // deriving it from the feedback slot's kind.
   void EmitGenericPropertyStore(TNode<JSReceiver> receiver,
                                 TNode<Map> receiver_map,
                                 const StoreICParameters* p,
@@ -1001,7 +1003,7 @@ void KeyedStoreGenericAssembler::KeyedStoreGeneric(
   {
     Comment("key is unique name");
     StoreICParameters p(context, receiver, var_unique.value(), value, slot,
-                        vector);
+                        vector, SmiConstant(0));
     ExitPoint direct_exit(this);
     EmitGenericPropertyStore(CAST(receiver), receiver_map, &p, &direct_exit,
                              &slow, language_mode);
@@ -1066,7 +1068,7 @@ void KeyedStoreGenericAssembler::SetProperty(TNode<Context> context,
 }
 
 void KeyedStoreGenericAssembler::StoreIC_Uninitialized() {
-  typedef StoreWithVectorDescriptor Descriptor;
+  typedef StoreWithVectorFlagDescriptor Descriptor;
 
   Node* receiver = Parameter(Descriptor::kReceiver);
   Node* name = Parameter(Descriptor::kName);
@@ -1074,6 +1076,7 @@ void KeyedStoreGenericAssembler::StoreIC_Uninitialized() {
   Node* slot = Parameter(Descriptor::kSlot);
   Node* vector = Parameter(Descriptor::kVector);
   Node* context = Parameter(Descriptor::kContext);
+  Node* flags = Parameter(Descriptor::kFlags);
 
   Label miss(this);
 
@@ -1089,7 +1092,9 @@ void KeyedStoreGenericAssembler::StoreIC_Uninitialized() {
                           LoadRoot(RootIndex::kpremonomorphic_symbol),
                           SKIP_WRITE_BARRIER, 0, SMI_PARAMETERS);
 
-  StoreICParameters p(context, receiver, name, value, slot, vector);
+  StoreICParameters p(context, receiver, name, value, slot, vector, flags);
+  // TODO(mythria): Pass the language mode. Currently it is derived from the
+  // feedback slot's kind.
   EmitGenericPropertyStore(receiver, receiver_map, &p, &miss);
 
   BIND(&miss);
@@ -1099,7 +1104,7 @@ void KeyedStoreGenericAssembler::StoreIC_Uninitialized() {
                             LoadRoot(RootIndex::kuninitialized_symbol),
                             SKIP_WRITE_BARRIER, 0, SMI_PARAMETERS);
     TailCallRuntime(Runtime::kStoreIC_Miss, context, value, slot, vector,
-                    receiver, name);
+                    receiver, name, flags);
   }
 }
 
@@ -1109,7 +1114,8 @@ void KeyedStoreGenericAssembler::SetProperty(TNode<Context> context,
                                              TNode<Name> unique_name,
                                              TNode<Object> value,
                                              LanguageMode language_mode) {
-  StoreICParameters p(context, receiver, unique_name, value, nullptr, nullptr);
+  StoreICParameters p(context, receiver, unique_name, value, nullptr, nullptr,
+                      SmiConstant(language_mode));
 
   Label done(this), slow(this, Label::kDeferred);
   ExitPoint exit_point(this, [&](Node* result) { Goto(&done); });

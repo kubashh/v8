@@ -690,7 +690,6 @@ InlineCacheState FeedbackNexus::StateFromFeedback() const {
       }
       return MONOMORPHIC;
     }
-
     case FeedbackSlotKind::kCloneObject: {
       if (feedback == MaybeObject::FromObject(
                           *FeedbackVector::UninitializedSentinel(isolate))) {
@@ -707,8 +706,10 @@ InlineCacheState FeedbackNexus::StateFromFeedback() const {
       DCHECK(feedback->GetHeapObjectAssumeStrong()->IsWeakFixedArray());
       return POLYMORPHIC;
     }
-
     case FeedbackSlotKind::kInvalid:
+      DCHECK(vector_handle_.is_null() && vector_ == nullptr);
+      return NO_FEEDBACK;
+
     case FeedbackSlotKind::kKindsNumber:
       UNREACHABLE();
       break;

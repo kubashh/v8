@@ -35,7 +35,8 @@ class IC {
 
   // Construct the IC structure with the given number of extra
   // JavaScript frames on the stack.
-  IC(Isolate* isolate, Handle<FeedbackVector> vector, FeedbackSlot slot);
+  IC(Isolate* isolate, Handle<FeedbackVector> vector, FeedbackSlot slot,
+     FeedbackSlotKind kind);
   virtual ~IC() = default;
 
   State state() const { return state_; }
@@ -156,7 +157,7 @@ class IC {
     return state() == RECOMPUTE_HANDLER ? old_state_ : state();
   }
 
-  const FeedbackNexus* nexus() const { return &nexus_; }
+  // const FeedbackNexus* nexus() const { return &nexus_; }
   FeedbackNexus* nexus() { return &nexus_; }
 
  private:
@@ -204,8 +205,9 @@ class IC {
 
 class LoadIC : public IC {
  public:
-  LoadIC(Isolate* isolate, Handle<FeedbackVector> vector, FeedbackSlot slot)
-      : IC(isolate, vector, slot) {
+  LoadIC(Isolate* isolate, Handle<FeedbackVector> vector, FeedbackSlot slot,
+         FeedbackSlotKind kind)
+      : IC(isolate, vector, slot, kind) {
     DCHECK(IsAnyLoad());
   }
 
@@ -239,8 +241,8 @@ class LoadIC : public IC {
 class LoadGlobalIC : public LoadIC {
  public:
   LoadGlobalIC(Isolate* isolate, Handle<FeedbackVector> vector,
-               FeedbackSlot slot)
-      : LoadIC(isolate, vector, slot) {}
+               FeedbackSlot slot, FeedbackSlotKind kind)
+      : LoadIC(isolate, vector, slot, kind) {}
 
   V8_WARN_UNUSED_RESULT MaybeHandle<Object> Load(Handle<Name> name);
 
@@ -253,8 +255,8 @@ class LoadGlobalIC : public LoadIC {
 class KeyedLoadIC : public LoadIC {
  public:
   KeyedLoadIC(Isolate* isolate, Handle<FeedbackVector> vector,
-              FeedbackSlot slot)
-      : LoadIC(isolate, vector, slot) {}
+              FeedbackSlot slot, FeedbackSlotKind kind)
+      : LoadIC(isolate, vector, slot, kind) {}
 
   V8_WARN_UNUSED_RESULT MaybeHandle<Object> Load(Handle<Object> object,
                                                  Handle<Object> key);
@@ -283,12 +285,15 @@ class KeyedLoadIC : public LoadIC {
 
 class StoreIC : public IC {
  public:
-  StoreIC(Isolate* isolate, Handle<FeedbackVector> vector, FeedbackSlot slot)
-      : IC(isolate, vector, slot) {
+  StoreIC(Isolate* isolate, Handle<FeedbackVector> vector, FeedbackSlot slot,
+          FeedbackSlotKind kind)
+      : IC(isolate, vector, slot, kind) {
     DCHECK(IsAnyStore());
   }
 
-  LanguageMode language_mode() const { return nexus()->GetLanguageMode(); }
+  LanguageMode language_mode() const {
+    return GetLanguageModeFromSlotKind(kind());
+  }
 
   V8_WARN_UNUSED_RESULT MaybeHandle<Object> Store(
       Handle<Object> object, Handle<Name> name, Handle<Object> value,
@@ -296,6 +301,10 @@ class StoreIC : public IC {
 
   bool LookupForWrite(LookupIterator* it, Handle<Object> value,
                       StoreOrigin store_origin);
+
+  class LanguageModeBits : public BitField<LanguageMode, 0, 1> {};
+
+  class OwnPropertyBits : public BitField<bool, LanguageModeBits::kNext, 1> {};
 
  protected:
   // Stub accessors.
@@ -318,8 +327,8 @@ class StoreIC : public IC {
 class StoreGlobalIC : public StoreIC {
  public:
   StoreGlobalIC(Isolate* isolate, Handle<FeedbackVector> vector,
-                FeedbackSlot slot)
-      : StoreIC(isolate, vector, slot) {}
+                FeedbackSlot slot, FeedbackSlotKind kind)
+      : StoreIC(isolate, vector, slot, kind) {}
 
   V8_WARN_UNUSED_RESULT MaybeHandle<Object> Store(Handle<Name> name,
                                                   Handle<Object> value);
@@ -343,8 +352,8 @@ class KeyedStoreIC : public StoreIC {
   }
 
   KeyedStoreIC(Isolate* isolate, Handle<FeedbackVector> vector,
-               FeedbackSlot slot)
-      : StoreIC(isolate, vector, slot) {}
+               FeedbackSlot slot, FeedbackSlotKind kind)
+      : StoreIC(isolate, vector, slot, kind) {}
 
   V8_WARN_UNUSED_RESULT MaybeHandle<Object> Store(Handle<Object> object,
                                                   Handle<Object> name,
@@ -376,8 +385,8 @@ class KeyedStoreIC : public StoreIC {
 class StoreInArrayLiteralIC : public KeyedStoreIC {
  public:
   StoreInArrayLiteralIC(Isolate* isolate, Handle<FeedbackVector> vector,
-                        FeedbackSlot slot)
-      : KeyedStoreIC(isolate, vector, slot) {
+                        FeedbackSlot slot, FeedbackSlotKind slot_kind)
+      : KeyedStoreIC(isolate, vector, slot, slot_kind) {
     DCHECK(IsStoreInArrayLiteralICKind(kind()));
   }
 

@@ -2787,6 +2787,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler : public compiler::CodeAssembler {
   // Update the type feedback vector.
   void UpdateFeedback(Node* feedback, Node* feedback_vector, Node* slot_id);
 
+  // Get Language mode for a given vector and slot.
+  void BranchIfStrictMode(Node* vector, Node* slot, Label* if_strict);
+  Node* GetLanguageMode(Node* vector, Node* slot);
+
   // Report that there was a feedback update, performing any tasks that should
   // be done after a feedback update.
   void ReportFeedbackUpdate(SloppyTNode<FeedbackVector> feedback_vector,

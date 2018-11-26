@@ -341,8 +341,12 @@ TF_STUB(KeyedStoreSloppyArgumentsStub, CodeStubAssembler) {
   BIND(&miss);
   {
     Comment("Miss");
-    TailCallRuntime(Runtime::kKeyedStoreIC_Miss, context, value, slot, vector,
-                    receiver, key);
+    // TODO(mythria): We could use KeyedStoreIC_Miss by passing a language_mode
+    // of the <slot> in the <vector> here. This stub is only used when we have
+    // a valid feedback vector. So, it is safe to get this information from the
+    // vector.
+    TailCallRuntime(Runtime::kKeyedStoreICWithVector_Miss, context, value, slot,
+                    vector, receiver, key);
   }
 }
 
@@ -425,8 +429,8 @@ TF_STUB(StoreFastElementStub, CodeStubAssembler) {
   BIND(&miss);
   {
     Comment("Miss");
-    TailCallRuntime(Runtime::kKeyedStoreIC_Miss, context, value, slot, vector,
-                    receiver, key);
+    TailCallRuntime(Runtime::kKeyedStoreICWithVector_Miss, context, value, slot,
+                    vector, receiver, key);
   }
 }
 
