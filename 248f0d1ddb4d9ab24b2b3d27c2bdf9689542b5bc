@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a110029_ea2e0fed",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-11-26T09:46:59Z",
+      "side": 1,
+      "message": "Left-over?",
+      "range": {
+        "startLine": 53,
+        "startChar": 5,
+        "endLine": 55,
+        "endChar": 78
+      },
+      "revId": "248f0d1ddb4d9ab24b2b3d27c2bdf9689542b5bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bbb87cc_1b1a1e8f",
+        "filename": "src/heap/objects-visiting-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-11-26T09:46:59Z",
+      "side": 1,
+      "message": "Left-over?",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 2
+      },
+      "revId": "248f0d1ddb4d9ab24b2b3d27c2bdf9689542b5bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
