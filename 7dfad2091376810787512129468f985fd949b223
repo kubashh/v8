@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be50cbce_934a61bf",
+        "filename": "src/ast/ast-source-ranges.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-26T12:31:40Z",
+      "side": 1,
+      "message": "nit: trailing \u0027_\u0027 for class members",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50770d17_ced79506",
+        "filename": "src/ast/remove-redundant-source-range-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-26T12:31:40Z",
+      "side": 1,
+      "message": "This assumes each block source range actually emits counters, and currently that\u0027s not the case. See https://cs.chromium.org/chromium/src/v8/src/interpreter/control-flow-builders.cc?l\u003d16\u0026rcl\u003d500be6dd6ec690aebae921e8a97d17f8055de017.\n\nMaybe we should just emit block counters unconditionally.. We\u0027d emit many more counters but that may just be okay.",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33470043_03a90a17",
+        "filename": "src/ast/remove-redundant-source-range-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-26T12:31:40Z",
+      "side": 1,
+      "message": "\u003d\u003d 0",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84f2b2c5_4d0aed3d",
+        "filename": "src/ast/remove-redundant-source-range-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-26T12:31:40Z",
+      "side": 1,
+      "message": "-\u003elast()",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64fc0d13_19c86d17",
+        "filename": "src/ast/remove-redundant-source-range-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-26T12:31:40Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right - we still need to collect then/else coverage. It\u0027s only the continuation counter that we want to disable. Did I miss something?\n\nWhat about we add DisableContinuation() to AstNodeSourceRanges? Then we don\u0027t need to special-case here at all, we could just say:\n\n if (last_stmt-\u003ehas_continuation() \u0026\u0026 enclosing_stmt-\u003ehas_continuation()) {\n   last_stmt-\u003eDisableContinuation();\n }",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9d5268f_b8e497db",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-26T12:31:40Z",
+      "side": 1,
+      "message": "Nit: I\u0027d call this \u0027MaybeRemove...\u0027 , and move it up to just below MaybeResetCharacterStream.",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
