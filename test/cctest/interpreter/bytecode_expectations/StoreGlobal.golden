@@ -18,7 +18,7 @@ bytecode array length: 8
 bytecodes: [
   /*   21 E> */ B(StackCheck),
   /*   26 S> */ B(LdaSmi), I8(2),
-  /*   28 E> */ B(StaGlobal), U8(0), U8(0),
+  /*   28 E> */ B(StaGlobalSloppy), U8(0), U8(0),
                 B(LdaUndefined),
   /*   33 S> */ B(Return),
 ]
@@ -39,7 +39,7 @@ bytecode array length: 8
 bytecodes: [
   /*   26 E> */ B(StackCheck),
   /*   32 S> */ B(Ldar), R(arg0),
-  /*   34 E> */ B(StaGlobal), U8(0), U8(0),
+  /*   34 E> */ B(StaGlobalSloppy), U8(0), U8(0),
                 B(LdaUndefined),
   /*   39 S> */ B(Return),
 ]
@@ -61,7 +61,7 @@ bytecode array length: 8
 bytecodes: [
   /*   35 E> */ B(StackCheck),
   /*   40 S> */ B(LdaSmi), I8(2),
-  /*   42 E> */ B(StaGlobal), U8(0), U8(0),
+  /*   42 E> */ B(StaGlobalStrict), U8(0), U8(0),
                 B(LdaUndefined),
   /*   47 S> */ B(Return),
 ]
@@ -83,7 +83,7 @@ bytecode array length: 8
 bytecodes: [
   /*   17 E> */ B(StackCheck),
   /*   22 S> */ B(LdaSmi), I8(2),
-  /*   24 E> */ B(StaGlobal), U8(0), U8(0),
+  /*   24 E> */ B(StaGlobalSloppy), U8(0), U8(0),
                 B(LdaUndefined),
   /*   29 S> */ B(Return),
 ]
@@ -366,7 +366,7 @@ bytecodes: [
   /* 1679 S> */ B(LdaNamedProperty), R(0), U8(126), U8(252),
   /* 1692 S> */ B(LdaNamedProperty), R(0), U8(127), U8(254),
   /* 1703 S> */ B(LdaSmi), I8(2),
-  /* 1705 E> */ B(Wide), B(StaGlobal), U16(128), U16(256),
+  /* 1705 E> */ B(Wide), B(StaGlobalSloppy), U16(128), U16(256),
                 B(LdaUndefined),
   /* 1710 S> */ B(Return),
 ]
@@ -778,7 +778,7 @@ bytecodes: [
   /* 1695 S> */ B(LdaNamedProperty), R(0), U8(126), U8(252),
   /* 1708 S> */ B(LdaNamedProperty), R(0), U8(127), U8(254),
   /* 1719 S> */ B(LdaSmi), I8(2),
-  /* 1721 E> */ B(Wide), B(StaGlobal), U16(128), U16(256),
+  /* 1721 E> */ B(Wide), B(StaGlobalStrict), U16(128), U16(256),
                 B(LdaUndefined),
   /* 1726 S> */ B(Return),
 ]

@@ -213,10 +213,26 @@ void StoreGlobalDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(len, registers);
 }
 
+void StoreGlobalWithFlagDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {NameRegister(), ValueRegister(), SlotRegister(),
+                          FlagsRegister()};
+  int len = arraysize(registers) - kStackArgumentsCount;
+  data->InitializePlatformSpecific(len, registers);
+}
+
 void StoreGlobalWithVectorDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   Register registers[] = {NameRegister(), ValueRegister(), SlotRegister(),
                           VectorRegister()};
+  int len = arraysize(registers) - kStackArgumentsCount;
+  data->InitializePlatformSpecific(len, registers);
+}
+
+void StoreGlobalWithVectorFlagDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {NameRegister(), ValueRegister(), SlotRegister(),
+                          VectorRegister(), FlagsRegister()};
   int len = arraysize(registers) - kStackArgumentsCount;
   data->InitializePlatformSpecific(len, registers);
 }
@@ -278,10 +294,33 @@ void LoadWithVectorDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(len, registers);
 }
 
+void StoreWithFlagDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {ReceiverRegister(), NameRegister(), ValueRegister(),
+                          SlotRegister(), FlagsRegister()};
+  // TODO(jgruber): This DCHECK could be enabled if RegisterBase::ListOf were
+  // to allow no_reg entries.
+  // DCHECK(!AreAliased(ReceiverRegister(), NameRegister(), kRootRegister));
+  int len = arraysize(registers) - kStackArgumentsCount;
+  data->InitializePlatformSpecific(len, registers);
+}
+
 void StoreWithVectorDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   Register registers[] = {ReceiverRegister(), NameRegister(), ValueRegister(),
                           SlotRegister(), VectorRegister()};
+  // TODO(jgruber): This DCHECK could be enabled if RegisterBase::ListOf were
+  // to allow no_reg entries.
+  // DCHECK(!AreAliased(ReceiverRegister(), NameRegister(), kRootRegister));
+  int len = arraysize(registers) - kStackArgumentsCount;
+  data->InitializePlatformSpecific(len, registers);
+}
+
+void StoreWithVectorFlagDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {ReceiverRegister(), NameRegister(),
+                          ValueRegister(),    SlotRegister(),
+                          VectorRegister(),   FlagsRegister()};
   // TODO(jgruber): This DCHECK could be enabled if RegisterBase::ListOf were
   // to allow no_reg entries.
   // DCHECK(!AreAliased(ReceiverRegister(), NameRegister(), kRootRegister));

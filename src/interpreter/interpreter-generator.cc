@@ -15,6 +15,7 @@
 #include "src/debug/debug.h"
 #include "src/ic/accessor-assembler.h"
 #include "src/ic/binary-op-assembler.h"
+#include "src/ic/ic.h"
 #include "src/interpreter/bytecode-flags.h"
 #include "src/interpreter/bytecodes.h"
 #include "src/interpreter/interpreter-assembler.h"
@@ -200,11 +201,11 @@ IGNITION_HANDLER(LdaGlobalInsideTypeof, InterpreterLoadGlobalAssembler) {
   LdaGlobal(kSlotOperandIndex, kNameOperandIndex, INSIDE_TYPEOF);
 }
 
-// StaGlobal <name_index> <slot>
+// StaGlobalStrict <name_index> <slot>
 //
 // Store the value in the accumulator into the global with name in constant pool
-// entry <name_index> using FeedBackVector slot <slot>.
-IGNITION_HANDLER(StaGlobal, InterpreterAssembler) {
+// entry <name_index> in strict mode. Uses FeedBackVector slot <slot> if valid.
+IGNITION_HANDLER(StaGlobalStrict, InterpreterAssembler) {
   Node* context = GetContext();
 
   // Store the global via the StoreGlobalIC.
@@ -214,7 +215,25 @@ IGNITION_HANDLER(StaGlobal, InterpreterAssembler) {
   Node* smi_slot = SmiTag(raw_slot);
   Node* feedback_vector = LoadFeedbackVector();
   CallBuiltin(Builtins::kStoreGlobalIC, context, name, value, smi_slot,
-              feedback_vector);
+              feedback_vector, SmiConstant(LanguageMode::kStrict));
+  Dispatch();
+}
+
+// StaGlobal <name_index> <slot>
+//
+// Store the value in the accumulator into the global with name in constant pool
+// entry <name_index> in sloppy mode. Uses FeedBackVector slot <slot> if valid.
+IGNITION_HANDLER(StaGlobalSloppy, InterpreterAssembler) {
+  Node* context = GetContext();
+
+  // Store the global via the StoreGlobalIC.
+  Node* name = LoadConstantPoolEntryAtOperandIndex(0);
+  Node* value = GetAccumulator();
+  Node* raw_slot = BytecodeOperandIdx(1);
+  Node* smi_slot = SmiTag(raw_slot);
+  Node* feedback_vector = LoadFeedbackVector();
+  CallBuiltin(Builtins::kStoreGlobalIC, context, name, value, smi_slot,
+              feedback_vector, SmiConstant(LanguageMode::kSloppy));
   Dispatch();
 }
 
@@ -554,7 +573,8 @@ class InterpreterStoreNamedPropertyAssembler : public InterpreterAssembler {
                                          OperandScale operand_scale)
       : InterpreterAssembler(state, bytecode, operand_scale) {}
 
-  void StaNamedProperty(Callable ic) {
+  void StaNamedProperty(Callable ic, LanguageMode language_mode,
+                        bool own_property) {
     Node* code_target = HeapConstant(ic.code());
     Node* object = LoadRegisterAtOperandIndex(0);
     Node* name = LoadConstantPoolEntryAtOperandIndex(1);
@@ -563,8 +583,12 @@ class InterpreterStoreNamedPropertyAssembler : public InterpreterAssembler {
     Node* smi_slot = SmiTag(raw_slot);
     Node* feedback_vector = LoadFeedbackVector();
     Node* context = GetContext();
-    Node* result = CallStub(ic.descriptor(), code_target, context, object, name,
-                            value, smi_slot, feedback_vector);
+    // TODO(mythria): Use a BitFieldClass to encode these bits
+    int flags = StoreIC::LanguageModeBits::encode(language_mode) |
+                StoreIC::OwnPropertyBits::encode(own_property);
+    Node* result =
+        CallStub(ic.descriptor(), code_target, context, object, name, value,
+                 smi_slot, feedback_vector, SmiConstant(flags));
     // To avoid special logic in the deoptimizer to re-materialize the value in
     // the accumulator, we overwrite the accumulator after the IC call. It
     // doesn't really matter what we write to the accumulator here, since we
@@ -575,14 +599,28 @@ class InterpreterStoreNamedPropertyAssembler : public InterpreterAssembler {
   }
 };
 
-// StaNamedProperty <object> <name_index> <slot>
+// StaNamedPropertyStrict <object> <name_index> <slot>
 //
-// Calls the StoreIC at FeedBackVector slot <slot> for <object> and
-// the name in constant pool entry <name_index> with the value in the
-// accumulator.
-IGNITION_HANDLER(StaNamedProperty, InterpreterStoreNamedPropertyAssembler) {
+// Stores the value in the accumulator in the <object> with the name
+// in the constant pool entry at index <name_index> in strict mode. Uses the
+// FeedBackVector slot <slot> if available to collect feedback and take a fast
+// path when possible.
+IGNITION_HANDLER(StaNamedPropertyStrict,
+                 InterpreterStoreNamedPropertyAssembler) {
   Callable ic = Builtins::CallableFor(isolate(), Builtins::kStoreIC);
-  StaNamedProperty(ic);
+  StaNamedProperty(ic, LanguageMode::kStrict, false);
+}
+
+// StaNamedPropertySloppy <object> <name_index> <slot>
+//
+// Stores the value in the accumulator in the <object> with the name
+// in the constant pool entry at index <name_index> in sloppy mode. Uses the
+// FeedBackVector slot <slot> if available to collect feedback and take a fast
+// path when possible.
+IGNITION_HANDLER(StaNamedPropertySloppy,
+                 InterpreterStoreNamedPropertyAssembler) {
+  Callable ic = Builtins::CallableFor(isolate(), Builtins::kStoreIC);
+  StaNamedProperty(ic, LanguageMode::kSloppy, false);
 }
 
 // StaNamedOwnProperty <object> <name_index> <slot>
@@ -592,8 +630,36 @@ IGNITION_HANDLER(StaNamedProperty, InterpreterStoreNamedPropertyAssembler) {
 // accumulator.
 IGNITION_HANDLER(StaNamedOwnProperty, InterpreterStoreNamedPropertyAssembler) {
   Callable ic = CodeFactory::StoreOwnICInOptimizedCode(isolate());
-  StaNamedProperty(ic);
+  StaNamedProperty(ic, LanguageMode::kStrict, true);
 }
+
+class InterpreterStoreKeyedPropertyAssembler : public InterpreterAssembler {
+ public:
+  InterpreterStoreKeyedPropertyAssembler(CodeAssemblerState* state,
+                                         Bytecode bytecode,
+                                         OperandScale operand_scale)
+      : InterpreterAssembler(state, bytecode, operand_scale) {}
+
+  void StaKeyedProperty(LanguageMode language_mode) {
+    Node* object = LoadRegisterAtOperandIndex(0);
+    Node* name = LoadRegisterAtOperandIndex(1);
+    Node* value = GetAccumulator();
+    Node* raw_slot = BytecodeOperandIdx(2);
+    Node* smi_slot = SmiTag(raw_slot);
+    Node* feedback_vector = LoadFeedbackVector();
+    Node* context = GetContext();
+    Node* result =
+        CallBuiltin(Builtins::kKeyedStoreIC, context, object, name, value,
+                    smi_slot, feedback_vector, SmiConstant(language_mode));
+    // To avoid special logic in the deoptimizer to re-materialize the value in
+    // the accumulator, we overwrite the accumulator after the IC call. It
+    // doesn't really matter what we write to the accumulator here, since we
+    // restore to the correct value on the outside. Storing the result means we
+    // don't need to keep unnecessary state alive across the callstub.
+    SetAccumulator(result);
+    Dispatch();
+  }
+};
 
 // StaNamedPropertyNoFeedback <object> <name_index>
 //
@@ -613,27 +679,22 @@ IGNITION_HANDLER(StaNamedPropertyNoFeedback,
   Dispatch();
 }
 
-// StaKeyedProperty <object> <key> <slot>
+// StaKeyedPropertyStrict <object> <key> <slot>
 //
 // Calls the KeyedStoreIC at FeedbackVector slot <slot> for <object> and
 // the key <key> with the value in the accumulator.
-IGNITION_HANDLER(StaKeyedProperty, InterpreterAssembler) {
-  Node* object = LoadRegisterAtOperandIndex(0);
-  Node* name = LoadRegisterAtOperandIndex(1);
-  Node* value = GetAccumulator();
-  Node* raw_slot = BytecodeOperandIdx(2);
-  Node* smi_slot = SmiTag(raw_slot);
-  Node* feedback_vector = LoadFeedbackVector();
-  Node* context = GetContext();
-  Node* result = CallBuiltin(Builtins::kKeyedStoreIC, context, object, name,
-                             value, smi_slot, feedback_vector);
-  // To avoid special logic in the deoptimizer to re-materialize the value in
-  // the accumulator, we overwrite the accumulator after the IC call. It
-  // doesn't really matter what we write to the accumulator here, since we
-  // restore to the correct value on the outside. Storing the result means we
-  // don't need to keep unnecessary state alive across the callstub.
-  SetAccumulator(result);
-  Dispatch();
+IGNITION_HANDLER(StaKeyedPropertyStrict,
+                 InterpreterStoreKeyedPropertyAssembler) {
+  StaKeyedProperty(LanguageMode::kStrict);
+}
+
+// StaKeyedPropertySloppy <object> <key> <slot>
+//
+// Calls the KeyedStoreIC at FeedbackVector slot <slot> for <object> and
+// the key <key> with the value in the accumulator.
+IGNITION_HANDLER(StaKeyedPropertySloppy,
+                 InterpreterStoreKeyedPropertyAssembler) {
+  StaKeyedProperty(LanguageMode::kSloppy);
 }
 
 // StaInArrayLiteral <array> <index> <slot>

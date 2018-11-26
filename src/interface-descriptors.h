@@ -27,10 +27,14 @@ namespace internal {
   V(LoadGlobal)                       \
   V(LoadGlobalWithVector)             \
   V(Store)                            \
+  V(StoreWithFlag)                    \
   V(StoreWithVector)                  \
+  V(StoreWithVectorFlag)              \
   V(StoreTransition)                  \
   V(StoreGlobal)                      \
+  V(StoreGlobalWithFlag)              \
   V(StoreGlobalWithVector)            \
+  V(StoreGlobalWithVectorFlag)        \
   V(FastNewFunctionContext)           \
   V(FastNewObject)                    \
   V(RecordWrite)                      \
@@ -530,6 +534,22 @@ class StoreDescriptor : public CallInterfaceDescriptor {
   static const int kStackArgumentsCount = kPassLastArgsOnStack ? 2 : 0;
 };
 
+class StoreWithFlagDescriptor : public StoreDescriptor {
+ public:
+  DEFINE_PARAMETERS(kReceiver, kName, kValue, kSlot, kFlags)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
+                         MachineType::AnyTagged(),     // kName
+                         MachineType::AnyTagged(),     // kValue
+                         MachineType::TaggedSigned(),  // kSlot
+                         MachineType::TaggedSigned())  // kFlags
+  DECLARE_DESCRIPTOR(StoreWithFlagDescriptor, StoreDescriptor)
+
+  static const Register FlagsRegister();
+
+  // Pass value, slot and flags through the stack.
+  static const int kStackArgumentsCount = kPassLastArgsOnStack ? 3 : 0;
+};
+
 class StoreTransitionDescriptor : public StoreDescriptor {
  public:
   DEFINE_PARAMETERS(kReceiver, kName, kMap, kValue, kSlot, kVector)
@@ -565,6 +585,23 @@ class StoreWithVectorDescriptor : public StoreDescriptor {
   static const int kStackArgumentsCount = kPassLastArgsOnStack ? 3 : 0;
 };
 
+class StoreWithVectorFlagDescriptor : public StoreWithVectorDescriptor {
+ public:
+  DEFINE_PARAMETERS(kReceiver, kName, kValue, kSlot, kVector, kFlags)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kReceiver
+                         MachineType::AnyTagged(),     // kName
+                         MachineType::AnyTagged(),     // kValue
+                         MachineType::TaggedSigned(),  // kSlot
+                         MachineType::AnyTagged(),     // kVector
+                         MachineType::TaggedSigned())  // kFlags
+  DECLARE_DESCRIPTOR(StoreWithVectorFlagDescriptor, StoreWithVectorDescriptor)
+
+  static const Register FlagsRegister();
+
+  // Pass value, slot, vector and flag through the stack.
+  static const int kStackArgumentsCount = kPassLastArgsOnStack ? 4 : 0;
+};
+
 class StoreGlobalDescriptor : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kName, kValue, kSlot)
@@ -591,6 +628,23 @@ class StoreGlobalDescriptor : public CallInterfaceDescriptor {
   }
 };
 
+class StoreGlobalWithFlagDescriptor : public StoreGlobalDescriptor {
+ public:
+  DEFINE_PARAMETERS(kName, kValue, kSlot, kFlags)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kName
+                         MachineType::AnyTagged(),     // kValue
+                         MachineType::TaggedSigned(),  // kSlot
+                         MachineType::TaggedSigned())  // kFlags
+  DECLARE_DESCRIPTOR(StoreGlobalWithFlagDescriptor, StoreGlobalDescriptor)
+
+  // Pass value, slot and flags through the stack.
+  static const int kStackArgumentsCount = kPassLastArgsOnStack ? 3 : 0;
+
+  static const Register FlagsRegister() {
+    return StoreWithFlagDescriptor::FlagsRegister();
+  }
+};
+
 class StoreGlobalWithVectorDescriptor : public StoreGlobalDescriptor {
  public:
   DEFINE_PARAMETERS(kName, kValue, kSlot, kVector)
@@ -606,6 +660,26 @@ class StoreGlobalWithVectorDescriptor : public StoreGlobalDescriptor {
 
   // Pass value, slot and vector through the stack.
   static const int kStackArgumentsCount = kPassLastArgsOnStack ? 3 : 0;
+};
+
+class StoreGlobalWithVectorFlagDescriptor
+    : public StoreGlobalWithVectorDescriptor {
+ public:
+  DEFINE_PARAMETERS(kName, kValue, kSlot, kVector, kFlags)
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),     // kName
+                         MachineType::AnyTagged(),     // kValue
+                         MachineType::TaggedSigned(),  // kSlot
+                         MachineType::AnyTagged(),     // kVector
+                         MachineType::TaggedSigned())  // kFlags
+  DECLARE_DESCRIPTOR(StoreGlobalWithVectorFlagDescriptor,
+                     StoreGlobalWithVectorDescriptor)
+
+  static const Register FlagsRegister() {
+    return StoreWithVectorFlagDescriptor::FlagsRegister();
+  }
+
+  // Pass value, slot and vector through the stack.
+  static const int kStackArgumentsCount = kPassLastArgsOnStack ? 4 : 0;
 };
 
 class LoadWithVectorDescriptor : public LoadDescriptor {

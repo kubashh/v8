@@ -59,7 +59,10 @@ namespace interpreter {
   V(LdaGlobal, AccumulatorUse::kWrite, OperandType::kIdx, OperandType::kIdx)   \
   V(LdaGlobalInsideTypeof, AccumulatorUse::kWrite, OperandType::kIdx,          \
     OperandType::kIdx)                                                         \
-  V(StaGlobal, AccumulatorUse::kRead, OperandType::kIdx, OperandType::kIdx)    \
+  V(StaGlobalStrict, AccumulatorUse::kRead, OperandType::kIdx,                 \
+    OperandType::kIdx)                                                         \
+  V(StaGlobalSloppy, AccumulatorUse::kRead, OperandType::kIdx,                 \
+    OperandType::kIdx)                                                         \
                                                                                \
   /* Context operations */                                                     \
   V(PushContext, AccumulatorUse::kRead, OperandType::kRegOut)                  \
@@ -110,13 +113,17 @@ namespace interpreter {
     OperandType::kUImm)                                                        \
                                                                                \
   /* Propery stores (StoreIC) operations */                                    \
-  V(StaNamedProperty, AccumulatorUse::kReadWrite, OperandType::kReg,           \
+  V(StaNamedPropertyStrict, AccumulatorUse::kReadWrite, OperandType::kReg,     \
+    OperandType::kIdx, OperandType::kIdx)                                      \
+  V(StaNamedPropertySloppy, AccumulatorUse::kReadWrite, OperandType::kReg,     \
     OperandType::kIdx, OperandType::kIdx)                                      \
   V(StaNamedPropertyNoFeedback, AccumulatorUse::kReadWrite, OperandType::kReg, \
     OperandType::kIdx, OperandType::kFlag8)                                    \
   V(StaNamedOwnProperty, AccumulatorUse::kReadWrite, OperandType::kReg,        \
     OperandType::kIdx, OperandType::kIdx)                                      \
-  V(StaKeyedProperty, AccumulatorUse::kReadWrite, OperandType::kReg,           \
+  V(StaKeyedPropertyStrict, AccumulatorUse::kReadWrite, OperandType::kReg,     \
+    OperandType::kReg, OperandType::kIdx)                                      \
+  V(StaKeyedPropertySloppy, AccumulatorUse::kReadWrite, OperandType::kReg,     \
     OperandType::kReg, OperandType::kIdx)                                      \
   V(StaInArrayLiteral, AccumulatorUse::kReadWrite, OperandType::kReg,          \
     OperandType::kReg, OperandType::kIdx)                                      \

@@ -111,13 +111,15 @@ Callable CodeFactory::LoadGlobalICInOptimizedCode(Isolate* isolate,
 Callable CodeFactory::StoreOwnIC(Isolate* isolate) {
   // TODO(ishell): Currently we use StoreOwnIC only for storing properties that
   // already exist in the boilerplate therefore we can use StoreIC.
-  return Callable(BUILTIN_CODE(isolate, StoreICTrampoline), StoreDescriptor{});
+  return Callable(BUILTIN_CODE(isolate, StoreICTrampoline),
+                  StoreWithFlagDescriptor{});
 }
 
 Callable CodeFactory::StoreOwnICInOptimizedCode(Isolate* isolate) {
   // TODO(ishell): Currently we use StoreOwnIC only for storing properties that
   // already exist in the boilerplate therefore we can use StoreIC.
-  return Callable(BUILTIN_CODE(isolate, StoreIC), StoreWithVectorDescriptor{});
+  return Callable(BUILTIN_CODE(isolate, StoreIC),
+                  StoreWithVectorFlagDescriptor{});
 }
 
 Callable CodeFactory::KeyedStoreIC_SloppyArguments(Isolate* isolate,

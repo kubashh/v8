@@ -342,8 +342,11 @@ void HandlerBuiltinsAssembler::Generate_StoreFastElementIC(
   Return(value);
 
   BIND(&miss);
-  TailCallRuntime(Runtime::kKeyedStoreIC_Miss, context, value, slot, vector,
-                  receiver, key);
+  // TODO(mythria): Check if this can be also called with kStoreInArrayLiteral
+  // feedback kind. If it is not needed, we could replace this with
+  // KeyedStoreIC_Miss and pass the language mode of the feedback slot.
+  TailCallRuntime(Runtime::kKeyedStoreICWithVector_Miss, context, value, slot,
+                  vector, receiver, key);
 }
 
 TF_BUILTIN(StoreFastElementIC_Standard, HandlerBuiltinsAssembler) {
@@ -443,8 +446,12 @@ void HandlerBuiltinsAssembler::Generate_KeyedStoreIC_SloppyArguments() {
   Return(value);
 
   BIND(&miss);
-  TailCallRuntime(Runtime::kKeyedStoreIC_Miss, context, value, slot, vector,
-                  receiver, key);
+  // TODO(mythria): We could use KeyedStoreIC_Miss by passing a language_mode
+  // of the <slot> in the <vector> here. This stub is only used when we have
+  // a valid feedback vector. So, it is safe to get this information from the
+  // vector.
+  TailCallRuntime(Runtime::kKeyedStoreICWithVector_Miss, context, value, slot,
+                  vector, receiver, key);
 }
 
 TF_BUILTIN(KeyedStoreIC_SloppyArguments_Standard, HandlerBuiltinsAssembler) {

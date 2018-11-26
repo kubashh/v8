@@ -2841,7 +2841,8 @@ void BytecodeGenerator::BuildVariableAssignment(
     }
     case VariableLocation::UNALLOCATED: {
       FeedbackSlot slot = GetCachedStoreGlobalICSlot(language_mode(), variable);
-      builder()->StoreGlobal(variable->raw_name(), feedback_index(slot));
+      builder()->StoreGlobal(variable->raw_name(), feedback_index(slot),
+                             language_mode());
       break;
     }
     case VariableLocation::CONTEXT: {

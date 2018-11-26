@@ -850,10 +850,12 @@ DebugInfo::SideEffectState BuiltinGetSideEffectState(Builtins::Name id) {
 bool BytecodeRequiresRuntimeCheck(interpreter::Bytecode bytecode) {
   typedef interpreter::Bytecode Bytecode;
   switch (bytecode) {
-    case Bytecode::kStaNamedProperty:
+    case Bytecode::kStaNamedPropertyStrict:
+    case Bytecode::kStaNamedPropertySloppy:
     case Bytecode::kStaNamedPropertyNoFeedback:
     case Bytecode::kStaNamedOwnProperty:
-    case Bytecode::kStaKeyedProperty:
+    case Bytecode::kStaKeyedPropertyStrict:
+    case Bytecode::kStaKeyedPropertySloppy:
     case Bytecode::kStaInArrayLiteral:
     case Bytecode::kStaDataPropertyInLiteral:
     case Bytecode::kStaCurrentContextSlot:

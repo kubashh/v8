@@ -15,6 +15,7 @@
 #include "src/compiler/node-properties.h"
 #include "src/compiler/operator-properties.h"
 #include "src/feedback-vector.h"
+#include "src/ic/ic.h"
 #include "src/objects/scope-info.h"
 
 namespace v8 {
@@ -224,12 +225,18 @@ void JSGenericLowering::LowerJSStoreProperty(Node* node) {
   if (outer_state->opcode() != IrOpcode::kFrameState) {
     Callable callable =
         Builtins::CallableFor(isolate(), Builtins::kKeyedStoreICTrampoline);
+    node->InsertInput(zone(), 4,
+                      jsgraph()->SmiConstant(StoreIC::LanguageModeBits::encode(
+                          p.language_mode())));
     ReplaceWithStubCall(node, callable, flags);
   } else {
     Callable callable =
         Builtins::CallableFor(isolate(), Builtins::kKeyedStoreIC);
     Node* vector = jsgraph()->HeapConstant(p.feedback().vector());
     node->InsertInput(zone(), 4, vector);
+    node->InsertInput(zone(), 5,
+                      jsgraph()->SmiConstant(StoreIC::LanguageModeBits::encode(
+                          p.language_mode())));
     ReplaceWithStubCall(node, callable, flags);
   }
 }
@@ -247,7 +254,11 @@ void JSGenericLowering::LowerJSStoreNamed(Node* node) {
     return;
   }
   node->InsertInput(zone(), 3, jsgraph()->SmiConstant(p.feedback().index()));
+  uint32_t storeic_flags =
+      StoreIC::LanguageModeBits::encode(p.language_mode()) |
+      StoreIC::OwnPropertyBits::encode(false);
   if (outer_state->opcode() != IrOpcode::kFrameState) {
+    node->InsertInput(zone(), 4, jsgraph()->SmiConstant(storeic_flags));
     Callable callable =
         Builtins::CallableFor(isolate(), Builtins::kStoreICTrampoline);
     ReplaceWithStubCall(node, callable, flags);
@@ -255,6 +266,7 @@ void JSGenericLowering::LowerJSStoreNamed(Node* node) {
     Callable callable = Builtins::CallableFor(isolate(), Builtins::kStoreIC);
     Node* vector = jsgraph()->HeapConstant(p.feedback().vector());
     node->InsertInput(zone(), 4, vector);
+    node->InsertInput(zone(), 5, jsgraph()->SmiConstant(storeic_flags));
     ReplaceWithStubCall(node, callable, flags);
   }
 }
@@ -266,13 +278,18 @@ void JSGenericLowering::LowerJSStoreNamedOwn(Node* node) {
   Node* outer_state = frame_state->InputAt(kFrameStateOuterStateInput);
   node->InsertInput(zone(), 1, jsgraph()->HeapConstant(p.name()));
   node->InsertInput(zone(), 3, jsgraph()->SmiConstant(p.feedback().index()));
+  uint32_t storeic_flags =
+      StoreIC::LanguageModeBits::encode(LanguageMode::kStrict) |
+      StoreIC::OwnPropertyBits::encode(true);
   if (outer_state->opcode() != IrOpcode::kFrameState) {
     Callable callable = CodeFactory::StoreOwnIC(isolate());
+    node->InsertInput(zone(), 4, jsgraph()->SmiConstant(storeic_flags));
     ReplaceWithStubCall(node, callable, flags);
   } else {
     Callable callable = CodeFactory::StoreOwnICInOptimizedCode(isolate());
     Node* vector = jsgraph()->HeapConstant(p.feedback().vector());
     node->InsertInput(zone(), 4, vector);
+    node->InsertInput(zone(), 5, jsgraph()->SmiConstant(storeic_flags));
     ReplaceWithStubCall(node, callable, flags);
   }
 }
@@ -287,12 +304,18 @@ void JSGenericLowering::LowerJSStoreGlobal(Node* node) {
   if (outer_state->opcode() != IrOpcode::kFrameState) {
     Callable callable =
         Builtins::CallableFor(isolate(), Builtins::kStoreGlobalICTrampoline);
+    node->InsertInput(zone(), 3,
+                      jsgraph()->SmiConstant(StoreIC::LanguageModeBits::encode(
+                          p.language_mode())));
     ReplaceWithStubCall(node, callable, flags);
   } else {
     Callable callable =
         Builtins::CallableFor(isolate(), Builtins::kStoreGlobalIC);
     Node* vector = jsgraph()->HeapConstant(p.feedback().vector());
     node->InsertInput(zone(), 3, vector);
+    node->InsertInput(zone(), 4,
+                      jsgraph()->SmiConstant(StoreIC::LanguageModeBits::encode(
+                          p.language_mode())));
     ReplaceWithStubCall(node, callable, flags);
   }
 }

@@ -9977,6 +9977,54 @@ void CodeStubAssembler::UpdateFeedback(Node* feedback, Node* maybe_vector,
   BIND(&end);
 }
 
+void CodeStubAssembler::BranchIfStrictMode(Node* vector, Node* slot,
+                                           Label* if_strict) {
+  Node* sfi =
+      LoadObjectField(vector, FeedbackVector::kSharedFunctionInfoOffset);
+  TNode<FeedbackMetadata> metadata = CAST(LoadObjectField(
+      sfi, SharedFunctionInfo::kOuterScopeInfoOrFeedbackMetadataOffset));
+  Node* slot_int = SmiToInt32(slot);
+
+  // See VectorICComputer::index().
+  const int kItemsPerWord = FeedbackMetadata::VectorICComputer::kItemsPerWord;
+  Node* word_index = Int32Div(slot_int, Int32Constant(kItemsPerWord));
+  Node* word_offset = Int32Mod(slot_int, Int32Constant(kItemsPerWord));
+
+  int32_t first_item = FeedbackMetadata::kHeaderSize - kHeapObjectTag;
+  Node* offset =
+      ElementOffsetFromIndex(ChangeInt32ToIntPtr(word_index), UINT32_ELEMENTS,
+                             INTPTR_PARAMETERS, first_item);
+
+  Node* data = Load(MachineType::Int32(), metadata, offset);
+
+  // See VectorICComputer::decode().
+  const int kBitsPerItem = FeedbackMetadata::kFeedbackSlotKindBits;
+  Node* shift = Int32Mul(word_offset, Int32Constant(kBitsPerItem));
+  const int kMask = FeedbackMetadata::VectorICComputer::kMask;
+  Node* kind = Word32And(Word32Shr(data, shift), Int32Constant(kMask));
+
+  STATIC_ASSERT(FeedbackSlotKind::kStoreGlobalSloppy <=
+                FeedbackSlotKind::kLastSloppyKind);
+  STATIC_ASSERT(FeedbackSlotKind::kStoreKeyedSloppy <=
+                FeedbackSlotKind::kLastSloppyKind);
+  STATIC_ASSERT(FeedbackSlotKind::kStoreNamedSloppy <=
+                FeedbackSlotKind::kLastSloppyKind);
+  GotoIfNot(Int32LessThanOrEqual(kind, Int32Constant(static_cast<int>(
+                                           FeedbackSlotKind::kLastSloppyKind))),
+            if_strict);
+}
+
+Node* CodeStubAssembler::GetLanguageMode(Node* vector, Node* slot) {
+  VARIABLE(var_language_mode, MachineRepresentation::kTaggedSigned,
+           SmiConstant(LanguageMode::kStrict));
+  Label language_mode_determined(this);
+  BranchIfStrictMode(vector, slot, &language_mode_determined);
+  var_language_mode.Bind(SmiConstant(LanguageMode::kSloppy));
+  Goto(&language_mode_determined);
+  BIND(&language_mode_determined);
+  return var_language_mode.value();
+}
+
 void CodeStubAssembler::ReportFeedbackUpdate(
     SloppyTNode<FeedbackVector> feedback_vector, SloppyTNode<IntPtrT> slot_id,
     const char* reason) {
