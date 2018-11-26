@@ -1097,7 +1097,7 @@ void KeyedStoreGenericAssembler::StoreIC_Uninitialized() {
     StoreFeedbackVectorSlot(vector, slot,
                             LoadRoot(RootIndex::kuninitialized_symbol),
                             SKIP_WRITE_BARRIER, 0, SMI_PARAMETERS);
-    TailCallRuntime(Runtime::kStoreIC_Miss, context, value, slot, vector,
+    TailCallRuntime(Runtime::kNamedStoreIC_Miss, context, value, slot, vector,
                     receiver, name);
   }
 }

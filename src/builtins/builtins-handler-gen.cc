@@ -383,7 +383,8 @@ TF_BUILTIN(LoadIC_FunctionPrototype, CodeStubAssembler) {
   Return(LoadJSFunctionPrototype(receiver, &miss));
 
   BIND(&miss);
-  TailCallRuntime(Runtime::kLoadIC_Miss, context, receiver, name, slot, vector);
+  TailCallRuntime(Runtime::kNamedLoadIC_Miss, context, receiver, name, slot,
+                  vector);
 }
 
 TF_BUILTIN(LoadIC_Slow, CodeStubAssembler) {
