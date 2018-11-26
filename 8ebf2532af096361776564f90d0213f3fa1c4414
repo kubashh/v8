@@ -22,6 +22,30 @@
       "revId": "8ebf2532af096361776564f90d0213f3fa1c4414",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "674892ad_ceb88c55",
+        "filename": "src/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5500,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-26T22:57:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adcc930e_bf67dc7e",
+      "range": {
+        "startLine": 5500,
+        "startChar": 12,
+        "endLine": 5500,
+        "endChar": 38
+      },
+      "revId": "8ebf2532af096361776564f90d0213f3fa1c4414",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
