@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2681955_5db05207",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-11-26T15:03:46Z",
+      "side": 1,
+      "message": "DCHECK_EQ(context-\u003eSizeFromMap(map), size)",
+      "range": {
+        "startLine": 1393,
+        "startChar": 2,
+        "endLine": 1393,
+        "endChar": 44
+      },
+      "revId": "78a0be6fcbeb844498096218e6ff42c31054a945",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
