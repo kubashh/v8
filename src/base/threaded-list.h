@@ -44,21 +44,6 @@ class ThreadedListBase final : public BaseClass {
     head_ = v;
   }
 
-  // Reinitializing the head to a new node, this costs O(n).
-  void ReinitializeHead(T* v) {
-    head_ = v;
-    T* current = v;
-    if (current != nullptr) {  // Find tail
-      T* tmp;
-      while ((tmp = *TLTraits::next(current))) {
-        current = tmp;
-      }
-      tail_ = TLTraits::next(current);
-    } else {
-      tail_ = &head_;
-    }
-  }
-
   void DropHead() {
     DCHECK_NOT_NULL(head_);
 
@@ -152,7 +137,7 @@ class ThreadedListBase final : public BaseClass {
     bool operator!=(const Iterator& other) const {
       return entry_ != other.entry_;
     }
-    T* operator*() { return *entry_; }
+    T*& operator*() { return *entry_; }
     T* operator->() { return *entry_; }
     Iterator& operator=(T* entry) {
       T* next = *TLTraits::next(*entry_);
