@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ac89801_31f3b08f",
+        "filename": "test/mjsunit/regress/regress-908231.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2018-11-26T08:32:45Z",
+      "side": 1,
+      "message": "could you minimise this test case? It\u0027d be pretty intimidating to debug if this ever fails again.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 5
+      },
+      "revId": "3ab19d171fd8f62aea255273d57f8dd829930391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
