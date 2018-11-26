@@ -45,6 +45,74 @@
       "revId": "248f0d1ddb4d9ab24b2b3d27c2bdf9689542b5bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6218e646_d73f699e",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-26T11:01:55Z",
+      "side": 1,
+      "message": "Nice :) We should probably have a presubmit warning for this pattern ;-)",
+      "revId": "248f0d1ddb4d9ab24b2b3d27c2bdf9689542b5bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "403b38bb_3998c6c1",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-26T11:01:55Z",
+      "side": 1,
+      "message": "You probably don\u0027t need this anymore now that you don\u0027t -1 above anymore?",
+      "revId": "248f0d1ddb4d9ab24b2b3d27c2bdf9689542b5bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ac01f5c_d34762db",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-26T11:01:55Z",
+      "side": 1,
+      "message": "Note for future CL: we should probably just generate functions like IsContext(InstanceType) that internally check the range and using that instead?",
+      "revId": "248f0d1ddb4d9ab24b2b3d27c2bdf9689542b5bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d312e660_bf70dddd",
+        "filename": "src/objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-26T11:01:55Z",
+      "side": 1,
+      "message": "Can you make this InstanceType as well?",
+      "revId": "248f0d1ddb4d9ab24b2b3d27c2bdf9689542b5bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
