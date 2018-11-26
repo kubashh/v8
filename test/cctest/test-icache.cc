@@ -18,7 +18,7 @@ using F0 = int(int);
 
 static constexpr int kNumInstr = 100;
 static constexpr int kNumIterations = 5;
-static constexpr int kBufferSize = 8 * KB;
+static constexpr int kAssemblerBufferSize = 8 * KB;
 
 static void FloodWithInc(Isolate* isolate, byte* buffer, size_t allocated) {
   MacroAssembler masm(isolate, buffer, static_cast<int>(allocated),
@@ -91,7 +91,7 @@ TEST(TestFlushICacheOfWritable) {
   size_t allocated;
 
   for (int i = 0; i < kNumIterations; ++i) {
-    byte* buffer = AllocateAssemblerBuffer(&allocated, kBufferSize);
+    byte* buffer = AllocateAssemblerBuffer(&allocated, kAssemblerBufferSize);
 
     // Allow calling the function from C++.
     auto f = GeneratedCode<F0>::FromBuffer(isolate, buffer);
@@ -121,7 +121,7 @@ TEST(TestFlushICacheOfWritable) {
 // cache flush instructions to trigger access error on non-writable memory.
 // See https://bugs.chromium.org/p/v8/issues/detail?id=8157
 //
-// Also note that this requires {kBufferSize == 8 * KB} to reproduce.
+// Also note that this requires {kAssemblerBufferSize == 8 * KB} to reproduce.
 #define CONDITIONAL_TEST DISABLED_TEST
 #else
 #define CONDITIONAL_TEST TEST
@@ -135,7 +135,7 @@ CONDITIONAL_TEST(TestFlushICacheOfExecutable) {
   size_t allocated;
 
   for (int i = 0; i < kNumIterations; ++i) {
-    byte* buffer = AllocateAssemblerBuffer(&allocated, kBufferSize);
+    byte* buffer = AllocateAssemblerBuffer(&allocated, kAssemblerBufferSize);
 
     // Allow calling the function from C++.
     auto f = GeneratedCode<F0>::FromBuffer(isolate, buffer);
@@ -169,7 +169,7 @@ TEST(TestFlushICacheOfWritableAndExecutable) {
   size_t allocated;
 
   for (int i = 0; i < kNumIterations; ++i) {
-    byte* buffer = AllocateAssemblerBuffer(&allocated, kBufferSize);
+    byte* buffer = AllocateAssemblerBuffer(&allocated, kAssemblerBufferSize);
 
     // Allow calling the function from C++.
     auto f = GeneratedCode<F0>::FromBuffer(isolate, buffer);
