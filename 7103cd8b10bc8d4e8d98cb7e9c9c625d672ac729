@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccfd64d8_9f6fba67",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-11-26T19:26:43Z",
+      "side": 1,
+      "message": "This returns 65536 on ppc64le.",
+      "range": {
+        "startLine": 464,
+        "startChar": 38,
+        "endLine": 464,
+        "endChar": 74
+      },
+      "revId": "7103cd8b10bc8d4e8d98cb7e9c9c625d672ac729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edd2d0f5_5667f722",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-11-26T19:26:43Z",
+      "side": 1,
+      "message": "both CodePageGuardStartOffset() and CodePageGuardSize() returns 65536, this returns 131072",
+      "range": {
+        "startLine": 474,
+        "startChar": 9,
+        "endLine": 474,
+        "endChar": 58
+      },
+      "revId": "7103cd8b10bc8d4e8d98cb7e9c9c625d672ac729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a15c3d1d_5c73abb2",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-11-26T19:26:43Z",
+      "side": 1,
+      "message": "kPageSize \u003d\u003d 524288, GetCommitPageSize() \u003d\u003d 65536, this call returns 458752",
+      "range": {
+        "startLine": 480,
+        "startChar": 9,
+        "endLine": 481,
+        "endChar": 63
+      },
+      "revId": "7103cd8b10bc8d4e8d98cb7e9c9c625d672ac729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0791521_73d5c4e0",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2018-11-26T19:26:43Z",
+      "side": 1,
+      "message": "kMaxRegularHeapObjectSize \u003d\u003d 507136,\nmemory \u003d\u003d 327680\nthus DCHECK fails.",
+      "range": {
+        "startLine": 486,
+        "startChar": 2,
+        "endLine": 486,
+        "endChar": 46
+      },
+      "revId": "7103cd8b10bc8d4e8d98cb7e9c9c625d672ac729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
