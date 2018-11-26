@@ -997,9 +997,9 @@ void Oddball::set_to_number_raw_as_bits(uint64_t bits) {
   WRITE_UINT64_FIELD(this, kToNumberRawOffset, bits);
 }
 
-ACCESSORS(Oddball, to_string, String, kToStringOffset)
+ACCESSORS2(Oddball, to_string, String, kToStringOffset)
 ACCESSORS(Oddball, to_number, Object, kToNumberOffset)
-ACCESSORS(Oddball, type_of, String, kTypeOfOffset)
+ACCESSORS2(Oddball, type_of, String, kTypeOfOffset)
 
 byte Oddball::kind() const { return Smi::ToInt(READ_FIELD(this, kKindOffset)); }
 
@@ -1017,7 +1017,7 @@ Handle<Object> Oddball::ToNumber(Isolate* isolate, Handle<Oddball> input) {
 ACCESSORS(Cell, value, Object, kValueOffset)
 ACCESSORS(FeedbackCell, value, HeapObject, kValueOffset)
 ACCESSORS(PropertyCell, dependent_code, DependentCode, kDependentCodeOffset)
-ACCESSORS(PropertyCell, name, Name, kNameOffset)
+ACCESSORS2(PropertyCell, name, Name, kNameOffset)
 ACCESSORS(PropertyCell, value, Object, kValueOffset)
 ACCESSORS(PropertyCell, property_details_raw, Object, kDetailsOffset)
 
@@ -1091,13 +1091,12 @@ void RegExpMatchInfo::SetNumberOfCaptureRegisters(int value) {
   set(kNumberOfCapturesIndex, Smi::FromInt(value));
 }
 
-String* RegExpMatchInfo::LastSubject() {
+String RegExpMatchInfo::LastSubject() {
   DCHECK_GE(length(), kLastMatchOverhead);
-  Object* obj = get(kLastSubjectIndex);
-  return String::cast(obj);
+  return String::cast(get(kLastSubjectIndex));
 }
 
-void RegExpMatchInfo::SetLastSubject(String* value) {
+void RegExpMatchInfo::SetLastSubject(String value) {
   DCHECK_GE(length(), kLastMatchOverhead);
   set(kLastSubjectIndex, value);
 }
@@ -1207,7 +1206,7 @@ EnumCache* DescriptorArray::GetEnumCache() {
 
 // Perform a binary search in a fixed array.
 template <SearchMode search_mode, typename T>
-int BinarySearch(T* array, Name* name, int valid_entries,
+int BinarySearch(T* array, Name name, int valid_entries,
                  int* out_insertion_index) {
   DCHECK(search_mode == ALL_ENTRIES || out_insertion_index == nullptr);
   int low = 0;
@@ -1219,7 +1218,7 @@ int BinarySearch(T* array, Name* name, int valid_entries,
 
   while (low != high) {
     int mid = low + (high - low) / 2;
-    Name* mid_name = array->GetSortedKey(mid);
+    Name mid_name = array->GetSortedKey(mid);
     uint32_t mid_hash = mid_name->hash_field();
 
     if (mid_hash >= hash) {
@@ -1231,7 +1230,7 @@ int BinarySearch(T* array, Name* name, int valid_entries,
 
   for (; low <= limit; ++low) {
     int sort_index = array->GetSortedKeyIndex(low);
-    Name* entry = array->GetKey(sort_index);
+    Name entry = array->GetKey(sort_index);
     uint32_t current_hash = entry->hash_field();
     if (current_hash != hash) {
       if (search_mode == ALL_ENTRIES && out_insertion_index != nullptr) {
@@ -1253,18 +1252,17 @@ int BinarySearch(T* array, Name* name, int valid_entries,
   return T::kNotFound;
 }
 
-
 // Perform a linear search in this fixed array. len is the number of entry
 // indices that are valid.
 template <SearchMode search_mode, typename T>
-int LinearSearch(T* array, Name* name, int valid_entries,
+int LinearSearch(T* array, Name name, int valid_entries,
                  int* out_insertion_index) {
   if (search_mode == ALL_ENTRIES && out_insertion_index != nullptr) {
     uint32_t hash = name->hash_field();
     int len = array->number_of_entries();
     for (int number = 0; number < len; number++) {
       int sorted_index = array->GetSortedKeyIndex(number);
-      Name* entry = array->GetKey(sorted_index);
+      Name entry = array->GetKey(sorted_index);
       uint32_t current_hash = entry->hash_field();
       if (current_hash > hash) {
         *out_insertion_index = sorted_index;
@@ -1285,7 +1283,7 @@ int LinearSearch(T* array, Name* name, int valid_entries,
 }
 
 template <SearchMode search_mode, typename T>
-int Search(T* array, Name* name, int valid_entries, int* out_insertion_index) {
+int Search(T* array, Name name, int valid_entries, int* out_insertion_index) {
   SLOW_DCHECK(array->IsSortedNoDuplicates());
 
   if (valid_entries == 0) {
@@ -1307,21 +1305,20 @@ int Search(T* array, Name* name, int valid_entries, int* out_insertion_index) {
                                    out_insertion_index);
 }
 
-
-int DescriptorArray::Search(Name* name, int valid_descriptors) {
+int DescriptorArray::Search(Name name, int valid_descriptors) {
   DCHECK(name->IsUniqueName());
   return internal::Search<VALID_ENTRIES>(this, name, valid_descriptors,
                                          nullptr);
 }
 
-int DescriptorArray::Search(Name* name, Map map) {
+int DescriptorArray::Search(Name name, Map map) {
   DCHECK(name->IsUniqueName());
   int number_of_own_descriptors = map->NumberOfOwnDescriptors();
   if (number_of_own_descriptors == 0) return kNotFound;
   return Search(name, number_of_own_descriptors);
 }
 
-int DescriptorArray::SearchWithCache(Isolate* isolate, Name* name, Map map) {
+int DescriptorArray::SearchWithCache(Isolate* isolate, Name name, Map map) {
   DCHECK(name->IsUniqueName());
   int number_of_own_descriptors = map->NumberOfOwnDescriptors();
   if (number_of_own_descriptors == 0) return kNotFound;
@@ -1351,23 +1348,19 @@ MaybeObjectSlot DescriptorArray::GetDescriptorEndSlot(int descriptor_number) {
   return GetValueSlot(descriptor_number - 1) + 1;
 }
 
-
-Name* DescriptorArray::GetKey(int descriptor_number) {
+Name DescriptorArray::GetKey(int descriptor_number) {
   DCHECK(descriptor_number < number_of_descriptors());
   return Name::cast(
       get(ToKeyIndex(descriptor_number))->GetHeapObjectAssumeStrong());
 }
 
-
 int DescriptorArray::GetSortedKeyIndex(int descriptor_number) {
   return GetDetails(descriptor_number).pointer();
 }
 
-
-Name* DescriptorArray::GetSortedKey(int descriptor_number) {
+Name DescriptorArray::GetSortedKey(int descriptor_number) {
   return GetKey(GetSortedKeyIndex(descriptor_number));
 }
-
 
 void DescriptorArray::SetSortedKey(int descriptor_index, int pointer) {
   PropertyDetails details = GetDetails(descriptor_index);
@@ -1417,7 +1410,7 @@ FieldType DescriptorArray::GetFieldType(int descriptor_number) {
   return Map::UnwrapFieldType(wrapped_type);
 }
 
-void DescriptorArray::Set(int descriptor_number, Name* key, MaybeObject value,
+void DescriptorArray::Set(int descriptor_number, Name key, MaybeObject value,
                           PropertyDetails details) {
   // Range check.
   DCHECK(descriptor_number < number_of_descriptors());
@@ -1428,7 +1421,7 @@ void DescriptorArray::Set(int descriptor_number, Name* key, MaybeObject value,
 }
 
 void DescriptorArray::Set(int descriptor_number, Descriptor* desc) {
-  Name* key = *desc->GetKey();
+  Name key = *desc->GetKey();
   MaybeObject value = *desc->GetValue();
   Set(descriptor_number, key, value, desc->GetDetails());
 }
@@ -1445,7 +1438,7 @@ void DescriptorArray::Append(Descriptor* desc) {
   int insertion;
 
   for (insertion = descriptor_number; insertion > 0; --insertion) {
-    Name* key = GetSortedKey(insertion - 1);
+    Name key = GetSortedKey(insertion - 1);
     if (key->Hash() <= hash) break;
     SetSortedKey(insertion, GetSortedKeyIndex(insertion - 1));
   }
@@ -1468,12 +1461,12 @@ void DescriptorArray::set(int index, MaybeObject value) {
   WeakFixedArray::Set(index, value);
 }
 
-bool StringSetShape::IsMatch(String* key, Object* value) {
+bool StringSetShape::IsMatch(String key, Object* value) {
   DCHECK(value->IsString());
   return key->Equals(String::cast(value));
 }
 
-uint32_t StringSetShape::Hash(Isolate* isolate, String* key) {
+uint32_t StringSetShape::Hash(Isolate* isolate, String key) {
   return key->Hash();
 }
 
@@ -1584,7 +1577,7 @@ int HeapObject::SizeFromMap(Map map) const {
     // Strings may get concurrently truncated, hence we have to access its
     // length synchronized.
     return SeqOneByteString::SizeFor(
-        reinterpret_cast<const SeqOneByteString*>(this)->synchronized_length());
+        SeqOneByteString::unchecked_cast(this)->synchronized_length());
   }
   if (instance_type == BYTE_ARRAY_TYPE) {
     return ByteArray::SizeFor(
@@ -1602,7 +1595,7 @@ int HeapObject::SizeFromMap(Map map) const {
     // Strings may get concurrently truncated, hence we have to access its
     // length synchronized.
     return SeqTwoByteString::SizeFor(
-        reinterpret_cast<const SeqTwoByteString*>(this)->synchronized_length());
+        SeqTwoByteString::unchecked_cast(this)->synchronized_length());
   }
   if (instance_type == FIXED_DOUBLE_ARRAY_TYPE) {
     return FixedDoubleArray::SizeFor(
@@ -1863,7 +1856,7 @@ RootIndex GlobalDictionaryShape::GetMapRootIndex() {
   return RootIndex::kGlobalDictionaryMap;
 }
 
-Name* NameDictionary::NameAt(int entry) { return Name::cast(KeyAt(entry)); }
+Name NameDictionary::NameAt(int entry) { return Name::cast(KeyAt(entry)); }
 
 RootIndex NameDictionaryShape::GetMapRootIndex() {
   return RootIndex::kNameDictionaryMap;
@@ -1883,7 +1876,7 @@ bool GlobalDictionaryShape::IsKey(ReadOnlyRoots roots, Object* k) {
   return IsLive(roots, k) && !PropertyCell::cast(k)->value()->IsTheHole(roots);
 }
 
-Name* GlobalDictionary::NameAt(int entry) { return CellAt(entry)->name(); }
+Name GlobalDictionary::NameAt(int entry) { return CellAt(entry)->name(); }
 Object* GlobalDictionary::ValueAt(int entry) { return CellAt(entry)->value(); }
 
 void GlobalDictionary::SetEntry(Isolate* isolate, int entry, Object* key,

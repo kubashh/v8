@@ -1757,7 +1757,7 @@ Reduction JSNativeContextSpecialization::ReduceKeyedAccess(
   }
 
   // Check if we have feedback for a named access.
-  if (Name* name = nexus.FindFirstName()) {
+  if (Name name = nexus.FindFirstName()) {
     return ReduceNamedAccess(node, value, receiver_maps,
                              handle(name, isolate()), access_mode, index);
   } else if (nexus.GetKeyType() != ELEMENT) {
