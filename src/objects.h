@@ -96,7 +96,6 @@
 //         - OrderedHashTable
 //           - OrderedHashSet
 //           - OrderedHashMap
-//         - Context
 //         - FeedbackMetadata
 //         - TemplateList
 //         - TransitionArray
@@ -124,6 +123,8 @@
 //             - ExternalOneByteInternalizedString
 //             - ExternalTwoByteInternalizedString
 //       - Symbol
+//     - Context
+//       - NativeContext
 //     - HeapNumber
 //     - BigInt
 //     - Cell
@@ -439,8 +440,9 @@ enum InstanceType : uint16_t {
   STRING_TABLE_TYPE,
   EPHEMERON_HASH_TABLE_TYPE,  // LAST_HASH_TABLE_TYPE
   SCOPE_INFO_TYPE,
-  SCRIPT_CONTEXT_TABLE_TYPE,
-  // TODO(ishell): remove native context from fixed array range
+  SCRIPT_CONTEXT_TABLE_TYPE,  // LAST_FIXED_ARRAY_TYPE
+
+  // Contexts.
   AWAIT_CONTEXT_TYPE,  // FIRST_CONTEXT_TYPE
   BLOCK_CONTEXT_TYPE,
   CATCH_CONTEXT_TYPE,
@@ -450,7 +452,7 @@ enum InstanceType : uint16_t {
   MODULE_CONTEXT_TYPE,
   NATIVE_CONTEXT_TYPE,
   SCRIPT_CONTEXT_TYPE,
-  WITH_CONTEXT_TYPE,  // LAST_FIXED_ARRAY_TYPE, LAST_CONTEXT_TYPE
+  WITH_CONTEXT_TYPE,  // LAST_CONTEXT_TYPE
 
   WEAK_FIXED_ARRAY_TYPE,  // FIRST_WEAK_FIXED_ARRAY_TYPE
   DESCRIPTOR_ARRAY_TYPE,
@@ -551,7 +553,8 @@ enum InstanceType : uint16_t {
   // Pseudo-types
   FIRST_TYPE = 0x0,
   LAST_TYPE = JS_FUNCTION_TYPE,
-  FIRST_NAME_TYPE = FIRST_TYPE,
+  FIRST_STRING_TYPE = FIRST_TYPE,
+  FIRST_NAME_TYPE = FIRST_STRING_TYPE,
   LAST_NAME_TYPE = SYMBOL_TYPE,
   FIRST_UNIQUE_NAME_TYPE = INTERNALIZED_STRING_TYPE,
   LAST_UNIQUE_NAME_TYPE = SYMBOL_TYPE,
@@ -562,7 +565,7 @@ enum InstanceType : uint16_t {
   LAST_FUNCTION_TYPE = JS_FUNCTION_TYPE,
   // Boundaries for testing if given HeapObject is a subclass of FixedArray.
   FIRST_FIXED_ARRAY_TYPE = FIXED_ARRAY_TYPE,
-  LAST_FIXED_ARRAY_TYPE = WITH_CONTEXT_TYPE,
+  LAST_FIXED_ARRAY_TYPE = SCRIPT_CONTEXT_TABLE_TYPE,
   // Boundaries for testing if given HeapObject is a subclass of HashTable
   FIRST_HASH_TABLE_TYPE = HASH_TABLE_TYPE,
   LAST_HASH_TABLE_TYPE = EPHEMERON_HASH_TABLE_TYPE,
@@ -609,6 +612,11 @@ enum InstanceType : uint16_t {
   FIRST_JS_WEAK_CELL_TYPE = JS_WEAK_CELL_TYPE,
   LAST_JS_WEAK_CELL_TYPE = JS_WEAK_REF_TYPE,
 };
+// This constant is defined outside of the InstanceType enum because the
+// string instance types are sparce and there's no such instance type value.
+// But it's still useful for range checks to have such a value.
+constexpr InstanceType LAST_STRING_TYPE =
+    static_cast<InstanceType>(FIRST_NONSTRING_TYPE - 1);
 
 STATIC_ASSERT((FIRST_NONSTRING_TYPE & kIsNotStringMask) != kStringTag);
 STATIC_ASSERT(JS_OBJECT_TYPE == Internals::kJSObjectType);
@@ -1038,8 +1046,8 @@ class ZoneForwardList;
   V(JSSetIterator, FIRST_SET_ITERATOR_TYPE, LAST_SET_ITERATOR_TYPE) \
   V(JSWeakCell, FIRST_JS_WEAK_CELL_TYPE, LAST_JS_WEAK_CELL_TYPE)    \
   V(Microtask, FIRST_MICROTASK_TYPE, LAST_MICROTASK_TYPE)           \
-  V(Name, FIRST_TYPE, LAST_NAME_TYPE)                               \
-  V(String, FIRST_TYPE, FIRST_NONSTRING_TYPE - 1)                   \
+  V(Name, FIRST_NAME_TYPE, LAST_NAME_TYPE)                          \
+  V(String, FIRST_STRING_TYPE, LAST_STRING_TYPE)                    \
   V(WeakFixedArray, FIRST_WEAK_FIXED_ARRAY_TYPE, LAST_WEAK_FIXED_ARRAY_TYPE)
 
 #define INSTANCE_TYPE_CHECKERS_CUSTOM(V) \
