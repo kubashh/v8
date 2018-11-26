@@ -44,21 +44,6 @@ class ThreadedListBase final : public BaseClass {
     head_ = v;
   }
 
-  // Reinitializing the head to a new node, this costs O(n).
-  void ReinitializeHead(T* v) {
-    head_ = v;
-    T* current = v;
-    if (current != nullptr) {  // Find tail
-      T* tmp;
-      while ((tmp = *TLTraits::next(current))) {
-        current = tmp;
-      }
-      tail_ = TLTraits::next(current);
-    } else {
-      tail_ = &head_;
-    }
-  }
-
   void DropHead() {
     DCHECK_NOT_NULL(head_);
 
@@ -152,7 +137,7 @@ class ThreadedListBase final : public BaseClass {
     bool operator!=(const Iterator& other) const {
       return entry_ != other.entry_;
     }
-    T* operator*() { return *entry_; }
+    T*& operator*() { return *entry_; }
     T* operator->() { return *entry_; }
     Iterator& operator=(T* entry) {
       T* next = *TLTraits::next(*entry_);
@@ -211,6 +196,24 @@ class ThreadedListBase final : public BaseClass {
     *tail_ = nullptr;
   }
 
+  // Moves the head of the from_list, starting at the head of the list to the
+  // end location.
+  void MoveHead(ThreadedListBase* from_list, Iterator end_location) {
+    if (from_list->begin() != end_location) {
+      T* old_head = head_;
+      head_ = from_list->head_;
+      from_list->head_ = *end_location;
+      if (from_list->head_ == nullptr) {
+        // Source list is empty. Repoint tail to head.
+        from_list->tail_ = &from_list->head_;
+      }
+      *end_location = old_head;
+      if (old_head == nullptr) {
+        // Target list was empty. Point tail to new tail.
+        tail_ = &*end_location;
+      }
+    }
+  }
   // Moves the tail of the from_list, starting at the from_location, to the end
   // of this list.
   void MoveTail(ThreadedListBase* from_list, Iterator from_location) {

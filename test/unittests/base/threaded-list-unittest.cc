@@ -134,14 +134,20 @@ TEST_F(ThreadedListTest, AddFront) {
   CHECK_EQ(list.first(), &new_node);
 }
 
-TEST_F(ThreadedListTest, ReinitializeHead) {
+TEST_F(ThreadedListTest, MoveHead) {
   CHECK_EQ(list.LengthForTest(), 5);
-  CHECK_NE(extra_test_list.first(), list.first());
-  list.ReinitializeHead(&extra_test_node_0);
+  auto iter = list.begin();
+  ++iter;
+  ++iter;
+  extra_test_list.Clear();
+  CHECK_EQ(extra_test_list.LengthForTest(), 0);
+  extra_test_list.MoveHead(&list, iter);
   list.Verify();
-  CHECK_EQ(extra_test_list.first(), list.first());
-  CHECK_EQ(extra_test_list.end(), list.end());
-  CHECK_EQ(extra_test_list.LengthForTest(), 3);
+  extra_test_list.Verify();
+  CHECK_EQ(list.LengthForTest(), 3);
+  CHECK_EQ(extra_test_list.LengthForTest(), 2);
+  CHECK_EQ(list.first(), &nodes[2]);
+  CHECK_EQ(extra_test_list.first(), &nodes[0]);
 }
 
 TEST_F(ThreadedListTest, DropHead) {

@@ -874,20 +874,12 @@ void Scope::Snapshot::Reparent(DeclarationScope* new_parent) const {
 
   Scope* outer_scope_ = outer_scope_and_calls_eval_.GetPointer();
   if (outer_scope_->unresolved_list_.first() != top_unresolved_) {
-    // If the marked VariableProxy (snapshoted) is not the first, we need to
-    // find it and move all VariableProxys up to that point into the new_parent,
-    // then we restore the snapshoted state by reinitializing the outer_scope
-    // list.
-    {
-      auto iter = outer_scope_->unresolved_list_.begin();
-      while (*iter != top_unresolved_) {
-        ++iter;
-      }
-      outer_scope_->unresolved_list_.Rewind(iter);
-    }
+    // Find the node that points to top_unresolved_.
+    auto iter = outer_scope_->unresolved_list_.begin();
+    while (*iter != top_unresolved_) ++iter;
 
-    new_parent->unresolved_list_ = std::move(outer_scope_->unresolved_list_);
-    outer_scope_->unresolved_list_.ReinitializeHead(top_unresolved_);
+    new_parent->unresolved_list_.MoveHead(&outer_scope_->unresolved_list_,
+                                          iter);
   }
 
   // Move temporaries allocated for complex parameter initializers.
