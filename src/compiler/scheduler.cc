@@ -35,7 +35,8 @@ namespace compiler {
 class SchedulableNodesQueue : public ZoneObject {
  public:
   explicit SchedulableNodesQueue(Zone* zone)
-      : queues_{ZoneQueue<Node*>(zone), ZoneQueue<Node*>(zone)} {}
+      : queues_{ZoneQueue<Node*>(zone), ZoneQueue<Node*>(zone),
+                ZoneQueue<Node*>(zone)} {}
 
   void push(Node* node) { queues_[PriorityClass(node)].push(node); }
   Node* front() { return ActiveQueue().front(); }
@@ -56,7 +57,7 @@ class SchedulableNodesQueue : public ZoneObject {
   }
   int PriorityClass(Node* node);
 
-  static constexpr int kPriorityClasses = 2;
+  static constexpr int kPriorityClasses = 3;
   std::array<ZoneQueue<Node*>, kPriorityClasses> queues_;
 };
 
@@ -551,6 +552,12 @@ class CFGBuilder : public ZoneObject {
         TraceConnect(sw, switch_block, successor_blocks[index]);
       }
       schedule_->AddSwitch(switch_block, sw, successor_blocks, successor_count);
+    }
+    for (size_t index = 0; index < successor_count; ++index) {
+      if (BranchHintOf(successor_blocks[index]->front()->op()) ==
+          BranchHint::kFalse) {
+        successor_blocks[index]->set_deferred(true);
+      }
     }
   }
 
@@ -1387,11 +1394,34 @@ void Scheduler::ScheduleEarly() {
 // -----------------------------------------------------------------------------
 // Phase 5: Schedule nodes late.
 
+namespace {
+// Detect nodes that are, directly or indirectly, the unique value use of an
+// effect chain or phi node. Such nodes should be scheduled early in the block
+// to reduce life range length.
+bool OwnsEffectOrPhiNode(Node* node) {
+  for (int i = 0; i < node->op()->ValueInputCount(); ++i) {
+    Node* input = NodeProperties::GetValueInput(node, i);
+    if (input->op()->EffectOutputCount() == 0) {
+      if (input->UseCount() == 1) {
+        if (input->opcode() == IrOpcode::kPhi) return true;
+        return OwnsEffectOrPhiNode(input);
+      }
+    } else {
+      if (input->UseCount() == 2) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+}  // namespace
+
 // Deprioritize effect chain nodes. Since we schedule backwards,
 // this means that value nodes are scheduled before the latest effect
 // chain node possible.
 int SchedulableNodesQueue::PriorityClass(Node* node) {
   if (node->op()->EffectOutputCount() > 0) return 1;
+  if (OwnsEffectOrPhiNode(node)) return 2;
   return 0;
 }
 
