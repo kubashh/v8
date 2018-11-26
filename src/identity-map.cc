@@ -45,8 +45,7 @@ void IdentityMapBase::DisableIteration() {
 
 int IdentityMapBase::ScanKeysFor(Address address) const {
   int start = Hash(address) & mask_;
-  Address not_mapped =
-      reinterpret_cast<Address>(ReadOnlyRoots(heap_).not_mapped_symbol());
+  Address not_mapped = ReadOnlyRoots(heap_).not_mapped_symbol().ptr();
   for (int index = start; index < capacity_; index++) {
     if (keys_[index] == address) return index;  // Found.
     if (keys_[index] == not_mapped) return -1;  // Not found.
@@ -59,8 +58,7 @@ int IdentityMapBase::ScanKeysFor(Address address) const {
 }
 
 int IdentityMapBase::InsertKey(Address address) {
-  Address not_mapped =
-      reinterpret_cast<Address>(ReadOnlyRoots(heap_).not_mapped_symbol());
+  Address not_mapped = ReadOnlyRoots(heap_).not_mapped_symbol().ptr();
   while (true) {
     int start = Hash(address) & mask_;
     int limit = capacity_ / 2;
@@ -82,8 +80,7 @@ int IdentityMapBase::InsertKey(Address address) {
 
 bool IdentityMapBase::DeleteIndex(int index, void** deleted_value) {
   if (deleted_value != nullptr) *deleted_value = values_[index];
-  Address not_mapped =
-      reinterpret_cast<Address>(ReadOnlyRoots(heap_).not_mapped_symbol());
+  Address not_mapped = ReadOnlyRoots(heap_).not_mapped_symbol().ptr();
   DCHECK_NE(keys_[index], not_mapped);
   keys_[index] = not_mapped;
   values_[index] = nullptr;
@@ -144,8 +141,7 @@ int IdentityMapBase::LookupOrInsert(Address key) {
 }
 
 int IdentityMapBase::Hash(Address address) const {
-  CHECK_NE(address,
-           reinterpret_cast<Address>(ReadOnlyRoots(heap_).not_mapped_symbol()));
+  CHECK_NE(address, ReadOnlyRoots(heap_).not_mapped_symbol().ptr());
   return static_cast<int>(hasher_(address));
 }
 
@@ -162,8 +158,7 @@ IdentityMapBase::RawEntry IdentityMapBase::GetEntry(Address key) {
     gc_counter_ = heap_->gc_count();
 
     keys_ = reinterpret_cast<Address*>(NewPointerArray(capacity_));
-    Address not_mapped =
-        reinterpret_cast<Address>(ReadOnlyRoots(heap_).not_mapped_symbol());
+    Address not_mapped = ReadOnlyRoots(heap_).not_mapped_symbol().ptr();
     for (int i = 0; i < capacity_; i++) keys_[i] = not_mapped;
     values_ = NewPointerArray(capacity_);
     memset(values_, 0, sizeof(void*) * capacity_);
@@ -202,8 +197,7 @@ bool IdentityMapBase::DeleteEntry(Address key, void** deleted_value) {
 Address IdentityMapBase::KeyAtIndex(int index) const {
   DCHECK_LE(0, index);
   DCHECK_LT(index, capacity_);
-  DCHECK_NE(keys_[index], reinterpret_cast<Address>(
-                              ReadOnlyRoots(heap_).not_mapped_symbol()));
+  DCHECK_NE(keys_[index], ReadOnlyRoots(heap_).not_mapped_symbol().ptr());
   CHECK(is_iterable());  // Must be iterable to access by index;
   return keys_[index];
 }
@@ -211,8 +205,7 @@ Address IdentityMapBase::KeyAtIndex(int index) const {
 IdentityMapBase::RawEntry IdentityMapBase::EntryAtIndex(int index) const {
   DCHECK_LE(0, index);
   DCHECK_LT(index, capacity_);
-  DCHECK_NE(keys_[index], reinterpret_cast<Address>(
-                              ReadOnlyRoots(heap_).not_mapped_symbol()));
+  DCHECK_NE(keys_[index], ReadOnlyRoots(heap_).not_mapped_symbol().ptr());
   CHECK(is_iterable());  // Must be iterable to access by index;
   return &values_[index];
 }
@@ -221,8 +214,7 @@ int IdentityMapBase::NextIndex(int index) const {
   DCHECK_LE(-1, index);
   DCHECK_LE(index, capacity_);
   CHECK(is_iterable());  // Must be iterable to access by index;
-  Address not_mapped =
-      reinterpret_cast<Address>(ReadOnlyRoots(heap_).not_mapped_symbol());
+  Address not_mapped = ReadOnlyRoots(heap_).not_mapped_symbol().ptr();
   for (++index; index < capacity_; ++index) {
     if (keys_[index] != not_mapped) {
       return index;
@@ -240,8 +232,7 @@ void IdentityMapBase::Rehash() {
   // Search the table looking for keys that wouldn't be found with their
   // current hashcode and evacuate them.
   int last_empty = -1;
-  Address not_mapped =
-      reinterpret_cast<Address>(ReadOnlyRoots(heap_).not_mapped_symbol());
+  Address not_mapped = ReadOnlyRoots(heap_).not_mapped_symbol().ptr();
   for (int i = 0; i < capacity_; i++) {
     if (keys_[i] == not_mapped) {
       last_empty = i;
@@ -279,8 +270,7 @@ void IdentityMapBase::Resize(int new_capacity) {
   size_ = 0;
 
   keys_ = reinterpret_cast<Address*>(NewPointerArray(capacity_));
-  Address not_mapped =
-      reinterpret_cast<Address>(ReadOnlyRoots(heap_).not_mapped_symbol());
+  Address not_mapped = ReadOnlyRoots(heap_).not_mapped_symbol().ptr();
   for (int i = 0; i < capacity_; i++) keys_[i] = not_mapped;
   values_ = NewPointerArray(capacity_);
   memset(values_, 0, sizeof(void*) * capacity_);
