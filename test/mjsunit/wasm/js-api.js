@@ -71,25 +71,15 @@ let moduleBinaryWithMemSectionAndMemImport = (() => {
   return new Int8Array(builder.toBuffer());
 })();
 
-// 'WebAssembly' data property on global object
-let wasmDesc = Object.getOwnPropertyDescriptor(this, 'WebAssembly');
-assertEq(typeof wasmDesc.value, 'object');
-assertTrue(wasmDesc.writable);
-assertFalse(wasmDesc.enumerable);
-assertTrue(wasmDesc.configurable);
-
 // 'WebAssembly' object
+let wasmDesc = Object.getOwnPropertyDescriptor(this, 'WebAssembly');
 assertEq(WebAssembly, wasmDesc.value);
 assertEq(String(WebAssembly), '[object WebAssembly]');
 
 // 'WebAssembly.CompileError'
+let CompileError = WebAssembly.CompileError;
 let compileErrorDesc =
     Object.getOwnPropertyDescriptor(WebAssembly, 'CompileError');
-assertEq(typeof compileErrorDesc.value, 'function');
-assertTrue(compileErrorDesc.writable);
-assertFalse(compileErrorDesc.enumerable);
-assertTrue(compileErrorDesc.configurable);
-let CompileError = WebAssembly.CompileError;
 assertEq(CompileError, compileErrorDesc.value);
 assertEq(CompileError.length, 1);
 assertEq(CompileError.name, 'CompileError');
@@ -101,13 +91,9 @@ assertEq(compileError.message, '');
 assertEq(new CompileError('hi').message, 'hi');
 
 // 'WebAssembly.RuntimeError'
+let RuntimeError = WebAssembly.RuntimeError;
 let runtimeErrorDesc =
     Object.getOwnPropertyDescriptor(WebAssembly, 'RuntimeError');
-assertEq(typeof runtimeErrorDesc.value, 'function');
-assertTrue(runtimeErrorDesc.writable);
-assertFalse(runtimeErrorDesc.enumerable);
-assertTrue(runtimeErrorDesc.configurable);
-let RuntimeError = WebAssembly.RuntimeError;
 assertEq(RuntimeError, runtimeErrorDesc.value);
 assertEq(RuntimeError.length, 1);
 assertEq(RuntimeError.name, 'RuntimeError');
@@ -119,12 +105,8 @@ assertEq(runtimeError.message, '');
 assertEq(new RuntimeError('hi').message, 'hi');
 
 // 'WebAssembly.LinkError'
-let linkErrorDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'LinkError');
-assertEq(typeof linkErrorDesc.value, 'function');
-assertTrue(linkErrorDesc.writable);
-assertFalse(linkErrorDesc.enumerable);
-assertTrue(linkErrorDesc.configurable);
 let LinkError = WebAssembly.LinkError;
+let linkErrorDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'LinkError');
 assertEq(LinkError, linkErrorDesc.value);
 assertEq(LinkError.length, 1);
 assertEq(LinkError.name, 'LinkError');
@@ -135,15 +117,9 @@ assertFalse(linkError instanceof TypeError);
 assertEq(linkError.message, '');
 assertEq(new LinkError('hi').message, 'hi');
 
-// 'WebAssembly.Module' data property
-let moduleDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'Module');
-assertEq(typeof moduleDesc.value, 'function');
-assertTrue(moduleDesc.writable);
-assertFalse(moduleDesc.enumerable);
-assertTrue(moduleDesc.configurable);
-
 // 'WebAssembly.Module' constructor function
 let Module = WebAssembly.Module;
+let moduleDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'Module');
 assertEq(Module, moduleDesc.value);
 assertEq(Module.length, 1);
 assertEq(Module.name, 'Module');
@@ -169,15 +145,9 @@ assertErrorMessage(
 assertTrue(new Module(emptyModuleBinary) instanceof Module);
 assertTrue(new Module(emptyModuleBinary.buffer) instanceof Module);
 
-// 'WebAssembly.Module.prototype' data property
-let moduleProtoDesc = Object.getOwnPropertyDescriptor(Module, 'prototype');
-assertEq(typeof moduleProtoDesc.value, 'object');
-assertFalse(moduleProtoDesc.writable);
-assertFalse(moduleProtoDesc.enumerable);
-assertFalse(moduleProtoDesc.configurable);
-
 // 'WebAssembly.Module.prototype' object
 let moduleProto = Module.prototype;
+let moduleProtoDesc = Object.getOwnPropertyDescriptor(Module, 'prototype');
 assertEq(moduleProto, moduleProtoDesc.value);
 assertEq(String(moduleProto), '[object WebAssembly.Module]');
 assertEq(Object.getPrototypeOf(moduleProto), Object.prototype);
@@ -190,14 +160,8 @@ assertEq(typeof emptyModule, 'object');
 assertEq(String(emptyModule), '[object WebAssembly.Module]');
 assertEq(Object.getPrototypeOf(emptyModule), moduleProto);
 
-// 'WebAssembly.Module.imports' data property
-let moduleImportsDesc = Object.getOwnPropertyDescriptor(Module, 'imports');
-assertEq(typeof moduleImportsDesc.value, 'function');
-assertTrue(moduleImportsDesc.writable);
-assertFalse(moduleImportsDesc.enumerable);
-assertTrue(moduleImportsDesc.configurable);
-
 // 'WebAssembly.Module.imports' method
+let moduleImportsDesc = Object.getOwnPropertyDescriptor(Module, 'imports');
 let moduleImports = moduleImportsDesc.value;
 assertEq(moduleImports.length, 1);
 assertErrorMessage(
@@ -237,14 +201,8 @@ assertEq(arr[3].kind, 'global');
 assertEq(arr[3].module, 'g');
 assertEq(arr[3].name, 'x');
 
-// 'WebAssembly.Module.exports' data property
-let moduleExportsDesc = Object.getOwnPropertyDescriptor(Module, 'exports');
-assertEq(typeof moduleExportsDesc.value, 'function');
-assertTrue(moduleExportsDesc.writable);
-assertFalse(moduleExportsDesc.enumerable);
-assertTrue(moduleExportsDesc.configurable);
-
 // 'WebAssembly.Module.exports' method
+let moduleExportsDesc = Object.getOwnPropertyDescriptor(Module, 'exports');
 let moduleExports = moduleExportsDesc.value;
 assertEq(moduleExports.length, 1);
 assertErrorMessage(
@@ -282,14 +240,9 @@ assertEq(arr[2].name, 'c');
 assertEq(arr[3].kind, 'global');
 assertEq(arr[3].name, 'x');
 
-// 'WebAssembly.Module.customSections' data property
+// 'WebAssembly.Module.customSections' method
 let moduleCustomSectionsDesc =
     Object.getOwnPropertyDescriptor(Module, 'customSections');
-assertEq(typeof moduleCustomSectionsDesc.value, 'function');
-assertEq(moduleCustomSectionsDesc.writable, true);
-assertEq(moduleCustomSectionsDesc.enumerable, false);
-assertEq(moduleCustomSectionsDesc.configurable, true);
-
 let moduleCustomSections = moduleCustomSectionsDesc.value;
 assertEq(moduleCustomSections.length, 2);
 assertErrorMessage(
@@ -338,15 +291,9 @@ var o = {toString() { throw "boo!" }}
 assertThrows(
   () => moduleCustomSections(new Module(customSectionModuleBinary2), o));
 
-// 'WebAssembly.Instance' data property
-let instanceDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'Instance');
-assertEq(typeof instanceDesc.value, 'function');
-assertTrue(instanceDesc.writable);
-assertFalse(instanceDesc.enumerable);
-assertTrue(instanceDesc.configurable);
-
 // 'WebAssembly.Instance' constructor function
 let Instance = WebAssembly.Instance;
+let instanceDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'Instance');
 assertEq(Instance, instanceDesc.value);
 assertEq(Instance.length, 1);
 assertEq(Instance.name, 'Instance');
@@ -373,15 +320,9 @@ assertErrorMessage(
 assertTrue(new Instance(emptyModule) instanceof Instance);
 assertTrue(new Instance(emptyModule, {}) instanceof Instance);
 
-// 'WebAssembly.Instance.prototype' data property
-let instanceProtoDesc = Object.getOwnPropertyDescriptor(Instance, 'prototype');
-assertEq(typeof instanceProtoDesc.value, 'object');
-assertFalse(instanceProtoDesc.writable);
-assertFalse(instanceProtoDesc.enumerable);
-assertFalse(instanceProtoDesc.configurable);
-
 // 'WebAssembly.Instance.prototype' object
 let instanceProto = Instance.prototype;
+let instanceProtoDesc = Object.getOwnPropertyDescriptor(Instance, 'prototype');
 assertEq(instanceProto, instanceProtoDesc.value);
 assertEq(String(instanceProto), '[object WebAssembly.Instance]');
 assertEq(Object.getPrototypeOf(instanceProto), Object.prototype);
@@ -392,14 +333,7 @@ assertEq(typeof exportingInstance, 'object');
 assertEq(String(exportingInstance), '[object WebAssembly.Instance]');
 assertEq(Object.getPrototypeOf(exportingInstance), instanceProto);
 
-// 'WebAssembly.Instance' 'exports' getter property
-let instanceExportsDesc =
-    Object.getOwnPropertyDescriptor(instanceProto, 'exports');
-assertEq(typeof instanceExportsDesc.get, 'function');
-assertEq(instanceExportsDesc.set, undefined);
-assertFalse(instanceExportsDesc.enumerable);
-assertTrue(instanceExportsDesc.configurable);
-
+// 'WebAssembly.Instance' 'exports' getter
 exportsObj = exportingInstance.exports;
 assertEq(typeof exportsObj, 'object');
 assertFalse(Object.isExtensible(exportsObj));
@@ -414,15 +348,9 @@ assertTrue('name' in f);
 assertEq(Function.prototype.call.call(f), 42);
 assertErrorMessage(() => new f(), TypeError, /is not a constructor/);
 
-// 'WebAssembly.Memory' data property
-let memoryDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'Memory');
-assertEq(typeof memoryDesc.value, 'function');
-assertTrue(memoryDesc.writable);
-assertFalse(memoryDesc.enumerable);
-assertTrue(memoryDesc.configurable);
-
 // 'WebAssembly.Memory' constructor function
 let Memory = WebAssembly.Memory;
+let memoryDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'Memory');
 assertEq(Memory, memoryDesc.value);
 assertEq(Memory.length, 1);
 assertEq(Memory.name, 'Memory');
@@ -450,15 +378,9 @@ assertErrorMessage(
 assertTrue(new Memory({initial: 1}) instanceof Memory);
 assertEq(new Memory({initial: 1.5}).buffer.byteLength, kPageSize);
 
-// 'WebAssembly.Memory.prototype' data property
-let memoryProtoDesc = Object.getOwnPropertyDescriptor(Memory, 'prototype');
-assertEq(typeof memoryProtoDesc.value, 'object');
-assertFalse(memoryProtoDesc.writable);
-assertFalse(memoryProtoDesc.enumerable);
-assertFalse(memoryProtoDesc.configurable);
-
 // 'WebAssembly.Memory.prototype' object
 let memoryProto = Memory.prototype;
+let memoryProtoDesc = Object.getOwnPropertyDescriptor(Memory, 'prototype');
 assertEq(memoryProto, memoryProtoDesc.value);
 assertEq(String(memoryProto), '[object WebAssembly.Memory]');
 assertEq(Object.getPrototypeOf(memoryProto), Object.prototype);
@@ -469,14 +391,8 @@ assertEq(typeof mem1, 'object');
 assertEq(String(mem1), '[object WebAssembly.Memory]');
 assertEq(Object.getPrototypeOf(mem1), memoryProto);
 
-// 'WebAssembly.Memory.prototype.buffer' accessor property
-let bufferDesc = Object.getOwnPropertyDescriptor(memoryProto, 'buffer');
-assertEq(typeof bufferDesc.get, 'function');
-assertEq(bufferDesc.set, undefined);
-assertFalse(bufferDesc.enumerable);
-assertTrue(bufferDesc.configurable);
-
 // 'WebAssembly.Memory.prototype.buffer' getter
+let bufferDesc = Object.getOwnPropertyDescriptor(memoryProto, 'buffer');
 let bufferGetter = bufferDesc.get;
 assertErrorMessage(
     () => bufferGetter.call(), TypeError, /called on incompatible undefined/);
@@ -485,14 +401,8 @@ assertErrorMessage(
 assertTrue(bufferGetter.call(mem1) instanceof ArrayBuffer);
 assertEq(bufferGetter.call(mem1).byteLength, kPageSize);
 
-// 'WebAssembly.Memory.prototype.grow' data property
-let memGrowDesc = Object.getOwnPropertyDescriptor(memoryProto, 'grow');
-assertEq(typeof memGrowDesc.value, 'function');
-assertFalse(memGrowDesc.enumerable);
-assertTrue(memGrowDesc.configurable);
-
 // 'WebAssembly.Memory.prototype.grow' method
-
+let memGrowDesc = Object.getOwnPropertyDescriptor(memoryProto, 'grow');
 let memGrow = memGrowDesc.value;
 assertEq(memGrow.length, 1);
 assertErrorMessage(
@@ -554,15 +464,9 @@ assertEq(empty_mem.grow(0), 0);
 assertEq(empty_mem.buffer.byteLength, 0);
 assertTrue(empty_buf !== empty_mem.buffer);
 
-// 'WebAssembly.Table' data property
-let tableDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'Table');
-assertEq(typeof tableDesc.value, 'function');
-assertTrue(tableDesc.writable);
-assertFalse(tableDesc.enumerable);
-assertTrue(tableDesc.configurable);
-
 // 'WebAssembly.Table' constructor function
 let Table = WebAssembly.Table;
+let tableDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'Table');
 assertEq(Table, tableDesc.value);
 assertEq(Table.length, 1);
 assertEq(Table.name, 'Table');
@@ -602,15 +506,9 @@ assertTrue(
     new Table({initial: 1, maximum: Math.pow(2, 32) - 1, element: 'anyfunc'})
         instanceof Table);
 
-// 'WebAssembly.Table.prototype' data property
-let tableProtoDesc = Object.getOwnPropertyDescriptor(Table, 'prototype');
-assertEq(typeof tableProtoDesc.value, 'object');
-assertFalse(tableProtoDesc.writable);
-assertFalse(tableProtoDesc.enumerable);
-assertFalse(tableProtoDesc.configurable);
-
 // 'WebAssembly.Table.prototype' object
 let tableProto = Table.prototype;
+let tableProtoDesc = Object.getOwnPropertyDescriptor(Table, 'prototype');
 assertEq(tableProto, tableProtoDesc.value);
 assertEq(String(tableProto), '[object WebAssembly.Table]');
 assertEq(Object.getPrototypeOf(tableProto), Object.prototype);
@@ -621,14 +519,8 @@ assertEq(typeof tbl1, 'object');
 assertEq(String(tbl1), '[object WebAssembly.Table]');
 assertEq(Object.getPrototypeOf(tbl1), tableProto);
 
-// 'WebAssembly.Table.prototype.length' accessor data property
-let lengthDesc = Object.getOwnPropertyDescriptor(tableProto, 'length');
-assertEq(typeof lengthDesc.get, 'function');
-assertEq(lengthDesc.set, undefined);
-assertFalse(lengthDesc.enumerable);
-assertTrue(lengthDesc.configurable);
-
 // 'WebAssembly.Table.prototype.length' getter
+let lengthDesc = Object.getOwnPropertyDescriptor(tableProto, 'length');
 let lengthGetter = lengthDesc.get;
 assertEq(lengthGetter.length, 0);
 assertErrorMessage(
@@ -638,13 +530,8 @@ assertErrorMessage(
 assertEq(typeof lengthGetter.call(tbl1), 'number');
 assertEq(lengthGetter.call(tbl1), 2);
 
-// 'WebAssembly.Table.prototype.get' data property
-let getDesc = Object.getOwnPropertyDescriptor(tableProto, 'get');
-assertEq(typeof getDesc.value, 'function');
-assertFalse(getDesc.enumerable);
-assertTrue(getDesc.configurable);
-
 // 'WebAssembly.Table.prototype.get' method
+let getDesc = Object.getOwnPropertyDescriptor(tableProto, 'get');
 let get = getDesc.value;
 assertEq(get.length, 1);
 assertErrorMessage(
@@ -665,13 +552,8 @@ assertErrorMessage(
 assertErrorMessage(
     () => get.call(tbl1, {valueOf() { throw new Error('hi') }}), Error, 'hi');
 
-// 'WebAssembly.Table.prototype.set' data property
-let setDesc = Object.getOwnPropertyDescriptor(tableProto, 'set');
-assertEq(typeof setDesc.value, 'function');
-assertFalse(setDesc.enumerable);
-assertTrue(setDesc.configurable);
-
 // 'WebAssembly.Table.prototype.set' method
+let setDesc = Object.getOwnPropertyDescriptor(tableProto, 'set');
 let set = setDesc.value;
 assertEq(set.length, 2);
 assertErrorMessage(
@@ -715,13 +597,8 @@ assertEq(set.call(tbl1, 0, null), undefined);
 assertEq(set.call(tbl1, 1, null), undefined);
 assertEq(set.call(tbl1, undefined, null), undefined);
 
-// 'WebAssembly.Table.prototype.grow' data property
-let tblGrowDesc = Object.getOwnPropertyDescriptor(tableProto, 'grow');
-assertEq(typeof tblGrowDesc.value, 'function');
-assertFalse(tblGrowDesc.enumerable);
-assertTrue(tblGrowDesc.configurable);
-
 // 'WebAssembly.Table.prototype.grow' method
+let tblGrowDesc = Object.getOwnPropertyDescriptor(tableProto, 'grow');
 let tblGrow = tblGrowDesc.value;
 assertEq(tblGrow.length, 1);
 assertErrorMessage(
@@ -759,15 +636,9 @@ assertTrue(WebAssembly.validate(emptyModuleBinary));
 assertFalse(WebAssembly.validate(moduleBinaryImporting2Memories));
 assertFalse(WebAssembly.validate(moduleBinaryWithMemSectionAndMemImport));
 
-// 'WebAssembly.compile' data property
-let compileDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'compile');
-assertEq(typeof compileDesc.value, 'function');
-assertTrue(compileDesc.writable);
-assertFalse(compileDesc.enumerable);
-assertTrue(compileDesc.configurable);
-
 // 'WebAssembly.compile' function
 let compile = WebAssembly.compile;
+let compileDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'compile');
 assertEq(compile, compileDesc.value);
 assertEq(compile.length, 1);
 assertEq(compile.name, 'compile');
@@ -804,16 +675,10 @@ function assertCompileSuccess(bytes) {
 assertCompileSuccess(emptyModuleBinary);
 assertCompileSuccess(emptyModuleBinary.buffer);
 
-// 'WebAssembly.instantiate' data property
-let instantiateDesc =
-    Object.getOwnPropertyDescriptor(WebAssembly, 'instantiate');
-assertEq(typeof instantiateDesc.value, 'function');
-assertTrue(instantiateDesc.writable);
-assertFalse(instantiateDesc.enumerable);
-assertTrue(instantiateDesc.configurable);
-
 // 'WebAssembly.instantiate' function
 let instantiate = WebAssembly.instantiate;
+let instantiateDesc =
+    Object.getOwnPropertyDescriptor(WebAssembly, 'instantiate');
 assertEq(instantiate, instantiateDesc.value);
 assertEq(instantiate.length, 1);
 assertEq(instantiate.name, 'instantiate');
