@@ -137,6 +137,8 @@ class IfStatementSourceRanges final : public AstNodeSourceRanges {
                                    const SourceRange& else_range)
       : then_range_(then_range), else_range_(else_range) {}
 
+  void DisableContinuation() { has_continuation_ = false; }
+
   SourceRange GetRange(SourceRangeKind kind) override {
     switch (kind) {
       case SourceRangeKind::kElse:
@@ -144,6 +146,7 @@ class IfStatementSourceRanges final : public AstNodeSourceRanges {
       case SourceRangeKind::kThen:
         return then_range_;
       case SourceRangeKind::kContinuation: {
+        if (!has_continuation_) return SourceRange();
         const SourceRange& trailing_range =
             else_range_.IsEmpty() ? then_range_ : else_range_;
         return SourceRange::ContinuationOf(trailing_range);
@@ -156,6 +159,7 @@ class IfStatementSourceRanges final : public AstNodeSourceRanges {
  private:
   SourceRange then_range_;
   SourceRange else_range_;
+  bool has_continuation_ = true;
 };
 
 class IterationStatementSourceRanges final : public AstNodeSourceRanges {
@@ -268,6 +272,8 @@ class TryFinallyStatementSourceRanges final : public AstNodeSourceRanges {
 class SourceRangeMap final : public ZoneObject {
  public:
   explicit SourceRangeMap(Zone* zone) : map_(zone) {}
+
+  void Erase(ZoneObject* node) { map_.erase(node); }
 
   AstNodeSourceRanges* Find(ZoneObject* node) {
     auto it = map_.find(node);
