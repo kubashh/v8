@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45f0a3f6_022c616a",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-27T19:31:54Z",
+      "side": 1,
+      "message": "It seems like a better default would be NONE, since most of the callers want NONE.",
+      "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ca44827_e0755e9c",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-27T19:31:54Z",
+      "side": 1,
+      "message": "Do we even need an argument here? It looks to me like all callers pass none.",
+      "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aa3c8e2_083f25b1",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-27T19:31:54Z",
+      "side": 1,
+      "message": "Why do these have different attributes than the other methods above? I\u0027d expect them to be the same.",
+      "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
