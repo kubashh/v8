@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e729b0de_20a03c5c",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1440,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-27T20:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45f0a3f6_022c616a",
+      "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ca44827_e0755e9c",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "178efc7d_7e31e495",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-27T20:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ca44827_e0755e9c",
+      "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4aa3c8e2_083f25b1",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2018-11-27T19:31:54Z",
       "side": 1,
       "message": "Why do these have different attributes than the other methods above? I\u0027d expect them to be the same.",
+      "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "036fd4f9_591ae38f",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-27T20:41:43Z",
+      "side": 1,
+      "message": "Yes that\u0027s a good point; the spec test doesn\u0027t cover them currently. I can send a PR to add the spec test and a followup CL here, does it sound good to you?",
+      "parentUuid": "4aa3c8e2_083f25b1",
       "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
