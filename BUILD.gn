@@ -218,15 +218,26 @@ if (v8_check_microtasks_scopes_consistency == "") {
       v8_enable_debugging_features || dcheck_always_on
 }
 if (v8_current_cpu == "arm" && v8_use_snapshot) {
+  # TODO: It's useful to force the baseline to match the C++ build flags, but the
+  # other variants should be configurable.
   # All Armv7+ code generation targets require NEON.
   if (arm_use_neon && arm_version >= 7) {
     if (arm_version >= 8) {
-      v8_arm_snapshot_arch = "armv8"
+      v8_arm_snapshot_arch_targets = [ "armv8" ]
     } else {
-      v8_arm_snapshot_arch = "armv7"
+      v8_arm_snapshot_arch_targets = [
+        "armv7",
+        "armv7_sudiv",
+        "armv8",
+      ]
     }
   } else {
-    v8_arm_snapshot_arch = "armv6"
+    v8_arm_snapshot_arch_targets = [
+      "armv6",
+      "armv7",
+      "armv7_sudiv",
+      "armv8",
+    ]
   }
 }
 
@@ -1090,10 +1101,6 @@ template("run_mksnapshot") {
       "--turbo_instruction_scheduling",
     ]
 
-    if (v8_current_cpu == "arm") {
-      args += [ "--arm-arch=$v8_arm_snapshot_arch" ]
-    }
-
     args += invoker.args
 
     if (v8_enable_embedded_builtins) {
@@ -1102,6 +1109,14 @@ template("run_mksnapshot") {
         "--embedded_src",
         rebase_path("$target_gen_dir/embedded${suffix}.S", root_build_dir),
       ]
+      if (v8_current_cpu == "arm") {
+        outputs += [ "$target_gen_dir/embedded_manifest${suffix}.cc" ]
+        args += [
+          "--embedded_manifest_src",
+          rebase_path("$target_gen_dir/embedded_manifest${suffix}.cc",
+                      root_build_dir),
+        ]
+      }
       if (invoker.embedded_variant != "") {
         args += [
           "--embedded_variant",
@@ -1159,10 +1174,21 @@ template("run_mksnapshot") {
 }
 
 if (v8_use_snapshot) {
-  run_mksnapshot("default") {
-    args = []
-    if (v8_enable_embedded_builtins) {
-      embedded_variant = "Default"
+  if (v8_current_cpu == "arm") {
+    foreach(arm_arch, v8_arm_snapshot_arch_targets) {
+      run_mksnapshot("$arm_arch") {
+        args = [ "--arm-arch=$arm_arch" ]
+        if (v8_enable_embedded_builtins) {
+          embedded_variant = "Default"
+        }
+      }
+    }
+  } else {
+    run_mksnapshot("default") {
+      args = []
+      if (v8_enable_embedded_builtins) {
+        embedded_variant = "Default"
+      }
     }
   }
   if (emit_builtins_as_inline_asm) {
@@ -1171,10 +1197,24 @@ if (v8_use_snapshot) {
     }
   }
   if (v8_use_multi_snapshots) {
-    run_mksnapshot("trusted") {
-      args = [ "--no-untrusted-code-mitigations" ]
-      if (v8_enable_embedded_builtins) {
-        embedded_variant = "Trusted"
+    if (v8_current_cpu == "arm") {
+      foreach(arm_arch, v8_arm_snapshot_arch_targets) {
+        run_mksnapshot("trusted_$arm_arch") {
+          args = [
+            "--no-untrusted-code-mitigations",
+            "--arm-arch=$arm_arch",
+          ]
+          if (v8_enable_embedded_builtins) {
+            embedded_variant = "Trusted"
+          }
+        }
+      }
+    } else {
+      run_mksnapshot("trusted") {
+        args = [ "--no-untrusted-code-mitigations" ]
+        if (v8_enable_embedded_builtins) {
+          embedded_variant = "Trusted"
+        }
       }
     }
     if (emit_builtins_as_inline_asm) {
@@ -1261,7 +1301,6 @@ v8_source_set("v8_nosnapshot") {
     "$target_gen_dir/experimental-extras-libraries.cc",
     "$target_gen_dir/extras-libraries.cc",
     "$target_gen_dir/libraries.cc",
-    "src/snapshot/embedded-empty.cc",
     "src/snapshot/snapshot-empty.cc",
   ]
 
@@ -1292,11 +1331,18 @@ if (v8_use_snapshot && !v8_use_external_startup_data) {
       ":js2c_extras",
       ":v8_base",
     ]
-    public_deps = [
-      # This should be public so downstream targets can declare the snapshot
-      # output file as their inputs.
-      ":run_mksnapshot_default",
-    ]
+    if (v8_current_cpu == "arm") {
+      public_deps = []
+      foreach(arm_arch, v8_arm_snapshot_arch_targets) {
+        public_deps += [ ":run_mksnapshot_$arm_arch" ]
+      }
+    } else {
+      public_deps = [
+        # This should be public so downstream targets can declare the snapshot
+        # output file as their inputs.
+        ":run_mksnapshot_default",
+      ]
+    }
 
     # Do not publicize any header to remove build dependency.
     public = []
@@ -1309,7 +1355,12 @@ if (v8_use_snapshot && !v8_use_external_startup_data) {
       "src/setup-isolate-deserialize.cc",
     ]
 
-    if (v8_enable_embedded_builtins && emit_builtins_as_inline_asm) {
+    if (v8_enable_embedded_builtins && v8_current_cpu == "arm") {
+      foreach(target, v8_arm_snapshot_arch_targets) {
+        sources += [ "$target_gen_dir/embedded_$target.S" ]
+        sources += [ "$target_gen_dir/embedded_manifest_$target.cc" ]
+      }
+    } else if (v8_enable_embedded_builtins && emit_builtins_as_inline_asm) {
       deps += [ ":asm_to_inline_asm_default" ]
       sources += [ "$target_gen_dir/embedded.cc" ]
     } else if (v8_enable_embedded_builtins) {
@@ -1343,8 +1394,14 @@ if (v8_use_snapshot && v8_use_external_startup_data) {
     ]
     public_deps = [
       ":natives_blob",
-      ":run_mksnapshot_default",
     ]
+    if (v8_current_cpu == "arm") {
+      foreach(arm_arch, v8_arm_snapshot_arch_targets) {
+        public_deps += [ ":run_mksnapshot_$arm_arch" ]
+      }
+    } else {
+      public_deps += [ ":run_mksnapshot_default" ]
+    }
 
     if (v8_use_multi_snapshots) {
       public_deps += [ ":run_mksnapshot_trusted" ]
@@ -1372,7 +1429,16 @@ if (v8_use_snapshot && v8_use_external_startup_data) {
         }
       }
     } else if (v8_enable_embedded_builtins) {
-      sources += [ "$target_gen_dir/embedded.S" ]
+      if (v8_current_cpu == "arm") {
+        foreach(target, v8_arm_snapshot_arch_targets) {
+          sources += [
+            "$target_gen_dir/embedded_$target.S",
+            "$target_gen_dir/embedded_manifest_$target.cc",
+          ]
+        }
+      } else {
+        sources += [ "$target_gen_dir/embedded.S" ]
+      }
 
       if (v8_use_multi_snapshots) {
         sources += [ "$target_gen_dir/embedded_trusted.S" ]

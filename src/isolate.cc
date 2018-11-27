@@ -34,6 +34,7 @@
 #include "src/debug/debug.h"
 #include "src/deoptimizer.h"
 #include "src/elements.h"
+#include "src/embedded-blob-variant.h"
 #include "src/frames-inl.h"
 #include "src/ic/stub-cache.h"
 #include "src/interpreter/interpreter.h"
@@ -96,15 +97,101 @@ namespace internal {
 #define TRACE_ISOLATE(tag)
 #endif
 
-const uint8_t* DefaultEmbeddedBlob() { return v8_Default_embedded_blob_; }
-uint32_t DefaultEmbeddedBlobSize() { return v8_Default_embedded_blob_size_; }
+bool EmbeddedBlobVariant::IsBetterThan(const EmbeddedBlobVariant& other) const {
+  if (IsEmpty()) return false;
+  if (other.IsEmpty()) return true;
+  return cpu_features_ > other.cpu_features_;
+}
+
+bool EmbeddedBlobVariant::IsSupported() const {
+  return (CpuFeatures::SupportedFeatures() & cpu_features_) == cpu_features_;
+}
+
+class EmbeddedBlobVariantSelector {
+ public:
+  const EmbeddedBlobVariant* Best() const {
+    // Try the cached result first.
+    if (best_ != nullptr) return best_;
+
+    // Search for the best supported blob.
+    for (size_t i = 0; i < blob_count_; i++) {
+      if (blobs_[i]->IsSupported() &&
+          ((best_ == nullptr) || blobs_[i]->IsBetterThan(*best_))) {
+        best_ = blobs_[i];
+      }
+    }
+    if (FLAG_trace_snapshot_selection) {
+      if (best_ == nullptr) {
+        PrintF("No snapsnot blob available for CPU with features 0x%08x.\n",
+               CpuFeatures::SupportedFeatures());
+      } else {
+        PrintF("Using snapshot blob with CpuFeatures 0x%08x.\n",
+               best_->cpu_features());
+      }
+    }
+    return best_;
+  }
+
+  void Register(const EmbeddedBlobVariant* blob) {
+    CHECK_NULL(best_);
+    CHECK_LT(blob_count_, kMaxEmbeddedBlobVariants);
+    blobs_[blob_count_++] = blob;
+  }
+
+  const uint8_t* BestEmbeddedBlob() const {
+    return (Best() == nullptr) ? nullptr : Best()->blob();
+  }
+
+  uint32_t BestEmbeddedBlobSize() const {
+    return (Best() == nullptr) ? 0 : Best()->size();
+  }
+
+ private:
+  static constexpr size_t kMaxEmbeddedBlobVariants = 4;
+
+  const EmbeddedBlobVariant* blobs_[kMaxEmbeddedBlobVariants];
+  size_t blob_count_ = 0;
+
+  // Cache the result of Best().
+  mutable const EmbeddedBlobVariant* best_;
+};
+
+namespace {
+EmbeddedBlobVariantSelector default_embedded_blob_selector;
+}  // namespace
+
+const uint8_t* DefaultEmbeddedBlob() {
+  return default_embedded_blob_selector.BestEmbeddedBlob();
+}
+uint32_t DefaultEmbeddedBlobSize() {
+  return default_embedded_blob_selector.BestEmbeddedBlobSize();
+}
+
+DefaultEmbeddedBlobVariant::DefaultEmbeddedBlobVariant(const uint8_t* blob,
+                                                       uint32_t size,
+                                                       unsigned cpu_features)
+    : EmbeddedBlobVariant(blob, size, cpu_features) {
+  default_embedded_blob_selector.Register(this);
+}
 
 #ifdef V8_MULTI_SNAPSHOTS
-extern "C" const uint8_t* v8_Trusted_embedded_blob_;
-extern "C" uint32_t v8_Trusted_embedded_blob_size_;
+namespace {
+EmbeddedBlobVariantSelector trusted_embedded_blob_selector;
+}  // namespace
 
-const uint8_t* TrustedEmbeddedBlob() { return v8_Trusted_embedded_blob_; }
-uint32_t TrustedEmbeddedBlobSize() { return v8_Trusted_embedded_blob_size_; }
+const uint8_t* TrustedEmbeddedBlob() {
+  return trusted_embedded_blob_selector.BestEmbeddedBlob();
+}
+uint32_t TrustedEmbeddedBlobSize() {
+  return trusted_embedded_blob_selector.BestEmbeddedBlobSize();
+}
+
+TrustedEmbeddedBlobVariant::TrustedEmbeddedBlobVariant(const uint8_t* blob,
+                                                       uint32_t size,
+                                                       unsigned cpu_features)
+    : EmbeddedBlobVariant(blob, size, cpu_features) {
+  trusted_embedded_blob_selector.Register(this);
+}
 #endif
 
 namespace {

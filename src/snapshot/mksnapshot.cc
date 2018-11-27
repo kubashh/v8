@@ -274,7 +274,11 @@ int main(int argc, char** argv) {
 
     i::EmbeddedFileWriter embedded_writer;
     embedded_writer.SetEmbeddedFile(i::FLAG_embedded_src);
+    embedded_writer.SetEmbeddedManifestFile(i::FLAG_embedded_manifest_src);
     embedded_writer.SetEmbeddedVariant(i::FLAG_embedded_variant);
+#if V8_TARGET_ARCH_ARM
+    embedded_writer.SetEmbeddedTarget(i::FLAG_arm_arch);
+#endif
 
     std::unique_ptr<char> embed_script(
         GetExtraCode(argc >= 2 ? argv[1] : nullptr, "embedding"));

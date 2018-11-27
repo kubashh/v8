@@ -61,7 +61,8 @@ static const unsigned kUseBest = ~0u;
 static unsigned CpuFeaturesFromCommandLine() {
   if (strcmp(FLAG_arm_arch, "armv8") == 0) {
     return kArmv8;
-  } else if (strcmp(FLAG_arm_arch, "armv7+sudiv") == 0) {
+  } else if ((strcmp(FLAG_arm_arch, "armv7+sudiv") == 0) ||
+             (strcmp(FLAG_arm_arch, "armv7_sudiv") == 0)) {
     return kArmv7WithSudiv;
   } else if (strcmp(FLAG_arm_arch, "armv7") == 0) {
     return kArmv7;
@@ -75,7 +76,7 @@ static unsigned CpuFeaturesFromCommandLine() {
     fprintf(stderr,
             "Supported values are:  best\n"
             "                       armv8\n"
-            "                       armv7+sudiv\n"
+            "                       armv7+sudiv (or armv7_sudiv)\n"
             "                       armv7\n"
             "                       armv6\n");
     FATAL("arm-arch");

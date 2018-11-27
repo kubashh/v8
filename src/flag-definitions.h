@@ -1042,6 +1042,8 @@ DEFINE_VALUE_IMPLICATION(runtime_call_stats, runtime_stats, 1)
 #endif
 DEFINE_BOOL_READONLY(embedded_builtins, V8_EMBEDDED_BUILTINS_BOOL,
                      "Embed builtin code into the binary.")
+DEFINE_BOOL(trace_snapshot_selection, false,
+            "Trace start-up embedded snapshot selection.")
 DEFINE_BOOL(profile_deserialization, false,
             "Print the time it takes to deserialize the snapshot.")
 DEFINE_BOOL(serialization_statistics, false,
@@ -1072,6 +1074,9 @@ DEFINE_INT(testing_prng_seed, 42, "Seed used for threading test randomness")
 // mksnapshot.cc
 DEFINE_STRING(embedded_src, nullptr,
               "Path for the generated embedded data file. (mksnapshot only)")
+DEFINE_STRING(embedded_manifest_src, nullptr,
+              "Path for the generated multi-target snapshot manifest file. "
+              "(mksnapshot only)")
 DEFINE_STRING(
     embedded_variant, nullptr,
     "Label to disambiguate symbols in embedded data file. (mksnapshot only)")
