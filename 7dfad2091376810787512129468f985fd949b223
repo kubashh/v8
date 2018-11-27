@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7cbf9ac6_81a3338e",
+        "filename": "src/ast/ast-source-ranges.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-27T06:33:21Z",
+      "side": 1,
+      "message": "fixed.",
+      "parentUuid": "be50cbce_934a61bf",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50770d17_ced79506",
         "filename": "src/ast/remove-redundant-source-range-visitor.cc",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2018-11-26T12:31:40Z",
       "side": 1,
       "message": "This assumes each block source range actually emits counters, and currently that\u0027s not the case. See https://cs.chromium.org/chromium/src/v8/src/interpreter/control-flow-builders.cc?l\u003d16\u0026rcl\u003d500be6dd6ec690aebae921e8a97d17f8055de017.\n\nMaybe we should just emit block counters unconditionally.. We\u0027d emit many more counters but that may just be okay.",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddea1cac_d9136ffa",
+        "filename": "src/ast/remove-redundant-source-range-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-27T06:33:21Z",
+      "side": 1,
+      "message": "What are some concrete examples where `needs_continuation_counter()` evaluates to false?\n\nAs an experiment. I disabled the check, and the main behavior I\u0027m noticing is that whitespace and comments begin being tracked, e.g., for:\n\n!function() {                             // 0000\n  var i;                                  // 0050\n  for (i of [0,1,2,3]) { nop(); }         // 0100\n  for (let j of [0,1,2,3]) { nop(); }     // 0150\n  for (i in [0,1,2,3]) { nop(); }         // 0200\n  for (let j in [0,1,2,3]) { nop(); }     // 0250\n  var xs \u003d [{a:0, b:1}, {a:1,b:0}];       // 0300\n  for (var {a: x, b: y} of xs) { nop(); } // 0350\n}();                                      // 0400\n\n{ nop(); } // 0350\n------------------\n\nis covered, rather than:\n\n{ nop(); } // 0350\n__________\n\nor for:\n\nfunction g() {}                           // 0000\n!function() {                             // 0050\n  for (var i \u003d 0; i \u003c 12; i++) g();       // 0100\n  for (var i \u003d 0; i \u003c 12; i++) {          // 0150\n    g();                                  // 0200\n  }                                       // 0250\n  for (var i \u003d 0; false; i++) g();        // 0300\n  for (var i \u003d 0; true; i++) break;       // 0350\n  for (var i \u003d 0; i \u003c 12; i++) {          // 0400\n    if (i % 3 \u003d\u003d 0) g(); else g();        // 0450\n  }                                       // 0500\n}();                                      // 0550\n\n\n                                       // 0500\n----------------------------------------------\n\nbegins being covered, whereas it wasn\u0027t before.",
+      "parentUuid": "50770d17_ced79506",
       "revId": "7dfad2091376810787512129468f985fd949b223",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "bb823b53_d8504cd8",
+        "filename": "src/ast/remove-redundant-source-range-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-27T06:33:21Z",
+      "side": 1,
+      "message": "fixed.",
+      "parentUuid": "33470043_03a90a17",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84f2b2c5_4d0aed3d",
         "filename": "src/ast/remove-redundant-source-range-visitor.cc",
         "patchSetId": 6
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "2016857a_37d84ebd",
+        "filename": "src/ast/remove-redundant-source-range-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-27T06:33:21Z",
+      "side": 1,
+      "message": "switched to using `-\u003elast()` everywhere.",
+      "parentUuid": "84f2b2c5_4d0aed3d",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64fc0d13_19c86d17",
         "filename": "src/ast/remove-redundant-source-range-visitor.cc",
         "patchSetId": 6
@@ -81,6 +153,24 @@
       "writtenOn": "2018-11-26T12:31:40Z",
       "side": 1,
       "message": "This doesn\u0027t look right - we still need to collect then/else coverage. It\u0027s only the continuation counter that we want to disable. Did I miss something?\n\nWhat about we add DisableContinuation() to AstNodeSourceRanges? Then we don\u0027t need to special-case here at all, we could just say:\n\n if (last_stmt-\u003ehas_continuation() \u0026\u0026 enclosing_stmt-\u003ehas_continuation()) {\n   last_stmt-\u003eDisableContinuation();\n }",
+      "revId": "7dfad2091376810787512129468f985fd949b223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd593969_e578db56",
+        "filename": "src/ast/remove-redundant-source-range-visitor.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1250850
+      },
+      "writtenOn": "2018-11-27T06:33:21Z",
+      "side": 1,
+      "message": "we talked about this in chat; \n\ndisabling the continuation without also removing the source range associated with the `then_statement` and `else_statement` seems to have no effect:\n\nAs an example, with only the continuation disabled:\n\nfunction a (branch) {                     // 0000\n  if (branch) {                           // 0050\n    return \u0027a\u0027                            // 0100\n  } else {                                // 0150\n    return \u0027b\u0027                            // 0200\n  }                                       // 0250\n}                                         // 0300\na(true); a(false)                         // 0350\n\nindicates that the following was not covered:\n\n                                       // 0250\n----------------------------------------------\n\nthe problem seems to be that the block associated with the else statement and the if statement is an open ended source range, and I think it calculates the terminal position to be the terminal position of the parent if statement (even though we\u0027d like it to use the terminal position of the function body).\n\nin the case of an if statement, perhaps rather than removing the source range for the continuation, we need to update it to have the same terminal position as the enclosing block?",
+      "parentUuid": "64fc0d13_19c86d17",
       "revId": "7dfad2091376810787512129468f985fd949b223",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
