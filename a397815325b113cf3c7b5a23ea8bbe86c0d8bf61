@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1725deb_e4f39ed8",
+        "filename": "src/builtins/builtins-handler-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-11-27T10:19:46Z",
+      "side": 1,
+      "message": "I am not very sure about it. I am not very sure if there are some cases, where the slot could be Global/Keyed kind. This is used here: https://cs.chromium.org/chromium/src/v8/src/ic/ic.cc?sq\u003dpackage:chromium\u0026q\u003dic/i\u0026g\u003d0\u0026l\u003d758.",
+      "revId": "a397815325b113cf3c7b5a23ea8bbe86c0d8bf61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f7180c2_c435d2af",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2437,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-11-27T10:19:46Z",
+      "side": 1,
+      "message": "This is bytecode handler and only called for NamedProperties.",
+      "revId": "a397815325b113cf3c7b5a23ea8bbe86c0d8bf61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94e78779_ae5a8ef2",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2479,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-11-27T10:19:46Z",
+      "side": 1,
+      "message": "Used by Turofan only for Named Properties here: https://cs.chromium.org/chromium/src/v8/src/compiler/js-generic-lowering.cc?type\u003dcs\u0026q\u003dBuiltins::kLoadIC\u0026g\u003d0\u0026l\u003d184",
+      "revId": "a397815325b113cf3c7b5a23ea8bbe86c0d8bf61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95487b55_1c04a84b",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2556,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-11-27T10:19:46Z",
+      "side": 1,
+      "message": "Only used by LoadIC_NonInlined which is used by LoadIC / LoadIC_BytecodeHandler.",
+      "revId": "a397815325b113cf3c7b5a23ea8bbe86c0d8bf61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba838503_6d1cc013",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-11-27T10:19:46Z",
+      "side": 1,
+      "message": "Used only for NamedProperties here: https://cs.chromium.org/chromium/src/v8/src/compiler/js-generic-lowering.cc?type\u003dcs\u0026q\u003dBuiltins::kStoreIC\u0026g\u003d0\u0026l\u003d251",
+      "revId": "a397815325b113cf3c7b5a23ea8bbe86c0d8bf61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22ef38b2_5b4f69a5",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3234,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-11-27T10:19:46Z",
+      "side": 1,
+      "message": "In GenerateLoadIC_Megamorphic: used only by Turbofan for LowerJSNamed here: https://cs.chromium.org/chromium/src/v8/src/compiler/js-generic-lowering.cc?type\u003dcs\u0026q\u003dBuiltins::kStoreIC\u0026g\u003d0\u0026l\u003d191",
+      "revId": "a397815325b113cf3c7b5a23ea8bbe86c0d8bf61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e31693b_58e7523d",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-11-27T10:19:46Z",
+      "side": 1,
+      "message": "Used by LoadIC / LoadIC_BytecodeHandler",
+      "revId": "a397815325b113cf3c7b5a23ea8bbe86c0d8bf61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2e17afc_60f8972b",
+        "filename": "src/ic/keyed-store-generic.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-11-27T10:19:46Z",
+      "side": 1,
+      "message": "Used by StoreIC which is used both by bytecode handler and TurboFan but only for named properties: https://cs.chromium.org/chromium/src/v8/src/compiler/js-generic-lowering.cc?type\u003dcs\u0026q\u003dBuiltins::kStoreIC\u0026g\u003d0\u0026l\u003d255",
+      "revId": "a397815325b113cf3c7b5a23ea8bbe86c0d8bf61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
