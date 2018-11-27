@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "10ef6071_c63ad79e",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-27T23:38:22Z",
+      "side": 1,
+      "message": "What I\u0027m proposing is to not even have an \"attributes\" argument, since it seems like no callers pass anything. Instead you\u0027d just always pass v8::DontEnum to SetAccessorProperty.",
+      "parentUuid": "178efc7d_7e31e495",
+      "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4aa3c8e2_083f25b1",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 1
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Yes that\u0027s a good point; the spec test doesn\u0027t cover them currently. I can send a PR to add the spec test and a followup CL here, does it sound good to you?",
       "parentUuid": "4aa3c8e2_083f25b1",
+      "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d92d0a3d_f45acd8a",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-27T23:38:22Z",
+      "side": 1,
+      "message": "I think these should change now, to keep them consistent with the rest of the methods. The enumeration behavior just follows naturally from WebIDL, so it\u0027s already what the spec \"says\" (it\u0027s actually in the wasm \"Web API\" spec, so the tests might be there too).",
+      "parentUuid": "036fd4f9_591ae38f",
       "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

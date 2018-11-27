@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f474579c_cbd28ac9",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-27T23:38:22Z",
+      "side": 1,
+      "message": "Seems like this should be removed at this point.",
+      "revId": "416833de7b1c263922b3aaced3afac55d66b1062",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b47cd176_b9c03b2c",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-27T23:38:22Z",
+      "side": 1,
+      "message": "How about adding a new helper, InstallConstructor, that delegates to InstallFunc and handles passing dont_enum_attribute? Then this function doesn\u0027t have to deal with attributes at all anymore.",
+      "revId": "416833de7b1c263922b3aaced3afac55d66b1062",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

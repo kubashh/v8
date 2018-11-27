@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bb5db9a_4c5f1004",
+        "filename": "test/mjsunit/wasm/js-api.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-27T23:38:22Z",
+      "side": 0,
+      "message": "Rather than removing these tests, please update them instead. I\u0027d rather duplicate coverage than risk missing coverage.",
+      "revId": "1d08ecafbebff572013bb4caeb675eff81e0c2ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
