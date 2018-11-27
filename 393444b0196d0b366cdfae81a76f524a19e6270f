@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbd48bef_2baafb22",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4216,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-11-27T09:58:50Z",
+      "side": 1,
+      "message": "Do we need to validate here? Can we move this to after ParseClassLiteral in ParseClassDeclaration? The ParsePrimaryExpression version will implicitly validate the expression when it turns out to be an expression anyway.",
+      "revId": "393444b0196d0b366cdfae81a76f524a19e6270f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
