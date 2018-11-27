@@ -217,6 +217,18 @@ if (v8_check_microtasks_scopes_consistency == "") {
   v8_check_microtasks_scopes_consistency =
       v8_enable_debugging_features || dcheck_always_on
 }
+if (v8_current_cpu == "arm" && v8_use_snapshot) {
+  # All Armv7+ code generation targets require NEON.
+  if (arm_use_neon && arm_version >= 7) {
+    if (arm_version >= 8) {
+      v8_arm_snapshot_arch = "armv8"
+    } else {
+      v8_arm_snapshot_arch = "armv7"
+    }
+  } else {
+    v8_arm_snapshot_arch = "armv6"
+  }
+}
 
 assert(v8_current_cpu != "x86" || !v8_untrusted_code_mitigations,
        "Untrusted code mitigations are unsupported on ia32")
@@ -420,28 +432,11 @@ config("toolchain") {
 
   if (v8_current_cpu == "arm") {
     defines += [ "V8_TARGET_ARCH_ARM" ]
-    if (arm_version >= 7) {
-      defines += [ "CAN_USE_ARMV7_INSTRUCTIONS" ]
-    }
-    if (arm_fpu == "vfpv3-d16") {
-      defines += [ "CAN_USE_VFP3_INSTRUCTIONS" ]
-    } else if (arm_fpu == "vfpv3") {
-      defines += [
-        "CAN_USE_VFP3_INSTRUCTIONS",
-        "CAN_USE_VFP32DREGS",
-      ]
-    } else if (arm_fpu == "neon") {
-      defines += [
-        "CAN_USE_VFP3_INSTRUCTIONS",
-        "CAN_USE_VFP32DREGS",
-        "CAN_USE_NEON",
-      ]
-    }
 
     # TODO(jochen): Add support for arm_test_noprobe.
 
     if (current_cpu != "arm") {
-      # These defines ares used for the ARM simulator.
+      # These defines are used for the ARM simulator.
       if (arm_float_abi == "hard") {
         defines += [ "USE_EABI_HARDFLOAT=1" ]
       } else if (arm_float_abi == "softfp") {
@@ -1094,6 +1089,10 @@ template("run_mksnapshot") {
                          root_build_dir),
       "--turbo_instruction_scheduling",
     ]
+
+    if (v8_current_cpu == "arm") {
+      args += [ "--arm-arch=$v8_arm_snapshot_arch" ]
+    }
 
     args += invoker.args
 

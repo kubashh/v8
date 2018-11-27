@@ -116,26 +116,6 @@ struct MaybeBoolFlag {
 #define DEBUG_BOOL false
 #endif
 
-// Supported ARM configurations are:
-//  "armv6":       ARMv6 + VFPv2
-//  "armv7":       ARMv7 + VFPv3-D32 + NEON
-//  "armv7+sudiv": ARMv7 + VFPv4-D32 + NEON + SUDIV
-//  "armv8":       ARMv8 (including all of the above)
-#if !defined(ARM_TEST_NO_FEATURE_PROBE) ||                            \
-    (defined(CAN_USE_ARMV8_INSTRUCTIONS) &&                           \
-     defined(CAN_USE_ARMV7_INSTRUCTIONS) && defined(CAN_USE_SUDIV) && \
-     defined(CAN_USE_NEON) && defined(CAN_USE_VFP3_INSTRUCTIONS))
-#define ARM_ARCH_DEFAULT "armv8"
-#elif defined(CAN_USE_ARMV7_INSTRUCTIONS) && defined(CAN_USE_SUDIV) && \
-    defined(CAN_USE_NEON) && defined(CAN_USE_VFP3_INSTRUCTIONS)
-#define ARM_ARCH_DEFAULT "armv7+sudiv"
-#elif defined(CAN_USE_ARMV7_INSTRUCTIONS) && defined(CAN_USE_NEON) && \
-    defined(CAN_USE_VFP3_INSTRUCTIONS)
-#define ARM_ARCH_DEFAULT "armv7"
-#else
-#define ARM_ARCH_DEFAULT "armv6"
-#endif
-
 #ifdef V8_OS_WIN
 # define ENABLE_LOG_COLOUR false
 #else
@@ -829,22 +809,14 @@ DEFINE_BOOL(enable_bmi2, true, "enable use of BMI2 instructions if available")
 DEFINE_BOOL(enable_lzcnt, true, "enable use of LZCNT instruction if available")
 DEFINE_BOOL(enable_popcnt, true,
             "enable use of POPCNT instruction if available")
-DEFINE_STRING(arm_arch, ARM_ARCH_DEFAULT,
-              "generate instructions for the selected ARM architecture if "
-              "available: armv6, armv7, armv7+sudiv or armv8")
+DEFINE_STRING(arm_arch, "best",
+              "generate instructions for the selected ARM architecture: "
+              "armv6, armv7, armv7+sudiv, armv8 or best")
 DEFINE_BOOL(force_long_branches, false,
             "force all emitted branches to be in long mode (MIPS/PPC only)")
 DEFINE_STRING(mcpu, "auto", "enable optimization for specific cpu")
 DEFINE_BOOL(partial_constant_pool, true,
             "enable use of partial constant pools (X64 only)")
-
-// Deprecated ARM flags (replaced by arm_arch).
-DEFINE_MAYBE_BOOL(enable_armv7, "deprecated (use --arm_arch instead)")
-DEFINE_MAYBE_BOOL(enable_vfp3, "deprecated (use --arm_arch instead)")
-DEFINE_MAYBE_BOOL(enable_32dregs, "deprecated (use --arm_arch instead)")
-DEFINE_MAYBE_BOOL(enable_neon, "deprecated (use --arm_arch instead)")
-DEFINE_MAYBE_BOOL(enable_sudiv, "deprecated (use --arm_arch instead)")
-DEFINE_MAYBE_BOOL(enable_armv8, "deprecated (use --arm_arch instead)")
 
 // regexp-macro-assembler-*.cc
 DEFINE_BOOL(enable_regexp_unaligned_accesses, true,

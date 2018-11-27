@@ -51,28 +51,6 @@
 #error "Host architecture was not detected as supported by v8"
 #endif
 
-#if defined(__ARM_ARCH_7A__) || \
-    defined(__ARM_ARCH_7R__) || \
-    defined(__ARM_ARCH_7__)
-# define CAN_USE_ARMV7_INSTRUCTIONS 1
-#ifdef __ARM_ARCH_EXT_IDIV__
-#define CAN_USE_SUDIV 1
-#endif
-# ifndef CAN_USE_VFP3_INSTRUCTIONS
-#define CAN_USE_VFP3_INSTRUCTIONS 1
-# endif
-#endif
-
-#if defined(__ARM_ARCH_8A__)
-#define CAN_USE_ARMV7_INSTRUCTIONS 1
-#define CAN_USE_SUDIV 1
-# define CAN_USE_ARMV8_INSTRUCTIONS 1
-#ifndef CAN_USE_VFP3_INSTRUCTIONS
-#define CAN_USE_VFP3_INSTRUCTIONS 1
-#endif
-#endif
-
-
 // Target architecture detection. This may be set externally. If not, detect
 // in the same way as the host architecture, that is, target the native
 // environment as presented by the compiler.
