@@ -16,6 +16,24 @@
       "revId": "393444b0196d0b366cdfae81a76f524a19e6270f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4439b255_f3174840",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4216,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2018-11-27T11:52:35Z",
+      "side": 1,
+      "message": "I *think* this used to be pared with a `ExpressionClassifier property_classifier(this)` that used to be a few lines above, it should be safe to move this to `ParseClassDeclaration` now.",
+      "parentUuid": "dbd48bef_2baafb22",
+      "revId": "393444b0196d0b366cdfae81a76f524a19e6270f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
