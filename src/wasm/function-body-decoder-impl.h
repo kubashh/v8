@@ -467,6 +467,7 @@ struct MemoryInitImmediate {
 
   inline MemoryInitImmediate(Decoder* decoder, const byte* pc)
       : memory(decoder, pc + 1) {
+    if (!VALIDATE(decoder->ok())) return;
     data_segment_index = decoder->read_i32v<validate>(
         pc + 2 + memory.length, &length, "data segment index");
     length += memory.length;
@@ -491,6 +492,7 @@ struct TableInitImmediate {
 
   inline TableInitImmediate(Decoder* decoder, const byte* pc)
       : table(decoder, pc + 1) {
+    if (!VALIDATE(decoder->ok())) return;
     elem_segment_index = decoder->read_i32v<validate>(
         pc + 2 + table.length, &length, "elem segment index");
     length += table.length;
