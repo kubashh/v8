@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8cccf38_ab621c91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-11-27T13:15:14Z",
+      "side": 1,
+      "message": "I don\u0027t think this will be necessary. Non-embedded builtins are on the way out.",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 26,
+        "endChar": 67
+      },
+      "revId": "e554dcfd14ff8ab589e9bb5d3bc0d612f525ea11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
