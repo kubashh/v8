@@ -114,7 +114,10 @@ TEST_F(BytecodeArrayBuilderTest, AllBytecodesGenerated) {
       .LoadGlobal(name, load_global_slot.ToInt(), TypeofMode::NOT_INSIDE_TYPEOF)
       .LoadGlobal(name, load_global_typeof_slot.ToInt(),
                   TypeofMode::INSIDE_TYPEOF)
-      .StoreGlobal(name, sloppy_store_global_slot.ToInt());
+      .StoreGlobal(name, sloppy_store_global_slot.ToInt(),
+                   LanguageMode::kSloppy)
+      .StoreGlobal(name, sloppy_store_global_slot.ToInt(),
+                   LanguageMode::kStrict);
 
   // Emit context operations.
   builder.PushContext(reg)

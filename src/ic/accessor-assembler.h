@@ -82,7 +82,7 @@ class AccessorAssembler : public CodeStubAssembler {
     Node* holder;
   };
 
-  void LoadGlobalIC(TNode<FeedbackVector> vector, Node* slot,
+  void LoadGlobalIC(Node* maybe_feedback_vector, Node* slot,
                     const LazyNode<Context>& lazy_context,
                     const LazyNode<Name>& lazy_name, TypeofMode typeof_mode,
                     ExitPoint* exit_point,
@@ -99,10 +99,13 @@ class AccessorAssembler : public CodeStubAssembler {
  protected:
   struct StoreICParameters : public LoadICParameters {
     StoreICParameters(Node* context, Node* receiver, Node* name,
-                      SloppyTNode<Object> value, Node* slot, Node* vector)
+                      SloppyTNode<Object> value, Node* slot, Node* vector,
+                      Node* flags)
         : LoadICParameters(context, receiver, name, slot, vector),
-          value(value) {}
+          value(value),
+          flags(flags) {}
     SloppyTNode<Object> value;
+    Node* flags;
   };
 
   enum class ICMode { kNonGlobalIC, kGlobalIC };

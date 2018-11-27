@@ -2391,6 +2391,10 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LoadICParameters* p,
   // accident.
   Label stub_call(this, Label::kDeferred), miss(this, Label::kDeferred);
 
+  // Goto runtime if there is no feedback vector.
+  // TODO(mythria): Should we call GetProperty builtin instead?
+  GotoIf(IsUndefined(p->vector), &miss);
+
   // Inlined fast path.
   {
     Comment("LoadIC_BytecodeHandler_fast");
@@ -2557,13 +2561,17 @@ void AccessorAssembler::LoadIC_Uninitialized(const LoadICParameters* p) {
   }
 }
 
-void AccessorAssembler::LoadGlobalIC(TNode<FeedbackVector> vector, Node* slot,
+void AccessorAssembler::LoadGlobalIC(Node* maybe_feedback_vector, Node* slot,
                                      const LazyNode<Context>& lazy_context,
                                      const LazyNode<Name>& lazy_name,
                                      TypeofMode typeof_mode,
                                      ExitPoint* exit_point,
                                      ParameterMode slot_mode) {
   Label try_handler(this, Label::kDeferred), miss(this, Label::kDeferred);
+  // If feedback_vector is not valid, then go to runtime.
+  GotoIf(IsUndefined(maybe_feedback_vector), &miss);
+
+  TNode<FeedbackVector> vector = CAST(maybe_feedback_vector);
   LoadGlobalIC_TryPropertyCellCase(vector, slot, lazy_context, exit_point,
                                    &try_handler, &miss, slot_mode);
 
@@ -2577,7 +2585,9 @@ void AccessorAssembler::LoadGlobalIC(TNode<FeedbackVector> vector, Node* slot,
     TNode<Context> context = lazy_context();
     TNode<Name> name = lazy_name();
     exit_point->ReturnCallRuntime(Runtime::kLoadGlobalIC_Miss, context, name,
-                                  ParameterToTagged(slot, slot_mode), vector);
+                                  ParameterToTagged(slot, slot_mode),
+                                  maybe_feedback_vector,
+                                  SmiConstant(typeof_mode));
   }
 }
 
@@ -2658,6 +2668,9 @@ void AccessorAssembler::KeyedLoadIC(const LoadICParameters* p) {
       try_megamorphic(this, Label::kDeferred),
       try_polymorphic_name(this, Label::kDeferred),
       miss(this, Label::kDeferred);
+
+  // Goto runtime if there is no feedback vector.
+  GotoIf(IsUndefined(p->vector), &miss);
 
   Node* receiver_map = LoadReceiverMap(p->receiver);
   GotoIf(IsDeprecatedMap(receiver_map), &miss);
@@ -2881,6 +2894,9 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
       try_megamorphic(this, Label::kDeferred),
       try_uninitialized(this, Label::kDeferred), miss(this, Label::kDeferred);
 
+  // Goto runtime if there is no feedback vector.
+  GotoIf(IsUndefined(p->vector), &miss);
+
   Node* receiver_map = LoadReceiverMap(p->receiver);
   GotoIf(IsDeprecatedMap(receiver_map), &miss);
 
@@ -2922,12 +2938,12 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
         WordEqual(strong_feedback, LoadRoot(RootIndex::kuninitialized_symbol)),
         &miss);
     TailCallBuiltin(Builtins::kStoreIC_Uninitialized, p->context, p->receiver,
-                    p->name, p->value, p->slot, p->vector);
+                    p->name, p->value, p->slot, p->vector, p->flags);
   }
   BIND(&miss);
   {
     TailCallRuntime(Runtime::kStoreIC_Miss, p->context, p->value, p->slot,
-                    p->vector, p->receiver, p->name);
+                    p->vector, p->receiver, p->name, p->flags);
   }
 }
 
@@ -2969,7 +2985,7 @@ void AccessorAssembler::StoreGlobalIC(const StoreICParameters* pp) {
     BIND(&miss);
     {
       TailCallRuntime(Runtime::kStoreGlobalIC_Miss, pp->context, pp->value,
-                      pp->slot, pp->vector, pp->name);
+                      pp->slot, pp->vector, pp->name, pp->flags);
     }
   }
 
@@ -3055,6 +3071,9 @@ void AccessorAssembler::StoreGlobalIC_PropertyCellCase(Node* property_cell,
 void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
   Label miss(this, Label::kDeferred);
   {
+    // Goto runtime if there is no feedback vector.
+    GotoIf(IsUndefined(p->vector), &miss);
+
     TVARIABLE(MaybeObject, var_handler);
 
     Label if_handler(this, &var_handler),
@@ -3116,7 +3135,7 @@ void AccessorAssembler::KeyedStoreIC(const StoreICParameters* p) {
   {
     Comment("KeyedStoreIC_miss");
     TailCallRuntime(Runtime::kKeyedStoreIC_Miss, p->context, p->value, p->slot,
-                    p->vector, p->receiver, p->name);
+                    p->vector, p->receiver, p->name, p->flags);
   }
 }
 
@@ -3189,9 +3208,8 @@ void AccessorAssembler::StoreInArrayLiteralIC(const StoreICParameters* p) {
   BIND(&miss);
   {
     Comment("StoreInArrayLiteralIC_miss");
-    // TODO(neis): Introduce Runtime::kStoreInArrayLiteralIC_Miss.
-    TailCallRuntime(Runtime::kKeyedStoreIC_Miss, p->context, p->value, p->slot,
-                    p->vector, p->receiver, p->name);
+    TailCallRuntime(Runtime::kStoreInArrayLiteralIC_Miss, p->context, p->value,
+                    p->slot, p->vector, p->receiver, p->name);
   }
 }
 
@@ -3312,7 +3330,7 @@ void AccessorAssembler::GenerateLoadGlobalIC(TypeofMode typeof_mode) {
   Node* context = Parameter(Descriptor::kContext);
 
   ExitPoint direct_exit(this);
-  LoadGlobalIC(CAST(vector), slot,
+  LoadGlobalIC(vector, slot,
                // lazy_context
                [=] { return CAST(context); },
                // lazy_name
@@ -3398,32 +3416,35 @@ void AccessorAssembler::GenerateKeyedLoadIC_PolymorphicName() {
 }
 
 void AccessorAssembler::GenerateStoreGlobalIC() {
-  typedef StoreGlobalWithVectorDescriptor Descriptor;
+  typedef StoreGlobalWithVectorFlagDescriptor Descriptor;
 
   Node* name = Parameter(Descriptor::kName);
   Node* value = Parameter(Descriptor::kValue);
   Node* slot = Parameter(Descriptor::kSlot);
   Node* vector = Parameter(Descriptor::kVector);
   Node* context = Parameter(Descriptor::kContext);
+  Node* flags = Parameter(Descriptor::kFlags);
 
-  StoreICParameters p(context, nullptr, name, value, slot, vector);
+  StoreICParameters p(context, nullptr, name, value, slot, vector, flags);
   StoreGlobalIC(&p);
 }
 
 void AccessorAssembler::GenerateStoreGlobalICTrampoline() {
-  typedef StoreGlobalDescriptor Descriptor;
+  typedef StoreGlobalWithFlagDescriptor Descriptor;
 
   Node* name = Parameter(Descriptor::kName);
   Node* value = Parameter(Descriptor::kValue);
   Node* slot = Parameter(Descriptor::kSlot);
   Node* context = Parameter(Descriptor::kContext);
   Node* vector = LoadFeedbackVectorForStub();
+  Node* language_mode = Parameter(Descriptor::kFlags);
 
-  TailCallBuiltin(Builtins::kStoreGlobalIC, context, name, value, slot, vector);
+  TailCallBuiltin(Builtins::kStoreGlobalIC, context, name, value, slot, vector,
+                  language_mode);
 }
 
 void AccessorAssembler::GenerateStoreIC() {
-  typedef StoreWithVectorDescriptor Descriptor;
+  typedef StoreWithVectorFlagDescriptor Descriptor;
 
   Node* receiver = Parameter(Descriptor::kReceiver);
   Node* name = Parameter(Descriptor::kName);
@@ -3431,13 +3452,14 @@ void AccessorAssembler::GenerateStoreIC() {
   Node* slot = Parameter(Descriptor::kSlot);
   Node* vector = Parameter(Descriptor::kVector);
   Node* context = Parameter(Descriptor::kContext);
+  Node* flags = Parameter(Descriptor::kFlags);
 
-  StoreICParameters p(context, receiver, name, value, slot, vector);
+  StoreICParameters p(context, receiver, name, value, slot, vector, flags);
   StoreIC(&p);
 }
 
 void AccessorAssembler::GenerateStoreICTrampoline() {
-  typedef StoreDescriptor Descriptor;
+  typedef StoreWithFlagDescriptor Descriptor;
 
   Node* receiver = Parameter(Descriptor::kReceiver);
   Node* name = Parameter(Descriptor::kName);
@@ -3445,13 +3467,14 @@ void AccessorAssembler::GenerateStoreICTrampoline() {
   Node* slot = Parameter(Descriptor::kSlot);
   Node* context = Parameter(Descriptor::kContext);
   Node* vector = LoadFeedbackVectorForStub();
+  Node* flags = Parameter(Descriptor::kFlags);
 
   TailCallBuiltin(Builtins::kStoreIC, context, receiver, name, value, slot,
-                  vector);
+                  vector, flags);
 }
 
 void AccessorAssembler::GenerateKeyedStoreIC() {
-  typedef StoreWithVectorDescriptor Descriptor;
+  typedef StoreWithVectorFlagDescriptor Descriptor;
 
   Node* receiver = Parameter(Descriptor::kReceiver);
   Node* name = Parameter(Descriptor::kName);
@@ -3459,13 +3482,14 @@ void AccessorAssembler::GenerateKeyedStoreIC() {
   Node* slot = Parameter(Descriptor::kSlot);
   Node* vector = Parameter(Descriptor::kVector);
   Node* context = Parameter(Descriptor::kContext);
+  Node* flags = Parameter(Descriptor::kFlags);
 
-  StoreICParameters p(context, receiver, name, value, slot, vector);
+  StoreICParameters p(context, receiver, name, value, slot, vector, flags);
   KeyedStoreIC(&p);
 }
 
 void AccessorAssembler::GenerateKeyedStoreICTrampoline() {
-  typedef StoreDescriptor Descriptor;
+  typedef StoreWithFlagDescriptor Descriptor;
 
   Node* receiver = Parameter(Descriptor::kReceiver);
   Node* name = Parameter(Descriptor::kName);
@@ -3473,9 +3497,10 @@ void AccessorAssembler::GenerateKeyedStoreICTrampoline() {
   Node* slot = Parameter(Descriptor::kSlot);
   Node* context = Parameter(Descriptor::kContext);
   Node* vector = LoadFeedbackVectorForStub();
+  Node* flags = Parameter(Descriptor::kFlags);
 
   TailCallBuiltin(Builtins::kKeyedStoreIC, context, receiver, name, value, slot,
-                  vector);
+                  vector, flags);
 }
 
 void AccessorAssembler::GenerateStoreInArrayLiteralIC() {
@@ -3488,7 +3513,8 @@ void AccessorAssembler::GenerateStoreInArrayLiteralIC() {
   Node* vector = Parameter(Descriptor::kVector);
   Node* context = Parameter(Descriptor::kContext);
 
-  StoreICParameters p(context, array, index, value, slot, vector);
+  StoreICParameters p(context, array, index, value, slot, vector,
+                      SmiConstant(0));
   StoreInArrayLiteralIC(&p);
 }
 

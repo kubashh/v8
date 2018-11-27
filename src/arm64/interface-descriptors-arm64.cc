@@ -50,6 +50,7 @@ const Register StoreDescriptor::ValueRegister() { return x0; }
 const Register StoreDescriptor::SlotRegister() { return x4; }
 
 const Register StoreWithVectorDescriptor::VectorRegister() { return x3; }
+const Register StoreWithFlagDescriptor::FlagsRegister() { return x5; }
 
 const Register StoreTransitionDescriptor::SlotRegister() { return x4; }
 const Register StoreTransitionDescriptor::VectorRegister() { return x3; }
