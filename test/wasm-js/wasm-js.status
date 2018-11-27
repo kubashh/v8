@@ -8,7 +8,6 @@
   'interface': [FAIL],
   'memory/grow': [FAIL],
   'memory/constructor': [FAIL],
-  'table/grow': [FAIL],
   'table/constructor': [FAIL],
   'table/get-set': [FAIL],
   'module/customSections': [FAIL],
