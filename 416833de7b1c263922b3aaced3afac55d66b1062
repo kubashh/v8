@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "ac9930e2_a5e582fc",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-28T20:13:31Z",
+      "side": 1,
+      "message": "I\u0027d just get rid of this variable and pass DONT_ENUM directly, the variable doesn\u0027t add any clarity to me.",
+      "revId": "416833de7b1c263922b3aaced3afac55d66b1062",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b47cd176_b9c03b2c",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 3

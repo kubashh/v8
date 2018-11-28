@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83349f9b_e5fd8d48",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1451,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-28T20:13:31Z",
+      "side": 1,
+      "message": "None of the callers pass a length, so your helper needn\u0027t have this argument at all.",
+      "revId": "0515732433548841fbea45923952003e2d666fda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18334c6c_4cd7ef17",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-28T20:13:31Z",
+      "side": 1,
+      "message": "This variable isn\u0027t needed, just pass DONT_ENUM in directly.",
+      "revId": "0515732433548841fbea45923952003e2d666fda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a3ee61e_9a511d28",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1659,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-28T20:13:31Z",
+      "side": 1,
+      "message": "I think this is another place where just passing DONT_ENUM directly would be clearer.",
+      "revId": "0515732433548841fbea45923952003e2d666fda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
