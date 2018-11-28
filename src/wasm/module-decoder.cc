@@ -31,7 +31,6 @@ namespace {
 
 constexpr char kNameString[] = "name";
 constexpr char kSourceMappingURLString[] = "sourceMappingURL";
-constexpr char kExceptionString[] = "exception";
 constexpr char kUnknownString[] = "<unknown>";
 
 template <size_t N>
@@ -88,7 +87,7 @@ const char* SectionName(SectionCode code) {
     case kSourceMappingURLSectionCode:
       return kSourceMappingURLString;
     case kExceptionSectionCode:
-      return kExceptionString;
+      return "Exception";
     default:
       return kUnknownString;
   }
