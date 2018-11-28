@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fe1fc5e1_8c354641",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:50:31Z",
+      "side": 1,
+      "message": "This is actually used 10 lines under and re-assignement at the end of the function. I changed it for better readability.",
+      "parentUuid": "f474579c_cbd28ac9",
+      "revId": "416833de7b1c263922b3aaced3afac55d66b1062",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b47cd176_b9c03b2c",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "416833de7b1c263922b3aaced3afac55d66b1062",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66ea6ce7_5bc55dee",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:50:31Z",
+      "side": 1,
+      "message": "Yes, good idea.",
+      "parentUuid": "b47cd176_b9c03b2c",
+      "revId": "416833de7b1c263922b3aaced3afac55d66b1062",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

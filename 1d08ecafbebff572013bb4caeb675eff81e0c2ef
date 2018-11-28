@@ -16,6 +16,24 @@
       "revId": "1d08ecafbebff572013bb4caeb675eff81e0c2ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "678093a7_b7509fe0",
+        "filename": "test/mjsunit/wasm/js-api.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:50:31Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "0bb5db9a_4c5f1004",
+      "revId": "1d08ecafbebff572013bb4caeb675eff81e0c2ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
