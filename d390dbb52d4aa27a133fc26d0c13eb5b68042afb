@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "022c5da4_d745c3df",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T18:28:22Z",
+      "side": 1,
+      "message": "The argument of BigIntFromInt64 (https://cs.chromium.org/chromium/src/v8/src/code-stub-assembler.cc?type\u003dcs\u0026q\u003dBigIntFromInt64\u0026g\u003d0\u0026l\u003d2090) is a TNode\u003cIntPtrT\u003e. I think we can avoid the unnecessary casting and given the condition above, it\u0027s easily understandable.",
+      "parentUuid": "00534476_0f6c77f0",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 18
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f014e4a0_850d9705",
         "filename": "src/builtins/builtins-bigint-gen.cc",
         "patchSetId": 9
@@ -68,6 +92,30 @@
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75cf8f6f_e1bdd76f",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T18:28:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f014e4a0_850d9705",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 18
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -139,6 +187,24 @@
       "writtenOn": "2018-11-28T17:45:37Z",
       "side": 1,
       "message": "Would it be possible to have this function in int64-lowering.cc?",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2ca5cc2_13d2b9ad",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5623,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T18:28:22Z",
+      "side": 1,
+      "message": "Sure, I moved it here because we already use GetI32WasmCallDescriptor or GetI32WasmCallDescriptorForSimd from int64-lowering.cc, it seems more consistent. Should I still move it?",
+      "parentUuid": "4dd3f447_38c9383e",
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
