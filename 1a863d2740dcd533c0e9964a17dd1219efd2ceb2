@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37fbf830_a7d5fd73",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-11-28T08:49:14Z",
+      "side": 1,
+      "message": "Nit: Drop the `_`.",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a166677_e8b5d6cf",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-11-28T08:49:14Z",
+      "side": 1,
+      "message": "Are both versions of the trap reason needed?",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5182574e_b456086b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4436,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-11-28T08:49:14Z",
+      "side": 1,
+      "message": "Is this parameter required? You should just be able to use enabled_features_ below instead of having to pass it in.",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22c141f5_9a26e472",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4521,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-11-28T08:49:14Z",
+      "side": 1,
+      "message": "Same comment as above, you should be able to use enabled_features_.",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a43b9a3_51b94e51",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4901,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-11-28T08:49:14Z",
+      "side": 1,
+      "message": "Remove spurious new line.",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b9fa877_bd9d4f74",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-11-28T08:49:14Z",
+      "side": 1,
+      "message": "Scope this into the case statement as that\u0027s the only place it\u0027s being used.",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f3f56fa_33c5ff64",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2018-11-28T08:49:14Z",
+      "side": 1,
+      "message": "Same as above, limit this to the scope it\u0027s used in.",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
