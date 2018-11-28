@@ -196,6 +196,9 @@ namespace internal {
   TFC(ToLength, TypeConversion, 1)                                             \
   TFC(Typeof, Typeof, 1)                                                       \
   TFC(GetSuperConstructor, Typeof, 1)                                          \
+  TFC(ToBigInt64, JavaScriptToWasmTypeConversion, 1)                           \
+  TFC(NewBigInt, WasmToJavaScriptTypeConversion, 1)                            \
+  TFC(NewBigInt32, WasmToJavaScriptTypeConversion32, 1)                        \
                                                                                \
   /* Type conversions continuations */                                         \
   TFC(ToBooleanLazyDeoptContinuation, TypeConversionStackParameter, 1)         \
@@ -1256,6 +1259,8 @@ namespace internal {
   TFS(ThrowWasmTrapFloatUnrepresentable)                                       \
   TFS(ThrowWasmTrapFuncInvalid)                                                \
   TFS(ThrowWasmTrapFuncSigMismatch)                                            \
+  TFC(WasmNewBigInt, WasmToJavaScriptTypeConversion, 1)                        \
+  TFC(WasmNewBigInt32, WasmToJavaScriptTypeConversion32, 1)                    \
                                                                                \
   /* WeakMap */                                                                \
   TFJ(WeakMapConstructor, SharedFunctionInfo::kDontAdaptArgumentsSentinel)     \
@@ -1547,7 +1552,9 @@ namespace internal {
   V(WasmStackGuard)                      \
   V(WasmToNumber)                        \
   V(WasmThrow)                           \
-  V(DoubleToI)
+  V(DoubleToI)                           \
+  V(WasmNewBigInt)                       \
+  V(WasmNewBigInt32)
 
 // The exception thrown in the following builtins are caught internally and will
 // not be propagated further or re-thrown
