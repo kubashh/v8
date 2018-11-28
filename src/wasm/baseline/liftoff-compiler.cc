@@ -1673,6 +1673,7 @@ class LiftoffCompiler {
                             "return")) {
       return;
     }
+    if (DidAssemblerBailout(decoder)) return;
 
     // Pop the index.
     Register index = __ PopToRegister().gp();
