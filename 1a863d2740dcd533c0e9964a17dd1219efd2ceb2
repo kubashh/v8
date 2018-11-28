@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e39d5bc2_02580b0a",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:09:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37fbf830_a7d5fd73",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a166677_e8b5d6cf",
         "filename": "src/builtins/builtins-definitions.h",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f9246f9_b827939a",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:09:42Z",
+      "side": 1,
+      "message": "These are not the trap reasons (there are in src/global.h) but the Wasm runtime stub list, where I\u0027m declaring the new builtins that I added.",
+      "parentUuid": "0a166677_e8b5d6cf",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fc4fda98_ea2320cc",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4436,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:09:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5182574e_b456086b",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22c141f5_9a26e472",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 7
@@ -67,6 +121,24 @@
       "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4c3ca00_9f8cf6a2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4521,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:09:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22c141f5_9a26e472",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "8eb93c42_c5687294",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 4901,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:09:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a43b9a3_51b94e51",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b9fa877_bd9d4f74",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 7
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "36e70470_71fc59b0",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:09:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b9fa877_bd9d4f74",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f3f56fa_33c5ff64",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 7
@@ -118,6 +226,24 @@
       "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0db9f1c_2da72546",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1414,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-28T11:09:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f3f56fa_33c5ff64",
+      "revId": "1a863d2740dcd533c0e9964a17dd1219efd2ceb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
