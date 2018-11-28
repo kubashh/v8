@@ -22,6 +22,47 @@
       "revId": "e554dcfd14ff8ab589e9bb5d3bc0d612f525ea11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b244101e_6ac6eba5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-28T10:46:35Z",
+      "side": 1,
+      "message": "+1, with https://crrev.com/c/1351129/2/BUILD.gn embedded builtins are supported everywhere and on by default.",
+      "parentUuid": "a8cccf38_ab621c91",
+      "range": {
+        "startLine": 26,
+        "startChar": 2,
+        "endLine": 26,
+        "endChar": 67
+      },
+      "revId": "e554dcfd14ff8ab589e9bb5d3bc0d612f525ea11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b885ee77_e36b9ab6",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-28T10:46:35Z",
+      "side": 1,
+      "message": "Please assert(!emit_builtins_as_inline_asm) if that\u0027s not supported here. Or even better, add the assert above (somewhere around L244).",
+      "revId": "e554dcfd14ff8ab589e9bb5d3bc0d612f525ea11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
