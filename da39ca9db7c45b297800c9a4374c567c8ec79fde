@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ab8fbe1_701dca1b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 4445,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-28T17:45:37Z",
+      "side": 1,
+      "message": "I guess you could just use\n\"CHECK(enabled_features_.bigint);\"",
+      "range": {
+        "startLine": 4443,
+        "startChar": 8,
+        "endLine": 4445,
+        "endChar": 9
+      },
+      "revId": "da39ca9db7c45b297800c9a4374c567c8ec79fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

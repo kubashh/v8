@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42fd10b6_ccb79474",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 4443,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-28T17:45:37Z",
+      "side": 1,
+      "message": "you could just write CHECK(hasBigIntFeature);",
+      "revId": "365a9a1403e04701196f0227027515168831f4e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

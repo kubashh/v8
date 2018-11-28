@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3797a98_de390a87",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-28T17:45:37Z",
+      "side": 1,
+      "message": "I think it would be nicer to let the builtin return 2 values here instead of returning the result over the heap. See https://cs.chromium.org/chromium/src/v8/src/interface-descriptors.h?l\u003d1062 on how to make such a CallInterfaceDescriptor. \n\nReturning 2 values seems to be supported, see https://cs.chromium.org/chromium/src/v8/src/compiler/code-assembler.cc?l\u003d418. To access the returned values you have to use Projection nodes (https://cs.chromium.org/chromium/src/v8/src/compiler/int64-lowering.cc?l\u003d1051).",
+      "range": {
+        "startLine": 63,
+        "startChar": 4,
+        "endLine": 63,
+        "endChar": 19
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00534476_0f6c77f0",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-28T17:45:37Z",
+      "side": 1,
+      "message": "Would it not be better to use TNode\u003cInt64T\u003e here? https://cs.chromium.org/chromium/src/v8/src/compiler/code-assembler.h?l\u003d774",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 18
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f014e4a0_850d9705",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-28T17:45:37Z",
+      "side": 1,
+      "message": "Same here, I think it would be better to use TNode\u003cInt64T\u003e here I guess.",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 18
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "716a06ff_6b0e079f",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-28T17:45:37Z",
+      "side": 1,
+      "message": "I am not convinced of this detection of Int64ToBigInt and BigIntToInt64 calls. I think a nice solution would actually be to create just a placeholder node in wasm-compiler.cc which is easy to detect. However, I discussed this with colleagues, and we were not able to figure out how such a placeholder could fit nicely into the existing system.\n\nThe best approach for now seems to be cache the targets of the Int64ToBigInt and BigIntToInt64 call nodes so that there exist exactly one node each. Then you pass pointers to these nodes to the int64lowering. When you lower a Call node, you can compare the target of the Call with these pointers to check if special lowering is necessary. Please also add a TODO that we should clean this up eventually, you can also mention that we could use a special placeholder instead of a Call node with a special target.",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0523189b_bfce634c",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4474,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-28T17:45:37Z",
+      "side": 1,
+      "message": "Is it necessary to do this distinction between 32-bit and 64-bit platform here? I think it would be nicer to just change the target in the int64-lowering.",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c94efc9c_c3869407",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4481,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-28T17:45:37Z",
+      "side": 1,
+      "message": "You could cache the target and use the same node for all Int64ToBigInt conversions. You can then use this node to identify kWasmNewBigInt-builtin calls in the int64-lowering. I added a more detailed comment there.",
+      "range": {
+        "startLine": 4481,
+        "startChar": 6,
+        "endLine": 4481,
+        "endChar": 12
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dd3f447_38c9383e",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5623,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-28T17:45:37Z",
+      "side": 1,
+      "message": "Would it be possible to have this function in int64-lowering.cc?",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
