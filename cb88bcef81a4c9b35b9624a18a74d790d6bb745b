@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a983630_811c81e1",
+        "filename": "test/mjsunit/wasm/futex.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-29T20:42:00Z",
+      "side": 1,
+      "message": "This looks much nicer, thank you! I\u0027d like to see a comment at the top about the structure of this test, though. What it is testing, how the memory is being used, etc. Probably should add a comment explaining all the `\u003e\u003e\u003e2` that show up too.",
+      "revId": "cb88bcef81a4c9b35b9624a18a74d790d6bb745b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37b98584_692b1d58",
+        "filename": "test/mjsunit/wasm/futex.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-29T20:42:00Z",
+      "side": 1,
+      "message": "nit: JS-style for variables is `camelCase`, so `jsWakeCheck`",
+      "revId": "cb88bcef81a4c9b35b9624a18a74d790d6bb745b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a24f99ff_a51cc996",
+        "filename": "test/mjsunit/wasm/futex.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-29T20:42:00Z",
+      "side": 1,
+      "message": "Move this up after `let memory \u003d ...`",
+      "revId": "cb88bcef81a4c9b35b9624a18a74d790d6bb745b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "044b6cce_faf3acb0",
+        "filename": "test/mjsunit/wasm/futex.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-29T20:42:00Z",
+      "side": 1,
+      "message": "Move this into a function, maybe \u0027WaitForAllWorkers\u0027",
+      "revId": "cb88bcef81a4c9b35b9624a18a74d790d6bb745b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6d4ae87_0572a9b3",
+        "filename": "test/mjsunit/wasm/futex.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-29T20:42:00Z",
+      "side": 1,
+      "message": "Define this above as `const numWorkers \u003d 4;`, and use instead of 4 everywhere below",
+      "revId": "cb88bcef81a4c9b35b9624a18a74d790d6bb745b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e392678c_7804bf86",
+        "filename": "test/mjsunit/wasm/futex.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-29T20:42:00Z",
+      "side": 1,
+      "message": "This part is non-obvious to me, can you add a comment?",
+      "revId": "cb88bcef81a4c9b35b9624a18a74d790d6bb745b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
