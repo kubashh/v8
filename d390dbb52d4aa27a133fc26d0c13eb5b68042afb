@@ -2,6 +2,144 @@
   "comments": [
     {
       "key": {
+        "uuid": "aebdeec8_6023aa48",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "nit: useless comment",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3d514f4_ec030820",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "Please pull up the CASTs:\n\nTNode\u003cObject\u003e value \u003d CAST(Parameter(Descriptor::kArgument));\nTNode\u003cContext\u003e context \u003d CAST(Parameter(Descriptor::kContext));",
+      "range": {
+        "startLine": 24,
+        "startChar": 2,
+        "endLine": 24,
+        "endChar": 49
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ab28505_573102c0",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "nit: stray comment?",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 30
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a17c90d_53927487",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "Nope, maps are regular pointers, that\u0027s why this is crashing. I agree that it would be best to have two return values as Andreas suggests. Should that not be possible for any reason, then use CodeStubAssembler::AllocateHeapNumber() instead of custom size computations.",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 15
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2c554ba_0b498679",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "For the record, the correct thing to do here would be \"AllocateInNewSpace(HeapNumber::kSize)\", but the AllocateHeapNumber helper does that for you, so you don\u0027t even have to worry about it.",
+      "range": {
+        "startLine": 51,
+        "startChar": 8,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5398472_128f998a",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "heapObjectTag is never a valid offset. You want HeapNumber::kValueOffset.",
+      "range": {
+        "startLine": 56,
+        "startChar": 24,
+        "endLine": 56,
+        "endChar": 37
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d3797a98_de390a87",
         "filename": "src/builtins/builtins-bigint-gen.cc",
         "patchSetId": 9
@@ -18,6 +156,29 @@
         "startChar": 4,
         "endLine": 63,
         "endChar": 19
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "172a9c8e_8cd5018d",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "I don\u0027t think this variable is needed. Just drop it, and make the last line:\n\nReturn(BigIntFromInt64(argument));",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 36
       },
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -72,6 +233,52 @@
     },
     {
       "key": {
+        "uuid": "4e111729_5d632a73",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "You mean CSA_ASSERT, but the entire check is unnecessary. BigIntFromInt64 returns a TNode\u003cBigInt\u003e, it\u0027s fine to trust that.",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 0
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa6d00d3_2bcda11f",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "same here, just drop it",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 36
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f014e4a0_850d9705",
         "filename": "src/builtins/builtins-bigint-gen.cc",
         "patchSetId": 9
@@ -116,6 +323,98 @@
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dad754cc_5835295b",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "same here, just drop it",
+      "range": {
+        "startLine": 93,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 43
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54b323e5_9c6b4cce",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "NoContextConstant();\n\nOr just inline it into its only usage site.",
+      "range": {
+        "startLine": 185,
+        "startChar": 20,
+        "endLine": 185,
+        "endChar": 55
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88f41e12_a490db87",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "Can you elaborate on why the two-builtin design with a tail call is needed? I see in your design doc that the Wasm builtins need to be PIC; but why don\u0027t you inline the other builtin here? AFAICS this is its only call. Am I missing something?",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 189,
+        "endChar": 16
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde4e942_d1243d25",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 199,
+        "startChar": 20,
+        "endLine": 200,
+        "endChar": 0
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -205,6 +504,116 @@
       "side": 1,
       "message": "Sure, I moved it here because we already use GetI32WasmCallDescriptor or GetI32WasmCallDescriptorForSimd from int64-lowering.cc, it seems more consistent. Should I still move it?",
       "parentUuid": "4dd3f447_38c9383e",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "353fcc01_6ac8f95e",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5623,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "Do you even need this? Why can\u0027t you use the existing GetI32WasmCallDescriptor mechanism? It sounds like replacing one int64 parameter/result with two int32 values is exactly what you want.",
+      "parentUuid": "e2ca5cc2_13d2b9ad",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b4389a1_503557ba",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "naming nit: snake_case for variable names please: has_bigint_feature.",
+      "range": {
+        "startLine": 85,
+        "startChar": 46,
+        "endLine": 85,
+        "endChar": 62
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d8983a2_688fdb1d",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "These descriptor names sound very generic, but they\u0027re used for quite specific things, so how about reflecting that in the name? Suggestion: WasmI64ToBigIntDescriptor and WasmBigIntToI64Descriptor. Or are you foreseeing usage for other purposes in the future?",
+      "range": {
+        "startLine": 1112,
+        "startChar": 6,
+        "endLine": 1112,
+        "endChar": 46
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4ab3a34_a606b277",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "How about having a single descriptor, and an \"#ifdef V8_HOST_ARCH_32_BIT\" inside? Then you can also have a single stub, where the \"Is64()\" branch serves the same goal. (You can then even drop the introduction of \"Is32()\".)",
+      "range": {
+        "startLine": 1122,
+        "startChar": 6,
+        "endLine": 1122,
+        "endChar": 48
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d579614_79ab8f0f",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T01:25:23Z",
+      "side": 1,
+      "message": "What if someone passes a non-BigInt?\nIf that\u0027s guaranteed not to happen, then please change \"!value-\u003eIsUndefined\" to \"value-\u003eIsBigInt\".\nIf it can happen, then you need to call i::BigInt::FromObject() (which isn\u0027t exposed on the external v8::BigInt yet). And please add a test that this case is handled correctly.",
+      "range": {
+        "startLine": 1107,
+        "startChar": 25,
+        "endLine": 1107,
+        "endChar": 37
+      },
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
