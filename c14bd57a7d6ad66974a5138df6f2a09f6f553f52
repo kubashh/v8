@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08ce193c_324f11d5",
+        "filename": "src/memcopy.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T22:19:35Z",
+      "side": 1,
+      "message": "nit: outdated comment",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 17
+      },
+      "revId": "c14bd57a7d6ad66974a5138df6f2a09f6f553f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ad29c40_e5a94ce0",
+        "filename": "src/memcopy.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T22:19:35Z",
+      "side": 1,
+      "message": "It probably makes sense to get rid of this too (and maybe inline memcpy instead of using MemCopy, so as not to rely on the compiler\u0027s inlining budget too much?).",
+      "range": {
+        "startLine": 48,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 36
+      },
+      "revId": "c14bd57a7d6ad66974a5138df6f2a09f6f553f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eb36828_2fae5e73",
+        "filename": "src/memcopy.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-11-29T22:19:35Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 70,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 57
+      },
+      "revId": "c14bd57a7d6ad66974a5138df6f2a09f6f553f52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
