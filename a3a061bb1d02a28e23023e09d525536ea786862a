@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61d06bf8_249dea8c",
+        "filename": "test/mjsunit/wasm/futex.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-29T23:01:17Z",
+      "side": 1,
+      "message": "nit: wrap at 80 columns",
+      "revId": "a3a061bb1d02a28e23023e09d525536ea786862a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "899dcc46_14c3b288",
+        "filename": "test/mjsunit/wasm/futex.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-11-29T23:01:17Z",
+      "side": 1,
+      "message": "Try to keep these at 80 columns, maybe rename `WasmI32AtomicWaitFunction` -\u003e `WasmI32AtomicWait`?",
+      "revId": "a3a061bb1d02a28e23023e09d525536ea786862a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
