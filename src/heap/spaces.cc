@@ -496,7 +496,6 @@ intptr_t MemoryChunkLayout::ObjectEndOffsetInCodePage() {
 
 size_t MemoryChunkLayout::AllocatableMemoryInCodePage() {
   size_t memory = ObjectEndOffsetInCodePage() - ObjectStartOffsetInCodePage();
-  DCHECK_LE(kMaxRegularHeapObjectSize, memory);
   return memory;
 }
 
