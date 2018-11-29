@@ -34,6 +34,40 @@
       "revId": "a0dee90bacb3f227ba12f7bc2179f5a61205d67e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c6b5be4_bc1259da",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-29T10:07:58Z",
+      "side": 1,
+      "message": "I think this field it not worth having. We only need this for reporting an error if the code section is missing. In that case, it would be ok to just point after the module bytes IMO.\nYou also currently don\u0027t ever set this field ;)",
+      "revId": "a0dee90bacb3f227ba12f7bc2179f5a61205d67e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd7e2313_6efe7eed",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-29T10:07:58Z",
+      "side": 1,
+      "message": "This field is very redundant. Please remove it from here and put a bool field into the decoder instead, which notes that we still need to see a code section.",
+      "revId": "a0dee90bacb3f227ba12f7bc2179f5a61205d67e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
