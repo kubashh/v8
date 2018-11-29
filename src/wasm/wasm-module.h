@@ -169,6 +169,7 @@ struct V8_EXPORT_PRIVATE WasmModule {
   uint32_t num_imported_mutable_globals = 0;
   uint32_t num_imported_functions = 0;
   uint32_t num_declared_functions = 0;  // excluding imported
+  uint32_t num_function_bodies = 0;
   uint32_t num_exported_functions = 0;
   WireBytesRef name = {0, 0};
   std::vector<FunctionSig*> signatures;  // by signature index

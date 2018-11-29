@@ -797,6 +797,7 @@ class ModuleDecoderImpl : public Decoder {
     uint32_t pos = pc_offset();
     uint32_t functions_count = consume_u32v("functions count");
     CheckFunctionsCount(functions_count, pos);
+    module_->num_function_bodies = functions_count;
     for (uint32_t i = 0; ok() && i < functions_count; ++i) {
       const byte* pos = pc();
       uint32_t size = consume_u32v("body size");
@@ -937,6 +938,10 @@ class ModuleDecoderImpl : public Decoder {
 
   ModuleResult FinishDecoding(bool verify_functions = true) {
     if (ok()) {
+      // The declared vs. defined function count is normally checked when
+      // decoding the code section, but we have to check it here too in case the
+      // code section was omitted.
+      CheckFunctionsCount(module_->num_function_bodies, function_count_offset_);
       CalculateGlobalOffsets(module_.get());
     }
     ModuleResult result = toResult(std::move(module_));
@@ -1047,6 +1052,11 @@ class ModuleDecoderImpl : public Decoder {
                 "not enough bits");
   VoidResult intermediate_result_;
   ModuleOrigin origin_;
+
+  // The pc_offset of the declared function count. Used to produce an error
+  // location when there is a mismatch between the number of declared and
+  // defined functions.
+  uint32_t function_count_offset_ = 0;
 
   uint32_t off(const byte* ptr) {
     return static_cast<uint32_t>(ptr - start_) + buffer_offset_;

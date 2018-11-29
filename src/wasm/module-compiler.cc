@@ -2854,6 +2854,8 @@ bool AsyncStreamingProcessor::ProcessCodeSectionHeader(
     FinishAsyncCompileJobWithError(decoder_.FinishDecoding(false));
     return false;
   }
+  decoder_.module()->num_function_bodies =
+      static_cast<uint32_t>(functions_count);
   // Execute the PrepareAndStartCompile step immediately and not in a separate
   // task.
   job_->DoImmediately<AsyncCompileJob::PrepareAndStartCompile>(
@@ -2902,7 +2904,10 @@ void AsyncStreamingProcessor::OnFinishedChunk() {
 void AsyncStreamingProcessor::OnFinishedStream(OwnedVector<uint8_t> bytes) {
   TRACE_STREAMING("Finish stream...\n");
   ModuleResult result = decoder_.FinishDecoding(false);
-  DCHECK(result.ok());
+  if (result.failed()) {
+    FinishAsyncCompileJobWithError(std::move(result));
+    return;
+  }
   bool needs_finish = job_->DecrementAndCheckFinisherCount();
   if (job_->native_module_ == nullptr) {
     // We are processing a WebAssembly module without code section. Create the
