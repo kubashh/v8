@@ -81,7 +81,8 @@ enum class WasmImportCallKind : uint8_t {
 };
 
 WasmImportCallKind GetWasmImportCallKind(Handle<JSReceiver> callable,
-                                         wasm::FunctionSig* sig);
+                                         wasm::FunctionSig* sig,
+                                         bool has_bigint_feature);
 
 // Compiles an import call wrapper, which allows WASM to call imports.
 wasm::WasmCode* CompileWasmImportCallWrapper(Isolate*, wasm::NativeModule*,
@@ -368,6 +369,9 @@ class WasmGraphBuilder {
 
   compiler::SourcePositionTable* const source_position_table_ = nullptr;
 
+  // Special cache for call to kWasmNewBigInt and kWasmNewBigInt32 builtin
+  CallDescriptor* cache_new_bigint_call_descriptor_ = nullptr;
+
   Node* NoContextConstant();
 
   Node* MemBuffer(uint32_t offset);
@@ -504,6 +508,9 @@ V8_EXPORT_PRIVATE CallDescriptor* GetWasmCallDescriptor(
         WasmGraphBuilder::kNoExtraCallableParam);
 
 V8_EXPORT_PRIVATE CallDescriptor* GetI32WasmCallDescriptor(
+    Zone* zone, CallDescriptor* call_descriptor);
+
+V8_EXPORT_PRIVATE CallDescriptor* GetI32WasmCallDescriptorForBigInt(
     Zone* zone, CallDescriptor* call_descriptor);
 
 V8_EXPORT_PRIVATE CallDescriptor* GetI32WasmCallDescriptorForSimd(

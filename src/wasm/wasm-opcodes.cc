@@ -381,11 +381,20 @@ std::ostream& operator<<(std::ostream& os, const FunctionSig& sig) {
   return os;
 }
 
-bool IsJSCompatibleSignature(const FunctionSig* sig) {
-  for (auto type : sig->all()) {
-    if (type == kWasmI64 || type == kWasmS128) return false;
+bool IsJSCompatibleSignature(const FunctionSig* sig, bool hasBigIntFeature) {
+  if (sig->return_count() > 1) {
+    return false;
   }
-  return sig->return_count() <= 1;
+
+  for (auto type : sig->all()) {
+    if (!hasBigIntFeature && type == kWasmI64) {
+      return false;
+    }
+
+    if (type == kWasmS128) return false;
+  }
+
+  return true;
 }
 
 namespace {

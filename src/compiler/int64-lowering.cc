@@ -23,7 +23,8 @@ namespace compiler {
 
 Int64Lowering::Int64Lowering(Graph* graph, MachineOperatorBuilder* machine,
                              CommonOperatorBuilder* common, Zone* zone,
-                             Signature<MachineRepresentation>* signature)
+                             Signature<MachineRepresentation>* signature,
+                             CallDescriptor* bigint_special_lowering_node)
     : zone_(zone),
       graph_(graph),
       machine_(machine),
@@ -32,8 +33,9 @@ Int64Lowering::Int64Lowering(Graph* graph, MachineOperatorBuilder* machine,
       stack_(zone),
       replacements_(nullptr),
       signature_(signature),
-      placeholder_(graph->NewNode(common->Parameter(-2, "placeholder"),
-                                  graph->start())) {
+      placeholder_(
+          graph->NewNode(common->Parameter(-2, "placeholder"), graph->start())),
+      bigint_special_lowering_node_(bigint_special_lowering_node) {
   DCHECK_NOT_NULL(graph);
   DCHECK_NOT_NULL(graph->end());
   replacements_ = zone->NewArray<Replacement>(graph->NodeCount());
@@ -285,16 +287,18 @@ void Int64Lowering::LowerNode(Node* node) {
     }
     case IrOpcode::kParameter: {
       DCHECK_EQ(1, node->InputCount());
+
+      int paramCount = static_cast<int>(signature()->parameter_count());
+
       // Only exchange the node if the parameter count actually changed. We do
       // not even have to do the default lowering because the the start node,
       // the only input of a parameter node, only changes if the parameter count
       // changes.
-      if (GetParameterCountAfterLowering(signature()) !=
-          static_cast<int>(signature()->parameter_count())) {
+      if (GetParameterCountAfterLowering(signature()) != paramCount) {
         int old_index = ParameterIndexOf(node->op());
-        // TODO(wasm): Make this part not wasm specific.
-        // Prevent special lowering of the instance parameter.
-        if (old_index == wasm::kWasmInstanceParameterIndex) {
+        // Prevent special lowering of wasm's instance or JS
+        // context/closure parameters.
+        if (old_index <= 0 || old_index > paramCount) {
           DefaultLowering(node);
           break;
         }
@@ -342,13 +346,33 @@ void Int64Lowering::LowerNode(Node* node) {
     case IrOpcode::kCall: {
       auto call_descriptor =
           const_cast<CallDescriptor*>(CallDescriptorOf(node->op()));
+
       bool returns_require_lowering =
           GetReturnCountAfterLowering(call_descriptor) !=
           static_cast<int>(call_descriptor->ReturnCount());
       if (DefaultLowering(node) || returns_require_lowering) {
-        // We have to adjust the call descriptor.
-        NodeProperties::ChangeOp(node, common()->Call(GetI32WasmCallDescriptor(
-                                           zone(), call_descriptor)));
+        // Special case for BigInt builtins in Wasm
+        //
+        // TODO(ssauleau): a few solutions were previously considered here:
+        //  - Matching on the description debug_name; however, relying on debug
+        //    logic is not a good idea.
+        //  - Create a placeholder Call node (in wasm-compiler.cc) with a
+        //    special target. How such a placeholder could fit nicely into the
+        //    existing system?
+        //  - Current implementation; cache the node and match against its
+        //    pointer.
+        //
+        //  We should clean this up eventually.
+        if (call_descriptor == bigint_special_lowering_node_) {
+          NodeProperties::ChangeOp(
+              node, common()->Call(GetI32WasmCallDescriptorForBigInt(
+                        zone(), call_descriptor)));
+        } else {
+          // We have to adjust the call descriptor.
+          NodeProperties::ChangeOp(
+              node, common()->Call(
+                        GetI32WasmCallDescriptor(zone(), call_descriptor)));
+        }
       }
       if (returns_require_lowering) {
         size_t return_arity = call_descriptor->ReturnCount();
@@ -1004,8 +1028,8 @@ bool Int64Lowering::HasReplacementLow(Node* node) {
 }
 
 Node* Int64Lowering::GetReplacementLow(Node* node) {
+  DCHECK(HasReplacementLow(node));
   Node* result = replacements_[node->id()].low;
-  DCHECK(result);
   return result;
 }
 
@@ -1014,8 +1038,8 @@ bool Int64Lowering::HasReplacementHigh(Node* node) {
 }
 
 Node* Int64Lowering::GetReplacementHigh(Node* node) {
+  DCHECK(HasReplacementHigh(node));
   Node* result = replacements_[node->id()].high;
-  DCHECK(result);
   return result;
 }
 

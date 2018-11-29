@@ -643,6 +643,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
                                    const AssemblerOptions& options);
 
   bool Is64() const;
+  bool Is32() const;
   bool IsFloat64RoundUpSupported() const;
   bool IsFloat64RoundDownSupported() const;
   bool IsFloat64RoundTiesEvenSupported() const;
@@ -838,6 +839,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void ReturnIf(Node* condition, Node* value);
 
   void ReturnRaw(Node* value);
+  void ReturnRaw(Node* value1, Node* value2);
 
   void DebugAbort(Node* message);
   void DebugBreak();

@@ -79,6 +79,9 @@ namespace internal {
   V(WasmAtomicWake)                   \
   V(WasmI32AtomicWait)                \
   V(CloneObjectWithVector)            \
+  V(WasmI64ToBigInt)   \
+  V(WasmI64ToBigInt32) \
+  V(WasmBigIntToI64)   \
   BUILTIN_LIST_TFS(V)
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
@@ -1104,6 +1107,36 @@ class WasmThrowDescriptor final : public CallInterfaceDescriptor {
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result 1
                                     MachineType::AnyTagged())  // kException
   DECLARE_DESCRIPTOR(WasmThrowDescriptor, CallInterfaceDescriptor)
+};
+
+class WasmI64ToBigIntDescriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kArgument)
+  DEFINE_PARAMETER_TYPES(MachineType::Int64())  // kArgument
+  DECLARE_DESCRIPTOR(WasmI64ToBigIntDescriptor,
+                     CallInterfaceDescriptor)
+};
+
+// 32 bits version of the WasmI64ToBigInt call descriptor
+class WasmI64ToBigInt32Descriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kLow, kHigh)
+  DEFINE_PARAMETER_TYPES(MachineType::Int32(),  // kLow
+                         MachineType::Int32())  // kHigh
+  DECLARE_DESCRIPTOR(WasmI64ToBigInt32Descriptor,
+                     CallInterfaceDescriptor)
+};
+
+class WasmBigIntToI64Descriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kArgument)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Int64(),      // result 1
+                                    MachineType::AnyTagged())  // kArgument
+  DECLARE_DESCRIPTOR(WasmBigIntToI64Descriptor,
+                     CallInterfaceDescriptor)
 };
 
 class WasmAtomicWakeDescriptor final : public CallInterfaceDescriptor {

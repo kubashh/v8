@@ -3518,7 +3518,8 @@ void WasmGraphBuilder::LowerInt64() {
   if (mcgraph()->machine()->Is64()) return;
   Int64Lowering r(mcgraph()->graph(), mcgraph()->machine(), mcgraph()->common(),
                   mcgraph()->zone(),
-                  CreateMachineSignature(mcgraph()->zone(), sig_));
+                  CreateMachineSignature(mcgraph()->zone(), sig_),
+                  cache_new_bigint_call_descriptor_);
   r.LowerGraph();
 }
 
@@ -4185,7 +4186,22 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       : WasmGraphBuilder(nullptr, zone, jsgraph, sig, spt),
         isolate_(jsgraph->isolate()),
         jsgraph_(jsgraph),
-        stub_mode_(stub_mode) {}
+        stub_mode_(stub_mode),
+        enabled_features_(wasm::WasmFeaturesFromIsolate(isolate_)) {
+    cache_new_bigint_call_descriptor_ = BuildWasmToJavaScriptCallDescriptor();
+  }
+
+  CallDescriptor* BuildWasmToJavaScriptCallDescriptor() {
+    WasmI64ToBigIntDescriptor interface_descriptor;
+
+    return Linkage::GetStubCallDescriptor(
+        mcgraph()->zone(),                              // zone
+        interface_descriptor,                           // descriptor
+        interface_descriptor.GetStackParameterCount(),  // stack parameter count
+        CallDescriptor::kNoFlags,                       // flags
+        Operator::kNoProperties,                        // properties
+        stub_mode_);                                    // stub call mode
+  }
 
   Node* BuildAllocateHeapNumberWithValue(Node* value, Node* control) {
     MachineOperatorBuilder* machine = mcgraph()->machine();
@@ -4437,8 +4453,11 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       case wasm::kWasmI32:
         return BuildChangeInt32ToTagged(node);
       case wasm::kWasmS128:
-      case wasm::kWasmI64:
         UNREACHABLE();
+      case wasm::kWasmI64: {
+        DCHECK(enabled_features_.bigint);
+        return BuildChangeInt64ToBigInt(node);
+      }
       case wasm::kWasmF32:
         node = graph()->NewNode(mcgraph()->machine()->ChangeFloat32ToFloat64(),
                                 node);
@@ -4452,6 +4471,49 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     }
   }
 
+  Node* BuildChangeInt64ToBigInt(Node* input) {
+    Node* target;
+    if (mcgraph()->machine()->Is32()) {
+      target =
+          (stub_mode_ == StubCallMode::kCallWasmRuntimeStub)
+              ? mcgraph()->RelocatableIntPtrConstant(
+                    wasm::WasmCode::kWasmNewBigInt32, RelocInfo::WASM_STUB_CALL)
+              : jsgraph()->HeapConstant(BUILTIN_CODE(isolate_, NewBigInt32));
+    } else {
+      target =
+          (stub_mode_ == StubCallMode::kCallWasmRuntimeStub)
+              ? mcgraph()->RelocatableIntPtrConstant(
+                    wasm::WasmCode::kWasmNewBigInt, RelocInfo::WASM_STUB_CALL)
+              : jsgraph()->HeapConstant(BUILTIN_CODE(isolate_, NewBigInt));
+    }
+
+    const Operator* call =
+        mcgraph()->common()->Call(cache_new_bigint_call_descriptor_);
+
+    return SetEffect(
+        SetControl(graph()->NewNode(call, target, input, Effect(), Control())));
+  }
+
+  Node* BuildChangeBigIntToInt64(Node* input, Node* context) {
+    DCHECK_EQ(stub_mode_, StubCallMode::kCallOnHeapBuiltin);
+
+    WasmBigIntToI64Descriptor interface_descriptor;
+
+    auto call_descriptor = Linkage::GetStubCallDescriptor(
+        mcgraph()->zone(),                              // zone
+        interface_descriptor,                           // descriptor
+        interface_descriptor.GetStackParameterCount(),  // stack parameter count
+        CallDescriptor::kNoFlags,                       // flags
+        Operator::kNoProperties,                        // properties
+        StubCallMode::kCallOnHeapBuiltin);              // stub call mode
+
+    Node* target = jsgraph()->HeapConstant(BUILTIN_CODE(isolate_, ToBigInt64));
+
+    return SetEffect(SetControl(
+        graph()->NewNode(mcgraph()->common()->Call(call_descriptor), target,
+                         input, context, Effect(), Control())));
+  }
+
   Node* FromJS(Node* node, Node* js_context, wasm::ValueType type) {
     DCHECK_NE(wasm::kWasmStmt, type);
 
@@ -4460,11 +4522,15 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       return node;
     }
 
-    // Do a JavaScript ToNumber.
-    Node* num = BuildJavaScriptToNumber(node, js_context);
+    Node* num = nullptr;
 
-    // Change representation.
-    num = BuildChangeTaggedToFloat64(num);
+    if (type != wasm::kWasmI64) {
+      // Do a JavaScript ToNumber.
+      num = BuildJavaScriptToNumber(node, js_context);
+
+      // Change representation.
+      num = BuildChangeTaggedToFloat64(num);
+    }
 
     switch (type) {
       case wasm::kWasmI32: {
@@ -4472,18 +4538,24 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                                num);
         break;
       }
-      case wasm::kWasmS128:
-      case wasm::kWasmI64:
-        UNREACHABLE();
+      case wasm::kWasmI64: {
+        DCHECK(enabled_features_.bigint);
+        num = BuildChangeBigIntToInt64(node, js_context);
+        break;
+      }
       case wasm::kWasmF32:
         num = graph()->NewNode(mcgraph()->machine()->TruncateFloat64ToFloat32(),
                                num);
         break;
       case wasm::kWasmF64:
         break;
+      case wasm::kWasmS128:
+        UNREACHABLE();
       default:
         UNREACHABLE();
     }
+    DCHECK_NOT_NULL(num);
+
     return num;
   }
 
@@ -4569,7 +4641,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     instance_node_.set(
         BuildLoadInstanceFromExportedFunctionData(function_data));
 
-    if (!wasm::IsJSCompatibleSignature(sig_)) {
+    if (!wasm::IsJSCompatibleSignature(sig_, enabled_features_.bigint)) {
       // Throw a TypeError. Use the js_context of the calling javascript
       // function (passed as a parameter), such that the generated code is
       // js_context independent.
@@ -4620,6 +4692,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Node* jsval = sig_->return_count() == 0 ? jsgraph()->UndefinedConstant()
                                             : ToJS(rets[0], sig_->GetReturn());
     Return(jsval);
+
+    if (ContainsInt64(sig_)) LowerInt64();
   }
 
   bool BuildWasmImportCallWrapper(WasmImportCallKind kind) {
@@ -4943,7 +5017,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       };
       Signature<MachineRepresentation> c_entry_sig(1, 2, sig_reps);
       Int64Lowering r(mcgraph()->graph(), mcgraph()->machine(),
-                      mcgraph()->common(), mcgraph()->zone(), &c_entry_sig);
+                      mcgraph()->common(), mcgraph()->zone(), &c_entry_sig,
+                      cache_new_bigint_call_descriptor_);
       r.LowerGraph();
     }
   }
@@ -4955,6 +5030,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
   JSGraph* jsgraph_;
   StubCallMode stub_mode_;
   SetOncePointer<const Operator> allocate_heap_number_operator_;
+  wasm::WasmFeatures enabled_features_;
 };
 
 void AppendSignature(char* buffer, size_t max_name_len,
@@ -5037,7 +5113,8 @@ MaybeHandle<Code> CompileJSToWasmWrapper(Isolate* isolate,
 }
 
 WasmImportCallKind GetWasmImportCallKind(Handle<JSReceiver> target,
-                                         wasm::FunctionSig* expected_sig) {
+                                         wasm::FunctionSig* expected_sig,
+                                         bool hasBigIntFeature) {
   if (WasmExportedFunction::IsWasmExportedFunction(*target)) {
     auto imported_function = WasmExportedFunction::cast(*target);
     wasm::FunctionSig* imported_sig =
@@ -5051,7 +5128,7 @@ WasmImportCallKind GetWasmImportCallKind(Handle<JSReceiver> target,
     return WasmImportCallKind::kWasmToWasm;
   }
   // Assuming we are calling to JS, check whether this would be a runtime error.
-  if (!wasm::IsJSCompatibleSignature(expected_sig)) {
+  if (!wasm::IsJSCompatibleSignature(expected_sig, hasBigIntFeature)) {
     return WasmImportCallKind::kRuntimeTypeError;
   }
   // For JavaScript calls, determine whether the target has an arity match
@@ -5537,6 +5614,24 @@ CallDescriptor* ReplaceTypeInCallDescriptorWith(
       rets.NumStackSlots() - params.NumStackSlots());  // stack_return_count
 }
 }  // namespace
+
+CallDescriptor* GetI32WasmCallDescriptorForBigInt(
+    Zone* zone, CallDescriptor* call_descriptor) {
+  WasmI64ToBigInt32Descriptor new_call_descriptor;
+
+  StubCallMode stub_mode =
+      call_descriptor->kind() == CallDescriptor::kCallWasmFunction
+          ? StubCallMode::kCallWasmRuntimeStub
+          : StubCallMode::kCallOnHeapBuiltin;
+
+  return Linkage::GetStubCallDescriptor(
+      zone,                                          // zone
+      new_call_descriptor,                           // descriptor
+      new_call_descriptor.GetStackParameterCount(),  // stack parameter count
+      CallDescriptor::kNoFlags,                      // flags
+      Operator::kNoProperties,                       // properties
+      stub_mode);                                    // stub call mode
+}
 
 CallDescriptor* GetI32WasmCallDescriptor(Zone* zone,
                                          CallDescriptor* call_descriptor) {

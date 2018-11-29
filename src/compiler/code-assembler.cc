@@ -220,6 +220,8 @@ Handle<Code> CodeAssembler::GenerateCode(CodeAssemblerState* state,
 
 bool CodeAssembler::Is64() const { return raw_assembler()->machine()->Is64(); }
 
+bool CodeAssembler::Is32() const { return raw_assembler()->machine()->Is32(); }
+
 bool CodeAssembler::IsFloat64RoundUpSupported() const {
   return raw_assembler()->machine()->Float64RoundUp().IsSupported();
 }
@@ -438,6 +440,10 @@ void CodeAssembler::ReturnIf(Node* condition, Node* value) {
 
 void CodeAssembler::ReturnRaw(Node* value) {
   return raw_assembler()->Return(value);
+}
+
+void CodeAssembler::ReturnRaw(Node* value1, Node* value2) {
+  return raw_assembler()->Return(value1, value2);
 }
 
 void CodeAssembler::DebugAbort(Node* message) {
