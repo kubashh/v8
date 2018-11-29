@@ -24,7 +24,8 @@ class V8_EXPORT_PRIVATE Int64Lowering {
  public:
   Int64Lowering(Graph* graph, MachineOperatorBuilder* machine,
                 CommonOperatorBuilder* common, Zone* zone,
-                Signature<MachineRepresentation>* signature);
+                Signature<MachineRepresentation>* signature,
+                CallDescriptor* bigint_special_lowering_node);
 
   void LowerGraph();
 
@@ -76,6 +77,7 @@ class V8_EXPORT_PRIVATE Int64Lowering {
   Replacement* replacements_;
   Signature<MachineRepresentation>* signature_;
   Node* placeholder_;
+  CallDescriptor* bigint_special_lowering_node_;
 };
 
 }  // namespace compiler

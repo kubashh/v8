@@ -79,6 +79,9 @@ namespace internal {
   V(WasmAtomicWake)                   \
   V(WasmI32AtomicWait)                \
   V(CloneObjectWithVector)            \
+  V(WasmToJavaScriptTypeConversion)   \
+  V(WasmToJavaScriptTypeConversion32) \
+  V(JavaScriptToWasmTypeConversion)   \
   BUILTIN_LIST_TFS(V)
 
 class V8_EXPORT_PRIVATE CallInterfaceDescriptorData {
@@ -1104,6 +1107,36 @@ class WasmThrowDescriptor final : public CallInterfaceDescriptor {
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result 1
                                     MachineType::AnyTagged())  // kException
   DECLARE_DESCRIPTOR(WasmThrowDescriptor, CallInterfaceDescriptor)
+};
+
+class WasmToJavaScriptTypeConversionDescriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kArgument)
+  DEFINE_PARAMETER_TYPES(MachineType::Int64())  // kArgument
+  DECLARE_DESCRIPTOR(WasmToJavaScriptTypeConversionDescriptor,
+                     CallInterfaceDescriptor)
+};
+
+// 32 bits version of the WasmToJavaScriptTypeConversion call descriptor
+class WasmToJavaScriptTypeConversion32Descriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kLow, kHigh)
+  DEFINE_PARAMETER_TYPES(MachineType::Int32(),  // kLow
+                         MachineType::Int32())  // kHigh
+  DECLARE_DESCRIPTOR(WasmToJavaScriptTypeConversion32Descriptor,
+                     CallInterfaceDescriptor)
+};
+
+class JavaScriptToWasmTypeConversionDescriptor final
+    : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kArgument)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Int64(),      // result 1
+                                    MachineType::AnyTagged())  // kArgument
+  DECLARE_DESCRIPTOR(JavaScriptToWasmTypeConversionDescriptor,
+                     CallInterfaceDescriptor)
 };
 
 class WasmAtomicWakeDescriptor final : public CallInterfaceDescriptor {
