@@ -754,6 +754,23 @@
     },
     {
       "key": {
+        "uuid": "fda5cb65_dbb5da3c",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-29T14:29:33Z",
+      "side": 1,
+      "message": "Please add a test to int64-lowering-unittests.cc",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "716a06ff_6b0e079f",
         "filename": "src/compiler/int64-lowering.cc",
         "patchSetId": 9
@@ -824,6 +841,24 @@
     },
     {
       "key": {
+        "uuid": "2600f13f_5a34581a",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4474,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-29T14:29:33Z",
+      "side": 1,
+      "message": "This is not really wasm specific: Even if JS used the same builtin it would want to get the same lowering.\nAlso, the int64-lowering is already wasm-specific, although only to a small degree.\n\nI think the code here should be platform-independent as far as possible and do most of the lowering in the int64-lowering.",
+      "parentUuid": "dd6d404b_a8fedbe6",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c94efc9c_c3869407",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 9
@@ -859,6 +894,30 @@
       "side": 1,
       "message": "Currently only caches the CallDescriptor because it\u0027s the minimum not specific needed, see my previous comment.",
       "parentUuid": "c94efc9c_c3869407",
+      "range": {
+        "startLine": 4481,
+        "startChar": 6,
+        "endLine": 4481,
+        "endChar": 12
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b33bb94_336861b7",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4481,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-29T14:29:33Z",
+      "side": 1,
+      "message": "As I mentioned above, If you cache target, you could use it to identify the call node in the int64-lowering.",
+      "parentUuid": "58fb81cf_faedda2a",
       "range": {
         "startLine": 4481,
         "startChar": 6,
@@ -935,6 +994,24 @@
       "writtenOn": "2018-11-29T14:03:59Z",
       "side": 1,
       "message": "That\u0027s right, I\u0027ll refactor this, thanks.",
+      "parentUuid": "353fcc01_6ac8f95e",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "795d5941_af41216b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5623,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-11-29T14:29:33Z",
+      "side": 1,
+      "message": "Yes, I think you should move it, except if you can really get rid of it, as Jakob suggested. It\u0027s just a local helper function, so it\u0027s better to keep it local.",
       "parentUuid": "353fcc01_6ac8f95e",
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
