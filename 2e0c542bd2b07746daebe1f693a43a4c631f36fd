@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eaee2854_7332a8d7",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2887,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2018-11-29T14:48:52Z",
+      "side": 1,
+      "message": "We could also do this ForwardStateTo then everything is in one place (by nesting ifs instead of chaining, code duplication can be avoided).",
+      "range": {
+        "startLine": 2886,
+        "startChar": 2,
+        "endLine": 2887,
+        "endChar": 74
+      },
+      "revId": "2e0c542bd2b07746daebe1f693a43a4c631f36fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
