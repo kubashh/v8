@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5d6e7e7f_bdde3a06",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aebdeec8_6023aa48",
+      "range": {
+        "startLine": 23,
+        "startChar": 2,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3d514f4_ec030820",
         "filename": "src/builtins/builtins-bigint-gen.cc",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba9346a6_dc4037c7",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3d514f4_ec030820",
+      "range": {
+        "startLine": 24,
+        "startChar": 2,
+        "endLine": 24,
+        "endChar": 49
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "20c05dca_9a9f7918",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ab28505_573102c0",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 30
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a17c90d_53927487",
         "filename": "src/builtins/builtins-bigint-gen.cc",
         "patchSetId": 9
@@ -91,6 +163,30 @@
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be063696_26a56bcf",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "To be honest, returning a pointer doesn\u0027t make sense I think. The goal of the builtin is to unbox a HeapObject to its native equivalent. I would like to avoid to load a ptr or create another HeapObject to unbox later.",
+      "parentUuid": "2a17c90d_53927487",
+      "range": {
+        "startLine": 44,
+        "startChar": 9,
+        "endLine": 44,
+        "endChar": 15
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "bca61a9b_0ef00260",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a2c554ba_0b498679",
+      "range": {
+        "startLine": 51,
+        "startChar": 8,
+        "endLine": 51,
+        "endChar": 69
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5398472_128f998a",
         "filename": "src/builtins/builtins-bigint-gen.cc",
         "patchSetId": 9
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "a6bbae3c_2dcba0ce",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e5398472_128f998a",
+      "range": {
+        "startLine": 56,
+        "startChar": 24,
+        "endLine": 56,
+        "endChar": 37
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d3797a98_de390a87",
         "filename": "src/builtins/builtins-bigint-gen.cc",
         "patchSetId": 9
@@ -151,6 +295,30 @@
       "writtenOn": "2018-11-28T17:45:37Z",
       "side": 1,
       "message": "I think it would be nicer to let the builtin return 2 values here instead of returning the result over the heap. See https://cs.chromium.org/chromium/src/v8/src/interface-descriptors.h?l\u003d1062 on how to make such a CallInterfaceDescriptor. \n\nReturning 2 values seems to be supported, see https://cs.chromium.org/chromium/src/v8/src/compiler/code-assembler.cc?l\u003d418. To access the returned values you have to use Projection nodes (https://cs.chromium.org/chromium/src/v8/src/compiler/int64-lowering.cc?l\u003d1051).",
+      "range": {
+        "startLine": 63,
+        "startChar": 4,
+        "endLine": 63,
+        "endChar": 19
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad481bd3_ae59451b",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "I agree, which would remove the entire ptr issue described in the above comments. I actually already this and ran into an invalid assertion (I think it was about projection requiring one node with two ouputs, where I have two nodes with each one output), but now I have the confirmation that it should be feasable. I\u0027ll dig into it again.",
+      "parentUuid": "d3797a98_de390a87",
       "range": {
         "startLine": 63,
         "startChar": 4,
@@ -183,6 +351,30 @@
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25f063ad_eafe5c36",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "172a9c8e_8cd5018d",
+      "range": {
+        "startLine": 70,
+        "startChar": 4,
+        "endLine": 70,
+        "endChar": 36
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -256,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "7eb76dc6_661ee7c5",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e111729_5d632a73",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 0
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa6d00d3_2bcda11f",
         "filename": "src/builtins/builtins-bigint-gen.cc",
         "patchSetId": 9
@@ -276,6 +492,30 @@
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b7ee9fa_79871df5",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa6d00d3_2bcda11f",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 36
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -349,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "4b3e3666_f5ec2ad3",
+        "filename": "src/builtins/builtins-bigint-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dad754cc_5835295b",
+      "range": {
+        "startLine": 93,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 43
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54b323e5_9c6b4cce",
         "filename": "src/builtins/builtins-wasm-gen.cc",
         "patchSetId": 9
@@ -372,6 +636,30 @@
     },
     {
       "key": {
+        "uuid": "3ec4bf2e_ac630069",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54b323e5_9c6b4cce",
+      "range": {
+        "startLine": 185,
+        "startChar": 20,
+        "endLine": 185,
+        "endChar": 55
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "88f41e12_a490db87",
         "filename": "src/builtins/builtins-wasm-gen.cc",
         "patchSetId": 9
@@ -383,6 +671,30 @@
       "writtenOn": "2018-11-29T01:25:23Z",
       "side": 1,
       "message": "Can you elaborate on why the two-builtin design with a tail call is needed? I see in your design doc that the Wasm builtins need to be PIC; but why don\u0027t you inline the other builtin here? AFAICS this is its only call. Am I missing something?",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 189,
+        "endChar": 16
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "801729f2_7fa26b50",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "I heard that some validations around the PICness of builtin changed. I think that it doesn\u0027t apply to Wasm calls tho. I did many experimentation at the beginning but as far as I remember it didn\u0027t worked, and it\u0027s consistent with the other calls above.\n\nI\u0027ll dig into it.",
+      "parentUuid": "88f41e12_a490db87",
       "range": {
         "startLine": 189,
         "startChar": 4,
@@ -418,6 +730,30 @@
     },
     {
       "key": {
+        "uuid": "e67fb4f7_4b65127b",
+        "filename": "src/builtins/builtins-wasm-gen.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cde4e942_d1243d25",
+      "range": {
+        "startLine": 199,
+        "startChar": 20,
+        "endLine": 200,
+        "endChar": 0
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "716a06ff_6b0e079f",
         "filename": "src/compiler/int64-lowering.cc",
         "patchSetId": 9
@@ -432,6 +768,24 @@
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5deb645_cbcdec10",
+        "filename": "src/compiler/int64-lowering.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "716a06ff_6b0e079f",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -452,6 +806,24 @@
     },
     {
       "key": {
+        "uuid": "dd6d404b_a8fedbe6",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4474,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "The int64-lowering is currently not Wasm specific, it\u0027s part of the compiler. I doubt JavaScript will use it tho.\n\nI think we either leave this Wasm specific lowering code here or make the lowering pass Wasm specific. What do you thing?",
+      "parentUuid": "0523189b_bfce634c",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c94efc9c_c3869407",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 9
@@ -463,6 +835,30 @@
       "writtenOn": "2018-11-28T17:45:37Z",
       "side": 1,
       "message": "You could cache the target and use the same node for all Int64ToBigInt conversions. You can then use this node to identify kWasmNewBigInt-builtin calls in the int64-lowering. I added a more detailed comment there.",
+      "range": {
+        "startLine": 4481,
+        "startChar": 6,
+        "endLine": 4481,
+        "endChar": 12
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58fb81cf_faedda2a",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 4481,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Currently only caches the CallDescriptor because it\u0027s the minimum not specific needed, see my previous comment.",
+      "parentUuid": "c94efc9c_c3869407",
       "range": {
         "startLine": 4481,
         "startChar": 6,
@@ -548,6 +944,30 @@
       "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f443cd1_3c42c582",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T13:23:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b4389a1_503557ba",
+      "range": {
+        "startLine": 85,
+        "startChar": 46,
+        "endLine": 85,
+        "endChar": 62
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
