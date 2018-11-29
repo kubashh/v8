@@ -813,6 +813,9 @@ class ModuleDecoderImpl : public Decoder {
   }
 
   bool CheckFunctionsCount(uint32_t functions_count, uint32_t offset) {
+    // This is set here instead of DecodeCodeSection so the logic can be shared
+    // with the AsyncStreamingProcessor.
+    seen_code_section_ = true;
     if (functions_count != module_->num_declared_functions) {
       Reset(nullptr, nullptr, offset);
       errorf(nullptr, "function body count %u mismatch (%u expected)",
@@ -937,7 +940,15 @@ class ModuleDecoderImpl : public Decoder {
 
   ModuleResult FinishDecoding(bool verify_functions = true) {
     if (ok()) {
-      CalculateGlobalOffsets(module_.get());
+      // The declared vs. defined function count is normally checked when
+      // decoding the code section, but we have to check it here too in case the
+      // code section is absent.
+      if (module_->num_declared_functions != 0 && !seen_code_section_) {
+        errorf(pc(), "function count is %u, but code section is absent",
+               module_->num_declared_functions);
+      } else {
+        CalculateGlobalOffsets(module_.get());
+      }
     }
     ModuleResult result = toResult(std::move(module_));
     if (verify_functions && result.ok() && intermediate_result_.failed()) {
@@ -1047,6 +1058,10 @@ class ModuleDecoderImpl : public Decoder {
                 "not enough bits");
   VoidResult intermediate_result_;
   ModuleOrigin origin_;
+  // Set to true when the code section is decoded. This is used to detect
+  // validation failure when there are declared functions but the code section
+  // is absent.
+  bool seen_code_section_ = false;
 
   uint32_t off(const byte* ptr) {
     return static_cast<uint32_t>(ptr - start_) + buffer_offset_;
