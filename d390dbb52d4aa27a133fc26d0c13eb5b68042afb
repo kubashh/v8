@@ -924,6 +924,24 @@
     },
     {
       "key": {
+        "uuid": "f76197c0_b8ca7f8b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5623,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T14:03:59Z",
+      "side": 1,
+      "message": "That\u0027s right, I\u0027ll refactor this, thanks.",
+      "parentUuid": "353fcc01_6ac8f95e",
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b4389a1_503557ba",
         "filename": "src/compiler/wasm-compiler.h",
         "patchSetId": 9
@@ -994,6 +1012,30 @@
     },
     {
       "key": {
+        "uuid": "d4faa0b2_dc67ec8a",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T14:03:59Z",
+      "side": 1,
+      "message": "There might be future usages with the BigInt64Array TypedArray, currently it\u0027s using the C++ BigInt runtime. I think it\u0027s a good idea to rename it now to something more meaningfull and renaming it later if needed.",
+      "parentUuid": "4d8983a2_688fdb1d",
+      "range": {
+        "startLine": 1112,
+        "startChar": 6,
+        "endLine": 1112,
+        "endChar": 46
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4ab3a34_a606b277",
         "filename": "src/interface-descriptors.h",
         "patchSetId": 9
@@ -1017,6 +1059,30 @@
     },
     {
       "key": {
+        "uuid": "a8434621_12d1caae",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T14:03:59Z",
+      "side": 1,
+      "message": "Sorry I don\u0027t understand what you mean. V8_HOST_ARCH_32_BIT is at V8\u0027s compile time. We need to include both CallDescriptors and use the correct one at \"runtime\".",
+      "parentUuid": "e4ab3a34_a606b277",
+      "range": {
+        "startLine": 1122,
+        "startChar": 6,
+        "endLine": 1122,
+        "endChar": 48
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4d579614_79ab8f0f",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 9
@@ -1028,6 +1094,30 @@
       "writtenOn": "2018-11-29T01:25:23Z",
       "side": 1,
       "message": "What if someone passes a non-BigInt?\nIf that\u0027s guaranteed not to happen, then please change \"!value-\u003eIsUndefined\" to \"value-\u003eIsBigInt\".\nIf it can happen, then you need to call i::BigInt::FromObject() (which isn\u0027t exposed on the external v8::BigInt yet). And please add a test that this case is handled correctly.",
+      "range": {
+        "startLine": 1107,
+        "startChar": 25,
+        "endLine": 1107,
+        "endChar": 37
+      },
+      "revId": "d390dbb52d4aa27a133fc26d0c13eb5b68042afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "271340f8_61fb2950",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-29T14:03:59Z",
+      "side": 1,
+      "message": "Good catch, this is indeed possible and untested currently.",
+      "parentUuid": "4d579614_79ab8f0f",
       "range": {
         "startLine": 1107,
         "startChar": 25,
