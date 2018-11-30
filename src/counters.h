@@ -885,9 +885,9 @@ class RuntimeCallTimer final {
   V(CompileBackgroundRewriteReturnResult)      \
   V(CompileBackgroundScopeAnalysis)            \
   V(CompileDeserialize)                        \
-  V(CompileEval)                               \
   V(CompileAnalyse)                            \
   V(CompileEnqueueOnDispatcher)                \
+  V(CompileEval)                               \
   V(CompileFinalizeBackgroundCompileTask)      \
   V(CompileFinishNowOnDispatcher)              \
   V(CompileFunction)                           \
@@ -900,6 +900,8 @@ class RuntimeCallTimer final {
   V(CompileSerialize)                          \
   V(CompileWaitForDispatcher)                  \
   V(DeoptimizeCode)                            \
+  V(DeserializeContext)                        \
+  V(DeserializeIsolate)                        \
   V(FunctionCallback)                          \
   V(FunctionPrototypeGetter)                   \
   V(FunctionPrototypeSetter)                   \
@@ -909,28 +911,33 @@ class RuntimeCallTimer final {
   V(GC_Custom_SlowAllocateRaw)                 \
   V(GCEpilogueCallback)                        \
   V(GCPrologueCallback)                        \
+  V(Genesis)                                   \
   V(GetMoreDataCallback)                       \
+  V(MessageListenerCallback                    \
   V(NamedDefinerCallback)                      \
   V(NamedDeleterCallback)                      \
   V(NamedDescriptorCallback)                   \
   V(NamedQueryCallback)                        \
   V(NamedSetterCallback)                       \
   V(NamedGetterCallback)                       \
-  V(NamedEnumeratorCallback)                   \
   V(IndexedDefinerCallback)                    \
   V(IndexedDeleterCallback)                    \
   V(IndexedDescriptorCallback)                 \
+  V(IndexedEnumeratorCallback)                 \
   V(IndexedGetterCallback)                     \
   V(IndexedQueryCallback)                      \
   V(IndexedSetterCallback)                     \
-  V(IndexedEnumeratorCallback)                 \
+  V(Invoke)                                    \
+  V(InvokeApiFunction)                         \
   V(InvokeApiInterruptCallbacks)               \
   V(InvokeFunctionCallback)                    \
   V(JS_Execution)                              \
   V(Map_SetPrototype)                          \
   V(Map_TransitionToAccessorProperty)          \
   V(Map_TransitionToDataProperty)              \
+  V(NamedEnumeratorCallback)                   \
   V(Object_DeleteProperty)                     \
+  V(ObjectVerify)                              \
   V(OptimizeCode)                              \
   V(ParseArrowFunctionLiteral)                 \
   V(ParseBackgroundArrowFunctionLiteral)       \
