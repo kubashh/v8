@@ -22,6 +22,30 @@
       "revId": "2e0c542bd2b07746daebe1f693a43a4c631f36fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3b885df_3080cdee",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2887,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2018-11-30T08:51:57Z",
+      "side": 1,
+      "message": "This is part of the \"AddToActive\" action and I have considered just calling AddToActive here. But that would make the generated log statements even more confusing...\n\nAlso, I would like to keep it in the method that actually performs the change to the state just to make sure it still happens if this is ever called from somewhere else.",
+      "parentUuid": "eaee2854_7332a8d7",
+      "range": {
+        "startLine": 2886,
+        "startChar": 2,
+        "endLine": 2887,
+        "endChar": 74
+      },
+      "revId": "2e0c542bd2b07746daebe1f693a43a4c631f36fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
