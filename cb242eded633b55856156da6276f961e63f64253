@@ -16,6 +16,24 @@
       "revId": "cb242eded633b55856156da6276f961e63f64253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b53e9ea_2bf6a249",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-11-30T12:29:43Z",
+      "side": 0,
+      "message": "The DCHECK is okay, it asserts that there is enough room in the page to hold the largest regular heap object.\n\nI think the right fix would be to decrease kMaxRegularHeapObjectSize on ppc64le, so that objects larger than that limit go to large object space.",
+      "parentUuid": "53fe2757_fefe01b6",
+      "revId": "cb242eded633b55856156da6276f961e63f64253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
