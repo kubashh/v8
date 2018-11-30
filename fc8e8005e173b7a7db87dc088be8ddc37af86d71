@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d45104d_e8394ae5",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-11-30T00:44:50Z",
+      "side": 1,
+      "message": "Somehow these ended up back in the state where they differ from the other methods. Please fix here and below by removing DONT_ENUM.",
+      "revId": "fc8e8005e173b7a7db87dc088be8ddc37af86d71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
