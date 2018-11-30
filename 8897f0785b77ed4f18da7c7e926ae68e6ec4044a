@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25eda237_f932b488",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-11-30T12:50:49Z",
+      "side": 1,
+      "message": "Style-wise I think I\u0027d prefer to keep the if(c-\u003eis_onearmed_if()) guarding this check instead of a complex condition inside of the VALIDATE() macro.\n\n(plus you can set the end_merge.reached here too).",
+      "revId": "8897f0785b77ed4f18da7c7e926ae68e6ec4044a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9317e5c3_22854c28",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-11-30T12:50:49Z",
+      "side": 1,
+      "message": "Is it possible to set end_merge.reached in processing the end for a one-armed if? That would be preferable to a special case here, IMO.",
+      "revId": "8897f0785b77ed4f18da7c7e926ae68e6ec4044a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
