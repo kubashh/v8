@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1f69a3e_99fff7c7",
+        "filename": "src/compiler/type-cache.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2018-11-30T11:53:42Z",
+      "side": 1,
+      "message": "Thinking about this a bit more, Type::Unsigned30() is probably a bit safer because that is going to fit into Smi.",
+      "range": {
+        "startLine": 169,
+        "startChar": 42,
+        "endLine": 169,
+        "endChar": 53
+      },
+      "revId": "1511aadb62eadf73cba566741a682714a5d27574",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
