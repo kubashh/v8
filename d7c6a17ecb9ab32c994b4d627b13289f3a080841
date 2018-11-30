@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb718052_cb2f80c3",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 589,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-11-30T10:15:55Z",
+      "side": 1,
+      "message": "This would need to be change, to be [Memory, Exception, Global] in order to test the same thing as before.",
+      "revId": "d7c6a17ecb9ab32c994b4d627b13289f3a080841",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
