@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "965aee71_7860e025",
+        "filename": "test/cctest/test-log.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2018-11-30T10:10:27Z",
+      "side": 1,
+      "message": "Nit: Do you need this flag?",
+      "revId": "af2b9f160efd8306268a3820ad9a5bfe548d0051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
