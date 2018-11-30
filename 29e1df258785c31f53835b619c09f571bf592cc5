@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "c59cda2b_1ca3419b",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1455,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-11-30T09:14:59Z",
+      "side": 1,
+      "message": "Yes sorry, Done now. I\u0027m not used to Gerrit yet and I sometimes miss comments.",
+      "parentUuid": "c22e8b16_4975a347",
+      "revId": "29e1df258785c31f53835b619c09f571bf592cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4aa3c8e2_083f25b1",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 1
