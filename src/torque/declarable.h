@@ -20,6 +20,7 @@ namespace internal {
 namespace torque {
 
 class Scope;
+class Namespace;
 
 DECLARE_CONTEXTUAL_VARIABLE(CurrentScope, Scope*);
 
@@ -156,11 +157,31 @@ class Namespace : public Scope {
   std::ostream& header_stream() { return header_stream_; }
   std::string source() { return source_stream_.str(); }
   std::string header() { return header_stream_.str(); }
+  void AddCppInclude(std::string include_path) {
+    cpp_includes_.push_back(std::move(include_path));
+  }
+  base::Optional<Namespace*> ParentNamespace() const {
+    if (Scope* parent = ParentScope()) {
+      return Namespace::cast(parent);
+    }
+    return base::nullopt;
+  }
+  std::vector<std::string> CppIncludes() const {
+    std::vector<std::string> result;
+    if (base::Optional<Namespace*> parent = ParentNamespace()) {
+      result = (*parent)->CppIncludes();
+    }
+    for (const std::string& include_path : cpp_includes_) {
+      result.push_back(include_path);
+    }
+    return result;
+  }
 
  private:
   std::string name_;
   std::stringstream header_stream_;
   std::stringstream source_stream_;
+  std::vector<std::string> cpp_includes_;
 };
 
 inline Namespace* CurrentNamespace() {
