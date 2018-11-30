@@ -34,6 +34,24 @@
       "revId": "cb242eded633b55856156da6276f961e63f64253",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14d6cbdd_ce15345e",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-11-30T12:38:17Z",
+      "side": 0,
+      "message": "Ah you\u0027re right of course - I misread it as \u0027memory\u0027 being the size of an object, not the size of the page. Thanks :)",
+      "parentUuid": "4b53e9ea_2bf6a249",
+      "revId": "cb242eded633b55856156da6276f961e63f64253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
