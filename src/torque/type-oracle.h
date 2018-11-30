@@ -92,8 +92,16 @@ class TypeOracle : public ContextualClass<TypeOracle> {
     return Get().GetBuiltinType(VOID_TYPE_STRING);
   }
 
+  static const Type* GetRawPtrType() {
+    return Get().GetBuiltinType(RAWPTR_TYPE_STRING);
+  }
+
   static const Type* GetObjectType() {
     return Get().GetBuiltinType(OBJECT_TYPE_STRING);
+  }
+
+  static const Type* GetTaggedType() {
+    return Get().GetBuiltinType(TAGGED_TYPE_STRING);
   }
 
   static const Type* GetConstStringType() {

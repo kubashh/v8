@@ -6,8 +6,8 @@ type Arguments constexpr 'CodeStubArguments*';
 type void;
 type never;
 
-type Tagged generates 'TNode<Object>';
-type Smi extends Tagged generates 'TNode<Smi>';
+type Tagged generates 'TNode<Object>' constexpr 'Object*';
+type Smi extends Tagged generates 'TNode<Smi>' constexpr 'Smi*';
 type HeapObject extends Tagged generates 'TNode<HeapObject>';
 type Object = Smi | HeapObject;
 type int32 generates 'TNode<Int32T>' constexpr 'int32_t';
@@ -18,11 +18,14 @@ type uintptr generates 'TNode<UintPtrT>' constexpr 'uintptr_t';
 type float32 generates 'TNode<Float32T>' constexpr 'float';
 type float64 generates 'TNode<Float64T>' constexpr 'double';
 type bool generates 'TNode<BoolT>' constexpr 'bool';
+type bint generates 'TNode<BInt>' constexpr 'bint';
 type string constexpr 'const char*';
 
 type int31 extends int32
     generates 'TNode<Int32T>' constexpr 'int31_t';
 type RawPtr generates 'TNode<RawPtrT>' constexpr 'void*';
+type SharedFunctionInfo extends HeapObject
+    generates 'TNode<SharedFunctionInfo>';
 type AbstractCode extends HeapObject generates 'TNode<AbstractCode>';
 type Code extends AbstractCode generates 'TNode<Code>';
 type JSReceiver extends HeapObject generates 'TNode<JSReceiver>';
@@ -76,6 +79,7 @@ type NumberDictionary extends HeapObject
 // in Torque-based UnsafeCast operators preceeded by an appropriate
 // type assert()
 intrinsic %RawCast<A: type>(o: Object): A;
+intrinsic %RawCast<A: type>(f: Frame): A;
 
 type NativeContextSlot generates 'TNode<IntPtrT>' constexpr 'int32_t';
 const ARRAY_JOIN_STACK_INDEX: constexpr NativeContextSlot
@@ -333,6 +337,10 @@ extern transitioning runtime TransitionElementsKindWithKind(
 extern transitioning runtime CreateDataProperty(implicit context: Context)(
     JSReceiver, Object, Object);
 
+extern macro LoadBufferObject(RawPtr, constexpr int32): Object;
+extern macro LoadBufferPointer(RawPtr, constexpr int32): RawPtr;
+extern macro LoadBufferSmi(RawPtr, constexpr int32): Smi;
+
 extern macro LoadRoot(constexpr RootIndex): Object;
 extern macro StoreRoot(constexpr RootIndex, Object): Object;
 extern macro LoadAndUntagToWord32Root(constexpr RootIndex): int32;
@@ -488,6 +496,12 @@ extern operator '.length' macro LoadStringLengthAsWord(String): intptr;
 extern operator '.length' macro GetArgumentsLength(constexpr Arguments): intptr;
 extern operator '[]' macro GetArgumentValue(
     constexpr Arguments, intptr): Object;
+
+extern operator '.shared_function_info' macro
+LoadJSFunctionSharedFunctionInfo(JSFunction): SharedFunctionInfo;
+
+extern operator '.formal_parameter_count' macro
+LoadSharedFunctionInfoFormalParameterCount(SharedFunctionInfo): int32;
 
 extern macro TaggedIsSmi(Object): bool;
 extern macro TaggedIsNotSmi(Object): bool;
@@ -665,6 +679,8 @@ CastHeapObject<JSFunction>(implicit context: Context)(o: HeapObject): JSFunction
   goto CastError;
 }
 
+macro Cast<A: type>(o: Tagged): A labels CastError;
+
 macro Cast<A: type>(implicit context: Context)(o: HeapObject): A
     labels CastError {
   return CastHeapObject<A>(o) otherwise CastError;
@@ -828,12 +844,19 @@ Convert<Smi>(ui: uint32): Smi {
 Convert<uintptr>(ui: uint32): uintptr {
   return ChangeUint32ToWord(ui);
 }
+Convert<bint>(v: int32): bint {
+  return IntPtrToBInt(Convert<intptr>(v));
+}
 macro Convert<A: type>(i: intptr): A;
 Convert<int32>(i: intptr): int32 {
   return TruncateIntPtrToInt32(i);
 }
 Convert<Smi>(i: intptr): Smi {
   return SmiTag(i);
+}
+extern macro IntPtrToBInt(intptr): bint;
+Convert<bint>(v: intptr): bint {
+  return IntPtrToBInt(v);
 }
 macro Convert<A: type>(ui: uintptr): A;
 Convert<uint32>(ui: uintptr): uint32 {
@@ -845,6 +868,10 @@ Convert<intptr>(s: Smi): intptr {
 }
 Convert<int32>(s: Smi): int32 {
   return SmiToInt32(s);
+}
+extern macro SmiToBInt(Smi): bint;
+Convert<bint>(v: Smi): bint {
+  return SmiToBInt(v);
 }
 macro Convert<A: type>(h: HeapNumber): A;
 Convert<float64>(h: HeapNumber): float64 {
@@ -881,6 +908,11 @@ Convert<uintptr>(r: RawPtr): uintptr {
 Convert<intptr>(r: RawPtr): intptr {
   return Signed(r);
 }
+macro Convert<A: type>(r: bint): A;
+extern macro BIntToSmi(bint): Smi;
+extern macro BIntToIntPtr(bint): intptr;
+extern Convert<Smi>(v: bint): Smi;
+extern Convert<intptr>(v: bint): intptr;
 
 macro BranchIf<A: type, B: type>(implicit context: Context)(o: B): never
     labels True, False {
@@ -1159,7 +1191,6 @@ extern macro IsCustomElementsReceiverInstanceType(int32): bool;
 extern macro IsFastJSArrayWithNoCustomIteration(implicit context: Context)(
     Object): bool;
 extern macro Typeof(Object): Object;
-extern macro LoadTargetFromFrame(): JSFunction;
 
 // Return true iff number is NaN.
 macro NumberIsNaN(number: Number): bool {

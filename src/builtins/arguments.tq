@@ -1,0 +1,38 @@
+// Copyright 2018 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+namespace arguments {
+
+  struct ArgumentsInfo {
+    frame: Frame;
+    argument_count: bint;
+    formal_parameter_count: bint;
+  }
+
+  // Calculates and returns the the frame pointer, argument count and formal
+  // parameter count to be used to access a function's parameters, taking
+  // argument adapter frames into account.
+  macro GetArgumentsFrameAndCountX(implicit context: Context)(f: JSFunction):
+      ArgumentsInfo {
+    let frame: Frame = LoadParentFramePointer();
+    assert(frame.function == f);
+
+    const shared: SharedFunctionInfo = f.shared_function_info;
+    const formalParameterCount: bint =
+        Convert<bint>(shared.formal_parameter_count);
+    let argumentCount: bint = formalParameterCount;
+
+    const caller: Frame = frame.caller;
+    typeswitch (caller) {
+      case (caller: ArgumentsAdapterFrame): {
+        argumentCount = Convert<bint>(caller.length);
+        frame = caller;
+      }
+      case (frame: Frame): {
+      }
+    }
+
+    return ArgumentsInfo{frame, argumentCount, formalParameterCount};
+  }
+}

@@ -349,11 +349,17 @@ Callable* DeclarationVisitor::Specialize(
     first = false;
   }
   readable_name << ">";
-  Callable* callable;
+  Callable* callable = nullptr;
   if (MacroDeclaration::DynamicCast(declaration) != nullptr) {
-    callable = Declarations::CreateMacro(generated_name, readable_name.str(),
-                                         base::nullopt, type_signature,
-                                         declaration->transitioning, *body);
+    if (body) {
+      callable = Declarations::CreateMacro(generated_name, readable_name.str(),
+                                           base::nullopt, type_signature,
+                                           declaration->transitioning, *body);
+    } else {
+      Declarations::DeclareMacro(generated_name, readable_name.str(),
+                                 type_signature, declaration->transitioning,
+                                 body);
+    }
   } else if (IntrinsicDeclaration::DynamicCast(declaration) != nullptr) {
     callable = Declarations::CreateIntrinsic(declaration->name, type_signature);
   } else {

@@ -786,7 +786,8 @@ struct SpecializationDeclaration : Declaration {
                             std::vector<TypeExpression*> generic_parameters,
                             ParameterList parameters,
                             TypeExpression* return_type,
-                            LabelAndTypesVector labels, Statement* b)
+                            LabelAndTypesVector labels,
+                            base::Optional<Statement*> b)
       : Declaration(kKind, pos),
         name(std::move(name)),
         external(false),
@@ -798,7 +799,7 @@ struct SpecializationDeclaration : Declaration {
   bool external;
   std::vector<TypeExpression*> generic_parameters;
   std::unique_ptr<CallableNodeSignature> signature;
-  Statement* body;
+  base::Optional<Statement*> body;
 };
 
 struct ExternConstDeclaration : Declaration {

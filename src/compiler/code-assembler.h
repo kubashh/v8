@@ -172,6 +172,12 @@ struct MachineTypeOf<
   static constexpr MachineType value = MachineType::TaggedPointer();
 };
 
+#if defined(V8_HOST_ARCH_32_BIT)
+typedef Smi BInt;
+#elif defined(V8_HOST_ARCH_64_BIT)
+typedef IntPtrT BInt;
+#endif
+
 template <class HeapObjectSubtype>
 constexpr MachineType MachineTypeOf<
     HeapObjectSubtype,
@@ -1678,8 +1684,14 @@ class CodeAssemblerScopedExceptionHandler {
   std::unique_ptr<CodeAssemblerExceptionHandlerLabel> label_;
   TypedCodeAssemblerVariable<Object>* exception_;
 };
-
 }  // namespace compiler
+
+#if defined(V8_HOST_ARCH_32_BIT)
+typedef Smi bint;
+#elif defined(V8_HOST_ARCH_64_BIT)
+typedef intptr_t bint;
+#endif
+
 }  // namespace internal
 }  // namespace v8
 

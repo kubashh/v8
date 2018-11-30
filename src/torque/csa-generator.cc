@@ -181,10 +181,16 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
   }
 
   if (instruction.intrinsic->ExternalName() == "%RawCast") {
-    if (!return_type->IsSubtypeOf(TypeOracle::GetObjectType())) {
-      ReportError("%RawCast must cast to subtype of Object");
+    if (return_type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+      out_ << "TORQUE_CAST";
+    } else if (return_type->IsSubtypeOf(TypeOracle::GetRawPtrType())) {
+      // No cast necessary, all RawPtrs in CSA are the same
+    } else {
+      std::stringstream s;
+      s << "%RawCast must cast to subtype of Object or RawPtr (" << *return_type
+        << " is not)";
+      ReportError(s.str());
     }
-    out_ << "TORQUE_CAST";
   } else {
     ReportError("no built in intrinsic with name " +
                 instruction.intrinsic->ExternalName());
