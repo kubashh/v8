@@ -1757,9 +1757,10 @@ class WasmFullDecoder : public WasmDecoder<validate> {
               this->error(this->pc_, "else already present for if");
               break;
             }
-            FallThruTo(c);
+            if (!TypeCheckFallThru(c)) break;
             c->kind = kControlIfElse;
             CALL_INTERFACE_IF_PARENT_REACHABLE(Else, c);
+            if (c->reachable()) c->end_merge.reached = true;
             PushMergeValues(c, &c->start_merge);
             c->reachability = control_at(1)->innerReachability();
             break;
@@ -1767,7 +1768,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           case kExprEnd: {
             if (!VALIDATE(!control_.empty())) {
               this->error("end does not match any if, try, or block");
-              return;
+              break;
             }
             Control* c = &control_.back();
             if (!VALIDATE(!c->is_incomplete_try())) {
@@ -1775,12 +1776,12 @@ class WasmFullDecoder : public WasmDecoder<validate> {
               break;
             }
             if (c->is_onearmed_if()) {
-              // Emulate empty else arm.
-              FallThruTo(c);
-              if (this->failed()) break;
-              CALL_INTERFACE_IF_PARENT_REACHABLE(Else, c);
-              PushMergeValues(c, &c->start_merge);
-              c->reachability = control_at(1)->innerReachability();
+              if (!VALIDATE(c->end_merge.arity == c->start_merge.arity)) {
+                this->error(
+                    c->pc,
+                    "start-arity and end-arity of one-armed if must match");
+                break;
+              }
             }
             if (c->is_try_catch()) {
               // Emulate catch-all + re-throw.
@@ -1794,6 +1795,7 @@ class WasmFullDecoder : public WasmDecoder<validate> {
             FallThruTo(c);
             // A loop just leaves the values on the stack.
             if (!c->is_loop()) PushMergeValues(c, &c->end_merge);
+            if (c->is_onearmed_if()) c->end_merge.reached = true;
 
             if (control_.size() == 1) {
               // If at the last (implicit) control, check we are at end.
