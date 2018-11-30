@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "993fe594_93a39d22",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1778,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-11-30T13:02:27Z",
+      "side": 1,
+      "message": "IMO yes, in general it\u0027s better to special-case the setting of flags than the reading of flags. That way readers of flags don\u0027t have to be smart.",
+      "parentUuid": "537a9e67_3bf7dcdb",
+      "revId": "8897f0785b77ed4f18da7c7e926ae68e6ec4044a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9317e5c3_22854c28",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 1
