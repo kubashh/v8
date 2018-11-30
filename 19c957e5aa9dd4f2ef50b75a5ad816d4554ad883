@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da93d493_e26ca75c",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-11-30T18:50:01Z",
+      "side": 1,
+      "message": "Variable name change proposal:\n\nI may as well just hard-code \"collation\" instead of calling uloc_toLegacyKey.\n \nconst char* kCollation \u003d \"collation\"; \n\n|values|  \u003d\u003d\u003e  collation_type_list  or collations or collation_list\n|type|    \u003d\u003d\u003e  collation_type  or collation \n|input_legacy_type|  \u003d\u003d\u003e  input_collation_type   or input_collation",
+      "range": {
+        "startLine": 1472,
+        "startChar": 0,
+        "endLine": 1486,
+        "endChar": 3
+      },
+      "revId": "19c957e5aa9dd4f2ef50b75a5ad816d4554ad883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ae9068b_0ca06506",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-11-30T18:50:01Z",
+      "side": 1,
+      "message": "Does this mean that \u0027u-kn\u0027 is not allowed?  Does it always have to be explicit (u-kn-true)?",
+      "range": {
+        "startLine": 1552,
+        "startChar": 8,
+        "endLine": 1554,
+        "endChar": 70
+      },
+      "revId": "19c957e5aa9dd4f2ef50b75a5ad816d4554ad883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
