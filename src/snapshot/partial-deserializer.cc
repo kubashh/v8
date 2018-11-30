@@ -5,6 +5,7 @@
 #include "src/snapshot/partial-deserializer.h"
 
 #include "src/api-inl.h"
+#include "src/counters.h"
 #include "src/objects/slots.h"
 #include "src/snapshot/snapshot.h"
 
@@ -15,6 +16,8 @@ MaybeHandle<Context> PartialDeserializer::DeserializeContext(
     Isolate* isolate, const SnapshotData* data, bool can_rehash,
     Handle<JSGlobalProxy> global_proxy,
     v8::DeserializeEmbedderFieldsCallback embedder_fields_deserializer) {
+  RuntimeCallTimerScope rcs_timer(isolate,
+                                  RuntimeCallCounterId::kDeserializeContext);
   PartialDeserializer d(data);
   d.SetRehashability(can_rehash);
 
