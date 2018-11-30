@@ -173,8 +173,10 @@ namespace internal {
   T(IDENTIFIER, nullptr, 0)                                        \
   K(ASYNC, "async", 0)                                             \
   /* `await` is a reserved word in module code only */             \
+  /* BEGIN AwaitOrYield */                                         \
   K(AWAIT, "await", 0)                                             \
   K(YIELD, "yield", 0)                                             \
+  /* END AwaitOrYield */                                           \
   K(LET, "let", 0)                                                 \
   K(STATIC, "static", 0)                                           \
   /* Future reserved words (ECMA-262, section 7.6.1.2). */         \
@@ -218,8 +220,10 @@ class Token {
   // Predicates
   static bool IsKeyword(Value token) { return token_type[token] == 'K'; }
 
-  static bool IsIdentifier(Value token, LanguageMode language_mode,
-                           bool is_generator, bool disallow_await) {
+  V8_INLINE static bool IsValidIdentifier(Value token,
+                                          LanguageMode language_mode,
+                                          bool is_generator,
+                                          bool disallow_await) {
     if (IsInRange(token, IDENTIFIER, ASYNC)) return true;
     if (IsInRange(token, LET, ESCAPED_STRICT_RESERVED_WORD)) {
       return is_sloppy(language_mode);
@@ -236,11 +240,19 @@ class Token {
   }
 
   static bool IsAnyIdentifier(Value token) {
+    return IsInRange(token, IDENTIFIER, ESCAPED_STRICT_RESERVED_WORD);
+  }
+
+  static bool IsAnyIdentifierOrEnum(Value token) {
     return IsInRange(token, IDENTIFIER, ENUM);
   }
 
+  static bool IsAwaitOrYield(Value token) {
+    return IsInRange(token, AWAIT, YIELD);
+  }
+
   static bool IsStrictReservedWord(Value token) {
-    return IsInRange(token, LET, ESCAPED_STRICT_RESERVED_WORD);
+    return IsInRange(token, YIELD, ESCAPED_STRICT_RESERVED_WORD);
   }
 
   static bool IsLiteral(Value token) {
