@@ -163,13 +163,6 @@ void DeclarationVisitor::Visit(GenericDeclaration* decl) {
 }
 
 void DeclarationVisitor::Visit(SpecializationDeclaration* decl) {
-  if ((decl->body != nullptr) == decl->external) {
-    std::stringstream stream;
-    stream << "specialization of " << decl->name
-           << " must either be marked 'extern' or have a body";
-    ReportError(stream.str());
-  }
-
   std::vector<Generic*> generic_list = Declarations::LookupGeneric(decl->name);
   // Find the matching generic specialization based on the concrete parameter
   // list.
@@ -210,10 +203,25 @@ void DeclarationVisitor::Visit(SpecializationDeclaration* decl) {
     ReportError(stream.str());
   }
 
-  Specialize(SpecializationKey{matching_generic,
-                               GetTypeVector(decl->generic_parameters)},
-             matching_generic->declaration()->callable, decl->signature.get(),
-             decl->body);
+  auto key = SpecializationKey{matching_generic,
+                               GetTypeVector(decl->generic_parameters)};
+  if (decl->body || decl->external) {
+    Specialize(key, matching_generic->declaration()->callable,
+               decl->signature.get(), decl->body);
+  } else {
+    if (!matching_generic->declaration()->body) {
+      std::stringstream stream;
+      stream << "explict specialization of " << decl->name
+             << " doesn't have a body and the generic doesn't either\n";
+      ReportError(stream.str());
+    }
+    CurrentScope::Scope generic_scope(matching_generic->ParentScope());
+    Callable* result =
+        Specialize(key, matching_generic->declaration()->callable,
+                   base::nullopt, matching_generic->declaration()->body);
+    CurrentScope::Scope callable_scope(result);
+    DeclareSpecializedTypes(key);
+  }
 }
 
 void DeclarationVisitor::Visit(ExternConstDeclaration* decl) {
@@ -349,11 +357,17 @@ Callable* DeclarationVisitor::Specialize(
     first = false;
   }
   readable_name << ">";
-  Callable* callable;
+  Callable* callable = nullptr;
   if (MacroDeclaration::DynamicCast(declaration) != nullptr) {
-    callable = Declarations::CreateMacro(generated_name, readable_name.str(),
-                                         base::nullopt, type_signature,
-                                         declaration->transitioning, *body);
+    if (body) {
+      callable = Declarations::CreateMacro(generated_name, readable_name.str(),
+                                           base::nullopt, type_signature,
+                                           declaration->transitioning, *body);
+    } else {
+      Declarations::DeclareMacro(generated_name, readable_name.str(),
+                                 type_signature, declaration->transitioning,
+                                 body);
+    }
   } else if (IntrinsicDeclaration::DynamicCast(declaration) != nullptr) {
     callable = Declarations::CreateIntrinsic(declaration->name, type_signature);
   } else {

@@ -530,17 +530,22 @@ base::Optional<ParseResult> MakeNamespaceDeclaration(
 
 base::Optional<ParseResult> MakeSpecializationDeclaration(
     ParseResultIterator* child_results) {
+  auto external = child_results->NextAs<bool>();
   auto name = child_results->NextAs<std::string>();
   auto generic_parameters =
       child_results->NextAs<std::vector<TypeExpression*>>();
   auto parameters = child_results->NextAs<ParameterList>();
   auto return_type = child_results->NextAs<TypeExpression*>();
   auto labels = child_results->NextAs<LabelAndTypesVector>();
-  auto body = child_results->NextAs<Statement*>();
-  CheckNotDeferredStatement(body);
+  auto body = child_results->NextAs<base::Optional<Statement*>>();
+  if (external && body.has_value()) {
+    ReportError(
+        "explicit specializations of extern callables must not have a body");
+  }
+  if (body) CheckNotDeferredStatement(*body);
   Declaration* result = MakeNode<SpecializationDeclaration>(
-      std::move(name), std::move(generic_parameters), std::move(parameters),
-      return_type, std::move(labels), body);
+      std::move(name), external, std::move(generic_parameters),
+      std::move(parameters), return_type, std::move(labels), body);
   return ParseResult{result};
 }
 
@@ -1517,9 +1522,9 @@ struct TorqueGrammar : Grammar {
             TryOrDefault<GenericParameters>(&genericParameters),
             &parameterListAllowVararg, &optionalReturnType, &optionalBody},
            MakeTorqueBuiltinDeclaration),
-      Rule({&identifier, &genericSpecializationTypeList,
-            &parameterListAllowVararg, &optionalReturnType, optionalLabelList,
-            &block},
+      Rule({CheckIf(Token("extern")), &identifier,
+            &genericSpecializationTypeList, &parameterListAllowVararg,
+            &optionalReturnType, optionalLabelList, &optionalBody},
            MakeSpecializationDeclaration),
       Rule({Token("struct"), &identifier, Token("{"),
             List<NameAndTypeExpression>(Sequence({&nameAndType, Token(";")})),
