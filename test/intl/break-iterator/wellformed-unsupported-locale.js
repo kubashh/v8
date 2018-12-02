@@ -29,4 +29,5 @@
 
 var iterator = Intl.v8BreakIterator(['xx']);
 
-assertLanguageTag(%GetDefaultICULocale(), iterator.resolvedOptions().locale);
+assertTrue(iterator.resolvedOptions().locale.length >= 2);
+assertFalse(iterator.resolvedOptions().locale == 'xx');

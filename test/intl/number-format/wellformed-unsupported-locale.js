@@ -29,4 +29,5 @@
 
 var nf = Intl.NumberFormat(['xx']);
 
-assertLanguageTag(%GetDefaultICULocale(), nf.resolvedOptions().locale);
+assertTrue(nf.resolvedOptions().locale.length >= 2);
+assertFalse(nf.resolvedOptions().locale == 'xx');

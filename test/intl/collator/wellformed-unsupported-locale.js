@@ -29,4 +29,5 @@
 
 var collator = Intl.Collator(['xx']);
 
-assertLanguageTag(%GetDefaultICULocale(), collator.resolvedOptions().locale);
+assertTrue(collator.resolvedOptions().locale.length >= 2);
+assertFalse(collator.resolvedOptions().locale == 'xx');

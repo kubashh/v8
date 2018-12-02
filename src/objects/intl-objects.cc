@@ -538,7 +538,8 @@ std::set<std::string> Intl::BuildLocaleSet(
   return locales;
 }
 
-std::string Intl::DefaultLocale(Isolate* isolate) {
+namespace {
+std::string DefaultLocale(Isolate* isolate) {
   if (isolate->default_locale().empty()) {
     icu::Locale default_locale;
     // Translate ICU's fallback locale to a well-known locale.
@@ -558,6 +559,7 @@ std::string Intl::DefaultLocale(Isolate* isolate) {
   }
   return isolate->default_locale();
 }
+}  // namespace
 
 // See ecma402/#legacy-constructor.
 MaybeHandle<Object> Intl::LegacyUnwrapReceiver(Isolate* isolate,
@@ -877,7 +879,7 @@ MaybeHandle<String> Intl::StringLocaleConvertCase(Isolate* isolate,
     return MaybeHandle<String>();
   }
   std::string requested_locale = requested_locales.size() == 0
-                                     ? Intl::DefaultLocale(isolate)
+                                     ? DefaultLocale(isolate)
                                      : requested_locales[0];
   size_t dash = requested_locale.find('-');
   if (dash != std::string::npos) {
@@ -1549,7 +1551,7 @@ std::string LookupMatcher(Isolate* isolate,
   // 3. Let defLocale be DefaultLocale();
   // 4. Set result.[[locale]] to defLocale.
   // 5. Return result.
-  return Intl::DefaultLocale(isolate);
+  return DefaultLocale(isolate);
 }
 
 }  // namespace
