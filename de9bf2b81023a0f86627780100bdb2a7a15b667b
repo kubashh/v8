@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a04fa90_f88ea11f",
+        "filename": "src/globals.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-03T19:24:54Z",
+      "side": 1,
+      "message": "Please add a comment explaining why we need this.",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 49
+      },
+      "revId": "de9bf2b81023a0f86627780100bdb2a7a15b667b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d43fbbcf_411e5141",
+        "filename": "src/objects/hash-table.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-03T19:24:54Z",
+      "side": 1,
+      "message": "Please add a comment explaining why we need this.",
+      "range": {
+        "startLine": 180,
+        "startChar": 2,
+        "endLine": 180,
+        "endChar": 51
+      },
+      "revId": "de9bf2b81023a0f86627780100bdb2a7a15b667b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
