@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "669511ed_282709ad",
+        "filename": "src/unwinder.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1002120
+      },
+      "writtenOn": "2018-12-03T17:57:45Z",
+      "side": 1,
+      "message": "nit: maybe move this to line 71, to make it obvious that the initial current_fp has been checked?",
+      "revId": "2fedb4813a488d2758d4f5764280d583f80541f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
