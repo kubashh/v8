@@ -51,7 +51,7 @@ namespace array {
   }
 
   macro LoadElementOrUndefined(a: FixedArray, i: constexpr int31): Object {
-    return LoadElementOrUndefined(a, Convert<intptr>(i));
+    return LoadElementOrUndefined(a, i);
   }
 
   macro LoadElementOrUndefined(a: FixedDoubleArray, i: Smi): NumberOrUndefined {
@@ -77,7 +77,7 @@ namespace array {
 
   macro LoadElementOrUndefined(a: FixedDoubleArray, i: constexpr int31):
       NumberOrUndefined {
-    return LoadElementOrUndefined(a, Convert<intptr>(i));
+    return LoadElementOrUndefined(a, i);
   }
 
   macro StoreArrayHole(elements: FixedDoubleArray, k: Smi): void {
