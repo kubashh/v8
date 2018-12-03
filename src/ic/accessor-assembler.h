@@ -274,8 +274,6 @@ class AccessorAssembler : public CodeStubAssembler {
                            const OnFoundOnReceiver& on_found_on_receiver,
                            Label* miss, ICMode ic_mode);
 
-  Node* GetLanguageMode(Node* vector, Node* slot);
-
   Node* PrepareValueForStore(Node* handler_word, Node* holder,
                              Representation representation, Node* value,
                              Label* bailout);
