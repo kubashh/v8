@@ -49,11 +49,21 @@ void* GetCallerSPFromFP(void* fp) {
                                  i::CommonFrameConstants::kCallerSPOffset);
 }
 
+bool AddressIsInStack(const void* address, const void* stack_base,
+                      const void* stack_top) {
+  return address <= stack_base && address >= stack_top;
+}
+
 }  // namespace
 
 bool Unwinder::TryUnwindV8Frames(const UnwindState& unwind_state,
                                  RegisterState* register_state,
                                  const void* stack_base) {
+  const void* stack_top = register_state->sp;
+  if (!AddressIsInStack(register_state->fp, stack_base, stack_top)) {
+    return false;
+  }
+
   void* pc = register_state->pc;
   if (PCIsInV8(unwind_state, pc) &&
       !IsInUnsafeJSEntryRange(unwind_state.js_entry_stub, pc)) {
@@ -64,11 +74,18 @@ bool Unwinder::TryUnwindV8Frames(const UnwindState& unwind_state,
     void* next_pc = GetReturnAddressFromFP(current_fp);
     while (PCIsInV8(unwind_state, next_pc)) {
       current_fp = GetCallerFPFromFP(current_fp);
+      if (!AddressIsInStack(current_fp, stack_base, stack_top)) return false;
       next_pc = GetReturnAddressFromFP(current_fp);
     }
 
-    register_state->sp = GetCallerSPFromFP(current_fp);
-    register_state->fp = GetCallerFPFromFP(current_fp);
+    void* final_sp = GetCallerSPFromFP(current_fp);
+    if (!AddressIsInStack(final_sp, stack_base, stack_top)) return false;
+    register_state->sp = final_sp;
+
+    void* final_fp = GetCallerFPFromFP(current_fp);
+    if (!AddressIsInStack(final_fp, stack_base, stack_top)) return false;
+    register_state->fp = final_fp;
+
     register_state->pc = next_pc;
     return true;
   }
