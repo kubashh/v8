@@ -156,7 +156,7 @@ class InterpreterLoadGlobalAssembler : public InterpreterAssembler {
 
   void LdaGlobal(int slot_operand_index, int name_operand_index,
                  TypeofMode typeof_mode) {
-    TNode<FeedbackVector> feedback_vector = LoadFeedbackVector();
+    Node* maybe_feedback_vector = LoadFeedbackVectorUnchecked();
     Node* feedback_slot = BytecodeOperandIdx(slot_operand_index);
 
     AccessorAssembler accessor_asm(state());
@@ -172,8 +172,8 @@ class InterpreterLoadGlobalAssembler : public InterpreterAssembler {
       return CAST(name);
     };
 
-    accessor_asm.LoadGlobalIC(feedback_vector, feedback_slot, lazy_context,
-                              lazy_name, typeof_mode, &exit_point,
+    accessor_asm.LoadGlobalIC(maybe_feedback_vector, feedback_slot,
+                              lazy_context, lazy_name, typeof_mode, &exit_point,
                               CodeStubAssembler::INTPTR_PARAMETERS);
   }
 };
@@ -212,9 +212,23 @@ IGNITION_HANDLER(StaGlobal, InterpreterAssembler) {
   Node* value = GetAccumulator();
   Node* raw_slot = BytecodeOperandIdx(1);
   Node* smi_slot = SmiTag(raw_slot);
-  Node* feedback_vector = LoadFeedbackVector();
+  Node* maybe_vector = LoadFeedbackVectorUnchecked();
+
+  Label no_feedback(this), end(this);
+  GotoIf(IsUndefined(maybe_vector), &no_feedback);
+
   CallBuiltin(Builtins::kStoreGlobalIC, context, name, value, smi_slot,
-              feedback_vector);
+              maybe_vector);
+  Goto(&end);
+
+  Bind(&no_feedback);
+  TNode<JSFunction> closure = CAST(LoadRegister(Register::function_closure()));
+  Node* language_mode = GetLanguageMode(closure, context);
+  CallRuntime(Runtime::kStoreGlobalICNoFeedback_Miss, context, name, value,
+              language_mode);
+  Goto(&end);
+
+  Bind(&end);
   Dispatch();
 }
 
@@ -554,23 +568,37 @@ class InterpreterStoreNamedPropertyAssembler : public InterpreterAssembler {
                                          OperandScale operand_scale)
       : InterpreterAssembler(state, bytecode, operand_scale) {}
 
-  void StaNamedProperty(Callable ic) {
+  void StaNamedProperty(Callable ic, bool is_own_property) {
     Node* code_target = HeapConstant(ic.code());
     Node* object = LoadRegisterAtOperandIndex(0);
     Node* name = LoadConstantPoolEntryAtOperandIndex(1);
     Node* value = GetAccumulator();
     Node* raw_slot = BytecodeOperandIdx(2);
     Node* smi_slot = SmiTag(raw_slot);
-    Node* feedback_vector = LoadFeedbackVector();
+    Node* maybe_vector = LoadFeedbackVectorUnchecked();
     Node* context = GetContext();
+
+    Label no_feedback(this), end(this);
+    GotoIf(IsUndefined(maybe_vector), &no_feedback);
     Node* result = CallStub(ic.descriptor(), code_target, context, object, name,
-                            value, smi_slot, feedback_vector);
+                            value, smi_slot, maybe_vector);
     // To avoid special logic in the deoptimizer to re-materialize the value in
     // the accumulator, we overwrite the accumulator after the IC call. It
     // doesn't really matter what we write to the accumulator here, since we
     // restore to the correct value on the outside. Storing the result means we
     // don't need to keep unnecessary state alive across the callstub.
     SetAccumulator(result);
+    Goto(&end);
+
+    Bind(&no_feedback);
+    TNode<JSFunction> closure =
+        CAST(LoadRegister(Register::function_closure()));
+    Node* language_mode = GetLanguageMode(closure, context);
+    CallRuntime(Runtime::kStoreICNoFeedback_Miss, context, object, name, value,
+                language_mode, SmiConstant(is_own_property));
+    Goto(&end);
+
+    Bind(&end);
     Dispatch();
   }
 };
@@ -582,7 +610,7 @@ class InterpreterStoreNamedPropertyAssembler : public InterpreterAssembler {
 // accumulator.
 IGNITION_HANDLER(StaNamedProperty, InterpreterStoreNamedPropertyAssembler) {
   Callable ic = Builtins::CallableFor(isolate(), Builtins::kStoreIC);
-  StaNamedProperty(ic);
+  StaNamedProperty(ic, false);
 }
 
 // StaNamedOwnProperty <object> <name_index> <slot>
@@ -592,7 +620,7 @@ IGNITION_HANDLER(StaNamedProperty, InterpreterStoreNamedPropertyAssembler) {
 // accumulator.
 IGNITION_HANDLER(StaNamedOwnProperty, InterpreterStoreNamedPropertyAssembler) {
   Callable ic = CodeFactory::StoreOwnICInOptimizedCode(isolate());
-  StaNamedProperty(ic);
+  StaNamedProperty(ic, true);
 }
 
 // StaNamedPropertyNoFeedback <object> <name_index>
@@ -623,16 +651,29 @@ IGNITION_HANDLER(StaKeyedProperty, InterpreterAssembler) {
   Node* value = GetAccumulator();
   Node* raw_slot = BytecodeOperandIdx(2);
   Node* smi_slot = SmiTag(raw_slot);
-  Node* feedback_vector = LoadFeedbackVector();
+  Node* maybe_vector = LoadFeedbackVectorUnchecked();
   Node* context = GetContext();
+
+  Label no_feedback(this), end(this);
+  GotoIf(IsUndefined(maybe_vector), &no_feedback);
   Node* result = CallBuiltin(Builtins::kKeyedStoreIC, context, object, name,
-                             value, smi_slot, feedback_vector);
+                             value, smi_slot, maybe_vector);
   // To avoid special logic in the deoptimizer to re-materialize the value in
   // the accumulator, we overwrite the accumulator after the IC call. It
   // doesn't really matter what we write to the accumulator here, since we
   // restore to the correct value on the outside. Storing the result means we
   // don't need to keep unnecessary state alive across the callstub.
   SetAccumulator(result);
+  Goto(&end);
+
+  Bind(&no_feedback);
+  TNode<JSFunction> closure = CAST(LoadRegister(Register::function_closure()));
+  Node* language_mode = GetLanguageMode(closure, context);
+  CallRuntime(Runtime::kKeyedStoreICNoFeedback_Miss, context, object, name,
+              value, language_mode);
+  Goto(&end);
+
+  Bind(&end);
   Dispatch();
 }
 
