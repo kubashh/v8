@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc9c9aa9_ff4fc95b",
+        "filename": "test/intl/break-iterator/wellformed-unsupported-locale.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-12-03T18:26:20Z",
+      "side": 1,
+      "message": "use assertNotEquals here and elsewhere",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 11
+      },
+      "revId": "9b8a7a5bbaadb79e8997ef4f30aa9fb3f886105e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
