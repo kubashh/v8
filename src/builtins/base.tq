@@ -23,6 +23,8 @@ type string constexpr 'const char*';
 type int31 extends int32
     generates 'TNode<Int32T>' constexpr 'int31_t';
 type RawPtr generates 'TNode<RawPtrT>' constexpr 'void*';
+type SharedFunctionInfo extends HeapObject
+    generates 'TNode<SharedFunctionInfo>';
 type AbstractCode extends HeapObject generates 'TNode<AbstractCode>';
 type Code extends AbstractCode generates 'TNode<Code>';
 type JSReceiver extends HeapObject generates 'TNode<JSReceiver>';
@@ -336,6 +338,10 @@ extern transitioning runtime TransitionElementsKindWithKind(
 extern transitioning runtime CreateDataProperty(implicit context: Context)(
     JSReceiver, Object, Object);
 
+extern macro LoadBufferObject(RawPtr, constexpr int32): Object;
+extern macro LoadBufferPointer(RawPtr, constexpr int32): RawPtr;
+extern macro LoadBufferSmi(RawPtr, constexpr int32): Smi;
+
 extern macro LoadRoot(constexpr RootIndex): Object;
 extern macro StoreRoot(constexpr RootIndex, Object): Object;
 extern macro LoadAndUntagToWord32Root(constexpr RootIndex): int32;
@@ -474,6 +480,9 @@ macro Max(x: Number, y: Number): Number {
   return NumberMax(x, y);
 }
 
+extern operator '<<' macro ConstexprIntPtrShl(
+    constexpr intptr, constexpr int31): constexpr intptr;
+
 extern macro SmiMax(Smi, Smi): Smi;
 extern macro SmiMin(Smi, Smi): Smi;
 
@@ -491,6 +500,12 @@ extern operator '.length' macro LoadStringLengthAsWord(String): intptr;
 extern operator '.length' macro GetArgumentsLength(constexpr Arguments): intptr;
 extern operator '[]' macro GetArgumentValue(
     constexpr Arguments, intptr): Object;
+
+extern operator '.shared_function_info' macro
+LoadJSFunctionSharedFunctionInfo(JSFunction): SharedFunctionInfo;
+
+extern operator '.formal_parameter_count' macro
+LoadSharedFunctionInfoFormalParameterCount(SharedFunctionInfo): int32;
 
 extern macro TaggedIsSmi(Object): bool;
 extern macro TaggedIsNotSmi(Object): bool;
@@ -1144,7 +1159,6 @@ extern macro IsCustomElementsReceiverInstanceType(int32): bool;
 extern macro IsFastJSArrayWithNoCustomIteration(implicit context: Context)(
     Object): bool;
 extern macro Typeof(Object): Object;
-extern macro LoadTargetFromFrame(): JSFunction;
 
 // Return true iff number is NaN.
 macro NumberIsNaN(number: Number): bool {

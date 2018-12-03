@@ -948,6 +948,7 @@ action("postmortem-metadata") {
 
 torque_files = [
   "src/builtins/base.tq",
+  "src/builtins/frames.tq",
   "src/builtins/array.tq",
   "src/builtins/array-copywithin.tq",
   "src/builtins/array-foreach.tq",
