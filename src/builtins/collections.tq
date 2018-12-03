@@ -48,7 +48,7 @@ namespace collections {
     label Generic {
       return KeyValuePair{
         GetProperty(o, Convert<Smi>(0)),
-        GetProperty(o, Convert<Smi>(1))
+        GetProperty(o, Convert<Smi>(0))
       };
     }
   }
