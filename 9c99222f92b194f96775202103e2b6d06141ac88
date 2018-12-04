@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5656f63f_4674b5e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-12-04T00:48:32Z",
+      "side": 1,
+      "message": "Please explain what was fixed here in the patch",
+      "revId": "9c99222f92b194f96775202103e2b6d06141ac88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
