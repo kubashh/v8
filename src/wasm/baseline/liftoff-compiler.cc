@@ -495,6 +495,11 @@ class LiftoffCompiler {
   }
 
   void FallThruTo(FullDecoder* decoder, Control* c) {
+    // Liftoff never breaks to the implicit return. It returns directly
+    // instead. So no need to generate any code for this FallThru.
+    // TODO(clemensh): Simplify this by removing implicit returns from TF.
+    if (c == decoder->control_at(decoder->control_depth() - 1)) return;
+
     if (c->end_merge.reached) {
       __ MergeFullStackWith(c->label_state);
     } else if (c->is_onearmed_if()) {
@@ -1075,20 +1080,23 @@ class LiftoffCompiler {
     __ cache_state()->stack_state.pop_back();
   }
 
-  void DoReturn(FullDecoder* decoder, Vector<Value> /*values*/, bool implicit) {
-    if (implicit) {
-      DCHECK_EQ(1, decoder->control_depth());
-      Control* func_block = decoder->control_at(0);
-      __ bind(func_block->label.get());
-      __ cache_state()->Steal(func_block->label_state);
-      TraceCacheState(decoder);
-    }
+  void DoReturn(FullDecoder* decoder) {
     size_t num_returns = decoder->sig_->return_count();
     if (num_returns > 1) return unsupported(decoder, "multi-return");
     if (num_returns > 0) __ MoveToReturnRegisters(decoder->sig_);
     __ LeaveFrame(StackFrame::WASM_COMPILED);
     __ DropStackSlotsAndRet(
         static_cast<uint32_t>(descriptor_->StackParameterCount()));
+  }
+
+  void DoReturn(FullDecoder* decoder, Vector<Value> /*values*/, bool implicit) {
+    // Liftoff never breaks to the implicit return. It returns directly
+    // instead. So we only need to generate return code here if we actually fall
+    // thru from the function block.
+    DCHECK_IMPLIES(implicit, decoder->control_depth() == 1);
+    if (implicit && !decoder->control_at(0)->reachable()) return;
+
+    DoReturn(decoder);
   }
 
   void GetLocal(FullDecoder* decoder, Value* result,
@@ -1248,14 +1256,22 @@ class LiftoffCompiler {
     __ jmp(target->label.get());
   }
 
-  void Br(FullDecoder* decoder, Control* target) { Br(target); }
+  void Br(FullDecoder* decoder, Control* target) {
+    // We never branch to the outer block. Instead, we return directly.
+    DCHECK_NE(target, decoder->control_at(decoder->control_depth() - 1));
+    Br(target);
+  }
 
   void BrIf(FullDecoder* decoder, const Value& cond, Control* target) {
     Label cont_false;
     Register value = __ PopToRegister().gp();
     __ emit_cond_jump(kEqual, &cont_false, kWasmI32, value);
 
-    Br(target);
+    if (target == decoder->control_at(decoder->control_depth() - 1)) {
+      DoReturn(decoder);
+    } else {
+      Br(target);
+    }
     __ bind(&cont_false);
   }
 
@@ -1268,7 +1284,11 @@ class LiftoffCompiler {
       __ jmp(label.get());
     } else {
       __ bind(label.get());
-      Br(decoder->control_at(br_depth));
+      if (br_depth == decoder->control_depth() - 1) {
+        DoReturn(decoder);
+      } else {
+        Br(decoder->control_at(br_depth));
+      }
     }
   }
 
