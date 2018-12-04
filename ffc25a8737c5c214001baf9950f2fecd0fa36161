@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f84ee6ef_649cbf88",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-12-04T09:03:22Z",
+      "side": 1,
+      "message": "Probably not required. But also doesn\u0027t hurt. It\u0027s on that bot because we wanted to test verify-heap on a release bot, but don\u0027t want to slow down any release bot that does perf testing.",
+      "parentUuid": "4c9bd112_e82b1c3f",
+      "range": {
+        "startLine": 461,
+        "startChar": 38,
+        "endLine": 461,
+        "endChar": 54
+      },
+      "revId": "ffc25a8737c5c214001baf9950f2fecd0fa36161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "73472bf1_45e998b2",
         "filename": "infra/testing/builders.pyl",
         "patchSetId": 2
