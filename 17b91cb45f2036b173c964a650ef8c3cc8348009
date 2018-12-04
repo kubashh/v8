@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66a4df38_4fa1c7ff",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2690,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-04T10:23:15Z",
+      "side": 1,
+      "message": "closure",
+      "range": {
+        "startLine": 2690,
+        "startChar": 42,
+        "endLine": 2690,
+        "endChar": 49
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80958a42_7f2163bd",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2385,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-04T10:23:15Z",
+      "side": 1,
+      "message": "It seems a bit confusing to me that some builtins require a feedback vector (and the check is in the bytecode handler) and others do the check here. Could we make this consistent and either do all the checks in the builtins or the bytecode handlers?",
+      "range": {
+        "startLine": 2385,
+        "startChar": 2,
+        "endLine": 2385,
+        "endChar": 40
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3347172_e51690a5",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2163,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-04T10:23:15Z",
+      "side": 1,
+      "message": "nit - newline after \"namespace {\" and before \"}  // namespace\"",
+      "range": {
+        "startLine": 2163,
+        "startChar": 3,
+        "endLine": 2163,
+        "endChar": 4
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ca4402e_abd14493",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-04T10:23:15Z",
+      "side": 1,
+      "message": "should this be \"kind \u003d vector-\u003eGetKind(vector_slot);\"?",
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86d70370_6ab2bde0",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-04T10:23:15Z",
+      "side": 1,
+      "message": "Can you just DCHECK the language mode is strict here, or do we sometimes call this with a sloppy function?",
+      "range": {
+        "startLine": 2335,
+        "startChar": 3,
+        "endLine": 2335,
+        "endChar": 42
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb993b6f_3c78a235",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-04T10:23:15Z",
+      "side": 1,
+      "message": "Can we make the builtins able to deal with no feedback vector instead of special casing it here? It looks like you\u0027ve done this in some places, it would be nice to make it consistent.",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 13
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00bd0fcd_fcb4ecb8",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-04T10:23:15Z",
+      "side": 1,
+      "message": "Could you make this an enum, and use the same enum in the runtime function.",
+      "range": {
+        "startLine": 571,
+        "startChar": 37,
+        "endLine": 571,
+        "endChar": 57
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
