@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eaf5cc44_1c5589e5",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-04T22:03:24Z",
+      "side": 1,
+      "message": "sp: Constructor",
+      "revId": "6e86e1dd5aa4f65e96d7d431360d86d5f0322ce0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
