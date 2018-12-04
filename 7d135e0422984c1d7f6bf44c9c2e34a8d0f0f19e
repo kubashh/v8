@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bd1dee9_c06d1e10",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-12-04T10:41:42Z",
+      "side": 1,
+      "message": "It\u0027d be great to pull this condition out to a helper with a good name, since it appears in several places.",
+      "revId": "7d135e0422984c1d7f6bf44c9c2e34a8d0f0f19e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9a221f6_358c3f18",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-12-04T10:41:42Z",
+      "side": 1,
+      "message": "This overload calls another overload, which can be confusing, so disambiguating with another name would help readability here.",
+      "revId": "7d135e0422984c1d7f6bf44c9c2e34a8d0f0f19e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
