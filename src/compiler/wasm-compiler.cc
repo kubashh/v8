@@ -4523,14 +4523,13 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
 
   void BuildModifyThreadInWasmFlag(bool new_value) {
     if (!trap_handler::IsTrapHandlerEnabled()) return;
-    Node* thread_in_wasm_flag_address_address =
-        graph()->NewNode(mcgraph()->common()->ExternalConstant(
-            ExternalReference::wasm_thread_in_wasm_flag_address_address(
-                isolate_)));
-    Node* thread_in_wasm_flag_address = SetEffect(graph()->NewNode(
-        mcgraph()->machine()->Load(LoadRepresentation(MachineType::Pointer())),
-        thread_in_wasm_flag_address_address, mcgraph()->Int32Constant(0),
-        Effect(), Control()));
+    Node* isolate_root =
+        LOAD_INSTANCE_FIELD(IsolateRoot, MachineType::TaggedPointer());
+
+    Node* thread_in_wasm_flag_address =
+        LOAD_RAW(isolate_root, Isolate::thread_in_wasm_flag_address_offset(),
+                 MachineType::Pointer());
+
     SetEffect(graph()->NewNode(
         mcgraph()->machine()->Store(StoreRepresentation(
             MachineRepresentation::kWord32, kNoWriteBarrier)),
