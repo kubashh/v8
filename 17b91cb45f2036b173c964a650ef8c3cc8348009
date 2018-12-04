@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "02b15f54_b710639f",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 2690,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-04T14:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66a4df38_4fa1c7ff",
+      "range": {
+        "startLine": 2690,
+        "startChar": 42,
+        "endLine": 2690,
+        "endChar": 49
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80958a42_7f2163bd",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-12-04T10:23:15Z",
       "side": 1,
       "message": "It seems a bit confusing to me that some builtins require a feedback vector (and the check is in the bytecode handler) and others do the check here. Could we make this consistent and either do all the checks in the builtins or the bytecode handlers?",
+      "range": {
+        "startLine": 2385,
+        "startChar": 2,
+        "endLine": 2385,
+        "endChar": 40
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faecaabc_f08d8766",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2385,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-04T14:15:19Z",
+      "side": 1,
+      "message": "I will try to fix StoreICs to also handle the case of empty feedback cases in the ICs. If it is difficult, I will move these checks to bytecode handlers.",
+      "parentUuid": "80958a42_7f2163bd",
       "range": {
         "startLine": 2385,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c9106490_035a88c4",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2163,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-04T14:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3347172_e51690a5",
+      "range": {
+        "startLine": 2163,
+        "startChar": 3,
+        "endLine": 2163,
+        "endChar": 4
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ca4402e_abd14493",
         "filename": "src/ic/ic.cc",
         "patchSetId": 3
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "7cecfdcd_a353a4be",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2189,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-04T14:15:19Z",
+      "side": 1,
+      "message": "Thanks, yes. I guess we may need more tests here, but will do it in a different cl. I am not totally sure how to call this with kKeyedProperty. Done.",
+      "parentUuid": "1ca4402e_abd14493",
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86d70370_6ab2bde0",
         "filename": "src/ic/ic.cc",
         "patchSetId": 3
@@ -99,6 +189,30 @@
       "writtenOn": "2018-12-04T10:23:15Z",
       "side": 1,
       "message": "Can you just DCHECK the language mode is strict here, or do we sometimes call this with a sloppy function?",
+      "range": {
+        "startLine": 2335,
+        "startChar": 3,
+        "endLine": 2335,
+        "endChar": 42
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65e45cb1_0defe406",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-04T14:15:19Z",
+      "side": 1,
+      "message": "In my understanding language_mode doesn\u0027t matter here. StoreOwnProperty behaves as if it is in strict mode irrespective of the current language mode. So, I can skip this assignment here. As far as I understand, it never checks for the language mode. The current implementation of FeedbackVector::GetLanguageMode returns Strict for this case, so I retained the current behaviour.\n\nToon, is my understanding correct?",
+      "parentUuid": "86d70370_6ab2bde0",
       "range": {
         "startLine": 2335,
         "startChar": 3,
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "c0eb281a_0ad1e1cc",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-04T14:15:19Z",
+      "side": 1,
+      "message": "Yes, for loads I handle it in builtins so that the calling runtime need not be duplicated. Stores are a bit more involved because we need to get language mode. I think, we can get the closure from the frame the parent\u0027s frame and hence would be able to get the language mode in the builtins itself. I think, we either call the builtin from the bytecode handlers and Turbofan or tail call in other cases (like handlers and non-inlined parts of the ICs etc.,), so it should be safe to look at parent frame. I still need to verify this though. \n\nAlso for StoreIC (for named property) we need to change it a bit so we also pass additional information if it is own property or not. I guess we can work around this as well. I just wanted to keep the initial implementation simple. I will try to have a look see if I can do it in this cl itself. If there are any blockers, either I will leave a TODO here or fix the load* bytecode handlers to check for emtpy feedback in the bytecode handlers instead of IC.",
+      "parentUuid": "fb993b6f_3c78a235",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 13
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00bd0fcd_fcb4ecb8",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 3
@@ -154,6 +292,30 @@
       "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d37af7d5_10857a53",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-04T14:15:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00bd0fcd_fcb4ecb8",
+      "range": {
+        "startLine": 571,
+        "startChar": 37,
+        "endLine": 571,
+        "endChar": 57
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
