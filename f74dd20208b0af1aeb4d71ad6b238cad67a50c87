@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58025124_e6f6842b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4529,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-12-04T15:20:17Z",
+      "side": 0,
+      "message": "Nice. Thanks for getting rid of the use of this local variable. This should have been a give-away for the problem here, but we somehow glossed over it.",
+      "range": {
+        "startLine": 4529,
+        "startChar": 16,
+        "endLine": 4529,
+        "endChar": 24
+      },
+      "revId": "f74dd20208b0af1aeb4d71ad6b238cad67a50c87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

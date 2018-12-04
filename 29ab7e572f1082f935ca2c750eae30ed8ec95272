@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1ce67c87_219b2211",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4527,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-12-04T15:20:17Z",
+      "side": 1,
+      "message": "+1.",
+      "parentUuid": "210d4303_8b2c0c1a",
+      "range": {
+        "startLine": 4527,
+        "startChar": 54,
+        "endLine": 4527,
+        "endChar": 67
+      },
+      "revId": "29ab7e572f1082f935ca2c750eae30ed8ec95272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8aa59970_743a51d9",
         "filename": "src/isolate.h",
         "patchSetId": 2
