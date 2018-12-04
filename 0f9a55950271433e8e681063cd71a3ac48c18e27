@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9793272_1fd15c40",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1537,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-12-04T03:06:29Z",
+      "side": 1,
+      "message": "Notice all the following validation is inside this \"(relevant_keys.find()\" check, which mean if will only validate the unicode extension inside the passed-in relevant_keys. Isn\u0027t that is what you asked already?\n\n\u003e There\u0027s no need to do a validation for collation when we create a number format object. \nFor the case of number format object, the relevant_keys contains only \"nu\" and therefore even the locale has \"-u-co-xxx\" this will be a IF (false) and will skip all the following.",
+      "range": {
+        "startLine": 1537,
+        "startChar": 4,
+        "endLine": 1537,
+        "endChar": 6
+      },
+      "revId": "0f9a55950271433e8e681063cd71a3ac48c18e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
