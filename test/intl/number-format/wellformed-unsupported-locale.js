@@ -25,8 +25,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// Environment Variables: LC_ALL=zh-CN
 // Passing a well formed but unsupported locale falls back to default.
 
 var nf = Intl.NumberFormat(['xx']);
 
-assertLanguageTag(%GetDefaultICULocale(), nf.resolvedOptions().locale);
+assertEquals('zh-CN', nf.resolvedOptions().locale);

@@ -25,6 +25,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// Environment Variables: LC_ALL=fr
+//
 // Constructing Collator with no locale arguments or with []
 // creates one with default locale.
 
@@ -38,7 +40,7 @@ assertFalse(options.locale === '');
 assertFalse(options.locale === undefined);
 
 // Then check for legitimacy.
-assertLanguageTag(%GetDefaultICULocale(), options.locale);
+assertEquals('fr', options.locale);
 
 var collatorNone = new Intl.Collator();
 assertEquals(options.locale, collatorNone.resolvedOptions().locale);
@@ -49,5 +51,5 @@ assertEquals(options.locale, collatorBraket.resolvedOptions().locale);
 
 var collatorWithOptions = new Intl.Collator(undefined, {usage: 'search'});
 var locale = collatorWithOptions.resolvedOptions().locale;
-assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('fr', locale);
 assertEquals(locale.indexOf('-co-search'), -1);

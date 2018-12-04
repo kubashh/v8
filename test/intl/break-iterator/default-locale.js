@@ -28,6 +28,8 @@
 // Constructing BreakIterator with no locale arguments or with []
 // creates one with default locale.
 
+// Environment Variables: LC_ALL=de
+
 var iterator = new Intl.v8BreakIterator([]);
 
 var options = iterator.resolvedOptions();
@@ -38,7 +40,7 @@ assertFalse(options.locale === '');
 assertFalse(options.locale === undefined);
 
 // Then check for legitimacy.
-assertLanguageTag(%GetDefaultICULocale(), options.locale);
+assertEquals("de", options.locale);
 
 var iteratorNone = new Intl.v8BreakIterator();
 assertEquals(options.locale, iteratorNone.resolvedOptions().locale);

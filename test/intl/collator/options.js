@@ -2,17 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+// Environment Variables: LC_ALL=it
+
 // No locale
 var collatorWithOptions = new Intl.Collator(undefined);
 var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
-assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('it', locale);
 assertEquals('sort', usage);
 assertEquals('default', collation);
 assertEquals(locale.indexOf('-co-search'), -1);
 
 collatorWithOptions = new Intl.Collator(undefined, {usage: 'sort'});
 var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
-assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('it', locale);
 assertEquals('sort', usage);
 assertEquals('default', collation);
 assertEquals(locale.indexOf('-co-search'), -1);
@@ -21,12 +23,12 @@ collatorWithOptions = new Intl.Collator(undefined, {usage: 'search'});
 var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
 assertEquals('search', usage);
 assertEquals('default', collation);
-assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('it', locale);
 assertEquals(locale.indexOf('-co-search'), -1);
 
 collatorWithOptions = new Intl.Collator(locale);
 var { locale, usage, collation } = collatorWithOptions.resolvedOptions();
-assertLanguageTag(%GetDefaultICULocale(), locale);
+assertEquals('it', locale);
 assertEquals('sort', usage);
 assertEquals('default', collation);
 assertEquals(locale.indexOf('-co-search'), -1);

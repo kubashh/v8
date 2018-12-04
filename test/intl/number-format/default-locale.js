@@ -25,6 +25,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// Environment Variables: LC_ALL=pt-BR
+//
 // Constructing NumberFormat with no locale arguments or with []
 // creates one with default locale.
 
@@ -38,7 +40,7 @@ assertFalse(options.locale === '');
 assertFalse(options.locale === undefined);
 
 // Then check for legitimacy.
-assertLanguageTag(%GetDefaultICULocale(), options.locale);
+assertEquals('pt-BR', options.locale);
 
 var nfNone = new Intl.NumberFormat();
 assertEquals(options.locale, nfNone.resolvedOptions().locale);

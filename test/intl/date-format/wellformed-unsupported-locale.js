@@ -25,8 +25,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// Environment Variables: LC_ALL=ja
+//
 // Passing a well formed but unsupported locale falls back to default.
 
 var dtf = Intl.DateTimeFormat(['xx']);
 
-assertLanguageTag(%GetDefaultICULocale(), dtf.resolvedOptions().locale);
+assertEquals('ja', dtf.resolvedOptions().locale);
