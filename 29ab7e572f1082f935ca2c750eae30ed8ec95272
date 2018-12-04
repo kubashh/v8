@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "210d4303_8b2c0c1a",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4527,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-12-04T12:49:38Z",
+      "side": 1,
+      "message": "Just Pointer().",
+      "range": {
+        "startLine": 4527,
+        "startChar": 54,
+        "endLine": 4527,
+        "endChar": 67
+      },
+      "revId": "29ab7e572f1082f935ca2c750eae30ed8ec95272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aa59970_743a51d9",
+        "filename": "src/isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-12-04T12:49:38Z",
+      "side": 1,
+      "message": "This could be just \n  OFFSET_OF(Isolate, thread_local_top_.thread_in_wasm_flag_address_)\n\nBut you also need to ensure that this offset is a static compiler-independent constant like in Isolate::CheckIsolateLayout(). This is necessary to ensure that if we cross-compile to another platform (and therefore the mksnapshot is created with host compiler and the actual code with cross compiler) the Isolate layout will not silently change.",
+      "revId": "29ab7e572f1082f935ca2c750eae30ed8ec95272",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
