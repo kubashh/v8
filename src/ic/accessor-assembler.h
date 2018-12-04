@@ -82,7 +82,7 @@ class AccessorAssembler : public CodeStubAssembler {
     Node* holder;
   };
 
-  void LoadGlobalIC(TNode<FeedbackVector> vector, Node* slot,
+  void LoadGlobalIC(Node* maybe_feedback_vector, Node* slot,
                     const LazyNode<Context>& lazy_context,
                     const LazyNode<Name>& lazy_name, TypeofMode typeof_mode,
                     ExitPoint* exit_point,
@@ -273,8 +273,6 @@ class AccessorAssembler : public CodeStubAssembler {
                            const OnCodeHandler& on_code_handler,
                            const OnFoundOnReceiver& on_found_on_receiver,
                            Label* miss, ICMode ic_mode);
-
-  Node* GetLanguageMode(Node* vector, Node* slot);
 
   Node* PrepareValueForStore(Node* handler_word, Node* holder,
                              Representation representation, Node* value,
