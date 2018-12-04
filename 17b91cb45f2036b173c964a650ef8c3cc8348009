@@ -272,6 +272,30 @@
     },
     {
       "key": {
+        "uuid": "95c34eb8_b7439fca",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-04T15:46:58Z",
+      "side": 1,
+      "message": "I\u0027m fine with having the checks live in the bytecode handlers if that\u0027s easier.",
+      "parentUuid": "c0eb281a_0ad1e1cc",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 13
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00bd0fcd_fcb4ecb8",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 3
