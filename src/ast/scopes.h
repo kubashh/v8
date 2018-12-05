@@ -377,8 +377,13 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
     // Catch scopes always have heap slots.
     DCHECK_IMPLIES(is_catch_scope(), num_heap_slots() > 0);
     DCHECK_IMPLIES(is_with_scope(), num_heap_slots() > 0);
+    DCHECK_IMPLIES(force_context_, num_heap_slots() > 0);
     return num_heap_slots() > 0;
   }
+
+  bool ForceContext() const { return force_context_; }
+
+  void SetForceContext(bool flag) { force_context_ = flag; }
 
   // ---------------------------------------------------------------------------
   // Accessors.
@@ -607,6 +612,12 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   bool is_declaration_scope_ : 1;
 
   bool must_use_preparsed_scope_data_ : 1;
+
+  // We want to force a context when we raise the language mode (for ex:
+  // class literals with extends). This lets us obtain the language mode from
+  // either the ScopeInfo of the current context or the closure's language mode.
+  // This is required if a function has no feedback vector.
+  bool force_context_ : 1;
 
   // Create a non-local variable with a given name.
   // These variables are looked up dynamically at runtime.

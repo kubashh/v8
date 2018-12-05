@@ -828,7 +828,8 @@ void AccessorAssembler::HandleStoreICNativeDataProperty(
   Node* accessor_info = LoadDescriptorValue(LoadMap(holder), descriptor);
   CSA_CHECK(this, IsAccessorInfo(accessor_info));
 
-  Node* language_mode = GetLanguageMode(p->vector, p->slot);
+  TNode<FeedbackVector> vector = CAST(p->vector);
+  Node* language_mode = GetLanguageMode(vector, p->context);
 
   TailCallRuntime(Runtime::kStoreCallbackProperty, p->context, p->receiver,
                   holder, accessor_info, p->name, p->value, language_mode);
@@ -1427,17 +1428,6 @@ void AccessorAssembler::HandleStoreICProtoHandler(
   }
 }
 
-Node* AccessorAssembler::GetLanguageMode(Node* vector, Node* slot) {
-  VARIABLE(var_language_mode, MachineRepresentation::kTaggedSigned,
-           SmiConstant(LanguageMode::kStrict));
-  Label language_mode_determined(this);
-  BranchIfStrictMode(vector, slot, &language_mode_determined);
-  var_language_mode.Bind(SmiConstant(LanguageMode::kSloppy));
-  Goto(&language_mode_determined);
-  BIND(&language_mode_determined);
-  return var_language_mode.value();
-}
-
 void AccessorAssembler::HandleStoreToProxy(const StoreICParameters* p,
                                            Node* proxy, Label* miss,
                                            ElementSupport support_elements) {
@@ -1447,7 +1437,8 @@ void AccessorAssembler::HandleStoreToProxy(const StoreICParameters* p,
   Label if_index(this), if_unique_name(this),
       to_name_failed(this, Label::kDeferred);
 
-  Node* language_mode = GetLanguageMode(p->vector, p->slot);
+  TNode<FeedbackVector> vector = CAST(p->vector);
+  Node* language_mode = GetLanguageMode(vector, p->context);
 
   if (support_elements == kSupportElements) {
     TryToName(p->name, &if_index, &var_index, &if_unique_name, &var_unique,
@@ -2577,7 +2568,8 @@ void AccessorAssembler::LoadGlobalIC(TNode<FeedbackVector> vector, Node* slot,
     TNode<Context> context = lazy_context();
     TNode<Name> name = lazy_name();
     exit_point->ReturnCallRuntime(Runtime::kLoadGlobalIC_Miss, context, name,
-                                  ParameterToTagged(slot, slot_mode), vector);
+                                  ParameterToTagged(slot, slot_mode), vector,
+                                  SmiConstant(typeof_mode));
   }
 }
 
@@ -3189,9 +3181,8 @@ void AccessorAssembler::StoreInArrayLiteralIC(const StoreICParameters* p) {
   BIND(&miss);
   {
     Comment("StoreInArrayLiteralIC_miss");
-    // TODO(neis): Introduce Runtime::kStoreInArrayLiteralIC_Miss.
-    TailCallRuntime(Runtime::kKeyedStoreIC_Miss, p->context, p->value, p->slot,
-                    p->vector, p->receiver, p->name);
+    TailCallRuntime(Runtime::kStoreInArrayLiteralIC_Miss, p->context, p->value,
+                    p->slot, p->vector, p->receiver, p->name);
   }
 }
 
