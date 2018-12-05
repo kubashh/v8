@@ -296,6 +296,30 @@
     },
     {
       "key": {
+        "uuid": "e394bd41_fbadae33",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-05T14:49:06Z",
+      "side": 1,
+      "message": "For now, I moved the checks to bytecode handlers. It is also consistent with the other handlers I am modifying in another cl. My initial attempt to move the checks to StoreICs didn\u0027t go well (lots of debugger tests failing). I still want to try moving these checks to ICs (both for loads and stores) to avoid duplication of calling into runtime in a later CL.",
+      "parentUuid": "95c34eb8_b7439fca",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 13
+      },
+      "revId": "17b91cb45f2036b173c964a650ef8c3cc8348009",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00bd0fcd_fcb4ecb8",
         "filename": "src/interpreter/interpreter-generator.cc",
         "patchSetId": 3
