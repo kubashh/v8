@@ -51,5 +51,8 @@
   # Unable to change locale on Android:
   'relative-time-format/default-locale-fr-CA': [FAIL],
   'relative-time-format/default-locale-pt-BR': [FAIL],
+
+  # Cannot set environment variables
+  'default_locale': [SKIP],
 }],  # 'system == android'
 ]
