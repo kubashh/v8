@@ -895,8 +895,14 @@ class ParserBase {
     return scope()->GetReceiverScope();
   }
   LanguageMode language_mode() { return scope()->language_mode(); }
-  void RaiseLanguageMode(LanguageMode mode) {
+  void RaiseLanguageMode(LanguageMode mode, bool forceContext) {
     LanguageMode old = scope()->language_mode();
+    // If we are raising a language mode then force a context allocation, so
+    // that the language mode can be properly tracked using the context. This
+    // is required in ICs where we lookup the language mode from the context.
+    if (forceContext && (mode > old)) {
+      scope()->SetForceContext(true);
+    }
     impl()->SetLanguageMode(scope(), old > mode ? old : mode);
   }
   bool is_generator() const {
@@ -4180,7 +4186,7 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseClassLiteral(
 
   Scope* block_scope = NewScope(BLOCK_SCOPE);
   BlockState block_state(&scope_, block_scope);
-  RaiseLanguageMode(LanguageMode::kStrict);
+  RaiseLanguageMode(LanguageMode::kStrict, true);
 
   ClassInfo class_info(this);
   class_info.is_anonymous = is_anonymous;
@@ -4524,7 +4530,9 @@ ParserBase<Impl>::ParseStatementList(StatementListT* body,
 
     if (use_strict) {
       // Directive "use strict" (ES5 14.1).
-      RaiseLanguageMode(LanguageMode::kStrict);
+      // We don't need to force a context here, since this will be reflected
+      // in the SharedFunctionInfo::LanguageMode.
+      RaiseLanguageMode(LanguageMode::kStrict, false);
       if (!scope()->HasSimpleParameters()) {
         // TC39 deemed "use strict" directives to be an error when occurring
         // in the body of a function with non-simple parameter list, on
@@ -4541,7 +4549,7 @@ ParserBase<Impl>::ParseStatementList(StatementListT* body,
       // Possibly an unknown directive.
       // Should not change mode, but will increment usage counters
       // as appropriate. Ditto usages below.
-      RaiseLanguageMode(LanguageMode::kSloppy);
+      RaiseLanguageMode(LanguageMode::kSloppy, false);
     }
   }
 
