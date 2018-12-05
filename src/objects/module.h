@@ -218,7 +218,7 @@ class Module : public Struct, public NeverReadOnlySpaceObject {
 // the declared variable (foo).  A module can have at most one namespace object.
 class JSModuleNamespace : public JSObject {
  public:
-  DECL_CAST(JSModuleNamespace)
+  DECL_CAST2(JSModuleNamespace)
   DECL_PRINTER(JSModuleNamespace)
   DECL_VERIFIER(JSModuleNamespace)
 
@@ -248,8 +248,7 @@ class JSModuleNamespace : public JSObject {
 
   static const int kSize = kHeaderSize + kPointerSize * kInObjectFieldCount;
 
- private:
-  DISALLOW_IMPLICIT_CONSTRUCTORS(JSModuleNamespace);
+  OBJECT_CONSTRUCTORS(JSModuleNamespace, JSObject);
 };
 
 // ModuleInfo is to ModuleDescriptor what ScopeInfo is to Scope.

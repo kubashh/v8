@@ -75,9 +75,9 @@ class PromiseRejectReactionJobTask : public PromiseReactionJobTask {
 class PromiseResolveThenableJobTask : public Microtask {
  public:
   DECL_ACCESSORS2(context, Context)
-  DECL_ACCESSORS(promise_to_resolve, JSPromise)
-  DECL_ACCESSORS(then, JSReceiver)
-  DECL_ACCESSORS(thenable, JSReceiver)
+  DECL_ACCESSORS2(promise_to_resolve, JSPromise)
+  DECL_ACCESSORS2(then, JSReceiver)
+  DECL_ACCESSORS2(thenable, JSReceiver)
 
   static const int kContextOffset = Microtask::kHeaderSize;
   static const int kPromiseToResolveOffset = kContextOffset + kPointerSize;

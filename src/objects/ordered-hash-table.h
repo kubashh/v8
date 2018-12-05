@@ -667,8 +667,7 @@ class JSCollectionIterator : public JSObject {
   static const int kIndexOffset = kTableOffset + kPointerSize;
   static const int kSize = kIndexOffset + kPointerSize;
 
- private:
-  DISALLOW_IMPLICIT_CONSTRUCTORS(JSCollectionIterator);
+  OBJECT_CONSTRUCTORS(JSCollectionIterator, JSObject);
 };
 
 // OrderedHashTableIterator is an iterator that iterates over the keys and
@@ -702,7 +701,7 @@ class OrderedHashTableIterator : public JSCollectionIterator {
   // if the [table] is not obsolete.
   void Transition();
 
-  DISALLOW_IMPLICIT_CONSTRUCTORS(OrderedHashTableIterator);
+  OBJECT_CONSTRUCTORS(OrderedHashTableIterator, JSCollectionIterator);
 };
 
 }  // namespace internal
