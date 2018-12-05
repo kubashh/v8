@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "45254d51_3d5e0550",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-12-05T16:35:52Z",
+      "side": 1,
+      "message": "Order matters as much/little as in C++. I\u0027ll alpha-sort them.",
+      "parentUuid": "b00eccb0_2b8d7eae",
+      "range": {
+        "startLine": 5,
+        "startChar": 14,
+        "endLine": 5,
+        "endChar": 21
+      },
+      "revId": "a52be546d16d3b0aa4bb3f6817f15fbfd2dcae7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "674151c1_0d79b9a6",
         "filename": "src/torque/declaration-visitor.cc",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-11-30T17:37:17Z",
       "side": 1,
       "message": "Also, how does this exactly work? It seems most (all?) of these includes are outside of an explicit namespace declaration, so isn\u0027t the CurrentNamepace always the default namespace or is there something else going on?",
+      "range": {
+        "startLine": 235,
+        "startChar": 2,
+        "endLine": 235,
+        "endChar": 18
+      },
+      "revId": "a52be546d16d3b0aa4bb3f6817f15fbfd2dcae7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37d54a1a_3f8e2c08",
+        "filename": "src/torque/declaration-visitor.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2018-12-05T16:35:52Z",
+      "side": 1,
+      "message": "This is indeed unnecessarily complex, it allows to add includes to specific namespaces only, but they would only be available to functions defined in this namespace, which usually doesn\u0027t make sense, since namespaces can be accessed in a qualified way. To simplify things, I changed the CL to have the includes in the GlobalContext.",
+      "parentUuid": "674151c1_0d79b9a6",
       "range": {
         "startLine": 235,
         "startChar": 2,
