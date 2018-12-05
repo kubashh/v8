@@ -309,7 +309,6 @@ void Isolate::InitializeOncePerProcess() {
   base::Relaxed_Store(&isolate_key_created_, 1);
 #endif
   per_isolate_thread_data_key_ = base::Thread::CreateThreadLocalKey();
-  init_memcopy_functions();
 }
 
 Address Isolate::get_address_from_id(IsolateAddressId id) {
