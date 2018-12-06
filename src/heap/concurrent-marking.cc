@@ -184,19 +184,19 @@ class ConcurrentMarkingVisitor final
   // JS object =================================================================
   // ===========================================================================
 
-  int VisitJSObject(Map map, JSObject* object) {
+  int VisitJSObject(Map map, JSObject object) {
     return VisitJSObjectSubclass(map, object);
   }
 
-  int VisitJSObjectFast(Map map, JSObject* object) {
+  int VisitJSObjectFast(Map map, JSObject object) {
     return VisitJSObjectSubclass(map, object);
   }
 
-  int VisitWasmInstanceObject(Map map, WasmInstanceObject* object) {
+  int VisitWasmInstanceObject(Map map, WasmInstanceObject object) {
     return VisitJSObjectSubclass(map, object);
   }
 
-  int VisitJSWeakCell(Map map, JSWeakCell* weak_cell) {
+  int VisitJSWeakCell(Map map, JSWeakCell weak_cell) {
     int size = VisitJSObjectSubclass(map, weak_cell);
     if (size == 0) {
       return 0;
@@ -222,19 +222,19 @@ class ConcurrentMarkingVisitor final
   // Some JS objects can carry back links to embedders that contain information
   // relevant to the garbage collectors.
 
-  int VisitJSApiObject(Map map, JSObject* object) {
+  int VisitJSApiObject(Map map, JSObject object) {
     return VisitEmbedderTracingSubclass(map, object);
   }
 
-  int VisitJSArrayBuffer(Map map, JSArrayBuffer* object) {
+  int VisitJSArrayBuffer(Map map, JSArrayBuffer object) {
     return VisitEmbedderTracingSubclass(map, object);
   }
 
-  int VisitJSDataView(Map map, JSDataView* object) {
+  int VisitJSDataView(Map map, JSDataView object) {
     return VisitEmbedderTracingSubclass(map, object);
   }
 
-  int VisitJSTypedArray(Map map, JSTypedArray* object) {
+  int VisitJSTypedArray(Map map, JSTypedArray object) {
     return VisitEmbedderTracingSubclass(map, object);
   }
 
@@ -335,7 +335,7 @@ class ConcurrentMarkingVisitor final
     return size;
   }
 
-  int VisitJSWeakCollection(Map map, JSWeakCollection* object) {
+  int VisitJSWeakCollection(Map map, JSWeakCollection object) {
     return VisitJSObjectSubclass(map, object);
   }
 
@@ -438,7 +438,7 @@ class ConcurrentMarkingVisitor final
   };
 
   template <typename T>
-  int VisitJSObjectSubclass(Map map, T* object) {
+  int VisitJSObjectSubclass(Map map, T object) {
     int size = T::BodyDescriptor::SizeOf(map, object);
     int used_size = map->UsedInstanceSize();
     DCHECK_LE(used_size, size);
@@ -447,7 +447,7 @@ class ConcurrentMarkingVisitor final
   }
 
   template <typename T>
-  int VisitEmbedderTracingSubclass(Map map, T* object) {
+  int VisitEmbedderTracingSubclass(Map map, T object) {
     DCHECK(object->IsApiWrapper());
     int size = VisitJSObjectSubclass(map, object);
     if (size && embedder_tracing_enabled_) {

@@ -237,7 +237,7 @@ namespace v8 {
 namespace {
 
 Local<Context> ContextFromNeverReadOnlySpaceObject(
-    i::Handle<i::NeverReadOnlySpaceObject> obj) {
+    i::Handle<i::JSReceiver> obj) {
   return reinterpret_cast<v8::Isolate*>(obj->GetIsolate())->GetCurrentContext();
 }
 
@@ -795,7 +795,7 @@ StartupData SnapshotCreator::CreateBlob(
   i::HeapIterator heap_iterator(isolate->heap());
   while (i::HeapObject* current_obj = heap_iterator.next()) {
     if (current_obj->IsJSFunction()) {
-      i::JSFunction* fun = i::JSFunction::cast(current_obj);
+      i::JSFunction fun = i::JSFunction::cast(current_obj);
 
       // Complete in-object slack tracking for all functions.
       fun->CompleteInobjectSlackTrackingIfActive();
@@ -5804,7 +5804,7 @@ void v8::Object::SetAlignedPointerInInternalFields(int argc, int indices[],
   i::Handle<i::JSReceiver> obj = Utils::OpenHandle(this);
   const char* location = "v8::Object::SetAlignedPointerInInternalFields()";
   i::DisallowHeapAllocation no_gc;
-  i::JSObject* js_obj = i::JSObject::cast(*obj);
+  i::JSObject js_obj = i::JSObject::cast(*obj);
   int nof_embedder_fields = js_obj->GetEmbedderFieldCount();
   for (int i = 0; i < argc; i++) {
     int index = indices[i];
@@ -6292,7 +6292,9 @@ MaybeLocal<v8::Object> ObjectTemplate::NewInstance(Local<Context> context) {
 
 
 Local<v8::Object> ObjectTemplate::NewInstance() {
-  auto context = ContextFromNeverReadOnlySpaceObject(Utils::OpenHandle(this));
+  Local<Context> context =
+      reinterpret_cast<v8::Isolate*>(Utils::OpenHandle(this)->GetIsolate())
+          ->GetCurrentContext();
   RETURN_TO_LOCAL_UNCHECKED(NewInstance(context), Object);
 }
 
@@ -6332,7 +6334,9 @@ MaybeLocal<v8::Function> FunctionTemplate::GetFunction(Local<Context> context) {
 
 
 Local<v8::Function> FunctionTemplate::GetFunction() {
-  auto context = ContextFromNeverReadOnlySpaceObject(Utils::OpenHandle(this));
+  Local<Context> context =
+      reinterpret_cast<v8::Isolate*>(Utils::OpenHandle(this)->GetIsolate())
+          ->GetCurrentContext();
   RETURN_TO_LOCAL_UNCHECKED(GetFunction(context), Function);
 }
 
@@ -9265,7 +9269,7 @@ bool debug::Script::GetPossibleBreakpoints(
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   if (script->type() == i::Script::TYPE_WASM &&
       this->SourceMappingURL().IsEmpty()) {
-    i::WasmModuleObject* module_object =
+    i::WasmModuleObject module_object =
         i::WasmModuleObject::cast(script->wasm_module_object());
     return module_object->GetPossibleBreakpoints(start, end, locations);
   }
@@ -9392,7 +9396,7 @@ int debug::WasmScript::NumFunctions() const {
   i::DisallowHeapAllocation no_gc;
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   DCHECK_EQ(i::Script::TYPE_WASM, script->type());
-  i::WasmModuleObject* module_object =
+  i::WasmModuleObject module_object =
       i::WasmModuleObject::cast(script->wasm_module_object());
   const i::wasm::WasmModule* module = module_object->module();
   DCHECK_GE(i::kMaxInt, module->functions.size());
@@ -9403,7 +9407,7 @@ int debug::WasmScript::NumImportedFunctions() const {
   i::DisallowHeapAllocation no_gc;
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   DCHECK_EQ(i::Script::TYPE_WASM, script->type());
-  i::WasmModuleObject* module_object =
+  i::WasmModuleObject module_object =
       i::WasmModuleObject::cast(script->wasm_module_object());
   const i::wasm::WasmModule* module = module_object->module();
   DCHECK_GE(i::kMaxInt, module->num_imported_functions);
@@ -9415,7 +9419,7 @@ std::pair<int, int> debug::WasmScript::GetFunctionRange(
   i::DisallowHeapAllocation no_gc;
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   DCHECK_EQ(i::Script::TYPE_WASM, script->type());
-  i::WasmModuleObject* module_object =
+  i::WasmModuleObject module_object =
       i::WasmModuleObject::cast(script->wasm_module_object());
   const i::wasm::WasmModule* module = module_object->module();
   DCHECK_LE(0, function_index);
@@ -9431,7 +9435,7 @@ uint32_t debug::WasmScript::GetFunctionHash(int function_index) {
   i::DisallowHeapAllocation no_gc;
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   DCHECK_EQ(i::Script::TYPE_WASM, script->type());
-  i::WasmModuleObject* module_object =
+  i::WasmModuleObject module_object =
       i::WasmModuleObject::cast(script->wasm_module_object());
   const i::wasm::WasmModule* module = module_object->module();
   DCHECK_LE(0, function_index);
@@ -9450,7 +9454,7 @@ debug::WasmDisassembly debug::WasmScript::DisassembleFunction(
   i::DisallowHeapAllocation no_gc;
   i::Handle<i::Script> script = Utils::OpenHandle(this);
   DCHECK_EQ(i::Script::TYPE_WASM, script->type());
-  i::WasmModuleObject* module_object =
+  i::WasmModuleObject module_object =
       i::WasmModuleObject::cast(script->wasm_module_object());
   return module_object->DisassembleFunction(function_index);
 }

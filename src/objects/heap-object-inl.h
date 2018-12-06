@@ -92,6 +92,10 @@ bool ObjectPtr::ToArrayIndex(uint32_t* index) const {
   return reinterpret_cast<Object*>(ptr())->ToArrayIndex(index);
 }
 
+void ObjectPtr::VerifyApiCallResultType() {
+  reinterpret_cast<Object*>(ptr())->VerifyApiCallResultType();
+}
+
 void ObjectPtr::ShortPrint(FILE* out) {
   return reinterpret_cast<Object*>(ptr())->ShortPrint(out);
 }
@@ -181,6 +185,10 @@ ReadOnlyRoots HeapObjectPtr::GetReadOnlyRoots() const {
   return ReadOnlyRoots(MemoryChunk::FromHeapObject(*this)->heap());
 }
 
+bool HeapObjectPtr::IsExternal(Isolate* isolate) const {
+  return map()->FindRootMap(isolate) == isolate->heap()->external_map();
+}
+
 int HeapObjectPtr::Size() const {
   return reinterpret_cast<HeapObject*>(ptr())->Size();
 }
@@ -213,6 +221,10 @@ void HeapObjectPtr::VerifySmiField(int offset) {
 
 Address HeapObjectPtr::GetFieldAddress(int field_offset) const {
   return FIELD_ADDR(this, field_offset);
+}
+
+bool HeapObjectPtr::NeedsRehashing() const {
+  return reinterpret_cast<HeapObject*>(ptr())->NeedsRehashing();
 }
 
 Heap* NeverReadOnlySpaceObjectPtr::GetHeap(const HeapObjectPtr object) {
