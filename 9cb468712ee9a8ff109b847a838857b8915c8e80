@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6ca92f9_ad262a26",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-12-06T20:47:08Z",
+      "side": 1,
+      "message": "All these casts are a bit unsightly, and I assume we\u0027ll get even more of them in the future. Maybe we should make them cleaner with an ASSERT_ENUM_EQUAL macro or somesuch? That\u0027s clearly a separate cleanup project (and discussion) though.",
+      "range": {
+        "startLine": 508,
+        "startChar": 20,
+        "endLine": 508,
+        "endChar": 36
+      },
+      "revId": "9cb468712ee9a8ff109b847a838857b8915c8e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
