@@ -88,6 +88,10 @@ deps = {
           'package': 'infra/tools/luci/isolate/${{platform}}',
           'version': 'git_revision:8c189891315769725ec1122446d5554b312ec725',
         },
+        {
+          'package': 'infra/tools/luci/swarming/${{platform}}',
+          'version': 'git_revision:fdf05508e8a66c773a41521e0243c9d11b9a2a1c',
+        },
       ],
       'condition': 'host_cpu != "s390"',
       'dep_type': 'cipd',
