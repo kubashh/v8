@@ -73,6 +73,8 @@ namespace internal {
   V(ResumeGenerator)                  \
   V(FrameDropperTrampoline)           \
   V(RunMicrotasks)                    \
+  V(WasmMemoryCopy)                   \
+  V(WasmMemoryFill)                   \
   V(WasmMemoryGrow)                   \
   V(WasmThrow)                        \
   V(WasmAtomicWake)                   \
@@ -1085,6 +1087,24 @@ class RunMicrotasksDescriptor final : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS()
   DECLARE_DEFAULT_DESCRIPTOR(RunMicrotasksDescriptor, CallInterfaceDescriptor)
+};
+
+class WasmMemoryCopyDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kDest, kSource, kSize)
+  DEFINE_PARAMETER_TYPES(MachineType::Uint32(),  // kDest
+                         MachineType::Uint32(),  // kSource
+                         MachineType::Uint32())  // kSize
+  DECLARE_DESCRIPTOR(WasmMemoryCopyDescriptor, CallInterfaceDescriptor)
+};
+
+class WasmMemoryFillDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kDest, kValue, kSize)
+  DEFINE_PARAMETER_TYPES(MachineType::Uint32(),  // kDest
+                         MachineType::Int32(),   // kValue
+                         MachineType::Uint32())  // kSize
+  DECLARE_DESCRIPTOR(WasmMemoryFillDescriptor, CallInterfaceDescriptor)
 };
 
 class WasmMemoryGrowDescriptor final : public CallInterfaceDescriptor {
