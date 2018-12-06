@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a5e91c1_2cbf95ff",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000487
+      },
+      "writtenOn": "2018-12-06T13:46:06Z",
+      "side": 1,
+      "message": "- Please map the isolated tool too while at it, as part of https://crbug.com/907585. Maybe v8 would be easier to convert than chromium?\n- Please map the same version for both tools.\n- Maybe worth making the version a variable? I don\u0027t know if it\u0027s possible. Not a big deal.",
+      "revId": "41c8fd8b91eb184dc0eb1eabeb5e4ad67a61059c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6730d016_4f39f25a",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000487
+      },
+      "writtenOn": "2018-12-06T13:46:06Z",
+      "side": 1,
+      "message": "Robbie, we could do \"GOARCH\u003ds390x GOOS\u003dlinux\" cross compile, even if we don\u0027t test it?",
+      "revId": "41c8fd8b91eb184dc0eb1eabeb5e4ad67a61059c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
