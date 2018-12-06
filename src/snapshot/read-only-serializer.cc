@@ -28,6 +28,8 @@ void ReadOnlySerializer::SerializeObject(HeapObject* obj, HowToCode how_to_code,
                                          WhereToPoint where_to_point,
                                          int skip) {
   CHECK(isolate()->heap()->read_only_space()->Contains(obj));
+  CHECK_IMPLIES(obj->IsString(),
+                StringShape(String::cast(obj)).IsInternalized());
 
   if (SerializeHotObject(obj, how_to_code, where_to_point, skip)) return;
   if (IsRootAndHasBeenSerialized(obj) &&
