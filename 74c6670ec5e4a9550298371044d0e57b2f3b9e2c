@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c46d036_3262455c",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-12-06T00:19:57Z",
+      "side": 1,
+      "message": "If this is unacceptable, then the best alternative is probably to store raw Address values in the Worklist. I\u0027d prefer to do that in a follow-up. Interestingly, there are also existing Worklists for Code and TransitionArray which \"just work\" -- presumably due to transitive #includes.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 71
+      },
+      "revId": "74c6670ec5e4a9550298371044d0e57b2f3b9e2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
