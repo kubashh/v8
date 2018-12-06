@@ -69,6 +69,30 @@
       "revId": "19c957e5aa9dd4f2ef50b75a5ad816d4554ad883",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d72dfc19_0432f02a",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-12-06T07:43:48Z",
+      "side": 1,
+      "message": "Besides, how about aliases, \u0027yes\u0027 and \u0027no\u0027?  Does Ecma402 say anything about them?",
+      "parentUuid": "1ae9068b_0ca06506",
+      "range": {
+        "startLine": 1552,
+        "startChar": 8,
+        "endLine": 1554,
+        "endChar": 70
+      },
+      "revId": "19c957e5aa9dd4f2ef50b75a5ad816d4554ad883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "01778c81_b0be9c39",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1475,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-12-06T07:43:48Z",
+      "side": 1,
+      "message": "nit: \u0027legacy_key\u0027 is meaningless to me.  How about \u0027kCollation \u003d \"collation\";\" ?",
+      "range": {
+        "startLine": 1475,
+        "startChar": 2,
+        "endLine": 1475,
+        "endChar": 39
+      },
+      "revId": "0f9a55950271433e8e681063cd71a3ac48c18e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d9793272_1fd15c40",
         "filename": "src/objects/intl-objects.cc",
         "patchSetId": 6
