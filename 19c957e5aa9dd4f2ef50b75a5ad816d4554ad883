@@ -93,6 +93,30 @@
       "revId": "19c957e5aa9dd4f2ef50b75a5ad816d4554ad883",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7d73457_22968d7f",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-12-06T12:24:00Z",
+      "side": 1,
+      "message": "ECMA402 refer to http://www.unicode.org/reports/tr35/tr35.html#Unicode_language_identifier. TR35 refer to http://www.unicode.org/reports/tr35/tr35.html#Key_Type_Definitions\n\"If the type is not included, then the type value \"true\" is assumed. Note that the default for key with a possible \"true\" value is often \"false\", but may not always be. \"\n\nalso \n\"The BCP 47 form for keys and types is the canonical form, and recommended. Other aliases are included for backwards compatibility.\"\n\nand\n\"A Unicode Collation Identifier defines a type of collation (sort order). The valid values are those name attribute values in the type elements of bcp47/collation.xml.\"\n\nand in \n https://www.unicode.org/repos/cldr/tags/latest/common/bcp47/collation.xml\n\n\"\u003ckey name\u003d\"kn\" description\u003d\"Collation parameter key for numeric handling\" alias\u003d\"colNumeric\"\u003e\n\u003ctype name\u003d\"true\" description\u003d\"A sequence of decimal digits is sorted at primary level with its numeric value\" alias\u003d\"yes\"/\u003e\n\u003ctype name\u003d\"false\" description\u003d\"No special handling for numeric ordering\" alias\u003d\"no\"/\u003e\n\u003c/key\u003e\"\n\n\"true\" and \"false\" are listed here as \"name attribute values in the type elements of bcp47/collation.xml.\" but not \"yes\" nor \"no\"",
+      "parentUuid": "d72dfc19_0432f02a",
+      "range": {
+        "startLine": 1552,
+        "startChar": 8,
+        "endLine": 1554,
+        "endChar": 70
+      },
+      "revId": "19c957e5aa9dd4f2ef50b75a5ad816d4554ad883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
