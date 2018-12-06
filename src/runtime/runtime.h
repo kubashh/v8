@@ -536,6 +536,8 @@ namespace internal {
   F(WasmAtomicWake, 3, 1)             \
   F(WasmExceptionGetValues, 1, 1)     \
   F(WasmExceptionGetTag, 1, 1)        \
+  F(WasmMemoryCopy, 4, 1)             \
+  F(WasmMemoryFill, 4, 1)             \
   F(WasmMemoryGrow, 2, 1)             \
   F(WasmRunInterpreter, 2, 1)         \
   F(WasmStackGuard, 0, 1)             \

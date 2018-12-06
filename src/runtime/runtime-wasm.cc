@@ -9,6 +9,7 @@
 #include "src/debug/debug.h"
 #include "src/frame-constants.h"
 #include "src/heap/factory.h"
+#include "src/memcopy.h"
 #include "src/message-template.h"
 #include "src/objects-inl.h"
 #include "src/objects/frame-array-inl.h"
@@ -55,6 +56,54 @@ class ClearThreadInWasmScope {
 };
 
 }  // namespace
+
+RUNTIME_FUNCTION(Runtime_WasmMemoryCopy) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(4, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(WasmInstanceObject, instance, 0);
+  CONVERT_NUMBER_CHECKED(uint32_t, dest_index, Uint32, args[1]);
+  CONVERT_NUMBER_CHECKED(uint32_t, src_index, Uint32, args[2]);
+  CONVERT_NUMBER_CHECKED(uint32_t, size, Uint32, args[3]);
+
+  Handle<JSArrayBuffer> buffer(instance->memory_object()->array_buffer(),
+                               isolate);
+  // Bounds checks should already be performed.
+  DCHECK_LE(static_cast<uint64_t>(src_index) + size,
+            static_cast<uint64_t>(buffer->byte_length()));
+  DCHECK_LE(static_cast<uint64_t>(dest_index) + size,
+            static_cast<uint64_t>(buffer->byte_length()));
+
+  uintptr_t backing_store =
+      reinterpret_cast<uintptr_t>(buffer->backing_store());
+  void* dest = reinterpret_cast<void*>(backing_store + dest_index);
+  const void* src = reinterpret_cast<const void*>(backing_store + src_index);
+  MemMove(dest, src, size);
+
+  return ReadOnlyRoots(isolate).undefined_value();
+}
+
+RUNTIME_FUNCTION(Runtime_WasmMemoryFill) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(4, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(WasmInstanceObject, instance, 0);
+  CONVERT_NUMBER_CHECKED(uint32_t, dest_index, Uint32, args[1]);
+  CONVERT_SMI_ARG_CHECKED(value, 2);
+  CONVERT_NUMBER_CHECKED(uint32_t, size, Uint32, args[3]);
+
+  Handle<JSArrayBuffer> buffer(instance->memory_object()->array_buffer(),
+                               isolate);
+  // Bounds checks should already be performed.
+  DCHECK_LE(static_cast<uint64_t>(dest_index) + size,
+            static_cast<uint64_t>(buffer->byte_length()));
+  DCHECK(value >= 0 && value < 256);
+
+  uintptr_t backing_store =
+      reinterpret_cast<uintptr_t>(buffer->backing_store());
+  void* dest = reinterpret_cast<void*>(backing_store + dest_index);
+  memset(dest, value, size);
+
+  return ReadOnlyRoots(isolate).undefined_value();
+}
 
 RUNTIME_FUNCTION(Runtime_WasmMemoryGrow) {
   HandleScope scope(isolate);
