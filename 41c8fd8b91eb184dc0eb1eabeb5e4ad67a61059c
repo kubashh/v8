@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3f380144_8cc754ab",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2018-12-06T14:16:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a5e91c1_2cbf95ff",
+      "revId": "41c8fd8b91eb184dc0eb1eabeb5e4ad67a61059c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6730d016_4f39f25a",
         "filename": "DEPS",
         "patchSetId": 3
