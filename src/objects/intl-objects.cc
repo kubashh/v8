@@ -26,6 +26,7 @@
 #include "src/string-case.h"
 #include "unicode/basictz.h"
 #include "unicode/brkiter.h"
+#include "unicode/calendar.h"
 #include "unicode/coll.h"
 #include "unicode/decimfmt.h"
 #include "unicode/locid.h"
@@ -1453,6 +1454,49 @@ MaybeHandle<JSObject> Intl::SupportedLocalesOf(
 
 namespace {
 
+bool IsValidCaledar(icu::Locale& locale, const std::string& value) {
+  std::set<std::string> special_allow = {"gregory", "iso8601"};
+  if (special_allow.find(value) != special_allow.end()) return true;
+  UErrorCode status = U_ZERO_ERROR;
+  std::unique_ptr<icu::Calendar> calendar(
+      icu::Calendar::createInstance(locale, status));
+  std::unique_ptr<icu::Calendar> base_calendar(
+      icu::Calendar::createInstance(icu::Locale(locale.getBaseName()), status));
+  return U_SUCCESS(status) && calendar.get() != nullptr &&
+         base_calendar.get() != nullptr &&
+         calendar->getType() != base_calendar->getType();
+}
+
+bool IsValidCollation(icu::Locale& locale, const std::string& value) {
+  std::set<std::string> invalid_values = {"standard", "search"};
+  if (invalid_values.find(value) != invalid_values.end()) return false;
+  UErrorCode status = U_ZERO_ERROR;
+  const char* kCollation = "collation";
+  std::unique_ptr<icu::StringEnumeration> collations(
+      icu::Collator::getKeywordValuesForLocale(
+          kCollation, icu::Locale(locale.getBaseName()), false, status));
+  if (U_SUCCESS(status)) {
+    int32_t length;
+    std::string input_collation(uloc_toLegacyType(kCollation, value.c_str()));
+    for (const char* collation = collations->next(&length, status);
+         collation != nullptr; collation = collations->next(&length, status)) {
+      if (U_SUCCESS(status) && input_collation == collation) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool IsValidNumberingSystem(const std::string& value) {
+  std::set<std::string> invalid_values = {"native", "traditio", "finance"};
+  if (invalid_values.find(value) != invalid_values.end()) return false;
+  UErrorCode status = U_ZERO_ERROR;
+  std::unique_ptr<icu::NumberingSystem> numbering_system(
+      icu::NumberingSystem::createInstanceByName(value.c_str(), status));
+  return U_SUCCESS(status) && numbering_system.get() != nullptr;
+}
+
 std::map<std::string, std::string> LookupAndValidateUnicodeExtensions(
     icu::Locale* icu_locale, const std::set<std::string>& relevant_keys) {
   std::map<std::string, std::string> extensions;
@@ -1491,13 +1535,40 @@ std::map<std::string, std::string> LookupAndValidateUnicodeExtensions(
 
     if (bcp47_key && (relevant_keys.find(bcp47_key) != relevant_keys.end())) {
       const char* bcp47_value = uloc_toUnicodeLocaleType(bcp47_key, value);
-      extensions.insert(
-          std::pair<std::string, std::string>(bcp47_key, bcp47_value));
-    } else {
-      status = U_ZERO_ERROR;
-      icu_locale->setKeywordValue(keyword, nullptr, status);
-      CHECK(U_SUCCESS(status));
+      bool insert = false;
+      // 8.h.ii.1.a If keyLocaleData contains requestedValue, then
+      if (strcmp("ca", bcp47_key) == 0) {
+        insert = IsValidCaledar(*icu_locale, bcp47_value);
+      } else if (strcmp("co", bcp47_key) == 0) {
+        insert = IsValidCollation(*icu_locale, bcp47_value);
+      } else if (strcmp("hc", bcp47_key) == 0) {
+        // https://www.unicode.org/repos/cldr/tags/latest/common/bcp47/calendar.xml
+        std::set<std::string> valid_values = {"h11", "h12", "h23", "h24"};
+        insert = valid_values.find(bcp47_value) != valid_values.end();
+      } else if (strcmp("lb", bcp47_key) == 0) {
+        // https://www.unicode.org/repos/cldr/tags/latest/common/bcp47/segmentation.xml
+        std::set<std::string> valid_values = {"strict", "normal", "loose"};
+        insert = valid_values.find(bcp47_value) != valid_values.end();
+      } else if (strcmp("kn", bcp47_key) == 0) {
+        // https://www.unicode.org/repos/cldr/tags/latest/common/bcp47/collation.xml
+        std::set<std::string> valid_values = {"true", "false"};
+        insert = valid_values.find(bcp47_value) != valid_values.end();
+      } else if (strcmp("kf", bcp47_key) == 0) {
+        // https://www.unicode.org/repos/cldr/tags/latest/common/bcp47/collation.xml
+        std::set<std::string> valid_values = {"upper", "lower", "false"};
+        insert = valid_values.find(bcp47_value) != valid_values.end();
+      } else if (strcmp("nu", bcp47_key) == 0) {
+        insert = IsValidNumberingSystem(bcp47_value);
+      }
+      if (insert) {
+        extensions.insert(
+            std::pair<std::string, std::string>(bcp47_key, bcp47_value));
+        continue;
+      }
     }
+    status = U_ZERO_ERROR;
+    icu_locale->setKeywordValue(keyword, nullptr, status);
+    CHECK(U_SUCCESS(status));
   }
 
   return extensions;
