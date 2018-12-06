@@ -722,12 +722,22 @@ Maybe<std::string> Intl::CanonicalizeLanguageTag(Isolate* isolate,
                                  Nothing<std::string>());
   }
   std::string locale(locale_str->ToCString().get());
+  // Because per BCP 47 2.1.1 language tags are case-insensitive, lowercase
+  // the input before any more check.
+  std::transform(locale.begin(), locale.end(), locale.begin(), AsciiToLower);
+  return Intl::CanonicalizeLanguageTag(isolate, locale);
+}
+
+Maybe<std::string> Intl::CanonicalizeLanguageTag(Isolate* isolate,
+                                                 const std::string& locale) {
+  Factory* factory = isolate->factory();
 
   if (locale.length() == 0 ||
       !String::IsAscii(locale.data(), static_cast<int>(locale.length()))) {
     THROW_NEW_ERROR_RETURN_VALUE(
         isolate,
-        NewRangeError(MessageTemplate::kInvalidLanguageTag, locale_str),
+        NewRangeError(MessageTemplate::kInvalidLanguageTag,
+                      factory->NewStringFromAsciiChecked(locale.c_str())),
         Nothing<std::string>());
   }
 
@@ -740,10 +750,6 @@ Maybe<std::string> Intl::CanonicalizeLanguageTag(Isolate* isolate,
       locale == "fil") {
     return Just(locale);
   }
-
-  // Because per BCP 47 2.1.1 language tags are case-insensitive, lowercase
-  // the input before any more check.
-  std::transform(locale.begin(), locale.end(), locale.begin(), AsciiToLower);
 
   // ICU maps a few grandfathered tags to what looks like a regular language
   // tag even though IANA language tag registry does not have a preferred
@@ -773,7 +779,8 @@ Maybe<std::string> Intl::CanonicalizeLanguageTag(Isolate* isolate,
       error == U_STRING_NOT_TERMINATED_WARNING) {
     THROW_NEW_ERROR_RETURN_VALUE(
         isolate,
-        NewRangeError(MessageTemplate::kInvalidLanguageTag, locale_str),
+        NewRangeError(MessageTemplate::kInvalidLanguageTag,
+                      factory->NewStringFromAsciiChecked(locale.c_str())),
         Nothing<std::string>());
   }
 
@@ -785,7 +792,8 @@ Maybe<std::string> Intl::CanonicalizeLanguageTag(Isolate* isolate,
   if (U_FAILURE(error)) {
     THROW_NEW_ERROR_RETURN_VALUE(
         isolate,
-        NewRangeError(MessageTemplate::kInvalidLanguageTag, locale_str),
+        NewRangeError(MessageTemplate::kInvalidLanguageTag,
+                      factory->NewStringFromAsciiChecked(locale.c_str())),
         Nothing<std::string>());
   }
 

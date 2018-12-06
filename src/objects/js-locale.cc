@@ -8,7 +8,6 @@
 
 #include "src/objects/js-locale.h"
 
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -23,170 +22,55 @@
 #include "unicode/char16ptr.h"
 #include "unicode/locid.h"
 #include "unicode/uloc.h"
-#include "unicode/unistr.h"
 
 namespace v8 {
 namespace internal {
 
 namespace {
-
-JSLocale::CaseFirst GetCaseFirst(const char* str) {
-  if (strcmp(str, "upper") == 0) return JSLocale::CaseFirst::UPPER;
-  if (strcmp(str, "lower") == 0) return JSLocale::CaseFirst::LOWER;
-  if (strcmp(str, "false") == 0) return JSLocale::CaseFirst::FALSE_VALUE;
-  UNREACHABLE();
-}
-
-JSLocale::HourCycle GetHourCycle(const char* str) {
-  if (strcmp(str, "h11") == 0) return JSLocale::HourCycle::H11;
-  if (strcmp(str, "h12") == 0) return JSLocale::HourCycle::H12;
-  if (strcmp(str, "h23") == 0) return JSLocale::HourCycle::H23;
-  if (strcmp(str, "h24") == 0) return JSLocale::HourCycle::H24;
-  UNREACHABLE();
-}
-
-JSLocale::Numeric GetNumeric(const char* str) {
-  return strcmp(str, "true") == 0 ? JSLocale::Numeric::TRUE_VALUE
-                                  : JSLocale::Numeric::FALSE_VALUE;
-}
-
-struct OptionData {
-  const char* name;
-  const char* key;
-  const std::vector<const char*>* possible_values;
-  bool is_bool_value;
-};
-
-// Inserts tags from options into locale string.
-Maybe<bool> InsertOptionsIntoLocale(Isolate* isolate,
-                                    Handle<JSReceiver> options,
-                                    char* icu_locale) {
-  CHECK(isolate);
-  CHECK(icu_locale);
-
-  const std::vector<const char*> hour_cycle_values = {"h11", "h12", "h23",
-                                                      "h24"};
-  const std::vector<const char*> case_first_values = {"upper", "lower",
-                                                      "false"};
-  const std::vector<const char*> empty_values = {};
-  const std::array<OptionData, 6> kOptionToUnicodeTagMap = {
-      {{"calendar", "ca", &empty_values, false},
-       {"collation", "co", &empty_values, false},
-       {"hourCycle", "hc", &hour_cycle_values, false},
-       {"caseFirst", "kf", &case_first_values, false},
-       {"numeric", "kn", &empty_values, true},
-       {"numberingSystem", "nu", &empty_values, false}}};
-
-  // TODO(cira): Pass in values as per the spec to make this to be
-  // spec compliant.
-
-  for (const auto& option_to_bcp47 : kOptionToUnicodeTagMap) {
-    std::unique_ptr<char[]> value_str = nullptr;
-    bool value_bool = false;
-    Maybe<bool> maybe_found =
-        option_to_bcp47.is_bool_value
-            ? Intl::GetBoolOption(isolate, options, option_to_bcp47.name,
-                                  "locale", &value_bool)
-            : Intl::GetStringOption(isolate, options, option_to_bcp47.name,
-                                    *(option_to_bcp47.possible_values),
-                                    "locale", &value_str);
-    MAYBE_RETURN(maybe_found, Nothing<bool>());
-
-    // TODO(cira): Use fallback value if value is not found to make
-    // this spec compliant.
-    if (!maybe_found.FromJust()) continue;
-
-    if (option_to_bcp47.is_bool_value) {
-      value_str = value_bool ? isolate->factory()->true_string()->ToCString()
-                             : isolate->factory()->false_string()->ToCString();
-    }
-    DCHECK_NOT_NULL(value_str.get());
-
-    // Convert bcp47 key and value into legacy ICU format so we can use
-    // uloc_setKeywordValue.
-    const char* key = uloc_toLegacyKey(option_to_bcp47.key);
-    DCHECK_NOT_NULL(key);
-
-    // Overwrite existing, or insert new key-value to the locale string.
-    const char* value = uloc_toLegacyType(key, value_str.get());
-    UErrorCode status = U_ZERO_ERROR;
-    if (value) {
-      // TODO(cira): ICU puts artificial limit on locale length, while BCP47
-      // doesn't. Switch to C++ API when it's ready.
-      // Related ICU bug - https://ssl.icu-project.org/trac/ticket/13417.
-      uloc_setKeywordValue(key, value, icu_locale, ULOC_FULLNAME_CAPACITY,
-                           &status);
-      if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
-        return Just(false);
-      }
-    } else {
-      return Just(false);
-    }
-  }
-
-  return Just(true);
-}
-
-// Fills in the JSLocale object slots with Unicode tag/values.
-bool PopulateLocaleWithUnicodeTags(Isolate* isolate, const char* icu_locale,
-                                   Handle<JSLocale> locale_holder) {
-  CHECK(isolate);
-  CHECK(icu_locale);
-
-  Factory* factory = isolate->factory();
-
+std::string LocaleToString(const icu::Locale& locale) {
+  CHECK(locale.isBogus() == FALSE);
   UErrorCode status = U_ZERO_ERROR;
-  UEnumeration* keywords = uloc_openKeywords(icu_locale, &status);
-  if (!keywords) return true;
-
-  char value[ULOC_FULLNAME_CAPACITY];
-  while (const char* keyword = uenum_next(keywords, nullptr, &status)) {
-    uloc_getKeywordValue(icu_locale, keyword, value, ULOC_FULLNAME_CAPACITY,
-                         &status);
-    if (U_FAILURE(status)) {
-      status = U_ZERO_ERROR;
-      continue;
-    }
-
-    // Ignore those we don't recognize - spec allows that.
-    const char* bcp47_key = uloc_toUnicodeLocaleKey(keyword);
-    if (bcp47_key) {
-      const char* bcp47_value = uloc_toUnicodeLocaleType(bcp47_key, value);
-      if (bcp47_value) {
-          if (strcmp(bcp47_key, "kn") == 0) {
-            locale_holder->set_numeric(GetNumeric(bcp47_value));
-          } else if (strcmp(bcp47_key, "ca") == 0) {
-            Handle<String> bcp47_handle =
-                factory->NewStringFromAsciiChecked(bcp47_value);
-            locale_holder->set_calendar(*bcp47_handle);
-          } else if (strcmp(bcp47_key, "kf") == 0) {
-            locale_holder->set_case_first(GetCaseFirst(bcp47_value));
-          } else if (strcmp(bcp47_key, "co") == 0) {
-            Handle<String> bcp47_handle =
-                factory->NewStringFromAsciiChecked(bcp47_value);
-            locale_holder->set_collation(*bcp47_handle);
-          } else if (strcmp(bcp47_key, "hc") == 0) {
-            locale_holder->set_hour_cycle(GetHourCycle(bcp47_value));
-          } else if (strcmp(bcp47_key, "nu") == 0) {
-            Handle<String> bcp47_handle =
-                factory->NewStringFromAsciiChecked(bcp47_value);
-            locale_holder->set_numbering_system(*bcp47_handle);
-          }
-      }
-    }
-  }
-
-  uenum_close(keywords);
-
-  return true;
+  char buffer[ULOC_FULLNAME_CAPACITY];
+  uloc_toLanguageTag(locale.getName(), buffer, ULOC_FULLNAME_CAPACITY, TRUE,
+                     &status);
+  CHECK(U_SUCCESS(status));
+  return buffer;
 }
+
+std::string LocaleGetBaseName(const icu::Locale& locale) {
+  CHECK(locale.isBogus() == FALSE);
+  UErrorCode status = U_ZERO_ERROR;
+  char buffer[ULOC_FULLNAME_CAPACITY];
+  uloc_toLanguageTag(locale.getBaseName(), buffer, ULOC_FULLNAME_CAPACITY, TRUE,
+                     &status);
+  CHECK(U_SUCCESS(status));
+  return buffer;
+}
+
+std::string LocaleGetUnicodeKeywordValue(const icu::Locale& locale,
+                                         const char* key) {
+  CHECK(locale.isBogus() == FALSE);
+  // ICU63 Replace with
+  // locale.getUnicodeKeywordValue(&status)
+  UErrorCode status = U_ZERO_ERROR;
+  char buffer[ULOC_FULLNAME_CAPACITY];
+  int32_t len = locale.getKeywordValue(uloc_toLegacyKey(key), buffer,
+                                       ULOC_FULLNAME_CAPACITY, status);
+  buffer[len] = '\0';  // null terminate
+  CHECK(U_SUCCESS(status));
+  if (len > 0) {
+    return uloc_toUnicodeLocaleType(key, buffer);
+  } else {
+    return "";
+  }
+}
+
 }  // namespace
 
 MaybeHandle<JSLocale> JSLocale::Initialize(Isolate* isolate,
                                            Handle<JSLocale> locale_holder,
                                            Handle<String> locale,
                                            Handle<JSReceiver> options) {
-  locale_holder->set_flags(0);
   static const char* const kMethod = "Intl.Locale";
   v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
   UErrorCode status = U_ZERO_ERROR;
@@ -219,9 +103,9 @@ MaybeHandle<JSLocale> JSLocale::Initialize(Isolate* isolate,
         JSLocale);
   }
 
-  Maybe<bool> error = InsertOptionsIntoLocale(isolate, options, icu_result);
-  MAYBE_RETURN(error, MaybeHandle<JSLocale>());
-  if (!error.FromJust()) {
+  // TODO(ftang) create the locale in a better way
+  icu::Locale icu_locale(icu_result);
+  if (icu_locale.isBogus()) {
     THROW_NEW_ERROR(
         isolate,
         NewRangeError(MessageTemplate::kLocaleBadParameters,
@@ -230,87 +114,96 @@ MaybeHandle<JSLocale> JSLocale::Initialize(Isolate* isolate,
         JSLocale);
   }
 
-  if (!PopulateLocaleWithUnicodeTags(isolate, icu_result, locale_holder)) {
-    THROW_NEW_ERROR(
-        isolate,
-        NewRangeError(MessageTemplate::kLocaleBadParameters,
-                      isolate->factory()->NewStringFromAsciiChecked(kMethod),
-                      locale_holder),
-        JSLocale);
-  }
+  // 31. Set locale.[[Locale]] to r.[[locale]].
+  Handle<Managed<icu::Locale>> managed_locale =
+      Managed<icu::Locale>::FromRawPtr(isolate, 0, icu_locale.clone());
+  locale_holder->set_icu_locale(*managed_locale);
 
-  // Extract language, script and region parts.
-  char icu_language[ULOC_LANG_CAPACITY];
-  uloc_getLanguage(icu_result, icu_language, ULOC_LANG_CAPACITY, &status);
-
-  char icu_script[ULOC_SCRIPT_CAPACITY];
-  uloc_getScript(icu_result, icu_script, ULOC_SCRIPT_CAPACITY, &status);
-
-  char icu_region[ULOC_COUNTRY_CAPACITY];
-  uloc_getCountry(icu_result, icu_region, ULOC_COUNTRY_CAPACITY, &status);
-
-  if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
-    THROW_NEW_ERROR(
-        isolate,
-        NewRangeError(MessageTemplate::kLocaleBadParameters,
-                      isolate->factory()->NewStringFromAsciiChecked(kMethod),
-                      locale_holder),
-        JSLocale);
-  }
-
-  Factory* factory = isolate->factory();
-
-  // NOTE: One shouldn't use temporary handles, because they can go out of
-  // scope and be garbage collected before properly assigned.
-  // DON'T DO THIS: locale_holder->set_language(*f->NewStringAscii...);
-  Handle<String> language = factory->NewStringFromAsciiChecked(icu_language);
-  locale_holder->set_language(*language);
-
-  if (strlen(icu_script) != 0) {
-    Handle<String> script = factory->NewStringFromAsciiChecked(icu_script);
-    locale_holder->set_script(*script);
-  }
-
-  if (strlen(icu_region) != 0) {
-    Handle<String> region = factory->NewStringFromAsciiChecked(icu_region);
-    locale_holder->set_region(*region);
-  }
-
-  char icu_base_name[ULOC_FULLNAME_CAPACITY];
-  uloc_getBaseName(icu_result, icu_base_name, ULOC_FULLNAME_CAPACITY, &status);
-  // We need to convert it back to BCP47.
-  char bcp47_result[ULOC_FULLNAME_CAPACITY];
-  uloc_toLanguageTag(icu_base_name, bcp47_result, ULOC_FULLNAME_CAPACITY, true,
-                     &status);
-  if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
-    THROW_NEW_ERROR(
-        isolate,
-        NewRangeError(MessageTemplate::kLocaleBadParameters,
-                      isolate->factory()->NewStringFromAsciiChecked(kMethod),
-                      locale_holder),
-        JSLocale);
-  }
-  Handle<String> base_name = factory->NewStringFromAsciiChecked(bcp47_result);
-  locale_holder->set_base_name(*base_name);
-
-  // Produce final representation of the locale string, for toString().
-  uloc_toLanguageTag(icu_result, bcp47_result, ULOC_FULLNAME_CAPACITY, true,
-                     &status);
-  if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
-    THROW_NEW_ERROR(
-        isolate,
-        NewRangeError(MessageTemplate::kLocaleBadParameters,
-                      isolate->factory()->NewStringFromAsciiChecked(kMethod),
-                      locale_holder),
-        JSLocale);
-  }
-  Handle<String> locale_handle =
-      factory->NewStringFromAsciiChecked(bcp47_result);
-  locale_holder->set_locale(*locale_handle);
-
+  // 32. Set locale.[[Calendar]] to r.[[ca]].
+  // 33. Set locale.[[Collation]] to r.[[co]].
+  // 34. Set locale.[[HourCycle]] to r.[[hc]].
+  // 35. If relevantExtensionKeys contains "kf", then
+  // a. Set locale.[[CaseFirst]] to r.[[kf]].
+  // 36. If relevantExtensionKeys contains "kn", then
+  // a. Set locale.[[Numeric]] to ! SameValue(r.[[kn]], "true").
+  // 37. Set locale.[[NumberingSystem]] to r.[[nu]].
+  // 38. Return locale.
   return locale_holder;
 }
 
+namespace {
+Handle<String> UnicodeKeywordValue(Isolate* isolate, Handle<JSLocale> locale,
+                                   const char* key) {
+  return isolate->factory()->NewStringFromAsciiChecked(
+      LocaleGetUnicodeKeywordValue(*(locale->icu_locale()->raw()), key)
+          .c_str());
+}
+}  // namespace
+
+Handle<Object> JSLocale::Language(Isolate* isolate, Handle<JSLocale> locale) {
+  Factory* factory = isolate->factory();
+  const char* language = locale->icu_locale()->raw()->getLanguage();
+  if (language == nullptr || *language == '\0') {
+    return factory->undefined_value();
+  }
+  return factory->NewStringFromAsciiChecked(language);
+}
+
+Handle<Object> JSLocale::Script(Isolate* isolate, Handle<JSLocale> locale) {
+  Factory* factory = isolate->factory();
+  const char* script = locale->icu_locale()->raw()->getScript();
+  if (script == nullptr || *script == '\0') {
+    return factory->undefined_value();
+  }
+  return factory->NewStringFromAsciiChecked(script);
+}
+
+Handle<Object> JSLocale::Region(Isolate* isolate, Handle<JSLocale> locale) {
+  Factory* factory = isolate->factory();
+  const char* region = locale->icu_locale()->raw()->getCountry();
+  if (region == nullptr || *region == '\0') {
+    return factory->undefined_value();
+  }
+  return factory->NewStringFromAsciiChecked(region);
+}
+
+Handle<String> JSLocale::BaseName(Isolate* isolate, Handle<JSLocale> locale) {
+  return isolate->factory()->NewStringFromAsciiChecked(
+      LocaleGetBaseName(*(locale->icu_locale()->raw())).c_str());
+}
+
+Handle<Object> JSLocale::Calendar(Isolate* isolate, Handle<JSLocale> locale) {
+  return UnicodeKeywordValue(isolate, locale, "ca");
+}
+
+Handle<Object> JSLocale::CaseFirst(Isolate* isolate, Handle<JSLocale> locale) {
+  return UnicodeKeywordValue(isolate, locale, "kf");
+}
+
+Handle<Object> JSLocale::Collation(Isolate* isolate, Handle<JSLocale> locale) {
+  return UnicodeKeywordValue(isolate, locale, "co");
+}
+
+Handle<Object> JSLocale::HourCycle(Isolate* isolate, Handle<JSLocale> locale) {
+  return UnicodeKeywordValue(isolate, locale, "hc");
+}
+
+Handle<Object> JSLocale::Numeric(Isolate* isolate, Handle<JSLocale> locale) {
+  Factory* factory = isolate->factory();
+  std::string numeric =
+      LocaleGetUnicodeKeywordValue(*(locale->icu_locale()->raw()), "kn");
+  return (numeric == "true") ? factory->true_value() : factory->false_value();
+}
+
+Handle<Object> JSLocale::NumberingSystem(Isolate* isolate,
+                                         Handle<JSLocale> locale) {
+  return UnicodeKeywordValue(isolate, locale, "nu");
+}
+
+Handle<String> JSLocale::ToString(Isolate* isolate, Handle<JSLocale> locale) {
+  return isolate->factory()->NewStringFromAsciiChecked(
+      LocaleToString(*(locale->icu_locale()->raw())).c_str());
+}
 namespace {
 
 Handle<String> MorphLocale(Isolate* isolate, String language_tag,
@@ -354,47 +247,6 @@ Handle<String> JSLocale::Maximize(Isolate* isolate, String locale) {
 
 Handle<String> JSLocale::Minimize(Isolate* isolate, String locale) {
   return MorphLocale(isolate, locale, uloc_minimizeSubtags);
-}
-
-Handle<String> JSLocale::CaseFirstAsString() const {
-  switch (case_first()) {
-    case CaseFirst::UPPER:
-      return GetReadOnlyRoots().upper_string_handle();
-    case CaseFirst::LOWER:
-      return GetReadOnlyRoots().lower_string_handle();
-    case CaseFirst::FALSE_VALUE:
-      return GetReadOnlyRoots().false_string_handle();
-    case CaseFirst::COUNT:
-      UNREACHABLE();
-  }
-}
-
-Handle<String> JSLocale::HourCycleAsString() const {
-  switch (hour_cycle()) {
-    case HourCycle::H11:
-      return GetReadOnlyRoots().h11_string_handle();
-    case HourCycle::H12:
-      return GetReadOnlyRoots().h12_string_handle();
-    case HourCycle::H23:
-      return GetReadOnlyRoots().h23_string_handle();
-    case HourCycle::H24:
-      return GetReadOnlyRoots().h24_string_handle();
-    case HourCycle::COUNT:
-      UNREACHABLE();
-  }
-}
-
-Handle<String> JSLocale::NumericAsString() const {
-  switch (numeric()) {
-    case Numeric::NOTSET:
-      return GetReadOnlyRoots().undefined_string_handle();
-    case Numeric::TRUE_VALUE:
-      return GetReadOnlyRoots().true_string_handle();
-    case Numeric::FALSE_VALUE:
-      return GetReadOnlyRoots().false_string_handle();
-    case Numeric::COUNT:
-      UNREACHABLE();
-  }
 }
 
 }  // namespace internal

@@ -35,6 +35,7 @@
   V(_, Invalid_Date_string, "Invalid Date")                         \
   V(_, integer_string, "integer")                                   \
   V(_, kana_string, "kana")                                         \
+  V(_, language_string, "language")                                 \
   V(_, letter_string, "letter")                                     \
   V(_, lineBreakStyle_string, "lineBreakStyle")                     \
   V(_, list_string, "list")                                         \
@@ -59,6 +60,7 @@
   V(_, percentSign_string, "percentSign")                           \
   V(_, plusSign_string, "plusSign")                                 \
   V(_, quarter_string, "quarter")                                   \
+  V(_, region_string, "region")                                     \
   V(_, second_string, "second")                                     \
   V(_, segment_string, "segment")                                   \
   V(_, SegmentIterator_string, "Segment Iterator")                  \
