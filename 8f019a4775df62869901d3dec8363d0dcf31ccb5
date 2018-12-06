@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecca3a26_fd312ae9",
+        "filename": "test/intl/intl.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-12-06T07:49:33Z",
+      "side": 1,
+      "message": "Why FAIL instead of SKIP?",
+      "range": {
+        "startLine": 47,
+        "startChar": 20,
+        "endLine": 47,
+        "endChar": 26
+      },
+      "revId": "8f019a4775df62869901d3dec8363d0dcf31ccb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93bc5d55_762b4d52",
+        "filename": "test/intl/intl.status",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2018-12-06T07:49:33Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 53,
+        "startChar": 2,
+        "endLine": 57,
+        "endChar": 27
+      },
+      "revId": "8f019a4775df62869901d3dec8363d0dcf31ccb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
