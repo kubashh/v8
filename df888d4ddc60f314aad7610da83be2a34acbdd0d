@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba99c3f6_b605b1c1",
+        "filename": "src/heap/array-buffer-tracker-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-06T15:45:04Z",
+      "side": 1,
+      "message": "You probably need unchecked cast because the map may already be dead at this point.",
+      "range": {
+        "startLine": 65,
+        "startChar": 27,
+        "endLine": 65,
+        "endChar": 46
+      },
+      "revId": "df888d4ddc60f314aad7610da83be2a34acbdd0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
