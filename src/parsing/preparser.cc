@@ -96,6 +96,14 @@ PreParser::PreParseResult PreParser::PreParseProgram() {
   return kPreParseSuccess;
 }
 
+void PreParserFormalParameters::ValidateDuplicate(PreParser* preparser) const {
+  if (has_duplicate_) preparser->ReportUnidentifiableError();
+}
+
+void PreParserFormalParameters::ValidateStrictMode(PreParser* preparser) const {
+  if (strict_parameter_error_) preparser->ReportUnidentifiableError();
+}
+
 PreParser::PreParseResult PreParser::PreParseFunction(
     const AstRawString* function_name, FunctionKind kind,
     FunctionLiteral::FunctionType function_type,
@@ -131,12 +139,11 @@ PreParser::PreParseResult PreParser::PreParseFunction(
   FunctionState function_state(&function_state_, &scope_, function_scope);
 
   PreParserFormalParameters formals(function_scope);
-  std::unique_ptr<ExpressionClassifier> formals_classifier;
 
   // Parse non-arrow function parameters. For arrow functions, the parameters
   // have already been parsed.
   if (!IsArrowFunction(kind)) {
-    formals_classifier.reset(new ExpressionClassifier(this));
+    ExpressionScope formals_scope(this, ExpressionScope::kFormalDeclaration);
     // We return kPreParseSuccess in failure cases too - errors are retrieved
     // separately by Parser::SkipLazyFunctionBody.
     ParseFormalParameterList(&formals);
@@ -146,6 +153,8 @@ PreParser::PreParseResult PreParser::PreParseFunction(
     CheckArityRestrictions(formals.arity, kind, formals.has_rest,
                            function_scope->start_position(),
                            formals_end_position);
+    formals_scope.ValidateDeclaration();
+    // TODO(verwaest): Copy strict error?
   }
 
   Expect(Token::LBRACE);
@@ -291,13 +300,17 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
     }
 
     FunctionState function_state(&function_state_, &scope_, function_scope);
-    ExpressionClassifier formals_classifier(this);
 
     Expect(Token::LPAREN);
     int start_position = position();
     function_scope->set_start_position(start_position);
     PreParserFormalParameters formals(function_scope);
-    ParseFormalParameterList(&formals);
+    {
+      ExpressionScope formals_scope(this, ExpressionScope::kFormalDeclaration);
+      ParseFormalParameterList(&formals);
+      formals_scope.ValidateDeclaration();
+      // TODO(verwaest): Copy strict error?
+    }
     Expect(Token::RPAREN);
     int formals_end_position = scanner()->location().end_pos;
 

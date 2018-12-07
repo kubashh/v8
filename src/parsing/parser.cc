@@ -757,12 +757,13 @@ FunctionLiteral* Parser::DoParseFunction(Isolate* isolate, ParseInfo* info,
       SetLanguageMode(scope, info->language_mode());
 
       scope->set_start_position(info->start_position());
-      ExpressionClassifier formals_classifier(this);
       ParserFormalParameters formals(scope);
       // The outer FunctionState should not contain destructuring assignments.
       DCHECK_EQ(0,
                 function_state.destructuring_assignments_to_rewrite().size());
       {
+        ExpressionScope formals_scope(this,
+                                      ExpressionScope::kFormalDeclaration);
         // Parsing patterns as variable reference expression creates
         // NewUnresolved references in current scope. Enter arrow function
         // scope for formal parameter parsing.
@@ -773,9 +774,12 @@ FunctionLiteral* Parser::DoParseFunction(Isolate* isolate, ParseInfo* info,
           Expect(Token::RPAREN);
         } else {
           // BindingIdentifier
+          ParameterParsingScope scope(impl(), &formals);
           ParseFormalParameter(&formals);
           DeclareFormalParameters(&formals);
         }
+        formals_scope.ValidateDeclaration();
+        // TODO(verwaest): Copy strict mode error.
       }
 
       if (GetLastFunctionLiteralId() != info->function_literal_id() - 1) {
@@ -1130,10 +1134,10 @@ Statement* Parser::ParseExportDefault() {
 
     default: {
       int pos = position();
-      ExpressionClassifier classifier(this);
+      ExpressionScope expression_scope(this, ExpressionScope::kExpression);
       AcceptINScope scope(this, true);
       Expression* value = ParseAssignmentExpression();
-      ValidateExpression();
+      expression_scope.ValidateExpression();
       SetFunctionName(value, ast_value_factory()->default_string());
 
       const AstRawString* local_name =
@@ -2318,6 +2322,17 @@ Statement* Parser::DesugarLexicalBindingsInForStatement(
   return outer_block;
 }
 
+void ParserFormalParameters::ValidateDuplicate(Parser* parser) const {
+  if (has_duplicate()) {
+    parser->ReportMessageAt(duplicate_loc, MessageTemplate::kParamDupe);
+  }
+}
+void ParserFormalParameters::ValidateStrictMode(Parser* parser) const {
+  if (strict_error_loc.IsValid()) {
+    parser->ReportMessageAt(strict_error_loc, strict_error_message);
+  }
+}
+
 void Parser::AddArrowFunctionFormalParameters(
     ParserFormalParameters* parameters, Expression* expr, int end_pos) {
   // ArrowFunctionFormals ::
@@ -2940,8 +2955,6 @@ void Parser::ParseFunction(
 
   bool is_wrapped = function_type == FunctionLiteral::kWrapped;
 
-  ExpressionClassifier formals_classifier(this);
-
   int expected_parameters_end_pos = parameters_end_pos_;
   if (expected_parameters_end_pos != kNoSourcePosition) {
     // This is the first function encountered in a CreateDynamicFunction eval.
@@ -2970,7 +2983,10 @@ void Parser::ParseFunction(
   } else {
     // For a regular function, the function arguments are parsed from source.
     DCHECK_NULL(arguments_for_wrapped_function);
+    ExpressionScope formals_scope(this, ExpressionScope::kFormalDeclaration);
     ParseFormalParameterList(&formals);
+    formals_scope.ValidateDeclaration();
+    // TODO(verwaest): Copy strict error?
     if (expected_parameters_end_pos != kNoSourcePosition) {
       // Check for '(' or ')' shenanigans in the parameter string for dynamic
       // functions.
