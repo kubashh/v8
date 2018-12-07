@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0c8e817_b6d98dc0",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-12-07T22:36:26Z",
+      "side": 1,
+      "message": "this part should be removed as dup of 1351307",
+      "range": {
+        "startLine": 884,
+        "startChar": 0,
+        "endLine": 916,
+        "endChar": 3
+      },
+      "revId": "872e69b66e67fab87fabda7ff5b52d5b8c34a368",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
