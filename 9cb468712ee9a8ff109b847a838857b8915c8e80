@@ -22,6 +22,30 @@
       "revId": "9cb468712ee9a8ff109b847a838857b8915c8e80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba66f3b2_58ab5c51",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2018-12-07T09:05:46Z",
+      "side": 1,
+      "message": "Yeah, good point. Sad thing is that these casts are here only because of GCC.",
+      "parentUuid": "c6ca92f9_ad262a26",
+      "range": {
+        "startLine": 508,
+        "startChar": 20,
+        "endLine": 508,
+        "endChar": 36
+      },
+      "revId": "9cb468712ee9a8ff109b847a838857b8915c8e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
