@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48f0acfc_b3fda680",
+        "filename": "test/mjsunit/wasm/bulk-memory.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-07T11:36:19Z",
+      "side": 1,
+      "message": "nit: You could just remove this whole variable.",
+      "revId": "670a6c0f9cf05ab9303dfb551a90973341acd74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4397f167_6b9cd15c",
+        "filename": "test/mjsunit/wasm/bulk-memory.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-07T11:36:19Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "670a6c0f9cf05ab9303dfb551a90973341acd74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a94f27be_d07d0dc4",
+        "filename": "test/mjsunit/wasm/bulk-memory.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-07T11:36:19Z",
+      "side": 1,
+      "message": "This sounds like a duplicate of assertArrayEquals from mjsunit.js, but it is not. Can we rename this to make the difference clear? Something like \"assertBufferContent\"?\nAlso, should be assert that the rest of the elements in the buffer are zero?",
+      "revId": "670a6c0f9cf05ab9303dfb551a90973341acd74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92439fdb_619c08b0",
+        "filename": "test/mjsunit/wasm/wasm-constants.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-07T11:36:19Z",
+      "side": 1,
+      "message": "nit: stray newline.",
+      "revId": "670a6c0f9cf05ab9303dfb551a90973341acd74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
