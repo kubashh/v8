@@ -235,6 +235,14 @@ UColAttributeValue ToUColAttributeValue(Intl::CaseFirst case_first) {
   }
 }
 
+void SetNumericOption(icu::Collator* icu_collator, bool numeric) {
+  CHECK_NOT_NULL(icu_collator);
+  UErrorCode status = U_ZERO_ERROR;
+  icu_collator->setAttribute(UCOL_NUMERIC_COLLATION,
+                             numeric ? UCOL_ON : UCOL_OFF, status);
+  CHECK(U_SUCCESS(status));
+}
+
 void SetCaseFirstOption(icu::Collator* icu_collator,
                         Intl::CaseFirst case_first) {
   CHECK_NOT_NULL(icu_collator);
@@ -328,29 +336,7 @@ MaybeHandle<JSCollator> JSCollator::Initialize(Isolate* isolate,
   icu::Locale icu_locale = r.icu_locale;
   DCHECK(!icu_locale.isBogus());
 
-  std::map<std::string, std::string> extensions = r.extensions;
-
   // 19. Let collation be r.[[co]].
-  //
-  // r.[[co]] is already set as part of the icu::Locale creation as
-  // icu parses unicode extensions and sets the keywords.
-  //
-  // We need to sanitize the keywords based on certain ECMAScript rules.
-  //
-  // As per https://tc39.github.io/ecma402/#sec-intl-collator-internal-slots:
-  // The values "standard" and "search" must not be used as elements
-  // in any [[SortLocaleData]][locale].co and
-  // [[SearchLocaleData]][locale].co list.
-  auto co_extension_it = extensions.find("co");
-  if (co_extension_it != extensions.end()) {
-    const std::string& value = co_extension_it->second;
-    if ((value == "search") || (value == "standard")) {
-      UErrorCode status = U_ZERO_ERROR;
-      const char* key = uloc_toLegacyKey("co");
-      icu_locale.setKeywordValue(key, nullptr, status);
-      CHECK(U_SUCCESS(status));
-    }
-  }
 
   // 5. Set collator.[[Usage]] to usage.
   //
@@ -410,19 +396,11 @@ MaybeHandle<JSCollator> JSCollator::Initialize(Isolate* isolate,
   // passed in through the unicode extensions.
   status = U_ZERO_ERROR;
   if (found_numeric.FromJust()) {
-    icu_collator->setAttribute(UCOL_NUMERIC_COLLATION,
-                               numeric ? UCOL_ON : UCOL_OFF, status);
-    CHECK(U_SUCCESS(status));
+    SetNumericOption(icu_collator.get(), numeric);
   } else {
-    auto kn_extension_it = extensions.find("kn");
-    if (kn_extension_it != extensions.end()) {
-      const std::string& value = kn_extension_it->second;
-
-      numeric = (value == "true");
-
-      icu_collator->setAttribute(UCOL_NUMERIC_COLLATION,
-                                 numeric ? UCOL_ON : UCOL_OFF, status);
-      CHECK(U_SUCCESS(status));
+    auto kn_extension_it = r.extensions.find("kn");
+    if (kn_extension_it != r.extensions.end()) {
+      SetNumericOption(icu_collator.get(), (kn_extension_it->second == "true"));
     }
   }
 
@@ -435,10 +413,10 @@ MaybeHandle<JSCollator> JSCollator::Initialize(Isolate* isolate,
   if (case_first != Intl::CaseFirst::kUndefined) {
     SetCaseFirstOption(icu_collator.get(), case_first);
   } else {
-    auto kf_extension_it = extensions.find("kf");
-    if (kf_extension_it != extensions.end()) {
-      const std::string& value = kf_extension_it->second;
-      SetCaseFirstOption(icu_collator.get(), ToCaseFirst(value.c_str()));
+    auto kf_extension_it = r.extensions.find("kf");
+    if (kf_extension_it != r.extensions.end()) {
+      SetCaseFirstOption(icu_collator.get(),
+                         ToCaseFirst(kf_extension_it->second.c_str()));
     }
   }
 
