@@ -290,6 +290,7 @@ void DeclarationScope::SetDefaults() {
   has_arguments_parameter_ = false;
   scope_uses_super_property_ = false;
   has_rest_ = false;
+  force_context_ = false;
   sloppy_block_function_map_ = nullptr;
   receiver_ = nullptr;
   new_target_ = nullptr;
@@ -333,6 +334,7 @@ void Scope::SetDefaults() {
   is_debug_evaluate_scope_ = false;
 
   inner_scope_calls_eval_ = false;
+  force_context_ = false;
   force_context_allocation_ = false;
   force_context_allocation_for_parameters_ = false;
 
@@ -2312,7 +2314,7 @@ void Scope::AllocateVariablesRecursively() {
   // even if no local variables were statically allocated in the scope.
   // Likewise for modules and function scopes representing asm.js modules.
   bool must_have_context =
-      is_with_scope() || is_module_scope() || IsAsmModule() ||
+      is_with_scope() || is_module_scope() || IsAsmModule() || force_context_ ||
       (is_function_scope() && AsDeclarationScope()->calls_sloppy_eval()) ||
       (is_block_scope() && is_declaration_scope() &&
        AsDeclarationScope()->calls_sloppy_eval());
