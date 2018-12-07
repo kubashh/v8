@@ -1,0 +1,181 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d60fd11_51ec58bc",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-07T21:03:53Z",
+      "side": 1,
+      "message": "If we do go with this approach this class deserves a big class comment.",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23c7b7b9_ba5b502b",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-07T21:03:53Z",
+      "side": 1,
+      "message": "Maybe call this ParserT; I misread \"Parser\" below as being the v8::internal::Parser and was confused.",
+      "range": {
+        "startLine": 17,
+        "startChar": 31,
+        "endLine": 17,
+        "endChar": 37
+      },
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3da038d9_e8b943ad",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-07T21:03:53Z",
+      "side": 1,
+      "message": "Is this about formal parameters? I think kFormalParameterDeclaration, or just kParameterDeclaration would be clearer if so (leaving comments as I go, so this may be answered later).",
+      "range": {
+        "startLine": 30,
+        "startChar": 5,
+        "endLine": 30,
+        "endChar": 11
+      },
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92055bab_93ba1322",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-07T21:03:53Z",
+      "side": 1,
+      "message": "Same here as above, if we go with this a class comment is essential.",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99c3e4c1_cdfb37d7",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-07T21:03:53Z",
+      "side": 1,
+      "message": "I\u0027m fuzzy on what this name actually means. I at first thought it meant an entire pattern, but it looks like it\u0027s actually about a particular element? A comment would help at the least.",
+      "range": {
+        "startLine": 866,
+        "startChar": 14,
+        "endLine": 866,
+        "endChar": 43
+      },
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95975298_716d7c87",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-07T21:03:53Z",
+      "side": 1,
+      "message": "Small improvement: use an enum here.",
+      "range": {
+        "startLine": 991,
+        "startChar": 42,
+        "endLine": 991,
+        "endChar": 58
+      },
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09a7adfa_f3a7c033",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1386,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-07T21:03:53Z",
+      "side": 1,
+      "message": "A comment for this struct would be useful, the name itself is somewhat helpful but doesn\u0027t fully explain what this is for/how it\u0027s used.",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b89b5190_ef102a24",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-07T21:03:53Z",
+      "side": 1,
+      "message": "This refactoring looks independent of the ExpressionScope change; that is, you could add such a helper to the current ParserBase (correct me if I\u0027m wrong). I think it\u0027d be easier to evaluate this CL without it.",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0af4237_2fce0bfb",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-07T21:03:53Z",
+      "side": 1,
+      "message": "This call to ValidateExpression surprises me. There are valid destructuring assignment targets which aren\u0027t valid expressions (e.g., `{x \u003d 0}`), so what is this actually doing?",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
