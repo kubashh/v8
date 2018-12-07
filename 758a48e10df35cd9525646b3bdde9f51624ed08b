@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0717cd6_36b62cc0",
+        "filename": "test/mjsunit/wasm/exceptions-utils.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-07T16:33:10Z",
+      "side": 1,
+      "message": "Please add this file to the mjsunit.status. There are already entries for wasm-constants and wasm-module-builder.",
+      "revId": "758a48e10df35cd9525646b3bdde9f51624ed08b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
