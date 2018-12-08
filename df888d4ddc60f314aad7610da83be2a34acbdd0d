@@ -22,6 +22,30 @@
       "revId": "df888d4ddc60f314aad7610da83be2a34acbdd0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaef5b8e_1e86916a",
+        "filename": "src/heap/array-buffer-tracker-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-12-08T03:00:01Z",
+      "side": 1,
+      "message": "Thanks, spot on! Done.",
+      "parentUuid": "ba99c3f6_b605b1c1",
+      "range": {
+        "startLine": 65,
+        "startChar": 27,
+        "endLine": 65,
+        "endChar": 46
+      },
+      "revId": "df888d4ddc60f314aad7610da83be2a34acbdd0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
