@@ -368,16 +368,15 @@ TEST(GarbageCollection) {
     HandleScope inner_scope(isolate);
     // Allocate a function and keep it in global object's property.
     Handle<JSFunction> function = factory->NewFunctionForTest(name);
-    JSReceiver::SetProperty(isolate, global, name, function,
-                            LanguageMode::kSloppy)
+    Object::SetProperty(isolate, global, name, function, LanguageMode::kSloppy)
         .Check();
     // Allocate an object.  Unrooted after leaving the scope.
     Handle<JSObject> obj = factory->NewJSObject(function);
-    JSReceiver::SetProperty(isolate, obj, prop_name, twenty_three,
-                            LanguageMode::kSloppy)
+    Object::SetProperty(isolate, obj, prop_name, twenty_three,
+                        LanguageMode::kSloppy)
         .Check();
-    JSReceiver::SetProperty(isolate, obj, prop_namex, twenty_four,
-                            LanguageMode::kSloppy)
+    Object::SetProperty(isolate, obj, prop_namex, twenty_four,
+                        LanguageMode::kSloppy)
         .Check();
 
     CHECK_EQ(Smi::FromInt(23),
@@ -400,11 +399,10 @@ TEST(GarbageCollection) {
     HandleScope inner_scope(isolate);
     // Allocate another object, make it reachable from global.
     Handle<JSObject> obj = factory->NewJSObject(function);
-    JSReceiver::SetProperty(isolate, global, obj_name, obj,
-                            LanguageMode::kSloppy)
+    Object::SetProperty(isolate, global, obj_name, obj, LanguageMode::kSloppy)
         .Check();
-    JSReceiver::SetProperty(isolate, obj, prop_name, twenty_three,
-                            LanguageMode::kSloppy)
+    Object::SetProperty(isolate, obj, prop_name, twenty_three,
+                        LanguageMode::kSloppy)
         .Check();
   }
 
@@ -945,14 +943,14 @@ TEST(FunctionAllocation) {
 
   Handle<String> prop_name = factory->InternalizeUtf8String("theSlot");
   Handle<JSObject> obj = factory->NewJSObject(function);
-  JSReceiver::SetProperty(isolate, obj, prop_name, twenty_three,
-                          LanguageMode::kSloppy)
+  Object::SetProperty(isolate, obj, prop_name, twenty_three,
+                      LanguageMode::kSloppy)
       .Check();
   CHECK_EQ(Smi::FromInt(23),
            *Object::GetProperty(isolate, obj, prop_name).ToHandleChecked());
   // Check that we can add properties to function objects.
-  JSReceiver::SetProperty(isolate, function, prop_name, twenty_four,
-                          LanguageMode::kSloppy)
+  Object::SetProperty(isolate, function, prop_name, twenty_four,
+                      LanguageMode::kSloppy)
       .Check();
   CHECK_EQ(
       Smi::FromInt(24),
@@ -984,8 +982,7 @@ TEST(ObjectProperties) {
   CHECK(Just(false) == JSReceiver::HasOwnProperty(obj, first));
 
   // add first
-  JSReceiver::SetProperty(isolate, obj, first, one, LanguageMode::kSloppy)
-      .Check();
+  Object::SetProperty(isolate, obj, first, one, LanguageMode::kSloppy).Check();
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, first));
 
   // delete first
@@ -994,10 +991,8 @@ TEST(ObjectProperties) {
   CHECK(Just(false) == JSReceiver::HasOwnProperty(obj, first));
 
   // add first and then second
-  JSReceiver::SetProperty(isolate, obj, first, one, LanguageMode::kSloppy)
-      .Check();
-  JSReceiver::SetProperty(isolate, obj, second, two, LanguageMode::kSloppy)
-      .Check();
+  Object::SetProperty(isolate, obj, first, one, LanguageMode::kSloppy).Check();
+  Object::SetProperty(isolate, obj, second, two, LanguageMode::kSloppy).Check();
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, first));
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, second));
 
@@ -1011,10 +1006,8 @@ TEST(ObjectProperties) {
   CHECK(Just(false) == JSReceiver::HasOwnProperty(obj, second));
 
   // add first and then second
-  JSReceiver::SetProperty(isolate, obj, first, one, LanguageMode::kSloppy)
-      .Check();
-  JSReceiver::SetProperty(isolate, obj, second, two, LanguageMode::kSloppy)
-      .Check();
+  Object::SetProperty(isolate, obj, first, one, LanguageMode::kSloppy).Check();
+  Object::SetProperty(isolate, obj, second, two, LanguageMode::kSloppy).Check();
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, first));
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, second));
 
@@ -1030,14 +1023,14 @@ TEST(ObjectProperties) {
   // check string and internalized string match
   const char* string1 = "fisk";
   Handle<String> s1 = factory->NewStringFromAsciiChecked(string1);
-  JSReceiver::SetProperty(isolate, obj, s1, one, LanguageMode::kSloppy).Check();
+  Object::SetProperty(isolate, obj, s1, one, LanguageMode::kSloppy).Check();
   Handle<String> s1_string = factory->InternalizeUtf8String(string1);
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, s1_string));
 
   // check internalized string and string match
   const char* string2 = "fugl";
   Handle<String> s2_string = factory->InternalizeUtf8String(string2);
-  JSReceiver::SetProperty(isolate, obj, s2_string, one, LanguageMode::kSloppy)
+  Object::SetProperty(isolate, obj, s2_string, one, LanguageMode::kSloppy)
       .Check();
   Handle<String> s2 = factory->NewStringFromAsciiChecked(string2);
   CHECK(Just(true) == JSReceiver::HasOwnProperty(obj, s2));
@@ -1059,8 +1052,8 @@ TEST(JSObjectMaps) {
 
   // Set a propery
   Handle<Smi> twenty_three(Smi::FromInt(23), isolate);
-  JSReceiver::SetProperty(isolate, obj, prop_name, twenty_three,
-                          LanguageMode::kSloppy)
+  Object::SetProperty(isolate, obj, prop_name, twenty_three,
+                      LanguageMode::kSloppy)
       .Check();
   CHECK_EQ(Smi::FromInt(23),
            *Object::GetProperty(isolate, obj, prop_name).ToHandleChecked());
@@ -1096,8 +1089,7 @@ TEST(JSArray) {
   CHECK(array->HasSmiOrObjectElements());
 
   // array[length] = name.
-  JSReceiver::SetElement(isolate, array, 0, name, LanguageMode::kSloppy)
-      .Check();
+  Object::SetElement(isolate, array, 0, name, LanguageMode::kSloppy).Check();
   CHECK_EQ(Smi::FromInt(1), array->length());
   element = i::Object::GetElement(isolate, array, 0).ToHandleChecked();
   CHECK_EQ(*element, *name);
@@ -1111,8 +1103,7 @@ TEST(JSArray) {
   CHECK(array->HasDictionaryElements());  // Must be in slow mode.
 
   // array[length] = name.
-  JSReceiver::SetElement(isolate, array, int_length, name,
-                         LanguageMode::kSloppy)
+  Object::SetElement(isolate, array, int_length, name, LanguageMode::kSloppy)
       .Check();
   uint32_t new_int_length = 0;
   CHECK(array->length()->ToArrayIndex(&new_int_length));
@@ -1144,14 +1135,11 @@ TEST(JSObjectCopy) {
   Handle<Smi> one(Smi::FromInt(1), isolate);
   Handle<Smi> two(Smi::FromInt(2), isolate);
 
-  JSReceiver::SetProperty(isolate, obj, first, one, LanguageMode::kSloppy)
-      .Check();
-  JSReceiver::SetProperty(isolate, obj, second, two, LanguageMode::kSloppy)
-      .Check();
+  Object::SetProperty(isolate, obj, first, one, LanguageMode::kSloppy).Check();
+  Object::SetProperty(isolate, obj, second, two, LanguageMode::kSloppy).Check();
 
-  JSReceiver::SetElement(isolate, obj, 0, first, LanguageMode::kSloppy).Check();
-  JSReceiver::SetElement(isolate, obj, 1, second, LanguageMode::kSloppy)
-      .Check();
+  Object::SetElement(isolate, obj, 0, first, LanguageMode::kSloppy).Check();
+  Object::SetElement(isolate, obj, 1, second, LanguageMode::kSloppy).Check();
 
   // Make the clone.
   Handle<Object> value1, value2;
@@ -1173,15 +1161,13 @@ TEST(JSObjectCopy) {
   CHECK_EQ(*value1, *value2);
 
   // Flip the values.
-  JSReceiver::SetProperty(isolate, clone, first, two, LanguageMode::kSloppy)
+  Object::SetProperty(isolate, clone, first, two, LanguageMode::kSloppy)
       .Check();
-  JSReceiver::SetProperty(isolate, clone, second, one, LanguageMode::kSloppy)
+  Object::SetProperty(isolate, clone, second, one, LanguageMode::kSloppy)
       .Check();
 
-  JSReceiver::SetElement(isolate, clone, 0, second, LanguageMode::kSloppy)
-      .Check();
-  JSReceiver::SetElement(isolate, clone, 1, first, LanguageMode::kSloppy)
-      .Check();
+  Object::SetElement(isolate, clone, 0, second, LanguageMode::kSloppy).Check();
+  Object::SetElement(isolate, clone, 1, first, LanguageMode::kSloppy).Check();
 
   value1 = Object::GetElement(isolate, obj, 1).ToHandleChecked();
   value2 = Object::GetElement(isolate, clone, 0).ToHandleChecked();
@@ -2498,8 +2484,7 @@ TEST(OptimizedPretenuringMixedInObjectProperties) {
     CHECK_EQ(1.1, o->RawFastDoublePropertyAt(idx2));
   }
 
-  JSObject* inner_object =
-      reinterpret_cast<JSObject*>(o->RawFastPropertyAt(idx1));
+  JSObject inner_object = JSObject::cast(o->RawFastPropertyAt(idx1));
   CHECK(CcTest::heap()->InOldSpace(inner_object));
   if (!inner_object->IsUnboxedDoubleField(idx1)) {
     CHECK(CcTest::heap()->InOldSpace(inner_object->RawFastPropertyAt(idx1)));
@@ -2863,8 +2848,8 @@ static void AddPropertyTo(
   FLAG_gc_global = true;
   FLAG_retain_maps_for_n_gc = 0;
   CcTest::heap()->set_allocation_timeout(gc_count);
-  JSReceiver::SetProperty(isolate, object, prop_name, twenty_three,
-                          LanguageMode::kSloppy)
+  Object::SetProperty(isolate, object, prop_name, twenty_three,
+                      LanguageMode::kSloppy)
       .Check();
 }
 
@@ -4702,8 +4687,7 @@ TEST(Regress3631) {
   // Incrementally mark the backing store.
   Handle<JSReceiver> obj =
       v8::Utils::OpenHandle(*v8::Local<v8::Object>::Cast(result));
-  Handle<JSWeakCollection> weak_map(reinterpret_cast<JSWeakCollection*>(*obj),
-                                    isolate);
+  Handle<JSWeakCollection> weak_map(JSWeakCollection::cast(*obj), isolate);
   HeapObject* weak_map_table = HeapObject::cast(weak_map->table());
   IncrementalMarking::MarkingState* marking_state = marking->marking_state();
   while (!marking_state->IsBlack(weak_map_table) && !marking->IsStopped()) {
@@ -4733,7 +4717,7 @@ TEST(Regress442710) {
   Handle<JSArray> array = factory->NewJSArray(2);
 
   Handle<String> name = factory->InternalizeUtf8String("testArray");
-  JSReceiver::SetProperty(isolate, global, name, array, LanguageMode::kSloppy)
+  Object::SetProperty(isolate, global, name, array, LanguageMode::kSloppy)
       .Check();
   CompileRun("testArray[0] = 1; testArray[1] = 2; testArray.shift();");
   CcTest::CollectGarbage(OLD_SPACE);
