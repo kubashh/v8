@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "255dde1e_871cf243",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-10T10:14:14Z",
+      "side": 1,
+      "message": "+1\n\nAlso a design doc (which explains the different cases we\u0027re tracking) might be good to have too (I\u0027m continuously surprised that something as complex as ExpressionClassifier never had one).",
+      "parentUuid": "6d60fd11_51ec58bc",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23c7b7b9_ba5b502b",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 2
@@ -163,6 +181,29 @@
       "writtenOn": "2018-12-07T21:03:53Z",
       "side": 1,
       "message": "A comment for this struct would be useful, the name itself is somewhat helpful but doesn\u0027t fully explain what this is for/how it\u0027s used.",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59e3f6b0_d70412ef",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-10T10:14:14Z",
+      "side": 1,
+      "message": "Cool, this is exactly where I\u0027d expect to see this code, so at least in this regard this approach is cleared than the ExpressionClassifier approach.",
+      "range": {
+        "startLine": 1722,
+        "startChar": 6,
+        "endLine": 1723,
+        "endChar": 76
+      },
       "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
