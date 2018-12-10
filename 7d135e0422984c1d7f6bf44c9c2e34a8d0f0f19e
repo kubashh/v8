@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "806c84b5_a3ee1647",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-10T13:22:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bd1dee9_c06d1e10",
+      "revId": "7d135e0422984c1d7f6bf44c9c2e34a8d0f0f19e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9a221f6_358c3f18",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "7d135e0422984c1d7f6bf44c9c2e34a8d0f0f19e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddae8937_be8eccb7",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-10T13:22:51Z",
+      "side": 1,
+      "message": "Done, also for \"Br\". They are \"BrImpl\" and \"ReturnImpl\" now. Let me know if you have a better name :)",
+      "parentUuid": "a9a221f6_358c3f18",
+      "revId": "7d135e0422984c1d7f6bf44c9c2e34a8d0f0f19e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
