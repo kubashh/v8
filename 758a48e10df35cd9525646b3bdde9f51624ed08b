@@ -16,6 +16,24 @@
       "revId": "758a48e10df35cd9525646b3bdde9f51624ed08b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "838b7d39_05474ab4",
+        "filename": "test/mjsunit/wasm/exceptions-utils.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2018-12-10T09:15:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0717cd6_36b62cc0",
+      "revId": "758a48e10df35cd9525646b3bdde9f51624ed08b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
