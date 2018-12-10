@@ -3,4 +3,4 @@
 // found in the LICENSE file.
 
 var code = "function f(" + ("{o(".repeat(10000));
-eval(code);
+assertThrows(code, SyntaxError);
