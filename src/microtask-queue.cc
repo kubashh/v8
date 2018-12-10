@@ -89,11 +89,11 @@ int MicrotaskQueue::RunMicrotasks(Isolate* isolate) {
   HandleScope scope(isolate);
   MaybeHandle<Object> maybe_exception;
 
-  // TODO(tzik): Execution::RunMicrotasks() runs default_microtask_queue.
-  // Give it as a parameter to support non-default MicrotaskQueue.
-  DCHECK_EQ(this, isolate->default_microtask_queue());
+  Handle<Foreign> foreign_this =
+      isolate->factory()->NewForeign(reinterpret_cast<Address>(this));
   MaybeHandle<Object> maybe_result = Execution::RunMicrotasks(
-      isolate, Execution::MessageHandling::kReport, &maybe_exception);
+      isolate, foreign_this, Execution::MessageHandling::kReport,
+      &maybe_exception);
 
   // If execution is terminating, clean up and propagate that to the caller.
   if (maybe_result.is_null() && maybe_exception.is_null()) {

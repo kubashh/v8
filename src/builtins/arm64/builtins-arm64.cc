@@ -796,7 +796,8 @@ void Builtins::Generate_JSConstructEntry(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_JSRunMicrotasksEntry(MacroAssembler* masm) {
-  Generate_JSEntryVariant(masm, StackFrame::ENTRY, Builtins::kRunMicrotasks);
+  Generate_JSEntryVariant(masm, StackFrame::ENTRY,
+                          Builtins::kRunMicrotasksTrampoline);
 }
 
 // Input:
@@ -916,6 +917,22 @@ void Builtins::Generate_JSEntryTrampoline(MacroAssembler* masm) {
 
 void Builtins::Generate_JSConstructEntryTrampoline(MacroAssembler* masm) {
   Generate_JSEntryTrampolineHelper(masm, true);
+}
+
+// Input:
+//   x0: new.target.
+//   x1: function.
+//   x2: receiver.
+//   x3: argc.
+//   x4: argv.
+//   x0: result.
+void Builtins::Generate_RunMicrotasksTrampoline(MacroAssembler* masm) {
+  Callable run_microtasks =
+      Builtins::CallableFor(masm->isolate(), Builtins::kRunMicrotasks);
+  Register receiver_register =
+      run_microtasks.descriptor().GetRegisterParameter(0);
+  __ mov(receiver_register, x2);
+  __ Jump(run_microtasks.code(), RelocInfo::CODE_TARGET);
 }
 
 static void ReplaceClosureCodeWithOptimizedCode(
