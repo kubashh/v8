@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff778851_a3b60fbb",
+        "filename": "src/snapshot/read-only-serializer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-12-10T06:53:24Z",
+      "side": 1,
+      "message": "you could also check obj-\u003eIsInternalizedString()",
+      "range": {
+        "startLine": 32,
+        "startChar": 16,
+        "endLine": 32,
+        "endChar": 63
+      },
+      "revId": "a0d16a4dcc24928de2463f6a778607100cbcd6db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
