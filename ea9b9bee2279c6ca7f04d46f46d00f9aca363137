@@ -105,6 +105,30 @@
     },
     {
       "key": {
+        "uuid": "68cb7323_0b4dbba2",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-10T09:01:31Z",
+      "side": 1,
+      "message": "This parses the target for a destructuring element indeed. So either an element in an array, or the RHS of a property in an object literal:\n\n[MDT,MDT,...] or {x:MDT,y:MDT} where MDT can be an array or object literal again (with again MDT in it), or a simple identifier, or a property access in the case of non-declaration: {array:[identifier, property.access, {object:literal}]} \u003d ... would work as an assignment target; and hence will validate as a valid pattern (even though property.access needs to be validated as an expression).\n\nIt wouldn\u0027t be a valid declaration target though, because of property. access.\nvar {array:[identifier, property.access, {object:literal}]} \u003d ... isn\u0027t valid because of property.access not being a valid variable name. In old v8 it would have reported:\n\nUncaught SyntaxError: Unexpected token .\n\nSince 7.2 is reports:\nvar {array:[identifier, property.access, {object:literal}]} \u003d\n                        ^^^^^^^^^^^^^^^\nSyntaxError: Illegal property in declaration context",
+      "parentUuid": "99c3e4c1_cdfb37d7",
+      "range": {
+        "startLine": 866,
+        "startChar": 14,
+        "endLine": 866,
+        "endChar": 43
+      },
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95975298_716d7c87",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 2
@@ -162,6 +186,24 @@
     },
     {
       "key": {
+        "uuid": "5e40130a_c30e4f7c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-10T09:01:31Z",
+      "side": 1,
+      "message": "Sure, that should work in the current state too. This CL isn\u0027t about reducing the number of explicit calls, but rather the meaning of the helper object: It steers the parser rather than being a simple helper data object that the parser can push info in and check when it wants.\n\nActually in followup CL, when I introduce distinct scope classes, I can directly call this ValidateExpression directly in the ExpressionParsingScope; and ValidateDeclaration in DeclarationParsingScope. In the case of arrow functions the parser still needs to tell it what it is, but the scope itself could do the verification based on that.",
+      "parentUuid": "b89b5190_ef102a24",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0af4237_2fce0bfb",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 2
@@ -173,6 +215,24 @@
       "writtenOn": "2018-12-07T21:03:53Z",
       "side": 1,
       "message": "This call to ValidateExpression surprises me. There are valid destructuring assignment targets which aren\u0027t valid expressions (e.g., `{x \u003d 0}`), so what is this actually doing?",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6c13e27_1f61e07c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-10T09:01:31Z",
+      "side": 1,
+      "message": "The only assignment target that doesn\u0027t look like a valid pattern is a Property access. So e.g., ({x:1}\u003d{}) isn\u0027t a valid assignment target, however ({x:2}.y\u003d{}) is valid. {x:2} in {x:2}.y will flag that it\u0027s not a valid pattern since 2 isn\u0027t a valid DestructuringTarget. However, that\u0027s irrelevant since the assignment target is the property y on {x:2}. So what do we do instead? We validate that we currently have a valid expression: the expression that evaluates to the object on which we\u0027re doing the property needs to be valid.",
+      "parentUuid": "a0af4237_2fce0bfb",
       "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
