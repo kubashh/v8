@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "665910c9_5a367a54",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2018-12-10T14:49:58Z",
+      "side": 1,
+      "message": "I would prefer that we not do this DCHECK here, unless something in Liftoff would work incorrectly without it. (why? Because this is enforcing something not part of the contract of the Br() interface method which only happens to be true in the function body decoder.).",
+      "revId": "e906f16929f5399a692a978f898f5bad206d0205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
