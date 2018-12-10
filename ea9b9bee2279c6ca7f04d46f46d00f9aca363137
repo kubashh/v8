@@ -204,6 +204,24 @@
     },
     {
       "key": {
+        "uuid": "1a80e49e_e31d0fa1",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-10T09:23:48Z",
+      "side": 1,
+      "message": "Actually it\u0027s not as simple. Half of the calls want to accumulate formal parameter containment errors, the other half don\u0027t. With this implementation that\u0027s not an issue since we don\u0027t \"accumulate\" but immediately propagate those.",
+      "parentUuid": "5e40130a_c30e4f7c",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0af4237_2fce0bfb",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 2
