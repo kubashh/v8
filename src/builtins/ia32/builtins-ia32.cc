@@ -490,7 +490,8 @@ void Builtins::Generate_JSConstructEntry(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_JSRunMicrotasksEntry(MacroAssembler* masm) {
-  Generate_JSEntryVariant(masm, StackFrame::ENTRY, Builtins::kRunMicrotasks);
+  Generate_JSEntryVariant(masm, StackFrame::ENTRY,
+                          Builtins::kRunMicrotasksTrampoline);
 }
 
 static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
@@ -569,6 +570,17 @@ void Builtins::Generate_JSEntryTrampoline(MacroAssembler* masm) {
 
 void Builtins::Generate_JSConstructEntryTrampoline(MacroAssembler* masm) {
   Generate_JSEntryTrampolineHelper(masm, true);
+}
+
+void Builtins::Generate_RunMicrotasksTrampoline(MacroAssembler* masm) {
+  Callable run_microtasks =
+      Builtins::CallableFor(masm->isolate(), Builtins::kRunMicrotasks);
+  Register receiver_register =
+      run_microtasks.descriptor().GetRegisterParameter(0);
+  __ mov(receiver_register, Operand(ebp, 0));
+  __ mov(receiver_register,
+         Operand(receiver_register, EntryFrameConstants::kReceiverArgOffset));
+  __ Jump(run_microtasks.code(), RelocInfo::CODE_TARGET);
 }
 
 static void GetSharedFunctionInfoBytecode(MacroAssembler* masm,
