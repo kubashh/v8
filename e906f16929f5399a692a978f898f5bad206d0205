@@ -16,6 +16,24 @@
       "revId": "e906f16929f5399a692a978f898f5bad206d0205",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1c0a1db_f094f31f",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-10T14:55:45Z",
+      "side": 1,
+      "message": "Ok, makes sense. I mostly added this to ensure correctness of this CL.\nRemoved.",
+      "parentUuid": "665910c9_5a367a54",
+      "revId": "e906f16929f5399a692a978f898f5bad206d0205",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
