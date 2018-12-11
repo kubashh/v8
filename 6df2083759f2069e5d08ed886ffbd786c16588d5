@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b36bdcf3_745c78f8",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-12-11T23:51:44Z",
+      "side": 1,
+      "message": "Please no single letter vars.. icu_locale seems consistent with others.",
+      "range": {
+        "startLine": 772,
+        "startChar": 14,
+        "endLine": 772,
+        "endChar": 16
+      },
+      "revId": "6df2083759f2069e5d08ed886ffbd786c16588d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
