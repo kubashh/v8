@@ -9,6 +9,7 @@
 
 #include "src/base/logging.h"
 #include "src/handles-inl.h"
+#include "src/heap/factory.h"
 #include "src/isolate.h"
 #include "src/objects/microtask.h"
 #include "src/roots-inl.h"
@@ -89,11 +90,17 @@ int MicrotaskQueue::RunMicrotasks(Isolate* isolate) {
   HandleScope scope(isolate);
   MaybeHandle<Object> maybe_exception;
 
-  // TODO(tzik): Execution::RunMicrotasks() runs default_microtask_queue.
-  // Give it as a parameter to support non-default MicrotaskQueue.
-  DCHECK_EQ(this, isolate->default_microtask_queue());
+  Handle<Foreign> foreign_this;
+  if (foreign_this_) {
+    foreign_this = Handle<Foreign>(foreign_this_, isolate);
+  } else {
+    foreign_this =
+        isolate->factory()->NewForeign(reinterpret_cast<Address>(this));
+    foreign_this_ = *foreign_this;
+  }
   MaybeHandle<Object> maybe_result = Execution::RunMicrotasks(
-      isolate, Execution::MessageHandling::kReport, &maybe_exception);
+      isolate, foreign_this, Execution::MessageHandling::kReport,
+      &maybe_exception);
 
   // If execution is terminating, clean up and propagate that to the caller.
   if (maybe_result.is_null() && maybe_exception.is_null()) {
@@ -110,6 +117,8 @@ int MicrotaskQueue::RunMicrotasks(Isolate* isolate) {
 }
 
 void MicrotaskQueue::IterateMicrotasks(RootVisitor* visitor) {
+  foreign_this_ = nullptr;
+
   if (size_) {
     // Iterate pending Microtasks as root objects to avoid the write barrier for
     // all single Microtask. If this hurts the GC performance, use a FixedArray.
