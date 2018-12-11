@@ -34,6 +34,24 @@
       "revId": "fe0bc771609f72032f47a13e599fdb88969683b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fa0b396_7d27f26a",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2402,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-11T15:27:24Z",
+      "side": 1,
+      "message": "Done. The CL is a bit bigger now since callbacks need to be registered via the public API of the CompilationState now.",
+      "parentUuid": "cb007ef2_afecb98e",
+      "revId": "fe0bc771609f72032f47a13e599fdb88969683b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
