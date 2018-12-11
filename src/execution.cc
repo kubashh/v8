@@ -49,6 +49,126 @@ static void PrintDeserializedCodeInfo(Handle<JSFunction> function) {
 
 namespace {
 
+Handle<Object> NormalizeReceiver(Isolate* isolate, Handle<Object> receiver) {
+  // Convert calls on global objects to be calls on the global
+  // receiver instead to avoid having a 'this' pointer which refers
+  // directly to a global object.
+  if (receiver->IsJSGlobalObject()) {
+    return handle(Handle<JSGlobalObject>::cast(receiver)->global_proxy(),
+                  isolate);
+  }
+  return receiver;
+}
+
+struct InvokeParams {
+  static InvokeParams SetUpForNew(Isolate* isolate, Handle<Object> constructor,
+                                  Handle<Object> new_target, int argc,
+                                  Handle<Object>* argv);
+
+  static InvokeParams SetUpForCall(Isolate* isolate, Handle<Object> callable,
+                                   Handle<Object> receiver, int argc,
+                                   Handle<Object>* argv);
+
+  static InvokeParams SetUpForTryCall(
+      Isolate* isolate, Handle<Object> callable, Handle<Object> receiver,
+      int argc, Handle<Object>* argv,
+      Execution::MessageHandling message_handling,
+      MaybeHandle<Object>* exception_out);
+
+  static InvokeParams SetUpForRunMicrotasks(
+      Isolate* isolate, MicrotaskQueue* microtask_queue,
+      Execution::MessageHandling message_handling,
+      MaybeHandle<Object>* exception_out);
+
+  Handle<Object> target;
+  Handle<Object> receiver;
+  int argc = 0;
+  Handle<Object>* argv = nullptr;
+  Handle<Object> new_target;
+
+  MicrotaskQueue* microtask_queue = nullptr;
+
+  Execution::MessageHandling message_handling;
+  MaybeHandle<Object>* exception_out = nullptr;
+
+  bool is_construct = false;
+  Execution::Target execution_target = Execution::Target::kCallable;
+};
+
+// static
+InvokeParams InvokeParams::SetUpForNew(Isolate* isolate,
+                                       Handle<Object> constructor,
+                                       Handle<Object> new_target, int argc,
+                                       Handle<Object>* argv) {
+  InvokeParams params;
+  params.target = constructor;
+  params.receiver = isolate->factory()->undefined_value();
+  params.argc = argc;
+  params.argv = argv;
+  params.new_target = new_target;
+  params.message_handling = Execution::MessageHandling::kReport;
+
+  params.is_construct = true;
+  params.execution_target = Execution::Target::kCallable;
+  return params;
+}
+
+// static
+InvokeParams InvokeParams::SetUpForCall(Isolate* isolate,
+                                        Handle<Object> callable,
+                                        Handle<Object> receiver, int argc,
+                                        Handle<Object>* argv) {
+  InvokeParams params;
+  params.target = callable;
+  params.receiver = NormalizeReceiver(isolate, receiver);
+  params.argc = argc;
+  params.argv = argv;
+  params.new_target = isolate->factory()->undefined_value();
+  params.message_handling = Execution::MessageHandling::kReport;
+
+  params.is_construct = false;
+  params.execution_target = Execution::Target::kCallable;
+  return params;
+}
+
+// static
+InvokeParams InvokeParams::SetUpForTryCall(
+    Isolate* isolate, Handle<Object> callable, Handle<Object> receiver,
+    int argc, Handle<Object>* argv, Execution::MessageHandling message_handling,
+    MaybeHandle<Object>* exception_out) {
+  InvokeParams params;
+  params.target = callable;
+  params.receiver = NormalizeReceiver(isolate, receiver);
+  params.argc = argc;
+  params.argv = argv;
+  params.new_target = isolate->factory()->undefined_value();
+  params.message_handling = message_handling;
+  params.exception_out = exception_out;
+
+  params.is_construct = false;
+  params.execution_target = Execution::Target::kCallable;
+  return params;
+}
+
+// static
+InvokeParams InvokeParams::SetUpForRunMicrotasks(
+    Isolate* isolate, MicrotaskQueue* microtask_queue,
+    Execution::MessageHandling message_handling,
+    MaybeHandle<Object>* exception_out) {
+  auto undefined = isolate->factory()->undefined_value();
+  InvokeParams params;
+  params.target = undefined;
+  params.receiver = undefined;
+  params.new_target = undefined;
+  params.microtask_queue = microtask_queue;
+  params.message_handling = message_handling;
+  params.exception_out = exception_out;
+
+  params.is_construct = false;
+  params.execution_target = Execution::Target::kRunMicrotasks;
+  return params;
+}
+
 Handle<Code> JSEntry(Isolate* isolate, Execution::Target execution_target,
                      bool is_construct) {
   if (is_construct) {
@@ -64,14 +184,11 @@ Handle<Code> JSEntry(Isolate* isolate, Execution::Target execution_target,
   UNREACHABLE();
 }
 
-V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(
-    Isolate* isolate, bool is_construct, Handle<Object> target,
-    Handle<Object> receiver, int argc, Handle<Object> args[],
-    Handle<Object> new_target, Execution::MessageHandling message_handling,
-    Execution::Target execution_target) {
+V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(Isolate* isolate,
+                                                 const InvokeParams& params) {
   RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kInvoke);
-  DCHECK(!receiver->IsJSGlobalObject());
-  DCHECK_LE(argc, FixedArray::kMaxLength);
+  DCHECK(!params.receiver->IsJSGlobalObject());
+  DCHECK_LE(params.argc, FixedArray::kMaxLength);
 
 #ifdef USE_SIMULATOR
   // Simulators use separate stacks for C++ and JS. JS stack overflow checks
@@ -81,7 +198,7 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(
   StackLimitCheck check(isolate);
   if (check.HasOverflowed()) {
     isolate->StackOverflow();
-    if (message_handling == Execution::MessageHandling::kReport) {
+    if (params.message_handling == Execution::MessageHandling::kReport) {
       isolate->ReportPendingMessages();
     }
     return MaybeHandle<Object>();
@@ -90,22 +207,27 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(
 
   // api callbacks can be called directly, unless we want to take the detour
   // through JS to set up a frame for break-at-entry.
-  if (target->IsJSFunction()) {
-    Handle<JSFunction> function = Handle<JSFunction>::cast(target);
-    if ((!is_construct || function->IsConstructor()) &&
+  if (params.target->IsJSFunction()) {
+    Handle<JSFunction> function = Handle<JSFunction>::cast(params.target);
+    if ((!params.is_construct || function->IsConstructor()) &&
         function->shared()->IsApiFunction() &&
         !function->shared()->BreakAtEntry()) {
       SaveContext save(isolate);
       isolate->set_context(function->context());
       DCHECK(function->context()->global_object()->IsJSGlobalObject());
-      if (is_construct) receiver = isolate->factory()->the_hole_value();
+
+      Handle<Object> receiver;
+      if (params.is_construct)
+        receiver = isolate->factory()->the_hole_value();
+      else
+        receiver = params.receiver;
       auto value = Builtins::InvokeApiFunction(
-          isolate, is_construct, function, receiver, argc, args,
-          Handle<HeapObject>::cast(new_target));
+          isolate, params.is_construct, function, receiver, params.argc,
+          params.argv, Handle<HeapObject>::cast(params.new_target));
       bool has_exception = value.is_null();
       DCHECK(has_exception == isolate->has_pending_exception());
       if (has_exception) {
-        if (message_handling == Execution::MessageHandling::kReport) {
+        if (params.message_handling == Execution::MessageHandling::kReport) {
           isolate->ReportPendingMessages();
         }
         return MaybeHandle<Object>();
@@ -121,7 +243,7 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(
   CHECK(AllowJavascriptExecution::IsAllowed(isolate));
   if (!ThrowOnJavascriptExecution::IsAllowed(isolate)) {
     isolate->ThrowIllegalOperation();
-    if (message_handling == Execution::MessageHandling::kReport) {
+    if (params.message_handling == Execution::MessageHandling::kReport) {
       isolate->ReportPendingMessages();
     }
     return MaybeHandle<Object>();
@@ -134,31 +256,47 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(
   // Placeholder for return value.
   Object* value = nullptr;
 
-  using JSEntryFunction = GeneratedCode<Object*(
-      Object * new_target, Object * target, Object * receiver, int argc,
-      Object*** args, Address root_register_value)>;
-
-  Handle<Code> code = JSEntry(isolate, execution_target, is_construct);
-  {
+  Handle<Code> code =
+      JSEntry(isolate, params.execution_target, params.is_construct);
+  if (params.execution_target == Execution::Target::kCallable) {
     // Save and restore context around invocation and block the
     // allocation of handles without explicit handle scopes.
     SaveContext save(isolate);
     SealHandleScope shs(isolate);
+    using JSEntryFunction = GeneratedCode<Object*(
+        Object * new_target, Object * target, Object * receiver, int argc,
+        Object*** argv, Address root_register_value)>;
     JSEntryFunction stub_entry =
         JSEntryFunction::FromAddress(isolate, code->entry());
 
     if (FLAG_clear_exceptions_on_js_entry) isolate->clear_pending_exception();
 
     // Call the function through the right JS entry stub.
-    Object* orig_func = *new_target;
-    Object* func = *target;
-    Object* recv = *receiver;
-    Object*** argv = reinterpret_cast<Object***>(args);
-    if (FLAG_profile_deserialization && target->IsJSFunction()) {
-      PrintDeserializedCodeInfo(Handle<JSFunction>::cast(target));
+    Object* orig_func = *params.new_target;
+    Object* func = *params.target;
+    Object* recv = *params.receiver;
+    Object*** argv = reinterpret_cast<Object***>(params.argv);
+    if (FLAG_profile_deserialization && params.target->IsJSFunction()) {
+      PrintDeserializedCodeInfo(Handle<JSFunction>::cast(params.target));
     }
     RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kJS_Execution);
-    value = stub_entry.Call(orig_func, func, recv, argc, argv,
+    value = stub_entry.Call(orig_func, func, recv, params.argc, argv,
+                            isolate->isolate_data()->isolate_root());
+  } else {
+    // Save and restore context around invocation and block the
+    // allocation of handles without explicit handle scopes.
+    SaveContext save(isolate);
+    SealHandleScope shs(isolate);
+    using JSEntryFunction = GeneratedCode<Object*(Address microtask_queue,
+                                                  Address root_register_value)>;
+    JSEntryFunction stub_entry =
+        JSEntryFunction::FromAddress(isolate, code->entry());
+
+    if (FLAG_clear_exceptions_on_js_entry) isolate->clear_pending_exception();
+
+    // Call the function through the right JS entry stub.
+    RuntimeCallTimerScope timer(isolate, RuntimeCallCounterId::kJS_Execution);
+    value = stub_entry.Call(reinterpret_cast<Address>(params.microtask_queue),
                             isolate->isolate_data()->isolate_root());
   }
 
@@ -172,7 +310,7 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(
   bool has_exception = value->IsException(isolate);
   DCHECK(has_exception == isolate->has_pending_exception());
   if (has_exception) {
-    if (message_handling == Execution::MessageHandling::kReport) {
+    if (params.message_handling == Execution::MessageHandling::kReport) {
       isolate->ReportPendingMessages();
     }
     return MaybeHandle<Object>();
@@ -183,59 +321,14 @@ V8_WARN_UNUSED_RESULT MaybeHandle<Object> Invoke(
   return Handle<Object>(value, isolate);
 }
 
-MaybeHandle<Object> CallInternal(Isolate* isolate, Handle<Object> callable,
-                                 Handle<Object> receiver, int argc,
-                                 Handle<Object> argv[],
-                                 Execution::MessageHandling message_handling,
-                                 Execution::Target target) {
-  // Convert calls on global objects to be calls on the global
-  // receiver instead to avoid having a 'this' pointer which refers
-  // directly to a global object.
-  if (receiver->IsJSGlobalObject()) {
-    receiver =
-        handle(Handle<JSGlobalObject>::cast(receiver)->global_proxy(), isolate);
-  }
-  return Invoke(isolate, false, callable, receiver, argc, argv,
-                isolate->factory()->undefined_value(), message_handling,
-                target);
-}
-
-}  // namespace
-
-// static
-MaybeHandle<Object> Execution::Call(Isolate* isolate, Handle<Object> callable,
-                                    Handle<Object> receiver, int argc,
-                                    Handle<Object> argv[]) {
-  return CallInternal(isolate, callable, receiver, argc, argv,
-                      MessageHandling::kReport, Execution::Target::kCallable);
-}
-
-
-// static
-MaybeHandle<Object> Execution::New(Isolate* isolate, Handle<Object> constructor,
-                                   int argc, Handle<Object> argv[]) {
-  return New(isolate, constructor, constructor, argc, argv);
-}
-
-
-// static
-MaybeHandle<Object> Execution::New(Isolate* isolate, Handle<Object> constructor,
-                                   Handle<Object> new_target, int argc,
-                                   Handle<Object> argv[]) {
-  return Invoke(isolate, true, constructor,
-                isolate->factory()->undefined_value(), argc, argv, new_target,
-                MessageHandling::kReport, Execution::Target::kCallable);
-}
-
-MaybeHandle<Object> Execution::TryCall(
-    Isolate* isolate, Handle<Object> callable, Handle<Object> receiver,
-    int argc, Handle<Object> args[], MessageHandling message_handling,
-    MaybeHandle<Object>* exception_out, Target target) {
+MaybeHandle<Object> InvokeWithTryCatch(Isolate* isolate,
+                                       const InvokeParams& params) {
   bool is_termination = false;
   MaybeHandle<Object> maybe_result;
-  if (exception_out != nullptr) *exception_out = MaybeHandle<Object>();
-  DCHECK_IMPLIES(message_handling == MessageHandling::kKeepPending,
-                 exception_out == nullptr);
+  if (params.exception_out != nullptr)
+    *params.exception_out = MaybeHandle<Object>();
+  DCHECK_IMPLIES(params.message_handling == MessageHandling::kKeepPending,
+                 params.exception_out == nullptr);
   // Enter a try-block while executing the JavaScript code. To avoid
   // duplicate error printing it must be non-verbose.  Also, to avoid
   // creating message objects during stack overflow we shouldn't
@@ -245,8 +338,7 @@ MaybeHandle<Object> Execution::TryCall(
     catcher.SetVerbose(false);
     catcher.SetCaptureMessage(false);
 
-    maybe_result = CallInternal(isolate, callable, receiver, argc, args,
-                                message_handling, target);
+    maybe_result = Invoke(isolate, params);
 
     if (maybe_result.is_null()) {
       DCHECK(isolate->has_pending_exception());
@@ -254,13 +346,13 @@ MaybeHandle<Object> Execution::TryCall(
           ReadOnlyRoots(isolate).termination_exception()) {
         is_termination = true;
       } else {
-        if (exception_out != nullptr) {
+        if (params.exception_out != nullptr) {
           DCHECK(catcher.HasCaught());
           DCHECK(isolate->external_caught_exception());
-          *exception_out = v8::Utils::OpenHandle(*catcher.Exception());
+          *params.exception_out = v8::Utils::OpenHandle(*catcher.Exception());
         }
       }
-      if (message_handling == MessageHandling::kReport) {
+      if (params.message_handling == Execution::MessageHandling::kReport) {
         isolate->OptionalRescheduleException(true);
       }
     }
@@ -272,12 +364,48 @@ MaybeHandle<Object> Execution::TryCall(
   return maybe_result;
 }
 
+}  // namespace
+
+// static
+MaybeHandle<Object> Execution::Call(Isolate* isolate, Handle<Object> callable,
+                                    Handle<Object> receiver, int argc,
+                                    Handle<Object> argv[]) {
+  return Invoke(isolate, InvokeParams::SetUpForCall(isolate, callable, receiver,
+                                                    argc, argv));
+}
+
+// static
+MaybeHandle<Object> Execution::New(Isolate* isolate, Handle<Object> constructor,
+                                   int argc, Handle<Object> argv[]) {
+  return New(isolate, constructor, constructor, argc, argv);
+}
+
+// static
+MaybeHandle<Object> Execution::New(Isolate* isolate, Handle<Object> constructor,
+                                   Handle<Object> new_target, int argc,
+                                   Handle<Object> argv[]) {
+  return Invoke(isolate, InvokeParams::SetUpForNew(isolate, constructor,
+                                                   new_target, argc, argv));
+}
+
+MaybeHandle<Object> Execution::TryCall(Isolate* isolate,
+                                       Handle<Object> callable,
+                                       Handle<Object> receiver, int argc,
+                                       Handle<Object> argv[],
+                                       MessageHandling message_handling,
+                                       MaybeHandle<Object>* exception_out) {
+  return InvokeWithTryCatch(
+      isolate,
+      InvokeParams::SetUpForTryCall(isolate, callable, receiver, argc, argv,
+                                    message_handling, exception_out));
+}
+
 MaybeHandle<Object> Execution::RunMicrotasks(
-    Isolate* isolate, MessageHandling message_handling,
-    MaybeHandle<Object>* exception_out) {
-  auto undefined = isolate->factory()->undefined_value();
-  return TryCall(isolate, undefined, undefined, 0, {}, message_handling,
-                 exception_out, Target::kRunMicrotasks);
+    Isolate* isolate, MicrotaskQueue* microtask_queue,
+    MessageHandling message_handling, MaybeHandle<Object>* exception_out) {
+  return InvokeWithTryCatch(
+      isolate, InvokeParams::SetUpForRunMicrotasks(
+                   isolate, microtask_queue, message_handling, exception_out));
 }
 
 void StackGuard::SetStackLimit(uintptr_t limit) {
