@@ -718,7 +718,8 @@ void Builtins::Generate_JSConstructEntry(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_JSRunMicrotasksEntry(MacroAssembler* masm) {
-  Generate_JSEntryVariant(masm, StackFrame::ENTRY, Builtins::kRunMicrotasks);
+  Generate_JSEntryVariant(masm, StackFrame::ENTRY,
+                          Builtins::kRunMicrotasksTrampoline);
 }
 
 static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
@@ -810,6 +811,23 @@ void Builtins::Generate_JSEntryTrampoline(MacroAssembler* masm) {
 
 void Builtins::Generate_JSConstructEntryTrampoline(MacroAssembler* masm) {
   Generate_JSEntryTrampolineHelper(masm, true);
+}
+
+void Builtins::Generate_RunMicrotasksTrampoline(MacroAssembler* masm) {
+  // This expects five C++ function parameters passed by Invoke() in
+  // execution.cc.
+  //   r0: new_target
+  //   r1: function
+  //   r2: receiver
+  //   r3: argc
+  //   r4: argv
+
+  Callable run_microtasks =
+      Builtins::CallableFor(masm->isolate(), Builtins::kRunMicrotasks);
+  Register receiver_register =
+      run_microtasks.descriptor().GetRegisterParameter(0);
+  __ mov(receiver_register, r2);
+  __ Jump(run_microtasks.code(), RelocInfo::CODE_TARGET);
 }
 
 static void ReplaceClosureCodeWithOptimizedCode(

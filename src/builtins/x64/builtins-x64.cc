@@ -541,7 +541,8 @@ void Builtins::Generate_JSConstructEntry(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_JSRunMicrotasksEntry(MacroAssembler* masm) {
-  Generate_JSEntryVariant(masm, StackFrame::ENTRY, Builtins::kRunMicrotasks);
+  Generate_JSEntryVariant(masm, StackFrame::ENTRY,
+                          Builtins::kRunMicrotasksTrampoline);
 }
 
 static void Generate_JSEntryTrampolineHelper(MacroAssembler* masm,
@@ -685,6 +686,34 @@ void Builtins::Generate_JSEntryTrampoline(MacroAssembler* masm) {
 
 void Builtins::Generate_JSConstructEntryTrampoline(MacroAssembler* masm) {
   Generate_JSEntryTrampolineHelper(masm, true);
+}
+
+void Builtins::Generate_RunMicrotasksTrampoline(MacroAssembler* masm) {
+  // This expects five C++ function parameters passed by Invoke() in
+  // execution.cc.
+
+  Callable run_microtasks =
+      Builtins::CallableFor(masm->isolate(), Builtins::kRunMicrotasks);
+  Register receiver_register =
+      run_microtasks.descriptor().GetRegisterParameter(0);
+
+#ifdef _WIN64
+  // rcx: new_target
+  // rdx: function
+  // r8: receiver
+  // r9: argc
+  // [rsp+0x20]: argv
+  __ movp(receiver_register, r8);
+#else
+  // rdi: new_target
+  // rsi: function
+  // rdx: receiver
+  // rcx: argc
+  // r8: argv
+  __ movp(receiver_register, rdx);
+#endif
+
+  __ Jump(run_microtasks.code(), RelocInfo::CODE_TARGET);
 }
 
 static void GetSharedFunctionInfoBytecode(MacroAssembler* masm,
