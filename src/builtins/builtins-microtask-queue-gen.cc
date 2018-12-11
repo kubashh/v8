@@ -450,8 +450,9 @@ TF_BUILTIN(RunMicrotasks, MicrotaskQueueBuiltinsAssembler) {
   // Load the current context from the isolate.
   TNode<Context> current_context = GetCurrentContext();
 
-  // TODO(tzik): Take a MicrotaskQueue parameter to support non-default queue.
-  TNode<IntPtrT> microtask_queue = GetDefaultMicrotaskQueue();
+  TNode<IntPtrT> microtask_queue = LoadObjectField<IntPtrT>(
+      UncheckedCast<Foreign>(Parameter(Descriptor::kMicrotaskQueue)),
+      Foreign::kForeignAddressOffset);
 
   Label loop(this), done(this);
   Goto(&loop);
