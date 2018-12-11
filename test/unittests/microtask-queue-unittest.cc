@@ -154,6 +154,7 @@ TEST_F(MicrotaskQueueTest, VisitRoot) {
   microtask_queue->RunMicrotasks(isolate());
 
   std::vector<Object*> expected;
+  expected.push_back(*microtask_queue->GetThisAsForeign(isolate()));
   for (int i = 0; i < MicrotaskQueue::kMinimumCapacity / 2 + 1; ++i) {
     Handle<Microtask> microtask = NewMicrotask([] {});
     expected.push_back(*microtask);

@@ -9,10 +9,12 @@
 #include <memory>
 
 #include "src/base/macros.h"
+#include "src/handles.h"
 
 namespace v8 {
 namespace internal {
 
+class Foreign;
 class Isolate;
 class Microtask;
 class Object;
@@ -47,6 +49,8 @@ class V8_EXPORT_PRIVATE MicrotaskQueue {
   MicrotaskQueue* next() const { return next_; }
   MicrotaskQueue* prev() const { return prev_; }
 
+  Handle<Foreign> GetThisAsForeign(Isolate* isolate);
+
   static const size_t kRingBufferOffset;
   static const size_t kCapacityOffset;
   static const size_t kSizeOffset;
@@ -70,6 +74,10 @@ class V8_EXPORT_PRIVATE MicrotaskQueue {
   intptr_t capacity_ = 0;
   intptr_t size_ = 0;
   intptr_t start_ = 0;
+
+  // |foreign_this_| holds |this| to pass to RunMicrotasks builtin if it's
+  // non-null.
+  Object* foreign_this_ = nullptr;
 };
 
 }  // namespace internal

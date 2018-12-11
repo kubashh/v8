@@ -273,10 +273,10 @@ MaybeHandle<Object> Execution::TryCall(
 }
 
 MaybeHandle<Object> Execution::RunMicrotasks(
-    Isolate* isolate, MessageHandling message_handling,
-    MaybeHandle<Object>* exception_out) {
+    Isolate* isolate, Handle<Foreign> microtask_queue,
+    MessageHandling message_handling, MaybeHandle<Object>* exception_out) {
   auto undefined = isolate->factory()->undefined_value();
-  return TryCall(isolate, undefined, undefined, 0, {}, message_handling,
+  return TryCall(isolate, undefined, microtask_queue, 0, {}, message_handling,
                  exception_out, Target::kRunMicrotasks);
 }
 
