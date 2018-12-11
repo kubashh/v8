@@ -16,6 +16,24 @@
       "revId": "44b1b245c5a2676914d6d436d55934e8d5cdb5ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "096cfe9f_331d819e",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-12-11T23:21:21Z",
+      "side": 0,
+      "message": "The reason I made such change is not because of performance, but rather \n1) the icu::Collator::getLocale() does not give us the resolved locale.\n2) it is not possible to reconstruct the requested locale from icu::Collator. For example, \nnew Intl.Collator(\"pt-BR\").resolvedOptions().locale in m71 is \"pt\" instead of \"pt-BR\".",
+      "parentUuid": "a95bc444_fb2a53ff",
+      "revId": "44b1b245c5a2676914d6d436d55934e8d5cdb5ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
