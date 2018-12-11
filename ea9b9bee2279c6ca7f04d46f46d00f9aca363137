@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "6aa22f09_2e3cce73",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-11T01:53:46Z",
+      "side": 1,
+      "message": "A doc would indeed be great, and would help see this from a higher level (in addition to the code itself; like Marja, I have trouble judging this from that angle alone).",
+      "parentUuid": "255dde1e_871cf243",
+      "revId": "ea9b9bee2279c6ca7f04d46f46d00f9aca363137",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23c7b7b9_ba5b502b",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 2
