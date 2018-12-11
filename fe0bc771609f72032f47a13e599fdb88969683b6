@@ -16,6 +16,24 @@
       "revId": "fe0bc771609f72032f47a13e599fdb88969683b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb007ef2_afecb98e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2402,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-11T15:05:19Z",
+      "side": 1,
+      "message": "Via another callback you mean? Something like StreamingDecoder::NotifyRuntimeObjectsCreated(Handle\u003cWasmModuleObject\u003e)? I also thought about that. Will do.",
+      "parentUuid": "e00f67c5_a9610b86",
+      "revId": "fe0bc771609f72032f47a13e599fdb88969683b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
