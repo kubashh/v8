@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e00f67c5_a9610b86",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2402,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-11T14:59:44Z",
+      "side": 1,
+      "message": "It seems like the wrong way around. Shouldn\u0027t the StreamingDecoder set the callback on the CompilationState (over the AsyncCompileJob)?",
+      "revId": "fe0bc771609f72032f47a13e599fdb88969683b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
