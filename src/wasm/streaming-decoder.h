@@ -84,7 +84,8 @@ class V8_EXPORT_PRIVATE StreamingDecoder {
 
   // Caching support.
   // Sets the callback that is called after the module is fully compiled.
-  using ModuleCompiledCallback = std::function<void(Handle<WasmModuleObject>)>;
+  using ModuleCompiledCallback =
+      std::function<void(const std::shared_ptr<NativeModule>&)>;
   void SetModuleCompiledCallback(ModuleCompiledCallback callback);
   // Passes previously compiled module bytes from the embedder's cache.
   bool SetCompiledModuleBytes(Vector<const uint8_t> compiled_module_bytes);

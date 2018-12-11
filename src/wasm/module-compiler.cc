@@ -85,9 +85,9 @@ class CompilationStateImpl {
   // compilation.
   void SetNumberOfFunctionsToCompile(size_t num_functions);
 
-  // Set the callback function to be called on compilation events. Needs to be
+  // Add the callback function to be called on compilation events. Needs to be
   // set before {AddCompilationUnits} is run.
-  void SetCallback(callback_t callback);
+  void AddCallback(callback_t callback);
 
   // Inserts new functions to compile and kicks off compilation.
   void AddCompilationUnits(
@@ -268,8 +268,8 @@ class CompilationStateImpl {
   // End of fields protected by {mutex_}.
   //////////////////////////////////////////////////////////////////////////////
 
-  // Callback function to be called on compilation events.
-  callback_t callback_;
+  // Callback functions to be called on compilation events.
+  std::vector<callback_t> callbacks_;
 
   CancelableTaskManager background_task_manager_;
   CancelableTaskManager foreground_task_manager_;
@@ -959,6 +959,25 @@ class BackgroundCompileTask : public CancelableTask {
  private:
   NativeModule* const native_module_;
   Counters* const counters_;
+};
+
+class StreamCallback {
+ public:
+  explicit StreamCallback(
+      std::shared_ptr<NativeModule> native_module,
+      std::function<void(const std::shared_ptr<NativeModule>&)> callback)
+      : native_module_(std::move(native_module)), callback_(callback) {}
+
+  void operator()(CompilationEvent event,
+                  const VoidResult* error_result) const {
+    if (event != CompilationEvent::kFinishedTopTierCompilation) return;
+    DCHECK_NULL(error_result);
+    callback_(native_module_);
+  }
+
+ private:
+  const std::shared_ptr<NativeModule> native_module_;
+  const std::function<void(const std::shared_ptr<NativeModule>&)> callback_;
 };
 
 }  // namespace
@@ -2375,6 +2394,13 @@ void AsyncCompileJob::PrepareRuntimeObjects(
     module_object_ = handle(*module_object_, isolate_);
     deferred_handles_.push_back(deferred.Detach());
   }
+
+  if (stream_ && stream_->module_compiled_callback()) {
+    auto* comp_state = Impl(native_module_->compilation_state());
+    comp_state->AddCallback(
+        StreamCallback{module_object_->shared_native_module(),
+                       stream_->module_compiled_callback()});
+  }
 }
 
 // This function assumes that it is executed in a HandleScope, and that a
@@ -2434,10 +2460,6 @@ class AsyncCompileJob::CompilationStateCallback {
         break;
       case CompilationEvent::kFinishedTopTierCompilation:
         DCHECK_EQ(CompilationEvent::kFinishedBaselineCompilation, last_event_);
-        // Notify embedder that compilation is finished.
-        if (job_->stream_ && job_->stream_->module_compiled_callback()) {
-          job_->stream_->module_compiled_callback()(job_->module_object_);
-        }
         // If a foreground task or a finisher is pending, we rely on
         // FinishModule to remove the job.
         if (!job_->pending_foreground_task_ &&
@@ -2690,7 +2712,7 @@ class AsyncCompileJob::PrepareAndStartCompile : public CompileStep {
 
     CompilationStateImpl* compilation_state =
         Impl(job->native_module_->compilation_state());
-    compilation_state->SetCallback(CompilationStateCallback{job});
+    compilation_state->AddCallback(CompilationStateCallback{job});
     if (start_compilation_) {
       // TODO(ahaas): Try to remove the {start_compilation_} check when
       // streaming decoding is done in the background. If
@@ -2996,9 +3018,8 @@ void CompilationStateImpl::SetNumberOfFunctionsToCompile(size_t num_functions) {
   }
 }
 
-void CompilationStateImpl::SetCallback(callback_t callback) {
-  DCHECK_NULL(callback_);
-  callback_ = std::move(callback);
+void CompilationStateImpl::AddCallback(callback_t callback) {
+  callbacks_.emplace_back(std::move(callback));
 }
 
 void CompilationStateImpl::AddCompilationUnits(
@@ -3211,7 +3232,7 @@ void CompilationStateImpl::SetError(uint32_t func_index,
 void CompilationStateImpl::NotifyOnEvent(CompilationEvent event,
                                          const VoidResult* error_result) {
   HandleScope scope(isolate_);
-  if (callback_) callback_(event, error_result);
+  for (auto& callback : callbacks_) callback(event, error_result);
 }
 
 void CompileJsToWasmWrappers(Isolate* isolate, const WasmModule* module,
