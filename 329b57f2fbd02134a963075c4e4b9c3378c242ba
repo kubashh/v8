@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "3a658b56_1e923f5b",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-11T16:50:12Z",
+      "side": 1,
+      "message": "Pushing the language mode calculation down to the throwing point seems like a big refactoring (since we\u0027d have to pass the closure + SFI to that point throughout).\n\nWhat do you think of landing this and seeing what the perf impact is first before making such big changes - my gut feel is that loading a couple of extra fields should cost much given what else is going on in a StoreIC. If there is impact we could make the proposed changes as a followup CL. WDYT?",
+      "parentUuid": "4ca5ad53_77dde3c9",
+      "revId": "329b57f2fbd02134a963075c4e4b9c3378c242ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "78d362bc_5e269cce",
         "filename": "src/ic/ic.h",
         "patchSetId": 9
@@ -47,6 +65,24 @@
       "writtenOn": "2018-12-11T16:37:24Z",
       "side": 1,
       "message": "We shouldn\u0027t eagerly fill in the language mode, but rather just fetch do it when needed. I don\u0027t think that the ICs themselves ever care.\n\nThat of course means that the runtime always needs access to the running function (SharedFunctionInfo) and current context.",
+      "revId": "329b57f2fbd02134a963075c4e4b9c3378c242ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4415227_2ba8629b",
+        "filename": "src/ic/ic.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2018-12-11T16:50:12Z",
+      "side": 1,
+      "message": "Ditto.",
+      "parentUuid": "78d362bc_5e269cce",
       "revId": "329b57f2fbd02134a963075c4e4b9c3378c242ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
