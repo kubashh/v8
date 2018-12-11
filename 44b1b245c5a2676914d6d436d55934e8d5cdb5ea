@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a95bc444_fb2a53ff",
+        "filename": "src/objects/js-collator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-12-11T22:27:55Z",
+      "side": 0,
+      "message": "There is a trade off between performance and memory here. We can either opt to store the locale string and waste memory for all collator objects or waste extra cycles computing the correct locale when resolvedOptions is called. \n\nFrom my discussions with cira@, it seemed like resolvedOptions() is an advanced API that only few developers use. This is exactly why I picked the memory trade off of all collator objects over the performance of resolvedOptions.\n\nIs there a reason to change this now?",
+      "revId": "44b1b245c5a2676914d6d436d55934e8d5cdb5ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

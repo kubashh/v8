@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18885052_c1f6e116",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-12-11T22:27:55Z",
+      "side": 1,
+      "message": "Is there an ICU bug for this?",
+      "revId": "6d781d9bd53220b13e67926dcb3526770667d4e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
