@@ -517,7 +517,7 @@ MaybeHandle<Object> LoadGlobalIC::Load(Handle<Name> name) {
       return result;
     }
   }
-  return LoadIC::Load(global, name);
+  return LoadIC::Load(handle(global->global_proxy(), isolate()), name);
 }
 
 static bool AddOneReceiverMapIfMissing(MapHandles* receiver_maps,
