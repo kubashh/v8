@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "40348a66_9a713f27",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-11T17:26:57Z",
+      "side": 1,
+      "message": "We can simply get it using the JS stack iterator. We\u0027re in a failure case anyway.\n\nBut yes, it\u0027s a little complex due to API always being language mode etc. We should add LanguageModeScope in addition to allow overwriting the language mode from the JS-top closure + isolate-\u003econtext().\n\nI\u0027m not sure this CL is a direct path towards that point, but it also doesn\u0027t block it. To implement the next steps we could compute and get in the language mode at the same time at first and nuke the incoming computed language mode once it\u0027s always the same as the locally computed language mode. So landing sgtm.",
+      "parentUuid": "3a658b56_1e923f5b",
+      "revId": "329b57f2fbd02134a963075c4e4b9c3378c242ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "78d362bc_5e269cce",
         "filename": "src/ic/ic.h",
         "patchSetId": 9
