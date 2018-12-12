@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b9b918c_8155e193",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-12T20:26:12Z",
+      "side": 1,
+      "message": "There\u0027s only a single caller of this (in ParseAssignmentExpression), and I\u0027m having trouble understanding how this if-statement could ever execute. Could this be a DCHECK instead?",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56d864c9_71b34f29",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-12T20:26:12Z",
+      "side": 1,
+      "message": "What are these TODOs about?",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "141c9ff1_e6a9dbdf",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-12T20:26:12Z",
+      "side": 1,
+      "message": "It\u0027s interesting that now \"Record\" really means \"RecordOrReport\". I\u0027m not sure this is a huge problem (especially once ExpressionClassifier fades from memory), but it makes me wonder...have you thought about how this might affect the calling code? Is there any danger of writing code incorrectly by assuming that the parser will continue after a call to Record?",
+      "range": {
+        "startLine": 104,
+        "startChar": 7,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0eced82_5150dfd3",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-12T20:26:12Z",
+      "side": 1,
+      "message": "We now have three ways to parse an AssignmentExpression:\n\nParseAssignmentExpression\nParseSingleExpression\nParseMaybeDestructuringTarget\n\nIt is not obvious from the names of these functions where they should be used. Have you thought about different ways of naming them? I\u0027m worried that someone modifying the parser in the future might easily use the wrong one, and at the least, bang their head against a wall for a little while.\n\n(I\u0027ll think about names too).",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f9875a1_39a5322f",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-12T20:26:12Z",
+      "side": 1,
+      "message": "s/is/has/ for grammatical clarity.",
+      "range": {
+        "startLine": 1409,
+        "startChar": 9,
+        "endLine": 1409,
+        "endChar": 11
+      },
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1a238db_32c658e0",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-12T20:26:12Z",
+      "side": 1,
+      "message": "This is a little weird, but I understand why. Making a note for myself to come back here if I think of something better.",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64d3668f_360d54e9",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 2669,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-12T20:26:12Z",
+      "side": 1,
+      "message": "ClassifyPattern() is something of an odd bird. It doesn\u0027t really \"classify\", but rather does something like \"ValidateAsPattern\". How would you feel about that name?",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

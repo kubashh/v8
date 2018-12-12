@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "b7bf72ce_0478d5da",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-12T20:26:12Z",
+      "side": 0,
+      "message": "I think you still want explicit given the default parameter.",
+      "range": {
+        "startLine": 582,
+        "startChar": 4,
+        "endLine": 582,
+        "endChar": 12
+      },
+      "revId": "0ed8017e8a9ed05227ae3292e05e92e1f68c5219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1f56e108_a4184ef5",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 17
