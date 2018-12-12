@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0fb3b271_d9dad429",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2317,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-12T12:27:44Z",
+      "side": 1,
+      "message": "Thanks, I removed this additional flag and now force context if the inner scope is stricter than outer scope. Done.",
+      "parentUuid": "1d8adc82_662e2cb8",
+      "revId": "329b57f2fbd02134a963075c4e4b9c3378c242ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ca5ad53_77dde3c9",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 9
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "208ed316_f9cf7ea2",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1443,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-12T12:27:44Z",
+      "side": 1,
+      "message": "I reverted these changes for now and added a TODO to compute them lazily by getting the closure from the stack. Again, will do this in a follow up cl as discussed offline.",
+      "parentUuid": "40348a66_9a713f27",
+      "revId": "329b57f2fbd02134a963075c4e4b9c3378c242ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78d362bc_5e269cce",
         "filename": "src/ic/ic.h",
         "patchSetId": 9
@@ -104,6 +140,24 @@
       "revId": "329b57f2fbd02134a963075c4e4b9c3378c242ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45b37600_933f425b",
+        "filename": "src/ic/ic.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2018-12-12T12:27:44Z",
+      "side": 1,
+      "message": "I created a bug and added a TODO. As discussed offline, I will do this in a follow up cl.",
+      "parentUuid": "b4415227_2ba8629b",
+      "revId": "329b57f2fbd02134a963075c4e4b9c3378c242ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
