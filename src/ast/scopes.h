@@ -422,6 +422,16 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   bool ContainsAsmModule() const;
   // Does this scope have the potential to execute declarations non-linearly?
   bool is_nonlinear() const { return scope_nonlinear_; }
+  // Returns if we need to force a context because the current scope is stricter
+  // than the outerscope. We need this to properly track the language mode using
+  // the context. This is required in ICs where we lookup the language mode
+  // from the context.
+  bool ForceContextForLanguageMode() const {
+    // For function scopes we need not force a context.
+    if (scope_type_ == FUNCTION_SCOPE) return false;
+    return (outer_scope_ != nullptr &&
+            language_mode() > outer_scope_->language_mode());
+  }
 
   // Whether this needs to be represented by a runtime context.
   bool NeedsContext() const {

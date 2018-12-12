@@ -4524,6 +4524,8 @@ ParserBase<Impl>::ParseStatementList(StatementListT* body,
 
     if (use_strict) {
       // Directive "use strict" (ES5 14.1).
+      // We don't need to force a context here, since this will be reflected
+      // in the SharedFunctionInfo::LanguageMode.
       RaiseLanguageMode(LanguageMode::kStrict);
       if (!scope()->HasSimpleParameters()) {
         // TC39 deemed "use strict" directives to be an error when occurring
