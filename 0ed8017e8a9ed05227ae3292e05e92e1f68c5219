@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f56e108_a4184ef5",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 17
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-12T09:11:36Z",
+      "side": 0,
+      "message": "This classifier previously had 2 functions: Classify the parameters and block AsyncArrowParametersErrors (await being used in async arrow head). I\u0027ve decided to split this up into a DeclarationParsingScope(kParameterDeclaration) that only covers the parameter parsing part; and a FunctionBodyParsingScope that covers the rest of the body.",
+      "revId": "0ed8017e8a9ed05227ae3292e05e92e1f68c5219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
