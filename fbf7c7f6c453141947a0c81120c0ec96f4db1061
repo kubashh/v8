@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e66ebf19_a3e6df36",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-12T13:21:30Z",
+      "side": 1,
+      "message": "Fyi the syntax here is about to change: https://crrev.com/c/1373552",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f765b6e7_9f630037",
+        "filename": "src/builtins/builtins-microtask-queue-gen.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-12T13:21:30Z",
+      "side": 1,
+      "message": "Nit: RawPtrT seems more appropriate.",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd1fb722_65399f62",
+        "filename": "src/builtins/builtins-microtask-queue-gen.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-12T13:21:30Z",
+      "side": 1,
+      "message": "Why the UncheckedCast? A standard CAST seems fine.",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26cf5b6b_c180fc22",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-12T13:21:30Z",
+      "side": 1,
+      "message": "Nit: I\u0027d prefer a dedicated MicrotaskQueueRegister() helper for this, then the Callable also becomes unnecessary and you can just use BUILTIN_CODE(...) below.",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfc7e8e6_29a8d8d2",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-12T13:21:30Z",
+      "side": 1,
+      "message": "Nit: Just arg_reg_3 instead of the ifdef.",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "539a117c_88f0807d",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-12T13:21:30Z",
+      "side": 1,
+      "message": "Please add a short comment that this is a Foreign wrapper around the microtask queue address.",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
