@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a64bdfa3_a22b5115",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-12T21:10:07Z",
+      "side": 1,
+      "message": "This simplifies to `return std::string(\"Property \u0027\") + name-\u003eToCString().get() + \"\u0027\"`",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74f6e29c_fb622e9e",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-12T21:10:07Z",
+      "side": 1,
+      "message": "Rather than using a template here, I think it would be cleaner to always take a `const std::string\u0026`, and convert the `i::Handle\u003ci::String\u003e` to a std::string at the call site.",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16f93dc0_d739928a",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-12T21:10:07Z",
+      "side": 1,
+      "message": "This doesn\u0027t properly handle when `old_size + grow_by` wraps at 32-bits.",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bdedd59_43aa49b0",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-12T21:10:07Z",
+      "side": 1,
+      "message": "This test seems wrong if we assume grow_by is unsigned, it will never be interpreted as negative, so this happens only when the value wraps (which should be the same as the first case).",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
