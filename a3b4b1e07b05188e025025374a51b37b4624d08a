@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6cc95ca_8cb5fbd1",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-12T12:27:19Z",
+      "side": 1,
+      "message": "This should only happen for the script scope, which never has stack-allocated variables anyway, so I\u0027m not sure we need to explicitly check this here.",
+      "revId": "a3b4b1e07b05188e025025374a51b37b4624d08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
