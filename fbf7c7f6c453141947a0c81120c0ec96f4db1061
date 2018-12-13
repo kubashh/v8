@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a30d516f_129a46fb",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-13T09:23:07Z",
+      "side": 1,
+      "message": "OK, I\u0027ll update this CL after yours lands.",
+      "parentUuid": "e66ebf19_a3e6df36",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f765b6e7_9f630037",
         "filename": "src/builtins/builtins-microtask-queue-gen.cc",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2018-12-12T13:21:30Z",
       "side": 1,
       "message": "Nit: RawPtrT seems more appropriate.",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2aabb3a1_6aee4c07",
+        "filename": "src/builtins/builtins-microtask-queue-gen.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-13T09:23:07Z",
+      "side": 1,
+      "message": "Let me update this separately, as there are some more:\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1375510",
+      "parentUuid": "f765b6e7_9f630037",
       "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "edea0190_4b550af7",
+        "filename": "src/builtins/builtins-microtask-queue-gen.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-13T09:23:07Z",
+      "side": 1,
+      "message": "Didn\u0027t aware that. Updated.",
+      "parentUuid": "cd1fb722_65399f62",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "26cf5b6b_c180fc22",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 11
@@ -67,6 +121,24 @@
       "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2de6622_3b9a3ecc",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-13T09:23:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26cf5b6b_c180fc22",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "1713624f_8c71e52f",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-13T09:23:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfc7e8e6_29a8d8d2",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "539a117c_88f0807d",
         "filename": "src/interface-descriptors.h",
         "patchSetId": 11
@@ -101,6 +191,24 @@
       "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c842163f_3f9c80a9",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-13T09:23:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "539a117c_88f0807d",
+      "revId": "fbf7c7f6c453141947a0c81120c0ec96f4db1061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
