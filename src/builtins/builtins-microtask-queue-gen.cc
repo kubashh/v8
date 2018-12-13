@@ -21,15 +21,15 @@ class MicrotaskQueueBuiltinsAssembler : public CodeStubAssembler {
   explicit MicrotaskQueueBuiltinsAssembler(compiler::CodeAssemblerState* state)
       : CodeStubAssembler(state) {}
 
-  TNode<IntPtrT> GetDefaultMicrotaskQueue();
-  TNode<IntPtrT> GetMicrotaskQueue(TNode<Context> context);
-  TNode<IntPtrT> GetMicrotaskRingBuffer(TNode<IntPtrT> microtask_queue);
-  TNode<IntPtrT> GetMicrotaskQueueCapacity(TNode<IntPtrT> microtask_queue);
-  TNode<IntPtrT> GetMicrotaskQueueSize(TNode<IntPtrT> microtask_queue);
-  void SetMicrotaskQueueSize(TNode<IntPtrT> microtask_queue,
+  TNode<RawPtrT> GetDefaultMicrotaskQueue();
+  TNode<RawPtrT> GetMicrotaskQueue(TNode<Context> context);
+  TNode<RawPtrT> GetMicrotaskRingBuffer(TNode<RawPtrT> microtask_queue);
+  TNode<IntPtrT> GetMicrotaskQueueCapacity(TNode<RawPtrT> microtask_queue);
+  TNode<IntPtrT> GetMicrotaskQueueSize(TNode<RawPtrT> microtask_queue);
+  void SetMicrotaskQueueSize(TNode<RawPtrT> microtask_queue,
                              TNode<IntPtrT> new_size);
-  TNode<IntPtrT> GetMicrotaskQueueStart(TNode<IntPtrT> microtask_queue);
-  void SetMicrotaskQueueStart(TNode<IntPtrT> microtask_queue,
+  TNode<IntPtrT> GetMicrotaskQueueStart(TNode<RawPtrT> microtask_queue);
+  void SetMicrotaskQueueStart(TNode<RawPtrT> microtask_queue,
                               TNode<IntPtrT> new_start);
   TNode<IntPtrT> CalculateRingBufferOffset(TNode<IntPtrT> capacity,
                                            TNode<IntPtrT> start,
@@ -48,56 +48,56 @@ class MicrotaskQueueBuiltinsAssembler : public CodeStubAssembler {
                       SloppyTNode<HeapObject> promise_or_capability);
 };
 
-TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::GetDefaultMicrotaskQueue() {
+TNode<RawPtrT> MicrotaskQueueBuiltinsAssembler::GetDefaultMicrotaskQueue() {
   auto ref = ExternalReference::default_microtask_queue_address(isolate());
-  return UncheckedCast<IntPtrT>(
+  return UncheckedCast<RawPtrT>(
       Load(MachineType::Pointer(), ExternalConstant(ref)));
 }
 
-TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskQueue(
+TNode<RawPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskQueue(
     TNode<Context> native_context) {
   CSA_ASSERT(this, IsNativeContext(native_context));
-  return LoadObjectField<IntPtrT>(native_context,
+  return LoadObjectField<RawPtrT>(native_context,
                                   NativeContext::kMicrotaskQueueOffset);
 }
 
-TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskRingBuffer(
-    TNode<IntPtrT> microtask_queue) {
-  return UncheckedCast<IntPtrT>(
-      Load(MachineType::IntPtr(), microtask_queue,
+TNode<RawPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskRingBuffer(
+    TNode<RawPtrT> microtask_queue) {
+  return UncheckedCast<RawPtrT>(
+      Load(MachineType::Pointer(), microtask_queue,
            IntPtrConstant(MicrotaskQueue::kRingBufferOffset)));
 }
 
 TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskQueueCapacity(
-    TNode<IntPtrT> microtask_queue) {
+    TNode<RawPtrT> microtask_queue) {
   return UncheckedCast<IntPtrT>(
       Load(MachineType::IntPtr(), microtask_queue,
            IntPtrConstant(MicrotaskQueue::kCapacityOffset)));
 }
 
 TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskQueueSize(
-    TNode<IntPtrT> microtask_queue) {
+    TNode<RawPtrT> microtask_queue) {
   return UncheckedCast<IntPtrT>(
       Load(MachineType::IntPtr(), microtask_queue,
            IntPtrConstant(MicrotaskQueue::kSizeOffset)));
 }
 
 void MicrotaskQueueBuiltinsAssembler::SetMicrotaskQueueSize(
-    TNode<IntPtrT> microtask_queue, TNode<IntPtrT> new_size) {
-  StoreNoWriteBarrier(MachineType::PointerRepresentation(), microtask_queue,
+    TNode<RawPtrT> microtask_queue, TNode<IntPtrT> new_size) {
+  StoreNoWriteBarrier(MachineType::IntPtr().representation(), microtask_queue,
                       IntPtrConstant(MicrotaskQueue::kSizeOffset), new_size);
 }
 
 TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskQueueStart(
-    TNode<IntPtrT> microtask_queue) {
+    TNode<RawPtrT> microtask_queue) {
   return UncheckedCast<IntPtrT>(
       Load(MachineType::IntPtr(), microtask_queue,
            IntPtrConstant(MicrotaskQueue::kStartOffset)));
 }
 
 void MicrotaskQueueBuiltinsAssembler::SetMicrotaskQueueStart(
-    TNode<IntPtrT> microtask_queue, TNode<IntPtrT> new_start) {
-  StoreNoWriteBarrier(MachineType::PointerRepresentation(), microtask_queue,
+    TNode<RawPtrT> microtask_queue, TNode<IntPtrT> new_start) {
+  StoreNoWriteBarrier(MachineType::IntPtr().representation(), microtask_queue,
                       IntPtrConstant(MicrotaskQueue::kStartOffset), new_start);
 }
 
@@ -467,9 +467,9 @@ TF_BUILTIN(EnqueueMicrotask, MicrotaskQueueBuiltinsAssembler) {
   TNode<Context> context =
       UncheckedCast<Context>(Parameter(Descriptor::kContext));
   TNode<Context> native_context = LoadNativeContext(context);
-  TNode<IntPtrT> microtask_queue = GetMicrotaskQueue(native_context);
+  TNode<RawPtrT> microtask_queue = GetMicrotaskQueue(native_context);
 
-  TNode<IntPtrT> ring_buffer = GetMicrotaskRingBuffer(microtask_queue);
+  TNode<RawPtrT> ring_buffer = GetMicrotaskRingBuffer(microtask_queue);
   TNode<IntPtrT> capacity = GetMicrotaskQueueCapacity(microtask_queue);
   TNode<IntPtrT> size = GetMicrotaskQueueSize(microtask_queue);
   TNode<IntPtrT> start = GetMicrotaskQueueStart(microtask_queue);
@@ -482,7 +482,7 @@ TF_BUILTIN(EnqueueMicrotask, MicrotaskQueueBuiltinsAssembler) {
     StoreNoWriteBarrier(MachineType::PointerRepresentation(), ring_buffer,
                         CalculateRingBufferOffset(capacity, start, size),
                         BitcastTaggedToWord(microtask));
-    StoreNoWriteBarrier(MachineType::PointerRepresentation(), microtask_queue,
+    StoreNoWriteBarrier(MachineType::IntPtr().representation(), microtask_queue,
                         IntPtrConstant(MicrotaskQueue::kSizeOffset),
                         IntPtrAdd(size, IntPtrConstant(1)));
     Return(UndefinedConstant());
@@ -508,7 +508,7 @@ TF_BUILTIN(RunMicrotasks, MicrotaskQueueBuiltinsAssembler) {
   TNode<Context> current_context = GetCurrentContext();
 
   // TODO(tzik): Take a MicrotaskQueue parameter to support non-default queue.
-  TNode<IntPtrT> microtask_queue = GetDefaultMicrotaskQueue();
+  TNode<RawPtrT> microtask_queue = GetDefaultMicrotaskQueue();
 
   Label loop(this), done(this);
   Goto(&loop);
@@ -519,14 +519,14 @@ TF_BUILTIN(RunMicrotasks, MicrotaskQueueBuiltinsAssembler) {
   // Exit if the queue is empty.
   GotoIf(WordEqual(size, IntPtrConstant(0)), &done);
 
-  TNode<IntPtrT> ring_buffer = GetMicrotaskRingBuffer(microtask_queue);
+  TNode<RawPtrT> ring_buffer = GetMicrotaskRingBuffer(microtask_queue);
   TNode<IntPtrT> capacity = GetMicrotaskQueueCapacity(microtask_queue);
   TNode<IntPtrT> start = GetMicrotaskQueueStart(microtask_queue);
 
   TNode<IntPtrT> offset =
       CalculateRingBufferOffset(capacity, start, IntPtrConstant(0));
-  TNode<IntPtrT> microtask_pointer =
-      UncheckedCast<IntPtrT>(Load(MachineType::Pointer(), ring_buffer, offset));
+  TNode<RawPtrT> microtask_pointer =
+      UncheckedCast<RawPtrT>(Load(MachineType::Pointer(), ring_buffer, offset));
   TNode<Microtask> microtask =
       UncheckedCast<Microtask>(BitcastWordToTagged(microtask_pointer));
 
