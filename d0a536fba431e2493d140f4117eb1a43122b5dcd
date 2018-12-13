@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cba9d7c9_14d10924",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:35:25Z",
+      "side": 1,
+      "message": "Nit: argv, argc, message_handling, is_construct, execution_target are explicitly initialized in each SetUpFor* helper below, right? IMO we could remove default values up here in that case.",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0026e92_204d39d1",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:35:25Z",
+      "side": 1,
+      "message": "The only callsite uses kReport, right? Should we simplify and remove the argument?",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3991f30_bb7007e8",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:35:25Z",
+      "side": 1,
+      "message": "Nit: {} or just use ternary \u0027?\u0027",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61e4427a_dd9a90ec",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:35:25Z",
+      "side": 1,
+      "message": "q: I\u0027m not sure if clang-format allows this, but can we remove the space before *?",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3948a27f_a7a66c78",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:35:25Z",
+      "side": 1,
+      "message": "Nit: {}",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e405225c_410d9de3",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:35:25Z",
+      "side": 1,
+      "message": "Nit: // static",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86930745_431ab1df",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:35:25Z",
+      "side": 1,
+      "message": "Also here.\n\nFor consistency with TryCall, do you think it makes sense to rename this to TryRunMicrotasks?",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c01433b5_fcddd0c2",
+        "filename": "src/execution.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:35:25Z",
+      "side": 1,
+      "message": "Nice.",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
