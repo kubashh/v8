@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55c510e2_0e3dfa04",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 2155,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-12-13T15:41:39Z",
+      "side": 1,
+      "message": "Can you please rename this to \u0027target-platform-fuchsia\u0027 as a drive-by? I\u0027ve tried to use dashes in all mixin names to stay consistent.",
+      "range": {
+        "startLine": 2155,
+        "startChar": 15,
+        "endLine": 2155,
+        "endChar": 38
+      },
+      "revId": "c2bfa01bdc3920fa438c5566f83e4dfb5960155e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "956215ee_6b181a0d",
+        "filename": "gatekeeper/tree_closers.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-12-13T15:41:39Z",
+      "side": 1,
+      "message": "Nice! No need for a separate CL.",
+      "revId": "c2bfa01bdc3920fa438c5566f83e4dfb5960155e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
