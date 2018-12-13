@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c55d557_9c865caf",
+        "filename": "src/builtins/builtins-microtask-queue-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T10:29:17Z",
+      "side": 1,
+      "message": "I think it\u0027s fine to keep PointerRepresentation here.",
+      "revId": "7d595c9f00c7bad86724ce206c6d2884f79b1904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "453253b5_242775f3",
+        "filename": "src/builtins/builtins-microtask-queue-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T10:29:17Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "7d595c9f00c7bad86724ce206c6d2884f79b1904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02501753_f087b483",
+        "filename": "src/builtins/builtins-microtask-queue-gen.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T10:29:17Z",
+      "side": 1,
+      "message": "q: Is it possible to CAST directly to Microtask above?",
+      "revId": "7d595c9f00c7bad86724ce206c6d2884f79b1904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
