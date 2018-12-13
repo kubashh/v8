@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "95629aa4_8b149db2",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-13T13:02:54Z",
+      "side": 1,
+      "message": "If you write\n\nvar {...} \u003d ...\n\nyou\u0027re in a DeclarationParsingScope for \"var\" when you call ParseAssignmentExpression for \"{...} \u003d ...\". ParseAssignmentExpression does not create a new parsing scope for the LHS, it just runs in the outer parsing scope. Hence it\u0027ll know immediately that {...} is a declaration. That means that the pattern wasn\u0027t ambiguous, and we would immediately have thrown errors on RecordPatternError(...).\n\nSince we\u0027re in a DeclarationParsingScope, it\u0027s not valid to parse an expression; so ExpressionErrors are ignored automatically.\n\nSince everything was done eagerly (wasn\u0027t ambiguous), we don\u0027t need to classify anything.",
+      "parentUuid": "9b9b918c_8155e193",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "56d864c9_71b34f29",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 19
@@ -30,6 +48,24 @@
       "writtenOn": "2018-12-12T20:26:12Z",
       "side": 1,
       "message": "What are these TODOs about?",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b01172d7_85ae6cc5",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-13T13:02:54Z",
+      "side": 1,
+      "message": "Similar to having a DeclarationParsingScope where we know we\u0027re parsing a Declaration and can eagerly throw PatternErrors rather than classifying them, there are non-ambiguous cases where we parse an expression: they are known not to be an assignment expression.\n\nE.g., ParseForAwaitStatement has an ExpressionParsingScope before a ParseLeftHandSideExpression which can\u0027t be an assignment of course, so it\u0027s not ambiguous. Hence we can immediately throw upon seeing an ExpressionError and can ignore a PatternError.",
+      "parentUuid": "56d864c9_71b34f29",
       "revId": "127236c023f9b84353218df3068d7001308ee28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "3b51002d_910d4f27",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-13T13:02:54Z",
+      "side": 1,
+      "message": "Yes, the name is a bit weird now, I agree. I couldn\u0027t come up with anything better.\n\nAs for the second part: by now the entire parser is written in that style. Since we don\u0027t CHECK_OK anymore, but rather keep on running with has_error() -\u003e true and peek() -\u003e Token::ILLEGAL, and FailureExpressions etc; this should just work.",
+      "parentUuid": "141c9ff1_e6a9dbdf",
+      "range": {
+        "startLine": 104,
+        "startChar": 7,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0eced82_5150dfd3",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 19
@@ -70,6 +130,24 @@
       "writtenOn": "2018-12-12T20:26:12Z",
       "side": 1,
       "message": "We now have three ways to parse an AssignmentExpression:\n\nParseAssignmentExpression\nParseSingleExpression\nParseMaybeDestructuringTarget\n\nIt is not obvious from the names of these functions where they should be used. Have you thought about different ways of naming them? I\u0027m worried that someone modifying the parser in the future might easily use the wrong one, and at the least, bang their head against a wall for a little while.\n\n(I\u0027ll think about names too).",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cddf349c_2d1a2c34",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-13T13:02:54Z",
+      "side": 1,
+      "message": "I\u0027m not sure. I\u0027m clearly bad at naming :)\n\nParseSingleExpression was more in line with ParseExpression (vs ParseExpressionCoverGrammar). I think that by itself makes sense since ParseAssignmentExpression is what the spec talks about, while ParseSingleExpression / ParseExpression is what the client wants to do without thinking about the exact grammar entry point. \n\nParseMaybeDestructuringTarget is for the specific cases where you have a \"LHS\" for assignment within a bigger pattern. Technically that could be used outside of any ParseAssignmentExpression; but is partially inlined in there for the case that there is no AccumulationScope involved. It also does only just the limited amount of work that can\u0027t be done on the outside. In the case of the PreParser we can\u0027t look into the Assignment result to validate the LHS if it actually is an assignment, so ParseAssignmentExpression needs to validate it already.\n\nSo I just named the third case of the place where it should be used: as part of a destructuring pattern. Perhaps it should be named something like ParseMaybeDestructuringSubPattern...",
+      "parentUuid": "e0eced82_5150dfd3",
       "revId": "127236c023f9b84353218df3068d7001308ee28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -99,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "7dfc4c2a_13abc86b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-13T13:02:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3f9875a1_39a5322f",
+      "range": {
+        "startLine": 1409,
+        "startChar": 9,
+        "endLine": 1409,
+        "endChar": 11
+      },
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a1a238db_32c658e0",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 19
@@ -110,6 +212,24 @@
       "writtenOn": "2018-12-12T20:26:12Z",
       "side": 1,
       "message": "This is a little weird, but I understand why. Making a note for myself to come back here if I think of something better.",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "790ab6c8_4eb8f73a",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-13T13:02:54Z",
+      "side": 1,
+      "message": "Yeah I changed this to be able to have enough lookahead without using PeekAhead() in ParseAndClassify users that may turn into single-argument arrow functions so I can use ArrowHeadParsingScopes there rather than manually rechhecking the errors that this function would find. I find this a small price to pay for the significantly improved code quality on the caller side.",
+      "parentUuid": "a1a238db_32c658e0",
       "revId": "127236c023f9b84353218df3068d7001308ee28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -130,6 +250,24 @@
       "revId": "127236c023f9b84353218df3068d7001308ee28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f06959e8_f2037d6a",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 2669,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-13T13:02:54Z",
+      "side": 1,
+      "message": "I wanted something to make it clear that it actually chooses one of the 2 options rather than just validating it as one and ignoring the other. It also clears the ExpressionError since it otherwise would possibly invalidly be accumulated.\n\nI renamed it to what you suggested.",
+      "parentUuid": "64d3668f_360d54e9",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
