@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ddb6ff9_e8a67077",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:06:32Z",
+      "side": 1,
+      "message": "This should still be mov(target_reg, r2), right?",
+      "revId": "5890a00a48f2ea43627ed8bc5ddad3e3ce41e2fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f4b49d9_903dc6c9",
+        "filename": "src/interface-descriptors.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-13T11:06:32Z",
+      "side": 1,
+      "message": "We can probably define this in the .h file directly and just\n\n return GetRegisterParameter(0);",
+      "revId": "5890a00a48f2ea43627ed8bc5ddad3e3ce41e2fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
