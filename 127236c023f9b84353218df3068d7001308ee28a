@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "01422dc0_9c5673aa",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-13T21:29:41Z",
+      "side": 1,
+      "message": "Turns out that a slightly more complicated example is needed (since variable parsing uses ParseBindingPattern):\n\nvar [...[x] \u003d []] \u003d [];\n\nhits this. Though one can imagine a future where we used something other than ParseAssignmentExpression to parse the rest param there.\n\nThat said, this if-statement is used for now, so this does answer my question.",
+      "parentUuid": "95629aa4_8b149db2",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56d864c9_71b34f29",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 19
@@ -119,6 +137,30 @@
     },
     {
       "key": {
+        "uuid": "aaffea5e_145c349a",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-13T21:29:41Z",
+      "side": 1,
+      "message": "Sounds reasonable. Will think more on the naming, but I\u0027m not against Record for now, could make that change in a followup. Something worth mentioning in the class comment, though.",
+      "parentUuid": "3b51002d_910d4f27",
+      "range": {
+        "startLine": 104,
+        "startChar": 7,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0eced82_5150dfd3",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 19
@@ -148,6 +190,24 @@
       "side": 1,
       "message": "I\u0027m not sure. I\u0027m clearly bad at naming :)\n\nParseSingleExpression was more in line with ParseExpression (vs ParseExpressionCoverGrammar). I think that by itself makes sense since ParseAssignmentExpression is what the spec talks about, while ParseSingleExpression / ParseExpression is what the client wants to do without thinking about the exact grammar entry point. \n\nParseMaybeDestructuringTarget is for the specific cases where you have a \"LHS\" for assignment within a bigger pattern. Technically that could be used outside of any ParseAssignmentExpression; but is partially inlined in there for the case that there is no AccumulationScope involved. It also does only just the limited amount of work that can\u0027t be done on the outside. In the case of the PreParser we can\u0027t look into the Assignment result to validate the LHS if it actually is an assignment, so ParseAssignmentExpression needs to validate it already.\n\nSo I just named the third case of the place where it should be used: as part of a destructuring pattern. Perhaps it should be named something like ParseMaybeDestructuringSubPattern...",
       "parentUuid": "e0eced82_5150dfd3",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e678f52f_b5526d95",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-13T21:29:41Z",
+      "side": 1,
+      "message": "\"ParsePossibleDestructuringSubPattern\"? \"Possible\" scans better as part of that name than \"maybe\", though I guess we already have plenty of \"maybes\" around the codebase.\n\nAs for ParseExpression, that\u0027s referring to \"Expression\" in the spec grammar. So maybe ParseAssignmentExpressionCoverGrammar would be the \"right\" name for ParseAssignmentExpression, and ParseSingleExpression could be renamed ParseAssignmentExpression. WDYT? Are these names ridiculously long?",
+      "parentUuid": "cddf349c_2d1a2c34",
       "revId": "127236c023f9b84353218df3068d7001308ee28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -233,6 +293,24 @@
       "revId": "127236c023f9b84353218df3068d7001308ee28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63ca85aa_fd6cd1a8",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-13T21:29:41Z",
+      "side": 1,
+      "message": "Yeah, anything else I can think of and achieves that lack of PeekAhead isn\u0027t really any better. So this is OK for now, just a small wart.",
+      "parentUuid": "790ab6c8_4eb8f73a",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
