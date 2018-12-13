@@ -54,6 +54,7 @@ class Execution final : public AllStatic {
                                      Target target = Target::kCallable);
   // Convenience method for performing RunMicrotasks
   static MaybeHandle<Object> RunMicrotasks(Isolate* isolate,
+                                           Handle<Foreign> microtask_queue,
                                            MessageHandling message_handling,
                                            MaybeHandle<Object>* exception_out);
 };
