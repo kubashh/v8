@@ -234,6 +234,8 @@ class JSFunctionRef : public JSObjectRef {
 
   void Serialize();
 
+  bool serialized() const;
+
   // The following are available only after calling Serialize().
   ObjectRef prototype() const;
   MapRef initial_map() const;
