@@ -22,6 +22,30 @@
       "revId": "527167bfbcd205cf5d39c83dee24799824f7854a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f41be7f1_b2192b92",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2018-12-14T00:38:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "654c5189_eabacd42",
+      "range": {
+        "startLine": 421,
+        "startChar": 0,
+        "endLine": 421,
+        "endChar": 34
+      },
+      "revId": "527167bfbcd205cf5d39c83dee24799824f7854a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
