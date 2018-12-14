@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "654c5189_eabacd42",
+        "filename": "src/objects/js-date-time-format.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2018-12-14T00:30:07Z",
+      "side": 1,
+      "message": "Why is this a reference?",
+      "range": {
+        "startLine": 421,
+        "startChar": 0,
+        "endLine": 421,
+        "endChar": 34
+      },
+      "revId": "527167bfbcd205cf5d39c83dee24799824f7854a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
