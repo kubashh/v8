@@ -183,6 +183,29 @@
       "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de260b11_6147c7a1",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-14T08:07:26Z",
+      "side": 1,
+      "message": "Comment would be good! Took me a while to understand why it\u0027s done this way around, but it\u0027s because we reuse the same ExpressionScope and just stash the errors away and clear them. (Based on other comments it\u0027s not clear that we don\u0027t use different ExpressionScopes for the sibling expressions and then Accumulate all of them here.)",
+      "range": {
+        "startLine": 398,
+        "startChar": 7,
+        "endLine": 398,
+        "endChar": 17
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
