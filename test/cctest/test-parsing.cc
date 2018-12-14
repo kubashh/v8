@@ -1613,10 +1613,10 @@ void TestParserSyncWithFlags(i::Handle<i::String> source,
   // Parse the data
   i::FunctionLiteral* function;
   {
+    SetGlobalFlags(flags);
     i::Handle<i::Script> script = factory->NewScript(source);
     i::ParseInfo info(isolate, script);
     info.set_allow_lazy_parsing(flags.Contains(kAllowLazy));
-    SetGlobalFlags(flags);
     if (is_module) info.set_module();
     i::parsing::ParseProgram(&info, isolate);
     function = info.literal();
