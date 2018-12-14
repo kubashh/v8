@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "abd6b10a_dc31b8c0",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "01422dc0_9c5673aa",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56d864c9_71b34f29",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 19
@@ -87,6 +105,24 @@
       "revId": "127236c023f9b84353218df3068d7001308ee28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a7b0ca9_eb03fb5c",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b01172d7_85ae6cc5",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +197,30 @@
     },
     {
       "key": {
+        "uuid": "67f8504a_f8915471",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aaffea5e_145c349a",
+      "range": {
+        "startLine": 104,
+        "startChar": 7,
+        "endLine": 104,
+        "endChar": 29
+      },
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e0eced82_5150dfd3",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 19
@@ -211,6 +271,24 @@
       "revId": "127236c023f9b84353218df3068d7001308ee28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba73ba01_d0475694",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e678f52f_b5526d95",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -308,6 +386,24 @@
       "side": 1,
       "message": "Yeah, anything else I can think of and achieves that lack of PeekAhead isn\u0027t really any better. So this is OK for now, just a small wart.",
       "parentUuid": "790ab6c8_4eb8f73a",
+      "revId": "127236c023f9b84353218df3068d7001308ee28a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8f897bc2_e78a49c2",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "63ca85aa_fd6cd1a8",
       "revId": "127236c023f9b84353218df3068d7001308ee28a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false

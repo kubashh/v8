@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "50fcfafd_13f54149",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcad7fb0_b4e16254",
+      "range": {
+        "startLine": 41,
+        "startChar": 3,
+        "endLine": 43,
+        "endChar": 36
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf521dbd_1c84611a",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 21
@@ -68,6 +92,30 @@
       "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa47736e_8cd14b5d",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "See answer to adam\u0027s question: https://chromium-review.googlesource.com/c/v8/v8/+/1367809/19/src/parsing/expression-scope.h#52",
+      "parentUuid": "bf521dbd_1c84611a",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 35
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "1c76a581_b7742daa",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ca9b017_2685f793",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 35
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d0d65db_069142ef",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 21
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "21460836_1f395938",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d0d65db_069142ef",
+      "range": {
+        "startLine": 63,
+        "startChar": 7,
+        "endLine": 63,
+        "endChar": 38
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7387c51f_6a90bcda",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 21
@@ -128,6 +224,30 @@
       "writtenOn": "2018-12-14T07:57:36Z",
       "side": 1,
       "message": "(Re: previous comment, e.g., here I understand that if it can\u0027t be a parameter declaration, we can skip recording the error. So this is clear.)",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 45
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c10b25a_c7a92207",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Well in this case it\u0027s about the LHS of a parameter. That\u0027s easy to see since it\u0027s not nested. The above cases are about the RHS and will span multiple ExpressionScopes; and actually walk the scopes if it is ambiguous even if they turn out to be functions. That\u0027s a bit weird and it\u0027s why\n\no \u003d function(await) {}\n\nis different from\n\no \u003d (await) \u003d\u003e 0\n\nas a parameter in an async function: The former is allowed, the latter isn\u0027t.\nIt\u0027s that fact that allows us to immediately propagate it everywhere actually. Otherwise we would have needed to accumulate the errors after disambiguating the scopes.",
+      "parentUuid": "7387c51f_6a90bcda",
       "range": {
         "startLine": 90,
         "startChar": 4,
@@ -163,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "3937fece_54e32c59",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b2c2669_137610c6",
+      "range": {
+        "startLine": 201,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 2
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cac963ba_25833713",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 21
@@ -186,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "0b3894c9_96059a6b",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cac963ba_25833713",
+      "range": {
+        "startLine": 358,
+        "startChar": 31,
+        "endLine": 359,
+        "endChar": 22
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de260b11_6147c7a1",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 21
@@ -206,6 +374,30 @@
       "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "586aa52d_68215b18",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:23:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de260b11_6147c7a1",
+      "range": {
+        "startLine": 398,
+        "startChar": 7,
+        "endLine": 398,
+        "endChar": 17
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
