@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "88820d79_f311100e",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:26:37Z",
+      "side": 1,
+      "message": "This is mentioned above the relevant classes.",
+      "parentUuid": "50b5f2dc_50d03caa",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 53
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcad7fb0_b4e16254",
         "filename": "src/parsing/expression-scope.h",
         "patchSetId": 21
@@ -257,6 +281,30 @@
       "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1248966b_fa2a5e33",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-14T09:26:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c10b25a_c7a92207",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 45
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
