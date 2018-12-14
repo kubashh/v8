@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50b5f2dc_50d03caa",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-14T07:57:36Z",
+      "side": 1,
+      "message": "Can you also mention here what happens in the ambiguous cases (arrow function / async arrow function / parenthesized comma separated / async function call)",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 27,
+        "endChar": 53
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcad7fb0_b4e16254",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-14T07:57:36Z",
+      "side": 1,
+      "message": "Should these be called kMaybeArrow... etc.?",
+      "range": {
+        "startLine": 41,
+        "startChar": 3,
+        "endLine": 43,
+        "endChar": 36
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf521dbd_1c84611a",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-14T07:57:36Z",
+      "side": 1,
+      "message": "Why this? I.e., when do we call ValidateAsPattern when CanBeExpression is false and... why don\u0027t we validate and... wat?",
+      "range": {
+        "startLine": 52,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 35
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ca9b017_2685f793",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-14T07:57:36Z",
+      "side": 1,
+      "message": "Does this mean that we\u0027re already sure that it\u0027s not... wait... wat...? I thought this is a shortcut where we know it\u0027s not going to be used as an \"async arrow parameters\" so we don\u0027t need to record an error, but what does CanBeExpression() have to do with that?\n\nIn any case, pls add a comment.",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 35
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d0d65db_069142ef",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-14T07:57:36Z",
+      "side": 1,
+      "message": "This function could use a short comment explaining why we need to do the scope walk.",
+      "range": {
+        "startLine": 63,
+        "startChar": 7,
+        "endLine": 63,
+        "endChar": 38
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7387c51f_6a90bcda",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-14T07:57:36Z",
+      "side": 1,
+      "message": "(Re: previous comment, e.g., here I understand that if it can\u0027t be a parameter declaration, we can skip recording the error. So this is clear.)",
+      "range": {
+        "startLine": 90,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 45
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b2c2669_137610c6",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-14T07:57:36Z",
+      "side": 1,
+      "message": "DISALLOW_COPY_AND_ASSIGN missing? (Here and elsewhere.)",
+      "range": {
+        "startLine": 201,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 2
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cac963ba_25833713",
+        "filename": "src/parsing/expression-scope.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-14T07:57:36Z",
+      "side": 1,
+      "message": "Can you add the examples in this comment (everything\u0027s easier to understand with examples :)) Based on this comment, I don\u0027t think anybody who doesn\u0027t already know what it means will understand what \"multiple ambiguous expressions and declarations in the same scope\" means.",
+      "range": {
+        "startLine": 358,
+        "startChar": 31,
+        "endLine": 359,
+        "endChar": 22
+      },
+      "revId": "e0f19b5c81009a8dd4b605facf2d681ad9b8d29e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
