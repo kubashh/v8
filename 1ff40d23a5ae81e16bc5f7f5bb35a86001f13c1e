@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b86b6a6_82fc9885",
+        "filename": "src/ast/source-range-ast-visitor.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1317214
+      },
+      "writtenOn": "2018-12-14T22:00:09Z",
+      "side": 1,
+      "message": "Is this addressing the same issue that I was attempting to address by erasing the continuation information attached to the else_statement and then_statement of an IfStatement?\n\ncontinuation_positions_.find(continuation.start) !\u003d continuation_positions_.end()\n\n☝ this is saying that the first range that starts at a position takes precedence? I think this addresses the then_statement, but will it address the source map range associated with an else_statement, which I would think starts at a position later than the IfStatement/then_statement.",
+      "revId": "1ff40d23a5ae81e16bc5f7f5bb35a86001f13c1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

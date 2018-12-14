@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73c319c5_b3c280bd",
+        "filename": "src/debug/debug-coverage.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1317214
+      },
+      "writtenOn": "2018-12-14T22:00:09Z",
+      "side": 0,
+      "message": "I think you said this was part of what was causing weirdness around IfStatements?",
+      "revId": "4516efa12d7c6cb3457da2eeefbce5b376131576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4a49619_623bccac",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1317214
+      },
+      "writtenOn": "2018-12-14T22:00:09Z",
+      "side": 0,
+      "message": "So that I better understand the code we\u0027re removing, could you summarize for me what types of statements we were skipping generating continuation counters for prior to this change? \n\nThe reason that we no longer remove source ranges is so that we can rely on the fact that a parent source range will increment a line counter, if an enclosed continuation range is removed?",
+      "revId": "4516efa12d7c6cb3457da2eeefbce5b376131576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18317fd6_8ade6cfc",
+        "filename": "src/interpreter/control-flow-builders.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1317214
+      },
+      "writtenOn": "2018-12-14T22:00:09Z",
+      "side": 0,
+      "message": "I\u0027m curious if this will create enough additional counters as to impact performance, this will be easier to tell when we run this against some large JavaScript codebases with Node.js.",
+      "revId": "4516efa12d7c6cb3457da2eeefbce5b376131576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
