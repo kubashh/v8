@@ -288,6 +288,14 @@ bool JSInliner::DetermineCallTarget(
   if (match.HasValue() && match.Value()->IsJSFunction()) {
     Handle<JSFunction> function = Handle<JSFunction>::cast(match.Value());
 
+    JSFunctionRef ref = JSFunctionRef(broker(), function);
+    if (ref.extra_serialized()) {
+      ++inlined;
+    } else {
+      ++failed;
+      return false;
+    }
+
     // Disallow cross native-context inlining for now. This means that all parts
     // of the resulting code will operate on the same global object. This also
     // prevents cross context leaks, where we could inline functions from a
