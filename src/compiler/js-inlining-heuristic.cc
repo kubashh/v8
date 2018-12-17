@@ -197,7 +197,13 @@ Reduction JSInliningHeuristic::Reduce(Node* node) {
   return NoChange();
 }
 
+unsigned JSInliningHeuristic::total_inlined = 0;
+unsigned JSInliningHeuristic::total_failed = 0;
+
 void JSInliningHeuristic::Finalize() {
+  total_inlined += inliner_.inlined;
+  total_failed += inliner_.failed;
+
   if (candidates_.empty()) return;  // Nothing to do without candidates.
   if (FLAG_trace_turbo_inlining) PrintCandidates();
 
