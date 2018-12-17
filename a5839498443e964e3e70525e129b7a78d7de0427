@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7700f482_c26cbc3e",
+        "filename": "test/mjsunit/es8/async-arrow-default-function-await.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-17T23:52:05Z",
+      "side": 1,
+      "message": "Why was this test added? If it\u0027s a positive parsing test, cctest/test-parsing.cc seems like a better place for it.",
+      "revId": "a5839498443e964e3e70525e129b7a78d7de0427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbac8fcf_bbb9346d",
+        "filename": "test/mjsunit/regress/regress-903874.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-17T23:52:05Z",
+      "side": 1,
+      "message": "Can you explain what happened with this test?",
+      "revId": "a5839498443e964e3e70525e129b7a78d7de0427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
