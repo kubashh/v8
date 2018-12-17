@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2c9c6ba4_cd39e91a",
+        "filename": "src/debug/debug-coverage.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-17T09:04:57Z",
+      "side": 0,
+      "message": "Well, duplicate singletons were being merged by this pass; but the real problem already occurred much earlier, when we generated two continuation ranges with identical positions but differing execution counts.\n\nThis pass is now removed since the visitor ensures no duplicate singletons exist.",
+      "parentUuid": "73c319c5_b3c280bd",
+      "revId": "4516efa12d7c6cb3457da2eeefbce5b376131576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f4a49619_623bccac",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 11
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "d809650b_f54ffac0",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-17T09:04:57Z",
+      "side": 0,
+      "message": "This was an optimization to skip range generation for blocks not containing any breakable control flow (continue, break, return). These blocks were not interesting for coverage purposes since their execution count should always equal their parent execution count.\n\nWe can\u0027t do this anymore due to removal of the last continuation range within a block (which was the main point of this CL). We can only remove the last continuation if we can rely on the block range itself being generated.",
+      "parentUuid": "f4a49619_623bccac",
+      "revId": "4516efa12d7c6cb3457da2eeefbce5b376131576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18317fd6_8ade6cfc",
         "filename": "src/interpreter/control-flow-builders.cc",
         "patchSetId": 11
@@ -47,6 +83,24 @@
       "writtenOn": "2018-12-14T22:00:09Z",
       "side": 0,
       "message": "I\u0027m curious if this will create enough additional counters as to impact performance, this will be easier to tell when we run this against some large JavaScript codebases with Node.js.",
+      "revId": "4516efa12d7c6cb3457da2eeefbce5b376131576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a90e707_1439e15b",
+        "filename": "src/interpreter/control-flow-builders.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-17T09:04:57Z",
+      "side": 0,
+      "message": "Yeah, I\u0027m curious too, let me know if you notice something. By the way, there\u0027s still a very easy way to improve block coverage perf: replace the Runtime::kIncBlockCounter call with a builtin :)",
+      "parentUuid": "18317fd6_8ade6cfc",
       "revId": "4516efa12d7c6cb3457da2eeefbce5b376131576",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
