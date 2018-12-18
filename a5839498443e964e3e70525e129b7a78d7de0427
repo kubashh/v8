@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6d46029c_c37ec32a",
+        "filename": "test/mjsunit/es8/async-arrow-default-function-await.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2018-12-18T07:52:30Z",
+      "side": 1,
+      "message": "Btw, there\u0027s value in having these in .js tests - ClusterFuzz will pick up snippets from these tests, but it won\u0027t pick up anything from cctests.",
+      "parentUuid": "7700f482_c26cbc3e",
+      "revId": "a5839498443e964e3e70525e129b7a78d7de0427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bbac8fcf_bbb9346d",
         "filename": "test/mjsunit/regress/regress-903874.js",
         "patchSetId": 25
