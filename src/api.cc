@@ -10648,7 +10648,6 @@ void HandleScopeImplementer::IterateThis(RootVisitor* v) {
   DCHECK(last_handle_before_deferred_block_ == nullptr ||
          found_block_before_deferred);
 
-  // Iterate over live handles in the last block (if any).
   if (!blocks()->empty()) {
     v->VisitRootPointers(Root::kHandleScope, nullptr,
                          FullObjectSlot(blocks()->back()),
