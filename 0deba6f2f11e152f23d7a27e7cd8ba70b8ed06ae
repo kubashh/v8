@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e09dfa5_3e08bad2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3151,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "nit: stray newline.",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f52bcc8c_a71ce848",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3166,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "Since there is common code after the if, you could avoid the local variable and return from the if directly (as in SetGlobal).",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9acebc9_18e9d364",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3175,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "nit: stray newline.",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f83d59bf_bf5cb20a",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3176,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "Else after return is disallowed by the styleguide.",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5eab501_54fc6905",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "nit: unneeded local, can be inlined.",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbfe2f13_1ae4ab04",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1193,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "This \"fast path\" does not save anything, but adds complexity. Should be removed.",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "021c5f7c_d9435f6d",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "The {size} local is only needed in the else branch, should be moved there.",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b6d9b2e_8aaa88a4",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "This should be assertNull.",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7815c40_bff128cf",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "This should be assertNull.",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03608c32_22f278a8",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "This should be assertSame.",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57e83458_219f75e3",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "assertSame",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7e8f20c_3a7442a7",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T10:56:05Z",
+      "side": 1,
+      "message": "assertSame(test_value, result);",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
