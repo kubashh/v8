@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "90168524_03e57a47",
+        "filename": "test/mjsunit/es8/async-arrow-default-function-await.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-18T08:30:22Z",
+      "side": 1,
+      "message": "This test was added because along the way I broke the case where a default parameter was a function with await as parameter.\n\nI broke it accidentally because a default parameter of an async arrow function is not allowed to be an *arrow* function with a parameter await. Regular functions are allowed to have await.\n\nEven if there would have been a test for it (I didn\u0027t look) it wouldn\u0027t have immediately triggered since the error only became apparent if the function was eagerly parsed; hence the () around function.\n\nThe test isn\u0027t looking for a result beyond simply not resulting in SyntaxError, so I think it\u0027s fine for the test to be here tbh. + what marja says :)",
+      "parentUuid": "6d46029c_c37ec32a",
+      "revId": "a5839498443e964e3e70525e129b7a78d7de0427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bbac8fcf_bbb9346d",
         "filename": "test/mjsunit/regress/regress-903874.js",
         "patchSetId": 25
@@ -48,6 +66,24 @@
       "writtenOn": "2018-12-17T23:52:05Z",
       "side": 1,
       "message": "Can you explain what happened with this test?",
+      "revId": "a5839498443e964e3e70525e129b7a78d7de0427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f667f90_c65c2fdf",
+        "filename": "test/mjsunit/regress/regress-903874.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2018-12-18T08:30:22Z",
+      "side": 1,
+      "message": "Originally the test would throw a stack overflow since cover grammar parsing would have to complete before we figure out that there\u0027s a syntax error. Now since the parser is guided by the ExpressionScope and knows what it\u0027s doing, it\u0027ll figure out immediately that there\u0027s a syntax error.",
+      "parentUuid": "bbac8fcf_bbb9346d",
       "revId": "a5839498443e964e3e70525e129b7a78d7de0427",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
