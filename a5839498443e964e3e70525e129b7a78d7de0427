@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "d99ddf27_06d73047",
+        "filename": "test/mjsunit/es8/async-arrow-default-function-await.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-18T17:27:04Z",
+      "side": 1,
+      "message": "\"Not resulting in a syntax error\" is precisely what the test-parsing tests are about.\n\nThe clusterfuzz thing sounds like a more general issue that we might want to look into. I\u0027ve long wanted to make test-parsing.cc less of a bother to update, perhaps we could somehow refactor it into an mjsunit test (though we\u0027d probably have to add some more flags somewhere...).",
+      "parentUuid": "90168524_03e57a47",
+      "revId": "a5839498443e964e3e70525e129b7a78d7de0427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bbac8fcf_bbb9346d",
         "filename": "test/mjsunit/regress/regress-903874.js",
         "patchSetId": 25
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Originally the test would throw a stack overflow since cover grammar parsing would have to complete before we figure out that there\u0027s a syntax error. Now since the parser is guided by the ExpressionScope and knows what it\u0027s doing, it\u0027ll figure out immediately that there\u0027s a syntax error.",
       "parentUuid": "bbac8fcf_bbb9346d",
+      "revId": "a5839498443e964e3e70525e129b7a78d7de0427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bf759bb_faa7a8a5",
+        "filename": "test/mjsunit/regress/regress-903874.js",
+        "patchSetId": 25
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2018-12-18T17:27:04Z",
+      "side": 1,
+      "message": "Looking at the bug, this was supposed to be testing stack overflow checking, so it doesn\u0027t seem like this regression test is actually testing the bugfix anymore.",
+      "parentUuid": "3f667f90_c65c2fdf",
       "revId": "a5839498443e964e3e70525e129b7a78d7de0427",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
