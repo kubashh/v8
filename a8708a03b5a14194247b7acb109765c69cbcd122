@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "73197b9d_6d5e1cc9",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-12-18T17:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a64bdfa3_a22b5115",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74f6e29c_fb622e9e",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 10
@@ -30,6 +48,24 @@
       "writtenOn": "2018-12-12T21:10:07Z",
       "side": 1,
       "message": "Rather than using a template here, I think it would be cleaner to always take a `const std::string\u0026`, and convert the `i::Handle\u003ci::String\u003e` to a std::string at the call site.",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4ac152e_508693ee",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-12-18T17:34:03Z",
+      "side": 1,
+      "message": "I\u0027m not fully satisfied with the template function here, but it solve an issue: first, EnforceUint32 needs to accept both a string (when used for an argument) or a Handle\u003cString\u003e (when used for a property). We want to avoid the Handle\u003cString\u003e conversion cost because it is only used for error messages.\n\nAnother solution could be to pass a function that returns a string, but it seemed more tedious to type to me. Please let me know if you have another solution in mind.",
+      "parentUuid": "74f6e29c_fb622e9e",
       "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "b2817a6c_ce3b760c",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1266,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-12-18T17:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16f93dc0_d739928a",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2bdedd59_43aa49b0",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 10
@@ -64,6 +118,24 @@
       "writtenOn": "2018-12-12T21:10:07Z",
       "side": 1,
       "message": "This test seems wrong if we assume grow_by is unsigned, it will never be interpreted as negative, so this happens only when the value wraps (which should be the same as the first case).",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51c4b0a9_358ee4b1",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-12-18T17:34:03Z",
+      "side": 1,
+      "message": "I\u0027m not sure to understand; new_size and old_size are both representing the memory size (absolutely), we are testing if the new size is smaller.",
+      "parentUuid": "2bdedd59_43aa49b0",
       "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
