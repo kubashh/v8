@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2299b0b7_69d4cf37",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3151,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e09dfa5_3e08bad2",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f52bcc8c_a71ce848",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7557e7a_736bef37",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3166,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f52bcc8c_a71ce848",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f2455597_bcc7df7b",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3175,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9acebc9_18e9d364",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f83d59bf_bf5cb20a",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac81f513_2e8335a6",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 3176,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f83d59bf_bf5cb20a",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "40f7e675_5c6915c1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1917,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5eab501_54fc6905",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dbfe2f13_1ae4ab04",
         "filename": "src/wasm/module-decoder.cc",
         "patchSetId": 4
@@ -101,6 +191,24 @@
       "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0062f46_d5439f47",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1193,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbfe2f13_1ae4ab04",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "ab64befa_daec0b04",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "021c5f7c_d9435f6d",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b6d9b2e_8aaa88a4",
         "filename": "test/mjsunit/wasm/anyref-globals.js",
         "patchSetId": 4
@@ -135,6 +261,24 @@
       "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08c0817c_7cdf4263",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b6d9b2e_8aaa88a4",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "dc882a9f_de106d6b",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7815c40_bff128cf",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03608c32_22f278a8",
         "filename": "test/mjsunit/wasm/anyref-globals.js",
         "patchSetId": 4
@@ -169,6 +331,24 @@
       "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4773a149_2c759079",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03608c32_22f278a8",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "f86cdb5c_1b6d4e3b",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57e83458_219f75e3",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7e8f20c_3a7442a7",
         "filename": "test/mjsunit/wasm/anyref-globals.js",
         "patchSetId": 4
@@ -203,6 +401,24 @@
       "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6a10d12_af40db78",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2018-12-18T11:56:34Z",
+      "side": 1,
+      "message": "No, test_value is `null` here because I set it to `null` in Line 104. I want to make the object unreachable in this function, so that the only reference which keeps it alive is the anyref global.",
+      "parentUuid": "b7e8f20c_3a7442a7",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
