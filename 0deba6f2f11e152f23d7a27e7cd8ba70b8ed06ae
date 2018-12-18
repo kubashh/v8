@@ -419,6 +419,24 @@
       "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac4b89c0_197d68a5",
+        "filename": "test/mjsunit/wasm/anyref-globals.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2018-12-18T13:16:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b6a10d12_af40db78",
+      "revId": "0deba6f2f11e152f23d7a27e7cd8ba70b8ed06ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
