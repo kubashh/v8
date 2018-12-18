@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fb0e4833_74affddc",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-18T03:35:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cba9d7c9_14d10924",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0026e92_204d39d1",
         "filename": "src/execution.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4fffba3_b71920f7",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-18T03:35:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0026e92_204d39d1",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "32a03ea1_f4030087",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-18T03:35:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3991f30_bb7007e8",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "61e4427a_dd9a90ec",
         "filename": "src/execution.cc",
         "patchSetId": 4
@@ -64,6 +118,24 @@
       "writtenOn": "2018-12-13T11:35:25Z",
       "side": 1,
       "message": "q: I\u0027m not sure if clang-format allows this, but can we remove the space before *?",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aa28905_e7161a05",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-18T03:35:16Z",
+      "side": 1,
+      "message": "clang-format seems to fail to handle this case. Let me disable it here.",
+      "parentUuid": "61e4427a_dd9a90ec",
       "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "ec3595d6_513b0016",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-18T03:35:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3948a27f_a7a66c78",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e405225c_410d9de3",
         "filename": "src/execution.cc",
         "patchSetId": 4
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "f0783e8b_000ecf7a",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-18T03:35:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e405225c_410d9de3",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86930745_431ab1df",
         "filename": "src/execution.cc",
         "patchSetId": 4
@@ -118,6 +226,24 @@
       "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96b40be5_f5edde36",
+        "filename": "src/execution.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2018-12-18T03:35:16Z",
+      "side": 1,
+      "message": "SG. Updated.",
+      "parentUuid": "86930745_431ab1df",
+      "revId": "d0a536fba431e2493d140f4117eb1a43122b5dcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
