@@ -29,9 +29,6 @@
 // We reserve the V8_* prefix for macros defined in V8 public API and
 // assume there are no name conflicts with the embedder's code.
 
-/**
- * The v8 JavaScript engine.
- */
 namespace v8 {
 
 class AccessorSignature;
