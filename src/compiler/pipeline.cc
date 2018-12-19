@@ -64,6 +64,7 @@
 #include "src/compiler/schedule.h"
 #include "src/compiler/scheduler.h"
 #include "src/compiler/select-lowering.h"
+#include "src/compiler/serializer-for-background-compilation.h"
 #include "src/compiler/simplified-lowering.h"
 #include "src/compiler/simplified-operator-reducer.h"
 #include "src/compiler/simplified-operator.h"
@@ -1113,6 +1114,13 @@ struct InliningPhase {
     AddReducer(data, &graph_reducer, &call_reducer);
     AddReducer(data, &graph_reducer, &inlining);
     graph_reducer.ReduceGraph();
+
+    // printf("Inlined: %u Failed: %u\n", inlining.total_inlined,
+    //        inlining.total_failed);
+    // printf("Success ratio: %f\n",
+    //        inlining.total_inlined / static_cast<float>(inlining.total_inlined
+    //        +
+    //                                                    inlining.total_failed));
   }
 };
 
@@ -1187,6 +1195,20 @@ struct CopyMetadataForConcurrentCompilePhase {
     NodeVector cached_nodes(temp_zone);
     data->jsgraph()->GetCachedNodes(&cached_nodes);
     for (Node* const node : cached_nodes) graph_reducer.ReduceNode(node);
+  }
+};
+
+// TODO(turbofan): Move all calls from CopyMetaDataForConcurrentCompilePhase
+// here. Also all the calls to Serialize* methods that are currently sprinkled
+// over inlining will move here as well.
+struct SerializationPhase {
+  static const char* phase_name() { return "serialize bytecode"; }
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    // TODO(mslekova): Think whether we should pass the temp_zone
+    SerializerForBackgroundCompilation serializer(data->broker(), temp_zone,
+                                                  data->info()->closure());
+    serializer.Run();
   }
 };
 
@@ -1870,15 +1892,19 @@ bool PipelineImpl::CreateGraph() {
     data->node_origins()->AddDecorator();
   }
 
+  if (FLAG_concurrent_inlining) {
+    data->broker()->StartSerializing();
+    Run<SerializeStandardObjectsPhase>();
+    Run<SerializationPhase>();
+  } else {
+    data->broker()->SetNativeContextRef();
+  }
+
   Run<GraphBuilderPhase>();
   RunPrintAndVerify(GraphBuilderPhase::phase_name(), true);
 
   if (FLAG_concurrent_inlining) {
-    data->broker()->StartSerializing();
-    Run<SerializeStandardObjectsPhase>();
     Run<CopyMetadataForConcurrentCompilePhase>();
-  } else {
-    data->broker()->SetNativeContextRef();
   }
 
   // Perform function context specialization and inlining (if enabled).

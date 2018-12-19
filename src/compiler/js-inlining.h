@@ -27,6 +27,8 @@ class JSInliner final : public AdvancedReducer {
             JSGraph* jsgraph, JSHeapBroker* broker,
             SourcePositionTable* source_positions)
       : AdvancedReducer(editor),
+        inlined(0),
+        failed(0),
         local_zone_(local_zone),
         info_(info),
         jsgraph_(jsgraph),
@@ -41,6 +43,9 @@ class JSInliner final : public AdvancedReducer {
   // Can be used by inlining heuristics or by testing code directly, without
   // using the above generic reducer interface of the inlining machinery.
   Reduction ReduceJSCall(Node* node);
+
+  unsigned inlined;
+  unsigned failed;
 
  private:
   Zone* zone() const { return local_zone_; }
