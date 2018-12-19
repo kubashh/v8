@@ -704,6 +704,30 @@
       "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eb90411e_f897b4b5",
+        "filename": "src/heap/store-buffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T19:40:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "177a3194_791bc2d2",
+      "range": {
+        "startLine": 33,
+        "startChar": 21,
+        "endLine": 33,
+        "endChar": 43
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
