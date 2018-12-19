@@ -488,6 +488,8 @@ class V8_EXPORT_PRIVATE BytecodeArrayBuilder final {
 
   void InitializeReturnPosition(FunctionLiteral* literal);
 
+  void ClearPosition() { latest_source_info_.set_invalid(); }
+
   void SetStatementPosition(Statement* stmt) {
     if (stmt->position() == kNoSourcePosition) return;
     latest_source_info_.MakeStatementPosition(stmt->position());
