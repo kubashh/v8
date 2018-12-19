@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1fcb004_f20877f4",
+        "filename": "src/heap/concurrent-marking.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T18:00:30Z",
+      "side": 1,
+      "message": "Only this line and lines 378, 385 - 392 differ from the main thread VisitMap.\nIn other words, we load the instance descriptors using acquire load and handle the case when map-\u003eNumberOfOwnDescriptors is out of sync with the instance descriptors.",
+      "range": {
+        "startLine": 368,
+        "startChar": 3,
+        "endLine": 368,
+        "endChar": 36
+      },
+      "revId": "cd1856c529653b2d86def351a0c2ee783a20cb53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25d2552d_0c2050cd",
+        "filename": "src/heap/mark-compact-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T18:00:30Z",
+      "side": 1,
+      "message": "The changes in this function are purely refactoring:\n1) map \u003d\u003e meta_map\n2) object \u003d\u003e map\n3) MarkMapContents is inlined.",
+      "range": {
+        "startLine": 189,
+        "startChar": 1,
+        "endLine": 189,
+        "endChar": 56
+      },
+      "revId": "cd1856c529653b2d86def351a0c2ee783a20cb53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "785950d5_083dfcd4",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T18:00:30Z",
+      "side": 1,
+      "message": "The Map::NumberOfOwnDescriptors is stored in this field and accessed from the concurrent marker.",
+      "range": {
+        "startLine": 637,
+        "startChar": 2,
+        "endLine": 637,
+        "endChar": 28
+      },
+      "revId": "cd1856c529653b2d86def351a0c2ee783a20cb53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
