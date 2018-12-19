@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4aefc4a9_cec9283b",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T20:34:52Z",
+      "side": 1,
+      "message": "Sorry, I just noticed that this actually obscures the behavior a little; EnforceUint32 is passed a `const char[]`, so providing a `const std::string\u0026` parameter here is doing an implicit conversion at the call site.\n\nGiven that, I think it might be clearer to change the signature here to `const char*` and have it return `std::string(name)`.",
+      "revId": "7d2f067fcc54b738e77cbce68ea9f7a02c7f16a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c854c108_7e61d993",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T20:34:52Z",
+      "side": 1,
+      "message": "I think the Handle should generally be passed by value",
+      "revId": "7d2f067fcc54b738e77cbce68ea9f7a02c7f16a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59ac51a5_a2f145e4",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T20:34:52Z",
+      "side": 1,
+      "message": "you can use DCHECK_LE for this",
+      "revId": "7d2f067fcc54b738e77cbce68ea9f7a02c7f16a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
