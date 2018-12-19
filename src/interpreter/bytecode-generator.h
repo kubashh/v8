@@ -215,13 +215,14 @@ class BytecodeGenerator final : public AstVisitor<BytecodeGenerator> {
 
   AssignmentLhsData PrepareAssignmentLhs(Expression* lhs);
   void BuildAssignment(AssignmentLhsData data, Token::Value op,
-                       LookupHoistingMode lookup_hoisting_mode);
+                       LookupHoistingMode lookup_hoisting_mode,
+                       bool value_can_be_nil);
   void BuildDestructuringArrayAssignment(
       ArrayLiteral* pattern, Token::Value op,
       LookupHoistingMode lookup_hoisting_mode);
   void BuildDestructuringObjectAssignment(
       ObjectLiteral* pattern, Token::Value op,
-      LookupHoistingMode lookup_hoisting_mode);
+      LookupHoistingMode lookup_hoisting_mode, bool value_can_be_nil);
 
   void BuildLoadNamedProperty(const Expression* object_expr, Register object,
                               const AstRawString* name);

@@ -3055,6 +3055,12 @@ Expression* GetDestructuringDefaultValue(Expression** target) {
   }
   return default_value;
 }
+
+bool CanBeNil(Expression* value) {
+  return !value->IsLiteral() || value->IsUndefinedLiteral() ||
+         value->IsNullLiteral();
+}
+
 }  // namespace
 
 // Convert a destructuring assignment to an array literal into a sequence of
@@ -3208,7 +3214,8 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
         }
         builder()->Bind(&do_assignment);
 
-        BuildAssignment(lhs_data, op, lookup_hoisting_mode);
+        BuildAssignment(lhs_data, op, lookup_hoisting_mode,
+                        !default_value || CanBeNil(default_value));
       } else {
         DCHECK_EQ(lhs_data.assign_type(), NON_PROPERTY);
         is_done.Bind(builder());
@@ -3248,7 +3255,8 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
           ->LoadTrue()
           .StoreAccumulatorInRegister(done)
           .LoadAccumulatorWithRegister(array);
-      BuildAssignment(lhs_data, op, lookup_hoisting_mode);
+      BuildAssignment(lhs_data, op, lookup_hoisting_mode,
+                      /* array cannot be nil */ false);
     }
   }
   try_control_builder.EndTry();
@@ -3359,47 +3367,49 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
 // b.c = %CopyDataPropertiesWithExcludedProperties.call(rest_runtime_callargs);
 void BytecodeGenerator::BuildDestructuringObjectAssignment(
     ObjectLiteral* pattern, Token::Value op,
-    LookupHoistingMode lookup_hoisting_mode) {
+    LookupHoistingMode lookup_hoisting_mode, bool value_can_be_nil) {
   RegisterAllocationScope scope(this);
 
-  // if (value === null || value === undefined)
-  //   throw new TypeError(kNonCoercible);
-  //
-  // TODO(leszeks): Eliminate check if value is known to be non-null (e.g.
-  // an object literal).
-  BytecodeLabel is_null_or_undefined, not_null_or_undefined;
-  builder()
-      ->JumpIfNull(&is_null_or_undefined)
-      .JumpIfNotUndefined(&not_null_or_undefined);
-
-  {
-    builder()->Bind(&is_null_or_undefined);
-
-    // TODO(leszeks): Don't do this calculation here, but instead do it in a
-    // runtime method.
-    auto source_position = pattern->position();
-    const AstRawString* property_name = ast_string_constants()->empty_string();
-    MessageTemplate msg = MessageTemplate::kNonCoercible;
-    for (ObjectLiteralProperty* pattern_property : *pattern->properties()) {
-      Expression* key = pattern_property->key();
-      if (key->IsPropertyName()) {
-        property_name = key->AsLiteral()->AsRawPropertyName();
-        msg = MessageTemplate::kNonCoercibleWithProperty;
-        source_position = key->position();
-        break;
-      }
-    }
-
-    RegisterList new_type_error_args = register_allocator()->NewRegisterList(2);
-    // throw %NewTypeError(msg, property_name, source_position)
-    builder()->SetExpressionPosition(source_position);
+  if (value_can_be_nil) {
+    // if (value === null || value === undefined)
+    //   throw new TypeError(kNonCoercible);
+    BytecodeLabel is_null_or_undefined, not_null_or_undefined;
     builder()
-        ->LoadLiteral(Smi::FromEnum(msg))
-        .StoreAccumulatorInRegister(new_type_error_args[0])
-        .LoadLiteral(property_name)
-        .StoreAccumulatorInRegister(new_type_error_args[1])
-        .CallRuntime(Runtime::kNewTypeError, new_type_error_args)
-        .Throw();
+        ->JumpIfNull(&is_null_or_undefined)
+        .JumpIfNotUndefined(&not_null_or_undefined);
+
+    {
+      builder()->Bind(&is_null_or_undefined);
+
+      // TODO(leszeks): Don't do this calculation here, but instead do it in a
+      // runtime method.
+      auto source_position = pattern->position();
+      const AstRawString* property_name =
+          ast_string_constants()->empty_string();
+      MessageTemplate msg = MessageTemplate::kNonCoercible;
+      for (ObjectLiteralProperty* pattern_property : *pattern->properties()) {
+        Expression* key = pattern_property->key();
+        if (key->IsPropertyName()) {
+          property_name = key->AsLiteral()->AsRawPropertyName();
+          msg = MessageTemplate::kNonCoercibleWithProperty;
+          source_position = key->position();
+          break;
+        }
+      }
+
+      RegisterList new_type_error_args =
+          register_allocator()->NewRegisterList(2);
+      // throw %NewTypeError(msg, property_name, source_position)
+      builder()->SetExpressionPosition(source_position);
+      builder()
+          ->LoadLiteral(Smi::FromEnum(msg))
+          .StoreAccumulatorInRegister(new_type_error_args[0])
+          .LoadLiteral(property_name)
+          .StoreAccumulatorInRegister(new_type_error_args[1])
+          .CallRuntime(Runtime::kNewTypeError, new_type_error_args)
+          .Throw();
+    }
+    builder()->Bind(&not_null_or_undefined);
   }
 
   // Store the assignment value in a register.
@@ -3412,7 +3422,7 @@ void BytecodeGenerator::BuildDestructuringObjectAssignment(
   } else {
     value = register_allocator()->NewRegister();
   }
-  builder()->Bind(&not_null_or_undefined).StoreAccumulatorInRegister(value);
+  builder()->StoreAccumulatorInRegister(value);
 
   int i = 0;
   for (ObjectLiteralProperty* pattern_property : *pattern->properties()) {
@@ -3494,7 +3504,8 @@ void BytecodeGenerator::BuildDestructuringObjectAssignment(
       builder()->Bind(&value_not_undefined);
     }
 
-    BuildAssignment(lhs_data, op, lookup_hoisting_mode);
+    BuildAssignment(lhs_data, op, lookup_hoisting_mode,
+                    !default_value || CanBeNil(default_value));
 
     i++;
   }
@@ -3504,15 +3515,17 @@ void BytecodeGenerator::BuildDestructuringObjectAssignment(
   }
 }
 
-void BytecodeGenerator::BuildAssignment(
-    AssignmentLhsData lhs_data, Token::Value op,
-    LookupHoistingMode lookup_hoisting_mode) {
+void BytecodeGenerator::BuildAssignment(AssignmentLhsData lhs_data,
+                                        Token::Value op,
+                                        LookupHoistingMode lookup_hoisting_mode,
+                                        bool value_can_be_nil) {
   // Assign the value to the LHS.
   switch (lhs_data.assign_type()) {
     case NON_PROPERTY: {
       if (ObjectLiteral* pattern = lhs_data.expr()->AsObjectLiteral()) {
         // Split object literals into destructuring.
-        BuildDestructuringObjectAssignment(pattern, op, lookup_hoisting_mode);
+        BuildDestructuringObjectAssignment(pattern, op, lookup_hoisting_mode,
+                                           value_can_be_nil);
       } else if (ArrayLiteral* pattern = lhs_data.expr()->AsArrayLiteral()) {
         // Split object literals into destructuring.
         BuildDestructuringArrayAssignment(pattern, op, lookup_hoisting_mode);
@@ -3565,7 +3578,8 @@ void BytecodeGenerator::VisitAssignment(Assignment* expr) {
   VisitForAccumulatorValue(expr->value());
 
   builder()->SetExpressionPosition(expr);
-  BuildAssignment(lhs_data, expr->op(), expr->lookup_hoisting_mode());
+  BuildAssignment(lhs_data, expr->op(), expr->lookup_hoisting_mode(),
+                  CanBeNil(expr));
 }
 
 void BytecodeGenerator::VisitCompoundAssignment(CompoundAssignment* expr) {
@@ -3616,7 +3630,8 @@ void BytecodeGenerator::VisitCompoundAssignment(CompoundAssignment* expr) {
   }
 
   builder()->SetExpressionPosition(expr);
-  BuildAssignment(lhs_data, expr->op(), expr->lookup_hoisting_mode());
+  BuildAssignment(lhs_data, expr->op(), expr->lookup_hoisting_mode(),
+                  CanBeNil(expr));
 }
 
 // Suspends the generator to resume at the next suspend_id, with output stored
