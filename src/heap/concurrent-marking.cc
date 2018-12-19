@@ -365,20 +365,25 @@ class ConcurrentMarkingVisitor final
   }
 
   int VisitMap(Map meta_map, Map map) {
-    if (marking_state_.IsGrey(map)) {
-      // Maps have ad-hoc weakness for descriptor arrays. They also clear the
-      // code-cache. Conservatively visit strong fields skipping the
-      // descriptor array field and the code cache field.
-      VisitMapPointer(map, map->map_slot());
-      VisitPointer(map, HeapObject::RawField(map, Map::kPrototypeOffset));
-      VisitPointer(
-          map, HeapObject::RawField(map, Map::kConstructorOrBackPointerOffset));
-      VisitPointer(map, HeapObject::RawMaybeWeakField(
-                            map, Map::kTransitionsOrPrototypeInfoOffset));
-      VisitPointer(map, HeapObject::RawField(map, Map::kDependentCodeOffset));
-      bailout_.Push(map);
+    if (!ShouldVisit(map)) return 0;
+    int size = Map::BodyDescriptor::SizeOf(meta_map, map);
+    if (map->CanTransition()) {
+      // Maps that can transition share their descriptor arrays and require
+      // special visiting logic to avoid memory leaks.
+      DescriptorArray descriptors = map->synchronized_instance_descriptors();
+      if (MarkObjectWithoutPush(descriptors)) {
+        VisitPointers(descriptors, descriptors->GetFirstPointerSlot(),
+                      descriptors->GetDescriptorSlot(0));
+      }
+      int number_of_own_descriptors = map->NumberOfOwnDescriptors();
+      if (number_of_own_descriptors) {
+        VisitDescriptors(descriptors,
+                         std::min<int>(number_of_own_descriptors,
+                                       descriptors->number_of_descriptors()));
+      }
     }
-    return 0;
+    Map::BodyDescriptor::IterateBody(meta_map, map, size, this);
+    return size;
   }
 
   void VisitDescriptors(DescriptorArray descriptor_array,
@@ -480,6 +485,10 @@ class ConcurrentMarkingVisitor final
     if (marking_state_.WhiteToGrey(object)) {
       shared_.Push(object);
     }
+  }
+
+  bool MarkObjectWithoutPush(HeapObject* object) {
+    return marking_state_.WhiteToBlack(object);
   }
 
  private:
