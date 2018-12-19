@@ -1724,7 +1724,7 @@ class VariableProxy final : public Expression {
 // Left-hand side can only be a property, a global or a (parameter or local)
 // slot.
 enum LhsKind {
-  VARIABLE,
+  NON_PROPERTY,
   NAMED_PROPERTY,
   KEYED_PROPERTY,
   NAMED_SUPER_PROPERTY,
@@ -1742,7 +1742,7 @@ class Property final : public Expression {
 
   // Returns the properties assign type.
   static LhsKind GetAssignType(Property* property) {
-    if (property == nullptr) return VARIABLE;
+    if (property == nullptr) return NON_PROPERTY;
     bool super_access = property->IsSuperAccess();
     return (property->key()->IsPropertyName())
                ? (super_access ? NAMED_SUPER_PROPERTY : NAMED_PROPERTY)
