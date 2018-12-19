@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "35310451_9a0c0049",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-12-19T15:11:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8facfa58_47bb5534",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f98b9541_eca0ff44",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 11
@@ -33,6 +51,24 @@
       "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04cae86f_3587c4e9",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-12-19T15:11:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f98b9541_eca0ff44",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fd837bfc_352201ee",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-12-19T15:11:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82b041be_371cfbc4",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "171950af_3df86956",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 11
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "2a39216a_cb4ab1bc",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-12-19T15:11:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "171950af_3df86956",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4cdf9ec_c8abf6db",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 11
@@ -84,6 +156,24 @@
       "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad2c3db8_40002bfd",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2018-12-19T15:11:55Z",
+      "side": 1,
+      "message": "good point, thanks! Also I just realized that tbl.grow(-1) isn\u0027t valid anymore, so you\u0027re right.",
+      "parentUuid": "a4cdf9ec_c8abf6db",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
