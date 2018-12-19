@@ -1,0 +1,349 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f923f0e1_3c8a2740",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2351,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "As discussed offline, please add a todo to verify that kWordAligned means tagged aligned.",
+      "range": {
+        "startLine": 2350,
+        "startChar": 4,
+        "endLine": 2351,
+        "endChar": 15
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "425e2439_f82be275",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 124,
+        "startChar": 52,
+        "endLine": 124,
+        "endChar": 70
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4868d677_d7d6fe0d",
+        "filename": "src/heap/mark-compact.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 128,
+        "startChar": 17,
+        "endLine": 128,
+        "endChar": 35
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0459d47c_fa7458c5",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "kTaggedSize?",
+      "range": {
+        "startLine": 105,
+        "startChar": 41,
+        "endLine": 105,
+        "endChar": 59
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baede100_a69d3594",
+        "filename": "src/heap/mark-compact.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 115,
+        "startChar": 51,
+        "endLine": 115,
+        "endChar": 69
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd7fc502_10f2c68e",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "kTaggedSize?",
+      "range": {
+        "startLine": 505,
+        "startChar": 43,
+        "endLine": 505,
+        "endChar": 61
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae3f21e8_00983900",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "I think it should be tagged",
+      "range": {
+        "startLine": 1189,
+        "startChar": 2,
+        "endLine": 1189,
+        "endChar": 34
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55a9e2bd_56939e3b",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "kTaggedSize?",
+      "range": {
+        "startLine": 792,
+        "startChar": 57,
+        "endLine": 792,
+        "endChar": 75
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fa7dc46_76c3e54e",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 794,
+        "startChar": 39,
+        "endLine": 794,
+        "endChar": 57
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "763a4779_3f6cc410",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "kTaggedSize?",
+      "range": {
+        "startLine": 1005,
+        "startChar": 29,
+        "endLine": 1005,
+        "endChar": 47
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d17055d3_f9f89af6",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "kTaggedSize?",
+      "range": {
+        "startLine": 1120,
+        "startChar": 48,
+        "endLine": 1120,
+        "endChar": 66
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fd103e1_85f10423",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1898,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "kTaggedSize?",
+      "range": {
+        "startLine": 1898,
+        "startChar": 42,
+        "endLine": 1898,
+        "endChar": 60
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0be55325_c572d2e7",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1903,
+        "startChar": 0,
+        "endLine": 1908,
+        "endChar": 66
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec8a9ac1_6cd84348",
+        "filename": "src/heap/store-buffer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 66
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03d46e50_b7de5040",
+        "filename": "src/heap/store-buffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-19T16:23:55Z",
+      "side": 1,
+      "message": "Not sure about this. It would be worthwhile to store tagged-size values in the store buffer.",
+      "range": {
+        "startLine": 33,
+        "startChar": 21,
+        "endLine": 33,
+        "endChar": 43
+      },
+      "revId": "6fa0bea591d4ecd4fdbc1530cb62f7f248f510b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
