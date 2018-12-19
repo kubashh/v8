@@ -307,8 +307,8 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
           location(location) {}
   };
   ZonePtrList<const NamedImport>* ParseNamedImports(int pos);
-  Block* BuildInitializationBlock(DeclarationParsingResult* parsing_result,
-                                  ZonePtrList<const AstRawString>* names);
+  Statement* BuildInitializationBlock(DeclarationParsingResult* parsing_result,
+                                      ZonePtrList<const AstRawString>* names);
   void DeclareLabel(ZonePtrList<const AstRawString>** labels,
                     ZonePtrList<const AstRawString>** own_labels,
                     VariableProxy* expr);
@@ -369,8 +369,9 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
 
   // PatternRewriter and associated methods defined in pattern-rewriter.cc.
   friend class PatternRewriter;
-  void DeclareAndInitializeVariables(
-      Block* block, const DeclarationDescriptor* declaration_descriptor,
+  void DeclareVariablesAndInitialize(
+      ScopedPtrList<Statement>* statements,
+      const DeclarationDescriptor* declaration_descriptor,
       const DeclarationParsingResult::Declaration* declaration,
       ZonePtrList<const AstRawString>* names);
   void RewriteDestructuringAssignment(RewritableExpression* expr);

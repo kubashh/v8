@@ -420,8 +420,8 @@ PreParserExpression PreParser::ExpressionFromIdentifier(
   return PreParserExpression::FromIdentifier(name, proxy, zone());
 }
 
-void PreParser::DeclareAndInitializeVariables(
-    PreParserStatement block,
+void PreParser::DeclareVariablesAndInitialize(
+    PreParserScopedStatementList* statements,
     const DeclarationDescriptor* declaration_descriptor,
     const DeclarationParsingResult::Declaration* declaration,
     ZonePtrList<const AstRawString>* names) {
