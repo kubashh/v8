@@ -1008,8 +1008,6 @@ class MarkingVisitor final
   template <typename T>
   V8_INLINE int VisitEmbedderTracingSubclass(Map map, T object);
 
-  V8_INLINE void MarkMapContents(Map map);
-
   // Marks the object black without pushing it on the marking work list. Returns
   // true if the object needed marking and false otherwise.
   V8_INLINE bool MarkObjectWithoutPush(HeapObject* host, HeapObject* object);
