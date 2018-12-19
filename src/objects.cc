@@ -16738,6 +16738,14 @@ inline int CountRequiredEscapes(Handle<String> source) {
     } else if (src[i] == '/') {
       // Not escaped forward-slash needs escape.
       escapes++;
+    } else if (src[i] == '\n') {
+      escapes++;
+    } else if (src[i] == '\r') {
+      escapes++;
+    } else if (static_cast<int>(src[i]) == 0x2028) {
+      escapes += 5;
+    } else if (static_cast<int>(src[i]) == 0x2029) {
+      escapes += 5;
     }
   }
   return escapes;
@@ -16752,6 +16760,8 @@ inline Handle<StringType> WriteEscapedRegExpSource(Handle<String> source,
   Vector<Char> dst(result->GetChars(no_gc), result->length());
   int s = 0;
   int d = 0;
+  // TODO(v8:1982): Fully implement
+  // https://tc39.github.io/ecma262/#sec-escaperegexppattern
   while (s < src.length()) {
     if (src[s] == '\\') {
       // Escape. Copy this and next character.
@@ -16760,6 +16770,36 @@ inline Handle<StringType> WriteEscapedRegExpSource(Handle<String> source,
     } else if (src[s] == '/') {
       // Not escaped forward-slash needs escape.
       dst[d++] = '\\';
+    } else if (src[s] == '\n') {
+      // Raw newlines are converted into escaped newline sequences.
+      dst[d++] = '\\';
+      dst[d++] = 'n';
+      s++;
+      continue;
+    } else if (src[s] == '\r') {
+      // Raw newlines are converted into escaped newline sequences.
+      dst[d++] = '\\';
+      dst[d++] = 'r';
+      s++;
+      continue;
+    } else if (static_cast<int>(src[s]) == 0x2028) {
+      dst[d++] = '\\';
+      dst[d++] = 'u';
+      dst[d++] = '2';
+      dst[d++] = '0';
+      dst[d++] = '2';
+      dst[d++] = '8';
+      s++;
+      continue;
+    } else if (static_cast<int>(src[s]) == 0x2029) {
+      dst[d++] = '\\';
+      dst[d++] = 'u';
+      dst[d++] = '2';
+      dst[d++] = '0';
+      dst[d++] = '2';
+      dst[d++] = '9';
+      s++;
+      continue;
     }
     dst[d++] = src[s++];
   }
