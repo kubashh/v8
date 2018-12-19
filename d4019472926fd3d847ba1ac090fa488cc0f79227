@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8facfa58_47bb5534",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T02:25:48Z",
+      "side": 1,
+      "message": "Pass std::string by const reference.",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f98b9541_eca0ff44",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T02:25:48Z",
+      "side": 1,
+      "message": "Better name for the function, since this doesn\u0027t print? Maybe just `ToString`.",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82b041be_371cfbc4",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T02:25:48Z",
+      "side": 1,
+      "message": "I think `debug_name` is less clear than `argument_name` here",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "171950af_3df86956",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T02:25:48Z",
+      "side": 1,
+      "message": "You need to convert `old_size` and `grow_by` to `uint64_t` first or this will wrap implicitly.",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4cdf9ec_c8abf6db",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T02:25:48Z",
+      "side": 1,
+      "message": "This has the same problem that `new_size` will wrap if `old_size + grow_by \u003e\u003d 2**32`. It should be enough to fix this by throwing if `new_size64 \u003e\u003d max_size64`. \n\nI think that both `max_size64` and `i::FLAG_wasm_max_table_size` must be less than 2**32 already, but you should add a DCHECK for that.\n\nThen you can convert `new_size64` to `uint32_t`, and remove the `new_size \u003c old_size` check since it will never occur.",
+      "revId": "d4019472926fd3d847ba1ac090fa488cc0f79227",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

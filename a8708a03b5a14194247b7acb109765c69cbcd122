@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "c88346fe_55b52860",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T02:25:48Z",
+      "side": 1,
+      "message": "OK, I see.",
+      "parentUuid": "d4ac152e_508693ee",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16f93dc0_d739928a",
         "filename": "src/wasm/wasm-js.cc",
         "patchSetId": 10
@@ -136,6 +154,24 @@
       "side": 1,
       "message": "I\u0027m not sure to understand; new_size and old_size are both representing the memory size (absolutely), we are testing if the new size is smaller.",
       "parentUuid": "2bdedd59_43aa49b0",
+      "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64b577d7_c3cd6250",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2018-12-19T02:25:48Z",
+      "side": 1,
+      "message": "The new size should never be smaller if the value didn\u0027t wrap, and grow_by is non-negative.",
+      "parentUuid": "51c4b0a9_358ee4b1",
       "revId": "a8708a03b5a14194247b7acb109765c69cbcd122",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
