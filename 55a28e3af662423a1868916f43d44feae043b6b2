@@ -22,6 +22,30 @@
       "revId": "55a28e3af662423a1868916f43d44feae043b6b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3009289e_d74f279a",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-12-20T17:26:52Z",
+      "side": 1,
+      "message": "I agree that we should remove the dependency on this property. Should the comment say so too? Whom do you mean by \u0027anybody\u0027. AFAIK, LUCI team has explicitly said that master property is just like any other property and has no special meaning anymore. Developers probably don\u0027t care at all. Some legacy systems may still have a concept of a master, but we can just hard-code \u0027client.v8\u0027 when talking to such systems.",
+      "parentUuid": "c9db383a_5ab9e308",
+      "range": {
+        "startLine": 844,
+        "startChar": 6,
+        "endLine": 844,
+        "endChar": 32
+      },
+      "revId": "55a28e3af662423a1868916f43d44feae043b6b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
