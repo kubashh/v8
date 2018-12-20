@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65f3a079_3d9d6300",
+        "filename": "src/regexp/x64/regexp-macro-assembler-x64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-20T10:14:56Z",
+      "side": 1,
+      "message": "q: do we have any bot that tests the X64 \u0026\u0026 V8_TARGET_ARCH_32_BIT config? I\u0027d suspect many things to be broken there if kPointerSize !\u003d kRegisterSize.",
+      "revId": "34a6eb49e99bd105b0ecedbf98fbc6a7c705d99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f2ea7db_65ceb112",
+        "filename": "src/x64/assembler-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1838,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-20T10:14:56Z",
+      "side": 1,
+      "message": "Double-checking - this is movq, is kSystemPointerSize okay here?",
+      "revId": "34a6eb49e99bd105b0ecedbf98fbc6a7c705d99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d92234b_acc9390c",
+        "filename": "src/x64/deoptimizer-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-20T10:14:56Z",
+      "side": 1,
+      "message": "kRegisterSize? (It\u0027s PopQuad below)",
+      "revId": "34a6eb49e99bd105b0ecedbf98fbc6a7c705d99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92a9770d_98298d02",
+        "filename": "src/x64/deoptimizer-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-20T10:14:56Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "34a6eb49e99bd105b0ecedbf98fbc6a7c705d99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cb3be5c_4718d906",
+        "filename": "src/x64/eh-frame-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-20T10:14:56Z",
+      "side": 1,
+      "message": "q: RegisterSize?",
+      "revId": "34a6eb49e99bd105b0ecedbf98fbc6a7c705d99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
