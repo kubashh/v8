@@ -3026,6 +3026,12 @@ BytecodeGenerator::AssignmentLhsData::KeyedSuperProperty(
 
 BytecodeGenerator::AssignmentLhsData BytecodeGenerator::PrepareAssignmentLhs(
     Expression* lhs) {
+  if (lhs->IsArrayLiteral() || lhs->IsObjectLiteral()) {
+    // Destructuring assignments are desugared into multiple separate
+    // assignments, so don't give the overall assignment a position.
+    builder()->ClearPosition();
+  }
+
   // Left-hand side can only be a property, a global or a variable slot.
   Property* property = lhs->AsProperty();
   LhsKind assign_type = Property::GetAssignType(property);
@@ -3193,7 +3199,8 @@ Expression* BytecodeGenerator::GetDestructuringDefaultValue(
 //   %FinalizeIteration(iterator, done, iteration_continuation)
 // }
 void BytecodeGenerator::BuildDestructuringArrayAssignment(
-    ArrayLiteral* pattern) {
+    ArrayLiteral* pattern, Token::Value op,
+    LookupHoistingMode lookup_hoisting_mode) {
   RegisterAllocationScope scope(this);
 
   Register value = register_allocator()->NewRegister();
@@ -3240,9 +3247,7 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
       }
 
       Expression* default_value = GetDestructuringDefaultValue(&target);
-      if (!target->IsObjectLiteral() && !target->IsArrayLiteral()) {
-        builder()->SetExpressionAsStatementPosition(target);
-      }
+      builder()->SetExpressionAsStatementPosition(target);
 
       AssignmentLhsData lhs_data = PrepareAssignmentLhs(target);
 
@@ -3298,8 +3303,7 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
         }
         builder()->Bind(&do_assignment);
 
-        // TODO(leszeks): This should be the position of the assignment.
-        BuildAssignment(lhs_data, Token::ASSIGN, LookupHoistingMode::kNormal);
+        BuildAssignment(lhs_data, op, lookup_hoisting_mode);
       } else {
         DCHECK_EQ(lhs_data.assign_type(), NON_PROPERTY);
         is_done.Bind(builder());
@@ -3339,7 +3343,7 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
           ->LoadTrue()
           .StoreAccumulatorInRegister(done)
           .LoadAccumulatorWithRegister(array);
-      BuildAssignment(lhs_data, Token::ASSIGN, LookupHoistingMode::kNormal);
+      BuildAssignment(lhs_data, op, lookup_hoisting_mode);
     }
   }
   try_control_builder.EndTry();
@@ -3393,7 +3397,8 @@ void BytecodeGenerator::BuildDestructuringArrayAssignment(
 //
 // b.c = %CopyDataPropertiesWithExcludedProperties.call(rest_runtime_callargs);
 void BytecodeGenerator::BuildDestructuringObjectAssignment(
-    ObjectLiteral* pattern) {
+    ObjectLiteral* pattern, Token::Value op,
+    LookupHoistingMode lookup_hoisting_mode) {
   RegisterAllocationScope scope(this);
 
   // if (value === null || value === undefined)
@@ -3411,6 +3416,7 @@ void BytecodeGenerator::BuildDestructuringObjectAssignment(
 
     // TODO(leszeks): Don't do this calculation here, but instead do it in a
     // runtime method.
+    auto source_position = pattern->position();
     const AstRawString* property_name = ast_string_constants()->empty_string();
     MessageTemplate msg = MessageTemplate::kNonCoercible;
     for (ObjectLiteralProperty* pattern_property : *pattern->properties()) {
@@ -3418,12 +3424,14 @@ void BytecodeGenerator::BuildDestructuringObjectAssignment(
       if (key->IsPropertyName()) {
         property_name = key->AsLiteral()->AsRawPropertyName();
         msg = MessageTemplate::kNonCoercibleWithProperty;
+        source_position = key->position();
         break;
       }
     }
 
     RegisterList new_type_error_args = register_allocator()->NewRegisterList(2);
     // throw %NewTypeError(msg, property_name, source_position)
+    builder()->SetExpressionPosition(source_position);
     builder()
         ->LoadLiteral(Smi::FromEnum(msg))
         .StoreAccumulatorInRegister(new_type_error_args[0])
@@ -3456,10 +3464,7 @@ void BytecodeGenerator::BuildDestructuringObjectAssignment(
     Expression* pattern_key = pattern_property->key();
     Expression* target = pattern_property->value();
     Expression* default_value = GetDestructuringDefaultValue(&target);
-
-    if (!target->IsObjectLiteral() && !target->IsArrayLiteral()) {
-      builder()->SetExpressionAsStatementPosition(target);
-    }
+    builder()->SetExpressionAsStatementPosition(target);
 
     // Calculate this property's key into the assignment RHS value, additionally
     // storing the key for rest_runtime_callargs if needed.
@@ -3528,7 +3533,7 @@ void BytecodeGenerator::BuildDestructuringObjectAssignment(
       builder()->Bind(&value_not_undefined);
     }
 
-    BuildAssignment(lhs_data, Token::ASSIGN, LookupHoistingMode::kNormal);
+    BuildAssignment(lhs_data, op, lookup_hoisting_mode);
 
     i++;
   }
@@ -3546,14 +3551,10 @@ void BytecodeGenerator::BuildAssignment(
     case NON_PROPERTY: {
       if (ObjectLiteral* pattern = lhs_data.expr()->AsObjectLiteral()) {
         // Split object literals into destructuring.
-        DCHECK_EQ(op, Token::ASSIGN);
-        DCHECK_EQ(lookup_hoisting_mode, LookupHoistingMode::kNormal);
-        BuildDestructuringObjectAssignment(pattern);
+        BuildDestructuringObjectAssignment(pattern, op, lookup_hoisting_mode);
       } else if (ArrayLiteral* pattern = lhs_data.expr()->AsArrayLiteral()) {
         // Split object literals into destructuring.
-        DCHECK_EQ(op, Token::ASSIGN);
-        DCHECK_EQ(lookup_hoisting_mode, LookupHoistingMode::kNormal);
-        BuildDestructuringArrayAssignment(pattern);
+        BuildDestructuringArrayAssignment(pattern, op, lookup_hoisting_mode);
       } else {
         DCHECK(lhs_data.expr()->IsVariableProxy());
         VariableProxy* proxy = lhs_data.expr()->AsVariableProxy();
