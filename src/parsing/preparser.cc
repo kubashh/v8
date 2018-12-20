@@ -233,8 +233,10 @@ PreParser::PreParseResult PreParser::PreParseFunction(
 
       DeclareFunctionNameVar(function_name, function_type, function_scope);
 
-      *produced_preparsed_scope_data = ProducedPreParsedScopeData::For(
-          preparsed_scope_data_builder_, main_zone());
+      if (preparsed_scope_data_builder_->HasData()) {
+        *produced_preparsed_scope_data = ProducedPreParsedScopeData::For(
+            preparsed_scope_data_builder_, main_zone());
+      }
     }
 
     if (pending_error_handler()->has_error_unidentifiable_by_preparser()) {
