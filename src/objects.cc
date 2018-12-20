@@ -16725,9 +16725,10 @@ Handle<JSRegExp> JSRegExp::Copy(Handle<JSRegExp> regexp) {
   return Handle<JSRegExp>::cast(isolate->factory()->CopyJSObject(regexp));
 }
 
+namespace {
 
 template <typename Char>
-inline int CountRequiredEscapes(Handle<String> source) {
+int CountRequiredEscapes(Handle<String> source) {
   DisallowHeapAllocation no_gc;
   int escapes = 0;
   Vector<const Char> src = source->GetCharVector<Char>(no_gc);
@@ -16738,20 +16739,35 @@ inline int CountRequiredEscapes(Handle<String> source) {
     } else if (src[i] == '/') {
       // Not escaped forward-slash needs escape.
       escapes++;
+    } else if (src[i] == '\n') {
+      escapes++;
+    } else if (src[i] == '\r') {
+      escapes++;
+    } else if (static_cast<int>(src[i]) == 0x2028) {
+      escapes += std::strlen("\\u2028") - 1;
+    } else if (static_cast<int>(src[i]) == 0x2029) {
+      escapes += std::strlen("\\u2029") - 1;
     }
   }
   return escapes;
 }
 
+template <typename Char>
+void WriteStringToCharVector(Vector<Char> v, int* d, const char* string) {
+  int s = 0;
+  while (string[s] != '\0') v[(*d)++] = string[s++];
+}
 
 template <typename Char, typename StringType>
-inline Handle<StringType> WriteEscapedRegExpSource(Handle<String> source,
-                                                   Handle<StringType> result) {
+Handle<StringType> WriteEscapedRegExpSource(Handle<String> source,
+                                            Handle<StringType> result) {
   DisallowHeapAllocation no_gc;
   Vector<const Char> src = source->GetCharVector<Char>(no_gc);
   Vector<Char> dst(result->GetChars(no_gc), result->length());
   int s = 0;
   int d = 0;
+  // TODO(v8:1982): Fully implement
+  // https://tc39.github.io/ecma262/#sec-escaperegexppattern
   while (s < src.length()) {
     if (src[s] == '\\') {
       // Escape. Copy this and next character.
@@ -16760,13 +16776,28 @@ inline Handle<StringType> WriteEscapedRegExpSource(Handle<String> source,
     } else if (src[s] == '/') {
       // Not escaped forward-slash needs escape.
       dst[d++] = '\\';
+    } else if (src[s] == '\n') {
+      WriteStringToCharVector(dst, &d, "\\n");
+      s++;
+      continue;
+    } else if (src[s] == '\r') {
+      WriteStringToCharVector(dst, &d, "\\r");
+      s++;
+      continue;
+    } else if (static_cast<int>(src[s]) == 0x2028) {
+      WriteStringToCharVector(dst, &d, "\\u2028");
+      s++;
+      continue;
+    } else if (static_cast<int>(src[s]) == 0x2029) {
+      WriteStringToCharVector(dst, &d, "\\u2029");
+      s++;
+      continue;
     }
     dst[d++] = src[s++];
   }
   DCHECK_EQ(result->length(), d);
   return result;
 }
-
 
 MaybeHandle<String> EscapeRegExpSource(Isolate* isolate,
                                        Handle<String> source) {
@@ -16792,6 +16823,7 @@ MaybeHandle<String> EscapeRegExpSource(Isolate* isolate,
   }
 }
 
+}  // namespace
 
 // static
 MaybeHandle<JSRegExp> JSRegExp::Initialize(Handle<JSRegExp> regexp,
