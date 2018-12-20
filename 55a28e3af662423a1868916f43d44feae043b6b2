@@ -70,6 +70,30 @@
       "revId": "55a28e3af662423a1868916f43d44feae043b6b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7651369c_fb2d9f76",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2018-12-20T17:36:11Z",
+      "side": 1,
+      "message": "This property defines how things look like, i.e. which console they appear at, thus removing it should not require V8 team\u0027s approval.\n\nThe comment in code still says that we should migrate the builders to aster-client-v8-fyi, whereas your message seems to suggest that we should get rid of this altogether. But I guess it does not matter - let\u0027s just remove the comment as we\u0027ll remove the property.",
+      "parentUuid": "0de38147_7e657ccc",
+      "range": {
+        "startLine": 844,
+        "startChar": 6,
+        "endLine": 844,
+        "endChar": 32
+      },
+      "revId": "55a28e3af662423a1868916f43d44feae043b6b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
