@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "352f5671_2a56980c",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 16750,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2018-12-20T08:49:07Z",
+      "side": 1,
+      "message": "Let\u0027s assert that we have checked for all characters for which unibrow::IsLineTerminator() return true.",
+      "range": {
+        "startLine": 16742,
+        "startChar": 4,
+        "endLine": 16750,
+        "endChar": 5
+      },
+      "revId": "b9f960ba5cb783288c787f6cc463e530df632d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
