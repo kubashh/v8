@@ -22,6 +22,30 @@
       "revId": "b9f960ba5cb783288c787f6cc463e530df632d7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5275b4e2_b6b7e255",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 16750,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-20T08:57:07Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "352f5671_2a56980c",
+      "range": {
+        "startLine": 16742,
+        "startChar": 4,
+        "endLine": 16750,
+        "endChar": 5
+      },
+      "revId": "b9f960ba5cb783288c787f6cc463e530df632d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
