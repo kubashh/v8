@@ -1057,9 +1057,9 @@ class ParserBase {
                               bool has_rest, int formals_start_pos,
                               int formals_end_pos);
 
-  BlockT ParseVariableDeclarations(VariableDeclarationContext var_context,
-                                   DeclarationParsingResult* parsing_result,
-                                   ZonePtrList<const AstRawString>* names);
+  StatementT ParseVariableDeclarations(VariableDeclarationContext var_context,
+                                       DeclarationParsingResult* parsing_result,
+                                       ZonePtrList<const AstRawString>* names);
   StatementT ParseAsyncFunctionDeclaration(
       ZonePtrList<const AstRawString>* names, bool default_export);
   StatementT ParseFunctionDeclaration();
@@ -3481,7 +3481,8 @@ void ParserBase<Impl>::ParseFormalParameterList(FormalParametersT* parameters) {
 }
 
 template <typename Impl>
-typename ParserBase<Impl>::BlockT ParserBase<Impl>::ParseVariableDeclarations(
+typename ParserBase<Impl>::StatementT
+ParserBase<Impl>::ParseVariableDeclarations(
     VariableDeclarationContext var_context,
     DeclarationParsingResult* parsing_result,
     ZonePtrList<const AstRawString>* names) {
@@ -3497,10 +3498,7 @@ typename ParserBase<Impl>::BlockT ParserBase<Impl>::ParseVariableDeclarations(
   parsing_result->descriptor.declaration_pos = peek_position();
   parsing_result->descriptor.initialization_pos = peek_position();
 
-  BlockT init_block = impl()->NullBlock();
-  if (var_context != kForStatement) {
-    init_block = factory()->NewBlock(1, true);
-  }
+  StatementListT statements(pointer_buffer());
 
   switch (peek()) {
     case Token::VAR:
@@ -3616,15 +3614,19 @@ typename ParserBase<Impl>::BlockT ParserBase<Impl>::ParseVariableDeclarations(
       // behavior (where N is the number of variables in a single
       // declaration) in the PatternRewriter having to do with removing
       // and adding VariableProxies to the Scope (see bug 4699).
-      impl()->DeclareAndInitializeVariables(
-          init_block, &parsing_result->descriptor, &decl, names);
+      impl()->DeclareVariablesAndInitialize(
+          &statements, &parsing_result->descriptor, &decl, names);
     }
   } while (Check(Token::COMMA));
 
   parsing_result->bindings_loc =
       Scanner::Location(bindings_start, end_position());
 
-  return init_block;
+  if (var_context == kForStatement) {
+    DCHECK_EQ(statements.length(), 0);
+    return impl()->NullBlock();
+  }
+  return factory()->NewBlock(true, statements);
 }
 
 template <typename Impl>
