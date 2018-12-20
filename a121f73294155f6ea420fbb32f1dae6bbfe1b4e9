@@ -34,6 +34,24 @@
       "revId": "a121f73294155f6ea420fbb32f1dae6bbfe1b4e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c47ccea6_065fc216",
+        "filename": "src/objects.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 16770,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2018-12-20T09:28:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c2729f3a_1a4c5154",
+      "revId": "a121f73294155f6ea420fbb32f1dae6bbfe1b4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
