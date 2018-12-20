@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9db383a_5ab9e308",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2018-12-20T17:21:39Z",
+      "side": 1,
+      "message": "The dependency on this property should be cleaned up. I\u0027ll do that dance later. First I\u0027ll see if anybody has any objections to the new organization.",
+      "range": {
+        "startLine": 844,
+        "startChar": 6,
+        "endLine": 844,
+        "endChar": 32
+      },
+      "revId": "55a28e3af662423a1868916f43d44feae043b6b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
