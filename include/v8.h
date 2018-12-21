@@ -2617,10 +2617,6 @@ class V8_EXPORT String : public Name {
    public:
     virtual ~ExternalStringResourceBase() = default;
 
-    V8_DEPRECATED("Use IsCacheable().", virtual bool IsCompressible() const) {
-      return false;
-    }
-
     /**
      * If a string is cacheable, the value returned by
      * ExternalStringResource::data() may be cached, otherwise it is not
@@ -3754,9 +3750,6 @@ class ReturnValue {
   }
   // Local setters
   template <typename S>
-  V8_INLINE V8_DEPRECATED("Use Global<> instead",
-                          void Set(const Persistent<S>& handle));
-  template <typename S>
   V8_INLINE void Set(const Global<S>& handle);
   template <typename S>
   V8_INLINE void Set(const Local<S> handle);
@@ -3982,11 +3975,6 @@ class V8_EXPORT Function : public Object {
       Local<Value> data = Local<Value>(), int length = 0,
       ConstructorBehavior behavior = ConstructorBehavior::kAllow,
       SideEffectType side_effect_type = SideEffectType::kHasSideEffect);
-  static V8_DEPRECATED("Use maybe version",
-                       Local<Function> New(Isolate* isolate,
-                                           FunctionCallback callback,
-                                           Local<Value> data = Local<Value>(),
-                                           int length = 0));
 
   V8_WARN_UNUSED_RESULT MaybeLocal<Object> NewInstance(
       Local<Context> context, int argc, Local<Value> argv[]) const;
@@ -4005,9 +3993,6 @@ class V8_EXPORT Function : public Object {
       Local<Context> context, int argc, Local<Value> argv[],
       SideEffectType side_effect_type = SideEffectType::kHasSideEffect) const;
 
-  V8_DEPRECATED("Use maybe version",
-                Local<Value> Call(Local<Value> recv, int argc,
-                                  Local<Value> argv[]));
   V8_WARN_UNUSED_RESULT MaybeLocal<Value> Call(Local<Context> context,
                                                Local<Value> recv, int argc,
                                                Local<Value> argv[]);
@@ -5823,7 +5808,6 @@ class V8_EXPORT FunctionTemplate : public Template {
       SideEffectType side_effect_type = SideEffectType::kHasSideEffect);
 
   /** Returns the unique function instance in the current execution context.*/
-  V8_DEPRECATED("Use maybe version", Local<Function> GetFunction());
   V8_WARN_UNUSED_RESULT MaybeLocal<Function> GetFunction(
       Local<Context> context);
 
@@ -6119,8 +6103,6 @@ class V8_EXPORT ObjectTemplate : public Template {
   static MaybeLocal<ObjectTemplate> FromSnapshot(Isolate* isolate,
                                                  size_t index);
 
-  /** Creates a new instance of this template.*/
-  V8_DEPRECATED("Use maybe version", Local<Object> NewInstance());
   V8_WARN_UNUSED_RESULT MaybeLocal<Object> NewInstance(Local<Context> context);
 
   /**
@@ -6340,20 +6322,6 @@ class V8_EXPORT AccessorSignature : public Data {
 
 
 // --- Extensions ---
-V8_DEPRECATED("Implementation detail", class)
-V8_EXPORT ExternalOneByteStringResourceImpl
-    : public String::ExternalOneByteStringResource {
- public:
-  ExternalOneByteStringResourceImpl() : data_(nullptr), length_(0) {}
-  ExternalOneByteStringResourceImpl(const char* data, size_t length)
-      : data_(data), length_(length) {}
-  const char* data() const override { return data_; }
-  size_t length() const override { return length_; }
-
- private:
-  const char* data_;
-  size_t length_;
-};
 
 /**
  * Ignore
@@ -7077,15 +7045,6 @@ class V8_EXPORT EmbedderHeapTracer {
    * steps will follow this call.
    */
   virtual void EnterFinalPause(EmbedderStackState stack_state) = 0;
-
-  /**
-   * Called when tracing is aborted.
-   *
-   * The embedder is expected to throw away all intermediate data and reset to
-   * the initial state.
-   */
-  V8_DEPRECATED("Obsolete as V8 will not abort tracing anymore.",
-                virtual void AbortTracing()) {}
 
   /*
    * Called by the embedder to request immediate finalization of the currently
@@ -8529,13 +8488,6 @@ class V8_EXPORT V8 {
 #endif  // V8_OS_POSIX
 
   /**
-   * Enable the default signal handler rather than using one provided by the
-   * embedder.
-   */
-  V8_DEPRECATED("Use EnableWebAssemblyTrapHandler",
-                static bool RegisterDefaultSignalHandler());
-
-  /**
    * Activate trap-based bounds checking for WebAssembly.
    *
    * \param use_v8_signal_handler Whether V8 should install its own signal
@@ -9622,17 +9574,6 @@ uint16_t PersistentBase<T>::WrapperClassId() const {
 
 template <typename T>
 ReturnValue<T>::ReturnValue(internal::Address* slot) : value_(slot) {}
-
-template<typename T>
-template<typename S>
-void ReturnValue<T>::Set(const Persistent<S>& handle) {
-  TYPE_CHECK(T, S);
-  if (V8_UNLIKELY(handle.IsEmpty())) {
-    *value_ = GetDefaultValue();
-  } else {
-    *value_ = *reinterpret_cast<internal::Address*>(*handle);
-  }
-}
 
 template <typename T>
 template <typename S>

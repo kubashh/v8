@@ -4911,14 +4911,6 @@ MaybeLocal<Function> Function::New(Local<Context> context,
   return templ->GetFunction(context);
 }
 
-
-Local<Function> Function::New(Isolate* v8_isolate, FunctionCallback callback,
-                              Local<Value> data, int length) {
-  return Function::New(v8_isolate->GetCurrentContext(), callback, data, length,
-                       ConstructorBehavior::kAllow)
-      .FromMaybe(Local<Function>());
-}
-
 MaybeLocal<Object> Function::NewInstance(Local<Context> context, int argc,
                                          v8::Local<v8::Value> argv[]) const {
   return NewInstanceWithSideEffectType(context, argc, argv,
@@ -4992,13 +4984,6 @@ MaybeLocal<v8::Value> Function::Call(Local<Context> context,
       i::Execution::Call(isolate, self, recv_obj, argc, args), &result);
   RETURN_ON_FAILED_EXECUTION(Value);
   RETURN_ESCAPED(result);
-}
-
-
-Local<v8::Value> Function::Call(v8::Local<v8::Value> recv, int argc,
-                                v8::Local<v8::Value> argv[]) {
-  auto context = ContextFromNeverReadOnlySpaceObject(Utils::OpenHandle(this));
-  RETURN_TO_LOCAL_UNCHECKED(Call(context, recv, argc, argv), Value);
 }
 
 
@@ -5793,10 +5778,6 @@ bool TryHandleWebAssemblyTrapWindows(EXCEPTION_POINTERS* exception) {
 }
 #endif
 
-bool V8::RegisterDefaultSignalHandler() {
-  return v8::internal::trap_handler::RegisterDefaultTrapHandler();
-}
-
 bool V8::EnableWebAssemblyTrapHandler(bool use_v8_signal_handler) {
   return v8::internal::trap_handler::EnableTrapHandler(use_v8_signal_handler);
 }
@@ -6207,14 +6188,6 @@ MaybeLocal<v8::Object> ObjectTemplate::NewInstance(Local<Context> context) {
   RETURN_ESCAPED(result);
 }
 
-
-Local<v8::Object> ObjectTemplate::NewInstance() {
-  Local<Context> context =
-      reinterpret_cast<v8::Isolate*>(Utils::OpenHandle(this)->GetIsolate())
-          ->GetCurrentContext();
-  RETURN_TO_LOCAL_UNCHECKED(NewInstance(context), Object);
-}
-
 void v8::ObjectTemplate::CheckCast(Data* that) {
   i::Handle<i::Object> obj = Utils::OpenHandle(that);
   Utils::ApiCheck(obj->IsObjectTemplateInfo(), "v8::ObjectTemplate::Cast",
@@ -6247,14 +6220,6 @@ MaybeLocal<v8::Function> FunctionTemplate::GetFunction(Local<Context> context) {
       !ToLocal<Function>(i::ApiNatives::InstantiateFunction(self), &result);
   RETURN_ON_FAILED_EXECUTION(Function);
   RETURN_ESCAPED(result);
-}
-
-
-Local<v8::Function> FunctionTemplate::GetFunction() {
-  Local<Context> context =
-      reinterpret_cast<v8::Isolate*>(Utils::OpenHandle(this)->GetIsolate())
-          ->GetCurrentContext();
-  RETURN_TO_LOCAL_UNCHECKED(GetFunction(context), Function);
 }
 
 MaybeLocal<v8::Object> FunctionTemplate::NewRemoteInstance() {
