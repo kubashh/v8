@@ -217,6 +217,9 @@ void CodeSerializer::SerializeObject(HeapObject obj, HowToCode how_to_code,
 
   // Past this point we should not see any (context-specific) maps anymore.
   CHECK(!obj->IsMap());
+  // Handling of descriptor arrays in Serializer::ObjectSerializer::Serialize
+  // must be reconsidered if we ever start serializing descriptor arrays here.
+  CHECK(!obj->IsDescriptorArray());
   // There should be no references to the global object embedded.
   CHECK(!obj->IsJSGlobalProxy() && !obj->IsJSGlobalObject());
   // Embedded FixedArrays that need rehashing must support rehashing.
