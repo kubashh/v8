@@ -28,9 +28,9 @@ class V8_EXPORT_PRIVATE MicrotaskQueue {
 
   ~MicrotaskQueue();
 
-  static Object* CallEnqueueMicrotask(Isolate* isolate,
-                                      intptr_t microtask_queue_pointer,
-                                      Microtask microtask);
+  static Object CallEnqueueMicrotask(Isolate* isolate,
+                                     intptr_t microtask_queue_pointer,
+                                     Microtask microtask);
 
   void EnqueueMicrotask(Microtask microtask);
 
