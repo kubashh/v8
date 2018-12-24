@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15647ae7_30593762",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-24T10:46:35Z",
+      "side": 1,
+      "message": "I\u0027ll refactor this and the below into one helper in the next PS.",
+      "revId": "fd177346346c6a72f974b6be6b24fe2d807c3660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4b8a0f8_07fc44aa",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-24T10:46:35Z",
+      "side": 1,
+      "message": "Will also create a helper function to wrap this.",
+      "revId": "fd177346346c6a72f974b6be6b24fe2d807c3660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8162ed0a_91d03f6d",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-24T10:46:35Z",
+      "side": 1,
+      "message": "Bikeshedding: SetCodePermissions? Something else?",
+      "revId": "fd177346346c6a72f974b6be6b24fe2d807c3660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90a34f19_6057d0c1",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-24T10:46:35Z",
+      "side": 1,
+      "message": "Will fix this dupe in the next PS.",
+      "revId": "fd177346346c6a72f974b6be6b24fe2d807c3660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
