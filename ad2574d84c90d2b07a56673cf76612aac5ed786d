@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "639c6409_370cb1dd",
+        "filename": "src/heap/scavenger.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2018-12-24T10:12:11Z",
+      "side": 0,
+      "message": "Not sure about this change. The HeapObject hasher could be made more precise by dropping the lower 2/3 bits.",
+      "range": {
+        "startLine": 27,
+        "startChar": 38,
+        "endLine": 27,
+        "endChar": 58
+      },
+      "revId": "ad2574d84c90d2b07a56673cf76612aac5ed786d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
