@@ -646,8 +646,17 @@ class MemoryChunk {
   // MemoryChunk::synchronized_heap() to simulate the barrier.
   void InitializationMemoryFence();
 
+  void SetReadable();
   void SetReadAndExecutable();
   void SetReadAndWritable();
+
+  void SetPermissionsForCode() {
+    if (FLAG_jitless) {
+      SetReadable();
+    } else {
+      SetReadAndExecutable();
+    }
+  }
 
   base::ListNode<MemoryChunk>& list_node() { return list_node_; }
 
@@ -2208,8 +2217,17 @@ class V8_EXPORT_PRIVATE PagedSpace
   // be used for allocation.
   Page* RemovePageSafe(int size_in_bytes);
 
+  void SetReadable();
   void SetReadAndExecutable();
   void SetReadAndWritable();
+
+  void SetPermissionsForCode() {
+    if (FLAG_jitless) {
+      SetReadable();
+    } else {
+      SetReadAndExecutable();
+    }
+  }
 
 #ifdef VERIFY_HEAP
   // Verify integrity of this space.

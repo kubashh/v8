@@ -3477,6 +3477,9 @@ TEST(TestCallBuiltinInlineTrampoline) {
                        Handle<String>::cast(result.ToHandleChecked())));
 }
 
+// use_pc_relative_calls_and_jumps is only relevant on arm and mips.
+#if defined(V8_TARGET_ARCH_ARM) || defined(V8_TARGET_ARCH_MIPS)
+
 TEST(TestCallBuiltinIndirectLoad) {
   Isolate* isolate(CcTest::InitIsolateOnce());
   const int kNumParams = 1;
@@ -3500,6 +3503,8 @@ TEST(TestCallBuiltinIndirectLoad) {
   CHECK(String::Equals(isolate, MakeString("abcdefabcdef"),
                        Handle<String>::cast(result.ToHandleChecked())));
 }
+
+#endif  // defined(V8_TARGET_ARCH_ARM) || defined(V8_TARGET_ARCH_MIPS)
 
 TEST(TestGotoIfDebugExecutionModeChecksSideEffects) {
   Isolate* isolate(CcTest::InitIsolateOnce());

@@ -544,7 +544,34 @@ void MemoryChunk::InitializationMemoryFence() {
 #endif
 }
 
+void MemoryChunk::SetReadable() {
+  DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
+  DCHECK(owner()->identity() == CODE_SPACE ||
+         owner()->identity() == CODE_LO_SPACE);
+  // Decrementing the write_unprotect_counter_ and changing the page
+  // protection mode has to be atomic.
+  base::MutexGuard guard(page_protection_change_mutex_);
+  if (write_unprotect_counter_ == 0) {
+    // This is a corner case that may happen when we have a
+    // CodeSpaceMemoryModificationScope open and this page was newly
+    // added.
+    return;
+  }
+  write_unprotect_counter_--;
+  DCHECK_LT(write_unprotect_counter_, kMaxWriteUnprotectCounter);
+  if (write_unprotect_counter_ == 0) {
+    Address protect_start =
+        address() + MemoryChunkLayout::ObjectStartOffsetInCodePage();
+    size_t page_size = MemoryAllocator::GetCommitPageSize();
+    DCHECK(IsAligned(protect_start, page_size));
+    size_t protect_size = RoundUp(area_size(), page_size);
+    CHECK(reservation_.SetPermissions(protect_start, protect_size,
+                                      PageAllocator::kRead));
+  }
+}
+
 void MemoryChunk::SetReadAndExecutable() {
+  DCHECK(!FLAG_jitless);
   DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
   DCHECK(owner()->identity() == CODE_SPACE ||
          owner()->identity() == CODE_LO_SPACE);
@@ -657,7 +684,9 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
       DCHECK(IsAligned(area_start, page_size));
       size_t area_size = RoundUp(area_end - area_start, page_size);
       CHECK(reservation.SetPermissions(area_start, area_size,
-                                       PageAllocator::kReadWriteExecute));
+                                       FLAG_jitless
+                                           ? PageAllocator::kReadWrite
+                                           : PageAllocator::kReadWriteExecute));
     }
   }
 
@@ -1830,6 +1859,14 @@ void PagedSpace::ReleasePage(Page* page) {
   AccountUncommitted(page->size());
   accounting_stats_.DecreaseCapacity(page->area_size());
   heap()->memory_allocator()->Free<MemoryAllocator::kPreFreeAndQueue>(page);
+}
+
+void PagedSpace::SetReadable() {
+  DCHECK(identity() == CODE_SPACE);
+  for (Page* page : *this) {
+    CHECK(heap()->memory_allocator()->IsMemoryChunkExecutable(page));
+    page->SetReadable();
+  }
 }
 
 void PagedSpace::SetReadAndExecutable() {
