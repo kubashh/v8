@@ -637,9 +637,9 @@ ExternalReference ExternalReference::search_string_raw_two_two() {
 
 FUNCTION_REFERENCE(orderedhashmap_gethash_raw, OrderedHashMap::GetHash)
 
-Address GetOrCreateHash(Isolate* isolate, Object* key) {
+Address GetOrCreateHash(Isolate* isolate, Address raw_key) {
   DisallowHeapAllocation no_gc;
-  return key->GetOrCreateHash(isolate).ptr();
+  return Object(raw_key)->GetOrCreateHash(isolate).ptr();
 }
 
 FUNCTION_REFERENCE(get_or_create_hash_raw, GetOrCreateHash)

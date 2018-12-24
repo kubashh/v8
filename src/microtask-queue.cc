@@ -64,9 +64,9 @@ MicrotaskQueue::~MicrotaskQueue() {
 }
 
 // static
-Object* MicrotaskQueue::CallEnqueueMicrotask(Isolate* isolate,
-                                             intptr_t microtask_queue_pointer,
-                                             Microtask microtask) {
+Object MicrotaskQueue::CallEnqueueMicrotask(Isolate* isolate,
+                                            intptr_t microtask_queue_pointer,
+                                            Microtask microtask) {
   reinterpret_cast<MicrotaskQueue*>(microtask_queue_pointer)
       ->EnqueueMicrotask(microtask);
   return ReadOnlyRoots(isolate).undefined_value();
