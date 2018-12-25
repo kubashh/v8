@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8a3e4bc6_a205a909",
+        "filename": "src/objects.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-12-25T00:21:59Z",
+      "side": 1,
+      "message": "E.g. https://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8928917821925856512/+/steps/build/0/steps/compile/0/stdout\n\nNote that this code and comment isn\u0027t new here, it moved from ObjectPtr.\n\nI\u0027m also not sure whether this is the best long-term state. Maybe what we would prefer is an \"explicit operator bool()\". It depends on (1) whether we want to support \"if (obj) {...}\", and (2) on whether we can make all compilers agree on it. To be discussed.",
+      "parentUuid": "6051ea67_eac2aa9c",
+      "revId": "bac0875237f3522c6bb4a4ac22441a5cb81dd669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11c06fc7_543a5c16",
         "filename": "src/objects.h",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2018-12-24T09:03:45Z",
       "side": 1,
       "message": "I kinda like this \u0027that\u0027 convention for these operators, the body then becomes \u0027this-\u003ex !\u003d that.x\u0027. Just an opinion though :)",
+      "revId": "bac0875237f3522c6bb4a4ac22441a5cb81dd669",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "254e96fb_5a9432ef",
+        "filename": "src/objects.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-12-25T00:21:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11c06fc7_543a5c16",
       "revId": "bac0875237f3522c6bb4a4ac22441a5cb81dd669",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false

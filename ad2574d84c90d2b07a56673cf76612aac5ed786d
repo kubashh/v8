@@ -22,6 +22,30 @@
       "revId": "ad2574d84c90d2b07a56673cf76612aac5ed786d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a81c90d4_08eba695",
+        "filename": "src/heap/scavenger.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2018-12-25T00:21:59Z",
+      "side": 0,
+      "message": "It\u0027s not a functional change. The Hasher struct moved from HeapObject to Object in this CL. I agree that we can in the future consider having a specialized HeapObject::Hasher. For now, the Hasher does exactly what std::unordered_map would have done by default for an old-style HeapObject* or Object*.",
+      "parentUuid": "639c6409_370cb1dd",
+      "range": {
+        "startLine": 27,
+        "startChar": 38,
+        "endLine": 27,
+        "endChar": 58
+      },
+      "revId": "ad2574d84c90d2b07a56673cf76612aac5ed786d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
