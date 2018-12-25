@@ -8,6 +8,7 @@
 #include "src/base/division-by-constant.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/bootstrapper.h"
+#include "src/builtins/constants-table-builder.h"
 #include "src/callable.h"
 #include "src/code-factory.h"
 #include "src/counters.h"
@@ -1470,6 +1471,17 @@ void MacroAssembler::Cmp(Operand dst, Handle<Object> source) {
 }
 
 void TurboAssembler::Push(Handle<HeapObject> source) {
+  if (FLAG_embedded_builtins) {
+    if (root_array_available_ && options().isolate_independent_code) {
+      LoadRoot(kScratchRegister, RootIndex::kBuiltinsConstantsTable);
+      BuiltinsConstantsTableBuilder* builder =
+        isolate()->builtins_constants_table_builder();
+      uint32_t index = builder->AddObject(source);
+      pushq(FieldOperand(kScratchRegister,
+            FixedArray::kHeaderSize + index * kPointerSize));
+      return;
+    }
+  }
   Move(kScratchRegister, source);
   Push(kScratchRegister);
 }
