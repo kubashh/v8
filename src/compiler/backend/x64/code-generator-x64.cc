@@ -2113,6 +2113,16 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
         frame_access_state()->IncreaseSPDelta(1);
         unwinding_info_writer_.MaybeIncreaseBaseOffsetAt(__ pc_offset(),
                                                          kSystemPointerSize);
+      } else if (instr->InputAt(0)->kind() == InstructionOperand::CONSTANT) {
+        Constant src = i.ToConstant(instr->InputAt(0));
+        Handle<HeapObject> src_object = src.ToHeapObject();
+        RootIndex index;
+        if (IsMaterializableFromRoot(src_object, &index)) {
+          __ pushq(Operand(kRootRegister,
+                TurboAssembler::RootRegisterOffsetForRootIndex(index)));
+        } else {
+          __ Push(src_object);
+        }
       } else {
         DCHECK(instr->InputAt(0)->IsSimd128StackSlot());
         __ Movups(kScratchDoubleReg, i.InputOperand(0));
