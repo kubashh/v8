@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "838e9d35_1d221fbe",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-31T11:40:40Z",
+      "side": 1,
+      "message": "Not here at least, we still need to allocate both RW and R pages (R for CODE/LO_CODE spaces, RW for other spaces). Did you mean another spot?",
+      "parentUuid": "0a26a1db_3a1f9884",
+      "range": {
+        "startLine": 427,
+        "startChar": 7,
+        "endLine": 427,
+        "endChar": 46
+      },
+      "revId": "fd177346346c6a72f974b6be6b24fe2d807c3660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15647ae7_30593762",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 1
@@ -95,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "f3316c7c_cc3df3a7",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-31T11:40:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc6c4bd3_5148abc4",
+      "revId": "fd177346346c6a72f974b6be6b24fe2d807c3660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8162ed0a_91d03f6d",
         "filename": "src/heap/spaces.h",
         "patchSetId": 1
@@ -153,6 +195,30 @@
     },
     {
       "key": {
+        "uuid": "094374c2_8361dbb2",
+        "filename": "test/mkgrokdump/mkgrokdump.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-31T11:40:40Z",
+      "side": 1,
+      "message": "The initial heap layout appears to be slightly different for lite mode. I haven\u0027t checked in detail, but the mkgrokdump test is only relevant for the main shipping config.",
+      "parentUuid": "cf899d8a_8c5fc8f6",
+      "range": {
+        "startLine": 8,
+        "startChar": 36,
+        "endLine": 8,
+        "endChar": 48
+      },
+      "revId": "fd177346346c6a72f974b6be6b24fe2d807c3660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "90a34f19_6057d0c1",
         "filename": "tools/testrunner/base_runner.py",
         "patchSetId": 1
@@ -182,6 +248,24 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "90a34f19_6057d0c1",
+      "revId": "fd177346346c6a72f974b6be6b24fe2d807c3660",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab24c84f_25a3d552",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2018-12-31T11:40:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ef937c7_813f3db8",
       "revId": "fd177346346c6a72f974b6be6b24fe2d807c3660",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
