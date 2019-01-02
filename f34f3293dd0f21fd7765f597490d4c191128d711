@@ -16,6 +16,24 @@
       "revId": "f34f3293dd0f21fd7765f597490d4c191128d711",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "782a244d_28095ecf",
+        "filename": "src/torque/implementation-visitor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-02T18:51:43Z",
+      "side": 1,
+      "message": "yes, thanks!",
+      "parentUuid": "8d2358ed_87e7b912",
+      "revId": "f34f3293dd0f21fd7765f597490d4c191128d711",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
