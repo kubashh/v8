@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3832227_67f4a9da",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-02T09:34:17Z",
+      "side": 1,
+      "message": "I guess you don\u0027t actually want to land this change :).",
+      "range": {
+        "startLine": 1099,
+        "startChar": 21,
+        "endLine": 1099,
+        "endChar": 25
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f03c339e_e6ccdb41",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-02T09:34:17Z",
+      "side": 1,
+      "message": "Why do we ever get here with jitless mode? I was asuming we would never be allocating code memory in jitless. If we allocate it but mark it as non-exec surely that is just going to cause a failure down the road if we ever try and use it?",
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d075e03_a7aafc60",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 3
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-02T09:34:17Z",
+      "side": 1,
+      "message": "None of the tests which \"require\" optimized code should need to be skipped, since we already deal with them for lite mode (either skipping during runtime or dealing with lack of optimization). Could you re-generate this list to only disable WASM tests?  Also it would be great if we could solve the WASM problem before landing this - can\u0027t we just enable the interpreter in JITLess?",
+      "range": {
+        "startLine": 357,
+        "startChar": 36,
+        "endLine": 357,
+        "endChar": 52
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
