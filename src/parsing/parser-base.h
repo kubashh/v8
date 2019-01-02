@@ -2285,7 +2285,7 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseMemberInitializer(
     // called once for all the class field initializers, instead of
     // rewriting after each class field initializer, improving
     // performance.
-    impl()->RewriteDestructuringAssignments();
+    impl()->VisitDestructuringAssignments();
   } else {
     initializer = factory()->NewUndefinedLiteral(kNoSourcePosition);
   }
@@ -4127,7 +4127,7 @@ ParserBase<Impl>::ParseArrowFunctionLiteral(
     }
     impl()->CheckConflictingVarDeclarations(formal_parameters.scope);
 
-    impl()->RewriteDestructuringAssignments();
+    impl()->VisitDestructuringAssignments();
     suspend_count = function_state.suspend_count();
   }
 

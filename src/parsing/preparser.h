@@ -1120,7 +1120,7 @@ class PreParser : public ParserBase<PreParser> {
   SpreadCallNew(const PreParserExpression& function,
                 const PreParserExpressionList& args, int pos);
 
-  V8_INLINE void RewriteDestructuringAssignments() {}
+  V8_INLINE void VisitDestructuringAssignments() {}
 
   V8_INLINE void PrepareGeneratorVariables() {}
   V8_INLINE void RewriteAsyncFunctionBody(

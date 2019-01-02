@@ -603,7 +603,7 @@ FunctionLiteral* Parser::DoParseProgram(Isolate* isolate, ParseInfo* info) {
       }
     }
 
-    RewriteDestructuringAssignments();
+    VisitDestructuringAssignments();
     int parameter_count = parsing_module_ ? 1 : 0;
     result = factory()->NewScriptOrEvalFunctionLiteral(
         scope, body, function_state.expected_property_count(), parameter_count);
@@ -1817,9 +1817,9 @@ Statement* Parser::InitializeForEachStatement(ForEachStatement* stmt,
     if (each->IsPattern()) {
       Variable* temp = NewTemporary(ast_value_factory()->empty_string());
       VariableProxy* temp_proxy = factory()->NewVariableProxy(temp);
-      Expression* assign_each =
-          RewriteDestructuringAssignment(factory()->NewAssignment(
-              Token::ASSIGN, each, temp_proxy, kNoSourcePosition));
+      Assignment* assign_each = factory()->NewAssignment(
+          Token::ASSIGN, each, temp_proxy, kNoSourcePosition);
+      VisitDestructuringAssignment(assign_each);
       auto block = factory()->NewBlock(2, false);
       block->statements()->Add(
           factory()->NewExpressionStatement(assign_each, kNoSourcePosition),
@@ -2051,7 +2051,7 @@ Statement* Parser::InitializeForOfStatement(
     assign_each =
         factory()->NewAssignment(Token::ASSIGN, each, result_value, nopos);
     if (each->IsPattern()) {
-      assign_each = RewriteDestructuringAssignment(assign_each->AsAssignment());
+      VisitDestructuringAssignment(assign_each->AsAssignment());
     }
   }
 
@@ -2802,7 +2802,7 @@ class InitializerRewriter final
   // Just rewrite destructuring assignments wrapped in RewritableExpressions.
   void VisitRewritableExpression(RewritableExpression* to_rewrite) {
     if (to_rewrite->is_rewritten()) return;
-    parser_->RewriteDestructuringAssignment(to_rewrite);
+    parser_->VisitDestructuringAssignment(to_rewrite);
     AstTraversalVisitor::VisitRewritableExpression(to_rewrite);
   }
 
@@ -3010,7 +3010,7 @@ void Parser::ParseFunction(
   ParseFunctionBody(body, function_name, pos, formals, kind, function_type,
                     FunctionBodyType::kBlock);
 
-  RewriteDestructuringAssignments();
+  VisitDestructuringAssignments();
 
   *has_duplicate_parameters = formals.has_duplicate();
 
@@ -3515,7 +3515,7 @@ void Parser::RewriteAsyncFunctionBody(ScopedPtrList<Statement>* body,
   body->Add(block);
 }
 
-void Parser::RewriteDestructuringAssignments() {
+void Parser::VisitDestructuringAssignments() {
   const auto& assignments =
       function_state_->destructuring_assignments_to_rewrite();
   auto it = assignments.rbegin();
@@ -3533,7 +3533,7 @@ void Parser::RewriteDestructuringAssignments() {
       // should be in the same function.
       DCHECK(scope->GetClosureScope() == scope_->GetClosureScope());
       BlockState block_state(&scope_, scope);
-      RewriteDestructuringAssignment(to_rewrite);
+      VisitDestructuringAssignment(to_rewrite);
     }
   }
 }

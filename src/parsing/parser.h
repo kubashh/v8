@@ -373,8 +373,8 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
       Block* block, const DeclarationDescriptor* declaration_descriptor,
       const DeclarationParsingResult::Declaration* declaration,
       ZonePtrList<const AstRawString>* names);
-  void RewriteDestructuringAssignment(RewritableExpression* expr);
-  Expression* RewriteDestructuringAssignment(Assignment* assignment);
+  void VisitDestructuringAssignment(RewritableExpression* expr);
+  void VisitDestructuringAssignment(Assignment* assignment);
 
   // [if (IteratorType == kAsync)]
   //     !%_IsJSReceiver(result = Await(next.[[Call]](iterator, « »)) &&
@@ -551,7 +551,7 @@ class V8_EXPORT_PRIVATE Parser : public NON_EXPORTED_BASE(ParserBase<Parser>) {
   void SetAsmModule();
 
   // Rewrite all DestructuringAssignments in the current FunctionState.
-  void RewriteDestructuringAssignments();
+  void VisitDestructuringAssignments();
 
   Expression* RewriteSpreads(ArrayLiteral* lit);
 
