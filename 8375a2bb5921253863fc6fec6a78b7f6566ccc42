@@ -1,0 +1,251 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00cfe4b8_af6ba8e6",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "throughout this file, please use \"const\" instead of \"let\" wherever values do not get re-assigned, there are still a few that aren\u0027t consistent (e.g. elements_kind).",
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "197466d2_58982211",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "here and below, define context as an implicit parameter (take a look at frames.tq to see some examples of this).",
+      "range": {
+        "startLine": 7,
+        "startChar": 15,
+        "endLine": 7,
+        "endChar": 22
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6285a47a_95d814b9",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "if you take the suggestions below, this comment needs to be updated.",
+      "range": {
+        "startLine": 46,
+        "startChar": 11,
+        "endLine": 46,
+        "endChar": 22
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "068b5ba8_e3e0b12e",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "I think I\u0027d prefer \"... \u003d Cast\u003cJSReceiver\u003e otherwise unreachable;\" here and below. If it\u0027s not performance-relevant, then it\u0027s better to avoid the UnsafeCast.",
+      "range": {
+        "startLine": 49,
+        "startChar": 35,
+        "endLine": 49,
+        "endChar": 45
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eb49297_aa13ead0",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "If you take the suggestion below, the comment here needs to be updated.",
+      "range": {
+        "startLine": 61,
+        "startChar": 31,
+        "endLine": 61,
+        "endChar": 38
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "068a144b_acbe5464",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "use \"Cast\u003c\u003e\" with unreachable, see above.",
+      "range": {
+        "startLine": 64,
+        "startChar": 46,
+        "endLine": 64,
+        "endChar": 56
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "756fcf42_45baf763",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "Here and below, \"otherwise unreachable;\" works here, too, no need for the wrapping \"try/label\"/",
+      "range": {
+        "startLine": 92,
+        "startChar": 47,
+        "endLine": 92,
+        "endChar": 67
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22ce7adc_31fdda79",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "don\u0027t know if this is more readable, but you can also make this and the following \"goto slow\" \"goto Bailout(k, to);\" directly, removes the need for the wrapping \"try/label\"",
+      "range": {
+        "startLine": 116,
+        "startChar": 31,
+        "endLine": 116,
+        "endChar": 35
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26fbe783_8e2604a1",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "This test is rather expensive to have in the inner loop. Are all the checks really necessary? Can you get by with a map check against the original map, or do you have to check the invalidation cells, too?",
+      "range": {
+        "startLine": 129,
+        "startChar": 39,
+        "endLine": 129,
+        "endChar": 48
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de677c40_cccd756c",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "not sure if this is more readable, but FYI you can also write:\n\notherwise goto Bailout(k, to);\n\nhere and below.",
+      "range": {
+        "startLine": 171,
+        "startChar": 41,
+        "endLine": 171,
+        "endChar": 55
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d162bf0_7db1b5a8",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-01-02T17:05:01Z",
+      "side": 1,
+      "message": "Perhaps also use a FastJSArray cast here? On success, then you can do:\n\nlet newMap: Map \u003d LoadJSArrayElementsMap(a.map.elements_kind, LoadNativeContext(context));\n\nFor now, there will be duplicate loads of the map and kind, but with Tobias\u0027 CSA load elimination, that will go away and I\u0027d prefer the shorter Torque code.",
+      "range": {
+        "startLine": 202,
+        "startChar": 35,
+        "endLine": 202,
+        "endChar": 36
+      },
+      "revId": "8375a2bb5921253863fc6fec6a78b7f6566ccc42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
