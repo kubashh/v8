@@ -501,7 +501,10 @@ std::set<std::string> Intl::BuildLocaleSet(
     const icu::Locale* icu_available_locales, int32_t count) {
   std::set<std::string> locales;
   for (int32_t i = 0; i < count; ++i) {
-    std::string locale = Intl::ToLanguageTag(icu_available_locales[i]);
+    Maybe<std::string> maybe_locale =
+        Intl::ToLanguageTag(icu_available_locales[i]);
+    CHECK(maybe_locale.IsJust());
+    std::string locale = maybe_locale.FromJust();
     locales.insert(locale);
 
     std::string shortened_locale;
@@ -514,9 +517,12 @@ std::set<std::string> Intl::BuildLocaleSet(
   return locales;
 }
 
-std::string Intl::ToLanguageTag(const icu::Locale& locale) {
+Maybe<std::string> Intl::ToLanguageTag(const icu::Locale& locale) {
   UErrorCode status = U_ZERO_ERROR;
   std::string res = locale.toLanguageTag<std::string>(status);
+  if (U_FAILURE(status)) {
+    return Nothing<std::string>();
+  }
   CHECK(U_SUCCESS(status));
 
   // Hack to remove -true from unicode extensions
@@ -532,7 +538,7 @@ std::string Intl::ToLanguageTag(const icu::Locale& locale) {
       res.erase(sep_true, 5 /* strlen(kSepTrue) == 5 */);
     }
   }
-  return res;
+  return Just(res);
 }
 
 namespace {
@@ -544,9 +550,17 @@ std::string DefaultLocale(Isolate* isolate) {
       isolate->set_default_locale("en-US");
     } else {
       // Set the locale
-      isolate->set_default_locale(default_locale.isBogus()
-                                      ? "und"
-                                      : Intl::ToLanguageTag(default_locale));
+      if (default_locale.isBogus()) {
+        isolate->set_default_locale("und");
+      } else {
+        Maybe<std::string> maybe_to_language_tag =
+            Intl::ToLanguageTag(default_locale);
+        if (maybe_to_language_tag.IsNothing()) {
+          isolate->set_default_locale("und");
+        } else {
+          isolate->set_default_locale(maybe_to_language_tag.FromJust());
+        }
+      }
     }
     DCHECK(!isolate->default_locale().empty());
   }
@@ -758,14 +772,21 @@ Maybe<std::string> Intl::CanonicalizeLanguageTag(Isolate* isolate,
   // without Chromium patches or ICU 62 or earlier.
   UErrorCode error = U_ZERO_ERROR;
   icu::Locale icu_locale = icu::Locale::forLanguageTag(locale.c_str(), error);
-  if (U_FAILURE(error)) {
+  if (U_FAILURE(error) || icu_locale.isBogus()) {
+    THROW_NEW_ERROR_RETURN_VALUE(
+        isolate,
+        NewRangeError(MessageTemplate::kInvalidLanguageTag, locale_str),
+        Nothing<std::string>());
+  }
+  Maybe<std::string> maybe_to_language_tag = Intl::ToLanguageTag(icu_locale);
+  if (maybe_to_language_tag.IsNothing()) {
     THROW_NEW_ERROR_RETURN_VALUE(
         isolate,
         NewRangeError(MessageTemplate::kInvalidLanguageTag, locale_str),
         Nothing<std::string>());
   }
 
-  return Just(Intl::ToLanguageTag(icu_locale));
+  return maybe_to_language_tag;
 }
 
 Maybe<std::vector<std::string>> Intl::CanonicalizeLocaleList(
@@ -1624,11 +1645,14 @@ Intl::ResolvedLocale Intl::ResolveLocale(
   std::map<std::string, std::string> extensions =
       LookupAndValidateUnicodeExtensions(&icu_locale, relevant_extension_keys);
 
-  std::string canonicalized_locale = Intl::ToLanguageTag(icu_locale);
+  Maybe<std::string> maybe_canonicalized_locale =
+      Intl::ToLanguageTag(icu_locale);
+  CHECK(maybe_canonicalized_locale.IsJust());
 
   // TODO(gsathya): Remove privateuse subtags from extensions.
 
-  return Intl::ResolvedLocale{canonicalized_locale, icu_locale, extensions};
+  return Intl::ResolvedLocale{maybe_canonicalized_locale.FromJust(), icu_locale,
+                              extensions};
 }
 
 Managed<icu::UnicodeString> Intl::SetTextToBreakIterator(
