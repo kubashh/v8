@@ -215,8 +215,10 @@ Handle<String> MorphLocale(Isolate* isolate, String locale,
   (*morph_func)(&icu_locale, &status);
   CHECK(U_SUCCESS(status));
   CHECK(!icu_locale.isBogus());
-  std::string locale_str = Intl::ToLanguageTag(icu_locale);
-  return isolate->factory()->NewStringFromAsciiChecked(locale_str.c_str());
+  Maybe<std::string> maybe_locale_str = Intl::ToLanguageTag(icu_locale);
+  CHECK(maybe_locale_str.IsJust());
+  return isolate->factory()->NewStringFromAsciiChecked(
+      maybe_locale_str.FromJust().c_str());
 }
 
 }  // namespace
@@ -259,7 +261,9 @@ Handle<Object> JSLocale::Region(Isolate* isolate, Handle<JSLocale> locale) {
 Handle<String> JSLocale::BaseName(Isolate* isolate, Handle<JSLocale> locale) {
   icu::Locale icu_locale =
       icu::Locale::createFromName(locale->icu_locale()->raw()->getBaseName());
-  std::string base_name = Intl::ToLanguageTag(icu_locale);
+  Maybe<std::string> maybe_base_name = Intl::ToLanguageTag(icu_locale);
+  MAYBE_RETURN(maybe_base_name, Handle<String>());
+  std::string base_name = maybe_base_name.FromJust();
   return isolate->factory()->NewStringFromAsciiChecked(base_name.c_str());
 }
 
@@ -295,7 +299,9 @@ Handle<Object> JSLocale::NumberingSystem(Isolate* isolate,
 
 Handle<String> JSLocale::ToString(Isolate* isolate, Handle<JSLocale> locale) {
   icu::Locale* icu_locale = locale->icu_locale()->raw();
-  std::string locale_str = Intl::ToLanguageTag(*icu_locale);
+  Maybe<std::string> maybe_locale_str = Intl::ToLanguageTag(*icu_locale);
+  MAYBE_RETURN(maybe_locale_str, Handle<String>());
+  std::string locale_str = maybe_locale_str.FromJust();
   return isolate->factory()->NewStringFromAsciiChecked(locale_str.c_str());
 }
 
