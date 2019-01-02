@@ -432,6 +432,7 @@ class PreParserScopedStatementList {
   void Rewind() {}
   void MergeInto(const PreParserScopedStatementList* other) {}
   void Add(const PreParserStatement& element) {}
+  int length() { return 0; }
 };
 
 // The pre-parser doesn't need to build lists of expressions, identifiers, or
@@ -1127,8 +1128,8 @@ class PreParser : public ParserBase<PreParser> {
       const PreParserScopedStatementList* body, PreParserStatement block,
       const PreParserExpression& return_value) {}
 
-  void DeclareAndInitializeVariables(
-      PreParserStatement block,
+  void DeclareVariablesAndInitialize(
+      PreParserScopedStatementList* statements,
       const DeclarationDescriptor* declaration_descriptor,
       const DeclarationParsingResult::Declaration* declaration,
       ZonePtrList<const AstRawString>* names);
@@ -1447,9 +1448,8 @@ class PreParser : public ParserBase<PreParser> {
   BuildInitializationBlock(DeclarationParsingResult* parsing_result,
                            ZonePtrList<const AstRawString>* names) {
     for (auto declaration : parsing_result->declarations) {
-      DeclareAndInitializeVariables(PreParserStatement::Default(),
-                                    &(parsing_result->descriptor), &declaration,
-                                    names);
+      DeclareVariablesAndInitialize(nullptr, &(parsing_result->descriptor),
+                                    &declaration, names);
     }
     return PreParserStatement::Default();
   }
@@ -1485,8 +1485,8 @@ class PreParser : public ParserBase<PreParser> {
         IsLexicalVariableMode(for_info->parsing_result.descriptor.mode) ||
         is_for_var_of;
 
-    DeclareAndInitializeVariables(
-        PreParserStatement::Default(), &for_info->parsing_result.descriptor,
+    DeclareVariablesAndInitialize(
+        nullptr, &for_info->parsing_result.descriptor,
         &for_info->parsing_result.declarations[0],
         collect_names ? &for_info->bound_names : nullptr);
   }
