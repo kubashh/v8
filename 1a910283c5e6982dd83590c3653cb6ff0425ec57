@@ -1,0 +1,129 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53c030aa_69c695cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-01-03T01:41:28Z",
+      "side": 1,
+      "message": "propogate",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 9,
+        "endChar": 55
+      },
+      "revId": "1a910283c5e6982dd83590c3653cb6ff0425ec57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89b72074_db19c988",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-01-03T01:41:28Z",
+      "side": 1,
+      "message": "std::string locale \u003d Intl::ToLanguageTag(icu_available_locales[i]).FromJust();",
+      "revId": "1a910283c5e6982dd83590c3653cb6ff0425ec57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8908f2c8_13748eb2",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-01-03T01:41:28Z",
+      "side": 1,
+      "message": "Is it possible for ICU\u0027s default locale to be an incorrect language tag?",
+      "revId": "1a910283c5e6982dd83590c3653cb6ff0425ec57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d977a22_37dfbc08",
+        "filename": "src/objects/intl-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1650,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-01-03T01:41:28Z",
+      "side": 1,
+      "message": "std::string maybe_canonicalized_locale \u003d Intl::ToLanguageTag(icu_locale).FromJust();",
+      "revId": "1a910283c5e6982dd83590c3653cb6ff0425ec57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54eaa01b_d04caca4",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-01-03T01:41:28Z",
+      "side": 1,
+      "message": "std::string maybe_locale_str \u003d Intl::ToLanguageTag(icu_locale).FromJust();",
+      "revId": "1a910283c5e6982dd83590c3653cb6ff0425ec57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bacbe2c9_8a194bb1",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-01-03T01:41:28Z",
+      "side": 1,
+      "message": "Can you add a test for this?",
+      "revId": "1a910283c5e6982dd83590c3653cb6ff0425ec57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51043234_6c401904",
+        "filename": "src/objects/js-locale.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-01-03T01:41:28Z",
+      "side": 1,
+      "message": "Can you add a test for this?",
+      "revId": "1a910283c5e6982dd83590c3653cb6ff0425ec57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
