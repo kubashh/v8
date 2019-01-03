@@ -29,57 +29,57 @@ Debug.setListener(listener);
 function f() {
   var a, b, c, d;
   debugger;                                       // B0
-  [                                               // B1
-    a,                                            // B2
-    b,                                            // B3
-    c = 3                                         // B4
+  [
+    a,                                            // B1
+    b,                                            // B2
+    c = 3                                         // B3
   ] = [1, 2];
-  assertEquals({a:1,b:2,c:3}, {a, b, c});         // B5
+  assertEquals({a:1,b:2,c:3}, {a, b, c});         // B4
 
-  [                                               // B6
-    a,                                            // B7
+  [
+    a,                                            // B5
     [
-      b,                                          // B8
-      c                                           // B9
+      b,                                          // B6
+      c                                           // B7
     ],
-    d                                             // B10
+    d                                             // B8
   ] = [5, [6, 7], 8];
-  assertEquals({a:5,b:6,c:7,d:8}, {a, b, c, d});  // B11
+  assertEquals({a:5,b:6,c:7,d:8}, {a, b, c, d});  // B9
 
-  [                                               // B12
-    a,                                            // B13
-    b,                                            // B14
-    ...c                                          // B15
+  [
+    a,                                            // B10
+    b,                                            // B11
+    ...c                                          // B12
   ] = [1, 2, 3, 4];
-  assertEquals({a:1,b:2,c:[3,4]}, {a, b, c});     // B16
+  assertEquals({a:1,b:2,c:[3,4]}, {a, b, c});     // B13
 
-  ({                                              // B17
+  ({
+    a,                                            // B14
+    b,                                            // B15
+    c = 7                                         // B16
+  } = {a: 5, b: 6});
+  assertEquals({a:5,b:6,c:7}, {a, b, c});         // B17
+
+  ({
     a,                                            // B18
-    b,                                            // B19
-    c = 7                                         // B20
+    b = return1(),                                // B19
+    c = return1()                                 // B20
   } = {a: 5, b: 6});
-  assertEquals({a:5,b:6,c:7}, {a, b, c});         // B21
+  assertEquals({a:5,b:6,c:1}, {a, b, c});         // B23
 
-  ({                                              // B22
-    a,                                            // B23
-    b = return1(),                                // B24
-    c = return1()                                 // B25
-  } = {a: 5, b: 6});
-  assertEquals({a:5,b:6,c:1}, {a, b, c});         // B28
-
-  ({                                              // B29
-    x : a,                                        // B30
-    y : b,                                        // B31
-    z : c = 3                                     // B32
+  ({
+    x : a,                                        // B24
+    y : b,                                        // B25
+    z : c = 3                                     // B26
   } = {x: 1, y: 2});
-  assertEquals({a:1,b:2,c:3}, {a, b, c});         // B33
-}                                                 // B34
+  assertEquals({a:1,b:2,c:3}, {a, b, c});         // B27
+}                                                 // B28
 
 function return1() {
-  return 1                                        // B26
-  ;                                               // B27
+  return 1                                        // B21
+  ;                                               // B22
 }
 
 f();
-Debug.setListener(null);                          // B35
+Debug.setListener(null);                          // B29
 assertNull(exception);
