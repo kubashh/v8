@@ -34,14 +34,14 @@ class Snapper {
     });
   }
 
-  getLastExpandedState(type, default_state) {
+  getLastExpandedState(type: string, default_state: boolean) {
     var state = window.sessionStorage.getItem("expandedState-" + type);
     if (state === null) return default_state;
     return state === 'true';
   }
 
-  setLastExpandedState(type, state) {
-    window.sessionStorage.setItem("expandedState-" + type, state);
+  setLastExpandedState(type: string, state: boolean) {
+    window.sessionStorage.setItem("expandedState-" + type, `${state}`);
   }
 
   toggleSourceExpanded(): void {
@@ -54,16 +54,17 @@ class Snapper {
     this.sourceCollapse.classList.toggle("invisible", !newState);
   }
 
-  setSourceExpanded(newState) {
+  setSourceExpanded(newState: boolean, default_width?: number) {
     if (this.sourceExpand.classList.contains("invisible") === newState) return;
+    const resizer = this.resizer;
     this.sourceExpandUpdate(newState);
-    let resizer = this.resizer;
     if (newState) {
-      resizer.sep_left = resizer.sep_left_snap;
+      resizer.sep_left = default_width ? default_width : resizer.sep_left_snap;
       resizer.sep_left_snap = 0;
     } else {
-      resizer.sep_left_snap = resizer.sep_left;
+      resizer.sep_left_snap = default_width ? default_width : resizer.sep_left;
       resizer.sep_left = 0;
+      window.sessionStorage.setItem("source-pane-width", `${resizer.sep_left_snap}`);
     }
     resizer.updatePanes();
   }
@@ -78,21 +79,22 @@ class Snapper {
     this.disassemblyCollapse.classList.toggle("invisible", !newState);
   }
 
-  setDisassemblyExpanded(newState) {
+  setDisassemblyExpanded(newState: boolean, default_width?: number) {
     if (this.disassemblyExpand.classList.contains("invisible") === newState) return;
     this.disassemblyExpandUpdate(newState);
     let resizer = this.resizer;
     if (newState) {
-      resizer.sep_right = resizer.sep_right_snap;
+      resizer.sep_right = default_width ? default_width : resizer.sep_right_snap;
       resizer.sep_right_snap = resizer.client_width;
     } else {
-      resizer.sep_right_snap = resizer.sep_right;
+      resizer.sep_right_snap = default_width ? default_width : resizer.sep_right;
       resizer.sep_right = resizer.client_width;
+      window.sessionStorage.setItem("disassembly-pane-width", `${resizer.sep_right_snap}`);
     }
     resizer.updatePanes();
   }
 
-  panesUpated() {
+  panesUpdated() {
     this.sourceExpandUpdate(this.resizer.sep_left > this.resizer.dead_width);
     this.disassemblyExpandUpdate(this.resizer.sep_right <
       (this.resizer.client_width - this.resizer.dead_width));
@@ -120,18 +122,16 @@ class Resizer {
     resizer.snapper = new Snapper(resizer)
     resizer.panes_updated_callback = panes_updated_callback;
     resizer.dead_width = dead_width
-    resizer.client_width = document.body.getBoundingClientRect().width;
     resizer.left = document.getElementById(C.SOURCE_PANE_ID);
     resizer.middle = document.getElementById(C.INTERMEDIATE_PANE_ID);
     resizer.right = document.getElementById(C.GENERATED_PANE_ID);
     resizer.resizer_left = d3.select('#resizer-left');
     resizer.resizer_right = d3.select('#resizer-right');
-    resizer.sep_left = resizer.client_width / 3;
-    resizer.sep_right = resizer.client_width / 3 * 2;
     resizer.sep_left_snap = 0;
     resizer.sep_right_snap = 0;
     // Offset to prevent resizers from sliding slightly over one another.
     resizer.sep_width_offset = 7;
+    this.updateWidths();
 
     let dragResizeLeft = d3.drag()
       .on('drag', function () {
@@ -147,6 +147,9 @@ class Resizer {
         }
       })
       .on('end', function () {
+        if (!resizer.isRightSnapped()) {
+          window.sessionStorage.setItem("source-pane-width", `${resizer.sep_left / resizer.client_width}`);
+        }
         resizer.resizer_left.classed("dragged", false);
       });
     resizer.resizer_left.call(dragResizeLeft);
@@ -165,6 +168,10 @@ class Resizer {
         }
       })
       .on('end', function () {
+        if (!resizer.isRightSnapped()) {
+          console.log(`disassembly-pane-width ${resizer.sep_right}`)
+          window.sessionStorage.setItem("disassembly-pane-width", `${resizer.sep_right / resizer.client_width}`);
+        }
         resizer.resizer_right.classed("dragged", false);
       });;
     resizer.resizer_right.call(dragResizeRight);
@@ -172,11 +179,21 @@ class Resizer {
       resizer.updateWidths();
       resizer.updatePanes();
     };
+
+    this.updatePanes();
+  }
+
+  isLeftSnapped() {
+    return this.sep_left === 0;
+  }
+
+  isRightSnapped() {
+    return this.sep_right >= this.client_width - 1;
   }
 
   updatePanes() {
-    let left_snapped = this.sep_left === 0;
-    let right_snapped = this.sep_right >= this.client_width - 1;
+    let left_snapped = this.isLeftSnapped();
+    let right_snapped = this.isRightSnapped();
     this.resizer_left.classed("snapped", left_snapped);
     this.resizer_right.classed("snapped", right_snapped);
     this.left.style.width = this.sep_left + 'px';
@@ -185,14 +202,16 @@ class Resizer {
     this.resizer_left.style('left', this.sep_left + 'px');
     this.resizer_right.style('right', (this.client_width - this.sep_right - 1) + 'px');
 
-    this.snapper.panesUpated();
+    this.snapper.panesUpdated();
     this.panes_updated_callback();
   }
 
   updateWidths() {
     this.client_width = document.body.getBoundingClientRect().width;
-    this.sep_right = Math.min(this.sep_right, this.client_width);
-    this.sep_left = Math.min(Math.max(0, this.sep_left), this.sep_right);
+    const sep_left = window.sessionStorage.getItem("source-pane-width");
+    this.sep_left = this.client_width * (sep_left ? Number.parseFloat(sep_left) : (1 / 3));
+    const sep_right = window.sessionStorage.getItem("disassembly-pane-width");
+    this.sep_right = this.client_width * (sep_right ? Number.parseFloat(sep_right) : (2 / 3));
   }
 }
 
