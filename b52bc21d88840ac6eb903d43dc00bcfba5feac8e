@@ -16,6 +16,24 @@
       "revId": "b52bc21d88840ac6eb903d43dc00bcfba5feac8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "450710b4_eab0f125",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3647,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-01-04T15:57:32Z",
+      "side": 1,
+      "message": "Tried it, turned out not to be true. Makes sense, since variables without initialisers won\u0027t add any initialisation statements.",
+      "parentUuid": "7e132bb9_9886d5c3",
+      "revId": "b52bc21d88840ac6eb903d43dc00bcfba5feac8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
