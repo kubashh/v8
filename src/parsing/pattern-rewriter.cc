@@ -38,9 +38,8 @@ class PatternRewriter final : public AstVisitor<PatternRewriter> {
 
   typedef Parser::DeclarationDescriptor DeclarationDescriptor;
 
-  static void DeclareAndInitializeVariables(
-      Parser* parser, Block* block,
-      const DeclarationDescriptor* declaration_descriptor,
+  static void DeclarePatternVariables(
+      Parser* parser, const DeclarationDescriptor* declaration_descriptor,
       const Parser::DeclarationParsingResult::Declaration* declaration,
       ZonePtrList<const AstRawString>* names);
 
@@ -111,13 +110,14 @@ class PatternRewriter final : public AstVisitor<PatternRewriter> {
   DEFINE_AST_VISITOR_MEMBERS_WITHOUT_STACKOVERFLOW()
 };
 
-void Parser::DeclareAndInitializeVariables(
-    Block* block, const DeclarationDescriptor* declaration_descriptor,
+void Parser::DeclareVariablesAndInitialize(
+    ScopedPtrList<Statement>* statements,
+    const DeclarationDescriptor* declaration_descriptor,
     const DeclarationParsingResult::Declaration* declaration,
     ZonePtrList<const AstRawString>* names) {
   if (has_error()) return;
-  PatternRewriter::DeclareAndInitializeVariables(
-      this, block, declaration_descriptor, declaration, names);
+  PatternRewriter::DeclarePatternVariables(this, declaration_descriptor,
+                                           declaration, names);
 
   if (declaration->initializer) {
     int pos = declaration->value_beg_position;
@@ -126,8 +126,7 @@ void Parser::DeclareAndInitializeVariables(
     }
     Assignment* assignment = factory()->NewAssignment(
         Token::INIT, declaration->pattern, declaration->initializer, pos);
-    block->statements()->Add(factory()->NewExpressionStatement(assignment, pos),
-                             zone());
+    statements->Add(factory()->NewExpressionStatement(assignment, pos));
   }
 }
 
@@ -148,13 +147,10 @@ void Parser::VisitDestructuringAssignment(Assignment* assignment) {
   PatternRewriter::VisitDestructuringAssignment(this, assignment);
 }
 
-void PatternRewriter::DeclareAndInitializeVariables(
-    Parser* parser, Block* block,
-    const DeclarationDescriptor* declaration_descriptor,
+void PatternRewriter::DeclarePatternVariables(
+    Parser* parser, const DeclarationDescriptor* declaration_descriptor,
     const Parser::DeclarationParsingResult::Declaration* declaration,
     ZonePtrList<const AstRawString>* names) {
-  DCHECK(block->ignore_completion_value());
-
   PatternRewriter rewriter(parser, BINDING, declaration_descriptor, names,
                            declaration->initializer_position,
                            declaration_descriptor->declaration_kind ==
