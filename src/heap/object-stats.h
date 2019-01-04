@@ -12,7 +12,13 @@
 // for object stats tracing. In contrast to Code and FixedArray sub types
 // these types are not known to other counters outside of object stats
 // tracing.
-//
+
+#ifdef V8_INTL_SUPPORT
+#define VIRTUAL_INSTANCE_TYPE_LIST_INTL(V) V(JS_COLLATOR_TYPE)
+#else  // V8_INTL_SUPPORT
+#define VIRTUAL_INSTANCE_TYPE_LIST_INTL(V)
+#endif  // V8_INTL_SUPPORT
+
 // Update LAST_VIRTUAL_TYPE below when changing this macro.
 #define VIRTUAL_INSTANCE_TYPE_LIST(V)            \
   CODE_KIND_LIST(V)                              \
@@ -69,6 +75,7 @@
   V(SOURCE_POSITION_TABLE_TYPE)                  \
   V(UNCOMPILED_JS_FUNCTION_TYPE)                 \
   V(UNCOMPILED_SHARED_FUNCTION_INFO_TYPE)        \
+  VIRTUAL_INSTANCE_TYPE_LIST_INTL(V)             \
   V(WEAK_NEW_SPACE_OBJECT_TO_CODE_TYPE)
 
 namespace v8 {
