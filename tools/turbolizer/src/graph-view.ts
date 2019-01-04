@@ -772,7 +772,7 @@ export class GraphView extends View implements PhaseView {
         .text(function (l) {
           return d.getTitle();
         })
-      if (d.type != undefined) {
+      if (d.nodeLabel.type != undefined) {
         d3.select(this).append("text")
           .classed("label", true)
           .classed("type", true)
