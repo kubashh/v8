@@ -20,30 +20,8 @@ export class Graph {
     this.minGraphY = 0;
     this.maxGraphY = 1;
 
-    data.nodes.forEach((n: any) => {
-      n.__proto__ = GNode.prototype;
-      n.visible = false;
-      n.x = 0;
-      n.y = 0;
-      if (typeof n.pos === "number") {
-        // Backwards compatibility.
-        n.sourcePosition = { scriptOffset: n.pos, inliningId: -1 };
-      }
-      n.rank = MAX_RANK_SENTINEL;
-      n.inputs = [];
-      n.outputs = [];
-      n.outputApproach = MINIMUM_NODE_OUTPUT_APPROACH;
-      // Every control node is a CFG node.
-      n.cfg = n.control;
-      this.nodeMap[n.id] = n;
-      n.displayLabel = n.getDisplayLabel();
-      n.labelbbox = measureText(n.displayLabel);
-      const typebbox = measureText(n.getDisplayType());
-      const innerwidth = Math.max(n.labelbbox.width, typebbox.width);
-      n.width = alignUp(innerwidth + NODE_INPUT_WIDTH * 2,
-        NODE_INPUT_WIDTH);
-      const innerheight = Math.max(n.labelbbox.height, typebbox.height);
-      n.normalheight = innerheight + 20;
+    data.nodes.forEach((json_node: any) => {
+      this.nodeMap[json_node.id] = new GNode(json_node.nodeLabel);
     });
 
     data.edges.forEach((e: any) => {
