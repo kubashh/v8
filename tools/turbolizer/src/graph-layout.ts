@@ -17,9 +17,9 @@ function newGraphOccupation(graph: Graph) {
   var isSlotFilled = [];
   var maxSlot = 0;
   var minSlot = 0;
-  var nodeOccupation = [];
+  var nodeOccupation: Array<[number, number]> = [];
 
-  function slotToIndex(slot) {
+  function slotToIndex(slot: number) {
     if (slot >= 0) {
       return slot * 2;
     } else {
@@ -27,15 +27,15 @@ function newGraphOccupation(graph: Graph) {
     }
   }
 
-  function positionToSlot(pos) {
+  function positionToSlot(pos: number) {
     return Math.floor(pos / NODE_INPUT_WIDTH);
   }
 
-  function slotToLeftPosition(slot) {
+  function slotToLeftPosition(slot: number) {
     return slot * NODE_INPUT_WIDTH
   }
 
-  function findSpace(pos, width, direction) {
+  function findSpace(pos: number, width: number, direction: number) {
     var widthSlots = Math.floor((width + NODE_INPUT_WIDTH - 1) /
       NODE_INPUT_WIDTH);
     var currentSlot = positionToSlot(pos + width / 2);
@@ -72,7 +72,7 @@ function newGraphOccupation(graph: Graph) {
     }
   }
 
-  function setIndexRange(from, to, value) {
+  function setIndexRange(from: number, to: number, value: boolean) {
     if (to < from) {
       throw ("illegal slot range");
     }
@@ -87,35 +87,35 @@ function newGraphOccupation(graph: Graph) {
     }
   }
 
-  function occupySlotRange(from, to) {
+  function occupySlotRange(from: number, to: number) {
     if (traceLayout) {
       console.log("Occupied [" + slotToLeftPosition(from) + "  " + slotToLeftPosition(to + 1) + ")");
     }
     setIndexRange(from, to, true);
   }
 
-  function clearSlotRange(from, to) {
+  function clearSlotRange(from: number, to: number) {
     if (traceLayout) {
       console.log("Cleared [" + slotToLeftPosition(from) + "  " + slotToLeftPosition(to + 1) + ")");
     }
     setIndexRange(from, to, false);
   }
 
-  function occupyPositionRange(from, to) {
+  function occupyPositionRange(from: number, to: number) {
     occupySlotRange(positionToSlot(from), positionToSlot(to - 1));
   }
 
-  function clearPositionRange(from, to) {
+  function clearPositionRange(from: number, to: number) {
     clearSlotRange(positionToSlot(from), positionToSlot(to - 1));
   }
 
-  function occupyPositionRangeWithMargin(from, to, margin) {
+  function occupyPositionRangeWithMargin(from: number, to: number, margin: number) {
     var fromMargin = from - Math.floor(margin);
     var toMargin = to + Math.floor(margin);
     occupyPositionRange(fromMargin, toMargin);
   }
 
-  function clearPositionRangeWithMargin(from, to, margin) {
+  function clearPositionRangeWithMargin(from: number, to: number, margin: number) {
     var fromMargin = from - Math.floor(margin);
     var toMargin = to + Math.floor(margin);
     clearPositionRange(fromMargin, toMargin);
@@ -138,8 +138,8 @@ function newGraphOccupation(graph: Graph) {
         }
       }
     },
-    occupyNode: function (node) {
-      var getPlacementHint = function (n) {
+    occupyNode: function (node: GNode) {
+      var getPlacementHint = function (n: GNode) {
         var pos = 0;
         var direction = -1;
         var outputEdges = 0;
@@ -196,8 +196,8 @@ function newGraphOccupation(graph: Graph) {
       }
     },
     clearOccupiedNodes: function () {
-      nodeOccupation.forEach(function (o) {
-        clearSlotRange(o[0], o[1]);
+      nodeOccupation.forEach(([firstSlot, endSlotExclusive]) => {
+        clearSlotRange(firstSlot, endSlotExclusive);
       });
       nodeOccupation = [];
     },
@@ -258,10 +258,10 @@ export function layoutNodeGraph(graph: Graph, showTypes: boolean): void {
   });
 
   // Finialize the list of start and end nodes.
-  var endNodes = [];
-  var startNodes = [];
-  var visited = [];
-  var rank = [];
+  const endNodes: Array<GNode> = [];
+  const startNodes: Array<GNode> = [];
+  let visited: Array<boolean> = [];
+  const rank: Array<number> = [];
   for (const n of graph.nodes()) {
     if (endNodesHasNoOutputs[n.id]) {
       endNodes.push(n);
@@ -281,35 +281,37 @@ export function layoutNodeGraph(graph: Graph, showTypes: boolean): void {
   }
 
   var maxRank = 0;
-  var visited = [];
+  visited = [];
   var visitOrderWithinRank = 0;
 
-  var worklist = startNodes.slice();
+  const worklist: Array<GNode> = startNodes.slice();
   while (worklist.length != 0) {
-    var n = worklist.pop();
-    var changed = false;
+    const n: GNode = worklist.pop();
+    let changed = false;
     if (n.rank == MAX_RANK_SENTINEL) {
       n.rank = 1;
       changed = true;
     }
-    var begin = 0;
-    var end = n.inputs.length;
-    if (n.opcode == 'Phi' || n.opcode == 'EffectPhi') {
+    let begin = 0;
+    let end = n.inputs.length;
+    if (n.nodeLabel.opcode == 'Phi' ||
+      n.nodeLabel.opcode == 'EffectPhi' ||
+      n.nodeLabel.opcode == 'InductionVariablePhi') {
       // Keep with merge or loop node
       begin = n.inputs.length - 1;
     } else if (n.hasBackEdges()) {
       end = 1;
     }
-    for (var l = begin; l < end; ++l) {
-      var input = n.inputs[l].source;
+    for (let l = begin; l < end; ++l) {
+      const input = n.inputs[l].source;
       if (input.visible && input.rank >= n.rank) {
         n.rank = input.rank + 1;
         changed = true;
       }
     }
     if (changed) {
-      var hasBackEdges = n.hasBackEdges();
-      for (var l = n.outputs.length - 1; l >= 0; --l) {
+      const hasBackEdges = n.hasBackEdges();
+      for (let l = n.outputs.length - 1; l >= 0; --l) {
         if (hasBackEdges && (l != 0)) {
           worklist.unshift(n.outputs[l].target);
         } else {
