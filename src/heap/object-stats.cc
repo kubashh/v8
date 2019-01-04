@@ -18,6 +18,9 @@
 #include "src/memcopy.h"
 #include "src/objects/compilation-cache-inl.h"
 #include "src/objects/heap-object.h"
+#ifdef V8_INTL_SUPPORT
+#include "src/objects/js-collator-inl.h"
+#endif  // V8_INTL_SUPPORT
 #include "src/objects/js-collection-inl.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/slots.h"
@@ -404,6 +407,11 @@ class ObjectStatsCollectorImpl {
 
   void RecordVirtualArrayBoilerplateDescription(
       ArrayBoilerplateDescription description);
+
+#ifdef V8_INTL_SUPPORT
+  void RecordVirtualJSCollatorDetails(JSCollator collator);
+#endif  // V8_INTL_SUPPORT
+
   Heap* heap_;
   ObjectStats* stats_;
   MarkCompactCollector::NonAtomicMarkingState* marking_state_;
@@ -695,6 +703,10 @@ void ObjectStatsCollectorImpl::CollectStatistics(
       } else if (obj->IsArrayBoilerplateDescription()) {
         RecordVirtualArrayBoilerplateDescription(
             ArrayBoilerplateDescription::cast(obj));
+#ifdef V8_INTL_SUPPORT
+      } else if (obj->IsJSCollator()) {
+        RecordVirtualJSCollatorDetails(JSCollator::cast(obj));
+#endif  // V8_INTL_SUPPORT
       } else if (obj->IsFixedArrayExact()) {
         // Has to go last as it triggers too eagerly.
         RecordVirtualFixedArrayDetails(FixedArray::cast(obj));
@@ -860,12 +872,21 @@ void ObjectStatsCollectorImpl::RecordVirtualJSFunctionDetails(
                                    ObjectStats::UNCOMPILED_JS_FUNCTION_TYPE);
   }
 }
+
 void ObjectStatsCollectorImpl::RecordVirtualArrayBoilerplateDescription(
     ArrayBoilerplateDescription description) {
   RecordVirtualObjectsForConstantPoolOrEmbeddedObjects(
       description, description->constant_elements(),
       ObjectStats::ARRAY_BOILERPLATE_DESCRIPTION_ELEMENTS_TYPE);
 }
+
+#ifdef V8_INTL_SUPPORT
+void ObjectStatsCollectorImpl::RecordVirtualJSCollatorDetails(
+    JSCollator collator) {
+  RecordSimpleVirtualObjectStats(HeapObject(), collator,
+                                 ObjectStats::JS_COLLATOR_TYPE);
+}
+#endif  // V8_INTL_SUPPORT
 
 void ObjectStatsCollectorImpl::
     RecordVirtualObjectsForConstantPoolOrEmbeddedObjects(
