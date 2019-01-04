@@ -3240,6 +3240,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kIA32S8x16Shuffle: {
+      CpuFeatureScope sse_scope(tasm(), SSSE3);
       XMMRegister dst = i.OutputSimd128Register();
       Operand src0 = i.InputOperand(0);
       Register tmp = i.TempRegister(0);
@@ -3247,14 +3248,16 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ mov(tmp, esp);
       __ and_(esp, -16);
       if (instr->InputCount() == 5) {  // only one input operand
+        printf("\ninstr->InputCount() == 5\n");
         DCHECK_EQ(i.OutputSimd128Register(), i.InputSimd128Register(0));
         for (int j = 4; j > 0; j--) {
           uint32_t mask = i.InputUint32(j);
           __ push(Immediate(mask));
         }
-        __ Pshufb(dst, Operand(esp, 0));
+        __ pshufb(dst, Operand(esp, 0));
       } else {  // two input operands
         DCHECK_EQ(6, instr->InputCount());
+        printf("\ninstr->InputCount() == 6\n");
         __ movups(kScratchDoubleReg, src0);
         for (int j = 5; j > 1; j--) {
           uint32_t lanes = i.InputUint32(j);
@@ -3262,10 +3265,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           for (int k = 0; k < 32; k += 8) {
             uint8_t lane = lanes >> k;
             mask |= (lane < kSimd128Size ? lane : 0x80) << k;
+            printf("\nmask = %x", mask);
           }
           __ push(Immediate(mask));
         }
-        __ Pshufb(kScratchDoubleReg, Operand(esp, 0));
+        __ pshufb(kScratchDoubleReg, Operand(esp, 0));
         Operand src1 = i.InputOperand(1);
         if (!src1.is_reg(dst)) __ movups(dst, src1);
         for (int j = 5; j > 1; j--) {
@@ -3274,10 +3278,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           for (int k = 0; k < 32; k += 8) {
             uint8_t lane = lanes >> k;
             mask |= (lane >= kSimd128Size ? (lane & 0xF) : 0x80) << k;
+            printf("\nmask = %x", mask);
           }
           __ push(Immediate(mask));
         }
-        __ Pshufb(dst, Operand(esp, 0));
+        __ pshufb(dst, Operand(esp, 0));
         __ por(dst, kScratchDoubleReg);
       }
       __ mov(esp, tmp);

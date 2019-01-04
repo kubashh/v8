@@ -452,6 +452,7 @@ WASM_SIMD_TEST(F32x4ReplaceLane) {
   }                                                                 \
   void RunWasm_##name##_Impl(LowerSimd lower_simd, ExecutionTier execution_tier)
 
+/*
 // Tests both signed and unsigned conversion.
 // v8:8425 tracks this test being enabled in the interpreter.
 WASM_SIMD_COMPILED_TEST(F32x4ConvertI32x4) {
@@ -1661,6 +1662,7 @@ WASM_SIMD_SELECT_TEST(8x16)
 WASM_SIMD_NON_CANONICAL_SELECT_TEST(32x4)
 WASM_SIMD_NON_CANONICAL_SELECT_TEST(16x8)
 WASM_SIMD_NON_CANONICAL_SELECT_TEST(8x16)
+*/
 
 // Test binary ops with two lane test patterns, all lanes distinct.
 template <typename T>
@@ -1691,10 +1693,13 @@ void RunBinaryLaneOpTest(
 
   CHECK_EQ(1, r.Call());
   for (size_t i = 0; i < expected.size(); i++) {
+    // printf("\ni = %zu, src0[i] = %x, expected[i] = %x", i,
+    //       ReadLittleEndianValue<T>(&src0[i]), expected[i]);
     CHECK_EQ(ReadLittleEndianValue<T>(&src0[i]), expected[i]);
   }
 }
 
+/*
 WASM_SIMD_TEST(I32x4AddHoriz) {
   // Inputs are [0 1 2 3] and [4 5 6 7].
   RunBinaryLaneOpTest<int32_t>(execution_tier, lower_simd, kExprI32x4AddHoriz,
@@ -1712,34 +1717,37 @@ WASM_SIMD_TEST(F32x4AddHoriz) {
   RunBinaryLaneOpTest<float>(execution_tier, lower_simd, kExprF32x4AddHoriz,
                              {{1.0f, 5.0f, 9.0f, 13.0f}});
 }
+*/
 
 // Test shuffle ops.
 void RunShuffleOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
                       WasmOpcode simd_op,
                       const std::array<int8_t, kSimd128Size>& shuffle) {
   // Test the original shuffle.
+  // printf("\nTest original Shuffle\n");
   RunBinaryLaneOpTest<int8_t>(execution_tier, lower_simd, simd_op, shuffle);
 
   // Test a non-canonical (inputs reversed) version of the shuffle.
+  // printf("\nTest non-canonical Shuffle\n");
   std::array<int8_t, kSimd128Size> other_shuffle(shuffle);
   for (size_t i = 0; i < shuffle.size(); ++i) other_shuffle[i] ^= kSimd128Size;
   RunBinaryLaneOpTest<int8_t>(execution_tier, lower_simd, simd_op,
                               other_shuffle);
 
   // Test the swizzle (one-operand) version of the shuffle.
+  // printf("\nTest swizzle\n");
   std::array<int8_t, kSimd128Size> swizzle(shuffle);
   for (size_t i = 0; i < shuffle.size(); ++i) swizzle[i] &= (kSimd128Size - 1);
   RunBinaryLaneOpTest<int8_t>(execution_tier, lower_simd, simd_op, swizzle);
 
   // Test the non-canonical swizzle (one-operand) version of the shuffle.
+  // printf("\nTest non-canonical swizzle\n");
   std::array<int8_t, kSimd128Size> other_swizzle(shuffle);
   for (size_t i = 0; i < shuffle.size(); ++i) other_swizzle[i] |= kSimd128Size;
   RunBinaryLaneOpTest<int8_t>(execution_tier, lower_simd, simd_op,
                               other_swizzle);
 }
 
-#if V8_TARGET_ARCH_ARM || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_MIPS || \
-    V8_TARGET_ARCH_MIPS64 || V8_TARGET_ARCH_IA32
 #define SHUFFLE_LIST(V)  \
   V(S128Identity)        \
   V(S32x4Dup)            \
@@ -1859,7 +1867,7 @@ SHUFFLE_LIST(SHUFFLE_TEST)
 // Test shuffles that blend the two vectors (elements remain in their lanes.)
 WASM_SIMD_TEST(S8x16Blend) {
   std::array<int8_t, kSimd128Size> expected;
-  for (int bias = 1; bias < kSimd128Size; bias++) {
+  for (int bias = 4; bias < kSimd128Size; bias++) {
     for (int i = 0; i < bias; i++) expected[i] = i;
     for (int i = bias; i < kSimd128Size; i++) expected[i] = i + kSimd128Size;
     RunShuffleOpTest(execution_tier, lower_simd, kExprS8x16Shuffle, expected);
@@ -1984,9 +1992,8 @@ WASM_SIMD_COMPILED_TEST(S8x16MultiShuffleFuzz) {
     }
   }
 }
-#endif  // V8_TARGET_ARCH_ARM || V8_TARGET_ARCH_ARM64 || V8_TARGET_ARCH_MIPS ||
-        // V8_TARGET_ARCH_MIPS64 || V8_TARGET_ARCH_IA32
 
+/*
 // Boolean unary operations are 'AllTrue' and 'AnyTrue', which return an integer
 // result. Use relational ops on numeric vectors to create the boolean vector
 // test inputs. Test inputs with all true, all false, one true, and one false.
@@ -2319,6 +2326,7 @@ WASM_SIMD_COMPILED_TEST(SimdLoadStoreLoad) {
     CHECK_EQ(expected, r.Call());
   }
 }
+*/
 
 #undef WASM_SIMD_TEST
 #undef WASM_SIMD_CHECK_LANE
