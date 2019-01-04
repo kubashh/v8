@@ -1166,7 +1166,7 @@ DEFINE_SIZE_T(mock_arraybuffer_allocator_limit, 0,
 #endif
 
 // Enable recompilation of function with optimized code.
-DEFINE_BOOL(opt, !V8_LITE_BOOL, "use adaptive optimizations")
+DEFINE_BOOL(opt, false, "use adaptive optimizations")
 
 // Enable use of inline caches to optimize object access operations.
 DEFINE_BOOL(use_ic, !V8_LITE_BOOL, "use inline caching")
