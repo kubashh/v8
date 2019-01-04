@@ -35,6 +35,7 @@ from . import statusfile
 from . import utils
 from ..objects.testcase import TestCase
 from .variants import ALL_VARIANTS, ALL_VARIANT_FLAGS
+from contextlib import contextmanager
 
 
 STANDARD_VARIANT = set(["default"])
@@ -77,19 +78,28 @@ class TestCombiner(object):
   def _combined_test_class(self):
     raise NotImplementedError()
 
+@contextmanager
+def _load_testsuite_module(name, root):
+  f = None
+  try:
+    (f, pathname, description) = imp.find_module("testcfg", [root])
+    module = imp.load_module(name + "_testcfg", f, pathname, description)
+    yield module
+  finally:
+    if f:
+      f.close()
 
 class TestSuite(object):
   @staticmethod
-  def LoadTestSuite(root, test_config):
+  def LoadFromDisk(root, test_config, statusfile_variables):
     name = root.split(os.path.sep)[-1]
-    f = None
-    try:
-      (f, pathname, description) = imp.find_module("testcfg", [root])
-      module = imp.load_module(name + "_testcfg", f, pathname, description)
-      return module.GetSuite(name, root, test_config)
-    finally:
-      if f:
-        f.close()
+    with _load_testsuite_module(name, root) as module:
+      suite = module.GetSuite(name, root, test_config)
+
+    suite.statusfile = statusfile.StatusFile(
+      suite.status_file(), statusfile_variables)
+    suite.tests = suite.ListTests()
+    return suite
 
   def __init__(self, name, root, test_config):
     self.name = name  # string
@@ -133,12 +143,6 @@ class TestSuite(object):
     tests.
     """
     return None
-
-  def ReadStatusFile(self, variables):
-    self.statusfile = statusfile.StatusFile(self.status_file(), variables)
-
-  def ReadTestCases(self):
-    self.tests = self.ListTests()
 
   def _create_test(self, path, **kwargs):
     if self.suppress_internals:
