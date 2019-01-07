@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "43ea2c62_b66722c3",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-07T16:18:11Z",
+      "side": 1,
+      "message": "Ahh sorry missed the ifdef / else. Given the plan is to remove the V8_JITLESS_MODE define, could we just move this down to the \"// Flags only available in non-Lite modes\" and rely on the V8_LITE_MODE define to make this read-only / enabled by default?",
+      "parentUuid": "2b548f27_25d762c0",
+      "range": {
+        "startLine": 1099,
+        "startChar": 21,
+        "endLine": 1099,
+        "endChar": 25
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f03c339e_e6ccdb41",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 3
@@ -78,6 +102,24 @@
       "side": 1,
       "message": "In the current design we still allocate Code heap objects in CODE_SPACE, but CODE_SPACE is non-executable. Code heap objects are only used as metadata containers and are never executed (their code area actually contains int3).",
       "parentUuid": "f03c339e_e6ccdb41",
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0be7a6cd_e68b22b5",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-07T16:18:11Z",
+      "side": 1,
+      "message": "How about allocating the code objects in the old space instead?",
+      "parentUuid": "b8e47d59_170864f4",
       "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -119,6 +161,30 @@
       "side": 1,
       "message": "It\u0027s not just optimized code, but any test that generates code (e.g. CodeStubAssembler tests). Sure I can make another pass and ensure we don\u0027t skip tests that already pass due to lite skips.\n\nWasm isn\u0027t part of the first jitless v8 version - back when I chatted about this with Michi, he estimated around a month of work to get interpreter-only wasm working (without allocating executable memory).\n\nAn alternative would be to put these jitless-specific test skips in a \u0027jitless_mode\u0027 block. That\u0027s what I had originally.",
       "parentUuid": "9d075e03_a7aafc60",
+      "range": {
+        "startLine": 357,
+        "startChar": 36,
+        "endLine": 357,
+        "endChar": 52
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab03895e_665072b7",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 3
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-07T16:18:11Z",
+      "side": 1,
+      "message": "Re WASM, that sounds fine. \n\nRe optimized code, let\u0027s do another pass and try and remove those that now work in lite mode, and remove the comment on optimized code from above. \n\nHopefully we can get this down to just those tests which explicitly generate assembly once the wasm issue is fixed (of which I don\u0027t think there should be any in mjsunit since we can\u0027t directly generate assembly code from js anyway).",
+      "parentUuid": "7f286c60_6a22e8f7",
       "range": {
         "startLine": 357,
         "startChar": 36,
