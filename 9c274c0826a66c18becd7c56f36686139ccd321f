@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05c93c4c_93852709",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4359,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-07T14:33:20Z",
+      "side": 1,
+      "message": "If receiver_maps is empty, the `kind` will be uninitialized. If that\u0027s impossible to happen, please add a (D)CHECK.",
+      "range": {
+        "startLine": 4359,
+        "startChar": 26,
+        "endLine": 4359,
+        "endChar": 30
+      },
+      "revId": "9c274c0826a66c18becd7c56f36686139ccd321f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68d5ac14_92d2be54",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-07T14:33:20Z",
+      "side": 1,
+      "message": "Please put these conditions and the ones from MapRef::supports_fast_array_resizing in a single place. For instance - define a static function in this .cc\nbool SupportsFastArrayResizing(Handle\u003cMap\u003e object).",
+      "range": {
+        "startLine": 792,
+        "startChar": 0,
+        "endLine": 799,
+        "endChar": 58
+      },
+      "revId": "9c274c0826a66c18becd7c56f36686139ccd321f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
