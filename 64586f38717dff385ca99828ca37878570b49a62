@@ -22,6 +22,30 @@
       "revId": "64586f38717dff385ca99828ca37878570b49a62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d633da7_b27ef868",
+        "filename": "src/message-template.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1318460
+      },
+      "writtenOn": "2019-01-07T10:53:10Z",
+      "side": 1,
+      "message": "Sure, I\u0027ll be glad to see the test results, but unfortunately, I don\u0027t have tryjob access, so I can\u0027t trigger CQ dry run.\nI have contributed before (https://chromium-review.googlesource.com/q/I48633694975879013c983580fa9b8c71dcb2e8f4) so, according to the guide (https://dev.chromium.org/developers/contributing-code#TOC-Running-automated-tests), I can request a reviewer to nominate me for try job access.\nCan you, please, give me try job access?",
+      "parentUuid": "e09126a0_26be20eb",
+      "range": {
+        "startLine": 172,
+        "startChar": 55,
+        "endLine": 172,
+        "endChar": 63
+      },
+      "revId": "64586f38717dff385ca99828ca37878570b49a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
