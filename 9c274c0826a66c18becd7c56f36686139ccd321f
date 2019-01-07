@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0cf3a62a_4dd3abb8",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 4359,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-07T14:44:02Z",
+      "side": 1,
+      "message": "The DCHECK is right above the declaration.",
+      "parentUuid": "05c93c4c_93852709",
+      "range": {
+        "startLine": 4359,
+        "startChar": 26,
+        "endLine": 4359,
+        "endChar": 30
+      },
+      "revId": "9c274c0826a66c18becd7c56f36686139ccd321f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "68d5ac14_92d2be54",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-07T14:33:20Z",
       "side": 1,
       "message": "Please put these conditions and the ones from MapRef::supports_fast_array_resizing in a single place. For instance - define a static function in this .cc\nbool SupportsFastArrayResizing(Handle\u003cMap\u003e object).",
+      "range": {
+        "startLine": 792,
+        "startChar": 0,
+        "endLine": 799,
+        "endChar": 58
+      },
+      "revId": "9c274c0826a66c18becd7c56f36686139ccd321f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ebe79dc_3d329f3b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-07T14:44:02Z",
+      "side": 1,
+      "message": "Ok, will do (until we get rid of the broker-disabled mode).",
+      "parentUuid": "68d5ac14_92d2be54",
       "range": {
         "startLine": 792,
         "startChar": 0,
