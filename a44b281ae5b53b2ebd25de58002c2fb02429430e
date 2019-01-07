@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5fff598_f0e2f14e",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4332,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-07T18:41:00Z",
+      "side": 1,
+      "message": "Oh sorry, this change was actually nonsense, as the first iteration reads that value.",
+      "revId": "a44b281ae5b53b2ebd25de58002c2fb02429430e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
