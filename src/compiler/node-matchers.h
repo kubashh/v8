@@ -798,6 +798,11 @@ struct StackCheckMatcher {
                        const typename BinopMatcher::RightMatcher& r) {
     if (l.IsLoad() && r.IsLoadStackPointer()) {
       LoadMatcher<ExternalReferenceMatcher> mleft(l.node());
+      if (isolate_ == nullptr) {
+        // We can't get the stack limit to compare against when we don't
+        // have an isolate.
+        return false;
+      }
       ExternalReference js_stack_limit =
           ExternalReference::address_of_stack_limit(isolate_);
       if (mleft.object().Is(js_stack_limit) && mleft.index().Is(0)) return true;
