@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ec098c7_5fceb755",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-01-07T14:39:44Z",
+      "side": 0,
+      "message": "Those abstractions here exist for the purpose of differentiating the normal test runner with the numfuzzer implementation, see here:\nhttps://cs.chromium.org/chromium/src/v8/tools/testrunner/num_fuzzer.py?type\u003dcs\u0026q\u003d_load_suites+file:%5Esrc/v8/+package:%5Echromium$\u0026g\u003d0\u0026l\u003d189\n\nThis change looks like it would break. Sadly, the numfuzzer is not running in CQ, but you can call it locally to test it with arguments as here:\ntools/run-num-fuzzer.py --progress\u003dverbose --mode Debug --outdir out --variants\u003ddefault --total-timeout-sec\u003d2100 --stress-thread-pool-size\u003d1\nFrom:\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8924989606875764304/+/steps/Num_Fuzz_-_threads/0/stdout",
+      "range": {
+        "startLine": 612,
+        "startChar": 6,
+        "endLine": 612,
+        "endChar": 41
+      },
+      "revId": "01f7c7155b1a695304d1e64ecbdce791ee3e5de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
