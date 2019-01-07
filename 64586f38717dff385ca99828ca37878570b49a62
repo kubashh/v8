@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e09126a0_26be20eb",
+        "filename": "src/message-template.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-01-07T09:45:55Z",
+      "side": 1,
+      "message": "Let\u0027s see whether this upsets any Layout tests.",
+      "range": {
+        "startLine": 172,
+        "startChar": 55,
+        "endLine": 172,
+        "endChar": 63
+      },
+      "revId": "64586f38717dff385ca99828ca37878570b49a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
