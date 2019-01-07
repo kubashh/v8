@@ -152,7 +152,6 @@ PreParsedScopeDataBuilder::PreParsedScopeDataBuilder(
       byte_data_(new (zone) ByteData(zone)),
       data_for_inner_functions_(zone),
       bailed_out_(false) {
-  if (parent != nullptr) parent->data_for_inner_functions_.push_back(this);
 #ifdef DEBUG
   // Reserve space for scope_data_start, written later:
   byte_data_->WriteUint32(0);
@@ -171,7 +170,13 @@ void PreParsedScopeDataBuilder::DataGatheringScope::Start(
 
 PreParsedScopeDataBuilder::DataGatheringScope::~DataGatheringScope() {
   if (builder_ == nullptr) return;
-  preparser_->set_preparsed_scope_data_builder(builder_->parent_);
+
+  PreParsedScopeDataBuilder* parent = builder_->parent_;
+  if (parent != nullptr) {
+    parent->data_for_inner_functions_.push_back(builder_->HasData() ? builder_
+                                                                    : nullptr);
+  }
+  preparser_->set_preparsed_scope_data_builder(parent);
 }
 
 void PreParsedScopeDataBuilder::AddSkippableFunction(int start_position,
@@ -227,11 +232,14 @@ bool PreParsedScopeDataBuilder::ContainsInnerFunctions() const {
   return byte_data_->size() > ByteData::kPlaceholderSize;
 }
 
-MaybeHandle<PreParsedScopeData> PreParsedScopeDataBuilder::Serialize(
+bool PreParsedScopeDataBuilder::HasData() const {
+  return !bailed_out_ && ContainsInnerFunctions();
+}
+
+Handle<PreParsedScopeData> PreParsedScopeDataBuilder::Serialize(
     Isolate* isolate) {
-  if (bailed_out_) return MaybeHandle<PreParsedScopeData>();
+  DCHECK(HasData());
   DCHECK(!ThisOrParentBailedOut());
-  if (!ContainsInnerFunctions()) return MaybeHandle<PreParsedScopeData>();
 
   int child_data_length = static_cast<int>(data_for_inner_functions_.size());
   Handle<PreParsedScopeData> data =
@@ -242,8 +250,8 @@ MaybeHandle<PreParsedScopeData> PreParsedScopeDataBuilder::Serialize(
 
   int i = 0;
   for (const auto& item : data_for_inner_functions_) {
-    Handle<PreParsedScopeData> child_data;
-    if (item->Serialize(isolate).ToHandle(&child_data)) {
+    if (item != nullptr) {
+      Handle<PreParsedScopeData> child_data = item->Serialize(isolate);
       data->set_child_data(i, *child_data);
     } else {
       DCHECK(data->child_data(i)->IsNull());
@@ -255,9 +263,8 @@ MaybeHandle<PreParsedScopeData> PreParsedScopeDataBuilder::Serialize(
 }
 
 ZonePreParsedScopeData* PreParsedScopeDataBuilder::Serialize(Zone* zone) {
-  if (bailed_out_) return nullptr;
+  DCHECK(HasData());
   DCHECK(!ThisOrParentBailedOut());
-  if (!ContainsInnerFunctions()) return nullptr;
 
   int child_length = static_cast<int>(data_for_inner_functions_.size());
   ZonePreParsedScopeData* result =
@@ -265,8 +272,10 @@ ZonePreParsedScopeData* PreParsedScopeDataBuilder::Serialize(Zone* zone) {
 
   int i = 0;
   for (const auto& item : data_for_inner_functions_) {
-    ZonePreParsedScopeData* child = item->Serialize(zone);
-    result->set_child(i, child);
+    if (item != nullptr) {
+      ZonePreParsedScopeData* child = item->Serialize(zone);
+      result->set_child(i, child);
+    }
     i++;
   }
 
@@ -370,9 +379,11 @@ class BuilderProducedPreParsedScopeData final
     : public ProducedPreParsedScopeData {
  public:
   explicit BuilderProducedPreParsedScopeData(PreParsedScopeDataBuilder* builder)
-      : builder_(builder) {}
+      : builder_(builder) {
+    DCHECK(builder->HasData());
+  }
 
-  MaybeHandle<PreParsedScopeData> Serialize(Isolate* isolate) final {
+  Handle<PreParsedScopeData> Serialize(Isolate* isolate) final {
     return builder_->Serialize(isolate);
   }
 
@@ -390,7 +401,8 @@ class OnHeapProducedPreParsedScopeData final
   explicit OnHeapProducedPreParsedScopeData(Handle<PreParsedScopeData> data)
       : data_(data) {}
 
-  MaybeHandle<PreParsedScopeData> Serialize(Isolate* isolate) final {
+  Handle<PreParsedScopeData> Serialize(Isolate* isolate) final {
+    DCHECK(!data_->is_null());
     return data_;
   }
 
@@ -408,7 +420,7 @@ class ZoneProducedPreParsedScopeData final : public ProducedPreParsedScopeData {
   explicit ZoneProducedPreParsedScopeData(ZonePreParsedScopeData* data)
       : data_(data) {}
 
-  MaybeHandle<PreParsedScopeData> Serialize(Isolate* isolate) final {
+  Handle<PreParsedScopeData> Serialize(Isolate* isolate) final {
     return data_->Serialize(isolate);
   }
 
