@@ -14460,17 +14460,14 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
     ProducedPreParsedScopeData* scope_data =
         lit->produced_preparsed_scope_data();
     if (scope_data != nullptr) {
-      Handle<PreParsedScopeData> pre_parsed_scope_data;
-      if (scope_data->Serialize(shared_info->GetIsolate())
-              .ToHandle(&pre_parsed_scope_data)) {
-        Handle<UncompiledData> data =
-            isolate->factory()->NewUncompiledDataWithPreParsedScope(
-                lit->inferred_name(), lit->start_position(),
-                lit->end_position(), lit->function_literal_id(),
-                pre_parsed_scope_data);
-        shared_info->set_uncompiled_data(*data);
-        needs_position_info = false;
-      }
+      Handle<PreParsedScopeData> pre_parsed_scope_data =
+          scope_data->Serialize(shared_info->GetIsolate());
+      Handle<UncompiledData> data =
+          isolate->factory()->NewUncompiledDataWithPreParsedScope(
+              lit->inferred_name(), lit->start_position(), lit->end_position(),
+              lit->function_literal_id(), pre_parsed_scope_data);
+      shared_info->set_uncompiled_data(*data);
+      needs_position_info = false;
     }
   }
   if (needs_position_info) {
