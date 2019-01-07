@@ -22,6 +22,30 @@
       "revId": "931f98458c375aadc331cb3d9c0caa546f51ff7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34a70a82_1a7eefd0",
+        "filename": "src/wasm/baseline/liftoff-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-07T13:54:40Z",
+      "side": 1,
+      "message": "Yes, I thought about this. Since the fast-path is taken in the majority of cases, I am not sure how this will affect performance. Let\u0027s do this in a follow-up CL so we see the performance impact in isolation: https://crrev.com/c/1397670",
+      "parentUuid": "26c62abf_1f749088",
+      "range": {
+        "startLine": 274,
+        "startChar": 13,
+        "endLine": 274,
+        "endChar": 30
+      },
+      "revId": "931f98458c375aadc331cb3d9c0caa546f51ff7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
