@@ -433,10 +433,8 @@ class MapRef : public HeapObjectRef {
   bool is_undetectable() const;
   bool is_callable() const;
   bool has_hidden_prototype() const;
-
-  // Optimizations based on this predicate being true require taking a
-  // dependency on the NoElements protector.
-  bool supports_fast_array_resizing() const;
+  bool supports_fast_array_iteration() const;
+  bool supports_fast_array_resize() const;
 
 #define DEF_TESTER(Type, ...) bool Is##Type##Map() const;
   INSTANCE_TYPE_CHECKERS(DEF_TESTER)
