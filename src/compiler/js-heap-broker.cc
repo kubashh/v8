@@ -649,8 +649,11 @@ class MapData : public HeapObjectData {
   int constructor_function_index() const { return constructor_function_index_; }
   int NextFreePropertyIndex() const { return next_free_property_index_; }
   int UnusedPropertyFields() const { return unused_property_fields_; }
-  bool supports_fast_array_resizing() const {
-    return supports_fast_array_resizing_;
+  bool supports_fast_array_iteration() const {
+    return supports_fast_array_iteration_;
+  }
+  bool supports_fast_array_resize() const {
+    return supports_fast_array_resize_;
   }
 
   // Extra information.
@@ -694,7 +697,8 @@ class MapData : public HeapObjectData {
   int const constructor_function_index_;
   int const next_free_property_index_;
   int const unused_property_fields_;
-  bool const supports_fast_array_resizing_;
+  bool const supports_fast_array_iteration_;
+  bool const supports_fast_array_resize_;
 
   bool serialized_elements_kind_generalizations_ = false;
   ZoneVector<MapData*> elements_kind_generalizations_;
@@ -766,7 +770,7 @@ bool IsReadOnlyLengthDescriptor(Isolate* isolate, Handle<Map> jsarray_map) {
   return descriptors->GetDetails(number).IsReadOnly();
 }
 
-bool SupportsFastArrayResizing(Isolate* isolate, Handle<Map> map) {
+bool SupportsFastArrayResize(Isolate* isolate, Handle<Map> map) {
   return map->instance_type() == JS_ARRAY_TYPE &&
          IsFastElementsKind(map->elements_kind()) && map->is_extensible() &&
          map->prototype()->IsJSArray() &&
@@ -774,6 +778,15 @@ bool SupportsFastArrayResizing(Isolate* isolate, Handle<Map> map) {
              handle(JSArray::cast(map->prototype()), isolate)) &&
          !map->is_dictionary_map() &&
          !IsReadOnlyLengthDescriptor(isolate, map) &&
+         isolate->IsNoElementsProtectorIntact();
+}
+
+bool SupportsFastArrayIteration(Isolate* isolate, Handle<Map> map) {
+  return map->instance_type() == JS_ARRAY_TYPE &&
+         IsFastElementsKind(map->elements_kind()) &&
+         map->prototype()->IsJSArray() &&
+         isolate->IsAnyInitialArrayPrototype(
+             handle(JSArray::cast(map->prototype()), isolate)) &&
          isolate->IsNoElementsProtectorIntact();
 }
 }  // namespace
@@ -799,8 +812,10 @@ MapData::MapData(JSHeapBroker* broker, ObjectData** storage, Handle<Map> object)
                                       : Map::kNoConstructorFunctionIndex),
       next_free_property_index_(object->NextFreePropertyIndex()),
       unused_property_fields_(object->UnusedPropertyFields()),
-      supports_fast_array_resizing_(
-          SupportsFastArrayResizing(broker->isolate(), object)),
+      supports_fast_array_iteration_(
+          SupportsFastArrayIteration(broker->isolate(), object)),
+      supports_fast_array_resize_(
+          SupportsFastArrayResize(broker->isolate(), object)),
       elements_kind_generalizations_(broker->zone()) {}
 
 JSFunctionData::JSFunctionData(JSHeapBroker* broker, ObjectData** storage,
@@ -1847,13 +1862,22 @@ base::Optional<MapRef> MapRef::AsElementsKind(ElementsKind kind) const {
   return base::Optional<MapRef>();
 }
 
-bool MapRef::supports_fast_array_resizing() const {
+bool MapRef::supports_fast_array_iteration() const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleDereference allow_handle_dereference;
     AllowHandleAllocation handle_allocation;
-    return SupportsFastArrayResizing(broker()->isolate(), object());
+    return SupportsFastArrayIteration(broker()->isolate(), object());
   }
-  return data()->AsMap()->supports_fast_array_resizing();
+  return data()->AsMap()->supports_fast_array_iteration();
+}
+
+bool MapRef::supports_fast_array_resize() const {
+  if (broker()->mode() == JSHeapBroker::kDisabled) {
+    AllowHandleDereference allow_handle_dereference;
+    AllowHandleAllocation handle_allocation;
+    return SupportsFastArrayResize(broker()->isolate(), object());
+  }
+  return data()->AsMap()->supports_fast_array_resize();
 }
 
 int JSFunctionRef::InitialMapInstanceSizeWithMinSlack() const {
