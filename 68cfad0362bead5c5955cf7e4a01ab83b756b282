@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "676b85c3_f8e01c67",
+        "filename": "src/compiler/node-matchers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-01-07T14:27:26Z",
+      "side": 1,
+      "message": "suggestion: Currently a StackCheckMatcher instantiated with a {nullptr} Isolate will always report false. Alternatively we could also forbid this class from being instantiated with a {nullptr} Isolate by adding a (D)CHECK and having the guard at the two use sites. WDYT?",
+      "range": {
+        "startLine": 801,
+        "startChar": 10,
+        "endLine": 801,
+        "endChar": 29
+      },
+      "revId": "68cfad0362bead5c5955cf7e4a01ab83b756b282",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
