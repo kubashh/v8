@@ -1125,6 +1125,13 @@ struct InliningPhase {
     AddReducer(data, &graph_reducer, &call_reducer);
     AddReducer(data, &graph_reducer, &inlining);
     graph_reducer.ReduceGraph();
+
+    // printf("Inlined: %u Failed: %u\n", inlining.total_inlined,
+    //        inlining.total_failed);
+    // printf("Success ratio: %f\n",
+    //        inlining.total_inlined / static_cast<float>(inlining.total_inlined
+    //        +
+    //                                                    inlining.total_failed));
   }
 };
 
