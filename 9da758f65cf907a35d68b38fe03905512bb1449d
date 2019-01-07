@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2b548f27_25d762c0",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-07T15:59:39Z",
+      "side": 1,
+      "message": "That was the intention - the jitless build-time flag implies the --jitless runtime flag. Currently this would affect only v8 lite bots, and there we agreed to test the jitless config, right?",
+      "parentUuid": "b3832227_67f4a9da",
+      "range": {
+        "startLine": 1099,
+        "startChar": 21,
+        "endLine": 1099,
+        "endChar": 25
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f03c339e_e6ccdb41",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 3
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "b8e47d59_170864f4",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-07T15:59:39Z",
+      "side": 1,
+      "message": "In the current design we still allocate Code heap objects in CODE_SPACE, but CODE_SPACE is non-executable. Code heap objects are only used as metadata containers and are never executed (their code area actually contains int3).",
+      "parentUuid": "f03c339e_e6ccdb41",
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d075e03_a7aafc60",
         "filename": "test/mjsunit/mjsunit.status",
         "patchSetId": 3
@@ -53,6 +95,30 @@
       "writtenOn": "2019-01-02T09:34:17Z",
       "side": 1,
       "message": "None of the tests which \"require\" optimized code should need to be skipped, since we already deal with them for lite mode (either skipping during runtime or dealing with lack of optimization). Could you re-generate this list to only disable WASM tests?  Also it would be great if we could solve the WASM problem before landing this - can\u0027t we just enable the interpreter in JITLess?",
+      "range": {
+        "startLine": 357,
+        "startChar": 36,
+        "endLine": 357,
+        "endChar": 52
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f286c60_6a22e8f7",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 3
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-07T15:59:39Z",
+      "side": 1,
+      "message": "It\u0027s not just optimized code, but any test that generates code (e.g. CodeStubAssembler tests). Sure I can make another pass and ensure we don\u0027t skip tests that already pass due to lite skips.\n\nWasm isn\u0027t part of the first jitless v8 version - back when I chatted about this with Michi, he estimated around a month of work to get interpreter-only wasm working (without allocating executable memory).\n\nAn alternative would be to put these jitless-specific test skips in a \u0027jitless_mode\u0027 block. That\u0027s what I had originally.",
+      "parentUuid": "9d075e03_a7aafc60",
       "range": {
         "startLine": 357,
         "startChar": 36,
