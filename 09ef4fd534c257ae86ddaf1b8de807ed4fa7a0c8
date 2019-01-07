@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a36347c_fffd9684",
+        "filename": "src/s390/constants-s390.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-01-07T14:54:55Z",
+      "side": 1,
+      "message": "This TODO can be removed now :)",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 63
+      },
+      "revId": "09ef4fd534c257ae86ddaf1b8de807ed4fa7a0c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
