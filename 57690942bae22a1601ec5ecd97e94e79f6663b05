@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "717d51a8_8fe895c1",
+        "filename": "tools/heap-stats/categories.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-01-08T09:58:54Z",
+      "side": 1,
+      "message": "nit: order",
+      "range": {
+        "startLine": 52,
+        "startChar": 7,
+        "endLine": 52,
+        "endChar": 37
+      },
+      "revId": "57690942bae22a1601ec5ecd97e94e79f6663b05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
