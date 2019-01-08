@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "abced2af_b6cde031",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-08T13:13:07Z",
+      "side": 1,
+      "message": "Thanks, removed.",
+      "parentUuid": "3dc5fab4_f35c6857",
+      "range": {
+        "startLine": 81,
+        "startChar": 2,
+        "endLine": 81,
+        "endChar": 38
+      },
+      "revId": "65d327c2e44e38c60e82f6ccd40696544876489f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47aa9d51_83827b14",
         "filename": "src/compiler/backend/gap-resolver.cc",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "1f901fd1_acfdb0cf",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-08T13:13:07Z",
+      "side": 1,
+      "message": "Because {it \u003d moves.erase(it)} moves all elements above {it}, i.e. is linear in the length of the vector. The code in this CL is constant time per element.",
+      "parentUuid": "47aa9d51_83827b14",
+      "range": {
+        "startLine": 100,
+        "startChar": 6,
+        "endLine": 100,
+        "endChar": 26
+      },
+      "revId": "65d327c2e44e38c60e82f6ccd40696544876489f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25149cb5_d1e4a470",
         "filename": "src/compiler/backend/gap-resolver.cc",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "65d327c2e44e38c60e82f6ccd40696544876489f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3826c15a_be76db01",
+        "filename": "src/compiler/backend/gap-resolver.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-08T13:13:07Z",
+      "side": 1,
+      "message": "Yep, agreed. Changed to \"non-conflicting\".",
+      "parentUuid": "25149cb5_d1e4a470",
+      "range": {
+        "startLine": 114,
+        "startChar": 21,
+        "endLine": 114,
+        "endChar": 27
+      },
+      "revId": "65d327c2e44e38c60e82f6ccd40696544876489f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
