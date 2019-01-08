@@ -305,6 +305,30 @@
       "revId": "caa853b79aca283555d56deb53ce8e80523062fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49e2c848_6c5d44bc",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-01-08T15:37:05Z",
+      "side": 1,
+      "message": "I still don\u0027t see it in the last patch set.",
+      "parentUuid": "1aa397e7_87bcec17",
+      "range": {
+        "startLine": 192,
+        "startChar": 37,
+        "endLine": 192,
+        "endChar": 64
+      },
+      "revId": "caa853b79aca283555d56deb53ce8e80523062fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
