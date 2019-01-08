@@ -15,9 +15,18 @@ const Register CallInterfaceDescriptor::ContextRegister() { return cp; }
 
 void CallInterfaceDescriptor::DefaultInitializePlatformSpecific(
     CallInterfaceDescriptorData* data, int register_parameter_count) {
-  const Register default_stub_registers[] = {a0, a1, a2, a3, t0};
+  Register default_stub_registers[] = {a0, a1, a2, a3, t0};
+  // Registers t4 and t6 correspond to f12 and f14 floating point unit registers
+  // respectively.
+  const Register default_float_stub_registers[] = {t4, t6};
   CHECK_LE(static_cast<size_t>(register_parameter_count),
            arraysize(default_stub_registers));
+  for (int i = 0, j = 0; i < data->param_count(); i++) {
+    if (IsFloatingPoint(data->param_type(i).representation())) {
+      default_stub_registers[i] = default_float_stub_registers[j++];
+    }
+    DCHECK_LE(j, arraysize(default_float_stub_registers));
+  }
   data->InitializePlatformSpecific(register_parameter_count,
                                    default_stub_registers);
 }
