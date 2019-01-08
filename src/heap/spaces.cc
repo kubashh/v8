@@ -2198,7 +2198,7 @@ LinearAllocationArea LocalAllocationBuffer::Close() {
   return LinearAllocationArea(kNullAddress, kNullAddress);
 }
 
-LocalAllocationBuffer::LocalAllocationBuffer(
+LocalAllocationBuffer::LocalAllocationBuffer V8_NOEXCEPT(
     Heap* heap, LinearAllocationArea allocation_info)
     : heap_(heap), allocation_info_(allocation_info) {
   if (IsValid()) {
@@ -2209,8 +2209,7 @@ LocalAllocationBuffer::LocalAllocationBuffer(
   }
 }
 
-
-LocalAllocationBuffer::LocalAllocationBuffer(
+LocalAllocationBuffer::LocalAllocationBuffer V8_NOEXCEPT(
     const LocalAllocationBuffer& other) {
   *this = other;
 }
@@ -2865,10 +2864,10 @@ void FreeListCategory::RepairFreeList(Heap* heap) {
   FreeSpace n = top();
   while (!n.is_null()) {
     MapWordSlot map_location = n.map_slot();
-    // We can't use .is_null() here because ObjectSlot.load() returns an
+    // We can't use .is_null() here because *map_location returns an
     // Object (for which "is null" is not defined, as it would be
     // indistinguishable from "is Smi(0)"). Only HeapObject has "is_null()".
-    if (map_location.load() == Map()) {
+    if (*map_location == Map()) {
       map_location.store(ReadOnlyRoots(heap).free_space_map());
     } else {
       DCHECK(*map_location == ReadOnlyRoots(heap).free_space_map());
@@ -3079,7 +3078,7 @@ size_t FreeListCategory::SumFreeList() {
   while (!cur.is_null()) {
     // We can't use "cur->map()" here because both cur's map and the
     // root can be null during bootstrapping.
-    DCHECK_EQ(cur->map_slot().load(),
+    DCHECK_EQ(*cur->map_slot(),
               page()->heap()->isolate()->root(RootIndex::kFreeSpaceMap));
     sum += cur->relaxed_read_size();
     cur = cur->next();
