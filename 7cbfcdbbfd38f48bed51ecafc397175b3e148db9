@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e376d81_763f95de",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-08T15:22:50Z",
+      "side": 1,
+      "message": "wow fancy, gotta dig into what this does at some point :)",
+      "revId": "7cbfcdbbfd38f48bed51ecafc397175b3e148db9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
