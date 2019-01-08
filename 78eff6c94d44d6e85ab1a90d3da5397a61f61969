@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "623d93e1_4b91b0f9",
+        "filename": "test/cctest/interpreter/test-bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-08T12:12:27Z",
+      "side": 1,
+      "message": "nit - strings_match",
+      "range": {
+        "startLine": 160,
+        "startChar": 7,
+        "endLine": 160,
+        "endChar": 14
+      },
+      "revId": "78eff6c94d44d6e85ab1a90d3da5397a61f61969",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
