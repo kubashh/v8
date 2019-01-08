@@ -22,6 +22,30 @@
       "revId": "78eff6c94d44d6e85ab1a90d3da5397a61f61969",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66269eb4_d672a3e4",
+        "filename": "test/cctest/interpreter/test-bytecode-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-01-08T12:20:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "623d93e1_4b91b0f9",
+      "range": {
+        "startLine": 160,
+        "startChar": 7,
+        "endLine": 160,
+        "endChar": 14
+      },
+      "revId": "78eff6c94d44d6e85ab1a90d3da5397a61f61969",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
