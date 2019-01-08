@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c6bebf7_62628d6d",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "++k, k++, and k +\u003d 1 should also work.",
+      "range": {
+        "startLine": 12,
+        "startChar": 44,
+        "endLine": 12,
+        "endChar": 53
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cd64c56_6dcee2ad",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "How about calling this initalTo, so that the local one can just be \"to\", analogous to k.",
+      "range": {
+        "startLine": 62,
+        "startChar": 56,
+        "endLine": 62,
+        "endChar": 58
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34b6f2f1_c8326c86",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "These types could be put in the signature of ArrayFilterLoopContinuation, moving the casts into the caller.",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 76
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc767357_8732b532",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "It\u0027s not clear what\u0027s the difference between \"LoopContinuation\" and \"TorqueContinuation\". They seem to be the same, just one is a builtin and the other a macro\nIf ArrayFilterTorqueContinuation was a builtin, we would save some code duplication, while paying another call in the main path. I think this might be worth it.",
+      "range": {
+        "startLine": 99,
+        "startChar": 11,
+        "endLine": 99,
+        "endChar": 40
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b092f913_8febe6a0",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "\": void\" can be omitted.",
+      "range": {
+        "startLine": 106,
+        "startChar": 34,
+        "endLine": 106,
+        "endChar": 40
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2346728d_0ae22995",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "In contrast to Javascript, it\u0027s possible to write this as\nconst len: Smi \u003d Cast\u003cSmi\u003e(len) otherwise goto Bailout(k, to);\nI consider shadowing with the same value legitimate, but it\u0027s up to you.",
+      "range": {
+        "startLine": 154,
+        "startChar": 3,
+        "endLine": 154,
+        "endChar": 69
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23ad5da0_23bccc6c",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "Here and below: Would it make sense to always choose non-holey elements kinds for the target array, since I don\u0027t see how it could end up holey.",
+      "range": {
+        "startLine": 162,
+        "startChar": 10,
+        "endLine": 162,
+        "endChar": 28
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0970f319_7a5ddb28",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "This should be tranisitioning. It seems ArraySpeciesCreate is missing it already.",
+      "range": {
+        "startLine": 179,
+        "startChar": 2,
+        "endLine": 179,
+        "endChar": 8
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc0536fb_865e9619",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "This return could be inside label Bailout I think.",
+      "range": {
+        "startLine": 232,
+        "startChar": 6,
+        "endLine": 233,
+        "endChar": 53
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aba5cad_412945fa",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "JSArray?",
+      "range": {
+        "startLine": 691,
+        "startChar": 9,
+        "endLine": 691,
+        "endChar": 19
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "663fd91b_735be50e",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "Do we have an UncheckedCast for this? A debug-build check might be a good idea.",
+      "range": {
+        "startLine": 708,
+        "startChar": 9,
+        "endLine": 708,
+        "endChar": 36
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2172b21d_fa1e97fc",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-08T13:17:58Z",
+      "side": 1,
+      "message": "This should take NativeContext as an argument. In addition, we could have\n\nmacro LoadJSArrayElementsMap(implicit context: Context)(kind: ElementsKind) {\n  return LoadJSArrayElementsMap(kind, LoadNativeContext(context));\n}",
+      "range": {
+        "startLine": 787,
+        "startChar": 13,
+        "endLine": 787,
+        "endChar": 35
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
