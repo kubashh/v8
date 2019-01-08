@@ -2904,6 +2904,13 @@ void AsyncStreamingProcessor::OnFinishedStream(OwnedVector<uint8_t> bytes) {
   TRACE_STREAMING("Finish stream...\n");
   ModuleResult result = decoder_.FinishDecoding(false);
   DCHECK(result.ok());
+  // We have to open a HandleScope and prepare the Context for
+  // PrepareRuntimeObjects and FinishCompile as this is a callback from the
+  // embedder.
+  HandleScope scope(job_->isolate_);
+  SaveContext saved_context(job_->isolate_);
+  job_->isolate_->set_context(*job_->native_context_);
+
   bool needs_finish = job_->DecrementAndCheckFinisherCount();
   if (job_->native_module_ == nullptr) {
     // We are processing a WebAssembly module without code section. Create the
@@ -2914,9 +2921,6 @@ void AsyncStreamingProcessor::OnFinishedStream(OwnedVector<uint8_t> bytes) {
   job_->wire_bytes_ = ModuleWireBytes(bytes.as_vector());
   job_->native_module_->SetWireBytes(std::move(bytes));
   if (needs_finish) {
-    HandleScope scope(job_->isolate_);
-    SaveContext saved_context(job_->isolate_);
-    job_->isolate_->set_context(*job_->native_context_);
     job_->FinishCompile(true);
   }
 }
