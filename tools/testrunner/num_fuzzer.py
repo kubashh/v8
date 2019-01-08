@@ -186,15 +186,15 @@ class NumFuzzer(base_runner.BaseTestRunner):
     # Indicate if a SIGINT or SIGTERM happened.
     return sigproc.exit_code
 
-  def _load_suites(self, names, options):
-    suites = super(NumFuzzer, self)._load_suites(names, options)
-    if options.combine_tests:
-      suites = [s for s in suites if s.test_combiner_available()]
+  def _process_testsuite(self, suite, options):
+    if not options.combine_tests:
+      return False
+
     if options.stress_interrupt_budget:
       # Changing interrupt budget forces us to suppress certain test assertions.
-      for suite in suites:
-        suite.do_suppress_internals()
-    return suites
+      suite.do_suppress_internals()
+
+    return suite
 
   def _create_combiner(self, rng, options):
     if not options.combine_tests:
