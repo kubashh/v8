@@ -126,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "b9034330_6dbe6bdf",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-08T08:00:06Z",
+      "side": 1,
+      "message": "I considered that and it\u0027s also a valid approach. \n\nThere\u0027s a few advantages to preserving CODE_SPACE though: 1. consistency with non-jitless modes, 2. less invasive changes (|changing permissions| \u003c |changing space|), 3. iirc some spots expect Code objects to be in CODE_SPACE. There\u0027s little downsides since the allocated code space page is trimmed after deserialization.",
+      "parentUuid": "0be7a6cd_e68b22b5",
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d075e03_a7aafc60",
         "filename": "test/mjsunit/mjsunit.status",
         "patchSetId": 3
