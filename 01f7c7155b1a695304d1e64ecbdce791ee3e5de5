@@ -22,6 +22,30 @@
       "revId": "01f7c7155b1a695304d1e64ecbdce791ee3e5de5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0680c350_3793bd5d",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-08T11:03:18Z",
+      "side": 0,
+      "message": "Ran it locally and included num_fuzzer.py in the refactoring",
+      "parentUuid": "3ec098c7_5fceb755",
+      "range": {
+        "startLine": 612,
+        "startChar": 6,
+        "endLine": 612,
+        "endChar": 41
+      },
+      "revId": "01f7c7155b1a695304d1e64ecbdce791ee3e5de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
