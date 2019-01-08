@@ -971,6 +971,7 @@ static const char* native_method_test_source = "function start(count) {\n"
 
 
 TEST(NativeMethodUninitializedIC) {
+  FLAG_cpu_profiler_logging = true;
   LocalContext env;
   v8::Isolate* isolate = env->GetIsolate();
   v8::HandleScope scope(isolate);
@@ -1772,7 +1773,8 @@ const double load_factor = 1.0;
 //                        bailed out due to 'Optimization is always disabled'
 //     2    (program):0 0 #2
 TEST(Inlining2) {
-  i::FLAG_allow_natives_syntax = true;
+  FLAG_allow_natives_syntax = true;
+  FLAG_cpu_profiler_logging = true;
   v8::HandleScope scope(CcTest::isolate());
   v8::Local<v8::Context> env = CcTest::NewContext(PROFILER_EXTENSION);
   v8::Context::Scope context_scope(env);
