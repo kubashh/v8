@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a081aa95_129b10fd",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 974,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-01-08T14:19:07Z",
+      "side": 1,
+      "message": "I was actually thinking of putting this into cctest.h so that we get this for every test. If they don\u0027t fail, we don\u0027t store the output on the bots. If they do fail, we don\u0027t need to enable the flag to investigate by then.",
+      "range": {
+        "startLine": 974,
+        "startChar": 2,
+        "endLine": 974,
+        "endChar": 27
+      },
+      "revId": "1c742478cdeca2dd20514a9a37263621dd52f9f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
