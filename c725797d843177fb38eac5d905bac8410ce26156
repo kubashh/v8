@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aac477e6_9a8c9ff5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2019-01-08T13:25:06Z",
+      "side": 1,
+      "message": "Handle some of these cases",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 29
+      },
+      "revId": "c725797d843177fb38eac5d905bac8410ce26156",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
