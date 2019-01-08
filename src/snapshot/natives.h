@@ -17,7 +17,6 @@ namespace internal {
 enum NativeType {
   EXTRAS,
   EXPERIMENTAL_EXTRAS,
-  D8,
   TEST
 };
 

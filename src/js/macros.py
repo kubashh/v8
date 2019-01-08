@@ -35,10 +35,8 @@ define DONT_DELETE = 4;
 
 # Type query macros.
 macro IS_ARRAY(arg)             = (%_IsArray(arg));
-macro IS_NULL(arg)              = (arg === null);
 macro IS_NULL_OR_UNDEFINED(arg) = (arg == null);
 macro IS_NUMBER(arg)            = (typeof(arg) === 'number');
-macro IS_SYMBOL(arg)            = (typeof(arg) === 'symbol');
 macro IS_UNDEFINED(arg)         = (arg === (void 0));
 macro IS_CALLABLE(arg) = (typeof(arg) === 'function');
 
