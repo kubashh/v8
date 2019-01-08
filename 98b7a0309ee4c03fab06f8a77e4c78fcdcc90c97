@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c6fed42_59e70b79",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-08T13:51:34Z",
+      "side": 1,
+      "message": "Nit: Rewrite this condition and the one below to just\n  `return {condition}`\n- this will decrease the levels of nesting and (IMO) improve the code readability.",
+      "revId": "98b7a0309ee4c03fab06f8a77e4c78fcdcc90c97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
