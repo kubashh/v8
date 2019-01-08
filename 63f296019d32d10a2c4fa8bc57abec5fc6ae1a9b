@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36c00131_c7727682",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-01-08T12:33:06Z",
+      "side": 1,
+      "message": "Why is this returning a suite if its only use is in an if-condition? Could you document what it\u0027s expected to return? Also, \"process\" is a very generic name. Maybe there\u0027s a more fitting name? I.e. \"should_load_testsuite\"?",
+      "range": {
+        "startLine": 625,
+        "startChar": 11,
+        "endLine": 625,
+        "endChar": 16
+      },
+      "revId": "63f296019d32d10a2c4fa8bc57abec5fc6ae1a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa0037fa_023ccf2e",
+        "filename": "tools/testrunner/local/testsuite.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-01-08T12:33:06Z",
+      "side": 1,
+      "message": "nit: load_tests_from_disc since it\u0027s a new method and this file seems to mix old and new convention.",
+      "range": {
+        "startLine": 120,
+        "startChar": 6,
+        "endLine": 120,
+        "endChar": 23
+      },
+      "revId": "63f296019d32d10a2c4fa8bc57abec5fc6ae1a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
