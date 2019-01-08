@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "05b7172a_4821e32b",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-08T14:58:45Z",
+      "side": 1,
+      "message": "The idea is similar to filter(), it\u0027ll return the suite if it\u0027s not filtered, it\u0027ll return False otherwise. I\u0027ll add this as a comment and rename it to should_load_testsuite.",
+      "parentUuid": "36c00131_c7727682",
+      "range": {
+        "startLine": 625,
+        "startChar": 11,
+        "endLine": 625,
+        "endChar": 16
+      },
+      "revId": "63f296019d32d10a2c4fa8bc57abec5fc6ae1a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa0037fa_023ccf2e",
         "filename": "tools/testrunner/local/testsuite.py",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "63f296019d32d10a2c4fa8bc57abec5fc6ae1a9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "666bf09e_a38c5cd3",
+        "filename": "tools/testrunner/local/testsuite.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-08T14:58:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aa0037fa_023ccf2e",
+      "range": {
+        "startLine": 120,
+        "startChar": 6,
+        "endLine": 120,
+        "endChar": 23
+      },
+      "revId": "63f296019d32d10a2c4fa8bc57abec5fc6ae1a9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
