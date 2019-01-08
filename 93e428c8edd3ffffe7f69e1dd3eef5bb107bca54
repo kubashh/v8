@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1b5cc673_a7305eac",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-01-08T16:12:46Z",
+      "side": 1,
+      "message": "Hilarious, now why did I do that? :) Fixed.",
+      "parentUuid": "0c6bebf7_62628d6d",
+      "range": {
+        "startLine": 12,
+        "startChar": 44,
+        "endLine": 12,
+        "endChar": 53
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2cd64c56_6dcee2ad",
         "filename": "src/builtins/array-filter.tq",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3cf90c1f_748f2009",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-01-08T16:12:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cd64c56_6dcee2ad",
+      "range": {
+        "startLine": 62,
+        "startChar": 56,
+        "endLine": 62,
+        "endChar": 58
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34b6f2f1_c8326c86",
         "filename": "src/builtins/array-filter.tq",
         "patchSetId": 7
@@ -68,6 +116,30 @@
       "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16ea54a4_929a7274",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-01-08T16:12:46Z",
+      "side": 1,
+      "message": "Ah, fantastic. I was forgetting that you can\u0027t do that with \"javascript builtin,\" but you can for other builtins.",
+      "parentUuid": "34b6f2f1_c8326c86",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 76
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -114,6 +186,30 @@
       "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "224c10b9_81fd28e4",
+        "filename": "src/builtins/array-filter.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-01-08T16:12:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b092f913_8febe6a0",
+      "range": {
+        "startLine": 106,
+        "startChar": 34,
+        "endLine": 106,
+        "endChar": 40
+      },
+      "revId": "93e428c8edd3ffffe7f69e1dd3eef5bb107bca54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
