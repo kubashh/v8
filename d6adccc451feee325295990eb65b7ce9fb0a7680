@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8ab5459_a9206916",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T19:08:45Z",
+      "side": 1,
+      "message": "This loop basically ignores all but the last value. Why?",
+      "revId": "d6adccc451feee325295990eb65b7ce9fb0a7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e6db0dd_51b433d6",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T19:08:45Z",
+      "side": 1,
+      "message": "I\u0027m a bit confused by the many functions here.",
+      "revId": "d6adccc451feee325295990eb65b7ce9fb0a7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "391bd007_e9da5550",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T19:08:45Z",
+      "side": 1,
+      "message": "Why isn\u0027t JumpLoop in the SKIPPED_JUMPS_LIST?",
+      "revId": "d6adccc451feee325295990eb65b7ce9fb0a7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
