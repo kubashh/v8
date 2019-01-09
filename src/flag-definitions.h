@@ -1096,7 +1096,7 @@ DEFINE_UINT(serialization_chunk_size, 4096,
 
 // JIT-less V8. Design doc: goo.gl/kRnhVe
 #ifdef V8_JITLESS_MODE
-DEFINE_BOOL(jitless, false, "Disable runtime allocation of executable memory.")
+DEFINE_BOOL(jitless, true, "Disable runtime allocation of executable memory.")
 #else
 DEFINE_BOOL_READONLY(jitless, false,
                      "Disable runtime allocation of executable memory.")
