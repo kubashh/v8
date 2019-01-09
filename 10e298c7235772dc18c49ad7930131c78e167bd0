@@ -1,0 +1,557 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31fc9904_f7dd7687",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "It\u0027s a little strange that all this does is set the flag.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2aca43d8_741f0367",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 2593,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Could you remove this? Until now, none of the SerializeForFoo() functions call Serialize().",
+      "range": {
+        "startLine": 2593,
+        "startChar": 0,
+        "endLine": 2593,
+        "endChar": 46
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93b7a5b1_7555b27a",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Do we need this one?",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "949ad0eb_c7886396",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "I still don\u0027t see the need for Kind and two separate vectors.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4f85475_c121acd0",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "They\u0027re used by many others too, so I think that sentence should be removed.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f85d620e_213e6740",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Above you called it \"inferred state\", let\u0027s use the same name for both.",
+      "range": {
+        "startLine": 57,
+        "startChar": 21,
+        "endLine": 57,
+        "endChar": 44
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cf021ba_ca9d4c09",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "..and many others.",
+      "range": {
+        "startLine": 58,
+        "startChar": 5,
+        "endLine": 58,
+        "endChar": 26
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a021058a_f2e772e7",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "I think this getter and the member are unused (and I don\u0027t see why it should be a Maybe).",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68d83ea9_be439b8a",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "I\u0027m wondering if this wouldn\u0027t be better a local function in the .cc file (taking the parameter count as argument).",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd1629e1_917108fd",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "It\u0027s not the currently known state because our analysis is not precise. It\u0027s not even an over-approximation but merely a kind of guess (hence my suggestion of using the name \"hint\").",
+      "range": {
+        "startLine": 83,
+        "startChar": 34,
+        "endLine": 83,
+        "endChar": 72
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "019f7598_1c287f5b",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "We usually use the kFoo naming convention for such constants.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83fb127a_63134c2c",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "If you move these to the initializer list, you can make the members const and it\u0027s immediately clear that they never change.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e412b9b_17f97375",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Please remove it until we need it.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94c133ff_d1a4ba76",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "No need for the \"handle\" call, just pass the two arguments to the bytecode_array_ constructor directly.",
+      "range": {
+        "startLine": 220,
+        "startChar": 10,
+        "endLine": 220,
+        "endChar": 16
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a04b267b_dfb15c7e",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "I\u0027d move these into the initializer list too.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8b8f46c_0333c08a",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "This seems to be the only use of the getter outside the constructor. I\u0027d prefer to use closure-\u003eshared-\u003eGetBytecodeArray here (and in the constructor) and remove the member and its getter.",
+      "range": {
+        "startLine": 234,
+        "startChar": 46,
+        "endLine": 234,
+        "endChar": 60
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92c51c0f_e2f5518f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "I don\u0027t understand the use of \u0027named\u0027.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca1cb1d4_4b21aedc",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "As discussed last time, this code should just look at the feedback (my CL was reverted again but I will hopefully reland it).",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be0b68ac_8ba4567d",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "ReplaceAccumulatorHint or OverwriteAccumulatorHint might be a better name.",
+      "range": {
+        "startLine": 334,
+        "startChar": 17,
+        "endLine": 334,
+        "endChar": 40
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9f1ffb5_1ca12701",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Nit: Handle\u003cObject\u003e zero(Smi::FromInt(0), broker()-\u003eisolate());\nand similar below.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5a504de_95c42a4a",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "I don\u0027t understand why you ignore the other kinds. Anyway, see my comment about kind earlier.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adce89d7_cb8df8ea",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "This code is missing handling of maps.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c09b65f_69a6c7d2",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "We should process all receiver hints and potentially add record an accumulator hint for each of them.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4344c5a_27ab99c7",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "?",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05d64db2_4b650fc4",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Please sort alphabetically.",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6cad166_a5318fc5",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Towards the end of the list there aren\u0027t any jumps.",
+      "range": {
+        "startLine": 30,
+        "startChar": 16,
+        "endLine": 30,
+        "endChar": 21
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b899c86_72d9a5c9",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Please sort alphabetically (also below).",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dc086c6_eb2b1754",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Let\u0027s find a better name for this, maybe Hint?",
+      "range": {
+        "startLine": 112,
+        "startChar": 7,
+        "endLine": 112,
+        "endChar": 20
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c67dc1c_57e76d25",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-09T15:39:22Z",
+      "side": 1,
+      "message": "Why does this change?",
+      "range": {
+        "startLine": 123,
+        "startChar": 34,
+        "endLine": 123,
+        "endChar": 44
+      },
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
