@@ -22,6 +22,30 @@
       "revId": "1fee62f15b131453de1d562b950a489db05d3284",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fce5a29_c7496660",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2474,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-09T12:13:34Z",
+      "side": 1,
+      "message": "No, none that I am aware of. There is one in the external API, but I do not want to use that here.",
+      "parentUuid": "1b26e08f_7ed957e1",
+      "range": {
+        "startLine": 2474,
+        "startChar": 12,
+        "endLine": 2474,
+        "endChar": 26
+      },
+      "revId": "1fee62f15b131453de1d562b950a489db05d3284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
