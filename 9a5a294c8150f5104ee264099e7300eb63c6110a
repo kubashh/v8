@@ -22,6 +22,30 @@
       "revId": "9a5a294c8150f5104ee264099e7300eb63c6110a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fd9e1ee_df83e1f8",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 6
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T14:15:29Z",
+      "side": 1,
+      "message": "Good idea, I\u0027ll add it to the burndown list.",
+      "parentUuid": "97d7a9bb_a5c3fe7f",
+      "range": {
+        "startLine": 361,
+        "startChar": 25,
+        "endLine": 361,
+        "endChar": 29
+      },
+      "revId": "9a5a294c8150f5104ee264099e7300eb63c6110a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

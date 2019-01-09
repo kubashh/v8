@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "97002244_53c91b93",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T14:15:29Z",
+      "side": 1,
+      "message": "Answered in the other comment.",
+      "parentUuid": "af3cfa02_18548024",
+      "range": {
+        "startLine": 1149,
+        "startChar": 0,
+        "endLine": 1149,
+        "endChar": 19
+      },
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3156c27_ef7ebf5c",
         "filename": "test/cctest/test-code-stub-assembler.cc",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3b7756f7_61de2b15",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3483,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T14:15:29Z",
+      "side": 1,
+      "message": "Good question, I don\u0027t remember. Tests still pass with this removed so I\u0027ll just revert it.",
+      "parentUuid": "c3156c27_ef7ebf5c",
+      "range": {
+        "startLine": 3482,
+        "startChar": 0,
+        "endLine": 3483,
+        "endChar": 63
+      },
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2232d64_a1554e57",
         "filename": "test/mjsunit/mjsunit.status",
         "patchSetId": 7
@@ -59,6 +107,24 @@
       "writtenOn": "2019-01-09T13:47:41Z",
       "side": 1,
       "message": "unintended change?",
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23da9323_3cd08f76",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 7
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T14:15:29Z",
+      "side": 1,
+      "message": "Not unintended, adding a whitespace line before the end as in other .status files.",
+      "parentUuid": "f2232d64_a1554e57",
       "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "8f24d4e3_b83af0de",
+        "filename": "test/mkgrokdump/mkgrokdump.status",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T14:15:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aaa54d8_8a31bb86",
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76522a33_007a02f1",
         "filename": "tools/v8_presubmit.py",
         "patchSetId": 7
@@ -93,6 +177,30 @@
       "writtenOn": "2019-01-09T13:47:41Z",
       "side": 1,
       "message": "Why was this necessary?",
+      "range": {
+        "startLine": 514,
+        "startChar": 8,
+        "endLine": 514,
+        "endChar": 27
+      },
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35ebd236_ab227e48",
+        "filename": "tools/v8_presubmit.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T14:15:29Z",
+      "side": 1,
+      "message": "The checks below (e.g. looking at the \u0027// Flags:\u0027) line were also applied to the .status files, which was obviously wrong. These checks should only be applied to .js files in the debugger or mjsunit directories. The condition is still hand-wavey but at least better than before.",
+      "parentUuid": "76522a33_007a02f1",
       "range": {
         "startLine": 514,
         "startChar": 8,

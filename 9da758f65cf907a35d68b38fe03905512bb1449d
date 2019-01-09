@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "ba22e16b_89e440fc",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T14:15:29Z",
+      "side": 1,
+      "message": "In V8_JITLESS_MODE (\u003d build-time enabled), it is mutable to give us the option to run lite mode without jitless mode. It is true by default so it\u0027ll be enabled on bots. We can also make it read-only here if you prefer, I don\u0027t think it matters too much.\n\nWithout V8_JITLESS_MODE, --jitless is not supported at all, that\u0027s why the flag is read-only and false.\n\nOnce the V8_JITLESS_MODE build-time config is removed, it\u0027d make sense to have similar behavior as for the other V8_LITE_MODE flags, i.e. read-only true in lite mode, and mutable with default false otherwise.",
+      "parentUuid": "ae46b59f_2b14a053",
+      "range": {
+        "startLine": 1099,
+        "startChar": 21,
+        "endLine": 1099,
+        "endChar": 25
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f03c339e_e6ccdb41",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 3
