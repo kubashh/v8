@@ -22,6 +22,92 @@
       "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c4004ea_cc7f6af1",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-09T11:38:00Z",
+      "side": 1,
+      "message": "I find it strange that this check is done after calling TestSuite.Load. Perhaps methods should be renamed somehow to better reflect what is actually loaded above and what is loaded inside this condition?",
+      "range": {
+        "startLine": 616,
+        "startChar": 6,
+        "endLine": 616,
+        "endChar": 53
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "691c9744_733bc206",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-09T11:38:00Z",
+      "side": 1,
+      "message": "Can suite ever be None? Unless this is the case, IMHO it\u0027s better to return True here.",
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a23af482_883b97de",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-09T11:38:00Z",
+      "side": 1,
+      "message": "Method name does not seem to suggest that it makes any changes to the suite. I would recommend moving this into an overridden load_tests_from_disk method:\n\n  def load_tests_from_disk(self, options, statusfile_variables):\n    if options.stress_interrupt_budget:\n      suite.do_suppress_internals()\n    super(NumFuzzer, self).load_tests_from_disk(options, statusfile_variables)\n\nNote that you\u0027ll have to modify the base method definition as well to add options parameter.",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 195,
+        "endChar": 35
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0e045ba_157f069f",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-09T11:38:00Z",
+      "side": 1,
+      "message": "Ditto here. Return True if suite can\u0027t be None",
+      "range": {
+        "startLine": 197,
+        "startChar": 11,
+        "endLine": 197,
+        "endChar": 16
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
