@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d1cc33b0_1fece2e9",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T14:29:18Z",
+      "side": 1,
+      "message": "Could you remove this comment, we don\u0027t have design docs for other flags and it will probably bitrot in time.",
+      "range": {
+        "startLine": 1097,
+        "startChar": 0,
+        "endLine": 1097,
+        "endChar": 41
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3832227_67f4a9da",
         "filename": "src/flag-definitions.h",
         "patchSetId": 3
@@ -133,6 +156,30 @@
       "side": 1,
       "message": "In V8_JITLESS_MODE (\u003d build-time enabled), it is mutable to give us the option to run lite mode without jitless mode. It is true by default so it\u0027ll be enabled on bots. We can also make it read-only here if you prefer, I don\u0027t think it matters too much.\n\nWithout V8_JITLESS_MODE, --jitless is not supported at all, that\u0027s why the flag is read-only and false.\n\nOnce the V8_JITLESS_MODE build-time config is removed, it\u0027d make sense to have similar behavior as for the other V8_LITE_MODE flags, i.e. read-only true in lite mode, and mutable with default false otherwise.",
       "parentUuid": "ae46b59f_2b14a053",
+      "range": {
+        "startLine": 1099,
+        "startChar": 21,
+        "endLine": 1099,
+        "endChar": 25
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea735f4a_d511bb46",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T14:29:18Z",
+      "side": 1,
+      "message": "But the V8_JITLESS_MODE doesn\u0027t actually do anything yet. Do you have changes that will require a build time flag? If there isn\u0027t anything could we just make this like the other lite mode flags (and remove the V8_JITLESS_MODE define until we need it). If not, can we make it always readonly.",
+      "parentUuid": "ba22e16b_89e440fc",
       "range": {
         "startLine": 1099,
         "startChar": 21,
