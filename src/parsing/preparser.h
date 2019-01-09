@@ -1637,26 +1637,22 @@ class PreParser : public ParserBase<PreParser> {
                                     int initializer_end_position,
                                     bool is_rest) {
     DeclarationScope* scope = parameters->scope;
-    if (pattern.variables_ == nullptr) {
-      scope->DeclareParameterName(ast_value_factory()->empty_string(), is_rest,
-                                  ast_value_factory(), false, true);
+    if (parameters->is_simple) {
+      DCHECK_NOT_NULL(pattern.variables_);
+      VariableProxy* param = pattern.variables_->first();
+      const AstRawString* name = param->raw_name();
+      if (scope->LookupLocal(name) != nullptr) parameters->set_has_duplicate();
+      scope->DeclareSimpleParameterName(name, is_rest);
     } else {
-      // We declare the parameter name for all names, but only create a
-      // parameter entry for the first one.
-      auto it = pattern.variables_->begin();
-      if (!parameters->has_duplicate() &&
-          scope->LookupLocal(it->raw_name()) != nullptr) {
-        parameters->set_has_duplicate();
-      }
-      scope->DeclareParameterName(it->raw_name(), is_rest, ast_value_factory(),
-                                  true, true);
-      for (++it; it != pattern.variables_->end(); ++it) {
-        if (!parameters->has_duplicate() &&
-            scope->LookupLocal(it->raw_name()) != nullptr) {
-          parameters->set_has_duplicate();
+      scope->AddNonSimpleParameterTemp(is_rest);
+      if (pattern.variables_) {
+        for (VariableProxy* param : *pattern.variables_) {
+          const AstRawString* name = param->raw_name();
+          if (scope->LookupLocal(name) != nullptr) {
+            parameters->set_has_duplicate();
+          }
+          scope->DeclareNonSimpleParameterName(name);
         }
-        scope->DeclareParameterName(it->raw_name(), is_rest,
-                                    ast_value_factory(), true, false);
       }
     }
     parameters->UpdateArityAndFunctionLength(!initializer.IsNull(), is_rest);
