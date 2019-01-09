@@ -162,6 +162,24 @@
     },
     {
       "key": {
+        "uuid": "69d5fd22_fa333de7",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T12:28:37Z",
+      "side": 1,
+      "message": "\u003e Regarding 2, is this really less invasive, I would have thought it would be as simple as changing this line if the jitless flag is enabled: \n\u003e https://cs.chromium.org/chromium/src/v8/src/heap/factory.cc?q\u003dNewCode\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d2787\n\u003e \n\u003e That way we wouldn\u0027t have to deal with the RW/RX permission changes that happen on the code space.\n\u003e \n\u003e #3 might be a reason to keep this in the code space, but I\u0027m not sure on the details. I won\u0027t block on this if Ulan is happy though, since hopefully we can avoid allocating code object trampolines in the future so this shouldn\u0027t be an issue.\n\nHere\u0027s one spot for the \u0027Code object -\u003e CODE_SPACE\u0027 assumption, just as an example:\n\nhttps://cs.chromium.org/chromium/src/v8/src/heap/spaces-inl.h?l\u003d86\u0026rcl\u003dda16260fa6ae1c2ebd7fd3e48703c5c0d812772e\n\nThere\u0027s also a few other spots e.g. related to serialization. Ofc we could update them to handle Code in OLD_SPACE. \n\nI actually think the current approach is pretty elegant though :) It\u0027s called \u0027CODE_SPACE\u0027 (not \u0027EXECUTABLE_SPACE\u0027) so we don\u0027t create any awkward naming discrepancies. Everything else stays as-is, except we never set executable permissions.",
+      "parentUuid": "adbe475e_a863bf75",
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d075e03_a7aafc60",
         "filename": "test/mjsunit/mjsunit.status",
         "patchSetId": 3
