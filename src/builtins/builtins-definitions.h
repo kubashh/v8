@@ -1359,7 +1359,6 @@ namespace internal {
   TFC(GetProperty, GetProperty, 1)                                             \
   TFS(SetProperty, kReceiver, kKey, kValue)                                    \
   TFS(SetPropertyInLiteral, kReceiver, kKey, kValue)                           \
-  ASM(MathPowInternal, Dummy)                                                  \
                                                                                \
   /* Trace */                                                                  \
   CPP(IsTraceCategoryEnabled)                                                  \
