@@ -329,6 +329,30 @@
       "revId": "caa853b79aca283555d56deb53ce8e80523062fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92359cf3_ab74fff6",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-09T14:51:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49e2c848_6c5d44bc",
+      "range": {
+        "startLine": 192,
+        "startChar": 37,
+        "endLine": 192,
+        "endChar": 64
+      },
+      "revId": "caa853b79aca283555d56deb53ce8e80523062fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

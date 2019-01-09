@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "313de72a_0e8c7d36",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-09T14:51:28Z",
+      "side": 1,
+      "message": "I\u0027ve added that to the new commit message",
+      "parentUuid": "3d203cb5_fe0d9735",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 21
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c4004ea_cc7f6af1",
         "filename": "tools/testrunner/base_runner.py",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "837a9be1_66ca0bfc",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-09T14:51:28Z",
+      "side": 1,
+      "message": "I\u0027ve renamed the method to avoid some confusion. The reason for this is that we have to load 2 things (test suite and the tests) and NumFuzzer wants to customize the suites before loading all the tests",
+      "parentUuid": "6c4004ea_cc7f6af1",
+      "range": {
+        "startLine": 616,
+        "startChar": 6,
+        "endLine": 616,
+        "endChar": 53
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "691c9744_733bc206",
         "filename": "tools/testrunner/base_runner.py",
         "patchSetId": 5
@@ -62,6 +110,24 @@
       "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60f9b39f_82814735",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-09T14:51:28Z",
+      "side": 1,
+      "message": "I\u0027ve renamed it to better reflect the purpose of the method and added more documentation to it.",
+      "parentUuid": "691c9744_733bc206",
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "35e57724_f0f7329f",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-09T14:51:28Z",
+      "side": 1,
+      "message": "do_suppress_internals modifies the TestSuite though, it\u0027s an old method. We can refactor that part as a follow-up if needs be. \n\nI\u0027ve kept it here since this is specific behavior and flag to the NumFuzzer.",
+      "parentUuid": "a23af482_883b97de",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 195,
+        "endChar": 35
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0e045ba_157f069f",
         "filename": "tools/testrunner/num_fuzzer.py",
         "patchSetId": 5
@@ -108,6 +198,30 @@
       "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6749c9d_ccb7689d",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-09T14:51:28Z",
+      "side": 1,
+      "message": "Ditto \"we need the modified suite\"",
+      "parentUuid": "c0e045ba_157f069f",
+      "range": {
+        "startLine": 197,
+        "startChar": 11,
+        "endLine": 197,
+        "endChar": 16
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
