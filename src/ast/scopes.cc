@@ -979,33 +979,50 @@ Variable* DeclarationScope::DeclareParameter(const AstRawString* name,
   return var;
 }
 
-Variable* DeclarationScope::DeclareParameterName(
-    const AstRawString* name, bool is_rest, AstValueFactory* ast_value_factory,
-    bool declare_as_local, bool add_parameter) {
+void DeclarationScope::DeclareSimpleParameterName(
+    const AstRawString* name, AstValueFactory* ast_value_factory,
+    bool is_rest) {
   DCHECK(!already_resolved_);
   DCHECK(is_function_scope() || is_module_scope());
-  DCHECK(!has_rest_ || is_rest);
   DCHECK(is_being_lazily_parsed_);
+  DCHECK(!has_rest_);
   has_rest_ = is_rest;
   if (name == ast_value_factory->arguments_string()) {
     has_arguments_parameter_ = true;
   }
-  Variable* var;
-  if (declare_as_local) {
-    var = Declare(zone(), name, VariableMode::kVar);
-  } else {
-    var = new (zone()) Variable(this, name, VariableMode::kTemporary,
-                                NORMAL_VARIABLE, kCreatedInitialized);
-  }
-  if (add_parameter) {
-    params_.Add(var, zone());
-  }
+  Variable* var = Declare(zone(), name, VariableMode::kVar);
+  params_.Add(var, zone());
   // Params are automatically marked as used to make sure that the debugger and
   // function.arguments sees them.
   // TODO(verwaest): Reevaluate whether we always need to do this, since
   // strict-mode function.arguments does not make the arguments available.
   var->set_is_used();
-  return var;
+}
+
+void DeclarationScope::AddNonSimpleParameterTemp(bool is_rest) {
+  DCHECK(!already_resolved_);
+  DCHECK(is_function_scope() || is_module_scope());
+  DCHECK(is_being_lazily_parsed_);
+  DCHECK(!has_rest_);
+  has_rest_ = is_rest;
+  // Add nullptr to params_ since we only care about the length of the array for
+  // num_parameters. The values aren't accessed in the case of non-simple
+  // parameters.
+  params_.Add(nullptr, zone());
+}
+
+void DeclarationScope::DeclareNonSimpleParameterName(const AstRawString* name) {
+  DCHECK(!already_resolved_);
+  DCHECK(is_function_scope() || is_module_scope());
+  DCHECK(is_being_lazily_parsed_);
+  // The resulting variable isn't added to params. In the case of non-simple
+  // params, a dummy temp variable is added in AddNonSimpleParameterTemp.
+  Variable* var = Declare(zone(), name, VariableMode::kVar);
+  // Params are automatically marked as used to make sure that the debugger and
+  // function.arguments sees them.
+  // TODO(verwaest): Reevaluate whether we always need to do this, since
+  // strict-mode function.arguments does not make the arguments available.
+  var->set_is_used();
 }
 
 Variable* Scope::DeclareLocal(const AstRawString* name, VariableMode mode,
