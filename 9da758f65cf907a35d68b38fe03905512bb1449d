@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "ae46b59f_2b14a053",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T13:47:41Z",
+      "side": 1,
+      "message": "Wait, why are we making it mutable in lite mode and readonly otherwise? Surely it should be the other way round so you can turn it on at runtime in default built for testing but it is forced on by default in lite mode?",
+      "parentUuid": "01c9dc54_3aba14fc",
+      "range": {
+        "startLine": 1099,
+        "startChar": 21,
+        "endLine": 1099,
+        "endChar": 25
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f03c339e_e6ccdb41",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 3
@@ -201,6 +225,24 @@
       "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1eb7894_36c1263d",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T13:47:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "69d5fd22_fa333de7",
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

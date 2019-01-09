@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97d7a9bb_a5c3fe7f",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 6
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T13:47:41Z",
+      "side": 1,
+      "message": "Just noticed that most of these tests are for asm.js - for asm.js don\u0027t we just want to end up executing the code as normal JS code in jitless (that would probably be faster than translating to WASM and running in the an interpreter. Maybe as a followup CL you could just make compiler.cc UseAsmWasm return false for jitless mode and remove all these asmjs cases (e.g., make FLAG_validate_asm an inverse dependency of FLAG_jitless)?",
+      "range": {
+        "startLine": 361,
+        "startChar": 25,
+        "endLine": 361,
+        "endChar": 29
+      },
+      "revId": "9a5a294c8150f5104ee264099e7300eb63c6110a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

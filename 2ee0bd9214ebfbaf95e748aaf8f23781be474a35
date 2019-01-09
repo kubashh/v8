@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af3cfa02_18548024",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T13:47:41Z",
+      "side": 1,
+      "message": "I was actually thinking you could move this down into the  \"Flags only available in non-Lite modes.\" which will automatically set it as readonly in lite mode, so you just need:\n\nDEFINE_BOOL(jitless, V8_LITE_BOOL, \"Disable runtime allocation of executable memory.\")",
+      "range": {
+        "startLine": 1149,
+        "startChar": 0,
+        "endLine": 1149,
+        "endChar": 19
+      },
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3156c27_ef7ebf5c",
+        "filename": "test/cctest/test-code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3483,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T13:47:41Z",
+      "side": 1,
+      "message": "Why this change for jitless?",
+      "range": {
+        "startLine": 3482,
+        "startChar": 0,
+        "endLine": 3483,
+        "endChar": 63
+      },
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2232d64_a1554e57",
+        "filename": "test/mjsunit/mjsunit.status",
+        "patchSetId": 7
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T13:47:41Z",
+      "side": 1,
+      "message": "unintended change?",
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5aaa54d8_8a31bb86",
+        "filename": "test/mkgrokdump/mkgrokdump.status",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T13:47:41Z",
+      "side": 1,
+      "message": "Update comment.",
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76522a33_007a02f1",
+        "filename": "tools/v8_presubmit.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-01-09T13:47:41Z",
+      "side": 1,
+      "message": "Why was this necessary?",
+      "range": {
+        "startLine": 514,
+        "startChar": 8,
+        "endLine": 514,
+        "endChar": 27
+      },
+      "revId": "2ee0bd9214ebfbaf95e748aaf8f23781be474a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
