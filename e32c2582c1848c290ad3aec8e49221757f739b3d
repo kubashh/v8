@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fbdf32a7_dea7278a",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T13:35:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ac72c9a2_617a273e",
+      "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e611e5a_fee7e838",
         "filename": "src/interface-descriptors.h",
         "patchSetId": 2
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "There are no other descriptors that have float parameters.\n\nClass CallInterfaceDescriptorData has only array of normal(non-floating-point) registers for parameters\u0027. Float parameters can only be distinguished by calling \u0027param_type(of their index). When it is defined to use float register for parameters (like in WasmI64AtomicWaitDescriptor or WasmI32AtomicWaitDescriptor), float register that is chosen to be used for parameter is the one that corresponds numerically to the next available register in array \u0027default_stub_registers\u0027. \n\nE.g. on MIPS32, numerical values of registers a0, a1, a2, a3 (if they are cast to int) are 4, 5, 6, 7. Therefore for descriptor WasmI64AtomicWaitDescriptor, the f7 float register is chosen for kTimeout parameter. But on MIPS it is not allowed to store floating-point data to odd numbered float registers. (According to MIPS ABI f12 and f14 must be used for parameters.) That was the reason because mksnapshot was unable to make snapshot in debug mode.",
       "parentUuid": "9fe72ffd_092c9fca",
+      "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bedfa53_dfbd0856",
+        "filename": "src/mips/interface-descriptors-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T13:35:59Z",
+      "side": 1,
+      "message": "Maybe a misunderstanding, I meant \u0027please elaborate in a comment in the code\u0027. I did understand the reasoning behind the change in general :)\n\nI still wonder if wouldn\u0027t be the easier and more readable solution to define custom register assignments for these two interface descriptors and leaving default initialization unchanged.. Wdyt?",
+      "parentUuid": "c6051bf1_71fb6604",
       "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
