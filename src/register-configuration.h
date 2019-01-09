@@ -25,8 +25,10 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
   };
 
   // Architecture independent maxes.
-  static const int kMaxGeneralRegisters = 32;
-  static const int kMaxFPRegisters = 32;
+  static constexpr int kMaxGeneralRegisters = 32;
+  static constexpr int kMaxFPRegisters = 32;
+  static constexpr int kMaxRegisters =
+      std::max(kMaxFPRegisters, kMaxGeneralRegisters);
 
   // Default RegisterConfigurations for the target architecture.
   static const RegisterConfiguration* Default();
