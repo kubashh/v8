@@ -155,7 +155,6 @@ class AsyncCompileJob {
   Handle<Context> native_context_;
   const std::shared_ptr<CompilationResultResolver> resolver_;
 
-  std::vector<DeferredHandles*> deferred_handles_;
   Handle<WasmModuleObject> module_object_;
   NativeModule* native_module_ = nullptr;
 
