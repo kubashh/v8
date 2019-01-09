@@ -93,6 +93,30 @@
       "revId": "86adaaa57992c743a583ba92cb995748c4ed7969",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fbcb47fc_14762570",
+        "filename": "src/profiler/profiler-listener.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-09T16:37:34Z",
+      "side": 1,
+      "message": "This is very weird, they should go though the same codepath.",
+      "parentUuid": "509d71af_711b152d",
+      "range": {
+        "startLine": 133,
+        "startChar": 35,
+        "endLine": 133,
+        "endChar": 67
+      },
+      "revId": "86adaaa57992c743a583ba92cb995748c4ed7969",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
