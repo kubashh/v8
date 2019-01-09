@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8990e060_3c693e23",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T14:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1cc33b0_1fece2e9",
+      "range": {
+        "startLine": 1097,
+        "startChar": 0,
+        "endLine": 1097,
+        "endChar": 41
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b3832227_67f4a9da",
         "filename": "src/flag-definitions.h",
         "patchSetId": 3
@@ -189,6 +213,30 @@
       "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69d9278e_23a0b23e",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T14:39:59Z",
+      "side": 1,
+      "message": "Huh. An earlier version of this CL had deps on the build-time flag, but you\u0027re right the current version doesn\u0027t. Moved into the LITE section as you suggested.",
+      "parentUuid": "ea735f4a_d511bb46",
+      "range": {
+        "startLine": 1099,
+        "startChar": 21,
+        "endLine": 1099,
+        "endChar": 25
+      },
+      "revId": "9da758f65cf907a35d68b38fe03905512bb1449d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
