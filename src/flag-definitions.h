@@ -1094,14 +1094,6 @@ DEFINE_BOOL(serialization_statistics, false,
 DEFINE_UINT(serialization_chunk_size, 4096,
             "Custom size for serialization chunks")
 
-// JIT-less V8. Design doc: goo.gl/kRnhVe
-#ifdef V8_JITLESS_MODE
-DEFINE_BOOL(jitless, false, "Disable runtime allocation of executable memory.")
-#else
-DEFINE_BOOL_READONLY(jitless, false,
-                     "Disable runtime allocation of executable memory.")
-#endif
-
 // Regexp
 DEFINE_BOOL(regexp_optimization, true, "generate optimized regexp code")
 DEFINE_BOOL(regexp_mode_modifiers, false, "enable inline flags in regexp.")
@@ -1152,6 +1144,14 @@ DEFINE_BOOL(mock_arraybuffer_allocator, false,
 DEFINE_SIZE_T(mock_arraybuffer_allocator_limit, 0,
               "Memory limit for mock ArrayBuffer allocator used to simulate "
               "OOM for testing.")
+
+// JIT-less V8. Design doc: goo.gl/kRnhVe
+#ifdef V8_LITE_MODE
+DEFINE_BOOL(jitless, true, "Disable runtime allocation of executable memory.")
+#else
+DEFINE_BOOL_READONLY(jitless, false,
+                     "Disable runtime allocation of executable memory.")
+#endif
 
 //
 // Flags only available in non-Lite modes.
