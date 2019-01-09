@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efaf190a_4877bc56",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T11:15:44Z",
+      "side": 1,
+      "message": "Could this be pure virtual?",
+      "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e611e5a_fee7e838",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T11:15:44Z",
+      "side": 1,
+      "message": "Nit: \u0027/* D\u0027 and each line should contain a complete terminated /* .. */ style comment.",
+      "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fe72ffd_092c9fca",
+        "filename": "src/mips/interface-descriptors-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-09T11:15:44Z",
+      "side": 1,
+      "message": "From a quick look I only see two descriptors that have float parameters (WasmI64AtomicWaitDescriptor, WasmI32AtomicWaitDescriptor). Are there others?\n\nIt seems a bit unexpected that the default register assignment changes based on the # of float params. Would it make sense to define custom platform-specific registers instead of mucking with default initialization?\n\nIf we do use this solution, please elaborate in the comment above why special handling is needed for float params.",
+      "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
