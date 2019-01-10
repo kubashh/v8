@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "e805e2b4_37c94273",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-10T16:11:38Z",
+      "side": 1,
+      "message": "As discussed offline, this flag now triggers broker logging in JSInlining.",
+      "parentUuid": "d8b3135e_5bcee0a6",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2aca43d8_741f0367",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 25
@@ -651,6 +669,24 @@
     },
     {
       "key": {
+        "uuid": "649cc100_cf21ee00",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-10T16:11:38Z",
+      "side": 1,
+      "message": "As discussed offline, inlined this function in both of its usage places.",
+      "parentUuid": "1c86f5eb_4b289937",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca1cb1d4_4b21aedc",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 25
@@ -680,6 +716,24 @@
       "side": 1,
       "message": "Should I leave a TODO here until your CL has landed?",
       "parentUuid": "ca1cb1d4_4b21aedc",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c785f203_94b1f24d",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-10T16:11:38Z",
+      "side": 1,
+      "message": "Please check the new version.",
+      "parentUuid": "decf5d90_15faa808",
       "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -803,6 +857,24 @@
     },
     {
       "key": {
+        "uuid": "8c44fb2e_d24490c3",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-10T16:11:38Z",
+      "side": 1,
+      "message": "Started gathering map feedback as well.",
+      "parentUuid": "14de0401_8777bba1",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "adce89d7_cb8df8ea",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 25
@@ -835,6 +907,24 @@
       "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22ae253e_802571d8",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-10T16:11:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efd7eac3_0dab445d",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
