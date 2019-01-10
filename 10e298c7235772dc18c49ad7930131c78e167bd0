@@ -875,6 +875,24 @@
     },
     {
       "key": {
+        "uuid": "e27c8d97_1975afa8",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-10T16:44:26Z",
+      "side": 1,
+      "message": "Just a note, switching from value to map feedback resulted in another 5% regression on Octane. Will start investigating tomorrow.",
+      "parentUuid": "8c44fb2e_d24490c3",
+      "revId": "10e298c7235772dc18c49ad7930131c78e167bd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "adce89d7_cb8df8ea",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 25
