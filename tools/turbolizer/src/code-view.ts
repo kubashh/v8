@@ -204,8 +204,7 @@ export class CodeView extends View {
         currentLineElement.id = "li" + i;
         currentLineElement.dataset.lineNumber = "" + lineNumber;
         const spans = currentLineElement.childNodes;
-        for (let j = 0; j < spans.length; ++j) {
-          const currentSpan = spans[j];
+        for (const currentSpan of spans) {
           if (currentSpan instanceof HTMLSpanElement) {
             const pos = base + current;
             const end = pos + currentSpan.textContent.length;
