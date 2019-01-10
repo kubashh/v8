@@ -178,6 +178,30 @@
     },
     {
       "key": {
+        "uuid": "ac8efffd_0b65af7c",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-01-10T08:19:42Z",
+      "side": 1,
+      "message": "How about splitting this in two:\n1) An imutable query method to check if a suite should be used/finalized? Call it e.g. \"is_suitable\", ;) The default would be True, NumFuzz would override it.\n2) A post-processing hook that allows mutating the suite. E.g. called process_suite or whatever.\n\nSecond proposal: We could kill 2), since the interrupt_budget fuzzer was removed from infra a while back. We should just remove all the code.",
+      "parentUuid": "35e57724_f0f7329f",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 195,
+        "endChar": 35
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0e045ba_157f069f",
         "filename": "tools/testrunner/num_fuzzer.py",
         "patchSetId": 5

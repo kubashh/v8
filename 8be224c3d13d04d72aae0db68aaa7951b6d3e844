@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf2f23db_f2d40f76",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-01-10T08:19:42Z",
+      "side": 1,
+      "message": "nit: It\u0027s not clear to me what \"it\" is. Sounds like it refers to the method LoadTestSuite, but I don\u0027t understand how that is omitted. So I assume you mean the loading of tests and status files, maybe clarify.",
+      "range": {
+        "startLine": 10,
+        "startChar": 65,
+        "endLine": 10,
+        "endChar": 67
+      },
+      "revId": "8be224c3d13d04d72aae0db68aaa7951b6d3e844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
