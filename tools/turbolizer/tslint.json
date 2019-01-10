@@ -32,13 +32,13 @@
     "interface-name": false,
     "no-bitwise": false,
     "no-shadowed-variable": false,
-    "prefer-for-of": false,
+    "prefer-for-of": true,
     "align": false,
     "arrow-return-shorthand": false,
     "max-classes-per-file": false,
     "variable-name": false,
     "forin": false,
-    "one-variable-per-declaration": false,
+    "one-variable-per-declaration": true,
     "no-consecutive-blank-lines": true
   },
   "rulesDirectory": []
