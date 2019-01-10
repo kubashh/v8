@@ -32,7 +32,7 @@
     "interface-name": false,
     "no-bitwise": false,
     "no-shadowed-variable": false,
-    "prefer-for-of": false,
+    "prefer-for-of": true,
     "align": false,
     "arrow-return-shorthand": false,
     "max-classes-per-file": false,
