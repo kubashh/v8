@@ -8,7 +8,8 @@
     "deploy": "./deploy.sh",
     "format": "tsfmt -r",
     "test": "ts-mocha -p tsconfig.test.json test/**/*-test.ts",
-    "dev-server": "ws"
+    "dev-server": "ws",
+    "presubmit": "tslint --project ./tslint.json --fix; tsfmt -r --verify"
   },
   "author": "The V8 team",
   "license": "MIT",
