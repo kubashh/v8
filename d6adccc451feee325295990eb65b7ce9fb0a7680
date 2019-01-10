@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bdec6f62_4bef16d1",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-10T10:25:14Z",
+      "side": 1,
+      "message": "This was unintentional. The correct behaviour is to spawn multiple recursive calls for as many values as we have in the inferred state.",
+      "parentUuid": "c8ab5459_a9206916",
+      "revId": "d6adccc451feee325295990eb65b7ce9fb0a7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e6db0dd_51b433d6",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 26
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "b64ea57c_add45b4f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-10T10:25:14Z",
+      "side": 1,
+      "message": "Removed ProcessCallArguments, it used to be used in a previous version of the code.",
+      "parentUuid": "2e6db0dd_51b433d6",
+      "revId": "d6adccc451feee325295990eb65b7ce9fb0a7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "391bd007_e9da5550",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 26
@@ -50,6 +86,24 @@
       "revId": "d6adccc451feee325295990eb65b7ce9fb0a7680",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90589e85_fabde103",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-10T10:25:14Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "391bd007_e9da5550",
+      "revId": "d6adccc451feee325295990eb65b7ce9fb0a7680",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
