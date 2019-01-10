@@ -6,10 +6,9 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "deploy": "./deploy.sh",
-    "format": "tsfmt -r",
     "test": "ts-mocha -p tsconfig.test.json test/**/*-test.ts",
     "dev-server": "ws",
-    "presubmit": "tslint --project ./tslint.json --fix; tsfmt -r --verify"
+    "presubmit": "tslint --project ./tslint.json --fix"
   },
   "author": "The V8 team",
   "license": "MIT",
