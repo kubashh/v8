@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "26b81590_757da3da",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-10T09:51:08Z",
+      "side": 1,
+      "message": "It\u0027s a lot better now (especially added \"process\" part since it make changes to the object), but still slightly confusing. How about this code?\n\n  should_load_tests \u003d self._process_suite(suite, options)\n  if should_load_tests:\n    suite.load_tests_from_disk(variables)\n    suites.append(suite)\n\nThe method should only return True when tests need to be loaded. This way it becomes clear that you load test suite above and actual tests in the call below.",
+      "parentUuid": "837a9be1_66ca0bfc",
+      "range": {
+        "startLine": 616,
+        "startChar": 6,
+        "endLine": 616,
+        "endChar": 53
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "691c9744_733bc206",
         "filename": "tools/testrunner/base_runner.py",
         "patchSetId": 5
