@@ -22,6 +22,30 @@
       "revId": "f532df54a22c5cfad85b7f08fef2c28af5810d08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d219cd7_b6f78bb6",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-01-10T11:56:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2c3c881_5f6db7d6",
+      "range": {
+        "startLine": 831,
+        "startChar": 21,
+        "endLine": 831,
+        "endChar": 50
+      },
+      "revId": "f532df54a22c5cfad85b7f08fef2c28af5810d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
