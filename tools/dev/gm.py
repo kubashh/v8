@@ -206,6 +206,16 @@ def GetPath(arch, mode):
   subdir = "%s.%s" % (arch, mode)
   return os.path.join(OUTDIR, subdir)
 
+def PrepareMksnapshotCmdline(orig_cmdline, path):
+  result = "gdb -args %s/mksnapshot " % path
+  for w in orig_cmdline.split(" "):
+    if w.startswith("gen/") or w.startswith("snapshot_blob"):
+      result += ("%(path)s%(sep)s%(arg)s " %
+                 {"path": path, "sep": os.sep, "arg": w})
+    else:
+      result += "%s " % w
+  return result
+
 class Config(object):
   def __init__(self, arch, mode, targets, tests=[]):
     self.arch = arch
@@ -266,6 +276,17 @@ class Config(object):
 
     return_code, output = _CallWithOutput("autoninja -C %s %s" %
                                           (path, targets))
+    if return_code != 0 and "FAILED:" in output and "snapshot_blob" in output:
+      csa_trap = re.compile("Specify option( --csa-trap-on-node=[^ ]*)")
+      match = csa_trap.search(output)
+      extra_opt = match.group(1) if match else ""
+      cmdline = re.compile("python ../../tools/run.py ./mksnapshot (.*)")
+      match = cmdline.search(output)
+      cmdline = PrepareMksnapshotCmdline(match.group(1), path) + extra_opt
+      _Notify("V8 build requires your attention",
+              "Detected mksnapshot failure, re-running in GDB...")
+      _Call(cmdline)
+    """
     if return_code != 0 and "FAILED: snapshot_blob.bin" in output:
       csa_trap = re.compile("Specify option( --csa-trap-on-node=[^ ]*)")
       match = csa_trap.search(output)
@@ -292,6 +313,7 @@ class Config(object):
             "--random-seed 314159265 "
             "--startup-blob %(path)s/snapshot_blob.bin"
             "%(extra)s"% {"path": path, "extra": extra_opt})
+    """
     return return_code
 
   def RunTests(self):
