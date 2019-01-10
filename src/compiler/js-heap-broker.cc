@@ -319,6 +319,11 @@ class JSFunctionData : public JSObjectData {
 
   void Serialize(JSHeapBroker* broker);
 
+  void SerializeForInlining(JSHeapBroker* broker) {
+    serialized_for_inlining_ = true;
+  }
+  bool serialized_for_inlining() const { return serialized_for_inlining_; }
+
   ContextData* context() const { return context_; }
   NativeContextData* native_context() const { return native_context_; }
   MapData* initial_map() const { return initial_map_; }
@@ -335,6 +340,7 @@ class JSFunctionData : public JSObjectData {
   bool PrototypeRequiresRuntimeLookup_;
 
   bool serialized_ = false;
+  bool serialized_for_inlining_ = false;
 
   ContextData* context_ = nullptr;
   NativeContextData* native_context_ = nullptr;
@@ -2572,6 +2578,18 @@ void JSFunctionRef::Serialize() {
   if (broker()->mode() == JSHeapBroker::kDisabled) return;
   CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
   data()->AsJSFunction()->Serialize(broker());
+}
+
+void JSFunctionRef::SerializeForInlining() {
+  if (broker()->mode() == JSHeapBroker::kDisabled) return;
+  CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
+  data()->AsJSFunction()->SerializeForInlining(broker());
+}
+
+bool JSFunctionRef::serialized_for_inlining() const {
+  if (broker()->mode() == JSHeapBroker::kDisabled) return false;
+  CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
+  return data()->AsJSFunction()->serialized_for_inlining();
 }
 
 void JSObjectRef::SerializeObjectCreateMap() {
