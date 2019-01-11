@@ -11,7 +11,7 @@ namespace internal {
 
 void CallInterfaceDescriptorData::InitializePlatformSpecific(
     int register_parameter_count, const Register* registers) {
-  DCHECK(!IsInitializedPlatformIndependent());
+  DCHECK(IsInitializedPlatformIndependent());
 
   register_param_count_ = register_parameter_count;
 
@@ -26,12 +26,13 @@ void CallInterfaceDescriptorData::InitializePlatformSpecific(
     DCHECK_NE(registers[i], kRootRegister);
     register_params_[i] = registers[i];
   }
+  DCHECK(AllStackParametersAreTagged());
 }
 
 void CallInterfaceDescriptorData::InitializePlatformIndependent(
     Flags flags, int return_count, int parameter_count,
     const MachineType* machine_types, int machine_types_length) {
-  DCHECK(IsInitializedPlatformSpecific());
+  DCHECK(!IsInitializedPlatformSpecific());
 
   flags_ = flags;
   return_count_ = return_count;
@@ -47,8 +48,6 @@ void CallInterfaceDescriptorData::InitializePlatformIndependent(
     machine_types_ = NewArray<MachineType>(types_length);
     for (int i = 0; i < types_length; i++) machine_types_[i] = machine_types[i];
   }
-
-  DCHECK(AllStackParametersAreTagged());
 }
 
 #ifdef DEBUG
@@ -321,7 +320,7 @@ void GrowArrayElementsDescriptor::InitializePlatformSpecific(
 
 void NewArgumentsElementsDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
-  DefaultInitializePlatformSpecific(data, 3);
+  DefaultInitializePlatformSpecific(data, kParameterCount);
 }
 
 void ArrayNoArgumentConstructorDescriptor::InitializePlatformSpecific(
@@ -364,6 +363,7 @@ void WasmAtomicWakeDescriptor::InitializePlatformSpecific(
   DefaultInitializePlatformSpecific(data, kParameterCount);
 }
 
+#if !defined(V8_TARGET_ARCH_MIPS) && !defined(V8_TARGET_ARCH_MIPS64)
 void WasmI32AtomicWaitDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   DefaultInitializePlatformSpecific(data, kParameterCount);
@@ -373,6 +373,7 @@ void WasmI64AtomicWaitDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   DefaultInitializePlatformSpecific(data, kParameterCount);
 }
+#endif
 
 void CloneObjectWithVectorDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
