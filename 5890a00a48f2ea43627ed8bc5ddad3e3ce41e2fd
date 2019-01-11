@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f35df75f_a924ce54",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-11T11:22:09Z",
+      "side": 1,
+      "message": "Ah, right. Updated.",
+      "parentUuid": "4ddb6ff9_e8a67077",
+      "revId": "5890a00a48f2ea43627ed8bc5ddad3e3ce41e2fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f4b49d9_903dc6c9",
         "filename": "src/interface-descriptors.cc",
         "patchSetId": 13
@@ -30,6 +48,24 @@
       "writtenOn": "2018-12-13T11:06:32Z",
       "side": 1,
       "message": "We can probably define this in the .h file directly and just\n\n return GetRegisterParameter(0);",
+      "revId": "5890a00a48f2ea43627ed8bc5ddad3e3ce41e2fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a1430a3_4d13cdcb",
+        "filename": "src/interface-descriptors.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-11T11:22:09Z",
+      "side": 1,
+      "message": "GetRegisterParameter(0) is unavailable here to stick this to a static function, and there\u0027s no handy accessor to get RunMicrotaskDescriptor for RunMicrotasksTrampoline, probably?",
+      "parentUuid": "9f4b49d9_903dc6c9",
       "revId": "5890a00a48f2ea43627ed8bc5ddad3e3ce41e2fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
