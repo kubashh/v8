@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2252bdf6_f76d4b8f",
+        "filename": "tools/turbolizer/package.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T10:33:29Z",
+      "side": 1,
+      "message": "How about \u0026\u0026 to only run the second command when the first one succeeded",
+      "revId": "94b03d6a05d53e327dc9141e084cd61a78328c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
