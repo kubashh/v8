@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "17a421bb_0fdd684f",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-11T11:01:56Z",
+      "side": 1,
+      "message": "How about self._should_run_testsuite or self._is_testsuite_supported?",
+      "parentUuid": "26b81590_757da3da",
+      "range": {
+        "startLine": 616,
+        "startChar": 6,
+        "endLine": 616,
+        "endChar": 53
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "691c9744_733bc206",
         "filename": "tools/testrunner/base_runner.py",
         "patchSetId": 5
