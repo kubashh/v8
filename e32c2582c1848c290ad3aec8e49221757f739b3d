@@ -158,6 +158,24 @@
       "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75409437_76056ec9",
+        "filename": "src/mips/interface-descriptors-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-11T12:38:55Z",
+      "side": 1,
+      "message": "Thanks. Could we also strip out the related generic mechanisms now that we assign manual registers? AFAICT this CL could just be the custom InitializePlatformSpecific functions for WasmI{32,64}AtomicWaitDescriptor with:\n\n  Register default_stub_registers[] \u003d {a0, a1, a2, a3, t4};\n \nWe know the last param is float typed so we don\u0027t need the ASSIGN_FLOAT_REGISTERS macro, and we don\u0027t need to swap the PlatformIndependent/PlatformSpecific call order. \n\nWe could DCHECK that float params aren\u0027t assigned invalid registers in CallInterfaceDescriptor::Initialize.\n\nI don\u0027t want to block you on this, but I think we should either go fully automatic (your initial solution), or fully manual (what I\u0027m suggesting above). I have a slight preference for the latter since it seems a bit easier to understand for future readers.",
+      "parentUuid": "847280b9_525c5b42",
+      "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
