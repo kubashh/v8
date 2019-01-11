@@ -22,6 +22,31 @@ void CallInterfaceDescriptor::DefaultInitializePlatformSpecific(
                                    default_stub_registers);
 }
 
+// On MIPS it is not allowed to use odd numbered floating point registers
+// (e.g. f1, f3, etc.) for parameters. This can happen if we use
+// DefaultInitializePlatformSpecific to assign float registers for parameters.
+// E.g if fourth parameter goes to float register, f7 would be assigned for
+// parameter (a3 casted to int is 7).
+void WasmI32AtomicWaitDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  /* Register t0 correspond to f12 FPU register. */
+  const Register default_stub_registers[] = {a0, a1, t0};
+  CHECK_EQ(static_cast<size_t>(kParameterCount),
+           arraysize(default_stub_registers));
+  DCHECK(IsFloatingPoint(data->param_type(2).representation()));
+  data->InitializePlatformSpecific(kParameterCount, default_stub_registers);
+}
+
+void WasmI64AtomicWaitDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  /* Register t0 correspond to f12 FPU register. */
+  const Register default_stub_registers[] = {a0, a1, a2, t0};
+  CHECK_EQ(static_cast<size_t>(kParameterCount),
+           arraysize(default_stub_registers));
+  DCHECK(IsFloatingPoint(data->param_type(3).representation()));
+  data->InitializePlatformSpecific(kParameterCount, default_stub_registers);
+}
+
 void RecordWriteDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   const Register default_stub_registers[] = {a0, a1, a2, a3, kReturnRegister0};

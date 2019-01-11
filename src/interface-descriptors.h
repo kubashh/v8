@@ -272,11 +272,7 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
 
   virtual void InitializePlatformIndependent(
       CallInterfaceDescriptorData* data) {
-    // Default descriptor configuration: one result, all parameters are passed
-    // in registers and all parameters have MachineType::AnyTagged() type.
-    data->InitializePlatformIndependent(CallInterfaceDescriptorData::kNoFlags,
-                                        1, data->register_param_count(),
-                                        nullptr, 0);
+    UNREACHABLE();
   }
 
   // Initializes |data| using the platform dependent default set of registers.
@@ -302,8 +298,8 @@ class V8_EXPORT_PRIVATE CallInterfaceDescriptor {
     // The passed pointer should be a modifiable pointer to our own data.
     DCHECK_EQ(data, data_);
     DCHECK(!data->IsInitialized());
-    InitializePlatformSpecific(data);
     InitializePlatformIndependent(data);
+    InitializePlatformSpecific(data);
     DCHECK(data->IsInitialized());
   }
 };
@@ -389,6 +385,16 @@ STATIC_ASSERT(kMaxTFSBuiltinRegisterParams <= kMaxBuiltinRegisterParams);
   };
 
 #define DEFINE_PARAMETERS(...) DEFINE_RESULT_AND_PARAMETERS(1, ##__VA_ARGS__)
+#define DEFINE_PARAMETERS_AND_NUMBER_OF_PARAMETERS(...)                        \
+  DEFINE_RESULT_AND_PARAMETERS(1, ##__VA_ARGS__)                               \
+  void InitializePlatformIndependent(CallInterfaceDescriptorData* data)        \
+      override {                                                               \
+    /* Default descriptor configuration: one result, all parameters are */     \
+    /* passed in registers and all parameters have MachineType::AnyTagged() */ \
+    /* type. */                                                                \
+    data->InitializePlatformIndependent(CallInterfaceDescriptorData::kNoFlags, \
+                                        1, kParameterCount, nullptr, 0);       \
+  }
 
 #define DEFINE_PARAMETERS_NO_CONTEXT(...) \
   DEFINE_RESULT_AND_PARAMETERS_NO_CONTEXT(1, ##__VA_ARGS__)
@@ -887,14 +893,14 @@ class ArraySingleArgumentConstructorDescriptor
 
 class CompareDescriptor : public CallInterfaceDescriptor {
  public:
-  DEFINE_PARAMETERS(kLeft, kRight)
+  DEFINE_PARAMETERS_AND_NUMBER_OF_PARAMETERS(kLeft, kRight)
   DECLARE_DESCRIPTOR(CompareDescriptor, CallInterfaceDescriptor)
 };
 
 
 class BinaryOpDescriptor : public CallInterfaceDescriptor {
  public:
-  DEFINE_PARAMETERS(kLeft, kRight)
+  DEFINE_PARAMETERS_AND_NUMBER_OF_PARAMETERS(kLeft, kRight)
   DECLARE_DESCRIPTOR(BinaryOpDescriptor, CallInterfaceDescriptor)
 };
 
