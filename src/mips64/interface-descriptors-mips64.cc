@@ -22,6 +22,40 @@ void CallInterfaceDescriptor::DefaultInitializePlatformSpecific(
                                    default_stub_registers);
 }
 
+// On MIPS it is not allowed to use odd numbered floating point registers
+// (e.g. f1, f3, etc.) for parameters. This can happen if we use
+// DefaultInitializePlatformSpecific to assign float registers for parameters.
+// E.g if fourth parameter goes to float register, f7 would be assigned for
+// parameter (a3 casted to int is 7).
+#define ASSIGN_FLOAT_REGISTERS(default_stub_registers, data)              \
+  /* Registers t0 and t2 correspond to f12 and f14 floating point unit */ \
+  /* registers respectively. */                                           \
+  const Register default_float_stub_registers[] = {t0, t2};               \
+  CHECK_LE(static_cast<size_t>(kParameterCount),                          \
+           arraysize(default_stub_registers));                            \
+  for (int i = 0, j = 0; i < data->param_count(); i++) {                  \
+    if (IsFloatingPoint(data->param_type(i).representation())) {          \
+      default_stub_registers[i] = default_float_stub_registers[j++];      \
+    }                                                                     \
+    DCHECK_LE(j, arraysize(default_float_stub_registers));                \
+  }
+
+void WasmI32AtomicWaitDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register default_stub_registers[] = {a0, a1, a2, a3, t0};
+  ASSIGN_FLOAT_REGISTERS(default_stub_registers, data)
+  data->InitializePlatformSpecific(kParameterCount, default_stub_registers);
+}
+
+void WasmI64AtomicWaitDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register default_stub_registers[] = {a0, a1, a2, a3, t0};
+  ASSIGN_FLOAT_REGISTERS(default_stub_registers, data)
+  data->InitializePlatformSpecific(kParameterCount, default_stub_registers);
+}
+
+#undef ASSIGN_FLOAT_REGISTERS
+
 void RecordWriteDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   const Register default_stub_registers[] = {a0, a1, a2, a3, kReturnRegister0};
