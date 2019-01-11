@@ -140,6 +140,24 @@
       "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "847280b9_525c5b42",
+        "filename": "src/mips/interface-descriptors-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2019-01-11T11:32:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bedfa53_dfbd0856",
+      "revId": "e32c2582c1848c290ad3aec8e49221757f739b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
