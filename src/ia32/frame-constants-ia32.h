@@ -23,6 +23,8 @@ class EntryFrameConstants : public AllStatic {
   static constexpr int kReceiverArgOffset = +5 * kPointerSize;
   static constexpr int kArgcOffset = +6 * kPointerSize;
   static constexpr int kArgvOffset = +7 * kPointerSize;
+
+  static constexpr int kMicrotaskQueueArgOffset = +3 * kPointerSize;
 };
 
 class ExitFrameConstants : public TypedFrameConstants {
