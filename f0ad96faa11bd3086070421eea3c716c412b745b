@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72b53f5e_4f445034",
+        "filename": "tools/dev/gm.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-11T06:48:12Z",
+      "side": 1,
+      "message": "not --?",
+      "revId": "f0ad96faa11bd3086070421eea3c716c412b745b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
