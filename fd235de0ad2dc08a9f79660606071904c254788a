@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "ed21af83_36c9b3b1",
+        "filename": "tools/testrunner/base_runner.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-11T10:56:11Z",
+      "side": 1,
+      "message": "I\u0027ve removed the processing logic since stress budget is unused and being removed (https://chromium-review.googlesource.com/c/v8/v8/+/1404437). Now, it\u0027s just an immutable query",
+      "parentUuid": "26b81590_757da3da",
+      "range": {
+        "startLine": 616,
+        "startChar": 6,
+        "endLine": 616,
+        "endChar": 53
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "691c9744_733bc206",
         "filename": "tools/testrunner/base_runner.py",
         "patchSetId": 5
@@ -226,6 +250,30 @@
     },
     {
       "key": {
+        "uuid": "9951d1a9_a9a5838d",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-11T10:56:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac8efffd_0b65af7c",
+      "range": {
+        "startLine": 195,
+        "startChar": 6,
+        "endLine": 195,
+        "endChar": 35
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0e045ba_157f069f",
         "filename": "tools/testrunner/num_fuzzer.py",
         "patchSetId": 5
@@ -261,6 +309,30 @@
       "side": 1,
       "message": "Ditto \"we need the modified suite\"",
       "parentUuid": "c0e045ba_157f069f",
+      "range": {
+        "startLine": 197,
+        "startChar": 11,
+        "endLine": 197,
+        "endChar": 16
+      },
+      "revId": "fd235de0ad2dc08a9f79660606071904c254788a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c462954e_9bde5523",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-01-11T10:56:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6749c9d_ccb7689d",
       "range": {
         "startLine": 197,
         "startChar": 11,
