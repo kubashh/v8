@@ -1,0 +1,214 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b4c9ef2_7d4a1558",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "Nit: JSFunctionRef ref(broker(), function);",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaaa9b2d_f6ddb782",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "Seems like we don\u0027t need an extra struct for this.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deae0e82_808a8aed",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "Needs an update.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a680ee6_e1c0a4ef",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "The naming here is a little inconsistent. I think these methods should all talk about hints.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ac047c6_a47f0985",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "As discussed, this visitor should look at the bytecode\u0027s feedback.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a8aeea3_dbefd45b",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "Nit: Handle\u003cMap\u003e map(...);",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba80ee15_504bf5bd",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "Those maps are not the maps of the value that the load produces. Instead, these maps should be inspected to find out if they tell us something about the value. We should look at what checks native context specialization does and do something similar here.\n\nWe probably also want to consider the receiver feedback, not just the information in the environment.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a28a140_151190ea",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "We shouldn\u0027t clear the environment here.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c64ded4e_11c85d92",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "I don\u0027t understand the comment.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ccaf467_d18c0ca0",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "Let\u0027s make the SerializeForBackgroundCompilation constructor retrieve the register count.\n\nI\u0027m confused about the arg_count. Can\u0027t it retrieve that too?",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78a4aa9f_be4b7fd9",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "I think we should call Run() here instead.",
+      "range": {
+        "startLine": 568,
+        "startChar": 19,
+        "endLine": 568,
+        "endChar": 35
+      },
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "924a8427_2957eccc",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T12:48:12Z",
+      "side": 1,
+      "message": "No need for \"explicit\" in those constructors.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
