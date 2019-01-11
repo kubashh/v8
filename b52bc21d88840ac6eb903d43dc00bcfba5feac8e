@@ -52,6 +52,24 @@
       "revId": "b52bc21d88840ac6eb903d43dc00bcfba5feac8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb25daf4_20325311",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3647,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-01-11T10:28:35Z",
+      "side": 1,
+      "message": "Ah, probably best to skip the block entirely in those cases. That can be a followup.",
+      "parentUuid": "00015f6b_1b9b39bd",
+      "revId": "b52bc21d88840ac6eb903d43dc00bcfba5feac8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
