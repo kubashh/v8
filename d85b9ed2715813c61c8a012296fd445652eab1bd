@@ -22,6 +22,30 @@
       "revId": "d85b9ed2715813c61c8a012296fd445652eab1bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0d61775_518dbef8",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-01-11T12:13:44Z",
+      "side": 1,
+      "message": "Ah, no actually:\nreturn not options.combine_tests or suite.test_combiner_available()",
+      "parentUuid": "0ef8b1db_fbd882d2",
+      "range": {
+        "startLine": 177,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 45
+      },
+      "revId": "d85b9ed2715813c61c8a012296fd445652eab1bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
