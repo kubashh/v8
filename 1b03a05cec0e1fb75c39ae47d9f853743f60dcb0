@@ -70,6 +70,23 @@
     },
     {
       "key": {
+        "uuid": "d2a674f5_cedd6296",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-11T14:07:01Z",
+      "side": 1,
+      "message": "I think in the default case we should reset the environment.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ac047c6_a47f0985",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 29
