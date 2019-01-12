@@ -16,6 +16,24 @@
       "revId": "94b03d6a05d53e327dc9141e084cd61a78328c8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ae05f46_7686a8d8",
+        "filename": "tools/turbolizer/package.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-01-12T15:30:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2252bdf6_f76d4b8f",
+      "revId": "94b03d6a05d53e327dc9141e084cd61a78328c8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
