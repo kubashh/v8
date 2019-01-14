@@ -34,6 +34,24 @@
       "revId": "495c24b276f06a4c51b24606ca6fd17cddd8b35d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3716d13e_8cc57c36",
+        "filename": "src/compiler/backend/OWNERS",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-01-14T17:28:33Z",
+      "side": 1,
+      "message": "Thanks for the background, the fact that this was confusing in practice is useful to know.",
+      "parentUuid": "ab5e8947_ded2952f",
+      "revId": "495c24b276f06a4c51b24606ca6fd17cddd8b35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
