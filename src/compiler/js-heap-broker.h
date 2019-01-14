@@ -234,6 +234,9 @@ class JSFunctionRef : public JSObjectRef {
   bool PrototypeRequiresRuntimeLookup() const;
 
   void Serialize();
+  void SerializeForInlining();
+
+  bool serialized_for_inlining() const;
 
   // The following are available only after calling Serialize().
   ObjectRef prototype() const;
