@@ -317,6 +317,24 @@
     },
     {
       "key": {
+        "uuid": "4f419433_d5ff8c73",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-14T11:34:06Z",
+      "side": 1,
+      "message": "Yes!",
+      "parentUuid": "1cf96547_d82615db",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c64ded4e_11c85d92",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 29
