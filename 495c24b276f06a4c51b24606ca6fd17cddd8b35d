@@ -16,6 +16,24 @@
       "revId": "495c24b276f06a4c51b24606ca6fd17cddd8b35d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab5e8947_ded2952f",
+        "filename": "src/compiler/backend/OWNERS",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-14T08:07:54Z",
+      "side": 1,
+      "message": "I added this because I was (momentarily) confused when looking for owners of src/compiler/backend, and only found Bill and Deepti there. I thought this comment makes it more clear that Bill and Deepti are not the main owners of the compiler backend, in the sense that they should do most of the reviews.",
+      "parentUuid": "fa2bc16a_e7a2f313",
+      "revId": "495c24b276f06a4c51b24606ca6fd17cddd8b35d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
