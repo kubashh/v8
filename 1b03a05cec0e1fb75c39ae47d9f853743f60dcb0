@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3da55c8c_03546873",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b4c9ef2_7d4a1558",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eaaa9b2d_f6ddb782",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 29
@@ -33,6 +51,24 @@
       "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da8ce6be_c5b75915",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eaaa9b2d_f6ddb782",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "29e6fc36_1e0a17e5",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "deae0e82_808a8aed",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a680ee6_e1c0a4ef",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 29
@@ -67,6 +121,24 @@
       "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "326feb76_b92c709c",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a680ee6_e1c0a4ef",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "1ac8aa90_d8b32b24",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Good point, thanks!",
+      "parentUuid": "d2a674f5_cedd6296",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ac047c6_a47f0985",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 29
@@ -101,6 +191,24 @@
       "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af1a0b21_7384ae71",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "As discussed offline, we\u0027ll currently drop the VisitLdaKeyed/Global implementations and they\u0027ll come in a follow-up CL.",
+      "parentUuid": "3ac047c6_a47f0985",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "60796e22_04746a05",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a8aeea3_dbefd45b",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba80ee15_504bf5bd",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 29
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "09e323f2_f344ff3f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Thanks for the comment!\nAs discussed offline, we\u0027ll currently drop the VisitLdaKeyed/Global implementations and they\u0027ll come in a follow-up CL.",
+      "parentUuid": "ba80ee15_504bf5bd",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a28a140_151190ea",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 29
@@ -149,6 +293,24 @@
       "writtenOn": "2019-01-11T12:48:12Z",
       "side": 1,
       "message": "We shouldn\u0027t clear the environment here.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cf96547_d82615db",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Still, we need to clear the accumulator, as the return value is placed there, is that correct?",
+      "parentUuid": "6a28a140_151190ea",
       "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -172,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "0ab54675_1662069d",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Re-wored, PTAL again.",
+      "parentUuid": "c64ded4e_11c85d92",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ccaf467_d18c0ca0",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 29
@@ -186,6 +366,24 @@
       "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3f8eaf4_359dd7d1",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Done w.r.t. register count.\n\n`arg_count` is number of parameters that the Call bytecode currently being visited implies. This can differ than the number of arguments actually passed when argument adaptation needs to be performed. As you correctly noticed the terms are currently swapped, so will fix that.",
+      "parentUuid": "1ccaf467_d18c0ca0",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -212,6 +410,30 @@
     },
     {
       "key": {
+        "uuid": "7ead2d2b_4fdee34d",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Good catch, thanks!",
+      "parentUuid": "78a4aa9f_be4b7fd9",
+      "range": {
+        "startLine": 568,
+        "startChar": 19,
+        "endLine": 568,
+        "endChar": 35
+      },
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16d23c4e_612af872",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 29
@@ -223,6 +445,24 @@
       "writtenOn": "2019-01-11T14:13:42Z",
       "side": 1,
       "message": "Why does this take callee_state and receiver_state if they are already contained inside parameters_state? BTW, parameters_state should be called parameter_states.",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beab0ccc_5590953a",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "`ProcessCall` takes the callee and receiver state since for other type calls they are not included in the parameters state. Only in this case they are double passed. I can eventually replace the call to `ProcessCall` with its implementation to avoid the double-passing.\n\nRe: naming - I disagree, this vector describes the state (the collection of hints) of multiple parameters, not multiple states of a single parameter. Let\u0027s discuss this.",
+      "parentUuid": "16d23c4e_612af872",
       "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -246,6 +486,24 @@
     },
     {
       "key": {
+        "uuid": "9fa385f4_c789bfe2",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 29
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Okay, removed it.",
+      "parentUuid": "dd98ce92_828c190b",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "924a8427_2957eccc",
         "filename": "src/compiler/serializer-for-background-compilation.h",
         "patchSetId": 29
@@ -260,6 +518,24 @@
       "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9d2c41f_ad3428e6",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-14T10:17:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "924a8427_2957eccc",
+      "revId": "1b03a05cec0e1fb75c39ae47d9f853743f60dcb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
