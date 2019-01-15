@@ -22,6 +22,30 @@
       "revId": "bab0441adea00bb6ebdf22c92c4dda2ca9ee9fce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a6f0c8c_4087b758",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3289,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2019-01-15T17:10:22Z",
+      "side": 1,
+      "message": "Thank you! That would have been annoying...",
+      "parentUuid": "e72bbafd_55bd3dc4",
+      "range": {
+        "startLine": 3289,
+        "startChar": 21,
+        "endLine": 3289,
+        "endChar": 22
+      },
+      "revId": "bab0441adea00bb6ebdf22c92c4dda2ca9ee9fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
