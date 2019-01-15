@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5c614f03_a7e0f0a1",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 28911,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-01-15T16:42:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de1c6475_fdbe97e7",
+      "range": {
+        "startLine": 28911,
+        "startChar": 13,
+        "endLine": 28911,
+        "endChar": 14
+      },
+      "revId": "4797cfcdbc3b0996dfd8339f30ebf3114457dfd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74d0ed83_ac8c1ae8",
         "filename": "test/cctest/test-api.cc",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-15T14:40:28Z",
       "side": 1,
       "message": "What\u0027s up with floating result? Is it needed? semicolon if it is I guess.",
+      "range": {
+        "startLine": 28944,
+        "startChar": 26,
+        "endLine": 28944,
+        "endChar": 32
+      },
+      "revId": "4797cfcdbc3b0996dfd8339f30ebf3114457dfd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "819f7604_748af9e4",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 28944,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-01-15T16:42:53Z",
+      "side": 1,
+      "message": "Initially I had it so that the function would return the stack trace as return value. However, with the mutual recursion across two isolate that would mean that the string from isolate_2 would get passed into isolate_1, violating a check with --verify-heap.\n\nSo I need to store the stack trace as a global. `result` floats here to become the completion value of CompileRun. Intentionally no semicolon.",
+      "parentUuid": "74d0ed83_ac8c1ae8",
       "range": {
         "startLine": 28944,
         "startChar": 26,
