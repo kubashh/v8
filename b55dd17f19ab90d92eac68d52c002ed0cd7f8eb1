@@ -69,6 +69,30 @@
       "revId": "b55dd17f19ab90d92eac68d52c002ed0cd7f8eb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92d73f5a_6410e599",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-15T16:18:20Z",
+      "side": 1,
+      "message": "If we can still use constant_pool_offset, please review this one: https://chromium-review.googlesource.com/c/v8/v8/+/1412632\n\nThanks.",
+      "parentUuid": "d2345be7_80fc1cb3",
+      "range": {
+        "startLine": 373,
+        "startChar": 57,
+        "endLine": 373,
+        "endChar": 77
+      },
+      "revId": "b55dd17f19ab90d92eac68d52c002ed0cd7f8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
