@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "85eed11a_5d57a253",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5623325f_a8a4911f",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "18d93404_a2c9b3c5",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 33
@@ -33,6 +51,24 @@
       "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37b9c2fa_9699391c",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "Turned register_base_ and accumulator_base_ into getters.",
+      "parentUuid": "18d93404_a2c9b3c5",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "10080150_5bb79304",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dc9fd80_8713f4f4",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "73ffc800_dba1fa37",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 33
@@ -67,6 +121,24 @@
       "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3afaa4c9_4a387d6f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "Nothing important anymore, removed it.",
+      "parentUuid": "73ffc800_dba1fa37",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "ce91e75e_2c0562c0",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "ClearAccumulatorHints was introduced after this one and I didn\u0027t think of using it here. Fixed.",
+      "parentUuid": "79ceb548_9a981a4c",
+      "range": {
+        "startLine": 147,
+        "startChar": 2,
+        "endLine": 147,
+        "endChar": 47
+      },
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5449b680_3e65790d",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 33
@@ -104,6 +200,24 @@
       "writtenOn": "2019-01-15T10:02:16Z",
       "side": 1,
       "message": "Before serializing the callee, shouldn\u0027t we check some of the things that JSInliner::ReduceCall checks? E.g., shared_info-\u003eIsInlineable()",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03ac00f0_1109719f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "If the SerializeForInlining will become SerializeForCompilation, then such a check wouldn\u0027t make sense, right?",
+      "parentUuid": "5449b680_3e65790d",
       "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -127,6 +241,24 @@
     },
     {
       "key": {
+        "uuid": "f927338e_4c7baab9",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41f10c21_9667b5ce",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ca1cd7a_a01db8fc",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 33
@@ -141,6 +273,24 @@
       "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e57151b_92d50a58",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "Good observation, thanks!",
+      "parentUuid": "2ca1cd7a_a01db8fc",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -161,6 +311,24 @@
     },
     {
       "key": {
+        "uuid": "b3c55a2e_1ba19d19",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 33
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "Makes sense, as we don\u0027t use the random access. How is the ZoneLinkedList comparing to ZoneVector in terms of memory usage?",
+      "parentUuid": "060d1f6c_cc69bb75",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9f4d34a_33cd3148",
         "filename": "src/compiler/serializer-for-background-compilation.h",
         "patchSetId": 33
@@ -172,6 +340,24 @@
       "writtenOn": "2019-01-15T09:52:13Z",
       "side": 1,
       "message": "It would be nice to get rid of the name \"state\" everywhere. How about calling this receiver_hints or simply receiver?",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9807e40f_4f744b7c",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 33
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T14:39:50Z",
+      "side": 1,
+      "message": "I don\u0027t like the \"receiver_hints\" idea, as this doesn\u0027t leave us a good name for the current \"environment_hints\" (the vector of vectors). I\u0027ll stick to naming all those without the _state part.",
+      "parentUuid": "e9f4d34a_33cd3148",
       "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
