@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "58b8d64e_8f6ba4d8",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-15T16:13:48Z",
+      "side": 1,
+      "message": "PPC debug build also fail on this DCHECK. Please take a look at: https://chromium-review.googlesource.com/c/v8/v8/+/1412494\n\nThanks.",
+      "range": {
+        "startLine": 548,
+        "startChar": 2,
+        "endLine": 548,
+        "endChar": 11
+      },
+      "revId": "b55dd17f19ab90d92eac68d52c002ed0cd7f8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9c4c2811_651d0990",
         "filename": "src/wasm/wasm-serialization.cc",
         "patchSetId": 5
