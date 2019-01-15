@@ -801,7 +801,8 @@ TEST(ProducingAndConsumingByteData) {
   LocalContext env;
 
   i::Zone zone(isolate->allocator(), ZONE_NAME);
-  i::PreparseDataBuilder::ByteData bytes(&zone);
+  std::vector<uint8_t> buffer;
+  i::PreparseDataBuilder::ByteData bytes(&buffer);
   // Write some data.
   bytes.WriteUint32(1983);  // This will be overwritten.
   bytes.WriteUint32(2147483647);

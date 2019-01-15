@@ -5,6 +5,8 @@
 #ifndef V8_PARSING_PREPARSER_H_
 #define V8_PARSING_PREPARSER_H_
 
+#include <vector>
+
 #include "src/ast/ast.h"
 #include "src/ast/scopes.h"
 #include "src/parsing/parser-base.h"
@@ -988,7 +990,9 @@ class PreParser : public ParserBase<PreParser> {
                               runtime_call_stats, logger, script_id,
                               parsing_module, parsing_on_main_thread),
         use_counts_(nullptr),
-        preparse_data_builder_(nullptr) {}
+        preparse_data_builder_(nullptr) {
+    preparse_data_buffer_.reserve(128);
+  }
 
   static bool IsPreParser() { return true; }
 
@@ -1016,6 +1020,10 @@ class PreParser : public ParserBase<PreParser> {
 
   PreparseDataBuilder* preparse_data_builder() const {
     return preparse_data_builder_;
+  }
+
+  std::vector<uint8_t>* preparse_data_buffer() {
+    return &preparse_data_buffer_;
   }
 
   void set_preparse_data_builder(PreparseDataBuilder* preparse_data_builder) {
@@ -1686,6 +1694,7 @@ class PreParser : public ParserBase<PreParser> {
   PreParserLogger log_;
 
   PreparseDataBuilder* preparse_data_builder_;
+  std::vector<uint8_t> preparse_data_buffer_;
 };
 
 PreParserExpression PreParser::SpreadCall(const PreParserExpression& function,
