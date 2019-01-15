@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbfdb9c1_3a292c5a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:19:12Z",
+      "side": 1,
+      "message": "This needs an update (it doesn\u0027t handle JS loads/stores if I remember correctly, and it does trigger some actual copying).",
+      "revId": "4c988d07252380f3aba2401784cd8900e6c80597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
