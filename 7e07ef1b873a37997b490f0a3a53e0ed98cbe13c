@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7fd8a1e0_7cc3d682",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-15T12:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eee65d57_f8767eed",
+      "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f9afe4f4_4dd4fb5d",
         "filename": "src/builtins/builtins-definitions.h",
         "patchSetId": 21
@@ -30,6 +48,24 @@
       "writtenOn": "2019-01-11T13:17:36Z",
       "side": 1,
       "message": "nit: it\u0027d be nice to define a descriptor for new ASM builtins just to systematically document their calling convention. All DummyDescriptor uses should be replaced by real descriptors at some point.",
+      "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6d6ba38_d2b2ca73",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-15T12:02:45Z",
+      "side": 1,
+      "message": "Let me do it separately: https://crrev.com/c/1412132",
+      "parentUuid": "f9afe4f4_4dd4fb5d",
       "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "50628317_863d92ac",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-15T12:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff26b96d_b71239f2",
+      "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a04da31_4eecbf79",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 21
@@ -64,6 +118,24 @@
       "writtenOn": "2019-01-11T13:17:36Z",
       "side": 1,
       "message": "Why not Jump here?",
+      "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2486b1a4_6bd727e6",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-15T12:02:45Z",
+      "side": 1,
+      "message": "Updated. This was an old code.",
+      "parentUuid": "9a04da31_4eecbf79",
       "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "433985f1_fa1bc9a3",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-15T12:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd1a8e71_adbf08c2",
+      "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a807918_5b495f05",
         "filename": "src/execution.cc",
         "patchSetId": 21
@@ -101,6 +191,24 @@
       "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46baabbc_14384dc4",
+        "filename": "src/execution.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-15T12:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a807918_5b495f05",
+      "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "ebcf1b81_6667e0b3",
+        "filename": "src/execution.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-15T12:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db479cde_dd7995a4",
+      "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a2e7e96_0ae87ec3",
         "filename": "src/ia32/frame-constants-ia32.h",
         "patchSetId": 21
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "dfee46de_aed6e511",
+        "filename": "src/ia32/frame-constants-ia32.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-15T12:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a2e7e96_0ae87ec3",
+      "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "004a5ff3_d2905eda",
         "filename": "src/interface-descriptors.h",
         "patchSetId": 21
@@ -152,6 +296,24 @@
       "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de5a102f_0784a909",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-01-15T12:02:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "004a5ff3_d2905eda",
+      "revId": "7e07ef1b873a37997b490f0a3a53e0ed98cbe13c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
