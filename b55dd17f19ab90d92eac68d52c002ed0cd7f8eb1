@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c4c2811_651d0990",
+        "filename": "src/wasm/wasm-serialization.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-15T15:48:07Z",
+      "side": 1,
+      "message": "Hello, this line breaks PPC build due to constant pool was not relocated properly. Any suggestion on fixing please?\n\nhttps://logs.chromium.org/logs/v8/buildbucket/cr-buildbucket.appspot.com/8924264734808495328/+/steps/Check/0/logs/print-code/0\n\nThanks,\nJohn",
+      "range": {
+        "startLine": 373,
+        "startChar": 57,
+        "endLine": 373,
+        "endChar": 77
+      },
+      "revId": "b55dd17f19ab90d92eac68d52c002ed0cd7f8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
