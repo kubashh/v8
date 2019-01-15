@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "18d93404_a2c9b3c5",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T10:02:16Z",
+      "side": 1,
+      "message": "Some of them are redundant, aren\u0027t they? E.g. register_base_ is determined by parameter_count_. If you don\u0027t want to remove them completely, you could turn the redundant ones into getters.",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7dc9fd80_8713f4f4",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 33
@@ -47,6 +64,23 @@
       "writtenOn": "2019-01-15T09:52:13Z",
       "side": 1,
       "message": "What is this about?",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5449b680_3e65790d",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T10:02:16Z",
+      "side": 1,
+      "message": "Before serializing the callee, shouldn\u0027t we check some of the things that JSInliner::ReduceCall checks? E.g., shared_info-\u003eIsInlineable()",
       "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
