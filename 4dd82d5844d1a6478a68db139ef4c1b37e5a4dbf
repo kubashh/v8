@@ -242,6 +242,24 @@
     },
     {
       "key": {
+        "uuid": "9488d3b1_f4aaa6d2",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T16:20:09Z",
+      "side": 1,
+      "message": "Here it actually makes sense. Added the IsInlineable check. Should we also have the full-blown machinery of heuristics that are later applied before inlining? Seems like an overkill to me, let\u0027s bet on over-copying here.",
+      "parentUuid": "b9879562_c9a1d563",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41f10c21_9667b5ce",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 33

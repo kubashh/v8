@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "eb3c7dae_b3961de9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T16:20:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbfdb9c1_3a292c5a",
+      "revId": "4c988d07252380f3aba2401784cd8900e6c80597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55963d16_be9c54a8",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 36
@@ -33,6 +51,24 @@
       "revId": "4c988d07252380f3aba2401784cd8900e6c80597",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e27637eb_3bdd3168",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 36
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-15T16:20:09Z",
+      "side": 1,
+      "message": "Good point, thanks!",
+      "parentUuid": "55963d16_be9c54a8",
+      "revId": "4c988d07252380f3aba2401784cd8900e6c80597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
