@@ -1099,8 +1099,12 @@ class FrameDropperTrampolineDescriptor final : public CallInterfaceDescriptor {
 
 class RunMicrotasksDescriptor final : public CallInterfaceDescriptor {
  public:
-  DEFINE_PARAMETERS()
-  DECLARE_DEFAULT_DESCRIPTOR(RunMicrotasksDescriptor, CallInterfaceDescriptor)
+  // kMicrotaskQueue is a pointer to MicrotaskQueue.
+  DEFINE_PARAMETERS(kMicrotaskQueue)
+  DEFINE_PARAMETER_TYPES(MachineType::Pointer())
+  DECLARE_DESCRIPTOR(RunMicrotasksDescriptor, CallInterfaceDescriptor)
+
+  static Register MicrotaskQueueRegister();
 };
 
 class WasmMemoryGrowDescriptor final : public CallInterfaceDescriptor {
