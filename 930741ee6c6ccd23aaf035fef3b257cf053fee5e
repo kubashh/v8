@@ -1,0 +1,170 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b074be5c_f0e353e5",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:16:29Z",
+      "side": 1,
+      "message": "Please rename the variable too.",
+      "range": {
+        "startLine": 323,
+        "startChar": 4,
+        "endLine": 323,
+        "endChar": 28
+      },
+      "revId": "930741ee6c6ccd23aaf035fef3b257cf053fee5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2781d691_a4446556",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:16:29Z",
+      "side": 1,
+      "message": "Let\u0027s call the arguments all hints/hint.",
+      "revId": "930741ee6c6ccd23aaf035fef3b257cf053fee5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d0b4f79_f57c6b88",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:16:29Z",
+      "side": 1,
+      "message": "environment_hints_",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 68,
+        "endChar": 31
+      },
+      "revId": "930741ee6c6ccd23aaf035fef3b257cf053fee5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d611ab4_ba02b8bc",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:16:29Z",
+      "side": 1,
+      "message": "the hints for",
+      "range": {
+        "startLine": 97,
+        "startChar": 14,
+        "endLine": 97,
+        "endChar": 22
+      },
+      "revId": "930741ee6c6ccd23aaf035fef3b257cf053fee5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cdc0146_a0c08406",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:16:29Z",
+      "side": 1,
+      "message": "at most up to the parameter count",
+      "range": {
+        "startLine": 97,
+        "startChar": 54,
+        "endLine": 98,
+        "endChar": 34
+      },
+      "revId": "930741ee6c6ccd23aaf035fef3b257cf053fee5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a610af5_57c71e11",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:16:29Z",
+      "side": 1,
+      "message": "Please use environment_hints.size() rather than duplicating this",
+      "range": {
+        "startLine": 122,
+        "startChar": 34,
+        "endLine": 122,
+        "endChar": 74
+      },
+      "revId": "930741ee6c6ccd23aaf035fef3b257cf053fee5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2659a4b9_13fdd6f7",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:16:29Z",
+      "side": 1,
+      "message": "Hmm I think this should be the first thing we do in this function.\n(Also the comment doesn\u0027t really fit anymore, let\u0027s remove it.)",
+      "revId": "930741ee6c6ccd23aaf035fef3b257cf053fee5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4da47f8_08419088",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 35
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:16:29Z",
+      "side": 1,
+      "message": "I think this makes sense only when we support the Return bytecode. We should probably track return values separately in the environment, not using the accumulator.",
+      "revId": "930741ee6c6ccd23aaf035fef3b257cf053fee5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

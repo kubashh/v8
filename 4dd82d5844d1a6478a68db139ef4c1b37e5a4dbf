@@ -224,6 +224,24 @@
     },
     {
       "key": {
+        "uuid": "b9879562_c9a1d563",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T15:16:29Z",
+      "side": 1,
+      "message": "It still makes sense to me. It should occur here, not in Run().",
+      "parentUuid": "03ac00f0_1109719f",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41f10c21_9667b5ce",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 33
