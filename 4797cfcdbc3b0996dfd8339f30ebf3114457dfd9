@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de1c6475_fdbe97e7",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 28911,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-01-15T14:40:28Z",
+      "side": 1,
+      "message": "Nit: space pls :D",
+      "range": {
+        "startLine": 28911,
+        "startChar": 13,
+        "endLine": 28911,
+        "endChar": 14
+      },
+      "revId": "4797cfcdbc3b0996dfd8339f30ebf3114457dfd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74d0ed83_ac8c1ae8",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 28944,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-01-15T14:40:28Z",
+      "side": 1,
+      "message": "What\u0027s up with floating result? Is it needed? semicolon if it is I guess.",
+      "range": {
+        "startLine": 28944,
+        "startChar": 26,
+        "endLine": 28944,
+        "endChar": 32
+      },
+      "revId": "4797cfcdbc3b0996dfd8339f30ebf3114457dfd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
