@@ -64,6 +64,7 @@ namespace internal {
   V(NoContext)                        \
   V(RecordWrite)                      \
   V(ResumeGenerator)                  \
+  V(RunMicrotasksEntry)               \
   V(RunMicrotasks)                    \
   V(Store)                            \
   V(StoreGlobal)                      \
@@ -1097,10 +1098,21 @@ class FrameDropperTrampolineDescriptor final : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR(FrameDropperTrampolineDescriptor, CallInterfaceDescriptor)
 };
 
+class RunMicrotasksEntryDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kRootRegisterValue, kMicrotaskQueue)
+  DEFINE_PARAMETER_TYPES(MachineType::Pointer(),  // kRootRegisterValue
+                         MachineType::Pointer())  // kMicrotaskQueue
+  DECLARE_DESCRIPTOR(RunMicrotasksEntryDescriptor, CallInterfaceDescriptor)
+};
+
 class RunMicrotasksDescriptor final : public CallInterfaceDescriptor {
  public:
-  DEFINE_PARAMETERS()
-  DECLARE_DEFAULT_DESCRIPTOR(RunMicrotasksDescriptor, CallInterfaceDescriptor)
+  DEFINE_PARAMETERS(kMicrotaskQueue)
+  DEFINE_PARAMETER_TYPES(MachineType::Pointer())
+  DECLARE_DESCRIPTOR(RunMicrotasksDescriptor, CallInterfaceDescriptor)
+
+  static Register MicrotaskQueueRegister();
 };
 
 class WasmMemoryGrowDescriptor final : public CallInterfaceDescriptor {
