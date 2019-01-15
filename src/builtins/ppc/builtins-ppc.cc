@@ -720,7 +720,8 @@ void Builtins::Generate_JSConstructEntry(MacroAssembler* masm) {
 }
 
 void Builtins::Generate_JSRunMicrotasksEntry(MacroAssembler* masm) {
-  Generate_JSEntryVariant(masm, StackFrame::ENTRY, Builtins::kRunMicrotasks);
+  Generate_JSEntryVariant(masm, StackFrame::ENTRY,
+                          Builtins::kRunMicrotasksTrampoline);
 }
 
 // Clobbers scratch1 and scratch2; preserves all other registers.
