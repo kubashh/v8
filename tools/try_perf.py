@@ -9,7 +9,8 @@ import subprocess
 import sys
 
 BOTS = {
-  '--arm32': 'v8_arm32_perf_try',
+  '--arm32': 'v8_arm32_perf_try',  # TODO(sergiyb): Remove after migration.
+  '--chromebook': 'v8_chromebook_perf_try',
   '--linux32': 'v8_linux32_perf_try',
   '--linux64': 'v8_linux64_perf_try',
   '--linux64_atom': 'v8_linux64_atom_perf_try',
@@ -22,6 +23,7 @@ BOTS = {
 # This list will contain builder names that should be triggered on an internal
 # swarming bucket instead of internal Buildbot master.
 SWARMING_BOTS = [
+  'v8_chromebook_perf_try',
   'v8_linux32_perf_try',
   'v8_linux64_perf_try',
   'v8_linux64_atom_perf_try',
@@ -32,6 +34,7 @@ SWARMING_BOTS = [
 ]
 
 DEFAULT_BOTS = [
+  # TODO(sergiyb): Replace with v8_chromeos_perf_try after migration.
   'v8_arm32_perf_try',
   'v8_linux32_perf_try',
   'v8_linux64_perf_try',
