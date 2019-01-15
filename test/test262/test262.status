@@ -398,9 +398,6 @@
   'annexB/language/eval-code/direct/func-switch-case-eval-func-block-scoping': [FAIL],
   'annexB/language/eval-code/direct/func-switch-dflt-eval-func-block-scoping': [FAIL],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=5139
-  'annexB/built-ins/Date/prototype/setYear/year-number-relative': [FAIL],
-
   # https://bugs.chromium.org/p/v8/issues/detail?id=4698
   'language/expressions/call/tco-call-args': [SKIP],
   'language/expressions/call/tco-cross-realm-class-construct': [SKIP],
