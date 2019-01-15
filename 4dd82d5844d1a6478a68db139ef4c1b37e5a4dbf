@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5623325f_a8a4911f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T09:52:13Z",
+      "side": 1,
+      "message": "Maybe we don\u0027t need this one, let\u0027s leave it out for now. Same for AddAccumulatorHint, which is only used once (internally).",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7dc9fd80_8713f4f4",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T09:52:13Z",
+      "side": 1,
+      "message": "?",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73ffc800_dba1fa37",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T09:52:13Z",
+      "side": 1,
+      "message": "What is this about?",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41f10c21_9667b5ce",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 33
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T09:52:13Z",
+      "side": 1,
+      "message": "As long as we don\u0027t have a need to distinguish between the function we started with and any inline candidate, I\u0027d suggest doing the marking at the beginning (in Run()). Then we can remove the conditional in 447, the comment in 452, as well as the SerializeForInlining call in 457. The check in 453 should probably move into Run as well.\n\n(Also note that we shouldn\u0027t mark a function as serialized-for-inlining when it doesn\u0027t have any bytecode.)\n\nIn fact, then we can get rid of RecurseOnCallee and just call the child serializer directly in ProcessCall.\n\nAs mentioned earlier, serialized-for-compilation would then be a more fitting name than serialized-for-inlining.",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "060d1f6c_cc69bb75",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 33
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T09:52:13Z",
+      "side": 1,
+      "message": "Wouldn\u0027t a list (ZoneLinkedList) make more sense here? Let\u0027s revisit this later.",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9f4d34a_33cd3148",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 33
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-15T09:52:13Z",
+      "side": 1,
+      "message": "It would be nice to get rid of the name \"state\" everywhere. How about calling this receiver_hints or simply receiver?",
+      "revId": "4dd82d5844d1a6478a68db139ef4c1b37e5a4dbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
