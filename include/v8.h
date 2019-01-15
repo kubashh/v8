@@ -18,6 +18,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <functional>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -7498,9 +7499,14 @@ class V8_EXPORT Isolate {
    * - the custom callback set returns true.
    * Otherwise, the custom callback will not be called and V8 will not abort.
    */
-  typedef bool (*AbortOnUncaughtExceptionCallback)(Isolate*);
+  using AbortOnUncaughtExceptionCallback = std::function<bool(Isolate*)>;
+  using AbortOnUncaughtExceptionCallbackWithError =
+      std::function<bool(Isolate*, Local<Message> message, Local<Value> error)>;
   void SetAbortOnUncaughtExceptionCallback(
       AbortOnUncaughtExceptionCallback callback);
+
+  void SetAbortOnUncaughtExceptionCallback(
+      AbortOnUncaughtExceptionCallbackWithError callback);
 
   /**
    * This specifies the callback called by the upcoming dynamic

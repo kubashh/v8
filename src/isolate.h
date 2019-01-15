@@ -795,7 +795,7 @@ class Isolate final : private HiddenFactory {
       StackTrace::StackTraceOptions options);
 
   void SetAbortOnUncaughtExceptionCallback(
-      v8::Isolate::AbortOnUncaughtExceptionCallback callback);
+      v8::Isolate::AbortOnUncaughtExceptionCallbackWithError callback);
 
   enum PrintStackMode { kPrintStackConcise, kPrintStackVerbose };
   void PrintCurrentStackTrace(FILE* out);
@@ -1882,7 +1882,7 @@ class Isolate final : private HiddenFactory {
   bool promise_hook_or_debug_is_active_or_async_event_delegate_ = false;
   int async_task_count_ = 0;
 
-  v8::Isolate::AbortOnUncaughtExceptionCallback
+  v8::Isolate::AbortOnUncaughtExceptionCallbackWithError
       abort_on_uncaught_exception_callback_ = nullptr;
 
   bool allow_atomics_wait_ = true;
