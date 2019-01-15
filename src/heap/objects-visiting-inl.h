@@ -106,6 +106,11 @@ ResultType HeapVisitor<ResultType, ConcreteVisitor>::VisitDataObject(
   ConcreteVisitor* visitor = static_cast<ConcreteVisitor*>(this);
   if (!visitor->ShouldVisit(object)) return ResultType();
   int size = map->instance_size();
+  if (!size) {
+    // FeedbackMetadata is the only data object that has variable size.
+    DCHECK(object->IsFeedbackMetadata());
+    size = FeedbackMetadata::BodyDescriptor::SizeOf(map, object);
+  }
   if (visitor->ShouldVisitMapPointer()) {
     visitor->VisitMapPointer(object, object->map_slot());
   }

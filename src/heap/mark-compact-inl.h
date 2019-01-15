@@ -28,6 +28,14 @@ bool MarkingStateBase<ConcreteState, access_mode>::GreyToBlack(HeapObject obj) {
 }
 
 template <typename ConcreteState, AccessMode access_mode>
+bool MarkingStateBase<ConcreteState, access_mode>::
+    GreyToBlackWithoutLiveBytesIncrement(HeapObject obj) {
+  MemoryChunk* p = MemoryChunk::FromAddress(obj->address());
+  MarkBit markbit = MarkBitFrom(p, obj->address());
+  return Marking::GreyToBlack<access_mode>(markbit);
+}
+
+template <typename ConcreteState, AccessMode access_mode>
 bool MarkingStateBase<ConcreteState, access_mode>::WhiteToGrey(HeapObject obj) {
   return Marking::WhiteToGrey<access_mode>(MarkBitFrom(obj));
 }

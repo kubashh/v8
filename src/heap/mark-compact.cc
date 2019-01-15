@@ -1682,14 +1682,19 @@ void MarkCompactCollector::ProcessMarkingWorklistInternal() {
     DCHECK(object->IsHeapObject());
     DCHECK(heap()->Contains(object));
     DCHECK(!(marking_state()->IsWhite(object)));
-    marking_state()->GreyToBlack(object);
+    bool was_grey =
+        marking_state()->GreyToBlackWithoutLiveBytesIncrement(object);
     if (mode == MarkCompactCollector::MarkingWorklistProcessingMode::
                     kTrackNewlyDiscoveredObjects) {
       AddNewlyDiscovered(object);
     }
     Map map = object->map();
     MarkObject(object, map);
-    visitor.Visit(map, object);
+    int size = visitor.Visit(map, object);
+    if (was_grey) {
+      marking_state()->IncrementLiveBytes(MemoryChunk::FromHeapObject(object),
+                                          size);
+    }
   }
   DCHECK(marking_worklist()->IsBailoutEmpty());
 }

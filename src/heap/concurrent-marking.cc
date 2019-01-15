@@ -100,10 +100,12 @@ class ConcurrentMarkingVisitor final
   }
 
   bool ShouldVisit(HeapObject object) {
-    return marking_state_.GreyToBlack(object);
+    return marking_state_.GreyToBlackWithoutLiveBytesIncrement(object);
   }
 
   bool AllowDefaultJSObjectVisit() { return false; }
+
+  ConcurrentMarkingState* marking_state() { return &marking_state_; }
 
   template <typename THeapObjectSlot>
   void ProcessStrongHeapObject(HeapObject host, THeapObjectSlot slot,
@@ -324,7 +326,7 @@ class ConcurrentMarkingVisitor final
     const int kProgressBarScanningChunk =
         RoundUp(kMaxRegularHeapObjectSize, kTaggedSize);
     DCHECK(marking_state_.IsBlackOrGrey(object));
-    marking_state_.GreyToBlack(object);
+    marking_state_.GreyToBlackWithoutLiveBytesIncrement(object);
     int size = FixedArray::BodyDescriptor::SizeOf(map, object);
     int start =
         Max(FixedArray::BodyDescriptor::kStartOffset, chunk->progress_bar());
@@ -793,7 +795,12 @@ void ConcurrentMarking::Run(int task_id, TaskState* task_state) {
           on_hold_->Push(task_id, object);
         } else {
           Map map = object->synchronized_map();
-          current_marked_bytes += visitor.Visit(map, object);
+          int size = visitor.Visit(map, object);
+          if (size) {
+            current_marked_bytes += size;
+            visitor.marking_state()->IncrementLiveBytes(
+                MemoryChunk::FromAddress(addr), size);
+          }
         }
       }
       marked_bytes += current_marked_bytes;

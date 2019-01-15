@@ -744,7 +744,8 @@ bool IncrementalMarking::IsFixedArrayWithProgressBar(HeapObject obj) {
 
 int IncrementalMarking::VisitObject(Map map, HeapObject obj) {
   DCHECK(marking_state()->IsGrey(obj) || marking_state()->IsBlack(obj));
-  if (!marking_state()->GreyToBlack(obj)) {
+  bool was_grey = marking_state()->GreyToBlackWithoutLiveBytesIncrement(obj);
+  if (!was_grey) {
     // The object can already be black in these cases:
     // 1. The object is a fixed array with the progress bar.
     // 2. The object is a JSObject that was colored black before
@@ -762,7 +763,11 @@ int IncrementalMarking::VisitObject(Map map, HeapObject obj) {
   WhiteToGreyAndPush(map);
   IncrementalMarkingMarkingVisitor visitor(heap()->mark_compact_collector(),
                                            marking_state());
-  return visitor.Visit(map, obj);
+  int size = visitor.Visit(map, obj);
+  if (was_grey) {
+    marking_state()->IncrementLiveBytes(MemoryChunk::FromHeapObject(obj), size);
+  }
+  return size;
 }
 
 void IncrementalMarking::ProcessBlackAllocatedObject(HeapObject obj) {
