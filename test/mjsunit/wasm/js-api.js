@@ -651,7 +651,8 @@ assertErrorMessage(
     () => get.call(), TypeError, /called on incompatible undefined/);
 assertErrorMessage(
     () => get.call({}), TypeError, /called on incompatible Object/);
-assertEq(get.call(tbl1), null);
+assertErrorMessage(
+    () => get.call(tbl1), TypeError, /must be convertible to a valid number/);
 assertEq(get.call(tbl1, 0), null);
 assertEq(get.call(tbl1, 0, Infinity), null);
 assertEq(get.call(tbl1, 1), null);
@@ -659,9 +660,9 @@ assertEq(get.call(tbl1, 1.5), null);
 assertErrorMessage(() => get.call(tbl1, 2), RangeError, /bad Table get index/);
 assertErrorMessage(
     () => get.call(tbl1, 2.5), RangeError, /bad Table get index/);
-assertErrorMessage(() => get.call(tbl1, -1), RangeError, /bad Table get index/);
+assertErrorMessage(() => get.call(tbl1, -1), TypeError, /bad Table get index/);
 assertErrorMessage(
-    () => get.call(tbl1, Math.pow(2, 33)), RangeError, /bad Table get index/);
+    () => get.call(tbl1, Math.pow(2, 33)), TypeError, /bad Table get index/);
 assertErrorMessage(
     () => get.call(tbl1, {valueOf() { throw new Error('hi') }}), Error, 'hi');
 
@@ -686,14 +687,14 @@ assertErrorMessage(
 assertErrorMessage(
     () => set.call(tbl1, 2, null), RangeError, /bad Table set index/);
 assertErrorMessage(
-    () => set.call(tbl1, -1, null), RangeError, /bad Table set index/);
+    () => set.call(tbl1, -1, null), TypeError, /bad Table set index/);
 assertErrorMessage(
-    () => set.call(tbl1, Math.pow(2, 33), null), RangeError,
+    () => set.call(tbl1, Math.pow(2, 33), null), TypeError,
     /bad Table set index/);
 assertErrorMessage(
-    () => set.call(tbl1, Infinity, null), RangeError, /bad Table set index/);
+    () => set.call(tbl1, Infinity, null), TypeError, /bad Table set index/);
 assertErrorMessage(
-    () => set.call(tbl1, -Infinity, null), RangeError, /bad Table set index/);
+    () => set.call(tbl1, -Infinity, null), TypeError, /bad Table set index/);
 assertErrorMessage(
     () => set.call(tbl1, 0, undefined), TypeError,
     /can only assign WebAssembly exported functions to Table/);
@@ -713,7 +714,9 @@ assertErrorMessage(
     'hai');
 assertEq(set.call(tbl1, 0, null), undefined);
 assertEq(set.call(tbl1, 1, null), undefined);
-assertEq(set.call(tbl1, undefined, null), undefined);
+assertErrorMessage(
+    () => set.call(tbl1, undefined, null), TypeError,
+    /must be convertible to a valid number/);
 
 // 'WebAssembly.Table.prototype.grow' data property
 let tblGrowDesc = Object.getOwnPropertyDescriptor(tableProto, 'grow');
