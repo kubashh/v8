@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e3e66e0_342fa239",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-01-16T18:09:40Z",
+      "side": 1,
+      "message": "This should handle the case where dst and src are overlapping ranges",
+      "revId": "8a40e88db3ff349063cc62e8fc919662c2e1273c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f5af15b_0c217fe7",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-01-16T18:09:40Z",
+      "side": 1,
+      "message": "here too",
+      "revId": "8a40e88db3ff349063cc62e8fc919662c2e1273c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
