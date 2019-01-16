@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0b5e2687_34c8aeeb",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2920,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-01-16T15:12:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ec3f939_20a8ea82",
+      "range": {
+        "startLine": 2920,
+        "startChar": 24,
+        "endLine": 2920,
+        "endChar": 61
+      },
+      "revId": "659798bd3c2637c29b2be67c4bdc4203eb39d758",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28a24dee_babcb6a0",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-01-16T15:01:34Z",
       "side": 1,
       "message": "nit: Couldn\u0027t this addition overflow the uint32_t range here? Would it be safer to check for (count \u003e max || dst \u003e\u003d max - count) instead?",
+      "range": {
+        "startLine": 1435,
+        "startChar": 6,
+        "endLine": 1435,
+        "endChar": 23
+      },
+      "revId": "659798bd3c2637c29b2be67c4bdc4203eb39d758",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9e16e87_d5389ce4",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-01-16T15:12:17Z",
+      "side": 1,
+      "message": "Yes, it is better to check this way. Done.",
+      "parentUuid": "28a24dee_babcb6a0",
       "range": {
         "startLine": 1435,
         "startChar": 6,
