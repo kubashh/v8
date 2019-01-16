@@ -4,8 +4,7 @@
 
 [
 [ALWAYS, {
-  # https://bugs.chromium.org/p/v8/issues/detail?id=8633
-  'limits': [SKIP],
+  'limits': [PASS, SLOW],
 }], # ALWAYS
 
 ['arch == s390 or arch == s390x or system == aix', {

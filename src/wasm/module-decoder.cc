@@ -548,9 +548,9 @@ class ModuleDecoderImpl : public Decoder {
           if (!AddMemory(module_.get())) break;
           uint8_t flags = validate_memory_flags(&module_->has_shared_memory);
           consume_resizable_limits(
-              "memory", "pages", kSpecMaxWasmMemoryPages,
-              &module_->initial_pages, &module_->has_maximum_pages,
-              kSpecMaxWasmMemoryPages, &module_->maximum_pages, flags);
+              "memory", "pages", kV8MaxWasmMemoryPages, &module_->initial_pages,
+              &module_->has_maximum_pages, kV8MaxWasmMemoryPages,
+              &module_->maximum_pages, flags);
           break;
         }
         case kExternalGlobal: {
@@ -638,8 +638,8 @@ class ModuleDecoderImpl : public Decoder {
       if (!AddMemory(module_.get())) break;
       uint8_t flags = validate_memory_flags(&module_->has_shared_memory);
       consume_resizable_limits(
-          "memory", "pages", kSpecMaxWasmMemoryPages, &module_->initial_pages,
-          &module_->has_maximum_pages, kSpecMaxWasmMemoryPages,
+          "memory", "pages", kV8MaxWasmMemoryPages, &module_->initial_pages,
+          &module_->has_maximum_pages, kV8MaxWasmMemoryPages,
           &module_->maximum_pages, flags);
     }
   }
