@@ -438,40 +438,46 @@ class AsyncInstantiateCompileResultResolver
 
 constexpr char AsyncInstantiateCompileResultResolver::kGlobalPromiseHandle[];
 constexpr char AsyncInstantiateCompileResultResolver::kGlobalImportsHandle[];
-}  // namespace
+
+std::string ToString(const char* name) { return std::string(name); }
+
+std::string ToString(const i::Handle<i::String> name) {
+  return std::string("Property '") + name->ToCString().get() + "'";
+}
 
 // Web IDL: '[EnforceRange] unsigned long'
 // Previously called ToNonWrappingUint32 in the draft WebAssembly JS spec.
 // https://heycam.github.io/webidl/#EnforceRange
-bool EnforceUint32(i::Handle<i::String> argument_name, Local<v8::Value> v,
-                   Local<Context> context, ErrorThrower* thrower,
-                   uint32_t* res) {
+template <typename T>
+bool EnforceUint32(T argument_name, Local<v8::Value> v, Local<Context> context,
+                   ErrorThrower* thrower, uint32_t* res) {
   double double_number;
 
   if (!v->NumberValue(context).To(&double_number)) {
-    thrower->TypeError("Property '%s' must be convertible to a number",
-                       argument_name->ToCString().get());
+    thrower->TypeError("%s must be convertible to a number",
+                       ToString(argument_name).c_str());
     return false;
   }
   if (!std::isfinite(double_number)) {
-    thrower->TypeError("Property '%s' must be convertible to a valid number",
-                       argument_name->ToCString().get());
+    thrower->TypeError("%s must be convertible to a valid number",
+                       ToString(argument_name).c_str());
     return false;
   }
   if (double_number < 0) {
-    thrower->TypeError("Property '%s' must be non-negative",
-                       argument_name->ToCString().get());
+    thrower->TypeError("%s must be non-negative",
+                       ToString(argument_name).c_str());
     return false;
   }
   if (double_number > std::numeric_limits<uint32_t>::max()) {
-    thrower->TypeError("Property '%s' must be in the unsigned long range",
-                       argument_name->ToCString().get());
+    thrower->TypeError("%s must be in the unsigned long range",
+                       ToString(argument_name).c_str());
     return false;
   }
 
   *res = static_cast<uint32_t>(double_number);
   return true;
 }
+}  // namespace
 
 // WebAssembly.compile(bytes) -> Promise
 void WebAssemblyCompile(const v8::FunctionCallbackInfo<v8::Value>& args) {
@@ -1343,15 +1349,20 @@ void WebAssemblyTableGet(const v8::FunctionCallbackInfo<v8::Value>& args) {
   Local<Context> context = isolate->GetCurrentContext();
   EXTRACT_THIS(receiver, WasmTableObject);
   i::Handle<i::FixedArray> array(receiver->functions(), i_isolate);
-  int64_t i = 0;
-  if (!args[0]->IntegerValue(context).To(&i)) return;
+
+  // Parameter 0.
+  uint32_t index;
+  if (!EnforceUint32("Argument 0", args[0], context, &thrower, &index)) {
+    return;
+  }
+
   v8::ReturnValue<v8::Value> return_value = args.GetReturnValue();
-  if (i < 0 || i >= array->length()) {
+  if (index >= static_cast<uint64_t>(array->length())) {
     thrower.RangeError("index out of bounds");
     return;
   }
 
-  i::Handle<i::Object> value(array->get(static_cast<int>(i)), i_isolate);
+  i::Handle<i::Object> value(array->get(static_cast<int>(index)), i_isolate);
   return_value.Set(Utils::ToLocal(value));
 }
 
@@ -1365,8 +1376,10 @@ void WebAssemblyTableSet(const v8::FunctionCallbackInfo<v8::Value>& args) {
   EXTRACT_THIS(receiver, WasmTableObject);
 
   // Parameter 0.
-  int64_t index;
-  if (!args[0]->IntegerValue(context).To(&index)) return;
+  uint32_t index;
+  if (!EnforceUint32("Argument 0", args[0], context, &thrower, &index)) {
+    return;
+  }
 
   // Parameter 1.
   i::Handle<i::Object> value = Utils::OpenHandle(*args[1]);
@@ -1376,12 +1389,12 @@ void WebAssemblyTableSet(const v8::FunctionCallbackInfo<v8::Value>& args) {
     return;
   }
 
-  if (index < 0 || index >= receiver->functions()->length()) {
+  if (index >= static_cast<uint64_t>(receiver->functions()->length())) {
     thrower.RangeError("index out of bounds");
     return;
   }
 
-  i::WasmTableObject::Set(i_isolate, receiver, static_cast<int32_t>(index),
+  i::WasmTableObject::Set(i_isolate, receiver, index,
                           value->IsNull(i_isolate)
                               ? i::Handle<i::JSFunction>::null()
                               : i::Handle<i::JSFunction>::cast(value));
