@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c890a5bf_6389dc30",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-01-16T21:58:23Z",
+      "side": 1,
+      "message": "Please put the new helpers inside this anonymous namespace, to file-scope it.",
+      "revId": "8bf6e1c766bc31fe9ea6e244105e773dcda36d29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f96e2f7_d8e941af",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-01-16T21:58:23Z",
+      "side": 1,
+      "message": "I don\u0027t think you need the \"const\" here.",
+      "range": {
+        "startLine": 455,
+        "startChar": 19,
+        "endLine": 455,
+        "endChar": 24
+      },
+      "revId": "8bf6e1c766bc31fe9ea6e244105e773dcda36d29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e404757_49a48234",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-01-16T21:58:23Z",
+      "side": 1,
+      "message": "Please remove this comment; though it\u0027s useful during code review, it won\u0027t be going future, as both EnforceRange and the type of grow_by make this always-safe.",
+      "revId": "8bf6e1c766bc31fe9ea6e244105e773dcda36d29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71572c24_f525fb4d",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-01-16T21:58:23Z",
+      "side": 1,
+      "message": "Seem like we might as well put this inside the \"if (new_size !\u003d old_size)\" check below (though I realize that WasmTableObject::Grow already bails out for the 0 case). It would make it easier for me to reason about at least.",
+      "revId": "8bf6e1c766bc31fe9ea6e244105e773dcda36d29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "918ed7b4_d570f690",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-01-16T21:58:23Z",
+      "side": 1,
+      "message": "Style: please wrap in braces when this doesn\u0027t fit on one line.",
+      "revId": "8bf6e1c766bc31fe9ea6e244105e773dcda36d29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
