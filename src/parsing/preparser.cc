@@ -336,7 +336,7 @@ PreParser::Expression PreParser::ParseFunctionLiteral(
       CheckStrictOctalLiteral(start_position, end_position());
     }
     if (skippable_function) {
-      preparse_data_builder_scope.AddSkippableFunction(
+      preparse_data_builder_scope.SetSkippableFunction(
           function_scope, end_position(), GetLastFunctionLiteralId() - func_id);
     }
   }
