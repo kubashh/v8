@@ -1,0 +1,214 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dbdc66f_330b2734",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "Since this doesn\u0027t actually do any serialization (and maybe never will), let\u0027s call it simply set_serialized_for_compilation, perhaps with a check that the flag is false when called.",
+      "range": {
+        "startLine": 322,
+        "startChar": 7,
+        "endLine": 322,
+        "endChar": 30
+      },
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b196bf0b_9af5497c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2650,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "We don\u0027t need to support the disabled broker mode for these two, let\u0027s remove the first line in each. Then we have less situations to worry about.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8355fd8_dda1c56b",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "I\u0027ll improve the tracing support such that this can be written in a nicer way.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a280e71d_42acda16",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "This may not be needed.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd8078fd_30dc7d30",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60585f04_e04e0b2f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "Not sure what you mean by \"Clear support\".\nHow about \"Remove all hints except those for the return value.\"",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "464e4261_5464fa10",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "Nit: remove empty line here and below.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37c7d1c8_fc77bcca",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "Could this be const? Also it should probably be static.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c13416c8_7d385594",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "Please move this up to right after the serialized_for_compilation check.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32ee4047_d967ca3c",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "Let\u0027s keep these three in the CLEAR_ACCUMULATOR_LIST until we properly implement them",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aec559ad_a0f4e084",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "Looks nice!",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc8b7764_d592aebf",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:47:12Z",
+      "side": 1,
+      "message": "They are not used for now, let\u0027s remove them.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
