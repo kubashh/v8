@@ -15,10 +15,8 @@ namespace v8 {
 namespace internal {
 namespace wasm {
 
-constexpr size_t kSpecMaxWasmMemoryPages = 65536;
-
 // The following limits are imposed by V8 on WebAssembly modules.
-// The limits are agreed upon with other engines for consistency.
+// The limits are from the WebAssembly specification and ensured by its tests.
 constexpr size_t kV8MaxWasmTypes = 1000000;
 constexpr size_t kV8MaxWasmFunctions = 1000000;
 constexpr size_t kV8MaxWasmImports = 100000;
@@ -28,7 +26,7 @@ constexpr size_t kV8MaxWasmExceptions = 1000000;
 constexpr size_t kV8MaxWasmExceptionTypes = 1000000;
 constexpr size_t kV8MaxWasmDataSegments = 100000;
 // Don't use this limit directly, but use the value of {max_mem_pages()}.
-constexpr size_t kV8MaxWasmMemoryPages = 32767;  // = ~ 2 GiB
+constexpr size_t kV8MaxWasmMemoryPages = 65536;  // = ~ 4 GiB
 constexpr size_t kV8MaxWasmStringSize = 100000;
 constexpr size_t kV8MaxWasmModuleSize = 1024 * 1024 * 1024;  // = 1 GiB
 constexpr size_t kV8MaxWasmFunctionSize = 7654321;
@@ -41,10 +39,6 @@ constexpr size_t kV8MaxWasmTableSize = 10000000;
 constexpr size_t kV8MaxWasmTableEntries = 10000000;
 constexpr size_t kV8MaxWasmTables = 1;
 constexpr size_t kV8MaxWasmMemories = 1;
-
-static_assert(kV8MaxWasmMemoryPages <= kSpecMaxWasmMemoryPages,
-              "v8 should not be more permissive than the spec");
-constexpr size_t kSpecMaxWasmTableSize = 0xFFFFFFFFu;
 
 constexpr uint64_t kWasmMaxHeapOffset =
     static_cast<uint64_t>(
