@@ -16,6 +16,7 @@
 #include "src/objects/module-inl.h"
 #include "src/objects/scope-info.h"
 #include "src/parsing/parse-info.h"
+#include "src/parsing/parser.h"
 #include "src/parsing/preparse-data.h"
 #include "src/zone/zone-list-inl.h"
 
@@ -1430,22 +1431,23 @@ void DeclarationScope::ResetAfterPreparsing(AstValueFactory* ast_value_factory,
   was_lazily_parsed_ = !aborted;
 }
 
-void Scope::SavePreparseData() {
+void Scope::SavePreparseData(Parser* parser) {
   if (PreparseDataBuilder::ScopeIsSkippableFunctionScope(this)) {
-    AsDeclarationScope()->SavePreparseDataForDeclarationScope();
+    AsDeclarationScope()->SavePreparseDataForDeclarationScope(parser);
   }
 
   for (Scope* scope = inner_scope_; scope != nullptr; scope = scope->sibling_) {
-    scope->SavePreparseData();
+    scope->SavePreparseData(parser);
   }
 }
 
-void DeclarationScope::SavePreparseDataForDeclarationScope() {
+void DeclarationScope::SavePreparseDataForDeclarationScope(Parser* parser) {
   if (preparse_data_builder_ == nullptr) return;
-  preparse_data_builder_->SaveScopeAllocationData(this);
+  preparse_data_builder_->SaveScopeAllocationData(this, parser);
 }
 
-void DeclarationScope::AnalyzePartially(AstNodeFactory* ast_node_factory) {
+void DeclarationScope::AnalyzePartially(Parser* parser,
+                                        AstNodeFactory* ast_node_factory) {
   DCHECK(!force_eager_compilation_);
   UnresolvedList new_unresolved_list;
   if (!IsArrowFunction(function_kind_) &&
@@ -1462,7 +1464,7 @@ void DeclarationScope::AnalyzePartially(AstNodeFactory* ast_node_factory) {
       function_ = ast_node_factory->CopyVariable(function_);
     }
 
-    SavePreparseData();
+    SavePreparseData(parser);
   }
 
 #ifdef DEBUG
