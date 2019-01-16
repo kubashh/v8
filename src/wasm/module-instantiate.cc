@@ -1334,6 +1334,7 @@ void InstanceBuilder::ProcessExports(Handle<WasmInstanceObject> instance) {
               WasmTableObject::New(isolate_, table.initial_size, maximum,
                                    &table_instance.js_wrappers);
         }
+        instance->set_table_object(*table_instance.table_object);
         desc.set_value(table_instance.table_object);
         break;
       }
