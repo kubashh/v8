@@ -161,6 +161,23 @@
     },
     {
       "key": {
+        "uuid": "5711d346_2a5ace73",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-16T09:52:09Z",
+      "side": 1,
+      "message": "You already branch on receiver_mode in 472, you can move the definition of arg_count into the branches there.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32ee4047_d967ca3c",
         "filename": "src/compiler/serializer-for-background-compilation.h",
         "patchSetId": 39
