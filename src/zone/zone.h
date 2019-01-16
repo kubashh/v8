@@ -380,6 +380,52 @@ class ScopedPtrList final {
   size_t end_;
 };
 
+template <typename T>
+class ScopedList final {
+ public:
+  explicit ScopedList(std::vector<T>* buffer)
+      : buffer_(*buffer), start_(buffer->size()), end_(buffer->size()) {}
+
+  ~ScopedList() { Rewind(); }
+
+  void Rewind() {
+    PrintF("Rewind(%p) %zu => %zu\n", this, end_, start_);
+    DCHECK_EQ(buffer_.size(), end_);
+    buffer_.resize(start_);
+    end_ = start_;
+  }
+
+  int length() const { return static_cast<int>(end_ - start_); }
+  T at(int i) const {
+    size_t index = start_ + i;
+    DCHECK_LE(start_, index);
+    DCHECK_LT(index, buffer_.size());
+    return reinterpret_cast<T>(buffer_[index]);
+  }
+
+  void Add(T value) {
+    DCHECK_EQ(buffer_.size(), end_);
+    buffer_.push_back(value);
+    ++end_;
+  }
+
+  T* front() const { return &buffer_[start_]; }
+
+  T* back() const { return &buffer_[end_ - 1]; }
+
+  T* CopyToZone(Zone* zone) {
+    int size = length() * sizeof(T);
+    T* zone_data = static_cast<T*>(ZoneAllocationPolicy(zone).New(size));
+    memcpy(zone_data, front(), size);
+    return zone_data;
+  }
+
+ private:
+  std::vector<T>& buffer_;
+  size_t start_;
+  size_t end_;
+};
+
 // ZoneThreadedList is a special variant of the ThreadedList that can be put
 // into a Zone.
 template <typename T, typename TLTraits = base::ThreadedListTraits<T>>
