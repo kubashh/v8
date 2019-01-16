@@ -6,8 +6,7 @@
 
 load("test/mjsunit/wasm/wasm-module-builder.js");
 
-var kV8MaxWasmMemoryPages = 32767;  // ~ 2 GiB
-var kSpecMaxWasmMemoryPages = 65536;  // 4 GiB
+var kV8MaxWasmMemoryPages = 65536;  // ~ 4 GiB
 
 (function testMemorySizeZero() {
   print(arguments.callee.name);
@@ -35,7 +34,7 @@ var kSpecMaxWasmMemoryPages = 65536;  // 4 GiB
 (function testMemorySizeSpecMaxOk() {
   print(arguments.callee.name);
   var builder = new WasmModuleBuilder();
-  builder.addMemory(1, kSpecMaxWasmMemoryPages, true);
+  builder.addMemory(1, kV8MaxWasmMemoryPages, true);
   builder.addFunction("memory_size", kSig_i_v)
          .addBody([kExprMemorySize, kMemoryZero])
          .exportFunc();
@@ -57,7 +56,7 @@ var kSpecMaxWasmMemoryPages = 65536;  // 4 GiB
 (function testMemorySpecMaxOk() {
   print(arguments.callee.name);
   var builder = new WasmModuleBuilder();
-  builder.addMemory(1, kSpecMaxWasmMemoryPages, false);
+  builder.addMemory(1, kV8MaxWasmMemoryPages, false);
   builder.addFunction("memory_size", kSig_i_v)
          .addBody([kExprMemorySize, kMemoryZero])
     .exportFunc();
