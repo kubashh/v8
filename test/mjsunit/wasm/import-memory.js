@@ -8,7 +8,7 @@ load("test/mjsunit/wasm/wasm-constants.js");
 load("test/mjsunit/wasm/wasm-module-builder.js");
 
 // V8 internal memory size limit.
-var kV8MaxPages = 32767;
+var kV8MaxPages = 65536; // ~ 4 GiB
 
 (function TestOne() {
   print("TestOne");

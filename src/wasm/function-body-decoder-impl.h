@@ -734,7 +734,7 @@ class WasmDecoder : public Decoder {
       if (decoder->failed()) return false;
 
       DCHECK_LE(type_list->size(), kV8MaxWasmFunctionLocals);
-      if (count > kV8MaxWasmFunctionLocals - type_list->size()) {
+      if (count + type_list->size() > kV8MaxWasmFunctionLocals) {
         decoder->error(decoder->pc() - 1, "local count too large");
         return false;
       }

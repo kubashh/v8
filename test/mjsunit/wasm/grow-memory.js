@@ -37,9 +37,8 @@ function genMemoryGrowBuilder() {
   return builder;
 }
 
-// V8 internal memory size limit.
-var kV8MaxPages = 32767;
-
+// JS embedding memory limit
+var kV8MaxWasmMemoryPages = 65536;  // = ~ 4 GiB
 
 // TODO(gdeepti): Generate tests programatically for all the sizes instead of
 // current implementation.
@@ -301,7 +300,7 @@ function testMemoryGrowTrapMaxPagesZeroInitialMemory() {
   builder.addMemory(0, undefined, false);
   var module = builder.instantiate();
   function growMem(pages) { return module.exports.grow_memory(pages); }
-  assertEquals(-1, growMem(kV8MaxPages + 1));
+  assertEquals(-1, growMem(kV8MaxWasmMemoryPages + 1));
 }
 
 testMemoryGrowTrapMaxPagesZeroInitialMemory();
@@ -311,7 +310,7 @@ function testMemoryGrowTrapMaxPages() {
   builder.addMemory(1, 1, false);
   var module = builder.instantiate();
   function growMem(pages) { return module.exports.grow_memory(pages); }
-  assertEquals(-1, growMem(kV8MaxPages));
+  assertEquals(-1, growMem(kV8MaxWasmMemoryPages));
 }
 
 testMemoryGrowTrapMaxPages();
@@ -488,13 +487,13 @@ function testMemoryGrowDeclaredSpecMaxTraps() {
   function poke(value) { return module.exports.store(offset, value); }
   function growMem(pages) { return module.exports.grow_memory(pages); }
   assertEquals(1, growMem(20));
-  assertEquals(-1, growMem(kV8MaxPages - 20));
+  assertEquals(-1, growMem(kV8MaxWasmMemoryPages - 20));
 }
 
 testMemoryGrowDeclaredSpecMaxTraps();
 
-function testMemoryGrow2Gb() {
-  print("testMemoryGrow2Gb");
+function testMemoryGrow4Gb() {
+  print("testMemoryGrow4Gb");
   var builder = genMemoryGrowBuilder();
   builder.addMemory(1, undefined, false);
   var module = builder.instantiate();
@@ -508,31 +507,33 @@ function testMemoryGrow2Gb() {
     assertEquals(100000 - offset, peek());
   }
 
-  let result = growMem(kV8MaxPages - 1);
-  if (result == 1 ){
+  let result = growMem(kV8MaxWasmMemoryPages - 1);
+  if (result == 1) {
     for(offset = 0; offset <= (kPageSize - 4); offset+=4) {
       assertEquals(100000 - offset, peek());
     }
 
     // Bounds check for large mem size
-    for(offset = (kV8MaxPages - 1) * kPageSize;
-        offset <= (kV8MaxPages * kPageSize - 4); offset+=4) {
+    for(offset = (kV8MaxWasmMemoryPages - 1) * kPageSize;
+        offset <= (kV8MaxWasmMemoryPages * kPageSize - 4); offset+=4) {
       poke(0xaced);
       assertEquals(0xaced, peek());
     }
 
-    for (offset = kV8MaxPages * kPageSize - 3;
-        offset <= kV8MaxPages * kPageSize + 4; offset++) {
+    for (offset = kV8MaxWasmMemoryPages * kPageSize + 1;
+        offset <= kV8MaxWasmMemoryPages * kPageSize + 4; offset++) {
+      console.log(offset);
       assertTraps(kTrapMemOutOfBounds, poke);
+      assertTraps(kTrapMemOutOfBounds, load);
     }
 
-    // Check traps around 3GB/4GB boundaries
-    let offset_3gb = 49152 * kPageSize;
-    let offset_4gb = 2 * kV8MaxPages * kPageSize;
-    for (offset = offset_3gb - 5; offset < offset_3gb + 4; offset++) {
+    // Check traps around 5GB/8GB boundaries
+    let offset_5gb = (kV8MaxWasmMemoryPages + 19264) * kPageSize;
+    let offset_8gb = 2 * kV8MaxWasmMemoryPages * kPageSize;
+    for (offset = offset_5gb - 5; offset < offset_5gb + 4; offset++) {
       assertTraps(kTrapMemOutOfBounds, poke);
     }
-    for (offset = offset_4gb - 5; offset < offset_4gb; offset++) {
+    for (offset = offset_6gb - 5; offset < offset_6gb; offset++) {
       assertTraps(kTrapMemOutOfBounds, poke);
     }
   } else {
@@ -542,4 +543,4 @@ function testMemoryGrow2Gb() {
   }
 }
 
-testMemoryGrow2Gb();
+testMemoryGrow4Gb();

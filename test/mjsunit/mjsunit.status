@@ -219,9 +219,6 @@
   # Runs out of stack space in debug builds.
   'big-array-literal': [PASS, ['mode == debug', SKIP]],
 
-  # BUG(v8:6306).
-  'wasm/huge-memory': [SKIP],
-
   # Allocates a huge string and then flattens it, very slow in debug mode.
   'regress/regress-752764': [PASS, ['mode == debug', SLOW]],
 
