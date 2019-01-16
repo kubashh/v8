@@ -246,6 +246,9 @@ class OwnedVector {
     return vec;
   }
 
+  bool operator==(std::nullptr_t) const { return data_ == nullptr; }
+  bool operator!=(std::nullptr_t) const { return data_ != nullptr; }
+
  private:
   std::unique_ptr<T[]> data_;
   size_t length_ = 0;
