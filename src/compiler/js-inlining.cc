@@ -301,6 +301,12 @@ bool JSInliner::DetermineCallTarget(
       return false;
     }
 
+    JSFunctionRef ref(broker(), function);
+    if (FLAG_concurrent_inlining && !ref.serialized_for_compilation()) {
+      TRACE_BROKER(broker(), "Missed opportunity to inline a function ("
+                                 << Brief(*match.Value()) << ")");
+    }
+
     shared_info_out = handle(function->shared(), isolate());
     return true;
   }
