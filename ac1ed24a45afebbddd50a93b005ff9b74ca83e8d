@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bc8cf0f7_f37b27d7",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dbdc66f_330b2734",
+      "range": {
+        "startLine": 322,
+        "startChar": 7,
+        "endLine": 322,
+        "endChar": 30
+      },
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b196bf0b_9af5497c",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 39
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "36651c1c_eeadf134",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 2650,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b196bf0b_9af5497c",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8355fd8_dda1c56b",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 39
@@ -53,6 +95,24 @@
       "writtenOn": "2019-01-16T09:47:12Z",
       "side": 1,
       "message": "I\u0027ll improve the tracing support such that this can be written in a nicer way.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "290806a0_0b31a827",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Does that imply any changes here?",
+      "parentUuid": "a8355fd8_dda1c56b",
       "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "1e9553d9_5d07ce11",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a280e71d_42acda16",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd8078fd_30dc7d30",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 39
@@ -90,6 +168,24 @@
       "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f8172fc_6f99fc61",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd8078fd_30dc7d30",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "48f8debf_4c9ca951",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "I guess this was a mistake when I first wrote the comment, I meant \"state\". Done,thanks!",
+      "parentUuid": "60585f04_e04e0b2f",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "464e4261_5464fa10",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 39
@@ -127,6 +241,24 @@
     },
     {
       "key": {
+        "uuid": "5ff87ecf_244e3949",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "464e4261_5464fa10",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37c7d1c8_fc77bcca",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 39
@@ -138,6 +270,24 @@
       "writtenOn": "2019-01-16T09:47:12Z",
       "side": 1,
       "message": "Could this be const? Also it should probably be static.",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46e2c3c9_5388c5cd",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "It can be const, thanks. Still, static is impossible due to the need to pass the Zone.",
+      "parentUuid": "37c7d1c8_fc77bcca",
       "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -161,6 +311,24 @@
     },
     {
       "key": {
+        "uuid": "fb3e2b7e_db87b07f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c13416c8_7d385594",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5711d346_2a5ace73",
         "filename": "src/compiler/serializer-for-background-compilation.cc",
         "patchSetId": 39
@@ -175,6 +343,24 @@
       "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ac7d9f0_fc7a8c4f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 39
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5711d346_2a5ace73",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -195,6 +381,24 @@
     },
     {
       "key": {
+        "uuid": "da1e5d98_ac572a96",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32ee4047_d967ca3c",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aec559ad_a0f4e084",
         "filename": "src/compiler/serializer-for-background-compilation.h",
         "patchSetId": 39
@@ -212,6 +416,24 @@
     },
     {
       "key": {
+        "uuid": "13072558_acfa31e6",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "aec559ad_a0f4e084",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc8b7764_d592aebf",
         "filename": "src/compiler/serializer-for-background-compilation.h",
         "patchSetId": 39
@@ -226,6 +448,24 @@
       "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bf2f434_661fea79",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 39
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-16T10:41:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc8b7764_d592aebf",
+      "revId": "ac1ed24a45afebbddd50a93b005ff9b74ca83e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
