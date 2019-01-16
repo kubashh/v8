@@ -1350,14 +1350,15 @@ VariableProxy* Parser::DeclareVariable(const AstRawString* name,
   DCHECK_NOT_NULL(name);
   VariableProxy* proxy =
       factory()->NewVariableProxy(name, NORMAL_VARIABLE, position());
-  DeclareVariable(proxy, NORMAL_VARIABLE, mode, init, scope(), pos,
-                  end_position());
+  Variable* var = DeclareVariable(name, NORMAL_VARIABLE, mode, init, scope(),
+                                  pos, end_position());
+  proxy->BindTo(var);
   return proxy;
 }
 
-void Parser::DeclareVariable(VariableProxy* proxy, VariableKind kind,
-                             VariableMode mode, InitializationFlag init,
-                             Scope* scope, int begin, int end) {
+Variable* Parser::DeclareVariable(const AstRawString* name, VariableKind kind,
+                                  VariableMode mode, InitializationFlag init,
+                                  Scope* scope, int begin, int end) {
   Declaration* declaration;
   if (mode == VariableMode::kVar && !scope->is_declaration_scope()) {
     DCHECK(scope->is_block_scope() || scope->is_with_scope());
@@ -1365,24 +1366,26 @@ void Parser::DeclareVariable(VariableProxy* proxy, VariableKind kind,
   } else {
     declaration = factory()->NewVariableDeclaration(begin);
   }
-  Declare(declaration, proxy, kind, mode, init, scope, end);
+  Declare(declaration, name, kind, mode, init, scope, begin, end);
+  return declaration->var();
 }
 
-void Parser::Declare(Declaration* declaration, VariableProxy* proxy,
+void Parser::Declare(Declaration* declaration, const AstRawString* name,
                      VariableKind variable_kind, VariableMode mode,
-                     InitializationFlag init, Scope* scope, int var_end_pos) {
+                     InitializationFlag init, Scope* scope, int var_begin_pos,
+                     int var_end_pos) {
   bool local_ok = true;
   bool sloppy_mode_block_scope_function_redefinition = false;
-  scope->DeclareVariable(declaration, proxy, mode, variable_kind, init,
-                         &sloppy_mode_block_scope_function_redefinition,
+  scope->DeclareVariable(declaration, name, var_begin_pos, mode, variable_kind,
+                         init, &sloppy_mode_block_scope_function_redefinition,
                          &local_ok);
   if (!local_ok) {
     // If we only have the start position of a proxy, we can't highlight the
     // whole variable name.  Pretend its length is 1 so that we highlight at
     // least the first character.
-    Scanner::Location loc(proxy->position(), var_end_pos != kNoSourcePosition
-                                                 ? var_end_pos
-                                                 : proxy->position() + 1);
+    Scanner::Location loc(var_begin_pos, var_end_pos != kNoSourcePosition
+                                             ? var_end_pos
+                                             : var_begin_pos + 1);
     if (variable_kind == PARAMETER_VARIABLE) {
       ReportMessageAt(loc, MessageTemplate::kParamDupe);
     } else {
@@ -1410,12 +1413,10 @@ Statement* Parser::DeclareFunction(const AstRawString* variable_name,
                                    int beg_pos, int end_pos,
                                    bool is_sloppy_block_function,
                                    ZonePtrList<const AstRawString>* names) {
-  VariableProxy* proxy =
-      factory()->NewVariableProxy(variable_name, NORMAL_VARIABLE, beg_pos);
   Declaration* declaration = factory()->NewFunctionDeclaration(
       function, is_sloppy_block_function, beg_pos);
-  Declare(declaration, proxy, NORMAL_VARIABLE, mode, kCreatedInitialized,
-          scope());
+  Declare(declaration, variable_name, NORMAL_VARIABLE, mode,
+          kCreatedInitialized, scope(), beg_pos);
   if (names) names->Add(variable_name, zone());
   if (is_sloppy_block_function) {
     SloppyBlockFunctionStatement* statement =
@@ -2202,8 +2203,7 @@ void Parser::AddArrowFunctionFormalParameters(
     expr = assignment->target();
   }
 
-  AddFormalParameter(parameters, expr, initializer,
-                     end_pos, is_rest);
+  AddFormalParameter(parameters, expr, initializer, end_pos, is_rest);
 }
 
 void Parser::DeclareArrowFunctionFormalParameters(
@@ -3141,12 +3141,10 @@ void Parser::AddTemplateSpan(TemplateLiteralState* state, bool should_cook,
   }
 }
 
-
 void Parser::AddTemplateExpression(TemplateLiteralState* state,
                                    Expression* expression) {
   (*state)->AddExpression(expression, zone());
 }
-
 
 Expression* Parser::CloseTemplateLiteral(TemplateLiteralState* state, int start,
                                          Expression* tag) {
@@ -3253,7 +3251,6 @@ Expression* Parser::SpreadCallNew(Expression* function,
 
   return factory()->NewCallRuntime(Context::REFLECT_CONSTRUCT_INDEX, args, pos);
 }
-
 
 void Parser::SetLanguageMode(Scope* scope, LanguageMode mode) {
   v8::Isolate::UseCounterFeature feature;

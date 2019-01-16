@@ -226,8 +226,8 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
                          VariableKind kind = NORMAL_VARIABLE,
                          InitializationFlag init_flag = kCreatedInitialized);
 
-  void DeclareVariable(Declaration* declaration, VariableProxy* proxy,
-                       VariableMode mode, VariableKind kind,
+  void DeclareVariable(Declaration* declaration, const AstRawString* name,
+                       int pos, VariableMode mode, VariableKind kind,
                        InitializationFlag init,
                        bool* sloppy_mode_block_scope_function_redefinition,
                        bool* ok);

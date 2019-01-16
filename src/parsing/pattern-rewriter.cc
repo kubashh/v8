@@ -164,6 +164,24 @@ void PatternRewriter::VisitVariableProxy(VariableProxy* proxy) {
   // which the variable or constant is declared. Only function variables have
   // an initial value in the declaration (because they are initialized upon
   // entering the function).
+  Variable* var = parser_->DeclareVariable(
+      proxy->raw_name(), descriptor_->kind, descriptor_->mode,
+      Variable::DefaultInitializationFlag(descriptor_->mode), target_scope,
+      proxy->position(), descriptor_->declaration_pos);
+
+  if (parser_->has_error()) return;
+  DCHECK_NOT_NULL(var);
+  DCHECK_EQ(var->scope(), expected_declaration_scope);
+  DCHECK_NE(initializer_position_, kNoSourcePosition);
+  var->set_initializer_position(initializer_position_);
+
+  if (var->scope()->num_var() > kMaxNumFunctionLocals) {
+    parser_->ReportMessage(MessageTemplate::kTooManyVariables);
+    return;
+  }
+  if (names_) {
+    names_->Add(proxy->raw_name(), zone());
+  }
 
   // A declaration of the form:
   //
@@ -184,33 +202,10 @@ void PatternRewriter::VisitVariableProxy(VariableProxy* proxy) {
   if (has_initializer_ && descriptor_->mode == VariableMode::kVar &&
       !var_init_scope->is_declaration_scope()) {
     DCHECK_EQ(target_scope->GetDeclarationScope(), expected_declaration_scope);
-    // The cloned variable is not added to the unresolved list of the target
-    // scope, as it is about to be resolved by the declaration. The original
-    // variable will be left unresolved for now.
+    // The proxy will be left unresolved for now.
     var_init_scope->AddUnresolved(proxy);
-    proxy = factory()->NewVariableProxy(proxy->raw_name(), NORMAL_VARIABLE,
-                                        proxy->position());
-  }
-
-  parser_->DeclareVariable(
-      proxy, descriptor_->kind, descriptor_->mode,
-      Variable::DefaultInitializationFlag(descriptor_->mode), target_scope,
-      descriptor_->declaration_pos);
-
-  if (parser_->has_error()) return;
-  Variable* var = proxy->var();
-  DCHECK_NOT_NULL(var);
-  DCHECK(proxy->is_resolved());
-  DCHECK_EQ(var->scope(), expected_declaration_scope);
-  DCHECK_NE(initializer_position_, kNoSourcePosition);
-  var->set_initializer_position(initializer_position_);
-
-  if (var->scope()->num_var() > kMaxNumFunctionLocals) {
-    parser_->ReportMessage(MessageTemplate::kTooManyVariables);
-    return;
-  }
-  if (names_) {
-    names_->Add(proxy->raw_name(), zone());
+  } else {
+    proxy->BindTo(var);
   }
 }
 
