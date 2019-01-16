@@ -62,13 +62,31 @@ class ZonePreparseData;
 
  */
 
-class PreparseDataBuilder : public ZoneObject {
- public:
-  class ByteData;
+struct PreparseByteDataConstants {
+#ifdef DEBUG
+  static constexpr int kMagicValue = 0xC0DE0DE;
 
+  static constexpr size_t kUint32Size = 5;
+  static constexpr size_t kUint8Size = 2;
+  static constexpr size_t kQuarterMarker = 0;
+  static constexpr size_t kPlaceholderSize = kUint32Size;
+#else
+  static constexpr size_t kUint32Size = 4;
+  static constexpr size_t kUint8Size = 1;
+  static constexpr size_t kPlaceholderSize = 0;
+#endif
+
+  static const size_t kSkippableFunctionDataSize =
+      4 * kUint32Size + 1 * kUint8Size;
+};
+
+class PreparseDataBuilder : public ZoneObject,
+                            public PreparseByteDataConstants {
+ public:
   // Create a PreparseDataBuilder object which will collect data as we
   // parse.
-  PreparseDataBuilder(Zone* zone, PreparseDataBuilder* parent);
+  explicit PreparseDataBuilder(Zone* zone, PreparseDataBuilder* parent_builder,
+                               std::vector<uint8_t>* data_buffer);
 
   PreparseDataBuilder* parent() const { return parent_; }
 
@@ -81,7 +99,7 @@ class PreparseDataBuilder : public ZoneObject {
         : preparser_(preparser), builder_(nullptr) {}
 
     void Start(DeclarationScope* function_scope);
-    void AddSkippableFunction(DeclarationScope* function_scope,
+    void SetSkippableFunction(DeclarationScope* function_scope,
                               int end_position, int num_inner_functions);
     ~DataGatheringScope();
 
@@ -92,9 +110,45 @@ class PreparseDataBuilder : public ZoneObject {
     DISALLOW_COPY_AND_ASSIGN(DataGatheringScope);
   };
 
+  class ByteData : public ZoneObject, public PreparseByteDataConstants {
+   public:
+    explicit ByteData(std::vector<uint8_t>* buffer)
+        : byte_data_(buffer), free_quarters_in_last_byte_(0) {}
+
+    ~ByteData() {}
+
+    void FinalizeToZone(Zone* zone);
+    Handle<PreparseData> CopyToHeap(Isolate* isolate, int children_length);
+    ZonePreparseData* CopyToZone(Zone* zone, int children_length);
+
+    void WriteUint32(uint32_t data);
+    void WriteUint8(uint8_t data);
+    void WriteQuarter(uint8_t data);
+
+#ifdef DEBUG
+    // For overwriting previously written data at position 0.
+    void SaveCurrentSizeAtFirstUint32();
+#endif
+
+   private:
+    union {
+      // Only used during construction and uses a shared buffer for data
+      // accumulation (is_finalized_ == false).
+      ScopedList<uint8_t> byte_data_;
+      // Once the data is finalized, it lives in a Zone, this implies
+      // is_finalized_ == true.
+      Vector<uint8_t> zone_byte_data_;
+    };
+    uint8_t free_quarters_in_last_byte_;
+
+#ifdef DEBUG
+    bool is_finalized_ = false;
+#endif
+  };
+
   // Saves the information needed for allocating the Scope's (and its
   // subscopes') variables.
-  void SaveScopeAllocationData(DeclarationScope* scope);
+  void SaveScopeAllocationData(DeclarationScope* scope, Zone* zone);
 
   // In some cases, PreParser cannot produce the same Scope structure as
   // Parser. If it happens, we're unable to produce the data that would enable
@@ -118,6 +172,7 @@ class PreparseDataBuilder : public ZoneObject {
 
   bool ContainsInnerFunctions() const;
   bool HasData() const;
+  bool HasSkippableFunctionScope() const;
 
   static bool ScopeNeedsData(Scope* scope);
   static bool ScopeIsSkippableFunctionScope(Scope* scope);
@@ -135,14 +190,20 @@ class PreparseDataBuilder : public ZoneObject {
   void SaveDataForScope(Scope* scope);
   void SaveDataForVariable(Variable* var);
   void SaveDataForInnerScopes(Scope* scope);
+  void SaveDataForSkippableFunction(PreparseDataBuilder* builder);
+
+  void CopyByteData(Zone* zone);
 
   PreparseDataBuilder* parent_;
-
-  ByteData* byte_data_;
+  ByteData byte_data_;
   ZoneChunkList<PreparseDataBuilder*> data_for_inner_functions_;
 
+  DeclarationScope* function_scope_;
+  int num_inner_functions_;
+  int num_inner_data_;
+
   // Whether we've given up producing the data for this function.
-  bool bailed_out_;
+  bool bailed_out_ : 1;
 
   DISALLOW_COPY_AND_ASSIGN(PreparseDataBuilder);
 };
