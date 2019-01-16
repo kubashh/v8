@@ -82,199 +82,146 @@ STATIC_ASSERT(LanguageModeSize <= LanguageField::kNumValues);
 
  */
 
-void PreparseDataBuilder::ByteData::WriteUint32(uint32_t data) {
-#ifdef DEBUG
-  // Save expected item size in debug mode.
-  backing_store_.push_back(kUint32Size);
-#endif
-  backing_store_.push_back(data & 0xFF);
-  backing_store_.push_back((data >> 8) & 0xFF);
-  backing_store_.push_back((data >> 16) & 0xFF);
-  backing_store_.push_back((data >> 24) & 0xFF);
-  free_quarters_in_last_byte_ = 0;
-}
-
-#ifdef DEBUG
-void PreparseDataBuilder::ByteData::OverwriteFirstUint32(uint32_t data) {
-  auto it = backing_store_.begin();
-  // Check that that position already holds an item of the expected size.
-  DCHECK_GE(backing_store_.size(), kUint32Size);
-  DCHECK_EQ(*it, kUint32Size);
-  ++it;
-  *it++ = data & 0xFF;
-  *it++ = (data >> 8) & 0xFF;
-  *it++ = (data >> 16) & 0xFF;
-  *it++ = (data >> 24) & 0xFF;
-}
-#endif
-
-void PreparseDataBuilder::ByteData::WriteUint8(uint8_t data) {
-#ifdef DEBUG
-  // Save expected item size in debug mode.
-  backing_store_.push_back(kUint8Size);
-#endif
-  backing_store_.push_back(data);
-  free_quarters_in_last_byte_ = 0;
-}
-
-void PreparseDataBuilder::ByteData::WriteQuarter(uint8_t data) {
-  DCHECK_LE(data, 3);
-  if (free_quarters_in_last_byte_ == 0) {
-#ifdef DEBUG
-    // Save a marker in debug mode.
-    backing_store_.push_back(kQuarterMarker);
-#endif
-    backing_store_.push_back(0);
-    free_quarters_in_last_byte_ = 3;
-  } else {
-    --free_quarters_in_last_byte_;
-  }
-
-  uint8_t shift_amount = free_quarters_in_last_byte_ * 2;
-  DCHECK_EQ(backing_store_.back() & (3 << shift_amount), 0);
-  backing_store_.back() |= (data << shift_amount);
-}
-
-void PreparseDataBuilder::ByteData::StoreInto(PreparseData data) {
-  DisallowHeapAllocation no_gc;
-  int i = 0;
-  for (uint8_t item : backing_store_) {
-    data->set(i++, item);
-  }
-}
-
 PreparseDataBuilder::PreparseDataBuilder(Zone* zone,
-                                         PreparseDataBuilder* parent)
-    : parent_(parent),
-      byte_data_(new (zone) ByteData(zone)),
+                                         PreparseDataBuilder* parent_builder,
+                                         std::vector<uint8_t>* data_buffer)
+    : parent_(parent_builder),
+      byte_data_(data_buffer),
       data_for_inner_functions_(zone),
-      bailed_out_(false) {
-#ifdef DEBUG
-  // Reserve space for scope_data_start, written later:
-  byte_data_->WriteUint32(0);
-#endif
-}
+      function_scope_(nullptr),
+      num_inner_functions_(0),
+      num_inner_data_(0),
+      bailed_out_(false) {}
 
 void PreparseDataBuilder::DataGatheringScope::Start(
     DeclarationScope* function_scope) {
-  PreparseDataBuilder* parent = preparser_->preparse_data_builder();
   Zone* main_zone = preparser_->main_zone();
-  builder_ = new (main_zone) PreparseDataBuilder(main_zone, parent);
+  builder_ = new (main_zone)
+      PreparseDataBuilder(main_zone, preparser_->preparse_data_builder(),
+                          preparser_->preparse_data_buffer());
   preparser_->set_preparse_data_builder(builder_);
   function_scope->set_preparse_data_builder(builder_);
 }
 
 PreparseDataBuilder::DataGatheringScope::~DataGatheringScope() {
   if (builder_ == nullptr) return;
+  // Copy over the data from the buffer into the zone-allocated byte_data_
   PreparseDataBuilder* parent = builder_->parent_;
-  if (parent != nullptr && builder_->HasData()) {
+  if (parent != nullptr &&
+      (builder_->HasData() || builder_->HasSkippableFunctionScope())) {
     parent->data_for_inner_functions_.push_back(builder_);
   }
   preparser_->set_preparse_data_builder(parent);
 }
 
-void PreparseDataBuilder::DataGatheringScope::AddSkippableFunction(
-    DeclarationScope* function_scope, int end_position,
-    int num_inner_functions) {
-  builder_->parent_->AddSkippableFunction(
-      function_scope->start_position(), end_position,
-      function_scope->num_parameters(), num_inner_functions,
-      function_scope->language_mode(), builder_->HasData(),
-      function_scope->NeedsHomeObject());
+void PreparseDataBuilder::ByteData::WriteUint32(uint32_t data) {
+  DCHECK(!is_finalized_);
+#ifdef DEBUG
+  // Save expected item size in debug mode.
+  byte_data_.Add(kUint32Size);
+#endif
+  byte_data_.Add(data & 0xFF);
+  byte_data_.Add((data >> 8) & 0xFF);
+  byte_data_.Add((data >> 16) & 0xFF);
+  byte_data_.Add((data >> 24) & 0xFF);
+  free_quarters_in_last_byte_ = 0;
 }
 
-void PreparseDataBuilder::AddSkippableFunction(
-    int start_position, int end_position, int num_parameters,
-    int num_inner_functions, LanguageMode language_mode, bool has_data,
-    bool uses_super_property) {
+#ifdef DEBUG
+void PreparseDataBuilder::ByteData::OverwriteFirstUint32(uint32_t data) {
+  DCHECK(!is_finalized_);
+  uint8_t* start = byte_data_.front();
+  int i = 0;
+  // Check that that position already holds an item of the expected size.
+  DCHECK_GE(byte_data_.length(), kUint32Size);
+  DCHECK_EQ(start[i++], kUint32Size);
+  start[i++] = data & 0xFF;
+  start[i++] = (data >> 8) & 0xFF;
+  start[i++] = (data >> 16) & 0xFF;
+  start[i++] = (data >> 24) & 0xFF;
+}
+#endif
+
+void PreparseDataBuilder::ByteData::WriteUint8(uint8_t data) {
+  DCHECK(!is_finalized_);
+#ifdef DEBUG
+  // Save expected item size in debug mode.
+  byte_data_.Add(kUint8Size);
+#endif
+  byte_data_.Add(data);
+  free_quarters_in_last_byte_ = 0;
+}
+
+void PreparseDataBuilder::ByteData::WriteQuarter(uint8_t data) {
+  DCHECK(!is_finalized_);
+  DCHECK_LE(data, 3);
+  if (free_quarters_in_last_byte_ == 0) {
+#ifdef DEBUG
+    // Save a marker in debug mode.
+    byte_data_.Add(kQuarterMarker);
+#endif
+    byte_data_.Add(0);
+    free_quarters_in_last_byte_ = 3;
+  } else {
+    --free_quarters_in_last_byte_;
+  }
+
+  uint8_t shift_amount = free_quarters_in_last_byte_ * 2;
+  DCHECK_EQ(*byte_data_.back() & (3 << shift_amount), 0);
+  *byte_data_.back() |= (data << shift_amount);
+}
+
+void PreparseDataBuilder::ByteData::FinalizeToZone(Zone* zone) {
+  Vector<uint8_t> zone_data(byte_data_.CopyToZone(zone), byte_data_.length());
+  byte_data_.Rewind();
+  zone_byte_data_ = zone_data;
+#ifdef DEBUG
+  is_finalized_ = true;
+#endif
+}
+
+void PreparseDataBuilder::DataGatheringScope::SetSkippableFunction(
+    DeclarationScope* function_scope, int end_position,
+    int num_inner_functions) {
+  DCHECK_NULL(builder_->function_scope_);
+  builder_->function_scope_ = function_scope;
+  DCHECK_EQ(builder_->num_inner_functions_, 0);
+  builder_->num_inner_functions_ = num_inner_functions;
+  builder_->parent_->num_inner_data_++;
+}
+
+void PreparseDataBuilder::SaveDataForSkippableFunction(
+    PreparseDataBuilder* builder) {
   if (bailed_out_) return;
+  DeclarationScope* function_scope = builder->function_scope_;
 
   // Start position is used for a sanity check when consuming the data, we could
   // remove it in the future if we're very pressed for space but it's been good
   // at catching bugs in the wild so far.
-  byte_data_->WriteUint32(start_position);
-  byte_data_->WriteUint32(end_position);
+  byte_data_.WriteUint32(function_scope->start_position());
+  byte_data_.WriteUint32(function_scope->end_position());
   uint32_t has_data_and_num_parameters =
-      HasDataField::encode(has_data) |
-      NumberOfParametersField::encode(num_parameters);
-  byte_data_->WriteUint32(has_data_and_num_parameters);
-  byte_data_->WriteUint32(num_inner_functions);
+      HasDataField::encode(builder->HasData()) |
+      NumberOfParametersField::encode(function_scope->num_parameters());
+  byte_data_.WriteUint32(has_data_and_num_parameters);
+  byte_data_.WriteUint32(builder->num_inner_functions_);
 
-  uint8_t language_and_super = LanguageField::encode(language_mode) |
-                               UsesSuperField::encode(uses_super_property);
-
-  byte_data_->WriteQuarter(language_and_super);
-}
-
-void PreparseDataBuilder::SaveScopeAllocationData(DeclarationScope* scope) {
-  // The data contains a uint32 (reserved space for scope_data_start) and
-  // function data items, kSkippableFunctionDataSize each.
-  DCHECK_GE(byte_data_->size(), ByteData::kPlaceholderSize);
-  DCHECK_LE(byte_data_->size(), std::numeric_limits<uint32_t>::max());
-  DCHECK_EQ(byte_data_->size() % ByteData::kSkippableFunctionDataSize,
-            ByteData::kPlaceholderSize);
-
-  if (bailed_out_) return;
-  // If there are no skippable inner functions, we don't need to save anything.
-  if (!ContainsInnerFunctions()) return;
-
-#ifdef DEBUG
-  uint32_t scope_data_start = static_cast<uint32_t>(byte_data_->size());
-  byte_data_->OverwriteFirstUint32(scope_data_start);
-
-  // For a data integrity check, write a value between data about skipped inner
-  // funcs and data about variables.
-  byte_data_->WriteUint32(ByteData::kMagicValue);
-  byte_data_->WriteUint32(scope->start_position());
-  byte_data_->WriteUint32(scope->end_position());
-#endif
-
-  if (ScopeNeedsData(scope)) SaveDataForScope(scope);
+  uint8_t language_and_super =
+      LanguageField::encode(function_scope->language_mode()) |
+      UsesSuperField::encode(function_scope->NeedsHomeObject());
+  byte_data_.WriteQuarter(language_and_super);
 }
 
 bool PreparseDataBuilder::ContainsInnerFunctions() const {
-  return byte_data_->size() > ByteData::kPlaceholderSize;
+  return num_inner_data_ > 0;
 }
 
 bool PreparseDataBuilder::HasData() const {
   return !bailed_out_ && ContainsInnerFunctions();
 }
 
-Handle<PreparseData> PreparseDataBuilder::Serialize(Isolate* isolate) {
-  DCHECK(HasData());
-  DCHECK(!ThisOrParentBailedOut());
-
-  int child_data_length = static_cast<int>(data_for_inner_functions_.size());
-  Handle<PreparseData> data = isolate->factory()->NewPreparseData(
-      static_cast<int>(byte_data_->size()), child_data_length);
-  byte_data_->StoreInto(*data);
-
-  int i = 0;
-  for (const auto& item : data_for_inner_functions_) {
-    DCHECK_NOT_NULL(item);
-    Handle<PreparseData> child_data = item->Serialize(isolate);
-    data->set_child(i++, *child_data);
-  }
-
-  return data;
-}
-
-ZonePreparseData* PreparseDataBuilder::Serialize(Zone* zone) {
-  DCHECK(HasData());
-  DCHECK(!ThisOrParentBailedOut());
-
-  int child_length = static_cast<int>(data_for_inner_functions_.size());
-  ZonePreparseData* result =
-      new (zone) ZonePreparseData(zone, byte_data_, child_length);
-
-  int i = 0;
-  for (const auto& item : data_for_inner_functions_) {
-    DCHECK_NOT_NULL(item);
-    ZonePreparseData* child = item->Serialize(zone);
-    result->set_child(i++, child);
-  }
-
-  return result;
+bool PreparseDataBuilder::HasSkippableFunctionScope() const {
+  return function_scope_ != nullptr;
 }
 
 bool PreparseDataBuilder::ScopeNeedsData(Scope* scope) {
@@ -307,12 +254,45 @@ bool PreparseDataBuilder::ScopeIsSkippableFunctionScope(Scope* scope) {
          declaration_scope->preparse_data_builder() != nullptr;
 }
 
+void PreparseDataBuilder::SaveScopeAllocationData(DeclarationScope* scope,
+                                                  Zone* zone) {
+  // The data contains a uint32 (reserved space for scope_data_start) and
+  // function data items, kSkippableFunctionDataSize each.
+  // DCHECK_GE(byte_data_.length(), kPlaceholderSize);
+  // DCHECK_LE(byte_data_.length(), std::numeric_limits<uint32_t>::max());
+  // DCHECK_EQ(byte_data_.length() % kSkippableFunctionDataSize,
+  // kPlaceholderSize);
+
+  if (bailed_out_) return;
+  // If there are no skippable inner functions, we don't need to save anything.
+  if (!ContainsInnerFunctions()) return;
+  DCHECK(!data_for_inner_functions_.is_empty());
+
+  for (const auto& builder : data_for_inner_functions_) {
+    SaveDataForSkippableFunction(builder);
+  }
+
+#ifdef DEBUG
+  // uint32_t scope_data_start = static_cast<uint32_t>(byte_data_.length());
+  // OverwriteFirstUint32(scope_data_start);
+
+  // For a data integrity check, write a value between data about skipped inner
+  // funcs and data about variables.
+  byte_data_.WriteUint32(kMagicValue);
+  byte_data_.WriteUint32(scope->start_position());
+  byte_data_.WriteUint32(scope->end_position());
+#endif
+
+  if (ScopeNeedsData(scope)) SaveDataForScope(scope);
+  byte_data_.FinalizeToZone(zone);
+}
+
 void PreparseDataBuilder::SaveDataForScope(Scope* scope) {
   DCHECK_NE(scope->end_position(), kNoSourcePosition);
   DCHECK(ScopeNeedsData(scope));
 
 #ifdef DEBUG
-  byte_data_->WriteUint8(scope->scope_type());
+  byte_data_.WriteUint8(scope->scope_type());
 #endif
 
   uint8_t eval =
@@ -320,7 +300,7 @@ void PreparseDataBuilder::SaveDataForScope(Scope* scope) {
           scope->is_declaration_scope() &&
           scope->AsDeclarationScope()->calls_sloppy_eval()) |
       InnerScopeCallsEvalField::encode(scope->inner_scope_calls_eval());
-  byte_data_->WriteUint8(eval);
+  byte_data_.WriteUint8(eval);
 
   if (scope->scope_type() == ScopeType::FUNCTION_SCOPE) {
     Variable* function = scope->AsDeclarationScope()->function_var();
@@ -339,17 +319,18 @@ void PreparseDataBuilder::SaveDataForVariable(Variable* var) {
   // Store the variable name in debug mode; this way we can check that we
   // restore data to the correct variable.
   const AstRawString* name = var->raw_name();
-  byte_data_->WriteUint8(name->is_one_byte());
-  byte_data_->WriteUint32(name->length());
+  byte_data_.WriteUint8(name->is_one_byte());
+  byte_data_.WriteUint32(name->length());
   for (int i = 0; i < name->length(); ++i) {
-    byte_data_->WriteUint8(name->raw_data()[i]);
+    byte_data_.WriteUint8(name->raw_data()[i]);
   }
 #endif
+
   byte variable_data = VariableMaybeAssignedField::encode(
                            var->maybe_assigned() == kMaybeAssigned) |
                        VariableContextAllocatedField::encode(
                            var->has_forced_context_allocation());
-  byte_data_->WriteQuarter(variable_data);
+  byte_data_.WriteQuarter(variable_data);
 }
 
 void PreparseDataBuilder::SaveDataForInnerScopes(Scope* scope) {
@@ -367,6 +348,53 @@ void PreparseDataBuilder::SaveDataForInnerScopes(Scope* scope) {
     if (!ScopeNeedsData(inner)) continue;
     SaveDataForScope(inner);
   }
+}
+
+Handle<PreparseData> PreparseDataBuilder::ByteData::CopyToHeap(
+    Isolate* isolate, int children_length) {
+  DCHECK(is_finalized_);
+
+  int data_length = zone_byte_data_.length();
+  Handle<PreparseData> data =
+      isolate->factory()->NewPreparseData(data_length, children_length);
+  data->copy_in(0, zone_byte_data_.start(), data_length);
+  return data;
+}
+
+ZonePreparseData* PreparseDataBuilder::ByteData::CopyToZone(
+    Zone* zone, int children_length) {
+  DCHECK(is_finalized_);
+  return new (zone) ZonePreparseData(zone, &zone_byte_data_, children_length);
+}
+
+Handle<PreparseData> PreparseDataBuilder::Serialize(Isolate* isolate) {
+  DCHECK(HasData());
+  DCHECK(!ThisOrParentBailedOut());
+  Handle<PreparseData> data = byte_data_.CopyToHeap(isolate, num_inner_data_);
+
+  int i = 0;
+  for (const auto& builder : data_for_inner_functions_) {
+    if (!builder->HasData()) continue;
+    Handle<PreparseData> child_data = builder->Serialize(isolate);
+    data->set_child(i++, *child_data);
+  }
+
+  return data;
+}
+
+ZonePreparseData* PreparseDataBuilder::Serialize(Zone* zone) {
+  DCHECK(HasData());
+  DCHECK(!ThisOrParentBailedOut());
+  ZonePreparseData* result = byte_data_.CopyToZone(zone, num_inner_data_);
+
+  int i = 0;
+  for (const auto& builder : data_for_inner_functions_) {
+    if (!builder->HasData()) continue;
+    ZonePreparseData* child = builder->Serialize(zone);
+    result->set_child(i++, child);
+  }
+
+  return result;
 }
 
 class BuilderProducedPreparseData final : public ProducedPreparseData {
@@ -571,11 +599,12 @@ void BaseConsumedPreparseData<Data>::RestoreDataForInnerScopes(Scope* scope) {
 template <class Data>
 void BaseConsumedPreparseData<Data>::VerifyDataStart() {
   typename ByteData::ReadingScope reading_scope(this);
-  int scope_data_start = scope_data_->ReadUint32();
-  scope_data_->SetPosition(scope_data_start);
-  DCHECK_EQ(scope_data_->ReadUint32(), ByteData::kMagicValue);
+  // Enable check-sum again.
+  // int scope_data_start = scope_data_->ReadUint32();
+  // scope_data_->SetPosition(scope_data_start);
+  // DCHECK_EQ(scope_data_->ReadUint32(), ByteData::kMagicValue);
   // The first data item is scope_data_start. Skip over it.
-  scope_data_->SetPosition(ByteData::kPlaceholderSize);
+  // scope_data_->SetPosition(ByteData::kPlaceholderSize);
 }
 #endif
 
@@ -598,8 +627,7 @@ OnHeapConsumedPreparseData::OnHeapConsumedPreparseData(
 #endif
 }
 
-ZonePreparseData::ZonePreparseData(Zone* zone,
-                                   PreparseDataBuilder::ByteData* byte_data,
+ZonePreparseData::ZonePreparseData(Zone* zone, Vector<uint8_t>* byte_data,
                                    int child_length)
     : byte_data_(byte_data->begin(), byte_data->end(), zone),
       children_(child_length, zone) {}

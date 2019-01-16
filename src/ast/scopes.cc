@@ -1430,19 +1430,19 @@ void DeclarationScope::ResetAfterPreparsing(AstValueFactory* ast_value_factory,
   was_lazily_parsed_ = !aborted;
 }
 
-void Scope::SavePreparseData() {
+void Scope::SavePreparseData(Zone* zone) {
   if (PreparseDataBuilder::ScopeIsSkippableFunctionScope(this)) {
-    AsDeclarationScope()->SavePreparseDataForDeclarationScope();
+    AsDeclarationScope()->SavePreparseDataForDeclarationScope(zone);
   }
 
   for (Scope* scope = inner_scope_; scope != nullptr; scope = scope->sibling_) {
-    scope->SavePreparseData();
+    scope->SavePreparseData(zone);
   }
 }
 
-void DeclarationScope::SavePreparseDataForDeclarationScope() {
+void DeclarationScope::SavePreparseDataForDeclarationScope(Zone* zone) {
   if (preparse_data_builder_ == nullptr) return;
-  preparse_data_builder_->SaveScopeAllocationData(this);
+  preparse_data_builder_->SaveScopeAllocationData(this, zone);
 }
 
 void DeclarationScope::AnalyzePartially(AstNodeFactory* ast_node_factory) {
@@ -1462,7 +1462,7 @@ void DeclarationScope::AnalyzePartially(AstNodeFactory* ast_node_factory) {
       function_ = ast_node_factory->CopyVariable(function_);
     }
 
-    SavePreparseData();
+    SavePreparseData(ast_node_factory->zone());
   }
 
 #ifdef DEBUG
