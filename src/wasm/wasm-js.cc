@@ -1021,7 +1021,7 @@ void WebAssemblyTable(const v8::FunctionCallbackInfo<v8::Value>& args) {
   int64_t maximum = -1;
   if (!GetOptionalIntegerProperty(isolate, &thrower, context, descriptor,
                                   v8_str(isolate, "maximum"), &maximum, initial,
-                                  i::wasm::kSpecMaxWasmTableSize)) {
+                                  i::wasm::kV8MaxWasmTableSize)) {
     return;
   }
 
@@ -1059,7 +1059,7 @@ void WebAssemblyMemory(const v8::FunctionCallbackInfo<v8::Value>& args) {
   int64_t maximum = -1;
   if (!GetOptionalIntegerProperty(isolate, &thrower, context, descriptor,
                                   v8_str(isolate, "maximum"), &maximum, initial,
-                                  i::wasm::kSpecMaxWasmMemoryPages)) {
+                                  i::wasm::kV8MaxWasmMemoryPages)) {
     return;
   }
 
