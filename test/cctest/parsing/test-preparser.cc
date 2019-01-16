@@ -801,7 +801,8 @@ TEST(ProducingAndConsumingByteData) {
   LocalContext env;
 
   i::Zone zone(isolate->allocator(), ZONE_NAME);
-  i::PreparseDataBuilder::ByteData bytes(&zone);
+  std::vector<uint8_t> buffer;
+  i::PreparseDataBuilder::ByteData bytes(&buffer);
   // Write some data.
   bytes.WriteUint32(1983);  // This will be overwritten.
   bytes.WriteUint32(2147483647);
@@ -827,12 +828,14 @@ TEST(ProducingAndConsumingByteData) {
   bytes.WriteUint32(50);
   // End with a lonely quarter.
   bytes.WriteQuarter(2);
-
+  // Move the data from the temporary buffer into the zone for later
+  // serialization.
+  bytes.FinalizeToZone(&zone);
   {
     // Serialize as a ZoneConsumedPreparseData, and read back data.
-    i::ZonePreparseData zone_serialized(&zone, &bytes, 0);
+    i::ZonePreparseData* data_in_zone = bytes.CopyToZone(&zone, 0);
     i::ZoneConsumedPreparseData::ByteData bytes_for_reading;
-    i::ZoneVectorWrapper wrapper(zone_serialized.byte_data());
+    i::ZoneVectorWrapper wrapper(data_in_zone->byte_data());
     i::ZoneConsumedPreparseData::ByteData::ReadingScope reading_scope(
         &bytes_for_reading, wrapper);
 
@@ -862,9 +865,7 @@ TEST(ProducingAndConsumingByteData) {
 
   {
     // Serialize as an OnHeapConsumedPreparseData, and read back data.
-    i::Handle<i::PreparseData> data_on_heap =
-        isolate->factory()->NewPreparseData(static_cast<int>(bytes.size()), 0);
-    bytes.StoreInto(*data_on_heap);
+    i::Handle<i::PreparseData> data_on_heap = bytes.CopyToHeap(isolate, 0);
     i::OnHeapConsumedPreparseData::ByteData bytes_for_reading;
     i::OnHeapConsumedPreparseData::ByteData::ReadingScope reading_scope(
         &bytes_for_reading, *data_on_heap);
