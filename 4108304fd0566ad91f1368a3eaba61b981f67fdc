@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec7517d2_903bffa3",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-01-17T17:35:13Z",
+      "side": 0,
+      "message": "Spurious renaming; I would prefer to keep the short name. Here and elsewhere.",
+      "revId": "4108304fd0566ad91f1368a3eaba61b981f67fdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
