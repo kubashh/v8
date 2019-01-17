@@ -1415,6 +1415,7 @@ Address WasmInstanceObject::GetCallTarget(uint32_t func_index) {
 namespace {
 void CopyTableEntriesImpl(Handle<WasmInstanceObject> instance, uint32_t dst,
                           uint32_t src, uint32_t count) {
+  DCHECK(IsInBounds(dst, count, instance->indirect_function_table_size()));
   for (uint32_t i = 0; i < count; i++) {
     auto from_entry = IndirectFunctionTableEntry(instance, dst + i);
     auto to_entry = IndirectFunctionTableEntry(instance, src + i);
@@ -1430,8 +1431,8 @@ bool WasmInstanceObject::CopyTableEntries(Isolate* isolate,
                                           uint32_t src, uint32_t count) {
   CHECK_EQ(0, table_index);  // TODO(titzer): multiple tables in TableCopy
   auto max = instance->indirect_function_table_size();
-  if (dst > max || count > (max - dst)) return false;  // out-of-bounds
-  if (src > max || count > (max - src)) return false;  // out-of-bounds
+  if (!IsInBounds(dst, count, max)) return false;
+  if (!IsInBounds(src, count, max)) return false;
 
   if (!instance->has_table_object()) {
     // No table object, only need to update this instance.
