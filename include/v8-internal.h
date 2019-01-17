@@ -169,8 +169,8 @@ class Internals {
   static const int kNodeStateIsWeakValue = 2;
   static const int kNodeStateIsPendingValue = 3;
   static const int kNodeStateIsNearDeathValue = 4;
-  static const int kNodeIsIndependentShift = 3;
-  static const int kNodeIsActiveShift = 4;
+  static const int kNodeIsIndependentShift = 4;
+  static const int kNodeIsActiveShift = 5;
 
   static const int kFirstNonstringType = 0x80;
   static const int kOddballType = 0x83;

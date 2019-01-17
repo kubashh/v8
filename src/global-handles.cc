@@ -16,8 +16,243 @@
 namespace v8 {
 namespace internal {
 
-class GlobalHandles::Node {
+template <class NodeBlock, class _Node>
+class NodeBlockBase {
  public:
+  using Node = _Node;
+
+  static constexpr int kSize = Node::kBlockSize;
+
+  NodeBlockBase(GlobalHandles* global_handles, NodeBlock* next,
+                NodeBlock** first_used_block)
+      : next_(next),
+        global_handles_(global_handles),
+        first_used_block_(first_used_block) {}
+
+  void PutNodesOnFreeList(Node** first_free) {
+    for (int i = kSize - 1; i >= 0; --i) {
+      nodes_[i].Initialize(i, first_free);
+    }
+  }
+
+  void IncreaseUses() {
+    DCHECK_LT(used_nodes_, kSize);
+    if (used_nodes_++ == 0) {
+      NodeBlock* old_first = *first_used_block_;
+      *first_used_block_ = impl();
+      next_used_ = old_first;
+      prev_used_ = nullptr;
+      if (old_first == nullptr) return;
+      old_first->prev_used_ = impl();
+    }
+  }
+
+  void DecreaseUses() {
+    DCHECK_GT(used_nodes_, 0);
+    if (--used_nodes_ == 0) {
+      if (next_used_ != nullptr) next_used_->prev_used_ = prev_used_;
+      if (prev_used_ != nullptr) prev_used_->next_used_ = next_used_;
+      if (this == *first_used_block_) {
+        *first_used_block_ = next_used_;
+      }
+    }
+  }
+
+  Node* node_at(uint8_t index) {
+    DCHECK_LE(0, index);
+    DCHECK_LT(index, kSize);
+    return &nodes_[index];
+  }
+
+  GlobalHandles* global_handles() const { return global_handles_; }
+
+  // Next block in the list of all blocks.
+  NodeBlock* next() const { return next_; }
+
+  // Next/previous block in the list of blocks with used nodes.
+  NodeBlock* next_used() const { return next_used_; }
+  NodeBlock* prev_used() const { return prev_used_; }
+
+ private:
+  NodeBlock* impl() { return static_cast<NodeBlock*>(this); }
+
+  Node nodes_[kSize];
+  NodeBlock* const next_;
+  GlobalHandles* const global_handles_;
+  NodeBlock** first_used_block_;
+  NodeBlock* next_used_ = nullptr;
+  NodeBlock* prev_used_ = nullptr;
+  uint8_t used_nodes_ = 0;
+};
+
+template <class NodeBlock>
+class NodeIteratorBase {
+ public:
+  explicit NodeIteratorBase(NodeBlock* first_used_block)
+      : current_block_(first_used_block), index_(0) {}
+
+  bool done() const { return current_block_ == nullptr; }
+
+  typename NodeBlock::Node* node() const {
+    DCHECK(!done());
+    return current_block_->node_at(index_);
+  }
+
+  void Advance() {
+    DCHECK(!done());
+    if (++index_ < NodeBlock::kSize) return;
+    index_ = 0;
+    current_block_ = static_cast<NodeBlock*>(current_block_->next_used());
+  }
+
+ private:
+  NodeBlock* current_block_;
+  int index_;
+
+  DISALLOW_COPY_AND_ASSIGN(NodeIteratorBase);
+};
+
+template <class Node>
+class NodeBase {
+ public:
+  NodeBase() {
+    DCHECK_EQ(0, offsetof(NodeBase, object_));
+    DCHECK_EQ(Internals::kNodeClassIdOffset, offsetof(NodeBase, class_id_));
+    DCHECK_EQ(Internals::kNodeFlagsOffset, offsetof(NodeBase, flags_));
+  }
+
+  void Initialize(uint8_t index, NodeBase** top) {
+    object_ = kGlobalHandleZapValue;
+    index_ = index;
+    class_id_ = v8::HeapProfiler::kPersistentHandleNoClassId;
+    data_.next_free = *top;
+    *top = this;
+    set_in_new_space_list(false);
+    impl()->InitializeNodeImpl();
+  }
+
+  void Acquire(Object object) {
+    DCHECK(!impl()->IsInUse());
+    object_ = object.ptr();
+    class_id_ = v8::HeapProfiler::kPersistentHandleNoClassId;
+    data_.parameter = nullptr;
+    impl()->AcquireImpl();
+    IncreaseBlockUses();
+  }
+
+  void Release() {
+    DCHECK(impl()->IsInUse());
+    // Zap the values for eager trapping.
+    object_ = kGlobalHandleZapValue;
+    class_id_ = v8::HeapProfiler::kPersistentHandleNoClassId;
+    impl()->ReleaseImpl();
+    DecreaseBlockUses();
+  }
+
+  Object object() const { return Object(object_); }
+  FullObjectSlot location() { return FullObjectSlot(&object_); }
+  Handle<Object> handle() { return Handle<Object>(&object_); }
+
+  void Zap() {
+    DCHECK(impl()->IsInUse());
+    // Zap the values for eager trapping.
+    object_ = kGlobalHandleZapValue;
+  }
+
+  void IncreaseBlockUses() {
+    typename Node::NodeBlock* node_block = impl()->FindBlock();
+    node_block->IncreaseUses();
+    GlobalHandles* global_handles = node_block->global_handles();
+    global_handles->isolate()->counters()->global_handles()->Increment();
+    global_handles->number_of_global_handles_++;
+  }
+
+  void DecreaseBlockUses() {
+    typename Node::NodeBlock* node_block = impl()->FindBlock();
+    GlobalHandles* global_handles = node_block->global_handles();
+    data_.next_free = global_handles->first_free_;
+    global_handles->first_free_ = impl();
+    node_block->DecreaseUses();
+    global_handles->isolate()->counters()->global_handles()->Decrement();
+    global_handles->number_of_global_handles_--;
+  }
+
+  GlobalHandles* GetGlobalHandles() {
+    return impl()->FindBlock()->global_handles();
+  }
+
+  uint16_t wrapper_class_id() const { return class_id_; }
+  bool has_wrapper_class_id() const {
+    return class_id_ != v8::HeapProfiler::kPersistentHandleNoClassId;
+  }
+
+  bool is_in_new_space_list() const { return IsInNewSpaceList::decode(flags_); }
+  void set_in_new_space_list(bool v) {
+    flags_ = IsInNewSpaceList::update(flags_, v);
+  }
+
+  void set_parameter(void* parameter) {
+    DCHECK(impl()->IsInUse());
+    data_.parameter = parameter;
+  }
+  void* parameter() const {
+    DCHECK(impl()->IsInUse());
+    return data_.parameter;
+  }
+
+  // Free list support.
+  Node* next_free() {
+    DCHECK(!impl()->IsInUse());
+    return data_.next_free;
+  }
+  void set_next_free(Node* value) {
+    DCHECK(!impl()->IsInUse());
+    data_.next_free = value;
+  }
+
+ protected:
+  // NodeBase flag bits.
+  class NodeState : public BitField<typename Node::State, 0, 3> {};
+  class IsInNewSpaceList : public BitField<bool, 3, 1> {};
+  static constexpr unsigned kFirstFreeBit = IsInNewSpaceList::kNext;
+
+  Node* impl() { return static_cast<Node*>(this); }
+
+  // Storage for object pointer.
+  //
+  // Placed first to avoid offset computation. The stored data is equivalent to
+  // an Object. It is stored as a plain Address for convenience (smallest number
+  // of casts), and because it is a private implementation detail: the public
+  // interface provides type safety.
+  Address object_;
+
+  // Next word stores class_id, index, state, and other flags.
+  // Note: the most aligned fields should go first.
+
+  // A custom class id that may be set by the user.
+  uint16_t class_id_;
+
+  // Index in the containing handle block.
+  uint8_t index_;
+
+  // Flags that depend on the Node type.
+  uint8_t flags_;
+
+  // The meaning of this field depends on node state:
+  // - In freed state it stores the next free NodeBase pointer.
+  // - Otherwise, it stores a paramter that is dependend on the node type.
+  union {
+    Node* next_free;
+    void* parameter;
+  } data_;
+
+  DISALLOW_COPY_AND_ASSIGN(NodeBase);
+};
+
+class GlobalHandles::Node : public NodeBase<GlobalHandles::Node> {
+ public:
+  using NodeBlock = GlobalHandles::NodeBlock;
+
   // State transition diagram:
   // FREE -> NORMAL <-> WEAK -> PENDING -> NEAR_DEATH -> { NORMAL, WEAK, FREE }
   enum State {
@@ -29,15 +264,14 @@ class GlobalHandles::Node {
     NUMBER_OF_NODE_STATES
   };
 
+  static constexpr int kBlockSize = 256;
+
   // Maps handle location (slot) to the containing node.
   static Node* FromLocation(Address* location) {
-    DCHECK_EQ(offsetof(Node, object_), 0);
     return reinterpret_cast<Node*>(location);
   }
 
   Node() {
-    DCHECK_EQ(offsetof(Node, class_id_), Internals::kNodeClassIdOffset);
-    DCHECK_EQ(offsetof(Node, flags_), Internals::kNodeFlagsOffset);
     STATIC_ASSERT(static_cast<int>(NodeState::kMask) ==
                   Internals::kNodeStateMask);
     STATIC_ASSERT(WEAK == Internals::kNodeStateIsWeakValue);
@@ -64,58 +298,26 @@ class GlobalHandles::Node {
   }
 #endif
 
-  void Initialize(int index, Node** first_free) {
-    object_ = kGlobalHandleZapValue;
-    index_ = static_cast<uint8_t>(index);
-    DCHECK(static_cast<int>(index_) == index);
-    set_state(FREE);
-    set_in_new_space_list(false);
-    data_.next_free = *first_free;
-    *first_free = this;
-  }
+  void InitializeImpl() { set_state(FREE); }
 
-  void Acquire(Object object) {
-    DCHECK(state() == FREE);
-    object_ = object.ptr();
-    class_id_ = v8::HeapProfiler::kPersistentHandleNoClassId;
+  void AcquireImpl() {
+    DCHECK_EQ(FREE, state());
     set_independent(false);
     set_active(false);
     set_state(NORMAL);
-    data_.parameter = nullptr;
     weak_callback_ = nullptr;
-    IncreaseBlockUses();
   }
 
-  void Zap() {
-    DCHECK(IsInUse());
-    // Zap the values for eager trapping.
-    object_ = kGlobalHandleZapValue;
-  }
-
-  void Release() {
-    DCHECK(IsInUse());
-    set_state(FREE);
-    // Zap the values for eager trapping.
-    object_ = kGlobalHandleZapValue;
-    class_id_ = v8::HeapProfiler::kPersistentHandleNoClassId;
+  void ReleaseImpl() {
     set_independent(false);
     set_active(false);
-    weak_callback_ = nullptr;
-    DecreaseBlockUses();
+    set_state(FREE);
   }
 
-  // Object slot accessors.
-  Object object() const { return Object(object_); }
-  FullObjectSlot location() { return FullObjectSlot(&object_); }
-  const char* label() { return state() == NORMAL ? data_.label : nullptr; }
-  Handle<Object> handle() { return Handle<Object>(&object_); }
-
-  // Wrapper class ID accessors.
-  bool has_wrapper_class_id() const {
-    return class_id_ != v8::HeapProfiler::kPersistentHandleNoClassId;
+  const char* label() {
+    return state() == NORMAL ? static_cast<const char*>(data_.parameter)
+                             : nullptr;
   }
-
-  uint16_t wrapper_class_id() const { return class_id_; }
 
   // State and flag accessors.
 
@@ -134,13 +336,6 @@ class GlobalHandles::Node {
   }
   void set_active(bool v) {
     flags_ = IsActive::update(flags_, v);
-  }
-
-  bool is_in_new_space_list() {
-    return IsInNewSpaceList::decode(flags_);
-  }
-  void set_in_new_space_list(bool v) {
-    flags_ = IsInNewSpaceList::update(flags_, v);
   }
 
   WeaknessType weakness_type() const {
@@ -193,26 +388,6 @@ class GlobalHandles::Node {
     set_state(PENDING);
   }
 
-  // Callback parameter accessors.
-  void set_parameter(void* parameter) {
-    DCHECK(IsInUse());
-    data_.parameter = parameter;
-  }
-  void* parameter() const {
-    DCHECK(IsInUse());
-    return data_.parameter;
-  }
-
-  // Accessors for next free node in the free list.
-  Node* next_free() {
-    DCHECK(state() == FREE);
-    return data_.next_free;
-  }
-  void set_next_free(Node* value) {
-    DCHECK(state() == FREE);
-    data_.next_free = value;
-  }
-
   void MakeWeak(void* parameter,
                 WeakCallbackInfo<void>::Callback phantom_callback,
                 v8::WeakCallbackType type) {
@@ -254,11 +429,10 @@ class GlobalHandles::Node {
 
   void AnnotateStrongRetainer(const char* label) {
     DCHECK_EQ(state(), NORMAL);
-    data_.label = label;
+    data_.parameter = const_cast<char*>(label);
   }
 
   void CollectPhantomCallbackData(
-
       std::vector<PendingPhantomCallback>* pending_phantom_callbacks) {
     DCHECK(weakness_type() == PHANTOM_WEAK ||
            weakness_type() == PHANTOM_WEAK_2_EMBEDDER_FIELDS);
@@ -331,125 +505,30 @@ class GlobalHandles::Node {
     return true;
   }
 
-  inline GlobalHandles* GetGlobalHandles();
-
- private:
+ protected:
   inline NodeBlock* FindBlock();
-  inline void IncreaseBlockUses();
-  inline void DecreaseBlockUses();
 
-  // Storage for object pointer.
-  // Placed first to avoid offset computation.
-  // The stored data is equivalent to an Object. It is stored as a plain
-  // Address for convenience (smallest number of casts), and because it is a
-  // private implementation detail: the public interface provides type safety.
-  Address object_;
-
-  // Next word stores class_id, index, state, and independent.
-  // Note: the most aligned fields should go first.
-
-  // Wrapper class ID.
-  uint16_t class_id_;
-
-  // Index in the containing handle block.
-  uint8_t index_;
-
-  // This stores three flags (independent, partially_dependent and
-  // in_new_space_list) and a State.
-  class NodeState : public BitField<State, 0, 3> {};
-  class IsIndependent : public BitField<bool, 3, 1> {};
+  class IsIndependent : public BitField<bool, kFirstFreeBit, 1> {};
   // The following two fields are mutually exclusive
-  class IsActive : public BitField<bool, 4, 1> {};
-  class IsInNewSpaceList : public BitField<bool, 5, 1> {};
-  class NodeWeaknessType : public BitField<WeaknessType, 6, 2> {};
-
-  uint8_t flags_;
+  class IsActive : public BitField<bool, IsIndependent::kNext, 1> {};
+  class NodeWeaknessType : public BitField<WeaknessType, IsActive::kNext, 2> {};
 
   // Handle specific callback - might be a weak reference in disguise.
   WeakCallbackInfo<void>::Callback weak_callback_;
 
-  // The meaning of this field depends on node state:
-  // state == FREE: it stores the next free node pointer.
-  // state == NORMAL: it stores the strong retainer label.
-  // otherwise: it stores the parameter for the weak callback.
-  union {
-    Node* next_free;
-    const char* label;
-    void* parameter;
-  } data_;
+  friend class NodeBase<GlobalHandles::Node>;
 
   DISALLOW_COPY_AND_ASSIGN(Node);
 };
 
-
-class GlobalHandles::NodeBlock {
+class GlobalHandles::NodeBlock
+    : public NodeBlockBase<GlobalHandles::NodeBlock, GlobalHandles::Node> {
  public:
-  static const int kSize = 256;
-
-  explicit NodeBlock(GlobalHandles* global_handles, NodeBlock* next)
-      : next_(next),
-        used_nodes_(0),
-        next_used_(nullptr),
-        prev_used_(nullptr),
-        global_handles_(global_handles) {}
-
-  void PutNodesOnFreeList(Node** first_free) {
-    for (int i = kSize - 1; i >= 0; --i) {
-      nodes_[i].Initialize(i, first_free);
-    }
-  }
-
-  Node* node_at(int index) {
-    DCHECK(0 <= index && index < kSize);
-    return &nodes_[index];
-  }
-
-  void IncreaseUses() {
-    DCHECK_LT(used_nodes_, kSize);
-    if (used_nodes_++ == 0) {
-      NodeBlock* old_first = global_handles_->first_used_block_;
-      global_handles_->first_used_block_ = this;
-      next_used_ = old_first;
-      prev_used_ = nullptr;
-      if (old_first == nullptr) return;
-      old_first->prev_used_ = this;
-    }
-  }
-
-  void DecreaseUses() {
-    DCHECK_GT(used_nodes_, 0);
-    if (--used_nodes_ == 0) {
-      if (next_used_ != nullptr) next_used_->prev_used_ = prev_used_;
-      if (prev_used_ != nullptr) prev_used_->next_used_ = next_used_;
-      if (this == global_handles_->first_used_block_) {
-        global_handles_->first_used_block_ = next_used_;
-      }
-    }
-  }
-
-  GlobalHandles* global_handles() { return global_handles_; }
-
-  // Next block in the list of all blocks.
-  NodeBlock* next() const { return next_; }
-
-  // Next/previous block in the list of blocks with used nodes.
-  NodeBlock* next_used() const { return next_used_; }
-  NodeBlock* prev_used() const { return prev_used_; }
-
- private:
-  Node nodes_[kSize];
-  NodeBlock* const next_;
-  int used_nodes_;
-  NodeBlock* next_used_;
-  NodeBlock* prev_used_;
-  GlobalHandles* global_handles_;
+  NodeBlock(GlobalHandles* global_handles, NodeBlock* next,
+            NodeBlock** first_used_block)
+      : NodeBlockBase<GlobalHandles::NodeBlock, GlobalHandles::Node>(
+            global_handles, next, first_used_block) {}
 };
-
-
-GlobalHandles* GlobalHandles::Node::GetGlobalHandles() {
-  return FindBlock()->global_handles();
-}
-
 
 GlobalHandles::NodeBlock* GlobalHandles::Node::FindBlock() {
   intptr_t ptr = reinterpret_cast<intptr_t>(this);
@@ -459,51 +538,13 @@ GlobalHandles::NodeBlock* GlobalHandles::Node::FindBlock() {
   return block;
 }
 
-
-void GlobalHandles::Node::IncreaseBlockUses() {
-  NodeBlock* node_block = FindBlock();
-  node_block->IncreaseUses();
-  GlobalHandles* global_handles = node_block->global_handles();
-  global_handles->isolate()->counters()->global_handles()->Increment();
-  global_handles->number_of_global_handles_++;
-}
-
-
-void GlobalHandles::Node::DecreaseBlockUses() {
-  NodeBlock* node_block = FindBlock();
-  GlobalHandles* global_handles = node_block->global_handles();
-  data_.next_free = global_handles->first_free_;
-  global_handles->first_free_ = this;
-  node_block->DecreaseUses();
-  global_handles->isolate()->counters()->global_handles()->Decrement();
-  global_handles->number_of_global_handles_--;
-}
-
-
-class GlobalHandles::NodeIterator {
+class GlobalHandles::NodeIterator
+    : public NodeIteratorBase<GlobalHandles::NodeBlock> {
  public:
-  explicit NodeIterator(GlobalHandles* global_handles)
-      : block_(global_handles->first_used_block_),
-        index_(0) {}
-
-  bool done() const { return block_ == nullptr; }
-
-  Node* node() const {
-    DCHECK(!done());
-    return block_->node_at(index_);
-  }
-
-  void Advance() {
-    DCHECK(!done());
-    if (++index_ < NodeBlock::kSize) return;
-    index_ = 0;
-    block_ = block_->next_used();
-  }
+  explicit NodeIterator(GlobalHandles::NodeBlock* first_used_block)
+      : NodeIteratorBase<GlobalHandles::NodeBlock>(first_used_block) {}
 
  private:
-  NodeBlock* block_;
-  int index_;
-
   DISALLOW_COPY_AND_ASSIGN(NodeIterator);
 };
 
@@ -519,7 +560,7 @@ GlobalHandles::GlobalHandles(Isolate* isolate)
 GlobalHandles::~GlobalHandles() {
   NodeBlock* block = first_block_;
   while (block != nullptr) {
-    NodeBlock* tmp = block->next();
+    NodeBlock* tmp = static_cast<NodeBlock*>(block->next());
     delete block;
     block = tmp;
   }
@@ -528,7 +569,7 @@ GlobalHandles::~GlobalHandles() {
 
 Handle<Object> GlobalHandles::Create(Object value) {
   if (first_free_ == nullptr) {
-    first_block_ = new NodeBlock(this, first_block_);
+    first_block_ = new NodeBlock(this, first_block_, &first_used_block_);
     first_block_->PutNodesOnFreeList(&first_free_);
   }
   DCHECK_NOT_NULL(first_free_);
@@ -595,7 +636,7 @@ bool GlobalHandles::IsWeak(Address* location) {
 
 DISABLE_CFI_PERF
 void GlobalHandles::IterateWeakRootsForFinalizers(RootVisitor* v) {
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     Node* node = it.node();
     if (node->IsWeakRetainer() && node->state() == Node::PENDING) {
       DCHECK(!node->IsPhantomCallback());
@@ -610,7 +651,7 @@ void GlobalHandles::IterateWeakRootsForFinalizers(RootVisitor* v) {
 DISABLE_CFI_PERF
 void GlobalHandles::IterateWeakRootsForPhantomHandles(
     WeakSlotCallbackWithHeap should_reset_handle) {
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     Node* node = it.node();
     if (node->IsWeakRetainer() &&
         should_reset_handle(isolate()->heap(), node->location())) {
@@ -628,7 +669,7 @@ void GlobalHandles::IterateWeakRootsForPhantomHandles(
 
 void GlobalHandles::IdentifyWeakHandles(
     WeakSlotCallbackWithHeap should_reset_handle) {
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     Node* node = it.node();
     if (node->IsWeak() &&
         should_reset_handle(isolate()->heap(), node->location())) {
@@ -792,7 +833,7 @@ int GlobalHandles::PostScavengeProcessing(
 int GlobalHandles::PostMarkSweepProcessing(
     const int initial_post_gc_processing_count) {
   int freed_nodes = 0;
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     if (!it.node()->IsRetainer()) {
       // Free nodes do not have weak callbacks. Do not use them to compute
       // the freed_nodes.
@@ -930,7 +971,7 @@ int GlobalHandles::PostGarbageCollectionProcessing(
 }
 
 void GlobalHandles::IterateStrongRoots(RootVisitor* v) {
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     if (it.node()->IsStrongRetainer()) {
       v->VisitRootPointer(Root::kGlobalHandles, it.node()->label(),
                           it.node()->location());
@@ -939,7 +980,7 @@ void GlobalHandles::IterateStrongRoots(RootVisitor* v) {
 }
 
 void GlobalHandles::IterateWeakRoots(RootVisitor* v) {
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     if (it.node()->IsWeak()) {
       v->VisitRootPointer(Root::kGlobalHandles, it.node()->label(),
                           it.node()->location());
@@ -949,7 +990,7 @@ void GlobalHandles::IterateWeakRoots(RootVisitor* v) {
 
 DISABLE_CFI_PERF
 void GlobalHandles::IterateAllRoots(RootVisitor* v) {
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     if (it.node()->IsRetainer()) {
       v->VisitRootPointer(Root::kGlobalHandles, it.node()->label(),
                           it.node()->location());
@@ -991,7 +1032,7 @@ void GlobalHandles::ApplyPersistentHandleVisitor(
 DISABLE_CFI_PERF
 void GlobalHandles::IterateAllRootsWithClassIds(
     v8::PersistentHandleVisitor* visitor) {
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     if (it.node()->IsRetainer() && it.node()->has_wrapper_class_id()) {
       ApplyPersistentHandleVisitor(visitor, it.node());
     }
@@ -1026,7 +1067,7 @@ void GlobalHandles::RecordStats(HeapStats* stats) {
   *stats->pending_global_handle_count = 0;
   *stats->near_death_global_handle_count = 0;
   *stats->free_global_handle_count = 0;
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     *stats->global_handle_count += 1;
     if (it.node()->state() == Node::WEAK) {
       *stats->weak_global_handle_count += 1;
@@ -1049,7 +1090,7 @@ void GlobalHandles::PrintStats() {
   int near_death = 0;
   int destroyed = 0;
 
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     total++;
     if (it.node()->state() == Node::WEAK) weak++;
     if (it.node()->state() == Node::PENDING) pending++;
@@ -1069,7 +1110,7 @@ void GlobalHandles::PrintStats() {
 
 void GlobalHandles::Print() {
   PrintF("Global handles:\n");
-  for (NodeIterator it(this); !it.done(); it.Advance()) {
+  for (NodeIterator it(first_used_block_); !it.done(); it.Advance()) {
     PrintF("  handle %p to %p%s\n", it.node()->location().ToVoidPtr(),
            reinterpret_cast<void*>(it.node()->object()->ptr()),
            it.node()->IsWeak() ? " (weak)" : "");

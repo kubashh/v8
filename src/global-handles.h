@@ -44,6 +44,9 @@ enum WeaknessType {
 
 class GlobalHandles {
  public:
+  template <class Node>
+  friend class NodeBase;
+
   ~GlobalHandles();
 
   // Creates a new global handle that is alive until Destroy is called.
@@ -187,6 +190,7 @@ class GlobalHandles {
   class Node;
   class NodeBlock;
   class NodeIterator;
+
   class PendingPhantomCallback;
 
   explicit GlobalHandles(Isolate* isolate);
