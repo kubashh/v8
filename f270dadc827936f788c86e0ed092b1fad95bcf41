@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23274087_36295039",
+        "filename": "src/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-01-17T19:55:55Z",
+      "side": 1,
+      "message": "I was wondering how you could figure out the key even though you are not pushing the key onto this stack. Turns out you end up using the deferred key here.\n\nWhat about this example?\n\no \u003d {};\no.p \u003d {};\no.p.q \u003d {};\no.p.q.r \u003d o.p;\nJSON.stringify(o)\n\nWouldn\u0027t the error message be \"Circle starts with the property \u0027r\u0027\"? Some may argue that the circle starts at \u0027p\u0027.\n\nHow about we print the full circle, i.e. something like \"Serialization ran into a circle consisting properties \u0027p\u0027 -\u003e \u0027q\u0027 -\u003e \u0027r\u0027\"?",
+      "range": {
+        "startLine": 377,
+        "startChar": 10,
+        "endLine": 377,
+        "endChar": 26
+      },
+      "revId": "f270dadc827936f788c86e0ed092b1fad95bcf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7c77d1a_f9334db7",
+        "filename": "src/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-01-17T19:55:55Z",
+      "side": 1,
+      "message": "I think we should actually be using an ArrayList object here.",
+      "range": {
+        "startLine": 396,
+        "startChar": 2,
+        "endLine": 397,
+        "endChar": 61
+      },
+      "revId": "f270dadc827936f788c86e0ed092b1fad95bcf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
