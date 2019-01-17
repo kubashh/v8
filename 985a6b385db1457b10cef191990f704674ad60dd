@@ -34,6 +34,24 @@
       "revId": "985a6b385db1457b10cef191990f704674ad60dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6656e52e_3db7d7ab",
+        "filename": "src/utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-17T14:35:42Z",
+      "side": 1,
+      "message": "Thanks. It\u0027s even one line shorter :)",
+      "parentUuid": "6ecbe916_cc4b6fa3",
+      "revId": "985a6b385db1457b10cef191990f704674ad60dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
