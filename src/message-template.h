@@ -61,7 +61,10 @@ namespace internal {
   T(CannotFreezeArrayBufferView,                                               \
     "Cannot freeze array buffer views with elements")                          \
   T(CannotSeal, "Cannot seal")                                                 \
-  T(CircularStructure, "Converting circular structure to JSON")                \
+  T(CircularStructure, "Converting circular structure '%' to JSON")            \
+  T(CircularStructureWithKey,                                                  \
+    "Converting circular structure '%' to JSON. Circle starts with the "       \
+    "property '%'")                                                            \
   T(ConstructAbstractClass, "Abstract class % not directly constructable")     \
   T(ConstAssign, "Assignment to constant variable.")                           \
   T(ConstructorClassField, "Classes may not have a field named 'constructor'") \

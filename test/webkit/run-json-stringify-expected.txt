@@ -434,7 +434,7 @@ function (jsonObject){
         cycleTracker = "";
         return jsonObject.stringify(cyclicObject);
     }
-PASS tests[i](nativeJSON) threw exception TypeError: Converting circular structure to JSON.
+PASS tests[i](nativeJSON) threw exception TypeError: Converting circular structure 'Object' to JSON. Circle starts with the property 'self'.
 function (jsonObject){
         cycleTracker = "";
         try { jsonObject.stringify(cyclicObject); } catch(e) { cycleTracker += " -> exception" }
@@ -445,7 +445,7 @@ function (jsonObject){
         cycleTracker = "";
         return jsonObject.stringify(cyclicArray);
     }
-PASS tests[i](nativeJSON) threw exception TypeError: Converting circular structure to JSON.
+PASS tests[i](nativeJSON) threw exception TypeError: Converting circular structure 'Array' to JSON.
 function (jsonObject){
         cycleTracker = "";
         try { jsonObject.stringify(cyclicArray); } catch { cycleTracker += " -> exception" }

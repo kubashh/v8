@@ -76,10 +76,12 @@ class JsonStringifier {
 
   Result SerializeJSValue(Handle<JSValue> object);
 
-  V8_INLINE Result SerializeJSArray(Handle<JSArray> object);
-  V8_INLINE Result SerializeJSObject(Handle<JSObject> object);
+  V8_INLINE Result SerializeJSArray(Handle<JSArray> object,
+                                    MaybeHandle<String> key);
+  V8_INLINE Result SerializeJSObject(Handle<JSObject> object,
+                                     MaybeHandle<String> key);
 
-  Result SerializeJSProxy(Handle<JSProxy> object);
+  Result SerializeJSProxy(Handle<JSProxy> object, MaybeHandle<String> key);
   Result SerializeJSReceiverSlow(Handle<JSReceiver> object);
   Result SerializeArrayLikeSlow(Handle<JSReceiver> object, uint32_t start,
                                 uint32_t length);
@@ -105,7 +107,7 @@ class JsonStringifier {
   Handle<JSReceiver> CurrentHolder(Handle<Object> value,
                                    Handle<Object> inital_holder);
 
-  Result StackPush(Handle<Object> object);
+  Result StackPush(Handle<Object> object, MaybeHandle<String> key);
   void StackPop();
 
   Factory* factory() { return isolate_->factory(); }
@@ -359,7 +361,8 @@ Handle<JSReceiver> JsonStringifier::CurrentHolder(
   }
 }
 
-JsonStringifier::Result JsonStringifier::StackPush(Handle<Object> object) {
+JsonStringifier::Result JsonStringifier::StackPush(Handle<Object> object,
+                                                   MaybeHandle<String> key) {
   StackLimitCheck check(isolate_);
   if (check.HasOverflowed()) {
     isolate_->StackOverflow();
@@ -373,9 +376,19 @@ JsonStringifier::Result JsonStringifier::StackPush(Handle<Object> object) {
     for (int i = 0; i < length; i++) {
       if (elements->get(i) == *object) {
         AllowHeapAllocation allow_to_return_error;
-        Handle<Object> error =
-            factory()->NewTypeError(MessageTemplate::kCircularStructure);
-        isolate_->Throw(*error);
+        Handle<String> constructor_name =
+            JSReceiver::GetConstructorName(Handle<JSReceiver>::cast(object));
+
+        if (!key.is_null()) {
+          Handle<Object> error = factory()->NewTypeError(
+              MessageTemplate::kCircularStructureWithKey, constructor_name,
+              key.ToHandleChecked());
+          isolate_->Throw(*error);
+        } else {
+          Handle<Object> error = factory()->NewTypeError(
+              MessageTemplate::kCircularStructure, constructor_name);
+          isolate_->Throw(*error);
+        }
         return EXCEPTION;
       }
     }
@@ -441,9 +454,13 @@ JsonStringifier::Result JsonStringifier::Serialize_(Handle<Object> object,
         default:
           return UNCHANGED;
       }
-    case JS_ARRAY_TYPE:
+    case JS_ARRAY_TYPE: {
       if (deferred_string_key) SerializeDeferredKey(comma, key);
-      return SerializeJSArray(Handle<JSArray>::cast(object));
+      MaybeHandle<String> maybe_key =
+          deferred_string_key ? MaybeHandle<String>(Handle<String>::cast(key))
+                              : MaybeHandle<String>();
+      return SerializeJSArray(Handle<JSArray>::cast(object), maybe_key);
+    }
     case JS_VALUE_TYPE:
       if (deferred_string_key) SerializeDeferredKey(comma, key);
       return SerializeJSValue(Handle<JSValue>::cast(object));
@@ -459,10 +476,13 @@ JsonStringifier::Result JsonStringifier::Serialize_(Handle<Object> object,
         if (object->IsCallable()) return UNCHANGED;
         // Go to slow path for global proxy and objects requiring access checks.
         if (deferred_string_key) SerializeDeferredKey(comma, key);
+        MaybeHandle<String> maybe_key =
+            deferred_string_key ? MaybeHandle<String>(Handle<String>::cast(key))
+                                : MaybeHandle<String>();
         if (object->IsJSProxy()) {
-          return SerializeJSProxy(Handle<JSProxy>::cast(object));
+          return SerializeJSProxy(Handle<JSProxy>::cast(object), maybe_key);
         }
-        return SerializeJSObject(Handle<JSObject>::cast(object));
+        return SerializeJSObject(Handle<JSObject>::cast(object), maybe_key);
       }
   }
 
@@ -491,7 +511,7 @@ JsonStringifier::Result JsonStringifier::SerializeJSValue(
     builder_.AppendCString(raw->IsTrue(isolate_) ? "true" : "false");
   } else {
     // ES6 24.3.2.1 step 10.c, serialize as an ordinary JSObject.
-    return SerializeJSObject(object);
+    return SerializeJSObject(object, MaybeHandle<String>());
   }
   return SUCCESS;
 }
@@ -517,9 +537,9 @@ JsonStringifier::Result JsonStringifier::SerializeDouble(double number) {
 }
 
 JsonStringifier::Result JsonStringifier::SerializeJSArray(
-    Handle<JSArray> object) {
+    Handle<JSArray> object, MaybeHandle<String> key) {
   HandleScope handle_scope(isolate_);
-  Result stack_push = StackPush(object);
+  Result stack_push = StackPush(object, key);
   if (stack_push != SUCCESS) return stack_push;
   uint32_t length = 0;
   CHECK(object->length()->ToArrayLength(&length));
@@ -632,9 +652,9 @@ JsonStringifier::Result JsonStringifier::SerializeArrayLikeSlow(
 }
 
 JsonStringifier::Result JsonStringifier::SerializeJSObject(
-    Handle<JSObject> object) {
+    Handle<JSObject> object, MaybeHandle<String> key) {
   HandleScope handle_scope(isolate_);
-  Result stack_push = StackPush(object);
+  Result stack_push = StackPush(object, key);
   if (stack_push != SUCCESS) return stack_push;
 
   if (property_list_.is_null() &&
@@ -711,9 +731,9 @@ JsonStringifier::Result JsonStringifier::SerializeJSReceiverSlow(
 }
 
 JsonStringifier::Result JsonStringifier::SerializeJSProxy(
-    Handle<JSProxy> object) {
+    Handle<JSProxy> object, MaybeHandle<String> key) {
   HandleScope scope(isolate_);
-  Result stack_push = StackPush(object);
+  Result stack_push = StackPush(object, MaybeHandle<String>());
   if (stack_push != SUCCESS) return stack_push;
   Maybe<bool> is_array = Object::IsArray(object);
   if (is_array.IsNothing()) return EXCEPTION;
