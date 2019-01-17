@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2323476_71e5a0ef",
+        "filename": "src/utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-17T14:05:25Z",
+      "side": 1,
+      "message": "For me, a more natural way of writing this would have been:\nreturn offset \u003c\u003d max \u0026\u0026 length \u003c\u003d (max - offset);\nPerformance-wise, both versions should be the same. My proposed version does not rely on wrap-around, and thus could be easier to understand. WDYT?",
+      "revId": "985a6b385db1457b10cef191990f704674ad60dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
