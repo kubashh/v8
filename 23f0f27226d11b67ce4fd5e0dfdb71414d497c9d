@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bc1c10b5_ea53334c",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-17T08:19:03Z",
+      "side": 1,
+      "message": "If you have a templatized function with a universal reference (like \"template\u003ctypename T\u003e foo(T\u0026\u0026)\"), and you invoke it like \"int x; foo(x);\", then T will be inferred as \"int\u0026\".\nThe same happens at the forwarding constructors. In release builds, this reference is optimized away, but in debug builds there will be a reference to this field (kBufferSize) remaining. Hence we need to define that field somewhere.",
+      "parentUuid": "a95f02ea_778add5f",
+      "revId": "23f0f27226d11b67ce4fd5e0dfdb71414d497c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9071107b_bc2bc82a",
         "filename": "test/cctest/heap/test-heap.cc",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-01-17T08:14:14Z",
       "side": 1,
       "message": "Nice, reads much better than static_cast\u003cint\u003e",
+      "revId": "23f0f27226d11b67ce4fd5e0dfdb71414d497c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df64a377_1fbdd805",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-17T08:19:03Z",
+      "side": 1,
+      "message": "And has stronger guarantees! This will fail if sizeof(buffer) does not fit in an int.",
+      "parentUuid": "9071107b_bc2bc82a",
       "revId": "23f0f27226d11b67ce4fd5e0dfdb71414d497c9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
