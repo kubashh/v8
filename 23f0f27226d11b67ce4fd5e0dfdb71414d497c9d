@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a95f02ea_778add5f",
+        "filename": "src/builtins/builtins.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-17T08:14:14Z",
+      "side": 1,
+      "message": ":{ out of curiosity why is this needed now and not before?",
+      "revId": "23f0f27226d11b67ce4fd5e0dfdb71414d497c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9071107b_bc2bc82a",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-17T08:14:14Z",
+      "side": 1,
+      "message": "Nice, reads much better than static_cast\u003cint\u003e",
+      "revId": "23f0f27226d11b67ce4fd5e0dfdb71414d497c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
