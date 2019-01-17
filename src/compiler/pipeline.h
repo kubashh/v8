@@ -23,7 +23,9 @@ namespace wasm {
 struct FunctionBody;
 class NativeModule;
 class WasmCode;
+struct WasmCompilationResult;
 class WasmEngine;
+struct WasmModule;
 }  // namespace wasm
 
 namespace compiler {
@@ -44,12 +46,12 @@ class Pipeline : public AllStatic {
                                                     bool has_script);
 
   // Run the pipeline for the WebAssembly compilation info.
-  static wasm::WasmCode* GenerateCodeForWasmFunction(
+  static void GenerateCodeForWasmFunction(
       OptimizedCompilationInfo* info, wasm::WasmEngine* wasm_engine,
       MachineGraph* mcgraph, CallDescriptor* call_descriptor,
       SourcePositionTable* source_positions, NodeOriginTable* node_origins,
-      wasm::FunctionBody function_body, wasm::NativeModule* native_module,
-      int function_index);
+      wasm::FunctionBody function_body, const wasm::WasmModule* module,
+      int function_index, wasm::WasmCompilationResult*);
 
   // Run the pipeline on a machine graph and generate code.
   static wasm::WasmCode* GenerateCodeForWasmNativeStub(
