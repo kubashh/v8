@@ -128,10 +128,17 @@ test(function() {
 
 // kCircularStructure
 test(function() {
+  let a = [];
+  a[0] = a;
+  JSON.stringify(a);
+}, "Converting circular structure 'Array' to JSON", TypeError);
+
+// kCircularStructureWithKey
+test(function() {
   var o = {};
   o.o = o;
   JSON.stringify(o);
-}, "Converting circular structure to JSON", TypeError);
+}, "Converting circular structure 'Object' to JSON. Circle starts with the property 'o'", TypeError);
 
 // kConstructorNotFunction
 test(function() {
