@@ -73,6 +73,13 @@ inline constexpr bool IsInRange(T value, U lower_limit, U higher_limit) {
                                  static_cast<unsigned_T>(lower_limit));
 }
 
+// Checks if [offset, offset+length) is in range [0, max). Note that this check
+// works even if {offset+length} overflows the {size_t} range and wraps around.
+inline constexpr bool IsInBounds(size_t offset, size_t length, size_t max) {
+  return ((offset + length) <= max /* in bounds */) &&  // --
+         ((offset + length) >= offset /* no overflow */);
+}
+
 // X must be a power of 2.  Returns the number of trailing zeros.
 template <typename T,
           typename = typename std::enable_if<std::is_integral<T>::value>::type>
