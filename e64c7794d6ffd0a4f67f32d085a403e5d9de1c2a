@@ -104,6 +104,24 @@
       "revId": "e64c7794d6ffd0a4f67f32d085a403e5d9de1c2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2786375_de041589",
+        "filename": "src/vector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-01-18T15:29:41Z",
+      "side": 1,
+      "message": "Yeah, understood. It\u0027s still an unfortunate design choice in C++ IMO, but c\u0027est la vie.",
+      "parentUuid": "7032512e_63bdd257",
+      "revId": "e64c7794d6ffd0a4f67f32d085a403e5d9de1c2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
