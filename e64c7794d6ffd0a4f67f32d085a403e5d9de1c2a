@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "32aa9127_973b00aa",
+        "filename": "src/compiler/pipeline.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-18T08:21:53Z",
+      "side": 1,
+      "message": "Ack, done. Seems like there are more refactorings needed to reach that state. And maybe it also makes sense to split the OptimizedCompilationInfo into an Input and an Output part, or is this a struct which is manipulated or iteratively created by multiple components?",
+      "parentUuid": "7cae1877_e355480d",
+      "revId": "e64c7794d6ffd0a4f67f32d085a403e5d9de1c2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8b20e6e_bf585e35",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 6
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "7705859b_d54fc572",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 5995,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-18T08:21:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f8b20e6e_bf585e35",
+      "revId": "e64c7794d6ffd0a4f67f32d085a403e5d9de1c2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1343313_943b42fb",
         "filename": "src/vector.h",
         "patchSetId": 6
@@ -50,6 +86,24 @@
       "revId": "e64c7794d6ffd0a4f67f32d085a403e5d9de1c2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7032512e_63bdd257",
+        "filename": "src/vector.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-18T08:21:53Z",
+      "side": 1,
+      "message": "Technically, different instantiations are completely separate things. They could have completely different fields and logic, so (as often) this really makes sense ;)",
+      "parentUuid": "c1343313_943b42fb",
+      "revId": "e64c7794d6ffd0a4f67f32d085a403e5d9de1c2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
