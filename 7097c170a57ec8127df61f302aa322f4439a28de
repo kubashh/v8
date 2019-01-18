@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fca20c9b_7c4644af",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-01-18T23:08:59Z",
+      "side": 1,
+      "message": "This maybe slightly different than what the spec intends, i.e. the ToInteger coercion in ToNonWrappingUint32. It looks to me like the other Set/Grow methods are doing this wrong and fixing EnforceUint32 would fix all of it? Will probably need a change to the tests as well.",
+      "revId": "7097c170a57ec8127df61f302aa322f4439a28de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c45c111c_0645cbd8",
+        "filename": "test/mjsunit/wasm/js-api.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-01-18T23:08:59Z",
+      "side": 1,
+      "message": "I\u0027m not sure if changing these to TypeError is correct, the Spec for WebAssembly.Table.prototype.set uses ToNonWrappingUint32, which says that if i is negative or greater than UINT32_MAX, a RangeError should be thrown. \nhttps://github.com/WebAssembly/design/blob/master/JS.md#tononwrappinguint32",
+      "revId": "7097c170a57ec8127df61f302aa322f4439a28de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
