@@ -16,6 +16,24 @@
       "revId": "ce35cf27527cd43169ccb1ff9e8455dac2471b6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15bdccb2_de1881b1",
+        "filename": "src/wasm/wasm-js.cc",
+        "patchSetId": 19
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2019-01-18T10:39:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fbdd908_47b0f4ad",
+      "revId": "ce35cf27527cd43169ccb1ff9e8455dac2471b6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
