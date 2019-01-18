@@ -341,6 +341,7 @@ class V8_EXPORT_PRIVATE NativeModule final {
   bool lazy_compile_frozen() const { return lazy_compile_frozen_; }
   Vector<const byte> wire_bytes() const { return wire_bytes_.as_vector(); }
   const WasmModule* module() const { return module_.get(); }
+  std::shared_ptr<const WasmModule> shared_module() const { return module_; }
   size_t committed_code_space() const { return committed_code_space_.load(); }
 
   void SetWireBytes(OwnedVector<const byte> wire_bytes);
@@ -423,8 +424,8 @@ class V8_EXPORT_PRIVATE NativeModule final {
   // to be consistent across asynchronous compilations later.
   const WasmFeatures enabled_features_;
 
-  // TODO(clemensh): Make this a unique_ptr (requires refactoring
-  // AsyncCompileJob).
+  // The decoded module, stored in a shared_ptr such that background compile
+  // tasks can keep this alive.
   std::shared_ptr<const WasmModule> module_;
 
   OwnedVector<const byte> wire_bytes_;

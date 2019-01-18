@@ -1961,14 +1961,13 @@ WasmCompilationResult LiftoffCompilationUnit::ExecuteCompilation(
   }
 
   Zone zone(wasm_unit_->wasm_engine_->allocator(), "LiftoffCompilationZone");
-  const WasmModule* module = env ? env->module : nullptr;
   auto call_descriptor = compiler::GetWasmCallDescriptor(&zone, func_body.sig);
   base::Optional<TimedHistogramScope> liftoff_compile_time_scope(
       base::in_place, counters->liftoff_compile_time());
   std::unique_ptr<wasm::WasmInstructionBuffer> instruction_buffer =
       wasm::WasmInstructionBuffer::New();
   WasmFullDecoder<Decoder::kValidate, LiftoffCompiler> decoder(
-      &zone, module, env->enabled_features, detected, func_body,
+      &zone, env->module.get(), env->enabled_features, detected, func_body,
       call_descriptor, env, &zone, instruction_buffer->CreateView());
   decoder.Decode();
   liftoff_compile_time_scope.reset();

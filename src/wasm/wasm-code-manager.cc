@@ -431,7 +431,7 @@ void NativeModule::LogWasmCodes(Isolate* isolate) {
 }
 
 CompilationEnv NativeModule::CreateCompilationEnv() const {
-  return {module(), use_trap_handler_, kRuntimeExceptionSupport,
+  return {module_, use_trap_handler_, kRuntimeExceptionSupport,
           enabled_features_};
 }
 
