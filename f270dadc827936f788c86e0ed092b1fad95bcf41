@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3f747dec_55965170",
+        "filename": "src/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-01-18T06:54:30Z",
+      "side": 1,
+      "message": "Yes, it would print the property \u0027r\u0027 in the example above. The error message is misleading, my intention was to name the property that \"closes\" the circle, i.e. the back-edge.\n\nWe could print the full circle, but then we also need to push the keys onto the stack. We would also need some anonymous name if no key is present for an element in the circle (for Arrays we might be able to use the index?).",
+      "parentUuid": "23274087_36295039",
+      "range": {
+        "startLine": 377,
+        "startChar": 10,
+        "endLine": 377,
+        "endChar": 26
+      },
+      "revId": "f270dadc827936f788c86e0ed092b1fad95bcf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7c77d1a_f9334db7",
         "filename": "src/json-stringifier.cc",
         "patchSetId": 2
