@@ -260,7 +260,7 @@ class V8_EXPORT_PRIVATE AssemblerBase : public Malloced {
     }
   }
 
-  static const int kMinimalBufferSize = 4*KB;
+  static const int kMinimalBufferSize = 4 * KB;
 
   static void FlushICache(void* start, size_t size);
   static void FlushICache(Address start, size_t size) {
