@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a37cd177_8e6de982",
+        "filename": "src/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-01-18T07:23:05Z",
+      "side": 1,
+      "message": "I think we have a few different options:\n1) Reword the error message so that it is not as misleading, e.g. something like \"The circle closes with property name \u0027r\u0027\".\n2) Push keys as well.\n3) The keys are already on the stack. We could use a special return value to indicate a circular structure, and keep a counter on how many recursions we need to step out, and during step out we collect the keys. But that sounds over engineered.\n\nFor 2-4 we need to make sure though that the string for the chain is limited. So we may need to format it like \"a-\u003eb-\u003ec-\u003e...-\u003ey-\u003ez\".\n\nFor Arrays we should indeed use array indices.\n\nI\u0027m slightly leaning towards 2, since that may provide more useful information, and I imagine that the performance impact is negligible. You could test that on Kraken benchmark\u0027s json-stringify-tinderbox.",
+      "parentUuid": "3f747dec_55965170",
+      "range": {
+        "startLine": 377,
+        "startChar": 10,
+        "endLine": 377,
+        "endChar": 26
+      },
+      "revId": "f270dadc827936f788c86e0ed092b1fad95bcf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e7c77d1a_f9334db7",
         "filename": "src/json-stringifier.cc",
         "patchSetId": 2
@@ -60,6 +84,30 @@
       "writtenOn": "2019-01-17T19:55:55Z",
       "side": 1,
       "message": "I think we should actually be using an ArrayList object here.",
+      "range": {
+        "startLine": 396,
+        "startChar": 2,
+        "endLine": 397,
+        "endChar": 61
+      },
+      "revId": "f270dadc827936f788c86e0ed092b1fad95bcf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a2954ff_5fcf957f",
+        "filename": "src/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-01-18T07:23:05Z",
+      "side": 1,
+      "message": "On another thought, why don\u0027t we just use a std::vector of Handles.",
+      "parentUuid": "e7c77d1a_f9334db7",
       "range": {
         "startLine": 396,
         "startChar": 2,
