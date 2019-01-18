@@ -86,7 +86,8 @@ class PreparseDataBuilder : public ZoneObject,
  public:
   // Create a PreparseDataBuilder object which will collect data as we
   // parse.
-  explicit PreparseDataBuilder(Zone* zone, PreparseDataBuilder* parent_builder);
+  explicit PreparseDataBuilder(Zone* zone, PreparseDataBuilder* parent_builder,
+                               std::vector<void*>* children_buffer);
 
   PreparseDataBuilder* parent() const { return parent_; }
 
@@ -188,6 +189,9 @@ class PreparseDataBuilder : public ZoneObject,
   Handle<PreparseData> Serialize(Isolate* isolate);
   ZonePreparseData* Serialize(Zone* zone);
 
+  void FinalizeChildren(Zone* zone);
+  void AddChild(PreparseDataBuilder* child);
+
   void SaveDataForScope(Scope* scope);
   void SaveDataForVariable(Variable* var);
   void SaveDataForInnerScopes(Scope* scope);
@@ -197,7 +201,10 @@ class PreparseDataBuilder : public ZoneObject,
 
   PreparseDataBuilder* parent_;
   ByteData byte_data_;
-  ZoneChunkList<PreparseDataBuilder*> children_;
+  union {
+    ScopedPtrList<PreparseDataBuilder> children_buffer_;
+    Vector<PreparseDataBuilder*> children_;
+  };
 
   DeclarationScope* function_scope_;
   int num_inner_functions_;
@@ -206,6 +213,10 @@ class PreparseDataBuilder : public ZoneObject,
   // Whether we've given up producing the data for this function.
   bool bailed_out_ : 1;
   bool has_data_ : 1;
+
+#ifdef DEBUG
+  bool finalized_children_ = false;
+#endif
 
   DISALLOW_COPY_AND_ASSIGN(PreparseDataBuilder);
 };
