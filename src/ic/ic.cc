@@ -1404,8 +1404,7 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
   if (MigrateDeprecated(object)) {
     Handle<Object> result;
     ASSIGN_RETURN_ON_EXCEPTION(
-        isolate(), result,
-        Object::SetProperty(isolate(), object, name, value, language_mode()),
+        isolate(), result, Object::SetProperty(isolate(), object, name, value),
         Object);
     return result;
   }
@@ -1445,8 +1444,7 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
   }
   if (use_ic) UpdateCaches(&it, value, store_origin);
 
-  MAYBE_RETURN_NULL(
-      Object::SetProperty(&it, value, language_mode(), store_origin));
+  MAYBE_RETURN_NULL(Object::SetProperty(&it, value, store_origin));
   return value;
 }
 
@@ -2010,7 +2008,7 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
     ASSIGN_RETURN_ON_EXCEPTION(
         isolate(), result,
         Runtime::SetObjectProperty(isolate(), object, key, value,
-                                   language_mode(), StoreOrigin::kMaybeKeyed),
+                                   StoreOrigin::kMaybeKeyed),
         Object);
     return result;
   }
@@ -2085,7 +2083,7 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
       Handle<JSArray>::cast(object)->elements()->IsCowArray();
   ASSIGN_RETURN_ON_EXCEPTION(
       isolate(), store_handle,
-      Runtime::SetObjectProperty(isolate(), object, key, value, language_mode(),
+      Runtime::SetObjectProperty(isolate(), object, key, value,
                                  StoreOrigin::kMaybeKeyed),
       Object);
 
@@ -2178,20 +2176,6 @@ void StoreInArrayLiteralIC::Store(Handle<JSArray> array, Handle<Object> index,
 // Static IC stub generators.
 //
 //
-namespace {
-
-// TODO(8580): Compute the language mode lazily to avoid the expensive
-// computation of language mode here.
-LanguageMode GetLanguageMode(Handle<FeedbackVector> vector, Context context) {
-  LanguageMode language_mode = vector->shared_function_info()->language_mode();
-  if (context->scope_info()->language_mode() > language_mode) {
-    return context->scope_info()->language_mode();
-  }
-  return language_mode;
-}
-
-}  // namespace
-
 RUNTIME_FUNCTION(Runtime_LoadIC_Miss) {
   HandleScope scope(isolate);
   DCHECK_EQ(4, args.length());
@@ -2342,20 +2326,19 @@ RUNTIME_FUNCTION(Runtime_StoreIC_Miss) {
 
   FeedbackSlot vector_slot = FeedbackVector::ToSlot(slot->value());
   FeedbackSlotKind kind = vector->GetKind(vector_slot);
-  LanguageMode language_mode = GetLanguageMode(vector, isolate->context());
   if (IsStoreICKind(kind) || IsStoreOwnICKind(kind)) {
-    StoreIC ic(isolate, vector, vector_slot, kind, language_mode);
+    StoreIC ic(isolate, vector, vector_slot, kind);
     ic.UpdateState(receiver, key);
     RETURN_RESULT_OR_FAILURE(isolate, ic.Store(receiver, key, value));
   } else if (IsStoreGlobalICKind(kind)) {
     DCHECK_EQ(isolate->native_context()->global_proxy(), *receiver);
     receiver = isolate->global_object();
-    StoreGlobalIC ic(isolate, vector, vector_slot, kind, language_mode);
+    StoreGlobalIC ic(isolate, vector, vector_slot, kind);
     ic.UpdateState(receiver, key);
     RETURN_RESULT_OR_FAILURE(isolate, ic.Store(key, value));
   } else {
     DCHECK(IsKeyedStoreICKind(kind));
-    KeyedStoreIC ic(isolate, vector, vector_slot, kind, language_mode);
+    KeyedStoreIC ic(isolate, vector, vector_slot, kind);
     ic.UpdateState(receiver, key);
     RETURN_RESULT_OR_FAILURE(isolate, ic.Store(receiver, key, value));
   }
@@ -2363,24 +2346,19 @@ RUNTIME_FUNCTION(Runtime_StoreIC_Miss) {
 
 RUNTIME_FUNCTION(Runtime_StoreICNoFeedback_Miss) {
   HandleScope scope(isolate);
-  DCHECK_EQ(5, args.length());
+  DCHECK_EQ(4, args.length());
   Handle<Object> value = args.at(0);
   Handle<Object> receiver = args.at(1);
   Handle<Name> key = args.at<Name>(2);
-  CONVERT_LANGUAGE_MODE_ARG_CHECKED(language_mode, 3);
-  CONVERT_INT32_ARG_CHECKED(is_own_property_value, 4);
+  CONVERT_INT32_ARG_CHECKED(is_own_property_value, 3);
   NamedPropertyType property_type =
       static_cast<NamedPropertyType>(is_own_property_value);
 
-  FeedbackSlotKind kind = (language_mode == LanguageMode::kStrict)
-                              ? FeedbackSlotKind::kStoreNamedStrict
-                              : FeedbackSlotKind::kStoreNamedSloppy;
+  FeedbackSlotKind kind = FeedbackSlotKind::kStoreNamedStrict;
   if (property_type == NamedPropertyType::kOwn) {
-    language_mode = LanguageMode::kStrict;
     kind = FeedbackSlotKind::kStoreOwnNamed;
   }
-  StoreIC ic(isolate, Handle<FeedbackVector>(), FeedbackSlot(), kind,
-             language_mode);
+  StoreIC ic(isolate, Handle<FeedbackVector>(), FeedbackSlot(), kind);
   RETURN_RESULT_OR_FAILURE(isolate, ic.Store(receiver, key, value));
 }
 
@@ -2395,8 +2373,7 @@ RUNTIME_FUNCTION(Runtime_StoreGlobalIC_Miss) {
 
   FeedbackSlot vector_slot = FeedbackVector::ToSlot(slot->value());
   FeedbackSlotKind kind = vector->GetKind(vector_slot);
-  LanguageMode language_mode = GetLanguageMode(vector, isolate->context());
-  StoreGlobalIC ic(isolate, vector, vector_slot, kind, language_mode);
+  StoreGlobalIC ic(isolate, vector, vector_slot, kind);
   Handle<JSGlobalObject> global = isolate->global_object();
   ic.UpdateState(global, key);
   RETURN_RESULT_OR_FAILURE(isolate, ic.Store(key, value));
@@ -2404,31 +2381,29 @@ RUNTIME_FUNCTION(Runtime_StoreGlobalIC_Miss) {
 
 RUNTIME_FUNCTION(Runtime_StoreGlobalICNoFeedback_Miss) {
   HandleScope scope(isolate);
-  DCHECK_EQ(3, args.length());
+  DCHECK_EQ(2, args.length());
   // Runtime functions don't follow the IC's calling convention.
   Handle<Object> value = args.at(0);
   Handle<Name> key = args.at<Name>(1);
-  CONVERT_LANGUAGE_MODE_ARG_CHECKED(language_mode, 2);
 
-  FeedbackSlotKind kind = (language_mode == LanguageMode::kStrict)
-                              ? FeedbackSlotKind::kStoreGlobalStrict
-                              : FeedbackSlotKind::kStoreGlobalSloppy;
-  StoreGlobalIC ic(isolate, Handle<FeedbackVector>(), FeedbackSlot(), kind,
-                   language_mode);
+  StoreGlobalIC ic(isolate, Handle<FeedbackVector>(), FeedbackSlot(),
+                   FeedbackSlotKind::kStoreGlobalStrict);
   RETURN_RESULT_OR_FAILURE(isolate, ic.Store(key, value));
 }
 
+// TODO(mythria): Remove Feedback vector and slot. Since they are not used apart
+// from the DCHECK.
 RUNTIME_FUNCTION(Runtime_StoreGlobalIC_Slow) {
   HandleScope scope(isolate);
   DCHECK_EQ(5, args.length());
   // Runtime functions don't follow the IC's calling convention.
   Handle<Object> value = args.at(0);
-  Handle<FeedbackVector> vector = args.at<FeedbackVector>(2);
   CONVERT_ARG_HANDLE_CHECKED(String, name, 4);
 
 #ifdef DEBUG
   {
     Handle<Smi> slot = args.at<Smi>(1);
+    Handle<FeedbackVector> vector = args.at<FeedbackVector>(2);
     FeedbackSlot vector_slot = FeedbackVector::ToSlot(slot->value());
     FeedbackSlotKind slot_kind = vector->GetKind(vector_slot);
     DCHECK(IsStoreGlobalICKind(slot_kind));
@@ -2464,11 +2439,9 @@ RUNTIME_FUNCTION(Runtime_StoreGlobalIC_Slow) {
     return *value;
   }
 
-  LanguageMode language_mode = GetLanguageMode(vector, isolate->context());
   RETURN_RESULT_OR_FAILURE(
-      isolate,
-      Runtime::SetObjectProperty(isolate, global, name, value, language_mode,
-                                 StoreOrigin::kMaybeKeyed));
+      isolate, Runtime::SetObjectProperty(isolate, global, name, value,
+                                          StoreOrigin::kMaybeKeyed));
 }
 
 RUNTIME_FUNCTION(Runtime_KeyedStoreIC_Miss) {
@@ -2481,14 +2454,13 @@ RUNTIME_FUNCTION(Runtime_KeyedStoreIC_Miss) {
   Handle<Object> receiver = args.at(3);
   Handle<Object> key = args.at(4);
 
-  LanguageMode language_mode = GetLanguageMode(vector, isolate->context());
   FeedbackSlot vector_slot = FeedbackVector::ToSlot(slot->value());
   FeedbackSlotKind kind = vector->GetKind(vector_slot);
 
   // The elements store stubs miss into this function, but they are shared by
   // different ICs.
   if (IsKeyedStoreICKind(kind)) {
-    KeyedStoreIC ic(isolate, vector, vector_slot, kind, language_mode);
+    KeyedStoreIC ic(isolate, vector, vector_slot, kind);
     ic.UpdateState(receiver, key);
     RETURN_RESULT_OR_FAILURE(isolate, ic.Store(receiver, key, value));
   } else {
@@ -2504,18 +2476,16 @@ RUNTIME_FUNCTION(Runtime_KeyedStoreIC_Miss) {
 
 RUNTIME_FUNCTION(Runtime_KeyedStoreICNoFeedback_Miss) {
   HandleScope scope(isolate);
-  DCHECK_EQ(4, args.length());
+  DCHECK_EQ(3, args.length());
   // Runtime functions don't follow the IC's calling convention.
   Handle<Object> value = args.at(0);
   Handle<Object> receiver = args.at(1);
   Handle<Object> key = args.at(2);
-  CONVERT_LANGUAGE_MODE_ARG_CHECKED(language_mode, 3);
 
-  FeedbackSlotKind kind = (language_mode == LanguageMode::kStrict)
-                              ? FeedbackSlotKind::kStoreKeyedStrict
-                              : FeedbackSlotKind::kStoreKeyedSloppy;
-  KeyedStoreIC ic(isolate, Handle<FeedbackVector>(), FeedbackSlot(), kind,
-                  language_mode);
+  // TODO(mythria): Replace StoreKeyedStrict and StoreKeyedSloppy with
+  // StoreKeyed.
+  KeyedStoreIC ic(isolate, Handle<FeedbackVector>(), FeedbackSlot(),
+                  FeedbackSlotKind::kStoreKeyedStrict);
   RETURN_RESULT_OR_FAILURE(isolate, ic.Store(receiver, key, value));
 }
 
@@ -2541,19 +2511,17 @@ RUNTIME_FUNCTION(Runtime_StoreInArrayLiteralIC_Miss) {
   return *value;
 }
 
+// TODO(mythria): We don't need feedback and slot here. Remove those arguments.
 RUNTIME_FUNCTION(Runtime_KeyedStoreIC_Slow) {
   HandleScope scope(isolate);
   DCHECK_EQ(5, args.length());
   // Runtime functions don't follow the IC's calling convention.
   Handle<Object> value = args.at(0);
-  Handle<FeedbackVector> vector = args.at<FeedbackVector>(2);
   Handle<Object> object = args.at(3);
   Handle<Object> key = args.at(4);
-  LanguageMode language_mode = GetLanguageMode(vector, isolate->context());
   RETURN_RESULT_OR_FAILURE(
-      isolate,
-      Runtime::SetObjectProperty(isolate, object, key, value, language_mode,
-                                 StoreOrigin::kMaybeKeyed));
+      isolate, Runtime::SetObjectProperty(isolate, object, key, value,
+                                          StoreOrigin::kMaybeKeyed));
 }
 
 RUNTIME_FUNCTION(Runtime_StoreInArrayLiteralIC_Slow) {
@@ -2590,11 +2558,9 @@ RUNTIME_FUNCTION(Runtime_ElementsTransitionAndStoreIC_Miss) {
     return *value;
   } else {
     DCHECK(IsKeyedStoreICKind(kind) || IsStoreICKind(kind));
-    LanguageMode language_mode = GetLanguageMode(vector, isolate->context());
     RETURN_RESULT_OR_FAILURE(
-        isolate,
-        Runtime::SetObjectProperty(isolate, object, key, value, language_mode,
-                                   StoreOrigin::kMaybeKeyed));
+        isolate, Runtime::SetObjectProperty(isolate, object, key, value,
+                                            StoreOrigin::kMaybeKeyed));
   }
 }
 
@@ -2736,20 +2702,17 @@ RUNTIME_FUNCTION(Runtime_StoreCallbackProperty) {
   Handle<AccessorInfo> info = args.at<AccessorInfo>(2);
   Handle<Name> name = args.at<Name>(3);
   Handle<Object> value = args.at(4);
-  CONVERT_LANGUAGE_MODE_ARG_CHECKED(language_mode, 5);
   HandleScope scope(isolate);
 
   if (V8_UNLIKELY(FLAG_runtime_stats)) {
     RETURN_RESULT_OR_FAILURE(
-        isolate,
-        Runtime::SetObjectProperty(isolate, receiver, name, value,
-                                   language_mode, StoreOrigin::kMaybeKeyed));
+        isolate, Runtime::SetObjectProperty(isolate, receiver, name, value,
+                                            StoreOrigin::kMaybeKeyed));
   }
 
   DCHECK(info->IsCompatibleReceiver(*receiver));
 
-  ShouldThrow should_throw =
-      is_sloppy(language_mode) ? kDontThrow : kThrowOnError;
+  ShouldThrow should_throw = GetShouldThrow(isolate, Nothing<LanguageMode>());
   PropertyCallbackArguments arguments(isolate, info->data(), *receiver, *holder,
                                       should_throw);
   arguments.CallAccessorSetter(info, name, value);
@@ -2861,7 +2824,6 @@ RUNTIME_FUNCTION(Runtime_StorePropertyWithInterceptor) {
   Handle<JSObject> receiver = args.at<JSObject>(3);
   Handle<Name> name = args.at<Name>(4);
   FeedbackSlot vector_slot = FeedbackVector::ToSlot(slot->value());
-  LanguageMode language_mode = GetLanguageMode(vector, isolate->context());
 
   // TODO(ishell): Cache interceptor_holder in the store handler like we do
   // for LoadHandler::kInterceptor case.
@@ -2894,9 +2856,8 @@ RUNTIME_FUNCTION(Runtime_StorePropertyWithInterceptor) {
   DCHECK_EQ(LookupIterator::INTERCEPTOR, it.state());
   it.Next();
 
-  MAYBE_RETURN(
-      Object::SetProperty(&it, value, language_mode, StoreOrigin::kNamed),
-      ReadOnlyRoots(isolate).exception());
+  MAYBE_RETURN(Object::SetProperty(&it, value, StoreOrigin::kNamed),
+               ReadOnlyRoots(isolate).exception());
   return *value;
 }
 
