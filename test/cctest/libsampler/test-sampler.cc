@@ -73,7 +73,6 @@ static void RunSampler(v8::Local<v8::Context> env,
                        v8::Local<v8::Value> argv[], int argc,
                        unsigned min_js_samples = 0,
                        unsigned min_external_samples = 0) {
-  Sampler::SetUp();
   TestSampler* sampler = new TestSampler(env->GetIsolate());
   TestSamplingThread* thread = new TestSamplingThread(sampler);
   sampler->IncreaseProfilingDepth();
@@ -89,7 +88,6 @@ static void RunSampler(v8::Local<v8::Context> env,
   thread->Join();
   delete thread;
   delete sampler;
-  Sampler::TearDown();
 }
 
 }  // namespace
