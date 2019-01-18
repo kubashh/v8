@@ -533,16 +533,7 @@ void Sampler::TearDown() {
 }
 
 Sampler::Sampler(Isolate* isolate)
-    : is_counting_samples_(false),
-      js_sample_count_(0),
-      external_sample_count_(0),
-      isolate_(isolate),
-      profiling_(false),
-      has_processing_thread_(false),
-      active_(false),
-      registered_(false) {
-  data_ = new PlatformData;
-}
+    : isolate_(isolate), data_(base::make_unique<PlatformData>()) {}
 
 void Sampler::UnregisterIfRegistered() {
 #if defined(USE_SIGNALS)
@@ -556,7 +547,6 @@ void Sampler::UnregisterIfRegistered() {
 Sampler::~Sampler() {
   DCHECK(!IsActive());
   DCHECK(!IsRegistered());
-  delete data_;
 }
 
 void Sampler::Start() {
@@ -579,7 +569,7 @@ void Sampler::Stop() {
 
 
 void Sampler::IncreaseProfilingDepth() {
-  base::Relaxed_AtomicIncrement(&profiling_, 1);
+  profiling_++;
 #if defined(USE_SIGNALS)
   SignalHandler::IncreaseSamplerCount();
 #endif
@@ -590,7 +580,7 @@ void Sampler::DecreaseProfilingDepth() {
 #if defined(USE_SIGNALS)
   SignalHandler::DecreaseSamplerCount();
 #endif
-  base::Relaxed_AtomicIncrement(&profiling_, -1);
+  profiling_--;
 }
 
 
