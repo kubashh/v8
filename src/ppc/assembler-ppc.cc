@@ -489,9 +489,8 @@ void Assembler::target_at_put(int pos, int target_pos, bool* is_branch) {
       // pointer in a register.
       Register dst = Register::from_code(instr_at(pos + kInstrSize));
       int32_t offset = target_pos + (Code::kHeaderSize - kHeapObjectTag);
-      PatchingAssembler patcher(options(),
-                                reinterpret_cast<byte*>(buffer_start_ + pos),
-                                2);
+      PatchingAssembler patcher(
+          options(), reinterpret_cast<byte*>(buffer_start_ + pos), 2);
       patcher.bitwise_mov32(dst, offset);
       break;
     }

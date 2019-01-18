@@ -122,7 +122,6 @@ RegExpMacroAssemblerPPC::RegExpMacroAssemblerPPC(Isolate* isolate, Zone* zone,
   __ bind(&start_label_);  // And then continue from here.
 }
 
-
 RegExpMacroAssemblerPPC::~RegExpMacroAssemblerPPC() {
   delete masm_;
   // Unuse labels in case we throw away the assembler without calling GetCode.
