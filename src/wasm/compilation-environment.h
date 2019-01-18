@@ -29,8 +29,8 @@ enum LowerSimd : bool { kLowerSimd = true, kNoLowerSimd = false };
 // The {CompilationEnv} encapsulates the module data that is used during
 // compilation. CompilationEnvs are shareable across multiple compilations.
 struct CompilationEnv {
-  // A pointer to the decoded module's static representation.
-  const WasmModule* const module;
+  // A shared pointer to the decoded module's static representation.
+  std::shared_ptr<const WasmModule> const module;
 
   // True if trap handling should be used in compiled code, rather than
   // compiling in bounds checks for each memory access.
@@ -54,12 +54,12 @@ struct CompilationEnv {
 
   const LowerSimd lower_simd;
 
-  constexpr CompilationEnv(const WasmModule* module,
-                           UseTrapHandler use_trap_handler,
-                           RuntimeExceptionSupport runtime_exception_support,
-                           const WasmFeatures& enabled_features,
-                           LowerSimd lower_simd = kNoLowerSimd)
-      : module(module),
+  CompilationEnv(std::shared_ptr<const WasmModule> shared_module,
+                 UseTrapHandler use_trap_handler,
+                 RuntimeExceptionSupport runtime_exception_support,
+                 const WasmFeatures& enabled_features,
+                 LowerSimd lower_simd = kNoLowerSimd)
+      : module(std::move(shared_module)),
         use_trap_handler(use_trap_handler),
         runtime_exception_support(runtime_exception_support),
         min_memory_size(module ? module->initial_pages * uint64_t{kWasmPageSize}

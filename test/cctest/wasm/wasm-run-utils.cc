@@ -19,7 +19,6 @@ TestingModuleBuilder::TestingModuleBuilder(
     Zone* zone, ManuallyImportedJSFunction* maybe_import, ExecutionTier tier,
     RuntimeExceptionSupport exception_support, LowerSimd lower_simd)
     : test_module_(std::make_shared<WasmModule>()),
-      test_module_ptr_(test_module_.get()),
       isolate_(CcTest::InitIsolateOnce()),
       enabled_features_(WasmFeaturesFromIsolate(isolate_)),
       execution_tier_(tier),
@@ -189,7 +188,7 @@ uint32_t TestingModuleBuilder::AddBytes(Vector<const byte> bytes) {
 
 CompilationEnv TestingModuleBuilder::CreateCompilationEnv() {
   return {
-      test_module_ptr_,
+      test_module_,
       trap_handler::IsTrapHandlerEnabled() ? kUseTrapHandler : kNoTrapHandler,
       runtime_exception_support_, enabled_features_, lower_simd()};
 }

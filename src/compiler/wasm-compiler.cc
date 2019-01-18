@@ -5647,7 +5647,7 @@ wasm::WasmCode* CompileWasmMathIntrinsic(wasm::WasmEngine* wasm_engine,
           InstructionSelector::AlignmentRequirements()));
 
   wasm::CompilationEnv env(
-      native_module->module(), wasm::UseTrapHandler::kNoTrapHandler,
+      native_module->shared_module(), wasm::UseTrapHandler::kNoTrapHandler,
       wasm::RuntimeExceptionSupport::kNoRuntimeExceptionSupport,
       wasm::kAllWasmFeatures, wasm::LowerSimd::kNoLowerSimd);
 
@@ -5870,8 +5870,8 @@ bool TurbofanWasmCompilationUnit::BuildGraphForWasmFunction(
   WasmGraphBuilder builder(env, mcgraph->zone(), mcgraph, func_body.sig,
                            source_positions);
   wasm::VoidResult graph_construction_result = wasm::BuildTFGraph(
-      wasm_unit_->wasm_engine_->allocator(), env->enabled_features, env->module,
-      &builder, detected, func_body, node_origins);
+      wasm_unit_->wasm_engine_->allocator(), env->enabled_features,
+      env->module.get(), &builder, detected, func_body, node_origins);
   if (graph_construction_result.failed()) {
     if (FLAG_trace_wasm_compiler) {
       StdoutStream{} << "Compilation failed: "
@@ -5894,7 +5894,7 @@ bool TurbofanWasmCompilationUnit::BuildGraphForWasmFunction(
   if (wasm_unit_->func_index_ >= FLAG_trace_wasm_ast_start &&
       wasm_unit_->func_index_ < FLAG_trace_wasm_ast_end) {
     PrintRawWasmCode(wasm_unit_->wasm_engine_->allocator(), func_body,
-                     env->module, wasm::kPrintLocals);
+                     env->module.get(), wasm::kPrintLocals);
   }
   if (FLAG_trace_wasm_decode_time) {
     *decode_ms = decode_timer.Elapsed().InMillisecondsF();
@@ -5975,7 +5975,7 @@ wasm::WasmCompilationResult TurbofanWasmCompilationUnit::ExecuteCompilation(
 
   Pipeline::GenerateCodeForWasmFunction(
       &info, wasm_unit_->wasm_engine_, mcgraph, call_descriptor,
-      source_positions, node_origins, func_body, env->module,
+      source_positions, node_origins, func_body, env->module.get(),
       wasm_unit_->func_index_);
 
   if (FLAG_trace_wasm_decode_time) {
