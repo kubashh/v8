@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "073aaba2_73af6f72",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 13
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-01-18T12:06:02Z",
+      "side": 1,
+      "message": "What about reserving when we allocate the PreParser?",
+      "revId": "239f2dabcd1ca3aebb314b3e17d09b62e1f8f8b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "465dc476_74fa0ca9",
+        "filename": "src/parsing/preparse-data.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-01-18T12:06:02Z",
+      "side": 1,
+      "message": "leftover printf",
+      "revId": "239f2dabcd1ca3aebb314b3e17d09b62e1f8f8b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
