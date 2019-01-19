@@ -400,19 +400,26 @@ BUILTIN(NumberFormatInternalFormatNumber) {
   // 3. If value is not provided, let value be undefined.
   Handle<Object> value = args.atOrUndefined(isolate, 1);
 
-  // 4. Let x be ? ToNumber(value).
-  Handle<Object> number_obj;
-  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, number_obj,
-                                     Object::ToNumber(isolate, value));
+  // 4. Let x be ? ToNumeric(value).
+  Handle<Object> numeric_obj;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, numeric_obj,
+                                     Object::ToNumeric(isolate, value));
 
-  double number = number_obj->Number();
   icu::NumberFormat* icu_number_format =
       number_format->icu_number_format()->raw();
   CHECK_NOT_NULL(icu_number_format);
 
-  // Return FormatNumber(nf, x).
-  RETURN_RESULT_OR_FAILURE(isolate, JSNumberFormat::FormatNumber(
-                                        isolate, *icu_number_format, number));
+  if (numeric_obj->IsBigInt()) {
+    Handle<BigInt> big_int = Handle<BigInt>::cast(numeric_obj);
+    RETURN_RESULT_OR_FAILURE(
+        isolate,
+        JSNumberFormat::FormatBigInt(isolate, *icu_number_format, big_int));
+  } else {
+    double number = numeric_obj->Number();
+    // Return FormatNumber(nf, x).
+    RETURN_RESULT_OR_FAILURE(isolate, JSNumberFormat::FormatNumber(
+                                          isolate, *icu_number_format, number));
+  }
 }
 
 BUILTIN(DateTimeFormatConstructor) {

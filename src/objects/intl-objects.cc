@@ -990,11 +990,15 @@ MaybeHandle<String> Intl::NumberToLocaleString(Isolate* isolate,
                                                Handle<Object> num,
                                                Handle<Object> locales,
                                                Handle<Object> options) {
-  Handle<Object> number_obj;
-  ASSIGN_RETURN_ON_EXCEPTION(isolate, number_obj,
-                             Object::ToNumber(isolate, num), String);
+  Handle<Object> numeric_obj;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, numeric_obj,
+                             Object::ToNumeric(isolate, num), String);
 
-  double number = number_obj->Number();
+  double number = numeric_obj->Number();
+  Handle<BigInt> big_int;
+  if (numeric_obj->IsBigInt()) {
+    big_int = Handle<BigInt>::cast(numeric_obj);
+  }
 
   // We only cache the instance when both locales and options are undefined,
   // as that is the only case when the specified side-effects of examining
@@ -1007,8 +1011,13 @@ MaybeHandle<String> Intl::NumberToLocaleString(Isolate* isolate,
             Isolate::ICUObjectCacheType::kDefaultNumberFormat));
     // We may use the cached icu::NumberFormat for a fast path.
     if (cached_number_format != nullptr) {
-      return JSNumberFormat::FormatNumber(isolate, *cached_number_format,
-                                          number);
+      if (numeric_obj->IsBigInt()) {
+        return JSNumberFormat::FormatBigInt(isolate, *cached_number_format,
+                                            big_int);
+      } else {
+        return JSNumberFormat::FormatNumber(isolate, *cached_number_format,
+                                            number);
+      }
     }
   }
 
@@ -1032,7 +1041,11 @@ MaybeHandle<String> Intl::NumberToLocaleString(Isolate* isolate,
   // Return FormatNumber(numberFormat, x).
   icu::NumberFormat* icu_number_format =
       number_format->icu_number_format()->raw();
-  return JSNumberFormat::FormatNumber(isolate, *icu_number_format, number);
+  if (numeric_obj->IsBigInt()) {
+    return JSNumberFormat::FormatBigInt(isolate, *icu_number_format, big_int);
+  } else {
+    return JSNumberFormat::FormatNumber(isolate, *icu_number_format, number);
+  }
 }
 
 namespace {

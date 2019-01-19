@@ -470,6 +470,24 @@ MaybeHandle<String> JSNumberFormat::FormatNumber(
       reinterpret_cast<const uint16_t*>(result.getBuffer()), result.length()));
 }
 
+MaybeHandle<String> JSNumberFormat::FormatBigInt(
+    Isolate* isolate, const icu::NumberFormat& number_format,
+    Handle<BigInt> big_int) {
+  Handle<String> big_int_string;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, big_int_string,
+                             BigInt::ToString(isolate, big_int), String);
+
+  icu::UnicodeString result;
+  UErrorCode status = U_ZERO_ERROR;
+  number_format.format(
+      {big_int_string->ToCString().get(), big_int_string->length()}, result,
+      nullptr, status);
+  CHECK(U_SUCCESS(status));
+
+  return isolate->factory()->NewStringFromTwoByte(Vector<const uint16_t>(
+      reinterpret_cast<const uint16_t*>(result.getBuffer()), result.length()));
+}
+
 namespace {
 
 bool cmp_NumberFormatSpan(const NumberFormatSpan& a,
