@@ -83,13 +83,13 @@ BUILTIN(NumberFormatPrototypeFormatToParts) {
   Handle<Object> x;
   if (args.length() >= 2) {
     ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, x,
-                                       Object::ToNumber(isolate, args.at(1)));
+                                       Object::ToNumeric(isolate, args.at(1)));
   } else {
     x = isolate->factory()->nan_value();
   }
 
-  RETURN_RESULT_OR_FAILURE(isolate, JSNumberFormat::FormatToParts(
-                                        isolate, number_format, x->Number()));
+  RETURN_RESULT_OR_FAILURE(
+      isolate, JSNumberFormat::FormatToParts(isolate, number_format, x));
 }
 
 BUILTIN(DateTimeFormatPrototypeResolvedOptions) {
@@ -400,19 +400,18 @@ BUILTIN(NumberFormatInternalFormatNumber) {
   // 3. If value is not provided, let value be undefined.
   Handle<Object> value = args.atOrUndefined(isolate, 1);
 
-  // 4. Let x be ? ToNumber(value).
-  Handle<Object> number_obj;
-  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, number_obj,
-                                     Object::ToNumber(isolate, value));
+  // 4. Let x be ? ToNumeric(value).
+  Handle<Object> numeric_obj;
+  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, numeric_obj,
+                                     Object::ToNumeric(isolate, value));
 
-  double number = number_obj->Number();
   icu::NumberFormat* icu_number_format =
       number_format->icu_number_format()->raw();
   CHECK_NOT_NULL(icu_number_format);
 
-  // Return FormatNumber(nf, x).
-  RETURN_RESULT_OR_FAILURE(isolate, JSNumberFormat::FormatNumber(
-                                        isolate, *icu_number_format, number));
+  RETURN_RESULT_OR_FAILURE(
+      isolate,
+      JSNumberFormat::FormatNumeric(isolate, *icu_number_format, numeric_obj));
 }
 
 BUILTIN(DateTimeFormatConstructor) {
