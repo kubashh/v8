@@ -461,11 +461,27 @@ Handle<String> JSNumberFormat::CurrencyDisplayAsString() const {
   }
 }
 
-MaybeHandle<String> JSNumberFormat::FormatNumber(
-    Isolate* isolate, const icu::NumberFormat& number_format, double number) {
-  icu::UnicodeString result;
-  number_format.format(number, result);
+MaybeHandle<String> JSNumberFormat::FormatNumeric(
+    Isolate* isolate, const icu::NumberFormat& number_format,
+    Handle<Object> numeric_obj) {
+  CHECK(numeric_obj->IsNumeric());
 
+  icu::UnicodeString result;
+  // If it is BigInt, handle it differently.
+  if (numeric_obj->IsBigInt()) {
+    Handle<BigInt> big_int = Handle<BigInt>::cast(numeric_obj);
+    Handle<String> big_int_string;
+    ASSIGN_RETURN_ON_EXCEPTION(isolate, big_int_string,
+                               BigInt::ToString(isolate, big_int), String);
+    UErrorCode status = U_ZERO_ERROR;
+    number_format.format(
+        {big_int_string->ToCString().get(), big_int_string->length()}, result,
+        nullptr, status);
+    CHECK(U_SUCCESS(status));
+  } else {
+    double number = numeric_obj->Number();
+    number_format.format(number, result);
+  }
   return isolate->factory()->NewStringFromTwoByte(Vector<const uint16_t>(
       reinterpret_cast<const uint16_t*>(result.getBuffer()), result.length()));
 }

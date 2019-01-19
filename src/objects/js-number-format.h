@@ -15,6 +15,7 @@
 #include "src/heap/factory.h"
 #include "src/isolate.h"
 #include "src/objects.h"
+#include "src/objects/bigint.h"
 #include "src/objects/intl-objects.h"
 #include "src/objects/managed.h"
 
@@ -58,8 +59,9 @@ class JSNumberFormat : public JSObject {
       Isolate* isolate, Handle<JSArray> result, int start_index,
       const icu::NumberFormat& fmt, double number, Handle<String> unit);
 
-  V8_WARN_UNUSED_RESULT static MaybeHandle<String> FormatNumber(
-      Isolate* isolate, const icu::NumberFormat& number_format, double number);
+  V8_WARN_UNUSED_RESULT static MaybeHandle<String> FormatNumeric(
+      Isolate* isolate, const icu::NumberFormat& number_format,
+      Handle<Object> numeric_obj);
 
   static std::set<std::string> GetAvailableLocales();
 
