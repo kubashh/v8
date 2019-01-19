@@ -117,6 +117,40 @@
       "revId": "f270dadc827936f788c86e0ed092b1fad95bcf41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbba036e_a7cdcb66",
+        "filename": "src/json-stringifier.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-01-19T01:29:52Z",
+      "side": 1,
+      "message": "nit: since there\u0027s an if check for deferred_string_key we should just reuse that\n\n  MaybeHandle\u003cString\u003e maybe_key;\n  if (deferred_string_key) {\n    SerializeDeferredKey(comma, key);\n    maybe_key \u003d Handle\u003cString\u003e::cast(key);\n  }\n\nsame below or pull it out to a helper function",
+      "revId": "f270dadc827936f788c86e0ed092b1fad95bcf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c8dbf43_1ff140b0",
+        "filename": "test/mjsunit/messages.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-01-19T01:29:52Z",
+      "side": 1,
+      "message": "I know you\u0027re updating an existing test so I don\u0027t feel too strongly but it might be nicer to add error message tests to test/messages/fail instead of mjsunit :)",
+      "revId": "f270dadc827936f788c86e0ed092b1fad95bcf41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
