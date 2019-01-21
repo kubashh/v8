@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "509355bc_ce249141",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11449,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2019-01-21T18:26:04Z",
+      "side": 1,
+      "message": "+1",
+      "revId": "03cc6a6a2ae6ee29d783340dbfbfefd7d2408049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c01b203a_e8dd6595",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11455,
+      "author": {
+        "id": 1162379
+      },
+      "writtenOn": "2019-01-21T18:26:04Z",
+      "side": 1,
+      "message": "since we\u0027re being extra thorough, might be worth adding non-error cases which use different linefeeds?",
+      "revId": "03cc6a6a2ae6ee29d783340dbfbfefd7d2408049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
