@@ -24,7 +24,7 @@ TEST(CodeLayoutWithoutUnwindingInfo) {
   CodeDesc code_desc;
   code_desc.buffer = buffer;
   code_desc.buffer_size = buffer_size;
-  code_desc.constant_pool_size = 0;
+  code_desc.constant_pool_offset = 0;
   code_desc.instr_size = buffer_size;
   code_desc.reloc_size = 0;
   code_desc.origin = nullptr;
@@ -63,7 +63,7 @@ TEST(CodeLayoutWithUnwindingInfo) {
   CodeDesc code_desc;
   code_desc.buffer = buffer;
   code_desc.buffer_size = buffer_size;
-  code_desc.constant_pool_size = 0;
+  code_desc.constant_pool_offset = 0;
   code_desc.instr_size = buffer_size;
   code_desc.reloc_size = 0;
   code_desc.origin = nullptr;
