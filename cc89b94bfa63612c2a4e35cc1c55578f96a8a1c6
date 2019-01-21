@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "82b8b583_149a0d2f",
+        "filename": "src/libsampler/sampler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-01-21T09:23:00Z",
+      "side": 1,
+      "message": "This constructs a PlatformData (equiv. to data_.reset(new PlatformData()))",
+      "parentUuid": "c8bfdfb3_e817e1e0",
+      "revId": "cc89b94bfa63612c2a4e35cc1c55578f96a8a1c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0e1e905_0a04c413",
         "filename": "src/libsampler/sampler.h",
         "patchSetId": 11
@@ -33,6 +51,24 @@
       "revId": "cc89b94bfa63612c2a4e35cc1c55578f96a8a1c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1970753_d129a973",
+        "filename": "src/libsampler/sampler.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-01-21T09:23:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0e1e905_0a04c413",
+      "revId": "cc89b94bfa63612c2a4e35cc1c55578f96a8a1c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
