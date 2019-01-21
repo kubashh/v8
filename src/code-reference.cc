@@ -50,7 +50,7 @@ struct CodeDescOps {
   const CodeDesc* code_desc;
 
   Address constant_pool() const {
-    return instruction_start() + code_desc->constant_pool_offset();
+    return instruction_start() + code_desc->constant_pool_offset;
   }
   Address instruction_start() const {
     return reinterpret_cast<Address>(code_desc->buffer);

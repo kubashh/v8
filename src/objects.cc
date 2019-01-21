@@ -15255,13 +15255,18 @@ void Code::Disassemble(const char* name, std::ostream& os, Address current_pc) {
     DisassembleCodeRange(isolate, os, *this, InstructionStart(), code_size,
                          current_pc);
 
-    if (int pool_size = constant_pool_size()) {
-      DCHECK_EQ(pool_size & kPointerAlignmentMask, 0);
-      os << "\nConstant Pool (size = " << pool_size << ")\n";
+    int constant_pool_size =
+        const_pool_offset == 0
+            ? 0
+            : std::min({handler_offset, safepoint_offset, comments_offset}) -
+                  const_pool_offset;
+    if (constant_pool_size) {
+      DCHECK_EQ(constant_pool_size & kPointerAlignmentMask, 0);
+      os << "\nConstant Pool (size = " << constant_pool_size << ")\n";
       Vector<char> buf = Vector<char>::New(50);
       intptr_t* ptr =
           reinterpret_cast<intptr_t*>(InstructionStart() + const_pool_offset);
-      for (int i = 0; i < pool_size; i += kSystemPointerSize, ptr++) {
+      for (int i = 0; i < constant_pool_size; i += kSystemPointerSize, ptr++) {
         SNPrintF(buf, "%4d %08" V8PRIxPTR, i, *ptr);
         os << static_cast<const void*>(ptr) << "  " << buf.start() << "\n";
       }
