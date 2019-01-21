@@ -33,6 +33,24 @@
       "revId": "03cc6a6a2ae6ee29d783340dbfbfefd7d2408049",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7482b149_cca6a8de",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 11455,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-01-21T22:03:13Z",
+      "side": 1,
+      "message": "Good call! Added tests for \\r, U+2028 and U+2029.",
+      "parentUuid": "c01b203a_e8dd6595",
+      "revId": "03cc6a6a2ae6ee29d783340dbfbfefd7d2408049",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
