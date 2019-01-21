@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1bbe6bad_0466042a",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-21T15:32:14Z",
+      "side": 1,
+      "message": "I argued this elsewhere, not so sure we should make it easy to write calls that end up in SmiMul. SmiMul generates a fair amount of code and we should discourage its use when possible. Could you perhaps make this a non-operator macro instead?",
+      "revId": "69389a9423e2856b04bb2fd147e2c00b756679d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3c267f6_729c84aa",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-21T15:32:14Z",
+      "side": 1,
+      "message": "nit: arrayLike",
+      "revId": "69389a9423e2856b04bb2fd147e2c00b756679d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
