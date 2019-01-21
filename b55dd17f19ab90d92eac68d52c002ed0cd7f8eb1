@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "f21c3bbd_6586ccfc",
+        "filename": "src/constant-pool.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-21T15:49:04Z",
+      "side": 1,
+      "message": "This might not be the actual constant pool size. might have included safepoint table and handler table.",
+      "range": {
+        "startLine": 206,
+        "startChar": 18,
+        "endLine": 206,
+        "endChar": 60
+      },
+      "revId": "b55dd17f19ab90d92eac68d52c002ed0cd7f8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb99e8e2_f3bb24e6",
+        "filename": "src/globals.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-21T15:49:04Z",
+      "side": 1,
+      "message": "Hello, this is not always true because after constant pool, there might be jump table, safepoint and handler table. This will happen if constant pool is emitted by FinishCode() called by CodeGenerator::AssembleCode().",
+      "range": {
+        "startLine": 786,
+        "startChar": 4,
+        "endLine": 786,
+        "endChar": 55
+      },
+      "revId": "b55dd17f19ab90d92eac68d52c002ed0cd7f8eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58b8d64e_8f6ba4d8",
         "filename": "src/objects/code-inl.h",
         "patchSetId": 5
