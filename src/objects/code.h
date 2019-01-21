@@ -101,7 +101,6 @@ class Code : public HeapObject {
   // Valid for FLAG_enable_embedded_constant_pool only
   inline int constant_pool_offset() const;
   inline void set_constant_pool_offset(int offset);
-  inline int constant_pool_size() const;
 
   // [code_comments_offset]: Offset of the code comment section.
   inline int code_comments_offset() const;
