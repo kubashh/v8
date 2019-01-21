@@ -749,7 +749,8 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
   }
 
   bool calls_sloppy_eval() const {
-    return scope_calls_eval_ && is_sloppy(language_mode());
+    return !is_script_scope() && scope_calls_eval_ &&
+           is_sloppy(language_mode());
   }
 
   bool was_lazily_parsed() const { return was_lazily_parsed_; }
