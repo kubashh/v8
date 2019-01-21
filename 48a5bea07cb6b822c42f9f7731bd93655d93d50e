@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4eb9a687_7191ac06",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-01-21T13:18:41Z",
+      "side": 1,
+      "message": "The CSA version passes here False. Is this intended?",
+      "revId": "48a5bea07cb6b822c42f9f7731bd93655d93d50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "056c1b01_f4af457f",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-01-21T13:18:41Z",
+      "side": 1,
+      "message": "nit: assert(ByteLengthIsValid(byteLength));",
+      "revId": "48a5bea07cb6b822c42f9f7731bd93655d93d50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
