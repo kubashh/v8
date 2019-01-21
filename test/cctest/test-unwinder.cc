@@ -523,7 +523,7 @@ TEST(PCIsInV8_LargeCodeObject) {
   desc.buffer_size = instruction_size;
   desc.instr_size = instruction_size;
   desc.reloc_size = 0;
-  desc.constant_pool_size = 0;
+  desc.constant_pool_offset = 0;
   desc.unwinding_info = nullptr;
   desc.unwinding_info_size = 0;
   desc.origin = nullptr;
