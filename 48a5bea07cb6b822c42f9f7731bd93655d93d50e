@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f06201e1_b55adeb4",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-21T13:56:09Z",
+      "side": 1,
+      "message": "Done, good catch! Thanks",
+      "parentUuid": "4eb9a687_7191ac06",
+      "revId": "48a5bea07cb6b822c42f9f7731bd93655d93d50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "056c1b01_f4af457f",
         "filename": "src/builtins/typed-array-createtypedarray.tq",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "48a5bea07cb6b822c42f9f7731bd93655d93d50e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ace817a_f08be0ea",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-21T13:56:09Z",
+      "side": 1,
+      "message": "Done, I\u0027m hoping to eventually remove this helper when byte lengths and offsets are typed as uintptr.",
+      "parentUuid": "056c1b01_f4af457f",
+      "revId": "48a5bea07cb6b822c42f9f7731bd93655d93d50e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
