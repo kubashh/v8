@@ -89,7 +89,7 @@ void InitializeCode(Heap* heap, Handle<Code> code, int object_size,
   code->set_code_data_container(*data_container);
   code->set_deoptimization_data(*deopt_data);
   code->set_source_position_table(*source_position_table);
-  code->set_constant_pool_offset(desc.constant_pool_offset());
+  code->set_constant_pool_offset(desc.constant_pool_offset);
   code->set_code_comments_offset(desc.code_comments_offset());
   code->set_builtin_index(builtin_index);
 
