@@ -50,7 +50,7 @@ class BaseConsumedPreparseData : public ConsumedPreparseData {
 #endif
       }
       explicit ReadingScope(BaseConsumedPreparseData<Data>* parent)
-          : ReadingScope(parent->scope_data_.get(), parent->GetScopeData()) {}
+          : ReadingScope(&parent->scope_data_, parent->GetScopeData()) {}
       ~ReadingScope() {
 #ifdef DEBUG
         consumed_data_->has_data_ = false;
@@ -127,7 +127,7 @@ class BaseConsumedPreparseData : public ConsumedPreparseData {
 #endif
   };
 
-  BaseConsumedPreparseData() : scope_data_(new ByteData()), child_index_(0) {}
+  BaseConsumedPreparseData() : scope_data_(), child_index_(0) {}
 
   virtual Data GetScopeData() = 0;
 
@@ -141,7 +141,7 @@ class BaseConsumedPreparseData : public ConsumedPreparseData {
   void RestoreScopeAllocationData(DeclarationScope* scope) final;
 
 #ifdef DEBUG
-  void VerifyDataStart();
+  bool VerifyDataStart();
 #endif
 
  private:
@@ -149,7 +149,7 @@ class BaseConsumedPreparseData : public ConsumedPreparseData {
   void RestoreDataForVariable(Variable* var);
   void RestoreDataForInnerScopes(Scope* scope);
 
-  std::unique_ptr<ByteData> scope_data_;
+  ByteData scope_data_;
   // When consuming the data, these indexes point to the data we're going to
   // consume next.
   int child_index_;

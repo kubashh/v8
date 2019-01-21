@@ -203,6 +203,8 @@ void PreparseDataBuilder::DataGatheringScope::SetSkippableFunction(
   DCHECK_EQ(builder_->num_inner_functions_, 0);
   builder_->num_inner_functions_ = num_inner_functions;
   builder_->parent_->has_data_ = true;
+  PrintF("%p skippable fn start_pos=%i\n", builder_,
+         function_scope->start_position());
 }
 
 bool PreparseDataBuilder::HasInnerFunctions() const {
@@ -235,7 +237,6 @@ bool PreparseDataBuilder::ScopeNeedsData(Scope* scope) {
 
 bool PreparseDataBuilder::SaveDataForSkippableFunction(
     PreparseDataBuilder* builder) {
-  if (builder->bailed_out_) return false;
   DeclarationScope* function_scope = builder->function_scope_;
   // Start position is used for a sanity check when consuming the data, we could
   // remove it in the future if we're very pressed for space but it's been good
@@ -243,7 +244,7 @@ bool PreparseDataBuilder::SaveDataForSkippableFunction(
   byte_data_.WriteUint32(function_scope->start_position());
   byte_data_.WriteUint32(function_scope->end_position());
 
-  bool has_data = builder->has_data_;
+  bool has_data = builder->HasData();
   uint32_t has_data_and_num_parameters =
       HasDataField::encode(has_data) |
       NumberOfParametersField::encode(function_scope->num_parameters());
@@ -259,7 +260,7 @@ bool PreparseDataBuilder::SaveDataForSkippableFunction(
 
 void PreparseDataBuilder::SaveScopeAllocationData(DeclarationScope* scope,
                                                   Parser* parser) {
-  if (!HasData()) return;
+  if (!has_data_) return;
   DCHECK(HasInnerFunctions());
 
   byte_data_.Start(parser->preparse_data_buffer());
@@ -274,6 +275,9 @@ void PreparseDataBuilder::SaveScopeAllocationData(DeclarationScope* scope,
     // builders that have no inner functions at all.
     if (SaveDataForSkippableFunction(builder)) num_inner_with_data_++;
   }
+
+  // Don't save imcoplete scope information when bailed out.
+  if (bailed_out_) return;
 
 #ifdef DEBUG
   // function data items, kSkippableFunctionDataSize each.
@@ -396,6 +400,7 @@ Handle<PreparseData> PreparseDataBuilder::Serialize(Isolate* isolate) {
     data->set_child(i++, *child_data);
   }
   DCHECK_EQ(i, data->children_length());
+  data->Print();
   return data;
 }
 
@@ -489,19 +494,19 @@ BaseConsumedPreparseData<Data>::GetDataForSkippableFunction(
   // The skippable function *must* be the next function in the data. Use the
   // start position as a sanity check.
   typename ByteData::ReadingScope reading_scope(this);
-  CHECK(scope_data_->HasRemainingBytes(ByteData::kSkippableFunctionDataSize));
-  int start_position_from_data = scope_data_->ReadUint32();
+  CHECK(scope_data_.HasRemainingBytes(ByteData::kSkippableFunctionDataSize));
+  int start_position_from_data = scope_data_.ReadUint32();
   CHECK_EQ(start_position, start_position_from_data);
-  *end_position = scope_data_->ReadUint32();
+  *end_position = scope_data_.ReadUint32();
   DCHECK_GT(*end_position, start_position);
 
-  uint32_t has_data_and_num_parameters = scope_data_->ReadUint32();
+  uint32_t has_data_and_num_parameters = scope_data_.ReadUint32();
   bool has_data = HasDataField::decode(has_data_and_num_parameters);
   *num_parameters =
       NumberOfParametersField::decode(has_data_and_num_parameters);
-  *num_inner_functions = scope_data_->ReadUint32();
+  *num_inner_functions = scope_data_.ReadUint32();
 
-  uint8_t language_and_super = scope_data_->ReadQuarter();
+  uint8_t language_and_super = scope_data_.ReadQuarter();
   *language_mode = LanguageMode(LanguageField::decode(language_and_super));
   *uses_super_property = UsesSuperField::decode(language_and_super);
 
@@ -520,12 +525,12 @@ void BaseConsumedPreparseData<Data>::RestoreScopeAllocationData(
   typename ByteData::ReadingScope reading_scope(this);
 
 #ifdef DEBUG
-  int magic_value_from_data = scope_data_->ReadUint32();
+  int magic_value_from_data = scope_data_.ReadUint32();
   // Check that we've consumed all inner function data.
   DCHECK_EQ(magic_value_from_data, ByteData::kMagicValue);
 
-  int start_position_from_data = scope_data_->ReadUint32();
-  int end_position_from_data = scope_data_->ReadUint32();
+  int start_position_from_data = scope_data_.ReadUint32();
+  int end_position_from_data = scope_data_.ReadUint32();
   DCHECK_EQ(start_position_from_data, scope->start_position());
   DCHECK_EQ(end_position_from_data, scope->end_position());
 #endif
@@ -533,7 +538,7 @@ void BaseConsumedPreparseData<Data>::RestoreScopeAllocationData(
   RestoreDataForScope(scope);
 
   // Check that we consumed all scope data.
-  DCHECK_EQ(scope_data_->RemainingBytes(), 0);
+  DCHECK_EQ(scope_data_.RemainingBytes(), 0);
 }
 
 template <typename Data>
@@ -549,10 +554,10 @@ void BaseConsumedPreparseData<Data>::RestoreDataForScope(Scope* scope) {
   if (!PreparseDataBuilder::ScopeNeedsData(scope)) return;
 
   // scope_type is stored only in debug mode.
-  DCHECK_EQ(scope_data_->ReadUint8(), scope->scope_type());
+  DCHECK_EQ(scope_data_.ReadUint8(), scope->scope_type());
 
-  CHECK(scope_data_->HasRemainingBytes(ByteData::kUint8Size));
-  uint32_t eval = scope_data_->ReadUint8();
+  CHECK(scope_data_.HasRemainingBytes(ByteData::kUint8Size));
+  uint32_t eval = scope_data_.ReadUint8();
   if (ScopeCallsSloppyEvalField::decode(eval)) scope->RecordEvalCall();
   if (InnerScopeCallsEvalField::decode(eval)) scope->RecordInnerScopeEvalCall();
 
@@ -572,28 +577,28 @@ template <typename Data>
 void BaseConsumedPreparseData<Data>::RestoreDataForVariable(Variable* var) {
 #ifdef DEBUG
   const AstRawString* name = var->raw_name();
-  bool data_one_byte = scope_data_->ReadUint8();
+  bool data_one_byte = scope_data_.ReadUint8();
   DCHECK_IMPLIES(name->is_one_byte(), data_one_byte);
-  DCHECK_EQ(scope_data_->ReadUint32(), static_cast<uint32_t>(name->length()));
+  DCHECK_EQ(scope_data_.ReadUint32(), static_cast<uint32_t>(name->length()));
   if (!name->is_one_byte() && data_one_byte) {
     // It's possible that "name" is a two-byte representation of the string
     // stored in the data.
     for (int i = 0; i < 2 * name->length(); i += 2) {
 #if defined(V8_TARGET_LITTLE_ENDIAN)
-      DCHECK_EQ(scope_data_->ReadUint8(), name->raw_data()[i]);
+      DCHECK_EQ(scope_data_.ReadUint8(), name->raw_data()[i]);
       DCHECK_EQ(0, name->raw_data()[i + 1]);
 #else
-      DCHECK_EQ(scope_data_->ReadUint8(), name->raw_data()[i + 1]);
+      DCHECK_EQ(scope_data_.ReadUint8(), name->raw_data()[i + 1]);
       DCHECK_EQ(0, name->raw_data()[i]);
 #endif  // V8_TARGET_LITTLE_ENDIAN
     }
   } else {
     for (int i = 0; i < name->length(); ++i) {
-      DCHECK_EQ(scope_data_->ReadUint8(), name->raw_data()[i]);
+      DCHECK_EQ(scope_data_.ReadUint8(), name->raw_data()[i]);
     }
   }
 #endif
-  uint8_t variable_data = scope_data_->ReadQuarter();
+  uint8_t variable_data = scope_data_.ReadQuarter();
   if (VariableMaybeAssignedField::decode(variable_data)) {
     var->set_maybe_assigned();
   }
@@ -613,14 +618,15 @@ void BaseConsumedPreparseData<Data>::RestoreDataForInnerScopes(Scope* scope) {
 
 #ifdef DEBUG
 template <class Data>
-void BaseConsumedPreparseData<Data>::VerifyDataStart() {
+bool BaseConsumedPreparseData<Data>::VerifyDataStart() {
   typename ByteData::ReadingScope reading_scope(this);
   // The first uint32 contains the size of the skippable function data.
-  int scope_data_start = scope_data_->ReadUint32();
-  scope_data_->SetPosition(scope_data_start);
-  DCHECK_EQ(scope_data_->ReadUint32(), ByteData::kMagicValue);
+  int scope_data_start = scope_data_.ReadUint32();
+  scope_data_.SetPosition(scope_data_start);
+  CHECK_EQ(scope_data_.ReadUint32(), ByteData::kMagicValue);
   // The first data item is scope_data_start. Skip over it.
-  scope_data_->SetPosition(ByteData::kPlaceholderSize);
+  scope_data_.SetPosition(ByteData::kPlaceholderSize);
+  return true;
 }
 #endif
 
@@ -638,9 +644,7 @@ OnHeapConsumedPreparseData::OnHeapConsumedPreparseData(
     : BaseConsumedPreparseData<PreparseData>(), isolate_(isolate), data_(data) {
   DCHECK_NOT_NULL(isolate);
   DCHECK(data->IsPreparseData());
-#ifdef DEBUG
-  VerifyDataStart();
-#endif
+  DCHECK(VerifyDataStart());
 }
 
 ZonePreparseData::ZonePreparseData(Zone* zone, Vector<uint8_t>* byte_data,
@@ -667,9 +671,7 @@ Handle<PreparseData> ZonePreparseData::Serialize(Isolate* isolate) {
 ZoneConsumedPreparseData::ZoneConsumedPreparseData(Zone* zone,
                                                    ZonePreparseData* data)
     : data_(data), scope_data_wrapper_(data_->byte_data()) {
-#ifdef DEBUG
-  VerifyDataStart();
-#endif
+  DCHECK(VerifyDataStart());
 }
 
 ZoneVectorWrapper ZoneConsumedPreparseData::GetScopeData() {
