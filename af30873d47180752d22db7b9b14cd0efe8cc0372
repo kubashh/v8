@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f806aaf_f81c2693",
+        "filename": "src/wasm/compilation-environment.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-21T13:56:48Z",
+      "side": 1,
+      "message": "Ack. Abandoning this CL then, merging a few remaining parts (updating comments etc) into https://crrev.com/c/1421364.",
+      "parentUuid": "e5e62fdb_1057d151",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 49
+      },
+      "revId": "af30873d47180752d22db7b9b14cd0efe8cc0372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9592a09d_fd39491e",
         "filename": "src/wasm/wasm-code-manager.h",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "af30873d47180752d22db7b9b14cd0efe8cc0372",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2aa674bb_7f5d2ff4",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-21T13:56:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9592a09d_fd39491e",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 330,
+        "endChar": 34
+      },
+      "revId": "af30873d47180752d22db7b9b14cd0efe8cc0372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
