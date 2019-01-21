@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5e62fdb_1057d151",
+        "filename": "src/wasm/compilation-environment.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-01-21T13:08:37Z",
+      "side": 1,
+      "message": "As discussed offline: Having the {CompilationEnv} participate in the lifetime management of the {WasmModule} make this class no longer a POD. I\u0027d prefer to have the lifetime be managed by a separate class, in this case this would be the {BackgroundCompileTask} that is adapted in one of the subsequent CLs. Would it be possible to only have this background task itself hold a shared pointer instead of merging it into this POD struct?\n\nI am fine with somehow enforcing this contract in the {CreateCompilationEnv} function, but would also be fine with just explaining the contract in a comment above this function.",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 49
+      },
+      "revId": "af30873d47180752d22db7b9b14cd0efe8cc0372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9592a09d_fd39491e",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-01-21T13:08:37Z",
+      "side": 1,
+      "message": "nit: While you are here, I think this comment is slightly outdated by now.",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 330,
+        "endChar": 34
+      },
+      "revId": "af30873d47180752d22db7b9b14cd0efe8cc0372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
