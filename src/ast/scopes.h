@@ -140,7 +140,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
     }
 
     void RestoreEvalFlag() {
-      outer_scope_and_calls_eval_->scope_calls_eval_ =
+      outer_scope_and_calls_eval_->scope_calls_sloppy_eval_ =
           outer_scope_and_calls_eval_.GetPayload();
     }
 
@@ -301,7 +301,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   // Inform the scope and outer scopes that the corresponding code contains an
   // eval call.
   void RecordEvalCall() {
-    scope_calls_eval_ = true;
+    scope_calls_sloppy_eval_ = !is_script_scope() && is_sloppy(language_mode());
   }
 
   void RecordInnerScopeEvalCall() {
@@ -697,9 +697,9 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   // The language mode of this scope.
   STATIC_ASSERT(LanguageModeSize == 2);
   bool is_strict_ : 1;
-  // This scope or a nested catch scope or with scope contain an 'eval' call. At
-  // the 'eval' call site this scope is the declaration scope.
-  bool scope_calls_eval_ : 1;
+  // This scope or a nested catch scope or with scope contain a sloppy 'eval'
+  // call. At the 'eval' call site this scope is the declaration scope.
+  bool scope_calls_sloppy_eval_ : 1;
   // This scope's declarations might not be executed in order (e.g., switch).
   bool scope_nonlinear_ : 1;
   bool is_hidden_ : 1;
@@ -748,9 +748,7 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
                                         IsClassConstructor(function_kind())));
   }
 
-  bool calls_sloppy_eval() const {
-    return scope_calls_eval_ && is_sloppy(language_mode());
-  }
+  bool calls_sloppy_eval() const { return scope_calls_sloppy_eval_; }
 
   bool was_lazily_parsed() const { return was_lazily_parsed_; }
 
@@ -1106,12 +1104,12 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
 };
 
 Scope::Snapshot::Snapshot(Scope* scope)
-    : outer_scope_and_calls_eval_(scope, scope->scope_calls_eval_),
+    : outer_scope_and_calls_eval_(scope, scope->scope_calls_sloppy_eval_),
       top_inner_scope_(scope->inner_scope_),
       top_unresolved_(scope->unresolved_list_.end()),
       top_local_(scope->GetClosureScope()->locals_.end()) {
   // Reset in order to record eval calls during this Snapshot's lifetime.
-  outer_scope_and_calls_eval_.GetPointer()->scope_calls_eval_ = false;
+  outer_scope_and_calls_eval_.GetPointer()->scope_calls_sloppy_eval_ = false;
 }
 
 class ModuleScope final : public DeclarationScope {

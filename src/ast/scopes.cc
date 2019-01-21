@@ -214,7 +214,7 @@ Scope::Scope(Zone* zone, ScopeType scope_type, Handle<ScopeInfo> scope_info)
 #ifdef DEBUG
   already_resolved_ = true;
 #endif
-  if (scope_info->CallsSloppyEval()) scope_calls_eval_ = true;
+  if (scope_info->CallsSloppyEval()) scope_calls_sloppy_eval_ = true;
   set_language_mode(scope_info->language_mode());
   num_heap_slots_ = scope_info->ContextLength();
   DCHECK_LE(Context::MIN_CONTEXT_SLOTS, num_heap_slots_);
@@ -297,7 +297,7 @@ void Scope::SetDefaults() {
 
   set_language_mode(LanguageMode::kSloppy);
 
-  scope_calls_eval_ = false;
+  scope_calls_sloppy_eval_ = false;
   scope_nonlinear_ = false;
   is_hidden_ = false;
   is_debug_evaluate_scope_ = false;
@@ -740,10 +740,9 @@ Scope* Scope::FinalizeBlockScope() {
 
   if (inner_scope_calls_eval_) outer_scope()->inner_scope_calls_eval_ = true;
 
-  // No need to propagate scope_calls_eval_, since if it was relevant to
+  // No need to propagate scope_calls_sloppy_eval_, since if it was relevant to
   // this scope we would have had to bail out at the top.
-  DCHECK(!scope_calls_eval_ || !is_declaration_scope() ||
-         !is_sloppy(language_mode()));
+  DCHECK(!scope_calls_sloppy_eval_ || !is_declaration_scope());
 
   // This block does not need a context.
   num_heap_slots_ = 0;
@@ -808,8 +807,8 @@ void Scope::Snapshot::Reparent(DeclarationScope* new_parent) {
   outer_closure->locals_.Rewind(top_local_);
 
   // Move eval calls since Snapshot's creation into new_parent.
-  if (outer_scope_and_calls_eval_->scope_calls_eval_) {
-    new_parent->scope_calls_eval_ = true;
+  if (outer_scope_and_calls_eval_->scope_calls_sloppy_eval_) {
+    new_parent->scope_calls_sloppy_eval_ = true;
     new_parent->inner_scope_calls_eval_ = true;
   }
 
