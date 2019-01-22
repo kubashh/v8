@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b03d5b67_d68151de",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-22T12:46:09Z",
+      "side": 1,
+      "message": "Ack, yup coming in the next CL.",
+      "parentUuid": "72e09459_3f7b0ffe",
+      "revId": "2b9632f5695f37b37a6404bf74cf50c6ce0ce6c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "07682375_ce2fdd55",
         "filename": "src/builtins/typed-array-createtypedarray.tq",
         "patchSetId": 5
@@ -39,6 +57,30 @@
       "revId": "2b9632f5695f37b37a6404bf74cf50c6ce0ce6c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e240c6ec_0ae2b447",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-22T12:46:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07682375_ce2fdd55",
+      "range": {
+        "startLine": 47,
+        "startChar": 10,
+        "endLine": 47,
+        "endChar": 24
+      },
+      "revId": "2b9632f5695f37b37a6404bf74cf50c6ce0ce6c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
