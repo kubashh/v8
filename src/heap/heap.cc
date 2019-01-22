@@ -3885,9 +3885,11 @@ void Heap::IterateStrongRoots(RootVisitor* v, VisitMode mode) {
       isolate_->global_handles()->IterateNewSpaceStrongAndDependentRoots(v);
       break;
     case VISIT_ALL_IN_MINOR_MC_MARK:
+      isolate_->global_handles()->IterateNewSpaceStrongAndDependentRoots(v);
       // Global handles are processed manually by the minor MC.
       break;
     case VISIT_ALL_IN_MINOR_MC_UPDATE:
+      isolate_->global_handles()->IterateAllNewSpaceRoots(v);
       // Global handles are processed manually by the minor MC.
       break;
     case VISIT_ALL_IN_SWEEP_NEWSPACE:
