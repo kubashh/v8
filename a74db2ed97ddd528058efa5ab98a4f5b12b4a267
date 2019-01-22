@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a87296b0_df72fbea",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-22T16:51:33Z",
+      "side": 1,
+      "message": "There\u0027s an extra \u0027at the \u0027, the sentence should read: \u0027may exist in this order at the end\u0027",
+      "parentUuid": "b4d59584_0e40d34c",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae75ec5c_3ece549c",
         "filename": "src/globals.h",
         "patchSetId": 12
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Because not all platform supports constant pool, if we don\u0027t use magic value 0 to imply \u0027does not exist\u0027, then we will need to set this offset on all platform. Do you think this is ok?\n\nIf we use constant_pool_size here, we won\u0027t be able to compute offset without given the safepoint offset and handler offset.\n\nI tried setting constant_pool_offset on all platform. It seems to be a bit complicate to set it before safepoint on not supported platforms. Could you enlighten me a bit?\n\nThanks.",
       "parentUuid": "ae75ec5c_3ece549c",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffb77f85_e4dd8cf8",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-22T16:51:33Z",
+      "side": 1,
+      "message": "\u003e Because not all platform supports constant pool, if we don\u0027t use magic value 0 to imply \u0027does not exist\u0027, then we will need to set this offset on all platform. Do you think this is ok?\n\nYeah I think so, that sounds nicely consistent across architectures. It\u0027s what I thought we were doing currently.\n\n\u003e \n\u003e If we use constant_pool_size here, we won\u0027t be able to compute offset without given the safepoint offset and handler offset.\n\u003e \n\u003e I tried setting constant_pool_offset on all platform. It seems to be a bit complicate to set it before safepoint on not supported platforms. Could you enlighten me a bit?\n\nWhat about exactly?",
+      "parentUuid": "ff543a29_81cfb614",
       "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -136,6 +172,24 @@
       "side": 1,
       "message": "Hello Jakob, given that constant_pool_offset is set correctly, to calculate constant_pool_size, we still need to compute std::min({handler_offset, safepoint_offset, comments_offset}), unless safepoint_table_offset, handler_table_offset and code_comments_offset are also set \u0027correctly\u0027, so that constant_pool_size \u003d safepoint_offset - const_pool_offset is always correct.",
       "parentUuid": "07890645_a99de209",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d065d717_180d16d1",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-22T16:51:33Z",
+      "side": 1,
+      "message": "Imo it\u0027d be nice to have all of these offsets set correctly s.t. for all these fields we can rely on\n\n current_field_size \u003d current_field_offset - previous_field_offset",
+      "parentUuid": "019c2ab1_8cf4df6f",
       "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
