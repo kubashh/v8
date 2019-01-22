@@ -16,6 +16,24 @@
       "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad0b8659_69b2496e",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1324852
+      },
+      "writtenOn": "2019-01-22T17:52:29Z",
+      "side": 1,
+      "message": "The reason is simply to avoid the expense of extra allocation (which you mentioned in the bug description). Here we get the best tradeoff out of correctness and performance - for short format outputs (\u003c 128 bytes) we use stack space (as before), for long ones we reallocate data on the heap.",
+      "parentUuid": "da470f47_d228f579",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
