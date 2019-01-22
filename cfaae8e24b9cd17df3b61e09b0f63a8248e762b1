@@ -16,6 +16,23 @@
       "revId": "cfaae8e24b9cd17df3b61e09b0f63a8248e762b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf515925_9401a3b8",
+        "filename": "test/mjsunit/array-sort.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-01-22T15:41:28Z",
+      "side": 1,
+      "message": "Don’t forget to call TestArrayPrototypeHasElements().",
+      "revId": "cfaae8e24b9cd17df3b61e09b0f63a8248e762b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
