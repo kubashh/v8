@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da470f47_d228f579",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-22T16:09:25Z",
+      "side": 1,
+      "message": "Why not use a standard stringstream and return an std::string instead, wdyt?",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
