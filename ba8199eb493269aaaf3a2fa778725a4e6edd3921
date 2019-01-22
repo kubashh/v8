@@ -16,6 +16,24 @@
       "revId": "ba8199eb493269aaaf3a2fa778725a4e6edd3921",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cd21fb5_21404b32",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-01-22T14:29:45Z",
+      "side": 1,
+      "message": "Done. Moved it to the {0, 0} category since it doesn\u0027t really matter. It would only matter if the result was used to check for some minimal number of stack elements that need to be present, as br-on-exn would be invalid on an empty stack.",
+      "parentUuid": "b81a4397_a90d839b",
+      "revId": "ba8199eb493269aaaf3a2fa778725a4e6edd3921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
