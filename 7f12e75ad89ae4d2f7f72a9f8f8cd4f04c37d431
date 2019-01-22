@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8d2e4ea_5722d29a",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-22T13:13:49Z",
+      "side": 0,
+      "message": "THis should now just be parameter_count_",
+      "revId": "7f12e75ad89ae4d2f7f72a9f8f8cd4f04c37d431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c9760a_7ecc3fa4",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-22T13:13:49Z",
+      "side": 0,
+      "message": "this should now be just function_closure_index() + 1",
+      "revId": "7f12e75ad89ae4d2f7f72a9f8f8cd4f04c37d431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
