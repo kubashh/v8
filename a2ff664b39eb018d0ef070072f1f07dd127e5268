@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5176a8a7_1a8f2e53",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 15262,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-01-22T11:29:24Z",
+      "side": 1,
+      "message": "Please re-add Code::constant_pool_size() and use that here.",
+      "range": {
+        "startLine": 15258,
+        "startChar": 0,
+        "endLine": 15262,
+        "endChar": 0
+      },
+      "revId": "a2ff664b39eb018d0ef070072f1f07dd127e5268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcfc9dee_f7e72535",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-01-22T11:29:24Z",
+      "side": 1,
+      "message": "This needs to return 0 now. You need to also remove a DCHECK in Code::CodeVerify.",
+      "revId": "a2ff664b39eb018d0ef070072f1f07dd127e5268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab70a1e1_96ed2a6c",
+        "filename": "src/objects/code.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-01-22T11:29:24Z",
+      "side": 1,
+      "message": "// Always returns 0 if !FLAG_enable_embedded_constant_pool",
+      "range": {
+        "startLine": 101,
+        "startChar": 2,
+        "endLine": 101,
+        "endChar": 54
+      },
+      "revId": "a2ff664b39eb018d0ef070072f1f07dd127e5268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
