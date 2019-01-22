@@ -718,7 +718,7 @@ class BaseTestRunner(object):
     myid, count = self._get_shard_info(options)
     if count == 1:
       return None
-    return ShardProc(myid - 1, count)
+    return ShardProc(myid - 1, count, len(self._variants))
 
   def _get_shard_info(self, options):
     """

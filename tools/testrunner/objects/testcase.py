@@ -81,6 +81,8 @@ class TestCase(object):
 
     self._prepare_outcomes()
 
+    self.id = 0
+
   def create_subtest(self, processor, subtest_id, variant=None, flags=None,
                      keep_output=False, random_seed=None):
     subtest = copy.copy(self)
@@ -155,6 +157,9 @@ class TestCase(object):
   @property
   def only_standard_variant(self):
     return statusfile.NO_VARIANTS in self._statusfile_outcomes
+
+  def set_id(self, id):
+    self.id = id
 
   def get_command(self):
     params = self._get_cmd_params()

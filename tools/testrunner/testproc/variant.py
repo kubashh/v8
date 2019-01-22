@@ -38,17 +38,19 @@ class VariantProc(base.TestProcProducer):
 
   def _next_test(self, test):
     gen = self._variants_gen(test)
-    self._next_variant[test.procid] = gen
-    self._try_send_new_subtest(test, gen)
+    id_gen = (test.id + i for i in range(len(self._variants)))
+    self._next_variant[test.procid] = (gen, id_gen)
+    self._try_send_new_subtest(test, gen, id_gen)
 
   def _result_for(self, test, subtest, result):
-    gen = self._next_variant[test.procid]
-    self._try_send_new_subtest(test, gen)
+    gen, id_gen = self._next_variant[test.procid]
+    self._try_send_new_subtest(test, gen, id_gen)
 
-  def _try_send_new_subtest(self, test, variants_gen):
+  def _try_send_new_subtest(self, test, variants_gen, id_gen):
     for variant, flags, suffix in variants_gen:
       subtest = self._create_subtest(test, '%s-%s' % (variant, suffix),
                                      variant=variant, flags=flags)
+      subtest.set_id(next(id_gen))
       self._send_test(subtest)
       return
 

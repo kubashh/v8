@@ -10,7 +10,7 @@ class ShardProc(base.TestProcFilter):
   It simply passes every n-th test. To be deterministic it has to be placed
   before all processors that generate tests dynamically.
   """
-  def __init__(self, myid, shards_count):
+  def __init__(self, myid, shards_count, variants_count):
     """
     Args:
       myid: id of the shard within [0; shards_count - 1]
@@ -22,9 +22,7 @@ class ShardProc(base.TestProcFilter):
 
     self._myid = myid
     self._shards_count = shards_count
-    self._last = 0
 
   def _filter(self, test):
-    res = self._last != self._myid
-    self._last = (self._last + 1) % self._shards_count
-    return res
+    should_skip = (test.id % self._shards_count) != self._myid
+    return should_skip
