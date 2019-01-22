@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b4d59584_0e40d34c",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-22T16:42:12Z",
+      "side": 1,
+      "message": "not sure I understand this one.",
+      "parentUuid": "b31cd4c2_fd9e8a44",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae75ec5c_3ece549c",
         "filename": "src/globals.h",
         "patchSetId": 12
@@ -30,6 +48,24 @@
       "writtenOn": "2019-01-22T15:04:05Z",
       "side": 1,
       "message": "Not sure I understand; why are we back at this solution where an offset of 0 implies \u0027does not exist\u0027? I like our current logic, where offset and size are always non-magic values, and offset points to where the pool/table/code comments start, even if empty.",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff543a29_81cfb614",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-22T16:42:12Z",
+      "side": 1,
+      "message": "Because not all platform supports constant pool, if we don\u0027t use magic value 0 to imply \u0027does not exist\u0027, then we will need to set this offset on all platform. Do you think this is ok?\n\nIf we use constant_pool_size here, we won\u0027t be able to compute offset without given the safepoint offset and handler offset.\n\nI tried setting constant_pool_offset on all platform. It seems to be a bit complicate to set it before safepoint on not supported platforms. Could you enlighten me a bit?\n\nThanks.",
+      "parentUuid": "ae75ec5c_3ece549c",
       "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "efd6d681_71203cc9",
+        "filename": "src/objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 15257,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-22T16:42:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bbe7ecef_5cbe2c3b",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "07890645_a99de209",
         "filename": "src/objects/code-inl.h",
         "patchSetId": 12
@@ -64,6 +118,24 @@
       "writtenOn": "2019-01-22T15:04:05Z",
       "side": 1,
       "message": "Could we avoid all of this complexity by setting the constant_pool_offset correctly in the first place?",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "019c2ab1_8cf4df6f",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-22T16:42:12Z",
+      "side": 1,
+      "message": "Hello Jakob, given that constant_pool_offset is set correctly, to calculate constant_pool_size, we still need to compute std::min({handler_offset, safepoint_offset, comments_offset}), unless safepoint_table_offset, handler_table_offset and code_comments_offset are also set \u0027correctly\u0027, so that constant_pool_size \u003d safepoint_offset - const_pool_offset is always correct.",
+      "parentUuid": "07890645_a99de209",
       "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
