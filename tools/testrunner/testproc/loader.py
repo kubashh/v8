@@ -10,11 +10,15 @@ class LoadProc(base.TestProc):
   """
 
   def load_tests(self, tests):
+    test_id = 0
     loaded = set()
     for test in tests:
       if test.procid in loaded:
         print 'Warning: %s already obtained' % test.procid
         continue
+
+      test.set_id(test_id)
+      test_id += 1
 
       loaded.add(test.procid)
       self._send_test(test)
