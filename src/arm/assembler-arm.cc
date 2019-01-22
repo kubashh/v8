@@ -569,7 +569,7 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc) {
   desc->instr_size = pc_offset();
   desc->reloc_size =
       (buffer_start_ + desc->buffer_size) - reloc_info_writer.pos();
-  desc->constant_pool_size = 0;
+  desc->constant_pool_offset = 0;
   desc->origin = this;
   desc->unwinding_info_size = 0;
   desc->unwinding_info = nullptr;
