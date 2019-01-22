@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b81a4397_a90d839b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-22T14:17:53Z",
+      "side": 1,
+      "message": "Similar to our previous discussion: I would have expected this to be in the {0, 0} category. It probably does not really matter, since as far as I can see we only ever use the difference of the two values returned.",
+      "revId": "ba8199eb493269aaaf3a2fa778725a4e6edd3921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
