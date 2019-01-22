@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c59b5487_122678b1",
+        "filename": "src/profiler/heap-snapshot-generator.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2030,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-01-22T17:57:15Z",
+      "side": 1,
+      "message": "Removed it.",
+      "parentUuid": "6ba43349_aee49b5d",
+      "revId": "d7462ea23cf476216ddd6ce43bebbb500922fa5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9eaba073_4daf8661",
         "filename": "src/profiler/heap-snapshot-generator.h",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "d7462ea23cf476216ddd6ce43bebbb500922fa5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f47d7e76_69a16c12",
+        "filename": "src/profiler/heap-snapshot-generator.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-01-22T17:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eaba073_4daf8661",
+      "revId": "d7462ea23cf476216ddd6ce43bebbb500922fa5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
