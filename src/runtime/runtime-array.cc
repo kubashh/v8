@@ -404,10 +404,8 @@ RUNTIME_FUNCTION(Runtime_PrepareElementsForSort) {
     }
   }
 
-  if (!object->IsJSArray()) {
-    RETURN_FAILURE_ON_EXCEPTION(isolate,
-                                CopyFromPrototype(isolate, object, length));
-  }
+  RETURN_FAILURE_ON_EXCEPTION(isolate,
+                              CopyFromPrototype(isolate, object, length));
   return RemoveArrayHoles(isolate, object, length);
 }
 
