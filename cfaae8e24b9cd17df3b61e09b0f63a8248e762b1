@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "488ecdb6_fb6b53a3",
+        "filename": "src/runtime/runtime-array.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-01-22T15:54:00Z",
+      "side": 1,
+      "message": "Yes, makes sense. Done.",
+      "parentUuid": "2e1d605c_2afd14d8",
+      "revId": "cfaae8e24b9cd17df3b61e09b0f63a8248e762b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf515925_9401a3b8",
         "filename": "test/mjsunit/array-sort.js",
         "patchSetId": 2
@@ -51,6 +69,24 @@
       "revId": "cfaae8e24b9cd17df3b61e09b0f63a8248e762b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d1e25cc_72690797",
+        "filename": "test/mjsunit/array-sort.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-01-22T15:54:00Z",
+      "side": 1,
+      "message": "*facepalm*, thanks and done :)",
+      "parentUuid": "737ba03c_e20ceac5",
+      "revId": "cfaae8e24b9cd17df3b61e09b0f63a8248e762b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
