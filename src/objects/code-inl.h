@@ -547,10 +547,6 @@ void Code::set_constant_pool_offset(int value) {
   WRITE_INT_FIELD(this, kConstantPoolOffset, value);
 }
 
-int Code::constant_pool_size() const {
-  if (!FLAG_enable_embedded_constant_pool) return 0;
-  return code_comments_offset() - constant_pool_offset();
-}
 Address Code::constant_pool() const {
   if (FLAG_enable_embedded_constant_pool) {
     int offset = constant_pool_offset();
