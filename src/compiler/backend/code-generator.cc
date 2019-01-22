@@ -384,6 +384,10 @@ MaybeHandle<Code> CodeGenerator::FinalizeCode() {
   // Allocate and install the code.
   CodeDesc desc;
   tasm()->GetCode(isolate(), &desc);
+  desc.constant_pool_offset = desc.constant_pool_offset
+                                  ? desc.constant_pool_offset
+                                  : safepoints()->GetCodeOffset();
+
   if (unwinding_info_writer_.eh_frame_writer()) {
     unwinding_info_writer_.eh_frame_writer()->GetEhFrame(&desc);
   }
