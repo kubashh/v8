@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "3bd1f31c_057f3186",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-22T19:46:09Z",
+      "side": 1,
+      "message": "Ack. Thanks.",
+      "parentUuid": "a87296b0_df72fbea",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae75ec5c_3ece549c",
         "filename": "src/globals.h",
         "patchSetId": 12
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "\u003e Because not all platform supports constant pool, if we don\u0027t use magic value 0 to imply \u0027does not exist\u0027, then we will need to set this offset on all platform. Do you think this is ok?\n\nYeah I think so, that sounds nicely consistent across architectures. It\u0027s what I thought we were doing currently.\n\n\u003e \n\u003e If we use constant_pool_size here, we won\u0027t be able to compute offset without given the safepoint offset and handler offset.\n\u003e \n\u003e I tried setting constant_pool_offset on all platform. It seems to be a bit complicate to set it before safepoint on not supported platforms. Could you enlighten me a bit?\n\nWhat about exactly?",
       "parentUuid": "ff543a29_81cfb614",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b49754e0_d3553ac0",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-22T19:46:09Z",
+      "side": 1,
+      "message": "If consant_pool_size \u003d safepoint_offset - constant_pool_offset on all platforms, we need both constant_pool_offset and safepoint_offset to be \u0027correct\u0027. There are 2 places that could emit constant pool, which are in FinishCode() and in GetCode(). safepoints are emitted after FinishCode(). On arm/ppc, we use ConstantPoolBuilder to remember the offset to the constant pool, so that GetCode can use this offset to initialize the CodeDesc object. But on all other architectures, we don\u0027t have the correct constant pool offset (equal to safepoint_offset in these case) to use within GetCode. In the latest patch, I try to patch the constant_pool_offset to safepoint_offset if constant_pool_offset is 0. But that doesn\u0027t sound like a good approach, does it? Also, I am not sure if there is any other place that I need to patch constant_pool_offset or safepoint_offset.\n\nBefore this CL, constant_pool_offset was computed by code_comments_offset() - constant_pool_size, which is not correct. And it\u0027s not possible to compute the correct constant pool offset because we don\u0027t know the jump table size.\n\nOne more thing, to be able to compute constant_pool_size, we need safepoint_offset to be correct. Can I assume that to be true even if safepoint doesn\u0027t exist in a code obj?",
+      "parentUuid": "ffb77f85_e4dd8cf8",
       "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
