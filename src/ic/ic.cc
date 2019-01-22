@@ -2129,8 +2129,8 @@ void StoreOwnElement(Isolate* isolate, Handle<JSArray> array,
       isolate, array, index, &success, LookupIterator::OWN);
   DCHECK(success);
 
-  CHECK(JSObject::DefineOwnPropertyIgnoreAttributes(&it, value, NONE,
-                                                    kThrowOnError)
+  CHECK(JSObject::DefineOwnPropertyIgnoreAttributes(
+            &it, value, NONE, Just(ShouldThrow::kThrowOnError))
             .FromJust());
 }
 }  // namespace
