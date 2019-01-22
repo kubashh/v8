@@ -124,7 +124,6 @@ class SerializerForBackgroundCompilation {
   SerializerForBackgroundCompilation(JSHeapBroker* broker, Zone* zone,
                                      Handle<SharedFunctionInfo> sfi,
                                      Handle<FeedbackVector> feedback,
-                                     const Hints& receiver,
                                      const HintsVector& arguments);
 
   void TraverseBytecode();
