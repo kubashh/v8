@@ -30,23 +30,22 @@ typedef ZoneMap<MoveKey, unsigned, MoveKeyCompare> MoveMap;
 
 class OperandSet {
  public:
-  explicit OperandSet(ZoneVector<InstructionOperand>* buffer)
+  explicit OperandSet(
+      ZoneSet<InstructionOperand, InstructionOperand::CanonicalizedComparator>*
+          buffer)
       : set_(buffer), fp_reps_(0) {
     buffer->clear();
   }
 
   void InsertOp(const InstructionOperand& op) {
-    set_->push_back(op);
+    set_->insert(op);
 
     if (!kSimpleFPAliasing && op.IsFPRegister())
       fp_reps_ |= RepresentationBit(LocationOperand::cast(op).representation());
   }
 
   bool Contains(const InstructionOperand& op) const {
-    for (const InstructionOperand& elem : *set_) {
-      if (elem.EqualsCanonicalized(op)) return true;
-    }
-    return false;
+    return set_->find(op) != set_->end();
   }
 
   bool ContainsOpOrAlias(const InstructionOperand& op) const {
@@ -106,7 +105,8 @@ class OperandSet {
     return reps && !base::bits::IsPowerOfTwo(reps);
   }
 
-  ZoneVector<InstructionOperand>* set_;
+  ZoneSet<InstructionOperand, InstructionOperand::CanonicalizedComparator>*
+      set_;
   int fp_reps_;
 };
 

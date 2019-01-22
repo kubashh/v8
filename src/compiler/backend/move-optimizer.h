@@ -55,8 +55,10 @@ class V8_EXPORT_PRIVATE MoveOptimizer final {
 
   // Reusable buffers for storing operand sets. We need at most two sets
   // at any given time, so we create two buffers.
-  ZoneVector<InstructionOperand> operand_buffer1;
-  ZoneVector<InstructionOperand> operand_buffer2;
+  ZoneSet<InstructionOperand, InstructionOperand::CanonicalizedComparator>
+      operand_buffer1;
+  ZoneSet<InstructionOperand, InstructionOperand::CanonicalizedComparator>
+      operand_buffer2;
 
   DISALLOW_COPY_AND_ASSIGN(MoveOptimizer);
 };

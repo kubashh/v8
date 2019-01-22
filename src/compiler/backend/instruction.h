@@ -48,6 +48,14 @@ class V8_EXPORT_PRIVATE InstructionOperand {
     // Location operand kinds must be last.
   };
 
+  // std::set compatible comparator based on canonicalized value.
+  struct CanonicalizedComparator {
+    bool operator()(const InstructionOperand a,
+                    const InstructionOperand b) const {
+      return a.CompareCanonicalized(b);
+    }
+  };
+
   InstructionOperand() : InstructionOperand(INVALID) {}
 
   Kind kind() const { return KindField::decode(value_); }
