@@ -122,7 +122,6 @@ class SerializerForBackgroundCompilation {
                                      Handle<JSFunction> closure);
   SerializerForBackgroundCompilation(JSHeapBroker* broker, Zone* zone,
                                      Handle<JSFunction> closure,
-                                     const Hints& receiver,
                                      const HintsVector& arguments);
 
   Hints Run();
