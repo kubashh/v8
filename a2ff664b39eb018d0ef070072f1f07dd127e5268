@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b23b2385_34702df5",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 15262,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-22T13:47:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5176a8a7_1a8f2e53",
+      "range": {
+        "startLine": 15258,
+        "startChar": 0,
+        "endLine": 15262,
+        "endChar": 0
+      },
+      "revId": "a2ff664b39eb018d0ef070072f1f07dd127e5268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcfc9dee_f7e72535",
         "filename": "src/objects/code-inl.h",
         "patchSetId": 9
@@ -36,6 +60,24 @@
       "writtenOn": "2019-01-22T11:29:24Z",
       "side": 1,
       "message": "This needs to return 0 now. You need to also remove a DCHECK in Code::CodeVerify.",
+      "revId": "a2ff664b39eb018d0ef070072f1f07dd127e5268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d298e4_ef197fcc",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-22T13:47:50Z",
+      "side": 1,
+      "message": "Hello Sigurd, all DCHECKs in CodeVerify seems to be valid. Could you please let me know which one you want to remove?",
+      "parentUuid": "dcfc9dee_f7e72535",
       "revId": "a2ff664b39eb018d0ef070072f1f07dd127e5268",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -62,6 +104,30 @@
       "revId": "a2ff664b39eb018d0ef070072f1f07dd127e5268",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "792eb601_0c35a593",
+        "filename": "src/objects/code.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-01-22T13:47:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab70a1e1_96ed2a6c",
+      "range": {
+        "startLine": 101,
+        "startChar": 2,
+        "endLine": 101,
+        "endChar": 54
+      },
+      "revId": "a2ff664b39eb018d0ef070072f1f07dd127e5268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
