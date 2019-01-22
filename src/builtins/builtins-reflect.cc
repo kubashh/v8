@@ -41,7 +41,7 @@ BUILTIN(ReflectDefineProperty) {
   }
 
   Maybe<bool> result = JSReceiver::DefineOwnProperty(
-      isolate, Handle<JSReceiver>::cast(target), name, &desc, kDontThrow);
+      isolate, Handle<JSReceiver>::cast(target), name, &desc, Just(kDontThrow));
   MAYBE_RETURN(result, ReadOnlyRoots(isolate).exception());
   return *isolate->factory()->ToBoolean(result.FromJust());
 }
