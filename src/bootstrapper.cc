@@ -4653,6 +4653,10 @@ void Genesis::InitializeGlobal_harmony_intl_segmenter() {
   }
 }
 
+void Genesis::InitializeGlobal_harmony_intl_bigint() {
+  // No new functions.
+}
+
 #endif  // V8_INTL_SUPPORT
 
 void Genesis::InitializeGlobal_harmony_object_from_entries() {
