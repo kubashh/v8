@@ -149,7 +149,6 @@ class SerializerForBackgroundCompilation {
  private:
   SerializerForBackgroundCompilation(JSHeapBroker* broker, Zone* zone,
                                      FunctionBlueprint function,
-                                     const Hints& receiver,
                                      const HintsVector& arguments);
 
   void TraverseBytecode();
