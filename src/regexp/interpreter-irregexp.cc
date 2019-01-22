@@ -519,6 +519,7 @@ static RegExpImpl::IrregexpResult RawMatch(Isolate* isolate,
         break;
       }
       BYTECODE(CHECK_NOT_BACK_REF_NO_CASE_UNICODE)
+      V8_FALLTHROUGH;
       BYTECODE(CHECK_NOT_BACK_REF_NO_CASE) {
         bool unicode =
             (insn & BYTECODE_MASK) == BC_CHECK_NOT_BACK_REF_NO_CASE_UNICODE;
@@ -537,6 +538,7 @@ static RegExpImpl::IrregexpResult RawMatch(Isolate* isolate,
         break;
       }
       BYTECODE(CHECK_NOT_BACK_REF_NO_CASE_UNICODE_BACKWARD)
+      V8_FALLTHROUGH;
       BYTECODE(CHECK_NOT_BACK_REF_NO_CASE_BACKWARD) {
         bool unicode = (insn & BYTECODE_MASK) ==
                        BC_CHECK_NOT_BACK_REF_NO_CASE_UNICODE_BACKWARD;
@@ -596,7 +598,7 @@ RegExpImpl::IrregexpResult IrregexpInterpreter::Match(
   DisallowHeapAllocation no_gc;
   const byte* code_base = code_array->GetDataStartAddress();
   uc16 previous_char = '\n';
-  String::FlatContent subject_content = subject->GetFlatContent();
+  String::FlatContent subject_content = subject->GetFlatContent(no_gc);
   if (subject_content.IsOneByte()) {
     Vector<const uint8_t> subject_vector = subject_content.ToOneByteVector();
     if (start_position != 0) previous_char = subject_vector[start_position - 1];

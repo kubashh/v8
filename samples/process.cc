@@ -650,10 +650,10 @@ MaybeLocal<String> ReadFile(Isolate* isolate, const string& name) {
   size_t size = ftell(file);
   rewind(file);
 
-  char* chars = new char[size + 1];
-  chars[size] = '\0';
+  std::unique_ptr<char> chars(new char[size + 1]);
+  chars.get()[size] = '\0';
   for (size_t i = 0; i < size;) {
-    i += fread(&chars[i], 1, size - i, file);
+    i += fread(&chars.get()[i], 1, size - i, file);
     if (ferror(file)) {
       fclose(file);
       return MaybeLocal<String>();
@@ -661,8 +661,7 @@ MaybeLocal<String> ReadFile(Isolate* isolate, const string& name) {
   }
   fclose(file);
   MaybeLocal<String> result = String::NewFromUtf8(
-      isolate, chars, NewStringType::kNormal, static_cast<int>(size));
-  delete[] chars;
+      isolate, chars.get(), NewStringType::kNormal, static_cast<int>(size));
   return result;
 }
 
@@ -701,8 +700,8 @@ void PrintMap(map<string, string>* m) {
 int main(int argc, char* argv[]) {
   v8::V8::InitializeICUDefaultLocation(argv[0]);
   v8::V8::InitializeExternalStartupData(argv[0]);
-  v8::Platform* platform = v8::platform::CreateDefaultPlatform();
-  v8::V8::InitializePlatform(platform);
+  std::unique_ptr<v8::Platform> platform = v8::platform::NewDefaultPlatform();
+  v8::V8::InitializePlatform(platform.get());
   v8::V8::Initialize();
   map<string, string> options;
   string file;
@@ -728,7 +727,7 @@ int main(int argc, char* argv[]) {
     fprintf(stderr, "Error initializing processor.\n");
     return 1;
   }
-  if (!ProcessEntries(platform, &processor, kSampleSize, kSampleRequests))
+  if (!ProcessEntries(platform.get(), &processor, kSampleSize, kSampleRequests))
     return 1;
   PrintMap(&output);
 }

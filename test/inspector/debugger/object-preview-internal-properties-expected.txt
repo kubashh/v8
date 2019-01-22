@@ -26,13 +26,14 @@ expression: Object(Symbol(42))
 {
     name : [[PrimitiveValue]]
     type : symbol
-    valuePreview : {
-        description : Symbol
-        overflow : false
-        properties : [
-        ]
-        type : object
-    }
+    value : Symbol(42)
+}
+
+expression: Object(BigInt(2))
+{
+    name : [[PrimitiveValue]]
+    type : bigint
+    value : 2n
 }
 
 

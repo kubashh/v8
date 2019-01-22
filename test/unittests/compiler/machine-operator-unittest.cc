@@ -11,8 +11,7 @@
 namespace v8 {
 namespace internal {
 namespace compiler {
-
-#if GTEST_HAS_COMBINE
+namespace machine_operator_unittest {
 
 template <typename T>
 class MachineOperatorTestWithParam
@@ -31,8 +30,6 @@ class MachineOperatorTestWithParam
 };
 
 
-namespace {
-
 const MachineRepresentation kMachineReps[] = {MachineRepresentation::kWord32,
                                               MachineRepresentation::kWord64};
 
@@ -49,8 +46,6 @@ const MachineRepresentation kRepresentationsForStore[] = {
     MachineRepresentation::kWord8,   MachineRepresentation::kWord16,
     MachineRepresentation::kWord32,  MachineRepresentation::kWord64,
     MachineRepresentation::kTagged};
-
-}  // namespace
 
 
 // -----------------------------------------------------------------------------
@@ -91,8 +86,7 @@ TEST_P(MachineLoadOperatorTest, OpcodeIsCorrect) {
 
 TEST_P(MachineLoadOperatorTest, ParameterIsCorrect) {
   MachineOperatorBuilder machine(zone(), representation());
-  EXPECT_EQ(GetParam(),
-            OpParameter<LoadRepresentation>(machine.Load(GetParam())));
+  EXPECT_EQ(GetParam(), LoadRepresentationOf(machine.Load(GetParam())));
 }
 
 
@@ -152,8 +146,7 @@ TEST_P(MachineStoreOperatorTest, OpcodeIsCorrect) {
 
 TEST_P(MachineStoreOperatorTest, ParameterIsCorrect) {
   MachineOperatorBuilder machine(zone(), representation());
-  EXPECT_EQ(GetParam(),
-            OpParameter<StoreRepresentation>(machine.Store(GetParam())));
+  EXPECT_EQ(GetParam(), StoreRepresentationOf(machine.Store(GetParam())));
 }
 
 
@@ -164,12 +157,9 @@ INSTANTIATE_TEST_CASE_P(
         ::testing::Combine(::testing::ValuesIn(kRepresentationsForStore),
                            ::testing::Values(kNoWriteBarrier,
                                              kFullWriteBarrier))));
-#endif
 
 // -----------------------------------------------------------------------------
 // Pure operators.
-
-namespace {
 
 struct PureOperator {
   const Operator* (MachineOperatorBuilder::*constructor)();
@@ -269,7 +259,6 @@ const PureOperator kPureOperators[] = {
 #undef PURE
 };
 
-}  // namespace
 
 class MachinePureOperatorTest : public TestWithZone {
  protected:
@@ -299,8 +288,6 @@ TEST_F(MachinePureOperatorTest, PureOperators) {
 
 // Optional operators.
 
-namespace {
-
 struct OptionalOperatorEntry {
   const OptionalOperator (MachineOperatorBuilder::*constructor)();
   MachineOperatorBuilder::Flag enabling_flag;
@@ -327,7 +314,6 @@ const OptionalOperatorEntry kOptionalOperators[] = {
     OPTIONAL_ENTRY(Float64RoundTiesAway, 1, 0, 1),  // --
 #undef OPTIONAL_ENTRY
 };
-}  // namespace
 
 
 class MachineOptionalOperatorTest : public TestWithZone {
@@ -365,11 +351,7 @@ TEST_F(MachineOptionalOperatorTest, OptionalOperators) {
 // Pseudo operators.
 
 
-namespace {
-
 typedef TestWithZone MachineOperatorTest;
-
-}  // namespace
 
 
 TEST_F(MachineOperatorTest, PseudoOperatorsWhenWordSizeIs32Bit) {
@@ -415,6 +397,7 @@ TEST_F(MachineOperatorTest, PseudoOperatorsWhenWordSizeIs64Bit) {
   EXPECT_EQ(machine.Int64LessThanOrEqual(), machine.IntLessThanOrEqual());
 }
 
+}  // namespace machine_operator_unittest
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8

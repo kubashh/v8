@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 #include "test/cctest/compiler/codegen-tester.h"
+
+#include "src/base/overflowing-math.h"
 #include "src/objects-inl.h"
 #include "test/cctest/cctest.h"
 #include "test/cctest/compiler/value-helper.h"
@@ -48,92 +50,92 @@ TEST(CompareWrapper) {
   CHECK_EQ(true, wWord32Equal.Int32Compare(257, 257));
   CHECK_EQ(true, wWord32Equal.Int32Compare(65539, 65539));
   CHECK_EQ(true, wWord32Equal.Int32Compare(-1, -1));
-  CHECK_EQ(true, wWord32Equal.Int32Compare(0xffffffff, 0xffffffff));
+  CHECK_EQ(true, wWord32Equal.Int32Compare(0xFFFFFFFF, 0xFFFFFFFF));
 
   CHECK_EQ(false, wWord32Equal.Int32Compare(0, 1));
   CHECK_EQ(false, wWord32Equal.Int32Compare(257, 256));
   CHECK_EQ(false, wWord32Equal.Int32Compare(65539, 65537));
   CHECK_EQ(false, wWord32Equal.Int32Compare(-1, -2));
-  CHECK_EQ(false, wWord32Equal.Int32Compare(0xffffffff, 0xfffffffe));
+  CHECK_EQ(false, wWord32Equal.Int32Compare(0xFFFFFFFF, 0xFFFFFFFE));
 
   CHECK_EQ(false, wInt32LessThan.Int32Compare(0, 0));
   CHECK_EQ(false, wInt32LessThan.Int32Compare(357, 357));
   CHECK_EQ(false, wInt32LessThan.Int32Compare(75539, 75539));
   CHECK_EQ(false, wInt32LessThan.Int32Compare(-1, -1));
-  CHECK_EQ(false, wInt32LessThan.Int32Compare(0xffffffff, 0xffffffff));
+  CHECK_EQ(false, wInt32LessThan.Int32Compare(0xFFFFFFFF, 0xFFFFFFFF));
 
   CHECK_EQ(true, wInt32LessThan.Int32Compare(0, 1));
   CHECK_EQ(true, wInt32LessThan.Int32Compare(456, 457));
   CHECK_EQ(true, wInt32LessThan.Int32Compare(85537, 85539));
   CHECK_EQ(true, wInt32LessThan.Int32Compare(-2, -1));
-  CHECK_EQ(true, wInt32LessThan.Int32Compare(0xfffffffe, 0xffffffff));
+  CHECK_EQ(true, wInt32LessThan.Int32Compare(0xFFFFFFFE, 0xFFFFFFFF));
 
   CHECK_EQ(false, wInt32LessThan.Int32Compare(1, 0));
   CHECK_EQ(false, wInt32LessThan.Int32Compare(457, 456));
   CHECK_EQ(false, wInt32LessThan.Int32Compare(85539, 85537));
   CHECK_EQ(false, wInt32LessThan.Int32Compare(-1, -2));
-  CHECK_EQ(false, wInt32LessThan.Int32Compare(0xffffffff, 0xfffffffe));
+  CHECK_EQ(false, wInt32LessThan.Int32Compare(0xFFFFFFFF, 0xFFFFFFFE));
 
   CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(0, 0));
   CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(357, 357));
   CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(75539, 75539));
   CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(-1, -1));
-  CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(0xffffffff, 0xffffffff));
+  CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(0xFFFFFFFF, 0xFFFFFFFF));
 
   CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(0, 1));
   CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(456, 457));
   CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(85537, 85539));
   CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(-2, -1));
-  CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(0xfffffffe, 0xffffffff));
+  CHECK_EQ(true, wInt32LessThanOrEqual.Int32Compare(0xFFFFFFFE, 0xFFFFFFFF));
 
   CHECK_EQ(false, wInt32LessThanOrEqual.Int32Compare(1, 0));
   CHECK_EQ(false, wInt32LessThanOrEqual.Int32Compare(457, 456));
   CHECK_EQ(false, wInt32LessThanOrEqual.Int32Compare(85539, 85537));
   CHECK_EQ(false, wInt32LessThanOrEqual.Int32Compare(-1, -2));
-  CHECK_EQ(false, wInt32LessThanOrEqual.Int32Compare(0xffffffff, 0xfffffffe));
+  CHECK_EQ(false, wInt32LessThanOrEqual.Int32Compare(0xFFFFFFFF, 0xFFFFFFFE));
 
   // Unsigned comparisons.
   CHECK_EQ(false, wUint32LessThan.Int32Compare(0, 0));
   CHECK_EQ(false, wUint32LessThan.Int32Compare(357, 357));
   CHECK_EQ(false, wUint32LessThan.Int32Compare(75539, 75539));
   CHECK_EQ(false, wUint32LessThan.Int32Compare(-1, -1));
-  CHECK_EQ(false, wUint32LessThan.Int32Compare(0xffffffff, 0xffffffff));
-  CHECK_EQ(false, wUint32LessThan.Int32Compare(0xffffffff, 0));
+  CHECK_EQ(false, wUint32LessThan.Int32Compare(0xFFFFFFFF, 0xFFFFFFFF));
+  CHECK_EQ(false, wUint32LessThan.Int32Compare(0xFFFFFFFF, 0));
   CHECK_EQ(false, wUint32LessThan.Int32Compare(-2999, 0));
 
   CHECK_EQ(true, wUint32LessThan.Int32Compare(0, 1));
   CHECK_EQ(true, wUint32LessThan.Int32Compare(456, 457));
   CHECK_EQ(true, wUint32LessThan.Int32Compare(85537, 85539));
   CHECK_EQ(true, wUint32LessThan.Int32Compare(-11, -10));
-  CHECK_EQ(true, wUint32LessThan.Int32Compare(0xfffffffe, 0xffffffff));
-  CHECK_EQ(true, wUint32LessThan.Int32Compare(0, 0xffffffff));
+  CHECK_EQ(true, wUint32LessThan.Int32Compare(0xFFFFFFFE, 0xFFFFFFFF));
+  CHECK_EQ(true, wUint32LessThan.Int32Compare(0, 0xFFFFFFFF));
   CHECK_EQ(true, wUint32LessThan.Int32Compare(0, -2996));
 
   CHECK_EQ(false, wUint32LessThan.Int32Compare(1, 0));
   CHECK_EQ(false, wUint32LessThan.Int32Compare(457, 456));
   CHECK_EQ(false, wUint32LessThan.Int32Compare(85539, 85537));
   CHECK_EQ(false, wUint32LessThan.Int32Compare(-10, -21));
-  CHECK_EQ(false, wUint32LessThan.Int32Compare(0xffffffff, 0xfffffffe));
+  CHECK_EQ(false, wUint32LessThan.Int32Compare(0xFFFFFFFF, 0xFFFFFFFE));
 
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(0, 0));
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(357, 357));
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(75539, 75539));
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(-1, -1));
-  CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(0xffffffff, 0xffffffff));
+  CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(0xFFFFFFFF, 0xFFFFFFFF));
 
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(0, 1));
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(456, 457));
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(85537, 85539));
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(-300, -299));
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(-300, -300));
-  CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(0xfffffffe, 0xffffffff));
+  CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(0xFFFFFFFE, 0xFFFFFFFF));
   CHECK_EQ(true, wUint32LessThanOrEqual.Int32Compare(0, -2995));
 
   CHECK_EQ(false, wUint32LessThanOrEqual.Int32Compare(1, 0));
   CHECK_EQ(false, wUint32LessThanOrEqual.Int32Compare(457, 456));
   CHECK_EQ(false, wUint32LessThanOrEqual.Int32Compare(85539, 85537));
   CHECK_EQ(false, wUint32LessThanOrEqual.Int32Compare(-130, -170));
-  CHECK_EQ(false, wUint32LessThanOrEqual.Int32Compare(0xffffffff, 0xfffffffe));
+  CHECK_EQ(false, wUint32LessThanOrEqual.Int32Compare(0xFFFFFFFF, 0xFFFFFFFE));
   CHECK_EQ(false, wUint32LessThanOrEqual.Int32Compare(-2997, 0));
 
   CompareWrapper wFloat64Equal(IrOpcode::kFloat64Equal);
@@ -285,7 +287,7 @@ TEST(CompareWrapper) {
 
 
 void Int32BinopInputShapeTester::TestAllInputShapes() {
-  std::vector<int32_t> inputs = ValueHelper::int32_vector();
+  Vector<const int32_t> inputs = ValueHelper::int32_vector();
   int num_int_inputs = static_cast<int>(inputs.size());
   if (num_int_inputs > 16) num_int_inputs = 16;  // limit to 16 inputs
 
@@ -319,7 +321,6 @@ void Int32BinopInputShapeTester::TestAllInputShapes() {
 
       gen->gen(&m, n0, n1);
 
-      if (false) printf("Int32BinopInputShapeTester i=%d, j=%d\n", i, j);
       if (i >= 0) {
         input_a = inputs[i];
         RunRight(&m);
@@ -340,7 +341,6 @@ void Int32BinopInputShapeTester::Run(RawMachineAssemblerTester<int32_t>* m) {
       input_a = *pl;
       input_b = *pr;
       int32_t expect = gen->expected(input_a, input_b);
-      if (false) printf("  cmp(a=%d, b=%d) ?== %d\n", input_a, input_b, expect);
       CHECK_EQ(expect, m->Call(input_a, input_b));
     }
   }
@@ -352,7 +352,6 @@ void Int32BinopInputShapeTester::RunLeft(
   FOR_UINT32_INPUTS(i) {
     input_a = *i;
     int32_t expect = gen->expected(input_a, input_b);
-    if (false) printf("  cmp(a=%d, b=%d) ?== %d\n", input_a, input_b, expect);
     CHECK_EQ(expect, m->Call(input_a, input_b));
   }
 }
@@ -363,7 +362,6 @@ void Int32BinopInputShapeTester::RunRight(
   FOR_UINT32_INPUTS(i) {
     input_b = *i;
     int32_t expect = gen->expected(input_a, input_b);
-    if (false) printf("  cmp(a=%d, b=%d) ?== %d\n", input_a, input_b, expect);
     CHECK_EQ(expect, m->Call(input_a, input_b));
   }
 }
@@ -385,7 +383,7 @@ void RunSmiConstant(int32_t v) {
 // TODO(dcarney): on x64 Smis are generated with the SmiConstantRegister
 #if !V8_TARGET_ARCH_X64
   if (Smi::IsValid(v)) {
-    RawMachineAssemblerTester<Object*> m;
+    RawMachineAssemblerTester<Object> m;
     m.Return(m.NumberConstant(v));
     CHECK_EQ(Smi::FromInt(v), m.Call());
   }
@@ -394,14 +392,14 @@ void RunSmiConstant(int32_t v) {
 
 
 void RunNumberConstant(double v) {
-  RawMachineAssemblerTester<Object*> m;
+  RawMachineAssemblerTester<Object> m;
 #if V8_TARGET_ARCH_X64
   // TODO(dcarney): on x64 Smis are generated with the SmiConstantRegister
   Handle<Object> number = m.isolate()->factory()->NewNumber(v);
   if (number->IsSmi()) return;
 #endif
   m.Return(m.NumberConstant(v));
-  Object* result = m.Call();
+  Object result = m.Call();
   m.CheckNumber(v, result);
 }
 
@@ -423,11 +421,12 @@ TEST(RunInt32Constants) {
 
 
 TEST(RunSmiConstants) {
-  for (int32_t i = 1; i < Smi::kMaxValue && i != 0; i = i << 1) {
+  for (int32_t i = 1; i < Smi::kMaxValue && i != 0;
+       i = base::ShlWithWraparound(i, 1)) {
     RunSmiConstant(i);
-    RunSmiConstant(3 * i);
-    RunSmiConstant(5 * i);
-    RunSmiConstant(-i);
+    RunSmiConstant(base::MulWithWraparound(3, i));
+    RunSmiConstant(base::MulWithWraparound(5, i));
+    RunSmiConstant(base::NegateWithWraparound(i));
     RunSmiConstant(i | 1);
     RunSmiConstant(i | 3);
   }
@@ -448,9 +447,10 @@ TEST(RunNumberConstants) {
     FOR_INT32_INPUTS(i) { RunNumberConstant(*i); }
   }
 
-  for (int32_t i = 1; i < Smi::kMaxValue && i != 0; i = i << 1) {
+  for (int32_t i = 1; i < Smi::kMaxValue && i != 0;
+       i = base::ShlWithWraparound(i, 1)) {
     RunNumberConstant(i);
-    RunNumberConstant(-i);
+    RunNumberConstant(base::NegateWithWraparound(i));
     RunNumberConstant(i | 1);
     RunNumberConstant(i | 3);
   }
@@ -462,24 +462,25 @@ TEST(RunNumberConstants) {
 
 
 TEST(RunEmptyString) {
-  RawMachineAssemblerTester<Object*> m;
+  RawMachineAssemblerTester<Object> m;
   m.Return(m.StringConstant("empty"));
   m.CheckString("empty", m.Call());
 }
 
 
 TEST(RunHeapConstant) {
-  RawMachineAssemblerTester<Object*> m;
+  RawMachineAssemblerTester<Object> m;
   m.Return(m.StringConstant("empty"));
   m.CheckString("empty", m.Call());
 }
 
 
 TEST(RunHeapNumberConstant) {
-  RawMachineAssemblerTester<HeapObject*> m;
+  RawMachineAssemblerTester<void*> m;
   Handle<HeapObject> number = m.isolate()->factory()->NewHeapNumber(100.5);
   m.Return(m.HeapConstant(number));
-  HeapObject* result = m.Call();
+  HeapObject result =
+      HeapObject::cast(Object(reinterpret_cast<Address>(m.Call())));
   CHECK_EQ(result, *number);
 }
 
@@ -579,6 +580,20 @@ TEST(RunBinopTester) {
 
 #if V8_TARGET_ARCH_64_BIT
 // TODO(ahaas): run int64 tests on all platforms when supported.
+
+namespace {
+
+int64_t Add4(int64_t a, int64_t b, int64_t c, int64_t d) {
+  // Operate on uint64_t values to avoid undefined behavior.
+  return static_cast<int64_t>(
+      static_cast<uint64_t>(a) + static_cast<uint64_t>(b) +
+      static_cast<uint64_t>(c) + static_cast<uint64_t>(d));
+}
+
+int64_t Add3(int64_t a, int64_t b, int64_t c) { return Add4(a, b, c, 0); }
+
+}  // namespace
+
 TEST(RunBufferedRawMachineAssemblerTesterTester) {
   {
     BufferedRawMachineAssemblerTester<int64_t> m;
@@ -596,8 +611,8 @@ TEST(RunBufferedRawMachineAssemblerTesterTester) {
     m.Return(m.Int64Add(m.Parameter(0), m.Parameter(1)));
     FOR_INT64_INPUTS(i) {
       FOR_INT64_INPUTS(j) {
-        CHECK_EQ(*i + *j, m.Call(*i, *j));
-        CHECK_EQ(*j + *i, m.Call(*j, *i));
+        CHECK_EQ(base::AddWithWraparound(*i, *j), m.Call(*i, *j));
+        CHECK_EQ(base::AddWithWraparound(*j, *i), m.Call(*j, *i));
       }
     }
   }
@@ -608,9 +623,9 @@ TEST(RunBufferedRawMachineAssemblerTesterTester) {
         m.Int64Add(m.Int64Add(m.Parameter(0), m.Parameter(1)), m.Parameter(2)));
     FOR_INT64_INPUTS(i) {
       FOR_INT64_INPUTS(j) {
-        CHECK_EQ(*i + *i + *j, m.Call(*i, *i, *j));
-        CHECK_EQ(*i + *j + *i, m.Call(*i, *j, *i));
-        CHECK_EQ(*j + *i + *i, m.Call(*j, *i, *i));
+        CHECK_EQ(Add3(*i, *i, *j), m.Call(*i, *i, *j));
+        CHECK_EQ(Add3(*i, *j, *i), m.Call(*i, *j, *i));
+        CHECK_EQ(Add3(*j, *i, *i), m.Call(*j, *i, *i));
       }
     }
   }
@@ -623,10 +638,10 @@ TEST(RunBufferedRawMachineAssemblerTesterTester) {
         m.Parameter(3)));
     FOR_INT64_INPUTS(i) {
       FOR_INT64_INPUTS(j) {
-        CHECK_EQ(*i + *i + *i + *j, m.Call(*i, *i, *i, *j));
-        CHECK_EQ(*i + *i + *j + *i, m.Call(*i, *i, *j, *i));
-        CHECK_EQ(*i + *j + *i + *i, m.Call(*i, *j, *i, *i));
-        CHECK_EQ(*j + *i + *i + *i, m.Call(*j, *i, *i, *i));
+        CHECK_EQ(Add4(*i, *i, *i, *j), m.Call(*i, *i, *i, *j));
+        CHECK_EQ(Add4(*i, *i, *j, *i), m.Call(*i, *i, *j, *i));
+        CHECK_EQ(Add4(*i, *j, *i, *i), m.Call(*i, *j, *i, *i));
+        CHECK_EQ(Add4(*j, *i, *i, *i), m.Call(*j, *i, *i, *i));
       }
     }
   }
@@ -662,10 +677,10 @@ TEST(RunBufferedRawMachineAssemblerTesterTester) {
     FOR_INT64_INPUTS(i) {
       FOR_INT64_INPUTS(j) {
         m.Call(*i, *j);
-        CHECK_EQ(*i + *j, result);
+        CHECK_EQ(base::AddWithWraparound(*i, *j), result);
 
         m.Call(*j, *i);
-        CHECK_EQ(*j + *i, result);
+        CHECK_EQ(base::AddWithWraparound(*j, *i), result);
       }
     }
   }
@@ -681,13 +696,13 @@ TEST(RunBufferedRawMachineAssemblerTesterTester) {
     FOR_INT64_INPUTS(i) {
       FOR_INT64_INPUTS(j) {
         m.Call(*i, *i, *j);
-        CHECK_EQ(*i + *i + *j, result);
+        CHECK_EQ(Add3(*i, *i, *j), result);
 
         m.Call(*i, *j, *i);
-        CHECK_EQ(*i + *j + *i, result);
+        CHECK_EQ(Add3(*i, *j, *i), result);
 
         m.Call(*j, *i, *i);
-        CHECK_EQ(*j + *i + *i, result);
+        CHECK_EQ(Add3(*j, *i, *i), result);
       }
     }
   }
@@ -706,16 +721,16 @@ TEST(RunBufferedRawMachineAssemblerTesterTester) {
     FOR_INT64_INPUTS(i) {
       FOR_INT64_INPUTS(j) {
         m.Call(*i, *i, *i, *j);
-        CHECK_EQ(*i + *i + *i + *j, result);
+        CHECK_EQ(Add4(*i, *i, *i, *j), result);
 
         m.Call(*i, *i, *j, *i);
-        CHECK_EQ(*i + *i + *j + *i, result);
+        CHECK_EQ(Add4(*i, *i, *j, *i), result);
 
         m.Call(*i, *j, *i, *i);
-        CHECK_EQ(*i + *j + *i + *i, result);
+        CHECK_EQ(Add4(*i, *j, *i, *i), result);
 
         m.Call(*j, *i, *i, *i);
-        CHECK_EQ(*j + *i + *i + *i, result);
+        CHECK_EQ(Add4(*j, *i, *i, *i), result);
       }
     }
   }

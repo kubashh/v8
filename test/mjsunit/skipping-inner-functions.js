@@ -352,3 +352,28 @@ TestSkippableFunctionInForOfHeaderAndBody();
   }
   lazy();
 })();
+
+
+(function TestLazinessDecisionWithDefaultConstructors() {
+  // Regression test for
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=773576
+
+  // The problem was that Parser and PreParser treated default constructors
+  // differently, and that threw off the "next / previous function is likely
+  // called" logic.
+
+  function lazy(p = (function() {}, class {}, function() {}, class { method1() { } })) { }
+  lazy();
+})();
+
+(function TestOneByteTwoByteMismatch() {
+  // Regression test for
+  // https://bugs.chromium.org/p/v8/issues/detail?id=7428
+
+  let name = 'weird_string\u2653'.slice(0, 12);
+  let o = {};
+  o[name] = null;
+  var x;
+  eval('x = function weird_string() { function skip() {} };');
+  x();
+})();

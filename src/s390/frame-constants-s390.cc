@@ -4,14 +4,12 @@
 
 #if V8_TARGET_ARCH_S390
 
-#include "src/assembler.h"
+#include "src/s390/frame-constants-s390.h"
+
+#include "src/assembler-inl.h"
 #include "src/frame-constants.h"
 #include "src/macro-assembler.h"
-#include "src/s390/assembler-s390-inl.h"
-#include "src/s390/assembler-s390.h"
-#include "src/s390/macro-assembler-s390.h"
 
-#include "src/s390/frame-constants-s390.h"
 
 namespace v8 {
 namespace internal {
@@ -22,6 +20,11 @@ Register JavaScriptFrame::constant_pool_pointer_register() { UNREACHABLE(); }
 
 int InterpreterFrameConstants::RegisterStackSlotCount(int register_count) {
   return register_count;
+}
+
+int BuiltinContinuationFrameConstants::PaddingSlotCount(int register_count) {
+  USE(register_count);
+  return 0;
 }
 
 }  // namespace internal

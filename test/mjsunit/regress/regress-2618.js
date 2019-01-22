@@ -28,7 +28,11 @@
 // Flags: --use-osr --allow-natives-syntax --ignition-osr --opt
 // Flags: --no-always-opt
 
-// Can't OSR with always-opt.
+// Can't OSR with always-opt or in Lite mode.
+if (isNeverOptimizeLiteMode()) {
+  print("Warning: skipping test that requires optimization in Lite mode.");
+  quit(0);
+}
 assertFalse(isAlwaysOptimize());
 
 function f() {
@@ -40,6 +44,7 @@ function f() {
       // feedback.
       var opt_status = %GetOptimizationStatus(f);
       assertTrue(
+        (opt_status & V8OptimizationStatus.kMaybeDeopted) !== 0 ||
         (opt_status & V8OptimizationStatus.kTopmostFrameIsTurboFanned) !== 0);
     } while (false);
   } while (false);
@@ -66,8 +71,10 @@ function g() {
                 do {
                   for (var i = 0; i < 10; i++) %OptimizeOsr();
                   var opt_status = %GetOptimizationStatus(g);
-                  assertTrue((opt_status
-                    & V8OptimizationStatus.kTopmostFrameIsTurboFanned) !== 0);
+                  assertTrue(
+                    (opt_status & V8OptimizationStatus.kMaybeDeopted) !== 0 ||
+                    (opt_status &
+                        V8OptimizationStatus.kTopmostFrameIsTurboFanned) !== 0);
                 } while (false);
               } while (false);
             } while (false);

@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef V8_COMPILER_REGISTER_CONFIGURATION_H_
-#define V8_COMPILER_REGISTER_CONFIGURATION_H_
+#ifndef V8_REGISTER_CONFIGURATION_H_
+#define V8_REGISTER_CONFIGURATION_H_
 
 #include "src/base/macros.h"
 #include "src/globals.h"
 #include "src/machine-type.h"
 #include "src/reglist.h"
+#include "src/utils.h"
 
 namespace v8 {
 namespace internal {
@@ -25,11 +26,16 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
   };
 
   // Architecture independent maxes.
-  static const int kMaxGeneralRegisters = 32;
-  static const int kMaxFPRegisters = 32;
+  static constexpr int kMaxGeneralRegisters = 32;
+  static constexpr int kMaxFPRegisters = 32;
+  static constexpr int kMaxRegisters =
+      Max(kMaxFPRegisters, kMaxGeneralRegisters);
 
   // Default RegisterConfigurations for the target architecture.
   static const RegisterConfiguration* Default();
+
+  // Register configuration with reserved masking register.
+  static const RegisterConfiguration* Poisoning();
 
   static const RegisterConfiguration* RestrictGeneralRegisters(
       RegList registers);
@@ -39,11 +45,7 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
                         int num_allocatable_double_registers,
                         const int* allocatable_general_codes,
                         const int* allocatable_double_codes,
-                        AliasingKind fp_aliasing_kind,
-                        char const* const* general_names,
-                        char const* const* float_names,
-                        char const* const* double_names,
-                        char const* const* simd128_names);
+                        AliasingKind fp_aliasing_kind);
 
   int num_general_registers() const { return num_general_registers_; }
   int num_float_registers() const { return num_float_registers_; }
@@ -99,18 +101,7 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
   bool IsAllocatableSimd128Code(int index) const {
     return ((1 << index) & allocatable_simd128_codes_mask_) != 0;
   }
-  const char* GetGeneralRegisterName(int code) const {
-    return general_register_names_[code];
-  }
-  const char* GetFloatRegisterName(int code) const {
-    return float_register_names_[code];
-  }
-  const char* GetDoubleRegisterName(int code) const {
-    return double_register_names_[code];
-  }
-  const char* GetSimd128RegisterName(int code) const {
-    return simd128_register_names_[code];
-  }
+
   const int* allocatable_general_codes() const {
     return allocatable_general_codes_;
   }
@@ -136,7 +127,7 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
   bool AreAliases(MachineRepresentation rep, int index,
                   MachineRepresentation other_rep, int other_index) const;
 
-  virtual ~RegisterConfiguration() {}
+  virtual ~RegisterConfiguration() = default;
 
  private:
   const int num_general_registers_;
@@ -156,13 +147,9 @@ class V8_EXPORT_PRIVATE RegisterConfiguration {
   const int* allocatable_double_codes_;
   int allocatable_simd128_codes_[kMaxFPRegisters];
   AliasingKind fp_aliasing_kind_;
-  char const* const* general_register_names_;
-  char const* const* float_register_names_;
-  char const* const* double_register_names_;
-  char const* const* simd128_register_names_;
 };
 
 }  // namespace internal
 }  // namespace v8
 
-#endif  // V8_COMPILER_REGISTER_CONFIGURATION_H_
+#endif  // V8_REGISTER_CONFIGURATION_H_

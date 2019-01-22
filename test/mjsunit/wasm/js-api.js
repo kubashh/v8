@@ -16,7 +16,7 @@ function unexpectedFail(error) {
 }
 
 function assertEq(val, expected) {
-  assertEquals(expected, val);
+  assertSame(expected, val);
 }
 function assertArrayBuffer(val, expected) {
   assertTrue(val instanceof ArrayBuffer);
@@ -194,7 +194,7 @@ assertEq(Object.getPrototypeOf(emptyModule), moduleProto);
 let moduleImportsDesc = Object.getOwnPropertyDescriptor(Module, 'imports');
 assertEq(typeof moduleImportsDesc.value, 'function');
 assertTrue(moduleImportsDesc.writable);
-assertFalse(moduleImportsDesc.enumerable);
+assertTrue(moduleImportsDesc.enumerable);
 assertTrue(moduleImportsDesc.configurable);
 
 // 'WebAssembly.Module.imports' method
@@ -241,7 +241,7 @@ assertEq(arr[3].name, 'x');
 let moduleExportsDesc = Object.getOwnPropertyDescriptor(Module, 'exports');
 assertEq(typeof moduleExportsDesc.value, 'function');
 assertTrue(moduleExportsDesc.writable);
-assertFalse(moduleExportsDesc.enumerable);
+assertTrue(moduleExportsDesc.enumerable);
 assertTrue(moduleExportsDesc.configurable);
 
 // 'WebAssembly.Module.exports' method
@@ -265,7 +265,7 @@ let exportingModuleBinary2 = (() => {
   builder.addFunction('foo', kSig_v_v).addBody([]).exportAs('a');
   builder.addMemory(1, 1, false);
   builder.exportMemoryAs('b');
-  builder.setFunctionTableBounds(1, 1);
+  builder.setTableBounds(1, 1);
   builder.addExportOfKind('c', kExternalTable, 0);
   var o = builder.addGlobal(kWasmI32, false).exportAs('x');
   return new Int8Array(builder.toBuffer());
@@ -286,9 +286,9 @@ assertEq(arr[3].name, 'x');
 let moduleCustomSectionsDesc =
     Object.getOwnPropertyDescriptor(Module, 'customSections');
 assertEq(typeof moduleCustomSectionsDesc.value, 'function');
-assertEq(moduleCustomSectionsDesc.writable, true);
-assertEq(moduleCustomSectionsDesc.enumerable, false);
-assertEq(moduleCustomSectionsDesc.configurable, true);
+assertTrue(moduleCustomSectionsDesc.writable);
+assertTrue(moduleCustomSectionsDesc.enumerable);
+assertTrue(moduleCustomSectionsDesc.configurable);
 
 let moduleCustomSections = moduleCustomSectionsDesc.value;
 assertEq(moduleCustomSections.length, 2);
@@ -397,7 +397,7 @@ let instanceExportsDesc =
     Object.getOwnPropertyDescriptor(instanceProto, 'exports');
 assertEq(typeof instanceExportsDesc.get, 'function');
 assertEq(instanceExportsDesc.set, undefined);
-assertFalse(instanceExportsDesc.enumerable);
+assertTrue(instanceExportsDesc.enumerable);
 assertTrue(instanceExportsDesc.configurable);
 
 exportsObj = exportingInstance.exports;
@@ -435,9 +435,9 @@ assertErrorMessage(
     () => new Memory({initial: {valueOf() { throw new Error('here') }}}), Error,
     'here');
 assertErrorMessage(
-    () => new Memory({initial: -1}), RangeError, /bad Memory initial size/);
+    () => new Memory({initial: -1}), TypeError, /bad Memory initial size/);
 assertErrorMessage(
-    () => new Memory({initial: Math.pow(2, 32)}), RangeError,
+    () => new Memory({initial: Math.pow(2, 32)}), TypeError,
     /bad Memory initial size/);
 assertErrorMessage(
     () => new Memory({initial: 1, maximum: Math.pow(2, 32) / Math.pow(2, 14)}),
@@ -446,7 +446,7 @@ assertErrorMessage(
     () => new Memory({initial: 2, maximum: 1}), RangeError,
     /bad Memory maximum size/);
 assertErrorMessage(
-    () => new Memory({maximum: -1}), RangeError, /bad Memory maximum size/);
+    () => new Memory({maximum: -1}), TypeError, /bad Memory maximum size/);
 assertTrue(new Memory({initial: 1}) instanceof Memory);
 assertEq(new Memory({initial: 1.5}).buffer.byteLength, kPageSize);
 
@@ -473,7 +473,7 @@ assertEq(Object.getPrototypeOf(mem1), memoryProto);
 let bufferDesc = Object.getOwnPropertyDescriptor(memoryProto, 'buffer');
 assertEq(typeof bufferDesc.get, 'function');
 assertEq(bufferDesc.set, undefined);
-assertFalse(bufferDesc.enumerable);
+assertTrue(bufferDesc.enumerable);
 assertTrue(bufferDesc.configurable);
 
 // 'WebAssembly.Memory.prototype.buffer' getter
@@ -488,7 +488,7 @@ assertEq(bufferGetter.call(mem1).byteLength, kPageSize);
 // 'WebAssembly.Memory.prototype.grow' data property
 let memGrowDesc = Object.getOwnPropertyDescriptor(memoryProto, 'grow');
 assertEq(typeof memGrowDesc.value, 'function');
-assertFalse(memGrowDesc.enumerable);
+assertTrue(memGrowDesc.enumerable);
 assertTrue(memGrowDesc.configurable);
 
 // 'WebAssembly.Memory.prototype.grow' method
@@ -512,13 +512,40 @@ assertTrue(buf !== mem.buffer);
 assertEq(buf.byteLength, 0);
 buf = mem.buffer;
 assertEq(buf.byteLength, kPageSize);
-assertEq(mem.grow(1), 1);
+assertEq(mem.grow(1, 23), 1);
+assertTrue(buf !== mem.buffer);
+assertEq(buf.byteLength, 0);
+buf = mem.buffer;
+assertEq(buf.byteLength, 2 * kPageSize);
+assertEq(mem.grow(), 2);
 assertTrue(buf !== mem.buffer);
 assertEq(buf.byteLength, 0);
 buf = mem.buffer;
 assertEq(buf.byteLength, 2 * kPageSize);
 assertErrorMessage(() => mem.grow(1), Error, /failed to grow memory/);
+assertErrorMessage(() => mem.grow(Infinity), Error, /failed to grow memory/);
+assertErrorMessage(() => mem.grow(-Infinity), Error, /failed to grow memory/);
 assertEq(buf, mem.buffer);
+let throwOnValueOf = {
+  valueOf: function() {
+    throw Error('throwOnValueOf')
+  }
+};
+assertErrorMessage(() => mem.grow(throwOnValueOf), Error, /throwOnValueOf/);
+assertEq(buf, mem.buffer);
+let zero_wrapper = {
+  valueOf: function() {
+    ++this.call_counter;
+    return 0;
+  },
+  call_counter: 0
+};
+assertEq(mem.grow(zero_wrapper), 2);
+assertEq(zero_wrapper.call_counter, 1);
+assertTrue(buf !== mem.buffer);
+assertEq(buf.byteLength, 0);
+buf = mem.buffer;
+assertEq(buf.byteLength, 2 * kPageSize);
 
 let empty_mem = new Memory({initial: 0, maximum: 5});
 let empty_buf = empty_mem.buffer;
@@ -556,23 +583,24 @@ assertErrorMessage(
         {initial: {valueOf() { throw new Error('here') }}, element: 'anyfunc'}),
     Error, 'here');
 assertErrorMessage(
-    () => new Table({initial: -1, element: 'anyfunc'}), RangeError,
+    () => new Table({initial: -1, element: 'anyfunc'}), TypeError,
     /bad Table initial size/);
 assertErrorMessage(
-    () => new Table({initial: Math.pow(2, 32), element: 'anyfunc'}), RangeError,
+    () => new Table({initial: Math.pow(2, 32), element: 'anyfunc'}), TypeError,
     /bad Table initial size/);
 assertErrorMessage(
     () => new Table({initial: 2, maximum: 1, element: 'anyfunc'}), RangeError,
     /bad Table maximum size/);
 assertErrorMessage(
     () => new Table({initial: 2, maximum: Math.pow(2, 32), element: 'anyfunc'}),
-    RangeError, /bad Table maximum size/);
+    TypeError, /bad Table maximum size/);
 assertTrue(new Table({initial: 1, element: 'anyfunc'}) instanceof Table);
 assertTrue(new Table({initial: 1.5, element: 'anyfunc'}) instanceof Table);
 assertTrue(
     new Table({initial: 1, maximum: 1.5, element: 'anyfunc'}) instanceof Table);
-// TODO:maximum assertTrue(new Table({initial:1, maximum:Math.pow(2,32)-1,
-// element:"anyfunc"}) instanceof Table);
+assertTrue(
+    new Table({initial: 1, maximum: Math.pow(2, 32) - 1, element: 'anyfunc'})
+        instanceof Table);
 
 // 'WebAssembly.Table.prototype' data property
 let tableProtoDesc = Object.getOwnPropertyDescriptor(Table, 'prototype');
@@ -597,7 +625,7 @@ assertEq(Object.getPrototypeOf(tbl1), tableProto);
 let lengthDesc = Object.getOwnPropertyDescriptor(tableProto, 'length');
 assertEq(typeof lengthDesc.get, 'function');
 assertEq(lengthDesc.set, undefined);
-assertFalse(lengthDesc.enumerable);
+assertTrue(lengthDesc.enumerable);
 assertTrue(lengthDesc.configurable);
 
 // 'WebAssembly.Table.prototype.length' getter
@@ -613,7 +641,7 @@ assertEq(lengthGetter.call(tbl1), 2);
 // 'WebAssembly.Table.prototype.get' data property
 let getDesc = Object.getOwnPropertyDescriptor(tableProto, 'get');
 assertEq(typeof getDesc.value, 'function');
-assertFalse(getDesc.enumerable);
+assertTrue(getDesc.enumerable);
 assertTrue(getDesc.configurable);
 
 // 'WebAssembly.Table.prototype.get' method
@@ -623,22 +651,25 @@ assertErrorMessage(
     () => get.call(), TypeError, /called on incompatible undefined/);
 assertErrorMessage(
     () => get.call({}), TypeError, /called on incompatible Object/);
+assertErrorMessage(
+    () => get.call(tbl1), TypeError, /must be convertible to a valid number/);
 assertEq(get.call(tbl1, 0), null);
+assertEq(get.call(tbl1, 0, Infinity), null);
 assertEq(get.call(tbl1, 1), null);
 assertEq(get.call(tbl1, 1.5), null);
 assertErrorMessage(() => get.call(tbl1, 2), RangeError, /bad Table get index/);
 assertErrorMessage(
     () => get.call(tbl1, 2.5), RangeError, /bad Table get index/);
-assertErrorMessage(() => get.call(tbl1, -1), RangeError, /bad Table get index/);
-// TODO assertErrorMessage(() => get.call(tbl1, Math.pow(2,33)), RangeError,
-// /bad Table get index/);
+assertErrorMessage(() => get.call(tbl1, -1), TypeError, /bad Table get index/);
+assertErrorMessage(
+    () => get.call(tbl1, Math.pow(2, 33)), TypeError, /bad Table get index/);
 assertErrorMessage(
     () => get.call(tbl1, {valueOf() { throw new Error('hi') }}), Error, 'hi');
 
 // 'WebAssembly.Table.prototype.set' data property
 let setDesc = Object.getOwnPropertyDescriptor(tableProto, 'set');
 assertEq(typeof setDesc.value, 'function');
-assertFalse(setDesc.enumerable);
+assertTrue(setDesc.enumerable);
 assertTrue(setDesc.configurable);
 
 // 'WebAssembly.Table.prototype.set' method
@@ -651,13 +682,24 @@ assertErrorMessage(
 assertErrorMessage(
     () => set.call(tbl1, 0), TypeError, /requires more than 1 argument/);
 assertErrorMessage(
+    () => set.call(tbl1, undefined), TypeError,
+    /requires more than 1 argument/);
+assertErrorMessage(
     () => set.call(tbl1, 2, null), RangeError, /bad Table set index/);
 assertErrorMessage(
-    () => set.call(tbl1, -1, null), RangeError, /bad Table set index/);
-// TODO assertErrorMessage(() => set.call(tbl1, Math.pow(2,33), null),
-// RangeError, /bad Table set index/);
+    () => set.call(tbl1, -1, null), TypeError, /bad Table set index/);
+assertErrorMessage(
+    () => set.call(tbl1, Math.pow(2, 33), null), TypeError,
+    /bad Table set index/);
+assertErrorMessage(
+    () => set.call(tbl1, Infinity, null), TypeError, /bad Table set index/);
+assertErrorMessage(
+    () => set.call(tbl1, -Infinity, null), TypeError, /bad Table set index/);
 assertErrorMessage(
     () => set.call(tbl1, 0, undefined), TypeError,
+    /can only assign WebAssembly exported functions to Table/);
+assertErrorMessage(
+    () => set.call(tbl1, undefined, undefined), TypeError,
     /can only assign WebAssembly exported functions to Table/);
 assertErrorMessage(
     () => set.call(tbl1, 0, {}), TypeError,
@@ -672,11 +714,14 @@ assertErrorMessage(
     'hai');
 assertEq(set.call(tbl1, 0, null), undefined);
 assertEq(set.call(tbl1, 1, null), undefined);
+assertErrorMessage(
+    () => set.call(tbl1, undefined, null), TypeError,
+    /must be convertible to a valid number/);
 
 // 'WebAssembly.Table.prototype.grow' data property
 let tblGrowDesc = Object.getOwnPropertyDescriptor(tableProto, 'grow');
 assertEq(typeof tblGrowDesc.value, 'function');
-assertFalse(tblGrowDesc.enumerable);
+assertTrue(tblGrowDesc.enumerable);
 assertTrue(tblGrowDesc.configurable);
 
 // 'WebAssembly.Table.prototype.grow' method
@@ -687,17 +732,26 @@ assertErrorMessage(
 assertErrorMessage(
     () => tblGrow.call({}), TypeError, /called on incompatible Object/);
 assertErrorMessage(
-    () => tblGrow.call(tbl1, -1), RangeError, /bad Table grow delta/);
+    () => tblGrow.call(tbl1, -1), TypeError, /bad Table grow delta/);
 assertErrorMessage(
-    () => tblGrow.call(tbl1, Math.pow(2, 32)), RangeError,
+    () => tblGrow.call(tbl1, Math.pow(2, 32)), TypeError,
     /bad Table grow delta/);
 var tbl = new Table({element: 'anyfunc', initial: 1, maximum: 2});
 assertEq(tbl.length, 1);
+assertErrorMessage(
+    () => tbl.grow(Infinity), TypeError, /failed to grow table/);
+assertErrorMessage(
+    () => tbl.grow(-Infinity), TypeError, /failed to grow table/);
 assertEq(tbl.grow(0), 1);
 assertEq(tbl.length, 1);
-assertEq(tbl.grow(1), 1);
+assertEq(tbl.grow(1, 4), 1);
+assertEq(tbl.length, 2);
 assertEq(tbl.length, 2);
 assertErrorMessage(() => tbl.grow(1), Error, /failed to grow table/);
+assertErrorMessage(
+    () => tbl.grow(Infinity), TypeError, /failed to grow table/);
+assertErrorMessage(
+    () => tbl.grow(-Infinity), TypeError, /failed to grow table/);
 
 // 'WebAssembly.validate' function
 assertErrorMessage(() => WebAssembly.validate(), TypeError);
@@ -711,7 +765,7 @@ assertFalse(WebAssembly.validate(moduleBinaryWithMemSectionAndMemImport));
 let compileDesc = Object.getOwnPropertyDescriptor(WebAssembly, 'compile');
 assertEq(typeof compileDesc.value, 'function');
 assertTrue(compileDesc.writable);
-assertFalse(compileDesc.enumerable);
+assertTrue(compileDesc.enumerable);
 assertTrue(compileDesc.configurable);
 
 // 'WebAssembly.compile' function
@@ -757,7 +811,7 @@ let instantiateDesc =
     Object.getOwnPropertyDescriptor(WebAssembly, 'instantiate');
 assertEq(typeof instantiateDesc.value, 'function');
 assertTrue(instantiateDesc.writable);
-assertFalse(instantiateDesc.enumerable);
+assertTrue(instantiateDesc.enumerable);
 assertTrue(instantiateDesc.configurable);
 
 // 'WebAssembly.instantiate' function
@@ -772,7 +826,7 @@ function assertInstantiateError(args, err, msg) {
     // TODO assertTrue(Boolean(error.message.match(msg)));
   });
 }
-var scratch_memory = new WebAssembly.Memory(new ArrayBuffer(10));
+var scratch_memory = new WebAssembly.Memory({ initial: 0 });
 assertInstantiateError([], TypeError, /requires more than 0 arguments/);
 assertInstantiateError(
     [undefined], TypeError, /first argument must be a BufferSource/);
@@ -841,3 +895,42 @@ assertInstantiateSuccess(importingModuleBinary, {'': {f: () => {}}});
 assertInstantiateSuccess(importingModuleBinary.buffer, {'': {f: () => {}}});
 assertInstantiateSuccess(
     memoryImportingModuleBinary, {'': {'my_memory': scratch_memory}});
+
+(function TestSubclassing() {
+  class M extends WebAssembly.Module { }
+  assertThrows(() => new M());
+
+  class I extends WebAssembly.Instance { }
+  assertThrows(() => new I());
+
+  class T extends WebAssembly.Table { }
+  assertThrows(() => new T());
+
+  class Y extends WebAssembly.Memory { }
+  assertThrows(() => new Y());
+})();
+
+(function TestCallWithoutNew() {
+  var bytes = Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x1, 0x00, 0x00, 0x00);
+  assertThrows(() => WebAssembly.Module(bytes), TypeError);
+  assertThrows(() => WebAssembly.Instance(new WebAssembly.Module(bytes)),
+               TypeError);
+  assertThrows(() => WebAssembly.Table({size: 10, element: 'anyfunc'}),
+               TypeError);
+  assertThrows(() => WebAssembly.Memory({size: 10}), TypeError);
+})();
+
+(function TestTinyModule() {
+  var bytes = Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x1, 0x00, 0x00, 0x00);
+  var module = new WebAssembly.Module(bytes);
+  assertTrue(module instanceof Module);
+  var instance = new WebAssembly.Instance(module);
+  assertTrue(instance instanceof Instance);
+})();
+
+(function TestPassBigIntInGlobalWhenNotEnabled() {
+  assertThrows(() => new WebAssembly.Global({ value: "i64" }, 1), TypeError,
+               /Can't set the value/);
+  assertThrows(() => new WebAssembly.Global({ value: "i64" }, 1n), TypeError,
+               /Can't set the value/);
+})();

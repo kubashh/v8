@@ -9,7 +9,8 @@
 #include "src/compiler/node-matchers.h"
 #include "src/compiler/operator-properties.h"
 #include "src/compiler/simplified-operator.h"
-#include "src/zone/zone-list-inl.h"  // TODO(mstarzinger): Fix zone-handle-set.h instead!
+#include "src/handles-inl.h"
+#include "src/objects/map-inl.h"
 
 #ifdef DEBUG
 #define TRACE(...)                                    \
@@ -125,7 +126,18 @@ class VariableTracker {
    public:
     Scope(VariableTracker* tracker, Node* node, Reduction* reduction);
     ~Scope();
-    Node* Get(Variable var) { return current_state_.Get(var); }
+    Maybe<Node*> Get(Variable var) {
+      Node* node = current_state_.Get(var);
+      if (node && node->opcode() == IrOpcode::kDead) {
+        // TODO(tebbi): We use {Dead} as a sentinel for uninitialized memory.
+        // Reading uninitialized memory can only happen in unreachable code. In
+        // this case, we have to mark the object as escaping to avoid dead nodes
+        // in the graph. This is a workaround that should be removed once we can
+        // handle dead nodes everywhere.
+        return Nothing<Node*>();
+      }
+      return Just(node);
+    }
     void Set(Variable var, Node* node) { current_state_.Set(var, node); }
 
    private:
@@ -212,8 +224,12 @@ class EscapeAnalysisTracker : public ZoneObject {
       replacement_ = replacement;
       vobject_ =
           replacement ? tracker_->virtual_objects_.Get(replacement) : nullptr;
-      TRACE("Set %s#%d as replacement.\n", replacement->op()->mnemonic(),
-            replacement->id());
+      if (replacement) {
+        TRACE("Set %s#%d as replacement.\n", replacement->op()->mnemonic(),
+              replacement->id());
+      } else {
+        TRACE("Set nullptr as replacement.\n");
+      }
     }
 
     void MarkForDeletion() { SetReplacement(tracker_->jsgraph_->Dead()); }
@@ -237,10 +253,6 @@ class EscapeAnalysisTracker : public ZoneObject {
   Node* GetReplacementOf(Node* node) { return replacements_[node]; }
   Node* ResolveReplacement(Node* node) {
     if (Node* replacement = GetReplacementOf(node)) {
-      // Replacements cannot have replacements. This is important to ensure
-      // re-visitation: If a replacement is replaced, then all nodes accessing
-      // the replacement have to be updated.
-      DCHECK_NULL(GetReplacementOf(replacement));
       return replacement;
     }
     return node;
@@ -272,7 +284,7 @@ EffectGraphReducer::EffectGraphReducer(
       state_(graph, kNumStates),
       revisit_(zone),
       stack_(zone),
-      reduce_(reduce) {}
+      reduce_(std::move(reduce)) {}
 
 void EffectGraphReducer::ReduceFrom(Node* node) {
   // Perform DFS and eagerly trigger revisitation as soon as possible.
@@ -488,20 +500,24 @@ int OffsetOfFieldAccess(const Operator* op) {
   return access.offset;
 }
 
+int OffsetOfElementAt(ElementAccess const& access, int index) {
+  DCHECK_GE(index, 0);
+  DCHECK_GE(ElementSizeLog2Of(access.machine_type.representation()),
+            kTaggedSizeLog2);
+  return access.header_size +
+         (index << ElementSizeLog2Of(access.machine_type.representation()));
+}
+
 Maybe<int> OffsetOfElementsAccess(const Operator* op, Node* index_node) {
   DCHECK(op->opcode() == IrOpcode::kLoadElement ||
          op->opcode() == IrOpcode::kStoreElement);
-  Type* index_type = NodeProperties::GetType(index_node);
-  if (!index_type->Is(Type::Number())) return Nothing<int>();
-  double max = index_type->Max();
-  double min = index_type->Min();
+  Type index_type = NodeProperties::GetType(index_node);
+  if (!index_type.Is(Type::OrderedNumber())) return Nothing<int>();
+  double max = index_type.Max();
+  double min = index_type.Min();
   int index = static_cast<int>(min);
-  if (!(index == min && index == max)) return Nothing<int>();
-  ElementAccess access = ElementAccessOf(op);
-  DCHECK_GE(ElementSizeLog2Of(access.machine_type.representation()),
-            kPointerSizeLog2);
-  return Just(access.header_size + (index << ElementSizeLog2Of(
-                                        access.machine_type.representation())));
+  if (index < 0 || index != min || index != max) return Nothing<int>();
+  return Just(OffsetOfElementAt(ElementAccessOf(op), index));
 }
 
 Node* LowerCompareMapsWithoutLoad(Node* checked_map,
@@ -585,14 +601,12 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
       Node* object = current->ValueInput(0);
       const VirtualObject* vobject = current->GetVirtualObject(object);
       Variable var;
+      Node* value;
       if (vobject && !vobject->HasEscaped() &&
-          vobject->FieldAt(OffsetOfFieldAccess(op)).To(&var)) {
-        current->SetReplacement(current->Get(var));
+          vobject->FieldAt(OffsetOfFieldAccess(op)).To(&var) &&
+          current->Get(var).To(&value)) {
+        current->SetReplacement(value);
       } else {
-        // TODO(tebbi): At the moment, we mark objects as escaping if there
-        // is a load from an invalid location to avoid dead nodes. This is a
-        // workaround that should be removed once we can handle dead nodes
-        // everywhere.
         current->SetEscaped(object);
       }
       break;
@@ -603,19 +617,71 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
       const VirtualObject* vobject = current->GetVirtualObject(object);
       int offset;
       Variable var;
+      Node* value;
       if (vobject && !vobject->HasEscaped() &&
           OffsetOfElementsAccess(op, index).To(&offset) &&
-          vobject->FieldAt(offset).To(&var)) {
-        current->SetReplacement(current->Get(var));
-      } else {
-        current->SetEscaped(object);
+          vobject->FieldAt(offset).To(&var) && current->Get(var).To(&value)) {
+        current->SetReplacement(value);
+      } else if (vobject && !vobject->HasEscaped()) {
+        // Compute the known length (aka the number of elements) of {object}
+        // based on the virtual object information.
+        ElementAccess const& access = ElementAccessOf(op);
+        int const length =
+            (vobject->size() - access.header_size) >>
+            ElementSizeLog2Of(access.machine_type.representation());
+        Variable var0, var1;
+        Node* value0;
+        Node* value1;
+        if (length == 1 &&
+            vobject->FieldAt(OffsetOfElementAt(access, 0)).To(&var) &&
+            current->Get(var).To(&value) &&
+            (value == nullptr ||
+             NodeProperties::GetType(value).Is(access.type))) {
+          // The {object} has no elements, and we know that the LoadElement
+          // {index} must be within bounds, thus it must always yield this
+          // one element of {object}.
+          current->SetReplacement(value);
+          break;
+        } else if (length == 2 &&
+                   vobject->FieldAt(OffsetOfElementAt(access, 0)).To(&var0) &&
+                   current->Get(var0).To(&value0) &&
+                   (value0 == nullptr ||
+                    NodeProperties::GetType(value0).Is(access.type)) &&
+                   vobject->FieldAt(OffsetOfElementAt(access, 1)).To(&var1) &&
+                   current->Get(var1).To(&value1) &&
+                   (value1 == nullptr ||
+                    NodeProperties::GetType(value1).Is(access.type))) {
+          if (value0 && value1) {
+            // The {object} has exactly two elements, so the LoadElement
+            // must return one of them (i.e. either the element at index
+            // 0 or the one at index 1). So we can turn the LoadElement
+            // into a Select operation instead (still allowing the {object}
+            // to be scalar replaced). We must however mark the elements
+            // of the {object} itself as escaping.
+            Node* check =
+                jsgraph->graph()->NewNode(jsgraph->simplified()->NumberEqual(),
+                                          index, jsgraph->ZeroConstant());
+            NodeProperties::SetType(check, Type::Boolean());
+            Node* select = jsgraph->graph()->NewNode(
+                jsgraph->common()->Select(access.machine_type.representation()),
+                check, value0, value1);
+            NodeProperties::SetType(select, access.type);
+            current->SetReplacement(select);
+            current->SetEscaped(value0);
+            current->SetEscaped(value1);
+            break;
+          } else {
+            // If the variables have no values, we have
+            // not reached the fixed-point yet.
+            break;
+          }
+        }
       }
+      current->SetEscaped(object);
       break;
     }
     case IrOpcode::kTypeGuard: {
-      // The type-guard is re-introduced in the final reducer if the types
-      // don't match.
-      current->SetReplacement(current->ValueInput(0));
+      current->SetVirtualObject(current->ValueInput(0));
       break;
     }
     case IrOpcode::kReferenceEqual: {
@@ -641,8 +707,8 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
         // types (which might confuse representation selection). We get
         // around this by refusing to constant-fold and escape-analyze
         // if the type is not inhabited.
-        if (NodeProperties::GetType(left)->IsInhabited() &&
-            NodeProperties::GetType(right)->IsInhabited()) {
+        if (!NodeProperties::GetType(left).IsNone() &&
+            !NodeProperties::GetType(right).IsNone()) {
           current->SetReplacement(replacement);
         } else {
           current->SetEscaped(left);
@@ -656,13 +722,16 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
       Node* checked = current->ValueInput(0);
       const VirtualObject* vobject = current->GetVirtualObject(checked);
       Variable map_field;
+      Node* map;
       if (vobject && !vobject->HasEscaped() &&
-          vobject->FieldAt(HeapObject::kMapOffset).To(&map_field)) {
-        if (Node* map = current->Get(map_field)) {
-          Type* const map_type = NodeProperties::GetType(map);
-          if (map_type->IsHeapConstant() &&
-              params.maps().contains(ZoneHandleSet<Map>(bit_cast<Handle<Map>>(
-                  map_type->AsHeapConstant()->Value())))) {
+          vobject->FieldAt(HeapObject::kMapOffset).To(&map_field) &&
+          current->Get(map_field).To(&map)) {
+        if (map) {
+          Type const map_type = NodeProperties::GetType(map);
+          AllowHandleDereference handle_dereference;
+          if (map_type.IsHeapConstant() &&
+              params.maps().contains(
+                  Handle<Map>::cast(map_type.AsHeapConstant()->Value()))) {
             current->MarkForDeletion();
             break;
           }
@@ -679,11 +748,13 @@ void ReduceNode(const Operator* op, EscapeAnalysisTracker::Scope* current,
       Node* object = current->ValueInput(0);
       const VirtualObject* vobject = current->GetVirtualObject(object);
       Variable map_field;
+      Node* object_map;
       if (vobject && !vobject->HasEscaped() &&
-          vobject->FieldAt(HeapObject::kMapOffset).To(&map_field)) {
-        if (Node* object_map = current->Get(map_field)) {
+          vobject->FieldAt(HeapObject::kMapOffset).To(&map_field) &&
+          current->Get(map_field).To(&object_map)) {
+        if (object_map) {
           current->SetReplacement(LowerCompareMapsWithoutLoad(
-              object_map, CompareMapsParametersOf(op), jsgraph));
+              object_map, CompareMapsParametersOf(op).maps(), jsgraph));
           break;
         } else {
           // If the variable has no value, we have not reached the fixed-point
@@ -754,7 +825,12 @@ EscapeAnalysis::EscapeAnalysis(JSGraph* jsgraph, Zone* zone)
       jsgraph_(jsgraph) {}
 
 Node* EscapeAnalysisResult::GetReplacementOf(Node* node) {
-  return tracker_->GetReplacementOf(node);
+  Node* replacement = tracker_->GetReplacementOf(node);
+  // Replacements cannot have replacements. This is important to ensure
+  // re-visitation: If a replacement is replaced, then all nodes accessing
+  // the replacement have to be updated.
+  if (replacement) DCHECK_NULL(tracker_->GetReplacementOf(replacement));
+  return replacement;
 }
 
 Node* EscapeAnalysisResult::GetVirtualObjectField(const VirtualObject* vobject,
@@ -770,9 +846,9 @@ const VirtualObject* EscapeAnalysisResult::GetVirtualObject(Node* node) {
 VirtualObject::VirtualObject(VariableTracker* var_states, VirtualObject::Id id,
                              int size)
     : Dependable(var_states->zone()), id_(id), fields_(var_states->zone()) {
-  DCHECK_EQ(0, size % kPointerSize);
+  DCHECK(IsAligned(size, kTaggedSize));
   TRACE("Creating VirtualObject id:%d size:%d\n", id, size);
-  int num_fields = size / kPointerSize;
+  int num_fields = size / kTaggedSize;
   fields_.reserve(num_fields);
   for (int i = 0; i < num_fields; ++i) {
     fields_.push_back(var_states->NewVariable());

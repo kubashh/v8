@@ -17,6 +17,7 @@ InspectorTest.runTestSuite([
       .then(() => checkExpression("new Boolean(false)"))
       .then(() => checkExpression("new String(\"abc\")"))
       .then(() => checkExpression("Object(Symbol(42))"))
+      .then(() => checkExpression("Object(BigInt(2))"))
       .then(next);
   },
 

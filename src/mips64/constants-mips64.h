@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef  V8_MIPS_CONSTANTS_H_
-#define  V8_MIPS_CONSTANTS_H_
+#ifndef V8_MIPS64_CONSTANTS_MIPS64_H_
+#define V8_MIPS64_CONSTANTS_MIPS64_H_
 
 #include "src/base/logging.h"
 #include "src/base/macros.h"
@@ -82,11 +82,20 @@ const uint32_t kMipsSdlOffset = 0;
 #error Unknown endianness
 #endif
 
+#if defined(V8_TARGET_LITTLE_ENDIAN)
+const uint32_t kLeastSignificantByteInInt32Offset = 0;
+const uint32_t kLessSignificantWordInDoublewordOffset = 0;
+#elif defined(V8_TARGET_BIG_ENDIAN)
+const uint32_t kLeastSignificantByteInInt32Offset = 3;
+const uint32_t kLessSignificantWordInDoublewordOffset = 4;
+#else
+#error Unknown endianness
+#endif
+
 #ifndef __STDC_FORMAT_MACROS
 #define __STDC_FORMAT_MACROS
 #endif
 #include <inttypes.h>
-
 
 // Defines constants and accessor classes to assemble, disassemble and
 // simulate MIPS32 instructions.
@@ -97,6 +106,9 @@ const uint32_t kMipsSdlOffset = 0;
 
 namespace v8 {
 namespace internal {
+
+// TODO(sigurds): Change this value once we use relative jumps.
+constexpr size_t kMaxPCRelativeCodeRangeInMB = 0;
 
 // -----------------------------------------------------------------------------
 // Registers and FPURegisters.
@@ -131,8 +143,8 @@ const int kMSALanesDword = kMSARegSize / 64;
 // FPU (coprocessor 1) control registers. Currently only FCSR is implemented.
 const int kFCSRRegister = 31;
 const int kInvalidFPUControlRegister = -1;
-const uint32_t kFPUInvalidResult = static_cast<uint32_t>(1 << 31) - 1;
-const int32_t kFPUInvalidResultNegative = static_cast<int32_t>(1 << 31);
+const uint32_t kFPUInvalidResult = static_cast<uint32_t>(1u << 31) - 1;
+const int32_t kFPUInvalidResultNegative = static_cast<int32_t>(1u << 31);
 const uint64_t kFPU64InvalidResult =
     static_cast<uint64_t>(static_cast<uint64_t>(1) << 63) - 1;
 const int64_t kFPU64InvalidResultNegative =
@@ -171,6 +183,11 @@ const int32_t kPrefHintLoadRetained = 6;
 const int32_t kPrefHintStoreRetained = 7;
 const int32_t kPrefHintWritebackInvalidate = 25;
 const int32_t kPrefHintPrepareForStore = 30;
+
+// Actual value of root register is offset from the root array's start
+// to take advantage of negative displacement values.
+// TODO(sigurds): Choose best value.
+constexpr int kRootRegisterBias = 256;
 
 // Helper functions for converting between register numbers and names.
 class Registers {
@@ -989,7 +1006,7 @@ enum SecondaryField : uint32_t {
   BIT_DF_w = ((2U << 5) << 16),
   BIT_DF_d = ((0U << 6) << 16),
 
-  NULLSF = 0U
+  nullptrSF = 0U
 };
 
 enum MSAMinorOpcode : uint32_t {
@@ -1137,30 +1154,6 @@ enum MSABranchDF {
   MSA_BRANCH_V
 };
 
-// Commute a condition such that {a cond b == b cond' a}.
-inline Condition CommuteCondition(Condition cc) {
-  switch (cc) {
-    case Uless:
-      return Ugreater;
-    case Ugreater:
-      return Uless;
-    case Ugreater_equal:
-      return Uless_equal;
-    case Uless_equal:
-      return Ugreater_equal;
-    case less:
-      return greater;
-    case greater:
-      return less;
-    case greater_equal:
-      return less_equal;
-    case less_equal:
-      return greater_equal;
-    default:
-      return cc;
-  }
-}
-
 
 // ----- Coprocessor conditions.
 enum FPUCondition {
@@ -1261,11 +1254,12 @@ static constexpr uint64_t OpcodeToBitNumber(Opcode opcode) {
   return 1ULL << (static_cast<uint32_t>(opcode) >> kOpcodeShift);
 }
 
+constexpr uint8_t kInstrSize = 4;
+constexpr uint8_t kInstrSizeLog2 = 2;
+
 class InstructionBase {
  public:
   enum {
-    kInstrSize = 4,
-    kInstrSizeLog2 = 2,
     // On MIPS PC cannot actually be directly accessed. We behave as if PC was
     // always the value of the current instruction being executed.
     kPCReadOffset = 0
@@ -1452,22 +1446,22 @@ class InstructionGetters : public T {
   }
 
   inline int RdValue() const {
-    DCHECK(this->InstructionType() == InstructionBase::kRegisterType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kRegisterType);
     return this->Bits(kRdShift + kRdBits - 1, kRdShift);
   }
 
   inline int BaseValue() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kBaseShift + kBaseBits - 1, kBaseShift);
   }
 
   inline int SaValue() const {
-    DCHECK(this->InstructionType() == InstructionBase::kRegisterType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kRegisterType);
     return this->Bits(kSaShift + kSaBits - 1, kSaShift);
   }
 
   inline int LsaSaValue() const {
-    DCHECK(this->InstructionType() == InstructionBase::kRegisterType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kRegisterType);
     return this->Bits(kSaShift + kLsaSaBits - 1, kSaShift);
   }
 
@@ -1506,12 +1500,12 @@ class InstructionGetters : public T {
   }
 
   inline int Bp2Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kRegisterType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kRegisterType);
     return this->Bits(kBp2Shift + kBp2Bits - 1, kBp2Shift);
   }
 
   inline int Bp3Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kRegisterType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kRegisterType);
     return this->Bits(kBp3Shift + kBp3Bits - 1, kBp3Shift);
   }
 
@@ -1553,7 +1547,7 @@ class InstructionGetters : public T {
   }
 
   inline int RdFieldRaw() const {
-    DCHECK(this->InstructionType() == InstructionBase::kRegisterType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kRegisterType);
     return this->InstructionBits() & kRdFieldMask;
   }
 
@@ -1577,37 +1571,37 @@ class InstructionGetters : public T {
       case REGIMM:
         return RtValue();
       default:
-        return NULLSF;
+        return nullptrSF;
     }
   }
 
   inline int32_t ImmValue(int bits) const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(bits - 1, 0);
   }
 
   inline int32_t Imm9Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kImm9Shift + kImm9Bits - 1, kImm9Shift);
   }
 
   inline int32_t Imm16Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kImm16Shift + kImm16Bits - 1, kImm16Shift);
   }
 
   inline int32_t Imm18Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kImm18Shift + kImm18Bits - 1, kImm18Shift);
   }
 
   inline int32_t Imm19Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kImm19Shift + kImm19Bits - 1, kImm19Shift);
   }
 
   inline int32_t Imm21Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kImm21Shift + kImm21Bits - 1, kImm21Shift);
   }
 
@@ -1618,27 +1612,27 @@ class InstructionGetters : public T {
   }
 
   inline int32_t MsaImm8Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kMsaImm8Shift + kMsaImm8Bits - 1, kMsaImm8Shift);
   }
 
   inline int32_t MsaImm5Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kMsaImm5Shift + kMsaImm5Bits - 1, kMsaImm5Shift);
   }
 
   inline int32_t MsaImm10Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kMsaImm10Shift + kMsaImm10Bits - 1, kMsaImm10Shift);
   }
 
   inline int32_t MsaImmMI10Value() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(kMsaImmMI10Shift + kMsaImmMI10Bits - 1, kMsaImmMI10Shift);
   }
 
   inline int32_t MsaBitDf() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     int32_t df_m = this->Bits(22, 16);
     if (((df_m >> 6) & 1U) == 0) {
       return 3;
@@ -1654,7 +1648,7 @@ class InstructionGetters : public T {
   }
 
   inline int32_t MsaBitMValue() const {
-    DCHECK(this->InstructionType() == InstructionBase::kImmediateType);
+    DCHECK_EQ(this->InstructionType(), InstructionBase::kImmediateType);
     return this->Bits(16 + this->MsaBitDf() + 3, 16);
   }
 
@@ -1750,10 +1744,10 @@ const int kCArgSlotCount = 0;
 
 // TODO(plind): below should be based on kPointerSize
 // TODO(plind): find all usages and remove the needless instructions for n64.
-const int kCArgsSlotsSize = kCArgSlotCount * Instruction::kInstrSize * 2;
+const int kCArgsSlotsSize = kCArgSlotCount * kInstrSize * 2;
 
 const int kInvalidStackOffset = -1;
-const int kBranchReturnOffset = 2 * Instruction::kInstrSize;
+const int kBranchReturnOffset = 2 * kInstrSize;
 
 static const int kNegOffset = 0x00008000;
 
@@ -1807,7 +1801,7 @@ InstructionBase::Type InstructionBase::InstructionType() const {
         case LLD_R6:
         case SC_R6:
         case SCD_R6: {
-          DCHECK(kArchVariant == kMips64r6);
+          DCHECK_EQ(kArchVariant, kMips64r6);
           return kImmediateType;
         }
         case DBSHFL: {
@@ -2013,4 +2007,4 @@ bool InstructionGetters<T>::IsForbiddenAfterBranchInstr(Instr instr) {
 }  // namespace internal
 }  // namespace v8
 
-#endif    // #ifndef V8_MIPS_CONSTANTS_H_
+#endif  // V8_MIPS64_CONSTANTS_MIPS64_H_

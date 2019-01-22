@@ -29,8 +29,8 @@ namespace {
 
 const size_t kIndices[] = {0, 1, 42, 100, 1024};
 
-Type* const kJSTypes[] = {Type::Undefined(), Type::Null(),   Type::Boolean(),
-                          Type::Number(),    Type::String(), Type::Object()};
+Type const kJSTypes[] = {Type::Undefined(), Type::Null(),   Type::Boolean(),
+                         Type::Number(),    Type::String(), Type::Object()};
 
 }  // namespace
 
@@ -38,7 +38,7 @@ Type* const kJSTypes[] = {Type::Undefined(), Type::Null(),   Type::Boolean(),
 class JSTypedLoweringTest : public TypedGraphTest {
  public:
   JSTypedLoweringTest() : TypedGraphTest(3), javascript_(zone()) {}
-  ~JSTypedLoweringTest() override {}
+  ~JSTypedLoweringTest() override = default;
 
  protected:
   Reduction Reduce(Node* node) {
@@ -48,12 +48,13 @@ class JSTypedLoweringTest : public TypedGraphTest {
                     &machine);
     // TODO(titzer): mock the GraphReducer here for better unit testing.
     GraphReducer graph_reducer(zone(), graph());
-    JSTypedLowering reducer(&graph_reducer, &jsgraph, zone());
+    JSTypedLowering reducer(&graph_reducer, &jsgraph, broker(), zone());
     return reducer.Reduce(node);
   }
 
   Handle<JSArrayBuffer> NewArrayBuffer(void* bytes, size_t byte_length) {
-    Handle<JSArrayBuffer> buffer = factory()->NewJSArrayBuffer();
+    Handle<JSArrayBuffer> buffer =
+        factory()->NewJSArrayBuffer(SharedFlag::kNotShared);
     JSArrayBuffer::Setup(buffer, isolate(), true, bytes, byte_length);
     return buffer;
   }
@@ -64,77 +65,6 @@ class JSTypedLoweringTest : public TypedGraphTest {
   JSOperatorBuilder javascript_;
 };
 
-
-// -----------------------------------------------------------------------------
-// JSToBoolean
-
-
-TEST_F(JSTypedLoweringTest, JSToBooleanWithBoolean) {
-  Node* input = Parameter(Type::Boolean(), 0);
-  Node* context = Parameter(Type::Any(), 1);
-  Reduction r = Reduce(graph()->NewNode(
-      javascript()->ToBoolean(ToBooleanHint::kAny), input, context));
-  ASSERT_TRUE(r.Changed());
-  EXPECT_EQ(input, r.replacement());
-}
-
-
-TEST_F(JSTypedLoweringTest, JSToBooleanWithOrderedNumber) {
-  Node* input = Parameter(Type::OrderedNumber(), 0);
-  Node* context = Parameter(Type::Any(), 1);
-  Reduction r = Reduce(graph()->NewNode(
-      javascript()->ToBoolean(ToBooleanHint::kAny), input, context));
-  ASSERT_TRUE(r.Changed());
-  EXPECT_THAT(r.replacement(),
-              IsBooleanNot(IsNumberEqual(input, IsNumberConstant(0.0))));
-}
-
-TEST_F(JSTypedLoweringTest, JSToBooleanWithNumber) {
-  Node* input = Parameter(Type::Number(), 0);
-  Node* context = Parameter(Type::Any(), 1);
-  Reduction r = Reduce(graph()->NewNode(
-      javascript()->ToBoolean(ToBooleanHint::kAny), input, context));
-  ASSERT_TRUE(r.Changed());
-  EXPECT_THAT(r.replacement(), IsNumberToBoolean(input));
-}
-
-TEST_F(JSTypedLoweringTest, JSToBooleanWithDetectableReceiverOrNull) {
-  Node* input = Parameter(Type::DetectableReceiverOrNull(), 0);
-  Node* context = Parameter(Type::Any(), 1);
-  Reduction r = Reduce(graph()->NewNode(
-      javascript()->ToBoolean(ToBooleanHint::kAny), input, context));
-  ASSERT_TRUE(r.Changed());
-  EXPECT_THAT(r.replacement(),
-              IsBooleanNot(IsReferenceEqual(input, IsNullConstant())));
-}
-
-TEST_F(JSTypedLoweringTest, JSToBooleanWithReceiverOrNullOrUndefined) {
-  Node* input = Parameter(Type::ReceiverOrNullOrUndefined(), 0);
-  Node* context = Parameter(Type::Any(), 1);
-  Reduction r = Reduce(graph()->NewNode(
-      javascript()->ToBoolean(ToBooleanHint::kAny), input, context));
-  ASSERT_TRUE(r.Changed());
-  EXPECT_THAT(r.replacement(), IsBooleanNot(IsObjectIsUndetectable(input)));
-}
-
-TEST_F(JSTypedLoweringTest, JSToBooleanWithString) {
-  Node* input = Parameter(Type::String(), 0);
-  Node* context = Parameter(Type::Any(), 1);
-  Reduction r = Reduce(graph()->NewNode(
-      javascript()->ToBoolean(ToBooleanHint::kAny), input, context));
-  ASSERT_TRUE(r.Changed());
-  EXPECT_THAT(r.replacement(),
-              IsBooleanNot(IsReferenceEqual(
-                  input, IsHeapConstant(factory()->empty_string()))));
-}
-
-TEST_F(JSTypedLoweringTest, JSToBooleanWithAny) {
-  Node* input = Parameter(Type::Any(), 0);
-  Node* context = Parameter(Type::Any(), 1);
-  Reduction r = Reduce(graph()->NewNode(
-      javascript()->ToBoolean(ToBooleanHint::kAny), input, context));
-  ASSERT_FALSE(r.Changed());
-}
 
 
 // -----------------------------------------------------------------------------
@@ -246,7 +176,7 @@ TEST_F(JSTypedLoweringTest, JSStrictEqualWithTheHole) {
   Node* const context = UndefinedConstant();
   Node* const effect = graph()->start();
   Node* const control = graph()->start();
-  TRACED_FOREACH(Type*, type, kJSTypes) {
+  TRACED_FOREACH(Type, type, kJSTypes) {
     Node* const lhs = Parameter(type);
     Reduction r = Reduce(
         graph()->NewNode(javascript()->StrictEqual(CompareOperationHint::kAny),
@@ -412,7 +342,7 @@ TEST_F(JSTypedLoweringTest, JSStoreContext) {
   Node* const effect = graph()->start();
   Node* const control = graph()->start();
   TRACED_FOREACH(size_t, index, kIndices) {
-    TRACED_FOREACH(Type*, type, kJSTypes) {
+    TRACED_FOREACH(Type, type, kJSTypes) {
       Node* const value = Parameter(type);
 
       Reduction const r1 =
@@ -453,8 +383,7 @@ TEST_F(JSTypedLoweringTest, JSLoadNamedStringLength) {
       Reduce(graph()->NewNode(javascript()->LoadNamed(name, feedback), receiver,
                               context, EmptyFrameState(), effect, control));
   ASSERT_TRUE(r.Changed());
-  EXPECT_THAT(r.replacement(), IsLoadField(AccessBuilder::ForStringLength(),
-                                           receiver, effect, control));
+  EXPECT_THAT(r.replacement(), IsStringLength(receiver));
 }
 
 
@@ -473,12 +402,7 @@ TEST_F(JSTypedLoweringTest, JSAddWithString) {
   Reduction r = Reduce(graph()->NewNode(javascript()->Add(hint), lhs, rhs,
                                         context, frame_state, effect, control));
   ASSERT_TRUE(r.Changed());
-  EXPECT_THAT(r.replacement(),
-              IsCall(_, IsHeapConstant(
-                            CodeFactory::StringAdd(
-                                isolate(), STRING_ADD_CHECK_NONE, NOT_TENURED)
-                                .code()),
-                     lhs, rhs, context, frame_state, effect, control));
+  EXPECT_THAT(r.replacement(), IsStringConcat(_, lhs, rhs));
 }
 
 }  // namespace compiler

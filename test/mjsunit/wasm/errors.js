@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --expose-wasm
+// Flags: --expose-wasm --allow-natives-syntax
 
 'use strict';
 
@@ -72,9 +72,10 @@ function assertConversionError(bytes, imports, msg) {
   assertCompileError(
       builder().addFunction("f", kSig_i_v).end().toBuffer(),
       /function body must end with "end" opcode @/);
-  assertCompileError(builder().addFunction("f", kSig_i_v).addBody([
-    kExprReturn
-  ]).end().toBuffer(), /return found empty stack @/);
+  assertCompileError(
+      builder().addFunction('f', kSig_i_v).addBody([kExprReturn])
+          .end().toBuffer(),
+      /expected 1 elements on the stack for return, found 0 @/);
   assertCompileError(builder().addFunction("f", kSig_v_v).addBody([
     kExprGetLocal, 0
   ]).end().toBuffer(), /invalid local index: 0 @/);
@@ -160,13 +161,36 @@ function assertConversionError(bytes, imports, msg) {
 
 (function TestConversionError() {
   let b = builder();
-  b.addImport("foo", "bar", kSig_v_l);
-  assertConversionError(b.addFunction("run", kSig_v_v).addBody([
-    kExprI64Const, 0, kExprCallFunction, 0
-  ]).exportFunc().end().toBuffer(), {foo:{bar: (l)=>{}}}, "invalid type");
+  b.addImport('foo', 'bar', kSig_v_l);
+  let buffer = b.addFunction('run', kSig_v_v)
+                   .addBody([kExprI64Const, 0, kExprCallFunction, 0])
+                   .exportFunc()
+                   .end()
+                   .toBuffer();
+  assertConversionError(
+      buffer, {foo: {bar: (l) => {}}}, kTrapMsgs[kTrapTypeError]);
 
-  b = builder()
-  assertConversionError(builder().addFunction("run", kSig_l_v).addBody([
-    kExprI64Const, 0
-  ]).exportFunc().end().toBuffer(), {}, "invalid type");
+  buffer = builder()
+               .addFunction('run', kSig_l_v)
+               .addBody([kExprI64Const, 0])
+               .exportFunc()
+               .end()
+               .toBuffer();
+  assertConversionError(buffer, {}, kTrapMsgs[kTrapTypeError]);
+})();
+
+
+(function InternalDebugTrace() {
+  var builder = new WasmModuleBuilder();
+  var sig = builder.addType(kSig_i_dd);
+  builder.addImport("mod", "func", sig);
+  builder.addFunction("main", sig)
+    .addBody([kExprGetLocal, 0, kExprGetLocal, 1, kExprCallFunction, 0])
+    .exportAs("main");
+  var main = builder.instantiate({
+    mod: {
+      func: ()=>{%DebugTrace();}
+    }
+  }).exports.main;
+  main();
 })();

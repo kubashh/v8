@@ -17,10 +17,6 @@ class ScopeTestHelper {
     return var->scope()->MustAllocateInContext(var);
   }
 
-  static void AllocateWithoutVariableResolution(Scope* scope) {
-    scope->AllocateVariablesRecursively();
-  }
-
   static void CompareScopes(Scope* baseline, Scope* scope,
                             bool precise_maybe_assigned) {
     CHECK_EQ(baseline->scope_type(), scope->scope_type());
@@ -28,7 +24,7 @@ class ScopeTestHelper {
                   baseline->AsDeclarationScope()->function_kind() ==
                       scope->AsDeclarationScope()->function_kind());
 
-    if (!ProducedPreParsedScopeData::ScopeNeedsData(baseline)) {
+    if (!PreparseDataBuilder::ScopeNeedsData(baseline)) {
       return;
     }
 
@@ -51,8 +47,9 @@ class ScopeTestHelper {
               scope_local = scope->locals()->begin();
          baseline_local != baseline->locals()->end();
          ++baseline_local, ++scope_local) {
-      if (scope_local->mode() == VAR || scope_local->mode() == LET ||
-          scope_local->mode() == CONST) {
+      if (scope_local->mode() == VariableMode::kVar ||
+          scope_local->mode() == VariableMode::kLet ||
+          scope_local->mode() == VariableMode::kConst) {
         CompareVariables(*baseline_local, *scope_local, precise_maybe_assigned);
       }
     }
@@ -108,6 +105,20 @@ class ScopeTestHelper {
       }
       MarkInnerFunctionsAsSkipped(inner);
     }
+  }
+
+  static bool HasSkippedFunctionInside(Scope* scope) {
+    if (scope->scope_type() == ScopeType::FUNCTION_SCOPE &&
+        scope->AsDeclarationScope()->is_skipped_function()) {
+      return true;
+    }
+    for (Scope* inner = scope->inner_scope(); inner != nullptr;
+         inner = inner->sibling()) {
+      if (HasSkippedFunctionInside(inner)) {
+        return true;
+      }
+    }
+    return false;
   }
 };
 }  // namespace internal

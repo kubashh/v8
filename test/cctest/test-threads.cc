@@ -43,14 +43,14 @@ class ThreadIdValidationThread : public v8::base::Thread {
         thread_to_start_(thread_to_start),
         semaphore_(semaphore) {}
 
-  void Run() {
+  void Run() override {
     i::ThreadId thread_id = i::ThreadId::Current();
     for (int i = 0; i < thread_no_; i++) {
       CHECK(!(*refs_)[i].Equals(thread_id));
     }
     CHECK(thread_id.IsValid());
     (*refs_)[thread_no_] = thread_id;
-    if (thread_to_start_ != NULL) {
+    if (thread_to_start_ != nullptr) {
       thread_to_start_->Start();
     }
     semaphore_->Signal();
@@ -71,7 +71,7 @@ TEST(ThreadIdValidation) {
   threads.reserve(kNThreads);
   refs.reserve(kNThreads);
   v8::base::Semaphore semaphore(0);
-  ThreadIdValidationThread* prev = NULL;
+  ThreadIdValidationThread* prev = nullptr;
   for (int i = kNThreads - 1; i >= 0; i--) {
     ThreadIdValidationThread* newThread =
         new ThreadIdValidationThread(prev, &refs, i, &semaphore);

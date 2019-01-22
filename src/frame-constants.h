@@ -50,28 +50,29 @@ namespace internal {
 //
 class CommonFrameConstants : public AllStatic {
  public:
-  static const int kCallerFPOffset = 0 * kPointerSize;
-  static const int kCallerPCOffset = kCallerFPOffset + 1 * kFPOnStackSize;
-  static const int kCallerSPOffset = kCallerPCOffset + 1 * kPCOnStackSize;
+  static constexpr int kCallerFPOffset = 0 * kSystemPointerSize;
+  static constexpr int kCallerPCOffset = kCallerFPOffset + 1 * kFPOnStackSize;
+  static constexpr int kCallerSPOffset = kCallerPCOffset + 1 * kPCOnStackSize;
 
   // Fixed part of the frame consists of return address, caller fp,
   // constant pool (if FLAG_enable_embedded_constant_pool), context, and
   // function. StandardFrame::IterateExpressions assumes that kLastObjectOffset
   // is the last object pointer.
-  static const int kFixedFrameSizeAboveFp = kPCOnStackSize + kFPOnStackSize;
-  static const int kFixedSlotCountAboveFp =
-      kFixedFrameSizeAboveFp / kPointerSize;
-  static const int kCPSlotSize =
-      FLAG_enable_embedded_constant_pool ? kPointerSize : 0;
-  static const int kCPSlotCount = kCPSlotSize / kPointerSize;
-  static const int kConstantPoolOffset = kCPSlotSize ? -1 * kPointerSize : 0;
-  static const int kContextOrFrameTypeSize = kPointerSize;
-  static const int kContextOrFrameTypeOffset =
+  static constexpr int kFixedFrameSizeAboveFp = kPCOnStackSize + kFPOnStackSize;
+  static constexpr int kFixedSlotCountAboveFp =
+      kFixedFrameSizeAboveFp / kSystemPointerSize;
+  static constexpr int kCPSlotSize =
+      FLAG_enable_embedded_constant_pool ? kSystemPointerSize : 0;
+  static constexpr int kCPSlotCount = kCPSlotSize / kSystemPointerSize;
+  static constexpr int kConstantPoolOffset =
+      kCPSlotSize ? -1 * kSystemPointerSize : 0;
+  static constexpr int kContextOrFrameTypeSize = kSystemPointerSize;
+  static constexpr int kContextOrFrameTypeOffset =
       -(kCPSlotSize + kContextOrFrameTypeSize);
 };
 
-// StandardFrames are used for interpreted, full-codegen and optimized
-// JavaScript frames. They always have a context below the saved fp/constant
+// StandardFrames are used for interpreted and optimized JavaScript
+// frames. They always have a context below the saved fp/constant
 // pool and below that the JSFunction of the executing function.
 //
 //  slot      JS frame
@@ -103,15 +104,18 @@ class CommonFrameConstants : public AllStatic {
 //
 class StandardFrameConstants : public CommonFrameConstants {
  public:
-  static const int kFixedFrameSizeFromFp = 2 * kPointerSize + kCPSlotSize;
-  static const int kFixedFrameSize =
+  static constexpr int kFixedFrameSizeFromFp =
+      2 * kSystemPointerSize + kCPSlotSize;
+  static constexpr int kFixedFrameSize =
       kFixedFrameSizeAboveFp + kFixedFrameSizeFromFp;
-  static const int kFixedSlotCountFromFp = kFixedFrameSizeFromFp / kPointerSize;
-  static const int kFixedSlotCount = kFixedFrameSize / kPointerSize;
-  static const int kContextOffset = kContextOrFrameTypeOffset;
-  static const int kFunctionOffset = -2 * kPointerSize - kCPSlotSize;
-  static const int kExpressionsOffset = -3 * kPointerSize - kCPSlotSize;
-  static const int kLastObjectOffset = kContextOffset;
+  static constexpr int kFixedSlotCountFromFp =
+      kFixedFrameSizeFromFp / kSystemPointerSize;
+  static constexpr int kFixedSlotCount = kFixedFrameSize / kSystemPointerSize;
+  static constexpr int kContextOffset = kContextOrFrameTypeOffset;
+  static constexpr int kFunctionOffset = -2 * kSystemPointerSize - kCPSlotSize;
+  static constexpr int kExpressionsOffset =
+      -3 * kSystemPointerSize - kCPSlotSize;
+  static constexpr int kLastObjectOffset = kContextOffset;
 };
 
 // OptimizedBuiltinFrameConstants are used for TF-generated builtins. They
@@ -150,10 +154,10 @@ class StandardFrameConstants : public CommonFrameConstants {
 //
 class OptimizedBuiltinFrameConstants : public StandardFrameConstants {
  public:
-  static const int kArgCSize = kPointerSize;
-  static const int kArgCOffset = -3 * kPointerSize - kCPSlotSize;
-  static const int kFixedFrameSize = kFixedFrameSizeAboveFp - kArgCOffset;
-  static const int kFixedSlotCount = kFixedFrameSize / kPointerSize;
+  static constexpr int kArgCSize = kSystemPointerSize;
+  static constexpr int kArgCOffset = -3 * kSystemPointerSize - kCPSlotSize;
+  static constexpr int kFixedFrameSize = kFixedFrameSizeAboveFp - kArgCOffset;
+  static constexpr int kFixedSlotCount = kFixedFrameSize / kSystemPointerSize;
 };
 
 // TypedFrames have a SMI type maker value below the saved FP/constant pool to
@@ -189,110 +193,136 @@ class OptimizedBuiltinFrameConstants : public StandardFrameConstants {
 //
 class TypedFrameConstants : public CommonFrameConstants {
  public:
-  static const int kFrameTypeSize = kContextOrFrameTypeSize;
-  static const int kFrameTypeOffset = kContextOrFrameTypeOffset;
-  static const int kFixedFrameSizeFromFp = kCPSlotSize + kFrameTypeSize;
-  static const int kFixedSlotCountFromFp = kFixedFrameSizeFromFp / kPointerSize;
-  static const int kFixedFrameSize =
+  static constexpr int kFrameTypeSize = kContextOrFrameTypeSize;
+  static constexpr int kFrameTypeOffset = kContextOrFrameTypeOffset;
+  static constexpr int kFixedFrameSizeFromFp = kCPSlotSize + kFrameTypeSize;
+  static constexpr int kFixedSlotCountFromFp =
+      kFixedFrameSizeFromFp / kSystemPointerSize;
+  static constexpr int kFixedFrameSize =
       StandardFrameConstants::kFixedFrameSizeAboveFp + kFixedFrameSizeFromFp;
-  static const int kFixedSlotCount = kFixedFrameSize / kPointerSize;
-  static const int kFirstPushedFrameValueOffset =
-      -StandardFrameConstants::kCPSlotSize - kFrameTypeSize - kPointerSize;
+  static constexpr int kFixedSlotCount = kFixedFrameSize / kSystemPointerSize;
+  static constexpr int kFirstPushedFrameValueOffset =
+      -StandardFrameConstants::kCPSlotSize - kFrameTypeSize -
+      kSystemPointerSize;
 };
 
 #define TYPED_FRAME_PUSHED_VALUE_OFFSET(x) \
-  (TypedFrameConstants::kFirstPushedFrameValueOffset - (x)*kPointerSize)
+  (TypedFrameConstants::kFirstPushedFrameValueOffset - (x)*kSystemPointerSize)
 #define TYPED_FRAME_SIZE(count) \
-  (TypedFrameConstants::kFixedFrameSize + (count)*kPointerSize)
+  (TypedFrameConstants::kFixedFrameSize + (count)*kSystemPointerSize)
 #define TYPED_FRAME_SIZE_FROM_SP(count) \
-  (TypedFrameConstants::kFixedFrameSizeFromFp + (count)*kPointerSize)
-#define DEFINE_TYPED_FRAME_SIZES(count)                                     \
-  static const int kFixedFrameSize = TYPED_FRAME_SIZE(count);               \
-  static const int kFixedSlotCount = kFixedFrameSize / kPointerSize;        \
-  static const int kFixedFrameSizeFromFp = TYPED_FRAME_SIZE_FROM_SP(count); \
-  static const int kFixedSlotCountFromFp = kFixedFrameSizeFromFp / kPointerSize
+  (TypedFrameConstants::kFixedFrameSizeFromFp + (count)*kSystemPointerSize)
+#define DEFINE_TYPED_FRAME_SIZES(count)                                        \
+  static constexpr int kFixedFrameSize = TYPED_FRAME_SIZE(count);              \
+  static constexpr int kFixedSlotCount = kFixedFrameSize / kSystemPointerSize; \
+  static constexpr int kFixedFrameSizeFromFp =                                 \
+      TYPED_FRAME_SIZE_FROM_SP(count);                                         \
+  static constexpr int kFixedSlotCountFromFp =                                 \
+      kFixedFrameSizeFromFp / kSystemPointerSize
 
 class ArgumentsAdaptorFrameConstants : public TypedFrameConstants {
  public:
   // FP-relative.
-  static const int kFunctionOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
-  static const int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
-  DEFINE_TYPED_FRAME_SIZES(2);
+  static constexpr int kFunctionOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+  static constexpr int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+  static constexpr int kPaddingOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(2);
+  DEFINE_TYPED_FRAME_SIZES(3);
 };
 
 class BuiltinFrameConstants : public TypedFrameConstants {
  public:
   // FP-relative.
-  static const int kFunctionOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
-  static const int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+  static constexpr int kFunctionOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+  static constexpr int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
   DEFINE_TYPED_FRAME_SIZES(2);
-};
-
-class InternalFrameConstants : public TypedFrameConstants {
- public:
-  // FP-relative.
-  static const int kCodeOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
-  DEFINE_TYPED_FRAME_SIZES(1);
 };
 
 class ConstructFrameConstants : public TypedFrameConstants {
  public:
   // FP-relative.
-  static const int kContextOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
-  static const int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
-  static const int kConstructorOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(2);
-  static const int kNewTargetOrImplicitReceiverOffset =
-      TYPED_FRAME_PUSHED_VALUE_OFFSET(3);
-  DEFINE_TYPED_FRAME_SIZES(4);
+  static constexpr int kContextOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+  static constexpr int kLengthOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+  static constexpr int kConstructorOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(2);
+  static constexpr int kPaddingOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(3);
+  static constexpr int kNewTargetOrImplicitReceiverOffset =
+      TYPED_FRAME_PUSHED_VALUE_OFFSET(4);
+  DEFINE_TYPED_FRAME_SIZES(5);
+};
+
+class WasmCompiledFrameConstants : public TypedFrameConstants {
+ public:
+  // FP-relative.
+  static constexpr int kWasmInstanceOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+  DEFINE_TYPED_FRAME_SIZES(1);
 };
 
 class BuiltinContinuationFrameConstants : public TypedFrameConstants {
  public:
   // FP-relative.
-  static const int kFunctionOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
-  static const int kBuiltinOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
-  static const int kArgCOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(2);
-  DEFINE_TYPED_FRAME_SIZES(2);
+  static constexpr int kFunctionOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(0);
+  static constexpr int kFrameSPtoFPDeltaAtDeoptimize =
+      TYPED_FRAME_PUSHED_VALUE_OFFSET(1);
+  static constexpr int kBuiltinContextOffset =
+      TYPED_FRAME_PUSHED_VALUE_OFFSET(2);
+  static constexpr int kBuiltinOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(3);
+
+  // The argument count is in the first allocatable register, stored below the
+  // fixed part of the frame and therefore is not part of the fixed frame size.
+  static constexpr int kArgCOffset = TYPED_FRAME_PUSHED_VALUE_OFFSET(4);
+  DEFINE_TYPED_FRAME_SIZES(4);
+
+  // Returns the number of padding stack slots needed when we have
+  // 'register_count' register slots.
+  // This is needed on some architectures to ensure the stack pointer is
+  // aligned.
+  static int PaddingSlotCount(int register_count);
 };
 
 // Behaves like an exit frame but with target and new target args.
 class BuiltinExitFrameConstants : public CommonFrameConstants {
  public:
-  static const int kNewTargetOffset = kCallerPCOffset + 1 * kPointerSize;
-  static const int kTargetOffset = kNewTargetOffset + 1 * kPointerSize;
-  static const int kArgcOffset = kTargetOffset + 1 * kPointerSize;
+  static constexpr int kNewTargetOffset =
+      kCallerPCOffset + 1 * kSystemPointerSize;
+  static constexpr int kTargetOffset =
+      kNewTargetOffset + 1 * kSystemPointerSize;
+  static constexpr int kArgcOffset = kTargetOffset + 1 * kSystemPointerSize;
+  static constexpr int kPaddingOffset = kArgcOffset + 1 * kSystemPointerSize;
+  static constexpr int kFirstArgumentOffset =
+      kPaddingOffset + 1 * kSystemPointerSize;
+  static constexpr int kNumExtraArgsWithReceiver = 5;
 };
 
 class InterpreterFrameConstants : public AllStatic {
  public:
   // Fixed frame includes bytecode array and bytecode offset.
-  static const int kFixedFrameSize =
-      StandardFrameConstants::kFixedFrameSize + 2 * kPointerSize;
-  static const int kFixedFrameSizeFromFp =
-      StandardFrameConstants::kFixedFrameSizeFromFp + 2 * kPointerSize;
+  static constexpr int kFixedFrameSize =
+      StandardFrameConstants::kFixedFrameSize + 2 * kSystemPointerSize;
+  static constexpr int kFixedFrameSizeFromFp =
+      StandardFrameConstants::kFixedFrameSizeFromFp + 2 * kSystemPointerSize;
 
   // FP-relative.
-  static const int kLastParamFromFp = StandardFrameConstants::kCallerSPOffset;
-  static const int kCallerPCOffsetFromFp =
+  static constexpr int kLastParamFromFp =
+      StandardFrameConstants::kCallerSPOffset;
+  static constexpr int kCallerPCOffsetFromFp =
       StandardFrameConstants::kCallerPCOffset;
-  static const int kBytecodeArrayFromFp =
-      -StandardFrameConstants::kFixedFrameSizeFromFp - 1 * kPointerSize;
-  static const int kBytecodeOffsetFromFp =
-      -StandardFrameConstants::kFixedFrameSizeFromFp - 2 * kPointerSize;
-  static const int kRegisterFileFromFp =
-      -StandardFrameConstants::kFixedFrameSizeFromFp - 3 * kPointerSize;
+  static constexpr int kBytecodeArrayFromFp =
+      -StandardFrameConstants::kFixedFrameSizeFromFp - 1 * kSystemPointerSize;
+  static constexpr int kBytecodeOffsetFromFp =
+      -StandardFrameConstants::kFixedFrameSizeFromFp - 2 * kSystemPointerSize;
+  static constexpr int kRegisterFileFromFp =
+      -StandardFrameConstants::kFixedFrameSizeFromFp - 3 * kSystemPointerSize;
 
-  static const int kExpressionsOffset = kRegisterFileFromFp;
+  static constexpr int kExpressionsOffset = kRegisterFileFromFp;
 
   // Number of fixed slots in addition to a {StandardFrame}.
-  static const int kExtraSlotCount =
-      InterpreterFrameConstants::kFixedFrameSize / kPointerSize -
-      StandardFrameConstants::kFixedFrameSize / kPointerSize;
+  static constexpr int kExtraSlotCount =
+      InterpreterFrameConstants::kFixedFrameSize / kSystemPointerSize -
+      StandardFrameConstants::kFixedFrameSize / kSystemPointerSize;
 
   // Expression index for {StandardFrame::GetExpressionAddress}.
-  static const int kBytecodeArrayExpressionIndex = -2;
-  static const int kBytecodeOffsetExpressionIndex = -1;
-  static const int kRegisterFileExpressionIndex = 0;
+  static constexpr int kBytecodeArrayExpressionIndex = -2;
+  static constexpr int kBytecodeOffsetExpressionIndex = -1;
+  static constexpr int kRegisterFileExpressionIndex = 0;
 
   // Returns the number of stack slots needed for 'register_count' registers.
   // This is needed because some architectures must pad the stack frame with
@@ -302,12 +332,12 @@ class InterpreterFrameConstants : public AllStatic {
 
 inline static int FPOffsetToFrameSlot(int frame_offset) {
   return StandardFrameConstants::kFixedSlotCountAboveFp - 1 -
-         frame_offset / kPointerSize;
+         frame_offset / kSystemPointerSize;
 }
 
 inline static int FrameSlotToFPOffset(int slot) {
   return (StandardFrameConstants::kFixedSlotCountAboveFp - 1 - slot) *
-         kPointerSize;
+         kSystemPointerSize;
 }
 
 }  // namespace internal

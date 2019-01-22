@@ -15,9 +15,6 @@ function bytes() {
   return buffer;
 }
 
-// V8 internal constants
-var kV8MaxPages = 32767;
-
 // Header declaration constants
 var kWasmH0 = 0;
 var kWasmH1 = 0x61;
@@ -67,8 +64,8 @@ let kStartSectionCode = 8;       // Start function declaration
 let kElementSectionCode = 9;     // Elements section
 let kCodeSectionCode = 10;       // Function code
 let kDataSectionCode = 11;       // Data segments
-let kNameSectionCode = 12;       // Name section (encoded as string)
-let kExceptionSectionCode = 13;  // Exception section (must appear before code section)
+let kExceptionSectionCode = 12;  // Exception section (between Global & Export)
+let kDataCountSectionCode = 13;  // Data segments
 
 // Name section types
 let kModuleNameCode = 0;
@@ -78,7 +75,12 @@ let kLocalNamesCode = 2;
 let kWasmFunctionTypeForm = 0x60;
 let kWasmAnyFunctionTypeForm = 0x70;
 
-let kResizableMaximumFlag = 1;
+let kHasMaximumFlag = 1;
+
+// Segment flags
+let kActiveNoIndex = 0;
+let kPassive = 1;
+let kActiveWithIndex = 2;
 
 // Function declaration flags
 let kDeclFunctionName   = 0x01;
@@ -93,14 +95,21 @@ let kWasmI64 = 0x7e;
 let kWasmF32 = 0x7d;
 let kWasmF64 = 0x7c;
 let kWasmS128  = 0x7b;
+let kWasmAnyRef = 0x6f;
+let kWasmAnyFunc = 0x70;
+let kWasmExceptRef = 0x68;
 
 let kExternalFunction = 0;
 let kExternalTable = 1;
 let kExternalMemory = 2;
 let kExternalGlobal = 3;
+let kExternalException = 4;
 
 let kTableZero = 0;
 let kMemoryZero = 0;
+let kSegmentZero = 0;
+
+let kExceptionAttribute = 0;
 
 // Useful signatures
 let kSig_i_i = makeSig([kWasmI32], [kWasmI32]);
@@ -108,13 +117,15 @@ let kSig_l_l = makeSig([kWasmI64], [kWasmI64]);
 let kSig_i_l = makeSig([kWasmI64], [kWasmI32]);
 let kSig_i_ii = makeSig([kWasmI32, kWasmI32], [kWasmI32]);
 let kSig_i_iii = makeSig([kWasmI32, kWasmI32, kWasmI32], [kWasmI32]);
+let kSig_v_iiii = makeSig([kWasmI32, kWasmI32, kWasmI32, kWasmI32], []);
+let kSig_f_ff = makeSig([kWasmF32, kWasmF32], [kWasmF32]);
 let kSig_d_dd = makeSig([kWasmF64, kWasmF64], [kWasmF64]);
 let kSig_l_ll = makeSig([kWasmI64, kWasmI64], [kWasmI64]);
 let kSig_i_dd = makeSig([kWasmF64, kWasmF64], [kWasmI32]);
 let kSig_v_v = makeSig([], []);
 let kSig_i_v = makeSig([], [kWasmI32]);
 let kSig_l_v = makeSig([], [kWasmI64]);
-let kSig_f_v = makeSig([], [kWasmF64]);
+let kSig_f_v = makeSig([], [kWasmF32]);
 let kSig_d_v = makeSig([], [kWasmF64]);
 let kSig_v_i = makeSig([kWasmI32], []);
 let kSig_v_ii = makeSig([kWasmI32, kWasmI32], []);
@@ -123,10 +134,24 @@ let kSig_v_l = makeSig([kWasmI64], []);
 let kSig_v_d = makeSig([kWasmF64], []);
 let kSig_v_dd = makeSig([kWasmF64, kWasmF64], []);
 let kSig_v_ddi = makeSig([kWasmF64, kWasmF64, kWasmI32], []);
+let kSig_ii_v = makeSig([], [kWasmI32, kWasmI32]);
+let kSig_iii_v = makeSig([], [kWasmI32, kWasmI32, kWasmI32]);
+let kSig_ii_i = makeSig([kWasmI32], [kWasmI32, kWasmI32]);
+let kSig_iii_i = makeSig([kWasmI32], [kWasmI32, kWasmI32, kWasmI32]);
+let kSig_ii_ii = makeSig([kWasmI32, kWasmI32], [kWasmI32, kWasmI32]);
+let kSig_iii_ii = makeSig([kWasmI32, kWasmI32], [kWasmI32, kWasmI32, kWasmI32]);
 
 let kSig_v_f = makeSig([kWasmF32], []);
 let kSig_f_f = makeSig([kWasmF32], [kWasmF32]);
+let kSig_f_d = makeSig([kWasmF64], [kWasmF32]);
 let kSig_d_d = makeSig([kWasmF64], [kWasmF64]);
+let kSig_r_r = makeSig([kWasmAnyRef], [kWasmAnyRef]);
+let kSig_a_a = makeSig([kWasmAnyFunc], [kWasmAnyFunc]);
+let kSig_i_r = makeSig([kWasmAnyRef], [kWasmI32]);
+let kSig_v_r = makeSig([kWasmAnyRef], []);
+let kSig_v_a = makeSig([kWasmAnyFunc], []);
+let kSig_v_rr = makeSig([kWasmAnyRef, kWasmAnyRef], []);
+let kSig_r_v = makeSig([], [kWasmAnyRef]);
 
 function makeSig(params, results) {
   return {params: params, results: results};
@@ -162,6 +187,8 @@ let kExprElse = 0x05;
 let kExprTry = 0x06;
 let kExprCatch = 0x07;
 let kExprThrow = 0x08;
+let kExprRethrow = 0x09;
+let kExprBrOnExn = 0x0a;
 let kExprEnd = 0x0b;
 let kExprBr = 0x0c;
 let kExprBrIf = 0x0d;
@@ -180,6 +207,7 @@ let kExprI32Const = 0x41;
 let kExprI64Const = 0x42;
 let kExprF32Const = 0x43;
 let kExprF64Const = 0x44;
+let kExprRefNull = 0xd0;
 let kExprI32LoadMem = 0x28;
 let kExprI64LoadMem = 0x29;
 let kExprF32LoadMem = 0x2a;
@@ -204,7 +232,7 @@ let kExprI64StoreMem8 = 0x3c;
 let kExprI64StoreMem16 = 0x3d;
 let kExprI64StoreMem32 = 0x3e;
 let kExprMemorySize = 0x3f;
-let kExprGrowMemory = 0x40;
+let kExprMemoryGrow = 0x40;
 let kExprI32Eqz = 0x45;
 let kExprI32Eq = 0x46;
 let kExprI32Ne = 0x47;
@@ -239,6 +267,7 @@ let kExprF64Lt = 0x63;
 let kExprF64Gt = 0x64;
 let kExprF64Le = 0x65;
 let kExprF64Ge = 0x66;
+let kExprRefIsNull = 0xd1;
 let kExprI32Clz = 0x67;
 let kExprI32Ctz = 0x68;
 let kExprI32Popcnt = 0x69;
@@ -328,10 +357,30 @@ let kExprI32ReinterpretF32 = 0xbc;
 let kExprI64ReinterpretF64 = 0xbd;
 let kExprF32ReinterpretI32 = 0xbe;
 let kExprF64ReinterpretI64 = 0xbf;
+let kExprI32SExtendI8 = 0xc0;
+let kExprI32SExtendI16 = 0xc1;
+let kExprI64SExtendI8 = 0xc2;
+let kExprI64SExtendI16 = 0xc3;
+let kExprI64SExtendI32 = 0xc4;
 
 // Prefix opcodes
+let kNumericPrefix = 0xfc;
+let kSimdPrefix = 0xfd;
 let kAtomicPrefix = 0xfe;
 
+// Numeric opcodes.
+let kExprMemoryInit = 0x08;
+let kExprMemoryDrop = 0x09;
+let kExprMemoryCopy = 0x0a;
+let kExprMemoryFill = 0x0b;
+let kExprTableInit = 0x0c;
+let kExprTableDrop = 0x0d;
+let kExprTableCopy = 0x0e;
+
+// Atomic opcodes.
+let kExprAtomicWake = 0x00;
+let kExprI32AtomicWait = 0x01;
+let kExprI64AtomicWait = 0x02;
 let kExprI32AtomicLoad = 0x10;
 let kExprI32AtomicLoad8U = 0x12;
 let kExprI32AtomicLoad16U = 0x13;
@@ -356,9 +405,49 @@ let kExprI32AtomicXor16U = 0x3d;
 let kExprI32AtomicExchange = 0x41;
 let kExprI32AtomicExchange8U = 0x43;
 let kExprI32AtomicExchange16U = 0x44;
-let kExprI32AtomicCompareExchange = 0x48
-let kExprI32AtomicCompareExchange8U = 0x4a
-let kExprI32AtomicCompareExchange16U = 0x4b
+let kExprI32AtomicCompareExchange = 0x48;
+let kExprI32AtomicCompareExchange8U = 0x4a;
+let kExprI32AtomicCompareExchange16U = 0x4b;
+
+let kExprI64AtomicLoad = 0x11;
+let kExprI64AtomicLoad8U = 0x14;
+let kExprI64AtomicLoad16U = 0x15;
+let kExprI64AtomicLoad32U = 0x16;
+let kExprI64AtomicStore = 0x18;
+let kExprI64AtomicStore8U = 0x1b;
+let kExprI64AtomicStore16U = 0x1c;
+let kExprI64AtomicStore32U = 0x1d;
+let kExprI64AtomicAdd = 0x1f;
+let kExprI64AtomicAdd8U = 0x22;
+let kExprI64AtomicAdd16U = 0x23;
+let kExprI64AtomicAdd32U = 0x24;
+let kExprI64AtomicSub = 0x26;
+let kExprI64AtomicSub8U = 0x29;
+let kExprI64AtomicSub16U = 0x2a;
+let kExprI64AtomicSub32U = 0x2b;
+let kExprI64AtomicAnd = 0x2d;
+let kExprI64AtomicAnd8U = 0x30;
+let kExprI64AtomicAnd16U = 0x31;
+let kExprI64AtomicAnd32U = 0x32;
+let kExprI64AtomicOr = 0x34;
+let kExprI64AtomicOr8U = 0x37;
+let kExprI64AtomicOr16U = 0x38;
+let kExprI64AtomicOr32U = 0x39;
+let kExprI64AtomicXor = 0x3b;
+let kExprI64AtomicXor8U = 0x3e;
+let kExprI64AtomicXor16U = 0x3f;
+let kExprI64AtomicXor32U = 0x40;
+let kExprI64AtomicExchange = 0x42;
+let kExprI64AtomicExchange8U = 0x45;
+let kExprI64AtomicExchange16U = 0x46;
+let kExprI64AtomicExchange32U = 0x47;
+let kExprI64AtomicCompareExchange = 0x49
+let kExprI64AtomicCompareExchange8U = 0x4c;
+let kExprI64AtomicCompareExchange16U = 0x4d;
+let kExprI64AtomicCompareExchange32U = 0x4e;
+
+// Simd opcodes.
+let kExprF32x4Min = 0x9e;
 
 let kTrapUnreachable          = 0;
 let kTrapMemOutOfBounds       = 1;
@@ -368,7 +457,10 @@ let kTrapRemByZero            = 4;
 let kTrapFloatUnrepresentable = 5;
 let kTrapFuncInvalid          = 6;
 let kTrapFuncSigMismatch      = 7;
-let kTrapInvalidIndex         = 8;
+let kTrapTypeError            = 8;
+let kTrapUnalignedAccess      = 9;
+let kTrapDataSegmentDropped   = 10;
+let kTrapElemSegmentDropped   = 11;
 
 let kTrapMsgs = [
   "unreachable",
@@ -376,10 +468,13 @@ let kTrapMsgs = [
   "divide by zero",
   "divide result unrepresentable",
   "remainder by zero",
-  "integer result unrepresentable",
-  "invalid function",
+  "float unrepresentable in integer range",
+  "invalid index into function table",
   "function signature mismatch",
-  "invalid index into function table"
+  "wasm function signature contains illegal type",
+  "operation does not support unaligned accesses",
+  "data segment has been dropped",
+  "element segment has been dropped"
 ];
 
 function assertTraps(trap, code) {
@@ -396,29 +491,6 @@ function assertTraps(trap, code) {
     return;
   }
   throw new MjsUnitAssertionError('Did not trap, expected: ' + kTrapMsgs[trap]);
-}
-
-function assertWasmThrows(runtime_id, values, code) {
-  try {
-    if (typeof code === 'function') {
-      code();
-    } else {
-      eval(code);
-    }
-  } catch (e) {
-    assertTrue(e instanceof WebAssembly.RuntimeError);
-    var e_runtime_id = e['WasmExceptionRuntimeId'];
-    assertEquals(e_runtime_id, runtime_id);
-    assertTrue(Number.isInteger(e_runtime_id));
-    var e_values = e['WasmExceptionValues'];
-    assertEquals(values.length, e_values.length);
-    for (i = 0; i < values.length; ++i) {
-      assertEquals(values[i], e_values[i]);
-    }
-    // Success.
-    return;
-  }
-  throw new MjsUnitAssertionError('Did not throw expected: ' + runtime_id + values);
 }
 
 function wasmI32Const(val) {

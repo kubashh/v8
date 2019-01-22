@@ -33,6 +33,10 @@
 
 {
   'WATCHLIST_DEFINITIONS': {
+    'api': {
+      'filepath': 'include/' \
+                  '|src/api\.(cc|h)$',
+    },
     'snapshot': {
       'filepath': 'src/snapshot/',
     },
@@ -54,14 +58,15 @@
     'arm': {
       'filepath': '/arm/',
     },
+    'csa': {
+      'filepath': 'src/code-stub-assembler\.(cc|h)$' \
+                  '|src/builtins/.*-gen.(cc|h)$',
+    },
     'ia32': {
       'filepath': '/ia32/',
     },
     'merges': {
       'filepath': '.',
-    },
-    'gypfiles': {
-      'filepath': 'gypfiles/',
     },
     'inspector': {
       'filepath': 'inspector',
@@ -77,17 +82,36 @@
       'filepath': 'src/ast/' \
                   '|src/parsing/',
     },
+    'profiler': {
+      'filepath': 'src/profiler/' \
+                  '|src/libsampler/',
+    },
+    'torque': {
+      'filepath': '.*\.tq$',
+    },
     'tracing': {
       'filepath': 'src/tracing/',
     },
   },
 
   'WATCHLISTS': {
+    'api': [
+      'adamk+watch@chromium.org',
+      'yangguo+watch@chromium.org',
+    ],
+    'csa': [
+      'jgruber+watch@chromium.org',
+    ],
+    'torque': [
+      'jgruber+watch@chromium.org',
+    ],
     'snapshot': [
-      'yangguo@chromium.org',
+      'jgruber+watch@chromium.org',
+      'yangguo+watch@chromium.org',
     ],
     'debugger': [
-      'yangguo@chromium.org',
+      'jgruber+watch@chromium.org',
+      'yangguo+watch@chromium.org',
     ],
     'interpreter': [
       'rmcilroy@chromium.org',
@@ -102,15 +126,9 @@
       'v8-mips-ports@googlegroups.com',
       'v8-ppc-ports@googlegroups.com',
     ],
-    'ia32': [
-      'v8-x87-ports@googlegroups.com',
-    ],
     'merges': [
       # Only enabled on branches created with tools/release/create_release.py
       # 'v8-merges@googlegroups.com',
-    ],
-    'gypfiles': [
-      'machenbach@chromium.org',
     ],
     'inspector': [
       'devtools-reviews@chromium.org',
@@ -122,9 +140,14 @@
       'jbroman+watch@chromium.org',
     ],
     'parser': [
+      'adamk+watch@chromium.org',
       'marja+watch@chromium.org',
     ],
+    'profiler': [
+      'alph+watch@chromium.org',
+    ],
     'tracing': [
+      'alph+watch@chromium.org',
       'lpy+v8tracing@chromium.org',
       'fmeawad@chromium.org',
     ],

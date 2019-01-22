@@ -20,11 +20,11 @@ class DeadCodeEliminationTest : public GraphTest {
  public:
   explicit DeadCodeEliminationTest(int num_parameters = 4)
       : GraphTest(num_parameters) {}
-  ~DeadCodeEliminationTest() override {}
+  ~DeadCodeEliminationTest() override = default;
 
  protected:
   Reduction Reduce(AdvancedReducer::Editor* editor, Node* node) {
-    DeadCodeElimination reducer(editor, graph(), common());
+    DeadCodeElimination reducer(editor, graph(), common(), zone());
     return reducer.Reduce(node);
   }
 

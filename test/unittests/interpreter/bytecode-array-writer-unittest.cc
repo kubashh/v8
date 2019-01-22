@@ -5,7 +5,7 @@
 #include "src/v8.h"
 
 #include "src/api.h"
-#include "src/factory.h"
+#include "src/heap/factory.h"
 #include "src/interpreter/bytecode-array-writer.h"
 #include "src/interpreter/bytecode-label.h"
 #include "src/interpreter/bytecode-node.h"
@@ -22,7 +22,9 @@
 namespace v8 {
 namespace internal {
 namespace interpreter {
+namespace bytecode_array_writer_unittest {
 
+#define B(Name) static_cast<uint8_t>(Bytecode::k##Name)
 #define R(i) static_cast<uint32_t>(Register(i).ToOperand())
 
 class BytecodeArrayWriterUnittest : public TestWithIsolateAndZone {
@@ -32,7 +34,7 @@ class BytecodeArrayWriterUnittest : public TestWithIsolateAndZone {
         bytecode_array_writer_(
             zone(), &constant_array_builder_,
             SourcePositionTableBuilder::RECORD_SOURCE_POSITIONS) {}
-  ~BytecodeArrayWriterUnittest() override {}
+  ~BytecodeArrayWriterUnittest() override = default;
 
   void Write(Bytecode bytecode, BytecodeSourceInfo info = BytecodeSourceInfo());
   void Write(Bytecode bytecode, uint32_t operand0,
@@ -141,8 +143,8 @@ TEST_F(BytecodeArrayWriterUnittest, SimpleExample) {
     CHECK_EQ(bytecodes()->at(i), expected_bytes[i]);
   }
 
-  Handle<BytecodeArray> bytecode_array = writer()->ToBytecodeArray(
-      isolate(), 0, 0, factory()->empty_fixed_array());
+  Handle<BytecodeArray> bytecode_array =
+      writer()->ToBytecodeArray(isolate(), 0, 0, factory()->empty_byte_array());
   CHECK_EQ(bytecodes()->size(), arraysize(expected_bytes));
 
   PositionTableEntry expected_positions[] = {
@@ -230,8 +232,8 @@ TEST_F(BytecodeArrayWriterUnittest, ComplexExample) {
              static_cast<int>(expected_bytes[i]));
   }
 
-  Handle<BytecodeArray> bytecode_array = writer()->ToBytecodeArray(
-      isolate(), 0, 0, factory()->empty_fixed_array());
+  Handle<BytecodeArray> bytecode_array =
+      writer()->ToBytecodeArray(isolate(), 0, 0, factory()->empty_byte_array());
   SourcePositionTableIterator source_iterator(
       bytecode_array->SourcePositionTable());
   for (size_t i = 0; i < arraysize(expected_positions); ++i) {
@@ -282,8 +284,8 @@ TEST_F(BytecodeArrayWriterUnittest, ElideNoneffectfulBytecodes) {
              static_cast<int>(expected_bytes[i]));
   }
 
-  Handle<BytecodeArray> bytecode_array = writer()->ToBytecodeArray(
-      isolate(), 0, 0, factory()->empty_fixed_array());
+  Handle<BytecodeArray> bytecode_array =
+      writer()->ToBytecodeArray(isolate(), 0, 0, factory()->empty_byte_array());
   SourcePositionTableIterator source_iterator(
       bytecode_array->SourcePositionTable());
   for (size_t i = 0; i < arraysize(expected_positions); ++i) {
@@ -348,8 +350,8 @@ TEST_F(BytecodeArrayWriterUnittest, DeadcodeElimination) {
              static_cast<int>(expected_bytes[i]));
   }
 
-  Handle<BytecodeArray> bytecode_array = writer()->ToBytecodeArray(
-      isolate(), 0, 0, factory()->empty_fixed_array());
+  Handle<BytecodeArray> bytecode_array =
+      writer()->ToBytecodeArray(isolate(), 0, 0, factory()->empty_byte_array());
   SourcePositionTableIterator source_iterator(
       bytecode_array->SourcePositionTable());
   for (size_t i = 0; i < arraysize(expected_positions); ++i) {
@@ -363,6 +365,10 @@ TEST_F(BytecodeArrayWriterUnittest, DeadcodeElimination) {
   CHECK(source_iterator.done());
 }
 
+#undef B
+#undef R
+
+}  // namespace bytecode_array_writer_unittest
 }  // namespace interpreter
 }  // namespace internal
 }  // namespace v8

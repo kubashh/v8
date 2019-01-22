@@ -5,71 +5,78 @@
 #ifndef V8_SNAPSHOT_CODE_SERIALIZER_H_
 #define V8_SNAPSHOT_CODE_SERIALIZER_H_
 
-#include "src/parsing/preparse-data.h"
 #include "src/snapshot/serializer.h"
 
 namespace v8 {
 namespace internal {
 
-class CodeSerializer : public Serializer<> {
+class ScriptData {
  public:
-  static ScriptData* Serialize(Isolate* isolate,
-                               Handle<SharedFunctionInfo> info,
-                               Handle<String> source);
+  ScriptData(const byte* data, int length);
+  ~ScriptData() {
+    if (owns_data_) DeleteArray(data_);
+  }
 
-  ScriptData* Serialize(Handle<HeapObject> obj);
+  const byte* data() const { return data_; }
+  int length() const { return length_; }
+  bool rejected() const { return rejected_; }
 
-  MUST_USE_RESULT static MaybeHandle<SharedFunctionInfo> Deserialize(
-      Isolate* isolate, ScriptData* cached_data, Handle<String> source);
+  void Reject() { rejected_ = true; }
 
-  const std::vector<uint32_t>* stub_keys() const { return &stub_keys_; }
+  void AcquireDataOwnership() {
+    DCHECK(!owns_data_);
+    owns_data_ = true;
+  }
+
+  void ReleaseDataOwnership() {
+    DCHECK(owns_data_);
+    owns_data_ = false;
+  }
+
+ private:
+  bool owns_data_ : 1;
+  bool rejected_ : 1;
+  const byte* data_;
+  int length_;
+
+  DISALLOW_COPY_AND_ASSIGN(ScriptData);
+};
+
+class CodeSerializer : public Serializer {
+ public:
+  static ScriptCompiler::CachedData* Serialize(Handle<SharedFunctionInfo> info);
+
+  ScriptData* SerializeSharedFunctionInfo(Handle<SharedFunctionInfo> info);
+
+  V8_WARN_UNUSED_RESULT static MaybeHandle<SharedFunctionInfo> Deserialize(
+      Isolate* isolate, ScriptData* cached_data, Handle<String> source,
+      ScriptOriginOptions origin_options);
 
   uint32_t source_hash() const { return source_hash_; }
 
  protected:
-  explicit CodeSerializer(Isolate* isolate, uint32_t source_hash)
-      : Serializer(isolate), source_hash_(source_hash) {}
+  CodeSerializer(Isolate* isolate, uint32_t source_hash);
   ~CodeSerializer() override { OutputStatistics("CodeSerializer"); }
 
-  virtual void SerializeCodeObject(Code* code_object, HowToCode how_to_code,
+  virtual void SerializeCodeObject(Code code_object, HowToCode how_to_code,
                                    WhereToPoint where_to_point) {
     UNREACHABLE();
   }
 
-  virtual bool ElideObject(Object* obj) { return false; }
-  void SerializeGeneric(HeapObject* heap_object, HowToCode how_to_code,
+  virtual bool ElideObject(Object obj) { return false; }
+  void SerializeGeneric(HeapObject heap_object, HowToCode how_to_code,
                         WhereToPoint where_to_point);
 
  private:
-  void SerializeObject(HeapObject* o, HowToCode how_to_code,
+  void SerializeObject(HeapObject o, HowToCode how_to_code,
                        WhereToPoint where_to_point, int skip) override;
 
-  void SerializeCodeStub(Code* code_stub, HowToCode how_to_code,
-                         WhereToPoint where_to_point);
+  bool SerializeReadOnlyObject(HeapObject obj, HowToCode how_to_code,
+                               WhereToPoint where_to_point, int skip);
 
-  DisallowHeapAllocation no_gc_;
+  DISALLOW_HEAP_ALLOCATION(no_gc_);
   uint32_t source_hash_;
-  std::vector<uint32_t> stub_keys_;
   DISALLOW_COPY_AND_ASSIGN(CodeSerializer);
-};
-
-class WasmCompiledModuleSerializer : public CodeSerializer {
- public:
-  static std::unique_ptr<ScriptData> SerializeWasmModule(
-      Isolate* isolate, Handle<FixedArray> compiled_module);
-  static MaybeHandle<FixedArray> DeserializeWasmModule(
-      Isolate* isolate, ScriptData* data, Vector<const byte> wire_bytes);
-
- protected:
-  void SerializeCodeObject(Code* code_object, HowToCode how_to_code,
-                           WhereToPoint where_to_point) override;
-  bool ElideObject(Object* obj) override;
-
- private:
-  WasmCompiledModuleSerializer(Isolate* isolate, uint32_t source_hash,
-                               Handle<Context> native_context,
-                               Handle<SeqOneByteString> module_bytes);
-  DISALLOW_COPY_AND_ASSIGN(WasmCompiledModuleSerializer);
 };
 
 // Wrapper around ScriptData to provide code-serializer-specific functionality.
@@ -89,16 +96,14 @@ class SerializedCodeData : public SerializedData {
 
   // The data header consists of uint32_t-sized entries:
   // [0] magic number and (internally provided) external reference count
-  // [1] extra (API-provided) external reference count
-  // [2] version hash
-  // [3] source hash
-  // [4] cpu features
-  // [5] flag hash
-  // [6] number of code stub keys
-  // [7] number of reservation size entries
-  // [8] payload length
-  // [9] payload checksum part 1
-  // [10] payload checksum part 2
+  // [1] version hash
+  // [2] source hash
+  // [3] cpu features
+  // [4] flag hash
+  // [5] number of reservation size entries
+  // [6] payload length
+  // [7] payload checksum part A
+  // [8] payload checksum part B
   // ...  reservations
   // ...  code stub keys
   // ...  serialized payload
@@ -107,13 +112,14 @@ class SerializedCodeData : public SerializedData {
   static const uint32_t kCpuFeaturesOffset = kSourceHashOffset + kUInt32Size;
   static const uint32_t kFlagHashOffset = kCpuFeaturesOffset + kUInt32Size;
   static const uint32_t kNumReservationsOffset = kFlagHashOffset + kUInt32Size;
-  static const uint32_t kNumCodeStubKeysOffset =
-      kNumReservationsOffset + kUInt32Size;
   static const uint32_t kPayloadLengthOffset =
-      kNumCodeStubKeysOffset + kUInt32Size;
-  static const uint32_t kChecksum1Offset = kPayloadLengthOffset + kUInt32Size;
-  static const uint32_t kChecksum2Offset = kChecksum1Offset + kUInt32Size;
-  static const uint32_t kUnalignedHeaderSize = kChecksum2Offset + kUInt32Size;
+      kNumReservationsOffset + kUInt32Size;
+  static const uint32_t kChecksumPartAOffset =
+      kPayloadLengthOffset + kUInt32Size;
+  static const uint32_t kChecksumPartBOffset =
+      kChecksumPartAOffset + kUInt32Size;
+  static const uint32_t kUnalignedHeaderSize =
+      kChecksumPartBOffset + kUInt32Size;
   static const uint32_t kHeaderSize = POINTER_SIZE_ALIGN(kUnalignedHeaderSize);
 
   // Used when consuming.
@@ -129,19 +135,18 @@ class SerializedCodeData : public SerializedData {
   // Return ScriptData object and relinquish ownership over it to the caller.
   ScriptData* GetScriptData();
 
-  Vector<const Reservation> Reservations() const;
+  std::vector<Reservation> Reservations() const;
   Vector<const byte> Payload() const;
 
-  Vector<const uint32_t> CodeStubKeys() const;
-
-  static uint32_t SourceHash(Handle<String> source);
+  static uint32_t SourceHash(Handle<String> source,
+                             ScriptOriginOptions origin_options);
 
  private:
   explicit SerializedCodeData(ScriptData* data);
   SerializedCodeData(const byte* data, int size)
       : SerializedData(const_cast<byte*>(data), size) {}
 
-  Vector<const byte> DataWithoutHeader() const {
+  Vector<const byte> ChecksummedContent() const {
     return Vector<const byte>(data_ + kHeaderSize, size_ - kHeaderSize);
   }
 

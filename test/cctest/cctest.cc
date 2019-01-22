@@ -47,11 +47,11 @@ enum InitializationState { kUnset, kUninitialized, kInitialized };
 static InitializationState initialization_state_ = kUnset;
 static bool disable_automatic_dispose_ = false;
 
-CcTest* CcTest::last_ = NULL;
+CcTest* CcTest::last_ = nullptr;
 bool CcTest::initialize_called_ = false;
 v8::base::Atomic32 CcTest::isolate_used_ = 0;
-v8::ArrayBuffer::Allocator* CcTest::allocator_ = NULL;
-v8::Isolate* CcTest::isolate_ = NULL;
+v8::ArrayBuffer::Allocator* CcTest::allocator_ = nullptr;
+v8::Isolate* CcTest::isolate_ = nullptr;
 
 CcTest::CcTest(TestFunction* callback, const char* file, const char* name,
                bool enabled, bool initialize)
@@ -82,20 +82,30 @@ CcTest::CcTest(TestFunction* callback, const char* file, const char* name,
 
 void CcTest::Run() {
   if (!initialize_) {
-    CHECK(initialization_state_ != kInitialized);
+    CHECK_NE(initialization_state_, kInitialized);
     initialization_state_ = kUninitialized;
-    CHECK(CcTest::isolate_ == NULL);
+    CHECK_NULL(CcTest::isolate_);
   } else {
-    CHECK(initialization_state_ != kUninitialized);
+    CHECK_NE(initialization_state_, kUninitialized);
     initialization_state_ = kInitialized;
-    if (isolate_ == NULL) {
+    if (isolate_ == nullptr) {
       v8::Isolate::CreateParams create_params;
       create_params.array_buffer_allocator = allocator_;
       isolate_ = v8::Isolate::New(create_params);
     }
     isolate_->Enter();
   }
+#ifdef DEBUG
+  const size_t active_isolates = i::Isolate::non_disposed_isolates();
+#endif  // DEBUG
   callback_();
+#ifdef DEBUG
+  // This DCHECK ensures that all Isolates are properly disposed after finishing
+  // the test. Stray Isolates lead to stray tasks in the platform which can
+  // interact weirdly when swapping in new platforms (for testing) or during
+  // shutdown.
+  DCHECK_EQ(active_isolates, i::Isolate::non_disposed_isolates());
+#endif  // DEBUG
   if (initialize_) {
     if (v8::Locker::IsActive()) {
       v8::Locker locker(isolate_);
@@ -113,16 +123,21 @@ void CcTest::CollectGarbage(i::AllocationSpace space) {
   heap()->CollectGarbage(space, i::GarbageCollectionReason::kTesting);
 }
 
-void CcTest::CollectAllGarbage() {
-  CollectAllGarbage(i::Heap::kFinalizeIncrementalMarkingMask);
+void CcTest::CollectAllGarbage(i::Isolate* isolate) {
+  i::Isolate* iso = isolate ? isolate : i_isolate();
+  iso->heap()->CollectAllGarbage(i::Heap::kNoGCFlags,
+                                 i::GarbageCollectionReason::kTesting);
 }
 
-void CcTest::CollectAllGarbage(int flags) {
-  heap()->CollectAllGarbage(flags, i::GarbageCollectionReason::kTesting);
+void CcTest::CollectAllAvailableGarbage(i::Isolate* isolate) {
+  i::Isolate* iso = isolate ? isolate : i_isolate();
+  iso->heap()->CollectAllAvailableGarbage(i::GarbageCollectionReason::kTesting);
 }
 
-void CcTest::CollectAllAvailableGarbage() {
-  heap()->CollectAllAvailableGarbage(i::GarbageCollectionReason::kTesting);
+void CcTest::PreciseCollectAllGarbage(i::Isolate* isolate) {
+  i::Isolate* iso = isolate ? isolate : i_isolate();
+  iso->heap()->PreciseCollectAllGarbage(i::Heap::kNoGCFlags,
+                                        i::GarbageCollectionReason::kTesting);
 }
 
 v8::base::RandomNumberGenerator* CcTest::random_number_generator() {
@@ -142,23 +157,23 @@ void CcTest::InitializeVM() {
 }
 
 void CcTest::TearDown() {
-  if (isolate_ != NULL) isolate_->Dispose();
+  if (isolate_ != nullptr) isolate_->Dispose();
 }
 
-v8::Local<v8::Context> CcTest::NewContext(CcTestExtensionFlags extensions,
+v8::Local<v8::Context> CcTest::NewContext(CcTestExtensionFlags extension_flags,
                                           v8::Isolate* isolate) {
-    const char* extension_names[kMaxExtensions];
-    int extension_count = 0;
-  #define CHECK_EXTENSION_FLAG(Name, Id) \
-    if (extensions.Contains(Name##_ID)) extension_names[extension_count++] = Id;
-    EXTENSION_LIST(CHECK_EXTENSION_FLAG)
-  #undef CHECK_EXTENSION_FLAG
-    v8::ExtensionConfiguration config(extension_count, extension_names);
-    v8::Local<v8::Context> context = v8::Context::New(isolate, &config);
-    CHECK(!context.IsEmpty());
-    return context;
+  const char* extension_names[kMaxExtensions];
+  int extension_count = 0;
+  for (int i = 0; i < kMaxExtensions; ++i) {
+    if (!extension_flags.contains(static_cast<CcTestExtensionId>(i))) continue;
+    extension_names[extension_count] = kExtensionName[i];
+    ++extension_count;
+  }
+  v8::ExtensionConfiguration config(extension_count, extension_names);
+  v8::Local<v8::Context> context = v8::Context::New(isolate, &config);
+  CHECK(!context.IsEmpty());
+  return context;
 }
-
 
 void CcTest::DisableAutomaticDispose() {
   CHECK_EQ(kUninitialized, initialization_state_);
@@ -200,15 +215,15 @@ InitializedHandleScope::InitializedHandleScope()
       initialized_handle_scope_impl_(
           new InitializedHandleScopeImpl(main_isolate_)) {}
 
-InitializedHandleScope::~InitializedHandleScope() {}
+InitializedHandleScope::~InitializedHandleScope() = default;
 
 HandleAndZoneScope::HandleAndZoneScope()
     : main_zone_(new i::Zone(&allocator_, ZONE_NAME)) {}
 
-HandleAndZoneScope::~HandleAndZoneScope() {}
+HandleAndZoneScope::~HandleAndZoneScope() = default;
 
 static void PrintTestList(CcTest* current) {
-  if (current == NULL) return;
+  if (current == nullptr) return;
   PrintTestList(current->prev());
   printf("%s/%s\n", current->file(), current->name());
 }
@@ -253,14 +268,15 @@ int main(int argc, char* argv[]) {
   }
 
   v8::V8::InitializeICUDefaultLocation(argv[0]);
-  v8::Platform* platform = v8::platform::CreateDefaultPlatform();
-  v8::V8::InitializePlatform(platform);
+  std::unique_ptr<v8::Platform> platform(v8::platform::NewDefaultPlatform());
+  v8::V8::InitializePlatform(platform.get());
   v8::internal::FlagList::SetFlagsFromCommandLine(&argc, argv, true);
   v8::V8::Initialize();
   v8::V8::InitializeExternalStartupData(argv[0]);
 
-  if (i::trap_handler::UseTrapHandler()) {
-    v8::V8::RegisterDefaultSignalHandler();
+  if (V8_TRAP_HANDLER_SUPPORTED && i::FLAG_wasm_trap_handler) {
+    constexpr bool use_default_signal_handler = true;
+    CHECK(v8::V8::EnableWebAssemblyTrapHandler(use_default_signal_handler));
   }
 
   CcTest::set_array_buffer_allocator(
@@ -291,7 +307,7 @@ int main(int argc, char* argv[]) {
         char* file = arg_copy;
         char* name = testname + 1;
         CcTest* test = CcTest::last();
-        while (test != NULL) {
+        while (test != nullptr) {
           if (test->enabled()
               && strcmp(test->file(), file) == 0
               && strcmp(test->name(), name) == 0) {
@@ -305,7 +321,7 @@ int main(int argc, char* argv[]) {
         // Run all tests with the specified file or test name.
         char* file_or_name = arg_copy;
         CcTest* test = CcTest::last();
-        while (test != NULL) {
+        while (test != nullptr) {
           if (test->enabled()
               && (strcmp(test->file(), file_or_name) == 0
                   || strcmp(test->name(), file_or_name) == 0)) {
@@ -324,9 +340,8 @@ int main(int argc, char* argv[]) {
   // TODO(svenpanne) See comment above.
   // if (!disable_automatic_dispose_) v8::V8::Dispose();
   v8::V8::ShutdownPlatform();
-  delete platform;
   return 0;
 }
 
-RegisterThreadedTest *RegisterThreadedTest::first_ = NULL;
+RegisterThreadedTest* RegisterThreadedTest::first_ = nullptr;
 int RegisterThreadedTest::count_ = 0;

@@ -4,9 +4,9 @@
 
 // PLEASE READ BEFORE CHANGING THIS FILE!
 //
-// This file implements the support code for the out of bounds signal handler.
-// Nothing in here actually runs in the signal handler, but the code here
-// manipulates data structures used by the signal handler so we still need to be
+// This file implements the support code for the out of bounds trap handler.
+// Nothing in here actually runs in the trap handler, but the code here
+// manipulates data structures used by the trap handler so we still need to be
 // careful. In order to minimize this risk, here are some rules to follow.
 //
 // 1. Avoid introducing new external dependencies. The files in src/trap-handler
@@ -17,9 +17,8 @@
 //
 // For more information, see https://goo.gl/yMeyUY.
 //
-// For the code that runs in the signal handler itself, see handler-inside.cc.
+// For the code that runs in the trap handler itself, see handler-inside.cc.
 
-#include <signal.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,10 +33,10 @@
 namespace {
 size_t gNextCodeObject = 0;
 
-#if defined(DEBUG)
-const bool kEnableDebug = true;
+#ifdef DEBUG
+constexpr bool kEnableDebug = true;
 #else
-const bool kEnableDebug = false;
+constexpr bool kEnableDebug = false;
 #endif
 }
 
@@ -45,8 +44,8 @@ namespace v8 {
 namespace internal {
 namespace trap_handler {
 
-const size_t kInitialCodeObjectSize = 1024;
-const size_t kCodeObjectGrowthFactor = 2;
+constexpr size_t kInitialCodeObjectSize = 1024;
+constexpr size_t kCodeObjectGrowthFactor = 2;
 
 constexpr size_t HandlerDataSize(size_t num_protected_instructions) {
   return offsetof(CodeProtectionInfo, instructions) +
@@ -54,17 +53,14 @@ constexpr size_t HandlerDataSize(size_t num_protected_instructions) {
 }
 
 namespace {
-template <typename = std::enable_if<kEnableDebug>>
+#ifdef DEBUG
 bool IsDisjoint(const CodeProtectionInfo* a, const CodeProtectionInfo* b) {
   if (a == nullptr || b == nullptr) {
     return true;
   }
-
-  const auto a_base = reinterpret_cast<uintptr_t>(a->base);
-  const auto b_base = reinterpret_cast<uintptr_t>(b->base);
-
-  return a_base >= b_base + b->size || b_base >= a_base + a->size;
+  return a->base >= b->base + b->size || b->base >= a->base + a->size;
 }
+#endif
 
 // Verify that the code range does not overlap any that have already been
 // registered.
@@ -114,8 +110,8 @@ void ValidateCodeObjects() {
 }  // namespace
 
 CodeProtectionInfo* CreateHandlerData(
-    void* base, size_t size, size_t num_protected_instructions,
-    ProtectedInstructionData* protected_instructions) {
+    Address base, size_t size, size_t num_protected_instructions,
+    const ProtectedInstructionData* protected_instructions) {
   const size_t alloc_size = HandlerDataSize(num_protected_instructions);
   CodeProtectionInfo* data =
       reinterpret_cast<CodeProtectionInfo*>(malloc(alloc_size));
@@ -134,19 +130,9 @@ CodeProtectionInfo* CreateHandlerData(
   return data;
 }
 
-void UpdateHandlerDataCodePointer(int index, void* base) {
-  MetadataLock lock;
-  if (static_cast<size_t>(index) >= gNumCodeObjects) {
-    abort();
-  }
-  CodeProtectionInfo* data = gCodeObjects[index].code_info;
-  data->base = base;
-}
-
-int RegisterHandlerData(void* base, size_t size,
-                        size_t num_protected_instructions,
-                        ProtectedInstructionData* protected_instructions) {
-  // TODO(eholk): in debug builds, make sure this data isn't already registered.
+int RegisterHandlerData(
+    Address base, size_t size, size_t num_protected_instructions,
+    const ProtectedInstructionData* protected_instructions) {
 
   CodeProtectionInfo* data = CreateHandlerData(
       base, size, num_protected_instructions, protected_instructions);
@@ -181,6 +167,7 @@ int RegisterHandlerData(void* base, size_t size,
       new_size = int_max;
     }
     if (new_size == gNumCodeObjects) {
+      free(data);
       return kInvalidIndex;
     }
 
@@ -215,6 +202,7 @@ int RegisterHandlerData(void* base, size_t size,
 
     return static_cast<int>(i);
   } else {
+    free(data);
     return kInvalidIndex;
   }
 }
@@ -246,27 +234,33 @@ void ReleaseHandlerData(int index) {
   free(data);
 }
 
-bool RegisterDefaultSignalHandler() {
-#if V8_TRAP_HANDLER_SUPPORTED
-  struct sigaction action;
-  action.sa_sigaction = HandleSignal;
-  action.sa_flags = SA_SIGINFO;
-  sigemptyset(&action.sa_mask);
-  // {sigaction} installs a new custom segfault handler. On success, it returns
-  // 0. If we get a nonzero value, we report an error to the caller by returning
-  // false.
-  if (sigaction(SIGSEGV, &action, nullptr) != 0) {
-    return false;
-  }
-
-  return true;
-#else
-  return false;
-#endif
-}
+int* GetThreadInWasmThreadLocalAddress() { return &g_thread_in_wasm_code; }
 
 size_t GetRecoveredTrapCount() {
   return gRecoveredTrapCount.load(std::memory_order_relaxed);
+}
+
+#if !V8_TRAP_HANDLER_SUPPORTED
+// This version is provided for systems that do not support trap handlers.
+// Otherwise, the correct one should be implemented in the appropriate
+// platform-specific handler-outside.cc.
+bool RegisterDefaultTrapHandler() { return false; }
+
+void RemoveTrapHandler() {}
+#endif
+
+bool g_is_trap_handler_enabled;
+
+bool EnableTrapHandler(bool use_v8_handler) {
+  if (!V8_TRAP_HANDLER_SUPPORTED) {
+    return false;
+  }
+  if (use_v8_handler) {
+    g_is_trap_handler_enabled = RegisterDefaultTrapHandler();
+    return g_is_trap_handler_enabled;
+  }
+  g_is_trap_handler_enabled = true;
+  return true;
 }
 
 }  // namespace trap_handler

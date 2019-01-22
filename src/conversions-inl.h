@@ -19,6 +19,7 @@
 #include "src/conversions.h"
 #include "src/double.h"
 #include "src/objects-inl.h"
+#include "src/objects/heap-number-inl.h"
 
 namespace v8 {
 namespace internal {
@@ -43,9 +44,10 @@ inline unsigned int FastD2UI(double x) {
     x += k2Pow52;
     uint32_t result;
 #ifndef V8_TARGET_BIG_ENDIAN
-    Address mantissa_ptr = reinterpret_cast<Address>(&x);
+    void* mantissa_ptr = reinterpret_cast<void*>(&x);
 #else
-    Address mantissa_ptr = reinterpret_cast<Address>(&x) + kInt32Size;
+    void* mantissa_ptr =
+        reinterpret_cast<void*>(reinterpret_cast<Address>(&x) + kInt32Size);
 #endif
     // Copy least significant 32 bits of mantissa.
     memcpy(&result, mantissa_ptr, sizeof(result));
@@ -70,37 +72,43 @@ inline double DoubleToInteger(double x) {
   return (x >= 0) ? std::floor(x) : std::ceil(x);
 }
 
-
+// Implements most of https://tc39.github.io/ecma262/#sec-toint32.
 int32_t DoubleToInt32(double x) {
-  int32_t i = FastD2I(x);
-  if (FastI2D(i) == x) return i;
+  if ((std::isfinite(x)) && (x <= INT_MAX) && (x >= INT_MIN)) {
+    int32_t i = static_cast<int32_t>(x);
+    if (FastI2D(i) == x) return i;
+  }
   Double d(x);
   int exponent = d.Exponent();
+  uint64_t bits;
   if (exponent < 0) {
     if (exponent <= -Double::kSignificandSize) return 0;
-    return d.Sign() * static_cast<int32_t>(d.Significand() >> -exponent);
+    bits = d.Significand() >> -exponent;
   } else {
     if (exponent > 31) return 0;
-    return d.Sign() * static_cast<int32_t>(d.Significand() << exponent);
+    // Masking to a 32-bit value ensures that the result of the
+    // static_cast<int64_t> below is not the minimal int64_t value,
+    // which would overflow on multiplication with d.Sign().
+    bits = (d.Significand() << exponent) & 0xFFFFFFFFul;
   }
+  return static_cast<int32_t>(d.Sign() * static_cast<int64_t>(bits));
 }
 
 bool DoubleToSmiInteger(double value, int* smi_int_value) {
-  if (IsMinusZero(value)) return false;
-  int i = FastD2IChecked(value);
-  if (value != i || !Smi::IsValid(i)) return false;
-  *smi_int_value = i;
+  if (!IsSmiDouble(value)) return false;
+  *smi_int_value = FastD2I(value);
+  DCHECK(Smi::IsValid(*smi_int_value));
   return true;
 }
 
 bool IsSmiDouble(double value) {
-  return !IsMinusZero(value) && value >= Smi::kMinValue &&
-         value <= Smi::kMaxValue && value == FastI2D(FastD2I(value));
+  return value >= Smi::kMinValue && value <= Smi::kMaxValue &&
+         !IsMinusZero(value) && value == FastI2D(FastD2I(value));
 }
 
 
 bool IsInt32Double(double value) {
-  return !IsMinusZero(value) && value >= kMinInt && value <= kMaxInt &&
+  return value >= kMinInt && value <= kMaxInt && !IsMinusZero(value) &&
          value == FastI2D(FastD2I(value));
 }
 
@@ -140,17 +148,17 @@ bool DoubleToUint32IfEqualToSelf(double value, uint32_t* uint32_value) {
   return false;
 }
 
-int32_t NumberToInt32(Object* number) {
+int32_t NumberToInt32(Object number) {
   if (number->IsSmi()) return Smi::ToInt(number);
   return DoubleToInt32(number->Number());
 }
 
-uint32_t NumberToUint32(Object* number) {
+uint32_t NumberToUint32(Object number) {
   if (number->IsSmi()) return Smi::ToInt(number);
   return DoubleToUint32(number->Number());
 }
 
-uint32_t PositiveNumberToUint32(Object* number) {
+uint32_t PositiveNumberToUint32(Object number) {
   if (number->IsSmi()) {
     int value = Smi::ToInt(number);
     if (value <= 0) return 0;
@@ -165,7 +173,7 @@ uint32_t PositiveNumberToUint32(Object* number) {
   return max;
 }
 
-int64_t NumberToInt64(Object* number) {
+int64_t NumberToInt64(Object number) {
   if (number->IsSmi()) return Smi::ToInt(number);
   double d = number->Number();
   if (std::isnan(d)) return 0;
@@ -178,7 +186,22 @@ int64_t NumberToInt64(Object* number) {
   return static_cast<int64_t>(d);
 }
 
-bool TryNumberToSize(Object* number, size_t* result) {
+uint64_t PositiveNumberToUint64(Object number) {
+  if (number->IsSmi()) {
+    int value = Smi::ToInt(number);
+    if (value <= 0) return 0;
+    return value;
+  }
+  DCHECK(number->IsHeapNumber());
+  double value = number->Number();
+  // Catch all values smaller than 1 and use the double-negation trick for NANs.
+  if (!(value >= 1)) return 0;
+  uint64_t max = std::numeric_limits<uint64_t>::max();
+  if (value < max) return static_cast<uint64_t>(value);
+  return max;
+}
+
+bool TryNumberToSize(Object number, size_t* result) {
   // Do not create handles in this function! Don't use SealHandleScope because
   // the function can be used concurrently.
   if (number->IsSmi()) {
@@ -207,13 +230,12 @@ bool TryNumberToSize(Object* number, size_t* result) {
   }
 }
 
-size_t NumberToSize(Object* number) {
+size_t NumberToSize(Object number) {
   size_t result = 0;
   bool is_valid = TryNumberToSize(number, &result);
   CHECK(is_valid);
   return result;
 }
-
 
 uint32_t DoubleToUint32(double x) {
   return static_cast<uint32_t>(DoubleToInt32(x));

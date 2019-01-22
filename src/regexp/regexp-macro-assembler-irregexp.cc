@@ -54,7 +54,7 @@ void RegExpMacroAssemblerIrregexp::Bind(Label* l) {
 
 
 void RegExpMacroAssemblerIrregexp::EmitOrLink(Label* l) {
-  if (l == NULL) l = &backtrack_;
+  if (l == nullptr) l = &backtrack_;
   if (l->is_bound()) {
     Emit32(l->pos());
   } else {
@@ -439,8 +439,7 @@ int RegExpMacroAssemblerIrregexp::length() {
   return pc_;
 }
 
-
-void RegExpMacroAssemblerIrregexp::Copy(Address a) {
+void RegExpMacroAssemblerIrregexp::Copy(byte* a) {
   MemCopy(a, buffer_.start(), length());
 }
 

@@ -21,28 +21,6 @@ class PagedSpace;
 
 enum class StepOrigin { kV8, kTask };
 
-// This marking state is used when concurrent marking is running.
-class IncrementalMarkingState final
-    : public MarkingStateBase<IncrementalMarkingState, AccessMode::ATOMIC> {
- public:
-  Bitmap* bitmap(const MemoryChunk* chunk) const {
-    return Bitmap::FromAddress(chunk->address() + MemoryChunk::kHeaderSize);
-  }
-
-  // Concurrent marking uses local live bytes.
-  void IncrementLiveBytes(MemoryChunk* chunk, intptr_t by) {
-    chunk->live_byte_count_ += by;
-  }
-
-  intptr_t live_bytes(MemoryChunk* chunk) const {
-    return chunk->live_byte_count_;
-  }
-
-  void SetLiveBytes(MemoryChunk* chunk, intptr_t value) {
-    chunk->live_byte_count_ = value;
-  }
-};
-
 class V8_EXPORT_PRIVATE IncrementalMarking {
  public:
   enum State { STOPPED, SWEEPING, MARKING, COMPLETE };
@@ -57,7 +35,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
   using MarkingState = IncrementalMarkingState;
 #else
   using MarkingState = MajorNonAtomicMarkingState;
-#endif
+#endif  // V8_CONCURRENT_MARKING
   using AtomicMarkingState = MajorAtomicMarkingState;
   using NonAtomicMarkingState = MajorNonAtomicMarkingState;
 
@@ -95,10 +73,6 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
   static const int kStepSizeInMs = 1;
   static const int kMaxStepSizeInMs = 5;
 
-  // This is the upper bound for how many times we allow finalization of
-  // incremental marking to be postponed.
-  static const int kMaxIdleMarkingDelayCounter = 3;
-
 #ifndef DEBUG
   static const intptr_t kActivationThreshold = 8 * MB;
 #else
@@ -111,7 +85,9 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
   static const AccessMode kAtomicity = AccessMode::NON_ATOMIC;
 #endif
 
-  explicit IncrementalMarking(Heap* heap);
+  IncrementalMarking(Heap* heap,
+                     MarkCompactCollector::MarkingWorklist* marking_worklist,
+                     WeakObjects* weak_objects);
 
   MarkingState* marking_state() { return &marking_state_; }
 
@@ -121,25 +97,9 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
     return &non_atomic_marking_state_;
   }
 
-  void NotifyLeftTrimming(HeapObject* from, HeapObject* to);
+  void NotifyLeftTrimming(HeapObject from, HeapObject to);
 
-  V8_INLINE void TransferColor(HeapObject* from, HeapObject* to) {
-    if (atomic_marking_state()->IsBlack(to)) {
-      DCHECK(black_allocation());
-      return;
-    }
-
-    DCHECK(atomic_marking_state()->IsWhite(to));
-    if (atomic_marking_state()->IsGrey(from)) {
-      bool success = atomic_marking_state()->WhiteToGrey(to);
-      DCHECK(success);
-      USE(success);
-    } else if (atomic_marking_state()->IsBlack(from)) {
-      bool success = atomic_marking_state()->WhiteToBlack(to);
-      DCHECK(success);
-      USE(success);
-    }
-  }
+  V8_INLINE void TransferColor(HeapObject from, HeapObject to);
 
   State state() const {
     DCHECK(state_ == STOPPED || FLAG_incremental_marking);
@@ -189,6 +149,8 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
   void FinalizeIncrementally();
 
   void UpdateMarkingWorklistAfterScavenge();
+  void UpdateWeakReferencesAfterScavenge();
+  void UpdateMarkedBytesAfterScavenge(size_t dead_bytes_in_new_space);
 
   void Hurry();
 
@@ -207,17 +169,23 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
   // anymore because a single step would exceed the deadline.
   double AdvanceIncrementalMarking(double deadline_in_ms,
                                    CompletionAction completion_action,
-                                   ForceCompletionAction force_completion,
                                    StepOrigin step_origin);
 
   void FinalizeSweeping();
 
   size_t Step(size_t bytes_to_process, CompletionAction action,
-              ForceCompletionAction completion, StepOrigin step_origin);
+              StepOrigin step_origin);
+  void StepOnAllocation(size_t bytes_to_process, double max_step_size);
+
+  bool ShouldDoEmbedderStep();
+  void EmbedderStep(double duration);
 
   inline void RestartIfNotMarking();
 
-  static int RecordWriteFromCode(HeapObject* obj, Object** slot,
+  // {raw_obj} and {slot_address} are raw Address values instead of a
+  // HeapObject and a MaybeObjectSlot because this is called from
+  // generated code via ExternalReference.
+  static int RecordWriteFromCode(Address raw_obj, Address slot_address,
                                  Isolate* isolate);
 
   // Record a slot for compaction.  Returns false for objects that are
@@ -226,45 +194,35 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
   // No slots in white objects should be recorded, as some slots are typed and
   // cannot be interpreted correctly if the underlying object does not survive
   // the incremental cycle (stays white).
-  V8_INLINE bool BaseRecordWrite(HeapObject* obj, Object* value);
-  V8_INLINE void RecordWrite(HeapObject* obj, Object** slot, Object* value);
-  V8_INLINE void RecordWriteIntoCode(Code* host, RelocInfo* rinfo,
-                                     Object* value);
-  V8_INLINE void RecordWrites(HeapObject* obj);
+  V8_INLINE bool BaseRecordWrite(HeapObject obj, Object value);
+  V8_INLINE void RecordWrite(HeapObject obj, ObjectSlot slot, Object value);
+  V8_INLINE void RecordMaybeWeakWrite(HeapObject obj, MaybeObjectSlot slot,
+                                      MaybeObject value);
+  void RevisitObject(HeapObject obj);
+  // Ensures that all descriptors int range [0, number_of_own_descripts)
+  // are visited.
+  void VisitDescriptors(HeapObject host, DescriptorArray array,
+                        int number_of_own_descriptors);
 
-  void RecordWriteSlow(HeapObject* obj, Object** slot, Object* value);
-  void RecordWriteIntoCodeSlow(Code* host, RelocInfo* rinfo, Object* value);
+  void RecordWriteSlow(HeapObject obj, HeapObjectSlot slot, Object value);
+  void RecordWriteIntoCode(Code host, RelocInfo* rinfo, HeapObject value);
 
   // Returns true if the function succeeds in transitioning the object
   // from white to grey.
-  bool WhiteToGreyAndPush(HeapObject* obj);
+  bool WhiteToGreyAndPush(HeapObject obj);
 
   // This function is used to color the object black before it undergoes an
   // unsafe layout change. This is a part of synchronization protocol with
   // the concurrent marker.
-  void MarkBlackAndPush(HeapObject* obj);
-
-  inline void SetOldSpacePageFlags(MemoryChunk* chunk) {
-    SetOldSpacePageFlags(chunk, IsMarking(), IsCompacting());
-  }
-
-  inline void SetNewSpacePageFlags(Page* chunk) {
-    SetNewSpacePageFlags(chunk, IsMarking());
-  }
+  void MarkBlackAndVisitObjectDueToLayoutChange(HeapObject obj);
 
   bool IsCompacting() { return IsMarking() && is_compacting_; }
-
-  void ActivateGeneratedStub(Code* stub);
 
   void NotifyIncompleteScanOfObject(int unscanned_bytes) {
     unscanned_bytes_of_large_object_ = unscanned_bytes;
   }
 
-  void ClearIdleMarkingDelayCounter();
-
-  bool IsIdleMarkingDelayCounterLimitReached();
-
-  void ProcessBlackAllocatedObject(HeapObject* obj);
+  void ProcessBlackAllocatedObject(HeapObject obj);
 
   Heap* heap() const { return heap_; }
 
@@ -280,16 +238,8 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
     }
   }
 
-  void AbortBlackAllocation();
-
-  MarkCompactCollector::MarkingWorklist* marking_worklist() {
-    SLOW_DCHECK(marking_worklist_ != nullptr);
+  MarkCompactCollector::MarkingWorklist* marking_worklist() const {
     return marking_worklist_;
-  }
-
-  void set_marking_worklist(
-      MarkCompactCollector::MarkingWorklist* marking_worklist) {
-    marking_worklist_ = marking_worklist;
   }
 
   void Deactivate();
@@ -307,11 +257,6 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
     IncrementalMarking& incremental_marking_;
   };
 
-  static void SetOldSpacePageFlags(MemoryChunk* chunk, bool is_marking,
-                                   bool is_compacting);
-
-  static void SetNewSpacePageFlags(MemoryChunk* chunk, bool is_marking);
-
   void StartMarking();
 
   void StartBlackAllocation();
@@ -319,6 +264,7 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
   void FinishBlackAllocation();
 
   void MarkRoots();
+  bool ShouldRetainMap(Map map, int age);
   // Retain dying maps for <FLAG_retain_maps_for_n_gc> garbage collections to
   // increase chances of reusing of map transition tree in future.
   void RetainMaps();
@@ -335,12 +281,10 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
       intptr_t bytes_to_process,
       ForceCompletionAction completion = DO_NOT_FORCE_COMPLETION);
 
-  V8_INLINE bool IsFixedArrayWithProgressBar(HeapObject* object);
+  V8_INLINE bool IsFixedArrayWithProgressBar(HeapObject object);
 
   // Visits the object and returns its size.
-  V8_INLINE int VisitObject(Map* map, HeapObject* obj);
-
-  void RevisitObject(HeapObject* obj);
+  V8_INLINE int VisitObject(Map map, HeapObject obj);
 
   void IncrementIdleMarkingDelayCounter();
 
@@ -354,21 +298,23 @@ class V8_EXPORT_PRIVATE IncrementalMarking {
     heap_->SetIsMarkingFlag(s >= MARKING);
   }
 
-  Heap* heap_;
-  MarkCompactCollector::MarkingWorklist* marking_worklist_;
+  Heap* const heap_;
+  MarkCompactCollector::MarkingWorklist* const marking_worklist_;
+  WeakObjects* weak_objects_;
 
   double start_time_ms_;
   size_t initial_old_generation_size_;
   size_t old_generation_allocation_counter_;
   size_t bytes_allocated_;
   size_t bytes_marked_ahead_of_schedule_;
+  // A sample of concurrent_marking()->TotalMarkedBytes() at the last
+  // incremental marking step. It is used for updating
+  // bytes_marked_ahead_of_schedule_ with contribution of concurrent marking.
+  size_t bytes_marked_concurrently_;
   size_t unscanned_bytes_of_large_object_;
 
   // Must use SetState() above to update state_
   State state_;
-
-  int idle_marking_delay_counter_;
-  int incremental_marking_finalization_rounds_;
 
   bool is_compacting_;
   bool should_hurry_;

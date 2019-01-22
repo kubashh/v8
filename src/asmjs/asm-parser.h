@@ -10,6 +10,7 @@
 
 #include "src/asmjs/asm-scanner.h"
 #include "src/asmjs/asm-types.h"
+#include "src/base/enum-set.h"
 #include "src/wasm/wasm-module-builder.h"
 #include "src/zone/zone-containers.h"
 
@@ -47,7 +48,7 @@ class AsmJsParser {
   };
   // clang-format on
 
-  typedef EnumSet<StandardMember, uint64_t> StdlibSet;
+  using StdlibSet = base::EnumSet<StandardMember, uint64_t>;
 
   explicit AsmJsParser(Zone* zone, uintptr_t stack_limit,
                        Utf16CharacterStream* stream);
@@ -76,9 +77,16 @@ class AsmJsParser {
   };
   // clang-format on
 
+  // A single import in asm.js can require multiple imports in wasm, if the
+  // function is used with different signatures. {cache} keeps the wasm
+  // imports for the single asm.js import of name {function_name}.
   struct FunctionImportInfo {
     Vector<const char> function_name;
-    WasmModuleBuilder::SignatureMap cache;
+    ZoneUnorderedMap<FunctionSig, uint32_t> cache;
+
+    // Constructor.
+    FunctionImportInfo(Vector<const char> name, Zone* zone)
+        : function_name(name), cache(zone) {}
   };
 
   struct VarInfo {

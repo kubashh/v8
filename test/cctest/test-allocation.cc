@@ -4,6 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if V8_OS_POSIX
+#include <setjmp.h>
+#include <signal.h>
+#include <unistd.h>  // NOLINT
+#endif
+
 #include "src/v8.h"
 
 #include "test/cctest/cctest.h"
@@ -17,7 +23,7 @@ using v8::Task;
 #include "src/allocation.h"
 #include "src/zone/accounting-allocator.h"
 
-// ASAN isn't configured to return NULL, so skip all of these tests.
+// ASAN isn't configured to return nullptr, so skip all of these tests.
 #if !defined(V8_USE_ADDRESS_SANITIZER) && !defined(MEMORY_SANITIZER) && \
     !defined(THREAD_SANITIZER)
 
@@ -31,9 +37,14 @@ class AllocationPlatform : public TestPlatform {
     // Now that it's completely constructed, make this the current platform.
     i::V8::SetPlatformForTesting(this);
   }
-  virtual ~AllocationPlatform() = default;
+  ~AllocationPlatform() override = default;
 
   void OnCriticalMemoryPressure() override { oom_callback_called = true; }
+
+  bool OnCriticalMemoryPressure(size_t length) override {
+    oom_callback_called = true;
+    return true;
+  }
 
   static AllocationPlatform* current_platform;
   bool oom_callback_called = false;
@@ -122,7 +133,7 @@ TEST(AlignedAllocOOM) {
   // On failure, this won't return, since an AlignedAlloc failure is fatal.
   // In that case, behavior is checked in OnAlignedAllocOOM before exit.
   void* result = v8::internal::AlignedAlloc(GetHugeMemoryAmount(),
-                                            v8::base::OS::AllocateAlignment());
+                                            v8::internal::AllocatePageSize());
   // On a few systems, allocation somehow succeeds.
   CHECK_EQ(result == nullptr, platform.oom_callback_called);
 }
@@ -130,24 +141,20 @@ TEST(AlignedAllocOOM) {
 TEST(AllocVirtualMemoryOOM) {
   AllocationPlatform platform;
   CHECK(!platform.oom_callback_called);
-  v8::internal::VirtualMemory result;
-  bool success =
-      v8::internal::AllocVirtualMemory(GetHugeMemoryAmount(), nullptr, &result);
+  v8::internal::VirtualMemory result(v8::internal::GetPlatformPageAllocator(),
+                                     GetHugeMemoryAmount(), nullptr);
   // On a few systems, allocation somehow succeeds.
-  CHECK_IMPLIES(success, result.IsReserved());
-  CHECK_IMPLIES(!success, !result.IsReserved() && platform.oom_callback_called);
+  CHECK_IMPLIES(!result.IsReserved(), platform.oom_callback_called);
 }
 
 TEST(AlignedAllocVirtualMemoryOOM) {
   AllocationPlatform platform;
   CHECK(!platform.oom_callback_called);
-  v8::internal::VirtualMemory result;
-  bool success = v8::internal::AlignedAllocVirtualMemory(
-      GetHugeMemoryAmount(), v8::base::OS::AllocateAlignment(), nullptr,
-      &result);
+  v8::internal::VirtualMemory result(v8::internal::GetPlatformPageAllocator(),
+                                     GetHugeMemoryAmount(), nullptr,
+                                     v8::internal::AllocatePageSize());
   // On a few systems, allocation somehow succeeds.
-  CHECK_IMPLIES(success, result.IsReserved());
-  CHECK_IMPLIES(!success, !result.IsReserved() && platform.oom_callback_called);
+  CHECK_IMPLIES(!result.IsReserved(), platform.oom_callback_called);
 }
 
 #endif  // !defined(V8_USE_ADDRESS_SANITIZER) && !defined(MEMORY_SANITIZER) &&

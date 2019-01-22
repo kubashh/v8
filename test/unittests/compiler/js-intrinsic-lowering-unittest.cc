@@ -26,7 +26,7 @@ namespace compiler {
 class JSIntrinsicLoweringTest : public GraphTest {
  public:
   JSIntrinsicLoweringTest() : GraphTest(3), javascript_(zone()) {}
-  ~JSIntrinsicLoweringTest() override {}
+  ~JSIntrinsicLoweringTest() override = default;
 
  protected:
   Reduction Reduce(Node* node) {
@@ -88,7 +88,7 @@ TEST_F(JSIntrinsicLoweringTest, InlineIsArray) {
           IsNumberEqual(IsLoadField(AccessBuilder::ForMapInstanceType(),
                                     IsLoadField(AccessBuilder::ForMap(), input,
                                                 effect, CaptureEq(&if_false)),
-                                    effect, _),
+                                    _, _),
                         IsNumberConstant(JS_ARRAY_TYPE)),
           IsMerge(IsIfTrue(AllOf(CaptureEq(&branch),
                                  IsBranch(IsObjectIsSmi(input), control))),
@@ -119,7 +119,7 @@ TEST_F(JSIntrinsicLoweringTest, InlineIsTypedArray) {
           IsNumberEqual(IsLoadField(AccessBuilder::ForMapInstanceType(),
                                     IsLoadField(AccessBuilder::ForMap(), input,
                                                 effect, CaptureEq(&if_false)),
-                                    effect, _),
+                                    _, _),
                         IsNumberConstant(JS_TYPED_ARRAY_TYPE)),
           IsMerge(IsIfTrue(AllOf(CaptureEq(&branch),
                                  IsBranch(IsObjectIsSmi(input), control))),

@@ -185,6 +185,10 @@ MAGIC_MARKER_PAIRS = (
     (0xbbbbbbbb, 0xbbbbbbbb),
     (0xfefefefe, 0xfefefeff),
 )
+# See StackTraceFailureMessage in isolate.h
+STACK_TRACE_MARKER = 0xdecade30
+# See FailureMessage in logging.cc
+ERROR_MESSAGE_MARKER = 0xdecade10
 
 # Set of structures and constants that describe the layout of minidump
 # files. Based on MSDN and Google Breakpad.
@@ -579,6 +583,9 @@ MD_CPU_ARCHITECTURE_ARM = 5
 MD_CPU_ARCHITECTURE_ARM64 = 0x8003
 MD_CPU_ARCHITECTURE_AMD64 = 9
 
+OBJDUMP_BIN = None
+DEFAULT_OBJDUMP_BIN = '/usr/bin/objdump'
+
 class FuncSymbol:
   def __init__(self, start, size, name):
     self.start = start
@@ -623,6 +630,11 @@ class MinidumpReader(object):
     self.modules_with_symbols = []
     self.symbols = []
 
+    self._ReadArchitecture(directories)
+    self._ReadDirectories(directories)
+    self._FindObjdump(options)
+
+  def _ReadArchitecture(self, directories):
     # Find MDRawSystemInfo stream and determine arch.
     for d in directories:
       if d.stream_type == MD_SYSTEM_INFO_STREAM:
@@ -635,6 +647,7 @@ class MinidumpReader(object):
                              MD_CPU_ARCHITECTURE_X86]
     assert not self.arch is None
 
+  def _ReadDirectories(self, directories):
     for d in directories:
       DebugPrint(d)
       if d.stream_type == MD_EXCEPTION_STREAM:
@@ -680,6 +693,44 @@ class MinidumpReader(object):
         assert ctypes.sizeof(self.memory_list64) == d.location.data_size
         DebugPrint(self.memory_list64)
 
+  def _FindObjdump(self, options):
+    if options.objdump:
+        objdump_bin = options.objdump
+    else:
+      objdump_bin = self._FindThirdPartyObjdump()
+    if not objdump_bin or not os.path.exists(objdump_bin):
+      print "# Cannot find '%s', falling back to default objdump '%s'" % (
+          objdump_bin, DEFAULT_OBJDUMP_BIN)
+      objdump_bin  = DEFAULT_OBJDUMP_BIN
+    global OBJDUMP_BIN
+    OBJDUMP_BIN = objdump_bin
+    disasm.OBJDUMP_BIN = objdump_bin
+
+  def _FindThirdPartyObjdump(self):
+      # Try to find the platform specific objdump
+      third_party_dir = os.path.join(
+          os.path.dirname(os.path.dirname(__file__)), 'third_party')
+      objdumps = []
+      for root, dirs, files in os.walk(third_party_dir):
+        for file in files:
+          if file.endswith("objdump"):
+            objdumps.append(os.path.join(root, file))
+      if self.arch == MD_CPU_ARCHITECTURE_ARM:
+        platform_filter = 'arm-linux'
+      elif self.arch == MD_CPU_ARCHITECTURE_ARM64:
+        platform_filter = 'aarch64'
+      else:
+        # use default otherwise
+        return None
+      print ("# Looking for platform specific (%s) objdump in "
+             "third_party directory.") % platform_filter
+      objdumps = filter(lambda file: platform_filter in file >= 0, objdumps)
+      if len(objdumps) == 0:
+        print "# Could not find platform specific objdump in third_party."
+        print "# Make sure you installed the correct SDK."
+        return None
+      return objdumps[0]
+
   def ContextDescriptor(self):
     if self.arch == MD_CPU_ARCHITECTURE_X86:
       return MINIDUMP_CONTEXT_X86
@@ -710,7 +761,7 @@ class MinidumpReader(object):
 
   def IsValidExceptionStackAddress(self, address):
     if not self.IsValidAddress(address): return False
-    return self.isExceptionStackAddress(address)
+    return self.IsExceptionStackAddress(address)
 
   def IsModuleAddress(self, address):
     return self.GetModuleForAddress(address) != None
@@ -1179,9 +1230,6 @@ class Map(HeapObject):
 
   def DependentCodeOffset(self):
     return self.CodeCacheOffset() + self.heap.PointerSize()
-
-  def WeakCellCacheOffset(self):
-    return self.DependentCodeOffset() + self.heap.PointerSize()
 
   def ReadByte(self, offset):
     return self.heap.reader.ReadU8(self.address + offset)
@@ -1667,9 +1715,9 @@ class V8Heap(object):
     "EXTERNAL_SYMBOL_TYPE": ExternalString,
     "EXTERNAL_SYMBOL_WITH_ONE_BYTE_DATA_TYPE": ExternalString,
     "EXTERNAL_ONE_BYTE_SYMBOL_TYPE": ExternalString,
-    "SHORT_EXTERNAL_SYMBOL_TYPE": ExternalString,
-    "SHORT_EXTERNAL_SYMBOL_WITH_ONE_BYTE_DATA_TYPE": ExternalString,
-    "SHORT_EXTERNAL_ONE_BYTE_SYMBOL_TYPE": ExternalString,
+    "UNCACHED_EXTERNAL_SYMBOL_TYPE": ExternalString,
+    "UNCACHED_EXTERNAL_SYMBOL_WITH_ONE_BYTE_DATA_TYPE": ExternalString,
+    "UNCACHED_EXTERNAL_ONE_BYTE_SYMBOL_TYPE": ExternalString,
     "STRING_TYPE": SeqString,
     "ONE_BYTE_STRING_TYPE": SeqString,
     "CONS_STRING_TYPE": ConsString,
@@ -1681,6 +1729,8 @@ class V8Heap(object):
     "ODDBALL_TYPE": Oddball,
     "FIXED_ARRAY_TYPE": FixedArray,
     "HASH_TABLE_TYPE": FixedArray,
+    "OBJECT_BOILERPLATE_DESCRIPTION_TYPE": FixedArray,
+    "SCOPE_INFO_TYPE": FixedArray,
     "JS_FUNCTION_TYPE": JSFunction,
     "SHARED_FUNCTION_INFO_TYPE": SharedFunctionInfo,
     "SCRIPT_TYPE": Script,
@@ -2010,7 +2060,8 @@ class InspectionPadawan(object):
   def SenseMap(self, tagged_address):
     if self.IsInKnownMapSpace(tagged_address):
       offset = self.GetPageOffset(tagged_address)
-      known_map_info = KNOWN_MAPS.get(offset)
+      lookup_key = ("MAP_SPACE", offset)
+      known_map_info = KNOWN_MAPS.get(lookup_key)
       if known_map_info:
         known_map_type, known_map_name = known_map_info
         return KnownMap(self, known_map_name, known_map_type)
@@ -2058,11 +2109,9 @@ class InspectionPadawan(object):
     """
     # Only look at the first 1k words on the stack
     ptr_size = self.reader.PointerSize()
-    if start is None:
-      start = self.reader.ExceptionSP()
+    if start is None: start = self.reader.ExceptionSP()
     if not self.reader.IsValidAddress(start): return start
     end = start + ptr_size * 1024 * 4
-    message_start = 0
     magic1 = None
     for slot in xrange(start, end, ptr_size):
       if not self.reader.IsValidAddress(slot + ptr_size): break
@@ -2070,10 +2119,65 @@ class InspectionPadawan(object):
       magic2 = self.reader.ReadUIntPtr(slot + ptr_size)
       pair = (magic1 & 0xFFFFFFFF, magic2 & 0xFFFFFFFF)
       if pair in MAGIC_MARKER_PAIRS:
-        message_slot = slot + ptr_size * 4
-        message_start = self.reader.ReadUIntPtr(message_slot)
-        break
-    if message_start == 0:
+        return self.TryExtractOldStyleStackTrace(slot, start, end,
+                                                 print_message)
+      if pair[0] == STACK_TRACE_MARKER:
+        return self.TryExtractStackTrace(slot, start, end, print_message)
+      elif pair[0] == ERROR_MESSAGE_MARKER:
+        return self.TryExtractErrorMessage(slot, start, end, print_message)
+    # Simple fallback in case not stack trace object was found
+    return self.TryExtractOldStyleStackTrace(0, start, end,
+                                             print_message)
+
+  def TryExtractStackTrace(self, slot, start, end, print_message):
+    ptr_size = self.reader.PointerSize()
+    assert self.reader.ReadUIntPtr(slot) & 0xFFFFFFFF == STACK_TRACE_MARKER
+    end_marker = STACK_TRACE_MARKER + 1;
+    header_size = 10
+    # Look for the end marker after the fields and the message buffer.
+    end_search = start + (32 * 1024) + (header_size * ptr_size);
+    end_slot = self.FindPtr(end_marker, end_search, end_search + ptr_size * 512)
+    if not end_slot: return start
+    print "Stack Message (start=%s):" % self.heap.FormatIntPtr(slot)
+    slot += ptr_size
+    for name in ("isolate","ptr1", "ptr2", "ptr3", "ptr4", "codeObject1",
+                 "codeObject2", "codeObject3", "codeObject4"):
+      value = self.reader.ReadUIntPtr(slot)
+      print " %s: %s" % (name.rjust(14), self.heap.FormatIntPtr(value))
+      slot += ptr_size
+    print "  message start: %s" % self.heap.FormatIntPtr(slot)
+    stack_start = end_slot + ptr_size
+    print "  stack_start:   %s" % self.heap.FormatIntPtr(stack_start)
+    (message_start, message) = self.FindFirstAsciiString(slot)
+    self.FormatStackTrace(message, print_message)
+    return stack_start
+
+  def FindPtr(self, expected_value, start, end):
+    ptr_size = self.reader.PointerSize()
+    for slot in xrange(start, end, ptr_size):
+      if not self.reader.IsValidAddress(slot): return None
+      value = self.reader.ReadUIntPtr(slot)
+      if value == expected_value: return slot
+    return None
+
+  def TryExtractErrorMessage(self, slot, start, end, print_message):
+    ptr_size = self.reader.PointerSize()
+    end_marker = ERROR_MESSAGE_MARKER + 1;
+    header_size = 1
+    end_search = start + 1024 + (header_size * ptr_size);
+    end_slot = self.FindPtr(end_marker, end_search, end_search + ptr_size * 512)
+    if not end_slot: return start
+    print "Error Message (start=%s):" % self.heap.FormatIntPtr(slot)
+    slot += ptr_size
+    (message_start, message) = self.FindFirstAsciiString(slot)
+    self.FormatStackTrace(message, print_message)
+    stack_start = end_slot + ptr_size
+    return stack_start
+
+  def TryExtractOldStyleStackTrace(self, message_slot, start, end,
+                                   print_message):
+    ptr_size = self.reader.PointerSize()
+    if message_slot == 0:
       """
       On Mac we don't always get proper magic markers, so just try printing
       the first long ascii string found on the stack.
@@ -2083,6 +2187,7 @@ class InspectionPadawan(object):
       message_start, message = self.FindFirstAsciiString(start, end, 128)
       if message_start is None: return start
     else:
+      message_start = self.reader.ReadUIntPtr(message_slot + ptr_size * 4)
       message = self.reader.ReadAsciiString(message_start)
     stack_start = message_start + len(message) + 1
     # Make sure the address is word aligned
@@ -2102,10 +2207,15 @@ class InspectionPadawan(object):
       print "  message start: %s" % self.heap.FormatIntPtr(message_start)
       print "  stack_start:   %s" % self.heap.FormatIntPtr(stack_start )
       print ""
+    self.FormatStackTrace(message, print_message)
+    return stack_start
+
+  def FormatStackTrace(self, message, print_message):
     if not print_message:
       print "  Use `dsa` to print the message with annotated addresses."
       print ""
-      return stack_start
+      return
+    ptr_size = self.reader.PointerSize()
     # Annotate all addresses in the dumped message
     prog = re.compile("[0-9a-fA-F]{%s}" % ptr_size*2)
     addresses = list(set(prog.findall(message)))
@@ -2119,7 +2229,7 @@ class InspectionPadawan(object):
     print message
     print "="*80
     print ""
-    return stack_start
+
 
   def TryInferFramePointer(self, slot, address):
     """ Assume we have a framepointer if we find 4 consecutive links """
@@ -3008,9 +3118,16 @@ class InspectionWebFormatter(object):
     marker = ""
     if stack_slot:
       marker = "=>"
-    op_offset = 3 * num_bytes - 1
 
     code = line[1]
+
+    # Some disassemblers insert spaces between each byte,
+    # while some do not.
+    if code[2] == " ":
+        op_offset = 3 * num_bytes - 1
+    else:
+        op_offset = 2 * num_bytes
+
     # Compute the actual call target which the disassembler is too stupid
     # to figure out (it adds the call offset to the disassembly offset rather
     # than the absolute instruction address).
@@ -3203,7 +3320,7 @@ DUMP_FILE_RE = re.compile(r"[-_0-9a-zA-Z][-\._0-9a-zA-Z]*\.dmp$")
 class InspectionWebServer(BaseHTTPServer.HTTPServer):
   def __init__(self, port_number, switches, minidump_name):
     BaseHTTPServer.HTTPServer.__init__(
-        self, ('', port_number), InspectionWebHandler)
+        self, ('localhost', port_number), InspectionWebHandler)
     splitpath = os.path.split(minidump_name)
     self.dumppath = splitpath[0]
     self.dumpfilename = splitpath[1]
@@ -3807,15 +3924,10 @@ if __name__ == "__main__":
                     help="dump all information contained in the minidump")
   parser.add_option("--symdir", dest="symdir", default=".",
                     help="directory containing *.pdb.sym file with symbols")
-  parser.add_option("--objdump",
-                    default="/usr/bin/objdump",
-                    help="objdump tool to use [default: %default]")
+  parser.add_option("--objdump", default="",
+                    help="objdump tool to use [default: %s]" % (
+                        DEFAULT_OBJDUMP_BIN))
   options, args = parser.parse_args()
-  if os.path.exists(options.objdump):
-    disasm.OBJDUMP_BIN = options.objdump
-    OBJDUMP_BIN = options.objdump
-  else:
-    print "Cannot find %s, falling back to default objdump" % options.objdump
   if len(args) != 1:
     parser.print_help()
     sys.exit(1)

@@ -20,26 +20,18 @@ namespace c = v8::internal::compiler;
 namespace v8 {
 namespace internal {
 
-#ifdef ENABLE_VERIFY_CSA
-#define IS_BITCAST_WORD_TO_TAGGED_SIGNED(x) IsBitcastWordToTaggedSigned(x)
-#define IS_BITCAST_TAGGED_TO_WORD(x) IsBitcastTaggedToWord(x)
-#else
-#define IS_BITCAST_WORD_TO_TAGGED_SIGNED(x) (x)
-#define IS_BITCAST_TAGGED_TO_WORD(x) (x)
-#endif
-
 CodeStubAssemblerTestState::CodeStubAssemblerTestState(
     CodeStubAssemblerTest* test)
-    : compiler::CodeAssemblerState(test->isolate(), test->zone(),
-                                   VoidDescriptor(test->isolate()), Code::STUB,
-                                   "test") {}
+    : compiler::CodeAssemblerState(
+          test->isolate(), test->zone(), VoidDescriptor{}, Code::STUB, "test",
+          PoisoningMitigationLevel::kPoisonCriticalOnly) {}
 
 TARGET_TEST_F(CodeStubAssemblerTest, SmiTag) {
   CodeStubAssemblerTestState state(this);
   CodeStubAssemblerForTest m(&state);
   Node* value = m.Int32Constant(44);
   EXPECT_THAT(m.SmiTag(value),
-              IS_BITCAST_WORD_TO_TAGGED_SIGNED(c::IsIntPtrConstant(
+              IsBitcastWordToTaggedSigned(c::IsIntPtrConstant(
                   static_cast<intptr_t>(44) << (kSmiShiftSize + kSmiTagSize))));
   EXPECT_THAT(m.SmiUntag(value),
               c::IsIntPtrConstant(static_cast<intptr_t>(44) >>

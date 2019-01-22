@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "src/char-predicates-inl.h"
-#include "src/handles.h"
 #include "src/isolate-inl.h"
 #include "src/string-search.h"
 #include "src/unicode-inl.h"
@@ -38,8 +37,8 @@ bool IsReservedPredicate(uc16 c) {
 bool IsReplacementCharacter(const uint8_t* octets, int length) {
   // The replacement character is at codepoint U+FFFD in the Unicode Specials
   // table. Its UTF-8 encoding is 0xEF 0xBF 0xBD.
-  if (length != 3 || octets[0] != 0xef || octets[1] != 0xbf ||
-      octets[2] != 0xbd) {
+  if (length != 3 || octets[0] != 0xEF || octets[1] != 0xBF ||
+      octets[2] != 0xBD) {
     return false;
   }
   return true;
@@ -139,7 +138,7 @@ bool IntoOneAndTwoByte(Handle<String> uri, bool is_uri,
                        std::vector<uint8_t>* one_byte_buffer,
                        std::vector<uc16>* two_byte_buffer) {
   DisallowHeapAllocation no_gc;
-  String::FlatContent uri_content = uri->GetFlatContent();
+  String::FlatContent uri_content = uri->GetFlatContent(no_gc);
 
   int uri_length = uri->length();
   for (int k = 0; k < uri_length; k++) {
@@ -175,7 +174,7 @@ bool IntoOneAndTwoByte(Handle<String> uri, bool is_uri,
 
 MaybeHandle<String> Uri::Decode(Isolate* isolate, Handle<String> uri,
                                 bool is_uri) {
-  uri = String::Flatten(uri);
+  uri = String::Flatten(isolate, uri);
   std::vector<uint8_t> one_byte_buffer;
   std::vector<uc16> two_byte_buffer;
 
@@ -195,9 +194,11 @@ MaybeHandle<String> Uri::Decode(Isolate* isolate, Handle<String> uri,
       isolate, result, isolate->factory()->NewRawTwoByteString(result_length),
       String);
 
-  CopyChars(result->GetChars(), one_byte_buffer.data(), one_byte_buffer.size());
-  CopyChars(result->GetChars() + one_byte_buffer.size(), two_byte_buffer.data(),
-            two_byte_buffer.size());
+  DisallowHeapAllocation no_gc;
+  CopyChars(result->GetChars(no_gc), one_byte_buffer.data(),
+            one_byte_buffer.size());
+  CopyChars(result->GetChars(no_gc) + one_byte_buffer.size(),
+            two_byte_buffer.data(), two_byte_buffer.size());
 
   return result;
 }
@@ -273,14 +274,14 @@ void EncodePair(uc16 cc1, uc16 cc2, std::vector<uint8_t>* buffer) {
 
 MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
                                 bool is_uri) {
-  uri = String::Flatten(uri);
+  uri = String::Flatten(isolate, uri);
   int uri_length = uri->length();
   std::vector<uint8_t> buffer;
   buffer.reserve(uri_length);
 
   {
     DisallowHeapAllocation no_gc;
-    String::FlatContent uri_content = uri->GetFlatContent();
+    String::FlatContent uri_content = uri->GetFlatContent(no_gc);
 
     for (int k = 0; k < uri_length; k++) {
       uc16 cc1 = uri_content.Get(k);
@@ -308,8 +309,7 @@ MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
     }
   }
 
-  return isolate->factory()->NewStringFromOneByte(
-      Vector<const uint8_t>(buffer.data(), static_cast<int>(buffer.size())));
+  return isolate->factory()->NewStringFromOneByte(VectorOf(buffer));
 }
 
 namespace {  // Anonymous namespace for Escape and Unescape
@@ -343,7 +343,7 @@ MaybeHandle<String> UnescapeSlow(Isolate* isolate, Handle<String> string,
   int unescaped_length = 0;
   {
     DisallowHeapAllocation no_allocation;
-    Vector<const Char> vector = string->GetCharVector<Char>();
+    Vector<const Char> vector = string->GetCharVector<Char>(no_allocation);
     for (int i = start_index; i < length; unescaped_length++) {
       int step;
       if (UnescapeChar(vector, i, length, &step) >
@@ -360,13 +360,13 @@ MaybeHandle<String> UnescapeSlow(Isolate* isolate, Handle<String> string,
 
   int dest_position = 0;
   Handle<String> second_part;
-  DCHECK(unescaped_length <= String::kMaxLength);
+  DCHECK_LE(unescaped_length, String::kMaxLength);
   if (one_byte) {
     Handle<SeqOneByteString> dest = isolate->factory()
                                         ->NewRawOneByteString(unescaped_length)
                                         .ToHandleChecked();
     DisallowHeapAllocation no_allocation;
-    Vector<const Char> vector = string->GetCharVector<Char>();
+    Vector<const Char> vector = string->GetCharVector<Char>(no_allocation);
     for (int i = start_index; i < length; dest_position++) {
       int step;
       dest->SeqOneByteStringSet(dest_position,
@@ -379,7 +379,7 @@ MaybeHandle<String> UnescapeSlow(Isolate* isolate, Handle<String> string,
                                         ->NewRawTwoByteString(unescaped_length)
                                         .ToHandleChecked();
     DisallowHeapAllocation no_allocation;
-    Vector<const Char> vector = string->GetCharVector<Char>();
+    Vector<const Char> vector = string->GetCharVector<Char>(no_allocation);
     for (int i = start_index; i < length; dest_position++) {
       int step;
       dest->SeqTwoByteStringSet(dest_position,
@@ -416,8 +416,8 @@ static MaybeHandle<String> UnescapePrivate(Isolate* isolate,
   int index;
   {
     DisallowHeapAllocation no_allocation;
-    StringSearch<uint8_t, Char> search(isolate, STATIC_CHAR_VECTOR("%"));
-    index = search.Search(source->GetCharVector<Char>(), 0);
+    StringSearch<uint8_t, Char> search(isolate, StaticCharVector("%"));
+    index = search.Search(source->GetCharVector<Char>(no_allocation), 0);
     if (index < 0) return source;
   }
   return UnescapeSlow<Char>(isolate, source, index);
@@ -432,7 +432,7 @@ static MaybeHandle<String> EscapePrivate(Isolate* isolate,
 
   {
     DisallowHeapAllocation no_allocation;
-    Vector<const Char> vector = string->GetCharVector<Char>();
+    Vector<const Char> vector = string->GetCharVector<Char>(no_allocation);
     for (int i = 0; i < length; i++) {
       uint16_t c = vector[i];
       if (c >= 256) {
@@ -444,7 +444,7 @@ static MaybeHandle<String> EscapePrivate(Isolate* isolate,
       }
 
       // We don't allow strings that are longer than a maximal length.
-      DCHECK(String::kMaxLength < 0x7fffffff - 6);     // Cannot overflow.
+      DCHECK_LT(String::kMaxLength, 0x7FFFFFFF - 6);   // Cannot overflow.
       if (escaped_length > String::kMaxLength) break;  // Provoke exception.
     }
   }
@@ -460,7 +460,7 @@ static MaybeHandle<String> EscapePrivate(Isolate* isolate,
 
   {
     DisallowHeapAllocation no_allocation;
-    Vector<const Char> vector = string->GetCharVector<Char>();
+    Vector<const Char> vector = string->GetCharVector<Char>(no_allocation);
     for (int i = 0; i < length; i++) {
       uint16_t c = vector[i];
       if (c >= 256) {
@@ -468,10 +468,10 @@ static MaybeHandle<String> EscapePrivate(Isolate* isolate,
         dest->SeqOneByteStringSet(dest_position + 1, 'u');
         dest->SeqOneByteStringSet(dest_position + 2, HexCharOfValue(c >> 12));
         dest->SeqOneByteStringSet(dest_position + 3,
-                                  HexCharOfValue((c >> 8) & 0xf));
+                                  HexCharOfValue((c >> 8) & 0xF));
         dest->SeqOneByteStringSet(dest_position + 4,
-                                  HexCharOfValue((c >> 4) & 0xf));
-        dest->SeqOneByteStringSet(dest_position + 5, HexCharOfValue(c & 0xf));
+                                  HexCharOfValue((c >> 4) & 0xF));
+        dest->SeqOneByteStringSet(dest_position + 5, HexCharOfValue(c & 0xF));
         dest_position += 6;
       } else if (IsNotEscaped(c)) {
         dest->SeqOneByteStringSet(dest_position, c);
@@ -479,7 +479,7 @@ static MaybeHandle<String> EscapePrivate(Isolate* isolate,
       } else {
         dest->SeqOneByteStringSet(dest_position, '%');
         dest->SeqOneByteStringSet(dest_position + 1, HexCharOfValue(c >> 4));
-        dest->SeqOneByteStringSet(dest_position + 2, HexCharOfValue(c & 0xf));
+        dest->SeqOneByteStringSet(dest_position + 2, HexCharOfValue(c & 0xF));
         dest_position += 3;
       }
     }
@@ -492,16 +492,16 @@ static MaybeHandle<String> EscapePrivate(Isolate* isolate,
 
 MaybeHandle<String> Uri::Escape(Isolate* isolate, Handle<String> string) {
   Handle<String> result;
-  string = String::Flatten(string);
-  return string->IsOneByteRepresentationUnderneath()
+  string = String::Flatten(isolate, string);
+  return String::IsOneByteRepresentationUnderneath(*string)
              ? EscapePrivate<uint8_t>(isolate, string)
              : EscapePrivate<uc16>(isolate, string);
 }
 
 MaybeHandle<String> Uri::Unescape(Isolate* isolate, Handle<String> string) {
   Handle<String> result;
-  string = String::Flatten(string);
-  return string->IsOneByteRepresentationUnderneath()
+  string = String::Flatten(isolate, string);
+  return String::IsOneByteRepresentationUnderneath(*string)
              ? UnescapePrivate<uint8_t>(isolate, string)
              : UnescapePrivate<uc16>(isolate, string);
 }

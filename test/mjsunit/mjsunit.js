@@ -55,11 +55,17 @@ MjsUnitAssertionError.prototype.toString = function () {
 // For known primitive values, please use assertEquals.
 var assertSame;
 
+// Inverse of assertSame.
+var assertNotSame;
+
 // Expected and found values are identical primitive values or functions
 // or similarly structured objects (checking internal properties
 // of, e.g., Number and Date objects, the elements of arrays
 // and the properties of non-Array objects).
 var assertEquals;
+
+// Deep equality predicate used by assertEquals.
+var deepEquals;
 
 // Expected and found values are not identical primitive values or functions
 // or similarly structured objects (checking internal properties
@@ -132,7 +138,15 @@ var assertContains;
 // Assert that a string matches a given regex.
 var assertMatches;
 
-// Assert the result of a promise.
+// Assert that a promise resolves or rejects.
+// Parameters:
+// {promise} - the promise
+// {success} - optional - a callback which is called with the result of the
+//             resolving promise.
+//  {fail} -   optional - a callback which is called with the result of the
+//             rejecting promise. If the promise is rejected but no {fail}
+//             callback is set, the error is propagated out of the promise
+//             chain.
 var assertPromiseResult;
 
 var promiseTestChain;
@@ -152,7 +166,11 @@ var V8OptimizationStatus = {
   kOptimizingConcurrently: 1 << 9,
   kIsExecuting: 1 << 10,
   kTopmostFrameIsTurboFanned: 1 << 11,
+  kLiteMode: 1 << 12,
 };
+
+// Returns true if --lite-mode is on and we can't ever turn on optimization.
+var isNeverOptimizeLiteMode;
 
 // Returns true if --no-opt mode is on.
 var isNeverOptimize;
@@ -166,18 +184,17 @@ var isInterpreted;
 // Returns true if given function is optimized.
 var isOptimized;
 
-// Returns true if given function is compiled by Crankshaft.
-var isCrankshafted;
-
 // Returns true if given function is compiled by TurboFan.
 var isTurboFanned;
-
-// Used for async tests. See definition below for more documentation.
-var testAsync;
 
 // Monkey-patchable all-purpose failure handler.
 var failWithMessage;
 
+// Returns the formatted failure text.  Used by test-async.js.
+var formatFailureText;
+
+// Returns a pretty-printed string representation of the passed value.
+var prettyPrinted;
 
 (function () {  // Scope for utility functions.
 
@@ -192,6 +209,12 @@ var failWithMessage;
   var ArrayPrototypeMap = Array.prototype.map;
   var ArrayPrototypePush = Array.prototype.push;
 
+  var BigIntPrototypeValueOf;
+  // TODO(neis): Remove try-catch once BigInts are enabled by default.
+  try {
+    BigIntPrototypeValueOf = BigInt.prototype.valueOf;
+  } catch(e) {}
+
   function classOf(object) {
     // Argument must not be null or undefined.
     var string = ObjectPrototypeToString.call(object);
@@ -204,6 +227,8 @@ var failWithMessage;
     switch (classOf(value)) {
       case "Number":
         return NumberPrototypeValueOf.call(value);
+      case "BigInt":
+        return BigIntPrototypeValueOf.call(value);
       case "String":
         return StringPrototypeValueOf.call(value);
       case "Boolean":
@@ -216,10 +241,12 @@ var failWithMessage;
   }
 
 
-  function PrettyPrint(value) {
+  prettyPrinted = function prettyPrinted(value) {
     switch (typeof value) {
       case "string":
         return JSON.stringify(value);
+      case "bigint":
+        return String(value) + "n";
       case "number":
         if (value === 0 && (1 / value) < 0) return "-0";
         // FALLTHROUGH.
@@ -233,14 +260,16 @@ var failWithMessage;
         var objectClass = classOf(value);
         switch (objectClass) {
           case "Number":
+          case "BigInt":
           case "String":
           case "Boolean":
           case "Date":
-            return objectClass + "(" + PrettyPrint(ValueOf(value)) + ")";
+            return objectClass + "(" + prettyPrinted(ValueOf(value)) + ")";
           case "RegExp":
             return RegExpPrototypeToString.call(value);
           case "Array":
-            var mapped = ArrayPrototypeMap.call(value, PrettyPrintArrayElement);
+            var mapped = ArrayPrototypeMap.call(
+                value, prettyPrintedArrayElement);
             var joined = ArrayPrototypeJoin.call(mapped, ",");
             return "[" + joined + "]";
           case "Uint8Array":
@@ -256,7 +285,7 @@ var failWithMessage;
           case "Object":
             break;
           default:
-            return objectClass + "()";
+            return objectClass + "(" + String(value) + ")";
         }
         // [[Class]] is "Object".
         var name = value.constructor.name;
@@ -268,9 +297,9 @@ var failWithMessage;
   }
 
 
-  function PrettyPrintArrayElement(value, index, array) {
+  function prettyPrintedArrayElement(value, index, array) {
     if (value === undefined && !(index in array)) return "";
-    return PrettyPrint(value);
+    return prettyPrinted(value);
   }
 
 
@@ -278,14 +307,14 @@ var failWithMessage;
     throw new MjsUnitAssertionError(message);
   }
 
-  function formatFailureText(expectedText, found, name_opt) {
+  formatFailureText = function(expectedText, found, name_opt) {
     var message = "Fail" + "ure";
     if (name_opt) {
       // Fix this when we ditch the old test runner.
       message += " (" + name_opt + ")";
     }
 
-    var foundText = PrettyPrint(found);
+    var foundText = prettyPrinted(found);
     if (expectedText.length <= 40 && foundText.length <= 40) {
       message += ": expected <" + expectedText + "> found <" + foundText + ">";
     } else {
@@ -316,7 +345,7 @@ var failWithMessage;
   }
 
 
-  function deepEquals(a, b) {
+  deepEquals = function deepEquals(a, b) {
     if (a === b) {
       // Check for -0.
       if (a === 0) return (1 / a) === (1 / b);
@@ -346,7 +375,8 @@ var failWithMessage;
       return true;
     }
     if (objectClass === "String" || objectClass === "Number" ||
-      objectClass === "Boolean" || objectClass === "Date") {
+      objectClass === "BigInt" || objectClass === "Boolean" ||
+      objectClass === "Date") {
       if (ValueOf(a) !== ValueOf(b)) return false;
     }
     return deepObjectEquals(a, b);
@@ -360,19 +390,29 @@ var failWithMessage;
     } else if ((expected !== expected) && (found !== found)) {
       return;
     }
-    fail(PrettyPrint(expected), found, name_opt);
+    fail(prettyPrinted(expected), found, name_opt);
   };
 
+  assertNotSame = function assertNotSame(expected, found, name_opt) {
+    // TODO(mstarzinger): We should think about using Harmony's egal operator
+    // or the function equivalent Object.is() here.
+    if (found !== expected) {
+      if (expected === 0 || (1 / expected) !== (1 / found)) return;
+    } else if (!((expected !== expected) && (found !== found))) {
+      return;
+    }
+    fail(prettyPrinted(expected), found, name_opt);
+  }
 
   assertEquals = function assertEquals(expected, found, name_opt) {
     if (!deepEquals(found, expected)) {
-      fail(PrettyPrint(expected), found, name_opt);
+      fail(prettyPrinted(expected), found, name_opt);
     }
   };
 
   assertNotEquals = function assertNotEquals(expected, found, name_opt) {
     if (deepEquals(found, expected)) {
-      fail("not equals to " + PrettyPrint(expected), found, name_opt);
+      fail("not equals to " + prettyPrinted(expected), found, name_opt);
     }
   };
 
@@ -380,7 +420,7 @@ var failWithMessage;
   assertEqualsDelta =
       function assertEqualsDelta(expected, found, delta, name_opt) {
     if (Math.abs(expected - found) > delta) {
-      fail(PrettyPrint(expected) + " +- " + PrettyPrint(delta), found, name_opt);
+      fail(prettyPrinted(expected) + " +- " + prettyPrinted(delta), found, name_opt);
     }
   };
 
@@ -473,7 +513,7 @@ var failWithMessage;
     try {
       fun();
     } catch(e) {
-      assertEquals(val, e);
+      assertSame(val, e);
       return;
     }
     failWithMessage("Did not throw exception");
@@ -487,7 +527,7 @@ var failWithMessage;
       if (typeof actualConstructor === "function") {
         actualTypeName = actualConstructor.name || String(actualConstructor);
       }
-      failWithMessage("Object <" + PrettyPrint(obj) + "> is not an instance of <" +
+      failWithMessage("Object <" + prettyPrinted(obj) + "> is not an instance of <" +
                (type.name || type) + ">" +
                (actualTypeName ? " but of <" + actualTypeName + ">" : ""));
     }
@@ -530,35 +570,47 @@ var failWithMessage;
     }
   };
 
-  assertPromiseResult = function(promise, success, fail) {
-    // Use --allow-natives-syntax to use this function. Note that this function
-    // overwrites {failWithMessage} permanently with %AbortJS.
+  function concatenateErrors(stack, exception) {
+    // If the exception does not contain a stack trace, wrap it in a new Error.
+    if (!exception.stack) exception = new Error(exception);
 
-    // We have to patch mjsunit because normal assertion failures just throw
-    // exceptions which are swallowed in a then clause.
-    // We use eval here to avoid parsing issues with the natives syntax.
-    if (!success) success = () => {};
-
-    failWithMessage = (msg) => eval("%AbortJS(msg)");
-    if (!fail) {
-      fail = result => failWithMessage("assertPromiseResult failed: " + result);
+    // If the exception already provides a special stack trace, we do not modify
+    // it.
+    if (typeof exception.stack !== 'string') {
+      return exception;
     }
+    exception.stack = stack + '\n\n' + exception.stack;
+    return exception;
+  }
 
-    var test_promise =
-        promise.then(
-          result => {
-            try {
-              success(result);
-            } catch (e) {
-              failWithMessage(e);
-            }
-          },
-          result => {
-            fail(result);
+  assertPromiseResult = function(promise, success, fail) {
+    const stack = (new Error()).stack;
+
+    var test_promise = promise.then(
+        result => {
+          try {
+            if (--promiseTestCount == 0) testRunner.notifyDone();
+            if (success) success(result);
+          } catch (e) {
+            // Use setTimeout to throw the error again to get out of the promise
+            // chain.
+            setTimeout(_ => {
+              throw concatenateErrors(stack, e);
+            }, 0);
           }
-        )
-        .then((x)=> {
-          if (--promiseTestCount == 0) testRunner.notifyDone();
+        },
+        result => {
+          try {
+            if (--promiseTestCount == 0) testRunner.notifyDone();
+            if (!fail) throw result;
+            fail(result);
+          } catch (e) {
+            // Use setTimeout to throw the error again to get out of the promise
+            // chain.
+            setTimeout(_ => {
+              throw concatenateErrors(stack, e);
+            }, 0);
+          }
         });
 
     if (!promiseTestChain) promiseTestChain = Promise.resolve();
@@ -582,7 +634,8 @@ var failWithMessage;
     return OptimizationStatusImpl(fun, sync_opt);
   }
 
-  assertUnoptimized = function assertUnoptimized(fun, sync_opt, name_opt) {
+  assertUnoptimized = function assertUnoptimized(
+      fun, sync_opt, name_opt, skip_if_maybe_deopted = true) {
     if (sync_opt === undefined) sync_opt = "";
     var opt_status = OptimizationStatus(fun, sync_opt);
     // Tests that use assertUnoptimized() do not make sense if --always-opt
@@ -590,7 +643,8 @@ var failWithMessage;
     assertFalse((opt_status & V8OptimizationStatus.kAlwaysOptimize) !== 0,
                 "test does not make sense with --always-opt");
     assertTrue((opt_status & V8OptimizationStatus.kIsFunction) !== 0, name_opt);
-    if ((opt_status & V8OptimizationStatus.kMaybeDeopted) !== 0) {
+    if (skip_if_maybe_deopted &&
+        (opt_status & V8OptimizationStatus.kMaybeDeopted) !== 0) {
       // When --deopt-every-n-times flag is specified it's no longer guaranteed
       // that particular function is still deoptimized, so keep running the test
       // to stress test the deoptimizer.
@@ -599,21 +653,34 @@ var failWithMessage;
     assertFalse((opt_status & V8OptimizationStatus.kOptimized) !== 0, name_opt);
   }
 
-  assertOptimized = function assertOptimized(fun, sync_opt, name_opt) {
+  assertOptimized = function assertOptimized(
+      fun, sync_opt, name_opt, skip_if_maybe_deopted = true) {
     if (sync_opt === undefined) sync_opt = "";
     var opt_status = OptimizationStatus(fun, sync_opt);
+    // Tests that use assertOptimized() do not make sense for Lite mode where
+    // optimization is always disabled, explicitly exit the test with a warning.
+    if (opt_status & V8OptimizationStatus.kLiteMode) {
+      print("Warning: Test uses assertOptimized in Lite mode, skipping test.");
+      quit(0);
+    }
     // Tests that use assertOptimized() do not make sense if --no-opt
     // option is provided. Such tests must add --opt to flags comment.
     assertFalse((opt_status & V8OptimizationStatus.kNeverOptimize) !== 0,
                 "test does not make sense with --no-opt");
     assertTrue((opt_status & V8OptimizationStatus.kIsFunction) !== 0, name_opt);
-    if ((opt_status & V8OptimizationStatus.kMaybeDeopted) !== 0) {
+    if (skip_if_maybe_deopted &&
+        (opt_status & V8OptimizationStatus.kMaybeDeopted) !== 0) {
       // When --deopt-every-n-times flag is specified it's no longer guaranteed
       // that particular function is still optimized, so keep running the test
       // to stress test the deoptimizer.
       return;
     }
     assertTrue((opt_status & V8OptimizationStatus.kOptimized) !== 0, name_opt);
+  }
+
+  isNeverOptimizeLiteMode = function isNeverOptimizeLiteMode() {
+    var opt_status = OptimizationStatus(undefined, "");
+    return (opt_status & V8OptimizationStatus.kLiteMode) !== 0;
   }
 
   isNeverOptimize = function isNeverOptimize() {
@@ -639,14 +706,6 @@ var failWithMessage;
     assertTrue((opt_status & V8OptimizationStatus.kIsFunction) !== 0,
                "not a function");
     return (opt_status & V8OptimizationStatus.kOptimized) !== 0;
-  }
-
-  isCrankshafted = function isCrankshafted(fun) {
-    var opt_status = OptimizationStatus(fun, "");
-    assertTrue((opt_status & V8OptimizationStatus.kIsFunction) !== 0,
-               "not a function");
-    return (opt_status & V8OptimizationStatus.kOptimized) !== 0 &&
-           (opt_status & V8OptimizationStatus.kTurboFanned) === 0;
   }
 
   isTurboFanned = function isTurboFanned(fun) {
@@ -715,112 +774,5 @@ var failWithMessage;
       return "" + error.message + "\n" + ArrayPrototypeJoin.call(stack, "\n");
     } catch(e) {};
     return error.stack;
-  }
-
-  /**
-   * This is to be used through the testAsync helper function defined
-   * below.
-   *
-   * This requires the --allow-natives-syntax flag to allow calling
-   * runtime functions.
-   *
-   * There must be at least one assertion in an async test. A test
-   * with no assertions will fail.
-   *
-   * @example
-   * testAsync(assert => {
-   *   assert.plan(1) // There should be one assertion in this test.
-   *   Promise.resolve(1)
-   *    .then(val => assert.equals(1, val),
-   *          assert.unreachable);
-   * })
-   */
-  class AsyncAssertion {
-    constructor(test, name) {
-      this.expectedAsserts_ = -1;
-      this.actualAsserts_ = 0;
-      this.test_ = test;
-      this.name_ = name || '';
-    }
-
-    /**
-     * Sets the number of expected asserts in the test. The test fails
-     * if the number of asserts computed after running the test is not
-     * equal to this specified value.
-     * @param {number} expectedAsserts
-     */
-    plan(expectedAsserts) {
-      this.expectedAsserts_ = expectedAsserts;
-    }
-
-    fail(expectedText, found) {
-      let message = formatFailureText(expectedText, found);
-      message += "\nin test:" + this.name_
-      message += "\n" + Function.prototype.toString.apply(this.test_);
-      eval("%AbortJS(message)");
-    }
-
-    equals(expected, found, name_opt) {
-      this.actualAsserts_++;
-      if (!deepEquals(expected, found)) {
-        this.fail(PrettyPrint(expected), found, name_opt);
-      }
-    }
-
-    unreachable() {
-      let message = "Failure: unreachable in test: " + this.name_;
-      message += "\n" + Function.prototype.toString.apply(this.test_);
-      eval("%AbortJS(message)");
-    }
-
-    unexpectedRejection(details) {
-      return (error) => {
-        let message =
-            "Failure: unexpected Promise rejection in test: " + this.name_;
-        if (details) message += "\n    @" + details;
-        if (error instanceof Error) {
-          message += "\n" + String(error.stack);
-        } else {
-          message += "\n" + String(error);
-        }
-        message += "\n\n" + Function.prototype.toString.apply(this.test_);
-        eval("%AbortJS(message)");
-      };
-    }
-
-    drainMicrotasks() {
-      eval("%RunMicrotasks()");
-    }
-
-    done_() {
-      if (this.expectedAsserts_ === -1) {
-        let message = "Please call t.plan(count) to initialize test harness " +
-            "with correct assert count (Note: count > 0)";
-        eval("%AbortJS(message)");
-      }
-
-      if (this.expectedAsserts_ !== this.actualAsserts_) {
-        let message = "Expected asserts: " + this.expectedAsserts_;
-        message += ", Actual asserts: " + this.actualAsserts_;
-        message += "\nin test: " + this.name_;
-        message += "\n" + Function.prototype.toString.apply(this.test_);
-        eval("%AbortJS(message)");
-      }
-    }
-  }
-
-  /** This is used to test async functions and promises.
-   * @param {testCallback} test - test function
-   * @param {string} [name] - optional name of the test
-   *
-   *
-   * @callback testCallback
-   * @param {AsyncAssertion} assert
-   */
-  testAsync = function(test, name) {
-    let assert = new AsyncAssertion(test, name);
-    test(assert);
-    eval("%RunMicrotasks()");
-    assert.done_();
   }
 })();

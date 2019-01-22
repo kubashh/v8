@@ -8,6 +8,7 @@
 #include "src/compiler/opcodes.h"
 #include "src/isolate.h"
 #include "src/objects-inl.h"
+#include "src/objects/heap-number-inl.h"
 #include "test/cctest/compiler/code-assembler-tester.h"
 #include "test/cctest/compiler/function-tester.h"
 
@@ -30,10 +31,10 @@ Node* SmiTag(CodeAssembler& m, Node* value) {
 }
 
 Node* UndefinedConstant(CodeAssembler& m) {
-  return m.LoadRoot(Heap::kUndefinedValueRootIndex);
+  return m.LoadRoot(RootIndex::kUndefinedValue);
 }
 
-Node* SmiFromWord32(CodeAssembler& m, Node* value) {
+Node* SmiFromInt32(CodeAssembler& m, Node* value) {
   value = m.ChangeInt32ToIntPtr(value);
   return m.BitcastWordToTaggedSigned(
       m.WordShl(value, kSmiShiftSize + kSmiTagSize));
@@ -68,8 +69,7 @@ TEST(SimpleIntPtrReturn) {
       m.IntPtrConstant(reinterpret_cast<intptr_t>(&test))));
   FunctionTester ft(asm_tester.GenerateCode());
   MaybeHandle<Object> result = ft.Call();
-  CHECK_EQ(reinterpret_cast<intptr_t>(&test),
-           reinterpret_cast<intptr_t>(*result.ToHandleChecked()));
+  CHECK_EQ(reinterpret_cast<Address>(&test), result.ToHandleChecked()->ptr());
 }
 
 TEST(SimpleDoubleReturn) {
@@ -87,9 +87,10 @@ TEST(SimpleCallRuntime1Arg) {
   CodeAssembler m(asm_tester.state());
   Node* context = m.HeapConstant(Handle<Context>(isolate->native_context()));
   Node* b = SmiTag(m, m.Int32Constant(0));
-  m.Return(m.CallRuntime(Runtime::kNumberToSmi, context, b));
+  m.Return(m.CallRuntime(Runtime::kIsSmi, context, b));
   FunctionTester ft(asm_tester.GenerateCode());
-  CHECK_EQ(0, ft.CallChecked<Smi>()->value());
+  CHECK(ft.CallChecked<Oddball>().is_identical_to(
+      isolate->factory()->true_value()));
 }
 
 TEST(SimpleTailCallRuntime1Arg) {
@@ -98,9 +99,10 @@ TEST(SimpleTailCallRuntime1Arg) {
   CodeAssembler m(asm_tester.state());
   Node* context = m.HeapConstant(Handle<Context>(isolate->native_context()));
   Node* b = SmiTag(m, m.Int32Constant(0));
-  m.TailCallRuntime(Runtime::kNumberToSmi, context, b);
+  m.TailCallRuntime(Runtime::kIsSmi, context, b);
   FunctionTester ft(asm_tester.GenerateCode());
-  CHECK_EQ(0, ft.CallChecked<Smi>()->value());
+  CHECK(ft.CallChecked<Oddball>().is_identical_to(
+      isolate->factory()->true_value()));
 }
 
 TEST(SimpleCallRuntime2Arg) {
@@ -467,7 +469,7 @@ TEST(GotoIfException) {
   CHECK(result->IsJSObject());
 
   Handle<Object> constructor =
-      Object::GetPropertyOrElement(result,
+      Object::GetPropertyOrElement(isolate, result,
                                    isolate->factory()->constructor_string())
           .ToHandleChecked();
   CHECK(constructor->SameValue(*isolate->type_error_function()));
@@ -505,7 +507,7 @@ TEST(GotoIfExceptionMultiple) {
   error.Bind(UndefinedConstant(m));
   string = m.CallStub(to_string, context, second_value);
   m.GotoIfException(string, &exception_handler2, &error);
-  m.Return(SmiFromWord32(m, return_value.value()));
+  m.Return(SmiFromInt32(m, return_value.value()));
 
   // try { ToString(param3); return 7 & ~2; } catch (e) { return e; }
   m.Bind(&exception_handler2);
@@ -513,7 +515,7 @@ TEST(GotoIfExceptionMultiple) {
   error.Bind(UndefinedConstant(m));
   string = m.CallStub(to_string, context, third_value);
   m.GotoIfException(string, &exception_handler3, &error);
-  m.Return(SmiFromWord32(
+  m.Return(SmiFromInt32(
       m, m.Word32And(return_value.value(),
                      m.Word32Xor(m.Int32Constant(2), m.Int32Constant(-1)))));
 
@@ -552,10 +554,54 @@ TEST(GotoIfExceptionMultiple) {
   CHECK(result->IsJSObject());
 
   Handle<Object> constructor =
-      Object::GetPropertyOrElement(result,
+      Object::GetPropertyOrElement(isolate, result,
                                    isolate->factory()->constructor_string())
           .ToHandleChecked();
   CHECK(constructor->SameValue(*isolate->type_error_function()));
+}
+
+TEST(ExceptionHandler) {
+  Isolate* isolate(CcTest::InitIsolateOnce());
+  const int kNumParams = 0;
+  CodeAssemblerTester asm_tester(isolate, kNumParams);
+  CodeAssembler m(asm_tester.state());
+
+  CodeAssembler::TVariable<Object> var(m.SmiConstant(0), &m);
+  Label exception(&m, {&var}, Label::kDeferred);
+  {
+    CodeAssemblerScopedExceptionHandler handler(&m, &exception, &var);
+    Node* context = m.HeapConstant(Handle<Context>(isolate->native_context()));
+    m.CallRuntime(Runtime::kThrow, context, m.SmiConstant(2));
+  }
+  m.Return(m.SmiConstant(1));
+
+  m.Bind(&exception);
+  m.Return(var.value());
+
+  FunctionTester ft(asm_tester.GenerateCode(), kNumParams);
+  CHECK_EQ(2, ft.CallChecked<Smi>()->value());
+}
+
+TEST(TestCodeAssemblerCodeComment) {
+  i::FLAG_code_comments = true;
+  Isolate* isolate(CcTest::InitIsolateOnce());
+  const int kNumParams = 0;
+  CodeAssemblerTester asm_tester(isolate, kNumParams);
+  CodeAssembler m(asm_tester.state());
+
+  m.Comment("Comment1");
+  m.Return(m.SmiConstant(1));
+
+  Handle<Code> code = asm_tester.GenerateCode();
+  CHECK_NE(code->code_comments(), kNullAddress);
+  CodeCommentsIterator it(code->code_comments());
+  CHECK(it.HasCurrent());
+  bool found_comment = false;
+  while (it.HasCurrent()) {
+    if (strcmp(it.GetComment(), "Comment1") == 0) found_comment = true;
+    it.Next();
+  }
+  CHECK(found_comment);
 }
 
 }  // namespace compiler

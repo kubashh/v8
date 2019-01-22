@@ -20,47 +20,7 @@ namespace v8 {
 namespace internal {
 
 typedef TestWithIsolate HeapTest;
-
-double Round(double x) {
-  // Round to three digits.
-  return floor(x * 1000 + 0.5) / 1000;
-}
-
-
-void CheckEqualRounded(double expected, double actual) {
-  expected = Round(expected);
-  actual = Round(actual);
-  EXPECT_DOUBLE_EQ(expected, actual);
-}
-
-
-TEST(Heap, HeapGrowingFactor) {
-  CheckEqualRounded(Heap::kMaxHeapGrowingFactor,
-                    Heap::HeapGrowingFactor(34, 1, 4.0));
-  CheckEqualRounded(3.553, Heap::HeapGrowingFactor(45, 1, 4.0));
-  CheckEqualRounded(2.830, Heap::HeapGrowingFactor(50, 1, 4.0));
-  CheckEqualRounded(1.478, Heap::HeapGrowingFactor(100, 1, 4.0));
-  CheckEqualRounded(1.193, Heap::HeapGrowingFactor(200, 1, 4.0));
-  CheckEqualRounded(1.121, Heap::HeapGrowingFactor(300, 1, 4.0));
-  CheckEqualRounded(Heap::HeapGrowingFactor(300, 1, 4.0),
-                    Heap::HeapGrowingFactor(600, 2, 4.0));
-  CheckEqualRounded(Heap::kMinHeapGrowingFactor,
-                    Heap::HeapGrowingFactor(400, 1, 4.0));
-}
-
-TEST(Heap, MaxHeapGrowingFactor) {
-  CheckEqualRounded(
-      1.3, Heap::MaxHeapGrowingFactor(Heap::kMinOldGenerationSize * MB));
-  CheckEqualRounded(
-      1.600, Heap::MaxHeapGrowingFactor(Heap::kMaxOldGenerationSize / 2 * MB));
-  CheckEqualRounded(
-      1.999,
-      Heap::MaxHeapGrowingFactor(
-          (Heap::kMaxOldGenerationSize - Heap::kPointerMultiplier) * MB));
-  CheckEqualRounded(4.0,
-                    Heap::MaxHeapGrowingFactor(
-                        static_cast<size_t>(Heap::kMaxOldGenerationSize) * MB));
-}
+typedef TestWithIsolateAndPointerCompression HeapWithPointerCompressionTest;
 
 TEST(Heap, SemiSpaceSize) {
   const size_t KB = static_cast<size_t>(i::KB);
@@ -73,22 +33,6 @@ TEST(Heap, SemiSpaceSize) {
   ASSERT_EQ(8u * pm * MB, i::Heap::ComputeMaxSemiSpaceSize(4095u * MB) * KB);
 }
 
-TEST(Heap, OldGenerationSize) {
-  uint64_t configurations[][2] = {
-      {0, i::Heap::kMinOldGenerationSize},
-      {512, i::Heap::kMinOldGenerationSize},
-      {1 * i::GB, 256 * i::Heap::kPointerMultiplier},
-      {2 * static_cast<uint64_t>(i::GB), 512 * i::Heap::kPointerMultiplier},
-      {4 * static_cast<uint64_t>(i::GB), i::Heap::kMaxOldGenerationSize},
-      {8 * static_cast<uint64_t>(i::GB), i::Heap::kMaxOldGenerationSize}};
-
-  for (auto configuration : configurations) {
-    ASSERT_EQ(configuration[1],
-              static_cast<uint64_t>(
-                  i::Heap::ComputeMaxOldGenerationSize(configuration[0])));
-  }
-}
-
 TEST_F(HeapTest, ASLR) {
 #if V8_TARGET_ARCH_X64
 #if V8_OS_MACOSX
@@ -99,7 +43,7 @@ TEST_F(HeapTest, ASLR) {
   }
   if (hints.size() == 1) {
     EXPECT_TRUE((*hints.begin()) == nullptr);
-    EXPECT_TRUE(v8::internal::GetRandomMmapAddr() == nullptr);
+    EXPECT_TRUE(i::GetRandomMmapAddr() == nullptr);
   } else {
     // It is unlikely that 1000 random samples will collide to less then 500
     // values.
@@ -115,6 +59,49 @@ TEST_F(HeapTest, ASLR) {
 #endif  // V8_OS_MACOSX
 #endif  // V8_TARGET_ARCH_X64
 }
+
+TEST_F(HeapTest, ExternalLimitDefault) {
+  Heap* heap = i_isolate()->heap();
+  EXPECT_EQ(kExternalAllocationSoftLimit,
+            heap->isolate()->isolate_data()->external_memory_limit_);
+}
+
+TEST_F(HeapTest, ExternalLimitStaysAboveDefaultForExplicitHandling) {
+  v8_isolate()->AdjustAmountOfExternalAllocatedMemory(+10 * MB);
+  v8_isolate()->AdjustAmountOfExternalAllocatedMemory(-10 * MB);
+  Heap* heap = i_isolate()->heap();
+  EXPECT_GE(heap->isolate()->isolate_data()->external_memory_limit_,
+            kExternalAllocationSoftLimit);
+}
+
+#if V8_TARGET_ARCH_64_BIT
+TEST_F(HeapWithPointerCompressionTest, HeapLayout) {
+  // Produce some garbage.
+  RunJS(
+      "let ar = [];"
+      "for (let i = 0; i < 100; i++) {"
+      "  ar.push(Array(i));"
+      "}"
+      "ar.push(Array(32 * 1024 * 1024));");
+
+  Address isolate_root = i_isolate()->isolate_root();
+  EXPECT_TRUE(IsAligned(isolate_root, size_t{4} * GB));
+
+  // Check that all memory chunks belong this region.
+  base::AddressRegion heap_reservation(isolate_root - size_t{2} * GB,
+                                       size_t{4} * GB);
+
+  OldGenerationMemoryChunkIterator iter(i_isolate()->heap());
+  for (;;) {
+    MemoryChunk* chunk = iter.next();
+    if (chunk == nullptr) break;
+
+    Address address = chunk->address();
+    size_t size = chunk->area_end() - address;
+    EXPECT_TRUE(heap_reservation.contains(address, size));
+  }
+}
+#endif  // V8_TARGET_ARCH_64_BIT
 
 }  // namespace internal
 }  // namespace v8

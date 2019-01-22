@@ -5,12 +5,9 @@
 #include <vector>
 
 #include "src/globals.h"
-#include "src/heap/heap.h"
-#include "src/heap/spaces.h"
+#include "src/heap/heap-inl.h"
 #include "src/heap/spaces-inl.h"
-// FIXME(mstarzinger, marja): This is weird, but required because of the missing
-// (disallowed) include: src/heap/incremental-marking.h -> src/objects-inl.h
-#include "src/objects-inl.h"
+#include "src/objects.h"
 #include "test/cctest/cctest.h"
 
 namespace v8 {
@@ -28,8 +25,8 @@ static Address AllocateLabBackingStore(Heap* heap, intptr_t size_in_bytes) {
 static void VerifyIterable(v8::internal::Address base,
                            v8::internal::Address limit,
                            std::vector<intptr_t> expected_size) {
-  CHECK_LE(reinterpret_cast<intptr_t>(base), reinterpret_cast<intptr_t>(limit));
-  HeapObject* object = nullptr;
+  CHECK_LE(base, limit);
+  HeapObject object;
   size_t counter = 0;
   while (base < limit) {
     object = HeapObject::FromAddress(base);
@@ -45,7 +42,7 @@ static void VerifyIterable(v8::internal::Address base,
 static bool AllocateFromLab(Heap* heap, LocalAllocationBuffer* lab,
                             intptr_t size_in_bytes,
                             AllocationAlignment alignment = kWordAligned) {
-  HeapObject* obj;
+  HeapObject obj;
   AllocationResult result =
       lab->AllocateRawAligned(static_cast<int>(size_in_bytes), alignment);
   if (result.To(&obj)) {
@@ -66,7 +63,6 @@ TEST(InvalidLab) {
 TEST(UnusedLabImplicitClose) {
   CcTest::InitializeVM();
   Heap* heap = CcTest::heap();
-  heap->root(Heap::kOnePointerFillerMapRootIndex);
   const int kLabSize = 4 * KB;
   Address base = AllocateLabBackingStore(heap, kLabSize);
   Address limit = base + kLabSize;

@@ -17,7 +17,8 @@ namespace platform {
 namespace {
 
 struct MockTask : public Task {
-  virtual ~MockTask() { Die(); }
+  // See issue v8:8185
+  ~MockTask() /* override */ { Die(); }
   MOCK_METHOD0(Run, void());
   MOCK_METHOD0(Die, void());
 };
@@ -32,10 +33,10 @@ TEST(WorkerThreadTest, PostSingleTask) {
   WorkerThread thread2(&queue);
 
   InSequence s;
-  StrictMock<MockTask>* task = new StrictMock<MockTask>;
-  EXPECT_CALL(*task, Run());
-  EXPECT_CALL(*task, Die());
-  queue.Append(task);
+  std::unique_ptr<StrictMock<MockTask>> task(new StrictMock<MockTask>);
+  EXPECT_CALL(*task.get(), Run());
+  EXPECT_CALL(*task.get(), Die());
+  queue.Append(std::move(task));
 
   // The next call should not time out.
   queue.BlockUntilQueueEmptyForTesting();
@@ -50,10 +51,10 @@ TEST(WorkerThreadTest, Basic) {
   TaskQueue queue;
   for (size_t i = 0; i < kNumTasks; ++i) {
     InSequence s;
-    StrictMock<MockTask>* task = new StrictMock<MockTask>;
-    EXPECT_CALL(*task, Run());
-    EXPECT_CALL(*task, Die());
-    queue.Append(task);
+    std::unique_ptr<StrictMock<MockTask>> task(new StrictMock<MockTask>);
+    EXPECT_CALL(*task.get(), Run());
+    EXPECT_CALL(*task.get(), Die());
+    queue.Append(std::move(task));
   }
 
   WorkerThread thread1(&queue);

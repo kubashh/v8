@@ -36,6 +36,7 @@
 #endif
 
 namespace v8 {
+
 namespace base {
 
 // ----------------------------------------------------------------------------
@@ -47,24 +48,24 @@ namespace base {
 
 #define V8_FAST_TLS_SUPPORTED 1
 
-INLINE(intptr_t InternalGetExistingThreadLocal(intptr_t index));
+V8_INLINE intptr_t InternalGetExistingThreadLocal(intptr_t index);
 
 inline intptr_t InternalGetExistingThreadLocal(intptr_t index) {
   const intptr_t kTibInlineTlsOffset = 0xE10;
   const intptr_t kTibExtraTlsOffset = 0xF94;
   const intptr_t kMaxInlineSlots = 64;
   const intptr_t kMaxSlots = kMaxInlineSlots + 1024;
-  const intptr_t kPointerSize = sizeof(void*);
+  const intptr_t kSystemPointerSize = sizeof(void*);
   DCHECK(0 <= index && index < kMaxSlots);
   USE(kMaxSlots);
   if (index < kMaxInlineSlots) {
-    return static_cast<intptr_t>(__readfsdword(kTibInlineTlsOffset +
-                                               kPointerSize * index));
+    return static_cast<intptr_t>(
+        __readfsdword(kTibInlineTlsOffset + kSystemPointerSize * index));
   }
   intptr_t extra = static_cast<intptr_t>(__readfsdword(kTibExtraTlsOffset));
-  DCHECK(extra != 0);
-  return *reinterpret_cast<intptr_t*>(extra +
-                                      kPointerSize * (index - kMaxInlineSlots));
+  DCHECK_NE(extra, 0);
+  return *reinterpret_cast<intptr_t*>(extra + kSystemPointerSize *
+                                                  (index - kMaxInlineSlots));
 }
 
 #elif defined(__APPLE__) && (V8_HOST_ARCH_IA32 || V8_HOST_ARCH_X64)
@@ -73,7 +74,7 @@ inline intptr_t InternalGetExistingThreadLocal(intptr_t index) {
 
 extern V8_BASE_EXPORT intptr_t kMacTlsBaseOffset;
 
-INLINE(intptr_t InternalGetExistingThreadLocal(intptr_t index));
+V8_INLINE intptr_t InternalGetExistingThreadLocal(intptr_t index);
 
 inline intptr_t InternalGetExistingThreadLocal(intptr_t index) {
   intptr_t result;
@@ -93,9 +94,8 @@ inline intptr_t InternalGetExistingThreadLocal(intptr_t index) {
 
 #endif  // V8_NO_FAST_TLS
 
-
+class PageAllocator;
 class TimezoneCache;
-
 
 // ----------------------------------------------------------------------------
 // OS
@@ -155,55 +155,16 @@ class V8_BASE_EXPORT OS {
   static PRINTF_FORMAT(1, 2) void PrintError(const char* format, ...);
   static PRINTF_FORMAT(1, 0) void VPrintError(const char* format, va_list args);
 
-  // Memory access permissions. Only the modes currently used by V8 are listed
-  // here even though most systems support additional modes.
-  enum class MemoryPermission { kNoAccess, kReadWrite, kReadWriteExecute };
-
-  // Allocate/Free memory used by JS heap. Permissions are set according to the
-  // is_* flags. Returns the address of allocated memory, or NULL if failed.
-  static void* Allocate(const size_t requested, size_t* allocated,
-                        MemoryPermission access, void* hint = nullptr);
-  // Allocate/Free memory used by JS heap. Pages are readable/writable, but
-  // they are not guaranteed to be executable unless 'executable' is true.
-  // Returns the address of allocated memory, or NULL if failed.
-  static void* Allocate(const size_t requested, size_t* allocated,
-                        bool is_executable, void* hint = nullptr);
-  static void Free(void* address, const size_t size);
-
-  // Allocates a region of memory that is inaccessible. On Windows this reserves
-  // but does not commit the memory. On POSIX systems it allocates memory as
-  // PROT_NONE, which also prevents it from being committed.
-  static void* AllocateGuarded(const size_t requested);
-
-  // This is the granularity at which the ProtectCode(...) call can set page
-  // permissions.
-  static intptr_t CommitPageSize();
-
-  // Mark code segments non-writable.
-  static void ProtectCode(void* address, const size_t size);
-
-  // Assign memory as a guard page so that access will cause an exception.
-  static void Guard(void* address, const size_t size);
-
-  // Make a region of memory readable and writable.
-  static void Unprotect(void* address, const size_t size);
-
-  // Get the Alignment guaranteed by Allocate().
-  static size_t AllocateAlignment();
-
-  static void* ReserveRegion(size_t size, void* hint);
-
-  static void* ReserveAlignedRegion(size_t size, size_t alignment, void* hint,
-                                    size_t* allocated);
-
-  static bool CommitRegion(void* address, size_t size, bool is_executable);
-
-  static bool UncommitRegion(void* address, size_t size);
-
-  static bool ReleaseRegion(void* address, size_t size);
-
-  // Release part of a reserved address range.
-  static bool ReleasePartialRegion(void* address, size_t size);
+  // Memory permissions. These should be kept in sync with the ones in
+  // v8::PageAllocator.
+  enum class MemoryPermission {
+    kNoAccess,
+    kRead,
+    kReadWrite,
+    // TODO(hpayer): Remove this flag. Memory should never be rwx.
+    kReadWriteExecute,
+    kReadExecute
+  };
 
   static bool HasLazyCommits();
 
@@ -227,12 +188,12 @@ class V8_BASE_EXPORT OS {
 
   class V8_BASE_EXPORT MemoryMappedFile {
    public:
-    virtual ~MemoryMappedFile() {}
+    virtual ~MemoryMappedFile() = default;
     virtual void* memory() const = 0;
     virtual size_t size() const = 0;
 
-    static MemoryMappedFile* open(const char* name, void* hint);
-    static MemoryMappedFile* create(const char* name, void* hint, size_t size,
+    static MemoryMappedFile* open(const char* name);
+    static MemoryMappedFile* create(const char* name, size_t size,
                                     void* initial);
   };
 
@@ -271,7 +232,7 @@ class V8_BASE_EXPORT OS {
   // process that a code moving garbage collection starts.  Can do
   // nothing, in which case the code objects must not move (e.g., by
   // using --never-compact) if accurate profiling is desired.
-  static void SignalCodeMovingGC(void* hint);
+  static void SignalCodeMovingGC();
 
   // Support runtime detection of whether the hard float option of the
   // EABI is used.
@@ -285,7 +246,36 @@ class V8_BASE_EXPORT OS {
 
   static int GetCurrentThreadId();
 
+  static void ExitProcess(int exit_code);
+
  private:
+  // These classes use the private memory management API below.
+  friend class MemoryMappedFile;
+  friend class PosixMemoryMappedFile;
+  friend class v8::base::PageAllocator;
+
+  static size_t AllocatePageSize();
+
+  static size_t CommitPageSize();
+
+  static void SetRandomMmapSeed(int64_t seed);
+
+  static void* GetRandomMmapAddr();
+
+  V8_WARN_UNUSED_RESULT static void* Allocate(void* address, size_t size,
+                                              size_t alignment,
+                                              MemoryPermission access);
+
+  V8_WARN_UNUSED_RESULT static bool Free(void* address, const size_t size);
+
+  V8_WARN_UNUSED_RESULT static bool Release(void* address, size_t size);
+
+  V8_WARN_UNUSED_RESULT static bool SetPermissions(void* address, size_t size,
+                                                   MemoryPermission access);
+
+  V8_WARN_UNUSED_RESULT static bool DiscardSystemPages(void* address,
+                                                       size_t size);
+
   static const int msPerSecond = 1000;
 
 #if V8_OS_POSIX
@@ -294,6 +284,18 @@ class V8_BASE_EXPORT OS {
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(OS);
 };
+
+#if (defined(_WIN32) || defined(_WIN64))
+V8_BASE_EXPORT void EnsureConsoleOutputWin32();
+#endif  // (defined(_WIN32) || defined(_WIN64))
+
+inline void EnsureConsoleOutput() {
+#if (defined(_WIN32) || defined(_WIN64))
+  // Windows requires extra calls to send assert output to the console
+  // rather than a dialog box.
+  EnsureConsoleOutputWin32();
+#endif  // (defined(_WIN32) || defined(_WIN64))
+}
 
 // ----------------------------------------------------------------------------
 // Thread
@@ -335,7 +337,7 @@ class V8_BASE_EXPORT Thread {
     Start();
     start_semaphore_->Wait();
     delete start_semaphore_;
-    start_semaphore_ = NULL;
+    start_semaphore_ = nullptr;
   }
 
   // Wait until thread terminates.
@@ -360,7 +362,7 @@ class V8_BASE_EXPORT Thread {
     SetThreadLocal(key, reinterpret_cast<void*>(static_cast<intptr_t>(value)));
   }
   static bool HasThreadLocal(LocalStorageKey key) {
-    return GetThreadLocal(key) != NULL;
+    return GetThreadLocal(key) != nullptr;
   }
 
 #ifdef V8_FAST_TLS_SUPPORTED

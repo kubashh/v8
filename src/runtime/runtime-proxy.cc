@@ -4,9 +4,10 @@
 
 #include "src/runtime/runtime-utils.h"
 
-#include "src/arguments.h"
+#include "src/arguments-inl.h"
+#include "src/counters.h"
 #include "src/elements.h"
-#include "src/factory.h"
+#include "src/heap/factory.h"
 #include "src/isolate-inl.h"
 #include "src/objects-inl.h"
 
@@ -38,30 +39,26 @@ RUNTIME_FUNCTION(Runtime_JSProxyGetTarget) {
 }
 
 
-RUNTIME_FUNCTION(Runtime_JSProxyRevoke) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(JSProxy, proxy, 0);
-  JSProxy::Revoke(proxy);
-  return isolate->heap()->undefined_value();
-}
-
 RUNTIME_FUNCTION(Runtime_GetPropertyWithReceiver) {
   HandleScope scope(isolate);
 
-  DCHECK_EQ(3, args.length());
+  DCHECK_EQ(4, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSReceiver, holder, 0);
-  CONVERT_ARG_HANDLE_CHECKED(Object, name, 1);
+  CONVERT_ARG_HANDLE_CHECKED(Object, key, 1);
   CONVERT_ARG_HANDLE_CHECKED(Object, receiver, 2);
+  CONVERT_ARG_HANDLE_CHECKED(Smi, on_non_existent, 3);
 
-  bool success;
-  LookupIterator it = LookupIterator::PropertyOrElement(isolate, receiver, name,
+  bool success = false;
+  LookupIterator it = LookupIterator::PropertyOrElement(isolate, receiver, key,
                                                         &success, holder);
   if (!success) {
     DCHECK(isolate->has_pending_exception());
-    return isolate->heap()->exception();
+    return ReadOnlyRoots(isolate).exception();
   }
-  RETURN_RESULT_OR_FAILURE(isolate, Object::GetProperty(&it));
+
+  RETURN_RESULT_OR_FAILURE(
+      isolate, Object::GetProperty(
+                   &it, static_cast<OnNonExistent>(on_non_existent->value())));
 }
 
 RUNTIME_FUNCTION(Runtime_SetPropertyWithReceiver) {
@@ -69,18 +66,21 @@ RUNTIME_FUNCTION(Runtime_SetPropertyWithReceiver) {
 
   DCHECK_EQ(5, args.length());
   CONVERT_ARG_HANDLE_CHECKED(JSReceiver, holder, 0);
-  CONVERT_ARG_HANDLE_CHECKED(Object, name, 1);
+  CONVERT_ARG_HANDLE_CHECKED(Object, key, 1);
   CONVERT_ARG_HANDLE_CHECKED(Object, value, 2);
   CONVERT_ARG_HANDLE_CHECKED(Object, receiver, 3);
   CONVERT_LANGUAGE_MODE_ARG_CHECKED(language_mode, 4);
 
-  bool success;
-  LookupIterator it = LookupIterator::PropertyOrElement(isolate, receiver, name,
+  bool success = false;
+  LookupIterator it = LookupIterator::PropertyOrElement(isolate, receiver, key,
                                                         &success, holder);
-
-  Maybe<bool> result = Object::SetSuperProperty(
-      &it, value, language_mode, Object::MAY_BE_STORE_FROM_KEYED);
-  MAYBE_RETURN(result, isolate->heap()->exception());
+  if (!success) {
+    DCHECK(isolate->has_pending_exception());
+    return ReadOnlyRoots(isolate).exception();
+  }
+  Maybe<bool> result = Object::SetSuperProperty(&it, value, language_mode,
+                                                StoreOrigin::kMaybeKeyed);
+  MAYBE_RETURN(result, ReadOnlyRoots(isolate).exception());
   return *isolate->factory()->ToBoolean(result.FromJust());
 }
 
@@ -106,7 +106,7 @@ RUNTIME_FUNCTION(Runtime_CheckProxyHasTrap) {
   CONVERT_ARG_HANDLE_CHECKED(JSReceiver, target, 1);
 
   Maybe<bool> result = JSProxy::CheckHasTrap(isolate, name, target);
-  if (!result.IsJust()) return isolate->heap()->exception();
+  if (!result.IsJust()) return ReadOnlyRoots(isolate).exception();
   return isolate->heap()->ToBoolean(result.FromJust());
 }
 

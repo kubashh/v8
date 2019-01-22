@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// Flags: --type-profile
-
 const source1 =
   `
 function g(a, b, c) {
@@ -166,5 +164,13 @@ InspectorTest.runAsyncTestSuite([
     Protocol.Profiler.stopTypeProfile();
     Protocol.Profiler.disable();
     await Protocol.Runtime.disable();
-  }
+  },
+  async function testStopTwice() {
+    Protocol.Runtime.enable();
+    await Protocol.Profiler.enable();
+    await Protocol.Profiler.stopTypeProfile();
+    await Protocol.Profiler.stopTypeProfile();
+    Protocol.Profiler.disable();
+    await Protocol.Runtime.disable();
+  },
 ]);

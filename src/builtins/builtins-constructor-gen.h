@@ -15,8 +15,6 @@ class ConstructorBuiltinsAssembler : public CodeStubAssembler {
   explicit ConstructorBuiltinsAssembler(compiler::CodeAssemblerState* state)
       : CodeStubAssembler(state) {}
 
-  Node* EmitFastNewClosure(Node* shared_info, Node* feedback_vector, Node* slot,
-                           Node* context);
   Node* EmitFastNewFunctionContext(Node* closure, Node* slots, Node* context,
                                    ScopeType scope_type);
 
@@ -37,18 +35,6 @@ class ConstructorBuiltinsAssembler : public CodeStubAssembler {
 
   Node* EmitFastNewObject(Node* context, Node* target, Node* new_target,
                           Label* call_runtime);
-
-  Node* EmitConstructString(Node* argc, CodeStubArguments& args, Node* context,
-                            bool convert_symbol);
-
- private:
-  Node* NonEmptyShallowClone(Node* boilerplate, Node* boilerplate_map,
-                             Node* boilerplate_elements, Node* allocation_site,
-                             Node* capacity, ElementsKind kind);
-  Node* CopyFixedArrayBase(Node* elements);
-
-  Node* NotHasBoilerplate(Node* literal_site);
-  Node* LoadAllocationSiteBoilerplate(Node* allocation_site);
 };
 
 }  // namespace internal

@@ -10,6 +10,8 @@
 #include <malloc.h>  // NOLINT
 #endif
 
+#include "src/allocation.h"
+
 namespace v8 {
 namespace internal {
 
@@ -41,7 +43,7 @@ void AccountingAllocator::ConfigureSegmentPool(const size_t max_pool_size) {
                                   (size_t(1) << kMinSegmentSizePower);
   size_t fits_fully = max_pool_size / full_size;
 
-  base::LockGuard<base::Mutex> lock_guard(&unused_segments_mutex_);
+  base::MutexGuard lock_guard(&unused_segments_mutex_);
 
   // We assume few zones (less than 'fits_fully' many) to be active at the same
   // time. When zones grow regularly, they will keep requesting segments of
@@ -82,11 +84,7 @@ Segment* AccountingAllocator::GetSegment(size_t bytes) {
 }
 
 Segment* AccountingAllocator::AllocateSegment(size_t bytes) {
-  void* memory = malloc(bytes);
-  if (memory == nullptr) {
-    V8::GetCurrentPlatform()->OnCriticalMemoryPressure();
-    memory = malloc(bytes);
-  }
+  void* memory = AllocWithRetry(bytes);
   if (memory != nullptr) {
     base::AtomicWord current =
         base::Relaxed_AtomicIncrement(&current_memory_usage_, bytes);
@@ -140,7 +138,7 @@ Segment* AccountingAllocator::GetSegmentFromPool(size_t requested_size) {
 
   Segment* segment;
   {
-    base::LockGuard<base::Mutex> lock_guard(&unused_segments_mutex_);
+    base::MutexGuard lock_guard(&unused_segments_mutex_);
 
     segment = unused_segments_heads_[power];
 
@@ -175,7 +173,7 @@ bool AccountingAllocator::AddSegmentToPool(Segment* segment) {
   power -= kMinSegmentSizePower;
 
   {
-    base::LockGuard<base::Mutex> lock_guard(&unused_segments_mutex_);
+    base::MutexGuard lock_guard(&unused_segments_mutex_);
 
     if (unused_segments_sizes_[power] >= unused_segments_max_sizes_[power]) {
       return false;
@@ -191,7 +189,7 @@ bool AccountingAllocator::AddSegmentToPool(Segment* segment) {
 }
 
 void AccountingAllocator::ClearPool() {
-  base::LockGuard<base::Mutex> lock_guard(&unused_segments_mutex_);
+  base::MutexGuard lock_guard(&unused_segments_mutex_);
 
   for (size_t power = 0; power <= kMaxSegmentSizePower - kMinSegmentSizePower;
        power++) {
