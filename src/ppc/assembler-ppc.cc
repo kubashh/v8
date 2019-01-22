@@ -247,7 +247,7 @@ Assembler::Assembler(const AssemblerOptions& options,
 
 void Assembler::GetCode(Isolate* isolate, CodeDesc* desc) {
   // Emit constant pool if necessary.
-  int constant_pool_size = EmitConstantPool();
+  int constant_pool_offset = EmitConstantPool();
 
   EmitRelocations();
 
@@ -261,7 +261,7 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc) {
   desc->instr_size = pc_offset();
   desc->reloc_size =
       (buffer_start_ + desc->buffer_size) - reloc_info_writer.pos();
-  desc->constant_pool_size = constant_pool_size;
+  desc->constant_pool_offset = constant_pool_offset;
   desc->origin = this;
   desc->unwinding_info_size = 0;
   desc->unwinding_info = nullptr;

@@ -15254,14 +15254,13 @@ void Code::Disassemble(const char* name, std::ostream& os, Address current_pc) {
     os << "Instructions (size = " << code_size << ")\n";
     DisassembleCodeRange(isolate, os, *this, InstructionStart(), code_size,
                          current_pc);
-
-    if (int pool_size = constant_pool_size()) {
-      DCHECK_EQ(pool_size & kPointerAlignmentMask, 0);
-      os << "\nConstant Pool (size = " << pool_size << ")\n";
+    if (int const_pool_size = constant_pool_size()) {
+      DCHECK_EQ(const_pool_size & kPointerAlignmentMask, 0);
+      os << "\nConstant Pool (size = " << const_pool_size << ")\n";
       Vector<char> buf = Vector<char>::New(50);
       intptr_t* ptr =
           reinterpret_cast<intptr_t*>(InstructionStart() + const_pool_offset);
-      for (int i = 0; i < pool_size; i += kSystemPointerSize, ptr++) {
+      for (int i = 0; i < const_pool_size; i += kSystemPointerSize, ptr++) {
         SNPrintF(buf, "%4d %08" V8PRIxPTR, i, *ptr);
         os << static_cast<const void*>(ptr) << "  " << buf.start() << "\n";
       }

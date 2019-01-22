@@ -2,9 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/api-inl.h"
 #include "src/heap/factory.h"
 #include "src/isolate.h"
 #include "src/objects-inl.h"
+#include "src/objects/code-inl.h"
 #include "test/cctest/cctest.h"
 
 namespace v8 {
@@ -24,7 +26,7 @@ TEST(CodeLayoutWithoutUnwindingInfo) {
   CodeDesc code_desc;
   code_desc.buffer = buffer;
   code_desc.buffer_size = buffer_size;
-  code_desc.constant_pool_size = 0;
+  code_desc.constant_pool_offset = 0;
   code_desc.instr_size = buffer_size;
   code_desc.reloc_size = 0;
   code_desc.origin = nullptr;
@@ -63,7 +65,7 @@ TEST(CodeLayoutWithUnwindingInfo) {
   CodeDesc code_desc;
   code_desc.buffer = buffer;
   code_desc.buffer_size = buffer_size;
-  code_desc.constant_pool_size = 0;
+  code_desc.constant_pool_offset = 0;
   code_desc.instr_size = buffer_size;
   code_desc.reloc_size = 0;
   code_desc.origin = nullptr;
@@ -87,6 +89,41 @@ TEST(CodeLayoutWithUnwindingInfo) {
   CHECK_EQ(code->unwinding_info_end() - code->address(),
            Code::kHeaderSize + RoundUp(buffer_size, kInt64Size) + kInt64Size +
                unwinding_info_size);
+}
+
+TEST(SimplLayout) {
+  i::FLAG_code_comments = true;
+  i::FLAG_allow_natives_syntax = true;
+  CcTest::InitializeVM();
+  HandleScope handle_scope(CcTest::i_isolate());
+  v8::Local<v8::Value> v = CompileRun(
+      "function f (a,b) { "
+      "  try {"
+      "    throw a;"
+      "  } catch(e) {"
+      "    return e;"
+      "  }"
+      "};"
+      ""
+      "f(1,2);"
+      "f(1,2);"
+      "%OptimizeFunctionOnNextCall(f);"
+      "f(1,2);"
+      "f");
+  i::Handle<i::JSFunction> f = Handle<JSFunction>::cast(
+      v8::Utils::OpenHandle(*v8::Local<v8::Function>::Cast(v)));
+  // Test is a no-op if we don't optimize.
+  Code code = f->code();
+  if (code->is_null()) return;
+  CHECK(code->has_safepoint_info());
+  CHECK_NE(code->handler_table_offset(), 0);
+  CHECK_LE(code->safepoint_table_offset(), code->handler_table_offset());
+  CHECK_NE(code->code_comments_offset(), code->InstructionSize());
+  CHECK_NE(code->code_comments_offset(), 0);
+  CHECK_LE(code->handler_table_offset(), code->code_comments_offset());
+  if (code->constant_pool_offset()) {
+    CHECK_LE(code->constant_pool_offset(), code->safepoint_table_offset());
+  }
 }
 
 }  // namespace internal

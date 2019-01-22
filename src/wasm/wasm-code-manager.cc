@@ -271,7 +271,7 @@ void WasmCode::Disassemble(const char* name, std::ostream& os,
 
 #ifdef ENABLE_DISASSEMBLER
   size_t instruction_size = unpadded_binary_size_;
-  if (constant_pool_offset_ < instruction_size) {
+  if (constant_pool_offset_ && constant_pool_offset_ < instruction_size) {
     instruction_size = constant_pool_offset_;
   }
   if (safepoint_table_offset_ && safepoint_table_offset_ < instruction_size) {
@@ -586,7 +586,7 @@ WasmCode* NativeModule::AddCode(
 
   WasmCode* ret = AddOwnedCode(
       index, {desc.buffer, static_cast<size_t>(desc.instr_size)}, stack_slots,
-      safepoint_table_offset, handler_table_offset, desc.constant_pool_offset(),
+      safepoint_table_offset, handler_table_offset, desc.constant_pool_offset,
       desc.code_comments_offset(), desc.instr_size,
       std::move(protected_instructions), std::move(reloc_info),
       std::move(source_pos_table), kind, tier);
