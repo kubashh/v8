@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b52ea6c9_443cb9ef",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-22T16:45:22Z",
+      "side": 1,
+      "message": "I\u0027d like to rewrite this a little because the arg_count is confusing now.\nHow about the following:\n\n\nbool first_reg_is_receiver \u003d\n    receiver_mode !\u003d ConvertReceiverMode::kNullOrUndefined;\n\nHints receiver(zone());\nif (first_reg_is_receiver) {\n  receiver.Add(environment()-\u003eregister_hints(first_reg));\n} else {\n  receiver.AddConstant(broker()-\u003eisolate()-\u003efactory()-\u003eundefined_value());\n}\n\nHintsVector arguments(zone());\narguments.push_back(receiver);\nfor (int i \u003d BoolToInt(first_reg_is_receiver); i \u003c reg_count; ++i) {\n  arguments.push_back(environment()-\u003eregister_hints(\n      interpreter::Register(first_reg.index() + i)));\n}",
+      "revId": "cd5f518956296f2826e5687accafdd60da35301a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70603b12_12b6d55a",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-22T16:45:22Z",
+      "side": 1,
+      "message": "Nit: let\u0027s inline that where it\u0027s used.",
+      "revId": "cd5f518956296f2826e5687accafdd60da35301a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
