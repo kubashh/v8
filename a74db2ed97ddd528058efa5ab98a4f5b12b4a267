@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b31cd4c2_fd9e8a44",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-22T15:04:05Z",
+      "side": 1,
+      "message": "nit: s/at the //",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae75ec5c_3ece549c",
+        "filename": "src/globals.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-22T15:04:05Z",
+      "side": 1,
+      "message": "Not sure I understand; why are we back at this solution where an offset of 0 implies \u0027does not exist\u0027? I like our current logic, where offset and size are always non-magic values, and offset points to where the pool/table/code comments start, even if empty.",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbe7ecef_5cbe2c3b",
+        "filename": "src/objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 15257,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-22T15:04:05Z",
+      "side": 1,
+      "message": "nit: this doesn\u0027t look necessary; If so, let\u0027s just revert these changes to simplify the CL?",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07890645_a99de209",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-22T15:04:05Z",
+      "side": 1,
+      "message": "Could we avoid all of this complexity by setting the constant_pool_offset correctly in the first place?",
+      "revId": "a74db2ed97ddd528058efa5ab98a4f5b12b4a267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
