@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "77389775_a65a4be1",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-01-22T14:29:44Z",
+      "side": 1,
+      "message": "I was wondering about this DCHECK:\n\nCHECK_LE(constant_pool_offset(), code_comments_offset());\n\nIt might be that it is coincidentally valid because constant_pool_will be 0 if it is not present, and code_comments_offset will be InstructionSize() if it is not present.",
+      "parentUuid": "e6d298e4_ef197fcc",
+      "revId": "a2ff664b39eb018d0ef070072f1f07dd127e5268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab70a1e1_96ed2a6c",
         "filename": "src/objects/code.h",
         "patchSetId": 9
