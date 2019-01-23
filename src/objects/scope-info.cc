@@ -678,9 +678,10 @@ bool ScopeInfo::VariableIsSynthetic(String name) {
          name->Equals(name->GetReadOnlyRoots().this_string());
 }
 
-int ScopeInfo::ModuleIndex(Handle<String> name, VariableMode* mode,
+int ScopeInfo::ModuleIndex(String name, VariableMode* mode,
                            InitializationFlag* init_flag,
                            MaybeAssignedFlag* maybe_assigned_flag) {
+  DisallowHeapAllocation no_gc;
   DCHECK(name->IsInternalizedString());
   DCHECK_EQ(scope_type(), MODULE_SCOPE);
   DCHECK_NOT_NULL(mode);
@@ -703,10 +704,11 @@ int ScopeInfo::ModuleIndex(Handle<String> name, VariableMode* mode,
 }
 
 // static
-int ScopeInfo::ContextSlotIndex(Handle<ScopeInfo> scope_info,
-                                Handle<String> name, VariableMode* mode,
+int ScopeInfo::ContextSlotIndex(ScopeInfo scope_info, String name,
+                                VariableMode* mode,
                                 InitializationFlag* init_flag,
                                 MaybeAssignedFlag* maybe_assigned_flag) {
+  DisallowHeapAllocation no_gc;
   DCHECK(name->IsInternalizedString());
   DCHECK_NOT_NULL(mode);
   DCHECK_NOT_NULL(init_flag);
@@ -717,16 +719,15 @@ int ScopeInfo::ContextSlotIndex(Handle<ScopeInfo> scope_info,
   int start = scope_info->ContextLocalNamesIndex();
   int end = start + scope_info->ContextLocalCount();
   for (int i = start; i < end; ++i) {
-    if (*name == scope_info->get(i)) {
-      int var = i - start;
-      *mode = scope_info->ContextLocalMode(var);
-      *init_flag = scope_info->ContextLocalInitFlag(var);
-      *maybe_assigned_flag = scope_info->ContextLocalMaybeAssignedFlag(var);
-      int result = Context::MIN_CONTEXT_SLOTS + var;
+    if (name != scope_info->get(i)) continue;
+    int var = i - start;
+    *mode = scope_info->ContextLocalMode(var);
+    *init_flag = scope_info->ContextLocalInitFlag(var);
+    *maybe_assigned_flag = scope_info->ContextLocalMaybeAssignedFlag(var);
+    int result = Context::MIN_CONTEXT_SLOTS + var;
 
-      DCHECK_LT(result, scope_info->ContextLength());
-      return result;
-    }
+    DCHECK_LT(result, scope_info->ContextLength());
+    return result;
   }
 
   return -1;
