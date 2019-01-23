@@ -4002,7 +4002,7 @@ Maybe<bool> v8::Object::Set(v8::Local<v8::Context> context,
   has_pending_exception =
       i::Runtime::SetObjectProperty(isolate, self, key_obj, value_obj,
                                     i::StoreOrigin::kMaybeKeyed,
-                                    Just(i::LanguageMode::kSloppy))
+                                    Just(i::ShouldThrow::kDontThrow))
           .is_null();
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
   return Just(true);
@@ -4022,7 +4022,7 @@ Maybe<bool> v8::Object::Set(v8::Local<v8::Context> context, uint32_t index,
   auto self = Utils::OpenHandle(this);
   auto value_obj = Utils::OpenHandle(*value);
   has_pending_exception = i::Object::SetElement(isolate, self, index, value_obj,
-                                                i::LanguageMode::kSloppy)
+                                                i::ShouldThrow::kDontThrow)
                               .is_null();
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
   return Just(true);
@@ -4046,7 +4046,7 @@ Maybe<bool> v8::Object::CreateDataProperty(v8::Local<v8::Context> context,
   i::Handle<i::Object> value_obj = Utils::OpenHandle(*value);
 
   Maybe<bool> result = i::JSReceiver::CreateDataProperty(
-      isolate, self, key_obj, value_obj, i::kDontThrow);
+      isolate, self, key_obj, value_obj, Just(i::kDontThrow));
   has_pending_exception = result.IsNothing();
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
   return result;
@@ -4064,7 +4064,7 @@ Maybe<bool> v8::Object::CreateDataProperty(v8::Local<v8::Context> context,
 
   i::LookupIterator it(isolate, self, index, self, i::LookupIterator::OWN);
   Maybe<bool> result =
-      i::JSReceiver::CreateDataProperty(&it, value_obj, i::kDontThrow);
+      i::JSReceiver::CreateDataProperty(&it, value_obj, Just(i::kDontThrow));
   has_pending_exception = result.IsNothing();
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
   return result;
@@ -4182,7 +4182,7 @@ Maybe<bool> v8::Object::DefineOwnProperty(v8::Local<v8::Context> context,
     ENTER_V8(isolate, context, Object, DefineOwnProperty, Nothing<bool>(),
              i::HandleScope);
     Maybe<bool> success = i::JSReceiver::DefineOwnProperty(
-        isolate, self, key_obj, &desc, i::kDontThrow);
+        isolate, self, key_obj, &desc, Just(i::kDontThrow));
     // Even though we said kDontThrow, there might be accessors that do throw.
     RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
     return success;
@@ -4192,7 +4192,7 @@ Maybe<bool> v8::Object::DefineOwnProperty(v8::Local<v8::Context> context,
     ENTER_V8_NO_SCRIPT(isolate, context, Object, DefineOwnProperty,
                        Nothing<bool>(), i::HandleScope);
     Maybe<bool> success = i::JSReceiver::DefineOwnProperty(
-        isolate, self, key_obj, &desc, i::kDontThrow);
+        isolate, self, key_obj, &desc, Just(i::kDontThrow));
     RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
     return success;
   }
@@ -4208,7 +4208,8 @@ Maybe<bool> v8::Object::DefineProperty(v8::Local<v8::Context> context,
   i::Handle<i::Name> key_obj = Utils::OpenHandle(*key);
 
   Maybe<bool> success = i::JSReceiver::DefineOwnProperty(
-      isolate, self, key_obj, &descriptor.get_private()->desc, i::kDontThrow);
+      isolate, self, key_obj, &descriptor.get_private()->desc,
+      Just(i::kDontThrow));
   RETURN_ON_FAILED_EXECUTION_PRIMITIVE(bool);
   return success;
 }
@@ -4229,7 +4230,7 @@ Maybe<bool> v8::Object::SetPrivate(Local<Context> context, Local<Private> key,
     desc.set_value(value_obj);
     return i::JSProxy::SetPrivateSymbol(
         isolate, i::Handle<i::JSProxy>::cast(self),
-        i::Handle<i::Symbol>::cast(key_obj), &desc, i::kDontThrow);
+        i::Handle<i::Symbol>::cast(key_obj), &desc, Just(i::kDontThrow));
   }
   auto js_object = i::Handle<i::JSObject>::cast(self);
   i::LookupIterator it(js_object, key_obj, js_object);

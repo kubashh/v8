@@ -13764,6 +13764,13 @@ void CodeStubAssembler::GotoIfInitialPrototypePropertiesModified(
 }
 
 }  // namespace internal
+
 // TODO(petermarshall): Remove. This is a workaround for crbug.com/v8/8719
 namespace {}  // namespace
+
+// TODO(mythria): Remove. This is a workaround for crbug.com/v8/8719
+namespace {
+typedef int integer;
+}  // namespace
+
 }  // namespace v8
