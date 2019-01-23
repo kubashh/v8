@@ -22,6 +22,30 @@
       "revId": "1cd49e9dd62f826d4a62f99539e2ae276679ee9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c16a74a_9edb9dc6",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-01-23T21:26:01Z",
+      "side": 1,
+      "message": "sign() is a \"private\" in BigIntBase, not \"protected\". I don\u0027t think I can call it from BigInt, unless you think I should move sign from \"private\" of BigIntBase to \"protected\" of BigIntBase.",
+      "parentUuid": "ce38502b_352ac372",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 0
+      },
+      "revId": "1cd49e9dd62f826d4a62f99539e2ae276679ee9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

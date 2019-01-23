@@ -355,6 +355,30 @@
     },
     {
       "key": {
+        "uuid": "22566bdb_0183b09b",
+        "filename": "test/intl/bigint/tolocalestring.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-01-23T21:26:01Z",
+      "side": 1,
+      "message": "Number(-0).toLocaleString() is \"-0\" \nsee https://bugs.chromium.org/p/v8/issues/detail?id\u003d8099\nhttps://github.com/tc39/ecma402/pull/232\nhttps://github.com/tc39/test262/blob/master/test/intl402/NumberFormat/prototype/format/format-negative-numbers.js",
+      "parentUuid": "644016ad_46ad3dd8",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 39
+      },
+      "revId": "21a9010446d8752f17df28eaed749952e6c831b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c83b4662_5d006abf",
         "filename": "test/intl/bigint/tolocalestring.js",
         "patchSetId": 5
