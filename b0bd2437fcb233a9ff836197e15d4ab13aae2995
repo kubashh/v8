@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c9d9e79_691ace18",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-23T08:01:49Z",
+      "side": 1,
+      "message": "q: is \u0027this-\u003e\u0027 needed?",
+      "revId": "b0bd2437fcb233a9ff836197e15d4ab13aae2995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
