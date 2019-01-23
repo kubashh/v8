@@ -35,6 +35,8 @@ class BigIntBase : public HeapObject {
     return LengthBits::decode(static_cast<uint32_t>(bitfield));
   }
 
+  bool IsNegative() const { return sign(); }
+
   static inline BigIntBase unchecked_cast(Object o) {
     return bit_cast<BigIntBase>(o);
   }
