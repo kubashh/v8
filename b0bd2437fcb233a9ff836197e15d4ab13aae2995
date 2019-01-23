@@ -16,6 +16,24 @@
       "revId": "b0bd2437fcb233a9ff836197e15d4ab13aae2995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2a4ae6e_4bb1833a",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-23T14:00:02Z",
+      "side": 1,
+      "message": "No, removed.",
+      "parentUuid": "0c9d9e79_691ace18",
+      "revId": "b0bd2437fcb233a9ff836197e15d4ab13aae2995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
