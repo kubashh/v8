@@ -35,9 +35,13 @@ void ScriptContextTable::set_used(int used) {
 Handle<Context> ScriptContextTable::GetContext(Isolate* isolate,
                                                Handle<ScriptContextTable> table,
                                                int i) {
-  DCHECK(i < table->used());
-  return Handle<Context>::cast(
-      FixedArray::get(*table, i + kFirstContextSlotIndex, isolate));
+  return handle(table->get_context(i), isolate);
+}
+
+Context ScriptContextTable::get_context(int i) const {
+  DisallowHeapAllocation no_gc;
+  DCHECK_LT(i, used());
+  return Context::cast(this->get(i + kFirstContextSlotIndex));
 }
 
 OBJECT_CONSTRUCTORS_IMPL(Context, HeapObject)
