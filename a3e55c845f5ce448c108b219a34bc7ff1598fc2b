@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e6783d9_ef6b66f8",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 8581,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-01-23T12:39:26Z",
+      "side": 1,
+      "message": "I named this MoveGlobalReference and renamed the CopyPersistent accordingly. This is becaused I am trying to reuse the moving parts for a TracedGlobal.",
+      "range": {
+        "startLine": 8581,
+        "startChar": 14,
+        "endLine": 8581,
+        "endChar": 33
+      },
+      "revId": "a3e55c845f5ce448c108b219a34bc7ff1598fc2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
