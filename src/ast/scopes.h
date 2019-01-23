@@ -287,6 +287,7 @@ class V8_EXPORT_PRIVATE Scope : public NON_EXPORTED_BASE(ZoneObject) {
   // declarations, i.e. a var declaration that has been hoisted from a nested
   // scope over a let binding of the same name.
   Declaration* CheckConflictingVarDeclarations();
+  Declaration* CheckConflictingSloppyEvalVarDeclarations();
 
   // Find variable with (variable->mode() <= |mode_limit|) that was declared in
   // |scope|. This is used to catch patterns like `try{}catch(e){let e;}` and

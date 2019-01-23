@@ -1139,34 +1139,48 @@ Variable* Scope::NewTemporary(const AstRawString* name,
 }
 
 Declaration* Scope::CheckConflictingVarDeclarations() {
-  bool is_sloppy_eval = is_eval_scope() && is_sloppy(language_mode());
-  // In case of a regular function/script, check all scopes except for the scope
-  // in which the var ends up being declared.
-  Scope* end = this;
-  // In the case of eval, check all scopes up to and including the next
-  // declaration scope.
-  if (is_sloppy_eval) {
-    while (end->is_eval_scope()) end = end->outer_scope_->GetDeclarationScope();
-    end = end->outer_scope_;
-  }
   for (Declaration* decl : decls_) {
     // Lexical vs lexical conflicts within the same scope have already been
     // captured in Parser::Declare. The only conflicts we still need to check
     // are lexical vs nested var.
-    Scope* current = nullptr;
     if (decl->IsVariableDeclaration() &&
         decl->AsVariableDeclaration()->AsNested() != nullptr) {
-      current = decl->AsVariableDeclaration()->AsNested()->scope();
-    } else if (is_sloppy_eval) {
-      if (IsLexicalVariableMode(decl->var()->mode())) continue;
-      current = outer_scope_;
+      Scope* current = decl->AsVariableDeclaration()->AsNested()->scope();
+      DCHECK(decl->var()->mode() == VariableMode::kVar ||
+             decl->var()->mode() == VariableMode::kDynamic);
+      // Iterate through all scopes until the declaration scope.
+      do {
+        // There is a conflict if there exists a non-VAR binding.
+        if (current->is_catch_scope()) continue;
+        Variable* other_var = current->LookupLocal(decl->var()->raw_name());
+        if (other_var != nullptr) {
+          DCHECK(IsLexicalVariableMode(other_var->mode()));
+          return decl;
+        }
+        current = current->outer_scope();
+      } while (current != this);
     }
-    if (current == nullptr) continue;
-    DCHECK(decl->var()->mode() == VariableMode::kVar ||
-           decl->var()->mode() == VariableMode::kDynamic);
+  }
+  if (V8_UNLIKELY(is_eval_scope() && is_sloppy(language_mode()))) {
+    return CheckConflictingSloppyEvalVarDeclarations();
+  }
+  return nullptr;
+}
+
+Declaration* Scope::CheckConflictingSloppyEvalVarDeclarations() {
+  DCHECK(is_eval_scope());
+  DCHECK(is_sloppy(language_mode()));
+  Scope* end = this;
+  while (end->is_eval_scope()) end = end->outer_scope_->GetDeclarationScope();
+  end = end->outer_scope_;
+
+  for (Declaration* decl : decls_) {
+    if (IsLexicalVariableMode(decl->var()->mode())) continue;
+    Scope* current = outer_scope_;
     // Iterate through all scopes until and including the declaration scope.
     do {
-      // There is a conflict if there exists a non-VAR binding.
+      // There is a conflict if there exists a non-VAR binding up to the
+      // declaration scope in which this sloppy-eval runs.
       Variable* other_var =
           current->LookupInScopeOrScopeInfo(decl->var()->raw_name());
       if (other_var != nullptr && IsLexicalVariableMode(other_var->mode())) {
