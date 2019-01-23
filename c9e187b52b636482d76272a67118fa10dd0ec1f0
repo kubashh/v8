@@ -52,6 +52,24 @@
       "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "826f6cd0_c121c59b",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1324852
+      },
+      "writtenOn": "2019-01-23T20:17:33Z",
+      "side": 1,
+      "message": "Jakob, thanks for the comment.\nI don\u0027t generally agree with the complexity introduced by SSOAllocator (due to the well-designed DI nature of StringStream-\u003eStringAllocator). I tend to find the concept quite useful and see potential for it to be used in other places as well (e.g. in object printers).\nNevertheless, I respect the idea of not trusting the internal voice and benchmarking own assumptions. For this particular problem I decided to not use some fancy perf-things, but just use perf stat (or, equally, time util). Here are the results of the measurements: goo.gl/JYmW9v (sorry, don\u0027t know what is preferred way to post links to code).\nI\u0027ve run the tests multiple times and the numbers are pretty much stable. So for short strings (\u003c128 bytes) the gain is over 1.7x, for longer strings the results are very close.\nOne of the reasons why std::stringstream might be slow is that there is no standard way to preallocate data in the underlying stringbuf (as opposed to, for example, boost::asio::streambuf). I think this idea might be a good candidate to go to a proposal for LWG. Another optimization that might be proposed is a separate ref-qualifed overload for xvalue stringstream objects, i.e.:\n std::basic_string\u003cCharT,Traits,Allocator\u003e str() \u0026\u0026 noexcept;\nthat would be able to move the underlying string, leaving the stringstream in unspecified state.",
+      "parentUuid": "b60dfcb5_dd9c85e3",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
