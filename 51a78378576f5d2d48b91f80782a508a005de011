@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02e67665_fb2b5333",
+        "filename": "src/contexts-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-01-23T13:33:59Z",
+      "side": 1,
+      "message": "This scope is a little superfluous. The receiver is unhandlified and we\u0027re simply calling a getter.",
+      "revId": "51a78378576f5d2d48b91f80782a508a005de011",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
