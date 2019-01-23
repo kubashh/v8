@@ -34,6 +34,24 @@
       "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b60dfcb5_dd9c85e3",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-23T15:50:47Z",
+      "side": 1,
+      "message": "Without benchmarks to show the perf benefit of this, I don\u0027t think it makes sense to add the complexity of the SSOAllocator + DateBuffer. \n\nDo you have any measurements that show this is worthwhile? Otherwise I think we should go with a simple stringstream solution first.",
+      "parentUuid": "ad0b8659_69b2496e",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
