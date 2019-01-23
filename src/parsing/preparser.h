@@ -1089,10 +1089,17 @@ class PreParser : public ParserBase<PreParser> {
     return PreParserStatement::Default();
   }
 
-  void DeclareVariable(VariableProxy* proxy, VariableKind kind,
+  void DeclareVariable(const AstRawString* name, VariableKind kind,
                        VariableMode mode, InitializationFlag init, Scope* scope,
                        bool* added, int position) {
+    DeclareVariableName(name, mode, scope, added, kind);
+  }
+
+  void DeclareAndBindVariable(const VariableProxy* proxy, VariableKind kind,
+                              VariableMode mode, InitializationFlag init,
+                              Scope* scope, bool* added, int position) {
     DeclareVariableName(proxy->raw_name(), mode, scope, added, kind);
+    // Don't bother actually binding the proxy.
   }
 
   void DeclareVariableName(const AstRawString* name, VariableMode mode,
