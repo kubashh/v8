@@ -275,6 +275,7 @@ class VariableDeclarationParsingScope : public ExpressionScope<Types> {
     VariableKind kind = NORMAL_VARIABLE;
     bool was_added;
     this->parser()->DeclareVariable(
+    this->parser()->DeclareAndBindVariable(
         proxy, kind, mode_, Variable::DefaultInitializationFlag(mode_),
         this->parser()->scope(), &was_added, proxy->position());
     if (was_added &&
@@ -346,7 +347,7 @@ class ParameterDeclarationParsingScope : public ExpressionScope<Types> {
     VariableKind kind = PARAMETER_VARIABLE;
     VariableMode mode = VariableMode::kVar;
     bool was_added;
-    this->parser()->DeclareVariable(
+    this->parser()->DeclareAndBindVariable(
         proxy, kind, mode, Variable::DefaultInitializationFlag(mode),
         this->parser()->scope(), &was_added, proxy->position());
     if (!has_duplicate() && !was_added) {
@@ -670,9 +671,9 @@ class ArrowHeadParsingScope : public ExpressionParsingScope<Types> {
     for (int i = 0; i < this->variable_list()->length(); i++) {
       VariableProxy* proxy = this->variable_list()->at(i);
       bool was_added;
-      this->parser()->DeclareVariable(proxy, kind, mode,
-                                      Variable::DefaultInitializationFlag(mode),
-                                      result, &was_added, proxy->position());
+      this->parser()->DeclareAndBindVariable(
+          proxy, kind, mode, Variable::DefaultInitializationFlag(mode), result,
+          &was_added, proxy->position());
       if (!was_added) {
         ExpressionScope<Types>::Report(proxy->location(),
                                        MessageTemplate::kParamDupe);
