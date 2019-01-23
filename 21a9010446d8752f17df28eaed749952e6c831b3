@@ -379,6 +379,30 @@
     },
     {
       "key": {
+        "uuid": "c3be86c9_5fe157a6",
+        "filename": "test/intl/bigint/tolocalestring.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-01-23T22:55:20Z",
+      "side": 1,
+      "message": "Ah, that\u0027s a very recent change which my Chrome hasn\u0027t picked up yet (I verified in DevTools before sending that message). Anyway, BigInt still has no \"minus zero\" (I sent you the spec link yesterday), so I still think this line should just be dropped.",
+      "parentUuid": "22566bdb_0183b09b",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 39
+      },
+      "revId": "21a9010446d8752f17df28eaed749952e6c831b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c83b4662_5d006abf",
         "filename": "test/intl/bigint/tolocalestring.js",
         "patchSetId": 5

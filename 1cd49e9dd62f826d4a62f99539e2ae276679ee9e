@@ -46,6 +46,30 @@
       "revId": "1cd49e9dd62f826d4a62f99539e2ae276679ee9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9e694a8_db7d8623",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-01-23T22:55:20Z",
+      "side": 1,
+      "message": "BigInt is a friend class of BigIntBase, so you can call it from there. No need to move sign().",
+      "parentUuid": "8c16a74a_9edb9dc6",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 0
+      },
+      "revId": "1cd49e9dd62f826d4a62f99539e2ae276679ee9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
