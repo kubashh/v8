@@ -1074,7 +1074,7 @@ TEST(JSArray) {
   CHECK(array->HasSmiOrObjectElements());
 
   // array[length] = name.
-  Object::SetElement(isolate, array, 0, name, LanguageMode::kSloppy).Check();
+  Object::SetElement(isolate, array, 0, name, ShouldThrow::kDontThrow).Check();
   CHECK_EQ(Smi::FromInt(1), array->length());
   element = i::Object::GetElement(isolate, array, 0).ToHandleChecked();
   CHECK_EQ(*element, *name);
@@ -1088,7 +1088,7 @@ TEST(JSArray) {
   CHECK(array->HasDictionaryElements());  // Must be in slow mode.
 
   // array[length] = name.
-  Object::SetElement(isolate, array, int_length, name, LanguageMode::kSloppy)
+  Object::SetElement(isolate, array, int_length, name, ShouldThrow::kDontThrow)
       .Check();
   uint32_t new_int_length = 0;
   CHECK(array->length()->ToArrayIndex(&new_int_length));
@@ -1123,8 +1123,8 @@ TEST(JSObjectCopy) {
   Object::SetProperty(isolate, obj, first, one).Check();
   Object::SetProperty(isolate, obj, second, two).Check();
 
-  Object::SetElement(isolate, obj, 0, first, LanguageMode::kSloppy).Check();
-  Object::SetElement(isolate, obj, 1, second, LanguageMode::kSloppy).Check();
+  Object::SetElement(isolate, obj, 0, first, ShouldThrow::kDontThrow).Check();
+  Object::SetElement(isolate, obj, 1, second, ShouldThrow::kDontThrow).Check();
 
   // Make the clone.
   Handle<Object> value1, value2;
@@ -1149,8 +1149,9 @@ TEST(JSObjectCopy) {
   Object::SetProperty(isolate, clone, first, two).Check();
   Object::SetProperty(isolate, clone, second, one).Check();
 
-  Object::SetElement(isolate, clone, 0, second, LanguageMode::kSloppy).Check();
-  Object::SetElement(isolate, clone, 1, first, LanguageMode::kSloppy).Check();
+  Object::SetElement(isolate, clone, 0, second, ShouldThrow::kDontThrow)
+      .Check();
+  Object::SetElement(isolate, clone, 1, first, ShouldThrow::kDontThrow).Check();
 
   value1 = Object::GetElement(isolate, obj, 1).ToHandleChecked();
   value2 = Object::GetElement(isolate, clone, 0).ToHandleChecked();

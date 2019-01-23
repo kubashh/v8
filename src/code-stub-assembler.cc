@@ -13764,6 +13764,10 @@ void CodeStubAssembler::GotoIfInitialPrototypePropertiesModified(
 }
 
 }  // namespace internal
+
+// Emtpy line as a work around.
+
+}  // namespace v8
+
 // TODO(petermarshall): Remove. This is a workaround for crbug.com/v8/8719
 namespace {}  // namespace
-}  // namespace v8
