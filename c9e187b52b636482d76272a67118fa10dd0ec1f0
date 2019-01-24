@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "4e69430a_069b861b",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-24T10:25:24Z",
+      "side": 1,
+      "message": "Ack, thanks for checking. I ran your microbenchmark locally:\n\nmaster: 894.719500 +- 15.149839 (lower is better)\nwith small vector: 1387.142000 +- 28.657007\nstringstream: 2218.576500 +- 53.225148\n\nInteresting that these changes have such visible impact. Do we know why your current solution is so much slower than the stack-allocated char array + SNPrintF?\n\nI don\u0027t doubt the perf benefit, my concern was mainly code complexity vs. actual benefit here. My impression was that date builtins aren\u0027t particularly perf-critical and thus I\u0027d usually prioritize simplicity over performance. But given that both Jakob and Clemens like this, Clemens mentioned possible reuses of this mechanism in wasm, plus the perf results above, I\u0027m convinced :)",
+      "parentUuid": "826f6cd0_c121c59b",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f77ac5d2_4c554277",
         "filename": "src/builtins/builtins-date.cc",
         "patchSetId": 1
@@ -84,6 +102,23 @@
       "writtenOn": "2019-01-24T10:02:20Z",
       "side": 1,
       "message": "I think we should truncate the buffer here, such that it really only contains the string. Currently it contains the null-terminated string plus additional uninitialized bytes.\nThis would also avoid the need to use \"CStrVector\" below. Just use \"VectorOf\".",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fab57d8_5a3e9c92",
+        "filename": "src/string-stream.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-24T10:25:24Z",
+      "side": 1,
+      "message": "nit: SmallStringOptimizedAllocator, and then we can remove the comment above.",
       "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
