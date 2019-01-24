@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "c63e342f_dfc70a21",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-24T10:41:20Z",
+      "side": 1,
+      "message": "Regarding the performance impact: StringStream is implemented very poorly. {StringStream::Add} calls {StringStream::Put} for each single character, hence does a bounds check for each single character. It also calls {Add} recursively. We could probably optimize this a bit if performance really matters (not in this CL of course).",
+      "parentUuid": "4e69430a_069b861b",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f77ac5d2_4c554277",
         "filename": "src/builtins/builtins-date.cc",
         "patchSetId": 1
