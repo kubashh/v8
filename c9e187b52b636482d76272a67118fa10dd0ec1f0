@@ -70,6 +70,23 @@
       "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f77ac5d2_4c554277",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-24T10:02:20Z",
+      "side": 1,
+      "message": "I think we should truncate the buffer here, such that it really only contains the string. Currently it contains the null-terminated string plus additional uninitialized bytes.\nThis would also avoid the need to use \"CStrVector\" below. Just use \"VectorOf\".",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
