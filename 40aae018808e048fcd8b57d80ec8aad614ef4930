@@ -22,6 +22,30 @@
       "revId": "40aae018808e048fcd8b57d80ec8aad614ef4930",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0084c7cb_7c965577",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-01-24T17:31:50Z",
+      "side": 1,
+      "message": "I\u0027ll do it in a follow-up cl.",
+      "parentUuid": "ac080fe9_4af5b1a7",
+      "range": {
+        "startLine": 1168,
+        "startChar": 2,
+        "endLine": 1169,
+        "endChar": 50
+      },
+      "revId": "40aae018808e048fcd8b57d80ec8aad614ef4930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
