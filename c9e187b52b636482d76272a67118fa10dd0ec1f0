@@ -144,6 +144,24 @@
     },
     {
       "key": {
+        "uuid": "df6f2743_7e992792",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-24T16:54:48Z",
+      "side": 1,
+      "message": "The StringStream knows the number of characters emitted:\nbuffer.resize(sstream.length());",
+      "parentUuid": "ebaee626_39bc8b0d",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1fab57d8_5a3e9c92",
         "filename": "src/string-stream.h",
         "patchSetId": 1
