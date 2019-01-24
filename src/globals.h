@@ -932,6 +932,55 @@ constexpr int kIeeeDoubleExponentWordOffset = 0;
   (((value) + kDoubleAlignmentMask) & ~kDoubleAlignmentMask)
 
 
+// CPU feature flags.
+enum CpuFeature {
+  // x86
+  SSE4_1,
+  SSSE3,
+  SSE3,
+  SAHF,
+  AVX,
+  FMA3,
+  BMI1,
+  BMI2,
+  LZCNT,
+  POPCNT,
+  ATOM,
+  // ARM
+  // - Standard configurations. The baseline is ARMv6+VFPv2.
+  ARMv7,        // ARMv7-A + VFPv3-D32 + NEON
+  ARMv7_SUDIV,  // ARMv7-A + VFPv4-D32 + NEON + SUDIV
+  ARMv8,        // ARMv8-A (+ all of the above)
+  // MIPS, MIPS64
+  FPU,
+  FP64FPU,
+  MIPSr1,
+  MIPSr2,
+  MIPSr6,
+  MIPS_SIMD,  // MSA instructions
+  // PPC
+  FPR_GPR_MOV,
+  LWSYNC,
+  ISELECT,
+  VSX,
+  MODULO,
+  // S390
+  DISTINCT_OPS,
+  GENERAL_INSTR_EXT,
+  FLOATING_POINT_EXT,
+  VECTOR_FACILITY,
+  VECTOR_ENHANCE_FACILITY_1,
+  MISC_INSTR_EXT2,
+
+  NUMBER_OF_CPU_FEATURES,
+
+  // ARM feature aliases (based on the standard configurations above).
+  VFPv3 = ARMv7,
+  NEON = ARMv7,
+  VFP32DREGS = ARMv7,
+  SUDIV = ARMv7_SUDIV
+};
+
 // Defines hints about receiver values based on structural knowledge.
 enum class ConvertReceiverMode : unsigned {
   kNullOrUndefined,     // Guaranteed to be null or undefined.
