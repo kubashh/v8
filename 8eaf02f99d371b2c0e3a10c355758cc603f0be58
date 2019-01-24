@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b61dd2d5_bee62cb2",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-01-24T17:00:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4f956af_b4152764",
+      "revId": "8eaf02f99d371b2c0e3a10c355758cc603f0be58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8b41b4c3_243ec2b4",
         "filename": "test/cctest/interpreter/bytecode_expectations/ConstVariableContextSlot.golden",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "8eaf02f99d371b2c0e3a10c355758cc603f0be58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "794b6957_c59eab2e",
+        "filename": "test/cctest/interpreter/bytecode_expectations/ConstVariableContextSlot.golden",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-01-24T17:00:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8b41b4c3_243ec2b4",
+      "revId": "8eaf02f99d371b2c0e3a10c355758cc603f0be58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
