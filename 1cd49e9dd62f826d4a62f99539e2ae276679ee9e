@@ -70,6 +70,30 @@
       "revId": "1cd49e9dd62f826d4a62f99539e2ae276679ee9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebfacfe1_e3f329ff",
+        "filename": "src/objects/bigint.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-01-24T02:40:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9e694a8_db7d8623",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 0
+      },
+      "revId": "1cd49e9dd62f826d4a62f99539e2ae276679ee9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
