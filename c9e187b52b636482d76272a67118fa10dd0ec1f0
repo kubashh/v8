@@ -126,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "ebaee626_39bc8b0d",
+        "filename": "src/builtins/builtins-date.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1324852
+      },
+      "writtenOn": "2019-01-24T15:26:19Z",
+      "side": 1,
+      "message": "Thanks for the suggestion. If I understood you correctly, to use VectorOf we would have to truncate the buffer on all escape paths by calling\n buffer.resize(StrLength(buffer.data()))\nwhich I\u0027m not sure is the better alternative. On the other hand I don\u0027t like meaningless .size() function either..",
+      "parentUuid": "f77ac5d2_4c554277",
+      "revId": "c9e187b52b636482d76272a67118fa10dd0ec1f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1fab57d8_5a3e9c92",
         "filename": "src/string-stream.h",
         "patchSetId": 1
