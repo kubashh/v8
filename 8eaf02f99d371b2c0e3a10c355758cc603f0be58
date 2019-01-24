@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4f956af_b4152764",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-01-24T14:04:57Z",
+      "side": 1,
+      "message": "What about moving this right after DeclareLocal? From that point on it should already be marked appropriately. Or even into DeclareLocal?",
+      "revId": "8eaf02f99d371b2c0e3a10c355758cc603f0be58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b41b4c3_243ec2b4",
+        "filename": "test/cctest/interpreter/bytecode_expectations/ConstVariableContextSlot.golden",
+        "patchSetId": 7
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-01-24T14:04:57Z",
+      "side": 1,
+      "message": "We shouldn\u0027t actually context-allocate based on unresolved references from unused functions :-) Follow-up.",
+      "revId": "8eaf02f99d371b2c0e3a10c355758cc603f0be58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
