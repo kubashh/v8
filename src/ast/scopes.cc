@@ -558,13 +558,13 @@ void DeclarationScope::HoistSloppyBlockFunctions(AstNodeFactory* factory) {
     const AstRawString* name = index_and_name.second;
     if (factory) {
       DCHECK(!is_being_lazily_parsed_);
-      VariableProxy* proxy = factory->NewVariableProxy(name, NORMAL_VARIABLE);
       auto declaration = factory->NewVariableDeclaration(kNoSourcePosition);
       bool was_added;
       // Based on the preceding checks, it doesn't matter what we pass as
       // sloppy_mode_block_scope_function_redefinition.
       bool ok = true;
-      DeclareVariable(declaration, proxy, VariableMode::kVar, NORMAL_VARIABLE,
+      DeclareVariable(declaration, name, kNoSourcePosition, VariableMode::kVar,
+                      NORMAL_VARIABLE,
                       Variable::DefaultInitializationFlag(VariableMode::kVar),
                       &was_added, nullptr, &ok);
       DCHECK(ok);
@@ -952,12 +952,11 @@ Variable* Scope::DeclareLocal(const AstRawString* name, VariableMode mode,
   return Declare(zone(), name, mode, kind, init_flag, kNotAssigned, was_added);
 }
 
-// TODO(leszeks): Avoid passing the proxy into here, passing the raw_name alone
-// instead.
 Variable* Scope::DeclareVariable(
-    Declaration* declaration, VariableProxy* proxy, VariableMode mode,
-    VariableKind kind, InitializationFlag init, bool* was_added,
-    bool* sloppy_mode_block_scope_function_redefinition, bool* ok) {
+    Declaration* declaration, const AstRawString* name, int pos,
+    VariableMode mode, VariableKind kind, InitializationFlag init,
+    bool* was_added, bool* sloppy_mode_block_scope_function_redefinition,
+    bool* ok) {
   DCHECK(IsDeclaredVariableMode(mode));
   DCHECK(!already_resolved_);
   DCHECK(!GetDeclarationScope()->is_being_lazily_parsed());
@@ -965,7 +964,7 @@ Variable* Scope::DeclareVariable(
 
   if (mode == VariableMode::kVar && !is_declaration_scope()) {
     return GetDeclarationScope()->DeclareVariable(
-        declaration, proxy, mode, kind, init, was_added,
+        declaration, name, pos, mode, kind, init, was_added,
         sloppy_mode_block_scope_function_redefinition, ok);
   }
   DCHECK(!is_catch_scope());
@@ -973,19 +972,7 @@ Variable* Scope::DeclareVariable(
   DCHECK(is_declaration_scope() ||
          (IsLexicalVariableMode(mode) && is_block_scope()));
 
-  DCHECK_NOT_NULL(proxy->raw_name());
-  const AstRawString* name = proxy->raw_name();
-
-  // Pessimistically assume that top-level variables will be assigned.
-  //
-  // Top-level variables in a script can be accessed by other scripts or even
-  // become global properties. While this does not apply to top-level variables
-  // in a module (assuming they are not exported), we must still mark these as
-  // assigned because they might be accessed by a lazily parsed top-level
-  // function, which, for efficiency, we preparse without variable tracking.
-  if (is_script_scope() || is_module_scope()) {
-    if (mode != VariableMode::kConst) proxy->set_is_assigned();
-  }
+  DCHECK_NOT_NULL(name);
 
   Variable* var = LookupLocal(name);
   // Declare the variable in the declaration scope.
@@ -998,7 +985,9 @@ Variable* Scope::DeclareVariable(
       // The proxy is bound to a lookup variable to force a dynamic declaration
       // using the DeclareEvalVar or DeclareEvalFunction runtime functions.
       DCHECK_EQ(NORMAL_VARIABLE, kind);
-      var = NonLocal(proxy->raw_name(), VariableMode::kDynamic);
+      var = NonLocal(name, VariableMode::kDynamic);
+      // Mark the var as used in case anyone outside the eval wants to use it.
+      var->set_is_used();
     } else {
       // Declare the name.
       var = DeclareLocal(name, mode, kind, was_added, init);
@@ -1040,6 +1029,18 @@ Variable* Scope::DeclareVariable(
   }
   DCHECK_NOT_NULL(var);
 
+  // Pessimistically assume that top-level variables will be assigned and used.
+  //
+  // Top-level variables in a script can be accessed by other scripts or even
+  // become global properties. While this does not apply to top-level variables
+  // in a module (assuming they are not exported), we must still mark these as
+  // assigned because they might be accessed by a lazily parsed top-level
+  // function, which, for efficiency, we preparse without variable tracking.
+  if (is_script_scope() || is_module_scope()) {
+    if (mode != VariableMode::kConst) var->set_maybe_assigned();
+    var->set_is_used();
+  }
+
   // We add a declaration node for every declaration. The compiler
   // will only generate code if necessary. In particular, declarations
   // for inner local variables that do not represent functions won't
@@ -1051,7 +1052,6 @@ Variable* Scope::DeclareVariable(
   // lead to repeated DeclareEvalVar or DeclareEvalFunction calls.
   decls_.Add(declaration);
   declaration->set_var(var);
-  proxy->BindTo(var);
   return var;
 }
 
@@ -2024,8 +2024,8 @@ bool Scope::ResolveVariablesRecursively(ParseInfo* info) {
         DCHECK(proxy->IsPrivateName());
         return false;
       }
+      var->set_is_used();
       if (!var->is_dynamic()) {
-        var->set_is_used();
         var->ForceContextAllocation();
         if (proxy->is_assigned()) var->set_maybe_assigned();
       }
