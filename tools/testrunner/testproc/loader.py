@@ -14,6 +14,12 @@ class LoadProc(base.TestProc):
 
     self.tests = tests
 
+    self._test_id = 0
+
+  def _assign_test_id(self, test):
+      test.set_id(self._test_id)
+      self._test_id += 1
+
   def load_initial_tests(self, exec_proc, initial_batch_size):
     """
     Args:
@@ -22,18 +28,22 @@ class LoadProc(base.TestProc):
     """
     while exec_proc.loaded_tests < initial_batch_size:
       try:
-        t = next(self.tests)
+        test = next(self.tests)
       except StopIteration:
         return
 
-      self._send_test(t)
+      self._assign_test_id(test)
+      self._send_test(test)
 
   def next_test(self, test):
     assert False, 'Nothing can be connected to the LoadProc'
 
   def result_for(self, test, result):
     try:
-      self._send_test(next(self.tests))
+      test = next(self.tests)
     except StopIteration:
       # No more tests to load.
-      pass
+      return
+
+    self._assign_test_id(test)
+    self._send_test(test)
