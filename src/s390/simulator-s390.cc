@@ -741,11 +741,20 @@ void Simulator::EvalTableInit() {
     EvalTable[i] = &Simulator::Evaluate_Unknown;
   }
 
-#define S390_SUPPORTED_VECTOR_OPCODE_LIST(V)                 \
-  V(vfs, VFS, 0xE7E2) /* type = VRR_C VECTOR FP SUBTRACT  */ \
-  V(vfa, VFA, 0xE7E3) /* type = VRR_C VECTOR FP ADD  */      \
-  V(vfd, VFD, 0xE7E5) /* type = VRR_C VECTOR FP DIVIDE  */   \
-  V(vfm, VFM, 0xE7E7) /* type = VRR_C VECTOR FP MULTIPLY  */
+#define S390_SUPPORTED_VECTOR_OPCODE_LIST(V)                                 \
+  V(vst, VST, 0xE70E)     /* type = VRX   VECTOR STORE  */                   \
+  V(vl, VL, 0xE706)       /* type = VRX   VECTOR LOAD  */                    \
+  V(vlgv, VLGV, 0xE721)   /* type = VRS_C VECTOR LOAD GR FROM VR ELEMENT  */ \
+  V(vlvg, VLVG, 0xE722)   /* type = VRS_B VECTOR LOAD VR ELEMENT FROM GR  */ \
+  V(vlrep, VLREP, 0xE705) /* type = VRX   VECTOR LOAD AND REPLICATE  */      \
+  V(vrepi, VREPI, 0xE745) /* type = VRI_A VECTOR REPLICATE IMMEDIATE  */     \
+  V(vlr, VLR, 0xE756)     /* type = VRR_A VECTOR LOAD  */                    \
+  V(vstef, VSTEF, 0xE70B) /* type = VRX   VECTOR STORE ELEMENT (32)  */      \
+  V(vlef, VLEF, 0xE703)   /* type = VRX   VECTOR LOAD ELEMENT (32)  */       \
+  V(vfs, VFS, 0xE7E2)     /* type = VRR_C VECTOR FP SUBTRACT  */             \
+  V(vfa, VFA, 0xE7E3)     /* type = VRR_C VECTOR FP ADD  */                  \
+  V(vfd, VFD, 0xE7E5)     /* type = VRR_C VECTOR FP DIVIDE  */               \
+  V(vfm, VFM, 0xE7E7)     /* type = VRR_C VECTOR FP MULTIPLY  */
 
 #define CREATE_EVALUATE_TABLE(name, op_name, op_value) \
   EvalTable[op_name] = &Simulator::Evaluate_##op_name;
@@ -1515,7 +1524,7 @@ Simulator::Simulator(Isolate* isolate) : isolate_(isolate) {
 
   // Initializing FP registers.
   for (int i = 0; i < kNumFPRs; i++) {
-    fp_registers_[i] = 0.0;
+    set_simd_reg_from_double(i, 0, 0.0);
   }
 
   // The sp is initialized to point to the bottom (high address) of the
@@ -2781,6 +2790,22 @@ uintptr_t Simulator::PopAddress() {
   int d2 = AS(RXEInstruction)->D2Value();      \
   int length = 6;
 
+#define DECODE_VRR_A_INSTRUCTION(r1, r2, m5, m4, m3) \
+  int r1 = AS(VRR_A_Instruction)->R1Value();         \
+  int r2 = AS(VRR_A_Instruction)->R2Value();         \
+  int m5 = AS(VRR_A_Instruction)->M5Value();         \
+  int m4 = AS(VRR_A_Instruction)->M4Value();         \
+  int m3 = AS(VRR_A_Instruction)->M3Value();         \
+  int length = 6;
+
+#define DECODE_VRR_B_INSTRUCTION(r1, r2, r3, m5, m4) \
+  int r1 = AS(VRR_B_Instruction)->R1Value();         \
+  int r2 = AS(VRR_B_Instruction)->R2Value();         \
+  int r3 = AS(VRR_B_Instruction)->R3Value();         \
+  int m5 = AS(VRR_B_Instruction)->M5Value();         \
+  int m4 = AS(VRR_B_Instruction)->M4Value();         \
+  int length = 6;
+
 #define DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4) \
   int r1 = AS(VRR_C_Instruction)->R1Value();             \
   int r2 = AS(VRR_C_Instruction)->R2Value();             \
@@ -2788,6 +2813,44 @@ uintptr_t Simulator::PopAddress() {
   int m6 = AS(VRR_C_Instruction)->M6Value();             \
   int m5 = AS(VRR_C_Instruction)->M5Value();             \
   int m4 = AS(VRR_C_Instruction)->M4Value();             \
+  int length = 6;
+
+#define DECODE_VRR_E_INSTRUCTION(r1, r2, r3, r4, m6, m5) \
+  int r1 = AS(VRR_E_Instruction)->R1Value();             \
+  int r2 = AS(VRR_E_Instruction)->R2Value();             \
+  int r3 = AS(VRR_E_Instruction)->R3Value();             \
+  int r4 = AS(VRR_E_Instruction)->R4Value();             \
+  int m6 = AS(VRR_E_Instruction)->M6Value();             \
+  int m5 = AS(VRR_E_Instruction)->M5Value();             \
+  int length = 6;
+
+#define DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3) \
+  int r1 = AS(VRX_Instruction)->R1Value();         \
+  int x2 = AS(VRX_Instruction)->X2Value();         \
+  int b2 = AS(VRX_Instruction)->B2Value();         \
+  int d2 = AS(VRX_Instruction)->D2Value();         \
+  int m3 = AS(VRX_Instruction)->M3Value();         \
+  int length = 6;
+
+#define DECODE_VRS_INSTRUCTION(r1, r3, b2, d2, m4) \
+  int r1 = AS(VRS_Instruction)->R1Value();         \
+  int r3 = AS(VRS_Instruction)->R3Value();         \
+  int b2 = AS(VRS_Instruction)->B2Value();         \
+  int d2 = AS(VRS_Instruction)->D2Value();         \
+  int m4 = AS(VRS_Instruction)->M4Value();         \
+  int length = 6;
+
+#define DECODE_VRI_A_INSTRUCTION(r1, i2, m3)     \
+  int r1 = AS(VRI_A_Instruction)->R1Value();     \
+  int16_t i2 = AS(VRI_A_Instruction)->I2Value(); \
+  int m3 = AS(VRI_A_Instruction)->M3Value();     \
+  int length = 6;
+
+#define DECODE_VRI_C_INSTRUCTION(r1, r2, i2, m4)  \
+  int r1 = AS(VRI_C_Instruction)->R1Value();      \
+  int r2 = AS(VRI_C_Instruction)->R2Value();      \
+  uint16_t i2 = AS(VRI_C_Instruction)->I2Value(); \
+  int m4 = AS(VRI_C_Instruction)->M4Value();      \
   int length = 6;
 
 #define GET_ADDRESS(index_reg, base_reg, offset)       \
@@ -2798,18 +2861,167 @@ int Simulator::Evaluate_Unknown(Instruction* instr) {
   UNREACHABLE();
 }
 
+EVALUATE(VST) {
+  DCHECK_OPCODE(VST);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  USE(m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  fpr_t* ptr = reinterpret_cast<fpr_t*>(addr);
+  *ptr = fp_registers_[r1];
+  return length;
+}
+
+EVALUATE(VL) {
+  DCHECK(VL);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  USE(m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  fpr_t* ptr = reinterpret_cast<fpr_t*>(addr);
+  fp_registers_[r1] = *ptr;
+  return length;
+}
+
+EVALUATE(VLGV) {
+  DCHECK_OPCODE(VLGV);
+  DECODE_VRS_INSTRUCTION(r1, r3, b2, d2, m4);
+  int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
+  int64_t index = b2_val + d2;
+  registers_[r1] = get_int_from_simd_reg(m4, r3, index);
+  return length;
+}
+
+EVALUATE(VLVG) {
+  DCHECK_OPCODE(VLVG);
+  DECODE_VRS_INSTRUCTION(r1, r3, b2, d2, m4);
+  int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
+  int64_t index = b2_val + d2;
+  int value = get_register(r3);
+  set_simd_reg_from_int(m4, r1, index, value);
+  return length;
+}
+
+EVALUATE(VLREP) {
+  DCHECK_OPCODE(VLREP);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  uint64_t mem_val = 0;
+  switch (m3) {
+    case 0:
+      mem_val = ReadBU(addr);
+      for (int i = 0; i < 16; i++) set_simd_reg_from_int(m3, r1, i, mem_val);
+      break;
+    case 1:
+      mem_val = ReadHU(addr, instr);
+      for (int i = 0; i < 8; i++) set_simd_reg_from_int(m3, r1, i, mem_val);
+      break;
+    case 2:
+      mem_val = ReadWU(addr, instr);
+      for (int i = 0; i < 4; i++) set_simd_reg_from_int(m3, r1, i, mem_val);
+      break;
+    case 3:
+      mem_val = ReadDW(addr);
+      set_simd_reg_from_int(m3, r1, 0, mem_val);
+      set_simd_reg_from_int(m3, r1, 1, mem_val);
+      break;
+    default:
+      UNREACHABLE();
+      break;
+  }
+  return length;
+}
+
+EVALUATE(VREPI) {
+  DCHECK_OPCODE(VREPI);
+  DECODE_VRI_A_INSTRUCTION(r1, i2, m3);
+  switch (m3) {
+    case 0:
+      for (int i = 0; i < 16; i++) set_simd_reg_from_int(m3, r1, i, i2);
+      break;
+    case 1:
+      for (int i = 0; i < 8; i++) set_simd_reg_from_int(m3, r1, i, i2);
+      break;
+    case 2:
+      for (int i = 0; i < 4; i++) set_simd_reg_from_int(m3, r1, i, i2);
+      break;
+    case 3:
+      set_simd_reg_from_int(m3, r1, 0, i2);
+      set_simd_reg_from_int(m3, r1, 1, i2);
+      break;
+    default:
+      UNREACHABLE();
+      break;
+  }
+  return length;
+}
+
+EVALUATE(VLR) {
+  DCHECK_OPCODE(VLR);
+  DECODE_VRR_A_INSTRUCTION(r1, r2, m5, m4, m3);
+  USE(m5);
+  USE(m4);
+  USE(m3);
+  int64_t temp = get_int_from_simd_reg(3, r2, 0);
+  set_simd_reg_from_int(3, r1, 0, temp);
+  temp = get_int_from_simd_reg(3, r2, 1);
+  set_simd_reg_from_int(3, r1, 1, temp);
+  return length;
+}
+
+EVALUATE(VSTEF) {
+  DCHECK_OPCODE(VSTEF);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  int32_t value = get_int_from_simd_reg(2, r1, m3);
+  WriteW(addr, value, instr);
+  return length;
+}
+
+EVALUATE(VLEF) {
+  DCHECK_OPCODE(VLEF);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  int32_t value = ReadW(addr, instr);
+  set_simd_reg_from_int(2, r1, m3, value);
+  return length;
+}
+
 EVALUATE(VFA) {
   DCHECK_OPCODE(VFA);
   DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4);
   USE(m6);
-  USE(m5);
-  USE(m4);
-  DCHECK_EQ(m5, 8);
-  DCHECK_EQ(m4, 3);
-  double r2_val = get_double_from_d_register(r2);
-  double r3_val = get_double_from_d_register(r3);
-  double r1_val = r2_val + r3_val;
-  set_d_register_from_double(r1, r1_val);
+  switch (m4) {
+    case 2:
+      if (m5 == 8) {
+        float src1 = get_float_from_simd_reg(r2, 0);
+        float src2 = get_float_from_simd_reg(r3, 0);
+        set_simd_reg_from_float(r1, 0, src1 + src2);
+      } else {
+        DCHECK_EQ(m5, 0);
+        for (int i = 0; i < 4; i++) {
+          float src1 = get_float_from_simd_reg(r2, i);
+          float src2 = get_float_from_simd_reg(r3, i);
+          set_simd_reg_from_float(r1, i, src1 + src2);
+        }
+      }
+      break;
+    case 3:
+      if (m5 == 8) {
+        double src1 = get_double_from_simd_reg(r2, 0);
+        double src2 = get_double_from_simd_reg(r3, 0);
+        set_simd_reg_from_double(r1, 0, src1 + src2);
+      } else {
+        DCHECK_EQ(m5, 0);
+        for (int i = 0; i < 2; i++) {
+          double src1 = get_double_from_simd_reg(r2, i);
+          double src2 = get_double_from_simd_reg(r3, i);
+          set_simd_reg_from_double(r1, i, src1 + src2);
+        }
+      }
+      break;
+    default:
+      UNREACHABLE();
+      break;
+  }
   return length;
 }
 
@@ -2817,14 +3029,39 @@ EVALUATE(VFS) {
   DCHECK_OPCODE(VFS);
   DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4);
   USE(m6);
-  USE(m5);
-  USE(m4);
-  DCHECK_EQ(m5, 8);
-  DCHECK_EQ(m4, 3);
-  double r2_val = get_double_from_d_register(r2);
-  double r3_val = get_double_from_d_register(r3);
-  double r1_val = r2_val - r3_val;
-  set_d_register_from_double(r1, r1_val);
+  switch (m4) {
+    case 2:
+      if (m5 == 8) {
+        float src1 = get_float_from_simd_reg(r2, 0);
+        float src2 = get_float_from_simd_reg(r3, 0);
+        set_simd_reg_from_float(r1, 0, src1 - src2);
+      } else {
+        DCHECK_EQ(m5, 0);
+        for (int i = 0; i < 4; i++) {
+          float src1 = get_float_from_simd_reg(r2, i);
+          float src2 = get_float_from_simd_reg(r3, i);
+          set_simd_reg_from_float(r1, i, src1 - src2);
+        }
+      }
+      break;
+    case 3:
+      if (m5 == 8) {
+        double src1 = get_double_from_simd_reg(r2, 0);
+        double src2 = get_double_from_simd_reg(r3, 0);
+        set_simd_reg_from_double(r1, 0, src1 - src2);
+      } else {
+        DCHECK_EQ(m5, 0);
+        for (int i = 0; i < 2; i++) {
+          double src1 = get_double_from_simd_reg(r2, i);
+          double src2 = get_double_from_simd_reg(r3, i);
+          set_simd_reg_from_double(r1, i, src1 - src2);
+        }
+      }
+      break;
+    default:
+      UNREACHABLE();
+      break;
+  }
   return length;
 }
 
@@ -2832,14 +3069,39 @@ EVALUATE(VFM) {
   DCHECK_OPCODE(VFM);
   DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4);
   USE(m6);
-  USE(m5);
-  USE(m4);
-  DCHECK_EQ(m5, 8);
-  DCHECK_EQ(m4, 3);
-  double r2_val = get_double_from_d_register(r2);
-  double r3_val = get_double_from_d_register(r3);
-  double r1_val = r2_val * r3_val;
-  set_d_register_from_double(r1, r1_val);
+  switch (m4) {
+    case 2:
+      if (m5 == 8) {
+        float src1 = get_float_from_simd_reg(r2, 0);
+        float src2 = get_float_from_simd_reg(r3, 0);
+        set_simd_reg_from_float(r1, 0, src1 * src2);
+      } else {
+        DCHECK_EQ(m5, 0);
+        for (int i = 0; i < 4; i++) {
+          float src1 = get_float_from_simd_reg(r2, i);
+          float src2 = get_float_from_simd_reg(r3, i);
+          set_simd_reg_from_float(r1, i, src1 * src2);
+        }
+      }
+      break;
+    case 3:
+      if (m5 == 8) {
+        double src1 = get_double_from_simd_reg(r2, 0);
+        double src2 = get_double_from_simd_reg(r3, 0);
+        set_simd_reg_from_double(r1, 0, src1 * src2);
+      } else {
+        DCHECK_EQ(m5, 0);
+        for (int i = 0; i < 2; i++) {
+          double src1 = get_double_from_simd_reg(r2, i);
+          double src2 = get_double_from_simd_reg(r3, i);
+          set_simd_reg_from_double(r1, i, src1 * src2);
+        }
+      }
+      break;
+    default:
+      UNREACHABLE();
+      break;
+  }
   return length;
 }
 
@@ -2847,14 +3109,39 @@ EVALUATE(VFD) {
   DCHECK_OPCODE(VFD);
   DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4);
   USE(m6);
-  USE(m5);
-  USE(m4);
-  DCHECK_EQ(m5, 8);
-  DCHECK_EQ(m4, 3);
-  double r2_val = get_double_from_d_register(r2);
-  double r3_val = get_double_from_d_register(r3);
-  double r1_val = r2_val / r3_val;
-  set_d_register_from_double(r1, r1_val);
+  switch (m4) {
+    case 2:
+      if (m5 == 8) {
+        float src1 = get_float_from_simd_reg(r2, 0);
+        float src2 = get_float_from_simd_reg(r3, 0);
+        set_simd_reg_from_float(r1, 0, src1 / src2);
+      } else {
+        DCHECK_EQ(m5, 0);
+        for (int i = 0; i < 4; i++) {
+          float src1 = get_float_from_simd_reg(r2, i);
+          float src2 = get_float_from_simd_reg(r3, i);
+          set_simd_reg_from_float(r1, i, src1 / src2);
+        }
+      }
+      break;
+    case 3:
+      if (m5 == 8) {
+        double src1 = get_double_from_simd_reg(r2, 0);
+        double src2 = get_double_from_simd_reg(r3, 0);
+        set_simd_reg_from_double(r1, 0, src1 / src2);
+      } else {
+        DCHECK_EQ(m5, 0);
+        for (int i = 0; i < 2; i++) {
+          double src1 = get_double_from_simd_reg(r2, i);
+          double src2 = get_double_from_simd_reg(r3, i);
+          set_simd_reg_from_double(r1, i, src1 / src2);
+        }
+      }
+      break;
+    default:
+      UNREACHABLE();
+      break;
+  }
   return length;
 }
 
@@ -3465,8 +3752,10 @@ EVALUATE(SLR) {
 EVALUATE(LDR) {
   DCHECK_OPCODE(LDR);
   DECODE_RR_INSTRUCTION(r1, r2);
-  int64_t r2_val = get_d_register(r2);
-  set_d_register(r1, r2_val);
+  int64_t value = get_int_from_simd_reg(3, r2, 0);
+  set_simd_reg_from_int(3, r1, 0, value);
+  value = get_int_from_simd_reg(3, r2, 1);
+  set_simd_reg_from_int(3, r1, 1, value);
   return length;
 }
 

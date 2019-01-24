@@ -305,6 +305,9 @@ ArchOpcode SelectLoadOpcode(Node* node) {
     case MachineRepresentation::kWord32:
       opcode = kS390_LoadWordU32;
       break;
+    case MachineRepresentation::kSimd128:
+      opcode = kS390_LoadSimd128;
+      break;
 #if V8_TARGET_ARCH_S390X
     case MachineRepresentation::kTaggedSigned:   // Fall through.
     case MachineRepresentation::kTaggedPointer:  // Fall through.
@@ -315,7 +318,6 @@ ArchOpcode SelectLoadOpcode(Node* node) {
 #else
     case MachineRepresentation::kWord64:  // Fall through.
 #endif
-    case MachineRepresentation::kSimd128:  // Fall through.
     case MachineRepresentation::kNone:
     default:
       UNREACHABLE();
@@ -786,6 +788,9 @@ static void VisitGeneralStore(
           value = value->InputAt(0);
         }
         break;
+      case MachineRepresentation::kSimd128:
+        opcode = kS390_StoreSimd128;
+        break;
 #if V8_TARGET_ARCH_S390X
       case MachineRepresentation::kTaggedSigned:   // Fall through.
       case MachineRepresentation::kTaggedPointer:  // Fall through.
@@ -800,7 +805,6 @@ static void VisitGeneralStore(
 #else
       case MachineRepresentation::kWord64:  // Fall through.
 #endif
-      case MachineRepresentation::kSimd128:  // Fall through.
       case MachineRepresentation::kNone:
         UNREACHABLE();
         return;
@@ -2170,7 +2174,16 @@ void InstructionSelector::EmitPrepareArguments(
       if (input.node == nullptr) continue;
       Emit(kS390_StoreToStackSlot, g.NoOutput(), g.UseRegister(input.node),
            g.TempImmediate(slot));
-      ++slot;
+      //++slot;
+      if (input.location.GetType().representation() ==
+          MachineRepresentation::kFloat64) {
+        slot += (kDoubleSize / kPointerSize);
+      } else if (input.location.GetType().representation() ==
+                 MachineRepresentation::kSimd128) {
+        slot += (kSimd128Size / kPointerSize);
+      } else {
+        slot += 1;
+      }
     }
   } else {
     // Push any stack arguments.
@@ -2179,10 +2192,15 @@ void InstructionSelector::EmitPrepareArguments(
 
     for (PushParameter input : *arguments) {
       if (input.node == nullptr) continue;
-      num_slots += input.location.GetType().representation() ==
-                           MachineRepresentation::kFloat64
-                       ? kDoubleSize / kSystemPointerSize
-                       : 1;
+      if (input.location.GetType().representation() ==
+          MachineRepresentation::kFloat64) {
+        num_slots += (kDoubleSize / kPointerSize);
+      } else if (input.location.GetType().representation() ==
+                 MachineRepresentation::kSimd128) {
+        num_slots += (kSimd128Size / kPointerSize);
+      } else {
+        num_slots += 1;
+      }
     }
     Emit(kS390_StackClaim, g.NoOutput(), g.TempImmediate(num_slots));
     for (PushParameter input : *arguments) {
@@ -2190,10 +2208,15 @@ void InstructionSelector::EmitPrepareArguments(
       if (input.node) {
         Emit(kS390_StoreToStackSlot, g.NoOutput(), g.UseRegister(input.node),
              g.TempImmediate(slot));
-        slot += input.location.GetType().representation() ==
-                        MachineRepresentation::kFloat64
-                    ? (kDoubleSize / kSystemPointerSize)
-                    : 1;
+        if (input.location.GetType().representation() ==
+            MachineRepresentation::kFloat64) {
+          slot += (kDoubleSize / kPointerSize);
+        } else if (input.location.GetType().representation() ==
+                   MachineRepresentation::kSimd128) {
+          slot += (kSimd128Size / kPointerSize);
+        } else {
+          slot += 1;
+        }
       }
     }
     DCHECK(num_slots == slot);
@@ -2461,11 +2484,42 @@ void InstructionSelector::VisitWord64AtomicStore(Node* node) {
   VisitGeneralStore(this, node, rep);
 }
 
-void InstructionSelector::VisitI32x4Splat(Node* node) { UNIMPLEMENTED(); }
+#define SIMD_TYPES(V) \
+  V(F32x4)            \
+  V(I32x4)            \
+  V(I16x8)            \
+  V(I8x16)
 
-void InstructionSelector::VisitI32x4ExtractLane(Node* node) { UNIMPLEMENTED(); }
+#define VISIT_SIMD_SPLAT(Type)                               \
+  void InstructionSelector::Visit##Type##Splat(Node* node) { \
+    S390OperandGenerator g(this);                            \
+    Emit(kS390_##Type##Splat, g.DefineAsRegister(node),      \
+         g.Use(node->InputAt(0)));                           \
+  }
+SIMD_TYPES(VISIT_SIMD_SPLAT)
+#undef VISIT_SIMD_SPLAT
 
-void InstructionSelector::VisitI32x4ReplaceLane(Node* node) { UNIMPLEMENTED(); }
+#define VISIT_SIMD_EXTRACT_LANE(Type)                              \
+  void InstructionSelector::Visit##Type##ExtractLane(Node* node) { \
+    S390OperandGenerator g(this);                                  \
+    int32_t lane = OpParameter<int32_t>(node->op());               \
+    Emit(kS390_##Type##ExtractLane, g.DefineAsRegister(node),      \
+         g.UseRegister(node->InputAt(0)), g.UseImmediate(lane));   \
+  }
+SIMD_TYPES(VISIT_SIMD_EXTRACT_LANE)
+#undef VISIT_SIMD_EXTRACT_LANE
+
+#define VISIT_SIMD_REPLACE_LANE(Type)                              \
+  void InstructionSelector::Visit##Type##ReplaceLane(Node* node) { \
+    S390OperandGenerator g(this);                                  \
+    int32_t lane = OpParameter<int32_t>(node->op());               \
+    Emit(kS390_##Type##ReplaceLane, g.DefineSameAsFirst(node),     \
+         g.UseRegister(node->InputAt(0)), g.UseImmediate(lane),    \
+         g.Use(node->InputAt(1)));                                 \
+  }
+SIMD_TYPES(VISIT_SIMD_REPLACE_LANE)
+#undef VISIT_SIMD_REPLACE_LANE
+#undef SIMD_TYPES
 
 void InstructionSelector::VisitI32x4Add(Node* node) { UNIMPLEMENTED(); }
 
@@ -2500,12 +2554,6 @@ void InstructionSelector::VisitI32x4GeS(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitI32x4GtU(Node* node) { UNIMPLEMENTED(); }
 
 void InstructionSelector::VisitI32x4GeU(Node* node) { UNIMPLEMENTED(); }
-
-void InstructionSelector::VisitI16x8Splat(Node* node) { UNIMPLEMENTED(); }
-
-void InstructionSelector::VisitI16x8ExtractLane(Node* node) { UNIMPLEMENTED(); }
-
-void InstructionSelector::VisitI16x8ReplaceLane(Node* node) { UNIMPLEMENTED(); }
 
 void InstructionSelector::VisitI16x8Shl(Node* node) { UNIMPLEMENTED(); }
 
@@ -2558,12 +2606,6 @@ void InstructionSelector::VisitI16x8GtU(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitI16x8GeU(Node* node) { UNIMPLEMENTED(); }
 
 void InstructionSelector::VisitI8x16Neg(Node* node) { UNIMPLEMENTED(); }
-
-void InstructionSelector::VisitI8x16Splat(Node* node) { UNIMPLEMENTED(); }
-
-void InstructionSelector::VisitI8x16ExtractLane(Node* node) { UNIMPLEMENTED(); }
-
-void InstructionSelector::VisitI8x16ReplaceLane(Node* node) { UNIMPLEMENTED(); }
 
 void InstructionSelector::VisitI8x16Add(Node* node) { UNIMPLEMENTED(); }
 
@@ -2622,12 +2664,6 @@ void InstructionSelector::VisitF32x4Ne(Node* node) { UNIMPLEMENTED(); }
 void InstructionSelector::VisitF32x4Lt(Node* node) { UNIMPLEMENTED(); }
 
 void InstructionSelector::VisitF32x4Le(Node* node) { UNIMPLEMENTED(); }
-
-void InstructionSelector::VisitF32x4Splat(Node* node) { UNIMPLEMENTED(); }
-
-void InstructionSelector::VisitF32x4ExtractLane(Node* node) { UNIMPLEMENTED(); }
-
-void InstructionSelector::VisitF32x4ReplaceLane(Node* node) { UNIMPLEMENTED(); }
 
 void InstructionSelector::EmitPrepareResults(
     ZoneVector<PushParameter>* results, const CallDescriptor* call_descriptor,
