@@ -3889,6 +3889,10 @@ void TurboAssembler::LoadFloat32ConvertToDouble(DoubleRegister dst,
   ldebr(dst, dst);
 }
 
+void TurboAssembler::LoadSimd128(Simd128Register dst, const MemOperand& mem) {
+  vl(dst, mem, Condition(0));
+}
+
 // Store Double Precision (64-bit) Floating Point number to memory
 void TurboAssembler::StoreDouble(DoubleRegister dst, const MemOperand& mem) {
   if (is_uint12(mem.offset())) {
@@ -3914,6 +3918,10 @@ void TurboAssembler::StoreDoubleAsFloat32(DoubleRegister src,
                                           DoubleRegister scratch) {
   ledbr(scratch, src);
   StoreFloat32(scratch, mem);
+}
+
+void TurboAssembler::StoreSimd128(Simd128Register src, const MemOperand& mem) {
+  vst(src, mem, Condition(0));
 }
 
 void TurboAssembler::AddFloat32(DoubleRegister dst, const MemOperand& opnd,
@@ -4353,6 +4361,31 @@ void TurboAssembler::SwapDouble(MemOperand src, MemOperand dst,
   LoadDouble(scratch_1, dst);
   StoreDouble(scratch_0, dst);
   StoreDouble(scratch_1, src);
+}
+
+void TurboAssembler::SwapSimd128(Simd128Register src, Simd128Register dst,
+                                 Simd128Register scratch) {
+  if (src == dst) return;
+  vlr(scratch, src, Condition(0), Condition(0), Condition(0));
+  vlr(src, dst, Condition(0), Condition(0), Condition(0));
+  vlr(dst, scratch, Condition(0), Condition(0), Condition(0));
+}
+
+void TurboAssembler::SwapSimd128(Simd128Register src, MemOperand dst,
+                                 Simd128Register scratch) {
+  DCHECK(!AreAliased(src, scratch));
+  vlr(scratch, src, Condition(0), Condition(0), Condition(0));
+  LoadSimd128(src, dst);
+  StoreSimd128(scratch, dst);
+}
+
+void TurboAssembler::SwapSimd128(MemOperand src, MemOperand dst,
+                                 Simd128Register scratch_0,
+                                 Simd128Register scratch_1) {
+  LoadSimd128(scratch_0, src);
+  LoadSimd128(scratch_1, dst);
+  StoreSimd128(scratch_0, dst);
+  StoreSimd128(scratch_1, src);
 }
 
 void TurboAssembler::ResetSpeculationPoisonRegister() {
