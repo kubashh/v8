@@ -22,6 +22,30 @@
       "revId": "886407aa0f7f7d7f8d50a6ad7db8e155ebb821be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa142b6d_2ef78aac",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-01-25T20:51:43Z",
+      "side": 1,
+      "message": "Good point. Done.",
+      "parentUuid": "056eb525_5f2f4425",
+      "range": {
+        "startLine": 60,
+        "startChar": 58,
+        "endLine": 60,
+        "endChar": 77
+      },
+      "revId": "886407aa0f7f7d7f8d50a6ad7db8e155ebb821be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
