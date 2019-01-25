@@ -83,7 +83,7 @@ void EXPECT_CALL(double expected, Handle<JSFunction> jsfunc,
     CHECK_EQ(expected, Smi::ToInt(*result));
   } else {
     CHECK(result->IsHeapNumber());
-    CHECK_FLOAT_EQ(expected, HeapNumber::cast(*result)->value());
+    CHECK_DOUBLE_EQ(expected, HeapNumber::cast(*result)->value());
   }
 }
 
