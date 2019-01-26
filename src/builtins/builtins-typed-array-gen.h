@@ -6,6 +6,7 @@
 #define V8_BUILTINS_BUILTINS_TYPED_ARRAY_GEN_H_
 
 #include "src/code-stub-assembler.h"
+#include "torque-generated/builtins-typed-array-from-dsl-gen.h"
 
 namespace v8 {
 namespace internal {
@@ -51,6 +52,9 @@ class TypedArrayBuiltinsAssembler : public CodeStubAssembler {
 
   // Returns the byte size of an element for a TypedArray elements kind.
   TNode<IntPtrT> GetTypedArrayElementSize(TNode<Word32T> elements_kind);
+
+  TypedArrayBuiltinsFromDSLAssembler::TypedArrayElementsInfo
+  GetTypedArrayElementsInfo(TNode<JSTypedArray> typed_array);
 
   TNode<JSArrayBuffer> LoadTypedArrayBuffer(TNode<JSTypedArray> typed_array) {
     return LoadObjectField<JSArrayBuffer>(typed_array,
