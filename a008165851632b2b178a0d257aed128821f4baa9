@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc9aa91a_710957b4",
+        "filename": "src/builtins/builtins-typed-array-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-27T01:40:57Z",
+      "side": 1,
+      "message": "In the end (after I port TypedArrayInitialize), think of this as the replacement for TypedArrayBuiltinsAssembler\u0027s LoadMapForType and GetTypedArrayElementSize for use cases that need both.  As LoadMapForType is only used by TypedArrayInitialize and TypedArrayInitializeBuffer, I was planning on removing it once I port TypedArrayInitialize.\n\nHappy to split this out in a separate CL if anyone feels strongly about it.",
+      "revId": "a008165851632b2b178a0d257aed128821f4baa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
