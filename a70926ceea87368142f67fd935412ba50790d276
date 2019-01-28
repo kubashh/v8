@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "721a0050_de6aaa5c",
+        "filename": "src/builtins/array-every.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-28T13:27:50Z",
+      "side": 1,
+      "message": "every",
+      "range": {
+        "startLine": 10,
+        "startChar": 48,
+        "endLine": 10,
+        "endChar": 55
+      },
+      "revId": "a70926ceea87368142f67fd935412ba50790d276",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79723142_85d14768",
+        "filename": "src/builtins/array-every.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-28T13:27:50Z",
+      "side": 1,
+      "message": "some",
+      "range": {
+        "startLine": 31,
+        "startChar": 48,
+        "endLine": 31,
+        "endChar": 55
+      },
+      "revId": "a70926ceea87368142f67fd935412ba50790d276",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60486288_05535484",
+        "filename": "src/builtins/array-every.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-28T13:27:50Z",
+      "side": 1,
+      "message": "FastJSArray. This also makes the cast below unnecessary. Same for some.",
+      "range": {
+        "startLine": 88,
+        "startChar": 9,
+        "endLine": 88,
+        "endChar": 16
+      },
+      "revId": "a70926ceea87368142f67fd935412ba50790d276",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a48198a_5f19d14d",
+        "filename": "src/builtins/array-every.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-28T13:27:50Z",
+      "side": 1,
+      "message": "nit: That\u0027s a different style from the current map implementation.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 49
+      },
+      "revId": "a70926ceea87368142f67fd935412ba50790d276",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5c726e4_50706151",
+        "filename": "src/builtins/array-every.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-28T13:27:50Z",
+      "side": 1,
+      "message": "nit: This could be moved into the label Bailout handler, making the k variable unnecessary. Same for ArraySome.",
+      "range": {
+        "startLine": 167,
+        "startChar": 6,
+        "endLine": 168,
+        "endChar": 67
+      },
+      "revId": "a70926ceea87368142f67fd935412ba50790d276",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31a9965a_78462b28",
+        "filename": "src/builtins/array-some.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-28T13:27:50Z",
+      "side": 1,
+      "message": "some",
+      "range": {
+        "startLine": 10,
+        "startChar": 48,
+        "endLine": 10,
+        "endChar": 55
+      },
+      "revId": "a70926ceea87368142f67fd935412ba50790d276",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c3c7c23_ede6ac97",
+        "filename": "src/builtins/array-some.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-28T13:27:50Z",
+      "side": 1,
+      "message": "some",
+      "range": {
+        "startLine": 134,
+        "startChar": 57,
+        "endLine": 134,
+        "endChar": 63
+      },
+      "revId": "a70926ceea87368142f67fd935412ba50790d276",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0803914_a38be6ec",
+        "filename": "src/builtins/array-some.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-01-28T13:27:50Z",
+      "side": 1,
+      "message": "This try doesn\u0027t have any handler.",
+      "range": {
+        "startLine": 159,
+        "startChar": 6,
+        "endLine": 159,
+        "endChar": 11
+      },
+      "revId": "a70926ceea87368142f67fd935412ba50790d276",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
