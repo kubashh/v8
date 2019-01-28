@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bd99e197_93e4e140",
+        "filename": "test/cctest/wasm/wasm-run-utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-01-28T15:59:56Z",
+      "side": 1,
+      "message": "Done (all except the variable number of arguments). There are two call-site that determines the number of argument passed from a local variable.",
+      "parentUuid": "7fd310c5_2ca3e27b",
+      "revId": "aea2e90ade55aa5357d892bb99233c60e61b9fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90f4bfb1_a7533950",
         "filename": "test/cctest/wasm/wasm-run-utils.h",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "aea2e90ade55aa5357d892bb99233c60e61b9fa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24841360_fdc10bc7",
+        "filename": "test/cctest/wasm/wasm-run-utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-01-28T15:59:56Z",
+      "side": 1,
+      "message": "Done. But used {function()-\u003efunc_index} instead of the hardcoding 0 here.",
+      "parentUuid": "90f4bfb1_a7533950",
+      "revId": "aea2e90ade55aa5357d892bb99233c60e61b9fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
