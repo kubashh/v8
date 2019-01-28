@@ -1069,6 +1069,8 @@ template <typename V>
 static inline V ByteReverse(V value) {
   size_t size_of_v = sizeof(value);
   switch (size_of_v) {
+    case 1:
+      return value;
     case 2:
 #if V8_HAS_BUILTIN_BSWAP16
       return static_cast<V>(__builtin_bswap16(static_cast<uint16_t>(value)));
