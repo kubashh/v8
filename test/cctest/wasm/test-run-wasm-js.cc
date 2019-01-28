@@ -74,38 +74,34 @@ ManuallyImportedJSFunction CreateJSSelector(FunctionSig* sig, int which) {
 WASM_EXEC_TEST(Run_Int32Sub_jswrapped) {
   WasmRunner<int, int, int> r(execution_tier);
   BUILD(r, WASM_I32_SUB(WASM_GET_LOCAL(0), WASM_GET_LOCAL(1)));
-  Handle<JSFunction> jsfunc = r.builder().WrapCode(r.function()->func_index);
 
-  EXPECT_CALL(33, jsfunc, 44, 11);
-  EXPECT_CALL(-8723487, jsfunc, -8000000, 723487);
+  r.CheckViaJS(33, 44, 11);
+  r.CheckViaJS(-8723487, -8000000, 723487);
 }
 
 WASM_EXEC_TEST(Run_Float32Div_jswrapped) {
   WasmRunner<float, float, float> r(execution_tier);
   BUILD(r, WASM_F32_DIV(WASM_GET_LOCAL(0), WASM_GET_LOCAL(1)));
-  Handle<JSFunction> jsfunc = r.builder().WrapCode(r.function()->func_index);
 
-  EXPECT_CALL(92, jsfunc, 46, 0.5);
-  EXPECT_CALL(64, jsfunc, -16, -0.25);
+  r.CheckViaJS(92, 46, 0.5);
+  r.CheckViaJS(64, -16, -0.25);
 }
 
 WASM_EXEC_TEST(Run_Float64Add_jswrapped) {
   WasmRunner<double, double, double> r(execution_tier);
   BUILD(r, WASM_F64_ADD(WASM_GET_LOCAL(0), WASM_GET_LOCAL(1)));
-  Handle<JSFunction> jsfunc = r.builder().WrapCode(r.function()->func_index);
 
-  EXPECT_CALL(3, jsfunc, 2, 1);
-  EXPECT_CALL(-5.5, jsfunc, -5.25, -0.25);
+  r.CheckViaJS(3, 2, 1);
+  r.CheckViaJS(-5.5, -5.25, -0.25);
 }
 
 WASM_EXEC_TEST(Run_I32Popcount_jswrapped) {
   WasmRunner<int, int> r(execution_tier);
   BUILD(r, WASM_I32_POPCNT(WASM_GET_LOCAL(0)));
-  Handle<JSFunction> jsfunc = r.builder().WrapCode(r.function()->func_index);
 
-  EXPECT_CALL(2, jsfunc, 9, 0);
-  EXPECT_CALL(3, jsfunc, 11, 0);
-  EXPECT_CALL(6, jsfunc, 0x3F, 0);
+  r.CheckViaJS(2, 9);
+  r.CheckViaJS(3, 11);
+  r.CheckViaJS(6, 0x3F);
 }
 
 WASM_EXEC_TEST(Run_CallJS_Add_jswrapped) {
@@ -118,15 +114,11 @@ WASM_EXEC_TEST(Run_CallJS_Add_jswrapped) {
   ManuallyImportedJSFunction import = {sigs.i_i(), js_function};
   WasmRunner<int, int> r(execution_tier, &import);
   uint32_t js_index = 0;
+  BUILD(r, WASM_CALL_FUNCTION(js_index, WASM_GET_LOCAL(0)));
 
-  WasmFunctionCompiler& t = r.NewFunction(sigs.i_i());
-  BUILD(t, WASM_CALL_FUNCTION(js_index, WASM_GET_LOCAL(0)));
-
-  Handle<JSFunction> jsfunc = r.builder().WrapCode(t.function_index());
-
-  EXPECT_CALL(101, jsfunc, 2, -8);
-  EXPECT_CALL(199, jsfunc, 100, -1);
-  EXPECT_CALL(-666666801, jsfunc, -666666900, -1);
+  r.CheckViaJS(101, 2);
+  r.CheckViaJS(199, 100);
+  r.CheckViaJS(-666666801, -666666900);
 }
 
 void RunJSSelectTest(ExecutionTier tier, int which) {
@@ -159,9 +151,9 @@ void RunJSSelectTest(ExecutionTier tier, int which) {
       t.Build(&code[0], &code[end]);
     }
 
-    Handle<JSFunction> jsfunc = r.builder().WrapCode(t.function_index());
     double expected = inputs.arg_d(which);
-    EXPECT_CALL(expected, jsfunc, 0.0, 0.0);
+    Handle<JSFunction> jsfunc = r.builder().WrapCode(t.function_index());
+    r.CheckViaJS(expected, jsfunc, nullptr, 0);
   }
 }
 
@@ -218,7 +210,6 @@ void RunWASMSelectTest(ExecutionTier tier, int which) {
     WasmRunner<void> r(tier);
     WasmFunctionCompiler& t = r.NewFunction(&sig);
     BUILD(t, WASM_GET_LOCAL(which));
-    Handle<JSFunction> jsfunc = r.builder().WrapCode(t.function_index());
 
     Handle<Object> args[] = {
         isolate->factory()->NewNumber(inputs.arg_d(0)),
@@ -232,7 +223,8 @@ void RunWASMSelectTest(ExecutionTier tier, int which) {
     };
 
     double expected = inputs.arg_d(which);
-    EXPECT_CALL(expected, jsfunc, args, kMaxParams);
+    Handle<JSFunction> jsfunc = r.builder().WrapCode(t.function_index());
+    r.CheckViaJS(expected, jsfunc, args, kMaxParams);
   }
 }
 
@@ -290,7 +282,6 @@ void RunWASMSelectAlignTest(ExecutionTier tier, int num_args, int num_params) {
     WasmRunner<void> r(tier);
     WasmFunctionCompiler& t = r.NewFunction(&sig);
     BUILD(t, WASM_GET_LOCAL(which));
-    Handle<JSFunction> jsfunc = r.builder().WrapCode(t.function_index());
 
     Handle<Object> args[] = {isolate->factory()->NewNumber(inputs.arg_d(0)),
                              isolate->factory()->NewNumber(inputs.arg_d(1)),
@@ -305,7 +296,8 @@ void RunWASMSelectAlignTest(ExecutionTier tier, int num_args, int num_params) {
 
     double nan = std::numeric_limits<double>::quiet_NaN();
     double expected = which < num_args ? inputs.arg_d(which) : nan;
-    EXPECT_CALL(expected, jsfunc, args, num_args);
+    Handle<JSFunction> jsfunc = r.builder().WrapCode(t.function_index());
+    r.CheckViaJS(expected, jsfunc, args, num_args);
   }
 }
 
@@ -405,8 +397,6 @@ void RunJSSelectAlignTest(ExecutionTier tier, int num_args, int num_params) {
     WasmFunctionCompiler& t = r.NewFunction(&sig);
     t.Build(&code[0], &code[end]);
 
-    Handle<JSFunction> jsfunc = r.builder().WrapCode(t.function_index());
-
     Handle<Object> args[] = {
         factory->NewNumber(inputs.arg_d(0)),
         factory->NewNumber(inputs.arg_d(1)),
@@ -422,7 +412,8 @@ void RunJSSelectAlignTest(ExecutionTier tier, int num_args, int num_params) {
 
     double nan = std::numeric_limits<double>::quiet_NaN();
     double expected = which < num_args ? inputs.arg_d(which) : nan;
-    EXPECT_CALL(expected, jsfunc, args, num_args);
+    Handle<JSFunction> jsfunc = r.builder().WrapCode(t.function_index());
+    r.CheckViaJS(expected, jsfunc, args, num_args);
   }
 }
 

@@ -491,15 +491,35 @@ class WasmRunner : public WasmRunnerBase {
     }
   }
 
-  Handle<Code> GetWrapperCode() { return wrapper_.GetWrapperCode(); }
-};
+  void CheckViaJS(double expected, Handle<JSFunction> jsfunc,
+                  Handle<Object>* buffer, int count) {
+    Isolate* isolate = builder_.isolate();
+    Handle<Object> global(isolate->context()->global_object(), isolate);
+    MaybeHandle<Object> retval =
+        Execution::Call(isolate, jsfunc, global, count, buffer);
 
-// TODO(mstarzinger): Rename these since they are not macros but functions.
-void EXPECT_CALL(double expected, Handle<JSFunction> jsfunc,
-                 Handle<Object>* buffer, int count);
-void EXPECT_CALL(double expected, Handle<JSFunction> jsfunc, double a,
-                 double b);
-void EXPECT_CALL(double expected, Handle<JSFunction> jsfunc, double a);
+    CHECK(!retval.is_null());
+    Handle<Object> result = retval.ToHandleChecked();
+    if (result->IsSmi()) {
+      CHECK_EQ(expected, Smi::ToInt(*result));
+    } else {
+      CHECK(result->IsHeapNumber());
+      CHECK_FLOAT_EQ(expected, HeapNumber::cast(*result)->value());
+    }
+  }
+
+  void CheckViaJS(double expected, ParamTypes... p) {
+    Isolate* isolate = builder_.isolate();
+    Handle<Object> buffer[] = {isolate->factory()->NewNumber(p)...};
+    if (jsfunc_.is_null()) jsfunc_ = builder_.WrapCode(function()->func_index);
+    return CheckViaJS(expected, jsfunc_, buffer, sizeof...(p));
+  }
+
+  Handle<Code> GetWrapperCode() { return wrapper_.GetWrapperCode(); }
+
+ private:
+  Handle<JSFunction> jsfunc_;
+};
 
 // A macro to define tests that run in different engine configurations.
 #define WASM_EXEC_TEST(name)                                                  \
