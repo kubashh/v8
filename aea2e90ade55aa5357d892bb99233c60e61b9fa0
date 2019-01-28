@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fd310c5_2ca3e27b",
+        "filename": "test/cctest/wasm/wasm-run-utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-28T15:26:25Z",
+      "side": 1,
+      "message": "Maybe put \"Call\" somewhere in the method name? \"CheckCallViaJS\"?\nAnd it seems that we always pass double constants as inputs, so we can probably use the same mechanism as below to simplify the call sites.\nAnd if this call is always preceded by a call to \"WrapCode\", we could include this here; this function would receive the expected value, function index, and a variable number of parameters. WDYT?",
+      "revId": "aea2e90ade55aa5357d892bb99233c60e61b9fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90f4bfb1_a7533950",
+        "filename": "test/cctest/wasm/wasm-run-utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-28T15:26:25Z",
+      "side": 1,
+      "message": "Note: This will always call function 0. Should we name the method \"CheckCallMainViaJS\"?\nAnd if we apply all simplifications proposed above, this method could just call the method above and pass 0 as function index.",
+      "revId": "aea2e90ade55aa5357d892bb99233c60e61b9fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
