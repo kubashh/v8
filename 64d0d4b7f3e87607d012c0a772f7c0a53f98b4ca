@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8804d76d_c90adb0b",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2345,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-28T13:53:39Z",
+      "side": 1,
+      "message": "neat ;)",
+      "revId": "64d0d4b7f3e87607d012c0a772f7c0a53f98b4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2c02f061_ce31084f",
+        "filename": "test/cctest/wasm/test-run-wasm-exceptions.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-28T13:53:39Z",
+      "side": 1,
+      "message": "Just use WASM_IF(...)",
+      "range": {
+        "startLine": 25,
+        "startChar": 26,
+        "endLine": 25,
+        "endChar": 46
+      },
+      "revId": "64d0d4b7f3e87607d012c0a772f7c0a53f98b4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73896034_1f3f7641",
+        "filename": "test/cctest/wasm/wasm-run-utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-01-28T13:53:39Z",
+      "side": 1,
+      "message": "Uh, can we leave a TODO to rename these? Should be possible to do so pretty mechanically.",
+      "revId": "64d0d4b7f3e87607d012c0a772f7c0a53f98b4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
