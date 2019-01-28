@@ -60,6 +60,9 @@ V8_BASE_EXPORT double cbrt(double x);
 // Returns exp(x)-1, the exponential of |x| minus 1.
 V8_BASE_EXPORT double expm1(double x);
 
+// Returns |x| to the power of |y|.
+V8_BASE_EXPORT double pow(double x, double y);
+
 // Returns the sine of |x|, where |x| is given in radians.
 V8_BASE_EXPORT double sin(double x);
 
