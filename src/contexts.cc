@@ -37,15 +37,14 @@ Handle<ScriptContextTable> ScriptContextTable::Extend(
   return result;
 }
 
-bool ScriptContextTable::Lookup(Isolate* isolate,
-                                Handle<ScriptContextTable> table,
-                                Handle<String> name, LookupResult* result) {
+bool ScriptContextTable::Lookup(Isolate* isolate, ScriptContextTable table,
+                                String name, LookupResult* result) {
+  DisallowHeapAllocation no_gc;
   for (int i = 0; i < table->used(); i++) {
-    Handle<Context> context = GetContext(isolate, table, i);
+    Context context = table->get_context(i);
     DCHECK(context->IsScriptContext());
-    Handle<ScopeInfo> scope_info(context->scope_info(), context->GetIsolate());
     int slot_index = ScopeInfo::ContextSlotIndex(
-        scope_info, name, &result->mode, &result->init_flag,
+        context->scope_info(), name, &result->mode, &result->init_flag,
         &result->maybe_assigned_flag);
 
     if (slot_index >= 0) {
@@ -56,7 +55,6 @@ bool ScriptContextTable::Lookup(Isolate* isolate,
   }
   return false;
 }
-
 
 bool Context::is_declaration_context() {
   if (IsFunctionContext() || IsNativeContext() || IsScriptContext() ||
@@ -219,7 +217,7 @@ Handle<Object> Context::Lookup(Handle<Context> context, Handle<String> name,
             context->global_object()->native_context()->script_context_table(),
             isolate);
         ScriptContextTable::LookupResult r;
-        if (ScriptContextTable::Lookup(isolate, script_contexts, name, &r)) {
+        if (ScriptContextTable::Lookup(isolate, *script_contexts, *name, &r)) {
           if (FLAG_trace_contexts) {
             Handle<Context> c = ScriptContextTable::GetContext(
                 isolate, script_contexts, r.context_index);
@@ -291,7 +289,7 @@ Handle<Object> Context::Lookup(Handle<Context> context, Handle<String> name,
       VariableMode mode;
       InitializationFlag flag;
       MaybeAssignedFlag maybe_assigned_flag;
-      int slot_index = ScopeInfo::ContextSlotIndex(scope_info, name, &mode,
+      int slot_index = ScopeInfo::ContextSlotIndex(*scope_info, *name, &mode,
                                                    &flag, &maybe_assigned_flag);
       DCHECK(slot_index < 0 || slot_index >= MIN_CONTEXT_SLOTS);
       if (slot_index >= 0) {
@@ -334,7 +332,7 @@ Handle<Object> Context::Lookup(Handle<Context> context, Handle<String> name,
         InitializationFlag flag;
         MaybeAssignedFlag maybe_assigned_flag;
         int cell_index =
-            scope_info->ModuleIndex(name, &mode, &flag, &maybe_assigned_flag);
+            scope_info->ModuleIndex(*name, &mode, &flag, &maybe_assigned_flag);
         if (cell_index != 0) {
           if (FLAG_trace_contexts) {
             PrintF("=> found in module imports or exports\n");
