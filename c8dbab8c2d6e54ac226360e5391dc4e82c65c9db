@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "77dbbd37_174d4b9a",
+        "filename": "src/contexts.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2019-01-28T10:58:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9118e4f_ce7e973b",
+      "range": {
+        "startLine": 216,
+        "startChar": 8,
+        "endLine": 216,
+        "endChar": 14
+      },
+      "revId": "c8dbab8c2d6e54ac226360e5391dc4e82c65c9db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbaf0b16_1c2631fe",
         "filename": "src/contexts.cc",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "3c2d52c7_02ab24fb",
+        "filename": "src/contexts.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2019-01-28T10:58:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbaf0b16_1c2631fe",
+      "range": {
+        "startLine": 288,
+        "startChar": 6,
+        "endLine": 288,
+        "endChar": 12
+      },
+      "revId": "c8dbab8c2d6e54ac226360e5391dc4e82c65c9db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "22df8502_eee6e261",
         "filename": "src/debug/debug-scopes.cc",
         "patchSetId": 7
@@ -59,6 +107,30 @@
       "writtenOn": "2019-01-23T15:52:38Z",
       "side": 1,
       "message": "this and those below don\u0027t need to take Handles either anymore?",
+      "range": {
+        "startLine": 864,
+        "startChar": 20,
+        "endLine": 864,
+        "endChar": 43
+      },
+      "revId": "c8dbab8c2d6e54ac226360e5391dc4e82c65c9db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9f2ba4a_449dd302",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 864,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2019-01-28T10:58:02Z",
+      "side": 1,
+      "message": "This is \"only\" used in the debugger where everything is handlified anyway. I don\u0027t think we\u0027ll gain anything here.",
+      "parentUuid": "22df8502_eee6e261",
       "range": {
         "startLine": 864,
         "startChar": 20,

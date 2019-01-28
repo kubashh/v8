@@ -22,6 +22,30 @@
       "revId": "f2227a2bce97615a56be84c1541232e61977d790",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4f304f3_a16ae1d7",
+        "filename": "test/cctest/scope-test-helper.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1132654
+      },
+      "writtenOn": "2019-01-28T10:58:02Z",
+      "side": 0,
+      "message": "Seems like a good idea, will do in a separate CL.",
+      "parentUuid": "00161d32_ca710a15",
+      "range": {
+        "startLine": 111,
+        "startChar": 31,
+        "endLine": 111,
+        "endChar": 40
+      },
+      "revId": "f2227a2bce97615a56be84c1541232e61977d790",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
