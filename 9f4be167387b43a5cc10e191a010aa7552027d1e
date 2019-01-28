@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba50bb11_26e98d4c",
+        "filename": "src/external-reference.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2019-01-28T19:04:49Z",
+      "side": 1,
+      "message": "I believe this should be \"BUILTIN_FP_FP_CALL\" instead of \"BUILTIN_FP_CALL\", since this function takes two arguments. We should probably have better names, I can see how easy it is to miss that.\n\nBut anyway, the reason this fails on Arm is a little tricky actually :-). The generated code to call the `pow` function is already correct (I checked) and it works on a native Arm platform. But it will fail in a simulator build, where we\u0027re running on x86 but simulating all generated Arm code. The reason this fails is that the Arm simulator needs to take care of calling the x86 `pow` function when it sees it, and it cannot tell how many arguments it needs from looking at the generated code alone. So it uses to external reference type to work out if the function needs one or two arguments.\n\nHope this helps.",
+      "revId": "9f4be167387b43a5cc10e191a010aa7552027d1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
