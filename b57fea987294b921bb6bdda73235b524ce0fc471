@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d468af70_cda7cd33",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-01-28T13:45:33Z",
+      "side": 1,
+      "message": "As discussed, lets add a brief comment here that this call-site create a copy of the passed {WasmError} object. You are right that the {const WasmError*} type above hints at that, but a comment to clarify never hurts. :)",
+      "range": {
+        "startLine": 1113,
+        "startChar": 64,
+        "endLine": 1113,
+        "endChar": 70
+      },
+      "revId": "b57fea987294b921bb6bdda73235b524ce0fc471",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
