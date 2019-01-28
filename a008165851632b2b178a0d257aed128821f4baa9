@@ -16,6 +16,23 @@
       "revId": "a008165851632b2b178a0d257aed128821f4baa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb3899a0_a222beda",
+        "filename": "src/builtins/builtins-typed-array-gen.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-28T09:10:59Z",
+      "side": 1,
+      "message": "nit: typo?",
+      "revId": "a008165851632b2b178a0d257aed128821f4baa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
