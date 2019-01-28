@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5577233_f3d3d405",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-28T14:32:20Z",
+      "side": 1,
+      "message": "Please copy the comment for this builder from the original file.",
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3673988a_e89b78f5",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-28T14:32:20Z",
+      "side": 1,
+      "message": "Is this matching full path in Gitiles URL? Why is it necessary?",
+      "range": {
+        "startLine": 167,
+        "startChar": 26,
+        "endLine": 167,
+        "endChar": 33
+      },
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "118a76e6_f87fa734",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-28T14:32:20Z",
+      "side": 1,
+      "message": "ditto: please copy comments and commented path_regexp over from old config",
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10c883e9_a31712f3",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-28T14:32:20Z",
+      "side": 1,
+      "message": "Are these default values?",
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
