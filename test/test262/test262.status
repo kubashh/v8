@@ -530,17 +530,8 @@
   # https://bugs.chromium.org/p/v8/issues/detail?id=8260
   'intl402/Locale/constructor-non-iana-canon': [FAIL],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=8261
-  'intl402/Locale/constructor-options-language-valid': [FAIL],
-
-  # https://bugs.chromium.org/p/v8/issues/detail?id=8262
-  'intl402/Locale/constructor-parse-twice': [FAIL],
-
   # https://bugs.chromium.org/p/v8/issues/detail?id=8246
   'intl402/Locale/constructor-tag': [FAIL],
-
-  # https://bugs.chromium.org/p/v8/issues/detail?id=8243
-  'intl402/Locale/extensions-private': [FAIL],
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=8236
   'intl402/Locale/likely-subtags': [FAIL],
@@ -625,9 +616,6 @@
   # https://bugs.chromium.org/p/v8/issues/detail?id=7833
   'built-ins/Atomics/wait/cannot-suspend-throws': [SKIP],
   'built-ins/Atomics/wait/undefined-index-defaults-to-zero': [SKIP],
-
-  # https://bugs.chromium.org/p/v8/issues/detail?id=8258
-  'intl402/Locale/constructor-options-language-valid-undefined': [FAIL],
 
   ##################### DELIBERATE INCOMPATIBILITIES #####################
 
