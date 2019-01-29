@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "fda3beca_cc0b95b7",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-01-29T11:55:14Z",
+      "side": 1,
+      "message": "Ack. Lets leave it as it is for now.",
+      "parentUuid": "dcb0e625_45d2a371",
+      "range": {
+        "startLine": 16,
+        "startChar": 6,
+        "endLine": 17,
+        "endChar": 40
+      },
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d5577233_f3d3d405",
         "filename": "commit-queue.cfg",
         "patchSetId": 4
@@ -165,6 +189,30 @@
       "side": 1,
       "message": "link to doc, which is now public and working, is at the top. \n\nhere is for the specific struct you are asking https://chromium.googlesource.com/infra/luci/luci-go/+/master/cq/api/config/v2/cq.proto#360 \nadmittedly, this isn\u0027t much...",
       "parentUuid": "dd27d43c_941713ce",
+      "range": {
+        "startLine": 195,
+        "startChar": 8,
+        "endLine": 196,
+        "endChar": 23
+      },
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad8d3ed6_041aca2c",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-01-29T11:55:14Z",
+      "side": 1,
+      "message": "Aha, thank! Lemme try to interpret what I understand based on the doc.\n- Every failed build can be retried maximum once.\n- One CQ attempt retries max two builds in total.\n- If a build fails with a timeout it weighs double, i.e. only one such failure is retried.",
+      "parentUuid": "3cc068eb_710f7ec1",
       "range": {
         "startLine": 195,
         "startChar": 8,
