@@ -132,7 +132,7 @@ declare_args() {
   v8_use_siphash = false
 
   # Switches off inlining in V8.
-  v8_no_inline = false
+  v8_no_inline = true
 
   # Override OS page size when generating snapshot
   v8_os_page_size = "0"
