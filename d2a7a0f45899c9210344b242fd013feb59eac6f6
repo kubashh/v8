@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a3282a3_6920e9da",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2019-01-29T16:11:33Z",
+      "side": 1,
+      "message": "Could you gate this flag behind an ifdef so that it is only present if d8 was built with vtune support? Otherwise disabling it in gn would leave d8 with a non-functional flag.\n\nAlso, please move up to Dev shell flags, as this flag only applies to the dev shell and not all embeddings (like the other profilers).\n\nUltimately, we should clean this up so that d8 only flags do not appear here but that is not for this change.",
+      "range": {
+        "startLine": 1325,
+        "startChar": 0,
+        "endLine": 1325,
+        "endChar": 78
+      },
+      "revId": "d2a7a0f45899c9210344b242fd013feb59eac6f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
