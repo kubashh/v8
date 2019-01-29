@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "2293eefd_2bf26b5d",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-29T12:25:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fda3beca_cc0b95b7",
+      "range": {
+        "startLine": 16,
+        "startChar": 6,
+        "endLine": 17,
+        "endChar": 40
+      },
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5577233_f3d3d405",
         "filename": "commit-queue.cfg",
         "patchSetId": 4
@@ -134,6 +158,30 @@
       "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d251503c_e4f38a4a",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-29T12:25:02Z",
+      "side": 1,
+      "message": "So, this matches the whole URL up to /+/ part, correct?",
+      "parentUuid": "19cead51_b1807dd0",
+      "range": {
+        "startLine": 167,
+        "startChar": 26,
+        "endLine": 167,
+        "endChar": 33
+      },
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -225,6 +273,30 @@
     },
     {
       "key": {
+        "uuid": "1f94eeba_6921b851",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-29T12:25:02Z",
+      "side": 1,
+      "message": "IIUC, build timeouts are not retried at all since single_quota is set to 1 and timeout consumes 2. This is probably to prevent CQ overloading the system when it\u0027s already low on capacity.\n\nI\u0027d also reduce transient_failure_weight to 0.5 (or rather double everything else) such that infra failures get retried more times, but this is probably best done in a follow-up CL.",
+      "parentUuid": "ad8d3ed6_041aca2c",
+      "range": {
+        "startLine": 195,
+        "startChar": 8,
+        "endLine": 196,
+        "endChar": 23
+      },
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "10c883e9_a31712f3",
         "filename": "commit-queue.cfg",
         "patchSetId": 4
@@ -254,6 +326,24 @@
       "side": 1,
       "message": "they used to be, new defaults are 0.",
       "parentUuid": "10c883e9_a31712f3",
+      "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c7ba2d3_01acc02d",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-01-29T12:25:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2d6176ce_6f226421",
       "revId": "ac1ede91e993d1043c26c29f3f106ea8d0403775",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
