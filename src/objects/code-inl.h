@@ -539,7 +539,6 @@ bool Code::is_optimized_code() const { return kind() == OPTIMIZED_FUNCTION; }
 bool Code::is_wasm_code() const { return kind() == WASM_FUNCTION; }
 
 int Code::constant_pool_offset() const {
-  if (!FLAG_enable_embedded_constant_pool) return code_comments_offset();
   return READ_INT_FIELD(this, kConstantPoolOffset);
 }
 
@@ -550,9 +549,13 @@ void Code::set_constant_pool_offset(int value) {
 }
 
 int Code::constant_pool_size() const {
-  if (!FLAG_enable_embedded_constant_pool) return 0;
-  return code_comments_offset() - constant_pool_offset();
+  int code_comments_offset2 = code_comments_offset();
+  int const_pool_offset = constant_pool_offset();
+  CHECK_LE(const_pool_offset, code_comments_offset2);
+  int const_pool_size = code_comments_offset2 - const_pool_offset;
+  return const_pool_size;
 }
+
 Address Code::constant_pool() const {
   if (FLAG_enable_embedded_constant_pool) {
     int offset = constant_pool_offset();

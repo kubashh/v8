@@ -99,7 +99,6 @@ class Code : public HeapObject {
   inline void set_next_code_link(Object value);
 
   // [constant_pool offset]: Offset of the constant pool.
-  // Valid for FLAG_enable_embedded_constant_pool only
   inline int constant_pool_offset() const;
   inline void set_constant_pool_offset(int offset);
   inline int constant_pool_size() const;

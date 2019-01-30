@@ -277,8 +277,6 @@ void CodeGenerator::AssembleCode() {
     if (result_ != kSuccess) return;
   }
 
-  FinishCode();
-
   // Emit the jump tables.
   if (jump_tables_) {
     tasm()->Align(kSystemPointerSize);
@@ -304,6 +302,8 @@ void CodeGenerator::AssembleCode() {
                                     handlers_[i].handler->pos());
     }
   }
+
+  FinishCode();
 
   tasm()->FinalizeJumpOptimizationInfo();
 
