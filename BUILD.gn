@@ -74,7 +74,7 @@ declare_args() {
   v8_enable_gdbjit = ""
 
   # Sets -dENABLE_VTUNE_JIT_INTERFACE.
-  v8_enable_vtunejit = false
+  v8_enable_vtunejit = true
 
   # Sets -dENABLE_HANDLE_ZAPPING.
   v8_enable_handle_zapping = true
