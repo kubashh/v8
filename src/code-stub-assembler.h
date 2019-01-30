@@ -668,10 +668,18 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   }
 
   template <class... TArgs>
+  TNode<JSReceiver> ConstructWithTarget(TNode<Context> context,
+                                        TNode<JSReceiver> target,
+                                        TNode<JSReceiver> new_target,
+                                        TArgs... args) {
+    return CAST(ConstructJSWithTarget(CodeFactory::Construct(isolate()),
+                                      context, target, new_target,
+                                      implicit_cast<TNode<Object>>(args)...));
+  }
+  template <class... TArgs>
   TNode<JSReceiver> Construct(TNode<Context> context,
                               TNode<JSReceiver> new_target, TArgs... args) {
-    return CAST(ConstructJS(CodeFactory::Construct(isolate()), context,
-                            new_target, implicit_cast<TNode<Object>>(args)...));
+    return ConstructWithTarget(context, new_target, new_target, args...);
   }
 
   template <class A, class F, class G>

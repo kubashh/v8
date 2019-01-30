@@ -7,14 +7,16 @@
 namespace typed_array {
   extern builtin IterableToListMayPreserveHoles(Context, Object, Callable):
       JSArray;
-  extern builtin TypedArrayInitialize(implicit context: Context)(
-      JSTypedArray, PositiveSmi, PositiveSmi, Boolean, JSReceiver): void;
 
   extern macro ConstructorBuiltinsAssembler::EmitFastNewObject(
       implicit context: Context)(JSFunction, JSReceiver): JSTypedArray;
+  extern macro TypedArrayBuiltinsAssembler::AllocateEmptyOnHeapBuffer(
+      implicit context: Context)(JSTypedArray, uintptr): JSArrayBuffer;
+  extern macro TypedArrayBuiltinsAssembler::AllocateElements(
+      Map, uintptr, Number): FixedTypedArrayBase;
   extern macro TypedArrayBuiltinsAssembler::ByteLengthIsValid(Number): bool;
-  extern macro TypedArrayBuiltinsAssembler::CallCMemcpy(
-      RawPtr, RawPtr, uintptr): void;
+  extern macro TypedArrayBuiltinsAssembler::GetTypedArrayElementsInfo(
+      ElementsKind): TypedArrayElementsInfo;
   extern macro TypedArrayBuiltinsAssembler::IsSharedArrayBuffer(JSArrayBuffer):
       bool;
   extern macro TypedArrayBuiltinsAssembler::SetupTypedArray(
@@ -26,6 +28,63 @@ namespace typed_array {
       Map, String): never;
   extern runtime TypedArrayCopyElements(Context, JSTypedArray, Object, Number):
       void;
+
+  macro CalculateTotalElementsByteSize(
+      byteLength: uintptr, elementSize: PositiveSmi): uintptr {
+    const remainder: Smi = Cast<Smi>(SmiMod(
+        elementSize, Convert<Smi>(FromConstexpr<uintptr>(kObjectAlignment))))
+        otherwise unreachable;
+    if (remainder == 0) {
+      return byteLength + kFixedTypedArrayBaseHeaderSize;
+    }
+    return (byteLength + kFixedTypedArrayBaseAlignedHeaderSize) &
+        kObjectAlignmentMaskComplement;
+  }
+
+  transitioning builtin TypedArrayInitialize(implicit context: Context)(
+      initialize: Boolean, typedArray: JSTypedArray, length: PositiveSmi,
+      elementMap: Map, elementSize: PositiveSmi,
+      bufferConstructor: JSReceiver): Object {
+    const byteLengthNum = SmiMul(length, elementSize);
+    const byteLength = Convert<uintptr>(byteLengthNum);
+    const defaultConstructor = GetArrayBufferFunction();
+
+    try {
+      if (bufferConstructor != defaultConstructor) {
+        goto AttachBuffer(ConstructWithTarget(
+            defaultConstructor, bufferConstructor, byteLengthNum));
+      }
+
+      if (byteLength > kTypedArrayMaxSizeInHeap) goto AllocateOffHeap;
+
+      AllocateEmptyOnHeapBuffer(typedArray, byteLength);
+
+      const totalSize = CalculateTotalElementsByteSize(byteLength, elementSize);
+      const elements = AllocateElements(elementMap, totalSize, length);
+      typedArray.elements = elements;
+
+      if (initialize == True) {
+        CallCMemset(elements.data_ptr, 0, byteLength);
+      }
+    }
+    label AllocateOffHeap {
+      if (initialize == True) {
+        goto AttachBuffer(Construct(defaultConstructor, byteLengthNum));
+      } else {
+        goto AttachBuffer(Call(
+            context, GetArrayBufferNoInitFunction(), Undefined, byteLengthNum));
+      }
+    }
+    label AttachBuffer(bufferObj: Object) {
+      const buffer = Cast<JSArrayBuffer>(bufferObj) otherwise unreachable;
+      AttachBuffer(typedArray, buffer, elementMap, length, 0);
+    }
+
+    const byteOffset: uintptr = 0;
+    SetupTypedArray(typedArray, length, byteOffset, byteLength);
+
+    return Undefined;
+  }
 
   macro TypedArrayInitializeWithBuffer(
       typedArray: JSTypedArray, length: PositiveSmi, buffer: JSArrayBuffer,
@@ -41,7 +100,7 @@ namespace typed_array {
 
   // 22.2.4.2 TypedArray ( length )
   // ES #sec-typedarray-length
-  macro ConstructByLength(implicit context: Context)(
+  transitioning macro ConstructByLength(implicit context: Context)(
       typedArray: JSTypedArray, length: Object,
       elementsInfo: TypedArrayElementsInfo): void {
     const convertedLength: Number =
@@ -52,16 +111,16 @@ namespace typed_array {
     // TODO(7881): support larger-than-smi typed array lengths
     const positiveLength: PositiveSmi = Cast<PositiveSmi>(convertedLength)
         otherwise ThrowRangeError(context, kInvalidTypedArrayLength, length);
-    const defaultConstructor: JSFunction = GetArrayBufferFunction();
+    const defaultConstructor: Constructor = GetArrayBufferFunction();
     const initialize: Boolean = True;
     TypedArrayInitialize(
-        typedArray, positiveLength, elementsInfo.size, initialize,
-        defaultConstructor);
+        initialize, typedArray, positiveLength, elementsInfo.map,
+        elementsInfo.size, defaultConstructor);
   }
 
   // 22.2.4.4 TypedArray ( object )
   // ES #sec-typedarray-object
-  macro ConstructByArrayLike(implicit context: Context)(
+  transitioning macro ConstructByArrayLike(implicit context: Context)(
       typedArray: JSTypedArray, arrayLike: HeapObject, initialLength: Object,
       elementsInfo: TypedArrayElementsInfo,
       bufferConstructor: JSReceiver): void {
@@ -70,7 +129,8 @@ namespace typed_array {
         otherwise ThrowRangeError(context, kInvalidTypedArrayLength, initialLength);
     const initialize: Boolean = False;
     TypedArrayInitialize(
-        typedArray, length, elementsInfo.size, initialize, bufferConstructor);
+        initialize, typedArray, length, elementsInfo.map, elementsInfo.size,
+        bufferConstructor);
 
     try {
       const src: JSTypedArray = Cast<JSTypedArray>(arrayLike) otherwise IfSlow;
@@ -97,7 +157,7 @@ namespace typed_array {
 
   // 22.2.4.4 TypedArray ( object )
   // ES #sec-typedarray-object
-  macro ConstructByIterable(implicit context: Context)(
+  transitioning macro ConstructByIterable(implicit context: Context)(
       typedArray: JSTypedArray, iterable: JSReceiver, iteratorFn: Callable,
       elementsInfo: TypedArrayElementsInfo): void {
     const array: JSArray =
@@ -109,7 +169,7 @@ namespace typed_array {
 
   // 22.2.4.3 TypedArray ( typedArray )
   // ES #sec-typedarray-typedarray
-  macro ConstructByTypedArray(implicit context: Context)(
+  transitioning macro ConstructByTypedArray(implicit context: Context)(
       typedArray: JSTypedArray, srcTypedArray: JSTypedArray,
       elementsInfo: TypedArrayElementsInfo): void {
     let bufferConstructor: JSReceiver = GetArrayBufferFunction();
