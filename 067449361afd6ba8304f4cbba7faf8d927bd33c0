@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fde0507c_b7cc548c",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-30T13:38:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84680bbb_b50d9c55",
+      "revId": "067449361afd6ba8304f4cbba7faf8d927bd33c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab5c1552_85185876",
         "filename": "test/cctest/compiler/serializer-tester.cc",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "067449361afd6ba8304f4cbba7faf8d927bd33c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a98bca6_ad426100",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-30T13:38:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab5c1552_85185876",
+      "revId": "067449361afd6ba8304f4cbba7faf8d927bd33c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "067449361afd6ba8304f4cbba7faf8d927bd33c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72fd7de4_a268fc12",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-01-30T13:38:09Z",
+      "side": 1,
+      "message": "Done. I should eat more letters *before* I start writing code comments, so that I don\u0027t eat ones that we need :D",
+      "parentUuid": "aed3f87c_1d26226d",
+      "range": {
+        "startLine": 145,
+        "startChar": 17,
+        "endLine": 145,
+        "endChar": 18
+      },
+      "revId": "067449361afd6ba8304f4cbba7faf8d927bd33c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
