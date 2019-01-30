@@ -52,10 +52,9 @@ let not_var_e = [
   'const {f:e}'
 ];
 
-// Check that `for (var ... of ...)` cannot redeclare a simple catch variable
-// but `for (var ... in ...)` can.
+// Check that `for (var ... of/in ...)` can redeclare a simple catch variable.
 for (let binding of var_e) {
-  checkIsRedeclarationError(`
+  checkIsNotRedeclarationError(`
 try {
   throw 0;
 } catch(e) {
@@ -72,9 +71,9 @@ try {
 `);
 }
 
-// Check that the above error occurs even for nested catches.
+// Check that the above error also works for nested catches.
 for (let binding of var_e) {
-  checkIsRedeclarationError(`
+  checkIsNotRedeclarationError(`
 try {
   throw 0;
 } catch(e) {
@@ -138,8 +137,8 @@ try {
 `);
 }
 
-// Check that there is an error for both for-in and for-of when redeclaring
-// a non-simple catch parameter
+// Check that there is an error for both for-in and for-of when redeclaring a
+// non-simple catch parameter
 for (let binding of var_e) {
   checkIsRedeclarationError(`
 try {

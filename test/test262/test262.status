@@ -379,6 +379,10 @@
   'language/global-code/script-decl-func-err-non-configurable': [FAIL],
   'language/global-code/script-decl-var-collision': [FAIL],
 
+  # https://bugs.chromium.org/p/v8/issues/detail?id=8759
+  'language/eval-code/direct/var-env-lower-lex-catch-non-strict': [SKIP],
+  'language/statements/try/early-catch-var': [SKIP],
+
   # https://bugs.chromium.org/p/v8/issues/detail?id=5116
   'built-ins/TypedArray/prototype/fill/fill-values-conversion-operations-consistent-nan': [PASS, FAIL],
 
