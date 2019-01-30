@@ -236,6 +236,8 @@ std::ostream& operator<<(std::ostream& os, const InstructionOperand& op) {
     }
     case InstructionOperand::INVALID:
       return os << "(x)";
+    default:
+      return os << "(? ?" << op.kind() << "? ?)";
   }
   UNREACHABLE();
 }

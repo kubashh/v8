@@ -2875,6 +2875,8 @@ void PipelineImpl::AllocateRegisters(const RegisterConfiguration* config,
 
   Run<CommitAssignmentPhase>();
 
+  // TODO(herhut) Remove again.
+  fflush(stdout);
   // TODO(chromium:725559): remove this check once
   // we understand the cause of the bug. We keep just the
   // check at the end of the allocation.
