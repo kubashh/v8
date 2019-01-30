@@ -78,6 +78,64 @@ TEST(SerializeInlinedFunction) {
       "  g(); return g;"
       "}; f(); return f;");
 }
+
+TEST(SerializeCallUndefinedReceiver) {
+  CheckForSerializedInlinee(
+      "function g(a,b,c) {};"
+      "function f() {"
+      "  g(1,2,3); return g;"
+      "}; f(); return f;");
+}
+
+TEST(SerializeCallUndefinedReceiver2) {
+  CheckForSerializedInlinee(
+      "function g(a,b) {};"
+      "function f() {"
+      "  g(1,2); return g;"
+      "}; f(); return f;");
+}
+
+TEST(SerializeCallProperty) {
+  CheckForSerializedInlinee(
+      "let obj = {"
+      "  g: function g(a,b,c) {}"
+      "};"
+      "function f() {"
+      "  obj.g(1,2,3); return obj.g;"
+      "}; f(); return f;");
+}
+
+TEST(SerializeCallProperty2) {
+  CheckForSerializedInlinee(
+      "let obj = {"
+      "  g: function g(a,b) {}"
+      "};"
+      "function f() {"
+      "  obj.g(1,2); return obj.g;"
+      "}; f(); return f;");
+}
+
+TEST(SerializeCallAnyReceiver) {
+  CheckForSerializedInlinee(
+      "let obj = {"
+      "  g: function g() {}"
+      "};"
+      "with(obj) {"
+      "  function f() {"
+      "    g(); return g;"
+      "  };"
+      "  f(); return f;"
+      "}");
+}
+
+TEST(SerializeCallWithSpread) {
+  CheckForSerializedInlinee(
+      "function g(args) {};"
+      "const arr = [1,2,3];"
+      "function f() {"
+      "  g(...arr); return g;"
+      "}; f(); return f;");
+}
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8
