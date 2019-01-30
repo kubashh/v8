@@ -249,7 +249,7 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
                         SafepointTableBuilder* safepoint_table_builder,
                         int handler_table_offset) {
   // Emit constant pool if necessary.
-  int constant_pool_size = EmitConstantPool();
+  const int constant_pool_offset = EmitConstantPool();
 
   EmitRelocations();
 
@@ -263,7 +263,6 @@ void Assembler::GetCode(Isolate* isolate, CodeDesc* desc,
 
   const int instruction_size = pc_offset();
   const int code_comments_offset = instruction_size - code_comments_size;
-  const int constant_pool_offset = code_comments_offset - constant_pool_size;
   const int handler_table_offset2 = (handler_table_offset == kNoHandlerTable)
                                         ? constant_pool_offset
                                         : handler_table_offset;
