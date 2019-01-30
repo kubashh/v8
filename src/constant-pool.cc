@@ -179,7 +179,7 @@ void ConstantPoolBuilder::EmitGroup(Assembler* assm,
   }
 }
 
-// Emit and return size of pool.
+// Emit and return offset of pool.
 int ConstantPoolBuilder::Emit(Assembler* assm) {
   bool emitted = emitted_label_.is_bound();
   bool empty = IsEmpty();
@@ -205,7 +205,7 @@ int ConstantPoolBuilder::Emit(Assembler* assm) {
     }
   }
 
-  return !empty ? (assm->pc_offset() - emitted_label_.pos()) : 0;
+  return emitted_label_.pos();
 }
 
 #endif  // defined(V8_TARGET_ARCH_PPC)
