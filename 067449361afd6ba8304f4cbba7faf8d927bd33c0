@@ -16,6 +16,46 @@
       "revId": "067449361afd6ba8304f4cbba7faf8d927bd33c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab5c1552_85185876",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-30T13:20:09Z",
+      "side": 1,
+      "message": "to turn",
+      "revId": "067449361afd6ba8304f4cbba7faf8d927bd33c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aed3f87c_1d26226d",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-30T13:20:09Z",
+      "side": 1,
+      "message": "us",
+      "range": {
+        "startLine": 145,
+        "startChar": 17,
+        "endLine": 145,
+        "endChar": 18
+      },
+      "revId": "067449361afd6ba8304f4cbba7faf8d927bd33c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
