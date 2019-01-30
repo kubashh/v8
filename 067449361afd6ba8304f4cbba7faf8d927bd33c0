@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84680bbb_b50d9c55",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-01-30T13:18:17Z",
+      "side": 1,
+      "message": "Let\u0027s also set these, as they are normally on and they may affect what optimizations can be performed.\n\nkAccessorInliningEnabled\nkLoopPeelingEnabled\nkBailoutOnUninitialized\nkAllocationFoldingEnabled\nkSplittingEnabled\nkAnalyzeEnvironmentLiveness",
+      "revId": "067449361afd6ba8304f4cbba7faf8d927bd33c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
