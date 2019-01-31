@@ -213,8 +213,7 @@ WasmCode* WasmCompilationUnit::Publish(WasmCompilationResult result,
 
   WasmCode* code = native_module->AddCode(
       func_index_, result.code_desc, result.frame_slot_count,
-      result.tagged_parameter_slots, result.safepoint_table_offset,
-      result.handler_table_offset, std::move(result.protected_instructions),
+      result.tagged_parameter_slots, std::move(result.protected_instructions),
       std::move(result.source_positions), WasmCode::kFunction, code_tier);
   // TODO(clemensh): Merge this into {AddCode}?
   native_module->PublishCode(code);

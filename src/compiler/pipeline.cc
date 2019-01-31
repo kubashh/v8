@@ -2206,8 +2206,6 @@ wasm::WasmCode* Pipeline::GenerateCodeForWasmNativeStub(
   wasm::WasmCode* code = native_module->AddCode(
       wasm::WasmCode::kAnonymousFuncIndex, code_desc,
       code_generator->frame()->GetTotalFrameSlotCount(), 0,
-      code_generator->GetSafepointTableOffset(),
-      code_generator->GetHandlerTableOffset(),
       code_generator->GetProtectedInstructions(),
       code_generator->GetSourcePositionTable(),
       static_cast<wasm::WasmCode::Kind>(wasm_kind), wasm::WasmCode::kOther);
