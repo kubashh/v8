@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80f3cd1c_58fb80a8",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-31T04:31:23Z",
+      "side": 1,
+      "message": "This may not be obvious, but I did NOT introduce this technique in this CL.\nThis was part of the CSA TypedArrayInitialize (see allocate_elements block).\n\nIn the future, this may be an opportunity (if not already exploited and if sound) to optimize loading elements across the board. Something like:\n1) check if on-heap ta buffer\n2) if so, load element with offset calculations (avoid 2 loads: base pointer and external pointer)",
+      "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
