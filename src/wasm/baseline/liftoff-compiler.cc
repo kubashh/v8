@@ -442,8 +442,8 @@ class LiftoffCompiler {
     }
     __ PatchPrepareStackFrame(pc_offset_stack_frame_construction_,
                               __ GetTotalFrameSlotCount());
-    __ FinishCode();
     safepoint_table_builder_.Emit(&asm_, __ GetTotalFrameSlotCount());
+    __ FinishCode();
     // The previous calls may have also generated a bailout.
     DidAssemblerBailout(decoder);
   }

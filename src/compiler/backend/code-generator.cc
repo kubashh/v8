@@ -277,33 +277,42 @@ void CodeGenerator::AssembleCode() {
     if (result_ != kSuccess) return;
   }
 
+  {
+    // Block the constant pool until constant pool emission. It is not needed
+    // in the metadata sections generated in this block.
+    TurboAssembler::BlockConstPoolScope block_const_pool(tasm());
+
+    // Emit the jump tables.
+    if (jump_tables_) {
+      tasm()->Align(kSystemPointerSize);
+      for (JumpTable* table = jump_tables_; table; table = table->next()) {
+        tasm()->bind(table->label());
+        AssembleJumpTable(table->targets(), table->target_count());
+      }
+    }
+
+    // The PerfJitLogger logs code up until here, excluding the safepoint
+    // table. Resolve the unwinding info now so it is aware of the same code
+    // size as reported by perf.
+    unwinding_info_writer_.Finish(tasm()->pc_offset());
+
+    safepoints()->Emit(tasm(), frame()->GetTotalFrameSlotCount());
+
+    // Emit the exception handler table.
+    if (!handlers_.empty()) {
+      handler_table_offset_ = HandlerTable::EmitReturnTableStart(
+          tasm(), static_cast<int>(handlers_.size()));
+      for (size_t i = 0; i < handlers_.size(); ++i) {
+        HandlerTable::EmitReturnEntry(tasm(), handlers_[i].pc_offset,
+                                      handlers_[i].handler->pos());
+      }
+    }
+  }
+
+  // TODO(jgruber): Move all inlined metadata generation into FinishCode.
+  // Currently, this includes the safepoint table, handler table, constant pool,
+  // and code comments, in that order.
   FinishCode();
-
-  // Emit the jump tables.
-  if (jump_tables_) {
-    tasm()->Align(kSystemPointerSize);
-    for (JumpTable* table = jump_tables_; table; table = table->next()) {
-      tasm()->bind(table->label());
-      AssembleJumpTable(table->targets(), table->target_count());
-    }
-  }
-
-  // The PerfJitLogger logs code up until here, excluding the safepoint
-  // table. Resolve the unwinding info now so it is aware of the same code size
-  // as reported by perf.
-  unwinding_info_writer_.Finish(tasm()->pc_offset());
-
-  safepoints()->Emit(tasm(), frame()->GetTotalFrameSlotCount());
-
-  // Emit the exception handler table.
-  if (!handlers_.empty()) {
-    handler_table_offset_ = HandlerTable::EmitReturnTableStart(
-        tasm(), static_cast<int>(handlers_.size()));
-    for (size_t i = 0; i < handlers_.size(); ++i) {
-      HandlerTable::EmitReturnEntry(tasm(), handlers_[i].pc_offset,
-                                    handlers_[i].handler->pos());
-    }
-  }
 
   tasm()->FinalizeJumpOptimizationInfo();
 

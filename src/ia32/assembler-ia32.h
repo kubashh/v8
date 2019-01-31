@@ -389,6 +389,12 @@ class V8_EXPORT_PRIVATE Assembler : public AssemblerBase {
 
   void FinalizeJumpOptimizationInfo();
 
+  // Unused on this architecture.
+  class BlockConstPoolScope {
+   public:
+    explicit BlockConstPoolScope(Assembler* assembler) {}
+  };
+
   // Read/Modify the code target in the branch/call instruction at pc.
   // The isolate argument is unused (and may be nullptr) when skipping flushing.
   inline static Address target_address_at(Address pc, Address constant_pool);

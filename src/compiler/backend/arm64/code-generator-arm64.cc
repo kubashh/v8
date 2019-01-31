@@ -2607,7 +2607,14 @@ void CodeGenerator::AssembleReturn(InstructionOperand* pop) {
   __ Ret();
 }
 
-void CodeGenerator::FinishCode() { __ CheckConstPool(true, false); }
+void CodeGenerator::FinishCode() {
+  {
+    // The constant pool must be instruction-aligned.
+    TurboAssembler::BlockConstPoolScope block_const_pool(tasm());
+    __ DataAlign(kInstrSize);
+  }
+  __ CheckConstPool(true, false);
+}
 
 void CodeGenerator::AssembleMove(InstructionOperand* source,
                                  InstructionOperand* destination) {

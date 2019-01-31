@@ -201,6 +201,12 @@ class Assembler : public AssemblerBase {
     GetCode(isolate, desc, kNoSafepointTable, kNoHandlerTable);
   }
 
+  // Unused on this architecture.
+  class BlockConstPoolScope {
+   public:
+    explicit BlockConstPoolScope(Assembler* assembler) {}
+  };
+
   // Label operations & relative jumps (PPUM Appendix D)
   //
   // Takes a branch opcode (cc) and a label (L) and generates

@@ -1106,9 +1106,9 @@ class CodeGeneratorTester {
   }
 
   Handle<Code> Finalize() {
-    generator_->FinishCode();
     generator_->safepoints()->Emit(generator_->tasm(),
                                    frame_.GetTotalFrameSlotCount());
+    generator_->FinishCode();
     return generator_->FinalizeCode().ToHandleChecked();
   }
 
