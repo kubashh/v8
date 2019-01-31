@@ -2,6 +2,92 @@
   "comments": [
     {
       "key": {
+        "uuid": "f58c3ba3_f9aa485b",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-01-31T09:31:37Z",
+      "side": 1,
+      "message": "SmiMod returns Number. Any specific reason for the upcast here?",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 76
+      },
+      "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fdb2b37_eb49ed88",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-01-31T09:31:37Z",
+      "side": 1,
+      "message": "I don\u0027t think we should put PositiveSmis here. Builtins can be called from anywhere and PositiveSmi is more of a convention than a real type (even on the CSA side). I\u0027d prefer the defensive approach and assume Smis here.",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 47,
+        "endChar": 46
+      },
+      "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "364146ab_d7ca75bc",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-01-31T09:31:37Z",
+      "side": 1,
+      "message": "Side note: I realize that this was done to shave of code size, but this code style of using labels with arguments instead of smaller helper macros and then using goto instead of calling the helper feels weird. Just thinking out loud here, but maybe we can build this concept into the language, to keep code readable but reduce code size.",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 55,
+        "endChar": 67
+      },
+      "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a57e6f6_29b756b6",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-01-31T09:31:37Z",
+      "side": 1,
+      "message": "nit: As TypedArrayInitialize is now typed in Torque, we should be able to get rid of \u0027initalize\u0027 and use the \u0027True\u0027 literal directly (here and below).",
+      "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "80f3cd1c_58fb80a8",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 6
