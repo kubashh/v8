@@ -31,6 +31,8 @@
 #include <cmath>
 #include <limits>
 
+#include "src/base/build_config.h"
+
 #include "src/v8.h"
 
 #include "src/arm64/assembler-arm64-inl.h"
@@ -14531,7 +14533,11 @@ static void AbsHelperX(int64_t value) {
   __ Mov(x1, value);
 
   if (value != kXMinInt) {
+#if defined(V8_OS_WIN)
+    expected = _abs64(value);
+#else
     expected = labs(value);
+#endif
 
     Label next;
     // The result is representable.
@@ -14541,7 +14547,7 @@ static void AbsHelperX(int64_t value) {
     __ Bind(&next);
     __ Abs(x13, x1, nullptr, &done);
   } else {
-    // labs is undefined for kXMinInt but our implementation in the
+    // labs/_abs64 is undefined for kXMinInt but our implementation in the
     // MacroAssembler will return kXMinInt in such a case.
     expected = kXMinInt;
 
