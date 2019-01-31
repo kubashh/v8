@@ -2003,6 +2003,27 @@ TNode<RawPtrT> CodeStubAssembler::LoadFixedTypedArrayBackingStore(
       IntPtrAdd(external_pointer, BitcastTaggedToWord(base_pointer)));
 }
 
+TNode<RawPtrT> CodeStubAssembler::LoadFixedTypedArrayOnHeapBackingStore(
+    TNode<FixedTypedArrayBase> typed_array) {
+  // This method specializes retrieving the backing store pointer to a simple
+  // offset calculation.  Unlike off heap allocated typed array buffers, the
+  // backing store is at a fixed offset from the pointer of a typed array's
+  // elements.
+  static const intptr_t fta_base_data_offset =
+      ExternalReference::fixed_typed_array_base_data_offset().address();
+
+  TNode<WordT> backing_store = IntPtrAdd(BitcastTaggedToWord(typed_array),
+                                         IntPtrConstant(fta_base_data_offset));
+
+#ifdef DEBUG
+  TNode<RawPtrT> expected_backing_store_pointer =
+      LoadFixedTypedArrayBackingStore(typed_array);
+  CSA_ASSERT(this, WordEqual(backing_store, expected_backing_store_pointer));
+#endif
+
+  return UncheckedCast<RawPtrT>(backing_store);
+}
+
 Node* CodeStubAssembler::LoadFixedBigInt64ArrayElementAsTagged(
     Node* data_pointer, Node* offset) {
   if (Is64()) {
