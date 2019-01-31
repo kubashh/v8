@@ -4540,6 +4540,11 @@ SaveContext::SaveContext(Isolate* isolate) : isolate_(isolate) {
   c_entry_fp_ = isolate->c_entry_fp(isolate->thread_local_top());
 }
 
+SaveContext::SaveContext(Isolate* isolate, Context new_context)
+    : SaveContext(isolate) {
+  isolate->set_context(new_context);
+}
+
 SaveContext::~SaveContext() {
   isolate_->set_context(context_.is_null() ? Context() : *context_);
 }
