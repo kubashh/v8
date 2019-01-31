@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "294b78b9_ad71984d",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-31T16:01:40Z",
+      "side": 1,
+      "message": "I slightly prefer keeping V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP so a text search will find all related occurrences here and in C++. I realize that\u0027s not the case for others here (e.g. kTypedArrayMaxByteLength -\u003e FixedTypedArrayBase::kMaxByteLength) but imo it\u0027s a useful property to preserve.",
+      "revId": "7fb6194b3daefeb7a8b2b88f8a2bc07ae8135d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7655027d_c25a4bb0",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-31T16:01:40Z",
+      "side": 1,
+      "message": "This is a bit weird; it\u0027s only the \u0027aligned header size\u0027 after the entire operation, which is\n\n (header + mask) \u0026 ~mask\n\nMaybe we can express that more nicely somehow and remove these declarations.",
+      "revId": "7fb6194b3daefeb7a8b2b88f8a2bc07ae8135d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b71cad20_0b70dc7c",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-01-31T16:01:40Z",
+      "side": 1,
+      "message": "I don\u0027t get the point of this ExternalReference; it looks like a constant containing \u0027FixedTypedArrayBase::kDataOffset - kHeapObjectTag\u0027 would be the better solution?",
+      "revId": "7fb6194b3daefeb7a8b2b88f8a2bc07ae8135d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
