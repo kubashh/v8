@@ -2468,7 +2468,7 @@ void CodeGenerator::AssembleReturn(InstructionOperand* pop) {
   __ Ret();
 }
 
-void CodeGenerator::FinishCode() { __ EmitConstantPool(); }
+void CodeGenerator::FinishCode() {}
 
 void CodeGenerator::AssembleMove(InstructionOperand* source,
                                  InstructionOperand* destination) {
