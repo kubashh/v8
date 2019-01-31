@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "a4ed9750_03c244a9",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-31T16:14:24Z",
+      "side": 1,
+      "message": "Just to be clear the entire operation is actually:\n\n  (var_byte_length + (kHeader + kMask)) \u0026 ~kMask\n\nSo unfortunately we can\u0027t just roll `(header + mask) \u0026 ~mask` into a single constant.",
+      "parentUuid": "7655027d_c25a4bb0",
+      "revId": "7fb6194b3daefeb7a8b2b88f8a2bc07ae8135d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b71cad20_0b70dc7c",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 7
