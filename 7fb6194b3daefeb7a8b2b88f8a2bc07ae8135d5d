@@ -68,6 +68,24 @@
       "revId": "7fb6194b3daefeb7a8b2b88f8a2bc07ae8135d5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "374e4654_0d1cd183",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-31T16:16:59Z",
+      "side": 1,
+      "message": "I can go back to using `FixedTypedArrayBase::kDataOffset - kHeapObjectTag`.  I was trying to find single source/constant instead of copying over a calculation.",
+      "parentUuid": "b71cad20_0b70dc7c",
+      "revId": "7fb6194b3daefeb7a8b2b88f8a2bc07ae8135d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
