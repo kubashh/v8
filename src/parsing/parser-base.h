@@ -1695,7 +1695,8 @@ ParserBase<Impl>::ParsePrimaryExpression() {
   switch (token) {
     case Token::THIS: {
       Consume(Token::THIS);
-      return impl()->ThisExpression(beg_pos);
+      expression_scope()->RecordThisUse();
+      return impl()->ThisExpression();
     }
 
     case Token::ASSIGN_DIV:
@@ -3300,6 +3301,7 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseSuperExpression(
     if (!is_new && peek() == Token::LPAREN && IsDerivedConstructor(kind)) {
       // TODO(rossberg): This might not be the correct FunctionState for the
       // method here.
+      expression_scope()->RecordThisUse();
       return impl()->NewSuperCallReference(pos);
     }
   }
@@ -5016,7 +5018,7 @@ typename ParserBase<Impl>::StatementT ParserBase<Impl>::ParseReturnStatement() {
   ExpressionT return_value = impl()->NullExpression();
   if (scanner()->HasLineTerminatorBeforeNext() || Token::IsAutoSemicolon(tok)) {
     if (IsDerivedConstructor(function_state_->kind())) {
-      return_value = impl()->ThisExpression(loc.beg_pos);
+      return_value = impl()->ThisExpression();
     }
   } else {
     return_value = ParseExpression();
