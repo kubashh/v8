@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e84a93a2_e54f35de",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-31T13:13:43Z",
+      "side": 1,
+      "message": "Yes, this is to force the generation of a WordEqual instead of a BranchIfNumberEqual (to match the CSA version):\n\n    // Check the alignment.\n    // TODO(ishell): remove \u003cObject, Object\u003e\n    GotoIf(WordEqual\u003cObject, Object\u003e(\n               SmiMod(element_size, SmiConstant(kObjectAlignment)),\n               SmiConstant(0)),\n           \u0026aligned);\n\nThis oddity should disappear with an upcoming optimization CL, that changes elementSize to elementSizeLog2.",
+      "parentUuid": "f58c3ba3_f9aa485b",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 76
+      },
+      "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9fdb2b37_eb49ed88",
         "filename": "src/builtins/typed-array-createtypedarray.tq",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca12dabe_0ddbda41",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-31T13:13:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fdb2b37_eb49ed88",
+      "range": {
+        "startLine": 44,
+        "startChar": 1,
+        "endLine": 47,
+        "endChar": 46
+      },
+      "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "db1a07c9_e5397282",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-31T13:13:43Z",
+      "side": 1,
+      "message": "Ack, I\u0027m hope so too, I thought I saw some commits from Tobias suggesting he\u0027s working on inlineability of macros. But this means something else.\n\n... \u003csheepishly\u003e because I was going to apply this same technique to all calls to ConstructByArrayLike, as it\u0027s called (and generated) 3 times.",
+      "parentUuid": "364146ab_d7ca75bc",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 55,
+        "endChar": 67
+      },
+      "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a57e6f6_29b756b6",
         "filename": "src/builtins/typed-array-createtypedarray.tq",
         "patchSetId": 6
@@ -82,6 +154,24 @@
       "writtenOn": "2019-01-31T09:31:37Z",
       "side": 1,
       "message": "nit: As TypedArrayInitialize is now typed in Torque, we should be able to get rid of \u0027initalize\u0027 and use the \u0027True\u0027 literal directly (here and below).",
+      "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86271a20_5ae695ed",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-01-31T13:13:43Z",
+      "side": 1,
+      "message": "I changed this originally as per Jakob:\n\n    Jakob - nit: i\u0027d still slightly prefer assigning True to a named constant to make the callsite easier to read.\n\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1419225/2/src/builtins/typed-array-createtypedarray.tq#19\n\nI don\u0027t care either way, I\u0027ll let you two decide :)",
+      "parentUuid": "3a57e6f6_29b756b6",
       "revId": "703f8a2211bb5bf74e9a3b9ed082247e5599d18a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
