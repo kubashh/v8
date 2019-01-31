@@ -557,8 +557,6 @@ void Generate_JSEntryVariant(MacroAssembler* masm, StackFrame::Type type,
   Label invoke, handler_entry, exit;
 
   // Called from C
-  __ function_descriptor();
-
   {
     NoRootArrayScope no_root_array(masm);
 
