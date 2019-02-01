@@ -16,6 +16,24 @@
       "revId": "cb76c7fc84b97f494f130492b6cc16c2170414b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "217125ee_4ba2d00c",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2019-02-01T09:31:29Z",
+      "side": 1,
+      "message": "included fix in\nhttps://chromium-review.googlesource.com/c/v8/v8/+/1447916",
+      "parentUuid": "9095bda7_c3e86681",
+      "revId": "cb76c7fc84b97f494f130492b6cc16c2170414b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
