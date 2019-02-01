@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "290500a4_8ad0a4b9",
+        "filename": "test/cctest/test-macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-01T11:59:12Z",
+      "side": 1,
+      "message": "Oops, too eager regexp :)\nThanks, will undo for now.",
+      "parentUuid": "18fe4e47_2c24d5e5",
+      "range": {
+        "startLine": 462,
+        "startChar": 37,
+        "endLine": 462,
+        "endChar": 70
+      },
+      "revId": "290614b112fea4b74a6006b624cbfe4bb0454871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a7f91a5_e5bd344c",
         "filename": "test/cctest/test-macro-assembler-mips64.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "290614b112fea4b74a6006b624cbfe4bb0454871",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23a51f6b_bbe72168",
+        "filename": "test/cctest/test-macro-assembler-mips64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-01T11:59:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a7f91a5_e5bd344c",
+      "range": {
+        "startLine": 637,
+        "startChar": 37,
+        "endLine": 637,
+        "endChar": 70
+      },
+      "revId": "290614b112fea4b74a6006b624cbfe4bb0454871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
