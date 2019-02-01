@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d1ddc4d_3fb84b36",
+        "filename": "src/debug/debug.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-01T10:57:55Z",
+      "side": 1,
+      "message": "q: Could we forward-declare AbstractCode instead?",
+      "revId": "32b096b0b02811f8eeb9ec352fa0703ad11c11c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
