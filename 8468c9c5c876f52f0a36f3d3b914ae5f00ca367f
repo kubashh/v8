@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9d84c8f6_d965d928",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-01T08:59:33Z",
+      "side": 1,
+      "message": "Ah I see. Perhaps in debug mode, torque could verify builtin parameter types at runtime?",
+      "parentUuid": "dd0ef508_5fe2a3fe",
+      "revId": "8468c9c5c876f52f0a36f3d3b914ae5f00ca367f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "944ea213_db665c4c",
         "filename": "src/builtins/typed-array-createtypedarray.tq",
         "patchSetId": 8
