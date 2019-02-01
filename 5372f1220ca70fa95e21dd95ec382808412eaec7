@@ -45,6 +45,29 @@
       "revId": "5372f1220ca70fa95e21dd95ec382808412eaec7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7042b901_df0cbd7a",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-01T21:03:29Z",
+      "side": 1,
+      "message": "FYI: I don\u0027t sort these flags and rather add new ones in the end to guarantee the same rng behavior for the other flags first. This is useful when bisecting backwards to ensure stability of the chosen flags with the given random seed.",
+      "range": {
+        "startLine": 78,
+        "startChar": 2,
+        "endLine": 82,
+        "endChar": 33
+      },
+      "revId": "5372f1220ca70fa95e21dd95ec382808412eaec7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
