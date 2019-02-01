@@ -459,7 +459,7 @@ static const std::vector<int32_t> cvt_trunc_int32_test_values() {
   return std::vector<int32_t>(&kValues[0], &kValues[arraysize(kValues)]);
 }
 
-// Helper macros that can be used in FOR_INT32_INPUTS(i) { ... *i ... }
+// Helper macros that can be used in FOR_INT32_INPUTS(i) { ... i ... }
 #define FOR_INPUTS(ctype, itype, var, test_vector)           \
   std::vector<ctype> var##_vec = test_vector();              \
   for (std::vector<ctype>::iterator var = var##_vec.begin(); \
