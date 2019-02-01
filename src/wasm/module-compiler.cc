@@ -714,8 +714,7 @@ class FinishCompileTask : public CancelableTask {
   void RunInternal() override {
     Isolate* isolate = compilation_state_->isolate();
     HandleScope scope(isolate);
-    SaveContext saved_context(isolate);
-    isolate->set_context(Context());
+    SaveAndSwitchContext saved_context(isolate, Context());
 
     TRACE_COMPILE("(4a) Finishing compilation units...\n");
     if (compilation_state_->failed()) {
@@ -1091,8 +1090,8 @@ class AsyncCompileJob::CompilationStateCallback {
           job->foreground_task_runner_->PostTask(
               MakeCancelableTask(job->isolate_, [job] {
                 HandleScope scope(job->isolate_);
-                SaveContext saved_context(job->isolate_);
-                job->isolate_->set_context(*job->native_context_);
+                SaveAndSwitchContext saved_context(job->isolate_,
+                                                   *job->native_context_);
                 job->FinishCompile();
               }));
         }
@@ -1113,8 +1112,8 @@ class AsyncCompileJob::CompilationStateCallback {
         job->foreground_task_runner_->PostTask(
             MakeCancelableTask(job->isolate_, [job] {
               HandleScope scope(job->isolate_);
-              SaveContext saved_context(job->isolate_);
-              job->isolate_->set_context(*job->native_context_);
+              SaveAndSwitchContext saved_context(job->isolate_,
+                                                 *job->native_context_);
               WasmError error = Impl(job->native_module_->compilation_state())
                                     ->GetCompileError();
               return job->AsyncCompileFailed("Async compilation failed", error);
@@ -1148,8 +1147,7 @@ class AsyncCompileJob::CompileStep {
   void Run(AsyncCompileJob* job, bool on_foreground) {
     if (on_foreground) {
       HandleScope scope(job->isolate_);
-      SaveContext saved_context(job->isolate_);
-      job->isolate_->set_context(*job->native_context_);
+      SaveAndSwitchContext saved_context(job->isolate_, *job->native_context_);
       RunInForeground(job);
     } else {
       RunInBackground(job);
@@ -1532,8 +1530,7 @@ void AsyncStreamingProcessor::OnFinishedStream(OwnedVector<uint8_t> bytes) {
   // CreateNativeModule, PrepareRuntimeObjects and FinishCompile as this is a
   // callback from the embedder.
   HandleScope scope(job_->isolate_);
-  SaveContext saved_context(job_->isolate_);
-  job_->isolate_->set_context(*job_->native_context_);
+  SaveAndSwitchContext saved_context(job_->isolate_, *job_->native_context_);
 
   bool needs_finish = job_->DecrementAndCheckFinisherCount();
   if (job_->native_module_ == nullptr) {
@@ -1565,8 +1562,7 @@ bool AsyncStreamingProcessor::Deserialize(Vector<const uint8_t> module_bytes,
   // DeserializeNativeModule and FinishCompile assume that they are executed in
   // a HandleScope, and that a context is set on the isolate.
   HandleScope scope(job_->isolate_);
-  SaveContext saved_context(job_->isolate_);
-  job_->isolate_->set_context(*job_->native_context_);
+  SaveAndSwitchContext saved_context(job_->isolate_, *job_->native_context_);
 
   MaybeHandle<WasmModuleObject> result =
       DeserializeNativeModule(job_->isolate_, module_bytes, wire_bytes);
