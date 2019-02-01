@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbab0c4f_624f12cc",
+        "filename": "src/isolate.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1952,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-01T14:47:51Z",
+      "side": 1,
+      "message": "suggestion: How about moving this new functionality into a separate class with the name {SaveAndSwitchContext} that inherits from {SaveContext} to make it clear that it actually does perform a context switch?",
+      "range": {
+        "startLine": 1952,
+        "startChar": 2,
+        "endLine": 1952,
+        "endChar": 13
+      },
+      "revId": "733f73d37f6b2a637c6c20de8b10bde0208ef0d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
