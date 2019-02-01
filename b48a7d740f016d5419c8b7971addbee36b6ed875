@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f06fe4e_f1082531",
+        "filename": "src/objects-inl.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 1295,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-01T09:47:03Z",
+      "side": 1,
+      "message": "suggestion: I wonder if this one should actually live in \"js-objects-inl.h\" instead. I assume the main reason it is here is that is can also be used in a future \"js-array.cc\" file. That \"js-array.cc\" file will most likely need \"js-objects-inl.h\" anyways. No strong opinion here, I am fine with landing this CL as is. Just a thought.",
+      "range": {
+        "startLine": 1295,
+        "startChar": 19,
+        "endLine": 1295,
+        "endChar": 46
+      },
+      "revId": "b48a7d740f016d5419c8b7971addbee36b6ed875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
