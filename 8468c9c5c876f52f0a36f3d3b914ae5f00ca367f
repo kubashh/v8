@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b45bd57_6ee42ed2",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-01T08:36:27Z",
+      "side": 1,
+      "message": "I\u0027m not sure how this will change in your follow-ups; I\u0027m fine with landing this as-is now if it will be cleaned up later. We could simplify all of this to\n\n  return (kFixedTypedArrayBaseHeaderSize + byteLength + kObjectAlignmentMask) \u0026 ~kObjectAlignmentMask;",
+      "revId": "8468c9c5c876f52f0a36f3d3b914ae5f00ca367f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d6b3b20_ec5cf2a1",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-01T08:36:27Z",
+      "side": 1,
+      "message": "q: is it possible / does it make sense to make the parameter type PositiveSmi?",
+      "revId": "8468c9c5c876f52f0a36f3d3b914ae5f00ca367f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "944ea213_db665c4c",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-01T08:36:27Z",
+      "side": 1,
+      "message": "nit: please move the byteOffset definition up and use that here.",
+      "range": {
+        "startLine": 85,
+        "startChar": 59,
+        "endLine": 85,
+        "endChar": 61
+      },
+      "revId": "8468c9c5c876f52f0a36f3d3b914ae5f00ca367f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3da5d603_3638fdb7",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-01T08:36:27Z",
+      "side": 1,
+      "message": "Interesting that it\u0027s possible to resolve the AttachBuffer macro correctly within the AttachBuffer label.",
+      "revId": "8468c9c5c876f52f0a36f3d3b914ae5f00ca367f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
