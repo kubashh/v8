@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8a49bd44_f9f982d6",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-02-01T14:41:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b45bd57_6ee42ed2",
+      "revId": "8468c9c5c876f52f0a36f3d3b914ae5f00ca367f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d6b3b20_ec5cf2a1",
         "filename": "src/builtins/typed-array-createtypedarray.tq",
         "patchSetId": 8
@@ -106,6 +124,30 @@
       "writtenOn": "2019-02-01T08:36:27Z",
       "side": 1,
       "message": "Interesting that it\u0027s possible to resolve the AttachBuffer macro correctly within the AttachBuffer label.",
+      "revId": "8468c9c5c876f52f0a36f3d3b914ae5f00ca367f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2ba6ba8c_10b02f4d",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-02-01T14:41:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "944ea213_db665c4c",
+      "range": {
+        "startLine": 85,
+        "startChar": 59,
+        "endLine": 85,
+        "endChar": 61
+      },
       "revId": "8468c9c5c876f52f0a36f3d3b914ae5f00ca367f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false

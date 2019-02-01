@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "0b2dbbda_9d73d2e1",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-02-01T14:41:54Z",
+      "side": 1,
+      "message": "Done, Only exposing kHeaderSize and kObjectAlignmentMask",
+      "parentUuid": "d15f5967_6837cedc",
+      "revId": "7fb6194b3daefeb7a8b2b88f8a2bc07ae8135d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b71cad20_0b70dc7c",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 7
@@ -155,6 +173,24 @@
       "side": 1,
       "message": "I think we could remove the external reference. Also feel free to add a named constant to FixedTypedArrayBase and update all callsites. Doesn\u0027t have to be in this CL though.",
       "parentUuid": "374e4654_0d1cd183",
+      "revId": "7fb6194b3daefeb7a8b2b88f8a2bc07ae8135d5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d09acf54_ef3b76bf",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-02-01T14:41:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1a6249ce_3f55e823",
       "revId": "7fb6194b3daefeb7a8b2b88f8a2bc07ae8135d5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
