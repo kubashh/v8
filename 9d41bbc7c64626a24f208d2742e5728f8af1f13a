@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ef8f614_129396a9",
+        "filename": "tools/testrunner/PRESUBMIT.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-01T10:13:21Z",
+      "side": 0,
+      "message": "FYI, omitting this here as it is already defined in tools/PRESUBMIT.py",
+      "revId": "9d41bbc7c64626a24f208d2742e5728f8af1f13a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
