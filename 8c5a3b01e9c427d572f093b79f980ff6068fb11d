@@ -16,6 +16,24 @@
       "revId": "8c5a3b01e9c427d572f093b79f980ff6068fb11d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d838168b_3a289233",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14537,
+      "author": {
+        "id": 1307249
+      },
+      "writtenOn": "2019-02-01T19:31:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da4d14ea_552d3103",
+      "revId": "8c5a3b01e9c427d572f093b79f980ff6068fb11d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
