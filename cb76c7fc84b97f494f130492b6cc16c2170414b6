@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9095bda7_c3e86681",
+        "filename": "src/objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1115961
+      },
+      "writtenOn": "2019-02-01T09:11:40Z",
+      "side": 1,
+      "message": "Oops, I forgot to point out, looks like we usually include only foo-inl.h instead of including both foo-inl.h and foo.h. No need to fix this separately, just for future CLs.",
+      "revId": "cb76c7fc84b97f494f130492b6cc16c2170414b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
