@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50126337_30903ff5",
+        "filename": "tools/PRESUBMIT.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-01T10:26:13Z",
+      "side": 1,
+      "message": "This will prevent pyc files being processed locally.",
+      "range": {
+        "startLine": 7,
+        "startChar": 42,
+        "endLine": 7,
+        "endChar": 68
+      },
+      "revId": "a4950676e5d2658c2cef8b3b9f858e7caace7677",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
