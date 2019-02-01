@@ -22,6 +22,30 @@
       "revId": "a37cc5c7603f1ea24219d3e84c0dca9b6190558a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53b2db7e_b488f565",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-01T11:31:06Z",
+      "side": 1,
+      "message": "I added a manual reload, but as both call sites of CopyToTempArray have the tempArray available, and its a macro, I added it back in as a parameter.",
+      "parentUuid": "d4d23f7f_2a6264ab",
+      "range": {
+        "startLine": 1130,
+        "startChar": 10,
+        "endLine": 1130,
+        "endChar": 19
+      },
+      "revId": "a37cc5c7603f1ea24219d3e84c0dca9b6190558a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
