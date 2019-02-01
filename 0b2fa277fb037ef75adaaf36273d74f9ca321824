@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2c33a0c_e321ff6b",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-02-01T15:07:46Z",
+      "side": 0,
+      "message": "I\u0027d only remove type annotations that are very clear from the context. Without proper IDE support, it can otherwise be annoying to find out the type.",
+      "range": {
+        "startLine": 660,
+        "startChar": 21,
+        "endLine": 660,
+        "endChar": 29
+      },
+      "revId": "0b2fa277fb037ef75adaaf36273d74f9ca321824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
