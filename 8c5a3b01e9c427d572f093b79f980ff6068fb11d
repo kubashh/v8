@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da4d14ea_552d3103",
+        "filename": "test/cctest/test-assembler-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 14537,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2019-02-01T03:04:31Z",
+      "side": 1,
+      "message": "What about using the overload std::abs instead, thus avoiding the ifdef? It handles int, long, and long long.\n\nhttps://en.cppreference.com/w/cpp/numeric/math/abs",
+      "revId": "8c5a3b01e9c427d572f093b79f980ff6068fb11d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
