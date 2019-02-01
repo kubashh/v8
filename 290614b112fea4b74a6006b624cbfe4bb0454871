@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18fe4e47_2c24d5e5",
+        "filename": "test/cctest/test-macro-assembler-mips.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-01T11:52:51Z",
+      "side": 1,
+      "message": "nit: I think this change to the comment is not accurate. I think we should undo this or alternatively fix the below macro as well.",
+      "range": {
+        "startLine": 462,
+        "startChar": 37,
+        "endLine": 462,
+        "endChar": 70
+      },
+      "revId": "290614b112fea4b74a6006b624cbfe4bb0454871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a7f91a5_e5bd344c",
+        "filename": "test/cctest/test-macro-assembler-mips64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-01T11:52:51Z",
+      "side": 1,
+      "message": "Likewise.",
+      "range": {
+        "startLine": 637,
+        "startChar": 37,
+        "endLine": 637,
+        "endChar": 70
+      },
+      "revId": "290614b112fea4b74a6006b624cbfe4bb0454871",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
