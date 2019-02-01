@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51760f75_fde65ec6",
+        "filename": "tools/testrunner/PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-01T10:12:12Z",
+      "side": 1,
+      "message": "Inspired by: https://cs.chromium.org/chromium/src/infra/config/PRESUBMIT.py?type\u003dcs\u0026q\u003dGetUnitTestsRecursively\u0026g\u003d0\u0026l\u003d23",
+      "revId": "6762cf0f647e9ce1c7d50b120840e3e3e2df3597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
