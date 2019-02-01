@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "dd0ef508_5fe2a3fe",
+        "filename": "src/builtins/typed-array-createtypedarray.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-01T08:39:18Z",
+      "side": 1,
+      "message": "This was a nit of mine, as builtins can be called from anywhere and it won\u0027t actually be guaranteed that the passed Smi is indeed positive. This would circumvent torques type checker.",
+      "parentUuid": "7d6b3b20_ec5cf2a1",
+      "revId": "8468c9c5c876f52f0a36f3d3b914ae5f00ca367f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "944ea213_db665c4c",
         "filename": "src/builtins/typed-array-createtypedarray.tq",
         "patchSetId": 8
