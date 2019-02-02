@@ -1148,6 +1148,9 @@ DEFINE_BOOL(mock_arraybuffer_allocator, false,
 DEFINE_SIZE_T(mock_arraybuffer_allocator_limit, 0,
               "Memory limit for mock ArrayBuffer allocator used to simulate "
               "OOM for testing.")
+#ifdef ENABLE_VTUNE_JIT_INTERFACE
+DEFINE_BOOL(vtune_prof, false, "Enable Intel VTune profiler (basic support).")
+#endif
 
 //
 // Flags only available in non-Lite modes.
