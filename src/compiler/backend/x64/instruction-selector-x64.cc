@@ -1542,6 +1542,9 @@ void InstructionSelector::EmitPrepareArguments(
             input.node, inputs, &input_count);
         opcode |= AddressingModeField::encode(mode);
         Emit(opcode, 0, outputs, input_count, inputs);
+      } else if (isolate()->serializer_enabled() &&
+          input.node->opcode() == IrOpcode::kHeapConstant) {
+        Emit(kX64Push, g.NoOutput(), g.UseRegisterOrSlotOrConstant(input.node));
       } else {
         Emit(kX64Push, g.NoOutput(), g.UseAny(input.node));
       }
