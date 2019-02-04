@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e68e708d_4e8f074b",
+        "filename": "src/flags.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-04T08:51:04Z",
+      "side": 1,
+      "message": "Please add a short comment why this flag is ignored.",
+      "revId": "d0833d4aeb0b9f466c24e919bdc525dad836b6e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
