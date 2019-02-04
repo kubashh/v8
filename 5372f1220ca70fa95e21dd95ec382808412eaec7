@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dc7f2845_d705ea1e",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-04T09:47:14Z",
+      "side": 1,
+      "message": "Yes, this still makes sense. It tests liftoff-only compilation without ever tiering-up to turbofan. This ensures that we really execute the Liftoff code.",
+      "parentUuid": "63ff5bd7_76de8ead",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 24
+      },
+      "revId": "5372f1220ca70fa95e21dd95ec382808412eaec7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35ee9c82_d8beafdb",
         "filename": "tools/clusterfuzz/v8_foozzie.py",
         "patchSetId": 1
