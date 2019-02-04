@@ -22,6 +22,30 @@
       "revId": "0b2fa277fb037ef75adaaf36273d74f9ca321824",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be60296c_f4b5e69e",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-04T06:36:55Z",
+      "side": 0,
+      "message": "I agree. I mostly removed results from comparison calls, which are always Number. And array elements, which are Object the context of sort.",
+      "parentUuid": "c2c33a0c_e321ff6b",
+      "range": {
+        "startLine": 660,
+        "startChar": 21,
+        "endLine": 660,
+        "endChar": 29
+      },
+      "revId": "0b2fa277fb037ef75adaaf36273d74f9ca321824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
