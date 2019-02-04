@@ -22,6 +22,30 @@
       "revId": "c04a7f27cc2b2889f67d2c3b6b777e6b1095093d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "907474f7_65636ede",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-04T07:51:18Z",
+      "side": 1,
+      "message": "Right, I think it\u0027s fine like this.",
+      "parentUuid": "d2c96bfc_8af6d576",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 16
+      },
+      "revId": "c04a7f27cc2b2889f67d2c3b6b777e6b1095093d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
