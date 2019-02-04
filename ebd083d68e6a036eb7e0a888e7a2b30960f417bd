@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "72a5efd5_e464fc4d",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2577,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-04T14:53:19Z",
+      "side": 1,
+      "message": "If there\u0027s one canonical ThisExpression, is this (no pun intended) field + accessor needed?",
+      "range": {
+        "startLine": 2576,
+        "startChar": 8,
+        "endLine": 2577,
+        "endChar": 70
+      },
+      "revId": "ebd083d68e6a036eb7e0a888e7a2b30960f417bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7d5e51f_3f67cfca",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 5
