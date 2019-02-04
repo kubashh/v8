@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eadcef4a_95b1adf0",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2574,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-02-04T10:50:01Z",
+      "side": 0,
+      "message": "Can you also mention in the CL description that you are removing this since it\u0027s unused (I assume).",
+      "revId": "518a39ddcfe2b77a2f007e6cbeda9a517b06c07e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
