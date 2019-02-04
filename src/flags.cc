@@ -610,6 +610,7 @@ void ComputeFlagListHash() {
   }
   for (size_t i = 0; i < num_flags; ++i) {
     Flag* current = &flags[i];
+    if (current->bool_variable() == &FLAG_profile_deserialization) continue;
     if (!current->IsDefault()) {
       modified_args_as_string << i;
       modified_args_as_string << *current;
