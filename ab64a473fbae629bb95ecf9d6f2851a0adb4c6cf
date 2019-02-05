@@ -163,6 +163,30 @@
       "revId": "ab64a473fbae629bb95ecf9d6f2851a0adb4c6cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4c3d8588_f4f50a46",
+        "filename": "tools/testrunner/testproc/loader.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-05T15:11:06Z",
+      "side": 1,
+      "message": "To summarize: I\u0027d add a static presubmit check in test262 that checks for duplicates in those 2 directories. That should catch all currently possible ways of getting duplicate tests.",
+      "parentUuid": "54d4ec34_bf5c0bd9",
+      "range": {
+        "startLine": 23,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 18
+      },
+      "revId": "ab64a473fbae629bb95ecf9d6f2851a0adb4c6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
