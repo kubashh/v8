@@ -1004,4 +1004,19 @@ c(true); d(true);                         // 1650
  {"start":1403,"end":1503,"count":0}]
 );
 
+TestCoverage(
+"https://crbug.com/927464",
+`
+!function f() {                           // 0000
+  function unused() {                     // 0050
+    console.log('never');                 // 0100
+  }                                       // 0150
+  nop();                                  // 0200
+}();                                      // 0250
+`,
+[{"start":0,"end":299,"count":1},
+ {"start":1,"end":251,"count":1},
+ {"start":52,"end":153,"count":0}]
+);
+
 %DebugToggleBlockCoverage(false);
