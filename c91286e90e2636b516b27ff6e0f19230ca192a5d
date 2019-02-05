@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b381696a_1eb4a43e",
+        "filename": "src/torque/csa-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-02-05T14:12:19Z",
+      "side": 1,
+      "message": "Yeah, I could make it another CL ... the bug is triggered in this CL since C++ refuses to compile \"if (false)\" unless it\u0027s written \"if ((false))\".",
+      "parentUuid": "5a9d8edb_f4792b01",
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2f1a0769_2ce2e8d0",
         "filename": "third_party/v8/builtins/array-sort.tq",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-05T14:02:17Z",
       "side": 1,
       "message": "nit: Is there a use-site of this left?",
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e68f3e9e_088611fe",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-02-05T14:12:19Z",
+      "side": 1,
+      "message": "Oops, missed that.",
+      "parentUuid": "2f1a0769_2ce2e8d0",
       "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -50,6 +86,24 @@
       "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1ace6e1_abc7d777",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-02-05T14:12:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ea3b607b_76300c9b",
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "47ce341f_6306ea63",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-02-05T14:12:19Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d680a4f2_9d63bdf6",
+      "range": {
+        "startLine": 471,
+        "startChar": 0,
+        "endLine": 472,
+        "endChar": 33
+      },
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ef1002d_d6dba0b3",
         "filename": "third_party/v8/builtins/array-sort.tq",
         "patchSetId": 1
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "52b5e3fc_447659e7",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-02-05T14:12:19Z",
+      "side": 1,
+      "message": "Right, strange that clang-format didn\u0027t do it.",
+      "parentUuid": "5ef1002d_d6dba0b3",
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9b8ad20d_e7c21f95",
         "filename": "third_party/v8/builtins/array-sort.tq",
         "patchSetId": 1
@@ -104,6 +200,30 @@
       "writtenOn": "2019-02-05T14:02:17Z",
       "side": 1,
       "message": "nit: not sure if we should make a helper that returns \"Undefined | Callable\".",
+      "range": {
+        "startLine": 1537,
+        "startChar": 0,
+        "endLine": 1549,
+        "endChar": 5
+      },
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1a7a4a1_07c5b0fa",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-02-05T14:12:19Z",
+      "side": 1,
+      "message": "Right, this could be a Cast\u003c\u003e...",
+      "parentUuid": "9b8ad20d_e7c21f95",
       "range": {
         "startLine": 1537,
         "startChar": 0,
