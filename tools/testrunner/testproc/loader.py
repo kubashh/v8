@@ -13,6 +13,27 @@ class LoadProc(base.TestProc):
     super(LoadProc, self).__init__()
 
     self.tests = tests
+    self.loaded_tests = set()
+
+  def _load_test(self):
+    try:
+      is_loaded = False
+      while not is_loaded:
+        test = next(self.tests)
+        if test.procid in self.loaded_tests:
+          continue
+
+        is_loaded = self._send_test(test)
+        if not is_loaded:
+          continue
+
+        self.loaded_tests.add(test.procid)
+
+    except StopIteration:
+      # No more tests to load.
+      return False
+
+    return True
 
   def load_initial_tests(self, initial_batch_size):
     """
@@ -20,23 +41,13 @@ class LoadProc(base.TestProc):
       exec_proc: execution processor that the tests are being loaded into
       initial_batch_size: initial number of tests to load
     """
-    loaded_tests = 0
-    while loaded_tests < initial_batch_size:
-      try:
-        t = next(self.tests)
-      except StopIteration:
+    for _ in range(initial_batch_size):
+      if not self._load_test():
+        # Ran out of tests
         return
-
-      if self._send_test(t):
-        loaded_tests += 1
 
   def next_test(self, test):
     assert False, 'Nothing can be connected to the LoadProc'
 
   def result_for(self, test, result):
-    try:
-      while not self._send_test(next(self.tests)):
-        pass
-    except StopIteration:
-      # No more tests to load.
-      pass
+    self._load_test()
