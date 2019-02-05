@@ -1511,6 +1511,53 @@ TEST_F(FunctionBodyDecoderTest, CallsWithMismatchedSigs3) {
   EXPECT_FAILURE_S(sig, WASM_CALL_FUNCTION(1, WASM_F32(17.6)));
 }
 
+TEST_F(FunctionBodyDecoderTest, SimpleReturnCalls) {
+  WASM_FEATURE_SCOPE(return_call);
+
+  FunctionSig* sig = sigs.i_i();
+  TestModuleBuilder builder;
+  module = builder.module();
+
+  builder.AddFunction(sigs.i_v());
+  builder.AddFunction(sigs.i_i());
+  builder.AddFunction(sigs.i_ii());
+
+  EXPECT_VERIFIES_S(sig, WASM_RETURN_CALL_FUNCTION0(0));
+  EXPECT_VERIFIES_S(sig, WASM_RETURN_CALL_FUNCTION(1, WASM_I32V_1(27)));
+  EXPECT_VERIFIES_S(
+      sig, WASM_RETURN_CALL_FUNCTION(2, WASM_I32V_1(37), WASM_I32V_2(77)));
+}
+
+TEST_F(FunctionBodyDecoderTest, ReturnCallsWithTooFewArguments) {
+  WASM_FEATURE_SCOPE(return_call);
+
+  FunctionSig* sig = sigs.i_i();
+  TestModuleBuilder builder;
+  module = builder.module();
+
+  builder.AddFunction(sigs.i_i());
+  builder.AddFunction(sigs.i_ii());
+  builder.AddFunction(sigs.f_ff());
+
+  EXPECT_FAILURE_S(sig, WASM_RETURN_CALL_FUNCTION0(0));
+  EXPECT_FAILURE_S(sig, WASM_RETURN_CALL_FUNCTION(1, WASM_ZERO));
+  EXPECT_FAILURE_S(sig, WASM_RETURN_CALL_FUNCTION(2, WASM_GET_LOCAL(0)));
+}
+
+TEST_F(FunctionBodyDecoderTest, ReturnCallsWithMismatchedSigs2) {
+  WASM_FEATURE_SCOPE(return_call);
+
+  FunctionSig* sig = sigs.i_i();
+  TestModuleBuilder builder;
+  module = builder.module();
+
+  builder.AddFunction(sigs.i_i());
+
+  EXPECT_FAILURE_S(sig, WASM_RETURN_CALL_FUNCTION(0, WASM_I64V_1(17)));
+  EXPECT_FAILURE_S(sig, WASM_RETURN_CALL_FUNCTION(0, WASM_F32(17.1)));
+  EXPECT_FAILURE_S(sig, WASM_RETURN_CALL_FUNCTION(0, WASM_F64(17.1)));
+}
+
 TEST_F(FunctionBodyDecoderTest, MultiReturn) {
   WASM_FEATURE_SCOPE(mv);
   ValueType storage[] = {kWasmI32, kWasmI32};
