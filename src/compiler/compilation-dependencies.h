@@ -55,6 +55,10 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   // field is identified by the arguments.
   void DependOnFieldType(const MapRef& map, int descriptor);
 
+  // Record the assumption that a field remains constant. The field is
+  // identified by the arguments.
+  PropertyConstness DependOnFieldConstant(const MapRef& map, int descriptor);
+
   // Record the assumption that neither {cell}'s {CellType} changes, nor the
   // {IsReadOnly()} flag of {cell}'s {PropertyDetails}.
   void DependOnGlobalProperty(const PropertyCellRef& cell);
