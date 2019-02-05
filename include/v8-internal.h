@@ -12,6 +12,11 @@
 #include "v8-version.h"  // NOLINT(build/include)
 #include "v8config.h"    // NOLINT(build/include)
 
+#ifndef V8_DEFINES_PRESENT
+#error The V8 specific #defines do not seem to be present; are build \
+dependendencies set right?
+#endif
+
 namespace v8 {
 
 class Context;
