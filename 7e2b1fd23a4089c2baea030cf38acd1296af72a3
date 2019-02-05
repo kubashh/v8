@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee3b548f_b7510c54",
+        "filename": "test/cctest/test-serialize.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-02-05T19:28:52Z",
+      "side": 1,
+      "message": "The fix is to change this from TEST to UNINITIALIZED_TEST :)",
+      "range": {
+        "startLine": 3926,
+        "startChar": 0,
+        "endLine": 3926,
+        "endChar": 18
+      },
+      "revId": "7e2b1fd23a4089c2baea030cf38acd1296af72a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
