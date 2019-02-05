@@ -45,6 +45,12 @@ action("protocol_compatibility") {
   ]
 }
 
+config("inspector_config") {
+  visibility = [ ":*" ]  # Only targets in this file can depend on this.
+
+  configs = [ "../../:internal_config" ]
+}
+
 inspector_protocol_generate("protocol_generated_sources") {
   visibility = [ ":*" ]  # Only targets in this file can depend on this.
   deps = [
@@ -59,13 +65,6 @@ inspector_protocol_generate("protocol_generated_sources") {
     "inspector_protocol_config.json",
   ]
   outputs = _protocol_generated
-}
-
-config("inspector_config") {
-  visibility = [ ":*" ]  # Only targets in this file can depend on this.
-  if (is_component_build) {
-    defines = [ "BUILDING_V8_SHARED" ]
-  }
 }
 
 v8_source_set("inspector") {

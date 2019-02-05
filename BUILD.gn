@@ -222,20 +222,6 @@ v8_toolset_for_shell = "host"
 ###############################################################################
 # Configurations
 #
-config("internal_config") {
-  visibility = [ ":*" ]  # Only targets in this file can depend on this.
-
-  include_dirs = [
-    ".",
-    "$target_gen_dir",
-  ]
-
-  configs = [ "//build/config/compiler:wexit_time_destructors" ]
-
-  if (is_component_build) {
-    defines = [ "BUILDING_V8_SHARED" ]
-  }
-}
 
 config("internal_config_base") {
   visibility = [ ":*" ]  # Only targets in this file can depend on this.
@@ -244,6 +230,40 @@ config("internal_config_base") {
     ".",
     "$target_gen_dir",
   ]
+}
+
+config("v8_defines") {
+  defines = [ "V8_DEFINES_PRESENT" ]
+  if (v8_enable_v8_checks) {
+    defines += [ "V8_ENABLE_CHECKS" ]  # Used in "include/v8.h".
+  }
+  if (v8_enable_pointer_compression) {
+    defines += [ "V8_COMPRESS_POINTERS" ]
+  }
+  if (v8_enable_pointer_compression || v8_enable_31bit_smis_on_64bit_arch) {
+    defines += [ "V8_31BIT_SMIS_ON_64BIT_ARCH" ]
+  }
+  if (v8_deprecation_warnings) {
+    defines += [ "V8_DEPRECATION_WARNINGS" ]
+  }
+  if (v8_imminent_deprecation_warnings) {
+    defines += [ "V8_IMMINENT_DEPRECATION_WARNINGS" ]
+  }
+}
+
+config("internal_config") {
+  defines = []
+  visibility = [ ":*" ]  # Only targets in this file can depend on this.
+
+  configs = [
+    "//build/config/compiler:wexit_time_destructors",
+    ":internal_config_base",
+    ":v8_defines",
+  ]
+
+  if (is_component_build) {
+    defines += [ "BUILDING_V8_SHARED" ]
+  }
 }
 
 # This config should be applied to code using the libplatform.
@@ -274,17 +294,9 @@ config("libsampler_config") {
 # itself.
 config("external_config") {
   defines = []
+  configs = [ ":v8_defines" ]
   if (is_component_build) {
     defines += [ "USING_V8_SHARED" ]
-  }
-  if (v8_enable_v8_checks) {
-    defines += [ "V8_ENABLE_CHECKS" ]  # Used in "include/v8.h".
-  }
-  if (v8_deprecation_warnings) {
-    defines += [ "V8_DEPRECATION_WARNINGS" ]
-  }
-  if (v8_imminent_deprecation_warnings) {
-    defines += [ "V8_IMMINENT_DEPRECATION_WARNINGS" ]
   }
   include_dirs = [
     "include",
@@ -1485,7 +1497,8 @@ v8_header_set("v8_version") {
 # This is split out to be a non-code containing target that the Chromium browser
 # can depend upon to get basic v8 types.
 v8_header_set("v8_headers") {
-  configs = [ ":internal_config" ]
+  configs = [ ":internal_config_base" ]
+  public_configs = [ ":v8_defines" ]
 
   sources = [
     "include/v8-internal.h",
@@ -3307,7 +3320,7 @@ v8_source_set("v8_libsampler") {
     "src/libsampler/sampler.h",
   ]
 
-  configs = [ ":internal_config_base" ]
+  configs = [ ":internal_config" ]
 
   public_configs = [ ":libsampler_config" ]
 
