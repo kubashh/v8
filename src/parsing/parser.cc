@@ -285,8 +285,8 @@ Expression* Parser::NewSuperPropertyReference(int pos) {
       AstSymbol::kHomeObjectSymbol, kNoSourcePosition);
   Expression* home_object = factory()->NewProperty(
       this_function_proxy, home_object_symbol_literal, pos);
-  return factory()->NewSuperPropertyReference(
-      ThisExpression(pos)->AsVariableProxy(), home_object, pos);
+  return factory()->NewSuperPropertyReference(ThisExpression(), home_object,
+                                              pos);
 }
 
 Expression* Parser::NewSuperCallReference(int pos) {
@@ -295,8 +295,7 @@ Expression* Parser::NewSuperCallReference(int pos) {
   VariableProxy* this_function_proxy =
       NewUnresolved(ast_value_factory()->this_function_string(), pos);
   return factory()->NewSuperCallReference(
-      ThisExpression(pos)->AsVariableProxy(), new_target_proxy,
-      this_function_proxy, pos);
+      ThisExpression(true), new_target_proxy, this_function_proxy, pos);
 }
 
 Expression* Parser::NewTargetExpression(int pos) {
@@ -451,6 +450,10 @@ void Parser::DeserializeScopeChain(
     original_scope_ = Scope::DeserializeScopeChain(
         isolate, zone(), *outer_scope_info, info->script_scope(),
         ast_value_factory(), mode);
+    if (info->is_eval() || IsArrowFunction(info->function_kind())) {
+      original_scope_->GetReceiverScope()->DeserializeReceiver(
+          ast_value_factory());
+    }
   }
 }
 
@@ -1563,9 +1566,8 @@ Expression* Parser::RewriteReturn(Expression* return_value, int pos) {
         factory()->NewUndefinedLiteral(kNoSourcePosition), pos);
 
     // is_undefined ? this : temp
-    return_value =
-        factory()->NewConditional(is_undefined, ThisExpression(pos),
-                                  factory()->NewVariableProxy(temp), pos);
+    return_value = factory()->NewConditional(
+        is_undefined, ThisExpression(), factory()->NewVariableProxy(temp), pos);
   }
   return return_value;
 }
@@ -3114,7 +3116,7 @@ Expression* Parser::SpreadCall(Expression* function,
   if (function->IsProperty()) {
     // Method calls
     if (function->AsProperty()->IsSuperAccess()) {
-      Expression* home = ThisExpression(kNoSourcePosition);
+      Expression* home = ThisExpression();
       args.Add(function);
       args.Add(home);
     } else {
