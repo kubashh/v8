@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a69b3dac_103e59ee",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2577,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-05T10:32:01Z",
+      "side": 1,
+      "message": "I originally did this do keep bytecode generation the same and to proof I had actually called ThisExpression() since it causes context allocation etc where necessary. Now I still take in the AST node as a proof of calling, but drop it and directly call the right helper to access \"this\".",
+      "parentUuid": "72a5efd5_e464fc4d",
+      "range": {
+        "startLine": 2576,
+        "startChar": 8,
+        "endLine": 2577,
+        "endChar": 70
+      },
+      "revId": "ebd083d68e6a036eb7e0a888e7a2b30960f417bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7d5e51f_3f67cfca",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 5
