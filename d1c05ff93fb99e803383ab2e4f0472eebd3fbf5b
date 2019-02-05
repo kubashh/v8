@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e1588de_8feb44f6",
+        "filename": "src/wasm/wasm-interpreter.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-05T14:37:35Z",
+      "side": 1,
+      "message": "Note that I am not 100% sure we should allow this new state transition directly. Alternatively we could make {HandleException} transition to {PAUSED} instead and maintain the invariant that {Run} can only transition from {PAUSED} and {STOPPED}. Let me know which one you think is better.",
+      "range": {
+        "startLine": 88,
+        "startChar": 28,
+        "endLine": 88,
+        "endChar": 67
+      },
+      "revId": "d1c05ff93fb99e803383ab2e4f0472eebd3fbf5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
