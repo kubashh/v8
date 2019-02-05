@@ -126,6 +126,7 @@ class PropertyCallbackArguments;
 class FunctionCallbackArguments;
 class GlobalHandles;
 class ScopedExternalStringLock;
+int GetShouldThrow(Isolate* isolate);
 
 namespace wasm {
 class NativeModule;
@@ -10700,6 +10701,10 @@ ReturnValue<T> PropertyCallbackInfo<T>::GetReturnValue() const {
 template <typename T>
 bool PropertyCallbackInfo<T>::ShouldThrowOnError() const {
   typedef internal::Internals I;
+  if (args_[kShouldThrowOnErrorIndex] == I::IntToSmi(2)) {
+    return v8::internal::GetShouldThrow(
+               reinterpret_cast<v8::internal::Isolate*>(GetIsolate())) != 0;
+  }
   return args_[kShouldThrowOnErrorIndex] != I::IntToSmi(0);
 }
 
