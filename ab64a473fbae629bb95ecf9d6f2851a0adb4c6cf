@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91ef23d6_4d9dcdc3",
+        "filename": "tools/testrunner/testproc/loader.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-05T14:03:29Z",
+      "side": 1,
+      "message": "nit: _load_and_send",
+      "revId": "ab64a473fbae629bb95ecf9d6f2851a0adb4c6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dbf244f_fcb9087e",
+        "filename": "tools/testrunner/testproc/loader.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-05T14:03:29Z",
+      "side": 1,
+      "message": "IMHO, this try-catch should only be around line 22. Or is there a reason to wrap the entire loop?",
+      "range": {
+        "startLine": 19,
+        "startChar": 4,
+        "endLine": 19,
+        "endChar": 8
+      },
+      "revId": "ab64a473fbae629bb95ecf9d6f2851a0adb4c6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84608453_bd973478",
+        "filename": "tools/testrunner/testproc/loader.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-05T14:03:29Z",
+      "side": 1,
+      "message": "IMHO you do not need is_loaded variable if you structure the code like this:\n\n  while True:\n    try:\n      test \u003d next(self.tests)\n    except StopIteration:\n      # No more tests to load.\n      return False\n\n    if test.procid in self.loaded_tests:\n      continue\n\n    if not self._send_test(test):\n      continue\n\n    self.loaded_tests.add(test.procid)\n    return True",
+      "revId": "ab64a473fbae629bb95ecf9d6f2851a0adb4c6cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
