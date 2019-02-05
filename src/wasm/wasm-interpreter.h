@@ -85,12 +85,13 @@ struct InterpretedFrameDeleter {
 class V8_EXPORT_PRIVATE WasmInterpreter {
  public:
   // State machine for a Thread:
-  //                         +---------Run()/Step()--------+
-  //                         V                             |
-  // STOPPED ---Run()-->  RUNNING  ------Pause()-----+-> PAUSED
-  //  ^                   | | | |                   /
-  //  +- HandleException -+ | | +--- Breakpoint ---+
-  //                        | |
+  //                        +-------HandleException()+Run()-------+
+  //                        | +--------Run()/Step()--------+      |
+  //                        V V                            |      |
+  // STOPPED ---Run()-->  RUNNING  ------Pause()-----+-> PAUSED   |
+  //  ^                   | | | |                   /             |
+  //  +- HandleException -+ | | +--- Breakpoint ---+              |
+  //                        | |                                   |
   //                        | +---------- Trap --------------> TRAPPED
   //                        +----------- Finish -------------> FINISHED
   enum State { STOPPED, RUNNING, PAUSED, FINISHED, TRAPPED };

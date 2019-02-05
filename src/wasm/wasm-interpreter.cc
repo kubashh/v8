@@ -1170,7 +1170,8 @@ class ThreadImpl {
 
   WasmInterpreter::State Run(int num_steps = -1) {
     DCHECK(state_ == WasmInterpreter::STOPPED ||
-           state_ == WasmInterpreter::PAUSED);
+           state_ == WasmInterpreter::PAUSED ||
+           state_ == WasmInterpreter::TRAPPED);
     DCHECK(num_steps == -1 || num_steps > 0);
     if (num_steps == -1) {
       TRACE("  => Run()\n");
