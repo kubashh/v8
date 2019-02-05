@@ -534,8 +534,12 @@ namespace {
 class FrameArrayBuilder {
  public:
   FrameArrayBuilder(Isolate* isolate, FrameSkipMode mode, int limit,
-                    Handle<Object> caller)
-      : isolate_(isolate), mode_(mode), limit_(limit), caller_(caller) {
+                    Handle<Object> caller, bool check_security_context = true)
+      : isolate_(isolate),
+        mode_(mode),
+        limit_(limit),
+        caller_(caller),
+        check_security_context_(check_security_context) {
     switch (mode_) {
       case SKIP_FIRST:
         skip_next_frame_ = true;
@@ -715,6 +719,7 @@ class FrameArrayBuilder {
   }
 
   bool IsInSameSecurityContext(Handle<JSFunction> function) {
+    if (!check_security_context_) return true;
     return isolate_->context()->HasSameSecurityTokenAs(function->context());
   }
 
@@ -732,6 +737,7 @@ class FrameArrayBuilder {
   const Handle<Object> caller_;
   bool skip_next_frame_ = true;
   bool encountered_strict_function_ = false;
+  bool check_security_context_;
   Handle<FrameArray> elements_;
 };
 
