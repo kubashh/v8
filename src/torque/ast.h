@@ -272,7 +272,7 @@ struct CallExpression : Expression {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(CallExpression)
   CallExpression(SourcePosition pos, IdentifierExpression* callee,
                  std::vector<Expression*> arguments,
-                 std::vector<std::string> labels)
+                 std::vector<std::string> labels = {})
       : Expression(kKind, pos),
         callee(callee),
         arguments(std::move(arguments)),
@@ -436,6 +436,8 @@ struct BasicTypeExpression : TypeExpression {
         namespace_qualification(std::move(namespace_qualification)),
         is_constexpr(is_constexpr),
         name(std::move(name)) {}
+  BasicTypeExpression(SourcePosition pos, std::string name)
+      : BasicTypeExpression(pos, {}, false, std::move(name)) {}
   std::vector<std::string> namespace_qualification;
   bool is_constexpr;
   std::string name;
@@ -899,20 +901,23 @@ struct StructDeclaration : Declaration {
 
 struct ClassDeclaration : Declaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(ClassDeclaration)
-  ClassDeclaration(SourcePosition pos, std::string name, bool transient,
-                   std::string super, base::Optional<std::string> generates,
+  ClassDeclaration(SourcePosition pos, std::string name, bool is_extern,
+                   bool transient, base::Optional<std::string> super,
+                   base::Optional<std::string> generates,
                    std::vector<Declaration*> methods,
                    std::vector<ClassFieldExpression> fields)
       : Declaration(kKind, pos),
         name(std::move(name)),
+        is_extern(is_extern),
         transient(transient),
         super(std::move(super)),
         generates(std::move(generates)),
         methods(std::move(methods)),
         fields(std::move(fields)) {}
   std::string name;
+  bool is_extern;
   bool transient;
-  std::string super;
+  base::Optional<std::string> super;
   base::Optional<std::string> generates;
   std::vector<Declaration*> methods;
   std::vector<ClassFieldExpression> fields;
