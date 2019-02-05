@@ -22,6 +22,30 @@
       "revId": "d1c05ff93fb99e803383ab2e4f0472eebd3fbf5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "571e9993_7b1b7a1d",
+        "filename": "src/wasm/wasm-interpreter.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-05T16:47:29Z",
+      "side": 1,
+      "message": "Let\u0027s discuss this tomorrow. I would prefer TRAPPED to stay a terminal state. If the trap is handled internally, we should call {HandleException} instead of stopping in the TRAPPED state.",
+      "parentUuid": "0e1588de_8feb44f6",
+      "range": {
+        "startLine": 88,
+        "startChar": 28,
+        "endLine": 88,
+        "endChar": 67
+      },
+      "revId": "d1c05ff93fb99e803383ab2e4f0472eebd3fbf5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
