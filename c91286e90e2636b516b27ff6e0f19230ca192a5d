@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a9d8edb_f4792b01",
+        "filename": "src/torque/csa-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-05T14:02:17Z",
+      "side": 1,
+      "message": "nit: Wrong CL?",
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f1a0769_2ce2e8d0",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-05T14:02:17Z",
+      "side": 1,
+      "message": "nit: Is there a use-site of this left?",
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea3b607b_76300c9b",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-05T14:02:17Z",
+      "side": 1,
+      "message": "nit: We could get rid of the temporary. \"sortState.receiver\" is readable enough to inline it here and below.",
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d680a4f2_9d63bdf6",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-05T14:02:17Z",
+      "side": 1,
+      "message": "nit: if (sortState.tempArraySize \u003e\u003d minSize)\n\nAlternatively: We could load the length from the tempArray itself and get rid of tempArraySize as this is the only use-site anyway.",
+      "range": {
+        "startLine": 471,
+        "startChar": 0,
+        "endLine": 472,
+        "endChar": 33
+      },
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ef1002d_d6dba0b3",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-05T14:02:17Z",
+      "side": 1,
+      "message": "nit: line length.",
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b8ad20d_e7c21f95",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-05T14:02:17Z",
+      "side": 1,
+      "message": "nit: not sure if we should make a helper that returns \"Undefined | Callable\".",
+      "range": {
+        "startLine": 1537,
+        "startChar": 0,
+        "endLine": 1549,
+        "endChar": 5
+      },
+      "revId": "c91286e90e2636b516b27ff6e0f19230ca192a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
