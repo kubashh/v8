@@ -1587,8 +1587,7 @@ void CompilationStateImpl::OnFinishedUnit(ExecutionTier tier, WasmCode* code) {
     }
   }
 
-  // TODO(clemensh): Fix and reenable code logging (https://crbug.com/v8/8783).
-  // if (code != nullptr) engine_->LogCode(code);
+  if (code != nullptr) engine_->LogCode(code);
 }
 
 void CompilationStateImpl::RestartBackgroundCompileTask() {
