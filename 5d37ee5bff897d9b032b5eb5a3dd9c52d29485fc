@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f22daa52_47940967",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2582,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-05T13:33:55Z",
+      "side": 1,
+      "message": "I see where you\u0027re coming from here, but maybe this type safety belongs in the parser rather than the factory? Particularly since this doesn\u0027t enforce anything for the preparser. Then, Parser::NewSuperPropertyReference can just trigger the ThisExpression() side effects itself.",
+      "range": {
+        "startLine": 2582,
+        "startChar": 2,
+        "endLine": 2582,
+        "endChar": 69
+      },
+      "revId": "5d37ee5bff897d9b032b5eb5a3dd9c52d29485fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d440353b_534ba04a",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 2603,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-05T13:33:55Z",
+      "side": 1,
+      "message": "as above.",
+      "revId": "5d37ee5bff897d9b032b5eb5a3dd9c52d29485fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15552af1_9af4da06",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 3270,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-05T13:33:55Z",
+      "side": 1,
+      "message": "it\u0027s not clear why this is sometimes needed and sometimes not",
+      "range": {
+        "startLine": 3270,
+        "startChar": 26,
+        "endLine": 3270,
+        "endChar": 39
+      },
+      "revId": "5d37ee5bff897d9b032b5eb5a3dd9c52d29485fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc776954_62625c45",
+        "filename": "src/parsing/preparser.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1540,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-05T13:33:55Z",
+      "side": 1,
+      "message": "it\u0027s kind of ugly to pass in the outer use type into the contructor here -- since it\u0027s a special case for NewSuperCallReference, maybe just do the receover()-\u003eset_maybe_assigned there?",
+      "range": {
+        "startLine": 1540,
+        "startChar": 52,
+        "endLine": 1540,
+        "endChar": 61
+      },
+      "revId": "5d37ee5bff897d9b032b5eb5a3dd9c52d29485fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a94d143_ff09c0d4",
+        "filename": "src/parsing/preparser.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-05T13:33:55Z",
+      "side": 1,
+      "message": "extract to ParserBase to shared between parser/preparser.",
+      "range": {
+        "startLine": 1541,
+        "startChar": 0,
+        "endLine": 1549,
+        "endChar": 45
+      },
+      "revId": "5d37ee5bff897d9b032b5eb5a3dd9c52d29485fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bea509d0_a818c647",
+        "filename": "src/parsing/preparser.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1557,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-05T13:33:55Z",
+      "side": 1,
+      "message": "add a comment that we\u0027re calling this for the side effects.",
+      "range": {
+        "startLine": 1557,
+        "startChar": 4,
+        "endLine": 1557,
+        "endChar": 18
+      },
+      "revId": "5d37ee5bff897d9b032b5eb5a3dd9c52d29485fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
