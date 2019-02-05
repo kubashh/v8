@@ -219,7 +219,7 @@ bool Scavenger::HandleLargeObject(Map map, HeapObject object, int object_size,
     if (object->map_slot().Release_CompareAndSwap(
             map, MapWord::FromForwardingAddress(object).ToMap()) == map) {
       surviving_new_large_objects_.insert({object, map});
-
+      promoted_size_ += object_size;
       if (object_fields == ObjectFields::kMaybePointers) {
         promotion_list_.PushLargeObject(object, map, object_size);
       }
