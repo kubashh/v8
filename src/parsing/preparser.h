@@ -1537,10 +1537,16 @@ class PreParser : public ParserBase<PreParser> {
     return PreParserIdentifier::Default();
   }
 
-  V8_INLINE PreParserExpression ThisExpression(int pos = kNoSourcePosition) {
-    scope()->NewUnresolved(factory()->ast_node_factory(),
-                           ast_value_factory()->this_string(), pos,
-                           THIS_VARIABLE);
+  V8_INLINE PreParserExpression ThisExpression(bool assigning = false) {
+    DeclarationScope* closure_scope = scope()->GetClosureScope();
+    DeclarationScope* receiver_scope = closure_scope->GetReceiverScope();
+    Variable* var = receiver_scope->receiver();
+    var->set_is_used();
+    if (closure_scope != receiver_scope) {
+      closure_scope->set_has_this_reference();
+      var->ForceContextAllocation();
+    }
+    if (assigning) var->set_maybe_assigned();
     return PreParserExpression::This();
   }
 
@@ -1548,9 +1554,7 @@ class PreParser : public ParserBase<PreParser> {
     scope()->NewUnresolved(factory()->ast_node_factory(),
                            ast_value_factory()->this_function_string(), pos,
                            NORMAL_VARIABLE);
-    scope()->NewUnresolved(factory()->ast_node_factory(),
-                           ast_value_factory()->this_string(), pos,
-                           THIS_VARIABLE);
+    ThisExpression();
     return PreParserExpression::Default();
   }
 
@@ -1561,9 +1565,7 @@ class PreParser : public ParserBase<PreParser> {
     scope()->NewUnresolved(factory()->ast_node_factory(),
                            ast_value_factory()->new_target_string(), pos,
                            NORMAL_VARIABLE);
-    scope()->NewUnresolved(factory()->ast_node_factory(),
-                           ast_value_factory()->this_string(), pos,
-                           THIS_VARIABLE);
+    ThisExpression(true);
     return PreParserExpression::SuperCallReference();
   }
 
