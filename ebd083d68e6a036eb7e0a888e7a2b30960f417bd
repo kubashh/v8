@@ -93,6 +93,30 @@
       "revId": "ebd083d68e6a036eb7e0a888e7a2b30960f417bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4551dcb6_46afe264",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-06T12:08:10Z",
+      "side": 1,
+      "message": "This is about hole check removal if the reference is after the initialization. I agree that if anywhere it should be done in the parser; and we\u0027d need a position (allocate new ThisExpressions with correct position in the case of Derived Constructors). I just moved it together with the code that sets up the hole check since there\u0027s no other real place to put it right now.",
+      "parentUuid": "6a809f6b_4163cea4",
+      "range": {
+        "startLine": 5145,
+        "startChar": 2,
+        "endLine": 5145,
+        "endChar": 62
+      },
+      "revId": "ebd083d68e6a036eb7e0a888e7a2b30960f417bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
