@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c99a3cf_0a9dcca9",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-02-06T12:20:19Z",
+      "side": 1,
+      "message": "FieldConstantDependency",
+      "range": {
+        "startLine": 192,
+        "startChar": 6,
+        "endLine": 192,
+        "endChar": 30
+      },
+      "revId": "6df416b0975d7b9a1384a59474aa7ba2c1f69d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0ed8a3a_9e45b9b6",
+        "filename": "src/compiler/compilation-dependencies.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-02-06T12:20:19Z",
+      "side": 1,
+      "message": "Let\u0027s make that more precise, because it\u0027s the first time that a function doesn\u0027t assume the property in question to hold already. How about:\n\nReturn a field\u0027s constness and, if kConst, record the assumption that it remains kConst. The field is identified by the arguments.",
+      "revId": "6df416b0975d7b9a1384a59474aa7ba2c1f69d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
