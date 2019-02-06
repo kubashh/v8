@@ -23,7 +23,7 @@
 // handler context. Some additional code is used both inside and outside the
 // trap handler. This code can be found in handler-shared.cc.
 
-#include "src/trap-handler/handler-inside-win.h"
+#include "src/trap-handler/handler-inside-win.h"  //includes Windows.h safly
 
 #include <windows.h>
 

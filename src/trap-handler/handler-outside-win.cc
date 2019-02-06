@@ -19,9 +19,10 @@
 //
 // For the code that runs in the trap handler itself, see handler-inside.cc.
 
+#include "src/trap-handler/handler-inside-win.h"  //includes Windows.h safly
+
 #include <windows.h>
 
-#include "src/trap-handler/handler-inside-win.h"
 #include "src/trap-handler/trap-handler.h"
 
 namespace v8 {

@@ -4,16 +4,16 @@
 
 #include "src/icu_util.h"
 
-#if defined(_WIN32)
-#include <windows.h>
-#endif
-
 #if defined(V8_INTL_SUPPORT)
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "unicode/putil.h"
 #include "unicode/udata.h"
+
+#if defined(_WIN32)
+#include "src/base/win32-headers.h"
+#endif
 
 #include "src/base/build_config.h"
 #include "src/base/file-utils.h"

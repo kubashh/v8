@@ -5,7 +5,7 @@
 #include "src/base/once.h"
 
 #ifdef _WIN32
-#include <windows.h>
+#include "src/base/win32-headers.h"
 #else
 #include <sched.h>
 #endif
