@@ -7,7 +7,7 @@
 #include "src/objects/string.h"
 
 #if V8_OS_WIN
-#include <windows.h>
+#include "src/base/win32-headers.h"
 #if _MSC_VER < 1900
 #define snprintf sprintf_s
 #endif
