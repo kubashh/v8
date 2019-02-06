@@ -117,6 +117,30 @@
       "revId": "ebd083d68e6a036eb7e0a888e7a2b30960f417bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a11106f8_0555ca0e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5145,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-02-06T12:19:18Z",
+      "side": 1,
+      "message": "Perfect, thanks.",
+      "parentUuid": "4551dcb6_46afe264",
+      "range": {
+        "startLine": 5145,
+        "startChar": 2,
+        "endLine": 5145,
+        "endChar": 62
+      },
+      "revId": "ebd083d68e6a036eb7e0a888e7a2b30960f417bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
