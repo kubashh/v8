@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "69d2b6c8_16f46321",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2708,
+      "author": {
+        "id": 1274103
+      },
+      "writtenOn": "2019-02-06T20:59:15Z",
+      "side": 1,
+      "message": "this isn\u0027t UB if the compiler supports IEC599, which I added a static assert for.",
+      "parentUuid": "4adb8f1a_cf087ee4",
+      "range": {
+        "startLine": 2708,
+        "startChar": 0,
+        "endLine": 2708,
+        "endChar": 41
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "12967e12_ae24540c",
         "filename": "src/base/ieee754.cc",
         "patchSetId": 1
