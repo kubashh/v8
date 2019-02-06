@@ -25,6 +25,46 @@
     },
     {
       "key": {
+        "uuid": "74d61c1b_cf78c25d",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-02-06T13:16:35Z",
+      "side": 1,
+      "message": "Let\u0027s inline this.",
+      "revId": "6df416b0975d7b9a1384a59474aa7ba2c1f69d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0a12f7d_a1c86a2a",
+        "filename": "src/compiler/compilation-dependencies.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-02-06T13:16:35Z",
+      "side": 1,
+      "message": "\"dependency\", or perhaps just drop the whole comment",
+      "range": {
+        "startLine": 401,
+        "startChar": 36,
+        "endLine": 401,
+        "endChar": 45
+      },
+      "revId": "6df416b0975d7b9a1384a59474aa7ba2c1f69d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f0ed8a3a_9e45b9b6",
         "filename": "src/compiler/compilation-dependencies.h",
         "patchSetId": 6
