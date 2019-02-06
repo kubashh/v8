@@ -923,12 +923,12 @@ class WasmDecoder : public Decoder {
     return true;
   }
 
-  inline bool CanTailCall(FunctionSig* sig) {
-    if (sig == nullptr) return false;
+  inline bool CanTailCall(FunctionSig* tgt_sig) {
+    if (tgt_sig == nullptr) return false;
     size_t num_returns = sig_->return_count();
-    if (num_returns != sig->return_count()) return false;
+    if (num_returns != tgt_sig->return_count()) return false;
     for (size_t i = 0; i < num_returns; ++i) {
-      if (sig_->GetReturn(i) != sig->GetReturn(i)) return false;
+      if (sig_->GetReturn(i) != tgt_sig->GetReturn(i)) return false;
     }
     return true;
   }
@@ -1378,24 +1378,12 @@ class WasmDecoder : public Decoder {
         CHECK(Complete(pc, imm));
         return {imm.sig->parameter_count(), imm.sig->return_count()};
       }
-      case kExprReturnCall: {
-        CallFunctionImmediate<validate> imm(this, pc);
-        CHECK(Complete(pc, imm));
-        // Acts like a return after call.
-        return {0, 0};
-      }
       case kExprCallIndirect: {
         CallIndirectImmediate<validate> imm(this, pc);
         CHECK(Complete(pc, imm));
         // Indirect calls pop an additional argument for the table index.
         return {imm.sig->parameter_count() + 1,
                 imm.sig->return_count()};
-      }
-      case kExprReturnCallIndirect: {
-        CallIndirectImmediate<validate> imm(this, pc);
-        CHECK(Complete(pc, imm));
-        // Acts like a return after call.
-        return {0, 0};
       }
       case kExprThrow: {
         ExceptionIndexImmediate<validate> imm(this, pc);
@@ -1413,6 +1401,8 @@ class WasmDecoder : public Decoder {
       case kExprBrOnExn:
       case kExprNop:
       case kExprReturn:
+      case kExprReturnCall:
+      case kExprReturnCallIndirect:
       case kExprUnreachable:
         return {0, 0};
       case kNumericPrefix:
