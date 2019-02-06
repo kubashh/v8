@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7915201_53f6613a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:27:20Z",
+      "side": 1,
+      "message": "Since this test will be tracked on the perf bots where we\u0027ll get nice graphs, I think you can drop these results from the CL description.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 25
+      },
+      "revId": "ba91df035a8e3d23d093a0ec114213ea46e55cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28c63cbb_6e198e1a",
+        "filename": "test/js-perf-test/Intl/constructor.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:27:20Z",
+      "side": 1,
+      "message": "I\u0027d suggest to drop 3 zeroes here (as well as in the other createSuite calls below) to move the scores into a more comfortable range. The scaling is arbitrary anyway; especially if we expect to make improvements in the future, starting with a score of 155 seems more readable than starting with 155533.",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "ba91df035a8e3d23d093a0ec114213ea46e55cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a00aa23_b39ddb43",
+        "filename": "test/js-perf-test/Intl/run.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:27:20Z",
+      "side": 1,
+      "message": "Do we need this?",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 8,
+        "endChar": 20
+      },
+      "revId": "ba91df035a8e3d23d093a0ec114213ea46e55cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
