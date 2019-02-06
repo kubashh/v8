@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20e9becc_06f003ae",
+        "filename": "include/v8.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 4106,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-02-06T19:05:22Z",
+      "side": 1,
+      "message": "I think these should go in the Internals class in v8-internals.h, and then be used to initialize the enum in globals.h, to ensure they stay in sync.",
+      "revId": "d80c4568526b153456179caccb1ed959bcc599dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
