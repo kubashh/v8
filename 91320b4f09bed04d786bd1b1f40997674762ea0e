@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b7500b66_d6211a9d",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-06T08:35:04Z",
+      "side": 1,
+      "message": "qq: How does the type resolution work here for the \"!\u003d\" operator? Is it the common base type for Undefined, Callable and Undefined? Or simply object?",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 74
+      },
+      "revId": "91320b4f09bed04d786bd1b1f40997674762ea0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
