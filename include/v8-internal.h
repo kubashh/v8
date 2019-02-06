@@ -367,6 +367,11 @@ V8_INLINE void PerformCastCheck(T* data) {
 // that's guaranteed to never be in ReadOnlySpace.
 V8_EXPORT internal::Isolate* IsolateFromNeverReadOnlySpaceObject(Address obj);
 
+// Returns if we need to throw when an error occurs. This infers the language
+// mode based on the current context and the closure. This returns true if the
+// language mode is strict.
+V8_EXPORT bool ShouldThrowOnError(v8::internal::Isolate* isolate);
+
 }  // namespace internal
 }  // namespace v8
 

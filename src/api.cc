@@ -3653,6 +3653,11 @@ i::Isolate* i::IsolateFromNeverReadOnlySpaceObject(i::Address obj) {
       i::HeapObject::cast(i::Object(obj)));
 }
 
+bool i::ShouldThrowOnError(i::Isolate* isolate) {
+  return i::GetShouldThrow(isolate, Nothing<i::ShouldThrow>()) ==
+         i::ShouldThrow::kThrowOnError;
+}
+
 void i::Internals::CheckInitializedImpl(v8::Isolate* external_isolate) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(external_isolate);
   Utils::ApiCheck(isolate != nullptr && !isolate->IsDead(),
