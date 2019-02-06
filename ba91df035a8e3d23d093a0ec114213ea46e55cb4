@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7cf35bf0_2aca65b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-02-06T23:59:19Z",
+      "side": 1,
+      "message": "I think it is nice to have a record of the score when I land this cl.",
+      "parentUuid": "e7915201_53f6613a",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 25
+      },
+      "revId": "ba91df035a8e3d23d093a0ec114213ea46e55cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "28c63cbb_6e198e1a",
         "filename": "test/js-perf-test/Intl/constructor.js",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "a4add6fd_2d8d8e2b",
+        "filename": "test/js-perf-test/Intl/constructor.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-02-06T23:59:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28c63cbb_6e198e1a",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "ba91df035a8e3d23d093a0ec114213ea46e55cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a00aa23_b39ddb43",
         "filename": "test/js-perf-test/Intl/run.js",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "ba91df035a8e3d23d093a0ec114213ea46e55cb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd3e03f1_88085fe9",
+        "filename": "test/js-perf-test/Intl/run.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-02-06T23:59:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a00aa23_b39ddb43",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 8,
+        "endChar": 20
+      },
+      "revId": "ba91df035a8e3d23d093a0ec114213ea46e55cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
