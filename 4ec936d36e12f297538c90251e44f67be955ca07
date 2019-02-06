@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0bf4a598_5e264d0c",
+        "filename": "src/torque/csa-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-02-06T07:36:32Z",
+      "side": 1,
+      "message": "Do you really need this? Can\u0027t you just use the existing GetAllocationBaseSize, passing in the FixedArray map and checking internally there for the case that it\u0027s an internal class to compute the right size, and then use %Allocate? IIRC, %Allocate already converts arguments of type IntPtrConstant into a fast allocation that doesn\u0027t involve a dynamic computation.",
+      "range": {
+        "startLine": 249,
+        "startChar": 39,
+        "endLine": 249,
+        "endChar": 70
+      },
+      "revId": "4ec936d36e12f297538c90251e44f67be955ca07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02fb70b3_5ca1faea",
+        "filename": "src/torque/csa-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-02-06T07:36:32Z",
+      "side": 1,
+      "message": "Yikes. OK, I guess this is alright for now. Alternatively, you could not special-case internal classes here (except for errors on non-Tagged types) by computing the field offsets starting at FixedArray::kHeaderSize. Don\u0027t know if that\u0027s less hack (\u0027cause we\u0027d be setting \"fields\" in FixedArrays, which under the covers is the same from an implementation perspective but it\u0027s also a bit weird).",
+      "range": {
+        "startLine": 745,
+        "startChar": 21,
+        "endLine": 745,
+        "endChar": 47
+      },
+      "revId": "4ec936d36e12f297538c90251e44f67be955ca07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
