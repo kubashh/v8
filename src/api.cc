@@ -114,7 +114,10 @@
 #endif
 
 #if V8_OS_WIN
-#include <windows.h>
+// clang-format off
+// This include need to be before `v8-wasm-trap-handler-win.h`
+#include "src/base/win32-headers.h"
+// clang-format on
 #include "include/v8-wasm-trap-handler-win.h"
 #include "src/trap-handler/handler-inside-win.h"
 #endif
