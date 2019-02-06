@@ -210,19 +210,7 @@ class InterpreterHandle {
           // Perfect, just break the switch and exit the loop.
           finished = true;
           break;
-        case WasmInterpreter::State::TRAPPED: {
-          MessageTemplate message_id =
-              WasmOpcodes::TrapReasonToMessageId(thread->GetTrapReason());
-          Handle<Object> exception =
-              isolate_->factory()->NewWasmRuntimeError(message_id);
-          isolate_->Throw(*exception);
-          // Handle this exception locally within the activation.
-          auto result = thread->HandleException(isolate_);
-          if (result == WasmInterpreter::Thread::HANDLED) break;
-          // If no local handler was found, we fall-thru to {STOPPED}.
-          DCHECK_EQ(WasmInterpreter::State::STOPPED, thread->state());
-          V8_FALLTHROUGH;
-        }
+        case WasmInterpreter::State::TRAPPED:
         case WasmInterpreter::State::STOPPED:
           // An exception happened, and the current activation was unwound
           // without hitting a local exception handler. All that remains to be

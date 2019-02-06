@@ -1145,6 +1145,8 @@ class ThreadImpl {
     Activation(uint32_t fp, sp_t sp) : fp(fp), sp(sp) {}
   };
 
+  enum ExceptionHandlingResult { HANDLED, UNWOUND };
+
  public:
   ThreadImpl(Zone* zone, CodeMap* codemap,
              Handle<WasmInstanceObject> instance_object)
@@ -1269,8 +1271,7 @@ class ThreadImpl {
 
   // Handle a thrown exception. Returns whether the exception was handled inside
   // the current activation. Unwinds the interpreted stack accordingly.
-  WasmInterpreter::Thread::ExceptionHandlingResult HandleException(
-      Isolate* isolate) {
+  ExceptionHandlingResult HandleException(Isolate* isolate) {
     DCHECK(isolate->has_pending_exception());
     DCHECK_LT(0, activations_.size());
     Activation& act = activations_.back();
@@ -1287,7 +1288,7 @@ class ThreadImpl {
         frame.pc += JumpToHandlerDelta(code, frame.pc);
         TRACE("  => handler #%zu (#%u @%zu)\n", frames_.size() - 1,
               code->function->func_index, frame.pc);
-        return WasmInterpreter::Thread::HANDLED;
+        return ExceptionHandlingResult::HANDLED;
       }
       TRACE("  => drop frame #%zu (#%u @%zu)\n", frames_.size() - 1,
             code->function->func_index, frame.pc);
@@ -1298,7 +1299,7 @@ class ThreadImpl {
     DCHECK_EQ(act.fp, frames_.size());
     DCHECK_EQ(act.sp, StackHeight());
     state_ = WasmInterpreter::STOPPED;
-    return WasmInterpreter::Thread::UNWOUND;
+    return ExceptionHandlingResult::UNWOUND;
   }
 
  private:
@@ -1342,11 +1343,25 @@ class ThreadImpl {
   CodeMap* codemap() const { return codemap_; }
   const WasmModule* module() const { return codemap_->module(); }
 
-  void DoTrap(TrapReason trap, pc_t pc) {
+  // Raises a trap. Note that the trap might have been handled by the current
+  // activation (either the current or a parent frame) and execution continues.
+  // Returns {true} if the trap was handled, {false} otherwise.
+  bool DoTrap(TrapReason trap, pc_t pc) {
+    CommitPc(pc);  // Needed for local unwinding.
     TRACE("TRAP: %s\n", WasmOpcodes::TrapReasonMessage(trap));
+    if (activations_.size() > 0) {  // XXX
+      Isolate* isolate = instance_object_->GetIsolate();
+      MessageTemplate message_id = WasmOpcodes::TrapReasonToMessageId(trap);
+      Handle<Object> exception =
+          isolate->factory()->NewWasmRuntimeError(message_id);
+      isolate->Throw(*exception);
+      if (HandleException(isolate) == ExceptionHandlingResult::HANDLED) {
+        return true;
+      }
+    }
     state_ = WasmInterpreter::TRAPPED;
     trap_reason_ = trap;
-    CommitPc(pc);
+    return false;
   }
 
   // Push a frame with arguments already on the stack.
@@ -1518,8 +1533,9 @@ class ThreadImpl {
     uint32_t index = Pop().to<uint32_t>();
     Address addr = BoundsCheckMem<mtype>(imm.offset, index);
     if (!addr) {
-      DoTrap(kTrapMemOutOfBounds, pc);
-      return false;
+      if (!DoTrap(kTrapMemOutOfBounds, pc)) return false;
+      UNREACHABLE();  // TODO(mstarzinger): Reload from frame and add test.
+      return true;
     }
     WasmValue result(
         converter<ctype, mtype>{}(ReadLittleEndianValue<mtype>(addr)));
@@ -1547,8 +1563,9 @@ class ThreadImpl {
     uint32_t index = Pop().to<uint32_t>();
     Address addr = BoundsCheckMem<mtype>(imm.offset, index);
     if (!addr) {
-      DoTrap(kTrapMemOutOfBounds, pc);
-      return false;
+      if (!DoTrap(kTrapMemOutOfBounds, pc)) return false;
+      UNREACHABLE();  // TODO(mstarzinger): Reload from frame and add test.
+      return true;
     }
     WriteLittleEndianValue<mtype>(addr, converter<mtype, ctype>{}(val));
     len = 1 + imm.length;
@@ -1574,8 +1591,9 @@ class ThreadImpl {
     uint32_t index = Pop().to<uint32_t>();
     address = BoundsCheckMem<type>(imm.offset, index);
     if (!address) {
-      DoTrap(kTrapMemOutOfBounds, pc);
-      return false;
+      if (!DoTrap(kTrapMemOutOfBounds, pc)) return false;
+      UNREACHABLE();  // TODO(mstarzinger): Reload from frame and add test.
+      return true;
     }
     len = 2 + imm.length;
     return true;
@@ -2220,7 +2238,7 @@ class ThreadImpl {
     Isolate* isolate = instance_object_->GetIsolate();
     HandleScope handle_scope(isolate);
     isolate->StackOverflow();
-    return HandleException(isolate) == WasmInterpreter::Thread::HANDLED;
+    return HandleException(isolate) == ExceptionHandlingResult::HANDLED;
   }
 
   void EncodeI32ExceptionValue(Handle<FixedArray> encoded_values,
@@ -2291,7 +2309,7 @@ class ThreadImpl {
     PopN(static_cast<int>(sig->parameter_count()));
     // Now that the exception is ready, set it as pending.
     isolate->Throw(*exception_object);
-    return HandleException(isolate) == WasmInterpreter::Thread::HANDLED;
+    return HandleException(isolate) == ExceptionHandlingResult::HANDLED;
   }
 
   // Throw a given existing exception. Returns true if the exception is being
@@ -2301,7 +2319,7 @@ class ThreadImpl {
     // TODO(mstarzinger): Use the passed {exception} here once reference types
     // as values on the operand stack are supported by the interpreter.
     isolate->ReThrow(*isolate->factory()->undefined_value());
-    return HandleException(isolate) == WasmInterpreter::Thread::HANDLED;
+    return HandleException(isolate) == ExceptionHandlingResult::HANDLED;
   }
 
   void Execute(InterpreterCode* code, pc_t pc, int max) {
@@ -2472,7 +2490,9 @@ class ThreadImpl {
           continue;
         }
         case kExprUnreachable: {
-          return DoTrap(kTrapUnreachable, pc);
+          if (!DoTrap(kTrapUnreachable, pc)) return;
+          ReloadFromFrameOnException(&decoder, &code, &pc, &limit, &len);
+          break;
         }
         case kExprEnd: {
           break;
@@ -2581,9 +2601,13 @@ class ThreadImpl {
               PAUSE_IF_BREAK_FLAG(AfterCall);
               continue;  // don't bump pc
             case ExternalCallResult::INVALID_FUNC:
-              return DoTrap(kTrapFuncInvalid, pc);
+              if (!DoTrap(kTrapFuncInvalid, pc)) return;
+              UNREACHABLE();  // TODO(mstarzinger): Reload from frame and test.
+              break;
             case ExternalCallResult::SIGNATURE_MISMATCH:
-              return DoTrap(kTrapFuncSigMismatch, pc);
+              if (!DoTrap(kTrapFuncSigMismatch, pc)) return;
+              UNREACHABLE();  // TODO(mstarzinger): Reload from frame and test.
+              break;
             case ExternalCallResult::EXTERNAL_RETURNED:
               PAUSE_IF_BREAK_FLAG(AfterCall);
               len = 1 + imm.length;
@@ -2806,7 +2830,10 @@ class ThreadImpl {
     ctype lval = Pop().to<ctype>();                         \
     auto result = Execute##name(lval, rval, &trap);         \
     possible_nondeterminism_ |= has_nondeterminism(result); \
-    if (trap != kTrapCount) return DoTrap(trap, pc);        \
+    if (trap != kTrapCount) {                               \
+      if (!DoTrap(trap, pc)) return;                        \
+      break;                                                \
+    }                                                       \
     Push(WasmValue(result));                                \
     break;                                                  \
   }
@@ -2819,7 +2846,10 @@ class ThreadImpl {
     ctype val = Pop().to<ctype>();                          \
     auto result = exec_fn(val, &trap);                      \
     possible_nondeterminism_ |= has_nondeterminism(result); \
-    if (trap != kTrapCount) return DoTrap(trap, pc);        \
+    if (trap != kTrapCount) {                               \
+      if (!DoTrap(trap, pc)) return;                        \
+      break;                                                \
+    }                                                       \
     Push(WasmValue(result));                                \
     break;                                                  \
   }
@@ -2958,7 +2988,7 @@ class ThreadImpl {
 
   ExternalCallResult TryHandleException(Isolate* isolate) {
     DCHECK(isolate->has_pending_exception());  // Assume exceptional return.
-    if (HandleException(isolate) == WasmInterpreter::Thread::UNWOUND) {
+    if (HandleException(isolate) == ExceptionHandlingResult::UNWOUND) {
       return {ExternalCallResult::EXTERNAL_UNWOUND};
     }
     return {ExternalCallResult::EXTERNAL_CAUGHT};
@@ -3282,10 +3312,6 @@ WasmInterpreter::State WasmInterpreter::Thread::Run(int num_steps) {
 }
 void WasmInterpreter::Thread::Pause() { return ToImpl(this)->Pause(); }
 void WasmInterpreter::Thread::Reset() { return ToImpl(this)->Reset(); }
-WasmInterpreter::Thread::ExceptionHandlingResult
-WasmInterpreter::Thread::HandleException(Isolate* isolate) {
-  return ToImpl(this)->HandleException(isolate);
-}
 pc_t WasmInterpreter::Thread::GetBreakpointPc() {
   return ToImpl(this)->GetBreakpointPc();
 }

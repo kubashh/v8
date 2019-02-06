@@ -111,8 +111,6 @@ class V8_EXPORT_PRIVATE WasmInterpreter {
     Thread() = delete;
 
    public:
-    enum ExceptionHandlingResult { HANDLED, UNWOUND };
-
     // Execution control.
     State state();
     void InitFrame(const WasmFunction* function, WasmValue* args);
@@ -121,9 +119,6 @@ class V8_EXPORT_PRIVATE WasmInterpreter {
     State Step() { return Run(1); }
     void Pause();
     void Reset();
-    // Handle the pending exception in the passed isolate. Unwind the stack
-    // accordingly. Return whether the exception was handled inside wasm.
-    ExceptionHandlingResult HandleException(Isolate* isolate);
 
     // Stack inspection and modification.
     pc_t GetBreakpointPc();

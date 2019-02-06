@@ -437,7 +437,6 @@ TEST(TestPossibleNondeterminism) {
 
 TEST(WasmInterpreterActivations) {
   WasmRunner<void> r(ExecutionTier::kInterpreter);
-  Isolate* isolate = r.main_isolate();
   BUILD(r, WASM_NOP);
 
   WasmInterpreter* interpreter = r.interpreter();
@@ -451,14 +450,20 @@ TEST(WasmInterpreterActivations) {
   thread->InitFrame(r.function(), nullptr);
   CHECK_EQ(2, thread->NumActivations());
   CHECK_EQ(2, thread->GetFrameCount());
-  isolate->set_pending_exception(Smi::kZero);
-  thread->HandleException(isolate);
+  CHECK_EQ(WasmInterpreter::FINISHED, thread->Run());
   CHECK_EQ(1, thread->GetFrameCount());
   CHECK_EQ(2, thread->NumActivations());
   thread->FinishActivation(act1);
   CHECK_EQ(1, thread->GetFrameCount());
   CHECK_EQ(1, thread->NumActivations());
-  thread->HandleException(isolate);
+  uint32_t act2 = thread->StartActivation();
+  CHECK_EQ(1, act2);
+  CHECK_EQ(1, thread->GetFrameCount());
+  CHECK_EQ(2, thread->NumActivations());
+  thread->FinishActivation(act2);
+  CHECK_EQ(1, thread->GetFrameCount());
+  CHECK_EQ(1, thread->NumActivations());
+  CHECK_EQ(WasmInterpreter::FINISHED, thread->Run());
   CHECK_EQ(0, thread->GetFrameCount());
   CHECK_EQ(1, thread->NumActivations());
   thread->FinishActivation(act0);
