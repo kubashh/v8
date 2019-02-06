@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e37474be_a204938d",
+        "filename": "src/torque/csa-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-02-06T12:44:45Z",
+      "side": 1,
+      "message": "As discussed offline, I think it\u0027s better not to replicate the logic in AllocateUninitializedFixedArray here, since that way it can be shared with the usual CSA code-paths.",
+      "parentUuid": "0bf4a598_5e264d0c",
+      "range": {
+        "startLine": 249,
+        "startChar": 39,
+        "endLine": 249,
+        "endChar": 70
+      },
+      "revId": "4ec936d36e12f297538c90251e44f67be955ca07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "02fb70b3_5ca1faea",
         "filename": "src/torque/csa-generator.cc",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2019-02-06T07:36:32Z",
       "side": 1,
       "message": "Yikes. OK, I guess this is alright for now. Alternatively, you could not special-case internal classes here (except for errors on non-Tagged types) by computing the field offsets starting at FixedArray::kHeaderSize. Don\u0027t know if that\u0027s less hack (\u0027cause we\u0027d be setting \"fields\" in FixedArrays, which under the covers is the same from an implementation perspective but it\u0027s also a bit weird).",
+      "range": {
+        "startLine": 745,
+        "startChar": 21,
+        "endLine": 745,
+        "endChar": 47
+      },
+      "revId": "4ec936d36e12f297538c90251e44f67be955ca07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12e9a364_b9ed2cd1",
+        "filename": "src/torque/csa-generator.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-02-06T12:44:45Z",
+      "side": 1,
+      "message": "I don\u0027t think we should share code with external classes here, in the LoadObjectFieldInstruction case we even cannot, since there we already emit C++ constants for external classes, which don\u0027t exist for internal ones.\nAlso, I think it\u0027s kind of clean to emit CSA code that manipulates FixedArrays using the existing CSA functionality, thus going through the same bottlenecks.",
+      "parentUuid": "02fb70b3_5ca1faea",
       "range": {
         "startLine": 745,
         "startChar": 21,
