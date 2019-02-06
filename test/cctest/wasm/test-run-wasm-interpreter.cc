@@ -451,14 +451,14 @@ TEST(WasmInterpreterActivations) {
   thread->InitFrame(r.function(), nullptr);
   CHECK_EQ(2, thread->NumActivations());
   CHECK_EQ(2, thread->GetFrameCount());
-  isolate->set_pending_exception(Smi::kZero);
-  thread->HandleException(isolate);
+  thread->RaiseException(isolate, handle(Smi::kZero, isolate));
   CHECK_EQ(1, thread->GetFrameCount());
   CHECK_EQ(2, thread->NumActivations());
   thread->FinishActivation(act1);
   CHECK_EQ(1, thread->GetFrameCount());
   CHECK_EQ(1, thread->NumActivations());
-  thread->HandleException(isolate);
+  isolate->clear_pending_exception();
+  thread->RaiseException(isolate, handle(Smi::kZero, isolate));
   CHECK_EQ(0, thread->GetFrameCount());
   CHECK_EQ(1, thread->NumActivations());
   thread->FinishActivation(act0);
