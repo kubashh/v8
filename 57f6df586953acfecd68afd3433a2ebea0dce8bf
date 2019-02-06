@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bbcc3449_db3218ce",
+        "filename": "src/wasm/wasm-interpreter.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-06T17:19:20Z",
+      "side": 1,
+      "message": "Two comments:\n1) It seems like the transition from RUNNING to STOPPED via RaiseException is only used by a test. Maybe we can refactor the test (which only tests activations are accounted correctly), and remove this transition?\n2) We can still go from RUNNING to STOPPED via unhandled exceptions, right? So I think we should keep this transition, and just put \"Exception\" as label.",
+      "revId": "57f6df586953acfecd68afd3433a2ebea0dce8bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
