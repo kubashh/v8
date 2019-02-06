@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e97b3d99_aef95c48",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2699,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "This is UB. For the time being, please use the EXTRACT_WORDS/GET_HIGH_WORD/GET_LOW_WORD helpers at the top of this file. They are also UB, but at least then we\u0027ll have to fix only one place.",
+      "range": {
+        "startLine": 2699,
+        "startChar": 1,
+        "endLine": 2699,
+        "endChar": 49
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4adb8f1a_cf087ee4",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2708,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "No, turning off the warnings in not a good way to fix them.",
+      "range": {
+        "startLine": 2708,
+        "startChar": 0,
+        "endLine": 2708,
+        "endChar": 41
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12967e12_ae24540c",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2761,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "nit {} whenever an if-block needs more than one line",
+      "range": {
+        "startLine": 2761,
+        "startChar": 4,
+        "endLine": 2761,
+        "endChar": 17
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f6d2562_53c34303",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "nit: {}",
+      "range": {
+        "startLine": 2788,
+        "startChar": 8,
+        "endLine": 2788,
+        "endChar": 21
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f756d5b_2853e6fc",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2790,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "nit: {}",
+      "range": {
+        "startLine": 2790,
+        "startChar": 8,
+        "endLine": 2790,
+        "endChar": 36
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "754346a2_49f2da24",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2792,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "nit: {}",
+      "range": {
+        "startLine": 2792,
+        "startChar": 8,
+        "endLine": 2792,
+        "endChar": 36
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aad827e_7cb820e0",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2796,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "{}",
+      "range": {
+        "startLine": 2796,
+        "startChar": 8,
+        "endLine": 2796,
+        "endChar": 23
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfc90869_68f03289",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2798,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "{}",
+      "range": {
+        "startLine": 2798,
+        "startChar": 8,
+        "endLine": 2798,
+        "endChar": 17
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e4ccd54_b238cb28",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2803,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "{}",
+      "range": {
+        "startLine": 2803,
+        "startChar": 8,
+        "endLine": 2803,
+        "endChar": 23
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94c34a42_ec836c09",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2960,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "to fix the UBSan warning:\n\n  j +\u003d static_cast\u003cuint32_t\u003e(n) \u003c\u003c 20;",
+      "range": {
+        "startLine": 2960,
+        "startChar": 2,
+        "endLine": 2960,
+        "endChar": 17
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6a53751_450f90f0",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2962,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "{}",
+      "range": {
+        "startLine": 2962,
+        "startChar": 4,
+        "endLine": 2962,
+        "endChar": 21
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e71d23f1_a23c66a6",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2964,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-06T20:15:00Z",
+      "side": 1,
+      "message": "{}, and another static_cast\u003cuint32_t\u003e(n)",
+      "range": {
+        "startLine": 2964,
+        "startChar": 4,
+        "endLine": 2964,
+        "endChar": 25
+      },
+      "revId": "d116beee1177373493e1307cc54e36d73ad052b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
