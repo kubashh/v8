@@ -1652,6 +1652,8 @@ void Heap::UpdateSurvivalStatistics(int start_new_space_size) {
 
 bool Heap::PerformGarbageCollection(
     GarbageCollector collector, const v8::GCCallbackFlags gc_callback_flags) {
+  DisallowJavascriptExecution no_js(isolate());
+
   size_t freed_global_handles = 0;
 
   if (!IsYoungGenerationCollector(collector)) {
