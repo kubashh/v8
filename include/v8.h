@@ -4103,6 +4103,10 @@ class PropertyCallbackInfo {
   static const int kDataIndex = 5;
   static const int kThisIndex = 6;
 
+  static const int kThrowOnError = 0;
+  static const int kDontThrow = 1;
+  static const int kInferShouldThrowMode = 2;
+
   V8_INLINE PropertyCallbackInfo(internal::Address* args) : args_(args) {}
   internal::Address* args_;
 };
@@ -10700,9 +10704,14 @@ ReturnValue<T> PropertyCallbackInfo<T>::GetReturnValue() const {
 template <typename T>
 bool PropertyCallbackInfo<T>::ShouldThrowOnError() const {
   typedef internal::Internals I;
-  return args_[kShouldThrowOnErrorIndex] != I::IntToSmi(0);
+  if (args_[kShouldThrowOnErrorIndex] !=
+      I::IntToSmi(PropertyCallbackInfo::kInferShouldThrowMode)) {
+    return args_[kShouldThrowOnErrorIndex] !=
+           I::IntToSmi(PropertyCallbackInfo::kDontThrow);
+  }
+  return v8::internal::ShouldThrowOnError(
+      reinterpret_cast<v8::internal::Isolate*>(GetIsolate()));
 }
-
 
 Local<Primitive> Undefined(Isolate* isolate) {
   typedef internal::Address S;
