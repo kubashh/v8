@@ -46,6 +46,30 @@
       "revId": "d1c05ff93fb99e803383ab2e4f0472eebd3fbf5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19a6d8d0_218486a5",
+        "filename": "src/wasm/wasm-interpreter.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-06T10:40:09Z",
+      "side": 1,
+      "message": "Ack. I see your point. There is an alternative implementation I tried where the call to {Throw} is moved into the interpreter itself. That one has the potential to be cleaner in the long run. Let me polish that up and upload it.",
+      "parentUuid": "571e9993_7b1b7a1d",
+      "range": {
+        "startLine": 88,
+        "startChar": 28,
+        "endLine": 88,
+        "endChar": 67
+      },
+      "revId": "d1c05ff93fb99e803383ab2e4f0472eebd3fbf5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
