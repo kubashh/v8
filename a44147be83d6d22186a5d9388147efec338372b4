@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1f3ddf9_9e8b685a",
+        "filename": "src/objects/map.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-02-06T13:23:57Z",
+      "side": 1,
+      "message": "This is for documentation, not really required by my change.",
+      "revId": "a44147be83d6d22186a5d9388147efec338372b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
