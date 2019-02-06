@@ -12,6 +12,10 @@
 #include "src/vector-slot-pair.h"
 #include "src/zone/zone.h"
 
+#ifdef OBJECT_PRINT
+#include "src/ostreams.h"
+#endif
+
 namespace v8 {
 namespace internal {
 namespace compiler {
@@ -59,6 +63,25 @@ bool Hints::IsEmpty() const {
   return constants().empty() && maps().empty() && function_blueprints().empty();
 }
 
+#ifdef OBJECT_PRINT
+std::ostream& operator<<(std::ostream& out,
+                         const FunctionBlueprint& blueprint) {
+  blueprint.shared->Print(out);
+  blueprint.feedback_vector->Print(out);
+  return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const Hints& hints) {
+  !hints.constants().empty() && out << "\t\tConstants:" << std::endl;
+  for (auto x : hints.constants()) x->Print(out);
+  !hints.maps().empty() && out << "\t\tMaps:" << std::endl;
+  for (auto x : hints.maps()) x->Print(out);
+  !hints.function_blueprints().empty() && out << "\t\tBlueprints:" << std::endl;
+  for (auto x : hints.function_blueprints()) out << x;
+  return out;
+}
+#endif
+
 void Hints::Clear() {
   constants_.clear();
   maps_.clear();
@@ -71,6 +94,19 @@ class SerializerForBackgroundCompilation::Environment : public ZoneObject {
   Environment(Zone* zone, Isolate* isolate, CompilationSubject function);
   Environment(Zone* zone, Isolate* isolate, CompilationSubject function,
               base::Optional<Hints> new_target, const HintsVector& arguments);
+
+  // When control flow bytecodes are encountered, e.g. a conditional jump,
+  // the current environment needs to be stashed together with the target jump
+  // address. Later, when this target bytecode is handled, the stashed
+  // environment will be merged into the current one. Presumably the source
+  // and the target would have the same layout, so this is enforced during
+  // {Merge}.
+  Environment* Copy(Zone* clone_zone);
+  void Merge(Environment* other);
+
+#ifdef OBJECT_PRINT
+  void Print();
+#endif
 
   FunctionBlueprint function() const { return function_; }
 
@@ -93,6 +129,7 @@ class SerializerForBackgroundCompilation::Environment : public ZoneObject {
   // Appends the hints for the given register range to {dst} (in order).
   void ExportRegisterHints(interpreter::Register first, size_t count,
                            HintsVector& dst);
+  int environment_hints_size() const { return function_closure_index() + 1; }
 
  private:
   int RegisterToLocalIndex(interpreter::Register reg) const;
@@ -102,6 +139,7 @@ class SerializerForBackgroundCompilation::Environment : public ZoneObject {
   int register_count() const { return register_count_; }
 
   Zone* const zone_;
+  Isolate* const isolate_;
   // Instead of storing the blueprint here, we could extract it from the
   // (closure) hints but that would be cumbersome.
   FunctionBlueprint const function_;
@@ -116,14 +154,18 @@ class SerializerForBackgroundCompilation::Environment : public ZoneObject {
   int accumulator_index() const { return parameter_count() + register_count(); }
   int current_context_index() const { return accumulator_index() + 1; }
   int function_closure_index() const { return current_context_index() + 1; }
-  int environment_hints_size() const { return function_closure_index() + 1; }
 
   Hints return_value_hints_;
+
+#ifdef OBJECT_PRINT
+  StdoutStream trace_out_;
+#endif
 };
 
 SerializerForBackgroundCompilation::Environment::Environment(
     Zone* zone, Isolate* isolate, CompilationSubject function)
     : zone_(zone),
+      isolate_(isolate),
       function_(function.blueprint()),
       parameter_count_(function_.shared->GetBytecodeArray()->parameter_count()),
       register_count_(function_.shared->GetBytecodeArray()->register_count()),
@@ -167,6 +209,55 @@ SerializerForBackgroundCompilation::Environment::Environment(
   }
 }
 
+SerializerForBackgroundCompilation::Environment*
+SerializerForBackgroundCompilation::Environment::Copy(Zone* clone_zone) {
+  CompilationSubject subject(function_);
+  SerializerForBackgroundCompilation::Environment* clone =
+      new (clone_zone) SerializerForBackgroundCompilation::Environment(
+          clone_zone, isolate_, subject);
+
+  CHECK(parameter_count() == clone->parameter_count());
+  CHECK(register_count() == clone->register_count());
+  CHECK(environment_hints_size() == clone->environment_hints_size());
+
+  for (size_t i = 0; i < environment_hints_.size(); ++i) {
+    clone->environment_hints_[i].Add(environment_hints_[i]);
+  }
+  clone->return_value_hints_.Add(return_value_hints_);
+
+  return clone;
+}
+
+void SerializerForBackgroundCompilation::Environment::Merge(
+    Environment* other) {
+  CHECK(parameter_count() == other->parameter_count());
+  CHECK(register_count() == other->register_count());
+  CHECK(environment_hints_size() == other->environment_hints_size());
+
+  for (size_t i = 0; i < environment_hints_.size(); ++i) {
+    environment_hints_[i].Add(other->environment_hints_[i]);
+  }
+  return_value_hints_.Add(other->return_value_hints_);
+}
+
+#ifdef OBJECT_PRINT
+void SerializerForBackgroundCompilation::Environment::Print() {
+  trace_out_ << "Function ";
+  function_.shared->Name()->Print(trace_out_);
+  trace_out_ << "Parameter count: " << parameter_count() << std::endl;
+  trace_out_ << "Register count: " << register_count() << std::endl;
+
+  trace_out_ << "Hints:\n";
+  for (size_t i = 0; i < environment_hints_.size(); ++i) {
+    trace_out_ << "\tSlot " << i << std::endl;
+    trace_out_ << environment_hints_[i];
+  }
+  trace_out_ << "\nReturn value:\n";
+  trace_out_ << return_value_hints_
+             << "===========================================\n";
+}
+#endif
+
 int SerializerForBackgroundCompilation::Environment::RegisterToLocalIndex(
     interpreter::Register reg) const {
   // TODO(mslekova): We also want to gather hints for the context.
@@ -183,9 +274,19 @@ SerializerForBackgroundCompilation::SerializerForBackgroundCompilation(
     JSHeapBroker* broker, Zone* zone, Handle<JSFunction> closure)
     : broker_(broker),
       zone_(zone),
+      stash_zone_(zone->allocator(), "Stash zone"),
       environment_(new (zone) Environment(zone, broker_->isolate(),
-                                          {closure, broker_->isolate()})) {
+                                          {closure, broker_->isolate()})),
+      stashed_environments_(zone) {
   JSFunctionRef(broker, closure).Serialize();
+#ifdef OBJECT_PRINT
+  if (FLAG_trace_heap_broker) {
+    StdoutStream out;
+    out << "Will run parent serializer with environment:\n"
+        << "===========================================\n";
+    environment()->Print();
+  }
+#endif
 }
 
 SerializerForBackgroundCompilation::SerializerForBackgroundCompilation(
@@ -193,8 +294,10 @@ SerializerForBackgroundCompilation::SerializerForBackgroundCompilation(
     base::Optional<Hints> new_target, const HintsVector& arguments)
     : broker_(broker),
       zone_(zone),
+      stash_zone_(zone->allocator(), "Stash zone"),
       environment_(new (zone) Environment(zone, broker_->isolate(), function,
-                                          new_target, arguments)) {
+                                          new_target, arguments)),
+      stashed_environments_(zone) {
   Handle<JSFunction> closure;
   if (function.closure().ToHandle(&closure)) {
     JSFunctionRef(broker, closure).Serialize();
@@ -208,6 +311,16 @@ Hints SerializerForBackgroundCompilation::Run() {
   if (shared.IsSerializedForCompilation(feedback_vector)) {
     return Hints(zone());
   }
+
+#ifdef OBJECT_PRINT
+  if (FLAG_trace_heap_broker) {
+    StdoutStream out;
+    out << "Will run child serializer with environment:\n"
+        << "===========================================\n";
+    environment()->Print();
+  }
+#endif
+
   shared.SetSerializedForCompilation(feedback_vector);
   feedback_vector.SerializeSlots();
   TraverseBytecode();
@@ -221,6 +334,7 @@ void SerializerForBackgroundCompilation::TraverseBytecode() {
   BytecodeArrayIterator iterator(bytecode_array.object());
 
   for (; !iterator.done(); iterator.Advance()) {
+    MergeAfterJump(&iterator);
     switch (iterator.current_bytecode()) {
 #define DEFINE_BYTECODE_CASE(name)     \
   case interpreter::Bytecode::k##name: \
@@ -461,9 +575,12 @@ Hints SerializerForBackgroundCompilation::RunChildSerializer(
     return RunChildSerializer(function, new_target, padded, false);
   }
 
+  Zone child_zone(zone()->allocator(), "child");
   SerializerForBackgroundCompilation child_serializer(
-      broker(), zone(), function, new_target, arguments);
-  return child_serializer.Run();
+      broker(), &child_zone, function, new_target, arguments);
+  Hints result = child_serializer.Run();
+  child_zone.ReleaseMemory();
+  return result;
 }
 
 namespace {
@@ -543,6 +660,29 @@ void SerializerForBackgroundCompilation::ProcessCallVarArgs(
   ProcessCallOrConstruct(callee, base::nullopt, arguments, slot);
 }
 
+void SerializerForBackgroundCompilation::ProcessJump(
+    interpreter::BytecodeArrayIterator* iterator) {
+  int jump_target = iterator->GetJumpTargetOffset();
+  int current_offset = iterator->current_offset();
+  if (current_offset >= jump_target) return;
+  Environment* stash = environment()->Copy(&stash_zone_);
+  stashed_environments_[jump_target] = stash;
+}
+
+void SerializerForBackgroundCompilation::MergeAfterJump(
+    interpreter::BytecodeArrayIterator* iterator) {
+  int current_offset = iterator->current_offset();
+  auto stash = stashed_environments_.find(current_offset);
+  if (stash != stashed_environments_.end()) {
+    environment()->Merge(stash->second);
+
+    stashed_environments_.erase(stash);
+    if (stashed_environments_.empty()) {
+      stash_zone_.ReleaseMemory();
+    }
+  }
+}
+
 void SerializerForBackgroundCompilation::VisitReturn(
     BytecodeArrayIterator* iterator) {
   environment()->return_value_hints().Add(environment()->accumulator_hints());
@@ -588,13 +728,13 @@ void SerializerForBackgroundCompilation::VisitConstructWithSpread(
   ProcessCallOrConstruct(callee, new_target, arguments, slot, true);
 }
 
-#define DEFINE_SKIPPED_JUMP(name, ...)                  \
+#define DEFINE_CLEAR_ENVIRONMENT(name, ...)             \
   void SerializerForBackgroundCompilation::Visit##name( \
       BytecodeArrayIterator* iterator) {                \
     environment()->ClearEphemeralHints();               \
   }
-CLEAR_ENVIRONMENT_LIST(DEFINE_SKIPPED_JUMP)
-#undef DEFINE_SKIPPED_JUMP
+CLEAR_ENVIRONMENT_LIST(DEFINE_CLEAR_ENVIRONMENT)
+#undef DEFINE_CLEAR_ENVIRONMENT
 
 #define DEFINE_CLEAR_ACCUMULATOR(name, ...)             \
   void SerializerForBackgroundCompilation::Visit##name( \
@@ -603,6 +743,23 @@ CLEAR_ENVIRONMENT_LIST(DEFINE_SKIPPED_JUMP)
   }
 CLEAR_ACCUMULATOR_LIST(DEFINE_CLEAR_ACCUMULATOR)
 #undef DEFINE_CLEAR_ACCUMULATOR
+
+#define DEFINE_CONDITIONAL_JUMP(name, ...)              \
+  void SerializerForBackgroundCompilation::Visit##name( \
+      BytecodeArrayIterator* iterator) {                \
+    ProcessJump(iterator);                              \
+  }
+CONDITIONAL_JUMPS_LIST(DEFINE_CONDITIONAL_JUMP)
+#undef DEFINE_CONDITIONAL_JUMP
+
+#define DEFINE_UNCONDITIONAL_JUMP(name, ...)            \
+  void SerializerForBackgroundCompilation::Visit##name( \
+      BytecodeArrayIterator* iterator) {                \
+    ProcessJump(iterator);                              \
+    environment()->ClearEphemeralHints();               \
+  }
+UNCONDITIONAL_JUMPS_LIST(DEFINE_UNCONDITIONAL_JUMP)
+#undef DEFINE_UNCONDITIONAL_JUMP
 
 }  // namespace compiler
 }  // namespace internal
