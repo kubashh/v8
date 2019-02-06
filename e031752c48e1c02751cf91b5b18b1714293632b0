@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bfc5317_471618db",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5143,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-02-06T10:59:47Z",
+      "side": 1,
+      "message": "nit - BuildThisVariableLoad.",
+      "range": {
+        "startLine": 5143,
+        "startChar": 24,
+        "endLine": 5143,
+        "endChar": 39
+      },
+      "revId": "e031752c48e1c02751cf91b5b18b1714293632b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
