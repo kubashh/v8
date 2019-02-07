@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "621fc1bf_03b06fdf",
+        "filename": "tools/testrunner/testproc/shard.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-07T11:10:54Z",
+      "side": 1,
+      "message": "Ack. Please add this explanation into description.",
+      "parentUuid": "022594ba_98efc321",
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a890e113_96d8b82e",
         "filename": "tools/unittests/run_tests_test.py",
         "patchSetId": 1
@@ -107,6 +125,30 @@
       "side": 1,
       "message": "This CL implements sharding by test identifier. Now that the test name matters, I\u0027ve swapped it with a different test",
       "parentUuid": "a890e113_96d8b82e",
+      "range": {
+        "startLine": 202,
+        "startChar": 24,
+        "endLine": 202,
+        "endChar": 50
+      },
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "47675091_0b719448",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-07T11:10:54Z",
+      "side": 1,
+      "message": "Ah, I\u0027ve failed to notice that you\u0027ve changed the test name above. All is good then :-)",
+      "parentUuid": "ae16541f_fb234f36",
       "range": {
         "startLine": 202,
         "startChar": 24,
