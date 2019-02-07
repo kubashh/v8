@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9542514c_b0c608e9",
+        "filename": "tools/testrunner/testproc/shard.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-07T09:40:40Z",
+      "side": 1,
+      "message": "Please update comment.",
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b90b4f14_06705099",
+        "filename": "tools/testrunner/testproc/shard.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-07T09:40:40Z",
+      "side": 1,
+      "message": "Why can\u0027t we simply continue passing every nth test as before?",
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a890e113_96d8b82e",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-07T09:40:40Z",
+      "side": 1,
+      "message": "Why wasn\u0027t it failing before? It seems strange that making changes to how things are sharded would change test outcomes.",
+      "range": {
+        "startLine": 202,
+        "startChar": 24,
+        "endLine": 202,
+        "endChar": 50
+      },
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
