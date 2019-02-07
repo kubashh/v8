@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2914061_de531540",
+        "filename": "tools/testrunner/testproc/shard_unittest.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-07T15:10:06Z",
+      "side": 1,
+      "message": "nit: lg. but maybe move the setUp code here since it\u0027s only used once? If it ever gets used twice, then it could be moved to setup. Like that one needs to look in two places to understand the test, and the other tests don\u0027t need it.",
+      "range": {
+        "startLine": 50,
+        "startChar": 16,
+        "endLine": 50,
+        "endChar": 26
+      },
+      "revId": "1c6bd18668b119f5021fa254c76e0b0df34b3eac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
