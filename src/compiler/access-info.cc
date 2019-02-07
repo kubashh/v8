@@ -619,9 +619,18 @@ Maybe<ElementsKind> GeneralizeElementsKind(ElementsKind this_kind,
 bool AccessInfoFactory::ConsolidateElementLoad(MapHandles const& maps,
                                                ElementAccessInfo* access_info) {
   if (maps.empty()) return false;
-  InstanceType instance_type = maps.front()->instance_type();
-  ElementsKind elements_kind = maps.front()->elements_kind();
+
+  MapHandles updated_maps;
+  updated_maps.reserve(maps.size());
   for (Handle<Map> map : maps) {
+    if (Map::TryUpdate(isolate(), map).ToHandle(&map)) {
+      updated_maps.push_back(map);
+    }
+  }
+
+  InstanceType instance_type = updated_maps.front()->instance_type();
+  ElementsKind elements_kind = updated_maps.front()->elements_kind();
+  for (Handle<Map> map : updated_maps) {
     if (!CanInlineElementAccess(map) || map->instance_type() != instance_type) {
       return false;
     }
@@ -630,7 +639,7 @@ bool AccessInfoFactory::ConsolidateElementLoad(MapHandles const& maps,
       return false;
     }
   }
-  *access_info = ElementAccessInfo(maps, elements_kind);
+  *access_info = ElementAccessInfo(updated_maps, elements_kind);
   return true;
 }
 
