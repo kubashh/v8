@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e63f8452_6097ee75",
+        "filename": "src/api.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 8918,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-02-07T14:10:59Z",
+      "side": 1,
+      "message": "Why do we need this if we only use the default microtask queue? Are there plans to use a different one?",
+      "range": {
+        "startLine": 8918,
+        "startChar": 6,
+        "endLine": 8918,
+        "endChar": 22
+      },
+      "revId": "b06123111e578d633750560260ea93d1cefd7fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
