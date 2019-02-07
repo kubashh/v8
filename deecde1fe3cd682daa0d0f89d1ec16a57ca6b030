@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f5518aaf_21831745",
+        "filename": "tools/testrunner/testproc/shard.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-07T12:28:35Z",
+      "side": 1,
+      "message": "nit: space too much",
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9542514c_b0c608e9",
         "filename": "tools/testrunner/testproc/shard.py",
         "patchSetId": 1
@@ -87,6 +104,52 @@
       "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fdfad33a_17035b17",
+        "filename": "tools/testrunner/testproc/shard_unittest.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-07T12:28:35Z",
+      "side": 1,
+      "message": "Maybe another test looping over e.g. 10 test cases with 5 variants each and asserting that all the outcomes are within 0 \u003c\u003d X \u003c 7.",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 69
+      },
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2011530_acf75ec5",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-07T12:28:35Z",
+      "side": 1,
+      "message": "Is this still accurate? Would be nicer if we could tweak the tests so that we have two variants distributed to two shards. Or add a test with that scenario.",
+      "range": {
+        "startLine": 196,
+        "startChar": 8,
+        "endLine": 196,
+        "endChar": 58
+      },
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
