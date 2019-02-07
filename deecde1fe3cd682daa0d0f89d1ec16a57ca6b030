@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "29f1e476_faa7ed0a",
+        "filename": "tools/testrunner/testproc/shard.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-07T13:00:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5518aaf_21831745",
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9542514c_b0c608e9",
         "filename": "tools/testrunner/testproc/shard.py",
         "patchSetId": 1
@@ -130,6 +148,30 @@
     },
     {
       "key": {
+        "uuid": "1aed10f5_88152b3f",
+        "filename": "tools/testrunner/testproc/shard_unittest.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-07T13:00:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdfad33a_17035b17",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 33,
+        "endChar": 69
+      },
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2011530_acf75ec5",
         "filename": "tools/unittests/run_tests_test.py",
         "patchSetId": 1
@@ -150,6 +192,30 @@
       "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9dd5ed0_9cdb18d6",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-07T13:00:56Z",
+      "side": 1,
+      "message": "That is exactly the case in the test (it\u0027s a for loop of assertions). Each shard runs 2 variants (default and stress)",
+      "parentUuid": "c2011530_acf75ec5",
+      "range": {
+        "startLine": 196,
+        "startChar": 8,
+        "endLine": 196,
+        "endChar": 58
+      },
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
