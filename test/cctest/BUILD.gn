@@ -368,16 +368,17 @@ v8_source_set("cctest_sources") {
   defines = []
   deps = [
     "../..:run_torque",
+    "../..:v8_maybe_snapshot",
   ]
 
-  if (is_component_build) {
-    # cctest can't be built against a shared library, so we
-    # need to depend on the underlying static target in that case.
-    deps += [ "../..:v8_maybe_snapshot" ]
-    defines += [ "BUILDING_V8_SHARED" ]
-  } else {
-    deps += [ "../..:v8" ]
-  }
+  #if (is_component_build) {
+  # cctest can't be built against a shared library, so we
+  # need to depend on the underlying static target in that case.
+  #  deps += [ "../..:v8_maybe_snapshot" ]
+  #  defines += [ "BUILDING_V8_SHARED" ]
+  #} else {
+  #  deps += [ "../..:v8" ]
+  #}
 
   if (v8_enable_i18n_support) {
     defines += [ "V8_INTL_SUPPORT" ]
