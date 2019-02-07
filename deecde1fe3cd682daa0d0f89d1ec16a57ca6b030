@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1079de79_eee94bc8",
+        "filename": "tools/testrunner/testproc/shard.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-07T09:48:38Z",
+      "side": 1,
+      "message": "Ack, will update after Michael\u0027s comments",
+      "parentUuid": "9542514c_b0c608e9",
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b90b4f14_06705099",
         "filename": "tools/testrunner/testproc/shard.py",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "022594ba_98efc321",
+        "filename": "tools/testrunner/testproc/shard.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-07T09:48:38Z",
+      "side": 1,
+      "message": "The execution order changes the shard ID, if we keep using the old method it\u0027ll be sharded non-deterministically.",
+      "parentUuid": "b90b4f14_06705099",
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae16541f_fb234f36",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-07T09:48:38Z",
+      "side": 1,
+      "message": "This CL implements sharding by test identifier. Now that the test name matters, I\u0027ve swapped it with a different test",
+      "parentUuid": "a890e113_96d8b82e",
+      "range": {
+        "startLine": 202,
+        "startChar": 24,
+        "endLine": 202,
+        "endChar": 50
+      },
+      "revId": "deecde1fe3cd682daa0d0f89d1ec16a57ca6b030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
