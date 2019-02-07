@@ -13,6 +13,8 @@
 namespace v8 {
 namespace internal {
 
+class FrameArray;
+
 class StackFrameInfo : public Struct {
  public:
   NEVER_READ_ONLY_SPACE
@@ -57,6 +59,55 @@ class StackFrameInfo : public Struct {
   static const int kIsWasmBit = 2;
 
   OBJECT_CONSTRUCTORS(StackFrameInfo, Struct);
+};
+
+// This class is used to lazily initialize a StackFrameInfo object from
+// a FrameArray plus an index.
+// The first time any of the Get* or Is* methods is called, a
+// StackFrameInfo object is allocated and all necessary informatoin
+// retrieved.
+class StackTraceFrame : public Struct {
+ public:
+  NEVER_READ_ONLY_SPACE
+  DECL_ACCESSORS(frame_array, Object)
+  DECL_INT_ACCESSORS(frame_index)
+  DECL_ACCESSORS(frame_info, Object)
+  DECL_INT_ACCESSORS(id)
+
+  DECL_CAST(StackTraceFrame)
+
+  // Dispatched behavior.
+  DECL_PRINTER(StackTraceFrame)
+  DECL_VERIFIER(StackTraceFrame)
+
+  // Layout description.
+#define STACK_FRAME_FIELDS(V)      \
+  V(kFrameArrayIndex, kTaggedSize) \
+  V(kFrameIndexIndex, kTaggedSize) \
+  V(kFrameInfoIndex, kTaggedSize)  \
+  V(kIdIndex, kTaggedSize)         \
+  /* Total size. */                \
+  V(kSize, 0)
+
+  DEFINE_FIELD_OFFSET_CONSTANTS(Struct::kHeaderSize, STACK_FRAME_FIELDS)
+#undef STACK_FRAME_FIELDS
+
+  inline int GetLineNumber();
+  inline int GetColumnNumber();
+  inline int GetScriptId();
+
+  inline Handle<Object> GetFileName();
+  inline Handle<Object> GetScriptNameOrSourceUrl();
+  inline Handle<Object> GetFunctionName();
+
+  inline bool IsEval();
+  inline bool IsConstructor();
+  inline bool IsWasm();
+
+ private:
+  OBJECT_CONSTRUCTORS(StackTraceFrame, Struct);
+
+  inline void InitializeFrameInfo();
 };
 
 }  // namespace internal
