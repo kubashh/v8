@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb2fcc53_499cccc2",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2950,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-07T19:25:20Z",
+      "side": 1,
+      "message": "j +\u003d static_cast\u003cint\u003e(static_cast\u003cuint32_t\u003e(n) \u003c\u003c 20);",
+      "range": {
+        "startLine": 2950,
+        "startChar": 2,
+        "endLine": 2950,
+        "endChar": 17
+      },
+      "revId": "ffe3a764430a87ead0cfff9f44fe5aab88b8631d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
