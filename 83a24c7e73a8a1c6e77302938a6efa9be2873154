@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9c134f2_9f1f5d37",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-07T14:34:40Z",
+      "side": 1,
+      "message": "suggestion: We should be able to also ...\nVerifySmiField(kIndexIndex);\nVerifySmiField(kIdIndex);",
+      "range": {
+        "startLine": 2055,
+        "startChar": 22,
+        "endLine": 2055,
+        "endChar": 43
+      },
+      "revId": "83a24c7e73a8a1c6e77302938a6efa9be2873154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "351229d4_3337f2a7",
+        "filename": "src/objects/stack-frame-info-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-07T14:34:40Z",
+      "side": 1,
+      "message": "This call is not gc-safe. We are in a non-handlified method here, which means that the \"this\" pointer is a raw pointer into the heap that the GC does not know about. The {InitializeFrameInfo} method is handlified and might trigger a GC. after such a GC the \"this\" pointer will be stale. The best way to fix this is to make all these accessors that perform lazy initialization handlified.",
+      "range": {
+        "startLine": 48,
+        "startChar": 35,
+        "endLine": 48,
+        "endChar": 54
+      },
+      "revId": "83a24c7e73a8a1c6e77302938a6efa9be2873154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d189bbb_f28057be",
+        "filename": "src/objects/stack-frame-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-07T14:34:40Z",
+      "side": 1,
+      "message": "nit: I am not sure why these are postfixed with \"Index\" in the {StackFrameInfo} object above, but AFAICT we usually use \"Offset\" as the postfix for these offsets. The value represents an offset in bytes and not an index in number-of-fields. I\u0027d vote for sticking with \"Offset\" here.",
+      "range": {
+        "startLine": 85,
+        "startChar": 15,
+        "endLine": 85,
+        "endChar": 20
+      },
+      "revId": "83a24c7e73a8a1c6e77302938a6efa9be2873154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
