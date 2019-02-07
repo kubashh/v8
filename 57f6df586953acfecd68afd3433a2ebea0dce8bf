@@ -16,6 +16,24 @@
       "revId": "57f6df586953acfecd68afd3433a2ebea0dce8bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de3aa085_5b75a778",
+        "filename": "src/wasm/wasm-interpreter.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-07T10:03:45Z",
+      "side": 1,
+      "message": "Done.\n1) I adapted the diagram as proposed, good idea, make is clearer.\n2) I added a DCHECK to {RaiseException} that the transition can only come from TRAPPED (and no longer from RUNNING) and adapted the test accordingly.",
+      "parentUuid": "bbcc3449_db3218ce",
+      "revId": "57f6df586953acfecd68afd3433a2ebea0dce8bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
