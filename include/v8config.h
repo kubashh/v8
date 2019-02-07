@@ -356,12 +356,14 @@
 // the V8 DLL USING_V8_SHARED needs to be defined. When either building the V8
 // static library or building a program which uses the V8 static library neither
 // BUILDING_V8_SHARED nor USING_V8_SHARED should be defined.
-#ifdef BUILDING_V8_SHARED
-# define V8_EXPORT __declspec(dllexport)
-#elif USING_V8_SHARED
-# define V8_EXPORT __declspec(dllimport)
+#if defined(BUILDING_V8_SHARED) && defined(USING_V8_SHARED)
+#error Cannot build and use V8 shared library at once.
+#elif defined(BUILDING_V8_SHARED)
+#define V8_EXPORT __declspec(dllexport)
+#elif defined(USING_V8_SHARED)
+#define V8_EXPORT __declspec(dllimport)
 #else
-# define V8_EXPORT
+#define V8_EXPORT
 #endif  // BUILDING_V8_SHARED
 
 #else  // V8_OS_WIN
