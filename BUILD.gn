@@ -955,7 +955,10 @@ action("run_torque") {
 }
 
 v8_source_set("torque_generated_initializers") {
-  visibility = [ ":*" ]  # Only targets in this file can depend on this.
+  visibility = [
+    ":*",
+    "./test/*",
+  ]
 
   deps = [
     ":generate_bytecode_builtins_list",
