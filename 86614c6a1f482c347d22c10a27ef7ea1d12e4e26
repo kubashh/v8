@@ -34,6 +34,24 @@
       "revId": "86614c6a1f482c347d22c10a27ef7ea1d12e4e26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e848589_22764b1a",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-08T11:47:00Z",
+      "side": 1,
+      "message": "This code will die once the Torque formatter is rewritten. The current formatter is already causing some headaches since this is essentially a wrapper around the clang formatter.",
+      "parentUuid": "fc7ebad9_5553e3d9",
+      "revId": "86614c6a1f482c347d22c10a27ef7ea1d12e4e26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
