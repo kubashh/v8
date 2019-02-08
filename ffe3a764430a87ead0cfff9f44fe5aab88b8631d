@@ -22,6 +22,30 @@
       "revId": "ffe3a764430a87ead0cfff9f44fe5aab88b8631d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b45b2ea_86f4e003",
+        "filename": "src/base/ieee754.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2950,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-08T10:32:31Z",
+      "side": 1,
+      "message": "Done by Gus.",
+      "parentUuid": "cb2fcc53_499cccc2",
+      "range": {
+        "startLine": 2950,
+        "startChar": 2,
+        "endLine": 2950,
+        "endChar": 17
+      },
+      "revId": "ffe3a764430a87ead0cfff9f44fe5aab88b8631d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
