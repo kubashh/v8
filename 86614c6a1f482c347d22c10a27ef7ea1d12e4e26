@@ -52,6 +52,24 @@
       "revId": "86614c6a1f482c347d22c10a27ef7ea1d12e4e26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "106a38c8_66960da0",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-08T11:47:57Z",
+      "side": 1,
+      "message": "I see. Then it\u0027s fine, but please do use argparse in other code. Even this CL would probably be easier to write with it.",
+      "parentUuid": "7e848589_22764b1a",
+      "revId": "86614c6a1f482c347d22c10a27ef7ea1d12e4e26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
