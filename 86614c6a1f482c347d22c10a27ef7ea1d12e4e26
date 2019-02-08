@@ -70,6 +70,24 @@
       "revId": "86614c6a1f482c347d22c10a27ef7ea1d12e4e26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ec2066f4_2f3a3a7f",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-02-08T11:50:59Z",
+      "side": 1,
+      "message": "There are no plans to re-write the formatter, and I don\u0027t think there should be. That would be a very large and difficult task, and I am not aware of any lasting/difficult problem that we have with the wrapped clang version. Which headaches are you referring to?",
+      "parentUuid": "106a38c8_66960da0",
+      "revId": "86614c6a1f482c347d22c10a27ef7ea1d12e4e26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
