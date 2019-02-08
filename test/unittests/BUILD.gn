@@ -285,7 +285,9 @@ v8_source_set("unittests_sources") {
   ]
 
   deps = [
+    "../:common_test_headers",
     "../..:v8_for_testing",
+    "../..:v8_headers",
     "../..:v8_libbase",
     "../..:v8_libplatform",
     "//build/win:default_exe_manifest",
