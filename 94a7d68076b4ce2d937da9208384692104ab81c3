@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "052f217f_f29f40cd",
+        "filename": "src/objects/stack-frame-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-08T14:14:11Z",
+      "side": 1,
+      "message": "This invocation is not gc-safe, I am actually scared that GC-mole is not flagging this. The issue underlying this is somewhat quirky. For C++ it is not fully specified whether in the \"a-\u003e(*foo())\" pattern the dereference of a happens before or after foo() is called. This means the compiler could dereference the {frame} handle before actually calling {NewStackFrameInfo} which triggers a GC. The solution is simply just calling {NewStackFrameInfo} in a separate line and hence sequence the order operation in two different statements. Concretely ...\n\nHandle\u003cStackFrameInfo\u003e frame_into \u003d isolate-\u003efactory()-\u003eNewStackFrameInfo(...);\nframe-\u003eset_frame_info(*frame_info);",
+      "range": {
+        "startLine": 71,
+        "startChar": 2,
+        "endLine": 71,
+        "endChar": 62
+      },
+      "revId": "94a7d68076b4ce2d937da9208384692104ab81c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
