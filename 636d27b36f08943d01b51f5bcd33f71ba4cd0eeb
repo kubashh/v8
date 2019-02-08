@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58eac450_22d250a4",
+        "filename": "src/compiler/access-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-02-08T13:20:59Z",
+      "side": 1,
+      "message": "This should be moved below the loop and changed to \n\nif (updated_maps.empty()) return false;",
+      "range": {
+        "startLine": 621,
+        "startChar": 2,
+        "endLine": 621,
+        "endChar": 33
+      },
+      "revId": "636d27b36f08943d01b51f5bcd33f71ba4cd0eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
