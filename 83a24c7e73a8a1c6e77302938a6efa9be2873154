@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "96bb2191_0c0d53c1",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2055,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-08T08:34:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9c134f2_9f1f5d37",
+      "range": {
+        "startLine": 2055,
+        "startChar": 22,
+        "endLine": 2055,
+        "endChar": 43
+      },
+      "revId": "83a24c7e73a8a1c6e77302938a6efa9be2873154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "351229d4_3337f2a7",
         "filename": "src/objects/stack-frame-info-inl.h",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d8e15263_36468e84",
+        "filename": "src/objects/stack-frame-info-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-08T08:34:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "351229d4_3337f2a7",
+      "range": {
+        "startLine": 48,
+        "startChar": 35,
+        "endLine": 48,
+        "endChar": 54
+      },
+      "revId": "83a24c7e73a8a1c6e77302938a6efa9be2873154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d189bbb_f28057be",
         "filename": "src/objects/stack-frame-info.h",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "83a24c7e73a8a1c6e77302938a6efa9be2873154",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2b7de63_a22def23",
+        "filename": "src/objects/stack-frame-info.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-08T08:34:47Z",
+      "side": 1,
+      "message": "Done, will clean up StackFrameInfo in a separate CL.",
+      "parentUuid": "2d189bbb_f28057be",
+      "range": {
+        "startLine": 85,
+        "startChar": 15,
+        "endLine": 85,
+        "endChar": 20
+      },
+      "revId": "83a24c7e73a8a1c6e77302938a6efa9be2873154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
