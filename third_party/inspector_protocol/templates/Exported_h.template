@@ -50,9 +50,9 @@ namespace {{param.name | to_title_case}}Enum {
 
 class {{config.exported.export_macro}} {{type.id}} {
 public:
-    virtual {{config.exported.string_out}} toJSONString() const = 0;
-    virtual ~{{type.id}}() { }
-    static std::unique_ptr<protocol::{{domain.domain}}::API::{{type.id}}> fromJSONString(const {{config.exported.string_in}}& json);
+    virtual V8_EXPORT {{config.exported.string_out}} toJSONString() const = 0;
+    virtual V8_EXPORT ~{{type.id}}() { }
+    static V8_EXPORT std::unique_ptr<protocol::{{domain.domain}}::API::{{type.id}}> fromJSONString(const {{config.exported.string_in}}& json);
 };
   {% endfor %}
 
