@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b01ff63_e4c589e8",
+        "filename": "src/builtins/builtins-handler-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-02-08T14:28:46Z",
+      "side": 1,
+      "message": "I\u0027m afraid this handler can be used for both LoadIC and KeyedLoadIC.",
+      "revId": "fa5d57bbf1cf8399a5f5278a53d00eaec8bb7d2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
