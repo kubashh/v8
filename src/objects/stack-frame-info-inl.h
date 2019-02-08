@@ -8,6 +8,7 @@
 #include "src/objects/stack-frame-info.h"
 
 #include "src/heap/heap-write-barrier-inl.h"
+#include "src/objects/frame-array-inl.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -33,6 +34,15 @@ BOOL_ACCESSORS(StackFrameInfo, flag, is_eval, kIsEvalBit)
 BOOL_ACCESSORS(StackFrameInfo, flag, is_constructor, kIsConstructorBit)
 BOOL_ACCESSORS(StackFrameInfo, flag, is_wasm, kIsWasmBit)
 SMI_ACCESSORS(StackFrameInfo, id, kIdIndex)
+
+OBJECT_CONSTRUCTORS_IMPL(StackTraceFrame, Struct)
+NEVER_READ_ONLY_SPACE_IMPL(StackTraceFrame)
+CAST_ACCESSOR(StackTraceFrame)
+
+ACCESSORS(StackTraceFrame, frame_array, Object, kFrameArrayIndex)
+SMI_ACCESSORS(StackTraceFrame, frame_index, kFrameIndexIndex)
+ACCESSORS(StackTraceFrame, frame_info, Object, kFrameInfoIndex)
+SMI_ACCESSORS(StackTraceFrame, id, kIdIndex)
 
 }  // namespace internal
 }  // namespace v8
