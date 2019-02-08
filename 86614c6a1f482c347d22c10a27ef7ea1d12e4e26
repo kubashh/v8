@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b77f13f_9fa47ca0",
+        "filename": "tools/torque/format-torque.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-08T11:41:28Z",
+      "side": 1,
+      "message": "Can we please convert this code to use argparse instead?\n\n  parser \u003d argparse.ArgumentParser()\n  parser.add_argument(\u0027-i\u0027, \u0027-f\u0027, \u0027--format\u0027, help\u003d\u0027...\u0027)\n  parser.add_argument(\u0027-l\u0027, \u0027--lint\u0027, help\u003d\u0027...\u0027)\n  args \u003d parser.parse_args()\n\n  if not args.format and not args.lint:\n    parser.error(\u0027-i and/or -l required\u0027)",
+      "revId": "86614c6a1f482c347d22c10a27ef7ea1d12e4e26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
