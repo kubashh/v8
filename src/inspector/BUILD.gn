@@ -63,14 +63,19 @@ inspector_protocol_generate("protocol_generated_sources") {
 
 config("inspector_config") {
   visibility = [ ":*" ]  # Only targets in this file can depend on this.
-  if (is_component_build) {
-    defines = [ "BUILDING_V8_SHARED" ]
-  }
+
+  configs = [
+    "../..:external_config",
+    "../..:internal_config_base",
+  ]
 }
 
 v8_source_set("inspector") {
   deps = [
     ":protocol_generated_sources",
+    "../../:v8",
+    "../../:v8_libbase",
+    "../../:v8_version",
   ]
   configs = [ ":inspector_config" ]
   include_dirs = [

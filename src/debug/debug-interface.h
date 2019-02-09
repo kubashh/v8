@@ -28,11 +28,11 @@ class TypeProfile;
 
 namespace debug {
 
-void SetContextId(Local<Context> context, int id);
-int GetContextId(Local<Context> context);
+void V8_EXPORT_PRIVATE SetContextId(Local<Context> context, int id);
+int V8_EXPORT_PRIVATE GetContextId(Local<Context> context);
 
 void SetInspector(Isolate* isolate, v8_inspector::V8Inspector*);
-v8_inspector::V8Inspector* GetInspector(Isolate* isolate);
+v8_inspector::V8Inspector* V8_EXPORT_PRIVATE GetInspector(Isolate* isolate);
 
 // Schedule a debugger break to happen when function is called inside given
 // isolate.
@@ -493,7 +493,7 @@ class PostponeInterruptsScope {
   std::unique_ptr<i::PostponeInterruptsScope> scope_;
 };
 
-class WeakMap : public v8::Object {
+class V8_EXPORT_PRIVATE WeakMap : public v8::Object {
  public:
   V8_WARN_UNUSED_RESULT v8::MaybeLocal<v8::Value> Get(
       v8::Local<v8::Context> context, v8::Local<v8::Value> key);
