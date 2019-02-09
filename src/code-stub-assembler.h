@@ -317,11 +317,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     return UncheckedCast<Smi>(value);
   }
 
-  TNode<Smi> TaggedToPositiveSmi(TNode<Object> value, Label* fail) {
-    GotoIfNot(TaggedIsPositiveSmi(value), fail);
-    return UncheckedCast<Smi>(value);
-  }
-
   TNode<String> TaggedToDirectString(TNode<Object> value, Label* fail);
 
   TNode<Number> TaggedToNumber(TNode<Object> value, Label* fail) {
@@ -338,12 +333,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                                      Label* fail) {
     GotoIfNot(IsJSArray(heap_object), fail);
     return UncheckedCast<JSArray>(heap_object);
-  }
-
-  TNode<JSArrayBuffer> HeapObjectToJSArrayBuffer(TNode<HeapObject> heap_object,
-                                                 Label* fail) {
-    GotoIfNot(IsJSArrayBuffer(heap_object), fail);
-    return UncheckedCast<JSArrayBuffer>(heap_object);
   }
 
   TNode<JSArray> TaggedToFastJSArray(TNode<Context> context,
@@ -404,10 +393,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   uintptr_t ConstexprUintPtrShl(uintptr_t a, int32_t b) { return a << b; }
   uintptr_t ConstexprUintPtrShr(uintptr_t a, int32_t b) { return a >> b; }
-  intptr_t ConstexprIntPtrAdd(intptr_t a, intptr_t b) { return a + b; }
-  uintptr_t ConstexprUintPtrAdd(uintptr_t a, uintptr_t b) { return a + b; }
-  intptr_t ConstexprWordNot(intptr_t a) { return ~a; }
-  uintptr_t ConstexprWordNot(uintptr_t a) { return ~a; }
 
   TNode<Object> NoContextConstant();
 
@@ -674,18 +659,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   }
 
   template <class... TArgs>
-  TNode<JSReceiver> ConstructWithTarget(TNode<Context> context,
-                                        TNode<JSReceiver> target,
-                                        TNode<JSReceiver> new_target,
-                                        TArgs... args) {
-    return CAST(ConstructJSWithTarget(CodeFactory::Construct(isolate()),
-                                      context, target, new_target,
-                                      implicit_cast<TNode<Object>>(args)...));
-  }
-  template <class... TArgs>
   TNode<JSReceiver> Construct(TNode<Context> context,
                               TNode<JSReceiver> new_target, TArgs... args) {
-    return ConstructWithTarget(context, new_target, new_target, args...);
+    return CAST(ConstructJS(CodeFactory::Construct(isolate()), context,
+                            new_target, implicit_cast<TNode<Object>>(args)...));
   }
 
   template <class A, class F, class G>
@@ -1133,8 +1110,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       MachineType machine_type = MachineType::Float64());
   TNode<RawPtrT> LoadFixedTypedArrayBackingStore(
       TNode<FixedTypedArrayBase> typed_array);
-  TNode<RawPtrT> LoadFixedTypedArrayOnHeapBackingStore(
-      TNode<FixedTypedArrayBase> typed_array);
   Node* LoadFixedTypedArrayElementAsTagged(
       Node* data_pointer, Node* index_node, ElementsKind elements_kind,
       ParameterMode parameter_mode = INTPTR_PARAMETERS);
@@ -1217,12 +1192,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   template <class T = Object>
   void StoreObjectFieldNoWriteBarrier(TNode<HeapObject> object,
                                       TNode<IntPtrT> offset, TNode<T> value) {
-    StoreObjectFieldNoWriteBarrier(object, offset, value,
-                                   MachineRepresentationOf<T>::value);
-  }
-  template <class T = Object>
-  void StoreObjectFieldNoWriteBarrier(TNode<HeapObject> object, int offset,
-                                      TNode<T> value) {
     StoreObjectFieldNoWriteBarrier(object, offset, value,
                                    MachineRepresentationOf<T>::value);
   }
@@ -2282,11 +2251,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   };
 
   // ES6 7.1.17 ToIndex, but jumps to range_error if the result is not a Smi.
-  TNode<Smi> ToSmiIndex(TNode<Context> context, TNode<Object> input,
+  TNode<Smi> ToSmiIndex(TNode<Object> input, TNode<Context> context,
                         Label* range_error);
 
   // ES6 7.1.15 ToLength, but jumps to range_error if the result is not a Smi.
-  TNode<Smi> ToSmiLength(TNode<Context> context, TNode<Object> input,
+  TNode<Smi> ToSmiLength(TNode<Object> input, TNode<Context> context,
                          Label* range_error);
 
   // ES6 7.1.15 ToLength, but with inlined fast path.
@@ -2659,10 +2628,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   Node* GetMethod(Node* context, Node* object, Handle<Name> name,
                   Label* if_null_or_undefined);
-
-  TNode<Object> GetIteratorMethod(TNode<Context> context,
-                                  TNode<HeapObject> heap_obj,
-                                  Label* if_iteratorundefined);
 
   template <class... TArgs>
   TNode<Object> CallBuiltin(Builtins::Name id, SloppyTNode<Object> context,
@@ -3140,7 +3105,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   bool ConstexprBoolNot(bool value) { return !value; }
 
   bool ConstexprInt31Equal(int31_t a, int31_t b) { return a == b; }
-  bool ConstexprInt31GreaterThanEqual(int31_t a, int31_t b) { return a >= b; }
   uint32_t ConstexprUint32Add(uint32_t a, uint32_t b) { return a + b; }
 
   void PerformStackCheck(TNode<Context> context);

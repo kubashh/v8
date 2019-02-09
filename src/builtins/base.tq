@@ -18,9 +18,6 @@ type never;
 type Tagged generates 'TNode<Object>' constexpr 'ObjectPtr';
 type Smi extends Tagged generates 'TNode<Smi>' constexpr 'Smi';
 
-// A Smi that is greater than or equal to 0. See TaggedIsPositiveSmi.
-type PositiveSmi extends Smi generates 'TNode<Smi>';
-
 extern class HeapObject extends Tagged { map: Map; }
 
 type Object = Smi | HeapObject;
@@ -188,12 +185,6 @@ intrinsic %RawDownCast<To: type, From: type>(x: From): To;
 intrinsic %RawConstexprCast<To: type, From: type>(f: From): To;
 
 type NativeContextSlot generates 'TNode<IntPtrT>' constexpr 'int32_t';
-const ARRAY_BUFFER_FUN_INDEX: constexpr NativeContextSlot
-    generates 'Context::ARRAY_BUFFER_FUN_INDEX';
-const ARRAY_BUFFER_NOINIT_FUN_INDEX: constexpr NativeContextSlot
-    generates 'Context::ARRAY_BUFFER_NOINIT_FUN_INDEX';
-const ARRAY_BUFFER_MAP_INDEX: constexpr NativeContextSlot
-    generates 'Context::ARRAY_BUFFER_MAP_INDEX';
 const ARRAY_JOIN_STACK_INDEX: constexpr NativeContextSlot
     generates 'Context::ARRAY_JOIN_STACK_INDEX';
 const OBJECT_FUNCTION_INDEX: constexpr NativeContextSlot
@@ -320,12 +311,6 @@ const kCalledNonCallable: constexpr MessageTemplate
     generates 'MessageTemplate::kCalledNonCallable';
 const kCalledOnNullOrUndefined: constexpr MessageTemplate
     generates 'MessageTemplate::kCalledOnNullOrUndefined';
-const kInvalidOffset: constexpr MessageTemplate
-    generates 'MessageTemplate::kInvalidOffset';
-const kInvalidTypedArrayLength: constexpr MessageTemplate
-    generates 'MessageTemplate::kInvalidTypedArrayLength';
-const kIteratorSymbolNonCallable: constexpr MessageTemplate
-    generates 'MessageTemplate::kIteratorSymbolNonCallable';
 const kIteratorValueNotAnObject: constexpr MessageTemplate
     generates 'MessageTemplate::kIteratorValueNotAnObject';
 const kNotIterable: constexpr MessageTemplate
@@ -335,18 +320,10 @@ const kFirstArgumentNotRegExp: constexpr MessageTemplate
 
 const kMaxArrayIndex:
     constexpr uint32 generates 'JSArray::kMaxArrayIndex';
-const kTypedArrayMaxByteLength:
-    constexpr uintptr generates 'FixedTypedArrayBase::kMaxByteLength';
-const V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP:
-    constexpr int31 generates 'V8_TYPED_ARRAY_MAX_SIZE_IN_HEAP';
 const kMaxSafeInteger: constexpr float64 generates 'kMaxSafeInteger';
 const kStringMaxLength: constexpr int31 generates 'String::kMaxLength';
 const kFixedArrayMaxLength:
     constexpr int31 generates 'FixedArray::kMaxLength';
-const kFixedTypedArrayBaseHeaderSize: constexpr intptr
-    generates 'FixedTypedArrayBase::kHeaderSize';
-const kObjectAlignmentMask: constexpr intptr
-    generates 'kObjectAlignmentMask';
 
 const kMaxRegularHeapObjectSize: constexpr int31
     generates 'kMaxRegularHeapObjectSize';
@@ -433,10 +410,6 @@ extern macro ToInteger_Inline(
     Context, Object, constexpr ToIntegerTruncationMode): Number;
 extern macro ToLength_Inline(Context, Object): Number;
 extern macro ToNumber_Inline(Context, Object): Number;
-extern macro ToSmiIndex(implicit context: Context)(Object): PositiveSmi
-    labels IfRangeError;
-extern macro ToSmiLength(implicit context: Context)(Object): PositiveSmi
-    labels IfRangeError;
 extern macro ToString_Inline(Context, Object): String;
 extern transitioning macro GetProperty(implicit context: Context)(
     Object, Object): Object;
@@ -452,10 +425,7 @@ extern transitioning macro HasProperty_Inline(implicit context: Context)(
     JSReceiver, Object): Boolean;
 
 extern macro ThrowRangeError(Context, constexpr MessageTemplate): never;
-extern macro ThrowRangeError(Context, constexpr MessageTemplate, Object): never;
 extern macro ThrowTypeError(Context, constexpr MessageTemplate): never;
-extern macro ThrowTypeError(
-    Context, constexpr MessageTemplate, constexpr string): never;
 extern macro ThrowTypeError(Context, constexpr MessageTemplate, Object): never;
 extern macro ThrowTypeError(
     Context, constexpr MessageTemplate, Object, Object, Object): never;
@@ -474,12 +444,6 @@ extern macro Construct(implicit context: Context)(
     Constructor, Object, Object): JSReceiver;
 extern macro Construct(implicit context: Context)(
     Constructor, Object, Object, Object): JSReceiver;
-extern macro ConstructWithTarget(implicit context: Context)(
-    Constructor, JSReceiver): JSReceiver;
-extern macro ConstructWithTarget(implicit context: Context)(
-    Constructor, JSReceiver, Object): JSReceiver;
-extern macro SpeciesConstructor(implicit context: Context)(
-    Object, JSReceiver): JSReceiver;
 
 extern builtin ToObject(Context, Object): JSReceiver;
 extern macro ToObject_Inline(Context, Object): JSReceiver;
@@ -497,7 +461,6 @@ extern transitioning runtime CreateDataProperty(implicit context: Context)(
 extern macro LoadBufferObject(RawPtr, constexpr int32): Object;
 extern macro LoadBufferPointer(RawPtr, constexpr int32): RawPtr;
 extern macro LoadBufferSmi(RawPtr, constexpr int32): Smi;
-extern macro LoadFixedTypedArrayOnHeapBackingStore(FixedTypedArrayBase): RawPtr;
 
 extern macro LoadRoot(constexpr RootIndex): Object;
 extern macro StoreRoot(constexpr RootIndex, Object): Object;
@@ -565,11 +528,6 @@ extern operator '<=' macro IntPtrLessThanOrEqual(intptr, intptr): bool;
 extern operator '<=' macro UintPtrLessThanOrEqual(uintptr, uintptr): bool;
 extern operator '>=' macro IntPtrGreaterThanOrEqual(intptr, intptr): bool;
 extern operator '>=' macro UintPtrGreaterThanOrEqual(uintptr, uintptr): bool;
-extern operator '~' macro WordNot(intptr): intptr;
-extern operator '~' macro WordNot(uintptr): uintptr;
-extern operator '~' macro ConstexprWordNot(constexpr intptr): constexpr intptr;
-extern operator '~' macro ConstexprWordNot(constexpr uintptr):
-    constexpr uintptr;
 
 extern operator '==' macro Float64Equal(float64, float64): bool;
 extern operator '!=' macro Float64NotEqual(float64, float64): bool;
@@ -593,10 +551,6 @@ extern operator '>' macro BranchIfNumberGreaterThan(Number, Number): never
 extern operator '>=' macro BranchIfNumberGreaterThanOrEqual(
     Number, Number): never
     labels Taken, NotTaken;
-
-extern builtin Divide(implicit context: Context)(Object, Object): Numeric;
-extern builtin Modulus(implicit context: Context)(Object, Object): Numeric;
-extern builtin Subtract(implicit context: Context)(Object, Object): Numeric;
 
 // The type of all tagged values that can safely be compared with WordEqual.
 type TaggedWithIdentity =
@@ -623,10 +577,6 @@ extern operator '<<' macro SmiShl(Smi, constexpr int31): Smi;
 extern operator '>>' macro SmiSar(Smi, constexpr int31): Smi;
 
 extern operator '+' macro IntPtrAdd(intptr, intptr): intptr;
-extern operator '+' macro ConstexprIntPtrAdd(
-    constexpr intptr, constexpr intptr): constexpr intptr;
-extern operator '+' macro ConstexprUintPtrAdd(
-    constexpr uintptr, constexpr uintptr): constexpr intptr;
 extern operator '-' macro IntPtrSub(intptr, intptr): intptr;
 extern operator '*' macro IntPtrMul(intptr, intptr): intptr;
 extern operator '/' macro IntPtrDiv(intptr, intptr): intptr;
@@ -651,9 +601,6 @@ extern operator '&' macro Word32And(int32, int32): int32;
 extern operator '&' macro Word32And(uint32, uint32): uint32;
 extern operator '==' macro
 ConstexprInt31Equal(constexpr int31, constexpr int31): constexpr bool;
-extern operator '>=' macro
-ConstexprInt31GreaterThanEqual(
-    constexpr int31, constexpr int31): constexpr bool;
 
 extern operator '==' macro Word32Equal(int32, int32): bool;
 extern operator '==' macro Word32Equal(uint32, uint32): bool;
@@ -687,8 +634,6 @@ extern operator '>>>' macro ConstexprUintPtrShr(
 
 extern macro SmiMax(Smi, Smi): Smi;
 extern macro SmiMin(Smi, Smi): Smi;
-extern macro SmiMul(Smi, Smi): Number;
-extern macro SmiMod(Smi, Smi): Number;
 
 extern operator '!' macro ConstexprBoolNot(constexpr bool): constexpr bool;
 extern operator '!' macro Word32BinaryNot(bool): bool;
@@ -711,15 +656,11 @@ extern macro IsValidPositiveSmi(intptr): bool;
 
 extern macro HeapObjectToJSDataView(HeapObject): JSDataView
     labels CastError;
-extern macro HeapObjectToJSArrayBuffer(HeapObject): JSArrayBuffer
-    labels CastError;
 extern macro HeapObjectToJSTypedArray(HeapObject): JSTypedArray
     labels CastError;
 extern macro TaggedToHeapObject(Object): HeapObject
     labels CastError;
 extern macro TaggedToSmi(Object): Smi
-    labels CastError;
-extern macro TaggedToPositiveSmi(Object): PositiveSmi
     labels CastError;
 extern macro TaggedToDirectString(Object): DirectString
     labels CastError;
@@ -752,11 +693,6 @@ macro Cast<A: type>(implicit context: Context)(o: Object): A
 Cast<Smi>(o: Object): Smi
     labels CastError {
   return TaggedToSmi(o) otherwise CastError;
-}
-
-Cast<PositiveSmi>(o: Object): PositiveSmi
-    labels CastError {
-  return TaggedToPositiveSmi(o) otherwise CastError;
 }
 
 Cast<Number>(o: Object): Number
@@ -812,11 +748,6 @@ Cast<Undefined | Callable>(o: HeapObject): Undefined | Callable
 Cast<JSArray>(o: HeapObject): JSArray
     labels CastError {
   return HeapObjectToJSArray(o) otherwise CastError;
-}
-
-Cast<JSArrayBuffer>(o: HeapObject): JSArrayBuffer
-    labels CastError {
-  return HeapObjectToJSArrayBuffer(o) otherwise CastError;
 }
 
 Cast<Context>(o: HeapObject): Context
@@ -1038,10 +969,6 @@ FromConstexpr<uintptr, constexpr uintptr>(i: constexpr uintptr): uintptr {
 FromConstexpr<Smi, constexpr int31>(i: constexpr int31): Smi {
   return %FromConstexpr<Smi>(i);
 }
-FromConstexpr<PositiveSmi, constexpr int31>(i: constexpr int31): PositiveSmi {
-  assert(i >= 0);
-  return %FromConstexpr<PositiveSmi>(i);
-}
 FromConstexpr<String, constexpr string>(s: constexpr string): String {
   return %FromConstexpr<String>(s);
 }
@@ -1137,11 +1064,6 @@ Convert<uint32, uintptr>(ui: uintptr): uint32 {
 }
 Convert<intptr, Smi>(s: Smi): intptr {
   return SmiUntag(s);
-}
-Convert<intptr, uintptr>(ui: uintptr): intptr {
-  const i = Signed(ui);
-  assert(i >= 0);
-  return i;
 }
 Convert<int32, Smi>(s: Smi): int32 {
   return SmiToInt32(s);
@@ -1279,8 +1201,6 @@ macro StoreFixedDoubleArrayElementWithSmiIndex(
   StoreFixedDoubleArrayElement(array, index, value, SMI_PARAMETERS);
 }
 extern macro GetNumberDictionaryNumberOfElements(NumberDictionary): Smi;
-extern macro GetIteratorMethod(implicit context: Context)(HeapObject): Object
-    labels IfIteratorUndefined;
 
 extern macro BasicLoadNumberDictionaryElement(NumberDictionary, intptr): Object
     labels NotData, IfHole;
@@ -1357,14 +1277,6 @@ extern macro StoreFixedDoubleArrayHoleSmi(FixedDoubleArray, Smi): void;
 macro GetObjectFunction(implicit context: Context)(): JSFunction {
   return UnsafeCast<JSFunction>(
       LoadNativeContext(context)[OBJECT_FUNCTION_INDEX]);
-}
-macro GetArrayBufferFunction(implicit context: Context)(): Constructor {
-  return UnsafeCast<Constructor>(
-      LoadNativeContext(context)[ARRAY_BUFFER_FUN_INDEX]);
-}
-macro GetArrayBufferNoInitFunction(implicit context: Context)(): JSFunction {
-  return UnsafeCast<JSFunction>(
-      LoadNativeContext(context)[ARRAY_BUFFER_NOINIT_FUN_INDEX]);
 }
 
 macro GetFastPackedSmiElementsJSArrayMap(implicit context: Context)(): Map {
@@ -1464,7 +1376,6 @@ extern macro TransitionElementsKind(
     constexpr ElementsKind): void labels Bailout;
 
 extern macro IsCallable(HeapObject): bool;
-extern macro IsConstructor(HeapObject): bool;
 extern macro IsJSArray(HeapObject): bool;
 extern macro IsMap(HeapObject): bool;
 extern macro IsJSFunction(HeapObject): bool;
