@@ -349,6 +349,10 @@
 #define V8_WARN_UNUSED_RESULT /* NOT SUPPORTED */
 #endif
 
+#if defined(BUILDING_V8_SHARED) && defined(USING_V8_SHARED)
+#error Cannot build and use V8 shared library at once.
+#endif
+
 #ifdef V8_OS_WIN
 
 // Setup for Windows DLL export/import. When building the V8 DLL the

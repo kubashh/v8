@@ -70,7 +70,7 @@ class Snapshot : public AllStatic {
   static bool EmbedsScript(Isolate* isolate);
 
   // To be implemented by the snapshot source.
-  static const v8::StartupData* DefaultSnapshotBlob();
+  static const v8::StartupData* V8_EXPORT_PRIVATE DefaultSnapshotBlob();
 
   static bool VerifyChecksum(const v8::StartupData* data);
 
@@ -158,7 +158,7 @@ class Snapshot : public AllStatic {
 };
 
 #ifdef V8_USE_EXTERNAL_STARTUP_DATA
-void SetSnapshotFromFile(StartupData* snapshot_blob);
+void V8_EXPORT_PRIVATE SetSnapshotFromFile(StartupData* snapshot_blob);
 #endif
 
 }  // namespace internal
