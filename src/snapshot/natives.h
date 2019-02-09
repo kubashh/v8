@@ -22,20 +22,15 @@ enum NativeType {
 // Extra handling for V8_EXPORT_PRIVATE in combination with USING_V8_SHARED
 // since definition of methods of classes marked as dllimport is not allowed.
 template <NativeType type>
-#ifdef USING_V8_SHARED
 class NativesCollection {
-#else
-class V8_EXPORT_PRIVATE NativesCollection {
-#endif  // USING_V8_SHARED
-
  public:
   // The following methods are implemented in js2c-generated code:
 
   // Number of built-in scripts.
-  static int GetBuiltinsCount();
+  static int V8_EXPORT_PRIVATE GetBuiltinsCount();
   static int GetIndex(const char* name);
-  static Vector<const char> GetScriptSource(int index);
-  static Vector<const char> GetScriptName(int index);
+  static Vector<const char> V8_EXPORT_PRIVATE GetScriptSource(int index);
+  static Vector<const char> V8_EXPORT_PRIVATE GetScriptName(int index);
   static Vector<const char> GetScriptsSource();
 };
 
@@ -44,9 +39,9 @@ typedef NativesCollection<EXTRAS> ExtraNatives;
 
 #ifdef V8_USE_EXTERNAL_STARTUP_DATA
 // Used for reading the natives at runtime. Implementation in natives-empty.cc
-void SetNativesFromFile(StartupData* natives_blob);
-void ReadNatives();
-void DisposeNatives();
+void V8_EXPORT_PRIVATE SetNativesFromFile(StartupData* natives_blob);
+void V8_EXPORT_PRIVATE ReadNatives();
+void V8_EXPORT_PRIVATE DisposeNatives();
 #endif
 
 class NativesExternalStringResource final
