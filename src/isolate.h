@@ -808,7 +808,8 @@ class Isolate final : private HiddenFactory {
   MaybeHandle<JSReceiver> CaptureAndSetSimpleStackTrace(
       Handle<JSReceiver> error_object, FrameSkipMode mode,
       Handle<Object> caller);
-  Handle<FixedArray> GetDetailedStackTrace(Handle<JSObject> error_object);
+  Handle<FixedArray> V8_EXPORT_PRIVATE
+  GetDetailedStackTrace(Handle<JSObject> error_object);
 
   Address GetAbstractPC(int* line, int* column);
 

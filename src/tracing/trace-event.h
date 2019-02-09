@@ -319,7 +319,7 @@ const uint64_t kNoId = 0;
 
 class TraceEventHelper {
  public:
-  static v8::TracingController* GetTracingController();
+  static V8_EXPORT_PRIVATE v8::TracingController* GetTracingController();
 };
 
 // TraceID encapsulates an ID that can either be an integer or pointer. Pointers
