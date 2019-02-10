@@ -2010,28 +2010,6 @@ TNode<RawPtrT> CodeStubAssembler::LoadFixedTypedArrayBackingStore(
       IntPtrAdd(external_pointer, BitcastTaggedToWord(base_pointer)));
 }
 
-TNode<RawPtrT> CodeStubAssembler::LoadFixedTypedArrayOnHeapBackingStore(
-    TNode<FixedTypedArrayBase> typed_array) {
-  // This is specialized method of retrieving the backing store pointer for on
-  // heap allocated typed array buffer. On heap allocated buffer's backing
-  // stores are a fixed offset from the pointer to a typed array's elements. See
-  // TypedArrayBuiltinsAssembler::AllocateOnHeapElements().
-  static const intptr_t fta_base_data_offset =
-      FixedTypedArrayBase::kDataOffset - kHeapObjectTag;
-
-  TNode<WordT> backing_store = IntPtrAdd(BitcastTaggedToWord(typed_array),
-                                         IntPtrConstant(fta_base_data_offset));
-
-#ifdef DEBUG
-  // Verify that this is an on heap backing store.
-  TNode<RawPtrT> expected_backing_store_pointer =
-      LoadFixedTypedArrayBackingStore(typed_array);
-  CSA_ASSERT(this, WordEqual(backing_store, expected_backing_store_pointer));
-#endif
-
-  return UncheckedCast<RawPtrT>(backing_store);
-}
-
 Node* CodeStubAssembler::LoadFixedBigInt64ArrayElementAsTagged(
     Node* data_pointer, Node* offset) {
   if (Is64()) {
@@ -7935,8 +7913,8 @@ TNode<JSReceiver> CodeStubAssembler::ToObject_Inline(TNode<Context> context,
   return result.value();
 }
 
-TNode<Smi> CodeStubAssembler::ToSmiIndex(TNode<Context> context,
-                                         TNode<Object> input,
+TNode<Smi> CodeStubAssembler::ToSmiIndex(TNode<Object> input,
+                                         TNode<Context> context,
                                          Label* range_error) {
   TVARIABLE(Smi, result);
   Label check_undefined(this), return_zero(this), defined(this),
@@ -7967,8 +7945,8 @@ TNode<Smi> CodeStubAssembler::ToSmiIndex(TNode<Context> context,
   return result.value();
 }
 
-TNode<Smi> CodeStubAssembler::ToSmiLength(TNode<Context> context,
-                                          TNode<Object> input,
+TNode<Smi> CodeStubAssembler::ToSmiLength(TNode<Object> input,
+                                          TNode<Context> context,
                                           Label* range_error) {
   TVARIABLE(Smi, result);
   Label to_integer(this), negative_check(this),
@@ -9217,14 +9195,6 @@ Node* CodeStubAssembler::GetMethod(Node* context, Node* object,
   GotoIf(IsNull(method), if_null_or_undefined);
 
   return method;
-}
-
-TNode<Object> CodeStubAssembler::GetIteratorMethod(
-    TNode<Context> context, TNode<HeapObject> heap_obj,
-    Label* if_iteratorundefined) {
-  return CAST(GetMethod(context, heap_obj,
-                        isolate()->factory()->iterator_symbol(),
-                        if_iteratorundefined));
 }
 
 void CodeStubAssembler::LoadPropertyFromFastObject(

@@ -885,7 +885,6 @@ torque_files = [
   "src/builtins/string-endswith.tq",
   "src/builtins/string-startswith.tq",
   "src/builtins/typed-array.tq",
-  "src/builtins/typed-array-createtypedarray.tq",
   "test/torque/test-torque.tq",
   "third_party/v8/builtins/array-sort.tq",
 ]
@@ -913,7 +912,6 @@ torque_namespaces = [
   "string",
   "test",
   "typed-array",
-  "typed-array-createtypedarray",
 ]
 
 action("run_torque") {
