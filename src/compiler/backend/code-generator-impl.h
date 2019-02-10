@@ -144,9 +144,9 @@ class InstructionOperandConverter {
 
   Constant ToConstant(InstructionOperand* op) {
     if (op->IsImmediate()) {
-      return gen_->code()->GetImmediate(ImmediateOperand::cast(op));
+      return gen_->instr_seq()->GetImmediate(ImmediateOperand::cast(op));
     }
-    return gen_->code()->GetConstant(
+    return gen_->instr_seq()->GetConstant(
         ConstantOperand::cast(op)->virtual_register());
   }
 
