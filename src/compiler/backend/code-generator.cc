@@ -43,19 +43,19 @@ class CodeGenerator::JumpTable final : public ZoneObject {
 
 CodeGenerator::CodeGenerator(
     Zone* codegen_zone, Frame* frame, Linkage* linkage,
-    InstructionSequence* code, OptimizedCompilationInfo* info, Isolate* isolate,
-    base::Optional<OsrHelper> osr_helper, int start_source_position,
-    JumpOptimizationInfo* jump_opt, PoisoningMitigationLevel poisoning_level,
-    const AssemblerOptions& options, int32_t builtin_index,
-    std::unique_ptr<AssemblerBuffer> buffer)
+    InstructionSequence* instr_seq, OptimizedCompilationInfo* info,
+    Isolate* isolate, base::Optional<OsrHelper> osr_helper,
+    int start_source_position, JumpOptimizationInfo* jump_opt,
+    PoisoningMitigationLevel poisoning_level, const AssemblerOptions& options,
+    int32_t builtin_index, std::unique_ptr<AssemblerBuffer> buffer)
     : zone_(codegen_zone),
       isolate_(isolate),
       frame_access_state_(nullptr),
       linkage_(linkage),
-      code_(code),
+      instr_seq_(instr_seq),
       unwinding_info_writer_(zone()),
       info_(info),
-      labels_(zone()->NewArray<Label>(code->InstructionBlockCount())),
+      labels_(zone()->NewArray<Label>(instr_seq->InstructionBlockCount())),
       current_block_(RpoNumber::Invalid()),
       start_source_position_(start_source_position),
       current_source_position_(SourcePosition::Unknown()),
@@ -80,7 +80,7 @@ CodeGenerator::CodeGenerator(
       poisoning_level_(poisoning_level),
       block_starts_(zone()),
       instr_starts_(zone()) {
-  for (int i = 0; i < code->InstructionBlockCount(); ++i) {
+  for (int i = 0; i < instr_seq->InstructionBlockCount(); ++i) {
     new (&labels_[i]) Label;
   }
   CreateFrameAccessState(frame);
@@ -186,15 +186,15 @@ void CodeGenerator::AssembleCode() {
   }
 
   unwinding_info_writer_.SetNumberOfInstructionBlocks(
-      code()->InstructionBlockCount());
+      instr_seq()->InstructionBlockCount());
 
   if (info->trace_turbo_json_enabled()) {
-    block_starts_.assign(code()->instruction_blocks().size(), -1);
-    instr_starts_.assign(code()->instructions().size(), -1);
+    block_starts_.assign(instr_seq()->instruction_blocks().size(), -1);
+    instr_starts_.assign(instr_seq()->instructions().size(), -1);
   }
 
   // Assemble instructions in assembly order.
-  for (const InstructionBlock* block : code()->ao_blocks()) {
+  for (const InstructionBlock* block : instr_seq()->ao_blocks()) {
     // Align loop headers on vendor recommended boundaries.
     if (block->ShouldAlign() && !tasm()->jump_optimization_info()) {
       tasm()->CodeTargetAlign();
@@ -248,7 +248,7 @@ void CodeGenerator::AssembleCode() {
     }
     if (result_ != kSuccess) return;
     unwinding_info_writer_.EndInstructionBlock(block);
-    }
+  }
 
   // Assemble all out-of-line code.
   if (ools_) {
@@ -324,9 +324,9 @@ void CodeGenerator::TryInsertBranchPoisoning(const InstructionBlock* block) {
   // instruction. If yes, then perform the masking based on the flags.
   if (block->PredecessorCount() != 1) return;
   RpoNumber pred_rpo = (block->predecessors())[0];
-  const InstructionBlock* pred = code()->InstructionBlockAt(pred_rpo);
+  const InstructionBlock* pred = instr_seq()->InstructionBlockAt(pred_rpo);
   if (pred->code_start() == pred->code_end()) return;
-  Instruction* instr = code()->InstructionAt(pred->code_end() - 1);
+  Instruction* instr = instr_seq()->InstructionAt(pred->code_end() - 1);
   FlagsMode mode = FlagsModeField::decode(instr->opcode());
   switch (mode) {
     case kFlags_branch_and_poison: {
@@ -422,10 +422,10 @@ MaybeHandle<Code> CodeGenerator::FinalizeCode() {
 }
 
 bool CodeGenerator::IsNextInAssemblyOrder(RpoNumber block) const {
-  return code()
+  return instr_seq()
       ->InstructionBlockAt(current_block_)
       ->ao_number()
-      .IsNext(code()->InstructionBlockAt(block)->ao_number());
+      .IsNext(instr_seq()->InstructionBlockAt(block)->ao_number());
 }
 
 void CodeGenerator::RecordSafepoint(ReferenceMap* references,
@@ -469,7 +469,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleBlock(
     if (info()->trace_turbo_json_enabled()) {
       instr_starts_[i] = tasm()->pc_offset();
     }
-    Instruction* instr = code()->InstructionAt(i);
+    Instruction* instr = instr_seq()->InstructionAt(i);
     CodeGenResult result = AssembleInstruction(instr, block);
     if (result != kSuccess) return result;
   }
@@ -637,7 +637,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleInstruction(
   if (adjust_stack) AssembleTailCallAfterGap(instr, first_unused_stack_slot);
   DCHECK_IMPLIES(
       block->must_deconstruct_frame(),
-      instr != code()->InstructionAt(block->last_instruction_index()) ||
+      instr != instr_seq()->InstructionAt(block->last_instruction_index()) ||
           instr->IsRet() || instr->IsJump());
   if (instr->IsJump() && block->must_deconstruct_frame()) {
     AssembleDeconstructFrame();
@@ -709,7 +709,7 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleInstruction(
 void CodeGenerator::AssembleSourcePosition(Instruction* instr) {
   SourcePosition source_position = SourcePosition::Unknown();
   if (instr->IsNop() && instr->AreMovesRedundant()) return;
-  if (!code()->GetSourcePosition(instr, &source_position)) return;
+  if (!instr_seq()->GetSourcePosition(instr, &source_position)) return;
   AssembleSourcePosition(source_position);
 }
 
@@ -899,7 +899,7 @@ DeoptimizationEntry const& CodeGenerator::GetDeoptimizationEntry(
     Instruction* instr, size_t frame_state_offset) {
   InstructionOperandConverter i(this, instr);
   int const state_id = i.InputInt32(frame_state_offset);
-  return code()->GetDeoptimizationEntry(state_id);
+  return instr_seq()->GetDeoptimizationEntry(state_id);
 }
 
 DeoptimizeKind CodeGenerator::GetDeoptimizationKind(
