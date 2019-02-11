@@ -383,9 +383,22 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
   }
 
   //--------------------------------------------------------------------------
-  // Reserve the metadata for indirect function tables.
+  // Initialize tables.
   //--------------------------------------------------------------------------
   int table_count = static_cast<int>(module_->tables.size());
+  Handle<FixedArray> tables = isolate_->factory()->NewFixedArray(table_count);
+  for (int i = module_->num_imported_tables; i < table_count; i++) {
+    const WasmTable& table = module_->tables[i];
+    tables->set(i, *WasmTableObject::New(isolate_, table.initial_size,
+                                         table.maximum_size, nullptr));
+  }
+  instance->set_tables(*tables);
+
+  //--------------------------------------------------------------------------
+  // Reserve the metadata for indirect function tables.
+  //--------------------------------------------------------------------------
+
+  table_count = static_cast<int>(module_->tables.size());
   table_instances_.resize(table_count);
 
   //--------------------------------------------------------------------------
@@ -821,7 +834,7 @@ bool InstanceBuilder::ProcessImportedTable(Handle<WasmInstanceObject> instance,
   table_instance.table_object = Handle<WasmTableObject>::cast(value);
   instance->set_table_object(*table_instance.table_object);
   table_instance.js_functions =
-      Handle<FixedArray>(table_instance.table_object->functions(), isolate_);
+      Handle<FixedArray>(table_instance.table_object->elements(), isolate_);
 
   int imported_table_size = table_instance.js_functions->length();
   if (imported_table_size < static_cast<int>(table.initial_size)) {
@@ -1445,13 +1458,12 @@ void InstanceBuilder::InitializeTables(Handle<WasmInstanceObject> instance) {
   size_t table_count = module_->tables.size();
   for (size_t index = 0; index < table_count; ++index) {
     const WasmTable& table = module_->tables[index];
-    TableInstance& table_instance = table_instances_[index];
 
     if (!instance->has_indirect_function_table() &&
         table.type == kWasmAnyFunc) {
       WasmInstanceObject::EnsureIndirectFunctionTableWithMinimumSize(
           instance, table.initial_size);
-      table_instance.table_size = table.initial_size;
+      table_instances_[index].table_size = table.initial_size;
     }
   }
 }
@@ -1567,7 +1579,7 @@ bool LoadElemSegment(Isolate* isolate, Handle<WasmInstanceObject> instance,
   Handle<FixedArray> js_functions;
   if (instance->has_table_object()) {
     table_object = Handle<WasmTableObject>(instance->table_object(), isolate);
-    js_functions = Handle<FixedArray>(table_object->functions(), isolate);
+    js_functions = Handle<FixedArray>(table_object->elements(), isolate);
   }
 
   TableInstance table_instance = {table_object, js_functions,
