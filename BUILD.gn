@@ -298,7 +298,9 @@ config("external_startup_data") {
 config("v8_header_features") {
   visibility = [ ":*" ]
 
-  defines = []
+  # v8-internal.h warns if this define is not present as it indicates that the
+  # might not have included out external build config from this file.
+  defines = [ "V8_HEADER_FEATURES_DEFINED" ]
 
   if (v8_enable_v8_checks) {
     defines += [ "V8_ENABLE_CHECKS" ]  # Used in "include/v8.h".
