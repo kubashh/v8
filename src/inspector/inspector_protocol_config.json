@@ -43,6 +43,7 @@
     "lib": {
         "package": "src/inspector/protocol",
         "output": "protocol",
+        "export_header": "v8.h",
         "string_header": "src/inspector/string-util.h"
     }
 }

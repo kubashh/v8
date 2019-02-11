@@ -90,7 +90,8 @@ class Bootstrapper final {
   static bool CompileNative(Isolate* isolate, Vector<const char> name,
                             Handle<String> source, int argc,
                             Handle<Object> argv[], NativesFlag natives_flag);
-  static bool CompileExtraBuiltin(Isolate* isolate, int index);
+  static bool V8_EXPORT_PRIVATE CompileExtraBuiltin(Isolate* isolate,
+                                                    int index);
   static bool CompileExperimentalExtraBuiltin(Isolate* isolate, int index);
 
  private:
