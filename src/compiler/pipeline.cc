@@ -1716,6 +1716,14 @@ struct LocateSpillSlotsPhase {
   }
 };
 
+struct DecideSpillingModePhase {
+  static const char* phase_name() { return "decide spilling mode"; }
+
+  void Run(PipelineData* data, Zone* temp_zone) {
+    OperandAssigner assigner(data->register_allocation_data());
+    assigner.DecideSpillingMode();
+  }
+};
 
 struct AssignSpillSlotsPhase {
   static const char* phase_name() { return "assign spill slots"; }
@@ -2871,10 +2879,12 @@ void PipelineImpl::AllocateRegisters(const RegisterConfiguration* config,
     Run<MergeSplintersPhase>();
   }
 
+  Run<DecideSpillingModePhase>();
   Run<AssignSpillSlotsPhase>();
-
   Run<CommitAssignmentPhase>();
 
+  // TODO(herhut) Remove again.
+  fflush(stdout);
   // TODO(chromium:725559): remove this check once
   // we understand the cause of the bug. We keep just the
   // check at the end of the allocation.
@@ -2890,7 +2900,6 @@ void PipelineImpl::AllocateRegisters(const RegisterConfiguration* config,
   if (FLAG_turbo_move_optimization) {
     Run<OptimizeMovesPhase>();
   }
-
   Run<LocateSpillSlotsPhase>();
 
   TraceSequence(info(), data, "after register allocation");
