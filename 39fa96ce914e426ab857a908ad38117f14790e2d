@@ -22,6 +22,30 @@
       "revId": "39fa96ce914e426ab857a908ad38117f14790e2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "030d6f72_d198f611",
+        "filename": "src/global-handles.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-02-11T15:18:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0d6418f_9e22d0d9",
+      "range": {
+        "startLine": 419,
+        "startChar": 7,
+        "endLine": 419,
+        "endChar": 23
+      },
+      "revId": "39fa96ce914e426ab857a908ad38117f14790e2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
