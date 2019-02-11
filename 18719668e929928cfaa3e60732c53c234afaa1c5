@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e18e949d_42f61d77",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-02-11T16:25:22Z",
+      "side": 1,
+      "message": "Yes, the new defines are intentional.",
+      "parentUuid": "cb47e95e_98b3d8dc",
+      "range": {
+        "startLine": 297,
+        "startChar": 14,
+        "endLine": 297,
+        "endChar": 27
+      },
+      "revId": "18719668e929928cfaa3e60732c53c234afaa1c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "49a3785f_dd0e695c",
         "filename": "BUILD.gn",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "18719668e929928cfaa3e60732c53c234afaa1c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c341c02_fe31073a",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-02-11T16:25:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49a3785f_dd0e695c",
+      "range": {
+        "startLine": 351,
+        "startChar": 2,
+        "endLine": 356,
+        "endChar": 3
+      },
+      "revId": "18719668e929928cfaa3e60732c53c234afaa1c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
