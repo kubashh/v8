@@ -110,7 +110,6 @@ RegExpMacroAssemblerPPC::RegExpMacroAssemblerPPC(Isolate* isolate, Zone* zone,
   DCHECK_EQ(0, registers_to_save % 2);
 
 // Called from C
-  __ function_descriptor();
 
   __ b(&entry_label_);  // We'll write the entry code later.
   // If the code gets too big or corrupted, an internal exception will be
