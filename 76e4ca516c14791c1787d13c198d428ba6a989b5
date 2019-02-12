@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75c8b2b0_dac3e6f2",
+        "filename": "third_party/inspector_protocol/lib/Values_h.template",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-02-12T19:43:15Z",
+      "side": 1,
+      "message": "add a space",
+      "range": {
+        "startLine": 31,
+        "startChar": 52,
+        "endLine": 31,
+        "endChar": 64
+      },
+      "revId": "76e4ca516c14791c1787d13c198d428ba6a989b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
