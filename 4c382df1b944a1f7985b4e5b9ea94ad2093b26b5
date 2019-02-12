@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a417ab2_4b86cdda",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-12T11:10:07Z",
+      "side": 1,
+      "message": "Could you move the import of numfuzz also here instead, so that coverage from importing is also tracked.",
+      "revId": "4c382df1b944a1f7985b4e5b9ea94ad2093b26b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f978ddac_74f7b141",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-12T11:10:07Z",
+      "side": 1,
+      "message": "I don\u0027t think this needs to be different from the default. Just out would also not make sense. The full build dir will always expand to out/Release or out/Debug or similar.",
+      "range": {
+        "startLine": 653,
+        "startChar": 19,
+        "endLine": 653,
+        "endChar": 37
+      },
+      "revId": "4c382df1b944a1f7985b4e5b9ea94ad2093b26b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
