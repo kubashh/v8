@@ -25,6 +25,54 @@
     },
     {
       "key": {
+        "uuid": "fa2266ab_b07cbb1a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-12T10:30:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e944ed04_e99b5c56",
+      "range": {
+        "startLine": 7,
+        "startChar": 37,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "cdec55245590b6be3abf78c626884ac67d293d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ead51c54_4726f55e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-12T10:30:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e944ed04_e99b5c56",
+      "range": {
+        "startLine": 7,
+        "startChar": 37,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "cdec55245590b6be3abf78c626884ac67d293d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d9dba2d_efeb3fbc",
         "filename": "tools/clusterfuzz/PRESUBMIT.py",
         "patchSetId": 1
@@ -48,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e1c72943_e1b46b7f",
+        "filename": "tools/clusterfuzz/PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-12T10:30:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d9dba2d_efeb3fbc",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 0
+      },
+      "revId": "cdec55245590b6be3abf78c626884ac67d293d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "625aeecd_a8abebf8",
         "filename": "tools/unittests/run_fuzzer_test.py",
         "patchSetId": 1
@@ -68,6 +140,30 @@
       "revId": "cdec55245590b6be3abf78c626884ac67d293d57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f9982b4_438d3375",
+        "filename": "tools/unittests/run_fuzzer_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-02-12T10:30:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "625aeecd_a8abebf8",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 21
+      },
+      "revId": "cdec55245590b6be3abf78c626884ac67d293d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
