@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83da2097_53099cb7",
+        "filename": "src/builtins/array-map.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-02-12T13:22:51Z",
+      "side": 1,
+      "message": "More of a broader question about `Convert\u003cfloat64\u003e` in Torque.\nIs this a common enough footgun we\u0027d want to `Convert\u003cfloat64\u003e` to do? If you really need the NaN to be preserved you\u0027d, need to opt-in by calling something like ConvertFloat64WithNaN.",
+      "revId": "4bbbc057382fcb6ba482bfe70f89616223831a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
