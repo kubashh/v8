@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84f17b17_bd2611a4",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 2613,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-12T15:59:49Z",
+      "side": 0,
+      "message": "q: why is this branch no longer needed?",
+      "revId": "ba75052e8b7ba4e2517eceae35c8dddd43b9e956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

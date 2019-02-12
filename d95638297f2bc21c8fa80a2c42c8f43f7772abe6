@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d44425a3_b9ba5d93",
+        "filename": "src/simulator.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-12T15:59:49Z",
+      "side": 1,
+      "message": "q: would it make sense for this to use ABI_USES_FUNCTION_DESCRIPTORS?",
+      "revId": "d95638297f2bc21c8fa80a2c42c8f43f7772abe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b207b83f_c40b56bd",
+        "filename": "src/simulator.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-12T15:59:49Z",
+      "side": 1,
+      "message": "Please add a comment describing what\u0027s going on here and why it\u0027s necessary.",
+      "revId": "d95638297f2bc21c8fa80a2c42c8f43f7772abe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
