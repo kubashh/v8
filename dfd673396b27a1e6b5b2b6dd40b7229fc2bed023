@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43eec8b3_68ae599b",
+        "filename": "test/mjsunit/regress/regress-crbug-930948.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-02-12T10:30:36Z",
+      "side": 1,
+      "message": "For TurboFan we\u0027ll need this:\n\n```js\nfunction foo(x) {\n  return [x].map(x \u003d\u003e Math.asin(x));\n}\n\nfoo(undefined);\nfoo(undefined);\n%OptimizeFunctionOnNextCall(foo);\nfoo(undefined);\n```\n\nIn general let\u0027s change this to:\n\n```js\nfunction foo() {\n  return [undefined].map(Math.asin);\n}\nfoo();\n```",
+      "revId": "dfd673396b27a1e6b5b2b6dd40b7229fc2bed023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
