@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c9bf745d_d6e0ab04",
+        "filename": "src/simulator.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-02-12T16:05:54Z",
+      "side": 1,
+      "message": "Not all arches use the same type of function descriptor, eg. zOS uses a different function descriptor. If we use ABI_USES_FUNCTION_DESCRIPTORS here, we still need to check if OS is AIX.",
+      "parentUuid": "d44425a3_b9ba5d93",
+      "revId": "d95638297f2bc21c8fa80a2c42c8f43f7772abe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b207b83f_c40b56bd",
         "filename": "src/simulator.h",
         "patchSetId": 11
@@ -33,6 +51,24 @@
       "revId": "d95638297f2bc21c8fa80a2c42c8f43f7772abe6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5721065d_6ee551a4",
+        "filename": "src/simulator.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-02-12T16:05:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b207b83f_c40b56bd",
+      "revId": "d95638297f2bc21c8fa80a2c42c8f43f7772abe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
