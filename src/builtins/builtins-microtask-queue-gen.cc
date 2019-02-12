@@ -34,6 +34,9 @@ class MicrotaskQueueBuiltinsAssembler : public CodeStubAssembler {
                                            TNode<IntPtrT> start,
                                            TNode<IntPtrT> index);
 
+  TNode<Context> ExtractHandlerContext(TNode<HeapObject> handler,
+                                       TNode<Context> var_context);
+
   void PrepareForContext(TNode<Context> microtask_context);
   void RunSingleMicrotask(TNode<Context> current_context,
                           TNode<Microtask> microtask);
@@ -103,6 +106,40 @@ TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::CalculateRingBufferOffset(
       WordAnd(IntPtrAdd(start, index), IntPtrSub(capacity, IntPtrConstant(1))));
 }
 
+TNode<Context> MicrotaskQueueBuiltinsAssembler::ExtractHandlerContext(
+    TNode<HeapObject> handler, TNode<Context> fallback_context) {
+  TVARIABLE(HeapObject, var_handler, handler);
+  TVARIABLE(Context, var_context, fallback_context);
+  Label loop(this, {&var_handler, &var_context}), done(this);
+  Goto(&loop);
+  BIND(&loop);
+  {
+    Label if_bound(this), if_function(this);
+    CSA_ASSERT(this, TaggedIsNotSmi(var_handler.value()));
+    TNode<Int32T> handler_type = LoadInstanceType(var_handler.value());
+    GotoIf(InstanceTypeEqual(handler_type, JS_BOUND_FUNCTION_TYPE), &if_bound);
+    Branch(InstanceTypeEqual(handler_type, JS_FUNCTION_TYPE), &if_function,
+           &done);
+
+    BIND(&if_function);
+    {
+      var_context = LoadObjectField<Context>(var_handler.value(),
+                                             JSFunction::kContextOffset);
+      Goto(&done);
+    }
+
+    BIND(&if_bound);
+    {
+      var_handler = LoadObjectField<HeapObject>(
+          var_handler.value(), JSBoundFunction::kBoundTargetFunctionOffset);
+      Goto(&loop);
+    }
+  }
+
+  BIND(&done);
+  return var_context.value();
+}
+
 void MicrotaskQueueBuiltinsAssembler::PrepareForContext(
     TNode<Context> native_context) {
   CSA_ASSERT(this, IsNativeContext(native_context));
@@ -146,14 +183,17 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
 
   BIND(&is_callable);
   {
+    TNode<JSReceiver> callable =
+        LoadObjectField<JSReceiver>(microtask, CallableTask::kCallableOffset);
+
     // Enter the context of the {microtask}.
-    TNode<Context> microtask_context =
+    TNode<Context> fallback_context =
         LoadObjectField<Context>(microtask, CallableTask::kContextOffset);
+    TNode<Context> microtask_context =
+        ExtractHandlerContext(callable, fallback_context);
     TNode<Context> native_context = LoadNativeContext(microtask_context);
     PrepareForContext(native_context);
 
-    TNode<JSReceiver> callable =
-        LoadObjectField<JSReceiver>(microtask, CallableTask::kCallableOffset);
     Node* const result = CallJS(
         CodeFactory::Call(isolate(), ConvertReceiverMode::kNullOrUndefined),
         microtask_context, callable, UndefinedConstant());
@@ -189,18 +229,20 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
 
   BIND(&is_promise_resolve_thenable_job);
   {
-    // Enter the context of the {microtask}.
-    TNode<Context> microtask_context = LoadObjectField<Context>(
-        microtask, PromiseResolveThenableJobTask::kContextOffset);
-    TNode<Context> native_context = LoadNativeContext(microtask_context);
-    PrepareForContext(native_context);
-
-    Node* const promise_to_resolve = LoadObjectField(
+    Node* const promise_to_resolve = LoadObjectField<JSPromise>(
         microtask, PromiseResolveThenableJobTask::kPromiseToResolveOffset);
     Node* const then =
         LoadObjectField(microtask, PromiseResolveThenableJobTask::kThenOffset);
     Node* const thenable = LoadObjectField(
         microtask, PromiseResolveThenableJobTask::kThenableOffset);
+
+    // Enter the context of the {microtask}.
+    TNode<Context> fallback_context = LoadObjectField<Context>(
+        microtask, PromiseResolveThenableJobTask::kContextOffset);
+    TNode<Context> microtask_context =
+        ExtractHandlerContext(CAST(then), fallback_context);
+    TNode<Context> native_context = LoadNativeContext(microtask_context);
+    PrepareForContext(native_context);
 
     Node* const result =
         CallBuiltin(Builtins::kPromiseResolveThenableJob, native_context,
@@ -213,18 +255,20 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
 
   BIND(&is_promise_fulfill_reaction_job);
   {
-    // Enter the context of the {microtask}.
-    TNode<Context> microtask_context = LoadObjectField<Context>(
-        microtask, PromiseReactionJobTask::kContextOffset);
-    TNode<Context> native_context = LoadNativeContext(microtask_context);
-    PrepareForContext(native_context);
-
     Node* const argument =
         LoadObjectField(microtask, PromiseReactionJobTask::kArgumentOffset);
     Node* const handler =
         LoadObjectField(microtask, PromiseReactionJobTask::kHandlerOffset);
     Node* const promise_or_capability = LoadObjectField(
         microtask, PromiseReactionJobTask::kPromiseOrCapabilityOffset);
+
+    // Enter the context of the {microtask}.
+    TNode<Context> fallback_context = LoadObjectField<Context>(
+        microtask, PromiseReactionJobTask::kContextOffset);
+    TNode<Context> microtask_context =
+        ExtractHandlerContext(CAST(handler), fallback_context);
+    TNode<Context> native_context = LoadNativeContext(microtask_context);
+    PrepareForContext(native_context);
 
     // Run the promise before/debug hook if enabled.
     RunPromiseHook(Runtime::kPromiseHookBefore, microtask_context,
@@ -246,18 +290,20 @@ void MicrotaskQueueBuiltinsAssembler::RunSingleMicrotask(
 
   BIND(&is_promise_reject_reaction_job);
   {
-    // Enter the context of the {microtask}.
-    TNode<Context> microtask_context = LoadObjectField<Context>(
-        microtask, PromiseReactionJobTask::kContextOffset);
-    TNode<Context> native_context = LoadNativeContext(microtask_context);
-    PrepareForContext(native_context);
-
     Node* const argument =
         LoadObjectField(microtask, PromiseReactionJobTask::kArgumentOffset);
     Node* const handler =
         LoadObjectField(microtask, PromiseReactionJobTask::kHandlerOffset);
     Node* const promise_or_capability = LoadObjectField(
         microtask, PromiseReactionJobTask::kPromiseOrCapabilityOffset);
+
+    // Enter the context of the {microtask}.
+    TNode<Context> fallback_context = LoadObjectField<Context>(
+        microtask, PromiseReactionJobTask::kContextOffset);
+    TNode<Context> microtask_context =
+        ExtractHandlerContext(CAST(handler), fallback_context);
+    TNode<Context> native_context = LoadNativeContext(microtask_context);
+    PrepareForContext(native_context);
 
     // Run the promise before/debug hook if enabled.
     RunPromiseHook(Runtime::kPromiseHookBefore, microtask_context,
