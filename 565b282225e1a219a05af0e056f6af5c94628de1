@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "394f5534_30b7aeba",
+        "filename": "src/inspector/string-util.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-02-12T17:46:12Z",
+      "side": 1,
+      "message": "Can you avoid copy by std::moving the message?",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
