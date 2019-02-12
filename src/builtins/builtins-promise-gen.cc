@@ -112,6 +112,39 @@ PromiseBuiltinsAssembler::CreatePromiseResolvingFunctions(
   return std::make_pair(resolve, reject);
 }
 
+void PromiseBuiltinsAssembler::ExtractHandlerContext(Node* handler,
+                                                     Variable* var_context) {
+  VARIABLE(var_handler, MachineRepresentation::kTagged, handler);
+  Label loop(this, &var_handler), done(this);
+  Goto(&loop);
+  BIND(&loop);
+  {
+    Label if_bound(this), if_function(this);
+    CSA_ASSERT(this, TaggedIsNotSmi(var_handler.value()));
+    Node* handler_type = LoadInstanceType(var_handler.value());
+    GotoIf(InstanceTypeEqual(handler_type, JS_BOUND_FUNCTION_TYPE), &if_bound);
+    Branch(InstanceTypeEqual(handler_type, JS_FUNCTION_TYPE), &if_function,
+           &done);
+
+    BIND(&if_function);
+    {
+      Node* handler_context =
+          LoadObjectField(var_handler.value(), JSFunction::kContextOffset);
+      var_context->Bind(LoadNativeContext(CAST(handler_context)));
+      Goto(&done);
+    }
+
+    BIND(&if_bound);
+    {
+      var_handler.Bind(LoadObjectField(
+          var_handler.value(), JSBoundFunction::kBoundTargetFunctionOffset));
+      Goto(&loop);
+    }
+  }
+
+  BIND(&done);
+}
+
 // ES #sec-newpromisecapability
 TF_BUILTIN(NewPromiseCapability, PromiseBuiltinsAssembler) {
   Node* const context = Parameter(Descriptor::kContext);
@@ -378,13 +411,19 @@ void PromiseBuiltinsAssembler::PerformPromiseThen(
     }
 
     BIND(&enqueue);
-    Node* argument =
-        LoadObjectField(promise, JSPromise::kReactionsOrResultOffset);
-    Node* microtask = AllocatePromiseReactionJobTask(
-        var_map.value(), context, argument, var_handler.value(),
-        result_promise_or_capability);
-    CallBuiltin(Builtins::kEnqueueMicrotask, context, microtask);
-    Goto(&done);
+    {
+      VARIABLE(var_handler_context, MachineRepresentation::kTagged, context);
+      ExtractHandlerContext(var_handler.value(), &var_handler_context);
+
+      Node* argument =
+          LoadObjectField(promise, JSPromise::kReactionsOrResultOffset);
+      Node* microtask = AllocatePromiseReactionJobTask(
+          var_map.value(), var_handler_context.value(), argument,
+          var_handler.value(), result_promise_or_capability);
+      CallBuiltin(Builtins::kEnqueueMicrotask, var_handler_context.value(),
+                  microtask);
+      Goto(&done);
+    }
   }
 
   BIND(&done);
