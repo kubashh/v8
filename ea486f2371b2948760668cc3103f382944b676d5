@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "58227712_02726a6b",
+        "filename": "src/objects/stack-frame-info.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-12T07:42:33Z",
+      "side": 1,
+      "message": "These originate from StackFrameBase in messages.h. I introduced the constant there.",
+      "parentUuid": "1d5a5c87_d1f5f1d9",
+      "revId": "ea486f2371b2948760668cc3103f382944b676d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2cffe6de_0887c51c",
         "filename": "src/objects/stack-frame-info.cc",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-11T10:33:58Z",
       "side": 1,
       "message": "just fyi, you can grab the unhandlified oddball directly with \n\n ReadOnlyRoots(isolate()).undefined_value();",
+      "revId": "ea486f2371b2948760668cc3103f382944b676d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a39cc76e_ce77c6c4",
+        "filename": "src/objects/stack-frame-info.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-12T07:42:33Z",
+      "side": 1,
+      "message": "Thx!",
+      "parentUuid": "2cffe6de_0887c51c",
       "revId": "ea486f2371b2948760668cc3103f382944b676d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -50,6 +86,24 @@
       "revId": "ea486f2371b2948760668cc3103f382944b676d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3e27c06_a17b829d",
+        "filename": "src/objects/stack-frame-info.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-12T07:42:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c55e24e_ecc8efa1",
+      "revId": "ea486f2371b2948760668cc3103f382944b676d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
