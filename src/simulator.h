@@ -121,7 +121,16 @@ class GeneratedCode {
 #else
   DISABLE_CFI_ICALL Return Call(Args... args) {
     // When running without a simulator we call the entry directly.
+#if V8_OS_AIX
+    Address function_desc[] = {reinterpret_cast<Address>(fn_ptr_), 0, 0};
+    Signature* fn = reinterpret_cast<Signature*>(function_desc);
+    // Due to aliasing issue, need to call USE()
+    USE(function_desc);
+    USE(function_desc[0]);
+    return fn(args...);
+#else
     return fn_ptr_(args...);
+#endif  // V8_OS_AIX
   }
 #endif
 
