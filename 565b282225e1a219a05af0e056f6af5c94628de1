@@ -34,6 +34,193 @@
       "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d21c1dfa_9e69bca0",
+        "filename": "src/inspector/string-util.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "ProtocolMessage(const ProtocolMessage\u0026 other) \u003d delete; and ditto for the assignment operator.",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "754b41df_066d84ca",
+        "filename": "src/inspector/string-util.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "nit: messageFromJSON() is more readable.",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93453671_def8d82d",
+        "filename": "src/inspector/v8-inspector-session-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "This looks to me as a case for using inheritance.",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c992b56_5a8e3783",
+        "filename": "src/inspector/v8-inspector-session-impl.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "I think this is going to be more robust if we rather check for the start of CBOR message, 0xDA.",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b3055a9_eb8c8aa3",
+        "filename": "src/inspector/v8-inspector-session-impl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "use_binary_protocol",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7106ee06_6b619f63",
+        "filename": "third_party/inspector_protocol/lib/DispatcherBase_cpp.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "make private?",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f9aefd2_e5d2abc6",
+        "filename": "third_party/inspector_protocol/lib/DispatcherBase_h.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "pass by value?",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72532333_2cfe30c6",
+        "filename": "third_party/inspector_protocol/lib/DispatcherBase_h.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "move here as well?",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21b7d29a_ecf822ad",
+        "filename": "third_party/inspector_protocol/lib/Values_cpp.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "style: uint8_t* data",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3463e2e9_f75c722d",
+        "filename": "third_party/inspector_protocol/templates/Imported_h.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "Just replace with // TODO: use binary here?",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59fa891f_142d3390",
+        "filename": "third_party/inspector_protocol/templates/Imported_h.template",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1115876
+      },
+      "writtenOn": "2019-02-12T18:46:26Z",
+      "side": 1,
+      "message": "style: no else after return. ditto about // TODO",
+      "revId": "565b282225e1a219a05af0e056f6af5c94628de1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
