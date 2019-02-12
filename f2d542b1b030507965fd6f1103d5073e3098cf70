@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4c48177_1077eb3e",
+        "filename": "test/mjsunit/regress/regress-crbug-930948.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-02-12T10:17:52Z",
+      "side": 1,
+      "message": "bmeurer@ found an even simpler repro: \n\n    [undefined].map(Math.asin);",
+      "revId": "f2d542b1b030507965fd6f1103d5073e3098cf70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
