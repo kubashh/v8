@@ -33,6 +33,9 @@ TOOLS_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEST_DATA_ROOT = os.path.join(TOOLS_ROOT, 'unittests', 'testdata')
 RUN_TESTS_PY = os.path.join(TOOLS_ROOT, 'run-tests.py')
 
+sys.path.append(TOOLS_ROOT)
+from testrunner import num_fuzzer
+
 Result = collections.namedtuple(
     'Result', ['stdout', 'stderr', 'returncode'])
 
@@ -54,7 +57,7 @@ def temp_dir():
 
 
 @contextlib.contextmanager
-def temp_base(baseroot='testroot1'):
+def temp_base(baseroot='testroot1', build_dirs=['out', 'Release']):
   """Wrapper that sets up a temporary V8 test root.
 
   Args:
@@ -64,7 +67,7 @@ def temp_base(baseroot='testroot1'):
   """
   basedir = os.path.join(TEST_DATA_ROOT, baseroot)
   with temp_dir() as tempbase:
-    builddir = os.path.join(tempbase, 'out', 'Release')
+    builddir = os.path.join(tempbase, *build_dirs)
     testroot = os.path.join(tempbase, 'test')
     os.makedirs(builddir)
     shutil.copy(os.path.join(basedir, 'v8_build_config.json'), builddir)
@@ -643,6 +646,17 @@ class SystemTest(unittest.TestCase):
       self.assertIn('2 tests failed', result.stdout, result)
       self.assertIn('3 tests ran', result.stdout, result)
       self.assertEqual(1, result.returncode, result)
+
+  def testNumFuzzer(self):
+    sys_args = ['--command-prefix', sys.executable]
+
+    with temp_base(build_dirs=['out']) as basedir:
+      with capture() as (stdout, stderr):
+        code = num_fuzzer.NumFuzzer(basedir=basedir).execute(sys_args)
+        result = Result(stdout.getvalue(), stderr.getvalue(), code)
+
+      self.assertEqual(0, result.returncode, result)
+
 
 if __name__ == '__main__':
   unittest.main()
