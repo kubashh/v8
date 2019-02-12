@@ -751,6 +751,7 @@ void Heap::CreateInitialObjects() {
 
     // Mark "Interesting Symbols" appropriately.
     to_string_tag_symbol->set_is_interesting_symbol(true);
+    to_primitive_symbol->set_is_interesting_symbol(true);
   }
 
   Handle<NameDictionary> empty_property_dictionary = NameDictionary::New(

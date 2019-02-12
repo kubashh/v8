@@ -1734,24 +1734,26 @@ Maybe<bool> JSReceiver::IsExtensible(Handle<JSReceiver> object) {
 // static
 MaybeHandle<Object> JSReceiver::ToPrimitive(Handle<JSReceiver> receiver,
                                             ToPrimitiveHint hint) {
-  Isolate* const isolate = receiver->GetIsolate();
-  Handle<Object> exotic_to_prim;
-  ASSIGN_RETURN_ON_EXCEPTION(
-      isolate, exotic_to_prim,
-      Object::GetMethod(receiver, isolate->factory()->to_primitive_symbol()),
-      Object);
-  if (!exotic_to_prim->IsUndefined(isolate)) {
-    Handle<Object> hint_string =
-        isolate->factory()->ToPrimitiveHintString(hint);
-    Handle<Object> result;
+  if (receiver->map()->may_have_interesting_symbols()) {
+    Isolate* const isolate = receiver->GetIsolate();
+    Handle<Object> exotic_to_prim;
     ASSIGN_RETURN_ON_EXCEPTION(
-        isolate, result,
-        Execution::Call(isolate, exotic_to_prim, receiver, 1, &hint_string),
+        isolate, exotic_to_prim,
+        Object::GetMethod(receiver, isolate->factory()->to_primitive_symbol()),
         Object);
-    if (result->IsPrimitive()) return result;
-    THROW_NEW_ERROR(isolate,
-                    NewTypeError(MessageTemplate::kCannotConvertToPrimitive),
-                    Object);
+    if (!exotic_to_prim->IsUndefined(isolate)) {
+      Handle<Object> hint_string =
+          isolate->factory()->ToPrimitiveHintString(hint);
+      Handle<Object> result;
+      ASSIGN_RETURN_ON_EXCEPTION(
+          isolate, result,
+          Execution::Call(isolate, exotic_to_prim, receiver, 1, &hint_string),
+          Object);
+      if (result->IsPrimitive()) return result;
+      THROW_NEW_ERROR(isolate,
+                      NewTypeError(MessageTemplate::kCannotConvertToPrimitive),
+                      Object);
+    }
   }
   return OrdinaryToPrimitive(receiver, (hint == ToPrimitiveHint::kString)
                                            ? OrdinaryToPrimitiveHint::kString
