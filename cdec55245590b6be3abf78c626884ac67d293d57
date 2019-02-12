@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e944ed04_e99b5c56",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-12T08:23:42Z",
+      "side": 1,
+      "message": "nit: NumFuzz fuzzer\n\nThis clarifies the context. The clusterfuzz fuzzer and jsfunfuzz have nothing to do with this.",
+      "range": {
+        "startLine": 7,
+        "startChar": 37,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "cdec55245590b6be3abf78c626884ac67d293d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d9dba2d_efeb3fbc",
+        "filename": "tools/clusterfuzz/PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-12T08:23:42Z",
+      "side": 1,
+      "message": "Please remove here. tools/clusterfuzz is completely decoupled from numfuzz. The new file could have been added where run_tests_test is run too.",
+      "range": {
+        "startLine": 7,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 0
+      },
+      "revId": "cdec55245590b6be3abf78c626884ac67d293d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "625aeecd_a8abebf8",
+        "filename": "tools/unittests/run_fuzzer_test.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-12T08:23:42Z",
+      "side": 1,
+      "message": "Most of this file is c/p. Please just add one additional test to the existing test suite run_tests_test. Feel free to rename it to test_runner_tests or similar if you think the name isn\u0027t appropriate.",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 21
+      },
+      "revId": "cdec55245590b6be3abf78c626884ac67d293d57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
