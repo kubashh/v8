@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2b84b3c2_a1db4192",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2930,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-02-13T11:40:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc955c9f_c21f477a",
+      "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a6d1324_f0e2a370",
         "filename": "src/builtins/x64/builtins-x64.cc",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-13T10:41:45Z",
       "side": 1,
       "message": "Sounds like you tried this and it didn\u0027t pay off? Feel free to remove the TODO if so :)",
+      "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31288e27_e1da420a",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3161,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-02-13T11:40:24Z",
+      "side": 1,
+      "message": "Haven\u0027t given up yet :)",
+      "parentUuid": "7a6d1324_f0e2a370",
       "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "91517489_3f67d7c3",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2114,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-02-13T11:40:24Z",
+      "side": 1,
+      "message": "No, since value comes after receiver. I\u0027m still planning to introduce a dedicated JSCallApiCallback operator into TurboFan once the dust settles, so all of this will disappear (together with the same code in JSCallReducer), and there will be one simpler implementation.",
+      "parentUuid": "7c3d9f1d_7b239d21",
+      "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3440ae27_a2950871",
         "filename": "src/interface-descriptors.h",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b46143c_e607cb6d",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-02-13T11:40:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3440ae27_a2950871",
+      "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
