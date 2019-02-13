@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bc1595e_13561818",
+        "filename": "src/builtins/array-map.tq",
+        "patchSetId": 6
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-02-13T09:23:15Z",
+      "side": 1,
+      "message": "I notice that in CodeStubAssembler::StoreElement there is a check to silence the Nan. I think it would make sense to do the same in Torque, so macro StoreFixedDoubleArrayNumber() and StoreFixedDoubleArrayElementSmi() should have the Float64SilenceNaN done in their implementations.\n\nThis could be done as a follow up...",
+      "revId": "a49af3c0bda7ceabe4deea24726b3707ee705074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
