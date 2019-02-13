@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3182b97f_9f73a46b",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-02-13T15:22:29Z",
+      "side": 1,
+      "message": "Class member initializer functions are eagerly compiled, they just don\u0027t force eager compilation of the whole scope (and so are still marked as lazily compilable). I\u0027d just say:\n\n // Function\u0027s which force eager compilation and class member initializer functions are not lazily compilable.",
+      "range": {
+        "startLine": 1220,
+        "startChar": 40,
+        "endLine": 1220,
+        "endChar": 74
+      },
+      "revId": "52d95dd4e58e60f001d54d3ba52112a562e92700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
