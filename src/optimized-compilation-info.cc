@@ -203,5 +203,16 @@ void OptimizedCompilationInfo::SetTracingFlags(bool passes_filter) {
   if (FLAG_trace_turbo_scheduled) SetFlag(kTraceTurboScheduled);
 }
 
+OptimizedCompilationInfo::InlinedFunctionHolder::InlinedFunctionHolder(
+    Handle<SharedFunctionInfo> inlined_shared_info,
+    Handle<BytecodeArray> inlined_bytecode, SourcePosition pos)
+    : shared_info(inlined_shared_info),
+      bytecode_array(inlined_bytecode),
+      position{pos, DeoptimizationData::kNotInlinedIndex} {
+  DCHECK_EQ(shared_info->GetBytecodeArray(), *bytecode_array);
+  // {position.inlined_function_id} will be updated when generating the
+  // deoptimization literals.
+}
+
 }  // namespace internal
 }  // namespace v8
