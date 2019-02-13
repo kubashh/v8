@@ -34,6 +34,29 @@
       "revId": "ba75052e8b7ba4e2517eceae35c8dddd43b9e956",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f207f39e_926ca70e",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-13T10:53:25Z",
+      "side": 0,
+      "message": "nit: Is this comment still useful?",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 18
+      },
+      "revId": "ba75052e8b7ba4e2517eceae35c8dddd43b9e956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

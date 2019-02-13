@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "ee13deba_ac4dde94",
+        "filename": "src/simulator.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-13T10:53:25Z",
+      "side": 1,
+      "message": "+1, I wanted to ask the same question, is the code in simulator-base.cc using the {ABI_USES_FUNCTION_DESCRIPTORS} descriptor correct for AIX or are there AIX-adaptations necessary there too?",
+      "parentUuid": "f6fa3fc5_2cb7205b",
+      "revId": "d95638297f2bc21c8fa80a2c42c8f43f7772abe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b207b83f_c40b56bd",
         "filename": "src/simulator.h",
         "patchSetId": 11
