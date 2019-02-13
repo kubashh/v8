@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "f6fa3fc5_2cb7205b",
+        "filename": "src/simulator.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-13T10:34:29Z",
+      "side": 1,
+      "message": "Follow-up, note that similar code here [0] also uses ABI_USES_FUNCTION_DESCRIPTORS.\n\n[0] https://cs.chromium.org/chromium/src/v8/src/simulator-base.cc?l\u003d79\u0026rcl\u003de2da742424d4a3020b1b81b10ea4693e72e46410",
+      "parentUuid": "14ab99aa_02c62ced",
+      "revId": "d95638297f2bc21c8fa80a2c42c8f43f7772abe6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b207b83f_c40b56bd",
         "filename": "src/simulator.h",
         "patchSetId": 11
