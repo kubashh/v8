@@ -25,6 +25,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# for py2/py3 compatibility
+from __future__ import absolute_import
+
 import copy
 import os
 import re
@@ -52,6 +55,12 @@ MODULE_RESOURCES_PATTERN_1 = re.compile(
 # import foobar from "path/to/file.js"
 MODULE_RESOURCES_PATTERN_2 = re.compile(
     r"(?:import|export).*from (?:'|\")([^'\"]+)(?:'|\")")
+
+try:
+  cmp             # Python 2
+except NameError:
+  def cmp(x, y):  # Python 3
+    return (x > y) - (x < y)
 
 
 class TestCase(object):

@@ -4,13 +4,17 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# for py2/py3 compatibility
+from __future__ import print_function
+from __future__ import absolute_import
+from functools import reduce
 
 import os
 import re
 import sys
 
 # Adds testrunner to the path hence it has to be imported at the beggining.
-import base_runner
+from . import base_runner
 
 from testrunner.local import utils
 from testrunner.local.variants import ALL_VARIANTS
@@ -217,7 +221,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
 
       def CheckTestMode(name, option):  # pragma: no cover
         if not option in ["run", "skip", "dontcare"]:
-          print "Unknown %s mode %s" % (name, option)
+          print("Unknown %s mode %s" % (name, option))
           raise base_runner.TestRunnerError()
       CheckTestMode("slow test", options.slow_tests)
       CheckTestMode("pass|fail test", options.pass_fail_tests)
@@ -240,7 +244,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
 
       for v in user_variants:
         if v not in ALL_VARIANTS:
-          print 'Unknown variant: %s' % v
+          print('Unknown variant: %s' % v)
           raise base_runner.TestRunnerError()
       assert False, 'Unreachable'
 
@@ -280,7 +284,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
     def _do_execute(self, tests, args, options):
       jobs = options.j
 
-      print '>>> Running with test processors'
+      print('>>> Running with test processors')
       loader = LoadProc(tests)
       results = self._create_result_tracker(options)
       indicators = self._create_progress_indicators(options)
@@ -319,7 +323,7 @@ class StandardTestRunner(base_runner.BaseTestRunner):
       for indicator in indicators:
         indicator.finished()
 
-      print '>>> %d tests ran' % (results.total - results.remaining)
+      print('>>> %d tests ran' % (results.total - results.remaining))
 
       exit_code = utils.EXIT_CODE_PASS
       if results.failed:
