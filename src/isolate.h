@@ -1469,7 +1469,7 @@ class Isolate final : private HiddenFactory {
   void CheckDetachedContextsAfterGC();
 
   std::vector<Object*>* read_only_object_cache() {
-    return &read_only_object_cache_;
+    return read_only_object_cache_;
   }
 
   std::vector<Object*>* partial_snapshot_cache() {
@@ -1594,6 +1594,9 @@ class Isolate final : private HiddenFactory {
   }
 
   void SetIdle(bool is_idle);
+
+  void InitializeReadOnlyRoots();
+  void InitializeSharedReadOnlyRoots();
 
  private:
   explicit Isolate(std::unique_ptr<IsolateAllocator> isolate_allocator);
@@ -1862,7 +1865,7 @@ class Isolate final : private HiddenFactory {
 
   v8::Isolate::UseCounterCallback use_counter_callback_ = nullptr;
 
-  std::vector<Object*> read_only_object_cache_;
+  std::vector<Object*>* read_only_object_cache_ = nullptr;
   std::vector<Object*> partial_snapshot_cache_;
 
   // Used during builtins compilation to build the builtins constants table,

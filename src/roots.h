@@ -401,6 +401,9 @@ class RootsTable {
   static constexpr size_t kEntriesCount =
       static_cast<size_t>(RootIndex::kRootListLength);
 
+  static constexpr size_t kReadOnlyRootsCount =
+      static_cast<size_t>(RootIndex::kReadOnlyRootsCount);
+
   RootsTable() : roots_{} {}
 
   inline bool IsRootHandleLocation(Address* handle_location,

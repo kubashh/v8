@@ -112,6 +112,7 @@ class IsolateData final {
   V(kExternalReferenceTableOffset, ExternalReferenceTable::kSizeInBytes)   \
   V(kBuiltinEntryTableOffset, Builtins::builtin_count* kSystemPointerSize) \
   V(kBuiltinsTableOffset, Builtins::builtin_count* kPointerSize)           \
+  V(kReadOnlyRootsOffset, kPointerSize)                                    \
   V(kVirtualCallTargetRegisterOffset, kPointerSize)                        \
   V(kFastCCallCallerFPOffset, kPointerSize)                                \
   V(kFastCCallCallerPCOffset, kPointerSize)                                \
@@ -152,6 +153,8 @@ class IsolateData final {
 
   // The entries in this array are tagged pointers to Code objects.
   Address builtins_[Builtins::builtin_count] = {};
+
+  Object** read_only_roots_ = nullptr;
 
   // For isolate-independent calls on ia32.
   // TODO(v8:6666): Remove once wasm supports pc-relative jumps to builtins on
@@ -196,6 +199,8 @@ void IsolateData::AssertPredictableLayout() {
   STATIC_ASSERT(offsetof(IsolateData, external_reference_table_) ==
                 kExternalReferenceTableOffset);
   STATIC_ASSERT(offsetof(IsolateData, builtins_) == kBuiltinsTableOffset);
+  STATIC_ASSERT(offsetof(IsolateData, read_only_roots_) ==
+                IsolateData::kReadOnlyRootsOffset);
   STATIC_ASSERT(offsetof(IsolateData, virtual_call_target_register_) ==
                 kVirtualCallTargetRegisterOffset);
   STATIC_ASSERT(offsetof(IsolateData, external_memory_) ==

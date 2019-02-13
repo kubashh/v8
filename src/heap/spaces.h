@@ -1394,10 +1394,12 @@ class V8_EXPORT_PRIVATE MemoryAllocator {
   void InitializeCodePageAllocator(v8::PageAllocator* page_allocator,
                                    size_t requested);
 
+ public:
   // PreFree logically frees the object, i.e., it takes care of the size
   // bookkeeping and calls the allocation callback.
   void PreFreeMemory(MemoryChunk* chunk);
 
+ private:
   // FreeMemory can be called concurrently when PreFree was executed before.
   void PerformFreeMemory(MemoryChunk* chunk);
 
@@ -2929,6 +2931,7 @@ class ReadOnlySpace : public PagedSpace {
   };
 
   explicit ReadOnlySpace(Heap* heap);
+  ~ReadOnlySpace() { UNREACHABLE(); }
 
   bool writable() const { return !is_marked_read_only_; }
 

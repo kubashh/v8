@@ -3252,6 +3252,7 @@ ReadOnlySpace::ReadOnlySpace(Heap* heap)
 
 void ReadOnlyPage::MakeHeaderRelocatable() {
   if (mutex_ != nullptr) {
+    heap_->memory_allocator()->PreFreeMemory(this);
     // TODO(v8:7464): heap_ and owner_ need to be cleared as well.
     delete mutex_;
     mutex_ = nullptr;

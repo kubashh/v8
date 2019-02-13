@@ -5,6 +5,7 @@
 #ifndef V8_SNAPSHOT_READ_ONLY_DESERIALIZER_H_
 #define V8_SNAPSHOT_READ_ONLY_DESERIALIZER_H_
 
+#include "src/base/once.h"
 #include "src/snapshot/deserializer.h"
 #include "src/snapshot/snapshot.h"
 
@@ -23,6 +24,8 @@ class ReadOnlyDeserializer final : public Deserializer {
 
  private:
   friend class StartupDeserializer;
+
+  void DeserializeReadOnlyRoots(Isolate* isolate);
 
   // Rehash after deserializing.
   void RehashHeap();

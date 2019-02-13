@@ -3236,6 +3236,22 @@ bool Isolate::Init(StartupDeserializer* des) {
   DCHECK(!heap_.HasBeenSetUp());
   heap_.SetUp();
 
+#ifdef V8_SHARED_RO_SPACE
+// Static local variables are guaranteed to be initialized just once even with
+// multi-threaded invocations.
+#define SHARE_MODIFIER static
+#else
+#define SHARE_MODIFIER
+#endif  // V8_SHARED_RO_SPACE
+
+  SHARE_MODIFIER Object** shared_read_only_roots =
+      new Object*[RootsTable::kReadOnlyRootsCount];
+  isolate_data_.read_only_roots_ = shared_read_only_roots;
+  SHARE_MODIFIER auto* shared_read_only_object_cache = new std::vector<Object*>;
+  read_only_object_cache_ = shared_read_only_object_cache;
+
+#undef SHARE_MODIFIER
+
   isolate_data_.external_reference_table()->Init(this);
 
   // Setup the wasm engine.
@@ -3311,7 +3327,9 @@ bool Isolate::Init(StartupDeserializer* des) {
     AlwaysAllocateScope always_allocate(this);
     CodeSpaceMemoryModificationScope modification_scope(&heap_);
 
-    if (!create_heap_objects) des->DeserializeInto(this);
+    if (!create_heap_objects) {
+      des->DeserializeInto(this);
+    }
     load_stub_cache_->Initialize();
     store_stub_cache_->Initialize();
     interpreter_->Initialize();
@@ -4455,6 +4473,20 @@ void Isolate::SetIdle(bool is_idle) {
   } else if (state == IDLE) {
     set_current_vm_state(EXTERNAL);
   }
+}
+
+void Isolate::InitializeReadOnlyRoots() {
+  std::memcpy(
+      reinterpret_cast<void*>(roots_table().read_only_roots_begin().address()),
+      isolate_data_.read_only_roots_,
+      RootsTable::kReadOnlyRootsCount * sizeof(Address));
+}
+
+void Isolate::InitializeSharedReadOnlyRoots() {
+  std::memcpy(
+      isolate_data_.read_only_roots_,
+      reinterpret_cast<void*>(roots_table().read_only_roots_begin().address()),
+      RootsTable::kReadOnlyRootsCount * sizeof(Address));
 }
 
 #ifdef V8_INTL_SUPPORT

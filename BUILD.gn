@@ -188,6 +188,8 @@ declare_args() {
   # avoid building v8_libbase on the host more than once. On mips with big
   # endian, the snapshot toolchain is the target toolchain and, hence, can't be
   # used.
+
+  v8_enable_shared_ro_space = true
 }
 
 v8_generator_toolchain = v8_snapshot_toolchain
@@ -410,6 +412,9 @@ config("features") {
   }
   if (v8_use_multi_snapshots) {
     defines += [ "V8_MULTI_SNAPSHOTS" ]
+  }
+  if (v8_enable_shared_ro_space) {
+    defines += [ "V8_SHARED_RO_SPACE" ]
   }
 }
 

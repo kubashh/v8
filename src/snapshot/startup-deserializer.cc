@@ -6,6 +6,7 @@
 
 #include "src/api.h"
 #include "src/assembler-inl.h"
+#include "src/base/once.h"
 #include "src/heap/heap-inl.h"
 #include "src/snapshot/read-only-deserializer.h"
 #include "src/snapshot/snapshot.h"
@@ -63,8 +64,12 @@ void StartupDeserializer::DeserializeInto(Isolate* isolate) {
   LogNewMapEvents();
 
   if (FLAG_rehash_snapshot && can_rehash()) {
-    isolate->heap()->InitializeHashSeed();
-    read_only_deserializer.RehashHeap();
+    static V8_DECLARE_ONCE(init_hash_once);
+    base::CallOnce(&init_hash_once,
+                   [heap = isolate->heap(), &read_only_deserializer]() {
+                     heap->InitializeHashSeed();
+                     read_only_deserializer.RehashHeap();
+                   });
     Rehash();
   }
 }

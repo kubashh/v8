@@ -13,7 +13,19 @@
 namespace v8 {
 namespace internal {
 
+V8_DECLARE_ONCE(once_deserialize);
+
 void ReadOnlyDeserializer::DeserializeInto(Isolate* isolate) {
+  // Deserialize RO_SPACE and the shared read-only roots just once.
+  base::CallOnce(&once_deserialize, [this, isolate]() {
+    ReadOnlyDeserializer::DeserializeReadOnlyRoots(isolate);
+  });
+
+  // Copy the read-only roots into the Isolate's roots table
+  isolate->InitializeReadOnlyRoots();
+}
+
+void ReadOnlyDeserializer::DeserializeReadOnlyRoots(Isolate* isolate) {
   Initialize(isolate);
 
   if (!allocator()->ReserveSpace()) {
@@ -35,6 +47,7 @@ void ReadOnlyDeserializer::DeserializeInto(Isolate* isolate) {
 
     ReadOnlyRoots(isolate).Iterate(this);
     isolate->heap()->read_only_space()->RepairFreeListsAfterDeserialization();
+    isolate->InitializeSharedReadOnlyRoots();
 
     // Deserialize the Read-only Object Cache.
     std::vector<Object*>* cache = isolate->read_only_object_cache();

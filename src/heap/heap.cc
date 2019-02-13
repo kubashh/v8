@@ -3402,14 +3402,19 @@ const char* Heap::GarbageCollectionReasonToString(
 }
 
 bool Heap::Contains(HeapObject* value) {
+  // Have to do this check first because IsOutsideAllocatedSpace cannot account
+  // for a shared RO_SPACE.
+  if (read_only_space_ != nullptr && read_only_space_->Contains(value)) {
+    return true;
+  }
   if (memory_allocator()->IsOutsideAllocatedSpace(value->address())) {
     return false;
   }
   return HasBeenSetUp() &&
          (new_space_->ToSpaceContains(value) || old_space_->Contains(value) ||
           code_space_->Contains(value) || map_space_->Contains(value) ||
-          lo_space_->Contains(value) || read_only_space_->Contains(value) ||
-          code_lo_space_->Contains(value) || new_lo_space_->Contains(value));
+          lo_space_->Contains(value) || code_lo_space_->Contains(value) ||
+          new_lo_space_->Contains(value));
 }
 
 bool Heap::InSpace(HeapObject* value, AllocationSpace space) {
@@ -4403,7 +4408,18 @@ void Heap::SetUp() {
     space_[i] = nullptr;
   }
 
-  space_[RO_SPACE] = read_only_space_ = new ReadOnlySpace(this);
+#ifdef V8_SHARED_RO_SPACE
+// Static local variables are guaranteed to be initialized just once even with
+// multi-threaded invocations.
+#define SHARE_MODIFIER static
+#else
+#define SHARE_MODIFIER
+#endif  // V8_SHARED_RO_SPACE
+  SHARE_MODIFIER ReadOnlySpace* shared_read_only_space =
+      new ReadOnlySpace(this);
+#undef SHARE_MODIFIER
+  space_[RO_SPACE] = read_only_space_ = shared_read_only_space;
+
   space_[NEW_SPACE] = new_space_ =
       new NewSpace(this, memory_allocator_->data_page_allocator(),
                    initial_semispace_size_, max_semi_space_size_);
@@ -4546,7 +4562,10 @@ void Heap::NotifyDeserializationComplete() {
 #endif  // DEBUG
   }
 
-  read_only_space()->MarkAsReadOnly();
+  // TODO(delphick): synchronize this
+  if (read_only_space()->writable()) {
+    read_only_space()->MarkAsReadOnly();
+  }
   deserialization_complete_ = true;
 }
 
@@ -4688,7 +4707,9 @@ void Heap::TearDown() {
   delete tracer_;
   tracer_ = nullptr;
 
-  for (int i = FIRST_SPACE; i <= LAST_SPACE; i++) {
+  // TODO(delphick): iterate from OLD_SPACE for non-snapshot builds
+  AllocationSpace first_space = NEW_SPACE;
+  for (int i = first_space; i <= LAST_SPACE; i++) {
     delete space_[i];
     space_[i] = nullptr;
   }
