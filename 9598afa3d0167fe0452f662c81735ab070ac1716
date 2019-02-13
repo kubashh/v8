@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "012d3982_0a749043",
+        "filename": "src/inspector/string-util.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-02-13T18:48:13Z",
+      "side": 1,
+      "message": "Keep TODO?",
+      "revId": "9598afa3d0167fe0452f662c81735ab070ac1716",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
