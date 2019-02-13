@@ -19,6 +19,7 @@ namespace internal {
 enum InstanceType : uint16_t;
 class JSGlobalObject;
 class JSGlobalProxy;
+class NativeContext;
 
 // JSReceiver includes types on which properties can be defined, i.e.,
 // JSObject and JSProxy.
@@ -960,7 +961,7 @@ class JSFunction : public JSObject {
   inline bool has_context() const;
   inline void set_context(Object context);
   inline JSGlobalProxy global_proxy();
-  inline Context native_context();
+  inline NativeContext native_context();
 
   static Handle<Object> GetName(Isolate* isolate, Handle<JSFunction> function);
   static Maybe<int> GetLength(Isolate* isolate, Handle<JSFunction> function);
@@ -1173,7 +1174,7 @@ class JSGlobalProxy : public JSObject {
 class JSGlobalObject : public JSObject {
  public:
   // [native context]: the natives corresponding to this global object.
-  DECL_ACCESSORS(native_context, Context)
+  DECL_ACCESSORS(native_context, NativeContext)
 
   // [global proxy]: the global proxy object of the context
   DECL_ACCESSORS(global_proxy, JSObject)
