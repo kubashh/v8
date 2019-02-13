@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1fd015d_5ee755e2",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-02-13T15:39:12Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we need the IsCompiledScope around the while loop? The point of this loop is to compile inner functions until we have compiled every function inside the source range, so we iterate over inner functions. Even though unlikely, code could be flushed between iterations?",
+      "range": {
+        "startLine": 1339,
+        "startChar": 6,
+        "endLine": 1339,
+        "endChar": 21
+      },
+      "revId": "837d7a547d91d1b15874f2ca53cd29ff890036e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
