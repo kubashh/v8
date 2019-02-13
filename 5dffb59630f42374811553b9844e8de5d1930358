@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a95d9b31_f154a5a6",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2906,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-13T10:41:45Z",
+      "side": 0,
+      "message": "I\u0027d slighly prefer keeping this a named constant instead of the \u0027+ 1 /* receiver */\u0027 below, also on other architectures.",
+      "revId": "5dffb59630f42374811553b9844e8de5d1930358",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc955c9f_c21f477a",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2930,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-13T10:41:45Z",
+      "side": 1,
+      "message": "Nit: -kNewTarget",
+      "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a6d1324_f0e2a370",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3161,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-13T10:41:45Z",
+      "side": 1,
+      "message": "Sounds like you tried this and it didn\u0027t pay off? Feel free to remove the TODO if so :)",
+      "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c3d9f1d_7b239d21",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2114,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-13T10:41:45Z",
+      "side": 1,
+      "message": "By now we could just init above, right?\n\n   Node* inputs[] \u003d {\n      code,    function_reference, jsgraph()-\u003eConstant(argc), data, holder,\n      receiver, context, frame_state, *effect, *control, value};\n\nAnd then below\n\n  const int num_inputs \u003d (value \u003d\u003d nullptr) ? \n    arraysize(inputs) - 1 : arraysize(inputs);\n  return *effect \u003d *control \u003d\n             graph()-\u003eNewNode(common()-\u003eCall(call_descriptor), num_inputs, inputs);",
+      "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3440ae27_a2950871",
+        "filename": "src/interface-descriptors.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-13T10:41:45Z",
+      "side": 1,
+      "message": "Looks like these are now stack args 1 / 2",
+      "revId": "863b484c8d6213ee8dd2ffd6e9250080ea0eedd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
