@@ -57,6 +57,30 @@
       "revId": "ba75052e8b7ba4e2517eceae35c8dddd43b9e956",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da3132d0_e6bbb5e8",
+        "filename": "src/builtins/ppc/builtins-ppc.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-02-13T13:25:27Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "f207f39e_926ca70e",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 18
+      },
+      "revId": "ba75052e8b7ba4e2517eceae35c8dddd43b9e956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

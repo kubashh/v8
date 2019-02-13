@@ -22,6 +22,30 @@
       "revId": "f37fd93748de178300c9dbe5409a4301f78d5737",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a3bbade_26868fae",
+        "filename": "src/regexp/ppc/regexp-macro-assembler-ppc.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-02-13T13:25:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c39aca5_e6217009",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 16
+      },
+      "revId": "f37fd93748de178300c9dbe5409a4301f78d5737",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
