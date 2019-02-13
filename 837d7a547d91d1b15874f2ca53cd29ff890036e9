@@ -46,6 +46,30 @@
       "revId": "837d7a547d91d1b15874f2ca53cd29ff890036e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4cf8ba16_0d38a718",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-02-13T17:25:13Z",
+      "side": 1,
+      "message": "Actually line 1351 does exactly what you say by adding the IsCompiledScope to a vector.",
+      "parentUuid": "2e5e0e93_ecc9e8de",
+      "range": {
+        "startLine": 1339,
+        "startChar": 6,
+        "endLine": 1339,
+        "endChar": 21
+      },
+      "revId": "837d7a547d91d1b15874f2ca53cd29ff890036e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
