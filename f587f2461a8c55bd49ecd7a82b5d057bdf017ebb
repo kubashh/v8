@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49b39d50_e430b9dd",
+        "filename": "src/optimized-compilation-info.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-02-13T10:57:54Z",
+      "side": 1,
+      "message": "Since we now use the initializer lists everywhere now, can\u0027t you say something like \n\n..., position({pos, DeoptimizationData::kNotInlinedIndex}) {",
+      "range": {
+        "startLine": 209,
+        "startChar": 72,
+        "endLine": 209,
+        "endChar": 74
+      },
+      "revId": "f587f2461a8c55bd49ecd7a82b5d057bdf017ebb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
