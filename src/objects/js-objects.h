@@ -19,6 +19,7 @@ namespace internal {
 enum InstanceType : uint16_t;
 class JSGlobalObject;
 class JSGlobalProxy;
+class NativeContext;
 
 // JSReceiver includes types on which properties can be defined, i.e.,
 // JSObject and JSProxy.
