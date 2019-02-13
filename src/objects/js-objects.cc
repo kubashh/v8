@@ -3004,7 +3004,9 @@ Handle<Map> JSObject::GetElementsTransitionMap(Handle<JSObject> object,
 // static
 MaybeHandle<NativeContext> JSObject::GetFunctionRealm(Handle<JSObject> object) {
   DCHECK(object->map()->is_constructor());
+  DCHECK(!object->IsJSProxy());
   DCHECK(!object->IsJSFunction());
+  DCHECK(!object->IsJSBoundFunction());
   return object->GetCreationContext();
 }
 
@@ -4770,7 +4772,6 @@ bool JSObject::IsDroppableApiWrapper() {
 // static
 MaybeHandle<NativeContext> JSBoundFunction::GetFunctionRealm(
     Handle<JSBoundFunction> function) {
-  DCHECK(function->map()->is_constructor());
   return JSReceiver::GetFunctionRealm(
       handle(function->bound_target_function(), function->GetIsolate()));
 }
@@ -4866,7 +4867,6 @@ Maybe<int> JSFunction::GetLength(Isolate* isolate,
 // static
 Handle<NativeContext> JSFunction::GetFunctionRealm(
     Handle<JSFunction> function) {
-  DCHECK(function->map()->is_constructor());
   return handle(function->context()->native_context(), function->GetIsolate());
 }
 
