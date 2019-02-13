@@ -1217,7 +1217,10 @@ bool Scope::AllowsLazyParsingWithoutUnresolvedVariables(
 }
 
 bool DeclarationScope::AllowsLazyCompilation() const {
-  return !force_eager_compilation_;
+  // Class member initializer functions do not yet force eager compilation
+  // despite not being lazily compilable.
+  return !force_eager_compilation_ &&
+         !IsClassMembersInitializerFunction(function_kind());
 }
 
 int Scope::ContextChainLength(Scope* scope) const {
