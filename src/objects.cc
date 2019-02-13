@@ -114,6 +114,17 @@
 namespace v8 {
 namespace internal {
 
+Handle<Context> ExtractHandlerContext(Handle<HeapObject> handler,
+                                      Handle<Context> fallback_context) {
+  if (handler->IsUndefined()) return fallback_context;
+  MaybeHandle<Context> maybe_handler_context =
+      JSReceiver::GetFunctionRealm(Handle<JSReceiver>::cast(handler));
+
+  Handle<Context> handler_context;
+  if (maybe_handler_context.ToHandle(&handler_context)) return handler_context;
+  return fallback_context;
+}
+
 ShouldThrow GetShouldThrow(Isolate* isolate, Maybe<ShouldThrow> should_throw) {
   if (should_throw.IsJust()) return should_throw.FromJust();
 
@@ -5954,10 +5965,12 @@ MaybeHandle<Object> JSPromise::Resolve(Handle<JSPromise> promise,
 
   // 12. Perform EnqueueJob("PromiseJobs", PromiseResolveThenableJob,
   //                        «promise, resolution, thenAction»).
+  Handle<Context> handler_context = ExtractHandlerContext(
+      Handle<HeapObject>::cast(then_action), isolate->native_context());
   Handle<PromiseResolveThenableJobTask> task =
       isolate->factory()->NewPromiseResolveThenableJobTask(
           promise, Handle<JSReceiver>::cast(then_action),
-          Handle<JSReceiver>::cast(resolution), isolate->native_context());
+          Handle<JSReceiver>::cast(resolution), handler_context);
   if (isolate->debug()->is_active() && resolution->IsJSPromise()) {
     // Mark the dependency of the new {promise} on the {resolution}.
     Object::SetProperty(isolate, resolution,
@@ -5965,7 +5978,7 @@ MaybeHandle<Object> JSPromise::Resolve(Handle<JSPromise> promise,
                         promise)
         .Check();
   }
-  isolate->native_context()->microtask_queue()->EnqueueMicrotask(*task);
+  handler_context->native_context()->microtask_queue()->EnqueueMicrotask(*task);
 
   // 13. Return undefined.
   return isolate->factory()->undefined_value();
@@ -6000,15 +6013,21 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
     Handle<PromiseReaction> reaction = Handle<PromiseReaction>::cast(task);
     reactions = handle(reaction->next(), isolate);
 
+    Handle<Context> handler_context;
+
     STATIC_ASSERT(static_cast<int>(PromiseReaction::kSize) ==
                   static_cast<int>(PromiseReactionJobTask::kSize));
     if (type == PromiseReaction::kFulfill) {
+      handler_context = ExtractHandlerContext(
+          Handle<HeapObject>(reaction->fulfill_handler(), isolate),
+          isolate->native_context());
+
       task->synchronized_set_map(
           ReadOnlyRoots(isolate).promise_fulfill_reaction_job_task_map());
       Handle<PromiseFulfillReactionJobTask>::cast(task)->set_argument(
           *argument);
       Handle<PromiseFulfillReactionJobTask>::cast(task)->set_context(
-          *isolate->native_context());
+          *handler_context);
       STATIC_ASSERT(
           static_cast<int>(PromiseReaction::kFulfillHandlerOffset) ==
           static_cast<int>(PromiseFulfillReactionJobTask::kHandlerOffset));
@@ -6019,11 +6038,13 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
     } else {
       DisallowHeapAllocation no_gc;
       HeapObject handler = reaction->reject_handler();
+      handler_context = ExtractHandlerContext(
+          Handle<HeapObject>(handler, isolate), isolate->native_context());
       task->synchronized_set_map(
           ReadOnlyRoots(isolate).promise_reject_reaction_job_task_map());
       Handle<PromiseRejectReactionJobTask>::cast(task)->set_argument(*argument);
       Handle<PromiseRejectReactionJobTask>::cast(task)->set_context(
-          *isolate->native_context());
+          *handler_context);
       Handle<PromiseRejectReactionJobTask>::cast(task)->set_handler(handler);
       STATIC_ASSERT(
           static_cast<int>(PromiseReaction::kPromiseOrCapabilityOffset) ==
@@ -6031,7 +6052,7 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
               PromiseRejectReactionJobTask::kPromiseOrCapabilityOffset));
     }
 
-    isolate->native_context()->microtask_queue()->EnqueueMicrotask(
+    handler_context->native_context()->microtask_queue()->EnqueueMicrotask(
         *Handle<PromiseReactionJobTask>::cast(task));
   }
 
