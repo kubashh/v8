@@ -159,6 +159,7 @@ namespace internal {
   ASM(ContinueToJavaScriptBuiltinWithResult, Dummy)                            \
                                                                                \
   /* API callback handling */                                                  \
+  TFC(CallApiCallbackWithChecks, ApiCallbackWithChecks, 1)                     \
   ASM(CallApiCallback, ApiCallback)                                            \
   ASM(CallApiGetter, ApiGetter)                                                \
   API(HandleApiCall)                                                           \

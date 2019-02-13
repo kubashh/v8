@@ -20,6 +20,7 @@ namespace internal {
   V(Allocate)                         \
   V(AllocateHeapNumber)               \
   V(ApiCallback)                      \
+  V(ApiCallbackWithChecks)            \
   V(ApiGetter)                        \
   V(ArgumentsAdaptor)                 \
   V(ArrayConstructor)                 \
@@ -1002,6 +1003,16 @@ class ApiCallbackDescriptor : public CallInterfaceDescriptor {
                          MachineType::AnyTagged(),  // kCallData
                          MachineType::AnyTagged())  // kHolder
   DECLARE_DESCRIPTOR(ApiCallbackDescriptor, CallInterfaceDescriptor)
+};
+
+class ApiCallbackWithChecksDescriptor : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS(kFunctionTemplateInfo, kActualArgumentsCount)
+  //                           receiver is implicit stack argument 3
+  //                           argv are implicit stack arguments [4, 4 + kArgc[
+  DEFINE_PARAMETER_TYPES(MachineType::AnyTagged(),  // kFunctionTemplateInfo
+                         MachineType::IntPtr())     // kActualArgumentsCount
+  DECLARE_DESCRIPTOR(ApiCallbackWithChecksDescriptor, CallInterfaceDescriptor)
 };
 
 class ApiGetterDescriptor : public CallInterfaceDescriptor {

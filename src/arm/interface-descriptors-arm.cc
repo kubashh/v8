@@ -211,6 +211,15 @@ void ApiCallbackDescriptor::InitializePlatformSpecific(
   data->InitializePlatformSpecific(arraysize(registers), registers);
 }
 
+void ApiCallbackWithChecksDescriptor::InitializePlatformSpecific(
+    CallInterfaceDescriptorData* data) {
+  Register registers[] = {
+      r1,  // function template info
+      r2,  // argument count (not including receiver)
+  };
+  data->InitializePlatformSpecific(arraysize(registers), registers);
+}
+
 void InterpreterDispatchDescriptor::InitializePlatformSpecific(
     CallInterfaceDescriptorData* data) {
   Register registers[] = {
