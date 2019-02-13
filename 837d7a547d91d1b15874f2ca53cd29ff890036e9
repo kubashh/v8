@@ -22,6 +22,30 @@
       "revId": "837d7a547d91d1b15874f2ca53cd29ff890036e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e5e0e93_ecc9e8de",
+        "filename": "src/debug/debug.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-02-13T16:57:25Z",
+      "side": 1,
+      "message": "Ross isn\u0027t here for me to ask but I think PrepareFunctionForDebugExecution (on line 1353) adds the bytecode array to a DebugInfo (itself held by the SharedFunctionInfo), which should keep the BytecodeArray alive without having to extend the IsCompiledScope.",
+      "parentUuid": "a1fd015d_5ee755e2",
+      "range": {
+        "startLine": 1339,
+        "startChar": 6,
+        "endLine": 1339,
+        "endChar": 21
+      },
+      "revId": "837d7a547d91d1b15874f2ca53cd29ff890036e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
