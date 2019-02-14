@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22cf6c78_f2fd4ded",
+        "filename": "tools/testrunner/num_fuzzer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-14T11:05:58Z",
+      "side": 0,
+      "message": "Why remove this line? We usually separate imports from consts with 2-line indent.",
+      "revId": "e3637a7c0cdcf9dff8e6fba687963f54340f3de9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
