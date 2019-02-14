@@ -22,6 +22,30 @@
       "revId": "d088c1ec4a40e4a7efd7013a5cbdc3a5ca67d902",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7b17464_87a37b5a",
+        "filename": "src/builtins/builtins-string.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-02-14T21:29:43Z",
+      "side": 1,
+      "message": "gee... I somehow missed that. Sorry. No this is NOT what I want. Thanks for catching this.",
+      "parentUuid": "77869bd6_6228c802",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 23
+      },
+      "revId": "d088c1ec4a40e4a7efd7013a5cbdc3a5ca67d902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
