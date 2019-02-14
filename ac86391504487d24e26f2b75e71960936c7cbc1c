@@ -22,6 +22,30 @@
       "revId": "ac86391504487d24e26f2b75e71960936c7cbc1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fa123de_79ad0b7c",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3039,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-02-14T21:17:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b90a8646_5ad2b94d",
+      "range": {
+        "startLine": 3039,
+        "startChar": 32,
+        "endLine": 3039,
+        "endChar": 34
+      },
+      "revId": "ac86391504487d24e26f2b75e71960936c7cbc1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
