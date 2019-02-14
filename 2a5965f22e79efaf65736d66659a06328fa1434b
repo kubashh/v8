@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13d9a0da_7d212fd4",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-02-14T09:28:26Z",
+      "side": 1,
+      "message": "Nit: CHECK_EQ(0, ...) produces more descriptive message with the expected and actual values if the check fails.",
+      "range": {
+        "startLine": 1929,
+        "startChar": 4,
+        "endLine": 1929,
+        "endChar": 9
+      },
+      "revId": "2a5965f22e79efaf65736d66659a06328fa1434b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5723c65_96d8a234",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1936,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-02-14T09:28:26Z",
+      "side": 1,
+      "message": "ditto here and below",
+      "range": {
+        "startLine": 1936,
+        "startChar": 4,
+        "endLine": 1936,
+        "endChar": 9
+      },
+      "revId": "2a5965f22e79efaf65736d66659a06328fa1434b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
