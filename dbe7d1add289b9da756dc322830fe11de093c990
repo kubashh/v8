@@ -16,6 +16,24 @@
       "revId": "dbe7d1add289b9da756dc322830fe11de093c990",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b6a283a_9f85d4f9",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-02-14T09:19:32Z",
+      "side": 1,
+      "message": "You are totally right. We need to walk up the prototype chain here, but it will sacrifice performance. Maybe another option in my mind is to make MayHaveInterestingSymbols inheritable during the creation of prototype chain. Could this be a feasible solution?",
+      "parentUuid": "ca8d8046_b98c3ee5",
+      "revId": "dbe7d1add289b9da756dc322830fe11de093c990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
