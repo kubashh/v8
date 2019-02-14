@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "826155b1_2d593922",
+        "filename": "src/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2975,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-14T16:16:01Z",
+      "side": 1,
+      "message": "Leftover?",
+      "revId": "b14723b1f3c312e6d6b4aeb6f8e4982629d262fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa92b6c8_c291bf68",
+        "filename": "src/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-14T16:16:01Z",
+      "side": 1,
+      "message": "The comments seem a bit repetitive, perhaps we can remove them later. Are you planning to merge the bodies of Capture{Simple,Current}StackTrace?",
+      "revId": "b14723b1f3c312e6d6b4aeb6f8e4982629d262fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
