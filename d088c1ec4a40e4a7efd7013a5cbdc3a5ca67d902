@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77869bd6_6228c802",
+        "filename": "src/builtins/builtins-string.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-02-14T19:23:25Z",
+      "side": 1,
+      "message": "This patch won\u0027t affect Chrome builds. Is that what you intended?\n\nThe Intl-enabled version is in builtins-intl.cc in BUILTIN(StringPrototypeNormalizeIntl).",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 23
+      },
+      "revId": "d088c1ec4a40e4a7efd7013a5cbdc3a5ca67d902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
