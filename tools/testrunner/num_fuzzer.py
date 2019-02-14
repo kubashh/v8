@@ -4,12 +4,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# for py2/py3 compatibility
+from __future__ import print_function
+from __future__ import absolute_import
 
 import random
 import sys
 
 # Adds testrunner to the path hence it has to be imported at the beggining.
-import base_runner
+from . import base_runner
 
 from testrunner.local import utils
 
@@ -97,8 +100,8 @@ class NumFuzzer(base_runner.BaseTestRunner):
 
     if options.combine_tests:
       if options.combine_min > options.combine_max:
-        print ('min_group_size (%d) cannot be larger than max_group_size (%d)' %
-               options.min_group_size, options.max_group_size)
+        print(('min_group_size (%d) cannot be larger than max_group_size (%d)' %
+               options.min_group_size, options.max_group_size))
         raise base_runner.TestRunnerError()
 
     if options.variants != 'default':
@@ -166,7 +169,7 @@ class NumFuzzer(base_runner.BaseTestRunner):
     for indicator in indicators:
       indicator.finished()
 
-    print '>>> %d tests ran' % results.total
+    print('>>> %d tests ran' % results.total)
     if results.failed:
       return utils.EXIT_CODE_FAILURES
 
