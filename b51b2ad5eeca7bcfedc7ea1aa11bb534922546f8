@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "877330c6_6f90b289",
+        "filename": "src/api.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 8535,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-14T08:46:14Z",
+      "side": 1,
+      "message": "I think we should use a variant of CreationContext() here instead. Possibly called GetFunctionRealmNoSideEffects or so. That one cannot get the realm from callable proxies.",
+      "revId": "b51b2ad5eeca7bcfedc7ea1aa11bb534922546f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "924c2c4f_09732893",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-14T08:46:14Z",
+      "side": 1,
+      "message": "Same as above.",
+      "revId": "b51b2ad5eeca7bcfedc7ea1aa11bb534922546f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
