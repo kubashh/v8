@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca8d8046_b98c3ee5",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-02-14T06:45:41Z",
+      "side": 1,
+      "message": "Unfortunately this is not correct, since any of the prototypes could have Symbol.toPrimitive on it, and so you would need to walk up the prototype chain to be sure.",
+      "revId": "dbe7d1add289b9da756dc322830fe11de093c990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
