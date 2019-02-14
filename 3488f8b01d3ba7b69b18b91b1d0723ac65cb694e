@@ -183,6 +183,24 @@
       "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b40e510d_4cb7f896",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-14T15:49:35Z",
+      "side": 1,
+      "message": "I\u0027ve read the article, but don\u0027t understand why we can still import modules in the same dir without having to use\n\n  from . import \u003c\u003e\n\nsyntax? See my other comment for an example.",
+      "parentUuid": "eae80329_f4cac2fa",
+      "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34a665f3_037eb0e4",
+        "filename": "tools/testrunner/local/statusfile_unittest.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-14T15:49:35Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be changed to\n\n  from . import statusfile\n\naccording to the absolute_imports rule above?",
+      "revId": "9663f49d10106bd38b73dbf9d06b7a20f0bc4877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
