@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73ed1de6_f36e79ca",
+        "filename": "tools/unittests/run_tests_test.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-14T12:20:26Z",
+      "side": 1,
+      "message": "I wonder if it would be useful to return these values to create an expectation-test... this would allow to see how changes to the test runner impact user-visible output.",
+      "range": {
+        "startLine": 660,
+        "startChar": 25,
+        "endLine": 660,
+        "endChar": 39
+      },
+      "revId": "e2207c67665b61870a4dd3372fad829fccd0897e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
