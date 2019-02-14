@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "25d40200_15c16a10",
+        "filename": "tools/testrunner/local/verbose.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1315912
+      },
+      "writtenOn": "2019-02-14T15:35:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "264cb965_04c8673e",
+      "range": {
+        "startLine": 101,
+        "startChar": 32,
+        "endLine": 101,
+        "endChar": 34
+      },
+      "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55f6877a_d0c8f099",
         "filename": "tools/testrunner/objects/testcase.py",
         "patchSetId": 1
@@ -138,6 +162,24 @@
       "side": 1,
       "message": "Then please remove it in other files (and in other CLs) too. Thanks.",
       "parentUuid": "5e095ff5_52e6ca51",
+      "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eae80329_f4cac2fa",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1315912
+      },
+      "writtenOn": "2019-02-14T15:35:09Z",
+      "side": 1,
+      "message": "But in other cases we should use it:\nhttps://python-future.org/imports.html\n\nIn further work on py3/py2 compatibility, we will need to add this.\nShould we keep these lines?",
+      "parentUuid": "05eed17e_a0d162c6",
       "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
