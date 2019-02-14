@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "264cb965_04c8673e",
+        "filename": "tools/testrunner/local/verbose.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-14T14:40:32Z",
+      "side": 1,
+      "message": "Please replace with \"test_duration\" since it better describes what\u0027s in the tuple.",
+      "parentUuid": "9c9716d4_284f7f0e",
+      "range": {
+        "startLine": 101,
+        "startChar": 32,
+        "endLine": 101,
+        "endChar": 34
+      },
+      "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f6877a_d0c8f099",
         "filename": "tools/testrunner/objects/testcase.py",
         "patchSetId": 1
@@ -99,6 +123,24 @@
       "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "05eed17e_a0d162c6",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-14T14:40:32Z",
+      "side": 1,
+      "message": "Then please remove it in other files (and in other CLs) too. Thanks.",
+      "parentUuid": "5e095ff5_52e6ca51",
+      "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
