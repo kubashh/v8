@@ -34,6 +34,24 @@
       "revId": "dbe7d1add289b9da756dc322830fe11de093c990",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d5acd27_3d2156a8",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1737,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-02-14T12:29:07Z",
+      "side": 1,
+      "message": "Walking up the prototype chain is probably too expensive here, since the lookup already does that.\n\nMaking it \"inheritable\" isn\u0027t easy, since the prototype chain can change at any point, and you don\u0027t know all the leaf maps relying on a given prototype.",
+      "parentUuid": "8b6a283a_9f85d4f9",
+      "revId": "dbe7d1add289b9da756dc322830fe11de093c990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
