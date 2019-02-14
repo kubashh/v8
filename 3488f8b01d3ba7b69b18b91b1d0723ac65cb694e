@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9c9716d4_284f7f0e",
+        "filename": "tools/testrunner/local/verbose.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1315912
+      },
+      "writtenOn": "2019-02-14T13:28:03Z",
+      "side": 1,
+      "message": "In this case, we remove implicit tuple parameter unpacking.\nfuturize does this by concatenating with a separator \"_\" (example: \"_\".join([\"arg1\",\"arg2\"]) # \u0027arg1_arg2\u0027 ).\n\n\nReplace with duration?",
+      "parentUuid": "e2b30b91_0ec438f0",
+      "range": {
+        "startLine": 101,
+        "startChar": 32,
+        "endLine": 101,
+        "endChar": 34
+      },
+      "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "55f6877a_d0c8f099",
         "filename": "tools/testrunner/objects/testcase.py",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2019-02-14T11:05:58Z",
       "side": 1,
       "message": "What does this do? Why do we need it?",
+      "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adf4a100_d46228f1",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1315912
+      },
+      "writtenOn": "2019-02-14T13:28:03Z",
+      "side": 1,
+      "message": "I think, we don\u0027t need it)",
+      "parentUuid": "55f6877a_d0c8f099",
       "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
