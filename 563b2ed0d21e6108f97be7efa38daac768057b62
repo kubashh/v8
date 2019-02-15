@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1f179eb_c7746a7b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2019-02-15T08:26:43Z",
+      "side": 1,
+      "message": "Please shorten the commit message. \n\nFYI: You can do this in the gerrit UI by clicking the EDIT link underneath the message in the CL overview. Changing the message of a git commit does not influence the CL\u0027s commit message.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 104
+      },
+      "revId": "563b2ed0d21e6108f97be7efa38daac768057b62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
