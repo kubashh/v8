@@ -282,7 +282,7 @@ class Config(object):
       extra_opt = match.group(1) if match else ""
       cmdline = re.compile("python ../../tools/run.py ./mksnapshot (.*)")
       match = cmdline.search(output)
-      cmdline = PrepareMksnapshotCmdline(match.group(1), path) + extra_opt
+      cmdline = PrepareMksnapshotCmdline(match.group(1).strip(), path) + extra_opt
       _Notify("V8 build requires your attention",
               "Detected mksnapshot failure, re-running in GDB...")
       _Call(cmdline)
