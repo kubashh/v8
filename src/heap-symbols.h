@@ -11,13 +11,11 @@
   V(_, calendar_string, "calendar")                                 \
   V(_, cardinal_string, "cardinal")                                 \
   V(_, caseFirst_string, "caseFirst")                               \
-  V(_, dateStyle_string, "dateStyle")                               \
   V(_, day_string, "day")                                           \
   V(_, dayPeriod_string, "dayPeriod")                               \
   V(_, decimal_string, "decimal")                                   \
   V(_, era_string, "era")                                           \
   V(_, fraction_string, "fraction")                                 \
-  V(_, full_string, "full")                                         \
   V(_, granularity_string, "granularity")                           \
   V(_, grapheme_string, "grapheme")                                 \
   V(_, group_string, "group")                                       \
@@ -67,7 +65,6 @@
   V(_, strict_string, "strict")                                     \
   V(_, style_string, "style")                                       \
   V(_, term_string, "term")                                         \
-  V(_, timeStyle_string, "timeStyle")                               \
   V(_, timeZone_string, "timeZone")                                 \
   V(_, timeZoneName_string, "timeZoneName")                         \
   V(_, type_string, "type")                                         \
@@ -192,7 +189,6 @@
   V(_, long_string, "long")                                           \
   V(_, Map_string, "Map")                                             \
   V(_, MapIterator_string, "Map Iterator")                            \
-  V(_, medium_string, "medium")                                       \
   V(_, message_string, "message")                                     \
   V(_, meta_string, "meta")                                           \
   V(_, minus_Infinity_string, "-Infinity")                            \

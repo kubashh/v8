@@ -4212,11 +4212,6 @@ EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_regexp_sequence)
 EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_await_optimization)
 EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_hashbang)
 
-#ifdef V8_INTL_SUPPORT
-EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_intl_bigint)
-EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE(harmony_intl_datetime_style)
-#endif  // V8_INTL_SUPPORT
-
 #undef EMPTY_INITIALIZE_GLOBAL_FOR_FEATURE
 
 void Genesis::InitializeGlobal_harmony_global() {
@@ -4645,6 +4640,10 @@ void Genesis::InitializeGlobal_harmony_intl_segmenter() {
                                      isolate());
     native_context()->set_intl_segment_iterator_map(*segment_iterator_map);
   }
+}
+
+void Genesis::InitializeGlobal_harmony_intl_bigint() {
+  // No new functions.
 }
 
 #endif  // V8_INTL_SUPPORT
