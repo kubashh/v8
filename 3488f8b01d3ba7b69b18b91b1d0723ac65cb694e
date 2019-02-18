@@ -201,6 +201,24 @@
       "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67de34cf_33939aa4",
+        "filename": "tools/testrunner/objects/testcase.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1315912
+      },
+      "writtenOn": "2019-02-18T13:50:02Z",
+      "side": 1,
+      "message": "I propose to remove all `from __future__ import absolute_import`.\nPart of the compatibility of imports I would like to make a separate commit, because initially I need to understand how scripts are called in v8 repo.",
+      "parentUuid": "b40e510d_4cb7f896",
+      "revId": "3488f8b01d3ba7b69b18b91b1d0723ac65cb694e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
