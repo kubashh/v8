@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bba793f6_e2768790",
+        "filename": "src/api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2975,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-18T09:41:18Z",
+      "side": 1,
+      "message": "Yes, removed.",
+      "parentUuid": "826155b1_2d593922",
+      "revId": "b14723b1f3c312e6d6b4aeb6f8e4982629d262fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa92b6c8_c291bf68",
         "filename": "src/isolate.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-14T16:16:01Z",
       "side": 1,
       "message": "The comments seem a bit repetitive, perhaps we can remove them later. Are you planning to merge the bodies of Capture{Simple,Current}StackTrace?",
+      "revId": "b14723b1f3c312e6d6b4aeb6f8e4982629d262fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1be4f71a_9cfc29f2",
+        "filename": "src/isolate.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-02-18T09:41:18Z",
+      "side": 1,
+      "message": "Yes, the plan is to merge them, I\u0027m just unsure about the specifics yet.",
+      "parentUuid": "fa92b6c8_c291bf68",
       "revId": "b14723b1f3c312e6d6b4aeb6f8e4982629d262fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
