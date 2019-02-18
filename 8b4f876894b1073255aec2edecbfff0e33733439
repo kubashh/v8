@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4ffefa9_b2d90eb1",
+        "filename": "BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2019-02-18T10:05:19Z",
+      "side": 1,
+      "message": "I assumed that ENABLE_VTUNE_JIT_INTERFACE was platform dependent and not just gated by this flag. Turns out that is not true :(\n\nCould you implement the same logic that we have for v8_enable_gdbjit (further down in BUILD.gn) adapted to the platform/os configurations you intend to support?",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 27
+      },
+      "revId": "8b4f876894b1073255aec2edecbfff0e33733439",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
