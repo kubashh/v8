@@ -49,15 +49,32 @@ class MockStreamingProcessor : public StreamingProcessor {
     }
     return true;
   }
+
   // Process all sections but the code section.
   bool ProcessSection(SectionCode section_code, Vector<const uint8_t> bytes,
                       uint32_t offset) override {
+    // Mock a simple processor that rejects non-consecutive section codes.
+    // TODO(ahaas): Share code with the module-decoder.
+    if (section_code != kUnknownSectionCode) {
+      if (section_code < next_section_) {
+        result_->error = WasmError(0, "section out of order");
+        return false;
+      }
+      next_section_ = section_code + 1;
+    }
     ++result_->num_sections;
     return true;
   }
 
   bool ProcessCodeSectionHeader(size_t num_functions, uint32_t offset,
                                 std::shared_ptr<WireBytesStorage>) override {
+    // Mock a simple processor that rejects non-consecutive section codes.
+    // TODO(ahaas): Share code with the module-decoder.
+    if (kCodeSectionCode < next_section_) {
+      result_->error = WasmError(0, "section out of order");
+      return false;
+    }
+    next_section_ = kCodeSectionCode + 1;
     return true;
   }
 
@@ -90,6 +107,7 @@ class MockStreamingProcessor : public StreamingProcessor {
 
  private:
   MockStreamingResult* const result_;
+  uint8_t next_section_ = kFirstSectionInModule;
 };
 
 class WasmStreamingDecoderTest : public ::testing::Test {
@@ -122,8 +140,6 @@ class WasmStreamingDecoderTest : public ::testing::Test {
       EXPECT_EQ(message, result.error.message());
     }
   }
-
-  MockStreamingResult result;
 };
 
 TEST_F(WasmStreamingDecoderTest, EmptyStream) {
