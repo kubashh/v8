@@ -8539,11 +8539,15 @@ void Isolate::RunMicrotasks() {
   isolate->default_microtask_queue()->RunMicrotasks(isolate);
 }
 
-void Isolate::EnqueueMicrotask(Local<Function> function) {
+void Isolate::EnqueueMicrotask(Local<Function> v8_function) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
-  i::Handle<i::CallableTask> microtask = isolate->factory()->NewCallableTask(
-      Utils::OpenHandle(*function), isolate->native_context());
-  isolate->default_microtask_queue()->EnqueueMicrotask(*microtask);
+  i::Handle<i::JSReceiver> function = Utils::OpenHandle(*v8_function);
+
+  i::Handle<i::NativeContext> handler_context =
+      i::JSReceiver::GetContextForTaskCancellation(function);
+  i::Handle<i::CallableTask> microtask =
+      isolate->factory()->NewCallableTask(function, handler_context);
+  handler_context->microtask_queue()->EnqueueMicrotask(*microtask);
 }
 
 void Isolate::EnqueueMicrotask(MicrotaskCallback callback, void* data) {
