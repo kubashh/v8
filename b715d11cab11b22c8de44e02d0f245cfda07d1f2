@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "430962b4_d42a2d79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-19T18:55:45Z",
+      "side": 1,
+      "message": "Oh, that\u0027s really nice!",
+      "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59fb2152_dadb4296",
+        "filename": "test/inspector/debugger/evaluate-on-call-frame-return-values.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-19T18:55:45Z",
+      "side": 1,
+      "message": "It is usually better to just logMessage() which will contain an error. Is there a specific reason for this assert-style check?",
+      "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89f714b5_a0126cac",
+        "filename": "test/inspector/debugger/evaluate-on-call-frame-return-values.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-19T18:55:45Z",
+      "side": 1,
+      "message": "let objectId",
+      "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9464334_ddbaef0b",
+        "filename": "test/inspector/debugger/set-variable-value.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-19T18:55:45Z",
+      "side": 1,
+      "message": "Same question here.",
+      "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
