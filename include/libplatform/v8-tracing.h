@@ -221,12 +221,10 @@ class V8_PLATFORM_EXPORT TraceConfig {
 class V8_PLATFORM_EXPORT TracingController
     : public V8_PLATFORM_NON_EXPORTED_BASE(v8::TracingController) {
  public:
-  enum Mode { DISABLED = 0, RECORDING_MODE };
-
-  // The pointer returned from GetCategoryGroupEnabledInternal() points to a
-  // value with zero or more of the following bits. Used in this class only.
-  // The TRACE_EVENT macros should only use the value as a bool.
-  // These values must be in sync with macro values in TraceEvent.h in Blink.
+  // The pointer returned from GetCategoryGroupEnabled() points to a value with
+  // zero or more of the following bits. Used in this class only. The
+  // TRACE_EVENT macros should only use the value as a bool. These values must
+  // be in sync with macro values in TraceEvent.h in Blink.
   enum CategoryGroupEnabledFlags {
     // Category group enabled for the recording mode.
     ENABLED_FOR_RECORDING = 1 << 0,
@@ -273,7 +271,6 @@ class V8_PLATFORM_EXPORT TracingController
   virtual int64_t CurrentCpuTimestampMicroseconds();
 
  private:
-  const uint8_t* GetCategoryGroupEnabledInternal(const char* category_group);
   void UpdateCategoryGroupEnabledFlag(size_t category_index);
   void UpdateCategoryGroupEnabledFlags();
 
@@ -281,7 +278,7 @@ class V8_PLATFORM_EXPORT TracingController
   std::unique_ptr<TraceConfig> trace_config_;
   std::unique_ptr<base::Mutex> mutex_;
   std::unordered_set<v8::TracingController::TraceStateObserver*> observers_;
-  Mode mode_ = DISABLED;
+  std::atomic_bool recording_{false};
 
   // Disallow copy and assign
   TracingController(const TracingController&) = delete;
