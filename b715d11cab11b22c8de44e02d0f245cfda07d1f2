@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "76d5f0c2_b6e74b89",
+        "filename": "test/inspector/debugger/evaluate-on-call-frame-return-values.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-19T21:12:24Z",
+      "side": 1,
+      "message": "That blink\u0027s expectedError thing is historical, and is not in favor anymore :) I don\u0027t think errors have anything specific we should not log.",
+      "parentUuid": "ec240db9_7112963c",
+      "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "89f714b5_a0126cac",
         "filename": "test/inspector/debugger/evaluate-on-call-frame-return-values.js",
         "patchSetId": 1
