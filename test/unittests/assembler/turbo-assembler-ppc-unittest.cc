@@ -25,8 +25,6 @@ TEST_F(TurboAssemblerTest, TestHardAbort) {
   TurboAssembler tasm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
                       buffer->CreateView());
   // Called from C
-  __ function_descriptor();
-
   __ set_abort_hard(true);
 
   __ Abort(AbortReason::kNoReason);
@@ -45,8 +43,6 @@ TEST_F(TurboAssemblerTest, TestCheck) {
   TurboAssembler tasm(nullptr, AssemblerOptions{}, CodeObjectRequired::kNo,
                       buffer->CreateView());
   // Called from C
-  __ function_descriptor();
-
   __ set_abort_hard(true);
 
   // Fail if the first parameter is 17.

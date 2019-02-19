@@ -2009,6 +2009,7 @@ void TurboAssembler::CallCFunctionHelper(Register function,
     // aware of this descriptor and pick up values from it
     LoadP(ToRegister(ABI_TOC_REGISTER), MemOperand(function, kPointerSize));
     LoadP(ip, MemOperand(function, 0));
+    Move(ip, function);
     dest = ip;
   } else if (ABI_CALL_VIA_IP) {
     Move(ip, function);
