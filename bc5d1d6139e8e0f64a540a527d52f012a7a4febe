@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02b1fb70_3509a9e0",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3339,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2019-02-19T16:43:34Z",
+      "side": 1,
+      "message": "This is an unrelated fix to make asan happier.",
+      "range": {
+        "startLine": 3339,
+        "startChar": 10,
+        "endLine": 3339,
+        "endChar": 34
+      },
+      "revId": "bc5d1d6139e8e0f64a540a527d52f012a7a4febe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
