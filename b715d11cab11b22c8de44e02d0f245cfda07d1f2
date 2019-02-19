@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3a2ee5b0_c2777279",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1322586
+      },
+      "writtenOn": "2019-02-19T20:14:15Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "430962b4_d42a2d79",
+      "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "59fb2152_dadb4296",
         "filename": "test/inspector/debugger/evaluate-on-call-frame-return-values.js",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-19T18:55:45Z",
       "side": 1,
       "message": "It is usually better to just logMessage() which will contain an error. Is there a specific reason for this assert-style check?",
+      "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec240db9_7112963c",
+        "filename": "test/inspector/debugger/evaluate-on-call-frame-return-values.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1322586
+      },
+      "writtenOn": "2019-02-19T20:14:15Z",
+      "side": 1,
+      "message": "I was basing it on this helper inside TestRunner from the blink inspector tests: \nhttps://cs.chromium.org/chromium/src/third_party/blink/web_tests/http/tests/inspector-protocol/resources/inspector-protocol-test.js?q\u003dinspector-protocol-test.js\u0026sq\u003dpackage:chromium\u0026dr\u0026l\u003d114\n\nPresumably this was done because some error objects contain unique strings that would be difficult to baseline? I\u0027m fine logging the whole thing instead if you prefer.",
+      "parentUuid": "59fb2152_dadb4296",
       "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fb482108_86806b20",
+        "filename": "test/inspector/debugger/evaluate-on-call-frame-return-values.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1322586
+      },
+      "writtenOn": "2019-02-19T20:14:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89f714b5_a0126cac",
+      "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9464334_ddbaef0b",
         "filename": "test/inspector/debugger/set-variable-value.js",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2019-02-19T18:55:45Z",
       "side": 1,
       "message": "Same question here.",
+      "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05eb1261_030af704",
+        "filename": "test/inspector/debugger/set-variable-value.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1322586
+      },
+      "writtenOn": "2019-02-19T20:14:15Z",
+      "side": 1,
+      "message": "Gotcha, yeah, let me know if you prefer wholesale logging, was just confused by the disparity from blink tests.",
+      "parentUuid": "c9464334_ddbaef0b",
       "revId": "b715d11cab11b22c8de44e02d0f245cfda07d1f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
