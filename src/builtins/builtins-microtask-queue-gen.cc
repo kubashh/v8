@@ -14,8 +14,7 @@
 namespace v8 {
 namespace internal {
 
-template <typename T>
-using TNode = compiler::TNode<T>;
+using compiler::TNode;
 
 class MicrotaskQueueBuiltinsAssembler : public CodeStubAssembler {
  public:

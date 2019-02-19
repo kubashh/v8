@@ -185,5 +185,36 @@ TEST_F(MicrotaskQueueTest, VisitRoot) {
   EXPECT_EQ(expected, actual);
 }
 
+// TEST_F(MicrotaskQueueTest, HandlerContext) {
+//   Local<v8::Context> context2 = v8::Context::New(v8_isolate());
+//   Local<v8::Context> context3 = v8::Context::New(v8_isolate());
+
+//   Handle<JSFunction> handler;
+//   Handle<JSProxy> proxy;
+
+//   {
+//     v8::Context::Scope scope(context2);
+//     handler = RunJS<JSFunction>("()=>{}");
+//   }
+
+//   {
+//     v8::Context::Scope scope(context3);
+//     proxy = isolate()->factory()->NewJSProxy(
+//         handler, isolate()->factory()->NewJSObjectWithNullProto());
+//   }
+
+//   SetGlobalProperty("handler", handler);
+//   SetGlobalProperty("proxy", handler);
+//   RunJS(
+//       "Promise.resolve().then(handler);"
+//       "Promise.resolve().then(proxy);");
+
+//   EXPECT_EQ(2, microtask_queue()->size());
+//   // TODO(tzik):
+//   //   Assert the microtask context for |handler| is context2.
+//   //   Assert the microtask context for |proxy| is context3.
+//   microtask_queue->RunMicrotasks();
+// }
+
 }  // namespace internal
 }  // namespace v8
