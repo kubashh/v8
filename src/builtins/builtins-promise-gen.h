@@ -154,6 +154,9 @@ class PromiseBuiltinsAssembler : public CodeStubAssembler {
   void PromiseSetStatus(Node* promise, v8::Promise::PromiseState status);
 
   Node* AllocateJSPromise(Node* context);
+
+  TNode<Object> GetConstructor(TNode<Map> map);
+  void ExtractHandlerContext(Node* handler, Variable* var_context);
 };
 
 }  // namespace internal

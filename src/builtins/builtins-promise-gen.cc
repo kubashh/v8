@@ -19,6 +19,7 @@ namespace v8 {
 namespace internal {
 
 using compiler::Node;
+using compiler::TNode;
 using IteratorRecord = IteratorBuiltinsAssembler::IteratorRecord;
 
 Node* PromiseBuiltinsAssembler::AllocateJSPromise(Node* context) {
@@ -110,6 +111,80 @@ PromiseBuiltinsAssembler::CreatePromiseResolvingFunctions(
   Node* const reject =
       AllocateFunctionWithMapAndContext(map, reject_info, promise_context);
   return std::make_pair(resolve, reject);
+}
+
+TNode<Object> PromiseBuiltinsAssembler::GetConstructor(TNode<Map> map) {
+  TVARIABLE(HeapObject, constructor_or_backpointer, map);
+
+  Label loop(this, &constructor_or_backpointer), done(this);
+  Goto(&loop);
+  BIND(&loop);
+  {
+    constructor_or_backpointer =
+        CAST(LoadObjectField(map, Map::kConstructorOrBackPointerOffset));
+    GotoIf(IsMap(constructor_or_backpointer.value()), &loop);
+  }
+
+  BIND(&done);
+  return constructor_or_backpointer.value();
+}
+
+void PromiseBuiltinsAssembler::ExtractHandlerContext(Node* handler,
+                                                     Variable* var_context) {
+  VARIABLE(var_handler, MachineRepresentation::kTagged, handler);
+  Label loop(this, &var_handler), done(this);
+  Goto(&loop);
+  BIND(&loop);
+  {
+    Label if_bound_function(this), if_function(this), if_proxy(this);
+    CSA_ASSERT(this, TaggedIsNotSmi(var_handler.value()));
+
+    int32_t case_values[] = {
+        JS_BOUND_FUNCTION_TYPE,
+        JS_FUNCTION_TYPE,
+        JS_PROXY_TYPE,
+    };
+    Label* case_labels[] = {
+        &if_bound_function,
+        &if_function,
+        &if_proxy,
+    };
+    static_assert(arraysize(case_values) == arraysize(case_labels), "");
+    TNode<Map> handler_map = LoadMap(handler);
+    TNode<Int32T> handler_type = LoadMapInstanceType(handler_map);
+    Switch(handler_type, &done, case_values, case_labels,
+           arraysize(case_labels));
+
+    BIND(&if_bound_function);
+    {
+      var_handler.Bind(LoadObjectField(
+          var_handler.value(), JSBoundFunction::kBoundTargetFunctionOffset));
+      Goto(&loop);
+    }
+
+    BIND(&if_function);
+    {
+      Node* handler_context =
+          LoadObjectField(var_handler.value(), JSFunction::kContextOffset);
+      var_context->Bind(LoadNativeContext(CAST(handler_context)));
+      Goto(&done);
+    }
+
+    BIND(&if_proxy);
+    {
+      Node* constructor = GetConstructor(handler_map);
+      GotoIfNot(IsJSFunction(constructor), &done);
+
+      Node* maybe_context =
+          LoadObjectField(constructor, JSFunction::kContextOffset);
+      GotoIfNot(IsContext(maybe_context), &done);
+
+      var_context->Bind(maybe_context);
+      Goto(&done);
+    }
+  }
+
+  BIND(&done);
 }
 
 // ES #sec-newpromisecapability
@@ -378,13 +453,19 @@ void PromiseBuiltinsAssembler::PerformPromiseThen(
     }
 
     BIND(&enqueue);
-    Node* argument =
-        LoadObjectField(promise, JSPromise::kReactionsOrResultOffset);
-    Node* microtask = AllocatePromiseReactionJobTask(
-        var_map.value(), context, argument, var_handler.value(),
-        result_promise_or_capability);
-    CallBuiltin(Builtins::kEnqueueMicrotask, context, microtask);
-    Goto(&done);
+    {
+      VARIABLE(var_handler_context, MachineRepresentation::kTagged, context);
+      ExtractHandlerContext(var_handler.value(), &var_handler_context);
+
+      Node* argument =
+          LoadObjectField(promise, JSPromise::kReactionsOrResultOffset);
+      Node* microtask = AllocatePromiseReactionJobTask(
+          var_map.value(), var_handler_context.value(), argument,
+          var_handler.value(), result_promise_or_capability);
+      CallBuiltin(Builtins::kEnqueueMicrotask, var_handler_context.value(),
+                  microtask);
+      Goto(&done);
+    }
   }
 
   BIND(&done);
@@ -508,18 +589,23 @@ Node* PromiseBuiltinsAssembler::TriggerPromiseReactions(
       GotoIf(TaggedIsSmi(current), &done_loop);
       var_current.Bind(LoadObjectField(current, PromiseReaction::kNextOffset));
 
+      VARIABLE(var_context, MachineRepresentation::kTagged, context);
+
       // Morph {current} from a PromiseReaction into a PromiseReactionJobTask
       // and schedule that on the microtask queue. We try to minimize the number
       // of stores here to avoid screwing up the store buffer.
       STATIC_ASSERT(static_cast<int>(PromiseReaction::kSize) ==
                     static_cast<int>(PromiseReactionJobTask::kSize));
       if (type == PromiseReaction::kFulfill) {
+        Node* handler =
+            LoadObjectField(current, PromiseReaction::kFulfillHandlerOffset);
+        ExtractHandlerContext(handler, &var_context);
         StoreMapNoWriteBarrier(current,
                                RootIndex::kPromiseFulfillReactionJobTaskMap);
         StoreObjectField(current, PromiseReactionJobTask::kArgumentOffset,
                          argument);
         StoreObjectField(current, PromiseReactionJobTask::kContextOffset,
-                         context);
+                         var_context.value());
         STATIC_ASSERT(
             static_cast<int>(PromiseReaction::kFulfillHandlerOffset) ==
             static_cast<int>(PromiseReactionJobTask::kHandlerOffset));
@@ -530,12 +616,13 @@ Node* PromiseBuiltinsAssembler::TriggerPromiseReactions(
       } else {
         Node* handler =
             LoadObjectField(current, PromiseReaction::kRejectHandlerOffset);
+        ExtractHandlerContext(handler, &var_context);
         StoreMapNoWriteBarrier(current,
                                RootIndex::kPromiseRejectReactionJobTaskMap);
         StoreObjectField(current, PromiseReactionJobTask::kArgumentOffset,
                          argument);
         StoreObjectField(current, PromiseReactionJobTask::kContextOffset,
-                         context);
+                         var_context.value());
         StoreObjectField(current, PromiseReactionJobTask::kHandlerOffset,
                          handler);
         STATIC_ASSERT(
@@ -543,7 +630,7 @@ Node* PromiseBuiltinsAssembler::TriggerPromiseReactions(
             static_cast<int>(
                 PromiseReactionJobTask::kPromiseOrCapabilityOffset));
       }
-      CallBuiltin(Builtins::kEnqueueMicrotask, context, current);
+      CallBuiltin(Builtins::kEnqueueMicrotask, var_context.value(), current);
       Goto(&loop);
     }
     BIND(&done_loop);
@@ -1874,11 +1961,14 @@ TF_BUILTIN(ResolvePromise, PromiseBuiltinsAssembler) {
 
   BIND(&do_enqueue);
   {
+    VARIABLE(var_context, MachineRepresentation::kTagged, native_context);
+    ExtractHandlerContext(var_then.value(), &var_context);
+
     // 12. Perform EnqueueJob("PromiseJobs", PromiseResolveThenableJob,
     //                        «promise, resolution, thenAction»).
     Node* const task = AllocatePromiseResolveThenableJobTask(
-        promise, var_then.value(), resolution, native_context);
-    TailCallBuiltin(Builtins::kEnqueueMicrotask, native_context, task);
+        promise, var_then.value(), resolution, var_context.value());
+    TailCallBuiltin(Builtins::kEnqueueMicrotask, var_context.value(), task);
   }
 
   BIND(&if_fulfill);
