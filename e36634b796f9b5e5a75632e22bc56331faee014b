@@ -22,6 +22,30 @@
       "revId": "e36634b796f9b5e5a75632e22bc56331faee014b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f4c865c_acb5c28b",
+        "filename": "src/arm64/assembler-arm64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1312654
+      },
+      "writtenOn": "2019-02-20T03:14:09Z",
+      "side": 1,
+      "message": "I didn\u0027t see the \u0027inline\u0027 keyword in the original declaration, so I don\u0027t think it should be added here.\n\nIf I understand correctly, I switched the function definition from an inline definition--that is, the function is defined when the class is declared--to an out-of-line definition. This should not impact whether the function is seen as marked with the keyword \u0027inline\u0027.",
+      "parentUuid": "8ca9f846_d0ef4694",
+      "range": {
+        "startLine": 1098,
+        "startChar": 1,
+        "endLine": 1098,
+        "endChar": 29
+      },
+      "revId": "e36634b796f9b5e5a75632e22bc56331faee014b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
