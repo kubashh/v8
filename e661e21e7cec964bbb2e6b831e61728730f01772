@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82448a85_c563a9c4",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3320,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-20T16:00:49Z",
+      "side": 0,
+      "message": "I\u0027d very much prefer using if (peek() \u003d\u003d Token::PERIOD \u0026\u0026 PeekAhead() \u003d\u003d Token::PRIVATE) throw() to avoid outlining property access in memberexpressioncontinuation. That\u0027s a much hotter path and PeekAhead isn\u0027t that bad. The perf of super matters much less.",
+      "revId": "e661e21e7cec964bbb2e6b831e61728730f01772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
