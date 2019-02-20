@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e0b99c4_1461380b",
+        "filename": "commit-queue.cfg",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-20T14:57:18Z",
+      "side": 1,
+      "message": "Do you still need this one? Maybe just remove it already now.",
+      "revId": "759a99f1006702d114b9bb693b1f2818df2b0f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
