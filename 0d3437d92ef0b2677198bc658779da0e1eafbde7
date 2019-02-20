@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30c40e46_671ec6e5",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 3322,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-20T18:23:48Z",
+      "side": 1,
+      "message": "you don\u0027t need to consume if you\u0027re going to fail anyway.",
+      "revId": "0d3437d92ef0b2677198bc658779da0e1eafbde7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
