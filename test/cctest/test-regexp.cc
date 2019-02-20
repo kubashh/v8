@@ -1488,7 +1488,7 @@ TEST(AddInverseToTable) {
   CHECK(table.Get(0xFFFF)->Get(0));
 }
 
-
+#ifndef V8_INTL_SUPPORT
 static uc32 canonicalize(uc32 c) {
   unibrow::uchar canon[unibrow::Ecma262Canonicalize::kMaxWidth];
   int count = unibrow::Ecma262Canonicalize::Convert(c, '\0', canon, nullptr);
@@ -1499,7 +1499,6 @@ static uc32 canonicalize(uc32 c) {
     return canon[0];
   }
 }
-
 
 TEST(LatinCanonicalize) {
   unibrow::Mapping<unibrow::Ecma262UnCanonicalize> un_canonicalize;
@@ -1514,7 +1513,6 @@ TEST(LatinCanonicalize) {
   }
   for (uc32 c = 128; c < (1 << 21); c++)
     CHECK_GE(canonicalize(c), 128);
-#ifndef V8_INTL_SUPPORT
   unibrow::Mapping<unibrow::ToUppercase> to_upper;
   // Canonicalization is only defined for the Basic Multilingual Plane.
   for (uc32 c = 0; c < (1 << 16); c++) {
@@ -1529,9 +1527,8 @@ TEST(LatinCanonicalize) {
       u = c;
     CHECK_EQ(u, canonicalize(c));
   }
-#endif
 }
-
+#endif
 
 static uc32 CanonRangeEnd(uc32 c) {
   unibrow::uchar canon[unibrow::CanonicalizationRange::kMaxWidth];
