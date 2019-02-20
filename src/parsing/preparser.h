@@ -1579,6 +1579,7 @@ class PreParser : public ParserBase<PreParser> {
     if (name.string_ != nullptr) {
       expression_scope()->NewVariable(name.string_, start_position);
     }
+
     return PreParserExpression::FromIdentifier(name);
   }
 
