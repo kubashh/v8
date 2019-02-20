@@ -1557,6 +1557,21 @@ ParserBase<Impl>::ParsePropertyOrPrivatePropertyName() {
     name = impl()->GetSymbol();
     key = factory()->NewStringLiteral(name, pos);
   } else if (allow_harmony_private_fields() && next == Token::PRIVATE_NAME) {
+    // In the case of a top level function, we completely skip
+    // analysing it's scope, meaning, we don't have a chance to
+    // resolve private names and find that they are not enclosed in a
+    // class body.
+    //
+    // Here, we check if this is a new private name reference in a top
+    // level function and throw an error if so.
+    //
+    // Bug(v8:7468): This hack will go away once we refactor private
+    // name resolution to happen independently from scope resolution.
+    if (scope()->outer_scope() != nullptr &&
+        scope()->outer_scope()->scope_type() == SCRIPT_SCOPE) {
+      ReportMessage(MessageTemplate::kInvalidPrivateFieldResolution);
+    }
+
     name = impl()->GetSymbol();
     key = impl()->ExpressionFromIdentifier(name, pos, InferName::kNo);
   } else {
