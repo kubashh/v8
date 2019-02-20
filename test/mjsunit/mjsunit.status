@@ -882,7 +882,7 @@
   # OOM:
   'regress/regress-748069': [FAIL],
   'regress/regress-752764': [FAIL],
-  'regress/regress-779407': [FAIL],
+  'regress/regress-779407': [FAIL, ['arch == android_arm64', PASS]],
   # Flaky OOM:
   'regress/regress-852258': [SKIP],
 }],  # 'system == android'
