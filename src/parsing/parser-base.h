@@ -1066,6 +1066,12 @@ class ParserBase {
     return DoParseMemberExpressionContinuation(expression);
   }
   ExpressionT DoParseMemberExpressionContinuation(ExpressionT expression);
+  ExpressionT ParseMemberExpressionContinuationComputedProperty(
+      ExpressionT expression);
+  ExpressionT ParseMemberExpressionContinuationPropertyOrPrivateName(
+      ExpressionT expression);
+  ExpressionT ParseMemberExpressionContinuationPropertyName(
+      ExpressionT expression);
 
   ExpressionT ParseArrowFunctionLiteral(const FormalParametersT& parameters);
   void ParseAsyncFunctionBody(Scope* scope, StatementListT* body);
@@ -3317,19 +3323,33 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseSuperExpression(
   FunctionKind kind = scope->function_kind();
   if (IsConciseMethod(kind) || IsAccessorFunction(kind) ||
       IsClassConstructor(kind)) {
-    if (Token::IsProperty(peek())) {
-      scope->RecordSuperPropertyUsage();
-      UseThis();
-      return impl()->NewSuperPropertyReference(pos);
-    }
-    // new super() is never allowed.
-    // super() is only allowed in derived constructor
-    if (!is_new && peek() == Token::LPAREN && IsDerivedConstructor(kind)) {
-      // TODO(rossberg): This might not be the correct FunctionState for the
-      // method here.
-      expression_scope()->RecordThisUse();
-      UseThis()->set_maybe_assigned();
-      return impl()->NewSuperCallReference(pos);
+    switch (peek()) {
+      case Token::LBRACK: {
+        scope->RecordSuperPropertyUsage();
+        UseThis();
+        ExpressionT expression = impl()->NewSuperPropertyReference(pos);
+        return ParseMemberExpressionContinuationComputedProperty(expression);
+      }
+      case Token::PERIOD: {
+        scope->RecordSuperPropertyUsage();
+        UseThis();
+        ExpressionT expression = impl()->NewSuperPropertyReference(pos);
+        return ParseMemberExpressionContinuationPropertyName(expression);
+      }
+      case Token::LPAREN: {
+        // new super() is never allowed.
+        // super() is only allowed in derived constructor
+        if (!is_new && IsDerivedConstructor(kind)) {
+          // TODO(rossberg): This might not be the correct FunctionState for the
+          // method here.
+          expression_scope()->RecordThisUse();
+          UseThis()->set_maybe_assigned();
+          return impl()->NewSuperCallReference(pos);
+        }
+      }
+        V8_FALLTHROUGH;
+      default:
+        break;
     }
   }
 
@@ -3357,6 +3377,44 @@ ParserBase<Impl>::ParseNewTargetExpression() {
 
 template <typename Impl>
 typename ParserBase<Impl>::ExpressionT
+ParserBase<Impl>::ParseMemberExpressionContinuationComputedProperty(
+    ExpressionT expression) {
+  Consume(Token::LBRACK);
+  int pos = position();
+  AcceptINScope scope(this, true);
+  ExpressionT index = ParseExpressionCoverGrammar();
+  expression = factory()->NewProperty(expression, index, pos);
+  impl()->PushPropertyName(index);
+  Expect(Token::RBRACK);
+  return expression;
+}
+
+template <typename Impl>
+typename ParserBase<Impl>::ExpressionT
+ParserBase<Impl>::ParseMemberExpressionContinuationPropertyName(
+    ExpressionT expression) {
+  Consume(Token::PERIOD);
+  int pos = peek_position();
+  IdentifierT name = ParsePropertyName();
+  impl()->PushLiteralName(name);
+  ExpressionT key = factory()->NewStringLiteral(name, pos);
+  expression = factory()->NewProperty(expression, key, pos);
+  return expression;
+}
+
+template <typename Impl>
+typename ParserBase<Impl>::ExpressionT
+ParserBase<Impl>::ParseMemberExpressionContinuationPropertyOrPrivateName(
+    ExpressionT expression) {
+  Consume(Token::PERIOD);
+  int pos = peek_position();
+  ExpressionT key = ParsePropertyOrPrivatePropertyName();
+  expression = factory()->NewProperty(expression, key, pos);
+  return expression;
+}
+
+template <typename Impl>
+typename ParserBase<Impl>::ExpressionT
 ParserBase<Impl>::DoParseMemberExpressionContinuation(ExpressionT expression) {
   DCHECK(Token::IsMember(peek()));
   // Parses this part of MemberExpression:
@@ -3364,20 +3422,13 @@ ParserBase<Impl>::DoParseMemberExpressionContinuation(ExpressionT expression) {
   do {
     switch (peek()) {
       case Token::LBRACK: {
-        Consume(Token::LBRACK);
-        int pos = position();
-        AcceptINScope scope(this, true);
-        ExpressionT index = ParseExpressionCoverGrammar();
-        expression = factory()->NewProperty(expression, index, pos);
-        impl()->PushPropertyName(index);
-        Expect(Token::RBRACK);
+        expression =
+            ParseMemberExpressionContinuationComputedProperty(expression);
         break;
       }
       case Token::PERIOD: {
-        Consume(Token::PERIOD);
-        int pos = peek_position();
-        ExpressionT key = ParsePropertyOrPrivatePropertyName();
-        expression = factory()->NewProperty(expression, key, pos);
+        expression =
+            ParseMemberExpressionContinuationPropertyOrPrivateName(expression);
         break;
       }
       default: {
