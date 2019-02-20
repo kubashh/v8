@@ -207,6 +207,11 @@ void MicrotaskQueue::FireMicrotasksCompletedCallback(Isolate* isolate) const {
   }
 }
 
+// Microtask MicrotaskQueue::get(int index) const {
+//   DCHECK_LT(index, size_);
+//   return Microtask::cast(ring_buffer_[(index + start_) % capacity_]);
+// }
+
 void MicrotaskQueue::OnCompleted(Isolate* isolate) {
   // TODO(marja): (spec) The discussion about when to clear the KeepDuringJob
   // set is still open (whether to clear it after every microtask or once
