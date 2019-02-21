@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b57e74e4_dbcb8c51",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 3755,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-21T13:07:31Z",
+      "side": 1,
+      "message": "oops, not necessary",
+      "revId": "188201b8651f59ccc0a5e110c7b5261e0c0d00de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
