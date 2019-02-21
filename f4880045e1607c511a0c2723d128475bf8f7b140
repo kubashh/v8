@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "409e32a5_939ee859",
+        "filename": "src/parsing/preparser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-21T14:18:52Z",
+      "side": 1,
+      "message": "I guess this could be any variable at all, so it could even just be a raw constructor or some static empty variable? Not that it matters since this is a failure path.",
+      "range": {
+        "startLine": 1113,
+        "startChar": 19,
+        "endLine": 1113,
+        "endChar": 30
+      },
+      "revId": "f4880045e1607c511a0c2723d128475bf8f7b140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
