@@ -185,5 +185,48 @@ TEST_F(MicrotaskQueueTest, VisitRoot) {
   EXPECT_EQ(expected, actual);
 }
 
+TEST_F(MicrotaskQueueTest, PromiseHandlerContext) {
+  Local<v8::Context> v8_context2 = v8::Context::New(v8_isolate());
+  Local<v8::Context> v8_context3 = v8::Context::New(v8_isolate());
+  Handle<Context> context2 = Utils::OpenHandle(*v8_context2, isolate());
+  Handle<Context> context3 = Utils::OpenHandle(*v8_context3, isolate());
+  context2->native_context()->set_microtask_queue(microtask_queue());
+  context3->native_context()->set_microtask_queue(microtask_queue());
+
+  Handle<JSFunction> handler;  // on |context2|.
+  Handle<JSProxy> proxy;       // on |context3|.
+
+  {
+    v8::Context::Scope scope(v8_context2);
+    handler = RunJS<JSFunction>("()=>{}");
+  }
+
+  {
+    v8::Context::Scope scope(v8_context3);
+    proxy = isolate()->factory()->NewJSProxy(
+        handler, isolate()->factory()->NewJSObjectWithNullProto());
+  }
+
+  SetGlobalProperty("handler", Utils::ToLocal(handler));
+  SetGlobalProperty("proxy", Utils::ToLocal(handler));
+  RunJS(
+      "Promise.resolve().then(handler);"
+      "Promise.resolve().then(proxy);");
+
+  EXPECT_EQ(2, microtask_queue()->size());
+  // TODO(tzik):
+  //   Assert the microtask context for |handler| is context2.
+  //   Assert the microtask context for |proxy| is context3.
+  Handle<Microtask> microtask1(microtask_queue()->get(0), isolate());
+  ASSERT_TRUE(microtask1->IsCallableTask());
+  // EXPECT_EQ(context2, Handle<CallableTask>::cast(microtask1)->context());
+
+  Handle<Microtask> microtask2(microtask_queue()->get(1), isolate());
+  ASSERT_TRUE(microtask2->IsCallableTask());
+
+  v8_context3->DetachGlobal();
+  v8_context2->DetachGlobal();
+}
+
 }  // namespace internal
 }  // namespace v8

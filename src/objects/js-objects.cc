@@ -522,6 +522,27 @@ MaybeHandle<NativeContext> JSReceiver::GetFunctionRealm(
   return JSObject::GetFunctionRealm(Handle<JSObject>::cast(receiver));
 }
 
+// static
+Handle<NativeContext> JSReceiver::GetContextForTaskCancellation(
+    Handle<JSReceiver> receiver) {
+  Isolate* isolate = receiver->GetIsolate();
+  while (receiver->IsJSBoundFunction()) {
+    receiver =
+        handle(Handle<JSBoundFunction>::cast(receiver)->bound_target_function(),
+               isolate);
+  }
+
+  DCHECK(receiver->IsJSProxy() || receiver->IsJSFunction());
+  if (receiver->IsJSProxy()) {
+    Handle<Context> context = receiver->GetCreationContext();
+    DCHECK(!context.is_null());
+    return handle(context->native_context(), isolate);
+  }
+
+  DCHECK(receiver->IsJSFunction());
+  return handle(Handle<JSFunction>::cast(receiver)->native_context(), isolate);
+}
+
 Maybe<PropertyAttributes> JSReceiver::GetPropertyAttributes(
     LookupIterator* it) {
   for (; it->IsFound(); it->Next()) {
