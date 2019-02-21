@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b6ef09f_b28593d7",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-02-21T10:04:17Z",
+      "side": 0,
+      "message": "Why is TopLevel()-\u003ehas_slot_use() not used after this CL?",
+      "range": {
+        "startLine": 1085,
+        "startChar": 31,
+        "endLine": 1086,
+        "endChar": 53
+      },
+      "revId": "b9dde931af974bca4908e02efbc18bb20231a2ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cf0a130_3fbc225e",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3450,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-02-21T10:04:17Z",
+      "side": 0,
+      "message": "Can you explain why this is gone now? This seems to change behavior without the flag, doesn\u0027t it?",
+      "revId": "b9dde931af974bca4908e02efbc18bb20231a2ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
