@@ -3750,11 +3750,11 @@ ParserBase<Impl>::ParseHoistableDeclaration(
   // sloppy_block_functions_. Don't add them to the map for async functions.
   // Generators are also supposed to be prohibited; currently doing this behind
   // a flag and UseCounting violations to assess web compatibility.
-  VariableKind kind = is_sloppy(language_mode()) &&
-                              !scope()->is_declaration_scope() &&
-                              flags == ParseFunctionFlag::kIsNormal
-                          ? SLOPPY_BLOCK_FUNCTION_VARIABLE
-                          : NORMAL_VARIABLE;
+  VariableKind kind =
+      is_sloppy(language_mode()) && !scope()->is_declaration_scope() &&
+              flags == ParseFunctionFlag::kIsNormal && !has_error()
+          ? SLOPPY_BLOCK_FUNCTION_VARIABLE
+          : NORMAL_VARIABLE;
 
   return impl()->DeclareFunction(variable_name, function, mode, kind, pos,
                                  end_position(), names);

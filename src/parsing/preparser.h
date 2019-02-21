@@ -1110,6 +1110,7 @@ class PreParser : public ParserBase<PreParser> {
     Variable* var = scope->DeclareVariableName(name, mode, was_added, kind);
     if (var == nullptr) {
       ReportUnidentifiableError();
+      var = scope->LookupLocal(name);
     } else if (var->scope() != scope) {
       DCHECK_NE(kNoSourcePosition, position);
       DCHECK_EQ(VariableMode::kVar, mode);
