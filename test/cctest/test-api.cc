@@ -27649,9 +27649,14 @@ void AtomicsWaitCallbackCommon(v8::Isolate* isolate, Local<Value> sab,
     info.expected_event = v8::Isolate::AtomicsWaitEvent::kAPIStopped;
     info.action = AtomicsWaitCallbackAction::StopAndThrowInSecondCall;
     info.ncalls = 0;
-    CompileRun(
-        "int32arr[1] = 200;"
-        "wait(1, 200);");
+    std::ostringstream src;
+#ifdef V8_TARGET_BIG_ENDIAN
+    src << "int32arr[" << (offset_multiplier >> 2) << "] = 200;";
+#else
+    src << "int32arr[1] = 200;"
+#endif
+    src << "wait(1, 200);";
+    CompileRun(src.str().c_str());
     CHECK_EQ(info.ncalls, 2);
     CHECK(try_catch.HasCaught());
     CHECK(try_catch.Exception()->IsInt32());
@@ -27667,9 +27672,14 @@ void AtomicsWaitCallbackCommon(v8::Isolate* isolate, Local<Value> sab,
     info.expected_event = v8::Isolate::AtomicsWaitEvent::kAPIStopped;
     info.action = AtomicsWaitCallbackAction::StopFromThreadAndThrow;
     info.ncalls = 0;
-    CompileRun(
-        "int32arr[1] = 0;"
-        "wait(0, 0);");
+    std::ostringstream src;
+#ifdef V8_TARGET_BIG_ENDIAN
+    src << "int32arr[" << (offset_multiplier >> 2) << "] = 0;";
+#else
+    src << "int32arr[1] = 0;"
+#endif
+    src << "wait(0, 0);";
+    CompileRun(src.str().c_str());
     CHECK_EQ(info.ncalls, 2);
     CHECK(try_catch.HasCaught());
     CHECK(try_catch.Exception()->IsInt32());
