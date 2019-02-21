@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4aa50045_9c2afab7",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2019-02-21T10:34:59Z",
+      "side": 0,
+      "message": "The old logic was essentially a setter, so the union had to be computed explicitly. With this change, one simply registers a slot use, which computes the maximum slot use kind. So it retains the value of TopLevel. There is also a new method to reset the slot use kind.\n\nI have changed it this way to move the transitions to one place.",
+      "parentUuid": "4b6ef09f_b28593d7",
+      "range": {
+        "startLine": 1085,
+        "startChar": 31,
+        "endLine": 1086,
+        "endChar": 53
+      },
+      "revId": "b9dde931af974bca4908e02efbc18bb20231a2ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9cf0a130_3fbc225e",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 14
@@ -39,6 +63,24 @@
       "revId": "b9dde931af974bca4908e02efbc18bb20231a2ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fa0824f_54d3f3d6",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 3450,
+      "author": {
+        "id": 1265497
+      },
+      "writtenOn": "2019-02-21T10:34:59Z",
+      "side": 0,
+      "message": "After this change, control flow aware allocation is no longer compatible with splintering. So it no longer ignores these boundaries and instead does its own magic. If control flow aware allocation is disabled via the flag, none of this code has any effect.",
+      "parentUuid": "9cf0a130_3fbc225e",
+      "revId": "b9dde931af974bca4908e02efbc18bb20231a2ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
