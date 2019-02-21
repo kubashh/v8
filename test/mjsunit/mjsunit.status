@@ -235,6 +235,9 @@
 
   # https://crbug.com/v8/8781
   'compiler/string-from-code-point': [PASS, FAIL],
+
+  # https://crbug.com/v8/8564
+  'wasm/growing-shared-memory': [SKIP],
 }],  # ALWAYS
 
 ['novfp3 == True', {
