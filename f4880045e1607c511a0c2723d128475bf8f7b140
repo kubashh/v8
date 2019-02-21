@@ -22,6 +22,30 @@
       "revId": "f4880045e1607c511a0c2723d128475bf8f7b140",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "654ebfb1_2b3cca33",
+        "filename": "src/parsing/preparser.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-21T16:25:21Z",
+      "side": 1,
+      "message": "It has to be a lexical variable since we only do this on lexical/\u003cmode\u003e conflicts.\nI had a bug though since could have been !IsLexicalVariableMode(mode) in which case we should have GetDeclarationScope()-\u003eLookupLocal(...).",
+      "parentUuid": "409e32a5_939ee859",
+      "range": {
+        "startLine": 1113,
+        "startChar": 19,
+        "endLine": 1113,
+        "endChar": 30
+      },
+      "revId": "f4880045e1607c511a0c2723d128475bf8f7b140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
