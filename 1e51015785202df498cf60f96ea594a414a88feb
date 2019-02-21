@@ -22,6 +22,30 @@
       "revId": "1e51015785202df498cf60f96ea594a414a88feb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b057880_b6175568",
+        "filename": "luci-scheduler.cfg",
+        "patchSetId": 5
+      },
+      "lineNbr": 2383,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-21T10:57:09Z",
+      "side": 1,
+      "message": "Either way works. See doc here: https://github.com/luci/luci-go/blob/master/scheduler/appengine/messages/config.proto#L147",
+      "parentUuid": "03a2b3e8_96e424b6",
+      "range": {
+        "startLine": 2383,
+        "startChar": 13,
+        "endLine": 2383,
+        "endChar": 29
+      },
+      "revId": "1e51015785202df498cf60f96ea594a414a88feb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
