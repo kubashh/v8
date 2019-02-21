@@ -1585,18 +1585,18 @@ bool Heap::ReserveSpace(Reservation* reservations, std::vector<Address>* maps) {
         DCHECK_LE(reservation->size(), 2);
         int reserved_size = 0;
         for (const Chunk& c : *reservation) reserved_size += c.size;
-        DCHECK_EQ(0, reserved_size % Map::kSize);
-        int num_maps = reserved_size / Map::kSize;
+        DCHECK_EQ(0, reserved_size % Map::GetSize());
+        int num_maps = reserved_size / Map::GetSize();
         for (int i = 0; i < num_maps; i++) {
           // The deserializer will update the skip list.
           AllocationResult allocation = map_space()->AllocateRawUnaligned(
-              Map::kSize, PagedSpace::IGNORE_SKIP_LIST);
+              Map::GetSize(), PagedSpace::IGNORE_SKIP_LIST);
           HeapObject free_space;
           if (allocation.To(&free_space)) {
             // Mark with a free list node, in case we have a GC before
             // deserializing.
             Address free_space_address = free_space->address();
-            CreateFillerObjectAt(free_space_address, Map::kSize,
+            CreateFillerObjectAt(free_space_address, Map::GetSize(),
                                  ClearRecordedSlots::kNo);
             maps->push_back(free_space_address);
           } else {

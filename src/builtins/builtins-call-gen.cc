@@ -411,7 +411,7 @@ TNode<JSReceiver> CallOrConstructBuiltinsAssembler::GetCompatibleReceiver(
       // If it's a Smi then it is non-instance prototype on some
       // initial map, which cannot be the case for API instances.
       TNode<Object> constructor = LoadObjectField(
-          var_template.value(), Map::kConstructorOrBackPointerOffset);
+          var_template.value(), Map::kConstructorOrBackpointerOffset);
       GotoIf(TaggedIsSmi(constructor), &holder_next);
 
       // Now there are three cases for {constructor} that we care

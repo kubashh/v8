@@ -1024,26 +1024,28 @@ void V8HeapExplorer::ExtractMapReferences(HeapEntry* entry, Map map) {
   DescriptorArray descriptors = map->instance_descriptors();
   TagObject(descriptors, "(map descriptors)");
   SetInternalReference(entry, "descriptors", descriptors,
-                       Map::kDescriptorsOffset);
+                       Map::kInstanceDescriptorsOffset);
   SetInternalReference(entry, "prototype", map->prototype(),
                        Map::kPrototypeOffset);
   if (FLAG_unbox_double_fields) {
-    SetInternalReference(entry, "layout_descriptor", map->layout_descriptor(),
-                         Map::kLayoutDescriptorOffset);
+    SetInternalReference(
+        entry, "layout_descriptor",
+        MapWithLayoutDescriptor::cast(map)->layout_descriptor(),
+        MapWithLayoutDescriptor::kLayoutDescriptorOffset);
   }
   Object constructor_or_backpointer = map->constructor_or_backpointer();
   if (constructor_or_backpointer->IsMap()) {
     TagObject(constructor_or_backpointer, "(back pointer)");
     SetInternalReference(entry, "back_pointer", constructor_or_backpointer,
-                         Map::kConstructorOrBackPointerOffset);
+                         Map::kConstructorOrBackpointerOffset);
   } else if (constructor_or_backpointer->IsFunctionTemplateInfo()) {
     TagObject(constructor_or_backpointer, "(constructor function data)");
     SetInternalReference(entry, "constructor_function_data",
                          constructor_or_backpointer,
-                         Map::kConstructorOrBackPointerOffset);
+                         Map::kConstructorOrBackpointerOffset);
   } else {
     SetInternalReference(entry, "constructor", constructor_or_backpointer,
-                         Map::kConstructorOrBackPointerOffset);
+                         Map::kConstructorOrBackpointerOffset);
   }
   TagObject(map->dependent_code(), "(dependent code)");
   SetInternalReference(entry, "dependent_code", map->dependent_code(),

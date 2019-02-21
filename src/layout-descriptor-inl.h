@@ -226,7 +226,8 @@ LayoutDescriptorHelper::LayoutDescriptorHelper(Map map)
       layout_descriptor_(LayoutDescriptor::FastPointerLayout()) {
   if (!FLAG_unbox_double_fields) return;
 
-  layout_descriptor_ = map->layout_descriptor_gc_safe();
+  layout_descriptor_ =
+      MapWithLayoutDescriptor::cast(map)->layout_descriptor_gc_safe();
   if (layout_descriptor_->IsFastPointerLayout()) {
     return;
   }

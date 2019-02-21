@@ -31,25 +31,26 @@ OBJECT_CONSTRUCTORS_IMPL(Map, HeapObject)
 CAST_ACCESSOR(Map)
 
 DescriptorArray Map::instance_descriptors() const {
-  return DescriptorArray::cast(READ_FIELD(*this, kDescriptorsOffset));
+  return DescriptorArray::cast(READ_FIELD(*this, kInstanceDescriptorsOffset));
 }
 
 DescriptorArray Map::synchronized_instance_descriptors() const {
-  return DescriptorArray::cast(ACQUIRE_READ_FIELD(*this, kDescriptorsOffset));
+  return DescriptorArray::cast(
+      ACQUIRE_READ_FIELD(*this, kInstanceDescriptorsOffset));
 }
 
 void Map::set_synchronized_instance_descriptors(DescriptorArray value,
                                                 WriteBarrierMode mode) {
-  RELEASE_WRITE_FIELD(*this, kDescriptorsOffset, value);
-  CONDITIONAL_WRITE_BARRIER(*this, kDescriptorsOffset, value, mode);
+  RELEASE_WRITE_FIELD(*this, kInstanceDescriptorsOffset, value);
+  CONDITIONAL_WRITE_BARRIER(*this, kInstanceDescriptorsOffset, value, mode);
 }
 
 // A freshly allocated layout descriptor can be set on an existing map.
 // We need to use release-store and acquire-load accessor pairs to ensure
 // that the concurrent marking thread observes initializing stores of the
 // layout descriptor.
-SYNCHRONIZED_ACCESSORS_CHECKED(Map, layout_descriptor, LayoutDescriptor,
-                               kLayoutDescriptorOffset,
+SYNCHRONIZED_ACCESSORS_CHECKED(MapWithLayoutDescriptor, layout_descriptor,
+                               LayoutDescriptor, kLayoutDescriptorOffset,
                                FLAG_unbox_double_fields)
 WEAK_ACCESSORS(Map, raw_transitions, kTransitionsOrPrototypeInfoOffset)
 
@@ -137,7 +138,8 @@ void Map::GeneralizeIfCanHaveTransitionableFastElementsKind(
 bool Map::IsUnboxedDoubleField(FieldIndex index) const {
   if (!FLAG_unbox_double_fields) return false;
   if (index.is_hidden_field() || !index.is_inobject()) return false;
-  return !layout_descriptor()->IsTagged(index.property_index());
+  return !MapWithLayoutDescriptor::cast(*this)->layout_descriptor()->IsTagged(
+      index.property_index());
 }
 
 bool Map::TooManyFastProperties(StoreOrigin store_origin) const {
@@ -560,7 +562,10 @@ void Map::set_prototype(Object value, WriteBarrierMode mode) {
   CONDITIONAL_WRITE_BARRIER(*this, kPrototypeOffset, value, mode);
 }
 
-LayoutDescriptor Map::layout_descriptor_gc_safe() const {
+OBJECT_CONSTRUCTORS_IMPL(MapWithLayoutDescriptor, Map)
+CAST_ACCESSOR(MapWithLayoutDescriptor)
+
+LayoutDescriptor MapWithLayoutDescriptor::layout_descriptor_gc_safe() const {
   DCHECK(FLAG_unbox_double_fields);
   // The loaded value can be dereferenced on background thread to load the
   // bitmap. We need acquire load in order to ensure that the bitmap
@@ -569,7 +574,7 @@ LayoutDescriptor Map::layout_descriptor_gc_safe() const {
   return LayoutDescriptor::cast_gc_safe(layout_desc);
 }
 
-bool Map::HasFastPointerLayout() const {
+bool MapWithLayoutDescriptor::HasFastPointerLayout() const {
   DCHECK(FLAG_unbox_double_fields);
   // The loaded value is used for SMI check only and is not dereferenced,
   // so relaxed load is safe.
@@ -582,17 +587,19 @@ void Map::UpdateDescriptors(Isolate* isolate, DescriptorArray descriptors,
                             int number_of_own_descriptors) {
   SetInstanceDescriptors(isolate, descriptors, number_of_own_descriptors);
   if (FLAG_unbox_double_fields) {
-    if (layout_descriptor()->IsSlowLayout()) {
-      set_layout_descriptor(layout_desc);
+    LayoutDescriptor layout_descriptor =
+        MapWithLayoutDescriptor::cast(*this)->layout_descriptor();
+    if (layout_descriptor->IsSlowLayout()) {
+      MapWithLayoutDescriptor::cast(*this)->set_layout_descriptor(layout_desc);
     }
 #ifdef VERIFY_HEAP
     // TODO(ishell): remove these checks from VERIFY_HEAP mode.
     if (FLAG_verify_heap) {
-      CHECK(layout_descriptor()->IsConsistentWithMap(*this));
+      CHECK(layout_descriptor->IsConsistentWithMap(*this));
       CHECK_EQ(Map::GetVisitorId(*this), visitor_id());
     }
 #else
-    SLOW_DCHECK(layout_descriptor()->IsConsistentWithMap(*this));
+    SLOW_DCHECK(layout_descriptor->IsConsistentWithMap(*this));
     DCHECK(visitor_id() == Map::GetVisitorId(*this));
 #endif
   }
@@ -604,14 +611,18 @@ void Map::InitializeDescriptors(Isolate* isolate, DescriptorArray descriptors,
                          descriptors->number_of_descriptors());
 
   if (FLAG_unbox_double_fields) {
-    set_layout_descriptor(layout_desc);
+    MapWithLayoutDescriptor::cast(*this)->set_layout_descriptor(layout_desc);
 #ifdef VERIFY_HEAP
     // TODO(ishell): remove these checks from VERIFY_HEAP mode.
     if (FLAG_verify_heap) {
-      CHECK(layout_descriptor()->IsConsistentWithMap(*this));
+      CHECK(MapWithLayoutDescriptor::cast(*this)
+                ->layout_descriptor()
+                ->IsConsistentWithMap(*this));
     }
 #else
-    SLOW_DCHECK(layout_descriptor()->IsConsistentWithMap(*this));
+    SLOW_DCHECK(MapWithLayoutDescriptor::cast(*this)
+                    ->layout_descriptor()
+                    ->IsConsistentWithMap(*this));
 #endif
     set_visitor_id(Map::GetVisitorId(*this));
   }
@@ -629,8 +640,9 @@ uint32_t Map::bit_field3() const {
 }
 
 LayoutDescriptor Map::GetLayoutDescriptor() const {
-  return FLAG_unbox_double_fields ? layout_descriptor()
-                                  : LayoutDescriptor::FastPointerLayout();
+  return FLAG_unbox_double_fields
+             ? MapWithLayoutDescriptor::cast(*this)->layout_descriptor()
+             : LayoutDescriptor::FastPointerLayout();
 }
 
 void Map::AppendDescriptor(Isolate* isolate, Descriptor* desc) {
@@ -703,7 +715,7 @@ void Map::SetBackPointer(Object value, WriteBarrierMode mode) {
 ACCESSORS(Map, dependent_code, DependentCode, kDependentCodeOffset)
 ACCESSORS(Map, prototype_validity_cell, Object, kPrototypeValidityCellOffset)
 ACCESSORS(Map, constructor_or_backpointer, Object,
-          kConstructorOrBackPointerOffset)
+          kConstructorOrBackpointerOffset)
 
 bool Map::IsPrototypeValidityCellValid() const {
   Object validity_cell = prototype_validity_cell();

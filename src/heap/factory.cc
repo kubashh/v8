@@ -1997,7 +1997,7 @@ Handle<Map> Factory::NewMap(InstanceType type, int instance_size,
                  IsDictionaryElementsKind(elements_kind) ||
                      IsTerminalElementsKind(elements_kind));
   HeapObject result =
-      isolate()->heap()->AllocateRawWithRetryOrFail(Map::kSize, MAP_SPACE);
+      isolate()->heap()->AllocateRawWithRetryOrFail(Map::GetSize(), MAP_SPACE);
   result->set_map_after_allocation(*meta_map(), SKIP_WRITE_BARRIER);
   return handle(InitializeMap(Map::cast(result), type, instance_size,
                               elements_kind, inobject_properties),
@@ -2028,7 +2028,8 @@ Map Factory::InitializeMap(Map map, InstanceType type, int instance_size,
   map->SetInObjectUnusedPropertyFields(inobject_properties);
   map->SetInstanceDescriptors(isolate(), *empty_descriptor_array(), 0);
   if (FLAG_unbox_double_fields) {
-    map->set_layout_descriptor(LayoutDescriptor::FastPointerLayout());
+    MapWithLayoutDescriptor::cast(map)->set_layout_descriptor(
+        LayoutDescriptor::FastPointerLayout());
   }
   // Must be called only after |instance_type|, |instance_size| and
   // |layout_descriptor| are set.

@@ -285,9 +285,7 @@ std::vector<Method*> AggregateType::Constructors() const {
 
 std::string StructType::ToExplicitString() const {
   std::stringstream result;
-  result << "struct " << name() << "{";
-  PrintCommaSeparatedList(result, fields());
-  result << "}";
+  result << "struct " << name();
   return result.str();
 }
 
@@ -333,9 +331,7 @@ std::string ClassType::GetGeneratedTypeNameImpl() const {
 
 std::string ClassType::ToExplicitString() const {
   std::stringstream result;
-  result << "class " << name() << "{";
-  PrintCommaSeparatedList(result, fields());
-  result << "}";
+  result << "class " << name();
   return result.str();
 }
 
@@ -558,39 +554,39 @@ std::tuple<size_t, std::string, std::string> Field::GetFieldSizeInformation()
     field_size = kSystemPointerSize;
     size_string = "kSystemPointerSize";
     machine_type = "MachineType::Pointer()";
-  } else if (field_type == TypeOracle::GetInt32Type()) {
-    field_size = kInt32Size;
-    size_string = "kInt32Size";
-    machine_type = "MachineType::Int32()";
-  } else if (field_type == TypeOracle::GetUint32Type()) {
-    field_size = kInt32Size;
-    size_string = "kInt32Size";
-    machine_type = "MachineType::Uint32()";
-  } else if (field_type == TypeOracle::GetInt16Type()) {
-    field_size = kUInt16Size;
-    size_string = "kUInt16Size";
-    machine_type = "MachineType::Int16()";
-  } else if (field_type == TypeOracle::GetUint16Type()) {
-    field_size = kUInt16Size;
-    size_string = "kUInt16Size";
-    machine_type = "MachineType::Uint16()";
-  } else if (field_type == TypeOracle::GetInt8Type()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetInt8Type())) {
     field_size = kUInt8Size;
     size_string = "kUInt8Size";
     machine_type = "MachineType::Int8()";
-  } else if (field_type == TypeOracle::GetUint8Type()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetUint8Type())) {
     field_size = kUInt8Size;
     size_string = "kUInt8Size";
     machine_type = "MachineType::Uint8()";
-  } else if (field_type == TypeOracle::GetFloat64Type()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetInt16Type())) {
+    field_size = kUInt16Size;
+    size_string = "kUInt16Size";
+    machine_type = "MachineType::Int16()";
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetUint16Type())) {
+    field_size = kUInt16Size;
+    size_string = "kUInt16Size";
+    machine_type = "MachineType::Uint16()";
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetInt32Type())) {
+    field_size = kInt32Size;
+    size_string = "kInt32Size";
+    machine_type = "MachineType::Int32()";
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetUint32Type())) {
+    field_size = kInt32Size;
+    size_string = "kInt32Size";
+    machine_type = "MachineType::Uint32()";
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetFloat64Type())) {
     field_size = kDoubleSize;
     size_string = "kDoubleSize";
     machine_type = "MachineType::Float64()";
-  } else if (field_type == TypeOracle::GetIntPtrType()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetIntPtrType())) {
     field_size = kIntptrSize;
     size_string = "kIntptrSize";
     machine_type = "MachineType::IntPtr()";
-  } else if (field_type == TypeOracle::GetUIntPtrType()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetUIntPtrType())) {
     field_size = kIntptrSize;
     size_string = "kIntptrSize";
     machine_type = "MachineType::IntPtr()";

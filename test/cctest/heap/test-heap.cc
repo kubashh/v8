@@ -86,7 +86,7 @@ static void CheckMap(Map map, int type, int instance_size) {
 TEST(HeapMaps) {
   CcTest::InitializeVM();
   ReadOnlyRoots roots(CcTest::heap());
-  CheckMap(roots.meta_map(), MAP_TYPE, Map::kSize);
+  CheckMap(roots.meta_map(), MAP_TYPE, Map::GetSize());
   CheckMap(roots.heap_number_map(), HEAP_NUMBER_TYPE, HeapNumber::kSize);
   CheckMap(roots.fixed_array_map(), FIXED_ARRAY_TYPE, kVariableSizeSentinel);
   CheckMap(roots.hash_table_map(), HASH_TABLE_TYPE, kVariableSizeSentinel);
