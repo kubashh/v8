@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bb6c224_899e504f",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-02-21T20:20:52Z",
+      "side": 1,
+      "message": "sp: initial",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e67ef58_c6c77ef4",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-02-21T20:20:52Z",
+      "side": 1,
+      "message": "Need to perform this check on maximum_pages too if it ends up being used?",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "424ee902_c0b3e089",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-02-21T20:20:52Z",
+      "side": 1,
+      "message": "The logic here is a bit hard to follow. I\u0027d prefer to see the state more explicit here, perhaps factoring out a separate `allocating_maximum` bool and an `allocation_size` variable that is updated instead of updating `max_size`.\n\nAnother option is to separate the allocation code from the failure code, so you can call the allocation code once for the larger size, then for the smaller size, and only fail if that fails.",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11a63181_e0f3cf25",
+        "filename": "src/wasm/wasm-memory.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-02-21T20:20:52Z",
+      "side": 1,
+      "message": "sp: up to",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ba8b46c_6d5cf3d3",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-02-21T20:20:52Z",
+      "side": 1,
+      "message": "When is the `New` above used? Can the callers of that one be changed to use this version? Can this be implemented in terms of that version?",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
