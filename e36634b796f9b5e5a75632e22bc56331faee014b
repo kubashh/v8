@@ -94,6 +94,30 @@
       "revId": "e36634b796f9b5e5a75632e22bc56331faee014b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8d673321_019b7349",
+        "filename": "src/arm64/assembler-arm64.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-21T07:31:41Z",
+      "side": 1,
+      "message": "The current solution (in the .cc file) looks good imo.",
+      "parentUuid": "d33c200e_a24a1145",
+      "range": {
+        "startLine": 1098,
+        "startChar": 1,
+        "endLine": 1098,
+        "endChar": 29
+      },
+      "revId": "e36634b796f9b5e5a75632e22bc56331faee014b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
