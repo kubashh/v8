@@ -67,35 +67,37 @@ TNode<RawPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskRingBuffer(
 
 TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskQueueCapacity(
     TNode<RawPtrT> microtask_queue) {
-  return UncheckedCast<IntPtrT>(
-      Load(MachineType::IntPtr(), microtask_queue,
-           IntPtrConstant(MicrotaskQueue::kCapacityOffset)));
+  return ChangeInt32ToIntPtr(UncheckedCast<Int32T>(
+      Load(MachineType::Int32(), microtask_queue,
+           IntPtrConstant(MicrotaskQueue::kCapacityOffset))));
 }
 
 TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskQueueSize(
     TNode<RawPtrT> microtask_queue) {
-  return UncheckedCast<IntPtrT>(
-      Load(MachineType::IntPtr(), microtask_queue,
-           IntPtrConstant(MicrotaskQueue::kSizeOffset)));
+  return ChangeInt32ToIntPtr(
+      UncheckedCast<Int32T>(Load(MachineType::Int32(), microtask_queue,
+                                 IntPtrConstant(MicrotaskQueue::kSizeOffset))));
 }
 
 void MicrotaskQueueBuiltinsAssembler::SetMicrotaskQueueSize(
     TNode<RawPtrT> microtask_queue, TNode<IntPtrT> new_size) {
-  StoreNoWriteBarrier(MachineType::PointerRepresentation(), microtask_queue,
-                      IntPtrConstant(MicrotaskQueue::kSizeOffset), new_size);
+  StoreNoWriteBarrier(MachineType::Int32().representation(), microtask_queue,
+                      IntPtrConstant(MicrotaskQueue::kSizeOffset),
+                      TruncateIntPtrToInt32(new_size));
 }
 
 TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::GetMicrotaskQueueStart(
     TNode<RawPtrT> microtask_queue) {
-  return UncheckedCast<IntPtrT>(
-      Load(MachineType::IntPtr(), microtask_queue,
-           IntPtrConstant(MicrotaskQueue::kStartOffset)));
+  return ChangeInt32ToIntPtr(UncheckedCast<Int32T>(
+      Load(MachineType::Int32(), microtask_queue,
+           IntPtrConstant(MicrotaskQueue::kStartOffset))));
 }
 
 void MicrotaskQueueBuiltinsAssembler::SetMicrotaskQueueStart(
     TNode<RawPtrT> microtask_queue, TNode<IntPtrT> new_start) {
-  StoreNoWriteBarrier(MachineType::PointerRepresentation(), microtask_queue,
-                      IntPtrConstant(MicrotaskQueue::kStartOffset), new_start);
+  StoreNoWriteBarrier(MachineType::Int32().representation(), microtask_queue,
+                      IntPtrConstant(MicrotaskQueue::kStartOffset),
+                      TruncateIntPtrToInt32(new_start));
 }
 
 TNode<IntPtrT> MicrotaskQueueBuiltinsAssembler::CalculateRingBufferOffset(
@@ -404,7 +406,7 @@ void MicrotaskQueueBuiltinsAssembler::EnterMicrotaskContext(
   {
     Node* function =
         ExternalConstant(ExternalReference::call_enter_context_function());
-    CallCFunction2(MachineType::Int32(), MachineType::Pointer(),
+    CallCFunction2(MachineType::IntPtr(), MachineType::Pointer(),
                    MachineType::Pointer(), function, hsi,
                    BitcastTaggedToWord(native_context));
     Goto(&done);
@@ -485,9 +487,10 @@ TF_BUILTIN(EnqueueMicrotask, MicrotaskQueueBuiltinsAssembler) {
     StoreNoWriteBarrier(
         MachineType::TaggedPointer().representation(), ring_buffer,
         CalculateRingBufferOffset(capacity, start, size), microtask);
-    StoreNoWriteBarrier(MachineType::PointerRepresentation(), microtask_queue,
-                        IntPtrConstant(MicrotaskQueue::kSizeOffset),
-                        IntPtrAdd(size, IntPtrConstant(1)));
+    StoreNoWriteBarrier(
+        MachineType::Int32().representation(), microtask_queue,
+        IntPtrConstant(MicrotaskQueue::kSizeOffset),
+        TruncateIntPtrToInt32(IntPtrAdd(size, IntPtrConstant(1))));
     Return(UndefinedConstant());
   }
 
