@@ -308,7 +308,8 @@ template <typename T>
 class ZoneForwardList;
 
 #ifdef OBJECT_PRINT
-#define DECL_PRINTER(Name) void Name##Print(std::ostream& os);  // NOLINT
+#define DECL_PRINTER(Name) \
+  V8_EXPORT_PRIVATE void Name##Print(std::ostream& os);  // NOLINT
 #else
 #define DECL_PRINTER(Name)
 #endif
