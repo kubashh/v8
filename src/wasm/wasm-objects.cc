@@ -1012,6 +1012,25 @@ Handle<WasmMemoryObject> WasmMemoryObject::New(
   return memory_obj;
 }
 
+MaybeHandle<WasmMemoryObject> WasmMemoryObject::New(Isolate* isolate,
+                                                    uint32_t initial,
+                                                    uint32_t maximum,
+                                                    SharedFlag shared) {
+  Handle<JSArrayBuffer> buffer;
+  size_t size = static_cast<size_t>(i::wasm::kWasmPageSize) *
+                static_cast<size_t>(initial);
+  if (!i::wasm::NewArrayBuffer(isolate, size, shared).ToHandle(&buffer)) {
+    return {};
+  }
+  Handle<JSFunction> memory_ctor(
+      isolate->native_context()->wasm_memory_constructor(), isolate);
+  auto memory_obj = Handle<WasmMemoryObject>::cast(
+      isolate->factory()->NewJSObject(memory_ctor, TENURED));
+  memory_obj->set_array_buffer(*buffer);
+  memory_obj->set_maximum_pages(maximum);
+  return memory_obj;
+}
+
 bool WasmMemoryObject::has_full_guard_region(Isolate* isolate) {
   const wasm::WasmMemoryTracker::AllocationData* allocation =
       isolate->wasm_engine()->memory_tracker()->FindAllocationData(
