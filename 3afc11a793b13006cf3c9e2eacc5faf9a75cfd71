@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fb4325f_8d987f02",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-02-21T13:09:57Z",
+      "side": 1,
+      "message": "I guess you should skip the whole cctest/test-field-type-tracking",
+      "revId": "3afc11a793b13006cf3c9e2eacc5faf9a75cfd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
