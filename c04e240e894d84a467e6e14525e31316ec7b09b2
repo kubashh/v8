@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6d7c2b8_88b694d9",
+        "filename": "test/mjsunit/wasm/shared-memory.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-02-21T10:53:54Z",
+      "side": 1,
+      "message": "You could use `print(arguments.callee.name);` here instead.",
+      "revId": "c04e240e894d84a467e6e14525e31316ec7b09b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
