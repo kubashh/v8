@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0b827c03_83b91a90",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-02-21T22:38:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bb6c224_899e504f",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e67ef58_c6c77ef4",
         "filename": "src/wasm/module-instantiate.cc",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-21T20:20:52Z",
       "side": 1,
       "message": "Need to perform this check on maximum_pages too if it ends up being used?",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d336f30b_ed7cf1d1",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-02-21T22:38:17Z",
+      "side": 1,
+      "message": "A couple of reasons why I think only this check is needed - only the initial size is made accessible initially regardless of the reservation length. On grow before adjusting the permissions we check again whether it\u0027s under the maximum limit. We already validate this on module decode, and importing memory so I suspect this is more of a sanity check.",
+      "parentUuid": "3e67ef58_c6c77ef4",
       "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "92662b76_7ce31887",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-02-21T22:38:17Z",
+      "side": 1,
+      "message": "I\u0027ve refactored this to be slightly different by using a variable reservation size. Can you check if that\u0027s better? If not I can refactor further.",
+      "parentUuid": "424ee902_c0b3e089",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "11a63181_e0f3cf25",
         "filename": "src/wasm/wasm-memory.h",
         "patchSetId": 4
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "adaddb80_eb44991d",
+        "filename": "src/wasm/wasm-memory.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-02-21T22:38:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11a63181_e0f3cf25",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3ba8b46c_6d5cf3d3",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 4
@@ -81,6 +153,24 @@
       "writtenOn": "2019-02-21T20:20:52Z",
       "side": 1,
       "message": "When is the `New` above used? Can the callers of that one be changed to use this version? Can this be implemented in terms of that version?",
+      "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18096f0e_ccfb4069",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-02-21T22:38:17Z",
+      "side": 1,
+      "message": "Thanks for catching, I\u0027ve implemented this one in terms of the one that was previously there. Both cannot be changed to be the same constructor because the other one is called when a memory import is used, so it only needs to setup but not allocate. This one is used only through the js-api on the constructor, so it should allocate as well. \n\nAs a side note, I remember that we had discussed this in a previous V8/Wasm walkthrough that the allocation code shouldn\u0027t be a part of the js-api, so this looked like a good opportunity to move it.",
+      "parentUuid": "3ba8b46c_6d5cf3d3",
       "revId": "5be1f413947b990169b9c87a2bf224aff22c0b28",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
