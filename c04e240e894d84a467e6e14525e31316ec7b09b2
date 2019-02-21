@@ -16,6 +16,24 @@
       "revId": "c04e240e894d84a467e6e14525e31316ec7b09b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c95f71d_a849e2a1",
+        "filename": "test/mjsunit/wasm/shared-memory.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2019-02-21T11:25:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6d7c2b8_88b694d9",
+      "revId": "c04e240e894d84a467e6e14525e31316ec7b09b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
