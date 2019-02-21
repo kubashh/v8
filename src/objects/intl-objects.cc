@@ -552,6 +552,12 @@ namespace {
 std::string DefaultLocale(Isolate* isolate) {
   if (isolate->default_locale().empty()) {
     icu::Locale default_locale;
+    printf("DefaultLocale %s\n", default_locale.getName());
+    printf("LANG %s\n", getenv("LANG"));
+    printf("LC_ALL %s\n", getenv("LC_ALL"));
+    printf("LC_CTYPE %s\n", getenv("LC_CTYPE"));
+    printf("LC_MESSAGES %s\n", getenv("LC_MESSAGES"));
+    printf("TZ %s\n", getenv("TZ"));
     // Translate ICU's fallback locale to a well-known locale.
     if (strcmp(default_locale.getName(), "en_US_POSIX") == 0) {
       isolate->set_default_locale("en-US");
