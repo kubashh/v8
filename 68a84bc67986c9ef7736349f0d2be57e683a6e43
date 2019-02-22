@@ -39,6 +39,24 @@
       "revId": "68a84bc67986c9ef7736349f0d2be57e683a6e43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1b54ff3_91c569f0",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 27768,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-22T13:00:44Z",
+      "side": 1,
+      "message": "Ah, yeah sorry my bad, I was thinking of {BigInt64Array} (see https://v8.dev/blog/bigint#two-new-types-of-typedarrays) without realizing. But now that I realize it is tied to BitInt I see how this complicates things because one can only store a BigInt (i.e. a literal with the \"n\" suffix is required) into them. If the overhead of switching to BigInt here is too heavy and introduces more complication than it solves, then I am also fine with the current approach. I leave the decision up to you.",
+      "parentUuid": "f55f673b_76760094",
+      "revId": "68a84bc67986c9ef7736349f0d2be57e683a6e43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
