@@ -81,9 +81,9 @@ class V8_EXPORT_PRIVATE MicrotaskQueue {
   void FireMicrotasksCompletedCallback(Isolate* isolate) const;
   bool IsRunningMicrotasks() const { return is_running_microtasks_; }
 
-  intptr_t capacity() const { return capacity_; }
-  intptr_t size() const { return size_; }
-  intptr_t start() const { return start_; }
+  int capacity() const { return capacity_; }
+  int size() const { return size_; }
+  int start() const { return start_; }
 
   MicrotaskQueue* next() const { return next_; }
   MicrotaskQueue* prev() const { return prev_; }
@@ -94,24 +94,24 @@ class V8_EXPORT_PRIVATE MicrotaskQueue {
   static const size_t kStartOffset;
   static const size_t kFinishedMicrotaskCountOffset;
 
-  static const intptr_t kMinimumCapacity;
+  static const int kMinimumCapacity;
 
  private:
   void OnCompleted(Isolate* isolate);
 
   MicrotaskQueue();
-  void ResizeBuffer(intptr_t new_capacity);
+  void ResizeBuffer(int new_capacity);
 
   // A ring buffer to hold Microtask instances.
   // ring_buffer_[(start_ + i) % capacity_] contains |i|th Microtask for each
   // |i| in [0, size_).
-  intptr_t size_ = 0;
-  intptr_t capacity_ = 0;
-  intptr_t start_ = 0;
+  int size_ = 0;
+  int capacity_ = 0;
+  int start_ = 0;
   FullObjectSlot ring_buffer_;
 
   // The number of finished microtask.
-  intptr_t finished_microtask_count_ = 0;
+  int finished_microtask_count_ = 0;
 
   // MicrotaskQueue instances form a doubly linked list loop, so that all
   // instances are reachable through |next_|.

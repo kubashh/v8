@@ -28,7 +28,7 @@ const size_t MicrotaskQueue::kStartOffset = OFFSET_OF(MicrotaskQueue, start_);
 const size_t MicrotaskQueue::kFinishedMicrotaskCountOffset =
     OFFSET_OF(MicrotaskQueue, finished_microtask_count_);
 
-const intptr_t MicrotaskQueue::kMinimumCapacity = 8;
+const int MicrotaskQueue::kMinimumCapacity = 8;
 
 // static
 void MicrotaskQueue::SetUpDefaultMicrotaskQueue(Isolate* isolate) {
@@ -81,13 +81,12 @@ void MicrotaskQueue::EnqueueMicrotask(Microtask microtask) {
   if (size_ == capacity_) {
     // Keep the capacity of |ring_buffer_| power of 2, so that the JIT
     // implementation can calculate the modulo easily.
-    intptr_t new_capacity = std::max(kMinimumCapacity, capacity_ << 1);
+    int new_capacity = std::max(kMinimumCapacity, capacity_ << 1);
     ResizeBuffer(new_capacity);
   }
 
   DCHECK_LT(size_, capacity_);
-  (ring_buffer_ + static_cast<int>((start_ + size_) % capacity_))
-      .store(microtask);
+  (ring_buffer_ + (start_ + size_) % capacity_).store(microtask);
   ++size_;
 }
 
@@ -117,7 +116,7 @@ int MicrotaskQueue::RunMicrotasks(Isolate* isolate) {
     return 0;
   }
 
-  intptr_t base_count = finished_microtask_count_;
+  int base_count = finished_microtask_count_;
 
   HandleScope handle_scope(isolate);
   MaybeHandle<Object> maybe_exception;
@@ -134,8 +133,7 @@ int MicrotaskQueue::RunMicrotasks(Isolate* isolate) {
     TRACE_EVENT_BEGIN0("v8.execute", "RunMicrotasks");
     TRACE_EVENT_CALL_STATS_SCOPED(isolate, "v8", "V8.RunMicrotasks");
     maybe_result = Execution::TryRunMicrotasks(isolate, this, &maybe_exception);
-    processed_microtask_count =
-        static_cast<int>(finished_microtask_count_ - base_count);
+    processed_microtask_count = finished_microtask_count_ - base_count;
     TRACE_EVENT_END1("v8.execute", "RunMicrotasks", "microtask_count",
                      processed_microtask_count);
   }
@@ -162,19 +160,18 @@ void MicrotaskQueue::IterateMicrotasks(RootVisitor* visitor) {
     // Iterate pending Microtasks as root objects to avoid the write barrier for
     // all single Microtask. If this hurts the GC performance, use a FixedArray.
     visitor->VisitRootPointers(
-        Root::kStrongRoots, nullptr, ring_buffer_ + static_cast<int>(start_),
-        ring_buffer_ + static_cast<int>(std::min(start_ + size_, capacity_)));
+        Root::kStrongRoots, nullptr, ring_buffer_ + start_,
+        ring_buffer_ + std::min(start_ + size_, capacity_));
     visitor->VisitRootPointers(
         Root::kStrongRoots, nullptr, ring_buffer_,
-        ring_buffer_ + static_cast<int>(
-                           std::max<intptr_t>(start_ + size_ - capacity_, 0)));
+        ring_buffer_ + std::max(start_ + size_ - capacity_, 0));
   }
 
   if (capacity_ <= kMinimumCapacity) {
     return;
   }
 
-  intptr_t new_capacity = capacity_;
+  int new_capacity = capacity_;
   while (new_capacity > 2 * size_) {
     new_capacity >>= 1;
   }
@@ -218,13 +215,12 @@ void MicrotaskQueue::OnCompleted(Isolate* isolate) {
   FireMicrotasksCompletedCallback(isolate);
 }
 
-void MicrotaskQueue::ResizeBuffer(intptr_t new_capacity) {
+void MicrotaskQueue::ResizeBuffer(int new_capacity) {
   DCHECK_LE(size_, new_capacity);
   FullObjectSlot new_ring_buffer(
       reinterpret_cast<Address>(new Microtask[new_capacity]));
-  for (intptr_t i = 0; i < size_; ++i) {
-    (new_ring_buffer + static_cast<int>(i))
-        .store(*(ring_buffer_ + static_cast<int>((start_ + i) % capacity_)));
+  for (int i = 0; i < size_; ++i) {
+    (new_ring_buffer + i).store(*(ring_buffer_ + (start_ + i) % capacity_));
   }
 
   delete[] reinterpret_cast<Microtask*>(ring_buffer_.address());
