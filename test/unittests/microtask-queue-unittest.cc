@@ -11,6 +11,7 @@
 
 #include "src/heap/factory.h"
 #include "src/objects/foreign.h"
+#include "src/objects/promise-inl.h"
 #include "src/visitors.h"
 #include "test/unittests/test-utils.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -183,6 +184,80 @@ TEST_F(MicrotaskQueueTest, VisitRoot) {
   std::sort(expected.begin(), expected.end());
   std::sort(actual.begin(), actual.end());
   EXPECT_EQ(expected, actual);
+}
+
+TEST_F(MicrotaskQueueTest, PromiseHandlerContext) {
+  Local<v8::Context> v8_context2 = v8::Context::New(v8_isolate());
+  Local<v8::Context> v8_context3 = v8::Context::New(v8_isolate());
+  Local<v8::Context> v8_context4 = v8::Context::New(v8_isolate());
+  Handle<Context> context2 = Utils::OpenHandle(*v8_context2, isolate());
+  Handle<Context> context3 = Utils::OpenHandle(*v8_context3, isolate());
+  Handle<Context> context4 = Utils::OpenHandle(*v8_context3, isolate());
+  context2->native_context()->set_microtask_queue(microtask_queue());
+  context3->native_context()->set_microtask_queue(microtask_queue());
+  context4->native_context()->set_microtask_queue(microtask_queue());
+
+  Handle<JSFunction> handler;
+  Handle<JSProxy> proxy;
+  Handle<JSBoundFunction> bound;
+
+  // Create a JSFunction on |context2|
+  {
+    v8::Context::Scope scope(v8_context2);
+    handler = RunJS<JSFunction>("()=>{}");
+    EXPECT_EQ(*context2,
+              *JSReceiver::GetContextForMicrotask(handler).ToHandleChecked());
+  }
+
+  // Create a JSProxy on |context3|.
+  {
+    v8::Context::Scope scope(v8_context3);
+    proxy = RunJS<JSProxy>("new Proxy(()=>{}, {})");
+    EXPECT_EQ(*context2,
+              *JSReceiver::GetContextForMicrotask(proxy).ToHandleChecked());
+  }
+
+  // Create a JSBoundFunction on |context4|.
+  // Note that its CreationContext and ContextForTaskCancellation is |context2|.
+  {
+    v8::Context::Scope scope(v8_context4);
+    ASSERT_TRUE(
+        v8_context4->Global()
+            ->Set(v8_context4, NewString("handler"), Utils::ToLocal(handler))
+            .FromJust());
+    bound = RunJS<JSBoundFunction>("handler.bind()");
+    EXPECT_EQ(*context2,
+              *JSReceiver::GetContextForMicrotask(bound).ToHandleChecked());
+  }
+
+  // Give the objects to the main context.
+  SetGlobalProperty("handler", Utils::ToLocal(handler));
+  SetGlobalProperty("proxy", Utils::ToLocal(proxy));
+  SetGlobalProperty("bound", Utils::ToLocal(Handle<JSReceiver>::cast(bound)));
+  RunJS(
+      "Promise.resolve().then(handler);"
+      "Promise.reject().catch(proxy);"
+      "Promise.resolve().then(bound);");
+
+  ASSERT_EQ(3, microtask_queue()->size());
+  Handle<Microtask> microtask1(microtask_queue()->get(0), isolate());
+  ASSERT_TRUE(microtask1->IsPromiseFulfillReactionJobTask());
+  EXPECT_EQ(*context2,
+            Handle<PromiseFulfillReactionJobTask>::cast(microtask1)->context());
+
+  Handle<Microtask> microtask2(microtask_queue()->get(1), isolate());
+  ASSERT_TRUE(microtask2->IsPromiseRejectReactionJobTask());
+  EXPECT_EQ(*context2,
+            Handle<PromiseRejectReactionJobTask>::cast(microtask2)->context());
+
+  Handle<Microtask> microtask3(microtask_queue()->get(2), isolate());
+  ASSERT_TRUE(microtask3->IsPromiseFulfillReactionJobTask());
+  EXPECT_EQ(*context2,
+            Handle<PromiseFulfillReactionJobTask>::cast(microtask3)->context());
+
+  v8_context4->DetachGlobal();
+  v8_context3->DetachGlobal();
+  v8_context2->DetachGlobal();
 }
 
 }  // namespace internal
