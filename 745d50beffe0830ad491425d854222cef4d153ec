@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5690294f_b002249c",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-22T09:49:28Z",
+      "side": 1,
+      "message": "Should we stop triggering it from the old bot to avoid overloading the bot?",
+      "revId": "745d50beffe0830ad491425d854222cef4d153ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
