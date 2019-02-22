@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "825da6d7_d861bf66",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-22T12:29:40Z",
+      "side": 1,
+      "message": "This isn\u0027t right. Proxies don\u0027t have an internal [[realm]], and you need to get the realm of the underlying target (it available). See http://www.ecma-international.org/ecma-262/#sec-getfunctionrealm. I\u0027m not sure what you need to do in case of revoked proxies though.",
+      "revId": "6de2e155e0ddbcba7e6028fadb0eecf848b45e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59b97321_499cd8cd",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-22T12:29:40Z",
+      "side": 1,
+      "message": "Same here, this isn\u0027t right. You actually should get the context of the target. I suppose either it\u0027s not possible that it\u0027s revoked, in which case this is fine; otherwise you need to do something different if it\u0027s revoked. Actually calling it will fail anyway; what would happen in case it fails?",
+      "revId": "6de2e155e0ddbcba7e6028fadb0eecf848b45e14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
