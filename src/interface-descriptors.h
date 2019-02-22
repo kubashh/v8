@@ -28,7 +28,9 @@ namespace internal {
   V(ArraySingleArgumentConstructor)   \
   V(AsyncFunctionStackParameter)      \
   V(BigIntToI64)                      \
+  V(BigIntToI6432)                    \
   V(BigIntToWasmI64)                  \
+  V(BigIntToWasmI6432)                \
   V(BinaryOp)                         \
   V(CallForwardVarargs)               \
   V(CallFunctionTemplate)             \
@@ -1170,12 +1172,30 @@ class BigIntToWasmI64Descriptor final : public CallInterfaceDescriptor {
   DECLARE_DESCRIPTOR(BigIntToWasmI64Descriptor, CallInterfaceDescriptor)
 };
 
+// 32 bits version of the BigIntToWasmI64 call interface descriptor
+class BigIntToWasmI6432Descriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kLow, kHigh)
+  DEFINE_PARAMETER_TYPES(MachineType::Int32(),  // kLow
+                         MachineType::Int32())  // kHigh
+  DECLARE_DESCRIPTOR(BigIntToWasmI6432Descriptor, CallInterfaceDescriptor)
+};
+
 class BigIntToI64Descriptor final : public CallInterfaceDescriptor {
  public:
   DEFINE_PARAMETERS(kArgument)
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Int64(),      // result 1
                                     MachineType::AnyTagged())  // kArgument
   DECLARE_DESCRIPTOR(BigIntToI64Descriptor, CallInterfaceDescriptor)
+};
+
+class BigIntToI6432Descriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_RESULT_AND_PARAMETERS(2, kArgument)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Uint32(),     // result 1
+                                    MachineType::Uint32(),     // result 2
+                                    MachineType::AnyTagged())  // kArgument
+  DECLARE_DESCRIPTOR(BigIntToI6432Descriptor, CallInterfaceDescriptor)
 };
 
 class WasmAtomicWakeDescriptor final : public CallInterfaceDescriptor {
