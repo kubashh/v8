@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "775261e5_84349389",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-02-22T19:46:10Z",
+      "side": 1,
+      "message": "No, it actually checks for this and adds to the AllocationStatus sample after the retry loop.",
+      "parentUuid": "f611a58c_08c1992b",
+      "range": {
+        "startLine": 59,
+        "startChar": 7,
+        "endLine": 59,
+        "endChar": 16
+      },
+      "revId": "3550584dca83343699a29775fbeeda60729e001e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e5eada3_44798465",
         "filename": "src/wasm/wasm-memory.cc",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-02-22T15:49:15Z",
       "side": 1,
       "message": "It seems like re-assigning `reservation_size` here has no effect in the case that `require_full_guard_regions \u0026\u0026 FLAG_wasm_trap_handler_fallback` is false.\n\nI think we should clean up the retry-loop here, it\u0027s really hard to understand. I think we should at least leave a TODO for cleanup here. Maybe the loop body could go into a separate function, with allocation_length and reservation_size as parameters. Then we can call this function with different parameters repeatedly. I think we should never do `--trial;`. We should also have the loop exit at the head of the loop, not somewhere hidden in the loop body, hidden behind 3 conditions.\n\nAs I said, it\u0027s not necessary to do this in this CL, we can do it in a separate one.",
+      "range": {
+        "startLine": 82,
+        "startChar": 6,
+        "endLine": 82,
+        "endChar": 22
+      },
+      "revId": "3550584dca83343699a29775fbeeda60729e001e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90c29b96_5be2da59",
+        "filename": "src/wasm/wasm-memory.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1122079
+      },
+      "writtenOn": "2019-02-22T19:46:10Z",
+      "side": 1,
+      "message": "In the case that \u0027require_full_guard_regions \u0026\u0026 FLAG_wasm_trap_handler_fallback\u0027 is false, I\u0027m doing this to make sure that allocation_length and reservation_size are in sync. \n\nI do agree that this piece of code is more complex than it needs to be, but I\u0027ve been cautious about touching more than I need to with this CL because there is different state in this loop that I don\u0027t fully understand the effects of. I\u0027d like to tackle this separately to not tie in any refactoring regressions with this change. I\u0027ve filed https://bugs.chromium.org/p/v8/issues/detail?id\u003d8898 as a tracking issue.",
+      "parentUuid": "7e5eada3_44798465",
       "range": {
         "startLine": 82,
         "startChar": 6,
