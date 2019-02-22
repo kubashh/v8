@@ -6,6 +6,7 @@
 #define V8_ZONE_ZONE_H_
 
 #include <limits>
+#include <vector>
 
 #include "src/base/hashmap.h"
 #include "src/base/logging.h"
@@ -367,7 +368,9 @@ class ScopedPtrList final {
   Vector<T*> CopyTo(Zone* zone) {
     DCHECK_LE(end_, buffer_.size());
     T** data = zone->NewArray<T*>(length());
-    MemCopy(data, &buffer_[start_], length() * sizeof(T*));
+    if (length() != 0) {
+      MemCopy(data, &buffer_[start_], length() * sizeof(T*));
+    }
     return Vector<T*>(data, length());
   }
 
