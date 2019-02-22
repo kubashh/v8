@@ -23,7 +23,11 @@ namespace compiler {
 
 Int64Lowering::Int64Lowering(Graph* graph, MachineOperatorBuilder* machine,
                              CommonOperatorBuilder* common, Zone* zone,
-                             Signature<MachineRepresentation>* signature)
+                             Signature<MachineRepresentation>* signature,
+                             CallDescriptor* bigint_to_i64_call_descriptor,
+                             Node* bigint_to_i64_call_descriptor_new_target,
+                             CallDescriptor* i64_to_bigint_call_descriptor,
+                             Node* i64_to_bigint_call_descriptor_new_target)
     : zone_(zone),
       graph_(graph),
       machine_(machine),
@@ -32,8 +36,14 @@ Int64Lowering::Int64Lowering(Graph* graph, MachineOperatorBuilder* machine,
       stack_(zone),
       replacements_(nullptr),
       signature_(signature),
-      placeholder_(graph->NewNode(common->Parameter(-2, "placeholder"),
-                                  graph->start())) {
+      placeholder_(
+          graph->NewNode(common->Parameter(-2, "placeholder"), graph->start())),
+      bigint_to_i64_call_descriptor_(bigint_to_i64_call_descriptor),
+      bigint_to_i64_call_descriptor_new_target_(
+          bigint_to_i64_call_descriptor_new_target),
+      i64_to_bigint_call_descriptor_(i64_to_bigint_call_descriptor),
+      i64_to_bigint_call_descriptor_new_target_(
+          i64_to_bigint_call_descriptor_new_target) {
   DCHECK_NOT_NULL(graph);
   DCHECK_NOT_NULL(graph->end());
   replacements_ = zone->NewArray<Replacement>(graph->NodeCount());
@@ -284,16 +294,16 @@ void Int64Lowering::LowerNode(Node* node) {
     }
     case IrOpcode::kParameter: {
       DCHECK_EQ(1, node->InputCount());
+      int paramCount = static_cast<int>(signature()->parameter_count());
       // Only exchange the node if the parameter count actually changed. We do
       // not even have to do the default lowering because the the start node,
       // the only input of a parameter node, only changes if the parameter count
       // changes.
-      if (GetParameterCountAfterLowering(signature()) !=
-          static_cast<int>(signature()->parameter_count())) {
+      if (GetParameterCountAfterLowering(signature()) != paramCount) {
         int old_index = ParameterIndexOf(node->op());
-        // TODO(wasm): Make this part not wasm specific.
-        // Prevent special lowering of the instance parameter.
-        if (old_index == wasm::kWasmInstanceParameterIndex) {
+        // Prevent special lowering of wasm's instance or JS
+        // context/closure parameters.
+        if (old_index <= 0 || old_index > paramCount) {
           DefaultLowering(node);
           break;
         }
@@ -335,6 +345,54 @@ void Int64Lowering::LowerNode(Node* node) {
         // descriptor is enough.
         auto new_descriptor = GetI32WasmCallDescriptor(zone(), call_descriptor);
         NodeProperties::ChangeOp(node, common()->TailCall(new_descriptor));
+      }
+      break;
+    }
+    case IrOpcode::kCallUnverified: {
+      auto call_descriptor =
+          const_cast<CallDescriptor*>(CallDescriptorOf(node->op()));
+
+      // Special case for BigInt builtins in Wasm
+      // TODO(ssauleau): a few solutions were previously considered here:
+      //  - Matching on the description debug_name; however, relying on debug
+      //    logic is not a good idea.
+      //  - Create a placeholder Call node (in wasm-compiler.cc) with a
+      //    special target. How such a placeholder could fit nicely into the
+      //    existing system?
+      //  - Current implementation; cache the node in the wasm-compiler and
+      //    match its pointer against the current node here.
+      //
+      //  We should clean this up eventually.
+      if (call_descriptor == bigint_to_i64_call_descriptor_) {
+        DCHECK_EQ(5, node->InputCount());
+
+        // change call target
+        node->ReplaceInput(0, bigint_to_i64_call_descriptor_new_target_);
+
+        // wrap the node into a projection
+        ReplaceNodeWithProjections(node);
+
+        call_descriptor = GetBigIntToI6432Descriptor(zone(), call_descriptor);
+        NodeProperties::ChangeOp(node,
+                                 common()->CallUnverified(call_descriptor));
+
+        DCHECK_EQ(5, node->InputCount());
+      } else if (call_descriptor == i64_to_bigint_call_descriptor_) {
+        DCHECK_EQ(4, node->InputCount());
+
+        // lower inputs
+        DefaultLowering(node);
+
+        // change call target
+        node->ReplaceInput(0, i64_to_bigint_call_descriptor_new_target_);
+
+        call_descriptor = GetI64ToBigInt32Descriptor(zone(), call_descriptor);
+        NodeProperties::ChangeOp(node,
+                                 common()->CallUnverified(call_descriptor));
+
+        DCHECK_EQ(5, node->InputCount());
+      } else {
+        UNREACHABLE();
       }
       break;
     }
@@ -1002,7 +1060,7 @@ bool Int64Lowering::HasReplacementLow(Node* node) {
 
 Node* Int64Lowering::GetReplacementLow(Node* node) {
   Node* result = replacements_[node->id()].low;
-  DCHECK(result);
+  DCHECK_NOT_NULL(result);
   return result;
 }
 
@@ -1012,7 +1070,7 @@ bool Int64Lowering::HasReplacementHigh(Node* node) {
 
 Node* Int64Lowering::GetReplacementHigh(Node* node) {
   Node* result = replacements_[node->id()].high;
-  DCHECK(result);
+  DCHECK_NOT_NULL(result);
   return result;
 }
 

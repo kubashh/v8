@@ -233,6 +233,20 @@ TF_BUILTIN(BigIntToWasmI64, WasmBuiltinsAssembler) {
                argument);
 }
 
+TF_BUILTIN(BigIntToWasmI6432, WasmBuiltinsAssembler) {
+  if (!Is32()) {
+    Unreachable();
+    return;
+  }
+
+  TNode<Code> target = LoadBuiltinFromFrame(Builtins::kI64ToBigInt32);
+  TNode<IntPtrT> low = UncheckedCast<IntPtrT>(Parameter(Descriptor::kLow));
+  TNode<IntPtrT> high = UncheckedCast<IntPtrT>(Parameter(Descriptor::kHigh));
+  TNode<Object> context = LoadContextFromInstance(LoadInstanceFromFrame());
+
+  TailCallStub(BigIntToWasmI6432Descriptor(), target, context, low, high);
+}
+
 TF_BUILTIN(WasmBigIntToI64, WasmBuiltinsAssembler) {
   if (!Is64()) {
     Unreachable();
@@ -246,6 +260,21 @@ TF_BUILTIN(WasmBigIntToI64, WasmBuiltinsAssembler) {
       UncheckedCast<IntPtrT>(Parameter(Descriptor::kArgument));
 
   TailCallStub(BigIntToI64Descriptor(), target, context, argument);
+}
+
+TF_BUILTIN(WasmBigIntToI6432, WasmBuiltinsAssembler) {
+  if (!Is64()) {
+    Unreachable();
+    return;
+  }
+
+  TNode<Object> context =
+      UncheckedCast<Object>(Parameter(Descriptor::kContext));
+  TNode<Code> target = LoadBuiltinFromFrame(Builtins::kBigIntToI6432);
+  TNode<IntPtrT> argument =
+      UncheckedCast<IntPtrT>(Parameter(Descriptor::kArgument));
+
+  TailCallStub(BigIntToI6432Descriptor(), target, context, argument);
 }
 
 #define DECLARE_ENUM(name)                                                \

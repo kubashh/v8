@@ -209,6 +209,7 @@ bool IsPotentiallyThrowingCall(IrOpcode::Value opcode) {
 #define BUILD_BLOCK_JS_CASE(Name) case IrOpcode::k##Name:
     JS_OP_LIST(BUILD_BLOCK_JS_CASE)
 #undef BUILD_BLOCK_JS_CASE
+    case IrOpcode::kCallUnverified:
     case IrOpcode::kCall:
     case IrOpcode::kCallWithCallerSavedRegisters:
       return true;
