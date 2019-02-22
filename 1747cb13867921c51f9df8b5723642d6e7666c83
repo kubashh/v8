@@ -16,6 +16,24 @@
       "revId": "1747cb13867921c51f9df8b5723642d6e7666c83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f42c49cd_22ab39ed",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 4
+      },
+      "lineNbr": 2096,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-22T15:03:22Z",
+      "side": 0,
+      "message": "Bot will soon be gone :)",
+      "parentUuid": "bd76713f_b7b144b3",
+      "revId": "1747cb13867921c51f9df8b5723642d6e7666c83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
