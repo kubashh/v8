@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfb9e7cd_d935cfe8",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 27763,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-22T14:36:04Z",
+      "side": 1,
+      "message": "nit: Offset no longer applies, I think we can just drop it completely now.",
+      "range": {
+        "startLine": 27762,
+        "startChar": 0,
+        "endLine": 27763,
+        "endChar": 22
+      },
+      "revId": "0fde41bbc379db3ea64df0430899db1f5727f322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
