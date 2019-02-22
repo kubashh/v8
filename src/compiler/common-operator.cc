@@ -179,6 +179,7 @@ SelectParameters const& SelectParametersOf(const Operator* const op) {
 
 CallDescriptor const* CallDescriptorOf(const Operator* const op) {
   DCHECK(op->opcode() == IrOpcode::kCall ||
+         op->opcode() == IrOpcode::kCallSven ||
          op->opcode() == IrOpcode::kCallWithCallerSavedRegisters ||
          op->opcode() == IrOpcode::kTailCall);
   return OpParameter<CallDescriptor const*>(op);
@@ -1468,6 +1469,30 @@ const Operator* CommonOperatorBuilder::Call(
     }
   };
   return new (zone()) CallOperator(call_descriptor);
+}
+
+const Operator* CommonOperatorBuilder::CallSven(
+    const CallDescriptor* call_descriptor) {
+  class CallSvenOperator final : public Operator1<const CallDescriptor*> {
+   public:
+    explicit CallSvenOperator(const CallDescriptor* call_descriptor)
+        : Operator1<const CallDescriptor*>(
+              IrOpcode::kCallSven, call_descriptor->properties(), "CallSven",
+              call_descriptor->InputCount() +
+                  call_descriptor->FrameStateCount(),
+              Operator::ZeroIfPure(call_descriptor->properties()),
+              Operator::ZeroIfEliminatable(call_descriptor->properties()),
+              call_descriptor->ReturnCount(),
+              Operator::ZeroIfPure(call_descriptor->properties()),
+              Operator::ZeroIfNoThrow(call_descriptor->properties()),
+              call_descriptor) {}
+
+    void PrintParameter(std::ostream& os,
+                        PrintVerbosity verbose) const override {
+      os << "[" << *parameter() << "]";
+    }
+  };
+  return new (zone()) CallSvenOperator(call_descriptor);
 }
 
 const Operator* CommonOperatorBuilder::CallWithCallerSavedRegisters(

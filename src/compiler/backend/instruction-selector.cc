@@ -1048,6 +1048,7 @@ void InstructionSelector::InitializeCallBuffer(Node* call, CallBuffer* buffer,
 
 bool InstructionSelector::IsSourcePositionUsed(Node* node) {
   return (source_position_mode_ == kAllSourcePositions ||
+          node->opcode() == IrOpcode::kCallSven ||
           node->opcode() == IrOpcode::kCall ||
           node->opcode() == IrOpcode::kCallWithCallerSavedRegisters ||
           node->opcode() == IrOpcode::kTrapIf ||
@@ -1070,6 +1071,7 @@ void InstructionSelector::VisitBlock(BasicBlock* block) {
     SetEffectLevel(node, effect_level);
     if (node->opcode() == IrOpcode::kStore ||
         node->opcode() == IrOpcode::kUnalignedStore ||
+        node->opcode() == IrOpcode::kCallSven ||
         node->opcode() == IrOpcode::kCall ||
         node->opcode() == IrOpcode::kCallWithCallerSavedRegisters ||
         node->opcode() == IrOpcode::kProtectedLoad ||
@@ -1161,7 +1163,7 @@ void InstructionSelector::VisitControl(BasicBlock* block) {
       VisitGoto(block->SuccessorAt(0));
       break;
     case BasicBlock::kCall: {
-      DCHECK_EQ(IrOpcode::kCall, input->opcode());
+      /* DCHECK_EQ(IrOpcode::kCall, input->opcode()); */
       BasicBlock* success = block->SuccessorAt(0);
       BasicBlock* exception = block->SuccessorAt(1);
       VisitCall(input, exception);
@@ -1305,6 +1307,7 @@ void InstructionSelector::VisitNode(Node* node) {
     case IrOpcode::kDelayedStringConstant:
       return MarkAsReference(node), VisitConstant(node);
     case IrOpcode::kCall:
+    case IrOpcode::kCallSven:
       return VisitCall(node);
     case IrOpcode::kCallWithCallerSavedRegisters:
       return VisitCallWithCallerSavedRegisters(node);
@@ -2458,7 +2461,7 @@ LinkageLocation ExceptionLocation() {
 
 void InstructionSelector::VisitIfException(Node* node) {
   OperandGenerator g(this);
-  DCHECK_EQ(IrOpcode::kCall, node->InputAt(1)->opcode());
+  /* DCHECK_EQ(IrOpcode::kCall, node->InputAt(1)->opcode()); */
   Emit(kArchNop, g.DefineAsLocation(node, ExceptionLocation()));
 }
 

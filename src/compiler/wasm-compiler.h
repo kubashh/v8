@@ -434,6 +434,14 @@ class WasmGraphBuilder {
 
   compiler::SourcePositionTable* const source_position_table_ = nullptr;
 
+  // Special cache for call to kWasmNewBigInt and kWasmNewBigInt32 builtin
+  CallDescriptor* cache_bigint_to_i64_call_descriptor_ = nullptr;
+  Node* cache_bigint_to_i64_32_call_target_ = nullptr;
+
+  // Special cache for call to kI64ToBigInt and kI64ToBigInt32 builtin
+  CallDescriptor* cache_i64_to_bigint_call_descriptor_ = nullptr;
+  Node* cache_i64_to_bigint_32_call_target_ = nullptr;
+
   Node* NoContextConstant();
 
   Node* MemBuffer(uint32_t offset);
@@ -582,6 +590,12 @@ V8_EXPORT_PRIVATE CallDescriptor* GetI32WasmCallDescriptor(
     Zone* zone, CallDescriptor* call_descriptor);
 
 V8_EXPORT_PRIVATE CallDescriptor* GetI32WasmCallDescriptorForSimd(
+    Zone* zone, CallDescriptor* call_descriptor);
+
+V8_EXPORT_PRIVATE CallDescriptor* GetI64ToBigInt32Descriptor(
+    Zone* zone, CallDescriptor* call_descriptor);
+
+V8_EXPORT_PRIVATE CallDescriptor* GetBigIntToI6432Descriptor(
     Zone* zone, CallDescriptor* call_descriptor);
 
 AssemblerOptions WasmAssemblerOptions();

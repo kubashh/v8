@@ -354,6 +354,7 @@ class CFGBuilder : public ZoneObject {
         JS_OP_LIST(BUILD_BLOCK_JS_CASE)
 // JS opcodes are just like calls => fall through.
 #undef BUILD_BLOCK_JS_CASE
+      case IrOpcode::kCallSven:
       case IrOpcode::kCall:
       case IrOpcode::kCallWithCallerSavedRegisters:
         if (NodeProperties::IsExceptionalCall(node)) {
@@ -399,6 +400,7 @@ class CFGBuilder : public ZoneObject {
         JS_OP_LIST(CONNECT_BLOCK_JS_CASE)
 // JS opcodes are just like calls => fall through.
 #undef CONNECT_BLOCK_JS_CASE
+      case IrOpcode::kCallSven:
       case IrOpcode::kCall:
       case IrOpcode::kCallWithCallerSavedRegisters:
         if (NodeProperties::IsExceptionalCall(node)) {

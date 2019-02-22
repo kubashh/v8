@@ -65,6 +65,7 @@
   V(ObjectId)                     \
   V(TypedObjectState)             \
   V(Call)                         \
+  V(CallSven)                     \
   V(CallWithCallerSavedRegisters) \
   V(Parameter)                    \
   V(OsrValue)                     \
