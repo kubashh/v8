@@ -2944,10 +2944,10 @@ class MapSpace : public PagedSpace {
   explicit MapSpace(Heap* heap) : PagedSpace(heap, MAP_SPACE, NOT_EXECUTABLE) {}
 
   int RoundSizeDownToObjectAlignment(int size) override {
-    if (base::bits::IsPowerOfTwo(Map::kSize)) {
-      return RoundDown(size, Map::kSize);
+    if (base::bits::IsPowerOfTwo(Map::GetSize())) {
+      return RoundDown(size, Map::GetSize());
     } else {
-      return (size / Map::kSize) * Map::kSize;
+      return (size / Map::GetSize()) * Map::GetSize();
     }
   }
 

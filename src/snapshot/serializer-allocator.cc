@@ -121,7 +121,7 @@ SerializerAllocator::EncodeReservations() const {
   }
 
   STATIC_ASSERT(MAP_SPACE == kNumberOfPreallocatedSpaces);
-  out.emplace_back(num_maps_ * Map::kSize);
+  out.emplace_back(num_maps_ * Map::GetSize());
   out.back().mark_as_last();
 
   STATIC_ASSERT(LO_SPACE == MAP_SPACE + 1);
@@ -148,7 +148,7 @@ void SerializerAllocator::OutputStatistics() {
   }
 
   STATIC_ASSERT(MAP_SPACE == kNumberOfPreallocatedSpaces);
-  PrintF("%16d", num_maps_ * Map::kSize);
+  PrintF("%16d", num_maps_ * Map::GetSize());
 
   STATIC_ASSERT(LO_SPACE == MAP_SPACE + 1);
   PrintF("%16d\n", large_objects_total_size_);

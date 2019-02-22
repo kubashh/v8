@@ -288,7 +288,8 @@ VisitorId Map::GetVisitorId(Map map) {
     case WASM_TABLE_TYPE:
     case JS_BOUND_FUNCTION_TYPE: {
       const bool has_raw_data_fields =
-          (FLAG_unbox_double_fields && !map->HasFastPointerLayout()) ||
+          (FLAG_unbox_double_fields &&
+           !MapWithLayoutDescriptor::cast(map)->HasFastPointerLayout()) ||
           (COMPRESS_POINTERS_BOOL && JSObject::GetEmbedderFieldCount(map) > 0);
       return has_raw_data_fields ? kVisitJSObject : kVisitJSObjectFast;
     }
@@ -1505,32 +1506,23 @@ Handle<Map> Map::Normalize(Isolate* isolate, Handle<Map> fast_map,
       // applied to the shared map, dependent code and weak cell cache.
       Handle<Map> fresh = Map::CopyNormalized(isolate, fast_map, mode);
 
-      if (new_map->is_prototype_map()) {
-        // For prototype maps, the PrototypeInfo is not copied.
-        DCHECK_EQ(0, memcmp(reinterpret_cast<void*>(fresh->address()),
-                            reinterpret_cast<void*>(new_map->address()),
-                            kTransitionsOrPrototypeInfoOffset));
-        DCHECK_EQ(fresh->raw_transitions(),
-                  MaybeObject::FromObject(Smi::kZero));
-        STATIC_ASSERT(kDescriptorsOffset ==
-                      kTransitionsOrPrototypeInfoOffset + kTaggedSize);
-        DCHECK_EQ(
-            0,
-            memcmp(
-                HeapObject::RawField(*fresh, kDescriptorsOffset).ToVoidPtr(),
-                HeapObject::RawField(*new_map, kDescriptorsOffset).ToVoidPtr(),
-                kDependentCodeOffset - kDescriptorsOffset));
-      } else {
-        DCHECK_EQ(0, memcmp(reinterpret_cast<void*>(fresh->address()),
-                            reinterpret_cast<void*>(new_map->address()),
-                            Map::kDependentCodeOffset));
-      }
       STATIC_ASSERT(Map::kPrototypeValidityCellOffset ==
                     Map::kDependentCodeOffset + kTaggedSize);
+      DCHECK_EQ(0, memcmp(reinterpret_cast<void*>(fresh->address()),
+                          reinterpret_cast<void*>(new_map->address()),
+                          Map::kDependentCodeOffset));
       int offset = Map::kPrototypeValidityCellOffset + kTaggedSize;
+      if (new_map->is_prototype_map()) {
+        // For prototype maps, the PrototypeInfo is not copied.
+        STATIC_ASSERT(Map::kTransitionsOrPrototypeInfoOffset ==
+                      Map::kPrototypeValidityCellOffset + kTaggedSize);
+        offset = kTransitionsOrPrototypeInfoOffset + kTaggedSize;
+        DCHECK_EQ(fresh->raw_transitions(),
+                  MaybeObject::FromObject(Smi::kZero));
+      }
       DCHECK_EQ(0, memcmp(reinterpret_cast<void*>(fresh->address() + offset),
                           reinterpret_cast<void*>(new_map->address() + offset),
-                          Map::kSize - offset));
+                          Map::GetSize() - offset));
     }
 #endif
   } else {
@@ -1851,14 +1843,19 @@ void Map::InstallDescriptors(Isolate* isolate, Handle<Map> parent,
     Handle<LayoutDescriptor> layout_descriptor =
         LayoutDescriptor::AppendIfFastOrUseFull(isolate, parent, details,
                                                 full_layout_descriptor);
-    child->set_layout_descriptor(*layout_descriptor);
+    Handle<MapWithLayoutDescriptor> child_with_layout_descriptor =
+        Handle<MapWithLayoutDescriptor>::cast(child);
+    child_with_layout_descriptor->set_layout_descriptor(*layout_descriptor);
 #ifdef VERIFY_HEAP
     // TODO(ishell): remove these checks from VERIFY_HEAP mode.
     if (FLAG_verify_heap) {
-      CHECK(child->layout_descriptor()->IsConsistentWithMap(*child));
+      CHECK(child_with_layout_descriptor->layout_descriptor()
+                ->IsConsistentWithMap(*child));
     }
 #else
-    SLOW_DCHECK(child->layout_descriptor()->IsConsistentWithMap(*child));
+    SLOW_DCHECK(
+        child_with_layout_descriptor->layout_descriptor()->IsConsistentWithMap(
+            *child));
 #endif
     child->set_visitor_id(Map::GetVisitorId(*child));
   }

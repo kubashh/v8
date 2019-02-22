@@ -202,7 +202,7 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewObject(Node* context,
   // Fall back to runtime if the target differs from the new target's
   // initial map constructor.
   Node* new_target_constructor =
-      LoadObjectField(initial_map, Map::kConstructorOrBackPointerOffset);
+      LoadObjectField(initial_map, Map::kConstructorOrBackpointerOffset);
   GotoIf(WordNotEqual(target, new_target_constructor), call_runtime);
 
   VARIABLE(properties, MachineRepresentation::kTagged);

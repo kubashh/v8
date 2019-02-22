@@ -101,7 +101,7 @@ HEAP_TEST(NoPromotion) {
 AllocationResult HeapTester::AllocateMapForTest(Isolate* isolate) {
   Heap* heap = isolate->heap();
   HeapObject obj;
-  AllocationResult alloc = heap->AllocateRaw(Map::kSize, MAP_SPACE);
+  AllocationResult alloc = heap->AllocateRaw(Map::GetSize(), MAP_SPACE);
   if (!alloc.To(&obj)) return alloc;
   obj->set_map_after_allocation(ReadOnlyRoots(heap).meta_map(),
                                 SKIP_WRITE_BARRIER);

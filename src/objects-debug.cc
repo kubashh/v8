@@ -655,8 +655,9 @@ void Map::MapVerify(Isolate* isolate) {
       TransitionsAccessor(isolate, *this, &no_gc).IsSortedNoDuplicates());
   SLOW_DCHECK(TransitionsAccessor(isolate, *this, &no_gc)
                   .IsConsistentWithBackPointers());
-  SLOW_DCHECK(!FLAG_unbox_double_fields ||
-              layout_descriptor()->IsConsistentWithMap(*this));
+  SLOW_DCHECK(!FLAG_unbox_double_fields || MapWithLayoutDescriptor::cast(*this)
+                                               ->layout_descriptor()
+                                               ->IsConsistentWithMap(*this));
   if (!may_have_interesting_symbols()) {
     CHECK(!has_named_interceptor());
     CHECK(!is_dictionary_map());

@@ -2443,7 +2443,7 @@ void Map::MapPrint(std::ostream& os) {  // NOLINT
      << Brief(instance_descriptors());
   if (FLAG_unbox_double_fields) {
     os << "\n - layout descriptor: ";
-    layout_descriptor()->ShortPrint(os);
+    MapWithLayoutDescriptor::cast(*this)->layout_descriptor()->ShortPrint(os);
   }
 
   Isolate* isolate;

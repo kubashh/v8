@@ -1132,12 +1132,13 @@ base::Optional<ParseResult> MakeNameAndType(
 }
 
 base::Optional<ParseResult> MakeClassField(ParseResultIterator* child_results) {
+  auto align = child_results->NextAs<bool>();
   auto weak = child_results->NextAs<bool>();
   auto name = child_results->NextAs<std::string>();
   auto index = child_results->NextAs<base::Optional<std::string>>();
   auto type = child_results->NextAs<TypeExpression*>();
   return ParseResult{
-      ClassFieldExpression{{std::move(name), type}, index, weak}};
+      ClassFieldExpression{{std::move(name), type}, index, weak, align}};
 }
 
 base::Optional<ParseResult> MakeStructField(
@@ -1337,8 +1338,8 @@ struct TorqueGrammar : Grammar {
       Optional<std::string>(Sequence({Token("["), &identifier, Token("]")}))};
 
   Symbol classField = {
-      Rule({CheckIf(Token("weak")), &identifier, optionalArraySpecifier,
-            Token(":"), &type, Token(";")},
+      Rule({CheckIf(Token("align")), CheckIf(Token("weak")), &identifier,
+            optionalArraySpecifier, Token(":"), &type, Token(";")},
            MakeClassField)};
 
   Symbol structField = {

@@ -568,6 +568,7 @@ void DeclarationVisitor::FinalizeClassFieldsAndMethods(
         ReportError("non-extern classes do not support weak fields");
       }
     }
+    base::Optional<const Field*> index_field = base::nullopt;
     if (field_expression.index) {
       if (seen_indexed_field ||
           (super_class && super_class->HasIndexedField())) {
@@ -575,15 +576,7 @@ void DeclarationVisitor::FinalizeClassFieldsAndMethods(
             "only one indexable field is currently supported per class");
       }
       seen_indexed_field = true;
-      const Field* index_field =
-          &(class_type->LookupField(*field_expression.index));
-      class_type->RegisterField(
-          {field_expression.name_and_type.type->pos,
-           class_type,
-           index_field,
-           {field_expression.name_and_type.name, field_type},
-           class_offset,
-           field_expression.weak});
+      index_field = &(class_type->LookupField(*field_expression.index));
     } else {
       if (seen_indexed_field) {
         ReportError("cannot declare non-indexable field \"",
@@ -591,24 +584,31 @@ void DeclarationVisitor::FinalizeClassFieldsAndMethods(
                     "\" after an indexable field "
                     "declaration");
       }
-      const Field& field = class_type->RegisterField(
-          {field_expression.name_and_type.type->pos,
-           class_type,
-           base::nullopt,
-           {field_expression.name_and_type.name, field_type},
-           class_offset,
-           field_expression.weak});
-      size_t field_size;
-      std::string size_string;
-      std::string machine_type;
-      std::tie(field_size, size_string, machine_type) =
-          field.GetFieldSizeInformation();
-      size_t aligned_offset = class_offset & ~(field_size - 1);
-      if (class_offset != aligned_offset) {
+    }
+    Field field = {field_expression.name_and_type.type->pos,
+                   class_type,
+                   index_field,
+                   {field_expression.name_and_type.name, field_type},
+                   class_offset,
+                   field_expression.weak};
+    size_t field_size;
+    std::string size_string;
+    std::string machine_type;
+    std::tie(field_size, size_string, machine_type) =
+        field.GetFieldSizeInformation();
+    size_t aligned_offset = class_offset & ~(field_size - 1);
+    if (class_offset != aligned_offset) {
+      if (field_expression.align) {
+        class_offset = aligned_offset + field_size;
+        field.offset = class_offset;
+      } else {
         ReportError("field ", field_expression.name_and_type.name,
                     " is not aligned to its size (", aligned_offset, " vs ",
                     class_offset, " for field size ", field_size, ")");
       }
+    }
+    class_type->RegisterField(field);
+    if (!field_expression.index) {
       class_offset += field_size;
     }
   }

@@ -313,7 +313,7 @@ void Serializer::ObjectSerializer::SerializePrologue(AllocationSpace space,
     CHECK(!object_->IsCode());
     back_reference = serializer_->allocator()->AllocateLargeObject(size);
   } else if (space == MAP_SPACE) {
-    DCHECK_EQ(Map::kSize, size);
+    DCHECK_EQ(Map::GetSize(), size);
     back_reference = serializer_->allocator()->AllocateMap();
     sink_->Put(kNewObject + space, "NewMap");
     // This is redundant, but we include it anyways.

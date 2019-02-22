@@ -9,6 +9,7 @@
 #include "src/objects.h"
 #include "src/objects/code.h"
 #include "src/objects/heap-object.h"
+#include "torque-generated/class-definitions-from-dsl.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -165,20 +166,20 @@ typedef std::vector<Handle<Map>> MapHandles;
 // +---------------+---------------------------------------------+
 // | TaggedPointer | [constructor_or_backpointer]                |
 // +---------------+---------------------------------------------+
+// | TaggedPointer | [instance_descriptors]                      |
+// +---------------+---------------------------------------------+
+// | TaggedPointer | [dependent_code]                            |
+// +---------------+---------------------------------------------+
 // | TaggedPointer | If Map is a prototype map:                  |
 // |               |   [prototype_info]                          |
 // |               | Else:                                       |
 // |               |   [raw_transitions]                         |
-// +---------------+---------------------------------------------+
-// | TaggedPointer | [instance_descriptors]                      |
 // +*************************************************************+
 // ! TaggedPointer ! [layout_descriptors]                        !
 // !               ! Field is only present if compile-time flag  !
 // !               ! FLAG_unbox_double_fields is enabled         !
 // !               ! (basically on 64 bit architectures)         !
 // +*************************************************************+
-// | TaggedPointer | [dependent_code]                            |
-// +---------------+---------------------------------------------+
 
 class Map : public HeapObject {
  public:
@@ -582,12 +583,6 @@ class Map : public HeapObject {
   void SetInstanceDescriptors(Isolate* isolate, DescriptorArray descriptors,
                               int number_of_own_descriptors);
 
-  // [layout descriptor]: describes the object layout.
-  DECL_ACCESSORS(layout_descriptor, LayoutDescriptor)
-  // |layout descriptor| accessor which can be used from GC.
-  inline LayoutDescriptor layout_descriptor_gc_safe() const;
-  inline bool HasFastPointerLayout() const;
-
   // |layout descriptor| accessor that is safe to call even when
   // FLAG_unbox_double_fields is disabled (in this case Map does not contain
   // |layout_descriptor| field at all).
@@ -822,34 +817,7 @@ class Map : public HeapObject {
 
   static const int kMaxPreAllocatedPropertyFields = 255;
 
-  // Layout description.
-#define MAP_FIELDS(V)                                                     \
-  /* Raw data fields. */                                                  \
-  V(kInstanceSizeInWordsOffset, kUInt8Size)                               \
-  V(kInObjectPropertiesStartOrConstructorFunctionIndexOffset, kUInt8Size) \
-  V(kUsedOrUnusedInstanceSizeInWordsOffset, kUInt8Size)                   \
-  V(kVisitorIdOffset, kUInt8Size)                                         \
-  V(kInstanceTypeOffset, kUInt16Size)                                     \
-  V(kBitFieldOffset, kUInt8Size)                                          \
-  V(kBitField2Offset, kUInt8Size)                                         \
-  V(kBitField3Offset, kUInt32Size)                                        \
-  V(k64BitArchPaddingOffset,                                              \
-    kSystemPointerSize == kUInt32Size ? 0 : kUInt32Size)                  \
-  /* Pointer fields. */                                                   \
-  V(kPointerFieldsBeginOffset, 0)                                         \
-  V(kPrototypeOffset, kTaggedSize)                                        \
-  V(kConstructorOrBackPointerOffset, kTaggedSize)                         \
-  V(kTransitionsOrPrototypeInfoOffset, kTaggedSize)                       \
-  V(kDescriptorsOffset, kTaggedSize)                                      \
-  V(kLayoutDescriptorOffset, FLAG_unbox_double_fields ? kTaggedSize : 0)  \
-  V(kDependentCodeOffset, kTaggedSize)                                    \
-  V(kPrototypeValidityCellOffset, kTaggedSize)                            \
-  V(kPointerFieldsEndOffset, 0)                                           \
-  /* Total size. */                                                       \
-  V(kSize, 0)
-
   DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize, MAP_FIELDS)
-#undef MAP_FIELDS
 
   STATIC_ASSERT(kInstanceTypeOffset == Internals::kMapInstanceTypeOffset);
 
@@ -888,6 +856,14 @@ class Map : public HeapObject {
   static inline bool CanHaveFastTransitionableElementsKind(
       InstanceType instance_type);
   inline bool CanHaveFastTransitionableElementsKind() const;
+
+  // Use this instead of Map::kSize, because Maps might actually be
+  // MapWithLayoutDescriptor.
+  static inline int GetSize();
+
+  inline bool IsMapWithLayoutDescriptor() const {
+    return FLAG_unbox_double_fields;
+  }
 
  private:
   // This byte encodes either the instance size without the in-object slack or
@@ -991,6 +967,29 @@ class Map : public HeapObject {
 
   OBJECT_CONSTRUCTORS(Map, HeapObject);
 };
+
+class MapWithLayoutDescriptor : public Map {
+ public:
+  // [layout descriptor]: describes the object layout.
+  DECL_ACCESSORS(layout_descriptor, LayoutDescriptor)
+  // |layout descriptor| accessor which can be used from GC.
+  inline LayoutDescriptor layout_descriptor_gc_safe() const;
+  inline bool HasFastPointerLayout() const;
+
+  DECL_CAST(MapWithLayoutDescriptor)
+
+  DEFINE_FIELD_OFFSET_CONSTANTS(Map::kSize, MAP_WITH_LAYOUT_DESCRIPTOR_FIELDS)
+
+  class BodyDescriptor;
+
+  OBJECT_CONSTRUCTORS(MapWithLayoutDescriptor, Map);
+};
+
+/*static*/ int Map::GetSize() {
+  return FLAG_unbox_double_fields
+             ? static_cast<int>(MapWithLayoutDescriptor::kSize)
+             : static_cast<int>(Map::kSize);
+}
 
 // The cache for maps used by normalized (dictionary mode) objects.
 // Such maps do not have property descriptors, so a typical program

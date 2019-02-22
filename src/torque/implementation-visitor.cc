@@ -2589,7 +2589,7 @@ void PossiblyStartTagged(FieldSectionType* section,
       completed_sections->count(FieldSectionType::kStrongSection) == 0 &&
       *section != FieldSectionType::kWeakSection &&
       *section != FieldSectionType::kStrongSection) {
-    *o << "V(kStartOfPointerFieldsOffset, 0) \\\n";
+    *o << "V(kStartOfTaggedFieldsOffset, 0) \\\n";
   }
 }
 
@@ -2662,11 +2662,18 @@ void ImplementationVisitor::GenerateClassDefinitions(std::string& file_name) {
     new_contents_stream << CapifyStringWithUnderscores(i.first)
                         << "_FIELDS(V) \\\n";
     ClassType* type = i.second;
+    const ClassType* super_class = type->GetSuperClass();
+    size_t class_offset = super_class ? super_class->size() : 0;
     std::vector<Field> fields = type->fields();
     FieldSectionType section = FieldSectionType::kNoSection;
     std::set<FieldSectionType> completed_sections;
     for (auto f : fields) {
       CurrentSourcePosition::Scope scope(f.pos);
+      if (f.offset > class_offset) {
+        new_contents_stream
+            << "V(kPaddingBefore" << CamelifyString(f.name_and_type.name)
+            << "Offset, " << (f.offset - class_offset) << ") \\\n";
+      }
       if (f.name_and_type.type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
         if (f.is_weak) {
           ProcessFieldInSection(&section, &completed_sections,
@@ -2689,6 +2696,7 @@ void ImplementationVisitor::GenerateClassDefinitions(std::string& file_name) {
           f.GetFieldSizeInformation();
       new_contents_stream << "V(k" << CamelifyString(f.name_and_type.name)
                           << "Offset, " << size_string << ") \\\n";
+      class_offset = f.offset + field_size;
     }
 
     ProcessFieldInSection(&section, &completed_sections,

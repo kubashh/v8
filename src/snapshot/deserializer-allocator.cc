@@ -36,7 +36,7 @@ Address DeserializerAllocator::AllocateRaw(AllocationSpace space, int size) {
     deserialized_large_objects_.push_back(obj);
     return obj->address();
   } else if (space == MAP_SPACE) {
-    DCHECK_EQ(Map::kSize, size);
+    DCHECK_EQ(Map::GetSize(), size);
     return allocated_maps_[next_map_index_++];
   } else {
     DCHECK_LT(space, kNumberOfPreallocatedSpaces);

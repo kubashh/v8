@@ -65,14 +65,69 @@ type DirectString extends String;
 
 type RootIndex generates 'TNode<Int32T>' constexpr 'RootIndex';
 
-type Map extends HeapObject generates 'TNode<Map>';
-
 extern class FixedArrayBase extends HeapObject { length: Smi; }
 
 extern class FixedArray extends FixedArrayBase { objects[length]: Object; }
 
 extern class FixedDoubleArray extends FixedArrayBase {
   floats[length]: float64;
+}
+
+type ByteArray extends FixedArrayBase generates 'TNode<ByteArray>';
+type WeakFixedArray extends HeapObject generates 'TNode<WeakFixedArray>';
+type Struct extends HeapObject generates 'TNode<Struct>';
+
+type DescriptorArray extends HeapObject
+    generates 'TNode<DescriptorArray>';
+type DependentCode extends WeakFixedArray
+    generates 'TNode<DependentCode>';
+type LayoutDescriptor extends ByteArray
+    generates 'TNode<LayoutDescriptor>';
+type TransitionArray extends WeakFixedArray
+    generates 'TNode<TransitionArray>';
+type PrototypeInfo extends Struct generates 'TNode<PrototypeInfo>';
+type Cell extends HeapObject generates 'TNode<Cell>';
+type TemplateInfo extends Struct generates 'TNode<TemplateInfo>';
+type FunctionTemplateInfo extends TemplateInfo
+    generates 'TNode<FunctionTemplateInfo>';
+
+// InstanceType actually extends uint16, but a bunch of methods in
+// CodeStubAssembler expect a TNode<Int32T>, so keeping it signed for now.
+type InstanceType extends int16 constexpr 'InstanceType';
+
+extern class Map extends HeapObject {
+  instance_size_in_words: uint8;
+  in_object_properties_start_or_constructor_function_index: uint8;
+  used_or_unused_instance_size_in_words: uint8;
+  visitor_id: uint8;
+  instance_type: InstanceType;
+  bit_field: uint8;
+  bit_field2: uint8;
+  bit_field3: uint32;
+
+  align prototype: Object;
+  constructor_or_backpointer: Map | JSFunction | FunctionTemplateInfo;
+  instance_descriptors: DescriptorArray;
+  dependent_code: DependentCode;
+
+  // The prototype is valid if this value equals kPrototypeChainValid, either
+  // stored inline as a Smi or in a separate Cell.
+  prototype_validity_cell: Smi | Cell;
+
+  // This field can store:
+  // - a PrototypeInfo if this Map represents a prototype
+  // - a weak reference to the next Map if there is only one transition
+  // - a TransitionArray if there are multiple transitions
+  // - a Map as a migration target
+  // - a Smi if none of the other cases is stored
+  weak transitions_or_prototype_info: Map | TransitionArray |
+      PrototypeInfo | Smi;
+}
+
+// If FLAG_unbox_double_fields is set at compile-time, then all Map instances
+// will actually be MapWithLayoutDescriptor.
+extern class MapWithLayoutDescriptor extends Map {
+  layout_descriptor: LayoutDescriptor;
 }
 
 // These intrinsics should never be called from Torque code. They're used
@@ -224,7 +279,6 @@ extern class JSTypedArray extends JSArrayBufferView {}
 
 type JSDataView extends JSArrayBufferView generates 'TNode<JSDataView>';
 
-type InstanceType generates 'TNode<Int32T>' constexpr 'InstanceType';
 type ElementsKind generates 'TNode<Int32T>' constexpr 'ElementsKind';
 type LanguageMode extends Smi constexpr 'LanguageMode';
 type ExtractFixedArrayFlags
@@ -1286,8 +1340,6 @@ operator '[]=' macro StoreFixedDoubleArrayDirect(
 operator '[]=' macro StoreFixedArrayDirect(a: FixedArray, i: Smi, v: Object) {
   a.objects[i] = v;
 }
-
-extern operator '.instance_type' macro LoadMapInstanceType(Map): int32;
 
 extern macro Float64SilenceNaN(float64): float64;
 

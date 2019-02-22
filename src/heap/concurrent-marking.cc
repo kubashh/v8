@@ -403,7 +403,7 @@ class ConcurrentMarkingVisitor final
 
   int VisitMap(Map meta_map, Map map) {
     if (!ShouldVisit(map)) return 0;
-    int size = Map::BodyDescriptor::SizeOf(meta_map, map);
+    int size = MapBodyDescriptor::SizeOf(meta_map, map);
     if (map->CanTransition()) {
       // Maps that can transition share their descriptor arrays and require
       // special visiting logic to avoid memory leaks.
@@ -430,7 +430,7 @@ class ConcurrentMarkingVisitor final
       // been marked already, it is fine that one of these fields contains a
       // pointer to it.
     }
-    Map::BodyDescriptor::IterateBody(meta_map, map, size, this);
+    MapBodyDescriptor::IterateBody(meta_map, map, size, this);
     return size;
   }
 
@@ -590,7 +590,8 @@ class ConcurrentMarkingVisitor final
 
   template <typename T>
   int VisitJSObjectSubclassFast(Map map, T object) {
-    DCHECK_IMPLIES(FLAG_unbox_double_fields, map->HasFastPointerLayout());
+    DCHECK_IMPLIES(FLAG_unbox_double_fields,
+                   MapWithLayoutDescriptor::cast(map)->HasFastPointerLayout());
     using TBodyDescriptor = typename T::FastBodyDescriptor;
     return VisitJSObjectSubclass<T, TBodyDescriptor>(map, object);
   }

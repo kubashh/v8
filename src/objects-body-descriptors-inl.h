@@ -54,7 +54,8 @@ bool BodyDescriptorBase::IsValidJSObjectSlotImpl(Map map, HeapObject obj,
   // embedder field area as tagged slots.
   STATIC_ASSERT(kEmbedderDataSlotSize == kTaggedSize);
 #endif
-  if (!FLAG_unbox_double_fields || map->HasFastPointerLayout()) {
+  if (!FLAG_unbox_double_fields ||
+      MapWithLayoutDescriptor::cast(map)->HasFastPointerLayout()) {
     return true;
   } else {
     DCHECK(FLAG_unbox_double_fields);
@@ -99,7 +100,8 @@ void BodyDescriptorBase::IterateJSObjectBodyImpl(Map map, HeapObject obj,
   // embedder field area as tagged slots.
   STATIC_ASSERT(kEmbedderDataSlotSize == kTaggedSize);
 #endif
-  if (!FLAG_unbox_double_fields || map->HasFastPointerLayout()) {
+  if (!FLAG_unbox_double_fields ||
+      MapWithLayoutDescriptor::cast(map)->HasFastPointerLayout()) {
     IteratePointers(obj, start_offset, end_offset, v);
   } else {
     DCHECK(FLAG_unbox_double_fields);
@@ -240,7 +242,7 @@ class JSWeakRef::BodyDescriptor final : public BodyDescriptorBase {
 class SharedFunctionInfo::BodyDescriptor final : public BodyDescriptorBase {
  public:
   static bool IsValidSlot(Map map, HeapObject obj, int offset) {
-    return FixedBodyDescriptor<kStartOfPointerFieldsOffset,
+    return FixedBodyDescriptor<kStartOfTaggedFieldsOffset,
                                kEndOfTaggedFieldsOffset,
                                kAlignedSize>::IsValidSlot(map, obj, offset);
   }
@@ -672,22 +674,53 @@ class WasmInstanceObject::BodyDescriptor final : public BodyDescriptorBase {
 class Map::BodyDescriptor final : public BodyDescriptorBase {
  public:
   static bool IsValidSlot(Map map, HeapObject obj, int offset) {
-    return offset >= Map::kPointerFieldsBeginOffset &&
-           offset < Map::kPointerFieldsEndOffset;
+    return offset >= Map::kStartOfTaggedFieldsOffset &&
+           offset < Map::kEndOfTaggedFieldsOffset;
   }
 
   template <typename ObjectVisitor>
   static inline void IterateBody(Map map, HeapObject obj, int object_size,
                                  ObjectVisitor* v) {
-    IteratePointers(obj, Map::kPointerFieldsBeginOffset,
-                    Map::kTransitionsOrPrototypeInfoOffset, v);
+    IteratePointers(obj, Map::kStartOfStrongFieldsOffset,
+                    Map::kEndOfStrongFieldsOffset, v);
     IterateMaybeWeakPointer(obj, kTransitionsOrPrototypeInfoOffset, v);
-    IteratePointers(obj, Map::kTransitionsOrPrototypeInfoOffset + kTaggedSize,
-                    Map::kPointerFieldsEndOffset, v);
   }
 
-  static inline int SizeOf(Map map, HeapObject obj) { return Map::kSize; }
+  static inline int SizeOf(Map map, HeapObject obj) { return Map::GetSize(); }
 };
+
+class MapWithLayoutDescriptor::BodyDescriptor final
+    : public BodyDescriptorBase {
+ public:
+  static bool IsValidSlot(Map map, HeapObject obj, int offset) {
+    return Map::BodyDescriptor::IsValidSlot(map, obj, offset) ||
+           (offset >= kStartOfTaggedFieldsOffset &&
+            offset < kEndOfTaggedFieldsOffset);
+  }
+
+  template <typename ObjectVisitor>
+  static inline void IterateBody(Map map, HeapObject obj, int object_size,
+                                 ObjectVisitor* v) {
+    Map::BodyDescriptor::IterateBody(map, obj, object_size, v);
+    IteratePointer(obj, kLayoutDescriptorOffset, v);
+  }
+
+  static inline int SizeOf(Map map, HeapObject obj) {
+    return MapWithLayoutDescriptor::kSize;
+  }
+};
+
+template <bool unbox_double_fields>
+struct MapBodyDescriptorSelector {
+  using BodyDescriptor = Map::BodyDescriptor;
+};
+template <>
+struct MapBodyDescriptorSelector<true> {
+  using BodyDescriptor = MapWithLayoutDescriptor::BodyDescriptor;
+};
+
+using MapBodyDescriptor =
+    MapBodyDescriptorSelector<FLAG_unbox_double_fields>::BodyDescriptor;
 
 class DataHandler::BodyDescriptor final : public BodyDescriptorBase {
  public:
@@ -948,7 +981,7 @@ ReturnType BodyDescriptorApply(InstanceType type, T1 p1, T2 p2, T3 p3, T4 p4) {
     case FOREIGN_TYPE:
       return Op::template apply<Foreign::BodyDescriptor>(p1, p2, p3, p4);
     case MAP_TYPE:
-      return Op::template apply<Map::BodyDescriptor>(p1, p2, p3, p4);
+      return Op::template apply<MapBodyDescriptor>(p1, p2, p3, p4);
     case CODE_TYPE:
       return Op::template apply<Code::BodyDescriptor>(p1, p2, p3, p4);
     case CELL_TYPE:
