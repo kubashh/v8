@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddc2e952_29144c83",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 27768,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-02-22T09:39:43Z",
+      "side": 1,
+      "message": "Would it also fix the problem if we changed this Int32Array to an Int64Array instead? IIRC this should then follow the endianess of the underlying hardware. Of course I\u0027d vote to adapt the name of the local variable from \"int32arr\" to just \"array\" or similar.",
+      "range": {
+        "startLine": 27768,
+        "startChar": 10,
+        "endLine": 27768,
+        "endChar": 35
+      },
+      "revId": "68a84bc67986c9ef7736349f0d2be57e683a6e43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
