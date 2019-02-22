@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93705a4c_5b3fc9ef",
+        "filename": "src/wasm/wasm-memory.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1229060
+      },
+      "writtenOn": "2019-02-22T07:44:23Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be: If address space _is_ available, it will try to reserve up to maximum?",
+      "range": {
+        "startLine": 148,
+        "startChar": 38,
+        "endLine": 148,
+        "endChar": 41
+      },
+      "revId": "3550584dca83343699a29775fbeeda60729e001e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
