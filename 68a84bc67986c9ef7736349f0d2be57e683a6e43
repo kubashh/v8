@@ -22,6 +22,23 @@
       "revId": "68a84bc67986c9ef7736349f0d2be57e683a6e43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f55f673b_76760094",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 27768,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-02-22T12:51:07Z",
+      "side": 1,
+      "message": "Yes, I think that could also fix the issue. But There is no implementation of Int64Array, right? I tried change it to Int64Array, then it gives me \"Uncaught ReferenceError: Int64Array is not defined\".",
+      "revId": "68a84bc67986c9ef7736349f0d2be57e683a6e43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
