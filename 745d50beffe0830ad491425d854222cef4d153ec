@@ -16,6 +16,24 @@
       "revId": "745d50beffe0830ad491425d854222cef4d153ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85f830f1_eb13c7f9",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 3
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-22T11:28:54Z",
+      "side": 1,
+      "message": "It\u0027s stopped. It was never a src-side property. I stop it in the infra-side flip CL.",
+      "parentUuid": "5690294f_b002249c",
+      "revId": "745d50beffe0830ad491425d854222cef4d153ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
