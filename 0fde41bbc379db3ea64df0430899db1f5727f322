@@ -22,6 +22,30 @@
       "revId": "0fde41bbc379db3ea64df0430899db1f5727f322",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a490e20_16739678",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 27763,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-02-22T15:19:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfb9e7cd_d935cfe8",
+      "range": {
+        "startLine": 27762,
+        "startChar": 0,
+        "endLine": 27763,
+        "endChar": 22
+      },
+      "revId": "0fde41bbc379db3ea64df0430899db1f5727f322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
