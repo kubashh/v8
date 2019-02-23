@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c54b5af9_6e6c0863",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2019-02-23T02:00:00Z",
+      "side": 1,
+      "message": "This seems not desirable. :P  Seems there are two things we should do here:\n\n1. Provide an OS::AllocateForExecutable() API for this use-case, and update the relevant call-sites; other platforms can just pass straight through to OS::Allocate().\n\n2. Decide whether we can implement this API more efficiently with the current state of the Zircon VMAR and VMO APIs?",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 3
+      },
+      "revId": "ac1abd9a499799711e7b04e96b3bb135eec01675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
