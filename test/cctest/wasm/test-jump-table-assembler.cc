@@ -119,6 +119,13 @@ Address GenerateJumpTableThunk(
   __ bne(&exit);
   __ mov(scratch, Operand(jump_target, RelocInfo::NONE));
   __ Jump(scratch);
+#elif V8_TARGET_ARCH_MIPS64
+  __ li(scratch, Operand(stop_bit_address, RelocInfo::NONE));
+  __ Lw(scratch, MemOperand(scratch, 0));
+  __ bne(scratch, zero_reg, &exit);
+  __ Jump(jump_target, RelocInfo::NONE);
+  __ nop();
+#elif V8_TARGET_ARCH_MIPS
 #else
 #error Unsupported architecture
 #endif
