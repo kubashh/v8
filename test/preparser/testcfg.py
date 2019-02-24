@@ -26,6 +26,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+# for py2/py3 compatibility
+from past.builtins import execfile
+
 import os
 
 from testrunner.local import testsuite
@@ -67,6 +70,8 @@ class TestSuite(testsuite.TestSuite):
         Test(testname, testsource, expectation)
       return MkTest
     execfile(pathname, {"Test": Test, "Template": Template})
+    # with open(pathname) as in_file:
+    #   exec(in_file.read(), {"Test": Test, "Template": Template})
 
   def ListTests(self):
     result = []
