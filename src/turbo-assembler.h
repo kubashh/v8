@@ -88,7 +88,7 @@ class V8_EXPORT_PRIVATE TurboAssemblerBase : public Assembler {
   static bool IsAddressableThroughRootRegister(
       Isolate* isolate, const ExternalReference& reference);
 
- protected:
+ public:
   TurboAssemblerBase(const AssemblerOptions& options,
                      std::unique_ptr<AssemblerBuffer> buffer = {})
       : TurboAssemblerBase(nullptr, options.EnableV8AgnosticCode(),
@@ -103,6 +103,7 @@ class V8_EXPORT_PRIVATE TurboAssemblerBase : public Assembler {
                      CodeObjectRequired create_code_object,
                      std::unique_ptr<AssemblerBuffer> buffer = {});
 
+ protected:
   void RecordCommentForOffHeapTrampoline(int builtin_index);
 
   Isolate* const isolate_ = nullptr;
