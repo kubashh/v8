@@ -1176,6 +1176,8 @@ DEFINE_BOOL(jitless, V8_LITE_BOOL,
 // Optimizations (i.e. jitting) are disabled.
 DEFINE_NEG_IMPLICATION(jitless, opt)
 #endif
+// Field representation tracking is only used by TurboFan.
+DEFINE_NEG_IMPLICATION(jitless, track_field_types)
 // Regexps are interpreted.
 DEFINE_IMPLICATION(jitless, regexp_interpret_all)
 // asm.js validation is disabled since it triggers wasm code generation.
