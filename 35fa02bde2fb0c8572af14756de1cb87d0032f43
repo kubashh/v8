@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0572388c_4fd8c6a1",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 2653,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-25T09:41:52Z",
+      "side": 1,
+      "message": "This was added in https://crrev.com/c/1251042. It was never triggered via buildbucket (https://ci.chromium.org/p/v8/builders/luci.v8.try/v8_linux64_rel_xg), but I see a few builds via led: https://chromium-swarm.appspot.com/tasklist?f\u003dbuilder-tag%3Av8_linux64_rel_ng and they do checkout/build. Michael, should it really run on multibot?",
+      "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
