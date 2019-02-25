@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05054070_7295caee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-25T21:56:08Z",
+      "side": 1,
+      "message": "The roll.py is for rolling changes from the deps/inspector_protocol, so updating it in-place is the correct way to do it.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 56
+      },
+      "revId": "7638ffaacf3fa535074b4e5c3d63e2d50ae2f73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f8e2ecd_c3dc0fd5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-25T21:56:08Z",
+      "side": 1,
+      "message": "Benedikt, looks like you created third_party/binutils directory in https://codereview.chromium.org/896703003. Where is the original source?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "7638ffaacf3fa535074b4e5c3d63e2d50ae2f73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
