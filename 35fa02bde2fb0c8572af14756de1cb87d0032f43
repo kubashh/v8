@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1079e473_42db478d",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-25T12:49:15Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 100,
+        "startChar": 72,
+        "endLine": 100,
+        "endChar": 75
+      },
+      "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0572388c_4fd8c6a1",
         "filename": "cr-buildbucket.cfg",
         "patchSetId": 2
@@ -13,6 +36,24 @@
       "writtenOn": "2019-02-25T09:41:52Z",
       "side": 1,
       "message": "This was added in https://crrev.com/c/1251042. It was never triggered via buildbucket (https://ci.chromium.org/p/v8/builders/luci.v8.try/v8_linux64_rel_xg), but I see a few builds via led: https://chromium-swarm.appspot.com/tasklist?f\u003dbuilder-tag%3Av8_linux64_rel_ng and they do checkout/build. Michael, should it really run on multibot?",
+      "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de848e98_0eafa4e9",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 2653,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-25T12:49:15Z",
+      "side": 1,
+      "message": "Your link points to _ng. The _xg should not check out and multibot is fine.",
+      "parentUuid": "0572388c_4fd8c6a1",
       "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
