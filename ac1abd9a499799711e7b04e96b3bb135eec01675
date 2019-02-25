@@ -22,6 +22,30 @@
       "revId": "ac1abd9a499799711e7b04e96b3bb135eec01675",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22cd2947_f6998327",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1116023
+      },
+      "writtenOn": "2019-02-25T18:39:45Z",
+      "side": 1,
+      "message": "I agree that this is not desirable. Problem is that right now we don\u0027t have any test coverage for V8. If we try fixing it now we can\u0027t be sure it doesn\u0027t break something else. So it\u0027s more important to enable unittests. I suggest:\n1. Land this change to make V8 and blink unittests pass\n2. Enable unittests on V8 or chromium waterfall ( https://crbug.com/934932 ).\n3. Fix this code to call zx_vmo_replace_as_executable() only when necessary ( https://chrbug.com/8899 ).",
+      "parentUuid": "c54b5af9_6e6c0863",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 3
+      },
+      "revId": "ac1abd9a499799711e7b04e96b3bb135eec01675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
