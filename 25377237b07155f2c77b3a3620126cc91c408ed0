@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c53a9d2c_d9e295bd",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-25T09:56:54Z",
+      "side": 1,
+      "message": "Are we guaranteed that the proxy cannot be revoked? Add a comment and check if it can\u0027t happen.",
+      "revId": "25377237b07155f2c77b3a3620126cc91c408ed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad3f491c_769bff62",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-25T09:56:54Z",
+      "side": 1,
+      "message": "Here it seems like it *can* be revoked? Make sure the 2 implementations are in sync and add proper comments / checks / tests.",
+      "revId": "25377237b07155f2c77b3a3620126cc91c408ed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
