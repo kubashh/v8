@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5b31a6c9_68495069",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-25T20:47:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1079e473_42db478d",
+      "range": {
+        "startLine": 100,
+        "startChar": 72,
+        "endLine": 100,
+        "endChar": 75
+      },
+      "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0572388c_4fd8c6a1",
         "filename": "cr-buildbucket.cfg",
         "patchSetId": 2
@@ -54,6 +78,24 @@
       "side": 1,
       "message": "Your link points to _ng. The _xg should not check out and multibot is fine.",
       "parentUuid": "0572388c_4fd8c6a1",
+      "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a906bba9_d0567457",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 2653,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-25T20:47:02Z",
+      "side": 1,
+      "message": "Ack. Can you please add a comment explaining the purpose of the bot after this CL lands?",
+      "parentUuid": "de848e98_0eafa4e9",
       "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
