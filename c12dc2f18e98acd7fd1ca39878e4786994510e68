@@ -16,6 +16,24 @@
       "revId": "c12dc2f18e98acd7fd1ca39878e4786994510e68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95953208_c16a4ff1",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-02-25T10:29:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cb359c4_742947cb",
+      "revId": "c12dc2f18e98acd7fd1ca39878e4786994510e68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
