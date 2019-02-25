@@ -45,6 +45,30 @@
       "revId": "7638ffaacf3fa535074b4e5c3d63e2d50ae2f73e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b08def1d_ddba4d9c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-25T22:03:06Z",
+      "side": 1,
+      "message": "Sorry, I have been blind. It\u0027s right in the commit description:\n\n  Mostly copy and paste from Chromium with customization for\n  V8 where necessary.\n\nVadim, it would be great if you also created a separate CL updating binutils/download.py in Chromium source code [1] to make sure these files stay in sync unless they haven\u0027t diverged already.\n\nThe detect_v8_host_arch.py was actually moved from gypfiles [2], so again I think it\u0027s fine to update in-place.\n\n[1]: https://chromium.googlesource.com/chromium/src/+/refs/heads/master/third_party/binutils/download.py\n[2]: https://chromium-review.googlesource.com/c/v8/v8/+/892865/",
+      "parentUuid": "1f8e2ecd_c3dc0fd5",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "7638ffaacf3fa535074b4e5c3d63e2d50ae2f73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
