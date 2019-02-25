@@ -197,8 +197,8 @@ AllocationResult Heap::AllocateEmptyFixedTypedArray(
   FixedTypedArrayBase elements = FixedTypedArrayBase::cast(object);
   elements->set_base_pointer(elements, SKIP_WRITE_BARRIER);
   elements->set_external_pointer(
-      reinterpret_cast<void*>(
-          ExternalReference::fixed_typed_array_base_data_offset().address()),
+      reinterpret_cast<void*>(FixedTypedArrayBase::kDataOffset -
+                              kHeapObjectTag),
       SKIP_WRITE_BARRIER);
   elements->set_length(0);
   return elements;
