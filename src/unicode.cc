@@ -1596,7 +1596,6 @@ int ToUppercase::Convert(uchar c,
     default: return 0;
   }
 }
-#endif  // !V8_INTL_SUPPORT
 
 static const MultiCharacterSpecialCase<1> kEcma262CanonicalizeMultiStrings0[1] = {  // NOLINT
   {{kSentinel}} }; // NOLINT
@@ -1877,6 +1876,7 @@ int Ecma262Canonicalize::Convert(uchar c,
     default: return 0;
   }
 }
+#endif  // !V8_INTL_SUPPORT
 
 static const MultiCharacterSpecialCase<4>
     kEcma262UnCanonicalizeMultiStrings0[507] = {  // NOLINT
@@ -3104,66 +3104,47 @@ int UnicodeData::GetByteCount() {
          + kWhiteSpaceTable0Size * sizeof(int32_t)      // NOLINT
          + kWhiteSpaceTable1Size * sizeof(int32_t)      // NOLINT
          + kWhiteSpaceTable7Size * sizeof(int32_t)      // NOLINT
-         +
-         kToLowercaseMultiStrings0Size *
-             sizeof(MultiCharacterSpecialCase<2>)  // NOLINT
-         +
-         kToLowercaseMultiStrings1Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kToLowercaseMultiStrings5Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kToLowercaseMultiStrings7Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kToUppercaseMultiStrings0Size *
-             sizeof(MultiCharacterSpecialCase<3>)  // NOLINT
-         +
-         kToUppercaseMultiStrings1Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kToUppercaseMultiStrings5Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kToUppercaseMultiStrings7Size *
-             sizeof(MultiCharacterSpecialCase<3>)  // NOLINT
+         + kToLowercaseMultiStrings0Size *
+               sizeof(MultiCharacterSpecialCase<2>)  // NOLINT
+         + kToLowercaseMultiStrings1Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kToLowercaseMultiStrings5Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kToLowercaseMultiStrings7Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kToUppercaseMultiStrings0Size *
+               sizeof(MultiCharacterSpecialCase<3>)  // NOLINT
+         + kToUppercaseMultiStrings1Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kToUppercaseMultiStrings5Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kToUppercaseMultiStrings7Size *
+               sizeof(MultiCharacterSpecialCase<3>)  // NOLINT
+         + kEcma262CanonicalizeMultiStrings0Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kEcma262CanonicalizeMultiStrings1Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kEcma262CanonicalizeMultiStrings5Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kEcma262CanonicalizeMultiStrings7Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
 #else
   return
 #endif  // !V8_INTL_SUPPORT
-         +
-         kEcma262CanonicalizeMultiStrings0Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kEcma262CanonicalizeMultiStrings1Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kEcma262CanonicalizeMultiStrings5Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kEcma262CanonicalizeMultiStrings7Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kEcma262UnCanonicalizeMultiStrings0Size *
-             sizeof(MultiCharacterSpecialCase<4>)  // NOLINT
-         +
-         kEcma262UnCanonicalizeMultiStrings1Size *
-             sizeof(MultiCharacterSpecialCase<2>)  // NOLINT
-         +
-         kEcma262UnCanonicalizeMultiStrings5Size *
-             sizeof(MultiCharacterSpecialCase<2>)  // NOLINT
-         +
-         kEcma262UnCanonicalizeMultiStrings7Size *
-             sizeof(MultiCharacterSpecialCase<2>)  // NOLINT
-         +
-         kCanonicalizationRangeMultiStrings0Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kCanonicalizationRangeMultiStrings1Size *
-             sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
-         +
-         kCanonicalizationRangeMultiStrings7Size *
-             sizeof(MultiCharacterSpecialCase<1>);  // NOLINT
+         + kEcma262UnCanonicalizeMultiStrings0Size *
+               sizeof(MultiCharacterSpecialCase<4>)  // NOLINT
+         + kEcma262UnCanonicalizeMultiStrings1Size *
+               sizeof(MultiCharacterSpecialCase<2>)  // NOLINT
+         + kEcma262UnCanonicalizeMultiStrings5Size *
+               sizeof(MultiCharacterSpecialCase<2>)  // NOLINT
+         + kEcma262UnCanonicalizeMultiStrings7Size *
+               sizeof(MultiCharacterSpecialCase<2>)  // NOLINT
+         + kCanonicalizationRangeMultiStrings0Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kCanonicalizationRangeMultiStrings1Size *
+               sizeof(MultiCharacterSpecialCase<1>)  // NOLINT
+         + kCanonicalizationRangeMultiStrings7Size *
+               sizeof(MultiCharacterSpecialCase<1>);  // NOLINT
 }
 
 }  // namespace unibrow
