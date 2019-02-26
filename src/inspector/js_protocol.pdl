@@ -4,7 +4,7 @@
 
 version
   major 1
-  minor 3
+  minor 4
 
 # This domain is deprecated - use Runtime or Log instead.
 deprecated domain Console
@@ -1019,6 +1019,14 @@ domain Runtime
       # Conventional property name.
       string name
       # The value associated with the property.
+      optional RemoteObject value
+
+  # Object private field descriptor.
+  type PrivateFieldDescriptor extends object
+    properties
+      # Private field name.
+      string name
+      # The value associated with the private field.
       optional RemoteObject value
 
   # Represents function call argument. Either remote object id `objectId`, primitive `value`,
