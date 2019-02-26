@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ea552fc4_59386d5b",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-02-26T05:02:36Z",
+      "side": 1,
+      "message": "Added a comment here.\nThat can be revoked, and that case will be handled by the next round of the loop as the default case of the Switch above.",
+      "parentUuid": "c53a9d2c_d9e295bd",
+      "revId": "25377237b07155f2c77b3a3620126cc91c408ed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad3f491c_769bff62",
         "filename": "src/objects/js-objects.cc",
         "patchSetId": 23
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-25T09:56:54Z",
       "side": 1,
       "message": "Here it seems like it *can* be revoked? Make sure the 2 implementations are in sync and add proper comments / checks / tests.",
+      "revId": "25377237b07155f2c77b3a3620126cc91c408ed0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddc02f74_521f232a",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 23
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1211094
+      },
+      "writtenOn": "2019-02-26T05:02:36Z",
+      "side": 1,
+      "message": "Added a test case for this.\nYes, it can be revoked, and they should behave similar.",
+      "parentUuid": "ad3f491c_769bff62",
       "revId": "25377237b07155f2c77b3a3620126cc91c408ed0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
