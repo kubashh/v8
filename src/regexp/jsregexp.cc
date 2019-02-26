@@ -1530,7 +1530,26 @@ void ChoiceNode::GenerateGuard(RegExpMacroAssembler* macro_assembler,
 // that cannot occur in the source string because it is Latin1.
 static int GetCaseIndependentLetters(Isolate* isolate, uc16 character,
                                      bool one_byte_subject,
-                                     unibrow::uchar* letters) {
+                                     unibrow::uchar* letters,
+                                     int letter_length) {
+#ifdef V8_INTL_SUPPORT
+  icu::UnicodeSet set;
+  set.add(character);
+  set = set.closeOver(USET_CASE_INSENSITIVE);
+  int32_t range_count = set.getRangeCount();
+  int items = 0;
+  for (int32_t i = 0; i < range_count; i++) {
+    UChar32 start = set.getRangeStart(i);
+    UChar32 end = set.getRangeEnd(i);
+    CHECK(end - start + items <= letter_length);
+    while (start <= end) {
+      if (one_byte_subject && start > String::kMaxOneByteCharCode) break;
+      letters[items++] = (unibrow::uchar)(start);
+      start++;
+    }
+  }
+  return items;
+#else
   int length =
       isolate->jsregexp_uncanonicalize()->get(character, '\0', letters);
   // Unibrow returns 0 or 1 for characters where case independence is
@@ -1551,8 +1570,8 @@ static int GetCaseIndependentLetters(Isolate* isolate, uc16 character,
   }
 
   return length;
+#endif  // V8_INTL_SUPPORT
 }
-
 
 static inline bool EmitSimpleCharacter(Isolate* isolate,
                                        RegExpCompiler* compiler,
@@ -1587,7 +1606,8 @@ static inline bool EmitAtomNonLetter(Isolate* isolate,
   RegExpMacroAssembler* macro_assembler = compiler->macro_assembler();
   bool one_byte = compiler->one_byte();
   unibrow::uchar chars[unibrow::Ecma262UnCanonicalize::kMaxWidth];
-  int length = GetCaseIndependentLetters(isolate, c, one_byte, chars);
+  int length = GetCaseIndependentLetters(
+      isolate, c, one_byte, chars, unibrow::Ecma262UnCanonicalize::kMaxWidth);
   if (length < 1) {
     // This can't match.  Must be an one-byte subject and a non-one-byte
     // character.  We do not need to do anything since the one-byte pass
@@ -1668,7 +1688,8 @@ static inline bool EmitAtomLetter(Isolate* isolate,
   RegExpMacroAssembler* macro_assembler = compiler->macro_assembler();
   bool one_byte = compiler->one_byte();
   unibrow::uchar chars[unibrow::Ecma262UnCanonicalize::kMaxWidth];
-  int length = GetCaseIndependentLetters(isolate, c, one_byte, chars);
+  int length = GetCaseIndependentLetters(
+      isolate, c, one_byte, chars, unibrow::Ecma262UnCanonicalize::kMaxWidth);
   if (length <= 1) return false;
   // We may not need to check against the end of the input string
   // if this character lies before a character that matched.
@@ -2473,8 +2494,9 @@ void TextNode::GetQuickCheckDetails(QuickCheckDetails* details,
         uc16 c = quarks[i];
         if (elm.atom()->ignore_case()) {
           unibrow::uchar chars[unibrow::Ecma262UnCanonicalize::kMaxWidth];
-          int length = GetCaseIndependentLetters(isolate, c,
-                                                 compiler->one_byte(), chars);
+          int length = GetCaseIndependentLetters(
+              isolate, c, compiler->one_byte(), chars,
+              unibrow::Ecma262UnCanonicalize::kMaxWidth);
           if (length == 0) {
             // This can happen because all case variants are non-Latin1, but we
             // know the input is Latin1.
@@ -5101,6 +5123,17 @@ int CompareFirstChar(RegExpTree* const* a, RegExpTree* const* b) {
   return 0;
 }
 
+#ifdef V8_INTL_SUPPORT
+
+// Case Insensitve comparesion
+int CompareFirstCharCaseInsensitve(RegExpTree* const* a, RegExpTree* const* b) {
+  RegExpAtom* atom1 = (*a)->AsAtom();
+  RegExpAtom* atom2 = (*b)->AsAtom();
+  icu::UnicodeString character1(atom1->data().at(0));
+  return character1.caseCompare(atom2->data().at(0), U_FOLD_CASE_DEFAULT);
+}
+
+#else
 
 static unibrow::uchar Canonical(
     unibrow::Mapping<unibrow::Ecma262Canonicalize>* canonicalize,
@@ -5112,7 +5145,6 @@ static unibrow::uchar Canonical(
   if (length == 1) canonical = chars[0];
   return canonical;
 }
-
 
 int CompareFirstCharCaseIndependent(
     unibrow::Mapping<unibrow::Ecma262Canonicalize>* canonicalize,
@@ -5128,7 +5160,7 @@ int CompareFirstCharCaseIndependent(
   }
   return static_cast<int>(character1) - static_cast<int>(character2);
 }
-
+#endif  // V8_INTL_SUPPORT
 
 // We can stable sort runs of atoms, since the order does not matter if they
 // start with different characters.
@@ -5164,6 +5196,10 @@ bool RegExpDisjunction::SortConsecutiveAtoms(RegExpCompiler* compiler) {
     DCHECK_LE(i, alternatives->length());
     DCHECK_LE(first_atom, i);
     if (IgnoreCase(flags)) {
+#ifdef V8_INTL_SUPPORT
+      alternatives->StableSort(CompareFirstCharCaseInsensitve, first_atom,
+                               i - first_atom);
+#else
       unibrow::Mapping<unibrow::Ecma262Canonicalize>* canonicalize =
           compiler->isolate()->regexp_macro_assembler_canonicalize();
       auto compare_closure =
@@ -5171,6 +5207,7 @@ bool RegExpDisjunction::SortConsecutiveAtoms(RegExpCompiler* compiler) {
             return CompareFirstCharCaseIndependent(canonicalize, a, b);
           };
       alternatives->StableSort(compare_closure, first_atom, i - first_atom);
+#endif  // V8_INTL_SUPPORT
     } else {
       alternatives->StableSort(CompareFirstChar, first_atom, i - first_atom);
     }
@@ -5197,7 +5234,11 @@ void RegExpDisjunction::RationalizeConsecutiveAtoms(RegExpCompiler* compiler) {
     }
     RegExpAtom* const atom = alternative->AsAtom();
     JSRegExp::Flags flags = atom->flags();
+#ifdef V8_INTL_SUPPORT
+    icu::UnicodeString common_prefix(atom->data().at(0));
+#else
     unibrow::uchar common_prefix = atom->data().at(0);
+#endif  // V8_INTL_SUPPORT
     int first_with_prefix = i;
     int prefix_length = atom->length();
     i++;
@@ -5206,6 +5247,14 @@ void RegExpDisjunction::RationalizeConsecutiveAtoms(RegExpCompiler* compiler) {
       if (!alternative->IsAtom()) break;
       RegExpAtom* const atom = alternative->AsAtom();
       if (atom->flags() != flags) break;
+#ifdef V8_INTL_SUPPORT
+      icu::UnicodeString new_prefix(atom->data().at(0));
+      if (new_prefix != common_prefix) {
+        if (!IgnoreCase(flags)) break;
+        if (common_prefix.caseCompare(new_prefix, U_FOLD_CASE_DEFAULT) != 0)
+          break;
+      }
+#else
       unibrow::uchar new_prefix = atom->data().at(0);
       if (new_prefix != common_prefix) {
         if (!IgnoreCase(flags)) break;
@@ -5215,6 +5264,7 @@ void RegExpDisjunction::RationalizeConsecutiveAtoms(RegExpCompiler* compiler) {
         common_prefix = Canonical(canonicalize, common_prefix);
         if (new_prefix != common_prefix) break;
       }
+#endif  // V8_INTL_SUPPORT
       prefix_length = Min(prefix_length, atom->length());
       i++;
     }
@@ -5878,6 +5928,8 @@ Vector<const int> CharacterRange::GetWordBounds() {
 void CharacterRange::AddCaseEquivalents(Isolate* isolate, Zone* zone,
                                         ZoneList<CharacterRange>* ranges,
                                         bool is_one_byte) {
+  icu::UnicodeSet already_added;
+  icu::UnicodeSet others;
   CharacterRange::Canonicalize(ranges);
   int range_count = ranges->length();
   for (int i = 0; i < range_count; i++) {
@@ -5891,62 +5943,40 @@ void CharacterRange::AddCaseEquivalents(Isolate* isolate, Zone* zone,
       if (bottom > String::kMaxOneByteCharCode) continue;
       if (top > String::kMaxOneByteCharCode) top = String::kMaxOneByteCharCode;
     }
-    unibrow::uchar chars[unibrow::Ecma262UnCanonicalize::kMaxWidth];
-    if (top == bottom) {
-      // If this is a singleton we just expand the one character.
-      int length = isolate->jsregexp_uncanonicalize()->get(bottom, '\0', chars);
-      for (int i = 0; i < length; i++) {
-        uc32 chr = chars[i];
-        if (chr != bottom) {
-          ranges->Add(CharacterRange::Singleton(chars[i]), zone);
-        }
-      }
-    } else {
-      // If this is a range we expand the characters block by block, expanding
-      // contiguous subranges (blocks) one at a time.  The approach is as
-      // follows.  For a given start character we look up the remainder of the
-      // block that contains it (represented by the end point), for instance we
-      // find 'z' if the character is 'c'.  A block is characterized by the
-      // property that all characters uncanonicalize in the same way, except
-      // that each entry in the result is incremented by the distance from the
-      // first element.  So a-z is a block because 'a' uncanonicalizes to ['a',
-      // 'A'] and the k'th letter uncanonicalizes to ['a' + k, 'A' + k].  Once
-      // we've found the end point we look up its uncanonicalization and
-      // produce a range for each element.  For instance for [c-f] we look up
-      // ['z', 'Z'] and produce [c-f] and [C-F].  We then only add a range if
-      // it is not already contained in the input, so [c-f] will be skipped but
-      // [C-F] will be added.  If this range is not completely contained in a
-      // block we do this for all the blocks covered by the range (handling
-      // characters that is not in a block as a "singleton block").
-      unibrow::uchar equivalents[unibrow::Ecma262UnCanonicalize::kMaxWidth];
-      int pos = bottom;
-      while (pos <= top) {
-        int length =
-            isolate->jsregexp_canonrange()->get(pos, '\0', equivalents);
-        uc32 block_end;
-        if (length == 0) {
-          block_end = pos;
-        } else {
-          DCHECK_EQ(1, length);
-          block_end = equivalents[0];
-        }
-        int end = (block_end > top) ? top : block_end;
-        length = isolate->jsregexp_uncanonicalize()->get(block_end, '\0',
-                                                         equivalents);
-        for (int i = 0; i < length; i++) {
-          uc32 c = equivalents[i];
-          uc32 range_from = c - (block_end - pos);
-          uc32 range_to = c - (block_end - end);
-          if (!(bottom <= range_from && range_to <= top)) {
-            ranges->Add(CharacterRange::Range(range_from, range_to), zone);
+    printf("%x - %x\n", bottom, top);
+    already_added.add(bottom, top);
+    while (bottom <= top) {
+      icu::UnicodeString upper(bottom);
+      upper.toUpper();
+      icu::UnicodeSet expanded(bottom, bottom);
+      expanded.closeOver(USET_CASE_INSENSITIVE);
+      for (int32_t i = 0; i < expanded.getRangeCount(); i++) {
+        UChar32 start = expanded.getRangeStart(i);
+        UChar32 end = expanded.getRangeEnd(i);
+        while (start <= end) {
+          icu::UnicodeString upper2(start);
+          upper2.toUpper();
+          // Only add if the upper case are the same.
+          if (upper[0] == upper2[0]) {
+            others.add(start);
           }
+          start++;
         }
-        pos = end + 1;
       }
+      bottom++;
+    }
+  }
+  others.removeAll(already_added);
+  for (int32_t i = 0; i < others.getRangeCount(); i++) {
+    UChar32 start = others.getRangeStart(i);
+    UChar32 end = others.getRangeEnd(i);
+    if (start == end) {
+      ranges->Add(CharacterRange::Singleton(start), zone);
+    } else {
+      ranges->Add(CharacterRange::Range(start, end), zone);
     }
   }
 }
-
 
 bool CharacterRange::IsCanonical(ZoneList<CharacterRange>* ranges) {
   DCHECK_NOT_NULL(ranges);
@@ -6428,7 +6458,7 @@ void TextNode::FillInBMInfo(Isolate* isolate, int initial_offset, int budget,
           unibrow::uchar chars[unibrow::Ecma262UnCanonicalize::kMaxWidth];
           int length = GetCaseIndependentLetters(
               isolate, character, bm->max_char() == String::kMaxOneByteCharCode,
-              chars);
+              chars, unibrow::Ecma262UnCanonicalize::kMaxWidth);
           for (int j = 0; j < length; j++) {
             bm->Set(offset, chars[j]);
           }

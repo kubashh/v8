@@ -227,7 +227,6 @@ struct ToUppercase {
                      uchar* result,
                      bool* allow_caching_ptr);
 };
-#endif
 struct Ecma262Canonicalize {
   static const int kMaxWidth = 1;
   static int Convert(uchar c,
@@ -235,6 +234,7 @@ struct Ecma262Canonicalize {
                      uchar* result,
                      bool* allow_caching_ptr);
 };
+#endif
 struct Ecma262UnCanonicalize {
   static const int kMaxWidth = 4;
   static int Convert(uchar c,
