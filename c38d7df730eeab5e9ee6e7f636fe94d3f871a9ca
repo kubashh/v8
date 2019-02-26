@@ -72,6 +72,41 @@
     },
     {
       "key": {
+        "uuid": "2c1e37ca_6e1900c9",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-26T19:01:58Z",
+      "side": 1,
+      "message": "I see. Let\u0027s mark this one as \"experimental type\" and go ahead.",
+      "parentUuid": "d2c7cdd4_5ceaf159",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50ef8e49_ac0aa24c",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-26T19:01:58Z",
+      "side": 1,
+      "message": "You should add \"experimental optional array of PrivateFieldDescriptor privateFields\" here. Also, is there a notion of \"own\" private fields, or are they all \"own\" (as in not from prototype)? Trying to understand how \"ownProperties\" flag above should interact with them.",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2745a8b_ec996d70",
         "filename": "src/inspector/value-mirror.h",
         "patchSetId": 1
