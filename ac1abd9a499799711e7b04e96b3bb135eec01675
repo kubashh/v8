@@ -46,6 +46,30 @@
       "revId": "ac1abd9a499799711e7b04e96b3bb135eec01675",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2ddce8f_62301360",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2019-02-26T19:32:20Z",
+      "side": 1,
+      "message": "ACK, assuming that this is no worse than the status-quo that we were previously assuming (i.e. that the VMO can be made executable when we want).",
+      "parentUuid": "22cd2947_f6998327",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 3
+      },
+      "revId": "ac1abd9a499799711e7b04e96b3bb135eec01675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
