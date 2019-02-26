@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebc6bbab_286cbf12",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-02-26T01:03:11Z",
+      "side": 1,
+      "message": "I don\u0027t know if this correct",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
