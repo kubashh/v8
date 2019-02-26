@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "d2c7cdd4_5ceaf159",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-02-26T18:25:51Z",
+      "side": 1,
+      "message": "It\u0027s neither. Private fields are not properties -- they don\u0027t have property descriptors. Private fields are not internal fields -- internal fields are v8/spec/embedder defined fields, but private fields are user space defined and can have additional metadata (see this table -- https://tc39.github.io/proposal-private-methods/#sec-private-names). They belong in a separate category.",
+      "parentUuid": "212f8d11_d355cabb",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2745a8b_ec996d70",
         "filename": "src/inspector/value-mirror.h",
         "patchSetId": 1
