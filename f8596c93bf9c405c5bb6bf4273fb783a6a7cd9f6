@@ -50,6 +50,23 @@
       "revId": "f8596c93bf9c405c5bb6bf4273fb783a6a7cd9f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d4716a2_2f77a815",
+        "filename": "src/turbo-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-26T14:48:58Z",
+      "side": 1,
+      "message": "This \"public\" is redundant. Please move the constructors up to be the first elements in the existing public section, to match the standard order of declarations we use elsewhere.\nAlso, please add a short comment before the constructors saying why they need to be public.",
+      "revId": "f8596c93bf9c405c5bb6bf4273fb783a6a7cd9f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
