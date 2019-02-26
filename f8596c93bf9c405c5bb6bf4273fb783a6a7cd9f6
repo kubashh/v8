@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "954a269f_88b78b91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-26T13:28:04Z",
+      "side": 1,
+      "message": "classes",
+      "revId": "f8596c93bf9c405c5bb6bf4273fb783a6a7cd9f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65b0c992_34507bf4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-26T13:28:04Z",
+      "side": 1,
+      "message": "Assembler here and below x3.\n\n\u0027inherited\u0027",
+      "revId": "f8596c93bf9c405c5bb6bf4273fb783a6a7cd9f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "969e6b42_c0c8da5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-26T13:28:04Z",
+      "side": 1,
+      "message": "Bug: v8:8902",
+      "revId": "f8596c93bf9c405c5bb6bf4273fb783a6a7cd9f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
