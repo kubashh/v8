@@ -975,10 +975,12 @@ class Isolate final : private HiddenFactory {
 
   Builtins* builtins() { return &builtins_; }
 
+#ifndef V8_INTL_SUPPORT
   unibrow::Mapping<unibrow::Ecma262Canonicalize>*
       regexp_macro_assembler_canonicalize() {
     return &regexp_macro_assembler_canonicalize_;
   }
+#endif  // !V8_INTL_SUPPORT
 
   RegExpStack* regexp_stack() { return regexp_stack_; }
 
@@ -988,11 +990,6 @@ class Isolate final : private HiddenFactory {
   }
 
   std::vector<int>* regexp_indices() { return &regexp_indices_; }
-
-  unibrow::Mapping<unibrow::Ecma262Canonicalize>*
-      interp_canonicalize_mapping() {
-    return &regexp_macro_assembler_canonicalize_;
-  }
 
   Debug* debug() { return debug_; }
 
@@ -1633,8 +1630,10 @@ class Isolate final : private HiddenFactory {
   SetupIsolateDelegate* setup_delegate_ = nullptr;
   unibrow::Mapping<unibrow::Ecma262UnCanonicalize> jsregexp_uncanonicalize_;
   unibrow::Mapping<unibrow::CanonicalizationRange> jsregexp_canonrange_;
+#ifndef V8_INTL_SUPPORT
   unibrow::Mapping<unibrow::Ecma262Canonicalize>
       regexp_macro_assembler_canonicalize_;
+#endif  // !V8_INTL_SUPPORT
   RegExpStack* regexp_stack_ = nullptr;
   std::vector<int> regexp_indices_;
   DateCache* date_cache_ = nullptr;
