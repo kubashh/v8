@@ -16,6 +16,58 @@
       "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e861879_8a8122d8",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-26T17:59:07Z",
+      "side": 1,
+      "message": "There is no need to touch the version.",
+      "parentUuid": "ebc6bbab_286cbf12",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "212f8d11_d355cabb",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-26T17:59:07Z",
+      "side": 1,
+      "message": "Is private field more like a property or an internal field? I feel like we should report private fields as \"properties\", using PropertyDescriptor type above and adding \"experimental optional boolean isPrivateField\". WDYT?",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2745a8b_ec996d70",
+        "filename": "src/inspector/value-mirror.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-02-26T17:59:07Z",
+      "side": 1,
+      "message": "If we consider private fields as properties, we should move all this into getProperties.",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
