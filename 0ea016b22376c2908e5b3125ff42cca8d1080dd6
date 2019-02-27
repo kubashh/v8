@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "759581c0_fa8b1b59",
+        "filename": "src/parsing/scanner-inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-27T12:02:49Z",
+      "side": 1,
+      "message": "this probably should be renamed to kIdentifierNeedsSlowPath or similar",
+      "range": {
+        "startLine": 194,
+        "startChar": 2,
+        "endLine": 194,
+        "endChar": 16
+      },
+      "revId": "0ea016b22376c2908e5b3125ff42cca8d1080dd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e16ae3c5_bea4a404",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-27T12:02:49Z",
+      "side": 1,
+      "message": "nit: do while?",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 9
+      },
+      "revId": "0ea016b22376c2908e5b3125ff42cca8d1080dd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
