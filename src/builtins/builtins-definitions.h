@@ -208,7 +208,7 @@ namespace internal {
   TFC(ToLength, TypeConversion, 1)                                             \
   TFC(Typeof, Typeof, 1)                                                       \
   TFC(GetSuperConstructor, Typeof, 1)                                          \
-  TFC(BigIntToI64, BigIntToI64, 1)                                             \
+  TFC(BigIntToI64, BigIntToI64, 666)                                           \
   TFC(I64ToBigInt, BigIntToWasmI64, 1)                                         \
                                                                                \
   /* Type conversions continuations */                                         \
@@ -1212,7 +1212,7 @@ namespace internal {
   TFS(ThrowWasmTrapElemSegmentDropped)                                         \
   TFS(ThrowWasmTrapTableOutOfBounds)                                           \
   TFC(BigIntToWasmI64, BigIntToWasmI64, 1)                                     \
-  TFC(WasmBigIntToI64, BigIntToI64, 1)                                         \
+  TFC(WasmBigIntToI64, BigIntToI64, 666)                                       \
                                                                                \
   /* WeakMap */                                                                \
   TFJ(WeakMapConstructor, SharedFunctionInfo::kDontAdaptArgumentsSentinel)     \
