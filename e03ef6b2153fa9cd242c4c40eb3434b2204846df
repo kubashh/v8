@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85423c17_07ef282f",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2654,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-27T14:56:25Z",
+      "side": 1,
+      "message": "For consistency with surrounding code, please use the same phrasing as everywhere else.",
+      "revId": "e03ef6b2153fa9cd242c4c40eb3434b2204846df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d025d4c_2ef3790a",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2662,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-27T14:56:25Z",
+      "side": 1,
+      "message": "Please generally pay more attention to correct formatting of comments. This was mentioned several times already.",
+      "revId": "e03ef6b2153fa9cd242c4c40eb3434b2204846df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1512806_d2c7a906",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2663,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-27T14:56:25Z",
+      "side": 1,
+      "message": "To reduce size of generated code, please make this a fallthrough.",
+      "revId": "e03ef6b2153fa9cd242c4c40eb3434b2204846df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
