@@ -841,6 +841,7 @@ class V8_EXPORT_PRIVATE CodeAssembler {
   void ReturnIf(Node* condition, Node* value);
 
   void ReturnRaw(Node* value);
+  void ReturnPair(Node* low, Node* high);
 
   void DebugAbort(Node* message);
   void DebugBreak();
