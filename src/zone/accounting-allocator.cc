@@ -11,6 +11,8 @@
 #endif
 
 #include "src/allocation.h"
+#include "src/asan.h"
+#include "src/msan.h"
 
 namespace v8 {
 namespace internal {
@@ -137,24 +139,26 @@ Segment* AccountingAllocator::GetSegmentFromPool(size_t requested_size) {
   power -= kMinSegmentSizePower;
 
   Segment* segment;
+
   {
     base::MutexGuard lock_guard(&unused_segments_mutex_);
 
     segment = unused_segments_heads_[power];
+    if (segment == nullptr) return nullptr;
 
-    if (segment != nullptr) {
-      unused_segments_heads_[power] = segment->next();
-      segment->set_next(nullptr);
+    unused_segments_heads_[power] = segment->next();
+    segment->set_next(nullptr);
 
-      unused_segments_sizes_[power]--;
-      base::Relaxed_AtomicIncrement(
-          &current_pool_size_, -static_cast<base::AtomicWord>(segment->size()));
-    }
+    unused_segments_sizes_[power]--;
   }
 
-  if (segment) {
-    DCHECK_GE(segment->size(), requested_size);
-  }
+  base::Relaxed_AtomicIncrement(
+      &current_pool_size_, -static_cast<base::AtomicWord>(segment->size()));
+
+  ASAN_UNPOISON_MEMORY_REGION(reinterpret_cast<void*>(segment->start()),
+                              segment->size());
+  MSAN_ALLOCATED_UNINITIALIZED_MEMORY(segment->start(), segment->size());
+  DCHECK_GE(segment->size(), requested_size);
   return segment;
 }
 
@@ -183,6 +187,8 @@ bool AccountingAllocator::AddSegmentToPool(Segment* segment) {
     unused_segments_heads_[power] = segment;
     base::Relaxed_AtomicIncrement(&current_pool_size_, size);
     unused_segments_sizes_[power]++;
+    ASAN_POISON_MEMORY_REGION(reinterpret_cast<void*>(segment->start()),
+                              segment->size());
   }
 
   return true;
