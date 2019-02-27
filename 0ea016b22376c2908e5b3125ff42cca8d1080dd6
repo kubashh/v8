@@ -45,6 +45,30 @@
       "revId": "0ea016b22376c2908e5b3125ff42cca8d1080dd6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d82542a_609e5d92",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-27T12:10:33Z",
+      "side": 1,
+      "message": "Can\u0027t: we possibly fell out of the previous loop with c0_ \u003d\u003d kEndOfInput.",
+      "parentUuid": "e16ae3c5_bea4a404",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 9
+      },
+      "revId": "0ea016b22376c2908e5b3125ff42cca8d1080dd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
