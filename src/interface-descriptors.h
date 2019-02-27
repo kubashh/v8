@@ -1165,16 +1165,29 @@ class WasmThrowDescriptor final : public CallInterfaceDescriptor {
 
 class BigIntToWasmI64Descriptor final : public CallInterfaceDescriptor {
  public:
+#if V8_TARGET_ARCH_64_BIT
   DEFINE_PARAMETERS_NO_CONTEXT(kArgument)
   DEFINE_PARAMETER_TYPES(MachineType::Int64())  // kArgument
+#else
+  DEFINE_PARAMETERS_NO_CONTEXT(kLow, kHigh)
+  DEFINE_PARAMETER_TYPES(MachineType::Uint32(),  // kLow
+                         MachineType::Uint32())  // kHigh
+#endif  // V8_TARGET_ARCH_64_BIT
   DECLARE_DESCRIPTOR(BigIntToWasmI64Descriptor, CallInterfaceDescriptor)
 };
 
 class BigIntToI64Descriptor final : public CallInterfaceDescriptor {
  public:
+#if V8_TARGET_ARCH_64_BIT
   DEFINE_PARAMETERS(kArgument)
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Int64(),      // result 1
                                     MachineType::AnyTagged())  // kArgument
+#else
+  DEFINE_RESULT_AND_PARAMETERS(2, kArgument)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::Uint32(),     // result 1
+                                    MachineType::Uint32(),     // result 2
+                                    MachineType::AnyTagged())  // kArgument
+#endif  // V8_TARGET_ARCH_64_BIT
   DECLARE_DESCRIPTOR(BigIntToI64Descriptor, CallInterfaceDescriptor)
 };
 

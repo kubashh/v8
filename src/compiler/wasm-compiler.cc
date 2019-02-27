@@ -329,7 +329,8 @@ void WasmGraphBuilder::StackCheck(wasm::WasmCodePosition position,
     // Just encode the stub index. This will be patched at relocation.
     stack_check_code_node_.set(mcgraph()->RelocatableIntPtrConstant(
         wasm::WasmCode::kWasmStackGuard, RelocInfo::WASM_STUB_CALL));
-    stack_check_call_operator_ = mcgraph()->common()->Call(call_descriptor);
+    stack_check_call_operator_ =
+        mcgraph()->common()->CallUnverified(call_descriptor);
   }
 
   Node* call = graph()->NewNode(stack_check_call_operator_.get(),
@@ -2594,7 +2595,7 @@ Node* WasmGraphBuilder::BuildCCall(MachineSignature* sig, Node* function,
   auto call_descriptor =
       Linkage::GetSimplifiedCDescriptor(mcgraph()->zone(), sig);
 
-  const Operator* op = mcgraph()->common()->Call(call_descriptor);
+  const Operator* op = mcgraph()->common()->CallUnverified(call_descriptor);
   return SetEffect(graph()->NewNode(op, arraysize(call_args), call_args));
 }
 
@@ -2625,7 +2626,7 @@ Node* WasmGraphBuilder::BuildWasmCall(wasm::FunctionSig* sig, Node** args,
 
   auto call_descriptor =
       GetWasmCallDescriptor(mcgraph()->zone(), sig, use_retpoline);
-  const Operator* op = mcgraph()->common()->Call(call_descriptor);
+  const Operator* op = mcgraph()->common()->CallUnverified(call_descriptor);
   Node* call = SetEffect(graph()->NewNode(op, static_cast<int>(count), args));
   DCHECK(position == wasm::kNoCodePosition || position > 0);
   if (position > 0) SetSourcePosition(call, position);
@@ -3156,7 +3157,7 @@ Node* WasmGraphBuilder::BuildCallToRuntimeWithContext(
   inputs[count++] = control;
 
   Node* call = mcgraph()->graph()->NewNode(
-      mcgraph()->common()->Call(call_descriptor), count, inputs);
+      mcgraph()->common()->CallUnverified(call_descriptor), count, inputs);
   *effect = call;
   return call;
 }
@@ -4864,9 +4865,9 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                   wasm::WasmCode::kBigIntToWasmI64, RelocInfo::WASM_STUB_CALL)
             : jsgraph()->HeapConstant(BUILTIN_CODE(isolate_, I64ToBigInt));
 
-    return SetEffect(
-        SetControl(graph()->NewNode(mcgraph()->common()->Call(call_descriptor),
-                                    target, input, Effect(), Control())));
+    return SetEffect(SetControl(
+        graph()->NewNode(mcgraph()->common()->CallUnverified(call_descriptor),
+                         target, input, Effect(), Control())));
   }
 
   Node* BuildChangeBigIntToInt64(Node* input, Node* context) {
@@ -4887,8 +4888,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
             : jsgraph()->HeapConstant(BUILTIN_CODE(isolate_, BigIntToI64));
 
     return SetEffect(SetControl(
-        graph()->NewNode(mcgraph()->common()->Call(call_descriptor), target,
-                         input, context, Effect(), Control())));
+        graph()->NewNode(mcgraph()->common()->CallUnverified(call_descriptor),
+                         target, input, context, Effect(), Control())));
   }
 
   Node* FromJS(Node* node, Node* js_context, wasm::ValueType type) {
@@ -5114,6 +5115,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Node* jsval = sig_->return_count() == 0 ? jsgraph()->UndefinedConstant()
                                             : ToJS(rets[0], sig_->GetReturn());
     Return(jsval);
+
+    if (ContainsInt64(sig_)) LowerInt64();
   }
 
   bool BuildWasmImportCallWrapper(WasmImportCallKind kind) {
@@ -5190,8 +5193,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         args[pos++] = Effect();
         args[pos++] = Control();
 
-        call = graph()->NewNode(mcgraph()->common()->Call(call_descriptor), pos,
-                                args);
+        call = graph()->NewNode(
+            mcgraph()->common()->CallUnverified(call_descriptor), pos, args);
         break;
       }
       // =======================================================================
@@ -5257,8 +5260,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         args[pos++] = function_context;
         args[pos++] = Effect();
         args[pos++] = Control();
-        call = graph()->NewNode(mcgraph()->common()->Call(call_descriptor), pos,
-                                args);
+        call = graph()->NewNode(
+            mcgraph()->common()->CallUnverified(call_descriptor), pos, args);
         break;
       }
       // =======================================================================
@@ -5290,8 +5293,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         args[pos++] = Effect();
         args[pos++] = Control();
 
-        call = graph()->NewNode(mcgraph()->common()->Call(call_descriptor), pos,
-                                args);
+        call = graph()->NewNode(
+            mcgraph()->common()->CallUnverified(call_descriptor), pos, args);
         break;
       }
       default:
@@ -5311,6 +5314,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     BuildModifyThreadInWasmFlag(true);
 
     Return(val);
+
+    if (ContainsInt64(sig_)) LowerInt64();
     return true;
   }
 
@@ -5417,7 +5422,7 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     auto call_descriptor = GetWasmCallDescriptor(mcgraph()->zone(), sig_);
 
     Node* call = SetEffect(graph()->NewNode(
-        mcgraph()->common()->Call(call_descriptor), arg_count, args));
+        mcgraph()->common()->CallUnverified(call_descriptor), arg_count, args));
 
     // Store the return value.
     DCHECK_GE(1, sig_->return_count());
@@ -6091,7 +6096,7 @@ CallDescriptor* GetWasmCallDescriptor(
   for (size_t i = 0; i < parameter_count; i++) {
     MachineRepresentation param =
         wasm::ValueTypes::MachineRepresentationFor(fsig->GetParam(i));
-    // Skip tagged parameters (e.g. any-ref).
+    // Skip tagged parameters (e.g. any-ref or bigint).
     if (IsAnyTagged(param)) continue;
     auto l = params.Next(param);
     locations.AddParamAt(i + param_offset, l);

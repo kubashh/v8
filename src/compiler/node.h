@@ -68,6 +68,7 @@ class V8_EXPORT_PRIVATE Node final {
 #define BOUNDS_CHECK(index)                                                   \
   do {                                                                        \
     if (index < 0 || index >= InputCount()) {                                 \
+      Print();                                                                \
       FATAL("Node #%d:%s->InputAt(%d) out of bounds", id(), op()->mnemonic(), \
             index);                                                           \
     }                                                                         \
