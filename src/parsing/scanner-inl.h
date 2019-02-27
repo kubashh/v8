@@ -192,6 +192,7 @@ enum class ScanFlags : uint8_t {
   kCannotBeKeywordStart = 1 << 2,
   kStringTerminator = 1 << 3,
   kNeedsSlowPath = 1 << 4,
+  kMultilineCommentCharacterNeedsSlowPath = 1 << 5,
 };
 constexpr uint8_t GetScanFlags(char c) {
   return
@@ -215,7 +216,13 @@ constexpr uint8_t GetScanFlags(char c) {
            ? static_cast<uint8_t>(ScanFlags::kStringTerminator)
            : 0) |
       // Escapes are processed on the slow path.
-      (c == '\\' ? static_cast<uint8_t>(ScanFlags::kNeedsSlowPath) : 0);
+      (c == '\\' ? static_cast<uint8_t>(ScanFlags::kNeedsSlowPath) : 0) |
+      // Newlines and * are interesting characters for multiline comment
+      // scanning.
+      (c == '\n' || c == '\r' || c == '*'
+           ? static_cast<uint8_t>(
+                 ScanFlags::kMultilineCommentCharacterNeedsSlowPath)
+           : 0);
 }
 inline bool TerminatesLiteral(uint8_t scan_flags) {
   return (scan_flags & static_cast<uint8_t>(ScanFlags::kTerminatesLiteral));
@@ -225,6 +232,10 @@ inline bool CanBeKeyword(uint8_t scan_flags) {
 }
 inline bool NeedsSlowPath(uint8_t scan_flags) {
   return (scan_flags & static_cast<uint8_t>(ScanFlags::kNeedsSlowPath));
+}
+inline bool MultilineCommentCharacterNeedsSlowPath(uint8_t scan_flags) {
+  return (scan_flags & static_cast<uint8_t>(
+                           ScanFlags::kMultilineCommentCharacterNeedsSlowPath));
 }
 inline bool MayTerminateString(uint8_t scan_flags) {
   return (scan_flags & static_cast<uint8_t>(ScanFlags::kStringTerminator));
