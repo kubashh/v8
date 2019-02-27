@@ -22,6 +22,30 @@
       "revId": "43af8c76ab1ae1841a564f08eaeb8263589597b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0874bd3_a88923e5",
+        "filename": "src/parsing/scanner.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-02-27T12:16:21Z",
+      "side": 1,
+      "message": "That\u0027s indeed why I wrote it this way. The one additional branch probably doesn\u0027t hurt us as much as the previous version which has many additional branches before the AdvanceUntil even :-)",
+      "parentUuid": "c07222d6_22dd259e",
+      "range": {
+        "startLine": 540,
+        "startChar": 4,
+        "endLine": 540,
+        "endChar": 9
+      },
+      "revId": "43af8c76ab1ae1841a564f08eaeb8263589597b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
