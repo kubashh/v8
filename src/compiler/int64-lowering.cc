@@ -23,7 +23,8 @@ namespace compiler {
 
 Int64Lowering::Int64Lowering(Graph* graph, MachineOperatorBuilder* machine,
                              CommonOperatorBuilder* common, Zone* zone,
-                             Signature<MachineRepresentation>* signature)
+                             Signature<MachineRepresentation>* signature,
+                             CallDescriptor* bigint_to_i64_call_descriptor)
     : zone_(zone),
       graph_(graph),
       machine_(machine),
@@ -32,8 +33,9 @@ Int64Lowering::Int64Lowering(Graph* graph, MachineOperatorBuilder* machine,
       stack_(zone),
       replacements_(nullptr),
       signature_(signature),
-      placeholder_(graph->NewNode(common->Parameter(-2, "placeholder"),
-                                  graph->start())) {
+      placeholder_(
+          graph->NewNode(common->Parameter(-2, "placeholder"), graph->start())),
+      bigint_to_i64_call_descriptor_(bigint_to_i64_call_descriptor) {
   DCHECK_NOT_NULL(graph);
   DCHECK_NOT_NULL(graph->end());
   replacements_ = zone->NewArray<Replacement>(graph->NodeCount());
@@ -284,16 +286,16 @@ void Int64Lowering::LowerNode(Node* node) {
     }
     case IrOpcode::kParameter: {
       DCHECK_EQ(1, node->InputCount());
+      int paramCount = static_cast<int>(signature()->parameter_count());
       // Only exchange the node if the parameter count actually changed. We do
       // not even have to do the default lowering because the the start node,
       // the only input of a parameter node, only changes if the parameter count
       // changes.
-      if (GetParameterCountAfterLowering(signature()) !=
-          static_cast<int>(signature()->parameter_count())) {
+      if (GetParameterCountAfterLowering(signature()) != paramCount) {
         int old_index = ParameterIndexOf(node->op());
-        // TODO(wasm): Make this part not wasm specific.
-        // Prevent special lowering of the instance parameter.
-        if (old_index == wasm::kWasmInstanceParameterIndex) {
+        // Prevent special lowering of wasm's instance or JS
+        // context/closure parameters.
+        if (old_index <= 0 || old_index > paramCount) {
           DefaultLowering(node);
           break;
         }
@@ -338,16 +340,33 @@ void Int64Lowering::LowerNode(Node* node) {
       }
       break;
     }
+    case IrOpcode::kCallUnverified:
     case IrOpcode::kCall: {
       auto call_descriptor =
           const_cast<CallDescriptor*>(CallDescriptorOf(node->op()));
+
+      // Special case: the calling interface descriptor (in 32-bit) has as
+      // output two Uint32 types. For graph correctness we need to wrap the call
+      // with a projection, that takes advantage of the two outputs.
+      if (call_descriptor == bigint_to_i64_call_descriptor_) {
+        ReplaceNodeWithProjections(node);
+        break;  // no further lowering is needed
+      }
+
       bool returns_require_lowering =
           GetReturnCountAfterLowering(call_descriptor) !=
           static_cast<int>(call_descriptor->ReturnCount());
       if (DefaultLowering(node) || returns_require_lowering) {
         // We have to adjust the call descriptor.
-        NodeProperties::ChangeOp(node, common()->Call(GetI32WasmCallDescriptor(
-                                           zone(), call_descriptor)));
+        if (node->opcode() == IrOpcode::kCallUnverified) {
+          NodeProperties::ChangeOp(
+              node, common()->CallUnverified(
+                        GetI32WasmCallDescriptor(zone(), call_descriptor)));
+        } else {
+          NodeProperties::ChangeOp(
+              node, common()->Call(
+                        GetI32WasmCallDescriptor(zone(), call_descriptor)));
+        }
       }
       if (returns_require_lowering) {
         size_t return_arity = call_descriptor->ReturnCount();

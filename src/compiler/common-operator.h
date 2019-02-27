@@ -527,6 +527,7 @@ class V8_EXPORT_PRIVATE CommonOperatorBuilder final
                              OutputFrameStateCombine state_combine,
                              const FrameStateFunctionInfo* function_info);
   const Operator* Call(const CallDescriptor* call_descriptor);
+  const Operator* CallUnverified(const CallDescriptor* call_descriptor);
   const Operator* CallWithCallerSavedRegisters(
       const CallDescriptor* call_descriptor);
   const Operator* TailCall(const CallDescriptor* call_descriptor);

@@ -3717,7 +3717,8 @@ void WasmGraphBuilder::LowerInt64() {
   if (mcgraph()->machine()->Is64()) return;
   Int64Lowering r(mcgraph()->graph(), mcgraph()->machine(), mcgraph()->common(),
                   mcgraph()->zone(),
-                  CreateMachineSignature(mcgraph()->zone(), sig_));
+                  CreateMachineSignature(mcgraph()->zone(), sig_),
+                  bigint_to_i64_call_descriptor_);
   r.LowerGraph();
 }
 
@@ -4577,7 +4578,21 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         isolate_(jsgraph->isolate()),
         jsgraph_(jsgraph),
         stub_mode_(stub_mode),
-        enabled_features_(features) {}
+        enabled_features_(features) {
+    bigint_to_i64_call_descriptor_ = GetBigIntToI64Descriptor();
+  }
+
+  CallDescriptor* GetBigIntToI64Descriptor() {
+    BigIntToI64Descriptor interface_descriptor;
+
+    return Linkage::GetStubCallDescriptor(
+        mcgraph()->zone(),                              // zone
+        interface_descriptor,                           // descriptor
+        interface_descriptor.GetStackParameterCount(),  // stack parameter count
+        CallDescriptor::kNoFlags,                       // flags
+        Operator::kNoProperties,                        // properties
+        stub_mode_);                                    // stub call mode
+  }
 
   Node* BuildAllocateHeapNumberWithValue(Node* value, Node* control) {
     MachineOperatorBuilder* machine = mcgraph()->machine();
@@ -4865,31 +4880,21 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                   wasm::WasmCode::kBigIntToWasmI64, RelocInfo::WASM_STUB_CALL)
             : jsgraph()->HeapConstant(BUILTIN_CODE(isolate_, I64ToBigInt));
 
-    return SetEffect(
-        SetControl(graph()->NewNode(mcgraph()->common()->Call(call_descriptor),
-                                    target, input, Effect(), Control())));
+    return SetEffect(SetControl(
+        graph()->NewNode(mcgraph()->common()->CallUnverified(call_descriptor),
+                         target, input, Effect(), Control())));
   }
 
   Node* BuildChangeBigIntToInt64(Node* input, Node* context) {
-    BigIntToI64Descriptor interface_descriptor;
-
-    auto call_descriptor = Linkage::GetStubCallDescriptor(
-        mcgraph()->zone(),                              // zone
-        interface_descriptor,                           // descriptor
-        interface_descriptor.GetStackParameterCount(),  // stack parameter count
-        CallDescriptor::kNoFlags,                       // flags
-        Operator::kNoProperties,                        // properties
-        stub_mode_);                                    // stub call mode
-
     Node* target =
         (stub_mode_ == StubCallMode::kCallWasmRuntimeStub)
             ? mcgraph()->RelocatableIntPtrConstant(
                   wasm::WasmCode::kWasmBigIntToI64, RelocInfo::WASM_STUB_CALL)
             : jsgraph()->HeapConstant(BUILTIN_CODE(isolate_, BigIntToI64));
 
-    return SetEffect(SetControl(
-        graph()->NewNode(mcgraph()->common()->Call(call_descriptor), target,
-                         input, context, Effect(), Control())));
+    return SetEffect(SetControl(graph()->NewNode(
+        mcgraph()->common()->Call(bigint_to_i64_call_descriptor_), target,
+        input, context, Effect(), Control())));
   }
 
   Node* FromJS(Node* node, Node* js_context, wasm::ValueType type) {
@@ -5115,6 +5120,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Node* jsval = sig_->return_count() == 0 ? jsgraph()->UndefinedConstant()
                                             : ToJS(rets[0], sig_->GetReturn());
     Return(jsval);
+
+    if (ContainsInt64(sig_)) LowerInt64();
   }
 
   bool BuildWasmImportCallWrapper(WasmImportCallKind kind) {
@@ -5312,6 +5319,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     BuildModifyThreadInWasmFlag(true);
 
     Return(val);
+
+    if (ContainsInt64(sig_)) LowerInt64();
     return true;
   }
 
@@ -5441,7 +5450,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
       };
       Signature<MachineRepresentation> c_entry_sig(1, 2, sig_reps);
       Int64Lowering r(mcgraph()->graph(), mcgraph()->machine(),
-                      mcgraph()->common(), mcgraph()->zone(), &c_entry_sig);
+                      mcgraph()->common(), mcgraph()->zone(), &c_entry_sig,
+                      bigint_to_i64_call_descriptor_);
       r.LowerGraph();
     }
   }
@@ -6092,7 +6102,7 @@ CallDescriptor* GetWasmCallDescriptor(
   for (size_t i = 0; i < parameter_count; i++) {
     MachineRepresentation param =
         wasm::ValueTypes::MachineRepresentationFor(fsig->GetParam(i));
-    // Skip tagged parameters (e.g. any-ref).
+    // Skip tagged parameters (e.g. any-ref or bigint).
     if (IsAnyTagged(param)) continue;
     auto l = params.Next(param);
     locations.AddParamAt(i + param_offset, l);
