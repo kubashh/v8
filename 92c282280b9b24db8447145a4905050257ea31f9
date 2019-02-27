@@ -22,6 +22,30 @@
       "revId": "92c282280b9b24db8447145a4905050257ea31f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04694117_3dc61990",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-27T14:44:27Z",
+      "side": 1,
+      "message": "Same as with debug_bot above. See comment there.",
+      "parentUuid": "186d954b_104da7f1",
+      "range": {
+        "startLine": 536,
+        "startChar": 17,
+        "endLine": 536,
+        "endChar": 27
+      },
+      "revId": "92c282280b9b24db8447145a4905050257ea31f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
