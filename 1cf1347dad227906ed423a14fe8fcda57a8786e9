@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5056de1_ff2c727c",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-27T14:57:31Z",
+      "side": 1,
+      "message": "This is not used in the template. Maybe drop it? Then you also don\u0027t need to create a spearate sanity_label variable below.",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0e22f41_f3a68e37",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-27T14:57:31Z",
+      "side": 1,
+      "message": "nit: 80 chars",
+      "range": {
+        "startLine": 345,
+        "startChar": 77,
+        "endLine": 345,
+        "endChar": 82
+      },
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd3895ce_d87e6d88",
+        "filename": "tools/clusterfuzz/v8_foozzie_test.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-27T14:57:31Z",
+      "side": 1,
+      "message": "Thanks for adding a comment, but it\u0027s still a bit unclear without reading code below. Perhaps this is better:\n\n  # This removes first lines containing d8 commands.",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23d8cb96_cab1987c",
+        "filename": "tools/clusterfuzz/v8_foozzie_test.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-27T14:57:31Z",
+      "side": 1,
+      "message": "Why pass this flag here? Wouldn\u0027t this prevent from sanity-check code being tested?\nAlternatively, pass it here, but create another test where it is not passed and sanity check fails.",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78c7b230_754d5d94",
+        "filename": "tools/clusterfuzz/v8_sanity_checks.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-27T14:57:31Z",
+      "side": 1,
+      "message": "Why print this (and one below)? Can\u0027t we just reference the bug in a comment?",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
