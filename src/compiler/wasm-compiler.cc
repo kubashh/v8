@@ -4864,9 +4864,9 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
                   wasm::WasmCode::kBigIntToWasmI64, RelocInfo::WASM_STUB_CALL)
             : jsgraph()->HeapConstant(BUILTIN_CODE(isolate_, I64ToBigInt));
 
-    return SetEffect(
-        SetControl(graph()->NewNode(mcgraph()->common()->Call(call_descriptor),
-                                    target, input, Effect(), Control())));
+    return SetEffect(SetControl(
+        graph()->NewNode(mcgraph()->common()->CallUnverified(call_descriptor),
+                         target, input, Effect(), Control())));
   }
 
   Node* BuildChangeBigIntToInt64(Node* input, Node* context) {
@@ -4876,9 +4876,9 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
         mcgraph()->zone(),                              // zone
         interface_descriptor,                           // descriptor
         interface_descriptor.GetStackParameterCount(),  // stack parameter count
-        CallDescriptor::kNoFlags,                       // flags
-        Operator::kNoProperties,                        // properties
-        stub_mode_);                                    // stub call mode
+        CallDescriptor::kNoFlags,  // flags
+        Operator::kNoProperties,  // properties
+        stub_mode_);              // stub call mode
 
     Node* target =
         (stub_mode_ == StubCallMode::kCallWasmRuntimeStub)
@@ -5114,6 +5114,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     Node* jsval = sig_->return_count() == 0 ? jsgraph()->UndefinedConstant()
                                             : ToJS(rets[0], sig_->GetReturn());
     Return(jsval);
+
+    if (ContainsInt64(sig_)) LowerInt64();
   }
 
   bool BuildWasmImportCallWrapper(WasmImportCallKind kind) {
@@ -5311,6 +5313,8 @@ class WasmWrapperGraphBuilder : public WasmGraphBuilder {
     BuildModifyThreadInWasmFlag(true);
 
     Return(val);
+
+    if (ContainsInt64(sig_)) LowerInt64();
     return true;
   }
 
@@ -6091,7 +6095,7 @@ CallDescriptor* GetWasmCallDescriptor(
   for (size_t i = 0; i < parameter_count; i++) {
     MachineRepresentation param =
         wasm::ValueTypes::MachineRepresentationFor(fsig->GetParam(i));
-    // Skip tagged parameters (e.g. any-ref).
+    // Skip tagged parameters (e.g. any-ref or bigint).
     if (IsAnyTagged(param)) continue;
     auto l = params.Next(param);
     locations.AddParamAt(i + param_offset, l);
