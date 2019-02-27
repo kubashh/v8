@@ -1049,6 +1049,7 @@ void InstructionSelector::InitializeCallBuffer(Node* call, CallBuffer* buffer,
 bool InstructionSelector::IsSourcePositionUsed(Node* node) {
   return (source_position_mode_ == kAllSourcePositions ||
           node->opcode() == IrOpcode::kCall ||
+          node->opcode() == IrOpcode::kCallUnverified ||
           node->opcode() == IrOpcode::kCallWithCallerSavedRegisters ||
           node->opcode() == IrOpcode::kTrapIf ||
           node->opcode() == IrOpcode::kTrapUnless ||
@@ -1071,6 +1072,7 @@ void InstructionSelector::VisitBlock(BasicBlock* block) {
     if (node->opcode() == IrOpcode::kStore ||
         node->opcode() == IrOpcode::kUnalignedStore ||
         node->opcode() == IrOpcode::kCall ||
+        node->opcode() == IrOpcode::kCallUnverified ||
         node->opcode() == IrOpcode::kCallWithCallerSavedRegisters ||
         node->opcode() == IrOpcode::kProtectedLoad ||
         node->opcode() == IrOpcode::kProtectedStore) {
@@ -1161,7 +1163,8 @@ void InstructionSelector::VisitControl(BasicBlock* block) {
       VisitGoto(block->SuccessorAt(0));
       break;
     case BasicBlock::kCall: {
-      DCHECK_EQ(IrOpcode::kCall, input->opcode());
+      DCHECK(IrOpcode::kCall == input->opcode() ||
+             IrOpcode::kCallUnverified == input->opcode());
       BasicBlock* success = block->SuccessorAt(0);
       BasicBlock* exception = block->SuccessorAt(1);
       VisitCall(input, exception);
@@ -1304,6 +1307,7 @@ void InstructionSelector::VisitNode(Node* node) {
     }
     case IrOpcode::kDelayedStringConstant:
       return MarkAsReference(node), VisitConstant(node);
+    case IrOpcode::kCallUnverified:
     case IrOpcode::kCall:
       return VisitCall(node);
     case IrOpcode::kCallWithCallerSavedRegisters:
@@ -2458,7 +2462,8 @@ LinkageLocation ExceptionLocation() {
 
 void InstructionSelector::VisitIfException(Node* node) {
   OperandGenerator g(this);
-  DCHECK_EQ(IrOpcode::kCall, node->InputAt(1)->opcode());
+  DCHECK(IrOpcode::kCall == node->InputAt(1)->opcode() ||
+         IrOpcode::kCallUnverified == node->InputAt(1)->opcode());
   Emit(kArchNop, g.DefineAsLocation(node, ExceptionLocation()));
 }
 
