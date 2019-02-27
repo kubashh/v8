@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e884d55_cf4a9f8d",
+        "filename": "tools/locs.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-27T15:00:03Z",
+      "side": 0,
+      "message": "Nice! I didn\u0027t even know this works in Python3.",
+      "revId": "a8a45e41213d51590a1b9b0a629afece1751555c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
