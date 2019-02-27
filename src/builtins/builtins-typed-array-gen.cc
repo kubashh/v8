@@ -107,7 +107,8 @@ TNode<JSArrayBuffer> TypedArrayBuiltinsAssembler::AllocateEmptyOnHeapBuffer(
                                  byte_length,
                                  MachineType::PointerRepresentation());
   StoreObjectFieldNoWriteBarrier(buffer, JSArrayBuffer::kBackingStoreOffset,
-                                 SmiConstant(0));
+                                 IntPtrConstant(0),
+                                 MachineType::PointerRepresentation());
   for (int offset = JSArrayBuffer::kHeaderSize;
        offset < JSArrayBuffer::kSizeWithEmbedderFields; offset += kTaggedSize) {
     StoreObjectFieldNoWriteBarrier(buffer, offset, SmiConstant(0));
