@@ -4,6 +4,8 @@
 
 #include "src/setup-isolate.h"
 
+#include <string>
+
 #include "src/assembler-inl.h"
 #include "src/builtins/builtins.h"
 #include "src/code-events.h"
@@ -183,6 +185,15 @@ Code BuildWithCodeStubAssemblerCS(Isolate* isolate, int32_t builtin_index,
                                   CodeAssemblerGenerator generator,
                                   CallDescriptors::Key interface_descriptor,
                                   const char* name, int result_size) {
+  // The interface descriptor with given key must be initialized at this point
+  // and this construction just queries the details from the descriptors table.
+  CallInterfaceDescriptor descriptor(interface_descriptor);
+  // FIXME(ssauleau): debug jumbo-build failures
+  if (std::string(name) == "BigIntToI64" ||
+      std::string(name) == "WasmBigIntToI64") {
+    result_size = descriptor.GetReturnCount();
+    PrintF("builtin: %s, has return_size: %d\n", name, result_size);
+  }
   HandleScope scope(isolate);
   // Canonicalize handles, so that we can share constant pool entries pointing
   // to code targets without dereferencing their handles.
@@ -191,9 +202,6 @@ Code BuildWithCodeStubAssemblerCS(Isolate* isolate, int32_t builtin_index,
                                  ? SegmentSize::kLarge
                                  : SegmentSize::kDefault;
   Zone zone(isolate->allocator(), ZONE_NAME, segment_size);
-  // The interface descriptor with given key must be initialized at this point
-  // and this construction just queries the details from the descriptors table.
-  CallInterfaceDescriptor descriptor(interface_descriptor);
   // Ensure descriptor is already initialized.
   DCHECK_EQ(result_size, descriptor.GetReturnCount());
   DCHECK_LE(0, descriptor.GetRegisterParameterCount());
