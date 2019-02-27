@@ -1,0 +1,28 @@
+types: get_buffer 1, 4.990000
+types: get_buffer 1000000, 33252.488000
+types: get_buffer 1000001, 42535.581000
+functions: get_buffer 1, 1.442000
+functions: get_buffer 1000000, 360336.039000
+functions: get_buffer 1000001, 504540.306000
+imports: get_buffer 1, 1.248000
+imports: get_buffer 100000, 8153.456000
+imports: get_buffer 100001, 1802.223000
+exports: get_buffer 1, 1.441000
+exports: get_buffer 100000, 16557.174000
+exports: get_buffer 100001, 24683.390000
+globals: get_buffer 1, 1.151000
+globals: get_buffer 1000000, 83019.206000
+globals: get_buffer 1000001, 160315.990000
+data segments: get_buffer 1, 11.270000
+data segments: get_buffer 100000, 8152.780000
+data segments: get_buffer 100001, 2339.004000
+function size: get_buffer 7654321, 58292.331000
+function size: get_buffer 7654322, 91006.932000
+function locals: get_buffer 1, 1.182000
+function params: get_buffer 1000, 4.214000
+function params: get_buffer 1001, 1645.167000
+element segments: get_buffer 10000000, 3321793.161000
+element segments: get_buffer 10000001, 4558369.666000
+tables: get_buffer 0, 4.515000
+tables: get_buffer 1, 10720.861000
+tables: get_buffer 2, 1.533000
