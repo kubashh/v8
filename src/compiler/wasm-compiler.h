@@ -434,6 +434,9 @@ class WasmGraphBuilder {
 
   compiler::SourcePositionTable* const source_position_table_ = nullptr;
 
+  // Cache for special BigInt to i64 CallDescriptor lowering
+  CallDescriptor* bigint_to_i64_call_descriptor_ = nullptr;
+
   Node* NoContextConstant();
 
   Node* MemBuffer(uint32_t offset);
