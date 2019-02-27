@@ -742,6 +742,7 @@ class RuntimeCallTimer final {
   V(Int16Array_New)                                        \
   V(Int32Array_New)                                        \
   V(Int8Array_New)                                         \
+  V(Isolate_ConfigurationChangeNotification)               \
   V(JSON_Parse)                                            \
   V(JSON_Stringify)                                        \
   V(Map_AsArray)                                           \
