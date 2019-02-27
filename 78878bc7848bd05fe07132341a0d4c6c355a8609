@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc768b12_e9d1b14e",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1548,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-02-27T16:36:41Z",
+      "side": 1,
+      "message": "I wonder if this should become impl()-\u003eGetPropertyName() to avoid the branch in parser. Might be overkill.",
+      "revId": "78878bc7848bd05fe07132341a0d4c6c355a8609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
