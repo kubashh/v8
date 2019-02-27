@@ -33,6 +33,12 @@ namespace internal {
 // TODO(jgruber): Remove DummyDescriptor once all ASM builtins have been
 // properly associated with their descriptor.
 
+#if V8_TARGET_ARCH_64_BIT
+#define ONE_IF_64_AND_TWO_IF_32 1
+#else
+#define ONE_IF_64_AND_TWO_IF_32 2
+#endif  // V8_TARGET_ARCH_64_BIT
+
 #define BUILTIN_LIST_BASE(CPP, API, TFJ, TFC, TFS, TFH, ASM)                   \
   /* GC write barrirer */                                                      \
   TFC(RecordWrite, RecordWrite, 1)                                             \
@@ -208,7 +214,7 @@ namespace internal {
   TFC(ToLength, TypeConversion, 1)                                             \
   TFC(Typeof, Typeof, 1)                                                       \
   TFC(GetSuperConstructor, Typeof, 1)                                          \
-  TFC(BigIntToI64, BigIntToI64, 1)                                             \
+  TFC(BigIntToI64, BigIntToI64, ONE_IF_64_AND_TWO_IF_32)                       \
   TFC(I64ToBigInt, BigIntToWasmI64, 1)                                         \
                                                                                \
   /* Type conversions continuations */                                         \
@@ -1212,7 +1218,7 @@ namespace internal {
   TFS(ThrowWasmTrapElemSegmentDropped)                                         \
   TFS(ThrowWasmTrapTableOutOfBounds)                                           \
   TFC(BigIntToWasmI64, BigIntToWasmI64, 1)                                     \
-  TFC(WasmBigIntToI64, BigIntToI64, 1)                                         \
+  TFC(WasmBigIntToI64, BigIntToI64, ONE_IF_64_AND_TWO_IF_32)                   \
                                                                                \
   /* WeakMap */                                                                \
   TFJ(WeakMapConstructor, SharedFunctionInfo::kDontAdaptArgumentsSentinel)     \
