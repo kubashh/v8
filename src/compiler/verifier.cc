@@ -93,6 +93,9 @@ class Verifier::Visitor {
 };
 
 void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
+  if (node->opcode() == IrOpcode::kCallUnverified) {
+    return;
+  }
   int value_count = node->op()->ValueInputCount();
   int context_count = OperatorProperties::GetContextInputCount(node->op());
   int frame_state_count =
@@ -580,6 +583,7 @@ void Verifier::Visitor::Check(Node* node, const AllNodes& all) {
       // TODO(jarin): what are the constraints on these?
       break;
     case IrOpcode::kCall:
+    case IrOpcode::kCallUnverified:
     case IrOpcode::kCallWithCallerSavedRegisters:
       // TODO(rossberg): what are the constraints on these?
       break;
@@ -2086,6 +2090,9 @@ void ScheduleVerifier::Run(Schedule* schedule) {
 
 // static
 void Verifier::VerifyNode(Node* node) {
+  if (node->opcode() == IrOpcode::kCallUnverified) {
+    return;
+  }
   DCHECK_EQ(OperatorProperties::GetTotalInputCount(node->op()),
             node->InputCount());
   // If this node has no effect or no control outputs,

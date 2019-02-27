@@ -4,6 +4,8 @@
 
 #include "src/setup-isolate.h"
 
+#include <string>
+
 #include "src/assembler-inl.h"
 #include "src/builtins/builtins.h"
 #include "src/code-events.h"
@@ -183,6 +185,16 @@ Code BuildWithCodeStubAssemblerCS(Isolate* isolate, int32_t builtin_index,
                                   CodeAssemblerGenerator generator,
                                   CallDescriptors::Key interface_descriptor,
                                   const char* name, int result_size) {
+  // FIXME(ssauleau): debug jumbo-build failures
+  if (std::string(name) == "BigIntToI64" ||
+      std::string(name) == "WasmBigIntToI64") {
+#if V8_TARGET_ARCH_64_BIT
+    result_size = 1;
+#else
+    result_size = 2;
+#endif  // V8_TARGET_ARCH_64_BIT
+    PrintF("builtin: %s, has return_size: %d\n", name, result_size);
+  }
   HandleScope scope(isolate);
   // Canonicalize handles, so that we can share constant pool entries pointing
   // to code targets without dereferencing their handles.
