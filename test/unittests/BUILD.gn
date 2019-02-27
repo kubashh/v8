@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import("../../gni/v8.gni")
+import("../../../build/config/fuchsia/rules.gni")
 
 v8_executable("unittests") {
   testonly = true
@@ -35,6 +36,20 @@ v8_executable("unittests") {
     "../..:external_config",
     "../..:internal_config_base",
   ]
+}
+
+if (is_fuchsia) {
+  fuchsia_package("v8_unittests_pkg") {
+    testonly = true
+    binary = ":unittests"
+    package_name_override = "v8_unittests"
+  }
+
+  fuchsia_package_runner("v8_unittests_fuchsia") {
+    testonly = true
+    package = ":v8_unittests_pkg"
+    package_name_override = "v8_unittests"
+  }
 }
 
 v8_source_set("unittests_sources") {
