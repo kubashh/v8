@@ -183,6 +183,11 @@ Code BuildWithCodeStubAssemblerCS(Isolate* isolate, int32_t builtin_index,
                                   CodeAssemblerGenerator generator,
                                   CallDescriptors::Key interface_descriptor,
                                   const char* name, int result_size) {
+  // The interface descriptor with given key must be initialized at this point
+  // and this construction just queries the details from the descriptors table.
+  CallInterfaceDescriptor descriptor(interface_descriptor);
+  // FIXME(ssauleau): debug jumbo-build failures
+  result_size = descriptor.GetReturnCount();
   HandleScope scope(isolate);
   // Canonicalize handles, so that we can share constant pool entries pointing
   // to code targets without dereferencing their handles.
@@ -191,9 +196,6 @@ Code BuildWithCodeStubAssemblerCS(Isolate* isolate, int32_t builtin_index,
                                  ? SegmentSize::kLarge
                                  : SegmentSize::kDefault;
   Zone zone(isolate->allocator(), ZONE_NAME, segment_size);
-  // The interface descriptor with given key must be initialized at this point
-  // and this construction just queries the details from the descriptors table.
-  CallInterfaceDescriptor descriptor(interface_descriptor);
   // Ensure descriptor is already initialized.
   DCHECK_EQ(result_size, descriptor.GetReturnCount());
   DCHECK_LE(0, descriptor.GetRegisterParameterCount());

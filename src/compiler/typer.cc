@@ -967,6 +967,7 @@ Type Typer::Visitor::TypeTypedObjectState(Node* node) {
 }
 
 Type Typer::Visitor::TypeCall(Node* node) { return Type::Any(); }
+Type Typer::Visitor::TypeCallUnverified(Node* node) { return Type::Any(); }
 
 Type Typer::Visitor::TypeCallWithCallerSavedRegisters(Node* node) {
   UNREACHABLE();
