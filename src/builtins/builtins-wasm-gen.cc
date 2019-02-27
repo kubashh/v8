@@ -227,25 +227,24 @@ TF_BUILTIN(WasmMemoryGrow, WasmBuiltinsAssembler) {
 }
 
 TF_BUILTIN(BigIntToWasmI64, WasmBuiltinsAssembler) {
-  if (!Is64()) {
-    Unreachable();
-    return;
-  }
-
   TNode<Code> target = LoadBuiltinFromFrame(Builtins::kI64ToBigInt);
-  TNode<IntPtrT> argument =
-      UncheckedCast<IntPtrT>(Parameter(Descriptor::kArgument));
+
+#if V8_TARGET_ARCH_64_BIT
+  TNode<Int64T> argument =
+      UncheckedCast<Int64T>(Parameter(Descriptor::kArgument));
 
   TailCallStub(BigIntToWasmI64Descriptor(), target, NoContextConstant(),
                argument);
+#else
+  TNode<Uint32T> low = UncheckedCast<Uint32T>(Parameter(Descriptor::kLow));
+  TNode<Uint32T> high = UncheckedCast<Uint32T>(Parameter(Descriptor::kHigh));
+
+  TailCallStub(BigIntToWasmI64Descriptor(), target, NoContextConstant(), low,
+               high);
+#endif  // V8_TARGET_ARCH_64_BIT
 }
 
 TF_BUILTIN(WasmBigIntToI64, WasmBuiltinsAssembler) {
-  if (!Is64()) {
-    Unreachable();
-    return;
-  }
-
   TNode<Object> context =
       UncheckedCast<Object>(Parameter(Descriptor::kContext));
   TNode<Code> target = LoadBuiltinFromFrame(Builtins::kBigIntToI64);

@@ -409,6 +409,10 @@ void CodeAssembler::ReturnRaw(Node* value) {
   return raw_assembler()->Return(value);
 }
 
+void CodeAssembler::ReturnPair(Node* high, Node* low) {
+  return raw_assembler()->Return(high, low);
+}
+
 void CodeAssembler::DebugAbort(Node* message) {
   raw_assembler()->DebugAbort(message);
 }
