@@ -6763,15 +6763,18 @@ double v8::Date::ValueOf() const {
 }
 
 // Assert that the static TimeZoneDetection cast in
-// DateTimeConfigurationChangeNotification is valid.
-#define TIME_ZONE_DETECTION_ASSERT_EQ(value)                  \
-  STATIC_ASSERT(                                              \
-      static_cast<int>(v8::Date::TimeZoneDetection::value) == \
-      static_cast<int>(base::TimezoneCache::TimeZoneDetection::value))
-TIME_ZONE_DETECTION_ASSERT_EQ(kSkip);
-TIME_ZONE_DETECTION_ASSERT_EQ(kRedetect);
+// ConfigurationChangeNotification is valid.
+#define TIME_ZONE_DETECTION_ASSERT_EQ(value)                               \
+  STATIC_ASSERT(                                                           \
+      static_cast<int>(v8::Isolate::TimeZoneDetection::value) ==           \
+      static_cast<int>(base::TimezoneCache::TimeZoneDetection::value));    \
+  STATIC_ASSERT(static_cast<int>(v8::Isolate::TimeZoneDetection::value) == \
+                static_cast<int>(v8::Date::TimeZoneDetection::value));
+TIME_ZONE_DETECTION_ASSERT_EQ(kSkip)
+TIME_ZONE_DETECTION_ASSERT_EQ(kRedetect)
 #undef TIME_ZONE_DETECTION_ASSERT_EQ
 
+// static
 void v8::Date::DateTimeConfigurationChangeNotification(
     Isolate* isolate, TimeZoneDetection time_zone_detection) {
   i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
@@ -8882,6 +8885,27 @@ void Isolate::VisitWeakHandles(PersistentHandleVisitor* visitor) {
 void Isolate::SetAllowAtomicsWait(bool allow) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   isolate->set_allow_atomics_wait(allow);
+}
+
+void v8::Isolate::ConfigurationChangeNotification(
+    TimeZoneDetection time_zone_detection) {
+  i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(this);
+  LOG_API(i_isolate, Isolate, ConfigurationChangeNotification);
+  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(i_isolate);
+
+#if __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+#endif
+  Date::DateTimeConfigurationChangeNotification(
+      this, static_cast<v8::Date::TimeZoneDetection>(time_zone_detection));
+#if __clang__
+#pragma clang diagnostic pop
+#endif
+
+#ifdef V8_INTL_SUPPORT
+  i_isolate->ResetDefaultLocale();
+#endif  // V8_INTL_SUPPORT
 }
 
 MicrotasksScope::MicrotasksScope(Isolate* isolate, MicrotasksScope::Type type)
