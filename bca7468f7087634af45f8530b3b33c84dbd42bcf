@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f9e9f3b_85b4ba11",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-27T10:55:52Z",
+      "side": 1,
+      "message": "Code extracted from line 335.",
+      "revId": "bca7468f7087634af45f8530b3b33c84dbd42bcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "802640b9_8d0d262f",
+        "filename": "tools/clusterfuzz/v8_sanity_checks.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-27T10:55:52Z",
+      "side": 1,
+      "message": "mstarzinger FYI. We could also uncomment this earlier in case too many duplicates are flooding in. But it would then block all comparisons with jitless.",
+      "range": {
+        "startLine": 20,
+        "startChar": 2,
+        "endLine": 20,
+        "endChar": 22
+      },
+      "revId": "bca7468f7087634af45f8530b3b33c84dbd42bcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
