@@ -22,6 +22,30 @@
       "revId": "112c733be192dd419009a608778ffa6be4fba45d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "def2699d_c49757b0",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-27T15:53:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2e841b65_0ef1c209",
+      "range": {
+        "startLine": 488,
+        "startChar": 6,
+        "endLine": 488,
+        "endChar": 71
+      },
+      "revId": "112c733be192dd419009a608778ffa6be4fba45d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

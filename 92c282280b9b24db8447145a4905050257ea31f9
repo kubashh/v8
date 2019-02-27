@@ -46,6 +46,30 @@
       "revId": "92c282280b9b24db8447145a4905050257ea31f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0de111a_d925bfd8",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-27T15:53:02Z",
+      "side": 1,
+      "message": "Ah, I missed that \u0027release\u0027 missed the \u0027_bot\u0027 suffix. Also didn\u0027t see your comment since it was posted on a previous patchset.",
+      "parentUuid": "04694117_3dc61990",
+      "range": {
+        "startLine": 536,
+        "startChar": 17,
+        "endLine": 536,
+        "endChar": 27
+      },
+      "revId": "92c282280b9b24db8447145a4905050257ea31f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
