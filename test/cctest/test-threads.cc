@@ -45,10 +45,10 @@ class ThreadIdValidationThread : public v8::base::Thread {
 
   void Run() override {
     i::ThreadId thread_id = i::ThreadId::Current();
+    CHECK(thread_id.IsValid());
     for (int i = 0; i < thread_no_; i++) {
       CHECK(!(*refs_)[i].Equals(thread_id));
     }
-    CHECK(thread_id.IsValid());
     (*refs_)[thread_no_] = thread_id;
     if (thread_to_start_ != nullptr) {
       thread_to_start_->Start();
