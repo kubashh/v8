@@ -22,6 +22,30 @@
       "revId": "d87aa4cd7c1a56dcd0f139cf72d14e2bd07c2437",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04481732_26ef90ff",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-02-27T16:52:39Z",
+      "side": 1,
+      "message": "Oops, no, missed that. Added now.",
+      "parentUuid": "0552bd11_fc7eb26b",
+      "range": {
+        "startLine": 501,
+        "startChar": 45,
+        "endLine": 501,
+        "endChar": 47
+      },
+      "revId": "d87aa4cd7c1a56dcd0f139cf72d14e2bd07c2437",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
