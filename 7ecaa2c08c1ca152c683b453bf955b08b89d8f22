@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce3626cf_c3323781",
+        "filename": "src/arm64/cpu-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2019-02-28T11:27:12Z",
+      "side": 1,
+      "message": "Isn\u0027t this redundant with `V8_HOST_ARCH_ARM64`? As in that if the host is not Arm64 (windows or linux) then `USE_SIMULATOR` should be on anyway. Did you consider adding the `V8_OS_WIN` condition inside `V8_HOST_ARCH_ARM64`?\n\nAs in:\n\n#if defined(V8_HOST_ARCH_ARM64)\n#if defined(V8_OS_WIN)\n  ::FlushInstructionCache(GetCurrentProcess(), address, length);\n#else\n  // The code below assumes user space cache operations are allowed. The goal\n  // of this routine is to make sure the code generated is visible to the I\n  // side of the CPU.\n  \n  ...\n#endif\n#endif\n\n\nThen we wouldn\u0027t need to check the `USE_SIMULATOR` macro.",
+      "revId": "7ecaa2c08c1ca152c683b453bf955b08b89d8f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
