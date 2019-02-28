@@ -8690,7 +8690,7 @@ void Isolate::MemoryPressureNotification(MemoryPressureLevel level) {
   bool on_isolate_thread =
       v8::Locker::IsActive()
           ? isolate->thread_manager()->IsLockedByCurrentThread()
-          : i::ThreadId::Current().Equals(isolate->thread_id());
+          : i::ThreadId::Current() == isolate->thread_id();
   isolate->heap()->MemoryPressureNotification(level, on_isolate_thread);
   isolate->allocator()->MemoryPressureNotification(level);
 }
