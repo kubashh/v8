@@ -19,6 +19,7 @@ export function foo1() {
 var module2 = `
 import { foo1 } from 'module1';
 let a2 = 20;
+export * as mod1 from 'module1';
 export let b2 = 21;
 export function foo2() {
   let c2 = 22;
