@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "700960bf_60071520",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 8485,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-02-28T11:00:21Z",
+      "side": 1,
+      "message": "locale / date / time",
+      "range": {
+        "startLine": 8485,
+        "startChar": 5,
+        "endLine": 8485,
+        "endChar": 16
+      },
+      "revId": "5934cd1cca4577a607dc6a8432f4acd2c5e8631d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "617fc47b_5c725eec",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 8490,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-02-28T11:00:21Z",
+      "side": 1,
+      "message": "It would be great if the name reflected that the configuration is limited to locale/date/time.\n\nCan we consider timezone as part of locale and name it LocaleChangeNotification?\n\nIf not, maybe we want two API functions: LocaleChangeNotification and TimeZoneChangeNotification?\nOr if we want to keep the existing API: LocalChangeNotification and DateTimeConfigurationChangeNotification.",
+      "range": {
+        "startLine": 8490,
+        "startChar": 7,
+        "endLine": 8490,
+        "endChar": 38
+      },
+      "revId": "5934cd1cca4577a607dc6a8432f4acd2c5e8631d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
