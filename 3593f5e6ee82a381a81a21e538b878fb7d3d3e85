@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2df67cd0_2c3d87b1",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-02-28T13:35:39Z",
+      "side": 1,
+      "message": "I\u0027m confused, I thought the synthetic variable in this case is called something like \u0027*default*\u0027? And ScopeInfo::VariableIsSynthetic wouldn\u0027t treat such names as synthetic?",
+      "revId": "3593f5e6ee82a381a81a21e538b878fb7d3d3e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
