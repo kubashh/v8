@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdd0b64e_64c8fd42",
+        "filename": "tools/clusterfuzz/testdata/sanity_check_output.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-28T10:15:46Z",
+      "side": 1,
+      "message": "C/P of the existing failure output with this source key changed...",
+      "range": {
+        "startLine": 4,
+        "startChar": 26,
+        "endLine": 4,
+        "endChar": 45
+      },
+      "revId": "7f12dddc50d3f69133aff36f47ed51d000c86603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9993dc8b_899aaab5",
+        "filename": "tools/clusterfuzz/testdata/sanity_check_output.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-28T10:15:46Z",
+      "side": 1,
+      "message": "... and here the None source file is now not printed. The rest is dummy output.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 1
+      },
+      "revId": "7f12dddc50d3f69133aff36f47ed51d000c86603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

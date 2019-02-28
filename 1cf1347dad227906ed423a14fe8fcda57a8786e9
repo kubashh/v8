@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3f8c51c1_c8463eb1",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-28T10:15:46Z",
+      "side": 1,
+      "message": "It\u0027s used. It\u0027s part of FAILURE_HEADER_TEMPLATE. I will make its printing optional, so that it defaults to None and is not printed in the None case. It actually always annoyed me when reducing test cases locally. I always remove it myself in the output in the end.",
+      "parentUuid": "e5056de1_ff2c727c",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0e22f41_f3a68e37",
         "filename": "tools/clusterfuzz/v8_foozzie.py",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "66a287f0_181079fc",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-28T10:15:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0e22f41_f3a68e37",
+      "range": {
+        "startLine": 345,
+        "startChar": 77,
+        "endLine": 345,
+        "endChar": 82
+      },
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd3895ce_d87e6d88",
         "filename": "tools/clusterfuzz/v8_foozzie_test.py",
         "patchSetId": 6
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "b23e60ac_50f038cc",
+        "filename": "tools/clusterfuzz/v8_foozzie_test.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-28T10:15:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd3895ce_d87e6d88",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23d8cb96_cab1987c",
         "filename": "tools/clusterfuzz/v8_foozzie_test.py",
         "patchSetId": 6
@@ -70,6 +130,24 @@
       "writtenOn": "2019-02-27T14:57:31Z",
       "side": 1,
       "message": "Why pass this flag here? Wouldn\u0027t this prevent from sanity-check code being tested?\nAlternatively, pass it here, but create another test where it is not passed and sanity check fails.",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23d583cb_74ba3a84",
+        "filename": "tools/clusterfuzz/v8_foozzie_test.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-28T10:15:46Z",
+      "side": 1,
+      "message": "Added a test without the flag. It\u0027s hard to have both in one test with the current mocking as I can\u0027t easily teach the mocked end-to-end fake d8\u0027s to behave differently throughout the test.",
+      "parentUuid": "23d8cb96_cab1987c",
       "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
