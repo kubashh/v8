@@ -15,11 +15,10 @@
 namespace v8_inspector {
 
 using protocol::Response;
-using protocol::Runtime::RemoteObject;
+using protocol::Runtime::EntryPreview;
 using protocol::Runtime::ObjectPreview;
 using protocol::Runtime::PropertyPreview;
-using protocol::Runtime::EntryPreview;
-using protocol::Runtime::InternalPropertyDescriptor;
+using protocol::Runtime::RemoteObject;
 
 namespace {
 V8InspectorClient* clientFor(v8::Local<v8::Context> context) {
@@ -809,59 +808,23 @@ void getInternalPropertiesForPreview(
   }
 }
 
-void getPrivateFieldsForPreview(v8::Local<v8::Context> context,
-                                v8::Local<v8::Object> object, int* nameLimit,
-                                bool* overflow,
-                                protocol::Array<PropertyPreview>* properties) {
-  v8::Isolate* isolate = context->GetIsolate();
-  v8::MicrotasksScope microtasksScope(isolate,
-                                      v8::MicrotasksScope::kDoNotRunMicrotasks);
-  v8::TryCatch tryCatch(isolate);
-  v8::Local<v8::Array> privateFields;
-
-  if (!v8::debug::GetPrivateFields(context, object).ToLocal(&privateFields)) {
-    return;
-  }
-
-  for (uint32_t i = 0; i < privateFields->Length(); i += 2) {
-    v8::Local<v8::Data> name;
-    if (!privateFields->Get(context, i).ToLocal(&name)) {
-      tryCatch.Reset();
-      continue;
+void getPrivateFieldsForPreview(
+    v8::Local<v8::Context> context, v8::Local<v8::Object> object,
+    int* nameLimit, bool* overflow,
+    protocol::Array<PropertyPreview>* privateFields) {
+  std::vector<PrivateFieldMirror> mirrors;
+  ValueMirror::getPrivateFields(context, object, &mirrors);
+  std::vector<String16> whitelist;
+  for (auto& mirror : mirrors) {
+    if (!*nameLimit) {
+      *overflow = true;
+      return;
     }
-
-    // Weirdly, v8::Private is set to be a subclass of v8::Data and
-    // not v8::Value, meaning, we first need to upcast to v8::Data
-    // and then downcast to v8::Private. Changing the hierarchy is a
-    // breaking change now. Not sure if that's possible.
-    //
-    // TODO(gsathya): Add an IsPrivate method to the v8::Private and
-    // assert here.
-    v8::Local<v8::Private> private_field = v8::Local<v8::Private>::Cast(name);
-    v8::Local<v8::Value> private_name = private_field->Name();
-    CHECK(!private_name->IsUndefined());
-
-    v8::Local<v8::Value> value;
-    if (!privateFields->Get(context, i + 1).ToLocal(&value)) {
-      tryCatch.Reset();
-      continue;
-    }
-
-    auto wrapper = ValueMirror::create(context, value);
-    if (wrapper) {
-      std::unique_ptr<PropertyPreview> propertyPreview;
-      wrapper->buildPropertyPreview(
-          context,
-          toProtocolStringWithTypeCheck(context->GetIsolate(), private_name),
-          &propertyPreview);
-      if (propertyPreview) {
-        if (!*nameLimit) {
-          *overflow = true;
-          return;
-        }
-        --*nameLimit;
-        properties->addItem(std::move(propertyPreview));
-      }
+    --*nameLimit;
+    std::unique_ptr<PropertyPreview> propertyPreview;
+    mirror.value->buildPropertyPreview(context, mirror.name, &propertyPreview);
+    if (propertyPreview) {
+      privateFields->addItem(std::move(propertyPreview));
     }
   }
 }
@@ -1405,6 +1368,50 @@ void ValueMirror::getInternalProperties(
       if (wrapper) {
         mirrors->emplace_back(InternalPropertyMirror{
             toProtocolStringWithTypeCheck(context->GetIsolate(), name),
+            std::move(wrapper)});
+      }
+    }
+  }
+}
+
+// static
+void ValueMirror::getPrivateFields(v8::Local<v8::Context> context,
+                                   v8::Local<v8::Object> object,
+                                   std::vector<PrivateFieldMirror>* mirrors) {
+  v8::Isolate* isolate = context->GetIsolate();
+  v8::MicrotasksScope microtasksScope(isolate,
+                                      v8::MicrotasksScope::kDoNotRunMicrotasks);
+  v8::TryCatch tryCatch(isolate);
+  v8::Local<v8::Array> privateFields;
+
+  if (v8::debug::GetPrivateFields(context, object).ToLocal(&privateFields)) {
+    for (uint32_t i = 0; i < privateFields->Length(); i += 2) {
+      v8::Local<v8::Value> name;
+      if (!privateFields->Get(context, i).ToLocal(&name)) {
+        tryCatch.Reset();
+        continue;
+      }
+
+      // Weirdly, v8::Private is set to be a subclass of v8::Data and
+      // not v8::Value, meaning, we first need to upcast to v8::Data
+      // and then downcast to v8::Private. Changing the hierarchy is a
+      // breaking change now. Not sure if that's possible.
+      //
+      // TODO(gsathya): Add an IsPrivate method to the v8::Private and
+      // assert here.
+      v8::Local<v8::Private> private_field = v8::Local<v8::Private>::Cast(name);
+      v8::Local<v8::Value> private_name = private_field->Name();
+      CHECK(!private_name->IsUndefined());
+
+      v8::Local<v8::Value> value;
+      if (!privateFields->Get(context, i + 1).ToLocal(&value)) {
+        tryCatch.Reset();
+        continue;
+      }
+      auto wrapper = ValueMirror::create(context, value);
+      if (wrapper) {
+        mirrors->emplace_back(PrivateFieldMirror{
+            toProtocolStringWithTypeCheck(context->GetIsolate(), private_name),
             std::move(wrapper)});
       }
     }
