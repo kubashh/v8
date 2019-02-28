@@ -7592,7 +7592,7 @@ TEST(ModuleParsingInternals) {
         i::VariableLocation::MODULE);
 
   CHECK(declarations->AtForTest(7)->var()->raw_name()->IsOneByteEqualTo(
-      "*default*"));
+      ".default"));
   CHECK(declarations->AtForTest(7)->var()->mode() == i::VariableMode::kConst);
   CHECK(declarations->AtForTest(7)->var()->binding_needs_init());
   CHECK(declarations->AtForTest(7)->var()->location() ==
@@ -7681,7 +7681,7 @@ TEST(ModuleParsingInternals) {
   entry = descriptor->regular_exports()
               .find(declarations->AtForTest(7)->var()->raw_name())
               ->second;
-  CheckEntry(entry, "default", "*default*", nullptr, -1);
+  CheckEntry(entry, "default", ".default", nullptr, -1);
   entry = descriptor->regular_exports()
               .find(declarations->AtForTest(12)->var()->raw_name())
               ->second;
