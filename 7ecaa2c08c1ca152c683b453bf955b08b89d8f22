@@ -16,6 +16,24 @@
       "revId": "7ecaa2c08c1ca152c683b453bf955b08b89d8f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f84e0d50_f093814d",
+        "filename": "src/arm64/cpu-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1307249
+      },
+      "writtenOn": "2019-02-28T18:27:18Z",
+      "side": 1,
+      "message": "Thanks for the catch, Pierre. Yes, `!USE_SIMULATOR` and `V8_HOST_ARCH_ARM64` look the same.\n\nTo remove the redundant check, would use `!USE_SIMULATOR` be more consistent as it is used in above `CacheLineSizes` class and also in other V8 backend (arm, mips). Furthermore, `!USE_SIMULATOR` could potentially enable the scenario to test V8 with arm64 simulator even running on arm64.",
+      "parentUuid": "ce3626cf_c3323781",
+      "revId": "7ecaa2c08c1ca152c683b453bf955b08b89d8f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
