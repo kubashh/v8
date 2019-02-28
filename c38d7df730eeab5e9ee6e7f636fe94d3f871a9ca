@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1120ff64_5d2866ec",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-02-28T00:18:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e861879_8a8122d8",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "212f8d11_d355cabb",
         "filename": "src/inspector/js_protocol.pdl",
         "patchSetId": 1
@@ -90,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "faff2a09_a6d22b85",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-02-28T00:18:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c1e37ca_6e1900c9",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50ef8e49_ac0aa24c",
         "filename": "src/inspector/js_protocol.pdl",
         "patchSetId": 1
@@ -107,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "6a0f4abb_7d227e0c",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-02-28T00:18:32Z",
+      "side": 1,
+      "message": "The private fields are all \"own\". There\u0027s no prototype lookup involved. The \"ownProperties\" flag shouldn\u0027t affect this IMO",
+      "parentUuid": "50ef8e49_ac0aa24c",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b2745a8b_ec996d70",
         "filename": "src/inspector/value-mirror.h",
         "patchSetId": 1
@@ -121,6 +175,24 @@
       "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d8b9064_e32d95c8",
+        "filename": "src/inspector/value-mirror.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-02-28T00:18:32Z",
+      "side": 1,
+      "message": "As commented above, these are separate from properties.",
+      "parentUuid": "b2745a8b_ec996d70",
+      "revId": "c38d7df730eeab5e9ee6e7f636fe94d3f871a9ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
