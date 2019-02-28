@@ -52,6 +52,24 @@
       "revId": "7ecaa2c08c1ca152c683b453bf955b08b89d8f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acceba7c_21524273",
+        "filename": "src/arm64/cpu-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1307249
+      },
+      "writtenOn": "2019-02-28T19:58:49Z",
+      "side": 1,
+      "message": "You are right, CpuFeatures::FlushICache will not even be called under simulator. It makes more sense to use `V8_HOST_ARCH_ARM64`.\n\nBTW: seems it also applies to line 18 in the same file. `cache_type_register_` should be set to 0 for `!V8_HOST_ARCH_ARM64` instead of `USE_SIMULATOR`.  Do you think this is appropriate?",
+      "parentUuid": "398cc81b_d51444f8",
+      "revId": "7ecaa2c08c1ca152c683b453bf955b08b89d8f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
