@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "70e33f72_1dcb33cc",
+        "filename": "tools/clusterfuzz/testdata/sanity_check_output.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-28T10:24:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cdd0b64e_64c8fd42",
+      "range": {
+        "startLine": 4,
+        "startChar": 26,
+        "endLine": 4,
+        "endChar": 45
+      },
+      "revId": "7f12dddc50d3f69133aff36f47ed51d000c86603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9993dc8b_899aaab5",
         "filename": "tools/clusterfuzz/testdata/sanity_check_output.txt",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "7f12dddc50d3f69133aff36f47ed51d000c86603",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65dfc5d8_fe25ecad",
+        "filename": "tools/clusterfuzz/testdata/sanity_check_output.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-28T10:24:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9993dc8b_899aaab5",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 1
+      },
+      "revId": "7f12dddc50d3f69133aff36f47ed51d000c86603",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

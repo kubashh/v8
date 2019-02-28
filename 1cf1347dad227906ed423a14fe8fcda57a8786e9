@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "249ddbbf_8542f4af",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-28T10:24:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3f8c51c1_c8463eb1",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e0e22f41_f3a68e37",
         "filename": "tools/clusterfuzz/v8_foozzie.py",
         "patchSetId": 6
@@ -81,6 +99,23 @@
       "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "324dc66f_44784f89",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-28T10:24:01Z",
+      "side": 1,
+      "message": "keep source_key assignment",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -151,6 +186,24 @@
       "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3508b091_1e0c709c",
+        "filename": "tools/clusterfuzz/v8_foozzie_test.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-02-28T10:24:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "23d583cb_74ba3a84",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
