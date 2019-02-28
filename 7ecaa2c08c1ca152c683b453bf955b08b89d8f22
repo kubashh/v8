@@ -34,6 +34,24 @@
       "revId": "7ecaa2c08c1ca152c683b453bf955b08b89d8f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "398cc81b_d51444f8",
+        "filename": "src/arm64/cpu-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2019-02-28T19:18:44Z",
+      "side": 1,
+      "message": "That\u0027s a good point, I think we may want to do this in the future since the Arm64 simulator is really helpful for debugging. It can generate traces of all code that it\u0027s executing, record register changes, give you a shell if it sees a break instruction, ...etc. So somebody working on V8 using an Arm64 workstation might want to use the simulator anyway.\n\nHowever, the more I think about this method the more I think it shouldn\u0027t be simulator specific, it should only depend on the host architecture. And when looking closer, `CpuFeatures::FlushICache()` isn\u0027t actually called to flush code objects when you have a simulator build, see https://cs.chromium.org/chromium/src/v8/src/flush-instruction-cache.cc?sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d18, so I think it makes more sense to use `V8_HOST_ARCH_ARM64` here instead.\n\nWhat do you think?",
+      "parentUuid": "f84e0d50_f093814d",
+      "revId": "7ecaa2c08c1ca152c683b453bf955b08b89d8f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
