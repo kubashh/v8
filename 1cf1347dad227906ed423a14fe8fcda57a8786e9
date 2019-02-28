@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "9be7125e_1dc5549a",
+        "filename": "tools/clusterfuzz/v8_foozzie.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-28T10:27:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "324dc66f_44784f89",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd3895ce_d87e6d88",
         "filename": "tools/clusterfuzz/v8_foozzie_test.py",
         "patchSetId": 6
@@ -218,6 +236,24 @@
       "writtenOn": "2019-02-27T14:57:31Z",
       "side": 1,
       "message": "Why print this (and one below)? Can\u0027t we just reference the bug in a comment?",
+      "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2bba7c4_3eddc52b",
+        "filename": "tools/clusterfuzz/v8_sanity_checks.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-02-28T10:27:22Z",
+      "side": 1,
+      "message": "The print serves as comment with the extra feature that when the sanity check fails, the users immediately see the link in clusterfuzz output text above the difference.",
+      "parentUuid": "78c7b230_754d5d94",
       "revId": "1cf1347dad227906ed423a14fe8fcda57a8786e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
