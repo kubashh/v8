@@ -70,6 +70,24 @@
       "revId": "7ecaa2c08c1ca152c683b453bf955b08b89d8f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d184f0b_2baeb742",
+        "filename": "src/arm64/cpu-arm64.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2019-03-01T11:11:32Z",
+      "side": 1,
+      "message": "\u003e BTW: seems it also applies to line 18 in the same file. `cache_type_register_` should be set to 0 for `!V8_HOST_ARCH_ARM64` instead of `USE_SIMULATOR`.  Do you think this is appropriate?\n\nYes, I think that\u0027s better too, thanks!",
+      "parentUuid": "acceba7c_21524273",
+      "revId": "7ecaa2c08c1ca152c683b453bf955b08b89d8f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
