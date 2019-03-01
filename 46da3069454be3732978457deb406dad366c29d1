@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "956b853d_28cfdd1c",
+        "filename": "test/message/fail/computed-prop-fni.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-03-01T09:01:55Z",
+      "side": 1,
+      "message": "2019!",
+      "revId": "46da3069454be3732978457deb406dad366c29d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
