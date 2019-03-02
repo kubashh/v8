@@ -10800,7 +10800,12 @@ int64_t Isolate::AdjustAmountOfExternalAllocatedMemory(
       reinterpret_cast<int64_t*>(reinterpret_cast<uint8_t*>(this) +
                                  I::kExternalMemoryAtLastMarkCompactOffset);
 
-  const int64_t amount = *external_memory + change_in_bytes;
+  // Overflows are likely embedder bugs, but to be conservative, we'll
+  // saturate instead of CHECK-failing.
+  const int64_t kMax = 0x7FFFFFFFFFFFFFFF;
+  const int64_t amount = change_in_bytes < kMax - *external_memory
+                             ? *external_memory + change_in_bytes
+                             : kMax;
   *external_memory = amount;
 
   int64_t allocation_diff_since_last_mc =
