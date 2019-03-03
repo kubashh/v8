@@ -3405,37 +3405,27 @@ Node* WasmGraphBuilder::BoundsCheckMem(uint8_t access_size, Node* index,
   return index;
 }
 
-// Check that the range [start, start + size) is in the range [0, max).
-void WasmGraphBuilder::BoundsCheckRange(Node* start, Node* size, Node* max,
-                                        wasm::WasmCodePosition position) {
-  // The accessed memory is [start, end), where {end} is {start + size}. We
-  // want to check that {start + size <= max}, making sure that {start + size}
-  // doesn't overflow. This can be expressed as {start <= max - size} as long
-  // as {max - size} isn't negative, which is true if {size <= max}.
+Node* WasmGraphBuilder::BoundsCheckRange(Node* start, Node** size, Node* max,
+                                         wasm::WasmCodePosition position) {
   auto m = mcgraph()->machine();
-  Node* cond = graph()->NewNode(m->Uint32LessThanOrEqual(), size, max);
-  TrapIfFalse(wasm::kTrapMemOutOfBounds, cond, position);
-
-  // This produces a positive number, since {size <= max}.
-  Node* effective_size = graph()->NewNode(m->Int32Sub(), max, size);
-
-  // Introduce the actual bounds check.
-  Node* check =
-      graph()->NewNode(m->Uint32LessThanOrEqual(), start, effective_size);
-  TrapIfFalse(wasm::kTrapMemOutOfBounds, check, position);
-
-  // TODO(binji): Does this need addtional untrusted_code_mitigations_ mask
-  // like BoundsCheckMem above?
+  TrapIfTrue(wasm::kTrapMemOutOfBounds,
+             graph()->NewNode(m->Uint32LessThan(), max, start), position);
+  Node* sub = graph()->NewNode(m->Int32Sub(), max, start);
+  Node* fail = graph()->NewNode(m->Uint32LessThan(), sub, *size);
+  Diamond d(graph(), mcgraph()->common(), fail, BranchHint::kFalse);
+  d.Chain(Control());
+  *size = d.Phi(MachineRepresentation::kWord32, sub, *size);
+  return fail;
 }
 
-Node* WasmGraphBuilder::BoundsCheckMemRange(Node* start, Node* size,
+Node* WasmGraphBuilder::BoundsCheckMemRange(Node** start, Node** size,
                                             wasm::WasmCodePosition position) {
-  // TODO(binji): Support trap handler.
-  if (!FLAG_wasm_no_bounds_checks) {
-    BoundsCheckRange(start, size, instance_cache_->mem_size, position);
-  }
-  return graph()->NewNode(mcgraph()->machine()->IntAdd(), MemBuffer(0),
-                          Uint32ToUintptr(start));
+  // TODO(binji): Support trap handler and no bounds check mode.
+  Node* fail =
+      BoundsCheckRange(*start, size, instance_cache_->mem_size, position);
+  *start = graph()->NewNode(mcgraph()->machine()->IntAdd(), MemBuffer(0),
+                            Uint32ToUintptr(*start));
+  return fail;
 }
 
 const Operator* WasmGraphBuilder::GetSafeLoadOperator(int offset,
@@ -4377,10 +4367,11 @@ Node* WasmGraphBuilder::MemoryInit(uint32_t data_segment_index, Node* dst,
                                    Node* src, Node* size,
                                    wasm::WasmCodePosition position) {
   CheckDataSegmentIsPassiveAndNotDropped(data_segment_index, position);
-  dst = BoundsCheckMemRange(dst, size, position);
-  MachineOperatorBuilder* m = mcgraph()->machine();
+  Node* dst_fail = BoundsCheckMemRange(&dst, &size, position);
+  auto m = mcgraph()->machine();
 
   Node* seg_index = Uint32Constant(data_segment_index);
+  Node* src_fail;
 
   {
     // Load segment size from WasmInstanceObject::data_segment_sizes.
@@ -4394,7 +4385,7 @@ Node* WasmGraphBuilder::MemoryInit(uint32_t data_segment_index, Node* dst,
                                                 Effect(), Control()));
 
     // Bounds check the src index against the segment size.
-    BoundsCheckRange(src, size, seg_size, position);
+    src_fail = BoundsCheckRange(src, &size, seg_size, position);
   }
 
   {
@@ -4418,7 +4409,10 @@ Node* WasmGraphBuilder::MemoryInit(uint32_t data_segment_index, Node* dst,
   MachineType sig_types[] = {MachineType::Pointer(), MachineType::Pointer(),
                              MachineType::Uint32()};
   MachineSignature sig(0, 3, sig_types);
-  return BuildCCall(&sig, function, dst, src, size);
+  BuildCCall(&sig, function, dst, src, size);
+  return TrapIfTrue(wasm::kTrapMemOutOfBounds,
+                    graph()->NewNode(m->Word32Or(), dst_fail, src_fail),
+                    position);
 }
 
 Node* WasmGraphBuilder::DataDrop(uint32_t data_segment_index,
@@ -4435,25 +4429,51 @@ Node* WasmGraphBuilder::DataDrop(uint32_t data_segment_index,
 
 Node* WasmGraphBuilder::MemoryCopy(Node* dst, Node* src, Node* size,
                                    wasm::WasmCodePosition position) {
-  dst = BoundsCheckMemRange(dst, size, position);
-  src = BoundsCheckMemRange(src, size, position);
+  auto m = mcgraph()->machine();
+  // TODO(binji): This is not correct when dst - src overflows, e.g.
+  //
+  //   dst = 0
+  //   src = 2**31 + 25
+  //   max = 2**31 + 50
+  //   size = 2**31 + 100
+  //
+  // dst + size > max, so dst_fail is true. And dst - src < size, since the
+  // subtraction wraps around. So the TrapIfTrue below will fire, and the
+  // writes won't occur.
+  Node* overlap = graph()->NewNode(
+      m->Uint32LessThan(), graph()->NewNode(m->Int32Sub(), dst, src), size);
+
+  Node* dst_fail = BoundsCheckMemRange(&dst, &size, position);
+
+  // Trap without copying any bytes if the regions overlap and src < dst. In
+  // this case, the copy should happen backward, but the first access will be
+  // out-of-bounds.
+  TrapIfTrue(wasm::kTrapMemOutOfBounds,
+             graph()->NewNode(m->Word32And(), dst_fail, overlap), position);
+
+  Node* src_fail = BoundsCheckMemRange(&src, &size, position);
+
   Node* function = graph()->NewNode(mcgraph()->common()->ExternalConstant(
       ExternalReference::wasm_memory_copy()));
   MachineType sig_types[] = {MachineType::Pointer(), MachineType::Pointer(),
                              MachineType::Uint32()};
   MachineSignature sig(0, 3, sig_types);
-  return BuildCCall(&sig, function, dst, src, size);
+  BuildCCall(&sig, function, dst, src, size);
+  return TrapIfTrue(wasm::kTrapMemOutOfBounds,
+                    graph()->NewNode(m->Word32Or(), dst_fail, src_fail),
+                    position);
 }
 
 Node* WasmGraphBuilder::MemoryFill(Node* dst, Node* value, Node* size,
                                    wasm::WasmCodePosition position) {
-  dst = BoundsCheckMemRange(dst, size, position);
+  Node* fail = BoundsCheckMemRange(&dst, &size, position);
   Node* function = graph()->NewNode(mcgraph()->common()->ExternalConstant(
       ExternalReference::wasm_memory_fill()));
   MachineType sig_types[] = {MachineType::Pointer(), MachineType::Uint32(),
                              MachineType::Uint32()};
   MachineSignature sig(0, 3, sig_types);
-  return BuildCCall(&sig, function, dst, value, size);
+  BuildCCall(&sig, function, dst, value, size);
+  return TrapIfTrue(wasm::kTrapMemOutOfBounds, fail, position);
 }
 
 Node* WasmGraphBuilder::CheckElemSegmentIsPassiveAndNotDropped(
