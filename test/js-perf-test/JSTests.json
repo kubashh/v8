@@ -892,6 +892,20 @@
       ]
     },
     {
+      "name": "TypedArrayFilter",
+      "path": ["TypedArrayFilter"],
+      "main": "run.js",
+      "resources": [],
+      "results_regexp": "^%s\\-TypedArrayFilter\\(Score\\): (.+)$",
+      "tests": [
+        {"name": "Uint8Array"},
+        {"name": "Uint16Array"},
+        {"name": "Uint32Array"},
+        {"name": "Float32Array"},
+        {"name": "Float64Array"}
+      ]
+    },
+    {
       "name": "Array",
       "path": ["Array"],
       "main": "run.js",
