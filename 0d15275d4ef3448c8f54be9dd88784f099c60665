@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee9bcfc9_70326a90",
+        "filename": "test/unittests/wasm/module-decoder-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2264,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-03-04T18:47:36Z",
+      "side": 1,
+      "message": "Nit: Please also add a test that {kLocalAnyRef} is rejected here.",
+      "revId": "0d15275d4ef3448c8f54be9dd88784f099c60665",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
