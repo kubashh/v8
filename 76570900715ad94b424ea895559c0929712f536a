@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1252fd1d_551cb149",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-03-04T18:05:04Z",
+      "side": 1,
+      "message": "Can you explain this code to me?\nI would assume that {LoadElemSegmentImpl} is only called during instantiation, and during instantiation only active segments get processed. However, you added a DCHECK that active segments cannot contain the null-function. If my understanding of the code is currect, then the change here is a no-op because the condition is always false.\n\nIf my understanding of passive segments is wrong and they also get called during instantiation, then never mind.\n\nIf this code is also called for passive segments during runtime, then please move this function to wasm-objects.cc. It does not belong here. The code here is just for instantiation.",
+      "revId": "76570900715ad94b424ea895559c0929712f536a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
