@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bbb4a94_3a045129",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-04T10:32:44Z",
+      "side": 1,
+      "message": "nit: line length.\nnit2: neither the commit hash nor bug nr work properly in gerrit. I\u0027d recommend linking with one of the following styles:\n\nhttps://crrev.com/f819fd44\nhttps://crrev.com/c/1491601\n\nhttps://crbug.com/v8/7464  // if it\u0027s a v8 bug.",
+      "revId": "420bc3e37ed572a97fc97e0ed11374adf61c9b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
