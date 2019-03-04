@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb743195_3fd3d9aa",
+        "filename": "src/mips/assembler-mips-inl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1192025
+      },
+      "writtenOn": "2019-03-04T08:09:11Z",
+      "side": 1,
+      "message": "Since code for mipsr6 and pre-r6 mips are now the same, delete this check.",
+      "range": {
+        "startLine": 126,
+        "startChar": 2,
+        "endLine": 126,
+        "endChar": 35
+      },
+      "revId": "56cdbaf7e1d221f94e52a692ec00dea387ea426a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
