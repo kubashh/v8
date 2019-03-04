@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c07425a1_9e6abf85",
+        "filename": "test/js-perf-test/JSTests.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-03-04T13:58:49Z",
+      "side": 1,
+      "message": "Done, moved under TypedArrays.",
+      "parentUuid": "75e80cb5_e115048c",
+      "revId": "dd55dd6b54aef9cf0510c36cdb3deb463ec5d6e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a4c9537d_ec9a687f",
         "filename": "test/js-perf-test/TypedArrayFilter/run.js",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "dd55dd6b54aef9cf0510c36cdb3deb463ec5d6e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8e1d8b8_cb2bb1a4",
+        "filename": "test/js-perf-test/TypedArrayFilter/run.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-03-04T13:58:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4c9537d_ec9a687f",
+      "revId": "dd55dd6b54aef9cf0510c36cdb3deb463ec5d6e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
