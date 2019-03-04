@@ -16,6 +16,24 @@
       "revId": "76570900715ad94b424ea895559c0929712f536a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e7a6b11_366e9ca9",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-03-04T18:27:15Z",
+      "side": 1,
+      "message": "A passive segment is not initialized during instantiation, so you\u0027re right that it\u0027s a bit weird that the code is here. But if you use the `table.init` instruction, it calls into the WasmInstanceObject::InitTableEntries function, which calls wasm::LoadElemSegment, which calls here.\n\nIt makes sense to share the code, since the same logic is used to copy segments at instantiation as init the `memory.init` and `table.init` instructions.",
+      "parentUuid": "1252fd1d_551cb149",
+      "revId": "76570900715ad94b424ea895559c0929712f536a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
