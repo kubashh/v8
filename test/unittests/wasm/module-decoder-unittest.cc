@@ -32,6 +32,9 @@ namespace module_decoder_unittest {
 #define WASM_INIT_EXPR_ANYREF WASM_REF_NULL, kExprEnd
 #define WASM_INIT_EXPR_GLOBAL(index) WASM_GET_GLOBAL(index), kExprEnd
 
+#define REF_NULL_ELEMENT kExprRefNull, kExprEnd
+#define REF_FUNC_ELEMENT(v) kExprRefFunc, U32V_1(v), kExprEnd
+
 #define EMPTY_BODY 0
 #define NOP_BODY 2, 0, kExprNop
 
@@ -2258,8 +2261,8 @@ TEST_F(WasmModuleVerifyTest, PassiveElementSegment) {
       // table declaration -----------------------------------------------------
       SECTION(Table, ENTRY_COUNT(1), kLocalAnyFunc, 0, 1),
       // element segments  -----------------------------------------------------
-      SECTION(Element, ENTRY_COUNT(1), PASSIVE,
-              ADD_COUNT(FUNC_INDEX(0), FUNC_INDEX(0))),
+      SECTION(Element, ENTRY_COUNT(1), PASSIVE, kLocalAnyFunc, U32V_1(3),
+              REF_FUNC_ELEMENT(0), REF_FUNC_ELEMENT(0), REF_NULL_ELEMENT),
       // code ------------------------------------------------------------------
       ONE_EMPTY_BODY};
   EXPECT_FAILURE(data);
@@ -2375,6 +2378,8 @@ TEST_F(WasmModuleVerifyTest, DataCountSegmentCount_omitted) {
 #undef WASM_INIT_EXPR_F64
 #undef WASM_INIT_EXPR_ANYREF
 #undef WASM_INIT_EXPR_GLOBAL
+#undef REF_NULL_ELEMENT
+#undef REF_FUNC_ELEMENT
 #undef EMPTY_BODY
 #undef NOP_BODY
 #undef SIG_ENTRY_i_i
