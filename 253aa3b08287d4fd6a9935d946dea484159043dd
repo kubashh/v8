@@ -16,6 +16,74 @@
       "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e128795_09ea25b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-03-04T19:32:39Z",
+      "side": 1,
+      "message": "I am curious whether we have a bug for this?",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab438d30_1a1f51a3",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 5
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-03-04T19:32:39Z",
+      "side": 1,
+      "message": "Just do double-check: it\u0027s never a symbol, right?",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b31ae96_894521b1",
+        "filename": "src/inspector/v8-runtime-agent-impl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-03-04T19:32:39Z",
+      "side": 1,
+      "message": "Let\u0027s merge this with getInternalProperties above. I don\u0027t see where we could use them separately.",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1d79b2f_3afd96e7",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1000379
+      },
+      "writtenOn": "2019-03-04T19:32:39Z",
+      "side": 1,
+      "message": "if (!...) return;",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
