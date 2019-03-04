@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75e80cb5_e115048c",
+        "filename": "test/js-perf-test/JSTests.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-04T10:43:43Z",
+      "side": 1,
+      "message": "Out of curiosity, why did you add a new top-level benchmark instead of under TypedArrays?",
+      "revId": "dd55dd6b54aef9cf0510c36cdb3deb463ec5d6e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4c9537d_ec9a687f",
+        "filename": "test/js-perf-test/TypedArrayFilter/run.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-04T10:43:43Z",
+      "side": 1,
+      "message": "Line length; not sure how strict we are about this in js tests.",
+      "revId": "dd55dd6b54aef9cf0510c36cdb3deb463ec5d6e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
