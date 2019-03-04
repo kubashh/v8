@@ -1907,12 +1907,16 @@ void UpdateNeedsHoleCheck(Variable* var, VariableProxy* proxy, Scope* scope) {
   }
 
   // Check if the binding really needs an initialization check. The check
-  // can be skipped in the following situation: we have a VariableMode::kLet or
-  // VariableMode::kConst binding, both the Variable and the VariableProxy have
-  // the same declaration scope (i.e. they are both in global code, in the same
-  // function or in the same eval code), the VariableProxy is in the source
-  // physically located after the initializer of the variable, and that the
-  // initializer cannot be skipped due to a nonlinear scope.
+  // can be skipped in the following situation:
+  // 1. We have a VariableMode::kLet or VariableMode::kConst binding.
+  // 2. Both the Variable and the VariableProxy have the same declaration
+  //    scope (i.e. they are both in global code, in the same function or in
+  //    the same eval code); or the VariableProxy is in or nested in a scope
+  //    that has the same declaration scope as the Variable and is created by
+  //    a function expression (since, function expressions are not hoisted).
+  // 3. The VariableProxy is in the source physically located after the
+  //    initializer of the variable.
+  // 4. The initializer does not contain a nonlinear scope.
   //
   // The condition on the closure scopes is a conservative check for
   // nested functions that access a binding and are called before the
@@ -1925,7 +1929,19 @@ void UpdateNeedsHoleCheck(Variable* var, VariableProxy* proxy, Scope* scope) {
   // The scope of the variable needs to be checked, in case the use is
   // in a sub-block which may be linear.
   if (var->scope()->GetClosureScope() != scope->GetClosureScope()) {
-    return SetNeedsHoleCheck(var, proxy);
+    // If the Variable doesn't have a valid source position the check
+    // cannot be skipped.
+    if (var->initializer_position() == kNoSourcePosition) {
+      return SetNeedsHoleCheck(var, proxy);
+    }
+    Scope* target = scope;
+    while (target->outer_scope()->GetClosureScope() !=
+           var->scope()->GetClosureScope()) {
+      target = target->outer_scope();
+    }
+    if (!target->GetClosureScope()->is_function_expression_scope()) {
+      return SetNeedsHoleCheck(var, proxy);
+    }
   }
 
   // We should always have valid source positions.
