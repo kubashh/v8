@@ -34,6 +34,24 @@
       "revId": "76570900715ad94b424ea895559c0929712f536a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a33507d_f0b971a9",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-03-04T18:36:55Z",
+      "side": 1,
+      "message": "I just realized that the code here was used for passive segments already before this CL. Please add a TODO here that this function moves to wasm-objects.cc eventually.",
+      "parentUuid": "6e7a6b11_366e9ca9",
+      "revId": "76570900715ad94b424ea895559c0929712f536a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
