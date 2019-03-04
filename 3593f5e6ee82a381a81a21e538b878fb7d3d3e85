@@ -52,6 +52,24 @@
       "revId": "3593f5e6ee82a381a81a21e538b878fb7d3d3e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebafb172_b10a1608",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-03-04T14:13:08Z",
+      "side": 1,
+      "message": "The CHECK was incorrect, at least since the addition of direct namespace exports.",
+      "parentUuid": "99618100_6ebcfb51",
+      "revId": "3593f5e6ee82a381a81a21e538b878fb7d3d3e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
