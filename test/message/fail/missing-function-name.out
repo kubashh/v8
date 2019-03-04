@@ -1,0 +1,4 @@
+*%(basename)s:5: SyntaxError: Function statements require a valid function name
+function (){}
+^^^^^^^^
+SyntaxError: Function statements require a valid function name
