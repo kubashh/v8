@@ -34,6 +34,24 @@
       "revId": "3593f5e6ee82a381a81a21e538b878fb7d3d3e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99618100_6ebcfb51",
+        "filename": "src/debug/debug-scopes.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-04T12:44:40Z",
+      "side": 1,
+      "message": "More q\u0027s: so why are we hitting a synthetic variable here now? The CHECK seems to imply we did not expect them here; should they be filtered out somewhere previously? Or were we just missing support here?",
+      "parentUuid": "afff6809_ad9da968",
+      "revId": "3593f5e6ee82a381a81a21e538b878fb7d3d3e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
