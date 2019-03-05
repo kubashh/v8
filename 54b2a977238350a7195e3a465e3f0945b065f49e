@@ -22,6 +22,30 @@
       "revId": "54b2a977238350a7195e3a465e3f0945b065f49e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80f4c6af_fd40bd04",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-03-05T22:14:45Z",
+      "side": 1,
+      "message": "Nope, before the bigint proposal, i64 values were entirely disallowed here (see lines 1019-1024 above; spec: https://webassembly.github.io/spec/js-api/index.html#towebassemblyvalue). This change brings the implementation in line with the current proposal. See https://github.com/WebAssembly/JS-BigInt-integration/issues/12 for further discussion.",
+      "parentUuid": "dd103b64_5eaef9c6",
+      "range": {
+        "startLine": 1060,
+        "startChar": 27,
+        "endLine": 1060,
+        "endChar": 50
+      },
+      "revId": "54b2a977238350a7195e3a465e3f0945b065f49e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
