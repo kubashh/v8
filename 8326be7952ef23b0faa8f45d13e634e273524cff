@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "88a070f4_a490ddf2",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4456,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-03-05T19:35:53Z",
+      "side": 1,
+      "message": "True. It doesn\u0027t matter for single-threaded code, but we\u0027ll want it to be correct for multi-threaded code. I\u0027ve filed https://bugs.chromium.org/p/v8/issues/detail?id\u003d8950 to track this.",
+      "parentUuid": "d88265dc_174098fb",
+      "range": {
+        "startLine": 4456,
+        "startChar": 56,
+        "endLine": 4456,
+        "endChar": 69
+      },
+      "revId": "8326be7952ef23b0faa8f45d13e634e273524cff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fb0fd7b1_a2489942",
         "filename": "src/compiler/wasm-compiler.h",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "8326be7952ef23b0faa8f45d13e634e273524cff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "268c50a6_f77483df",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-03-05T19:35:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb0fd7b1_a2489942",
+      "range": {
+        "startLine": 445,
+        "startChar": 5,
+        "endLine": 445,
+        "endChar": 18
+      },
+      "revId": "8326be7952ef23b0faa8f45d13e634e273524cff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "63eccd4f_b5106f7c",
+        "filename": "src/compiler/wasm-compiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-03-05T19:35:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d686fb81_b4c30f6a",
+      "range": {
+        "startLine": 451,
+        "startChar": 5,
+        "endLine": 451,
+        "endChar": 18
+      },
+      "revId": "8326be7952ef23b0faa8f45d13e634e273524cff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cb1d51ec_ea93bb1d",
         "filename": "src/wasm/module-instantiate.cc",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "cfd15d03_1c1ff88a",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1477,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-03-05T19:35:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb1d51ec_ea93bb1d",
+      "range": {
+        "startLine": 1477,
+        "startChar": 3,
+        "endLine": 1477,
+        "endChar": 62
+      },
+      "revId": "8326be7952ef23b0faa8f45d13e634e273524cff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ceb96414_b272e607",
         "filename": "src/wasm/module-instantiate.cc",
         "patchSetId": 3
@@ -114,6 +210,30 @@
       "revId": "8326be7952ef23b0faa8f45d13e634e273524cff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3b33131_18f0ebef",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1002783
+      },
+      "writtenOn": "2019-03-05T19:35:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ceb96414_b272e607",
+      "range": {
+        "startLine": 1499,
+        "startChar": 5,
+        "endLine": 1499,
+        "endChar": 7
+      },
+      "revId": "8326be7952ef23b0faa8f45d13e634e273524cff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
