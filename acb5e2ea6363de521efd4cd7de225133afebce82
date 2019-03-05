@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "007e6d22_8724dcf8",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7502,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-03-05T09:27:48Z",
+      "side": 1,
+      "message": "We have decided against using sdt::function due to confusion over ownership. Would normal function pointers work for you?",
+      "revId": "acb5e2ea6363de521efd4cd7de225133afebce82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
