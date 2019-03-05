@@ -1473,6 +1473,20 @@ void InstanceBuilder::InitializeTables(Handle<WasmInstanceObject> instance) {
   }
 }
 
+namespace {
+// TODO(wasm): Combine this with the same code in wasm-objects.cc
+bool ClampToBounds(uint32_t start, size_t* count, size_t max) {
+  if (start > max) {
+    *count = 0;
+    return false;
+  }
+  size_t avail = max - start;
+  bool oob = *count > avail;
+  if (oob) *count = avail;
+  return !oob;
+}
+}  // namespace
+
 bool LoadElemSegmentImpl(Isolate* isolate, Handle<WasmInstanceObject> instance,
                          const TableInstance& table_instance,
                          JSToWasmWrapperCache* js_to_wasm_cache,
@@ -1481,11 +1495,11 @@ bool LoadElemSegmentImpl(Isolate* isolate, Handle<WasmInstanceObject> instance,
   // TODO(wasm): Move this functionality into wasm-objects, since it is used
   // for both instantiation and in the implementation of the table.init
   // instruction.
-  if (!IsInBounds(dst, count, table_instance.table_size)) return false;
-  if (!IsInBounds(src, count, elem_segment.entries.size())) return false;
+  bool ok = ClampToBounds(dst, &count, table_instance.table_size);
+  ok &= ClampToBounds(src, &count, elem_segment.entries.size());
 
   const WasmModule* module = instance->module();
-  for (uint32_t i = 0; i < count; ++i) {
+  for (size_t i = 0; i < count; ++i) {
     uint32_t func_index = elem_segment.entries[src + i];
     int entry_index = static_cast<int>(dst + i);
 
@@ -1547,7 +1561,7 @@ bool LoadElemSegmentImpl(Isolate* isolate, Handle<WasmInstanceObject> instance,
           instance, func_index);
     }
   }
-  return true;
+  return ok;
 }
 
 void InstanceBuilder::LoadTableSegments(Handle<WasmInstanceObject> instance) {

@@ -24,7 +24,7 @@ load("test/mjsunit/wasm/wasm-module-builder.js");
 
   let instance = builder.instantiate();
   let copy = instance.exports.copy;
-  for (let i = 0; i < kTableSize; i++) {
+  for (let i = 0; i <= kTableSize; i++) {
     copy(0, 0, i); // nop
     copy(0, i, kTableSize - i);
     copy(i, 0, kTableSize - i);
