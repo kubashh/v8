@@ -69,6 +69,30 @@
       "revId": "7638ffaacf3fa535074b4e5c3d63e2d50ae2f73e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edcbcd4b_248d6c5c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-03-05T18:22:42Z",
+      "side": 1,
+      "message": "Thanks. The other CL has been LGTM\u0027ed, so we can now land both of them.",
+      "parentUuid": "b08def1d_ddba4d9c",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 56
+      },
+      "revId": "7638ffaacf3fa535074b4e5c3d63e2d50ae2f73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
