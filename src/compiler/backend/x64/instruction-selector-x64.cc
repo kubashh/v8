@@ -1521,6 +1521,7 @@ void InstructionSelector::EmitPrepareArguments(
   } else {
     // Push any stack arguments.
     int effect_level = GetEffectLevel(node);
+    RootIndex index;
     for (PushParameter input : base::Reversed(*arguments)) {
       // Skip any alignment holes in pushed nodes. We may have one in case of a
       // Simd128 stack argument.
@@ -1542,6 +1543,10 @@ void InstructionSelector::EmitPrepareArguments(
             input.node, inputs, &input_count);
         opcode |= AddressingModeField::encode(mode);
         Emit(opcode, 0, outputs, input_count, inputs);
+      } else if (input.node->opcode() == IrOpcode::kHeapConstant &&
+          CanCover(node, input.node) && isolate()->roots_table().
+          IsRootHandle(HeapConstantOf(input.node->op()), &index)) {
+        Emit(kX64Push, g.NoOutput(), g.UseRegisterOrSlotOrConstant(input.node));
       } else {
         Emit(kX64Push, g.NoOutput(), g.UseAny(input.node));
       }
