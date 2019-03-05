@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd103b64_5eaef9c6",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-05T09:53:31Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this path be gated by {(!enabled_.bigint || (global.type !\u003d kWasmI64))} instead? I didn\u0027t check the spec, but I assume that before the bigint proposal i64 was allowed to be initialized by a number, correct? In that case I think we should preserve the old path until --experimental-wasm-bigint is enabled by default.",
+      "range": {
+        "startLine": 1060,
+        "startChar": 27,
+        "endLine": 1060,
+        "endChar": 50
+      },
+      "revId": "54b2a977238350a7195e3a465e3f0945b065f49e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
