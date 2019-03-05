@@ -99,6 +99,24 @@
       "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41eb4f32_b7ace0e3",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 2653,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-03-05T16:14:06Z",
+      "side": 1,
+      "message": "Should _xg bot be triggerable via Gerrit? If so, I\u0027ll remove it from here and keep it in .try bucket.",
+      "parentUuid": "a906bba9_d0567457",
+      "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
