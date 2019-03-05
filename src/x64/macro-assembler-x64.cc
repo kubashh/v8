@@ -8,6 +8,7 @@
 #include "src/base/division-by-constant.h"
 #include "src/base/utils/random-number-generator.h"
 #include "src/bootstrapper.h"
+#include "src/builtins/constants-table-builder.h"
 #include "src/callable.h"
 #include "src/code-factory.h"
 #include "src/counters.h"
