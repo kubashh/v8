@@ -16,6 +16,24 @@
       "revId": "acb5e2ea6363de521efd4cd7de225133afebce82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e24ec2a8_a232946e",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7502,
+      "author": {
+        "id": 1240175
+      },
+      "writtenOn": "2019-03-05T11:22:49Z",
+      "side": 1,
+      "message": "IIRC the compiler wouldn\u0027t let me pass a lambda function to a normal function pointer (see https://chromium-review.googlesource.com/c/v8/v8/+/1412115/1/src/api.cc#8235), but I\u0027ll try again, since it should work.",
+      "parentUuid": "007e6d22_8724dcf8",
+      "revId": "acb5e2ea6363de521efd4cd7de225133afebce82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
