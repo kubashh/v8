@@ -727,6 +727,10 @@ class V8_EXPORT_PRIVATE DeclarationScope : public Scope {
     return is_function_scope() && IsArrowFunction(function_kind_);
   }
 
+  bool is_function_expression_scope() const {
+    return function_kind_ == kFunctionExpression || is_arrow_scope();
+  }
+
   // Inform the scope that the corresponding code uses "super".
   void RecordSuperPropertyUsage() {
     DCHECK(IsConciseMethod(function_kind()) ||

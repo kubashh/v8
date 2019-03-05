@@ -674,7 +674,7 @@ void Parser::ParseWrapped(Isolate* isolate, ParseInfo* info,
       PrepareWrappedArguments(isolate, info, zone);
 
   FunctionLiteral* function_literal = ParseFunctionLiteral(
-      function_name, location, kSkipFunctionNameCheck, kNormalFunction,
+      function_name, location, kSkipFunctionNameCheck, kFunctionExpression,
       kNoSourcePosition, FunctionLiteral::kWrapped, LanguageMode::kSloppy,
       arguments_for_wrapped_function);
 

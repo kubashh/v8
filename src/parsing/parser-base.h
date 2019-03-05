@@ -3235,7 +3235,7 @@ ParserBase<Impl>::ParseFunctionExpression() {
 
   FunctionKind function_kind = Check(Token::MUL)
                                    ? FunctionKind::kGeneratorFunction
-                                   : FunctionKind::kNormalFunction;
+                                   : FunctionKind::kFunctionExpression;
   IdentifierT name = impl()->NullIdentifier();
   bool is_strict_reserved_name = Token::IsStrictReservedWord(peek());
   Scanner::Location function_name_location = Scanner::Location::invalid();

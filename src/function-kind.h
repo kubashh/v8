@@ -14,6 +14,7 @@ namespace internal {
 enum FunctionKind : uint8_t {
   // BEGIN constructable functions
   kNormalFunction,
+  kFunctionExpression,
   kModule,
   // BEGIN class constructors
   // BEGIN base constructors
@@ -146,6 +147,8 @@ inline std::ostream& operator<<(std::ostream& os, FunctionKind kind) {
   switch (kind) {
     case FunctionKind::kNormalFunction:
       return os << "NormalFunction";
+    case FunctionKind::kFunctionExpression:
+      return os << "FunctionExpression";
     case FunctionKind::kArrowFunction:
       return os << "ArrowFunction";
     case FunctionKind::kGeneratorFunction:

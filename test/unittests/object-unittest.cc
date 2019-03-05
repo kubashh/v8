@@ -154,7 +154,7 @@ TEST_F(ObjectWithIsolate, DictionaryGrowth) {
 
 TEST_F(TestWithNativeContext, EmptyFunctionScopeInfo) {
   // Check that the empty_function has a properly set up ScopeInfo.
-  Handle<JSFunction> function = RunJS<JSFunction>("(function(){})");
+  Handle<JSFunction> function = RunJS<JSFunction>("function(){}");
 
   Handle<ScopeInfo> scope_info(function->shared()->scope_info(),
                                function->GetIsolate());
