@@ -10097,6 +10097,14 @@ void CpuProfiler::CollectSample(Isolate* isolate) {
   i::CpuProfiler::CollectSample(reinterpret_cast<i::Isolate*>(isolate));
 }
 
+// static
+int CpuProfiler::GetPlatformSamplingResolution() {
+  int64_t resolution =
+      i::CpuProfiler::GetPlatformSamplingResolution().InMicroseconds();
+  DCHECK(resolution <= std::numeric_limits<int>::max());
+  return static_cast<int>(resolution);
+}
+
 void CpuProfiler::SetSamplingInterval(int us) {
   DCHECK_GE(us, 0);
   return reinterpret_cast<i::CpuProfiler*>(this)->set_sampling_interval(

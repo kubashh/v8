@@ -221,6 +221,7 @@ class CpuProfiler {
   ~CpuProfiler();
 
   static void CollectSample(Isolate* isolate);
+  static base::TimeDelta GetPlatformSamplingResolution();
 
   typedef v8::CpuProfilingMode ProfilingMode;
 

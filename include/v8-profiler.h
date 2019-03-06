@@ -290,6 +290,16 @@ class V8_EXPORT CpuProfiler {
   static void CollectSample(Isolate* isolate);
 
   /**
+   * Returns the smallest possible sampling interval efficiently supported by
+   * the platform's hardware clock in microseconds. For best performance,
+   * sampling intervals should be divisible by this value.
+   *
+   * If the platform does not have a strictly defined timer resolution, 0 is
+   * returned.
+   */
+  static int GetPlatformSamplingResolution();
+
+  /**
    * Disposes the CPU profiler object.
    */
   void Dispose();

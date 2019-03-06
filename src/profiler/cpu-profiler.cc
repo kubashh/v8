@@ -183,6 +183,8 @@ SamplingEventsProcessor::ProcessOneSample() {
 
 void SamplingEventsProcessor::Run() {
   base::MutexGuard guard(&running_mutex_);
+  base::TimeDelta resolution = CpuProfiler::GetPlatformSamplingResolution();
+  base::TimeTicks last_wakeup = base::TimeTicks::HighResolutionNow();
   while (!!base::Relaxed_Load(&running_)) {
     base::TimeTicks nextSampleTime =
         base::TimeTicks::HighResolutionNow() + period_;
@@ -200,29 +202,23 @@ void SamplingEventsProcessor::Run() {
       now = base::TimeTicks::HighResolutionNow();
     } while (result != NoSamplesInQueue && now < nextSampleTime);
 
-    if (nextSampleTime > now) {
-#if V8_OS_WIN
-      if (nextSampleTime - now < base::TimeDelta::FromMilliseconds(100)) {
-        // Do not use Sleep on Windows as it is very imprecise, with up to 16ms
-        // jitter, which is unacceptable for short profile intervals.
-        while (base::TimeTicks::HighResolutionNow() < nextSampleTime) {
-        }
-      } else  // NOLINT
-#endif
-      {
-        // Allow another thread to interrupt the delay between samples in the
-        // event of profiler shutdown.
-        while (now < nextSampleTime &&
-               running_cond_.WaitFor(&running_mutex_, nextSampleTime - now)) {
-          // If true was returned, we got interrupted before the timeout
-          // elapsed. If this was not due to a change in running state, a
-          // spurious wakeup occurred (thus we should continue to wait).
-          if (!base::Relaxed_Load(&running_)) {
-            break;
-          }
-          now = base::TimeTicks::HighResolutionNow();
-        }
+    base::TimeTicks sleep_deadline = nextSampleTime;
+    if (!resolution.IsZero()) {
+      // On platforms with coarse timers, compensate for the misalignment to
+      // the clock interrupt.
+      base::TimeDelta skew = (nextSampleTime - last_wakeup) % resolution;
+      sleep_deadline -= skew;
+    }
+
+    while (now < nextSampleTime) {
+      if (!base::Relaxed_Load(&running_)) {
+        break;
       }
+      if (now < sleep_deadline &&
+          !running_cond_.WaitFor(&running_mutex_, sleep_deadline - now)) {
+        last_wakeup = base::TimeTicks::HighResolutionNow();
+      }
+      now = base::TimeTicks::HighResolutionNow();
     }
 
     // Schedule next sample.
@@ -356,6 +352,16 @@ void CpuProfiler::CreateEntriesForRuntimeCallStats() {
 // static
 void CpuProfiler::CollectSample(Isolate* isolate) {
   GetProfilersManager()->CallCollectSample(isolate);
+}
+
+// static
+base::TimeDelta CpuProfiler::GetPlatformSamplingResolution() {
+#if V8_OS_WIN
+  // Windows' most coarse timer resolution is defined at 1/64th of a second.
+  return base::TimeDelta::FromMicroseconds(15625);
+#else
+  return base::TimeDelta();
+#endif
 }
 
 void CpuProfiler::CollectSample() {

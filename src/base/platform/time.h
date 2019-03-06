@@ -143,6 +143,9 @@ class V8_BASE_EXPORT TimeDelta final {
   TimeDelta operator-(const TimeDelta& other) const {
     return TimeDelta(delta_ - other.delta_);
   }
+  TimeDelta operator%(const TimeDelta& other) const {
+    return TimeDelta(delta_ % other.delta_);
+  }
 
   TimeDelta& operator+=(const TimeDelta& other) {
     delta_ += other.delta_;
