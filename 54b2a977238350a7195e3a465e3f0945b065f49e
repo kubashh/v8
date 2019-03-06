@@ -46,6 +46,30 @@
       "revId": "54b2a977238350a7195e3a465e3f0945b065f49e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "abcaf656_c34e9256",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-06T09:09:26Z",
+      "side": 1,
+      "message": "Ack. Thanks for clarifying. Makes sense.",
+      "parentUuid": "80f4c6af_fd40bd04",
+      "range": {
+        "startLine": 1060,
+        "startChar": 27,
+        "endLine": 1060,
+        "endChar": 50
+      },
+      "revId": "54b2a977238350a7195e3a465e3f0945b065f49e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
