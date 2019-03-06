@@ -118,6 +118,30 @@
       "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93bd0b6f_2589f847",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-03-06T08:56:20Z",
+      "side": 1,
+      "message": "I\u0027ve managed to reproduce it with files:\n\n  \u003e\u003e\u003e f \u003d open(\u0027f\u0027, \u0027w\u0027)\n  \u003e\u003e\u003e print \u003e\u003e f, \u0027foo\u0027,\n  \u003e\u003e\u003e f.close()\n  \u003e\u003e\u003e f \u003d open(\u0027f2\u0027, \u0027w\u0027)\n  \u003e\u003e\u003e from __future__ import print_function\n  \u003e\u003e\u003e print(\u0027foo\u0027, end\u003d\u0027 \u0027, file\u003df)\n  \u003e\u003e\u003e f.close()\n  \u003e\u003e\u003e f \u003d open(\u0027f3\u0027, \u0027w\u0027)\n  \u003e\u003e\u003e print(\u0027foo\u0027, end\u003d\u0027\u0027, file\u003df)\n  \u003e\u003e\u003e f.close()\n\nAnd then listing shows the different in file size::\n\n  $ ls -l\n  -rw-r-----  1 sergiyb primarygroup     3 Mar  6 09:52 f\n  -rw-r-----  1 sergiyb primarygroup     4 Mar  6 09:52 f2\n  -rw-r-----  1 sergiyb primarygroup     3 Mar  6 09:53 f3",
+      "parentUuid": "f2718048_205aee2d",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 68
+      },
+      "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
