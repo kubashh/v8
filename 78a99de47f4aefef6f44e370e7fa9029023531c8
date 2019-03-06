@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "70f24c75_eab5dc14",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1315912
+      },
+      "writtenOn": "2019-03-06T11:59:08Z",
+      "side": 1,
+      "message": "fixed to \"end\u003d\u0027\u0027\"",
+      "parentUuid": "93bd0b6f_2589f847",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 68
+      },
+      "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5899e508_449efaa2",
         "filename": "test/preparser/testcfg.py",
         "patchSetId": 3
@@ -159,6 +183,24 @@
       "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b63e9290_90ad221e",
+        "filename": "test/preparser/testcfg.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1315912
+      },
+      "writtenOn": "2019-03-06T11:59:08Z",
+      "side": 1,
+      "message": "I have reverted the changes. Will make edits in a separate commit",
+      "parentUuid": "5899e508_449efaa2",
+      "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
