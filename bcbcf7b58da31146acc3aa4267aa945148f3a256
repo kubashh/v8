@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "142a7deb_b03b67d7",
+        "filename": "test/js-perf-test/StackTrace/capture.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-03-06T13:59:55Z",
+      "side": 1,
+      "message": "supernit: space between catch and (\n\n... I think",
+      "range": {
+        "startLine": 32,
+        "startChar": 24,
+        "endLine": 32,
+        "endChar": 25
+      },
+      "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7bce800_69ab2d9b",
+        "filename": "test/js-perf-test/StackTrace/capture.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-03-06T13:59:55Z",
+      "side": 1,
+      "message": "Not sure if you also need to mark middle and inner for optimization. Did you check with --trace-turbo-inlining that it gets inlined?",
+      "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55fca572_99cc1be0",
+        "filename": "test/js-perf-test/StackTrace/serialize.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-03-06T13:59:55Z",
+      "side": 1,
+      "message": "I would just give errors a more descriptive name and remove the comment.\n\nerrorsCaughtBySetup?",
+      "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
