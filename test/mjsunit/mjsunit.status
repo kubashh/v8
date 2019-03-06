@@ -232,6 +232,10 @@
 
   # BUG(v8:8169)
   'external-backing-store-gc': [SKIP],
+
+  # https://crbug.com/chromium/938251
+  'regress/regress-crbug-938251-fill': [FAIL],
+  'regress/regress-crbug-938251-concat': [FAIL, SLOW, NO_VARIANTS],
 }],  # ALWAYS
 
 ['novfp3 == True', {
