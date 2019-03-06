@@ -22,6 +22,30 @@
       "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12eb40dc_8b287bdf",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-03-06T08:36:12Z",
+      "side": 1,
+      "message": "AFAIK, the end parameter is exactly what should reproduce the behavior of the trailing comma in Python3. Do you have an example where the output is different?",
+      "parentUuid": "9410acb8_4a26ba26",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 68
+      },
+      "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
