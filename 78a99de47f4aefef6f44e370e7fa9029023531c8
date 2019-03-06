@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9410acb8_4a26ba26",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-03-06T08:09:34Z",
+      "side": 1,
+      "message": "Vadim, can you make sure that the print statements are not converted like this? \"end\u003d\u0027 \u0027\" is not the same as the python2 print statement.\n\nPlease make sure the print statements are the same before and after the conversion.\n\nOtherwise LGTM",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 68
+      },
+      "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
