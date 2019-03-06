@@ -70,6 +70,30 @@
       "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9b02700_900ba2a3",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-03-06T08:51:12Z",
+      "side": 1,
+      "message": "Interesting, thanks for the pointer. I can\u0027t seem to reproduce it locally though:\n\n  \u003e\u003e\u003e print \u0027foo\u0027,;print \u0027bar\u0027\n  foo bar\n  \u003e\u003e\u003e from __future__ import print_function\n  \u003e\u003e\u003e print(\u0027foo\u0027, end\u003d\u0027 \u0027);print(\u0027bar\u0027)\n  foo bar\n  \u003e\u003e\u003e print(\u0027foo\u0027, end\u003d\u0027\u0027);print(\u0027bar\u0027)",
+      "parentUuid": "0d9b8e51_9a80837b",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 68
+      },
+      "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
