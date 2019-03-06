@@ -56,6 +56,52 @@
       "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "626954cb_95eaade1",
+        "filename": "test/js-perf-test/StackTrace/serialize.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-03-06T19:33:30Z",
+      "side": 1,
+      "message": "I\u0027d like to see some larger functions. Small functions have small source position tables that are quick to iterate through.",
+      "range": {
+        "startLine": 37,
+        "startChar": 11,
+        "endLine": 37,
+        "endChar": 17
+      },
+      "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0f7bad1_af7dac44",
+        "filename": "test/js-perf-test/StackTrace/serialize.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-03-06T19:33:30Z",
+      "side": 1,
+      "message": "As discussed, the downside of this approach is that all of them have the same stack trace, which would very easily addressed by caching. While that is a valid approach, let\u0027s also look into cases that are harder to speed up through caching.\n\nHow about something like this:\n\nvar errors \u003d [];\nfunction rec(n) {\n  if (n \u003d\u003d 0) errors.push(new Error());\n  rec(n-1);\n  rec(n-2);\n}\n\nrec(10);\n\n\nNote that you don\u0027t need to throw to capture the stack trace on the Error object. We capture the stack trace when creating the Error object.",
+      "range": {
+        "startLine": 45,
+        "startChar": 21,
+        "endLine": 45,
+        "endChar": 34
+      },
+      "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
