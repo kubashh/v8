@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "cd4375fe_6a2959d9",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 5
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-06T20:02:05Z",
+      "side": 1,
+      "message": "Err, sorry, this can only be a String.",
+      "parentUuid": "7df96bf9_e89dd997",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b31ae96_894521b1",
         "filename": "src/inspector/v8-runtime-agent-impl.cc",
         "patchSetId": 5
