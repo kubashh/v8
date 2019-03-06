@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5d456198_e767391c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-06T20:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f3dc7d5_17ce026e",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e128795_09ea25b1",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d0e645a_d066697b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-06T20:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e128795_09ea25b1",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "7df96bf9_e89dd997",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 5
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-06T20:01:19Z",
+      "side": 1,
+      "message": "Yep, this can only be a Name.",
+      "parentUuid": "ab438d30_1a1f51a3",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b31ae96_894521b1",
         "filename": "src/inspector/v8-runtime-agent-impl.cc",
         "patchSetId": 5
@@ -64,6 +118,24 @@
       "writtenOn": "2019-03-04T19:32:39Z",
       "side": 1,
       "message": "Let\u0027s merge this with getInternalProperties above. I don\u0027t see where we could use them separately.",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea26218d_fb0e50ee",
+        "filename": "src/inspector/v8-runtime-agent-impl.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-06T20:01:19Z",
+      "side": 1,
+      "message": "Do you mean as part of InjectedScript::getInternalProperties? Let me know if you meant something else.",
+      "parentUuid": "6b31ae96_894521b1",
       "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -84,6 +156,24 @@
       "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2597fdc_906ff3c2",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-06T20:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1d79b2f_3afd96e7",
+      "revId": "253aa3b08287d4fd6a9935d946dea484159043dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
