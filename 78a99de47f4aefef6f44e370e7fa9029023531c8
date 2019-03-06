@@ -142,6 +142,23 @@
       "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5899e508_449efaa2",
+        "filename": "test/preparser/testcfg.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1316073
+      },
+      "writtenOn": "2019-03-06T09:12:51Z",
+      "side": 1,
+      "message": "Vadim, afaict you need to refactor this to use exec. You can exclude the conversion of this file to python3 so that you can land this commit easily. Then you can submit a refactor of this in a follow-up CL (please add me as a reviewer there as well).\n\nThe refactoring will be similar to https://chromium-review.googlesource.com/c/v8/v8/+/1445881/12/test/debugger/testcfg.py",
+      "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
