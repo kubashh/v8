@@ -117,6 +117,24 @@
       "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85d2d4e8_3b3a1cb9",
+        "filename": "cr-buildbucket.cfg",
+        "patchSetId": 2
+      },
+      "lineNbr": 2653,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-06T07:47:03Z",
+      "side": 1,
+      "message": "Yes, the xg should be triggerable via gerrit.",
+      "parentUuid": "41eb4f32_b7ace0e3",
+      "revId": "35fa02bde2fb0c8572af14756de1cb87d0032f43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
