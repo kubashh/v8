@@ -48,7 +48,7 @@ namespace internal {
 
 bool CpuFeatures::SupportsOptimizer() { return true; }
 
-bool CpuFeatures::SupportsWasmSimd128() { return false; }
+bool CpuFeatures::SupportsWasmSimd128() { return IsSupported(VECTOR_FACILITY); }
 
 void RelocInfo::apply(intptr_t delta) {
   // Absolute code pointer inside code object moves with the code object.
