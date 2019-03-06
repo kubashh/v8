@@ -3,10 +3,11 @@
 # found in the LICENSE file.
 
 [
-[ALWAYS, {
-  # https://bugs.chromium.org/p/v8/issues/detail?id=8633
+['mode == debug', {
+  # debug mode is passing the --verify-heap flag, which is very slow when
+  # testing the memory limits.
   'limits': [SKIP],
-}], # ALWAYS
+}], # mode == debug
 
 ['arch == s390 or arch == s390x or system == aix', {
   # https://bugs.chromium.org/p/v8/issues/detail?id=8402
