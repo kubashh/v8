@@ -78,11 +78,14 @@ class InjectedScript final {
           result,
       Maybe<protocol::Runtime::ExceptionDetails>*);
 
-  Response getInternalProperties(
+  Response getInternalPropertiesAndPrivateFields(
       v8::Local<v8::Value>, const String16& groupName,
       std::unique_ptr<
           protocol::Array<protocol::Runtime::InternalPropertyDescriptor>>*
-          result);
+          internalProperties,
+      std::unique_ptr<
+          protocol::Array<protocol::Runtime::PrivateFieldDescriptor>>*
+          privateFields);
 
   void releaseObject(const String16& objectId);
 

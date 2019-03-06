@@ -57,10 +57,11 @@ static bool isResolvableNumberLike(String16 query) {
 }  // namespace
 
 using protocol::Array;
-using protocol::Runtime::PropertyDescriptor;
-using protocol::Runtime::InternalPropertyDescriptor;
-using protocol::Runtime::RemoteObject;
 using protocol::Maybe;
+using protocol::Runtime::InternalPropertyDescriptor;
+using protocol::Runtime::PrivateFieldDescriptor;
+using protocol::Runtime::PropertyDescriptor;
+using protocol::Runtime::RemoteObject;
 
 class InjectedScript::ProtocolPromiseHandler {
  public:
@@ -355,30 +356,55 @@ Response InjectedScript::getProperties(
   return Response::OK();
 }
 
-Response InjectedScript::getInternalProperties(
+Response InjectedScript::getInternalPropertiesAndPrivateFields(
     v8::Local<v8::Value> value, const String16& groupName,
-    std::unique_ptr<protocol::Array<InternalPropertyDescriptor>>* result) {
-  *result = protocol::Array<InternalPropertyDescriptor>::create();
+    std::unique_ptr<protocol::Array<InternalPropertyDescriptor>>*
+        internalProperties,
+    std::unique_ptr<protocol::Array<PrivateFieldDescriptor>>* privateFields) {
+  *internalProperties = protocol::Array<InternalPropertyDescriptor>::create();
   v8::Local<v8::Context> context = m_context->context();
   int sessionId = m_sessionId;
-  std::vector<InternalPropertyMirror> wrappers;
+  std::vector<InternalPropertyMirror> internalPropertiesWrappers;
   if (value->IsObject()) {
     ValueMirror::getInternalProperties(m_context->context(),
-                                       value.As<v8::Object>(), &wrappers);
+                                       value.As<v8::Object>(),
+                                       &internalPropertiesWrappers);
   }
-  for (size_t i = 0; i < wrappers.size(); ++i) {
+  for (size_t i = 0; i < internalPropertiesWrappers.size(); ++i) {
     std::unique_ptr<RemoteObject> remoteObject;
-    Response response = wrappers[i].value->buildRemoteObject(
+    Response response = internalPropertiesWrappers[i].value->buildRemoteObject(
         m_context->context(), WrapMode::kNoPreview, &remoteObject);
     if (!response.isSuccess()) return response;
-    response = bindRemoteObjectIfNeeded(sessionId, context,
-                                        wrappers[i].value->v8Value(), groupName,
-                                        remoteObject.get());
+    response = bindRemoteObjectIfNeeded(
+        sessionId, context, internalPropertiesWrappers[i].value->v8Value(),
+        groupName, remoteObject.get());
     if (!response.isSuccess()) return response;
-    (*result)->addItem(InternalPropertyDescriptor::create()
-                           .setName(wrappers[i].name)
-                           .setValue(std::move(remoteObject))
-                           .build());
+    (*internalProperties)
+        ->addItem(InternalPropertyDescriptor::create()
+                      .setName(internalPropertiesWrappers[i].name)
+                      .setValue(std::move(remoteObject))
+                      .build());
+  }
+  *privateFields = protocol::Array<PrivateFieldDescriptor>::create();
+  std::vector<PrivateFieldMirror> privateFieldWrappers;
+  if (value->IsObject()) {
+    ValueMirror::getPrivateFields(m_context->context(), value.As<v8::Object>(),
+                                  &privateFieldWrappers);
+  }
+  for (size_t i = 0; i < privateFieldWrappers.size(); ++i) {
+    std::unique_ptr<RemoteObject> remoteObject;
+    Response response = privateFieldWrappers[i].value->buildRemoteObject(
+        m_context->context(), WrapMode::kNoPreview, &remoteObject);
+    if (!response.isSuccess()) return response;
+    response = bindRemoteObjectIfNeeded(
+        sessionId, context, privateFieldWrappers[i].value->v8Value(), groupName,
+        remoteObject.get());
+    if (!response.isSuccess()) return response;
+    (*privateFields)
+        ->addItem(PrivateFieldDescriptor::create()
+                      .setName(privateFieldWrappers[i].name)
+                      .setValue(std::move(remoteObject))
+                      .build());
   }
   return Response::OK();
 }
