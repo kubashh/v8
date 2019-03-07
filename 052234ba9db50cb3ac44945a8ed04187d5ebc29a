@@ -16,6 +16,29 @@
       "revId": "052234ba9db50cb3ac44945a8ed04187d5ebc29a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb3210f3_723e1507",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-07T12:24:16Z",
+      "side": 1,
+      "message": "You need to explain the reason for this change. While I could guess, most people won\u0027t be able to.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 41
+      },
+      "revId": "052234ba9db50cb3ac44945a8ed04187d5ebc29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
