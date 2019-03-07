@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58cfa2ff_66826cd4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-07T18:06:08Z",
+      "side": 1,
+      "message": "Are there exceptions that always get raised during thread creation, or does that only happen in some circumstances?",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 14,
+        "endChar": 44
+      },
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9f0fc6a_69acce51",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-07T18:06:08Z",
+      "side": 1,
+      "message": "Is this a bug that also occurs in Chrome, or are the two users of V8 doing something different that causes one to be affected and not the other?\n\nCan you file a bug in the V8 issue tracker, please?",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24289e75_c1978eb9",
+        "filename": "src/trap-handler/DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-07T18:06:08Z",
+      "side": 1,
+      "message": "The change below breaks the principle that is alluded to here...",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 0
+      },
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab769c85_72b882da",
+        "filename": "src/trap-handler/DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-07T18:06:08Z",
+      "side": 1,
+      "message": "This dependency isn\u0027t OK because the fault handler is not meant to depend on the rest of V8.  It could result in the fault handler calling into arbitrary other code in V8, where the authors won\u0027t necessarily be aware that their code is called in fault handler context.",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "750ad96e_f911a6bb",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-07T18:06:08Z",
+      "side": 1,
+      "message": "Instead of depending on other V8 code, a safer way to do this would be to use the Windows Tls*() APIs from the src/trap-handler code.\n\nHowever, I suspect it\u0027s possible to check from assembly code whether the current thread\u0027s TLS variables have been allocated.  As you say above, the fault handler is getting a null pointer dereference when the TLS variables haven\u0027t been allocated.  It should be possible to write some assembly to check whether that pointer is null.\n\nI think that would be preferable over using Tls*() because it would run less code in fault handler context.",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
