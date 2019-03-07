@@ -607,7 +607,6 @@ inline void ri_format(Opcode opcode, int f1, int f2) {
 #define DECLARE_S390_RI_A_INSTRUCTIONS(name, op_name, op_value)            \
   void name(Register r, const Operand& i2) {                               \
     DCHECK(is_uint12(op_name));                                            \
-    DCHECK(is_uint16(i2.immediate()) || is_int16(i2.immediate()));         \
     ri_format(op_name, r.code(), i2.immediate());                          \
   }
   S390_RI_A_OPCODE_LIST(DECLARE_S390_RI_A_INSTRUCTIONS)
