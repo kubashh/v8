@@ -20,5 +20,9 @@ specific_include_rules = {
   ],
   "handler-inside-win.h": [
     "+src/base/macros.h",
+  ],
+  "handler-inside-win.cc": [
+    # To check the TLS slot for the active isolate
+    "+src/isolate.h",
   ]
 }
