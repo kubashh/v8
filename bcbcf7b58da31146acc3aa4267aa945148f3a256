@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "049f23f2_4f9aa9fe",
+        "filename": "test/js-perf-test/StackTrace/capture.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-07T09:55:50Z",
+      "side": 1,
+      "message": "As stack traces are collected during construction, I skipped the throwing/catching part :)",
+      "parentUuid": "142a7deb_b03b67d7",
+      "range": {
+        "startLine": 32,
+        "startChar": 24,
+        "endLine": 32,
+        "endChar": 25
+      },
+      "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7bce800_69ab2d9b",
         "filename": "test/js-perf-test/StackTrace/capture.js",
         "patchSetId": 1
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "3aea370c_a39fe37d",
+        "filename": "test/js-perf-test/StackTrace/capture.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-07T09:55:50Z",
+      "side": 1,
+      "message": "Yes. I didn\u0027t now about --trace-turbo-inlining, so initially I only verified with --trace-opt and --trace-deopt, but --trace-turbo-inlining shows that both are inlined.",
+      "parentUuid": "a7bce800_69ab2d9b",
+      "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55fca572_99cc1be0",
         "filename": "test/js-perf-test/StackTrace/serialize.js",
         "patchSetId": 1
@@ -56,6 +98,24 @@
       "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc4ec884_8bf1bb58",
+        "filename": "test/js-perf-test/StackTrace/serialize.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-07T09:55:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55fca572_99cc1be0",
+      "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -102,6 +162,30 @@
       "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1c518d1_b6fdb9b3",
+        "filename": "test/js-perf-test/StackTrace/serialize.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-07T09:55:50Z",
+      "side": 1,
+      "message": "Added something similar as a separate micro benchmark.",
+      "parentUuid": "c0f7bad1_af7dac44",
+      "range": {
+        "startLine": 45,
+        "startChar": 21,
+        "endLine": 45,
+        "endChar": 34
+      },
+      "revId": "bcbcf7b58da31146acc3aa4267aa945148f3a256",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
