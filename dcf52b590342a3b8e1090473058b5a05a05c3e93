@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "254419fb_d96813fa",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-03-07T10:46:53Z",
+      "side": 1,
+      "message": "nit: please use double quotes here to be consistent with the rest of the file",
+      "range": {
+        "startLine": 186,
+        "startChar": 64,
+        "endLine": 186,
+        "endChar": 66
+      },
+      "revId": "dcf52b590342a3b8e1090473058b5a05a05c3e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
