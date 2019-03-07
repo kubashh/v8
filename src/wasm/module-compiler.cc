@@ -1245,6 +1245,27 @@ class AsyncCompileJob::CompileFailed : public CompileStep {
   }
 };
 
+namespace {
+class SampleTopTierCodeSizeCallback {
+ public:
+  explicit SampleTopTierCodeSizeCallback(
+      std::weak_ptr<NativeModule> native_module)
+      : native_module_(std::move(native_module)) {}
+
+  void operator()(CompilationEvent event) {
+    // This callback is registered after baseline compilation finished, so the
+    // only possible event to follow is {kFinishedTopTierCompilation}.
+    DCHECK_EQ(CompilationEvent::kFinishedTopTierCompilation, event);
+    std::shared_ptr<NativeModule> native_module = native_module_.lock();
+    if (!native_module) return;
+    native_module->engine()->SampleCodeSizeInAllIsolates(native_module);
+  }
+
+ private:
+  std::weak_ptr<NativeModule> native_module_;
+};
+}  // namespace
+
 //==========================================================================
 // Step 3b (sync): Compilation finished.
 //==========================================================================
@@ -1254,6 +1275,10 @@ class AsyncCompileJob::CompileFinished : public CompileStep {
     TRACE_COMPILE("(3b) Compilation finished\n");
     // Sample the generated code size when baseline compilation finished.
     job->native_module_->SampleCodeSize(job->isolate_->counters());
+    // Also, set a callback to sample the code size after top-tier compilation
+    // finished.
+    job->native_module_->compilation_state()->AddCallback(
+        SampleTopTierCodeSizeCallback{job->native_module_});
     // Then finalize and publish the generated module.
     job->FinishCompile();
   }

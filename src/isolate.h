@@ -851,9 +851,9 @@ class Isolate final : private HiddenFactory {
 
   Bootstrapper* bootstrapper() { return bootstrapper_; }
   // Use for updating counters on a foreground thread.
-  Counters* counters() { return async_counters().get(); }
+  Counters* counters() const { return async_counters().get(); }
   // Use for updating counters on a background thread.
-  const std::shared_ptr<Counters>& async_counters() {
+  const std::shared_ptr<Counters>& async_counters() const {
     // Make sure InitializeCounters() has been called.
     DCHECK_NOT_NULL(async_counters_.get());
     return async_counters_;

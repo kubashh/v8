@@ -516,6 +516,38 @@ void WasmEngine::FreeNativeModule(NativeModule* native_module) {
 }
 
 namespace {
+class SampleCodeSizeTask : public CancelableTask {
+ public:
+  SampleCodeSizeTask(Isolate* isolate,
+                     std::weak_ptr<NativeModule> native_module)
+      : CancelableTask(isolate),
+        isolate_(isolate),
+        native_module_(std::move(native_module)) {}
+
+  void RunInternal() override {
+    if (std::shared_ptr<NativeModule> native_module = native_module_.lock()) {
+      native_module->SampleCodeSize(isolate_->counters());
+    }
+  }
+
+ private:
+  const Isolate* isolate_;
+  const std::weak_ptr<NativeModule> native_module_;
+};
+}  // namespace
+
+void WasmEngine::SampleCodeSizeInAllIsolates(
+    const std::shared_ptr<NativeModule>& native_module) {
+  DCHECK_EQ(1, isolates_per_native_module_.count(native_module.get()));
+  for (Isolate* isolate : isolates_per_native_module_[native_module.get()]) {
+    DCHECK_EQ(1, isolates_.count(isolate));
+    IsolateInfo* info = isolates_[isolate].get();
+    info->foreground_task_runner->PostTask(
+        base::make_unique<SampleCodeSizeTask>(isolate, native_module));
+  }
+}
+
+namespace {
 
 DEFINE_LAZY_LEAKY_OBJECT_GETTER(std::shared_ptr<WasmEngine>,
                                 GetSharedWasmEngine)

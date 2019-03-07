@@ -176,6 +176,10 @@ class V8_EXPORT_PRIVATE WasmEngine {
 
   void FreeNativeModule(NativeModule*);
 
+  // Sample the code size of the given {NativeModule} in all isolates that have
+  // access to it.
+  void SampleCodeSizeInAllIsolates(const std::shared_ptr<NativeModule>&);
+
   // Call on process start and exit.
   static void InitializeOncePerProcess();
   static void GlobalTearDown();
