@@ -169,6 +169,30 @@
     },
     {
       "key": {
+        "uuid": "6b1f04f4_5656c016",
+        "filename": "test/benchmarks/csuite/benchmark.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-03-07T11:02:17Z",
+      "side": 1,
+      "message": "It seems it is impossible to implement the exact same behavior as trailing comma after a print statement, i.e. Python 2 seems to remember whether a trailing comma was used in previous statement and prints a space ONLY if there is another print statement executed after it. This way, there is no trailing whitespace in the output, but there is whitespace separating prints.\n\nGiven that this statement is followed by unconditional print on line 189, I think we should keep the end\u003d\" \". Tamer, WDYT?",
+      "parentUuid": "70f24c75_eab5dc14",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 68
+      },
+      "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5899e508_449efaa2",
         "filename": "test/preparser/testcfg.py",
         "patchSetId": 3
