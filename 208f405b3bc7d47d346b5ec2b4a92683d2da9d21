@@ -2,6 +2,63 @@
   "comments": [
     {
       "key": {
+        "uuid": "95f27216_f4ce438e",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-07T21:44:15Z",
+      "side": 1,
+      "message": "for (auto\u0026 internalProperty : internalPropertiesWrappers) {",
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "291a64bb_7e680e97",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-07T21:44:15Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77521bc7_b6742261",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 8
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-07T21:44:15Z",
+      "side": 1,
+      "message": "Why is it optional?",
+      "range": {
+        "startLine": 1030,
+        "startChar": 6,
+        "endLine": 1030,
+        "endChar": 14
+      },
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01207903_ba87a617",
         "filename": "src/inspector/value-mirror.cc",
         "patchSetId": 8
@@ -13,6 +70,69 @@
       "writtenOn": "2019-03-07T21:13:21Z",
       "side": 1,
       "message": "We should not manipulate nameLimit if propertyPreview is null.",
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d1a4083_c00e104c",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-07T21:44:15Z",
+      "side": 1,
+      "message": "drop {}",
+      "range": {
+        "startLine": 1387,
+        "startChar": 77,
+        "endLine": 1387,
+        "endChar": 78
+      },
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebc7b42b_719792a2",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-07T21:44:15Z",
+      "side": 1,
+      "message": "DCHECK should be enough",
+      "range": {
+        "startLine": 1406,
+        "startChar": 4,
+        "endLine": 1406,
+        "endChar": 9
+      },
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12c215b3_73b36cdb",
+        "filename": "src/inspector/value-mirror.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-07T21:44:15Z",
+      "side": 1,
+      "message": "static std::vector\u003cPrivateFieldMirror\u003e getPrivateFields(... context, ... object);",
       "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
