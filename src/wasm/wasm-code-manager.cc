@@ -1165,6 +1165,11 @@ bool NativeModule::SetExecutable(bool executable) {
   return true;
 }
 
+void NativeModule::SampleCodeSize(Counters* counters) {
+  int code_size = static_cast<int>(committed_code_space() / MB);
+  counters->wasm_module_code_size_mb()->AddSample(code_size);
+}
+
 void WasmCodeManager::FreeNativeModule(NativeModule* native_module) {
   base::MutexGuard lock(&native_modules_mutex_);
   TRACE_HEAP("Freeing NativeModule %p\n", native_module);

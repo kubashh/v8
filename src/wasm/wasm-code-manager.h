@@ -360,6 +360,9 @@ class V8_EXPORT_PRIVATE NativeModule final {
 
   const char* GetRuntimeStubName(Address runtime_stub_entry) const;
 
+  // Sample the current code size of this modules to the given counters.
+  void SampleCodeSize(Counters*);
+
  private:
   friend class WasmCode;
   friend class WasmCodeManager;
