@@ -232,6 +232,10 @@
 
   # BUG(v8:8169)
   'external-backing-store-gc': [SKIP],
+
+  # BUG(v8:8633)
+  'wasm/limits/functions': [SKIP, SLOW], # also flaky due to big code allocation
+  'wasm/limits/element-segments': [SKIP, SLOW],
 }],  # ALWAYS
 
 ['novfp3 == True', {
