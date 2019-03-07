@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "69b71a1f_481d93a8",
+        "filename": "src/regexp/jsregexp.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 5961,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-03-07T02:11:26Z",
+      "side": 1,
+      "message": "yes /i only consider two character has the same uppercase. So U+00C5 and U+212B are not matching.",
+      "parentUuid": "882f8b1c_12692c9f",
+      "range": {
+        "startLine": 5949,
+        "startChar": 6,
+        "endLine": 5961,
+        "endChar": 7
+      },
+      "revId": "173b40333441e7c1ed97a94fecd7a17df61c06ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5af958a3_f1abfe62",
         "filename": "src/regexp/regexp-macro-assembler.cc",
         "patchSetId": 11
@@ -60,6 +84,30 @@
       "side": 1,
       "message": "In addition, please use \u0027UChar\u0027 instead of \u0027char16_t\u0027. They can be the same or different depending on how ICU is configured.",
       "parentUuid": "5af958a3_f1abfe62",
+      "range": {
+        "startLine": 39,
+        "startChar": 1,
+        "endLine": 43,
+        "endChar": 65
+      },
+      "revId": "173b40333441e7c1ed97a94fecd7a17df61c06ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33dca73e_a46ca1b6",
+        "filename": "src/regexp/regexp-macro-assembler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1291594
+      },
+      "writtenOn": "2019-03-07T02:11:26Z",
+      "side": 1,
+      "message": "but http://icu-project.org/apiref/icu4c/classicu_1_1UnicodeString.html#a8b3ffe6ab1d40f7745d7e1a596075199\nis using ConstChar16Ptr and \nhttp://icu-project.org/apiref/icu4c/classicu_1_1ConstChar16Ptr.html is using const char16_t *\n\nYang- not sure what kind of helper function you have in mind. I look at all the three places I call caseCompare, it seems hard to make a common helper function efficiently since they all involved with different casting.",
+      "parentUuid": "d2104c90_37f9e8d8",
       "range": {
         "startLine": 39,
         "startChar": 1,
