@@ -57,10 +57,11 @@ static bool isResolvableNumberLike(String16 query) {
 }  // namespace
 
 using protocol::Array;
-using protocol::Runtime::PropertyDescriptor;
-using protocol::Runtime::InternalPropertyDescriptor;
-using protocol::Runtime::RemoteObject;
 using protocol::Maybe;
+using protocol::Runtime::InternalPropertyDescriptor;
+using protocol::Runtime::PrivateFieldDescriptor;
+using protocol::Runtime::PropertyDescriptor;
+using protocol::Runtime::RemoteObject;
 
 class InjectedScript::ProtocolPromiseHandler {
  public:
@@ -355,30 +356,56 @@ Response InjectedScript::getProperties(
   return Response::OK();
 }
 
-Response InjectedScript::getInternalProperties(
+Response InjectedScript::getInternalPropertiesAndPrivateFields(
     v8::Local<v8::Value> value, const String16& groupName,
-    std::unique_ptr<protocol::Array<InternalPropertyDescriptor>>* result) {
-  *result = protocol::Array<InternalPropertyDescriptor>::create();
+    std::unique_ptr<protocol::Array<InternalPropertyDescriptor>>*
+        internalProperties,
+    std::unique_ptr<protocol::Array<PrivateFieldDescriptor>>* privateFields) {
+  *internalProperties = protocol::Array<InternalPropertyDescriptor>::create();
+  *privateFields = protocol::Array<PrivateFieldDescriptor>::create();
+
+  if (!value->IsObject()) {
+    return Response::OK();
+  }
+  v8::Local<v8::Object> value_obj = value.As<v8::Object>();
+
   v8::Local<v8::Context> context = m_context->context();
   int sessionId = m_sessionId;
-  std::vector<InternalPropertyMirror> wrappers;
-  if (value->IsObject()) {
-    ValueMirror::getInternalProperties(m_context->context(),
-                                       value.As<v8::Object>(), &wrappers);
-  }
-  for (size_t i = 0; i < wrappers.size(); ++i) {
+  std::vector<InternalPropertyMirror> internalPropertiesWrappers;
+  ValueMirror::getInternalProperties(m_context->context(), value_obj,
+                                     &internalPropertiesWrappers);
+  for (const auto& internalProperty : internalPropertiesWrappers) {
     std::unique_ptr<RemoteObject> remoteObject;
-    Response response = wrappers[i].value->buildRemoteObject(
+    Response response = internalProperty.value->buildRemoteObject(
         m_context->context(), WrapMode::kNoPreview, &remoteObject);
     if (!response.isSuccess()) return response;
     response = bindRemoteObjectIfNeeded(sessionId, context,
-                                        wrappers[i].value->v8Value(), groupName,
-                                        remoteObject.get());
+                                        internalProperty.value->v8Value(),
+                                        groupName, remoteObject.get());
     if (!response.isSuccess()) return response;
-    (*result)->addItem(InternalPropertyDescriptor::create()
-                           .setName(wrappers[i].name)
-                           .setValue(std::move(remoteObject))
-                           .build());
+    (*internalProperties)
+        ->addItem(InternalPropertyDescriptor::create()
+                      .setName(internalProperty.name)
+                      .setValue(std::move(remoteObject))
+                      .build());
+  }
+  std::vector<PrivateFieldMirror> privateFieldWrappers;
+  privateFieldWrappers =
+      ValueMirror::getPrivateFields(m_context->context(), value_obj);
+  for (const auto& privateField : privateFieldWrappers) {
+    std::unique_ptr<RemoteObject> remoteObject;
+    Response response = privateField.value->buildRemoteObject(
+        m_context->context(), WrapMode::kNoPreview, &remoteObject);
+    if (!response.isSuccess()) return response;
+    response = bindRemoteObjectIfNeeded(sessionId, context,
+                                        privateField.value->v8Value(),
+                                        groupName, remoteObject.get());
+    if (!response.isSuccess()) return response;
+    (*privateFields)
+        ->addItem(PrivateFieldDescriptor::create()
+                      .setName(privateField.name)
+                      .setValue(std::move(remoteObject))
+                      .build());
   }
   return Response::OK();
 }

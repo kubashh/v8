@@ -385,8 +385,11 @@ Response V8RuntimeAgentImpl::getProperties(
         result,
     Maybe<protocol::Array<protocol::Runtime::InternalPropertyDescriptor>>*
         internalProperties,
+    Maybe<protocol::Array<protocol::Runtime::PrivateFieldDescriptor>>*
+        privateFields,
     Maybe<protocol::Runtime::ExceptionDetails>* exceptionDetails) {
   using protocol::Runtime::InternalPropertyDescriptor;
+  using protocol::Runtime::PrivateFieldDescriptor;
 
   InjectedScript::ObjectScope scope(m_session, objectId);
   Response response = scope.initialize();
@@ -410,11 +413,16 @@ Response V8RuntimeAgentImpl::getProperties(
     return Response::OK();
   std::unique_ptr<protocol::Array<InternalPropertyDescriptor>>
       propertiesProtocolArray;
-  response = scope.injectedScript()->getInternalProperties(
-      object, scope.objectGroupName(), &propertiesProtocolArray);
+  std::unique_ptr<protocol::Array<PrivateFieldDescriptor>>
+      privateFieldsProtocolArray;
+  response = scope.injectedScript()->getInternalPropertiesAndPrivateFields(
+      object, scope.objectGroupName(), &propertiesProtocolArray,
+      &privateFieldsProtocolArray);
   if (!response.isSuccess()) return response;
   if (propertiesProtocolArray->length())
     *internalProperties = std::move(propertiesProtocolArray);
+  if (privateFieldsProtocolArray->length())
+    *privateFields = std::move(privateFieldsProtocolArray);
   return Response::OK();
 }
 
