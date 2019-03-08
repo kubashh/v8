@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ec1293a9_2aacf9de",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-08T08:30:23Z",
+      "side": 1,
+      "message": "nit: these loops do in fact belong to corresponding if-blocks. but you can keep it this way if you want.",
+      "revId": "e29cbdd4314fe61df6e576841008c081fe3a0dc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c537941_5ca3aae1",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-08T08:30:23Z",
+      "side": 1,
+      "message": "nit: if (!propertyPreview) continue;",
+      "revId": "e29cbdd4314fe61df6e576841008c081fe3a0dc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
