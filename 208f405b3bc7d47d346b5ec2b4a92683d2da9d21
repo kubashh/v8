@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "246cea70_8498818f",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-08T00:43:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95f27216_f4ce438e",
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "291a64bb_7e680e97",
         "filename": "src/inspector/injected-script.cc",
         "patchSetId": 8
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "0661ac7b_81f9590b",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-08T00:43:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "291a64bb_7e680e97",
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "77521bc7_b6742261",
         "filename": "src/inspector/js_protocol.pdl",
         "patchSetId": 8
@@ -47,6 +83,30 @@
       "writtenOn": "2019-03-07T21:44:15Z",
       "side": 1,
       "message": "Why is it optional?",
+      "range": {
+        "startLine": 1030,
+        "startChar": 6,
+        "endLine": 1030,
+        "endChar": 14
+      },
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3e2d50e_a3d3e6e6",
+        "filename": "src/inspector/js_protocol.pdl",
+        "patchSetId": 8
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-08T00:43:48Z",
+      "side": 1,
+      "message": "Mostly going off InternalPropertyDescriptor, same reason as that. There\u0027s always a default value of undefined for private field, but I suppose InternalPropertyDescriptor also has a default undefined value? Changed to be non optional for now.",
+      "parentUuid": "77521bc7_b6742261",
       "range": {
         "startLine": 1030,
         "startChar": 6,
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "d5171827_46b52117",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-08T00:43:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01207903_ba87a617",
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d1a4083_c00e104c",
         "filename": "src/inspector/value-mirror.cc",
         "patchSetId": 8
@@ -96,6 +174,30 @@
       "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c5cc331_a5ae3b0f",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1387,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-08T00:43:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d1a4083_c00e104c",
+      "range": {
+        "startLine": 1387,
+        "startChar": 77,
+        "endLine": 1387,
+        "endChar": 78
+      },
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "3749c0a4_51d601d8",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-08T00:43:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebc7b42b_719792a2",
+      "range": {
+        "startLine": 1406,
+        "startChar": 4,
+        "endLine": 1406,
+        "endChar": 9
+      },
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12c215b3_73b36cdb",
         "filename": "src/inspector/value-mirror.h",
         "patchSetId": 8
@@ -133,6 +259,24 @@
       "writtenOn": "2019-03-07T21:44:15Z",
       "side": 1,
       "message": "static std::vector\u003cPrivateFieldMirror\u003e getPrivateFields(... context, ... object);",
+      "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6d778c1_6b282391",
+        "filename": "src/inspector/value-mirror.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-03-08T00:43:48Z",
+      "side": 1,
+      "message": "Similar to above this isn\u0027t consistent with getInternalProperties.. I\u0027ve gone ahead and made the change for now. Let me know if this is ok.",
+      "parentUuid": "12c215b3_73b36cdb",
       "revId": "208f405b3bc7d47d346b5ec2b4a92683d2da9d21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
