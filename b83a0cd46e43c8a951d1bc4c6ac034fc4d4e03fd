@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fe2720a_d8e73205",
+        "filename": "test/cctest/test-threads.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-08T14:56:08Z",
+      "side": 1,
+      "message": "Maybe this assert should be also added somewhere near mutex_owner_ field definition above.",
+      "revId": "b83a0cd46e43c8a951d1bc4c6ac034fc4d4e03fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a010e014_8421abd3",
+        "filename": "test/cctest/test-threads.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-08T14:56:08Z",
+      "side": 1,
+      "message": "std::memory_order_relaxed or the default std::memory_order_seq_cst?",
+      "range": {
+        "startLine": 53,
+        "startChar": 24,
+        "endLine": 53,
+        "endChar": 30
+      },
+      "revId": "b83a0cd46e43c8a951d1bc4c6ac034fc4d4e03fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
