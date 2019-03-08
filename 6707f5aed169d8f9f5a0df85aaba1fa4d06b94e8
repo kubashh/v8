@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fda8f84e_5b2430b1",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-08T14:59:10Z",
+      "side": 1,
+      "message": "I uploaded a patchset using this suggestion. No strong opinion on which one \"looks\" better.",
+      "parentUuid": "6efdaf79_0b10002a",
+      "revId": "6707f5aed169d8f9f5a0df85aaba1fa4d06b94e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0396ae0c_c64c7327",
         "filename": "third_party/v8/builtins/array-sort.tq",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "96eb56b9_16ea485b",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1328,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-08T14:59:10Z",
+      "side": 1,
+      "message": "I left the check in here. Moving it to CopyWorkArrayToReceiver would either require it to be executed on each loop iteration, or be pulled in front of the loop, which would be equivalent of just leaving it here.",
+      "parentUuid": "0396ae0c_c64c7327",
+      "revId": "6707f5aed169d8f9f5a0df85aaba1fa4d06b94e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae55c74a_12263ca9",
         "filename": "third_party/v8/builtins/array-sort.tq",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2019-03-08T10:26:25Z",
       "side": 1,
       "message": "Is bailoutStatus still needed?",
+      "revId": "6707f5aed169d8f9f5a0df85aaba1fa4d06b94e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d0d05ba_c9e7804c",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-08T14:59:10Z",
+      "side": 1,
+      "message": "Yes. bailoutStatus is used by each Load/Store builtin to signal if something went wrong. The reset needs to happen as CallLoad/CallStore use bailoutStatus to check whether to jump to the bailout label.",
+      "parentUuid": "ae55c74a_12263ca9",
       "revId": "6707f5aed169d8f9f5a0df85aaba1fa4d06b94e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
