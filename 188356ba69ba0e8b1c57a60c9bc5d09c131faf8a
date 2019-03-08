@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "93ba5e38_7f916ece",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-08T10:56:43Z",
+      "side": 1,
+      "message": "The two different types of exception we have observed are:\n\na)\nIf the system is running low on memory, and fails to allocate a page to grow the stack, then a STACK_OVERFLOW exception is raised. (Arguably the process is about to die anyway, but this issue does make the crash look like Wasm is at fault, when it may not even be being used). One instance observed had the below at the bottom of the thread\u0027s stack (as can be seen, was actually trying to allocate the TLS memory for the thread)\n\n - msedge_child!v8::internal::trap_handler::HandleWasmTrap+0x27\n - ntdll!RtlpCallVectoredHandlers+0x106\n - ntdll!RtlCallVectoredExceptionHandlers+0xe\n - ntdll!RtlDispatchException+0x69\n - ntdll!KiUserExceptionDispatch+0x2e \n - ntdll!RtlpAllocateHeap+0x31\n - ntdll!RtlpAllocateHeapInternal+0x991\n - ntdll!LdrpAllocateTls+0xe3\n - ntdll!LdrpInitializeThread+0x6f\n\nb)\nIf certain types of low-level OS logging are enabled, then it actually uses RaiseException and an exception handler to log diagnostic messages. (I don\u0027t recall the exception code used here).\n\nI did consider that only the first check on exception code for ACCESS_DENIED may be sufficient, but I couldn\u0027t get a definitive guarantee that this isn\u0027t something the OS may also throw early for other reasons. (And it would make adding any other exception types the trap hander may want to add in the future at risk of hitting this again).",
+      "parentUuid": "58cfa2ff_66826cd4",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 14,
+        "endChar": 44
+      },
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a9f0fc6a_69acce51",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2019-03-07T18:06:08Z",
       "side": 1,
       "message": "Is this a bug that also occurs in Chrome, or are the two users of V8 doing something different that causes one to be affected and not the other?\n\nCan you file a bug in the V8 issue tracker, please?",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f3fe6ea_9e72b55a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-08T10:56:43Z",
+      "side": 1,
+      "message": "I don\u0027t have access to Chrome crash reports, but this code is identical so would assume it is happening there also.\n\nI created the bug report at https://bugs.chromium.org/p/v8/issues/detail?id\u003d8966",
+      "parentUuid": "a9f0fc6a_69acce51",
       "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "d9d899cf_1e100303",
+        "filename": "src/trap-handler/DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-08T10:56:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "24289e75_c1978eb9",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 0
+      },
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab769c85_72b882da",
         "filename": "src/trap-handler/DEPS",
         "patchSetId": 1
@@ -76,6 +142,24 @@
       "writtenOn": "2019-03-07T18:06:08Z",
       "side": 1,
       "message": "This dependency isn\u0027t OK because the fault handler is not meant to depend on the rest of V8.  It could result in the fault handler calling into arbitrary other code in V8, where the authors won\u0027t necessarily be aware that their code is called in fault handler context.",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e673c4c_91ee1005",
+        "filename": "src/trap-handler/DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-08T10:56:43Z",
+      "side": 1,
+      "message": "Yeah, it seemed unfortunate to include all of isolate.h just for the one declaration to check if a pointer is null (essentially just to call \"static void *Isolate::TryGetCurrent()\". Depending on other changes, if this is still used, I assume declaring just the one function needed in the .cc file (to avoid pull in all of isolate.h) would be unacceptable?",
+      "parentUuid": "ab769c85_72b882da",
       "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -111,6 +195,24 @@
       "side": 1,
       "message": "To elaborate a little, here\u0027s the assembly code that gets generated for the following C/C++ code:\n\n __declspec(thread) uintptr_t tls_var;\n uintptr_t read_tls_var() {\n   return tls_var;\n }\n\n// Assembly code\nread_tls_var:\n  // Get the offset of tls_var from the start of the TLS section\n  // (SECREL relocation).\n  mov edx, OFFSET FLAT:tls_var\n  // Get the module index for the DLL/executable that this code is\n  // linked into.\n  mov ecx, DWORD PTR _tls_index\n  // Get the address of the module table for this thread.\n  mov rax, QWORD PTR gs:88\n  // Get the address of the TLS variables block for this module,\n  // for this thread.\n  mov rax, QWORD PTR [rax+rcx*8]\n  // Read tls_var from the TLS variables block.\n  mov rax, QWORD PTR [rdx+rax]\n  ret\n\nI am not sure the above is 100% correct (I haven\u0027t got a Windows machine handy to test on).  Here is the equivalent in GNU Assembler syntax for comparison:\n\nread_tls_var:\n  movl $tlsValue@SECREL, %edx\n  mov _tls_index(%rip), %ecx\n  movq %gs:0x58, %rax\n  movq (%rax,%rcx,8), %rax\n  movq (%rdx,%rax), %rax\n  ret\n\nPresumably one of these dereferences is getting a null pointer, and V8 could inline the code above with a null pointer check added.",
       "parentUuid": "750ad96e_f911a6bb",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29a65799_737db83e",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-08T10:56:43Z",
+      "side": 1,
+      "message": "The challenge is that how \"__declspec(thread)\" is allocated and accessed is \"implementation defined\", and can change by compiler release (and is also different for all platforms, so would need hand-written assembly for x64, ia32, ARM64, etc.).\n\nFor example, in a simple app built in Visual Studio for x64 it doesn\u0027t use _tls_slot to locate the memory for declspec(thread) variable. e.g. the assembly it generates (with annotations) is:\n\n// assigning value 42 to \"__declspec(thread) int foo\" results in:\n    mov         edx,4                       // Index of foo location in this module\u0027s TLS memory block\n    mov         rax,qword ptr gs:[58h]      // Get pointer to start of process-wide TLS block\n\t// *** Note: Above is memory location Teb-\u003eTeThreadLocalStoragePointer, not a Tls slot indexed by _tls_index\n    mov         rcx,qword ptr [rax]         // Get the Tls memory block location for this module (one module in this app).\n    mov         dword ptr [rdx+rcx],2Ah     // Assign 42 to the foo location in this module\u0027s Tls memory block\n\n\nAccessing TlsSlots via the Windows Tls* APIs are an entirely different mechanism to \"declspec(thread)\" variables. The code within that is already very efficient. On x64 it\u0027s actually hand-written in assembly, and is as shown below (my annotations):\n\n// \u003d\u003d\u003d Code for KERNEL32!TlsGetValue \u003d\u003d\u003d\n    // Branch if slot outside TLS_MINIMUM_AVAILABLE (not taken)\n    // Note: ecx contains the slot index (1st parameter)\n    cmp     ecx, 40h\n    mov     ecx, ecx\n    jae     KERNEL32!TlsGetValue+0x20\n\n    // See if LastError value needs to be set to 0 before returning\n    cmp     dword ptr gs:[68h], 0\n\n    // Mov the slot value into rax\n    // \"gs\" segement register points to the Thread Environment Block\n    // 1480h is the offset for the Tls slots within the TEB\n    mov     rax, qword ptr gs:[rcx*8+1480h]\n\n    // Jump to reset LastError to 0 if needed before returning\n    jne     KERNEL32!TlsGetValue+0x49\n    ret\n\nBottom line is that I couldn\u0027t figure out how to safely check if a \"declspec(thread)\" location has been initialized in a stable and cross-platform manner, which is why I checked a TLS slot using the stable Windows APIs instead - and it seemed fortunate that the isolate already maintains such a slot when in use. (Else the code change is going to be much bigger to add/maintain another slot for just the trap handler use).",
+      "parentUuid": "e330e771_68628e97",
       "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
