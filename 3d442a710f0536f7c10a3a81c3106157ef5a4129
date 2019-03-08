@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c269477_22c95345",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-08T20:07:48Z",
+      "side": 1,
+      "message": "drop {}",
+      "revId": "3d442a710f0536f7c10a3a81c3106157ef5a4129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c725d0b4_dd70d0d9",
+        "filename": "src/inspector/injected-script.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-08T20:07:48Z",
+      "side": 1,
+      "message": "Please merge declaration and assignment.",
+      "revId": "3d442a710f0536f7c10a3a81c3106157ef5a4129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d262b1f2_1dd408cd",
+        "filename": "src/inspector/value-mirror.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-03-08T20:07:48Z",
+      "side": 1,
+      "message": "drop {}",
+      "revId": "3d442a710f0536f7c10a3a81c3106157ef5a4129",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
