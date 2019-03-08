@@ -96,6 +96,24 @@
       "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e330e771_68628e97",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-08T02:40:44Z",
+      "side": 1,
+      "message": "To elaborate a little, here\u0027s the assembly code that gets generated for the following C/C++ code:\n\n __declspec(thread) uintptr_t tls_var;\n uintptr_t read_tls_var() {\n   return tls_var;\n }\n\n// Assembly code\nread_tls_var:\n  // Get the offset of tls_var from the start of the TLS section\n  // (SECREL relocation).\n  mov edx, OFFSET FLAT:tls_var\n  // Get the module index for the DLL/executable that this code is\n  // linked into.\n  mov ecx, DWORD PTR _tls_index\n  // Get the address of the module table for this thread.\n  mov rax, QWORD PTR gs:88\n  // Get the address of the TLS variables block for this module,\n  // for this thread.\n  mov rax, QWORD PTR [rax+rcx*8]\n  // Read tls_var from the TLS variables block.\n  mov rax, QWORD PTR [rdx+rax]\n  ret\n\nI am not sure the above is 100% correct (I haven\u0027t got a Windows machine handy to test on).  Here is the equivalent in GNU Assembler syntax for comparison:\n\nread_tls_var:\n  movl $tlsValue@SECREL, %edx\n  mov _tls_index(%rip), %ecx\n  movq %gs:0x58, %rax\n  movq (%rax,%rcx,8), %rax\n  movq (%rdx,%rax), %rax\n  ret\n\nPresumably one of these dereferences is getting a null pointer, and V8 could inline the code above with a null pointer check added.",
+      "parentUuid": "750ad96e_f911a6bb",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
