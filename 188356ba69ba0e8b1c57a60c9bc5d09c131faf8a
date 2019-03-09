@@ -216,6 +216,24 @@
       "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6005e75_10e25bad",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-09T01:06:10Z",
+      "side": 1,
+      "message": "Thanks for posting the TlsGetValue() code and the other details.  It\u0027s good to see that TlsGetValue() is (currently) not doing anything scary that would make us want to avoid calling it in a fault handler.\n\nWe could just have the trap-handler code maintain its own TLS slot independent of the rest of V8, as you mentioned in your comment.\n\nWould doing something like the following work?\n\n bool TryHandleWasmTrap(EXCEPTION_POINTERS* exception) {\n   // TlsGetValue() clobbers LastError, so save its value so that we can\n   // restore it, so that the crash reporter can report its value.\n   DWORD old_error \u003d GetLastError();\n\n   // We don\u0027t actually care what value this returns.  We only care whether\n   // this indicates an error condition, because that indicates\n   // whether TLS is set up successfully for this thread.\n   TlsGetValue(g_tls_index);\n\n   DWORD error \u003d GetLastError();\n   SetLastError(old_error);\n   if (error !\u003d ERROR_SUCCESS) {\n     // The thread is early in startup where TLS is not initialised.\n     return false;\n   }\n\n   // Check g_thread_in_wasm_code (as the code currently does).\n   ...\n }\n\nThat assumes that TlsGetValue()\u0027s success implies that __declspec(thread) variables also work on the current thread.  However, that assumption does not seem very safe.  If it\u0027s not safe, some alternatives are:\n\n* Replace all use of the g_thread_in_wasm_code TLS var with calls to TlsGetValue() and TlsSetValue().  That might be unnecessarily slow.\n* Do some explicit setup on any thread that might use V8 and/or Wasm so that the fault handler\u0027s TlsGetValue() call indicates whether that setup occurred.  I guess that\u0027s the approach your current Isolate::TryGetCurrent() call uses?",
+      "parentUuid": "29a65799_737db83e",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
