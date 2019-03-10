@@ -141,6 +141,30 @@
       "revId": "173b40333441e7c1ed97a94fecd7a17df61c06ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9033ede7_308a876b",
+        "filename": "src/regexp/regexp-macro-assembler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1151758
+      },
+      "writtenOn": "2019-03-10T17:51:15Z",
+      "side": 1,
+      "message": "Sorry that I forgot Markus had added multiple overloads for APIs in UnicodeString. Thanks to that,  I think you don\u0027t need a reinterpret_cast at all because it has overloads for both uint16_t (used by v8 on non-Windows) and wchar_t/WChar( used by v8 on Windows).",
+      "parentUuid": "920f682a_4899f492",
+      "range": {
+        "startLine": 39,
+        "startChar": 1,
+        "endLine": 43,
+        "endChar": 65
+      },
+      "revId": "173b40333441e7c1ed97a94fecd7a17df61c06ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
