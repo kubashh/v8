@@ -19,6 +19,9 @@
 #include "src/objects/compilation-cache-inl.h"
 #include "src/objects/heap-object.h"
 #include "src/objects/js-collection-inl.h"
+#include "src/objects/js-generator-inl.h"
+#include "src/objects/js-generator.h"
+#include "src/objects/js-objects.h"
 #include "src/objects/literal-objects-inl.h"
 #include "src/objects/slots.h"
 #include "src/objects/templates.h"
@@ -135,7 +138,7 @@ FieldStatsCollector::GetInobjectFieldStats(Map map) {
   return stats;
 }
 
-void ObjectStats::ClearObjectStats(bool clear_last_time_stats) {
+void ObjectStatsImpl::ClearObjectStats(bool clear_last_time_stats) {
   memset(object_counts_, 0, sizeof(object_counts_));
   memset(object_sizes_, 0, sizeof(object_sizes_));
   memset(over_allocated_, 0, sizeof(over_allocated_));
@@ -168,13 +171,13 @@ V8_NOINLINE static void DumpJSONArray(std::stringstream& stream, size_t* array,
   stream << PrintCollection(Vector<size_t>(array, len));
 }
 
-void ObjectStats::PrintKeyAndId(const char* key, int gc_count) {
+void ObjectStatsImpl::PrintKeyAndId(const char* key, int gc_count) {
   PrintF("\"isolate\": \"%p\", \"id\": %d, \"key\": \"%s\", ",
          reinterpret_cast<void*>(isolate()), gc_count, key);
 }
 
-void ObjectStats::PrintInstanceTypeJSON(const char* key, int gc_count,
-                                        const char* name, int index) {
+void ObjectStatsImpl::PrintInstanceTypeJSON(const char* key, int gc_count,
+                                            const char* name, int index) {
   PrintF("{ ");
   PrintKeyAndId(key, gc_count);
   PrintF("\"type\": \"instance_type_data\", ");
@@ -191,7 +194,7 @@ void ObjectStats::PrintInstanceTypeJSON(const char* key, int gc_count,
   PrintF(" }\n");
 }
 
-void ObjectStats::PrintJSON(const char* key) {
+void ObjectStatsImpl::PrintJSON(const char* key) {
   double time = isolate()->time_millis_since_init();
   int gc_count = heap()->gc_count();
 
@@ -233,8 +236,8 @@ void ObjectStats::PrintJSON(const char* key) {
 #undef VIRTUAL_INSTANCE_TYPE_WRAPPER
 }
 
-void ObjectStats::DumpInstanceTypeData(std::stringstream& stream,
-                                       const char* name, int index) {
+void ObjectStatsImpl::DumpInstanceTypeData(std::stringstream& stream,
+                                           const char* name, int index) {
   stream << "\"" << name << "\":{";
   stream << "\"type\":" << static_cast<int>(index) << ",";
   stream << "\"overall\":" << object_sizes_[index] << ",";
@@ -247,7 +250,7 @@ void ObjectStats::DumpInstanceTypeData(std::stringstream& stream,
   stream << "},";
 }
 
-void ObjectStats::Dump(std::stringstream& stream) {
+void ObjectStatsImpl::Dump(std::stringstream& stream) {
   double time = isolate()->time_millis_since_init();
   int gc_count = heap()->gc_count();
 
@@ -288,7 +291,7 @@ void ObjectStats::Dump(std::stringstream& stream) {
 #undef VIRTUAL_INSTANCE_TYPE_WRAPPER
 }
 
-void ObjectStats::CheckpointObjectStats() {
+void ObjectStatsImpl::CheckpointObjectStats() {
   base::MutexGuard lock_guard(object_stats_mutex.Pointer());
   MemCopy(object_counts_last_time_, object_counts_, sizeof(object_counts_));
   MemCopy(object_sizes_last_time_, object_sizes_, sizeof(object_sizes_));
@@ -304,21 +307,24 @@ int Log2ForSize(size_t size) {
 
 }  // namespace
 
-int ObjectStats::HistogramIndexFromSize(size_t size) {
+int ObjectStatsImpl::HistogramIndexFromSize(size_t size) {
   if (size == 0) return 0;
   return Min(Max(Log2ForSize(size) + 1 - kFirstBucketShift, 0),
              kLastValueBucketIndex);
 }
 
-void ObjectStats::RecordObjectStats(InstanceType type, size_t size) {
+void ObjectStatsImpl::RecordObjectStats(HeapObject object, InstanceType type,
+                                        size_t size) {
   DCHECK_LE(type, LAST_TYPE);
   object_counts_[type]++;
   object_sizes_[type] += size;
   size_histogram_[type][HistogramIndexFromSize(size)]++;
 }
 
-void ObjectStats::RecordVirtualObjectStats(VirtualInstanceType type,
-                                           size_t size, size_t over_allocated) {
+void ObjectStatsImpl::RecordVirtualObjectStats(HeapObject object,
+                                               VirtualInstanceType type,
+                                               size_t size,
+                                               size_t over_allocated) {
   DCHECK_LE(type, LAST_VIRTUAL_TYPE);
   object_counts_[FIRST_VIRTUAL_TYPE + type]++;
   object_sizes_[FIRST_VIRTUAL_TYPE + type] += size;
@@ -329,6 +335,100 @@ void ObjectStats::RecordVirtualObjectStats(VirtualInstanceType type,
 }
 
 Isolate* ObjectStats::isolate() { return heap()->isolate(); }
+
+void PerContextObjectStats::ClearObjectStats(bool clear_last_time_stats) {
+  context_stats_.clear();
+  context_mapper_ = nullptr;
+  total_stats_->ClearObjectStats(clear_last_time_stats);
+  shared_stats_->ClearObjectStats(clear_last_time_stats);
+  unknown_stats_->ClearObjectStats(clear_last_time_stats);
+}
+
+void PerContextObjectStats::PrintInstanceType(const char* key, int gc_count,
+                                              double time, const char* name,
+                                              int index) {
+  if (total_stats_->size(index) == 0) return;
+  PrintF(
+      "%9.fms: %6s (gc=%4d): total_size=%5zuKB shared_size=%5zuKB (%3.f) "
+      "unknown_size=%5zuKB(%3.f) | %s\n",
+      time, key, gc_count, total_stats_->size(index) / KB,
+      shared_stats_->size(index) / KB,
+      shared_stats_->size(index) * 100.0 / total_stats_->size(index),
+      unknown_stats_->size(index) / KB,
+      unknown_stats_->size(index) * 100.0 / total_stats_->size(index), name);
+}
+
+void PerContextObjectStats::PrintJSON(const char* key) {
+  double time = isolate()->time_millis_since_init();
+  int gc_count = heap()->gc_count();
+
+  PrintF("\n---------------------------------------------\n");
+
+#define INSTANCE_TYPE_WRAPPER(name) \
+  PrintInstanceType(key, gc_count, time, #name, name);
+
+#define VIRTUAL_INSTANCE_TYPE_WRAPPER(name) \
+  PrintInstanceType(key, gc_count, time, #name, FIRST_VIRTUAL_TYPE + name);
+
+  INSTANCE_TYPE_LIST(INSTANCE_TYPE_WRAPPER)
+  VIRTUAL_INSTANCE_TYPE_LIST(VIRTUAL_INSTANCE_TYPE_WRAPPER)
+
+#undef INSTANCE_TYPE_WRAPPER
+#undef VIRTUAL_INSTANCE_TYPE_WRAPPER
+  PrintF("---------------------------------------------\n");
+  PrintF(
+      "%9.fms: %6s (gc=%4d): total_size=%5zuKB shared_size=%5zuKB (%3.f) "
+      "unknown_size=%5zuKB(%3.f)\n",
+      time, key, gc_count, total_stats_->total_size() / KB,
+      shared_stats_->total_size() / KB,
+      shared_stats_->total_size() * 100.0 / total_stats_->total_size(),
+      unknown_stats_->total_size() / KB,
+      unknown_stats_->total_size() * 100.0 / total_stats_->total_size());
+}
+
+void PerContextObjectStats::Dump(std::stringstream& stream) {
+  total_stats_->Dump(stream);
+}
+
+void PerContextObjectStats::CheckpointObjectStats() {
+  total_stats_->CheckpointObjectStats();
+  shared_stats_->CheckpointObjectStats();
+  unknown_stats_->CheckpointObjectStats();
+}
+
+void PerContextObjectStats::RecordObjectStats(HeapObject object,
+                                              InstanceType type, size_t size) {
+  total_stats_->RecordObjectStats(object, type, size);
+  GetObjectStats(object)->RecordObjectStats(object, type, size);
+}
+
+void PerContextObjectStats::RecordVirtualObjectStats(HeapObject object,
+                                                     VirtualInstanceType type,
+                                                     size_t size,
+                                                     size_t over_allocated) {
+  total_stats_->RecordVirtualObjectStats(object, type, size, over_allocated);
+  GetObjectStats(object)->RecordVirtualObjectStats(object, type, size,
+                                                   over_allocated);
+}
+
+ObjectStats* PerContextObjectStats::GetObjectStats(HeapObject object) {
+  ContextMapper::Result context = context_mapper_->ContextOf(object);
+  switch (context.type) {
+    case ContextMapper::ResultType::kUnknown:
+      return unknown_stats_.get();
+    case ContextMapper::ResultType::kShared:
+      return shared_stats_.get();
+    case ContextMapper::ResultType::kKnownContext:
+    case ContextMapper::ResultType::kInferredContext:
+      Address context_addr = context.context.address();
+      auto it = context_stats_.find(context_addr);
+      if (it != context_stats_.end()) return it->second.get();
+      auto stats = std::make_unique<ObjectStatsImpl>(heap_);
+      ObjectStats* result = stats.get();
+      context_stats_[context_addr] = std::move(stats);
+      return result;
+  }
+}
 
 class ObjectStatsCollectorImpl {
  public:
@@ -358,7 +458,7 @@ class ObjectStatsCollectorImpl {
                                 ObjectStats::VirtualInstanceType type,
                                 size_t size, size_t over_allocated,
                                 CowMode check_cow_array = kCheckCow);
-  void RecordExternalResourceStats(Address resource,
+  void RecordExternalResourceStats(HeapObject owner, Address resource,
                                    ObjectStats::VirtualInstanceType type,
                                    size_t size);
   // Gets size from |ob| and assumes no over allocating.
@@ -458,17 +558,18 @@ bool ObjectStatsCollectorImpl::RecordVirtualObjectStats(
 
   if (virtual_objects_.find(obj) == virtual_objects_.end()) {
     virtual_objects_.insert(obj);
-    stats_->RecordVirtualObjectStats(type, size, over_allocated);
+    stats_->RecordVirtualObjectStats(obj, type, size, over_allocated);
     return true;
   }
   return false;
 }
 
 void ObjectStatsCollectorImpl::RecordExternalResourceStats(
-    Address resource, ObjectStats::VirtualInstanceType type, size_t size) {
+    HeapObject owner, Address resource, ObjectStats::VirtualInstanceType type,
+    size_t size) {
   if (external_resources_.find(resource) == external_resources_.end()) {
     external_resources_.insert(resource);
-    stats_->RecordVirtualObjectStats(type, size, 0);
+    stats_->RecordVirtualObjectStats(owner, type, size, 0);
   }
 }
 
@@ -618,7 +719,8 @@ void ObjectStatsCollectorImpl::RecordVirtualFeedbackVectorDetails(
 
   // Log the feedback vector's header (fixed fields).
   size_t header_size = vector->slots_start().address() - vector->address();
-  stats_->RecordVirtualObjectStats(ObjectStats::FEEDBACK_VECTOR_HEADER_TYPE,
+  stats_->RecordVirtualObjectStats(vector,
+                                   ObjectStats::FEEDBACK_VECTOR_HEADER_TYPE,
                                    header_size, ObjectStats::kNoOverAllocation);
   calculated_size += header_size;
 
@@ -631,6 +733,7 @@ void ObjectStatsCollectorImpl::RecordVirtualFeedbackVectorDetails(
     // Log the entry (or entries) taken up by this slot.
     size_t slot_size = it.entry_size() * kTaggedSize;
     stats_->RecordVirtualObjectStats(
+        vector,
         GetFeedbackSlotType(vector->Get(slot), it.kind(), heap_->isolate()),
         slot_size, ObjectStats::kNoOverAllocation);
     calculated_size += slot_size;
@@ -752,7 +855,7 @@ void ObjectStatsCollectorImpl::RecordObjectStats(HeapObject obj,
                                                  InstanceType type,
                                                  size_t size) {
   if (virtual_objects_.find(obj) == virtual_objects_.end()) {
-    stats_->RecordObjectStats(type, size);
+    stats_->RecordObjectStats(obj, type, size);
   }
 }
 
@@ -814,7 +917,7 @@ void ObjectStatsCollectorImpl::RecordVirtualScriptDetails(Script script) {
     Address resource = string->resource_as_address();
     size_t off_heap_size = string->ExternalPayloadSize();
     RecordExternalResourceStats(
-        resource,
+        string, resource,
         string->IsOneByteRepresentation()
             ? ObjectStats::SCRIPT_SOURCE_EXTERNAL_ONE_BYTE_TYPE
             : ObjectStats::SCRIPT_SOURCE_EXTERNAL_TWO_BYTE_TYPE,
@@ -836,7 +939,7 @@ void ObjectStatsCollectorImpl::RecordVirtualExternalStringDetails(
   Address resource = string->resource_as_address();
   size_t off_heap_size = string->ExternalPayloadSize();
   RecordExternalResourceStats(
-      resource,
+      string, resource,
       string->IsOneByteRepresentation()
           ? ObjectStats::STRING_EXTERNAL_RESOURCE_ONE_BYTE_TYPE
           : ObjectStats::STRING_EXTERNAL_RESOURCE_TWO_BYTE_TYPE,
@@ -1008,19 +1111,160 @@ class ObjectStatsVisitor {
 
 namespace {
 
-void IterateHeap(Heap* heap, ObjectStatsVisitor* visitor) {
+template <typename VisitCallback>
+void IterateHeap(Heap* heap, VisitCallback visit) {
   SpaceIterator space_it(heap);
   HeapObject obj;
   while (space_it.has_next()) {
     std::unique_ptr<ObjectIterator> it(space_it.next()->GetObjectIterator());
     ObjectIterator* obj_it = it.get();
     for (obj = obj_it->Next(); !obj.is_null(); obj = obj_it->Next()) {
-      visitor->Visit(obj, obj->Size());
+      visit(obj, obj->Size());
     }
   }
 }
 
 }  // namespace
+
+class ContextMapper::Visitor : public ObjectVisitor {
+ public:
+  Visitor(ContextMap* context_map, std::queue<HeapObject>* worklist)
+      : context_map_(context_map), worklist_(worklist) {}
+
+  void VisitPointers(HeapObject host, ObjectSlot start,
+                     ObjectSlot end) override {
+    VisitPointers(host, MaybeObjectSlot(start), MaybeObjectSlot(end));
+  }
+  void VisitPointers(HeapObject host, MaybeObjectSlot start,
+                     MaybeObjectSlot end) override {
+    Result context = (*context_map_)[host->address()];
+    for (MaybeObjectSlot p = start; p < end; ++p) {
+      HeapObject object;
+      if ((*p)->GetHeapObject(&object)) {
+        VisitObjectImpl(context, object);
+      }
+    }
+  }
+  void VisitCodeTarget(Code host, RelocInfo* rinfo) override {
+    Code target = Code::GetCodeFromTargetAddress(rinfo->target_address());
+    VisitObjectImpl((*context_map_)[host->address()], target);
+  }
+
+  void VisitEmbeddedPointer(Code host, RelocInfo* rinfo) override {
+    VisitObjectImpl((*context_map_)[host->address()], rinfo->target_object());
+  }
+  void VisitObjectImpl(Result parent_context, HeapObject object) {
+    Address addr = object->address();
+    auto it = context_map_->find(addr);
+    Result own_context;
+    if (it == context_map_->end()) {
+      own_context = {ResultType::kUnknown, NativeContext()};
+      worklist_->push(object);
+    } else {
+      own_context = it->second;
+    }
+    (*context_map_)[addr] = Combine(parent_context, own_context);
+  }
+
+ private:
+  Result Combine(Result parent, Result own) {
+    DCHECK_NE(ResultType::kUnknown, parent.type);
+
+    if (own.type == ResultType::kKnownContext) return own;
+
+    if (own.type == ResultType::kShared) return own;
+    if (parent.type == ResultType::kShared) return parent;
+
+    if (own.type == ResultType::kUnknown) {
+      return {ResultType::kInferredContext, parent.context};
+    }
+
+    if (own.context != parent.context)
+      return {ResultType::kShared, NativeContext()};
+
+    return own;
+  }
+  ContextMap* context_map_;
+  std::queue<HeapObject>* worklist_;
+};
+
+Object ContextMapper::GetConstructor(Map map) {
+  auto it = constructor_.find(map->address());
+  if (it != constructor_.end()) return it->second;
+  Object maybe_constructor = map->constructor_or_backpointer();
+  Object constructor;
+  if (maybe_constructor->IsMap()) {
+    constructor = GetConstructor(Map::cast(maybe_constructor));
+  } else {
+    constructor = maybe_constructor;
+  }
+  constructor_[map->address()] = constructor;
+  return constructor;
+}
+
+ContextMapper::Result ContextMapper::KnownContext(Heap* heap,
+                                                  HeapObject object) {
+  if (object->IsContext()) {
+    return {ResultType::kKnownContext, Context::cast(object)->native_context()};
+  }
+  if (object->IsMap()) {
+    Object constructor = GetConstructor(Map::cast(object));
+    if (constructor->IsJSFunction()) {
+      JSFunction function = JSFunction::cast(constructor);
+      if (function->has_context()) {
+        return {ResultType::kKnownContext,
+                function->context()->native_context()};
+      }
+    }
+    return {ResultType::kUnknown, NativeContext()};
+  }
+  if (object->IsJSReceiver()) {
+    JSReceiver receiver = JSReceiver::cast(object);
+    Object constructor = GetConstructor(receiver->map());
+    JSFunction function;
+    if (constructor->IsJSFunction()) {
+      function = JSFunction::cast(constructor);
+    } else if (constructor->IsFunctionTemplateInfo() ||
+               constructor->IsNull(ReadOnlyRoots(heap->isolate()))) {
+      // Remote objects don't have a creation context.
+      return {ResultType::kUnknown, NativeContext()};
+    } else if (receiver->IsJSGeneratorObject()) {
+      function = JSGeneratorObject::cast(receiver)->function();
+    } else {
+      // Functions have null as a constructor,
+      // but any JSFunction knows its context immediately.
+      if (!receiver->IsJSFunction()) {
+        receiver->Print();
+        receiver->map()->Print();
+        PrintF("------------\n");
+        constructor->Print();
+      }
+      CHECK(receiver->IsJSFunction());
+      function = JSFunction::cast(receiver);
+    }
+    if (function->has_context()) {
+      return {ResultType::kKnownContext, function->context()->native_context()};
+    }
+  }
+  return {ResultType::kUnknown, NativeContext()};
+}
+
+ContextMapper::ContextMapper(Heap* heap) {
+  std::queue<HeapObject> worklist;
+  ContextMapper::Visitor visitor(&context_map_, &worklist);
+  IterateHeap(heap, [this, &worklist, &heap](HeapObject obj, int size) {
+    Result context = KnownContext(heap, obj);
+    if (context.type == ResultType::kKnownContext) {
+      worklist.push(obj);
+      context_map_[obj->address()] = context;
+    }
+  });
+  while (!worklist.empty()) {
+    HeapObject object = worklist.front();
+    worklist.pop();
+    object->Iterate(&visitor);
+  }
+}
 
 void ObjectStatsCollector::Collect() {
   ObjectStatsCollectorImpl live_collector(heap_, live_);
@@ -1029,7 +1273,9 @@ void ObjectStatsCollector::Collect() {
   for (int i = 0; i < ObjectStatsCollectorImpl::kNumberOfPhases; i++) {
     ObjectStatsVisitor visitor(heap_, &live_collector, &dead_collector,
                                static_cast<ObjectStatsCollectorImpl::Phase>(i));
-    IterateHeap(heap_, &visitor);
+    IterateHeap(heap_, [&visitor](HeapObject obj, int size) {
+      visitor.Visit(obj, size);
+    });
   }
 }
 

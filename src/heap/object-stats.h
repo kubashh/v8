@@ -5,6 +5,8 @@
 #ifndef V8_HEAP_OBJECT_STATS_H_
 #define V8_HEAP_OBJECT_STATS_H_
 
+#include <unordered_map>
+
 #include "src/objects.h"
 #include "src/objects/code.h"
 
@@ -77,11 +79,37 @@ namespace internal {
 class Heap;
 class Isolate;
 
+class ContextMapper {
+ public:
+  enum class ResultType { kUnknown, kKnownContext, kInferredContext, kShared };
+  struct Result {
+    ResultType type;
+    NativeContext context;
+  };
+  explicit ContextMapper(Heap* heap);
+  Result ContextOf(HeapObject heap_object) {
+    auto it = context_map_.find(heap_object.address());
+    if (it == context_map_.end())
+      return {ResultType::kUnknown, NativeContext()};
+    return it->second;
+  }
+
+ private:
+  class Visitor;
+  Result KnownContext(Heap* heap, HeapObject object);
+  Object GetConstructor(Map map);
+  using ContextMap = std::unordered_map<Address, Result>;
+  ContextMap context_map_;
+  std::unordered_map<Address, Object> constructor_;
+};
+
 class ObjectStats {
  public:
   static const size_t kNoOverAllocation = 0;
 
-  explicit ObjectStats(Heap* heap) : heap_(heap) { ClearObjectStats(); }
+  explicit ObjectStats(Heap* heap) : heap_(heap) {}
+
+  virtual ~ObjectStats() = default;
 
   // See description on VIRTUAL_INSTANCE_TYPE_LIST.
   enum VirtualInstanceType {
@@ -99,26 +127,81 @@ class ObjectStats {
     OBJECT_STATS_COUNT = FIRST_VIRTUAL_TYPE + LAST_VIRTUAL_TYPE + 1,
   };
 
-  void ClearObjectStats(bool clear_last_time_stats = false);
+  virtual void SetContextMapper(ContextMapper* context_mapper) = 0;
+  virtual void ClearObjectStats(bool clear_last_time_stats = false) = 0;
 
-  void PrintJSON(const char* key);
-  void Dump(std::stringstream& stream);
+  virtual void PrintJSON(const char* key) = 0;
+  virtual void Dump(std::stringstream& stream) = 0;
 
-  void CheckpointObjectStats();
-  void RecordObjectStats(InstanceType type, size_t size);
-  void RecordVirtualObjectStats(VirtualInstanceType type, size_t size,
-                                size_t over_allocated);
+  virtual void CheckpointObjectStats() = 0;
+  virtual void RecordObjectStats(HeapObject object, InstanceType type,
+                                 size_t size) = 0;
+  virtual void RecordVirtualObjectStats(HeapObject object,
+                                        VirtualInstanceType type, size_t size,
+                                        size_t over_allocated) = 0;
 
-  size_t object_count_last_gc(size_t index) {
-    return object_counts_last_time_[index];
-  }
+  virtual size_t object_count_last_gc(size_t index) = 0;
 
-  size_t object_size_last_gc(size_t index) {
-    return object_sizes_last_time_[index];
-  }
+  virtual size_t object_size_last_gc(size_t index) = 0;
 
   Isolate* isolate();
   Heap* heap() { return heap_; }
+
+ protected:
+  Heap* heap_;
+  size_t tagged_fields_count_;
+  size_t embedder_fields_count_;
+  size_t unboxed_double_fields_count_;
+  size_t raw_fields_count_;
+
+  friend class ObjectStatsCollectorImpl;
+};
+
+class ObjectStatsImpl : public ObjectStats {
+ public:
+  explicit ObjectStatsImpl(Heap* heap) : ObjectStats(heap) {
+    ClearObjectStats();
+  }
+
+  void SetContextMapper(ContextMapper* context_mapper) override {}
+  void ClearObjectStats(bool clear_last_time_stats = false) override;
+
+  void PrintJSON(const char* key) override;
+  void Dump(std::stringstream& stream) override;
+
+  void CheckpointObjectStats() override;
+  void RecordObjectStats(HeapObject object, InstanceType type,
+                         size_t size) override;
+  void RecordVirtualObjectStats(HeapObject object, VirtualInstanceType type,
+                                size_t size, size_t over_allocated) override;
+
+  size_t object_count_last_gc(size_t index) override {
+    return object_counts_last_time_[index];
+  }
+
+  size_t object_size_last_gc(size_t index) override {
+    return object_sizes_last_time_[index];
+  }
+
+  size_t size(int index) { return object_sizes_[index]; }
+
+  size_t count(int index) { return object_counts_[index]; }
+
+  size_t total_size() {
+    size_t total = 0;
+    for (int i = 0; i < OBJECT_STATS_COUNT; i++) {
+      total += object_sizes_[i];
+    }
+    return total;
+  }
+
+  size_t total_count() {
+    size_t total = 0;
+    for (int i = 0; i < OBJECT_STATS_COUNT; i++) {
+      total += object_sizes_[i];
+    }
+    return total;
+  }
 
  private:
   static const int kFirstBucketShift = 5;  // <32
@@ -138,7 +221,6 @@ class ObjectStats {
 
   int HistogramIndexFromSize(size_t size);
 
-  Heap* heap_;
   // Object counts and used memory by InstanceType.
   size_t object_counts_[OBJECT_STATS_COUNT];
   size_t object_counts_last_time_[OBJECT_STATS_COUNT];
@@ -149,13 +231,49 @@ class ObjectStats {
   // Detailed histograms by InstanceType.
   size_t size_histogram_[OBJECT_STATS_COUNT][kNumberOfBuckets];
   size_t over_allocated_histogram_[OBJECT_STATS_COUNT][kNumberOfBuckets];
+};
 
-  size_t tagged_fields_count_;
-  size_t embedder_fields_count_;
-  size_t unboxed_double_fields_count_;
-  size_t raw_fields_count_;
+class PerContextObjectStats : public ObjectStats {
+ public:
+  PerContextObjectStats(Heap* heap)
+      : ObjectStats(heap),
+        total_stats_(std::make_unique<ObjectStatsImpl>(heap)),
+        shared_stats_(std::make_unique<ObjectStatsImpl>(heap)),
+        unknown_stats_(std::make_unique<ObjectStatsImpl>(heap)) {
+    ClearObjectStats();
+  }
+  void SetContextMapper(ContextMapper* context_mapper) override {
+    context_mapper_ = context_mapper;
+  }
+  void ClearObjectStats(bool clear_last_time_stats = false) override;
 
-  friend class ObjectStatsCollectorImpl;
+  void PrintJSON(const char* key) override;
+  void Dump(std::stringstream& stream) override;
+
+  void CheckpointObjectStats() override;
+  void RecordObjectStats(HeapObject object, InstanceType type,
+                         size_t size) override;
+  void RecordVirtualObjectStats(HeapObject object, VirtualInstanceType type,
+                                size_t size, size_t over_allocated) override;
+
+  size_t object_count_last_gc(size_t index) override {
+    return total_stats_->object_count_last_gc(index);
+  }
+
+  size_t object_size_last_gc(size_t index) override {
+    return total_stats_->object_size_last_gc(index);
+  }
+
+ private:
+  ObjectStats* GetObjectStats(HeapObject object);
+  void PrintInstanceType(const char* key, int gc_count, double time,
+                         const char* name, int index);
+
+  ContextMapper* context_mapper_ = nullptr;
+  std::unordered_map<Address, std::unique_ptr<ObjectStatsImpl>> context_stats_;
+  std::unique_ptr<ObjectStatsImpl> total_stats_;
+  std::unique_ptr<ObjectStatsImpl> shared_stats_;
+  std::unique_ptr<ObjectStatsImpl> unknown_stats_;
 };
 
 class ObjectStatsCollector {

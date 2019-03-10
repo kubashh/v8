@@ -503,7 +503,9 @@ void MarkCompactCollector::CollectGarbage() {
   ClearNonLiveReferences();
   VerifyMarking();
 
-  RecordObjectStats();
+  if (heap()->is_current_gc_forced()) {
+    RecordObjectStats();
+  }
 
   StartSweepSpaces();
 
@@ -1742,6 +1744,9 @@ void MarkCompactCollector::ProcessTopOptimizedFrame(ObjectVisitor* visitor) {
 void MarkCompactCollector::RecordObjectStats() {
   if (V8_UNLIKELY(FLAG_gc_stats)) {
     heap()->CreateObjectStats();
+    ContextMapper context_mapper(heap());
+    heap()->live_object_stats_->SetContextMapper(&context_mapper);
+    heap()->dead_object_stats_->SetContextMapper(&context_mapper);
     ObjectStatsCollector collector(heap(), heap()->live_object_stats_.get(),
                                    heap()->dead_object_stats_.get());
     collector.Collect();

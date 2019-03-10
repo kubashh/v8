@@ -1322,6 +1322,22 @@ void Heap::EnsureFillerObjectAtTop() {
   }
 }
 
+size_t EstimateJSObjectSize(JSObject jsobj) {
+  size_t result = jsobj->Size();
+  result += jsobj->elements()->Size();
+  result += jsobj->property_array()->Size();
+  result += jsobj->property_dictionary()->Size();
+  // if (jsobj->IsJSArrayBuffer()) {
+  //   result += JSArrayBuffer::cast(jsobj)->byte_length();
+  // }
+  // } else if (jsobj->IsJSCollection()) {
+  //   result += JSCollection::cast(jsobj)->table()->Size();
+  // } else if (jsobj->IsJSWeakCollection()) {
+  //   result += JSWeakCollection::cast(jsobj)->table()->Size();
+  // }
+  return result;
+}
+
 bool Heap::CollectGarbage(AllocationSpace space,
                           GarbageCollectionReason gc_reason,
                           const v8::GCCallbackFlags gc_callback_flags) {
@@ -1442,6 +1458,61 @@ bool Heap::CollectGarbage(AllocationSpace space,
     StartIncrementalMarkingIfAllocationLimitIsReached(
         GCFlagsForIncrementalMarking(),
         kGCCallbackScheduleIdleGarbageCollection);
+  }
+
+  if (collector == MARK_COMPACTOR && FLAG_trace_gc) {
+    isolate()->PrintWithTimestamp("-----------------\n");
+    HeapObjectIterator it(old_space());
+    for (HeapObject obj = it.Next(); !obj.is_null(); obj = it.Next()) {
+      if (obj->IsNativeContext()) {
+        NativeContext context = NativeContext::cast(obj);
+        isolate()->PrintWithTimestamp("NativeContext %lx:\n", context.ptr());
+        if (context->security_token()->IsString()) {
+          context->security_token()->Print();
+        }
+        PrintF("\n");
+      }
+    }
+    LargeObjectIterator lit(lo_space());
+    for (HeapObject obj = lit.Next(); !obj.is_null(); obj = lit.Next()) {
+      if (obj->IsNativeContext()) {
+        NativeContext context = NativeContext::cast(obj);
+        isolate()->PrintWithTimestamp("NativeContext %lx:\n", context.ptr());
+        if (context->security_token()->IsString()) {
+          context->security_token()->Print();
+        }
+        PrintF("\n");
+      }
+    }
+    isolate()->PrintWithTimestamp("-----------------\n");
+    // double time;
+    // {
+    //   TimedScope scope(&time);
+    //   std::map<Address, size_t> sizes;
+    //   {
+    //     HeapObjectIterator it(old_space());
+    //     for (HeapObject obj = it.Next(); obj.is_null(); obj = it.Next()) {
+    //       if (obj->IsJSObject()) {
+    //         JSObject jsobj = JSObject::cast(obj);
+    //         Object constructor = jsobj->map()->GetConstructor();
+    //         if (constructor->IsJSFunction()) {
+    //           JSFunction function = JSFunction::cast(constructor);
+    //           NativeContext context = function->context()->native_context();
+    //           sizes[context.ptr()] += EstimateJSObjectSize(jsobj);
+    //         }
+    //       }
+    //     }
+    //   }
+    //   isolate()->PrintWithTimestamp("-----------------\n");
+    //   size_t sum = 0;
+    //   for (auto x : sizes) {
+    //     isolate()->PrintWithTimestamp("%zx: %zuKB\n", x.first, x.second /
+    //     KB); sum += x.second;
+    //   }
+    //   isolate()->PrintWithTimestamp("Total %zuKB\n", sum / KB);
+    // }
+    // isolate()->PrintWithTimestamp("Total %.1fms\n", time);
+    // isolate()->PrintWithTimestamp("-----------------\n\n");
   }
 
   return next_gc_likely_to_collect_more;
@@ -4579,10 +4650,7 @@ void Heap::SetUp(ReadOnlyHeap* ro_heap) {
   array_buffer_collector_.reset(new ArrayBufferCollector(this));
   gc_idle_time_handler_.reset(new GCIdleTimeHandler());
   memory_reducer_.reset(new MemoryReducer(this));
-  if (V8_UNLIKELY(FLAG_gc_stats)) {
-    live_object_stats_.reset(new ObjectStats(this));
-    dead_object_stats_.reset(new ObjectStats(this));
-  }
+  CreateObjectStats();
   local_embedder_heap_tracer_.reset(new LocalEmbedderHeapTracer(isolate()));
 
   LOG(isolate_, IntPtrTEvent("heap-capacity", Capacity()));
@@ -5663,10 +5731,10 @@ bool Heap::AllowedToBeMigrated(HeapObject obj, AllocationSpace dst) {
 void Heap::CreateObjectStats() {
   if (V8_LIKELY(FLAG_gc_stats == 0)) return;
   if (!live_object_stats_) {
-    live_object_stats_.reset(new ObjectStats(this));
+    live_object_stats_.reset(new PerContextObjectStats(this));
   }
   if (!dead_object_stats_) {
-    dead_object_stats_.reset(new ObjectStats(this));
+    dead_object_stats_.reset(new PerContextObjectStats(this));
   }
 }
 
