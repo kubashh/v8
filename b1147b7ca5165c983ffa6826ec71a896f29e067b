@@ -22,6 +22,30 @@
       "revId": "b1147b7ca5165c983ffa6826ec71a896f29e067b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e19329b_0590c472",
+        "filename": "test/js-perf-test/StackTrace/serialize.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-11T05:51:42Z",
+      "side": 1,
+      "message": "No. I wasn\u0027t sure if accessing Error.stack alone, without using the result was enough to trigger serialization.",
+      "parentUuid": "a9f49af0_95438ee9",
+      "range": {
+        "startLine": 72,
+        "startChar": 42,
+        "endLine": 72,
+        "endChar": 51
+      },
+      "revId": "b1147b7ca5165c983ffa6826ec71a896f29e067b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
