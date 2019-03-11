@@ -119,20 +119,22 @@ class Simulator : public SimulatorBase {
   double get_double_from_register_pair(int reg);
   void set_d_register_from_double(int dreg, const double dbl) {
     DCHECK(dreg >= 0 && dreg < kNumFPRs);
-    *bit_cast<double*>(&fp_registers_[dreg]) = dbl;
+    *bit_cast<double*>(&fp_registers_[dreg].int64[0]) = dbl;
   }
 
   double get_double_from_d_register(int dreg) {
     DCHECK(dreg >= 0 && dreg < kNumFPRs);
-    return *bit_cast<double*>(&fp_registers_[dreg]);
+    return *bit_cast<double*>(&fp_registers_[dreg].int64[0]);
   }
+
   void set_d_register(int dreg, int64_t value) {
     DCHECK(dreg >= 0 && dreg < kNumFPRs);
-    fp_registers_[dreg] = value;
+    fp_registers_[dreg].int64[0] = value;
   }
+
   int64_t get_d_register(int dreg) {
     DCHECK(dreg >= 0 && dreg < kNumFPRs);
-    return fp_registers_[dreg];
+    return fp_registers_[dreg].int64[0];
   }
 
   void set_d_register_from_float32(int dreg, const float f) {
@@ -411,7 +413,94 @@ class Simulator : public SimulatorBase {
   // On z9 and higher and supported Linux on z Systems platforms, all registers
   // are 64-bit, even in 31-bit mode.
   uint64_t registers_[kNumGPRs];
-  int64_t fp_registers_[kNumFPRs];
+  union fpr_t {
+    int8_t int8[16];
+    uint8_t uint8[16];
+    int16_t int16[8];
+    uint16_t uint16[8];
+    int32_t int32[4];
+    uint32_t uint32[4];
+    int64_t int64[2];
+    uint64_t uint64[2];
+    float f32[4];
+    double f64[2];
+  };
+  fpr_t fp_registers_[kNumFPRs];
+
+  int64_t get_int_from_simd_reg(int type, int reg, int index) {
+    DCHECK((reg >= 0) && (reg < kNumGPRs));
+    switch (type) {
+      case 0:
+        return fp_registers_[reg].int8[index];
+      case 1:
+        return fp_registers_[reg].int16[index];
+      case 2:
+        return fp_registers_[reg].int32[index];
+      case 3:
+        return fp_registers_[reg].int64[index];
+      default:
+        UNREACHABLE();
+        break;
+    }
+  }
+
+  int64_t get_int_from_simd_reg(int type, fpr_t reg, int index) {
+    switch (type) {
+      case 0:
+        return reg.int8[index];
+      case 1:
+        return reg.int16[index];
+      case 2:
+        return reg.int32[index];
+      case 3:
+        return reg.int64[index];
+      default:
+        UNREACHABLE();
+        break;
+    }
+  }
+
+  void set_simd_reg_from_int(int type, int reg, int index, int64_t value) {
+    DCHECK((reg >= 0) && (reg < kNumGPRs));
+    switch (type) {
+      case 0:
+        fp_registers_[reg].int8[index] = static_cast<int8_t>(value);
+        break;
+      case 1:
+        fp_registers_[reg].int16[index] = static_cast<int16_t>(value);
+        break;
+      case 2:
+        fp_registers_[reg].int32[index] = static_cast<int32_t>(value);
+        break;
+      case 3:
+        fp_registers_[reg].int64[index] = static_cast<int64_t>(value);
+        break;
+      default:
+        UNREACHABLE();
+        break;
+    }
+  }
+
+  float get_float_from_simd_reg(int reg, int index) {
+    DCHECK(reg >= 0 && reg < kNumFPRs);
+    return fp_registers_[reg].f32[index];
+  }
+
+  void set_simd_reg_from_float(int reg, int index, float value) {
+    DCHECK(CpuFeatures::IsSupported(VECTOR_ENHANCE_FACILITY_1));
+    DCHECK(reg >= 0 && reg < kNumFPRs);
+    fp_registers_[reg].f32[index] = value;
+  }
+
+  double get_double_from_simd_reg(int reg, int index) {
+    DCHECK(reg >= 0 && reg < kNumFPRs);
+    return fp_registers_[reg].f64[index];
+  }
+
+  void set_simd_reg_from_double(int reg, int index, double value) {
+    DCHECK(reg >= 0 && reg < kNumFPRs);
+    fp_registers_[reg].f64[index] = value;
+  }
 
   // Condition Code register. In S390, the last 4 bits are used.
   int32_t condition_reg_;
@@ -461,10 +550,24 @@ class Simulator : public SimulatorBase {
   static void EvalTableInit();
 
 #define EVALUATE(name) int Evaluate_##name(Instruction* instr)
-#define EVALUATE_VRR_INSTRUCTIONS(name, op_name, op_value) EVALUATE(op_name);
+/*#define EVALUATE_VRR_INSTRUCTIONS(name, op_name, op_value) EVALUATE(op_name);
   S390_VRR_C_OPCODE_LIST(EVALUATE_VRR_INSTRUCTIONS)
   S390_VRR_A_OPCODE_LIST(EVALUATE_VRR_INSTRUCTIONS)
 #undef EVALUATE_VRR_INSTRUCTIONS
+#define EVALUATE_VRX_INSTRUCTIONS(name, op_name, op_value) EVALUATE(op_name);
+  S390_VRX_OPCODE_LIST(EVALUATE_VRX_INSTRUCTIONS)
+#undef EVALUATE_VRX_INSTRUCTIONS*/
+#define EVALUATE_VR_INSTRUCTIONS(name, op_name, op_value) EVALUATE(op_name);
+  S390_VRR_A_OPCODE_LIST(EVALUATE_VR_INSTRUCTIONS)
+  S390_VRR_C_OPCODE_LIST(EVALUATE_VR_INSTRUCTIONS)
+  S390_VRR_E_OPCODE_LIST(EVALUATE_VR_INSTRUCTIONS)
+  S390_VRX_OPCODE_LIST(EVALUATE_VR_INSTRUCTIONS)
+  S390_VRS_A_OPCODE_LIST(EVALUATE_VR_INSTRUCTIONS)
+  S390_VRS_B_OPCODE_LIST(EVALUATE_VR_INSTRUCTIONS)
+  S390_VRS_C_OPCODE_LIST(EVALUATE_VR_INSTRUCTIONS)
+  S390_VRR_B_OPCODE_LIST(EVALUATE_VR_INSTRUCTIONS)
+  S390_VRI_A_OPCODE_LIST(EVALUATE_VR_INSTRUCTIONS)
+#undef EVALUATE_VR_INSTRUCTIONS
 
   EVALUATE(DUMY);
   EVALUATE(BKPT);
