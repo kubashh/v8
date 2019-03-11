@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c60f4123_ab1b9f24",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-11T10:48:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da1770f8_f845cfe4",
+      "revId": "4ea8a1dffa9ce047b17d425e75233922fd706d96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfa67659_b37691da",
         "filename": "third_party/v8/builtins/array-sort.tq",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "4ea8a1dffa9ce047b17d425e75233922fd706d96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9bf10f4_c44a96c6",
+        "filename": "third_party/v8/builtins/array-sort.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-11T10:48:28Z",
+      "side": 1,
+      "message": "Extracted into a \"ResetToGenericAccessor\" helper on the sort state, while the load/store fn pointer is then reloaded from the sort state.",
+      "parentUuid": "cfa67659_b37691da",
+      "revId": "4ea8a1dffa9ce047b17d425e75233922fd706d96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
