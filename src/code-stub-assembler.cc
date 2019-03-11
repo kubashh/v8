@@ -8868,18 +8868,26 @@ void CodeStubAssembler::ForEachEnumerableOwnProperty(
   TVARIABLE(BoolT, var_has_symbol, Int32FalseConstant());
   // false - iterate only string properties, true - iterate only symbol
   // properties
-  TVARIABLE(BoolT, var_name_filter, Int32FalseConstant());
-  VariableList list({&var_stable, &var_has_symbol, &var_name_filter}, zone());
-  Label descriptor_array_loop(this,
-                              {&var_stable, &var_has_symbol, &var_name_filter});
+  TVARIABLE(BoolT, is_second_loop, Int32FalseConstant());
+  TVARIABLE(IntPtrT, first_symbol_descriptor_key_index, IntPtrConstant(-1));
+  TVARIABLE(IntPtrT, last_symbol_descriptor_key_index, IntPtrConstant(-1));
+  VariableList list(
+      {&var_stable, &var_has_symbol, &is_second_loop,
+       &first_symbol_descriptor_key_index, &last_symbol_descriptor_key_index},
+      zone());
+  Label descriptor_array_loop(
+      this,
+      {&var_stable, &var_has_symbol, &is_second_loop,
+       &first_symbol_descriptor_key_index, &last_symbol_descriptor_key_index});
 
   Goto(&descriptor_array_loop);
   BIND(&descriptor_array_loop);
 
   DescriptorArrayForEach(
       list, Unsigned(Int32Constant(0)), nof_descriptors,
-      [=, &var_stable, &var_has_symbol,
-       &var_name_filter](TNode<IntPtrT> descriptor_key_index) {
+      [=, &var_stable, &var_has_symbol, &is_second_loop,
+       &first_symbol_descriptor_key_index,
+       &last_symbol_descriptor_key_index](TNode<IntPtrT> descriptor_key_index) {
         TNode<Name> next_key =
             LoadKeyByKeyIndex(descriptors, descriptor_key_index);
 
@@ -8887,22 +8895,50 @@ void CodeStubAssembler::ForEachEnumerableOwnProperty(
         Label callback(this), next_iteration(this);
 
         if (mode == kEnumerationOrder) {
+          Label if_first_loop(this), if_second_loop(this);
+          Branch(is_second_loop.value(), &if_second_loop, &if_first_loop);
+          // On second loop, only consider from first symbol to last symbol.
+          BIND(&if_second_loop);
+          {
+            CSA_ASSERT(this, var_has_symbol.value());
+            GotoIf(IntPtrLessThan(descriptor_key_index,
+                                  first_symbol_descriptor_key_index.value()),
+                   &next_iteration);
+            GotoIf(IntPtrGreaterThan(descriptor_key_index,
+                                     last_symbol_descriptor_key_index.value()),
+                   &next_iteration);
+            Goto(&if_first_loop);
+          }
+          BIND(&if_first_loop);
           // |next_key| is either a string or a symbol
-          // Skip strings or symbols depending on var_name_filter value.
-          Label if_string(this), if_symbol(this), if_name_ok(this);
-
+          // Skip strings or symbols depending on is_second_loop value.
+          Label if_string(this), if_symbol(this), if_name_ok(this),
+              record_symbol(this);
           Branch(IsSymbol(next_key), &if_symbol, &if_string);
           BIND(&if_symbol);
           {
-            var_has_symbol = Int32TrueConstant();
-            // Process symbol property when |var_name_filer| is true.
-            Branch(var_name_filter.value(), &if_name_ok, &next_iteration);
+            // Process symbol property when |is_second_loop| is true.
+            Branch(is_second_loop.value(), &if_name_ok, &record_symbol);
+          }
+          // First iteration need to record symbol
+          BIND(&record_symbol);
+          {
+            Label record_first_symbol(this);
+            last_symbol_descriptor_key_index = descriptor_key_index;
+            Branch(var_has_symbol.value(), &next_iteration,
+                   &record_first_symbol);
+            BIND(&record_first_symbol);
+            {
+              first_symbol_descriptor_key_index = descriptor_key_index;
+              var_has_symbol = Int32TrueConstant();
+              Goto(&next_iteration);
+            }
           }
           BIND(&if_string);
           {
             CSA_ASSERT(this, IsString(next_key));
-            // Process string property when |var_name_filer| is false.
-            Branch(var_name_filter.value(), &next_iteration, &if_name_ok);
+            // Process string property when |var_name_fitler| is false.
+            Branch(is_second_loop.value(), &next_iteration, &if_name_ok);
           }
           BIND(&if_name_ok);
         }
@@ -9003,10 +9039,10 @@ void CodeStubAssembler::ForEachEnumerableOwnProperty(
 
   if (mode == kEnumerationOrder) {
     Label done(this);
-    GotoIf(var_name_filter.value(), &done);
+    GotoIf(is_second_loop.value(), &done);
     GotoIfNot(var_has_symbol.value(), &done);
     // All string properties are processed, now process symbol properties.
-    var_name_filter = Int32TrueConstant();
+    is_second_loop = Int32TrueConstant();
     Goto(&descriptor_array_loop);
 
     BIND(&done);
