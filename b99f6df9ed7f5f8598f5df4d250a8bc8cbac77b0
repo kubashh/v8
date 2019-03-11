@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60ab7ae3_c053ccdb",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-11T13:28:47Z",
+      "side": 1,
+      "message": "nit: Likewise, a brief comment that the sampling callback does not hold a strong reference could be helpful here.",
+      "range": {
+        "startLine": 1281,
+        "startChar": 15,
+        "endLine": 1281,
+        "endChar": 16
+      },
+      "revId": "b99f6df9ed7f5f8598f5df4d250a8bc8cbac77b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33c3e7ca_404d91a8",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-11T13:28:47Z",
+      "side": 1,
+      "message": "nit: Even though the signature is somewhat of a hint, lets also explicitly add a comment saying that this will not create/hold any strong references to the NativeModule.",
+      "range": {
+        "startLine": 181,
+        "startChar": 42,
+        "endLine": 181,
+        "endChar": 78
+      },
+      "revId": "b99f6df9ed7f5f8598f5df4d250a8bc8cbac77b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
