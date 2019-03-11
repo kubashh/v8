@@ -70,6 +70,30 @@
       "revId": "b1147b7ca5165c983ffa6826ec71a896f29e067b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb16d4cf_646405b0",
+        "filename": "test/js-perf-test/StackTrace/serialize.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-11T06:59:42Z",
+      "side": 1,
+      "message": "Replaced with \u0027%FlattenString\u0027 as the implementation of \u0027charAt\u0027 or some other flattening builtin could change over time.",
+      "parentUuid": "79086a2f_9675fa91",
+      "range": {
+        "startLine": 72,
+        "startChar": 42,
+        "endLine": 72,
+        "endChar": 51
+      },
+      "revId": "b1147b7ca5165c983ffa6826ec71a896f29e067b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
