@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "df55397c_27a68079",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-11T14:52:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60ab7ae3_c053ccdb",
+      "range": {
+        "startLine": 1281,
+        "startChar": 15,
+        "endLine": 1281,
+        "endChar": 16
+      },
+      "revId": "b99f6df9ed7f5f8598f5df4d250a8bc8cbac77b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33c3e7ca_404d91a8",
         "filename": "src/wasm/wasm-engine.h",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "b99f6df9ed7f5f8598f5df4d250a8bc8cbac77b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e371b0f5_32fa0bfa",
+        "filename": "src/wasm/wasm-engine.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-11T14:52:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33c3e7ca_404d91a8",
+      "range": {
+        "startLine": 181,
+        "startChar": 42,
+        "endLine": 181,
+        "endChar": 78
+      },
+      "revId": "b99f6df9ed7f5f8598f5df4d250a8bc8cbac77b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
