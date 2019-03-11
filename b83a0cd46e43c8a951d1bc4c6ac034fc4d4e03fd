@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a67cec00_8c56f460",
+        "filename": "test/cctest/test-threads.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-11T09:37:01Z",
+      "side": 1,
+      "message": "Ack, done.",
+      "parentUuid": "2fe2720a_d8e73205",
+      "revId": "b83a0cd46e43c8a951d1bc4c6ac034fc4d4e03fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a010e014_8421abd3",
         "filename": "test/cctest/test-threads.cc",
         "patchSetId": 4
@@ -39,6 +57,30 @@
       "revId": "b83a0cd46e43c8a951d1bc4c6ac034fc4d4e03fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5df767db_c03b8a0b",
+        "filename": "test/cctest/test-threads.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-11T09:37:01Z",
+      "side": 1,
+      "message": "In this case it doesn\u0027t really matter. This is only a test to check that different threads get different thread ids. Synchonization happens via the semaphore. Changed to std::memory_order_relaxed for consistency.",
+      "parentUuid": "a010e014_8421abd3",
+      "range": {
+        "startLine": 53,
+        "startChar": 24,
+        "endLine": 53,
+        "endChar": 30
+      },
+      "revId": "b83a0cd46e43c8a951d1bc4c6ac034fc4d4e03fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
