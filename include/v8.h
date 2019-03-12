@@ -7704,8 +7704,14 @@ class V8_EXPORT Isolate {
    * Otherwise, the custom callback will not be called and V8 will not abort.
    */
   typedef bool (*AbortOnUncaughtExceptionCallback)(Isolate*);
+  typedef bool (*AbortOnUncaughtExceptionWithErrorCallback)(Isolate*,
+                                                            Local<Message>,
+                                                            Local<Value>);
   void SetAbortOnUncaughtExceptionCallback(
       AbortOnUncaughtExceptionCallback callback);
+
+  void SetAbortOnUncaughtExceptionCallback(
+      AbortOnUncaughtExceptionWithErrorCallback callback);
 
   /**
    * This specifies the callback called by the upcoming dynamic

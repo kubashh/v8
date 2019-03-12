@@ -1567,7 +1567,9 @@ Object Isolate::Throw(Object raw_exception, MessageLocation* location) {
         if ((prediction == NOT_CAUGHT || prediction == CAUGHT_BY_EXTERNAL) &&
             (!abort_on_uncaught_exception_callback_ ||
              abort_on_uncaught_exception_callback_(
-                 reinterpret_cast<v8::Isolate*>(this)))) {
+                 reinterpret_cast<v8::Isolate*>(this),
+                 v8::Utils::MessageToLocal(message_obj),
+                 v8::Utils::ToLocal(exception)))) {
           // Prevent endless recursion.
           FLAG_abort_on_uncaught_exception = false;
           // This flag is intended for use by JavaScript developers, so
@@ -2554,9 +2556,8 @@ void Isolate::SetCaptureStackTraceForUncaughtExceptions(
   stack_trace_for_uncaught_exceptions_options_ = options;
 }
 
-
 void Isolate::SetAbortOnUncaughtExceptionCallback(
-    v8::Isolate::AbortOnUncaughtExceptionCallback callback) {
+    v8::Isolate::AbortOnUncaughtExceptionWithErrorCallback callback) {
   abort_on_uncaught_exception_callback_ = callback;
 }
 

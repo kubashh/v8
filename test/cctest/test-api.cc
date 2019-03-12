@@ -26408,9 +26408,10 @@ THREADED_TEST(SharedArrayBuffer_AllocationInformation) {
 }
 
 static int nb_uncaught_exception_callback_calls = 0;
-
+static v8::Isolate* nb_isolate = nullptr;
 
 bool NoAbortOnUncaughtException(v8::Isolate* isolate) {
+  CHECK_EQ(isolate, nb_isolate);
   ++nb_uncaught_exception_callback_calls;
   return false;
 }
@@ -26424,6 +26425,7 @@ TEST(AbortOnUncaughtExceptionNoAbort) {
   LocalContext env(nullptr, global_template);
 
   i::FLAG_abort_on_uncaught_exception = true;
+  nb_isolate = isolate;
   isolate->SetAbortOnUncaughtExceptionCallback(NoAbortOnUncaughtException);
 
   CompileRun("function boom() { throw new Error(\"boom\") }");
@@ -26435,8 +26437,37 @@ TEST(AbortOnUncaughtExceptionNoAbort) {
   CHECK(foo->Call(env.local(), global_object, 0, nullptr).IsEmpty());
 
   CHECK_EQ(1, nb_uncaught_exception_callback_calls);
+  nb_isolate = nullptr;
 }
 
+bool NoAbortOnUncaughtExceptionWithError(v8::Isolate* isolate,
+                                         v8::Local<v8::Message>,
+                                         v8::Local<v8::Value>) {
+  ++nb_uncaught_exception_callback_calls;
+  return false;
+}
+
+TEST(AbortOnUncaughtExceptionWthErrorNoAbort) {
+  v8::Isolate* isolate = CcTest::isolate();
+  v8::HandleScope handle_scope(isolate);
+  v8::Local<v8::ObjectTemplate> global_template =
+      v8::ObjectTemplate::New(isolate);
+  LocalContext env(nullptr, global_template);
+
+  i::FLAG_abort_on_uncaught_exception = true;
+  isolate->SetAbortOnUncaughtExceptionCallback(
+      NoAbortOnUncaughtExceptionWithError);
+
+  CompileRun("function boom() { throw new Error(\"boom\") }");
+
+  v8::Local<v8::Object> global_object = env->Global();
+  v8::Local<v8::Function> foo = v8::Local<v8::Function>::Cast(
+      global_object->Get(env.local(), v8_str("boom")).ToLocalChecked());
+
+  CHECK(foo->Call(env.local(), global_object, 0, nullptr).IsEmpty());
+
+  CHECK_EQ(1, nb_uncaught_exception_callback_calls);
+}
 
 TEST(AccessCheckedIsConcatSpreadable) {
   v8::Isolate* isolate = CcTest::isolate();

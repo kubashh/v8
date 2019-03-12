@@ -8242,6 +8242,12 @@ void Isolate::Exit() {
 
 void Isolate::SetAbortOnUncaughtExceptionCallback(
     AbortOnUncaughtExceptionCallback callback) {
+  SetAbortOnUncaughtExceptionCallback(
+      reinterpret_cast<AbortOnUncaughtExceptionWithErrorCallback>(callback));
+}
+
+void Isolate::SetAbortOnUncaughtExceptionCallback(
+    AbortOnUncaughtExceptionWithErrorCallback callback) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   isolate->SetAbortOnUncaughtExceptionCallback(callback);
 }
