@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "af046ccb_36b4d209",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1300103
+      },
+      "writtenOn": "2019-03-12T16:39:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0d56211_b332a612",
+      "range": {
+        "startLine": 2893,
+        "startChar": 10,
+        "endLine": 2893,
+        "endChar": 24
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef22db89_c553014c",
         "filename": "src/s390/simulator-s390.cc",
         "patchSetId": 10
@@ -45,6 +69,30 @@
       "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbb79264_60cd5844",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2903,
+      "author": {
+        "id": 1300103
+      },
+      "writtenOn": "2019-03-12T16:39:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef22db89_c553014c",
+      "range": {
+        "startLine": 2903,
+        "startChar": 16,
+        "endLine": 2903,
+        "endChar": 65
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "c8fc01d8_1de3b094",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1300103
+      },
+      "writtenOn": "2019-03-12T16:39:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "613034a8_dfe48b53",
+      "range": {
+        "startLine": 2916,
+        "startChar": 2,
+        "endLine": 2918,
+        "endChar": 3
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "700f80a0_86d73bb0",
         "filename": "src/s390/simulator-s390.cc",
         "patchSetId": 10
@@ -91,6 +163,30 @@
       "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b7f05f4_9143da02",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2928,
+      "author": {
+        "id": 1300103
+      },
+      "writtenOn": "2019-03-12T16:39:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "700f80a0_86d73bb0",
+      "range": {
+        "startLine": 2928,
+        "startChar": 4,
+        "endLine": 2928,
+        "endChar": 18
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "b2c6e5ff_b08273be",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2976,
+      "author": {
+        "id": 1300103
+      },
+      "writtenOn": "2019-03-12T16:39:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "859169cb_5d33b76f",
+      "range": {
+        "startLine": 2976,
+        "startChar": 0,
+        "endLine": 2976,
+        "endChar": 14
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dee93bf5_6fd7304c",
         "filename": "src/s390/simulator-s390.h",
         "patchSetId": 10
@@ -131,6 +251,24 @@
       "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8125c6ba_3d84a68d",
+        "filename": "src/s390/simulator-s390.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1300103
+      },
+      "writtenOn": "2019-03-12T16:39:44Z",
+      "side": 1,
+      "message": "ended up just using without static constexpr, as it created undefined symbol errors and would need to redeclare in simulator-s390.cc",
+      "parentUuid": "dee93bf5_6fd7304c",
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
