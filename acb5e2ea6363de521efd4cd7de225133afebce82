@@ -34,6 +34,24 @@
       "revId": "acb5e2ea6363de521efd4cd7de225133afebce82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "100e3d07_02be2f83",
+        "filename": "include/v8.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7502,
+      "author": {
+        "id": 1240175
+      },
+      "writtenOn": "2019-03-12T17:43:01Z",
+      "side": 1,
+      "message": "Lambda functions can only be converted to function pointers if they don\u0027t capture. In https://chromium-review.googlesource.com/c/v8/v8/+/1412115/1/src/api.cc#8235 we need to capture `callback`, which is why I moved from function pointers to std::function here. Let me see if there\u0027s another way we can structure this change.",
+      "parentUuid": "e24ec2a8_a232946e",
+      "revId": "acb5e2ea6363de521efd4cd7de225133afebce82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
