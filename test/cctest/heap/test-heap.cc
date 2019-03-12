@@ -3444,9 +3444,8 @@ class SourceResource : public v8::String::ExternalOneByteStringResource {
   size_t length_;
 };
 
-
 void ReleaseStackTraceDataTest(v8::Isolate* isolate, const char* source,
-                               const char* accessor) {
+                               const char* accessor, bool should_release) {
   // Test that the data retained by the Error.stack accessor is released
   // after the first time the accessor is fired.  We use external string
   // to check whether the data is being released since the external string
@@ -3475,10 +3474,13 @@ void ReleaseStackTraceDataTest(v8::Isolate* isolate, const char* source,
       i::GarbageCollectionReason::kTesting);
 
   // External source has been released.
-  CHECK(resource->IsDisposed());
-  delete resource;
+  if (should_release) {
+    CHECK(resource->IsDisposed());
+    delete resource;
+  } else {
+    CHECK(!resource->IsDisposed());
+  }
 }
-
 
 UNINITIALIZED_TEST(ReleaseStackTraceData) {
   if (FLAG_always_opt) {
@@ -3527,16 +3529,28 @@ UNINITIALIZED_TEST(ReleaseStackTraceData) {
     static const char* getter = "error.stack";
     static const char* setter = "error.stack = 0";
 
-    ReleaseStackTraceDataTest(isolate, source1, setter);
-    ReleaseStackTraceDataTest(isolate, source2, setter);
+    ReleaseStackTraceDataTest(isolate, source1, setter, true);
+    ReleaseStackTraceDataTest(isolate, source2, setter, true);
     // We do not test source3 and source4 with setter, since the setter is
     // supposed to (untypically) write to the receiver, not the holder.  This is
     // to emulate the behavior of a data property.
 
-    ReleaseStackTraceDataTest(isolate, source1, getter);
-    ReleaseStackTraceDataTest(isolate, source2, getter);
-    ReleaseStackTraceDataTest(isolate, source3, getter);
-    ReleaseStackTraceDataTest(isolate, source4, getter);
+    ReleaseStackTraceDataTest(isolate, source1, getter, true);
+    ReleaseStackTraceDataTest(isolate, source2, getter, true);
+    ReleaseStackTraceDataTest(isolate, source3, getter, true);
+    ReleaseStackTraceDataTest(isolate, source4, getter, true);
+
+    FLAG_retain_error_stack_trace_array = true;
+    ReleaseStackTraceDataTest(isolate, source1, setter, false);
+    ReleaseStackTraceDataTest(isolate, source2, setter, false);
+    // We do not test source3 and source4 with setter, since the setter is
+    // supposed to (untypically) write to the receiver, not the holder.  This is
+    // to emulate the behavior of a data property.
+
+    ReleaseStackTraceDataTest(isolate, source1, getter, false);
+    ReleaseStackTraceDataTest(isolate, source2, getter, false);
+    ReleaseStackTraceDataTest(isolate, source3, getter, false);
+    ReleaseStackTraceDataTest(isolate, source4, getter, false);
   }
   isolate->Dispose();
 }

@@ -793,13 +793,15 @@ namespace {
 
 MaybeHandle<JSReceiver> ClearInternalStackTrace(Isolate* isolate,
                                                 Handle<JSObject> error) {
-  RETURN_ON_EXCEPTION(
-      isolate,
-      Object::SetProperty(
-          isolate, error, isolate->factory()->stack_trace_symbol(),
-          isolate->factory()->undefined_value(), StoreOrigin::kMaybeKeyed,
-          Just(ShouldThrow::kThrowOnError)),
-      JSReceiver);
+  if (V8_LIKELY(!FLAG_retain_error_stack_trace_array)) {
+    RETURN_ON_EXCEPTION(
+        isolate,
+        Object::SetProperty(
+            isolate, error, isolate->factory()->stack_trace_symbol(),
+            isolate->factory()->undefined_value(), StoreOrigin::kMaybeKeyed,
+            Just(ShouldThrow::kThrowOnError)),
+        JSReceiver);
+  }
   return error;
 }
 
