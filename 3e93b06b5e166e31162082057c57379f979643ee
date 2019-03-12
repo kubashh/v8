@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75b2883f_0d8aae5b",
+        "filename": "src/compiler/backend/s390/code-generator-s390.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2815,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T19:08:31Z",
+      "side": 1,
+      "message": "should be able to optimize.",
+      "range": {
+        "startLine": 2811,
+        "startChar": 6,
+        "endLine": 2815,
+        "endChar": 36
+      },
+      "revId": "3e93b06b5e166e31162082057c57379f979643ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9b109a7_c8c48805",
+        "filename": "src/s390/macro-assembler-s390.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T19:08:31Z",
+      "side": 1,
+      "message": "use kDoubleSize",
+      "range": {
+        "startLine": 512,
+        "startChar": 27,
+        "endLine": 512,
+        "endChar": 40
+      },
+      "revId": "3e93b06b5e166e31162082057c57379f979643ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89da27ba_c998ef8a",
+        "filename": "src/s390/macro-assembler-s390.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T19:08:31Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 523,
+        "startChar": 26,
+        "endLine": 523,
+        "endChar": 38
+      },
+      "revId": "3e93b06b5e166e31162082057c57379f979643ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70822e4d_7916cef4",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 18
+      },
+      "lineNbr": 2896,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T19:08:31Z",
+      "side": 1,
+      "message": "zero r1 first?",
+      "range": {
+        "startLine": 2896,
+        "startChar": 9,
+        "endLine": 2896,
+        "endChar": 26
+      },
+      "revId": "3e93b06b5e166e31162082057c57379f979643ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
