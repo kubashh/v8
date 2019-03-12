@@ -31,6 +31,8 @@ namespace internal {
 // Windows C Run-Time Library does not provide vsscanf.
 #define SScanF sscanf  // NOLINT
 
+const Simulator::fpr_t Simulator::fp_zero;
+
 // The S390Debugger class is used by the simulator while debugging simulated
 // z/Architecture code.
 class S390Debugger {
@@ -741,11 +743,20 @@ void Simulator::EvalTableInit() {
     EvalTable[i] = &Simulator::Evaluate_Unknown;
   }
 
-#define S390_SUPPORTED_VECTOR_OPCODE_LIST(V)                 \
-  V(vfs, VFS, 0xE7E2) /* type = VRR_C VECTOR FP SUBTRACT  */ \
-  V(vfa, VFA, 0xE7E3) /* type = VRR_C VECTOR FP ADD  */      \
-  V(vfd, VFD, 0xE7E5) /* type = VRR_C VECTOR FP DIVIDE  */   \
-  V(vfm, VFM, 0xE7E7) /* type = VRR_C VECTOR FP MULTIPLY  */
+#define S390_SUPPORTED_VECTOR_OPCODE_LIST(V)                                 \
+  V(vst, VST, 0xE70E)     /* type = VRX   VECTOR STORE  */                   \
+  V(vl, VL, 0xE706)       /* type = VRX   VECTOR LOAD  */                    \
+  V(vlgv, VLGV, 0xE721)   /* type = VRS_C VECTOR LOAD GR FROM VR ELEMENT  */ \
+  V(vlvg, VLVG, 0xE722)   /* type = VRS_B VECTOR LOAD VR ELEMENT FROM GR  */ \
+  V(vlrep, VLREP, 0xE705) /* type = VRX   VECTOR LOAD AND REPLICATE  */      \
+  V(vrepi, VREPI, 0xE745) /* type = VRI_A VECTOR REPLICATE IMMEDIATE  */     \
+  V(vlr, VLR, 0xE756)     /* type = VRR_A VECTOR LOAD  */                    \
+  V(vstef, VSTEF, 0xE70B) /* type = VRX   VECTOR STORE ELEMENT (32)  */      \
+  V(vlef, VLEF, 0xE703)   /* type = VRX   VECTOR LOAD ELEMENT (32)  */       \
+  V(vfs, VFS, 0xE7E2)     /* type = VRR_C VECTOR FP SUBTRACT  */             \
+  V(vfa, VFA, 0xE7E3)     /* type = VRR_C VECTOR FP ADD  */                  \
+  V(vfd, VFD, 0xE7E5)     /* type = VRR_C VECTOR FP DIVIDE  */               \
+  V(vfm, VFM, 0xE7E7)     /* type = VRR_C VECTOR FP MULTIPLY  */
 
 #define CREATE_EVALUATE_TABLE(name, op_name, op_value) \
   EvalTable[op_name] = &Simulator::Evaluate_##op_name;
@@ -1515,7 +1526,8 @@ Simulator::Simulator(Isolate* isolate) : isolate_(isolate) {
 
   // Initializing FP registers.
   for (int i = 0; i < kNumFPRs; i++) {
-    fp_registers_[i] = 0.0;
+    set_simd_register_by_lane<double>(i, 0, 0.0);
+    set_simd_register_by_lane<double>(i, 1, 0.0);
   }
 
   // The sp is initialized to point to the bottom (high address) of the
@@ -1553,10 +1565,11 @@ void Simulator::set_register(int reg, uint64_t value) {
 // Get the register from the architecture state.
 uint64_t Simulator::get_register(int reg) const {
   DCHECK((reg >= 0) && (reg < kNumGPRs));
-  // Stupid code added to avoid bug in GCC.
-  // See: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43949
-  if (reg >= kNumGPRs) return 0;
-  // End stupid code.
+  return registers_[reg];
+}
+
+uint64_t& Simulator::get_register(int reg) {
+  DCHECK((reg >= 0) && (reg < kNumGPRs));
   return registers_[reg];
 }
 
@@ -2781,6 +2794,22 @@ uintptr_t Simulator::PopAddress() {
   int d2 = AS(RXEInstruction)->D2Value();      \
   int length = 6;
 
+#define DECODE_VRR_A_INSTRUCTION(r1, r2, m5, m4, m3) \
+  int r1 = AS(VRR_A_Instruction)->R1Value();         \
+  int r2 = AS(VRR_A_Instruction)->R2Value();         \
+  int m5 = AS(VRR_A_Instruction)->M5Value();         \
+  int m4 = AS(VRR_A_Instruction)->M4Value();         \
+  int m3 = AS(VRR_A_Instruction)->M3Value();         \
+  int length = 6;
+
+#define DECODE_VRR_B_INSTRUCTION(r1, r2, r3, m5, m4) \
+  int r1 = AS(VRR_B_Instruction)->R1Value();         \
+  int r2 = AS(VRR_B_Instruction)->R2Value();         \
+  int r3 = AS(VRR_B_Instruction)->R3Value();         \
+  int m5 = AS(VRR_B_Instruction)->M5Value();         \
+  int m4 = AS(VRR_B_Instruction)->M4Value();         \
+  int length = 6;
+
 #define DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4) \
   int r1 = AS(VRR_C_Instruction)->R1Value();             \
   int r2 = AS(VRR_C_Instruction)->R2Value();             \
@@ -2788,6 +2817,44 @@ uintptr_t Simulator::PopAddress() {
   int m6 = AS(VRR_C_Instruction)->M6Value();             \
   int m5 = AS(VRR_C_Instruction)->M5Value();             \
   int m4 = AS(VRR_C_Instruction)->M4Value();             \
+  int length = 6;
+
+#define DECODE_VRR_E_INSTRUCTION(r1, r2, r3, r4, m6, m5) \
+  int r1 = AS(VRR_E_Instruction)->R1Value();             \
+  int r2 = AS(VRR_E_Instruction)->R2Value();             \
+  int r3 = AS(VRR_E_Instruction)->R3Value();             \
+  int r4 = AS(VRR_E_Instruction)->R4Value();             \
+  int m6 = AS(VRR_E_Instruction)->M6Value();             \
+  int m5 = AS(VRR_E_Instruction)->M5Value();             \
+  int length = 6;
+
+#define DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3) \
+  int r1 = AS(VRX_Instruction)->R1Value();         \
+  int x2 = AS(VRX_Instruction)->X2Value();         \
+  int b2 = AS(VRX_Instruction)->B2Value();         \
+  int d2 = AS(VRX_Instruction)->D2Value();         \
+  int m3 = AS(VRX_Instruction)->M3Value();         \
+  int length = 6;
+
+#define DECODE_VRS_INSTRUCTION(r1, r3, b2, d2, m4) \
+  int r1 = AS(VRS_Instruction)->R1Value();         \
+  int r3 = AS(VRS_Instruction)->R3Value();         \
+  int b2 = AS(VRS_Instruction)->B2Value();         \
+  int d2 = AS(VRS_Instruction)->D2Value();         \
+  int m4 = AS(VRS_Instruction)->M4Value();         \
+  int length = 6;
+
+#define DECODE_VRI_A_INSTRUCTION(r1, i2, m3)     \
+  int r1 = AS(VRI_A_Instruction)->R1Value();     \
+  int16_t i2 = AS(VRI_A_Instruction)->I2Value(); \
+  int m3 = AS(VRI_A_Instruction)->M3Value();     \
+  int length = 6;
+
+#define DECODE_VRI_C_INSTRUCTION(r1, r2, i2, m4)  \
+  int r1 = AS(VRI_C_Instruction)->R1Value();      \
+  int r2 = AS(VRI_C_Instruction)->R2Value();      \
+  uint16_t i2 = AS(VRI_C_Instruction)->I2Value(); \
+  int m4 = AS(VRI_C_Instruction)->M4Value();      \
   int length = 6;
 
 #define GET_ADDRESS(index_reg, base_reg, offset)       \
@@ -2798,18 +2865,169 @@ int Simulator::Evaluate_Unknown(Instruction* instr) {
   UNREACHABLE();
 }
 
+EVALUATE(VST) {
+  DCHECK_OPCODE(VST);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  USE(m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  fpr_t* ptr = reinterpret_cast<fpr_t*>(addr);
+  *ptr = get_simd_register(r1);
+  return length;
+}
+
+EVALUATE(VL) {
+  DCHECK(VL);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  fpr_t* ptr = reinterpret_cast<fpr_t*>(addr);
+  switch (m3) {
+    case 3:
+      DCHECK_EQ(0x7&addr, 0);
+      for (int i = 0; i < 2; i++)
+        set_simd_register_by_lane<int64_t>(r1, i, ptr->int64[i]);
+      break;
+    case 5:
+      DCHECK_EQ(0xf&addr, 0);
+      set_simd_register(r1, *ptr);
+      break;
+    case 0:
+      set_simd_register(r1, *ptr);
+      break;
+    default:
+      UNREACHABLE();
+  }
+  return length;
+}
+
+EVALUATE(VLGV) {
+  DCHECK_OPCODE(VLGV);
+  DECODE_VRS_INSTRUCTION(r1, r3, b2, d2, m4);
+  int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
+  int64_t index = b2_val + d2;
+  const int size_by_byte = 1 << m4;
+  int8_t* src = get_simd_register(r3).int8 + index * size_by_byte;
+  memcpy(&get_register(r1), src, size_by_byte);
+  return length;
+}
+
+EVALUATE(VLVG) {
+  DCHECK_OPCODE(VLVG);
+  DECODE_VRS_INSTRUCTION(r1, r3, b2, d2, m4);
+  int64_t b2_val = (b2 == 0) ? 0 : get_register(b2);
+  int64_t index = b2_val + d2;
+  const int size_by_byte = 1 << m4;
+  int8_t* dst = get_simd_register(r1).int8 + index * size_by_byte;
+  memcpy(dst, &get_register(r3), size_by_byte);
+  return length;
+}
+
+EVALUATE(VLREP) {
+  DCHECK_OPCODE(VLREP);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  const int size_by_byte = 1 << m3;
+  int8_t* dst = get_simd_register(r1).int8;
+  int8_t* src = reinterpret_cast<int8_t*>(addr);
+  set_simd_register(r1, fp_zero);
+  for (int i = 0; i < kSimd128Size; i += size_by_byte) {
+    memcpy(dst + i, src, size_by_byte);
+  }
+  return length;
+}
+
+EVALUATE(VREPI) {
+  DCHECK_OPCODE(VREPI);
+  DECODE_VRI_A_INSTRUCTION(r1, i2, m3);
+  const int size_by_byte = 1 << m3;
+  int8_t* dst = get_simd_register(r1).int8;
+  uint64_t immediate = static_cast<uint64_t>(i2);
+  set_simd_register(r1, fp_zero);
+  for (int i = 0; i < kSimd128Size; i += size_by_byte) {
+    memcpy(dst + i, &immediate, size_by_byte);
+  }
+  return length;
+}
+
+EVALUATE(VLR) {
+  DCHECK_OPCODE(VLR);
+  DECODE_VRR_A_INSTRUCTION(r1, r2, m5, m4, m3);
+  USE(m5);
+  USE(m4);
+  USE(m3);
+  set_simd_register(r1, get_simd_register(r2));
+  return length;
+}
+
+EVALUATE(VSTEF) {
+  DCHECK_OPCODE(VSTEF);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  int32_t value = get_simd_register_by_lane<int32_t>(r1, m3);
+  WriteW(addr, value, instr);
+  return length;
+}
+
+EVALUATE(VLEF) {
+  DCHECK_OPCODE(VLEF);
+  DECODE_VRX_INSTRUCTION(r1, x2, b2, d2, m3);
+  intptr_t addr = GET_ADDRESS(x2, b2, d2);
+  int32_t value = ReadW(addr, instr);
+  set_simd_register_by_lane<int32_t>(r1, m3, value);
+  return length;
+}
+
+template<class T, class Operation>
+inline static void VectorBinaryOp(void* dst, void* src1, void* src2,
+                                  Operation op) {
+  int8_t* src1_ptr = reinterpret_cast<int8_t*>(src1);
+  int8_t* src2_ptr = reinterpret_cast<int8_t*>(src2);
+  int8_t* dst_ptr = reinterpret_cast<int8_t*>(dst);
+  for (int i = 0; i < kSimd128Size; i += sizeof(T)) {
+    T& dst_val = *reinterpret_cast<T*>(dst_ptr + i);
+    T& src1_val = *reinterpret_cast<T*>(src1_ptr + i);
+    T& src2_val = *reinterpret_cast<T*>(src2_ptr + i);
+    dst_val = op(src1_val, src2_val);
+  }
+}
+
+#define VECTOR_BINARY_OP_FOR_TYPE(type, op)                      \
+  VectorBinaryOp<type>(&get_simd_register(r1),                   \
+                       &get_simd_register(r2),                   \
+                       &get_simd_register(r3),                   \
+                       [](type a, type b) { return a op b; });
+
+#define VECTOR_FP_BINARY_OP(op)                                  \
+  switch (m4) {                                                  \
+    case 2:                                                      \
+      if (m5 == 8) {                                             \
+        float src1 = get_simd_register_by_lane<float>(r2, 0);    \
+        float src2 = get_simd_register_by_lane<float>(r3, 0);    \
+        set_simd_register_by_lane(r1, 0, src1 op src2);          \
+      } else {                                                   \
+        DCHECK_EQ(m5, 0);                                        \
+        VECTOR_BINARY_OP_FOR_TYPE(float, op)                     \
+      }                                                          \
+      break;                                                     \
+    case 3:                                                      \
+      if (m5 == 8) {                                             \
+        double src1 = get_simd_register_by_lane<double>(r2, 0);  \
+        double src2 = get_simd_register_by_lane<double>(r3, 0);  \
+        set_simd_register_by_lane(r1, 0, src1 op src2);          \
+      } else {                                                   \
+        DCHECK_EQ(m5, 0);                                        \
+        VECTOR_BINARY_OP_FOR_TYPE(double, op)                    \
+      }                                                          \
+      break;                                                     \
+    default:                                                     \
+      UNREACHABLE();                                             \
+      break;                                                     \
+  }
+
 EVALUATE(VFA) {
   DCHECK_OPCODE(VFA);
   DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4);
   USE(m6);
-  USE(m5);
-  USE(m4);
-  DCHECK_EQ(m5, 8);
-  DCHECK_EQ(m4, 3);
-  double r2_val = get_double_from_d_register(r2);
-  double r3_val = get_double_from_d_register(r3);
-  double r1_val = r2_val + r3_val;
-  set_d_register_from_double(r1, r1_val);
+  VECTOR_FP_BINARY_OP(+);
   return length;
 }
 
@@ -2817,14 +3035,7 @@ EVALUATE(VFS) {
   DCHECK_OPCODE(VFS);
   DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4);
   USE(m6);
-  USE(m5);
-  USE(m4);
-  DCHECK_EQ(m5, 8);
-  DCHECK_EQ(m4, 3);
-  double r2_val = get_double_from_d_register(r2);
-  double r3_val = get_double_from_d_register(r3);
-  double r1_val = r2_val - r3_val;
-  set_d_register_from_double(r1, r1_val);
+  VECTOR_FP_BINARY_OP(-);
   return length;
 }
 
@@ -2832,14 +3043,7 @@ EVALUATE(VFM) {
   DCHECK_OPCODE(VFM);
   DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4);
   USE(m6);
-  USE(m5);
-  USE(m4);
-  DCHECK_EQ(m5, 8);
-  DCHECK_EQ(m4, 3);
-  double r2_val = get_double_from_d_register(r2);
-  double r3_val = get_double_from_d_register(r3);
-  double r1_val = r2_val * r3_val;
-  set_d_register_from_double(r1, r1_val);
+  VECTOR_FP_BINARY_OP(*);
   return length;
 }
 
@@ -2847,14 +3051,7 @@ EVALUATE(VFD) {
   DCHECK_OPCODE(VFD);
   DECODE_VRR_C_INSTRUCTION(r1, r2, r3, m6, m5, m4);
   USE(m6);
-  USE(m5);
-  USE(m4);
-  DCHECK_EQ(m5, 8);
-  DCHECK_EQ(m4, 3);
-  double r2_val = get_double_from_d_register(r2);
-  double r3_val = get_double_from_d_register(r3);
-  double r1_val = r2_val / r3_val;
-  set_d_register_from_double(r1, r1_val);
+  VECTOR_FP_BINARY_OP(/);
   return length;
 }
 
