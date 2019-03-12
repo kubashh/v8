@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0d56211_b332a612",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2893,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T00:53:08Z",
+      "side": 1,
+      "message": "two things:\n1. You need to clean up r1 before memcpy. `r1 \u003d 0;`\n2. Pls modify get_register to return a reference and use \u0026get_register(r1)",
+      "range": {
+        "startLine": 2893,
+        "startChar": 10,
+        "endLine": 2893,
+        "endChar": 24
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef22db89_c553014c",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2903,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T00:53:08Z",
+      "side": 1,
+      "message": "pls use get_simd_register(r1).int8",
+      "range": {
+        "startLine": 2903,
+        "startChar": 16,
+        "endLine": 2903,
+        "endChar": 65
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "613034a8_dfe48b53",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2918,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T00:53:08Z",
+      "side": 1,
+      "message": "You need set_simd_register(r1, fp_zero); before the MemCopy loop",
+      "range": {
+        "startLine": 2916,
+        "startChar": 2,
+        "endLine": 2918,
+        "endChar": 3
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "700f80a0_86d73bb0",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2928,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T00:53:08Z",
+      "side": 1,
+      "message": "this is incorrect.\nUse this:\n  const int size_by_byte \u003d 1 \u003c\u003c m3;\n  int8_t* dst \u003d get_simd_register(r1).int8;\n  uint64_t immediate \u003d static_cast\u003cuint64_t\u003e(i2);\n  set_simd_register(r1, fp_zero); \n  for (int i \u003d 0; i \u003c kSimd128Size; i +\u003d size_by_byte) {\n    MemCopy(dst + i, \u0026immediate, size_by_byte);\n  }",
+      "range": {
+        "startLine": 2928,
+        "startChar": 4,
+        "endLine": 2928,
+        "endChar": 18
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "859169cb_5d33b76f",
+        "filename": "src/s390/simulator-s390.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 2976,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T00:53:08Z",
+      "side": 1,
+      "message": "no indent here?",
+      "range": {
+        "startLine": 2976,
+        "startChar": 0,
+        "endLine": 2976,
+        "endChar": 14
+      },
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dee93bf5_6fd7304c",
+        "filename": "src/s390/simulator-s390.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-03-12T00:53:08Z",
+      "side": 1,
+      "message": "Add `static constexpr fpr_t fp_zero \u003d {{0}};` to here",
+      "revId": "3916140d989e9390dd9b99f9776e51463ab05aa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
