@@ -202,9 +202,12 @@ void InstructionSelector::VisitLoad(Node* node) {
     case MachineRepresentation::kWord32:
       opcode = kPPC_LoadWordU32;
       break;
-    case MachineRepresentation::kTaggedSigned:   // Fall through.
-    case MachineRepresentation::kTaggedPointer:  // Fall through.
-    case MachineRepresentation::kTagged:         // Fall through.
+    case MachineRepresentation::kTaggedSigned:       // Fall through.
+    case MachineRepresentation::kTaggedPointer:      // Fall through.
+    case MachineRepresentation::kTagged:             // Fall through.
+    case MachineRepresentation::kCompressedSigned:   // Fall through.
+    case MachineRepresentation::kCompressedPointer:  // Fall through.
+    case MachineRepresentation::kCompressed:         // Fall through.
     case MachineRepresentation::kWord64:
       opcode = kPPC_LoadWord64;
       mode = kInt16Imm_4ByteAligned;
@@ -325,17 +328,23 @@ void InstructionSelector::VisitStore(Node* node) {
         opcode = kPPC_StoreWord16;
         break;
 #if !V8_TARGET_ARCH_PPC64
-      case MachineRepresentation::kTaggedSigned:   // Fall through.
-      case MachineRepresentation::kTaggedPointer:  // Fall through.
-      case MachineRepresentation::kTagged:         // Fall through.
+      case MachineRepresentation::kTaggedSigned:       // Fall through.
+      case MachineRepresentation::kTaggedPointer:      // Fall through.
+      case MachineRepresentation::kTagged:             // Fall through.
+      case MachineRepresentation::kCompressedSigned:   // Fall through.
+      case MachineRepresentation::kCompressedPointer:  // Fall through.
+      case MachineRepresentation::kCompressed:         // Fall through.
 #endif
       case MachineRepresentation::kWord32:
         opcode = kPPC_StoreWord32;
         break;
 #if V8_TARGET_ARCH_PPC64
-      case MachineRepresentation::kTaggedSigned:   // Fall through.
-      case MachineRepresentation::kTaggedPointer:  // Fall through.
-      case MachineRepresentation::kTagged:         // Fall through.
+      case MachineRepresentation::kTaggedSigned:       // Fall through.
+      case MachineRepresentation::kTaggedPointer:      // Fall through.
+      case MachineRepresentation::kTagged:             // Fall through.
+      case MachineRepresentation::kCompressedSigned:   // Fall through.
+      case MachineRepresentation::kCompressedPointer:  // Fall through.
+      case MachineRepresentation::kCompressed:         // Fall through.
       case MachineRepresentation::kWord64:
         opcode = kPPC_StoreWord64;
         mode = kInt16Imm_4ByteAligned;
