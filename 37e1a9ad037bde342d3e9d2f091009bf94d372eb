@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "126e5eff_1940f77d",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-03-13T23:38:36Z",
+      "side": 1,
+      "message": "Is this correct? Could it be made more specific?",
+      "range": {
+        "startLine": 33,
+        "startChar": 33,
+        "endLine": 33,
+        "endChar": 40
+      },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "897b4714_9aad1a40",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-03-13T23:38:36Z",
+      "side": 1,
+      "message": "Will remove this line after the change that torquefies BytecodeArray is merged.",
+      "range": {
+        "startLine": 783,
+        "startChar": 0,
+        "endLine": 783,
+        "endChar": 42
+      },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0531491_4ded2de0",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-03-13T23:38:36Z",
+      "side": 1,
+      "message": "Replace with:\nextern class DependentCode extends WeakFixedArray {}\nafter the change that torquefies WeakFixedArray is merged",
+      "range": {
+        "startLine": 809,
+        "startChar": 0,
+        "endLine": 810,
+        "endChar": 42
+      },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c00ccb2f_2855f8dd",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-03-13T23:38:36Z",
+      "side": 1,
+      "message": "Comment for AllocationSite indicates that weak_next field must be last, but Torque doesn\u0027t accept redefinition of field sections. Solved this by extracting the base class. Is that the right approach?\n\nI\u0027m also stuggling with providing a minimal defition of AllocationSiteBase. This is the build error I\u0027m getting when slow checks are enabled:\n\n../../v8\\src/objects/heap-object.h(65,25):  error: inline function \u0027v8::internal::HeapObject::IsAllocationSiteBase\u0027 is not defined [-Werror,-Wundefined-inline]\n  HEAP_OBJECT_TYPE_LIST(IS_TYPE_FUNCTION_DECL)\n                        ^\n../../v8\\src/objects-inl.h(89,23):  note: used here\nHEAP_OBJECT_TYPE_LIST(IS_TYPE_FUNCTION_DEF)\n                      ^\nBut I added AllocationSiteBase to HEAP_OBJECT_ORDINARY_TYPE_LIST_BASE -- what else am I missing?",
+      "range": {
+        "startLine": 812,
+        "startChar": 13,
+        "endLine": 812,
+        "endChar": 32
+      },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
