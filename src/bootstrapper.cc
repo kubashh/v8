@@ -4378,6 +4378,7 @@ void Genesis::InitializeGlobal_harmony_locale() {
 
   InstallToStringTag(isolate(), prototype, "Intl.Locale");
 
+#if 0
   SimpleInstallFunction(isolate(), prototype, "toString",
                         Builtins::kLocalePrototypeToString, 0, false);
   SimpleInstallFunction(isolate(), prototype, "maximize",
@@ -4406,6 +4407,7 @@ void Genesis::InitializeGlobal_harmony_locale() {
                       Builtins::kLocalePrototypeNumeric, true);
   SimpleInstallGetter(isolate(), prototype, factory()->numberingSystem_string(),
                       Builtins::kLocalePrototypeNumberingSystem, true);
+#endif
 }
 
 void Genesis::InitializeGlobal_harmony_intl_segmenter() {
