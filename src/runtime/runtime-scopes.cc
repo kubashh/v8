@@ -167,10 +167,11 @@ Object DeclareGlobals(Isolate* isolate, Handle<FixedArray> declarations,
     Handle<Object> value;
     if (is_function) {
       DCHECK(possibly_feedback_cell_slot->IsSmi());
-      Handle<FeedbackCell> feedback_cell = Handle<FeedbackCell>(
-          FeedbackCell::cast(closure_feedback_cell_array->get(
-              Smi::ToInt(*possibly_feedback_cell_slot))),
-          isolate);
+      Handle<FeedbackCell> feedback_cell =
+          Handle<FeedbackCell>(ClosureFeedbackCellArray::GetClosureFeedbackCell(
+                                   closure_feedback_cell_array,
+                                   Smi::ToInt(*possibly_feedback_cell_slot)),
+                               isolate);
       // Copy the function and update its context. Use it as value.
       Handle<SharedFunctionInfo> shared =
           Handle<SharedFunctionInfo>::cast(initial_value);

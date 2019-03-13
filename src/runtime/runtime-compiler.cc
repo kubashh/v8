@@ -180,6 +180,13 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
+RUNTIME_FUNCTION(Runtime_AllocateFeedbackVector) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
+  JSFunction::EnsureFeedbackVector(function);
+  return ReadOnlyRoots(isolate).undefined_value();
+}
 
 static bool IsSuitableForOnStackReplacement(Isolate* isolate,
                                             Handle<JSFunction> function) {

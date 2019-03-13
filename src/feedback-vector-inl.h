@@ -93,6 +93,12 @@ int FeedbackMetadata::GetSlotSize(FeedbackSlotKind kind) {
   return 1;
 }
 
+// static
+FeedbackCell ClosureFeedbackCellArray::GetClosureFeedbackCell(
+    Handle<FixedArray> closure_feedback_cell_array, int index) {
+  return FeedbackCell::cast(closure_feedback_cell_array->get(index));
+}
+
 ACCESSORS(FeedbackVector, shared_function_info, SharedFunctionInfo,
           kSharedFunctionInfoOffset)
 WEAK_ACCESSORS(FeedbackVector, optimized_code_weak_or_smi, kOptimizedCodeOffset)
