@@ -6,6 +6,7 @@
 #define V8_INSPECTOR_V8_DEBUGGER_AGENT_IMPL_H_
 
 #include <deque>
+#include <list>
 #include <unordered_map>
 #include <vector>
 
@@ -151,6 +152,8 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
 
   bool acceptsPause(bool isOOMBreak) const;
 
+  void scriptCollected(const String16& scriptId);
+
   v8::Isolate* isolate() { return m_isolate; }
 
  private:
@@ -199,8 +202,9 @@ class V8DebuggerAgentImpl : public protocol::Debugger::Backend {
   BreakpointIdToDebuggerBreakpointIdsMap m_breakpointIdToDebuggerBreakpointIds;
   DebuggerBreakpointIdToBreakpointIdMap m_debuggerBreakpointIdToBreakpointId;
 
-  std::deque<String16> m_failedToParseAnonymousScriptIds;
-  void cleanupOldFailedToParseAnonymousScriptsIfNeeded();
+  size_t m_maxCollectedScriptsSize = 0;
+  size_t m_collectedScriptsSize = 0;
+  std::deque<String16> m_collectedScriptsList;
 
   using BreakReason =
       std::pair<String16, std::unique_ptr<protocol::DictionaryValue>>;

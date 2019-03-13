@@ -6,6 +6,7 @@
 
 #include "src/inspector/inspected-context.h"
 #include "src/inspector/string-util.h"
+#include "src/inspector/v8-debugger-agent-impl.h"
 #include "src/inspector/v8-inspector-impl.h"
 #include "src/inspector/wasm-translation.h"
 #include "src/v8memory.h"
@@ -116,9 +117,11 @@ class ActualScript : public V8DebuggerScript {
 
  public:
   ActualScript(v8::Isolate* isolate, v8::Local<v8::debug::Script> script,
-               bool isLiveEdit, V8InspectorClient* client)
+               bool isLiveEdit, V8DebuggerAgentImpl* agent,
+               V8InspectorClient* client)
       : V8DebuggerScript(isolate, String16::fromInteger(script->Id()),
                          GetScriptURL(isolate, script, client)),
+        m_agent(agent),
         m_isLiveEdit(isLiveEdit) {
     Initialize(script);
   }
@@ -128,8 +131,7 @@ class ActualScript : public V8DebuggerScript {
 
   String16 source(size_t pos, size_t len) const override {
     v8::HandleScope scope(m_isolate);
-    v8::Local<v8::String> v8Source;
-    if (!script()->Source().ToLocal(&v8Source)) return String16();
+    v8::Local<v8::String> v8Source = m_source.Get(m_isolate);
     if (pos >= static_cast<size_t>(v8Source->Length())) return String16();
     size_t substringLength =
         std::min(len, static_cast<size_t>(v8Source->Length()) - pos);
@@ -143,12 +145,9 @@ class ActualScript : public V8DebuggerScript {
   int endLine() const override { return m_endLine; }
   int endColumn() const override { return m_endColumn; }
   bool isSourceLoadedLazily() const override { return false; }
-  int length() const override {
-    v8::HandleScope scope(m_isolate);
-    v8::Local<v8::String> v8Source;
-    if (!script()->Source().ToLocal(&v8Source)) return 0;
-    return v8Source->Length();
-  }
+  bool isCollected() const override { return m_script.IsEmpty(); }
+
+  int length() const override { return m_source.Get(m_isolate)->Length(); }
 
   const String16& sourceMappingURL() const override {
     return m_sourceMappingURL;
@@ -162,6 +161,11 @@ class ActualScript : public V8DebuggerScript {
                  v8::debug::LiveEditResult* result) override {
     v8::EscapableHandleScope scope(m_isolate);
     v8::Local<v8::String> v8Source = toV8String(m_isolate, newSource);
+    if (m_script.IsEmpty()) {
+      result->message =
+          scope.Escape(toV8String(m_isolate, "Script has been collected."));
+      return;
+    }
     if (!m_script.Get(m_isolate)->SetScriptSource(v8Source, preview, result)) {
       result->message = scope.Escape(result->message);
       return;
@@ -175,6 +179,7 @@ class ActualScript : public V8DebuggerScript {
       const v8::debug::Location& start, const v8::debug::Location& end,
       bool restrictToFunction,
       std::vector<v8::debug::BreakLocation>* locations) override {
+    if (m_script.IsEmpty()) return false;
     v8::HandleScope scope(m_isolate);
     v8::Local<v8::debug::Script> script = m_script.Get(m_isolate);
     std::vector<v8::debug::BreakLocation> allLocations;
@@ -211,11 +216,13 @@ class ActualScript : public V8DebuggerScript {
   }
 
   void resetBlackboxedStateCache() override {
+    if (m_script.IsEmpty()) return;
     v8::HandleScope scope(m_isolate);
     v8::debug::ResetBlackboxedStateCache(m_isolate, m_script.Get(m_isolate));
   }
 
   int offset(int lineNumber, int columnNumber) const override {
+    if (m_script.IsEmpty()) return V8DebuggerScript::kNoOffset;
     v8::HandleScope scope(m_isolate);
     return m_script.Get(m_isolate)->GetSourceOffset(
         v8::debug::Location(lineNumber, columnNumber));
@@ -228,27 +235,24 @@ class ActualScript : public V8DebuggerScript {
 
   bool setBreakpoint(const String16& condition, v8::debug::Location* location,
                      int* id) const override {
+    if (m_script.IsEmpty()) return false;
     v8::HandleScope scope(m_isolate);
     return script()->SetBreakpoint(toV8String(m_isolate, condition), location,
                                    id);
   }
 
   const String16& hash() const override {
-    if (m_hash.isEmpty()) {
-      v8::HandleScope scope(m_isolate);
-      v8::Local<v8::String> v8Source;
-      if (script()->Source().ToLocal(&v8Source)) {
-        m_hash = calculateHash(m_isolate, v8Source);
-      }
-    }
+    if (!m_hash.isEmpty()) return m_hash;
+    v8::HandleScope scope(m_isolate);
+    m_hash = calculateHash(m_isolate, m_source.Get(m_isolate));
     DCHECK(!m_hash.isEmpty());
     return m_hash;
   }
 
  private:
-  String16 GetScriptURL(v8::Isolate* isolate,
-                        v8::Local<v8::debug::Script> script,
-                        V8InspectorClient* client) {
+  static String16 GetScriptURL(v8::Isolate* isolate,
+                               v8::Local<v8::debug::Script> script,
+                               V8InspectorClient* client) {
     v8::Local<v8::String> sourceURL;
     if (script->SourceURL().ToLocal(&sourceURL) && sourceURL->Length() > 0)
       return toProtocolString(isolate, sourceURL);
@@ -293,10 +297,26 @@ class ActualScript : public V8DebuggerScript {
 
     m_isModule = script->IsModule();
 
+    v8::Local<v8::String> v8Source;
+    if (script->Source().ToLocal(&v8Source)) {
+      m_source.Reset(m_isolate, script->Source().ToLocalChecked());
+      m_source.AnnotateStrongRetainer(kGlobalDebuggerScriptHandleLabel);
+    }
     m_script.Reset(m_isolate, script);
-    m_script.AnnotateStrongRetainer(kGlobalDebuggerScriptHandleLabel);
+    m_script.SetWeak(
+        this,
+        [](const v8::WeakCallbackInfo<ActualScript>& data) {
+          data.GetParameter()->WeakCallback();
+        },
+        v8::WeakCallbackType::kParameter);
   }
 
+  void WeakCallback() {
+    m_script.Reset();
+    m_agent->scriptCollected(m_id);
+  }
+
+  V8DebuggerAgentImpl* m_agent;
   String16 m_sourceMappingURL;
   bool m_isLiveEdit = false;
   bool m_isModule = false;
@@ -306,6 +326,7 @@ class ActualScript : public V8DebuggerScript {
   int m_endLine = 0;
   int m_endColumn = 0;
   v8::Global<v8::debug::Script> m_script;
+  v8::Global<v8::String> m_source;
 };
 
 class WasmVirtualScript : public V8DebuggerScript {
@@ -335,6 +356,7 @@ class WasmVirtualScript : public V8DebuggerScript {
     return m_wasmTranslation->GetSource(m_id, m_functionIndex)
         .substring(pos, len);
   }
+  bool isCollected() const override { return false; }
   int startLine() const override {
     return m_wasmTranslation->GetStartLine(m_id, m_functionIndex);
   }
@@ -436,18 +458,18 @@ class WasmVirtualScript : public V8DebuggerScript {
 
 std::unique_ptr<V8DebuggerScript> V8DebuggerScript::Create(
     v8::Isolate* isolate, v8::Local<v8::debug::Script> scriptObj,
-    bool isLiveEdit, V8InspectorClient* client) {
-  return std::unique_ptr<ActualScript>(
-      new ActualScript(isolate, scriptObj, isLiveEdit, client));
+    bool isLiveEdit, V8DebuggerAgentImpl* agent, V8InspectorClient* client) {
+  return v8::base::make_unique<ActualScript>(isolate, scriptObj, isLiveEdit,
+                                             agent, client);
 }
 
 std::unique_ptr<V8DebuggerScript> V8DebuggerScript::CreateWasm(
     v8::Isolate* isolate, WasmTranslation* wasmTranslation,
     v8::Local<v8::debug::WasmScript> underlyingScript, String16 id,
     String16 url, int functionIndex) {
-  return std::unique_ptr<WasmVirtualScript>(
-      new WasmVirtualScript(isolate, wasmTranslation, underlyingScript,
-                            std::move(id), std::move(url), functionIndex));
+  return v8::base::make_unique<WasmVirtualScript>(
+      isolate, wasmTranslation, underlyingScript, std::move(id), std::move(url),
+      functionIndex);
 }
 
 V8DebuggerScript::V8DebuggerScript(v8::Isolate* isolate, String16 id,
@@ -466,6 +488,10 @@ void V8DebuggerScript::setSourceURL(const String16& sourceURL) {
 bool V8DebuggerScript::setBreakpoint(const String16& condition,
                                      v8::debug::Location* loc, int* id) const {
   v8::HandleScope scope(m_isolate);
-  return script()->SetBreakpoint(toV8String(m_isolate, condition), loc, id);
+  v8::Local<v8::debug::Script> script = this->script();
+  return !script.IsEmpty()
+             ? script->SetBreakpoint(toV8String(m_isolate, condition), loc, id)
+             : false;
 }
+
 }  // namespace v8_inspector

@@ -57,8 +57,6 @@ static const char kDebuggerNotPaused[] =
 static const size_t kBreakpointHintMaxLength = 128;
 static const intptr_t kBreakpointHintMaxSearchOffset = 80 * 10;
 
-static const int kMaxScriptFailedToParseScripts = 1000;
-
 namespace {
 
 void TranslateLocation(protocol::Debugger::Location* location,
@@ -324,10 +322,9 @@ void V8DebuggerAgentImpl::enableImpl() {
   m_state->setBoolean(DebuggerAgentState::debuggerEnabled, true);
   m_debugger->enable();
 
-  std::vector<std::unique_ptr<V8DebuggerScript>> compiledScripts;
-  m_debugger->getCompiledScripts(m_session->contextGroupId(), compiledScripts);
-  for (size_t i = 0; i < compiledScripts.size(); i++)
-    didParseSource(std::move(compiledScripts[i]), true);
+  std::vector<std::unique_ptr<V8DebuggerScript>> compiledScripts =
+      m_debugger->getCompiledScripts(m_session->contextGroupId(), this);
+  for (auto& script : compiledScripts) didParseSource(std::move(script), true);
 
   m_breakpointsActive = true;
   m_debugger->setBreakpointsActive(true);
@@ -370,6 +367,7 @@ Response V8DebuggerAgentImpl::disable() {
   m_blackboxPattern.reset();
   resetBlackboxedStateCache();
   m_scripts.clear();
+  m_collectedScriptsList.clear();
   for (const auto& it : m_debuggerBreakpointIdToBreakpointId) {
     v8::debug::RemoveBreakpoint(m_isolate, it.first);
   }
@@ -1417,38 +1415,32 @@ void V8DebuggerAgentImpl::didParseSource(
       stack && !stack->isEmpty()
           ? stack->buildInspectorObjectImpl(m_debugger, 0)
           : nullptr;
-  if (success) {
-    // TODO(herhut, dgozman): Report correct length for WASM if needed for
-    // coverage. Or do not send the length at all and change coverage instead.
-    if (scriptRef->isSourceLoadedLazily()) {
-      m_frontend.scriptParsed(
-          scriptId, scriptURL, 0, 0, 0, 0, contextId, scriptRef->hash(),
-          std::move(executionContextAuxDataParam), isLiveEditParam,
-          std::move(sourceMapURLParam), hasSourceURLParam, isModuleParam, 0,
-          std::move(stackTrace));
-    } else {
-      m_frontend.scriptParsed(
-          scriptId, scriptURL, scriptRef->startLine(), scriptRef->startColumn(),
-          scriptRef->endLine(), scriptRef->endColumn(), contextId,
-          scriptRef->hash(), std::move(executionContextAuxDataParam),
-          isLiveEditParam, std::move(sourceMapURLParam), hasSourceURLParam,
-          isModuleParam, scriptRef->length(), std::move(stackTrace));
-    }
-  } else {
+
+  if (!success) {
     m_frontend.scriptFailedToParse(
         scriptId, scriptURL, scriptRef->startLine(), scriptRef->startColumn(),
         scriptRef->endLine(), scriptRef->endColumn(), contextId,
         scriptRef->hash(), std::move(executionContextAuxDataParam),
         std::move(sourceMapURLParam), hasSourceURLParam, isModuleParam,
         scriptRef->length(), std::move(stackTrace));
+    return;
   }
 
-  if (!success) {
-    if (scriptURL.isEmpty()) {
-      m_failedToParseAnonymousScriptIds.push_back(scriptId);
-      cleanupOldFailedToParseAnonymousScriptsIfNeeded();
-    }
-    return;
+  // TODO(herhut, dgozman): Report correct length for WASM if needed for
+  // coverage. Or do not send the length at all and change coverage instead.
+  if (scriptRef->isSourceLoadedLazily()) {
+    m_frontend.scriptParsed(
+        scriptId, scriptURL, 0, 0, 0, 0, contextId, scriptRef->hash(),
+        std::move(executionContextAuxDataParam), isLiveEditParam,
+        std::move(sourceMapURLParam), hasSourceURLParam, isModuleParam, 0,
+        std::move(stackTrace));
+  } else {
+    m_frontend.scriptParsed(
+        scriptId, scriptURL, scriptRef->startLine(), scriptRef->startColumn(),
+        scriptRef->endLine(), scriptRef->endColumn(), contextId,
+        scriptRef->hash(), std::move(executionContextAuxDataParam),
+        isLiveEditParam, std::move(sourceMapURLParam), hasSourceURLParam,
+        isModuleParam, scriptRef->length(), std::move(stackTrace));
   }
 
   std::vector<protocol::DictionaryValue*> potentialBreakpoints;
@@ -1646,20 +1638,23 @@ void V8DebuggerAgentImpl::reset() {
   m_blackboxedPositions.clear();
   resetBlackboxedStateCache();
   m_scripts.clear();
+  m_collectedScriptsList.clear();
   m_breakpointIdToDebuggerBreakpointIds.clear();
 }
 
-void V8DebuggerAgentImpl::cleanupOldFailedToParseAnonymousScriptsIfNeeded() {
-  if (m_failedToParseAnonymousScriptIds.size() <=
-      kMaxScriptFailedToParseScripts)
-    return;
-  static_assert(kMaxScriptFailedToParseScripts > 100,
-                "kMaxScriptFailedToParseScripts should be greater then 100");
-  while (m_failedToParseAnonymousScriptIds.size() >
-         kMaxScriptFailedToParseScripts - 100 + 1) {
-    String16 scriptId = m_failedToParseAnonymousScriptIds.front();
-    m_failedToParseAnonymousScriptIds.pop_front();
+void V8DebuggerAgentImpl::scriptCollected(const String16& scriptId) {
+  auto it = m_scripts.find(scriptId);
+  DCHECK_NE(it, m_scripts.end());
+  V8DebuggerScript* script = it->second.get();
+  m_collectedScriptsList.push_back(scriptId);
+  m_collectedScriptsSize += script->length() * sizeof(uint16_t);
+  while (m_maxCollectedScriptsSize &&
+         m_collectedScriptsSize > m_maxCollectedScriptsSize) {
+    const String16& scriptIdToRemove = m_collectedScriptsList.front();
+    m_collectedScriptsSize -=
+        m_scripts[scriptIdToRemove]->length() * sizeof(uint16_t);
     m_scripts.erase(scriptId);
+    m_collectedScriptsList.pop_front();
   }
 }
 
