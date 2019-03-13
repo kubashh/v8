@@ -887,6 +887,12 @@ class MachineRepresentationChecker {
                 actual == MachineRepresentation::kTaggedPointer);
       case MachineRepresentation::kTaggedSigned:
       case MachineRepresentation::kTaggedPointer:
+      case MachineRepresentation::kCompressed:
+        return (actual == MachineRepresentation::kCompressed ||
+                actual == MachineRepresentation::kCompressedSigned ||
+                actual == MachineRepresentation::kCompressedPointer);
+      case MachineRepresentation::kCompressedSigned:
+      case MachineRepresentation::kCompressedPointer:
       case MachineRepresentation::kFloat32:
       case MachineRepresentation::kFloat64:
       case MachineRepresentation::kSimd128:
