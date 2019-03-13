@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56c80cd5_43e5038c",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-03-13T18:26:44Z",
+      "side": 1,
+      "message": "nit: !tls_base_offset_initialized.load(std::memory_order_acquire)",
+      "range": {
+        "startLine": 874,
+        "startChar": 67,
+        "endLine": 874,
+        "endChar": 68
+      },
+      "revId": "2b8c7362d811535dddaf736e1cd8d2b4a6049694",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b9df2b0_7c65db9e",
+        "filename": "src/base/platform/time.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1131764
+      },
+      "writtenOn": "2019-03-13T18:26:44Z",
+      "side": 1,
+      "message": "Don\u0027t know the details here but shouldn\u0027t we reload original in the loop? Otherwise, we would never update the expected value for the CAS below.",
+      "range": {
+        "startLine": 529,
+        "startChar": 10,
+        "endLine": 529,
+        "endChar": 18
+      },
+      "revId": "2b8c7362d811535dddaf736e1cd8d2b4a6049694",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
