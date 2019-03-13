@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb2361d0_5eaa764e",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2677,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-03-13T09:34:25Z",
+      "side": 1,
+      "message": "Nit: Scanner::Location loc(...)",
+      "revId": "63808bf7a5696bb6835079980f6d24382a02f012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1afd177_2fe6ba59",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2682,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-03-13T09:34:25Z",
+      "side": 1,
+      "message": "Please cite the spec here as a comment (or somehow point to it).\n\n \"It is an early Reference Error if LeftHandSideExpression is neither an ObjectLiteral nor an ArrayLiteral and AssignmentTargetType of LeftHandSideExpression is invalid.\"",
+      "revId": "63808bf7a5696bb6835079980f6d24382a02f012",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
