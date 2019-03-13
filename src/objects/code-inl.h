@@ -233,6 +233,14 @@ void Code::clear_padding() {
          CodeSize() - (data_end - address()));
 }
 
+ByteArray Code::SourcePositionTableOrEmpty() const {
+  ReadOnlyRoots roots = GetReadOnlyRoots();
+  Object maybe_table = source_position_table();
+  if (maybe_table->IsUndefined(roots) || maybe_table->IsException(roots))
+    return roots.empty_byte_array();
+  return SourcePositionTable();
+}
+
 ByteArray Code::SourcePositionTable() const {
   Object maybe_table = source_position_table();
   if (maybe_table->IsByteArray()) return ByteArray::cast(maybe_table);
@@ -714,20 +722,31 @@ Address BytecodeArray::GetFirstBytecodeAddress() {
   return ptr() - kHeapObjectTag + kHeaderSize;
 }
 
-bool BytecodeArray::HasSourcePositionTable() {
+bool BytecodeArray::HasSourcePositionTable() const {
   Object maybe_table = source_position_table();
-  return !maybe_table->IsUndefined();
+  return !maybe_table->IsUndefined() || DidSourcePositionGenerationFail();
 }
 
-ByteArray BytecodeArray::SourcePositionTable() {
+bool BytecodeArray::DidSourcePositionGenerationFail() const {
+  return source_position_table()->IsException();
+}
+
+ByteArray BytecodeArray::SourcePositionTable() const {
   Object maybe_table = source_position_table();
   if (maybe_table->IsByteArray()) return ByteArray::cast(maybe_table);
   ReadOnlyRoots roots = GetReadOnlyRoots();
-  if (maybe_table->IsUndefined(roots)) return roots.empty_byte_array();
+  if (maybe_table->IsException(roots)) return roots.empty_byte_array();
 
+  DCHECK(!maybe_table->IsUndefined(roots));
   DCHECK(maybe_table->IsSourcePositionTableWithFrameCache());
   return SourcePositionTableWithFrameCache::cast(maybe_table)
       ->source_position_table();
+}
+
+ByteArray BytecodeArray::SourcePositionTableOrEmpty() const {
+  if (!HasSourcePositionTable()) return GetReadOnlyRoots().empty_byte_array();
+
+  return SourcePositionTable();
 }
 
 void BytecodeArray::ClearFrameCacheFromSourcePositionTable() {
@@ -744,7 +763,9 @@ int BytecodeArray::SizeIncludingMetadata() {
   int size = BytecodeArraySize();
   size += constant_pool()->Size();
   size += handler_table()->Size();
-  size += SourcePositionTable()->Size();
+  if (HasSourcePositionTable()) {
+    size += SourcePositionTable()->Size();
+  }
   return size;
 }
 

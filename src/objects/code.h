@@ -89,6 +89,7 @@ class Code : public HeapObject {
   // SourcePositionTableWithFrameCache.
   DECL_ACCESSORS(source_position_table, Object)
   inline ByteArray SourcePositionTable() const;
+  inline ByteArray SourcePositionTableOrEmpty() const;
 
   // [code_data_container]: A container indirection for all mutable fields.
   DECL_ACCESSORS(code_data_container, CodeDataContainer)
@@ -778,8 +779,15 @@ class BytecodeArray : public FixedArrayBase {
   // offset and source position or SourcePositionTableWithFrameCache.
   DECL_ACCESSORS(source_position_table, Object)
 
-  inline ByteArray SourcePositionTable();
-  inline bool HasSourcePositionTable();
+  // This must only be called if source position collection has already been
+  // attempted. (If it failed because of an exception then it will return
+  // empty_byte_array).
+  inline ByteArray SourcePositionTable() const;
+  // If source positions have not been collected or an exception has been thrown
+  // this will return empty_byte_array.
+  inline ByteArray SourcePositionTableOrEmpty() const;
+  inline bool HasSourcePositionTable() const;
+  inline bool DidSourcePositionGenerationFail() const;
   inline void ClearFrameCacheFromSourcePositionTable();
 
   DECL_CAST(BytecodeArray)
