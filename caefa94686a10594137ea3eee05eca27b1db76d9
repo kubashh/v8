@@ -42,6 +42,48 @@
     },
     {
       "key": {
+        "uuid": "74767161_1d546d53",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc68d550_04609e96",
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18e5f2ed_9f96b880",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e83b4b6_4b348ef5",
+      "range": {
+        "startLine": 637,
+        "startChar": 6,
+        "endLine": 637,
+        "endChar": 24
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41fff594_e1cbe42e",
         "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
         "patchSetId": 4
@@ -82,6 +124,48 @@
     },
     {
       "key": {
+        "uuid": "ba66895e_8e8a1167",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5955831_dc6ce04b",
+      "range": {
+        "startLine": 771,
+        "startChar": 17,
+        "endLine": 771,
+        "endChar": 26
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c7c32d29_f956709b",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41fff594_e1cbe42e",
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "723ea155_85b99e34",
         "filename": "src/compiler/backend/register-allocator.cc",
         "patchSetId": 4
@@ -102,6 +186,30 @@
       "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7f60238_ef978408",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "kTaggedSize is 32 when pointer compression is enabled.\nkSystemPointerSize is 64 in 64 bits architectures.",
+      "parentUuid": "723ea155_85b99e34",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 44
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "c0f1ab23_dd294b5f",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "You\u0027re welcome!",
+      "parentUuid": "8e7d0a12_8e1f0750",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 12
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "abba951c_103e3d0c",
         "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
         "patchSetId": 4
@@ -148,6 +280,30 @@
       "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43fb8571_97744518",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abba951c_103e3d0c",
+      "range": {
+        "startLine": 269,
+        "startChar": 0,
+        "endLine": 270,
+        "endChar": 12
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "aee31b0e_f4ec5952",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1397f355_d6dee5e9",
+      "range": {
+        "startLine": 318,
+        "startChar": 0,
+        "endLine": 319,
+        "endChar": 12
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31deffd9_dafb9390",
         "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
         "patchSetId": 4
@@ -197,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "7beac275_acca35b6",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "31deffd9_dafb9390",
+      "range": {
+        "startLine": 1721,
+        "startChar": 0,
+        "endLine": 1723,
+        "endChar": 46
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "63b6941d_6258d490",
         "filename": "src/compiler/js-native-context-specialization.cc",
         "patchSetId": 4
@@ -211,6 +415,24 @@
       "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "815572e4_6806bae1",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2452,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "63b6941d_6258d490",
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -237,6 +459,30 @@
     },
     {
       "key": {
+        "uuid": "a214a6f3_b315670e",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ddc1d05_08e3ee74",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 44
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab564d60_d564c71f",
         "filename": "src/machine-type.h",
         "patchSetId": 4
@@ -251,6 +497,24 @@
       "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2427e50d_fd49b61e",
+        "filename": "src/machine-type.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-13T13:50:12Z",
+      "side": 1,
+      "message": "kTaggedSizeLog2 is 2 when pointer compression is enabled, which is the only case when kCompresedXXX would be used",
+      "parentUuid": "ab564d60_d564c71f",
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
