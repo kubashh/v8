@@ -1277,11 +1277,18 @@ FrameSummary::JavaScriptFrameSummary::JavaScriptFrameSummary(
       parameters_(parameters, isolate) {
   DCHECK(abstract_code->IsBytecodeArray() ||
          Code::cast(abstract_code)->kind() != Code::OPTIMIZED_FUNCTION);
-  // TODO(v8:8510): Move this to the SourcePosition getter.
-  if (FLAG_enable_lazy_source_positions && abstract_code->IsBytecodeArray()) {
-    SharedFunctionInfo::EnsureSourcePositionsAvailable(
-        isolate, handle(function->shared(), isolate));
+}
+
+void FrameSummary::EnsureSourcePositionsAvailable() const {
+  if (IsJavaScript()) {
+    AsJavaScript().EnsureSourcePositionsAvailable();
   }
+}
+
+void FrameSummary::JavaScriptFrameSummary::EnsureSourcePositionsAvailable()
+    const {
+  Handle<SharedFunctionInfo> shared(function()->shared(), isolate());
+  SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate(), shared);
 }
 
 bool FrameSummary::JavaScriptFrameSummary::is_subject_to_debugging() const {
@@ -1663,6 +1670,11 @@ Object OptimizedFrame::StackSlotAt(int index) const {
 }
 
 int InterpretedFrame::position() const {
+  if (FLAG_enable_lazy_source_positions &&
+      GetBytecodeArray()->IsBytecodeArray()) {
+    Handle<SharedFunctionInfo> shared = handle(function()->shared(), isolate());
+    SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate(), shared);
+  }
   AbstractCode code = AbstractCode::cast(GetBytecodeArray());
   int code_offset = GetBytecodeOffset();
   return code->SourcePosition(code_offset);
@@ -1975,6 +1987,9 @@ void PrintFunctionSource(StringStream* accumulator, SharedFunctionInfo shared,
 void JavaScriptFrame::Print(StringStream* accumulator,
                             PrintMode mode,
                             int index) const {
+  Handle<SharedFunctionInfo> shared = handle(function()->shared(), isolate());
+  SharedFunctionInfo::EnsureSourcePositionsAvailable(isolate(), shared);
+
   DisallowHeapAllocation no_gc;
   Object receiver = this->receiver();
   JSFunction function = this->function();
@@ -1991,7 +2006,6 @@ void JavaScriptFrame::Print(StringStream* accumulator,
   // doesn't contain scope info, scope_info will return 0 for the number of
   // parameters, stack local variables, context local variables, stack slots,
   // or context slots.
-  SharedFunctionInfo shared = function->shared();
   ScopeInfo scope_info = shared->scope_info();
   Object script_obj = shared->script();
   if (script_obj->IsScript()) {
@@ -2031,7 +2045,7 @@ void JavaScriptFrame::Print(StringStream* accumulator,
   }
   if (is_optimized()) {
     accumulator->Add(" {\n// optimized frame\n");
-    PrintFunctionSource(accumulator, shared, code);
+    PrintFunctionSource(accumulator, *shared, code);
     accumulator->Add("}\n");
     return;
   }
@@ -2081,7 +2095,7 @@ void JavaScriptFrame::Print(StringStream* accumulator,
     accumulator->Add("  [%02d] : %o\n", i, GetExpression(i));
   }
 
-  PrintFunctionSource(accumulator, shared, code);
+  PrintFunctionSource(accumulator, *shared, code);
 
   accumulator->Add("}\n\n");
 }
