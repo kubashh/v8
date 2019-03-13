@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "308868a7_fcae5647",
+        "filename": "test/mjsunit/wasm/multi-table-element-section.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-13T13:26:59Z",
+      "side": 1,
+      "message": "suggestion: This way of block scoping in JavaScript does not prevent for \"var\" declaration to be hoisted, the \"const\" declarations are block scoped, but accidentally using \"var\" is too easy. Usually one would use the following (an IIFE) instead to achieve proper scoping:\n\nlet instance_for_import \u003d (function() {\n  // ...\n  const instance \u003d ...\n  // ...\n  return instance;\n})();",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 1
+      },
+      "revId": "549994c29e112b25b607786e37f243fe1b9919f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
