@@ -34,6 +34,24 @@
       "revId": "e63b98c39873b1bfde2e5a4aaa58a3d6bccbecc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "638b1302_1dd6ad24",
+        "filename": "flakes/flakes.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-03-13T12:08:35Z",
+      "side": 0,
+      "message": "Thanks for pointing out that the platform for which the test was skipped (Windows) and for which it was verified (Linux) are different. Indeed a Flako run on Windows with the re-enabled test was successful - https://ci.chromium.org/p/v8/builders/try.triggered/v8_flako/b8919105297219051456\nSo I added it for verification, this time on Windows - https://chromium-review.googlesource.com/c/v8/v8/+/1520718",
+      "parentUuid": "596aa542_1d79b8ae",
+      "revId": "e63b98c39873b1bfde2e5a4aaa58a3d6bccbecc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
