@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "12a8ea6c_041f7c29",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-13T15:30:33Z",
+      "side": 1,
+      "message": "nit: Added skips can generally be NOTRY.",
+      "revId": "304b91d888540112b716c4a0821c473d781f50b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5699a404_d250ea7a",
         "filename": "test/cctest/cctest.status",
         "patchSetId": 1
