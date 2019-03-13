@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1034f8ca_643f562b",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-03-13T20:59:29Z",
+      "side": 1,
+      "message": "Why are we doing the ExceptionCode check at this point? And can we remove the other copy of this check from line 49 rather than duplicating it?",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
