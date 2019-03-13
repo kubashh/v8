@@ -1181,6 +1181,7 @@ Handle<FixedArray> Isolate::CaptureCurrentStackTrace(
     frame->Summarize(&frames);
     for (size_t i = frames.size(); i != 0 && !builder.full(); i--) {
       FrameSummary& frame = frames[i - 1];
+      frame.EnsureSourcePositionsAvailable();
       if (!frame.is_subject_to_debugging()) continue;
 
       if (frame.IsJavaScript()) {
@@ -2027,6 +2028,7 @@ bool Isolate::ComputeLocation(MessageLocation* target) {
   std::vector<FrameSummary> frames;
   frame->Summarize(&frames);
   FrameSummary& summary = frames.back();
+  summary.EnsureSourcePositionsAvailable();
   int pos = summary.SourcePosition();
   Handle<SharedFunctionInfo> shared;
   Handle<Object> script = summary.script();
@@ -2111,6 +2113,8 @@ bool Isolate::ComputeLocationFromStackTrace(MessageLocation* target,
     Object script = fun->shared()->script();
     if (script->IsScript() &&
         !(Script::cast(script)->source()->IsUndefined(this))) {
+      Handle<SharedFunctionInfo> shared = handle(fun->shared(), this);
+      SharedFunctionInfo::EnsureSourcePositionsAvailable(this, shared);
       AbstractCode abstract_code = elements->Code(i);
       const int code_offset = elements->Offset(i)->value();
       const int pos = abstract_code->SourcePosition(code_offset);
