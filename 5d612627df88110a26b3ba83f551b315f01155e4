@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b783f478_97bf49e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-13T15:25:18Z",
+      "side": 1,
+      "message": "nit: rather write:\nremove unmaintained mips big-endian builders\n\nWe\u0027re not going to remove the whole port.",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "5d612627df88110a26b3ba83f551b315f01155e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
