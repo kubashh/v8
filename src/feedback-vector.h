@@ -144,6 +144,24 @@ typedef std::vector<MaybeObjectHandle> MaybeObjectHandles;
 
 class FeedbackMetadata;
 
+// This is a helper class for ClosureFeedbackCellArray.
+// ClosureFeedbackCellArray is a FixedArray that contains feedback cells used
+// when creating closures from a function. Along with the feedback
+// cells, the first slot (slot 0) is used to hold a budget to measure the
+// hotness of the function. This is created once the function is compiled and is
+// either held by the feedback vector (if allocated) or by the FeedbackCell of
+// the closure.
+class ClosureFeedbackCellArray {
+ public:
+  static const int kInterruptBudgetIndex = 0;
+  static const int kNumHeaderFields = kInterruptBudgetIndex + 1;
+
+  V8_EXPORT_PRIVATE static Handle<FixedArray> New(
+      Isolate* isolate, Handle<SharedFunctionInfo> shared);
+  static inline FeedbackCell GetFeedbackCell(
+      FixedArray closure_feedback_cell_array, int index);
+};
+
 // A FeedbackVector has a fixed header with:
 //  - shared function info (which includes feedback metadata)
 //  - invocation count
@@ -239,8 +257,6 @@ class FeedbackVector : public HeapObject {
       Isolate* isolate, Handle<SharedFunctionInfo> shared,
       Handle<FixedArray> closure_feedback_cell_array);
 
-  V8_EXPORT_PRIVATE static Handle<FixedArray> NewClosureFeedbackCellArray(
-      Isolate* isolate, Handle<SharedFunctionInfo> shared);
 
 #define DEFINE_SLOT_KIND_PREDICATE(Name) \
   bool Name(FeedbackSlot slot) const { return Name##Kind(GetKind(slot)); }
@@ -329,7 +345,9 @@ class FeedbackVector : public HeapObject {
 class V8_EXPORT_PRIVATE FeedbackVectorSpec {
  public:
   explicit FeedbackVectorSpec(Zone* zone)
-      : slot_kinds_(zone), num_closure_feedback_cells_(0) {
+      : slot_kinds_(zone),
+        num_closure_feedback_cells_(
+            ClosureFeedbackCellArray::kNumHeaderFields) {
     slot_kinds_.reserve(16);
   }
 

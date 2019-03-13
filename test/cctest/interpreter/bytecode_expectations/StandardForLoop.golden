@@ -186,7 +186,7 @@ bytecodes: [
                 B(TestEqual), R(2), U8(3),
                 B(JumpIfFalse), U8(22),
   /*   17 E> */ B(StackCheck),
-  /*   48 S> */ B(CreateClosure), U8(1), U8(0), U8(2),
+  /*   48 S> */ B(CreateClosure), U8(1), U8(1), U8(2),
                 B(Star), R(5),
   /*   74 E> */ B(CallUndefinedReceiver0), R(5), U8(4),
                 B(LdaZero),
