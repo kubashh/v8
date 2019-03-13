@@ -253,6 +253,7 @@ class AbstractCode;
 class AccessorPair;
 class AccessCheckInfo;
 class AllocationSite;
+class AllocationSiteBase;
 class ByteArray;
 class CachedTemplateObject;
 class Cell;
@@ -323,6 +324,7 @@ class ZoneForwardList;
   V(AbstractCode)                              \
   V(AccessCheckNeeded)                         \
   V(AllocationSite)                            \
+  V(AllocationSiteBase)                        \
   V(ArrayList)                                 \
   V(BigInt)                                    \
   V(BigIntWrapper)                             \

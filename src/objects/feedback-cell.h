@@ -29,14 +29,9 @@ class FeedbackCell : public Struct {
   DECL_PRINTER(FeedbackCell)
   DECL_VERIFIER(FeedbackCell)
 
-// Layout description.
-#define FEEDBACK_CELL_FIELDS(V) \
-  V(kValueOffset, kTaggedSize)  \
-  /* Total size. */             \
-  V(kSize, 0)
-
-  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize, FEEDBACK_CELL_FIELDS)
-#undef FEEDBACK_CELL_FIELDS
+  // Layout description.
+  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
+                                TORQUE_GENERATED_FEEDBACK_CELL_FIELDS)
 
   typedef FixedBodyDescriptor<kValueOffset, kSize, kSize> BodyDescriptor;
 

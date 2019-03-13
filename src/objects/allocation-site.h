@@ -16,7 +16,23 @@ namespace internal {
 
 enum InstanceType : uint16_t;
 
-class AllocationSite : public Struct {
+// AllocationSite has to start with TransitionInfoOrboilerPlateOffset and end
+// with WeakNext field. Torque doesn't support reopening of field sections in
+// same class, so split the fields preceding to weak_next into a base class.
+class AllocationSiteBase : public Struct {
+ public:
+  // Layout description.
+  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
+                                TORQUE_GENERATED_ALLOCATION_SITE_BASE_FIELDS)
+  static constexpr int kHeaderSize = kSize;
+
+  DECL_CAST(AllocationSiteBase)
+
+ protected:
+  OBJECT_CONSTRUCTORS(AllocationSiteBase, Struct);
+};
+
+class AllocationSite : public AllocationSiteBase {
  public:
   NEVER_READ_ONLY_SPACE
   static const uint32_t kMaximumArrayBytesToPretransition = 8 * 1024;
@@ -134,44 +150,28 @@ class AllocationSite : public Struct {
   static bool ShouldTrack(ElementsKind from, ElementsKind to);
   static inline bool CanTrack(InstanceType type);
 
-// Layout description.
-// AllocationSite has to start with TransitionInfoOrboilerPlateOffset
-// and end with WeakNext field.
-#define ALLOCATION_SITE_FIELDS(V)                     \
-  V(kStartOffset, 0)                                  \
-  V(kTransitionInfoOrBoilerplateOffset, kTaggedSize)  \
-  V(kNestedSiteOffset, kTaggedSize)                   \
-  V(kDependentCodeOffset, kTaggedSize)                \
-  V(kCommonPointerFieldEndOffset, 0)                  \
-  V(kPretenureDataOffset, kInt32Size)                 \
-  V(kPretenureCreateCountOffset, kInt32Size)          \
-  /* Size of AllocationSite without WeakNext field */ \
-  V(kSizeWithoutWeakNext, 0)                          \
-  V(kWeakNextOffset, kTaggedSize)                     \
-  /* Size of AllocationSite with WeakNext field */    \
-  V(kSizeWithWeakNext, 0)
+  // Layout description.
+  DEFINE_FIELD_OFFSET_CONSTANTS(AllocationSiteBase::kHeaderSize,
+                                TORQUE_GENERATED_ALLOCATION_SITE_FIELDS)
 
-  DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize, ALLOCATION_SITE_FIELDS)
-#undef ALLOCATION_SITE_FIELDS
+  static constexpr int kStartOffset = kTransitionInfoOrBoilerplateOffset;
+  static constexpr int kCommonPointerFieldEndOffset = kPretenureDataOffset;
+  static constexpr int kSizeWithoutWeakNext = kWeakNextOffset;
+  static constexpr int kSizeWithWeakNext = kSize;
 
   class BodyDescriptor;
 
  private:
   inline bool PretenuringDecisionMade() const;
 
-  OBJECT_CONSTRUCTORS(AllocationSite, Struct);
+  OBJECT_CONSTRUCTORS(AllocationSite, AllocationSiteBase);
 };
 
 class AllocationMemento : public Struct {
  public:
-// Layout description.
-#define ALLOCATION_MEMENTO_FIELDS(V)    \
-  V(kAllocationSiteOffset, kTaggedSize) \
-  V(kSize, 0)
-
+  // Layout description.
   DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
-                                ALLOCATION_MEMENTO_FIELDS)
-#undef ALLOCATION_MEMENTO_FIELDS
+                                TORQUE_GENERATED_ALLOCATION_MEMENTO_FIELDS)
 
   DECL_ACCESSORS(allocation_site, Object)
 

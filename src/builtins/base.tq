@@ -30,6 +30,7 @@ type PositiveSmi extends Smi;
 type Zero extends PositiveSmi;
 
 extern class HeapObject extends Tagged { map: Map; }
+extern class MaybeObject extends Tagged {}
 
 type Object = Smi | HeapObject;
 type int32 generates 'TNode<Int32T>' constexpr 'int32_t';
@@ -88,6 +89,19 @@ type RootIndex generates 'TNode<Int32T>' constexpr 'RootIndex';
 type Map extends HeapObject generates 'TNode<Map>';
 
 extern class FixedArrayBase extends HeapObject { length: Smi; }
+
+extern class EnumCache extends Struct {
+  keys: FixedArray;
+  indices: FixedArray;
+}
+
+extern class DescriptorArray extends HeapObject {
+  number_of_all_descriptors: uint16;
+  number_of_descriptors: uint16;
+  raw_number_of_marked_descriptors: uint16;
+  filler16_bits: uint16;
+  enum_cache: EnumCache;
+}
 
 extern class FixedArray extends FixedArrayBase { objects[length]: Object; }
 
@@ -221,7 +235,6 @@ extern class Script extends Struct {
   source_mapping_url: Object;
   host_defined_options: Object;
 }
-type DebugInfo extends HeapObject;
 
 type ScopeInfo extends Object generates 'TNode<ScopeInfo>';
 
@@ -765,6 +778,49 @@ extern class AccessorPair extends Struct {
 
 extern class BreakPoint extends Tuple2 {}
 extern class BreakPointInfo extends Tuple2 {}
+extern class CoverageInfo extends FixedArray {}
+
+type BytecodeArray extends FixedArrayBase;
+extern class DebugInfo extends Struct {
+  shared_function_info: HeapObject;
+  debugger_hints: Smi;
+  script: Script;
+  original_bytecode_array: BytecodeArray;
+  debug_bytecode_array: BytecodeArray;
+  break_points_state: FixedArray;
+  flags: Smi;
+  coverage_info: CoverageInfo | Undefined;
+}
+
+extern class FeedbackVector extends HeapObject {
+  shared_function_info: SharedFunctionInfo;
+  optimized_code: MaybeObject;
+  closure_feedback_cell_array: FixedArray;
+  length: int32;
+  invocation_count: int32;
+  profiler_ticks: int32;
+  deopt_count: int32;
+}
+
+extern class FeedbackCell extends Struct {
+  value: Undefined | FeedbackVector | FixedArray;
+}
+
+type WeakFixedArray extends HeapObject;
+type DependentCode extends WeakFixedArray;
+
+extern class AllocationSiteBase extends Struct {
+  transition_info_or_boilerplate: Smi | JSObject;
+  nested_site: Zero | AllocationSite;
+  dependent_code: DependentCode;
+  pretenure_data: int32;
+  pretenure_create_count: int32;
+}
+extern class AllocationSite extends AllocationSiteBase { weak_next: Object; }
+
+extern class AllocationMemento extends Struct {
+  allocation_site: AllocationSite;
+}
 
 extern macro Is64(): constexpr bool;
 
