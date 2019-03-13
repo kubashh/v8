@@ -132,17 +132,35 @@ struct WasmElemSegment {
 
 // Static representation of a wasm import.
 struct WasmImport {
-  WireBytesRef module_name;  // module name.
-  WireBytesRef field_name;   // import name.
+  WireBytesRef module_name;   // module name.
+  WireBytesRef field_name;    // import name.
   ImportExportKindCode kind;  // kind of the import.
-  uint32_t index;            // index into the respective space.
+  uint32_t index;             // index into the respective space.
 };
 
 // Static representation of a wasm export.
 struct WasmExport {
-  WireBytesRef name;      // exported name.
+  WireBytesRef name;          // exported name.
   ImportExportKindCode kind;  // kind of the export.
-  uint32_t index;         // index into the respective space.
+  uint32_t index;             // index into the respective space.
+};
+
+// Static representation of a wasm compilation hint.
+enum class WasmCompilationHintStrategy : uint8_t {
+  kDefault = 0,
+  kLazy = 1,
+  kEager = 2,
+};
+enum class WasmCompilationHintTier : uint8_t {
+  kDefault = 0,
+  kInterpreter = 1,
+  kBaseline = 2,
+  kOptimized = 3,
+};
+struct WasmCompilationHint {
+  WasmCompilationHintStrategy strategy;
+  WasmCompilationHintTier fst_tier;
+  WasmCompilationHintTier snd_tier;
 };
 
 enum ModuleOrigin : uint8_t { kWasmOrigin, kAsmJsOrigin };
@@ -187,6 +205,7 @@ struct V8_EXPORT_PRIVATE WasmModule {
   std::vector<WasmExport> export_table;
   std::vector<WasmException> exceptions;
   std::vector<WasmElemSegment> elem_segments;
+  std::vector<WasmCompilationHint> compilation_hints;
   SignatureMap signature_map;  // canonicalizing map for signature indexes.
 
   ModuleOrigin origin = kWasmOrigin;  // origin of the module
