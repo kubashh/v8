@@ -25,6 +25,8 @@
   SEPARATOR                                                            \
   V(bulk_memory, "bulk memory opcodes", false)                         \
   SEPARATOR                                                            \
+  V(compilation_hints, "compilation hints section", false)             \
+  SEPARATOR                                                            \
   V(return_call, "return call opcodes", false)
 
 #endif  // V8_WASM_WASM_FEATURE_FLAGS_H_
