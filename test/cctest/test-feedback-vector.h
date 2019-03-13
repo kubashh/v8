@@ -50,7 +50,7 @@ Handle<FeedbackVector> NewFeedbackVector(Isolate* isolate, Spec* spec) {
   // overwriting existing metadata.
   shared->set_raw_outer_scope_info_or_feedback_metadata(*metadata);
   Handle<FixedArray> closure_feedback_cell_array =
-      FeedbackVector::NewClosureFeedbackCellArray(isolate, shared);
+      ClosureFeedbackCellArray::New(isolate, shared);
   return FeedbackVector::New(isolate, shared, closure_feedback_cell_array);
 }
 

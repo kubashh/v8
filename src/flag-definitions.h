@@ -354,6 +354,10 @@ DEFINE_INT(interrupt_budget, 144 * KB,
 #undef FLAG
 #define FLAG FLAG_FULL
 
+DEFINE_INT(collect_feedback_scale_factor, 2,
+           "Scale factor used to compute the budget after which v8 starts"
+           "collecting type feedback")
+
 // Flags for Ignition.
 DEFINE_BOOL(ignition_elide_noneffectful_bytecodes, true,
             "elide bytecodes which won't have any external effect")

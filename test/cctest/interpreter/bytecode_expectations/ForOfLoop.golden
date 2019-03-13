@@ -294,7 +294,7 @@ bytecodes: [
                 B(StaCurrentContextSlot), U8(4),
   /*   29 S> */ B(Ldar), R(0),
   /*   29 E> */ B(StaCurrentContextSlot), U8(4),
-  /*   41 S> */ B(CreateClosure), U8(5), U8(0), U8(2),
+  /*   41 S> */ B(CreateClosure), U8(5), U8(1), U8(2),
                 B(Star), R(12),
   /*   67 E> */ B(CallUndefinedReceiver0), R(12), U8(12),
                 B(PopContext), R(11),

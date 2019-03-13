@@ -270,6 +270,21 @@ RUNTIME_FUNCTION(Runtime_StackGuard) {
   return isolate->stack_guard()->HandleInterrupts();
 }
 
+RUNTIME_FUNCTION(Runtime_BytecodeBudgetInterrupt) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(JSFunction, function, 0);
+  if (!function->has_feedback_vector()) {
+    JSFunction::EnsureFeedbackVector(function);
+    return ReadOnlyRoots(isolate).undefined_value();
+  }
+  // Handle interrupts.
+  {
+    SealHandleScope shs(isolate);
+    return isolate->stack_guard()->HandleInterrupts();
+  }
+}
+
 RUNTIME_FUNCTION(Runtime_Interrupt) {
   SealHandleScope shs(isolate);
   DCHECK_EQ(0, args.length());
