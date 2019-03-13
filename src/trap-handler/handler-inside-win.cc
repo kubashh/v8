@@ -43,6 +43,7 @@ bool TryHandleWasmTrap(EXCEPTION_POINTERS* exception) {
   // Clear g_thread_in_wasm_code, primarily to protect against nested faults.
   g_thread_in_wasm_code = false;
 
+
   const EXCEPTION_RECORD* record = exception->ExceptionRecord;
 
   if (record->ExceptionCode != EXCEPTION_ACCESS_VIOLATION) {
@@ -66,9 +67,32 @@ bool TryHandleWasmTrap(EXCEPTION_POINTERS* exception) {
 }
 
 LONG HandleWasmTrap(EXCEPTION_POINTERS* exception) {
-  if (TryHandleWasmTrap(exception)) {
-    return EXCEPTION_CONTINUE_EXECUTION;
+  // VectoredExceptionHandlers need extreme caution. Do as little as
+  // possible to determine if the exception should be handled or not.
+  // Exceptions can be thrown very early in a threads life, before the
+  // thread has even completed initializing. As a demonstrative example,
+  // there was a bug where an exception would be raised before the thread
+  // local copy of the "__declspec(thread)" variables had been allocated,
+  // the handler tried to access the thread-local "g_thread_in_wasm_code",
+  // which would then raise another exception, and an infinite loop ensued.
+
+  // First ensure this is an exception type of interest
+  if (exception->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION) {
+    // See if thread-local storage for __declspec(thread) variables has been
+    // allocated yet. This pointer is initially null in the TEB until the
+    // loader has completed allocating the memory for thread_local variables
+    // and copy constructed their initial values. (Note: Any functions that
+    // need to run to initialize values may not have run yet, but that is not
+    // the case for any thread_locals used here).
+    TEB* pteb = reinterpret_cast<TEB*>(NtCurrentTeb());
+    if (pteb->ThreadLocalStoragePointer != nullptr) {
+      // Now safe to run more advanced logic, which may access thread_locals
+      if (TryHandleWasmTrap(exception)) {
+        return EXCEPTION_CONTINUE_EXECUTION;
+      }
+    }
   }
+
   return EXCEPTION_CONTINUE_SEARCH;
 }
 
