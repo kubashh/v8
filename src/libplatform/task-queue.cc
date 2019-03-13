@@ -28,15 +28,41 @@ void TaskQueue::Append(std::unique_ptr<Task> task) {
   process_queue_semaphore_.Signal();
 }
 
+void TaskQueue::AppendDelayed(std::unique_ptr<Task> task,
+                              double delay_in_seconds) {
+  base::MutexGuard guard(&lock_);
+  DCHECK(!terminated_);
+
+  base::Time deadline = base::Time::NowFromSystemTime() +
+                        base::TimeDelta::FromMicroseconds(static_cast<int64_t>(
+                            delay_in_seconds * 1000.0 * 1000.0));
+  delayed_task_queue_.emplace(deadline, std::move(task));
+  process_queue_semaphore_.Signal();
+}
+
 std::unique_ptr<Task> TaskQueue::GetNext() {
   for (;;) {
     {
+      base::Time now = base::Time::NowFromSystemTime();
       base::MutexGuard guard(&lock_);
+      // Note: This will starve non-delayed events if there are delayed events
+      // ready.
+      if (!delayed_task_queue_.empty()) {
+        auto it = delayed_task_queue_.begin();
+        if (now >= it->first) {
+          std::unique_ptr<Task> result = std::move(it->second);
+          delayed_task_queue_.erase(it);
+          printf("Send delayed event\n");
+          return result;
+        }
+      }
       if (!task_queue_.empty()) {
         std::unique_ptr<Task> result = std::move(task_queue_.front());
         task_queue_.pop();
+        printf("Send regular event\n");
         return result;
       }
+
       if (terminated_) {
         process_queue_semaphore_.Signal();
         return nullptr;
@@ -58,7 +84,7 @@ void TaskQueue::BlockUntilQueueEmptyForTesting() {
   for (;;) {
     {
       base::MutexGuard guard(&lock_);
-      if (task_queue_.empty()) return;
+      if (task_queue_.empty() && delayed_task_queue_.empty()) return;
     }
     base::OS::Sleep(base::TimeDelta::FromMilliseconds(5));
   }

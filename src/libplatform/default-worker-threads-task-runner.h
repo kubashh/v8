@@ -7,6 +7,7 @@
 
 #include "include/v8-platform.h"
 #include "src/libplatform/task-queue.h"
+#include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
 
 namespace v8 {
 namespace platform {
@@ -34,6 +35,10 @@ class V8_PLATFORM_EXPORT DefaultWorkerThreadsTaskRunner
   bool IdleTasksEnabled() override;
 
  private:
+  FRIEND_TEST(DefaultWorkerThreadsTaskRunnerUnittest, PostDelayedTask);
+
+  void BlockUntilTasksCompleteForTesting();
+
   bool terminated_ = false;
   base::Mutex lock_;
   TaskQueue queue_;

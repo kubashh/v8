@@ -41,13 +41,11 @@ void DefaultWorkerThreadsTaskRunner::PostDelayedTask(std::unique_ptr<Task> task,
                                                      double delay_in_seconds) {
   base::MutexGuard guard(&lock_);
   if (terminated_) return;
-  if (delay_in_seconds == 0) {
-    queue_.Append(std::move(task));
-    return;
-  }
-  // There is no use case for this function with non zero delay_in_second on a
-  // worker thread at the moment, but it is still part of the interface.
-  UNIMPLEMENTED();
+  // if (delay_in_seconds == 0) {
+  //   queue_.Append(std::move(task));
+  //   return;
+  // }
+  queue_.AppendDelayed(std::move(task), delay_in_seconds);
 }
 
 void DefaultWorkerThreadsTaskRunner::PostIdleTask(
@@ -59,6 +57,10 @@ void DefaultWorkerThreadsTaskRunner::PostIdleTask(
 bool DefaultWorkerThreadsTaskRunner::IdleTasksEnabled() {
   // There are no idle worker tasks.
   return false;
+}
+
+void DefaultWorkerThreadsTaskRunner::BlockUntilTasksCompleteForTesting() {
+  queue_.BlockUntilQueueEmptyForTesting();
 }
 
 }  // namespace platform

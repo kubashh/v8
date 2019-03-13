@@ -5,12 +5,14 @@
 #ifndef V8_LIBPLATFORM_TASK_QUEUE_H_
 #define V8_LIBPLATFORM_TASK_QUEUE_H_
 
+#include <map>
 #include <queue>
 
 #include "include/libplatform/libplatform-export.h"
 #include "src/base/macros.h"
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
+#include "src/base/platform/time.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
 
 namespace v8 {
@@ -18,6 +20,8 @@ namespace v8 {
 class Task;
 
 namespace platform {
+
+class DefaultWorkerThreadsTaskRunner;
 
 class V8_PLATFORM_EXPORT TaskQueue {
  public:
@@ -27,8 +31,13 @@ class V8_PLATFORM_EXPORT TaskQueue {
   // Appends a task to the queue. The queue takes ownership of |task|.
   void Append(std::unique_ptr<Task> task);
 
-  // Returns the next task to process. Blocks if no task is available. Returns
-  // nullptr if the queue is terminated.
+  // Appends a delayed task to the queue. There is no ordering guarantee
+  // provided regarding delayed tasks, both with respect to other delayed tasks
+  // and non-delayed tasks that were appended using Append().
+  void AppendDelayed(std::unique_ptr<Task> task, double delay_in_seconds);
+
+  // Returns the next task to process. Blocks if no task is available.
+  // Returns nullptr if the queue is terminated.
   std::unique_ptr<Task> GetNext();
 
   // Terminate the queue.
@@ -37,11 +46,13 @@ class V8_PLATFORM_EXPORT TaskQueue {
  private:
   FRIEND_TEST(WorkerThreadTest, PostSingleTask);
 
+  friend class DefaultWorkerThreadsTaskRunner;
   void BlockUntilQueueEmptyForTesting();
 
   base::Semaphore process_queue_semaphore_;
   base::Mutex lock_;
   std::queue<std::unique_ptr<Task>> task_queue_;
+  std::multimap<base::Time, std::unique_ptr<Task>> delayed_task_queue_;
   bool terminated_;
 
   DISALLOW_COPY_AND_ASSIGN(TaskQueue);
