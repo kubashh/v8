@@ -554,7 +554,7 @@ class LiveRangeBundle : public ZoneObject {
       : ranges_(zone), uses_(zone), id_(id) {}
 
   bool TryAddRange(LiveRange* range);
-  bool TryMerge(LiveRangeBundle* other);
+  bool TryMerge(LiveRangeBundle* other, bool trace_alloc);
 
   ZoneSet<LiveRange*, LiveRangeOrdering> ranges_;
   ZoneSet<Range, RangeOrdering> uses_;
@@ -596,12 +596,14 @@ class V8_EXPORT_PRIVATE TopLevelLiveRange final : public LiveRange {
   SlotUseKind slot_use_kind() const { return HasSlotUseField::decode(bits_); }
 
   // Add a new interval or a new use position to this live range.
-  void EnsureInterval(LifetimePosition start, LifetimePosition end, Zone* zone);
-  void AddUseInterval(LifetimePosition start, LifetimePosition end, Zone* zone);
-  void AddUsePosition(UsePosition* pos);
+  void EnsureInterval(LifetimePosition start, LifetimePosition end, Zone* zone,
+                      bool trace_alloc);
+  void AddUseInterval(LifetimePosition start, LifetimePosition end, Zone* zone,
+                      bool trace_alloc);
+  void AddUsePosition(UsePosition* pos, bool trace_alloc);
 
   // Shorten the most recently added interval by setting a new start.
-  void ShortenTo(LifetimePosition start);
+  void ShortenTo(LifetimePosition start, bool trace_alloc);
 
   // Detaches between start and end, and attributes the resulting range to
   // result.
@@ -897,7 +899,8 @@ class RegisterAllocationData final : public ZoneObject {
   RegisterAllocationData(const RegisterConfiguration* config,
                          Zone* allocation_zone, Frame* frame,
                          InstructionSequence* code,
-                         const char* debug_name = nullptr);
+                         const char* debug_name = nullptr,
+                         bool trace_alloc = false);
 
   const ZoneVector<TopLevelLiveRange*>& live_ranges() const {
     return live_ranges_;
@@ -991,6 +994,8 @@ class RegisterAllocationData final : public ZoneObject {
 
   void ResetSpillState() { spill_state_.clear(); }
 
+  bool trace_alloc() const { return trace_alloc_; }
+
  private:
   int GetNextLiveRangeId();
 
@@ -1016,6 +1021,7 @@ class RegisterAllocationData final : public ZoneObject {
   int virtual_register_count_;
   RangesWithPreassignedSlots preassigned_slot_ranges_;
   ZoneVector<ZoneVector<LiveRange*>> spill_state_;
+  bool trace_alloc_;
 
   DISALLOW_COPY_AND_ASSIGN(RegisterAllocationData);
 };

@@ -402,9 +402,13 @@ class PipelineData {
   void InitializeRegisterAllocationData(const RegisterConfiguration* config,
                                         CallDescriptor* call_descriptor) {
     DCHECK_NULL(register_allocation_data_);
-    register_allocation_data_ = new (register_allocation_zone())
-        RegisterAllocationData(config, register_allocation_zone(), frame(),
-                               sequence(), debug_name());
+    register_allocation_data_ =
+        new (register_allocation_zone()) RegisterAllocationData(
+            config, register_allocation_zone(), frame(), sequence(),
+            debug_name(),
+            FLAG_trace_alloc && v8::internal::PassesFilter(
+                                    CStrVector(debug_name()),
+                                    CStrVector(FLAG_trace_turbo_filter)));
   }
 
   void InitializeOsrHelper() {
