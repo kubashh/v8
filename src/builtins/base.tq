@@ -700,6 +700,12 @@ const INTPTR_PARAMETERS: constexpr ParameterMode
 const SKIP_WRITE_BARRIER:
     constexpr WriteBarrierMode generates 'SKIP_WRITE_BARRIER';
 
+extern macro IsJSProxy(HeapObject): bool;
+extern macro IsNull(Object): bool;
+extern operator '[]=' macro StoreContextElement(Context, intptr, Object): void;
+const kProxySlot: constexpr intptr
+    generates 'Context::MIN_CONTEXT_SLOTS';
+
 extern class AsyncGeneratorRequest extends Struct {
   next: AsyncGeneratorRequest | Undefined;
   resume_mode: Smi;
@@ -1063,6 +1069,8 @@ extern macro IsValidPositiveSmi(intptr): bool;
 
 extern macro HeapObjectToJSDataView(HeapObject): JSDataView
     labels CastError;
+extern macro HeapObjectToJSProxy(HeapObject): JSProxy
+    labels CastError;
 extern macro HeapObjectToJSArrayBuffer(HeapObject): JSArrayBuffer
     labels CastError;
 extern macro TaggedToHeapObject(Object): HeapObject
@@ -1140,6 +1148,11 @@ Cast<SloppyArgumentsElements>(o: HeapObject): SloppyArgumentsElements
 Cast<JSDataView>(o: HeapObject): JSDataView
     labels CastError {
   return HeapObjectToJSDataView(o) otherwise CastError;
+}
+
+Cast<JSProxy>(o: HeapObject): JSProxy
+    labels CastError {
+  return HeapObjectToJSProxy(o) otherwise CastError;
 }
 
 Cast<JSTypedArray>(o: HeapObject): JSTypedArray
