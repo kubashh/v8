@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc68d550_04609e96",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2019-03-13T12:49:02Z",
+      "side": 1,
+      "message": "Should this be `kArm64LdrW`?\n\nAlso, I suppose those 3 cases can fall through.",
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41fff594_e1cbe42e",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1183769
+      },
+      "writtenOn": "2019-03-13T12:49:02Z",
+      "side": 1,
+      "message": "And here `kArm64StrW`?",
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
