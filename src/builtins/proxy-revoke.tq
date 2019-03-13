@@ -1,0 +1,46 @@
+// Copyright 2018 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include 'src/builtins/builtins-proxy-gen.h'
+
+namespace proxy {
+
+  macro ValidateProxy(context: Context, o: Object, method: String): JSProxy {
+    try {
+      return Cast<JSProxy>(o) otherwise CastError;
+    }
+    label CastError {
+      ThrowTypeError(kIncompatibleMethodReceiver, method);
+    }
+  }
+
+  // Proxy Revocation Functions
+  // https://tc39.github.io/ecma262/#sec-proxy-revocation-functions
+  transitioning javascript builtin
+  ProxyRevoke(context: Context, receiver: Object, ...arguments): Undefined {
+    // 1. Let p be F.[[RevocableProxy]].
+    const proxySlot: intptr = IntPtrConstant(kProxySlot);
+    const proxyObject: Object = context[proxySlot];
+
+    // 2. If p is null, return undefined
+    if (IsNull(proxyObject)) {
+      return Undefined;
+    }
+
+    // 3. Set F.[[RevocableProxy]] to null.
+    context[proxySlot] = Null;
+
+    // 4. Assert: p is a Proxy object.
+    const proxy: JSProxy = ValidateProxy(context, proxyObject, 'ProxyRevoke');
+
+    // 5. Set p.[[ProxyTarget]] to null.
+    proxy.target = Null;
+
+    // 6. Set p.[[ProxyHandler]] to null.
+    proxy.handler = Null;
+
+    // 7. Return undefined.
+    return Undefined;
+  }
+}
