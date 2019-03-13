@@ -81,12 +81,17 @@ namespace torque {
   V(ExternalRuntimeDeclaration)        \
   V(IntrinsicDeclaration)
 
+#define AST_CLASS_FIELD_NODE_KIND_LIST(V) \
+  V(ClassPaddingFieldExpression)          \
+  V(ClassDataFieldExpression)
+
 #define AST_NODE_KIND_LIST(V)           \
   AST_EXPRESSION_NODE_KIND_LIST(V)      \
   AST_TYPE_EXPRESSION_NODE_KIND_LIST(V) \
   AST_STATEMENT_NODE_KIND_LIST(V)       \
   AST_DECLARATION_NODE_KIND_LIST(V)     \
   AST_CALLABLE_NODE_KIND_LIST(V)        \
+  AST_CLASS_FIELD_NODE_KIND_LIST(V)     \
   V(Identifier)                         \
   V(LabelBlock)
 
@@ -699,10 +704,29 @@ struct StructFieldExpression {
   NameAndTypeExpression name_and_type;
 };
 
-struct ClassFieldExpression {
+struct ClassFieldExpression : AstNode {
+  ClassFieldExpression(Kind kind, SourcePosition pos) : AstNode(kind, pos) {}
+  DEFINE_AST_NODE_INNER_BOILERPLATE(ClassFieldExpression)
+};
+
+struct ClassDataFieldExpression : ClassFieldExpression {
+  DEFINE_AST_NODE_LEAF_BOILERPLATE(ClassDataFieldExpression)
+  ClassDataFieldExpression(SourcePosition pos,
+                           NameAndTypeExpression name_and_type,
+                           base::Optional<std::string> index, bool weak)
+      : ClassFieldExpression(kKind, pos),
+        name_and_type(std::move(name_and_type)),
+        index(index),
+        weak(weak) {}
   NameAndTypeExpression name_and_type;
   base::Optional<std::string> index;
   bool weak;
+};
+
+struct ClassPaddingFieldExpression : ClassFieldExpression {
+  DEFINE_AST_NODE_LEAF_BOILERPLATE(ClassPaddingFieldExpression)
+  explicit ClassPaddingFieldExpression(SourcePosition pos)
+      : ClassFieldExpression(kKind, pos) {}
 };
 
 struct LabelAndTypes {
@@ -911,7 +935,7 @@ struct ClassDeclaration : Declaration {
                    bool transient, base::Optional<std::string> super,
                    base::Optional<std::string> generates,
                    std::vector<Declaration*> methods,
-                   std::vector<ClassFieldExpression> fields)
+                   std::vector<ClassFieldExpression*> fields)
       : Declaration(kKind, pos),
         name(name),
         is_extern(is_extern),
@@ -926,7 +950,7 @@ struct ClassDeclaration : Declaration {
   base::Optional<std::string> super;
   base::Optional<std::string> generates;
   std::vector<Declaration*> methods;
-  std::vector<ClassFieldExpression> fields;
+  std::vector<ClassFieldExpression*> fields;
 };
 
 struct CppIncludeDeclaration : Declaration {

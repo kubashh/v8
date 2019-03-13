@@ -110,8 +110,8 @@ AllocationResult Heap::AllocateMap(InstanceType instance_type,
   // JSObjects have maps with a mutable prototype_validity_cell, so they cannot
   // go in RO_SPACE.
   AllocationResult allocation =
-      AllocateRaw(Map::kSize, is_js_object ? AllocationType::kMap
-                                           : AllocationType::kReadOnly);
+      AllocateRaw(Map::GetSize(), is_js_object ? AllocationType::kMap
+                                               : AllocationType::kReadOnly);
   if (!allocation.To(&result)) return allocation;
 
   result->set_map_after_allocation(ReadOnlyRoots(this).meta_map(),
@@ -127,7 +127,7 @@ AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
                                           int instance_size) {
   Object result;
   AllocationResult allocation =
-      AllocateRaw(Map::kSize, AllocationType::kReadOnly);
+      AllocateRaw(Map::GetSize(), AllocationType::kReadOnly);
   if (!allocation.To(&result)) return allocation;
   // Map::cast cannot be used due to uninitialized map field.
   Map map = Map::unchecked_cast(result);
@@ -138,7 +138,8 @@ AllocationResult Heap::AllocatePartialMap(InstanceType instance_type,
   map->set_instance_size(instance_size);
   // Initialize to only containing tagged fields.
   if (FLAG_unbox_double_fields) {
-    map->set_layout_descriptor(LayoutDescriptor::FastPointerLayout());
+    MapWithLayoutDescriptor::unchecked_cast(map)->set_layout_descriptor(
+        LayoutDescriptor::FastPointerLayout());
   }
   // GetVisitorId requires a properly initialized LayoutDescriptor.
   map->set_visitor_id(Map::GetVisitorId(map));
@@ -164,7 +165,8 @@ void Heap::FinalizePartialMap(Map map) {
   map->set_raw_transitions(MaybeObject::FromSmi(Smi::zero()));
   map->SetInstanceDescriptors(isolate(), roots.empty_descriptor_array(), 0);
   if (FLAG_unbox_double_fields) {
-    map->set_layout_descriptor(LayoutDescriptor::FastPointerLayout());
+    MapWithLayoutDescriptor::cast(map)->set_layout_descriptor(
+        LayoutDescriptor::FastPointerLayout());
   }
   map->set_prototype(roots.null_value());
   map->set_constructor_or_backpointer(roots.null_value());
@@ -208,7 +210,7 @@ AllocationResult Heap::AllocateEmptyFixedTypedArray(
 bool Heap::CreateInitialMaps() {
   HeapObject obj;
   {
-    AllocationResult allocation = AllocatePartialMap(MAP_TYPE, Map::kSize);
+    AllocationResult allocation = AllocatePartialMap(MAP_TYPE, Map::GetSize());
     if (!allocation.To(&obj)) return false;
   }
   // Map::cast cannot be used due to uninitialized map field.

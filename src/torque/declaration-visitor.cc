@@ -470,6 +470,7 @@ void DeclarationVisitor::FinalizeStructFieldsAndMethods(
                                 base::nullopt,
                                 {field.name_and_type.name->value, field_type},
                                 offset,
+                                false,
                                 false});
     offset += LoweredSlotCount(field_type);
   }
@@ -477,66 +478,131 @@ void DeclarationVisitor::FinalizeStructFieldsAndMethods(
   DeclareMethods(struct_type, struct_declaration->methods);
 }
 
+namespace {
+size_t GetAlignment(size_t field_size) {
+  // Our allocations don't support alignments beyond kTaggedSize.
+  return std::min(size_t{kTaggedSize}, field_size);
+}
+
+// Get the number of padding bytes that would need to be inserted before a new
+// field to align it properly.
+size_t GetPaddingSize(size_t class_offset, size_t field_size) {
+  size_t alignment = GetAlignment(field_size);
+  return (alignment - class_offset % alignment) % alignment;
+}
+}  // namespace
+
 void DeclarationVisitor::FinalizeClassFieldsAndMethods(
     ClassType* class_type, ClassDeclaration* class_declaration) {
   const ClassType* super_class = class_type->GetSuperClass();
   size_t class_offset = super_class ? super_class->size() : 0;
   bool seen_indexed_field = false;
-  for (ClassFieldExpression& field_expression : class_declaration->fields) {
-    CurrentSourcePosition::Scope position_activator(
-        field_expression.name_and_type.type->pos);
-    const Type* field_type =
-        Declarations::GetType(field_expression.name_and_type.type);
-    if (!class_declaration->is_extern) {
-      if (!field_type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
-        ReportError("non-extern classes do not support untagged fields");
+  size_t count_of_padding_fields = 0;
+  for (size_t field_index = 0; field_index < class_declaration->fields.size();
+       ++field_index) {
+    ClassFieldExpression& field_expression =
+        *class_declaration->fields[field_index];
+    CurrentSourcePosition::Scope position_activator(field_expression.pos);
+
+    const Type* field_type = nullptr;
+    base::Optional<const Field*> index_field = base::nullopt;
+    std::string field_name;
+    bool is_weak = false;
+
+    ClassPaddingFieldExpression* padding_expression =
+        ClassPaddingFieldExpression::cast(&field_expression);
+    if (padding_expression) {
+      // Padding at the end of the struct means pad to tagged size.
+      size_t following_data_size = kTaggedSize;
+      if (field_index < class_declaration->fields.size() - 1) {
+        ClassDataFieldExpression* following_data =
+            ClassDataFieldExpression::cast(
+                class_declaration->fields[field_index + 1]);
+        if (following_data == nullptr) {
+          ReportError("Multiple padding fields in a row are not allowed");
+        }
+        Field following_data_field = {
+            field_expression.pos,
+            class_type,
+            base::nullopt,
+            {following_data->name_and_type.name->value,
+             Declarations::GetType(following_data->name_and_type.type)},
+            0,
+            false,
+            false};
+        std::string size_string;
+        std::string machine_type;
+        std::tie(following_data_size, size_string, machine_type) =
+            following_data_field.GetFieldSizeInformation();
       }
-      if (field_expression.weak) {
-        ReportError("non-extern classes do not support weak fields");
+      size_t padding_size = GetPaddingSize(class_offset, following_data_size);
+      switch (padding_size) {
+        case 0:
+          field_type = TypeOracle::GetVoidType();
+          break;
+        case kInt32Size:
+          field_type = TypeOracle::GetUint32Type();
+          break;
+        default:
+          ReportError("padding size ", padding_size, " not (yet) supported");
+      }
+      field_name = "optional_padding";
+      ++count_of_padding_fields;
+      if (count_of_padding_fields > 1) {
+        field_name += "_" + std::to_string(count_of_padding_fields);
+      }
+    } else {
+      // If it's not padding, it must be data.
+      ClassDataFieldExpression* data_expression =
+          ClassDataFieldExpression::cast(&field_expression);
+      field_type = Declarations::GetType(data_expression->name_and_type.type);
+      field_name = data_expression->name_and_type.name->value;
+      is_weak = data_expression->weak;
+      if (!class_declaration->is_extern) {
+        if (!field_type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
+          ReportError("non-extern classes do not support untagged fields");
+        }
+        if (data_expression->weak) {
+          ReportError("non-extern classes do not support weak fields");
+        }
+      }
+      if (data_expression->index) {
+        if (seen_indexed_field ||
+            (super_class && super_class->HasIndexedField())) {
+          ReportError(
+              "only one indexable field is currently supported per class");
+        }
+        seen_indexed_field = true;
+        index_field = &(class_type->LookupField(*data_expression->index));
+      } else {
+        if (seen_indexed_field) {
+          ReportError("cannot declare non-indexable field \"",
+                      data_expression->name_and_type.name,
+                      "\" after an indexable field "
+                      "declaration");
+        }
       }
     }
-    if (field_expression.index) {
-      if (seen_indexed_field ||
-          (super_class && super_class->HasIndexedField())) {
-        ReportError(
-            "only one indexable field is currently supported per class");
-      }
-      seen_indexed_field = true;
-      const Field* index_field =
-          &(class_type->LookupField(*field_expression.index));
-      class_type->RegisterField(
-          {field_expression.name_and_type.name->pos,
-           class_type,
-           index_field,
-           {field_expression.name_and_type.name->value, field_type},
-           class_offset,
-           field_expression.weak});
-    } else {
-      if (seen_indexed_field) {
-        ReportError("cannot declare non-indexable field \"",
-                    field_expression.name_and_type.name,
-                    "\" after an indexable field "
-                    "declaration");
-      }
-      const Field& field = class_type->RegisterField(
-          {field_expression.name_and_type.name->pos,
-           class_type,
-           base::nullopt,
-           {field_expression.name_and_type.name->value, field_type},
-           class_offset,
-           field_expression.weak});
-      size_t field_size;
-      std::string size_string;
-      std::string machine_type;
-      std::tie(field_size, size_string, machine_type) =
-          field.GetFieldSizeInformation();
-      // Our allocations don't support alignments beyond kTaggedSize.
-      size_t alignment = std::min(size_t{kTaggedSize}, field_size);
-      if (class_offset % alignment != 0) {
-        ReportError("field ", field_expression.name_and_type.name,
-                    " at offset ", class_offset, " is not ", alignment,
-                    "-byte aligned.");
-      }
+
+    const Field& field =
+        class_type->RegisterField({field_expression.pos,
+                                   class_type,
+                                   index_field,
+                                   {field_name, field_type},
+                                   class_offset,
+                                   is_weak,
+                                   padding_expression != nullptr});
+    size_t field_size;
+    std::string size_string;
+    std::string machine_type;
+    std::tie(field_size, size_string, machine_type) =
+        field.GetFieldSizeInformation();
+    if (padding_expression == nullptr &&
+        GetPaddingSize(class_offset, field_size) != 0) {
+      ReportError("field ", field_name, " at offset ", class_offset, " is not ",
+                  GetAlignment(field_size), "-byte aligned.");
+    }
+    if (!index_field.has_value()) {
       class_offset += field_size;
     }
   }
@@ -546,7 +612,7 @@ void DeclarationVisitor::FinalizeClassFieldsAndMethods(
   // function and define a corresponding '.field' operator. The
   // implementation iterator will turn the snippits into code.
   for (auto& field : class_type->fields()) {
-    if (field.index) continue;
+    if (field.index || field.is_padding) continue;
     CurrentSourcePosition::Scope position_activator(field.pos);
     IdentifierExpression* parameter =
         MakeNode<IdentifierExpression>(MakeNode<Identifier>(std::string{"o"}));
