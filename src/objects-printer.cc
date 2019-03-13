@@ -1774,6 +1774,13 @@ void Tuple3::Tuple3Print(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
+void EnumCache::EnumCachePrint(std::ostream& os) {  // NOLINT
+  PrintHeader(os, "EnumCache");
+  os << "\n - keys: " << Brief(keys());
+  os << "\n - indices: " << Brief(indices());
+  os << "\n";
+}
+
 void ClassPositions::ClassPositionsPrint(std::ostream& os) {  // NOLINT
   PrintHeader(os, "ClassPositions");
   os << "\n - start position: " << start();

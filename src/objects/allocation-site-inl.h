@@ -17,7 +17,8 @@ namespace v8 {
 namespace internal {
 
 OBJECT_CONSTRUCTORS_IMPL(AllocationMemento, Struct)
-OBJECT_CONSTRUCTORS_IMPL(AllocationSite, Struct)
+OBJECT_CONSTRUCTORS_IMPL(AllocationSiteBase, Struct)
+OBJECT_CONSTRUCTORS_IMPL(AllocationSite, AllocationSiteBase)
 
 NEVER_READ_ONLY_SPACE_IMPL(AllocationSite)
 

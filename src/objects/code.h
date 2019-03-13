@@ -811,7 +811,7 @@ class BytecodeArray : public FixedArrayBase {
   // Compares only the bytecode array but not any of the header fields.
   bool IsBytecodeEqual(const BytecodeArray other) const;
 
-// Layout description.
+  // Layout description.
 #define BYTECODE_ARRAY_FIELDS(V)                           \
   /* Pointer fields. */                                    \
   V(kConstantPoolOffset, kTaggedSize)                      \
