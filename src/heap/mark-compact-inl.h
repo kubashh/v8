@@ -204,7 +204,7 @@ template <FixedArrayVisitationMode fixed_array_mode,
           TraceRetainingPathMode retaining_path_mode, typename MarkingState>
 int MarkingVisitor<fixed_array_mode, retaining_path_mode,
                    MarkingState>::VisitMap(Map meta_map, Map map) {
-  int size = Map::BodyDescriptor::SizeOf(meta_map, map);
+  int size = MapBodyDescriptor::SizeOf(meta_map, map);
   if (map->CanTransition()) {
     // Maps that can transition share their descriptor arrays and require
     // special visiting logic to avoid memory leaks.
@@ -225,7 +225,7 @@ int MarkingVisitor<fixed_array_mode, retaining_path_mode,
     // been marked already, it is fine that one of these fields contains a
     // pointer to it.
   }
-  Map::BodyDescriptor::IterateBody(meta_map, map, size, this);
+  MapBodyDescriptor::IterateBody(meta_map, map, size, this);
   return size;
 }
 

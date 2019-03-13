@@ -65,7 +65,8 @@ Handle<LayoutDescriptor> LayoutDescriptor::AppendIfFastOrUseFull(
     Isolate* isolate, Handle<Map> map, PropertyDetails details,
     Handle<LayoutDescriptor> full_layout_descriptor) {
   DisallowHeapAllocation no_allocation;
-  LayoutDescriptor layout_descriptor = map->layout_descriptor();
+  LayoutDescriptor layout_descriptor =
+      Handle<MapWithLayoutDescriptor>::cast(map)->layout_descriptor();
   if (layout_descriptor->IsSlowLayout()) {
     return full_layout_descriptor;
   }
