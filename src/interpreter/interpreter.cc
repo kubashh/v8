@@ -139,6 +139,10 @@ int Interpreter::InterruptBudget() {
   return FLAG_interrupt_budget;
 }
 
+int Interpreter::ScaleFactorForCollectFeedbackBudget() {
+  return FLAG_collect_feedback_scale_factor;
+}
+
 namespace {
 
 void MaybePrintAst(ParseInfo* parse_info,
