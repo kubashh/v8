@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "6e0ba0fe_b032b93d",
+        "filename": "flakes/flakes.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-13T14:51:53Z",
+      "side": 1,
+      "message": "Yea, I think it should stay skipped until fixed. I.e. until verification bot doesn\u0027t repro any longer.\n\nSo there should be a skip entry in the status file. But I still think the bug link mentioned there, and the one mentioned here should match.",
+      "parentUuid": "4e518355_8eba9e6a",
+      "range": {
+        "startLine": 62,
+        "startChar": 16,
+        "endLine": 62,
+        "endChar": 41
+      },
+      "revId": "a592f2d4a37d96a8b94bcc17db27576b9441c206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa22f1b8_2feaef4f",
         "filename": "flakes/flakes.pyl",
         "patchSetId": 2
