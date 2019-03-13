@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "2e83b4b6_4b348ef5",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "Should not this be kArm64LdrW? (Here and below.)\n\nI think kArm64Ldr will load 64 bits.\n\nAlso, you can fall through here, just like you did for store.",
+      "range": {
+        "startLine": 637,
+        "startChar": 6,
+        "endLine": 637,
+        "endChar": 24
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41fff594_e1cbe42e",
         "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
         "patchSetId": 4
@@ -30,6 +53,201 @@
       "writtenOn": "2019-03-13T12:49:02Z",
       "side": 1,
       "message": "And here `kArm64StrW`?",
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5955831_dc6ce04b",
+        "filename": "src/compiler/backend/arm64/instruction-selector-arm64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "kArm64StrW?",
+      "range": {
+        "startLine": 771,
+        "startChar": 17,
+        "endLine": 771,
+        "endChar": 26
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "723ea155_85b99e34",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "These should be kSystemPointerSize, no? (I.e., 32 bits.)",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 44
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e7d0a12_8e1f0750",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "Thanks for making this uniform!",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 12
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abba951c_103e3d0c",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "While you are here, could you copy these two lines just before the #endif?\n\nThis will make it easier to understand.",
+      "range": {
+        "startLine": 269,
+        "startChar": 0,
+        "endLine": 270,
+        "endChar": 12
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1397f355_d6dee5e9",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "Again, could you copy these before #endif?",
+      "range": {
+        "startLine": 318,
+        "startChar": 0,
+        "endLine": 319,
+        "endChar": 12
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31deffd9_dafb9390",
+        "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1723,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "These are already 32 bit, so I think you do not need to add this (it should be handled by the default case).",
+      "range": {
+        "startLine": 1721,
+        "startChar": 0,
+        "endLine": 1723,
+        "endChar": 46
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63b6941d_6258d490",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2452,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "I think this will be essentially the same code as above (ultimately) modulo s/Tagged/Compressed/.",
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ddc1d05_08e3ee74",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "Could we make this UNREACHABLE so that we do not forget? (There will be definitely bunch of work to be done here.)",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 44
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab564d60_d564c71f",
+        "filename": "src/machine-type.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-13T13:20:17Z",
+      "side": 1,
+      "message": "These should return 2.",
       "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
