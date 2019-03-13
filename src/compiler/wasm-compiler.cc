@@ -3357,25 +3357,42 @@ void WasmGraphBuilder::GetTableBaseAndOffset(uint32_t table_index, Node* index,
 
 Node* WasmGraphBuilder::GetTable(uint32_t table_index, Node* index,
                                  wasm::WasmCodePosition position) {
-  Node* base = nullptr;
-  Node* offset = nullptr;
-  GetTableBaseAndOffset(table_index, index, position, &base, &offset);
-  return SetEffect(
-      graph()->NewNode(mcgraph()->machine()->Load(MachineType::AnyTagged()),
-                       base, offset, Effect(), Control()));
+  if (env_->module->tables[table_index].type == wasm::kWasmAnyRef) {
+    Node* base = nullptr;
+    Node* offset = nullptr;
+    GetTableBaseAndOffset(table_index, index, position, &base, &offset);
+    return SetEffect(
+        graph()->NewNode(mcgraph()->machine()->Load(MachineType::AnyTagged()),
+                         base, offset, Effect(), Control()));
+  }
+  // We access anyfunc tables through runtime calls.
+  Node* args[] = {
+      graph()->NewNode(mcgraph()->common()->NumberConstant(table_index)),
+      BuildChangeUint31ToSmi(index)};
+  return SetEffect(BuildCallToRuntime(Runtime::kWasmFunctionTableGet, args,
+                                      arraysize(args)));
 }
 
 Node* WasmGraphBuilder::SetTable(uint32_t table_index, Node* index, Node* val,
                                  wasm::WasmCodePosition position) {
-  Node* base = nullptr;
-  Node* offset = nullptr;
-  GetTableBaseAndOffset(table_index, index, position, &base, &offset);
+  if (env_->module->tables[table_index].type == wasm::kWasmAnyRef) {
+    Node* base = nullptr;
+    Node* offset = nullptr;
+    GetTableBaseAndOffset(table_index, index, position, &base, &offset);
 
-  const Operator* op = mcgraph()->machine()->Store(
-      StoreRepresentation(MachineRepresentation::kTagged, kFullWriteBarrier));
+    const Operator* op = mcgraph()->machine()->Store(
+        StoreRepresentation(MachineRepresentation::kTagged, kFullWriteBarrier));
 
-  Node* store = graph()->NewNode(op, base, offset, val, Effect(), Control());
-  return SetEffect(store);
+    Node* store = graph()->NewNode(op, base, offset, val, Effect(), Control());
+    return SetEffect(store);
+  } else {
+    // We access anyfunc tables through runtime calls.
+    Node* args[] = {
+        graph()->NewNode(mcgraph()->common()->NumberConstant(table_index)),
+        BuildChangeUint31ToSmi(index), val};
+    return SetEffect(BuildCallToRuntime(Runtime::kWasmFunctionTableSet, args,
+                                        arraysize(args)));
+  }
 }
 
 Node* WasmGraphBuilder::CheckBoundsAndAlignment(
