@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0c5e169_143b2048",
+        "filename": "flakes/flakes.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-13T12:39:01Z",
+      "side": 1,
+      "message": "nit: The bug at the skip and this entry should stay in sync:\nhttps://cs.chromium.org/chromium/src/v8/test/cctest/cctest.status?type\u003dcs\u0026q\u003dtest-cpu-profiler/FunctionCallSample\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d227\n\nMaybe we should update the status file instead.",
+      "range": {
+        "startLine": 62,
+        "startChar": 16,
+        "endLine": 62,
+        "endChar": 41
+      },
+      "revId": "a592f2d4a37d96a8b94bcc17db27576b9441c206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa22f1b8_2feaef4f",
+        "filename": "flakes/flakes.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-13T12:39:01Z",
+      "side": 1,
+      "message": "This must be 0 if repetitions above should have an effect. I\u0027d recommend that for windows, since we had this strange sigterm bug.\n\nThe number of repetitions can be guessed from the calibration. E.g. at calibration round 3 it ran ~1300 tests, when it found enough successes. But then bisection was unreliable. So maybe 3000?",
+      "range": {
+        "startLine": 76,
+        "startChar": 25,
+        "endLine": 76,
+        "endChar": 28
+      },
+      "revId": "a592f2d4a37d96a8b94bcc17db27576b9441c206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
