@@ -39,6 +39,30 @@
       "revId": "304b91d888540112b716c4a0821c473d781f50b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a870a341_5758d050",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-03-13T15:52:28Z",
+      "side": 1,
+      "message": "Good point, thanks.",
+      "parentUuid": "5699a404_d250ea7a",
+      "range": {
+        "startLine": 227,
+        "startChar": 8,
+        "endLine": 227,
+        "endChar": 23
+      },
+      "revId": "304b91d888540112b716c4a0821c473d781f50b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
