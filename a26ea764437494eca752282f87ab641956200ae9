@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4fb86cea_63cf359a",
+        "filename": "src/feedback-vector.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-13T15:58:04Z",
+      "side": 1,
+      "message": "This way we always start with 1 for create closure slots. I could change it so we start with 0 when generating bytecode and the accessors should add the necessary offset. Since it is only one slot, I felt this is better. Happy to change it though.",
+      "revId": "a26ea764437494eca752282f87ab641956200ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92a2c633_4f014c3b",
+        "filename": "src/interpreter/interpreter.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-13T15:58:04Z",
+      "side": 1,
+      "message": "I am not happy with this name. I will try to think of other alternatives. Any suggestions?",
+      "revId": "a26ea764437494eca752282f87ab641956200ae9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
