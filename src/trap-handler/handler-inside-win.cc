@@ -25,7 +25,9 @@
 
 #include "src/trap-handler/handler-inside-win.h"
 
+#define NOMINMAX
 #include <windows.h>
+#undef NOMINMAX
 
 #include "src/trap-handler/trap-handler-internal.h"
 #include "src/trap-handler/trap-handler.h"

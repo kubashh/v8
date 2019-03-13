@@ -19,7 +19,9 @@
 //
 // For the code that runs in the trap handler itself, see handler-inside.cc.
 
+#define NOMINMAX
 #include <windows.h>
+#undef NOMINMAX
 
 #include "src/trap-handler/handler-inside-win.h"
 #include "src/trap-handler/trap-handler.h"

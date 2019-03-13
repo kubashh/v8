@@ -5,7 +5,9 @@
 #ifndef V8_TRAP_HANDLER_HANDLER_INSIDE_WIN_H_
 #define V8_TRAP_HANDLER_HANDLER_INSIDE_WIN_H_
 
+#define NOMINMAX
 #include <windows.h>
+#undef NOMINMAX
 
 #include "src/base/macros.h"
 
