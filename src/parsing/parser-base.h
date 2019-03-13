@@ -2674,9 +2674,15 @@ ParserBase<Impl>::ParseAssignmentExpressionCoverGrammar() {
   } else if (expression->IsPattern() && op == Token::ASSIGN) {
     // Destructuring assignmment.
     if (expression->is_parenthesized()) {
-      expression_scope()->RecordPatternError(
-          Scanner::Location(lhs_beg_pos, end_position()),
-          MessageTemplate::kInvalidDestructuringTarget);
+      Scanner::Location loc = Scanner::Location(lhs_beg_pos, end_position());
+      if (expression_scope()->IsCertainlyDeclaration()) {
+        impl()->ReportMessageAt(loc,
+                                MessageTemplate::kInvalidDestructuringTarget);
+      } else {
+        impl()->ReportMessageAt(loc, MessageTemplate::kInvalidLhsInAssignment,
+                                static_cast<const char*>(nullptr),
+                                kReferenceError);
+      }
     }
     expression_scope()->ValidateAsPattern(expression, lhs_beg_pos,
                                           end_position());
