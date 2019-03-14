@@ -17,11 +17,7 @@ DefaultWorkerThreadsTaskRunner::DefaultWorkerThreadsTaskRunner(
   }
 }
 
-// NOLINTNEXTLINE
-DefaultWorkerThreadsTaskRunner::~DefaultWorkerThreadsTaskRunner() {
-  // This destructor is needed because we have unique_ptr to the WorkerThreads,
-  // und the {WorkerThread} class is forward declared in the header file.
-}
+DefaultWorkerThreadsTaskRunner::~DefaultWorkerThreadsTaskRunner() = default;
 
 void DefaultWorkerThreadsTaskRunner::Terminate() {
   base::MutexGuard guard(&lock_);
@@ -45,9 +41,7 @@ void DefaultWorkerThreadsTaskRunner::PostDelayedTask(std::unique_ptr<Task> task,
     queue_.Append(std::move(task));
     return;
   }
-  // There is no use case for this function with non zero delay_in_second on a
-  // worker thread at the moment, but it is still part of the interface.
-  UNIMPLEMENTED();
+  queue_.AppendDelayed(std::move(task), delay_in_seconds);
 }
 
 void DefaultWorkerThreadsTaskRunner::PostIdleTask(
@@ -59,6 +53,10 @@ void DefaultWorkerThreadsTaskRunner::PostIdleTask(
 bool DefaultWorkerThreadsTaskRunner::IdleTasksEnabled() {
   // There are no idle worker tasks.
   return false;
+}
+
+void DefaultWorkerThreadsTaskRunner::BlockUntilTasksCompleteForTesting() {
+  queue_.BlockUntilQueueEmptyForTesting();
 }
 
 }  // namespace platform
