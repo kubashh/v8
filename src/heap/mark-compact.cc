@@ -2203,7 +2203,8 @@ void MarkCompactCollector::TrimDescriptorArray(Map map,
     descriptors->Sort();
 
     if (FLAG_unbox_double_fields) {
-      LayoutDescriptor layout_descriptor = map->layout_descriptor();
+      LayoutDescriptor layout_descriptor =
+          MapWithLayoutDescriptor::cast(map)->layout_descriptor();
       layout_descriptor = layout_descriptor->Trim(heap_, map, descriptors,
                                                   number_of_own_descriptors);
       SLOW_DCHECK(layout_descriptor->IsConsistentWithMap(map, true));
