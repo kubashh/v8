@@ -213,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "28bcacc1_cbf46645",
+        "filename": "src/compiler/backend/register-allocator.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-14T07:39:44Z",
+      "side": 1,
+      "message": "Oh, I got indeed confused. Eventually, we should change Tagged representation on loads to mean uncompressed tagged pointer again (i.e., the Tagged representations would return kSystemPointerSize here). Then we can use it to load from stack and such (and get rid of the JS(Load|Store)Message dance).",
+      "parentUuid": "a7f60238_ef978408",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 44
+      },
+      "revId": "caefa94686a10594137ea3eee05eca27b1db76d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e7d0a12_8e1f0750",
         "filename": "src/compiler/backend/x64/instruction-selector-x64.cc",
         "patchSetId": 4
