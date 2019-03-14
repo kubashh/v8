@@ -55,19 +55,20 @@ let kDeclNoLocals = 0;
 
 // Section declaration constants
 let kUnknownSectionCode = 0;
-let kTypeSectionCode = 1;        // Function signature declarations
-let kImportSectionCode = 2;      // Import declarations
-let kFunctionSectionCode = 3;    // Function declarations
-let kTableSectionCode = 4;       // Indirect function table and other tables
-let kMemorySectionCode = 5;      // Memory attributes
-let kGlobalSectionCode = 6;      // Global declarations
-let kExportSectionCode = 7;      // Exports
-let kStartSectionCode = 8;       // Start function declaration
-let kElementSectionCode = 9;     // Elements section
-let kCodeSectionCode = 10;       // Function code
-let kDataSectionCode = 11;       // Data segments
-let kDataCountSectionCode = 12;  // Data segment count (between Element & Code)
-let kExceptionSectionCode = 13;  // Exception section (between Global & Export)
+let kTypeSectionCode = 1;               // Function signature declarations
+let kImportSectionCode = 2;             // Import declarations
+let kFunctionSectionCode = 3;           // Function declarations
+let kTableSectionCode = 4;              // Indirect function table and other tables
+let kMemorySectionCode = 5;             // Memory attributes
+let kGlobalSectionCode = 6;             // Global declarations
+let kExportSectionCode = 7;             // Exports
+let kStartSectionCode = 8;              // Start function declaration
+let kElementSectionCode = 9;            // Elements section
+let kCodeSectionCode = 10;              // Function code
+let kDataSectionCode = 11;              // Data segments
+let kDataCountSectionCode = 12;         // Data segment count (between Element & Code)
+let kExceptionSectionCode = 13;         // Exception section (between Global & Export)
+let kCompilationHintsSectionCode = 14;  // Compilation hints section (between Element & Code)
 
 // Name section types
 let kModuleNameCode = 0;
@@ -458,6 +459,23 @@ let kExprI64AtomicCompareExchange32U = 0x4e;
 // Simd opcodes.
 let kExprF32x4Min = 0x9e;
 
+// Compilation hint constants.
+let kCompilationHintStrategyDefault = 0x00;
+let kCompilationHintStrategyLazy = 0x01;
+let kCompilationHintStrategyEager = 0x02;
+let kCompilationHintTierDefault = 0x00;
+let kCompilationHintTierInterpreter = 0x01;
+let kCompilationHintTierBaseline = 0x02;
+let kCompilationHintTierOptimized = 0x03;
+let kCompilationHintFstTierDefault = kCompilationHintTierDefault << 2;
+let kCompilationHintFstTierInterpreter = kCompilationHintTierInterpreter << 2;
+let kCompilationHintFstTierBaseline = kCompilationHintTierBaseline << 2;
+let kCompilationHintFstTierOptimized = kCompilationHintTierOptimized << 2;
+let kCompilationHintSndTierDefault = kCompilationHintTierDefault << 4;
+let kCompilationHintSndTierInterpreter = kCompilationHintTierInterpreter << 4;
+let kCompilationHintSndTierBaseline = kCompilationHintTierBaseline << 4;
+let kCompilationHintSndTierOptimized = kCompilationHintTierOptimized << 4;
+
 let kTrapUnreachable          = 0;
 let kTrapMemOutOfBounds       = 1;
 let kTrapDivByZero            = 2;
@@ -627,6 +645,11 @@ class WasmFunctionBuilder {
     return this;
   }
 
+  giveCompilationHint(hint) {
+    this.module.giveCompilationHint(hint, this.index);
+    return this;
+  }
+
   addBody(body) {
     for (let b of body) {
       if (typeof b !== 'number' || (b & (~0xFF)) !== 0 )
@@ -708,6 +731,7 @@ class WasmModuleBuilder {
     this.tables = [];
     this.exceptions = [];
     this.functions = [];
+    this.compilation_hints = [];
     this.element_segments = [];
     this.data_segments = [];
     this.explicit = [];
@@ -845,6 +869,11 @@ class WasmModuleBuilder {
 
   addExportOfKind(name, kind, index) {
     this.exports.push({name: name, kind: kind, index: index});
+    return this;
+  }
+
+  giveCompilationHint(hint, index) {
+    this.compilation_hints.push({hint: hint, index: index});
     return this;
   }
 
@@ -1152,6 +1181,56 @@ class WasmModuleBuilder {
     if (wasm.data_segments.some(seg => !seg.is_active)) {
       binary.emit_section(kDataCountSectionCode, section => {
         section.emit_u32v(wasm.data_segments.length);
+      });
+    }
+
+    // If there are compilation hints, add the CompilationHints section.
+    if (wasm.compilation_hints.length > 0) {
+      if (debug) print("emitting compilation hints @ " + binary.length);
+      binary.emit_section(kCompilationHintsSectionCode, section => {
+        let implicit_compilation_hints_count  = wasm.functions.length;
+
+        print("section.length = " + section.length);
+        print ("implicit_compilation_hints_count = " + implicit_compilation_hints_count);
+        section.emit_u32v(implicit_compilation_hints_count);
+        print("emit implicit_compilation_hints_count");
+
+        print("section.length (after emmit count) = " + section.length);
+
+        wasm.compilation_hints.sort(function(a, b) {a.index - b.index});
+        // Defaults to the compiler's choice if no better hint was given
+        let defaultHint = kCompilationHintStrategyDefault |
+            kCompilationHintFstTierDefault | kCompilationHintSndTierDefault ;
+        // Emit hint byte for every function defined in this module
+        var index = wasm.num_imported_funcs;
+
+        print("initial index = " + index);
+
+        for (let hint of wasm.compilation_hints) {
+          // Insert default hints for skipped functions
+
+          print("hint.index = " + hint.index);
+
+          for (; index < hint.index; index++) {
+            section.emit_u8(defaultHint);
+            print("emit defaultHint");
+          }
+          // Emit hint
+          section.emit_u32v(hint.hint);
+          print("emit hint");
+          index++;
+        }
+        // Insert default hints for remaining functions
+        let index_end = wasm.num_imported_funcs +
+            implicit_compilation_hints_count;
+        for (; index < index_end; index++) {
+          section.emit_u8(defaultHint);
+          print("emit defaultHint");
+        }
+
+        print("final section.length = " + section.length);
+
+
       });
     }
 
