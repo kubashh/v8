@@ -16,6 +16,24 @@
       "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce359da3_88214446",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-14T16:27:06Z",
+      "side": 1,
+      "message": "It\u0027s the simplest/safest/quickest check, be just checking a passed in argument, so doing that first seems like the right approach.\n\nI did initially try removing the check on line 49, but it turns out some code (at least some tests), call TryHandleWasmTrap directly, not through HandleWasmTrap, and not doing the var reset on line 44 causes failures here.",
+      "parentUuid": "1034f8ca_643f562b",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
