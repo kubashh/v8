@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c13a9b3_cfabc905",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-14T14:16:35Z",
+      "side": 1,
+      "message": "Probably can afford to make this a CHECK(), since it shouldn\u0027t be hot, and we\u0027d definitely want to crash if validation didn\u0027t generate an error here.",
+      "revId": "2673748d3fdae1270605666a9154fadea24e8675",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
