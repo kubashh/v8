@@ -304,6 +304,14 @@ extern operator '[]' macro LoadContextElement(
 extern operator '[]=' macro StoreContextElement(
     NativeContext, NativeContextSlot, Object): void;
 
+type ProxyContextSlot generates 'TNode<IntPtrT>' constexpr 'int32_t';
+const PROXY_SLOT: constexpr ProxyContextSlot
+    generates 'Context::MIN_CONTEXT_SLOTS';
+extern operator '[]' macro LoadContextElement(
+    Context, ProxyContextSlot): Object;
+extern operator '[]=' macro StoreContextElement(
+    Context, ProxyContextSlot, Object): void;
+
 extern operator '[]' macro LoadContextElement(Context, intptr): Object;
 extern operator '[]' macro LoadContextElement(Context, Smi): Object;
 
@@ -1063,6 +1071,8 @@ extern macro IsValidPositiveSmi(intptr): bool;
 
 extern macro HeapObjectToJSDataView(HeapObject): JSDataView
     labels CastError;
+extern macro HeapObjectToJSProxy(HeapObject): JSProxy
+    labels CastError;
 extern macro HeapObjectToJSArrayBuffer(HeapObject): JSArrayBuffer
     labels CastError;
 extern macro TaggedToHeapObject(Object): HeapObject
@@ -1140,6 +1150,11 @@ Cast<SloppyArgumentsElements>(o: HeapObject): SloppyArgumentsElements
 Cast<JSDataView>(o: HeapObject): JSDataView
     labels CastError {
   return HeapObjectToJSDataView(o) otherwise CastError;
+}
+
+Cast<JSProxy>(o: HeapObject): JSProxy
+    labels CastError {
+  return HeapObjectToJSProxy(o) otherwise CastError;
 }
 
 Cast<JSTypedArray>(o: HeapObject): JSTypedArray
@@ -1339,6 +1354,7 @@ extern macro StringConstant(constexpr string): String;
 extern macro LanguageModeConstant(constexpr LanguageMode): LanguageMode;
 extern macro Int32Constant(constexpr ElementsKind): ElementsKind;
 extern macro IntPtrConstant(constexpr NativeContextSlot): NativeContextSlot;
+extern macro IntPtrConstant(constexpr ProxyContextSlot): ProxyContextSlot;
 extern macro IntPtrConstant(constexpr intptr): intptr;
 
 extern macro BitcastWordToTaggedSigned(intptr): Smi;
@@ -1426,6 +1442,10 @@ FromConstexpr<Object, constexpr string>(s: constexpr string): Object {
 }
 FromConstexpr<NativeContextSlot, constexpr NativeContextSlot>(
     c: constexpr NativeContextSlot): NativeContextSlot {
+  return IntPtrConstant(c);
+}
+FromConstexpr<ProxyContextSlot, constexpr ProxyContextSlot>(
+    c: constexpr ProxyContextSlot): ProxyContextSlot {
   return IntPtrConstant(c);
 }
 
@@ -1923,6 +1943,7 @@ extern macro TransitionElementsKind(
 extern macro IsCallable(HeapObject): bool;
 extern macro IsConstructor(HeapObject): bool;
 extern macro IsJSArray(HeapObject): bool;
+extern macro IsJSProxy(HeapObject): bool;
 extern macro IsMap(HeapObject): bool;
 extern macro IsJSFunction(HeapObject): bool;
 extern macro IsJSObject(HeapObject): bool;
