@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a8005d1d_a3fecdd9",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-03-14T18:32:57Z",
+      "side": 1,
+      "message": "Sure, we can make it a named custom section. \nCan we discuss this tomorrow because I am unsure why a \u0027named\u0027 section is better than an \u0027unordered\u0027 section.",
+      "parentUuid": "e141a587_ddd15d27",
+      "range": {
+        "startLine": 76,
+        "startChar": 2,
+        "endLine": 76,
+        "endChar": 35
+      },
+      "revId": "22c4b4db991cea903bd287e7debee4dbeed3428c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f02a9e2f_3bdd3022",
         "filename": "src/wasm/wasm-constants.h",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "22c4b4db991cea903bd287e7debee4dbeed3428c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09063a2f_1edaed61",
+        "filename": "src/wasm/wasm-constants.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-03-14T18:32:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f02a9e2f_3bdd3022",
+      "range": {
+        "startLine": 93,
+        "startChar": 5,
+        "endLine": 93,
+        "endChar": 28
+      },
+      "revId": "22c4b4db991cea903bd287e7debee4dbeed3428c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3421790f_05d708fe",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-03-14T18:32:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77e5503a_5306ddb0",
+      "range": {
+        "startLine": 153,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 46
+      },
+      "revId": "22c4b4db991cea903bd287e7debee4dbeed3428c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "502f3672_2584f5f2",
         "filename": "src/wasm/wasm-module.h",
         "patchSetId": 6
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "8bede5cc_8cc7a866",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-03-14T18:32:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "502f3672_2584f5f2",
+      "range": {
+        "startLine": 162,
+        "startChar": 26,
+        "endLine": 162,
+        "endChar": 34
+      },
+      "revId": "22c4b4db991cea903bd287e7debee4dbeed3428c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66b7a1f5_db3a3b13",
         "filename": "src/wasm/wasm-tier.h",
         "patchSetId": 6
@@ -105,6 +201,30 @@
       "writtenOn": "2019-03-14T16:43:43Z",
       "side": 1,
       "message": "question: Is this stricter definition needed? It seems like we have {WasmCompilationHintTier} for the concrete encoding in the module. I\u0027d prefer not to rely on this {ExecutionTier} numbering to necessarily follow a fixed numbering and rather keep this {ExecutionTier} unchanged. WDYT?",
+      "range": {
+        "startLine": 16,
+        "startChar": 14,
+        "endLine": 16,
+        "endChar": 18
+      },
+      "revId": "22c4b4db991cea903bd287e7debee4dbeed3428c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52800c20_f8f70778",
+        "filename": "src/wasm/wasm-tier.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-03-14T18:32:57Z",
+      "side": 1,
+      "message": "You\u0027re right. This is actually not needed for the decoder. \nIn order to check if a tier produces \"better\" results, however, the order may come in handy for the upcoming changes.\nHaving explained the motivation behind this change, should we change it back or keep it?",
+      "parentUuid": "66b7a1f5_db3a3b13",
       "range": {
         "startLine": 16,
         "startChar": 14,
