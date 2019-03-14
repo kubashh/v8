@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe792589_1472ca22",
+        "filename": "src/feedback-vector.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:59:25Z",
+      "side": 1,
+      "message": "Hmm, I\u0027d prefer not to have a dependency on the interpreter in the feedback-vector. Could we put the scaling factor somewhere else, maybe in BytecodeArray or somewhere?",
+      "revId": "1e29d4885fecd16eb0f3c99e8c73456c7acf418c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b3be8db_cb95fcb0",
+        "filename": "src/feedback-vector.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:59:25Z",
+      "side": 1,
+      "message": "Any reason not to make this a real object type that extends FixedArray and add kInterruptBudget as a field in the header?",
+      "revId": "1e29d4885fecd16eb0f3c99e8c73456c7acf418c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fda2f98f_4645ec5d",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:59:25Z",
+      "side": 1,
+      "message": "Not sure from the name what this does. Is this the equivalent of running the function twice before collecting feedback? Please update the name if so.",
+      "range": {
+        "startLine": 357,
+        "startChar": 11,
+        "endLine": 357,
+        "endChar": 40
+      },
+      "revId": "1e29d4885fecd16eb0f3c99e8c73456c7acf418c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
