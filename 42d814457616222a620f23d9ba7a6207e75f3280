@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6d08c9af_6432a670",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-14T20:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d57605ca_3ec24ce9",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1034f8ca_643f562b",
         "filename": "src/trap-handler/handler-inside-win.cc",
         "patchSetId": 2
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "12c9f9ca_b36be010",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-14T20:28:56Z",
+      "side": 1,
+      "message": "I was trying to do as little as possible in the registered handler when possible, including not call other functions (as being unable to allocate stack was the cause of the recursion seen in some crashes), but as it seems to get inlined anyway in release builds, will move it in.",
+      "parentUuid": "4dc72a3f_8193bb7f",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5c0fbfd9_82c6afa2",
         "filename": "src/trap-handler/handler-inside-win.cc",
         "patchSetId": 2
@@ -89,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "b3708174_79cc26ce",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-14T20:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c0fbfd9_82c6afa2",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e585f4a_3a0cc1bd",
         "filename": "src/trap-handler/handler-inside-win.h",
         "patchSetId": 2
@@ -103,6 +157,24 @@
       "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee653840_e8555957",
+        "filename": "src/trap-handler/handler-inside-win.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-14T20:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e585f4a_3a0cc1bd",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -126,6 +198,30 @@
       "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1b56e31_356ff592",
+        "filename": "src/trap-handler/handler-inside-win.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-14T20:28:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "750f5557_e88e7e89",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 33
+      },
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
