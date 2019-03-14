@@ -22,6 +22,30 @@
       "revId": "549994c29e112b25b607786e37f243fe1b9919f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cc7f312_586a0c43",
+        "filename": "test/mjsunit/wasm/multi-table-element-section.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-03-14T13:40:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "308868a7_fcae5647",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 1
+      },
+      "revId": "549994c29e112b25b607786e37f243fe1b9919f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
