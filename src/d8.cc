@@ -39,6 +39,8 @@
 #include "src/parsing/parse-info.h"
 #include "src/parsing/parsing.h"
 #include "src/parsing/scanner-character-streams.h"
+#include "src/parsing/scanner.h"
+#include "src/parsing/token.h"
 #include "src/snapshot/natives.h"
 #include "src/trap-handler/trap-handler.h"
 #include "src/utils.h"
@@ -468,6 +470,36 @@ bool Shell::ExecuteString(Isolate* isolate, Local<String> source,
                           Local<Value> name, PrintResult print_result,
                           ReportExceptions report_exceptions,
                           ProcessMessageQueue process_message_queue) {
+  if (i::FLAG_scan_only) {
+    i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
+    i::VMState<PARSER> state(i_isolate);
+    i::Handle<i::String> str = Utils::OpenHandle(*(source));
+
+    // Set up ParseInfo.
+    i::ParseInfo parse_info(i_isolate);
+    parse_info.set_toplevel();
+    parse_info.set_allow_lazy_parsing();
+    parse_info.set_language_mode(
+        i::construct_language_mode(i::FLAG_use_strict));
+    parse_info.set_script(
+        parse_info.CreateScript(i_isolate, str, options.compile_options));
+
+    std::unique_ptr<i::Utf16CharacterStream> stream(
+        i::ScannerStream::For(i_isolate, str));
+    parse_info.set_character_stream(std::move(stream));
+
+    i::Scanner scanner(parse_info.character_stream(), parse_info.is_module());
+    scanner.Initialize();
+    if (i::FLAG_harmony_hashbang) scanner.SkipHashBang();
+    while (scanner.Next() != i::Token::EOS) {
+      if (scanner.peek() == i::Token::ILLEGAL) {
+        fprintf(stderr, "Failed scanning\n");
+        return false;
+      }
+    }
+    return true;
+  }
+
   if (i::FLAG_parse_only) {
     i::Isolate* i_isolate = reinterpret_cast<i::Isolate*>(isolate);
     i::VMState<PARSER> state(i_isolate);
