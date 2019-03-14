@@ -87,6 +87,29 @@
     },
     {
       "key": {
+        "uuid": "97b4ef5c_66ff64b9",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-03-14T16:47:44Z",
+      "side": 1,
+      "message": "Just for my better understanding - does this allow passing actual arguments to the ProxyRevoke? Since it\u0027s only internal, this might not be important, but just wanted to make sure.",
+      "range": {
+        "startLine": 21,
+        "startChar": 50,
+        "endLine": 21,
+        "endChar": 62
+      },
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7537d8ee_587030fe",
         "filename": "src/builtins/proxy-revoke.tq",
         "patchSetId": 3
@@ -115,6 +138,24 @@
       "writtenOn": "2019-03-14T08:49:33Z",
       "side": 1,
       "message": "Spec asserts don\u0027t throw runtime exceptions; it\u0027s basically equivalent to an UnsafeCast\u003cJSProxy\u003e(...) here (instead of ValidateProxy).",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ec6bdf8_a2fb4f0a",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-03-14T16:47:44Z",
+      "side": 1,
+      "message": "+1, that\u0027s pretty important.",
+      "parentUuid": "16bb897b_b7ad5bed",
       "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
