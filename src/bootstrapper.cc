@@ -1,6 +1,8 @@
 // Copyright 2014 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+#include "../base/debug/stack_trace.h"
+#undef DISALLOW_COPY_AND_ASSIGN
 
 #include "src/bootstrapper.h"
 
@@ -1154,6 +1156,12 @@ void Genesis::CreateRoots() {
   native_context_ = factory()->NewNativeContext();
   AddToWeakNativeContextList(isolate(), *native_context());
   isolate()->set_context(*native_context());
+  isolate()->PrintWithTimestamp("NATIVE_CONTEXT_CREATION: create_roots %lx\n",
+                                (*native_context_)->address());
+
+  ::base::debug::StackTrace trace;
+
+  isolate()->PrintWithTimestamp("%s\n", trace.ToString().c_str());
 
   // Allocate the message listeners object.
   {
@@ -5552,6 +5560,11 @@ Genesis::Genesis(
                                          context_snapshot_index,
                                          embedder_fields_deserializer)
             .ToHandle(&context)) {
+      isolate->PrintWithTimestamp("NATIVE_CONTEXT_CREATION: deserailized %lx\n",
+                                  context->address());
+      ::base::debug::StackTrace trace;
+
+      isolate->PrintWithTimestamp("%s\n", trace.ToString().c_str());
       native_context_ = Handle<NativeContext>::cast(context);
     }
   }
