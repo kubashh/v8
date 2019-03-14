@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bd0ff155_931e634b",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T10:44:58Z",
+      "side": 1,
+      "message": "Seems like we\u0027re reaching the boundaries of what TQ currently does. \n\nFor the sake of offset definitions (DEFINE_FIELD_OFFSET_CONSTANTS), this is fine; but we\u0027ll need to return to this later. Could you please file a bug to support MaybeObjects in Torque and add a TODO(v8:XXXX) here?",
+      "parentUuid": "126e5eff_1940f77d",
+      "range": {
+        "startLine": 33,
+        "startChar": 33,
+        "endLine": 33,
+        "endChar": 40
+      },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "897b4714_9aad1a40",
         "filename": "src/builtins/base.tq",
         "patchSetId": 1
@@ -42,6 +66,57 @@
         "endLine": 783,
         "endChar": 42
       },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e2afe8c_835a42a8",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T10:44:58Z",
+      "side": 1,
+      "message": "This is initialized to undefined in NewDebugInfo, same for debug_bytecode_array",
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8d01289_60e50130",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T10:44:58Z",
+      "side": 1,
+      "message": "Suggestion: rename to break_points",
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bdde4e4_2a4a431c",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T10:44:58Z",
+      "side": 1,
+      "message": "Suggestion: update the name to optimized_code_weak_or_smi (this is what the direct accessor is called). Doesn\u0027t have to be in this CL.",
       "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +157,30 @@
       "writtenOn": "2019-03-13T23:38:36Z",
       "side": 1,
       "message": "Comment for AllocationSite indicates that weak_next field must be last, but Torque doesn\u0027t accept redefinition of field sections. Solved this by extracting the base class. Is that the right approach?\n\nI\u0027m also stuggling with providing a minimal defition of AllocationSiteBase. This is the build error I\u0027m getting when slow checks are enabled:\n\n../../v8\\src/objects/heap-object.h(65,25):  error: inline function \u0027v8::internal::HeapObject::IsAllocationSiteBase\u0027 is not defined [-Werror,-Wundefined-inline]\n  HEAP_OBJECT_TYPE_LIST(IS_TYPE_FUNCTION_DECL)\n                        ^\n../../v8\\src/objects-inl.h(89,23):  note: used here\nHEAP_OBJECT_TYPE_LIST(IS_TYPE_FUNCTION_DEF)\n                      ^\nBut I added AllocationSiteBase to HEAP_OBJECT_ORDINARY_TYPE_LIST_BASE -- what else am I missing?",
+      "range": {
+        "startLine": 812,
+        "startChar": 13,
+        "endLine": 812,
+        "endChar": 32
+      },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d57f1f0_e1dd665e",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T10:44:58Z",
+      "side": 1,
+      "message": "Probably an explicit definition in objects-inl.h: \n\n $ git grep \u0027HeapObject::Is\u0027\n\nAnother idea: have you tried \u0027AllocationSite extends HeapObject\u0027 instead? That seems like the simplest solution to me. I\u0027m not sure I understand the issue though, what does \u0027weak_next_field must be last\u0027 mean?",
+      "parentUuid": "c00ccb2f_2855f8dd",
       "range": {
         "startLine": 812,
         "startChar": 13,
