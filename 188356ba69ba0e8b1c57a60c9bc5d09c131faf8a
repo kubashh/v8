@@ -234,6 +234,24 @@
       "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e966ced_56072ab8",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-03-14T15:56:16Z",
+      "side": 1,
+      "message": "I think this approach looks reasonable\n\nI investigated your second alternative a bit:\nWe could implement our own mapping from thread-ids to flags in the trap handler. The thread-id would be registered during isolate initialization (or when a new thread starts using the isolate) in https://cs.chromium.org/chromium/src/v8/src/thread-local-top.cc?q\u003dThreadLocalTop::Ini\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d21. De-registration would happen in {ThreadLocalTop::Free}(https://cs.chromium.org/chromium/src/v8/src/thread-local-top.cc?q\u003dThreadLocalTop::Ini\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d24). \n\nIt\u0027s not clear to me how we can avoid a recursion then if the lookup in this mapping data structure causes a crash.\n\nAbout your first alternative: Setting the g_thread_in_wasm_code flag from generated code should be fast. Calling TlsSetValue() there would most likely not be acceptable.\n\nI\u0027m quite busy at the moment, but I want to prototype these ideas soon.",
+      "parentUuid": "b6005e75_10e25bad",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
