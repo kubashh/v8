@@ -490,7 +490,10 @@ void BytecodeArray::BytecodeArrayVerify(Isolate* isolate) {
   VerifyHeapPointer(isolate, constant_pool());
 }
 
-void FreeSpace::FreeSpaceVerify(Isolate* isolate) { CHECK(IsFreeSpace()); }
+void FreeSpace::FreeSpaceVerify(Isolate* isolate) {
+  CHECK(IsFreeSpace());
+  VerifySmiField(kSizeOffset);
+}
 
 void FeedbackCell::FeedbackCellVerify(Isolate* isolate) {
   CHECK(IsFeedbackCell());
@@ -736,6 +739,7 @@ void PropertyArray::PropertyArrayVerify(Isolate* isolate) {
     Object e = get(i);
     Object::VerifyPointer(isolate, e);
   }
+  VerifySmiField(kLengthAndHashOffset);
 }
 
 void FixedDoubleArray::FixedDoubleArrayVerify(Isolate* isolate) {
@@ -1196,6 +1200,8 @@ void Oddball::OddballVerify(Isolate* isolate) {
   } else {
     UNREACHABLE();
   }
+  CHECK(to_string()->IsString());
+  CHECK(type_of()->IsString());
 }
 
 void Cell::CellVerify(Isolate* isolate) {
