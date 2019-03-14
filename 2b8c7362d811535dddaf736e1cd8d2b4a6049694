@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "038b9eb0_ddae5caa",
+        "filename": "src/base/platform/platform-posix.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-14T07:55:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56c80cd5_43e5038c",
+      "range": {
+        "startLine": 874,
+        "startChar": 67,
+        "endLine": 874,
+        "endChar": 68
+      },
+      "revId": "2b8c7362d811535dddaf736e1cd8d2b4a6049694",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6b9df2b0_7c65db9e",
         "filename": "src/base/platform/time.cc",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "2b8c7362d811535dddaf736e1cd8d2b4a6049694",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b24a014_1e0052b5",
+        "filename": "src/base/platform/time.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-14T07:55:47Z",
+      "side": 1,
+      "message": "The {compare_exchange_weak} in the loop actually receives the expected value ({original} here) via reference and updates it if it does not match. That\u0027s why the {compare_exchange_weak} receives acq_rel as memory order: it\u0027s release on CAS, and acquire on reload of the changed value.\nI mentioned that {original} will be updated at the end of the loop body.",
+      "parentUuid": "6b9df2b0_7c65db9e",
+      "range": {
+        "startLine": 529,
+        "startChar": 10,
+        "endLine": 529,
+        "endChar": 18
+      },
+      "revId": "2b8c7362d811535dddaf736e1cd8d2b4a6049694",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
