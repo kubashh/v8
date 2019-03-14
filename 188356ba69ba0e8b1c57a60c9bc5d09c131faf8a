@@ -252,6 +252,24 @@
       "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f10a8dda_083aaa18",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-14T19:03:29Z",
+      "side": 1,
+      "message": "@Andreas: I wasn\u0027t proposing to have a mapping from thread IDs.  That would be quite complicated, so I would want to avoid that if possible.  The approach in patch set 2 of checking the TEB should work.",
+      "parentUuid": "8e966ced_56072ab8",
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

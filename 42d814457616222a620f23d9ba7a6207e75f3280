@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d57605ca_3ec24ce9",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-14T19:03:29Z",
+      "side": 1,
+      "message": "Nit: unnecessary whitespace change here",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1034f8ca_643f562b",
         "filename": "src/trap-handler/handler-inside-win.cc",
         "patchSetId": 2
@@ -34,6 +51,81 @@
       "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4dc72a3f_8193bb7f",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-14T19:03:29Z",
+      "side": 1,
+      "message": "Yeah, we shouldn\u0027t add another copy of the ExceptionCode check here.\n\nThe TEB check needs to be done in TryHandleWasmTrap() anyway.\n\nIt would be reasonable to move the ExceptionCode check to be before the TEB and TLS checks rather than after them, since the ExceptionCode check is less likely to go wrong.",
+      "parentUuid": "ce359da3_88214446",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c0fbfd9_82c6afa2",
+        "filename": "src/trap-handler/handler-inside-win.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-14T19:03:29Z",
+      "side": 1,
+      "message": "This approach is good and it\u0027s basically what I was suggesting.  Good to see it can easily be done without needing any assembly code.  So thanks!\n\nHowever, this check should be done in TryHandleWasmTrap() instead, since some cases, such as the crash reporter, use that function rather than HandleWasmTrap().  (I think you noticed that already, given your comment above.)",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e585f4a_3a0cc1bd",
+        "filename": "src/trap-handler/handler-inside-win.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-14T19:03:29Z",
+      "side": 1,
+      "message": "Nit: putting this in handler-inside-win.cc is preferable over putting this in the header file, because this isn\u0027t used outside the .cc file.",
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "750f5557_e88e7e89",
+        "filename": "src/trap-handler/handler-inside-win.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-14T19:03:29Z",
+      "side": 1,
+      "message": "Nit: should be named in lowercase_with_underscores style to follow Chromium style.  (An exception might be if the CamelCase name is the official name of this field?)",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 33
+      },
+      "revId": "42d814457616222a620f23d9ba7a6207e75f3280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
