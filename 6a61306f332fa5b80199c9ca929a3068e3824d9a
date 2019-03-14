@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0c684df0_ec584050",
+        "filename": "src/compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8ef5437_1cf5c71f",
+      "range": {
+        "startLine": 1226,
+        "startChar": 2,
+        "endLine": 1226,
+        "endChar": 36
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1802b0c5_a1d3ca73",
         "filename": "src/frames.cc",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5c71f25_f1383c18",
+        "filename": "src/frames.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1677,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "Actually this is only called from Isolate::GetAbstractPC, so it\u0027s easy to change.",
+      "parentUuid": "1802b0c5_a1d3ca73",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "136010c9_91a17de1",
+        "filename": "src/frames.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "The issue is that AsJavaScript returns a const JavaScriptFrameSummary. I could introduce a non-const version of that but since it\u0027s mostly called on non-const FrameSummary objects, that overload would be used in most places. That would allow real (but still hypothetical) mutators to be easily called, which would go against the intent of constness in the first place.\n\nThe alternative is that I make the functions non-const and then do the cast directly without going through AsJavaScript.",
+      "parentUuid": "e6b24501_42bda8ea",
+      "range": {
+        "startLine": 576,
+        "startChar": 39,
+        "endLine": 576,
+        "endChar": 45
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f24f955d_f9d84fc9",
         "filename": "src/objects/code-inl.h",
         "patchSetId": 3
@@ -79,6 +145,24 @@
       "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8bd06bd_3c5e2e7a",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f24f955d_f9d84fc9",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "0c6ae671_c1f8ce46",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "477ca580_4da3de3f",
+      "range": {
+        "startLine": 219,
+        "startChar": 13,
+        "endLine": 219,
+        "endChar": 14
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c8a04fa_9c99274a",
         "filename": "src/objects/code.cc",
         "patchSetId": 3
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "8f421de7_c01b2a89",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "Think it\u0027s from an older iteration. Done",
+      "parentUuid": "3c8a04fa_9c99274a",
+      "range": {
+        "startLine": 217,
+        "startChar": 2,
+        "endLine": 222,
+        "endChar": 3
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13a2d987_c3c67271",
         "filename": "src/objects/code.cc",
         "patchSetId": 3
@@ -142,6 +274,24 @@
       "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "928d9699_3379560a",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "This function isn\u0027t static and would need to be handlified for that to work. It\u0027s called from Object::Print, which would mean making all of the Print code static and handlified.\n\n(also we don\u0027t have a SharedFunctionInfo in BytecodeArray)",
+      "parentUuid": "13a2d987_c3c67271",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -168,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "def11c86_60b42497",
+        "filename": "src/objects/code.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3113767_f3031a84",
+      "range": {
+        "startLine": 778,
+        "startChar": 5,
+        "endLine": 779,
+        "endChar": 68
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f13aa88_27d69384",
         "filename": "src/objects/code.h",
         "patchSetId": 3
@@ -188,6 +362,30 @@
       "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97d54e02_8bb80686",
+        "filename": "src/objects/code.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "Changed the name. I think the comment already says, but let me know if you wanted something else.",
+      "parentUuid": "0f13aa88_27d69384",
+      "range": {
+        "startLine": 788,
+        "startChar": 19,
+        "endLine": 788,
+        "endChar": 45
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -214,6 +412,30 @@
     },
     {
       "key": {
+        "uuid": "bb6d8da2_f37f8a97",
+        "filename": "src/source-position-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "067a68d3_6f197611",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 25
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "667b0776_eab41ca0",
         "filename": "test/cctest/test-cpu-profiler.cc",
         "patchSetId": 3
@@ -225,6 +447,24 @@
       "writtenOn": "2019-03-14T10:48:54Z",
       "side": 1,
       "message": "Why is this change needed? Doesn\u0027t StartProfiling do this? If not, do we need to change the CPU profiler in DevTools to do this too?",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fee162fa_d00107f0",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-14T21:29:22Z",
+      "side": 1,
+      "message": "There\u0027s something odd going on with this test that I don\u0027t understand.\n\nprofiler-\u003eStartProfiling(...) would end up calling LogCompiledFunction, but this is calling it on profiles which is a CpuProfilesCollection which doesn\u0027t seem to be causing LogCompiledFunctions to work.\n\nI need to take a further look.",
+      "parentUuid": "667b0776_eab41ca0",
       "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
