@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "687523f6_cb86eaff",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T08:49:33Z",
+      "side": 1,
+      "message": "nit: alpha-sort here and above please",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e3230ec_4e5560ea",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T08:49:33Z",
+      "side": 1,
+      "message": "nit: should be next to other Is* predicates, e.g. IsJSArray",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d8d8764_5ef3049f",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T08:49:33Z",
+      "side": 1,
+      "message": "This isn\u0027t needed, use \u0027\u003d\u003d Null\u0027 instead.",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54eb9de6_9a01c97c",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T08:49:33Z",
+      "side": 1,
+      "message": "nit: let\u0027s put this and kProxySlot next to the other StoreContextElement def. Please also follow the style used there (i.e. define a new ContextSlot type, upper-case for the slot constant, etc).",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f143fc15_07b839ec",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T08:49:33Z",
+      "side": 1,
+      "message": "nit: 2019",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7537d8ee_587030fe",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T08:49:33Z",
+      "side": 1,
+      "message": "Suggestion: don\u0027t add the intptr constant, instead define LoadContextElement/StoreContextElement specializations for ContextSlot (the new type defined by you :).",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16bb897b_b7ad5bed",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T08:49:33Z",
+      "side": 1,
+      "message": "Spec asserts don\u0027t throw runtime exceptions; it\u0027s basically equivalent to an UnsafeCast\u003cJSProxy\u003e(...) here (instead of ValidateProxy).",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55208aaf_dbd39141",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-14T08:49:33Z",
+      "side": 1,
+      "message": "Someone asked this in another CL, could this move to base.tq instead?",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
