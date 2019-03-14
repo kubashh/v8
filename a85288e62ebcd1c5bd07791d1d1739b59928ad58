@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b8d0d860_5b63ecbb",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-14T17:43:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "687523f6_cb86eaff",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e3230ec_4e5560ea",
         "filename": "src/builtins/base.tq",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7352093d_6936d44d",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-14T17:43:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e3230ec_4e5560ea",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f07222eb_5b225936",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 704,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-14T17:43:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d8d8764_5ef3049f",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54eb9de6_9a01c97c",
         "filename": "src/builtins/base.tq",
         "patchSetId": 3
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "81d038b1_0afecb1e",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-14T17:43:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54eb9de6_9a01c97c",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f143fc15_07b839ec",
         "filename": "src/builtins/proxy-revoke.tq",
         "patchSetId": 3
@@ -84,6 +156,24 @@
       "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a370f6ab_9e1a577b",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-14T17:43:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f143fc15_07b839ec",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +200,30 @@
     },
     {
       "key": {
+        "uuid": "919093ed_0251832a",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-14T17:43:29Z",
+      "side": 1,
+      "message": "In this case, I only need context but I cannot define the builtin with only context. Torque parser will throw without any error message.\n@Jakob: WDYT?",
+      "parentUuid": "97b4ef5c_66ff64b9",
+      "range": {
+        "startLine": 21,
+        "startChar": 50,
+        "endLine": 21,
+        "endChar": 62
+      },
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7537d8ee_587030fe",
         "filename": "src/builtins/proxy-revoke.tq",
         "patchSetId": 3
@@ -124,6 +238,24 @@
       "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f034a45_3630e73a",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-14T17:43:29Z",
+      "side": 1,
+      "message": "fixed, thanks to your suggestion :)",
+      "parentUuid": "7537d8ee_587030fe",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -159,6 +291,24 @@
       "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2364b896_e827986a",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-14T17:43:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ec6bdf8_a2fb4f0a",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
