@@ -84,6 +84,8 @@ const char* SectionName(SectionCode code) {
       return "Exception";
     case kDataCountSectionCode:
       return "DataCount";
+    case kCompilationHintsSectionCode:
+      return "CompilationHints";
     case kNameSectionCode:
       return kNameString;
     case kSourceMappingURLSectionCode:
@@ -386,6 +388,12 @@ class ModuleDecoderImpl : public Decoder {
                                kExportSectionCode))
           return;
         break;
+      case kCompilationHintsSectionCode:
+        if (!CheckUnorderedSection(section_code)) return;
+        if (!CheckSectionOrder(section_code, kElementSectionCode,
+                               kCodeSectionCode))
+          return;
+        break;
       case kSourceMappingURLSectionCode:
         // sourceMappingURL is a custom section and currently can occur anywhere
         // in the module. In case of multiple sourceMappingURL sections, all
@@ -441,6 +449,13 @@ class ModuleDecoderImpl : public Decoder {
         break;
       case kSourceMappingURLSectionCode:
         DecodeSourceMappingURLSection();
+        break;
+      case kCompilationHintsSectionCode:
+        if (enabled_features_.compilation_hints) {
+          DecodeCompilationHintsSection();
+        } else {
+          errorf(pc(), "unexpected section <%s>", SectionName(section_code));
+        }
         break;
       case kDataCountSectionCode:
         if (enabled_features_.bulk_memory) {
@@ -506,7 +521,7 @@ class ModuleDecoderImpl : public Decoder {
           static_cast<ImportExportKindCode>(consume_u8("import kind"));
       switch (import->kind) {
         case kExternalFunction: {
-          // ===== Imported function =======================================
+          // ===== Imported function ===========================================
           import->index = static_cast<uint32_t>(module_->functions.size());
           module_->num_imported_functions++;
           module_->functions.push_back({nullptr,        // sig
@@ -521,7 +536,7 @@ class ModuleDecoderImpl : public Decoder {
           break;
         }
         case kExternalTable: {
-          // ===== Imported table ==========================================
+          // ===== Imported table ==============================================
           if (!AddTable(module_.get())) break;
           import->index = static_cast<uint32_t>(module_->tables.size());
           module_->num_imported_tables++;
@@ -544,7 +559,7 @@ class ModuleDecoderImpl : public Decoder {
           break;
         }
         case kExternalMemory: {
-          // ===== Imported memory =========================================
+          // ===== Imported memory =============================================
           if (!AddMemory(module_.get())) break;
           uint8_t flags = validate_memory_flags(&module_->has_shared_memory);
           consume_resizable_limits(
@@ -554,7 +569,7 @@ class ModuleDecoderImpl : public Decoder {
           break;
         }
         case kExternalGlobal: {
-          // ===== Imported global =========================================
+          // ===== Imported global =============================================
           import->index = static_cast<uint32_t>(module_->globals.size());
           module_->globals.push_back(
               {kWasmStmt, false, WasmInitExpr(), {0}, true, false});
@@ -567,7 +582,7 @@ class ModuleDecoderImpl : public Decoder {
           break;
         }
         case kExternalException: {
-          // ===== Imported exception ======================================
+          // ===== Imported exception ==========================================
           if (!enabled_features_.eh) {
             errorf(pos, "unknown import kind 0x%02x", import->kind);
             break;
@@ -959,6 +974,57 @@ class ModuleDecoderImpl : public Decoder {
       set_seen_unordered_section(kSourceMappingURLSectionCode);
     }
     consume_bytes(static_cast<uint32_t>(end_ - start_), nullptr);
+  }
+
+  void DecodeCompilationHintsSection() {
+    TRACE("DecodeCompilationHints module+%d\n", static_cast<int>(pc_ - start_));
+
+    // Ensure exactly one compilation hint per function
+    uint32_t hint_count = consume_u32v("compilation hint count");
+    if (hint_count != module_->num_declared_functions) {
+      errorf(pc(), "Expected %u compilation hints (%u found)",
+             module_->num_declared_functions, hint_count);
+    }
+
+    // Decode sequence of compilation hints
+    module_->compilation_hints.reserve(hint_count);
+    for (uint32_t i = 0; ok() && i < hint_count; i++) {
+      TRACE("DecodeCompilationHints[%d] module+%d\n", i,
+            static_cast<int>(pc_ - start_));
+
+      // Compilation hints are encoded in one byte each
+      // +-------+-------------+------------+------------------+
+      // | 2 bit | 2 bit       | 2 bit      | 2 bit            |
+      // | ...   | Second tier | First tier | Lazy compilation |
+      // +-------+-------------+------------+------------------+
+      uint8_t hint_byte = consume_u8("compilation hint");
+
+      // Decode compilation hint
+      WasmCompilationHint hint;
+      hint.strategy =
+          static_cast<WasmCompilationHintStrategy>(hint_byte & 0x03);
+      hint.first_tier =
+          static_cast<WasmCompilationHintTier>(hint_byte >> 2 & 0x3);
+      hint.second_tier =
+          static_cast<WasmCompilationHintTier>(hint_byte >> 4 & 0x3);
+
+      // Check strategy
+      if (hint.strategy > WasmCompilationHintStrategy::kEager) {
+        errorf(pc(), "Invalid compilation hint %#x (unknown strategy)",
+               hint_byte);
+      }
+
+      // Ensure that the second tier never dowgrades the compilation result. If
+      // first and secod tier are the same it will be invoked only once.
+      if (hint.second_tier < hint.first_tier &&
+          hint.second_tier != WasmCompilationHintTier::kDefault) {
+        errorf(pc(), "Invalid compilation hint %#x (forbidden downgrade)",
+               hint_byte);
+      }
+
+      // Happily accept compilation hint.
+      module_->compilation_hints.push_back(std::move(hint));
+    }
   }
 
   void DecodeDataCountSection() {
