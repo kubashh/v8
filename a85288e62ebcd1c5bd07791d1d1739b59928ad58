@@ -326,6 +326,24 @@
       "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbd3ebb3_f54020bb",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-14T17:55:31Z",
+      "side": 1,
+      "message": "I get the compile error:\n\"error: incomplete type \u0027v8::internal::JSProxy\u0027 used in type trait expression\n                : bool_constant\u003c__is_base_of(_Base, _Derived)\u003e\n                                                            ^\n../..\\src/compiler/code-assembler.h(204,34):  note: in instantiation of template class \u0027std::is_base_of\u003cv8::internal::Object, v8::internal::JSProxy\u003e\u0027 requested here\n  static const bool value \u003d std::is_base_of\u003cObject, T\u003e::value ||\n                                 ^\n../..\\src/compiler/code-assembler.h(458,17):  note: in instantiation of template class \u0027v8::internal::is_valid_type_tag\u003cv8::internal::JSProxy\u003e\u0027 requested here\n  static_assert(is_valid_type_tag\u003cT\u003e::value, \"invalid type tag\");\n                ^\n../..\\src/code-stub-assembler.h(362,18):  note: in instantiation of template class \u0027v8::internal::compiler::TNode\u003cv8::internal::JSProxy\u003e\u0027 requested here\n  TNode\u003cJSProxy\u003e HeapObjectToJSProxy(TNode\u003cHeapObject\u003e heap_object,\n                 ^\n../..\\src/objects.h(271,7):  note: forward declaration of \u0027v8::internal::JSProxy\u0027\nclass JSProxy;\"",
+      "parentUuid": "55208aaf_dbd39141",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
