@@ -1154,6 +1154,7 @@ static void TickLines(bool optimize) {
                                   v8::base::TimeDelta::FromMicroseconds(100));
   CpuProfiler profiler(isolate, profiles, generator, processor);
   profiles->StartProfiling("", false);
+  isolate->logger()->LogCompiledFunctions();
   processor->Start();
   ProfilerListener profiler_listener(isolate, processor);
 
