@@ -2586,7 +2586,7 @@ void PossiblyStartTagged(FieldSectionType* section,
       completed_sections->count(FieldSectionType::kStrongSection) == 0 &&
       *section != FieldSectionType::kWeakSection &&
       *section != FieldSectionType::kStrongSection) {
-    *o << "V(kStartOfPointerFieldsOffset, 0) \\\n";
+    *o << "V(kStartOfTaggedFieldsOffset, 0) \\\n";
   }
 }
 
