@@ -80,8 +80,16 @@ V8_EXPORT_PRIVATE const ParseResultTypeId
         ParseResultTypeId::kNameAndTypeExpression;
 template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId
-    ParseResultHolder<ClassFieldExpression>::id =
-        ParseResultTypeId::kClassFieldExpression;
+    ParseResultHolder<ClassFieldExpression*>::id =
+        ParseResultTypeId::kClassFieldExpressionPtr;
+template <>
+V8_EXPORT_PRIVATE const ParseResultTypeId
+    ParseResultHolder<ClassDataFieldExpression*>::id =
+        ParseResultTypeId::kClassDataFieldExpressionPtr;
+template <>
+V8_EXPORT_PRIVATE const ParseResultTypeId
+    ParseResultHolder<ClassPaddingFieldExpression*>::id =
+        ParseResultTypeId::kClassPaddingFieldExpressionPtr;
 template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId
     ParseResultHolder<StructFieldExpression>::id =
@@ -92,8 +100,8 @@ V8_EXPORT_PRIVATE const ParseResultTypeId
         ParseResultTypeId::kStdVectorOfNameAndTypeExpression;
 template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId
-    ParseResultHolder<std::vector<ClassFieldExpression>>::id =
-        ParseResultTypeId::kStdVectorOfClassFieldExpression;
+    ParseResultHolder<std::vector<ClassFieldExpression*>>::id =
+        ParseResultTypeId::kStdVectorOfClassFieldExpressionPtr;
 template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId
     ParseResultHolder<std::vector<StructFieldExpression>>::id =
@@ -565,7 +573,7 @@ base::Optional<ParseResult> MakeClassDeclaration(
   auto extends = child_results->NextAs<base::Optional<std::string>>();
   auto generates = child_results->NextAs<base::Optional<std::string>>();
   auto methods = child_results->NextAs<std::vector<Declaration*>>();
-  auto fields = child_results->NextAs<std::vector<ClassFieldExpression>>();
+  auto fields = child_results->NextAs<std::vector<ClassFieldExpression*>>();
   Declaration* result = MakeNode<ClassDeclaration>(
       name, is_extern, transient, std::move(extends), std::move(generates),
       std::move(methods), fields);
@@ -1107,7 +1115,15 @@ base::Optional<ParseResult> MakeClassField(ParseResultIterator* child_results) {
   auto name = child_results->NextAs<Identifier*>();
   auto index = child_results->NextAs<base::Optional<std::string>>();
   auto type = child_results->NextAs<TypeExpression*>();
-  return ParseResult{ClassFieldExpression{{name, type}, index, weak}};
+  ClassFieldExpression* result = MakeNode<ClassDataFieldExpression>(
+      NameAndTypeExpression{name, type}, index, weak);
+  return ParseResult{result};
+}
+
+base::Optional<ParseResult> MakeClassPaddingField(
+    ParseResultIterator* child_results) {
+  ClassFieldExpression* result = MakeNode<ClassPaddingFieldExpression>();
+  return ParseResult{result};
 }
 
 base::Optional<ParseResult> MakeStructField(
@@ -1311,7 +1327,8 @@ struct TorqueGrammar : Grammar {
   Symbol classField = {
       Rule({CheckIf(Token("weak")), &name, optionalArraySpecifier, Token(":"),
             &type, Token(";")},
-           MakeClassField)};
+           MakeClassField),
+      Rule({Token("padding"), Token(";")}, MakeClassPaddingField)};
 
   Symbol structField = {
       Rule({&name, Token(":"), &type, Token(";")}, MakeStructField)};
@@ -1602,7 +1619,7 @@ struct TorqueGrammar : Grammar {
             Optional<std::string>(
                 Sequence({Token("generates"), &externalString})),
             Token("{"), List<Declaration*>(&method),
-            List<ClassFieldExpression>(&classField), Token("}")},
+            List<ClassFieldExpression*>(&classField), Token("}")},
            MakeClassDeclaration),
       Rule({Token("struct"), &name, Token("{"), List<Declaration*>(&method),
             List<StructFieldExpression>(&structField), Token("}")},

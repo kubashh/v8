@@ -1578,7 +1578,7 @@ TNode<Int32T> CodeStubAssembler::LoadElementsKind(
 TNode<DescriptorArray> CodeStubAssembler::LoadMapDescriptors(
     SloppyTNode<Map> map) {
   CSA_SLOW_ASSERT(this, IsMap(map));
-  return CAST(LoadObjectField(map, Map::kDescriptorsOffset));
+  return CAST(LoadObjectField(map, Map::kInstanceDescriptorsOffset));
 }
 
 TNode<HeapObject> CodeStubAssembler::LoadMapPrototype(SloppyTNode<Map> map) {
@@ -1634,7 +1634,7 @@ TNode<IntPtrT> CodeStubAssembler::LoadMapConstructorFunctionIndex(
 TNode<Object> CodeStubAssembler::LoadMapConstructor(SloppyTNode<Map> map) {
   CSA_SLOW_ASSERT(this, IsMap(map));
   TVARIABLE(Object, result,
-            LoadObjectField(map, Map::kConstructorOrBackPointerOffset));
+            LoadObjectField(map, Map::kConstructorOrBackpointerOffset));
 
   Label done(this), loop(this, &result);
   Goto(&loop);
@@ -1645,7 +1645,7 @@ TNode<Object> CodeStubAssembler::LoadMapConstructor(SloppyTNode<Map> map) {
         InstanceTypeEqual(LoadInstanceType(CAST(result.value())), MAP_TYPE);
     GotoIfNot(is_map_type, &done);
     result = LoadObjectField(CAST(result.value()),
-                             Map::kConstructorOrBackPointerOffset);
+                             Map::kConstructorOrBackpointerOffset);
     Goto(&loop);
   }
   BIND(&done);
@@ -1660,7 +1660,7 @@ Node* CodeStubAssembler::LoadMapEnumLength(SloppyTNode<Map> map) {
 
 TNode<Object> CodeStubAssembler::LoadMapBackPointer(SloppyTNode<Map> map) {
   TNode<HeapObject> object =
-      CAST(LoadObjectField(map, Map::kConstructorOrBackPointerOffset));
+      CAST(LoadObjectField(map, Map::kConstructorOrBackpointerOffset));
   return Select<Object>(IsMap(object), [=] { return object; },
                         [=] { return UndefinedConstant(); });
 }
