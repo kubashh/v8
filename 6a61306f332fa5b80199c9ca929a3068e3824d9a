@@ -1,0 +1,233 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8ef5437_1cf5c71f",
+        "filename": "src/compiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "nit - worth a comment",
+      "range": {
+        "startLine": 1226,
+        "startChar": 2,
+        "endLine": 1226,
+        "endChar": 36
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1802b0c5_a1d3ca73",
+        "filename": "src/frames.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1677,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "Can we move this out of the getter, the getter shouldn\u0027t be doing allocation and compilation. Can we change callers of this to have them EnsureSourcePositionsAvailable first?",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6b24501_42bda8ea",
+        "filename": "src/frames.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "This seems a bit strange being const - I realize it doesn\u0027t change the FrameSummary, but does hange other objects pointed to by the summary. Does it need to be const?",
+      "range": {
+        "startLine": 576,
+        "startChar": 39,
+        "endLine": 576,
+        "endChar": 45
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f24f955d_f9d84fc9",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "Can you add an explicit DCHECK that the table isn\u0027t undefined or an exception here (I know it would be caught by the IsSourcePositionTableWithFrameCache below, but I think it would be clearer if a DCHECK failed here for these cases).",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "477ca580_4da3de3f",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "kNoSourcePosition",
+      "range": {
+        "startLine": 219,
+        "startChar": 13,
+        "endLine": 219,
+        "endChar": 14
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c8a04fa_9c99274a",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "Not sure on why the BytecodeArray logic is needed? Can\u0027t this just be:\n\nif (maybe_table-\u003eIsException()) return kNoSourcePosition;\n\nThe ByteArray::cast(...) would DCHECK if we ever passed undefined to it",
+      "range": {
+        "startLine": 217,
+        "startChar": 2,
+        "endLine": 222,
+        "endChar": 3
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13a2d987_c3c67271",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "Maybe ensure source positions above the no_gc, and use real source positions here?",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3113767_f3031a84",
+        "filename": "src/objects/code.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "Could you update this comment please",
+      "range": {
+        "startLine": 778,
+        "startChar": 5,
+        "endLine": 779,
+        "endChar": 68
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f13aa88_27d69384",
+        "filename": "src/objects/code.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "How about calling this something like SourcePositionTableIfCollected with a comment saying it returns an empty byte array if it hasn\u0027t been collected?",
+      "range": {
+        "startLine": 788,
+        "startChar": 19,
+        "endLine": 788,
+        "endChar": 45
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "067a68d3_6f197611",
+        "filename": "src/source-position-table.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "Please add a comment for each of these - e.g., LAZY is omitting in this compilation, but might be built lazily later)",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 25
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "667b0776_eab41ca0",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 1,
+      "message": "Why is this change needed? Doesn\u0027t StartProfiling do this? If not, do we need to change the CPU profiler in DevTools to do this too?",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

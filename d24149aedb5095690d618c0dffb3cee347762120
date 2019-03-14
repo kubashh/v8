@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee67ec86_a77be4b0",
+        "filename": "test/cctest/cctest.status",
+        "patchSetId": 3
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-14T10:48:54Z",
+      "side": 0,
+      "message": "Nice :)",
+      "revId": "d24149aedb5095690d618c0dffb3cee347762120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
