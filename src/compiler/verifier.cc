@@ -2085,6 +2085,9 @@ void ScheduleVerifier::Run(Schedule* schedule) {
 
 // static
 void Verifier::VerifyNode(Node* node) {
+  if (OperatorProperties::GetTotalInputCount(node->op()) !)
+            node->InputCount())
+  node->Print();
   DCHECK_EQ(OperatorProperties::GetTotalInputCount(node->op()),
             node->InputCount());
   // If this node has no effect or no control outputs,
