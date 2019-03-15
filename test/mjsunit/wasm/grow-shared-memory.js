@@ -337,3 +337,11 @@ let workerHelpers = assertTrue.toString() + assertIsWasmSharedMemory.toString();
   assertTraps(kTrapMemOutOfBounds,
       () => instance.exports.atomic_load(25 * kPageSize - 3));
 })();
+
+(function TestMemoryBufferTypeAfterGrow() {
+  const memory = new WebAssembly.Memory({
+    "initial": 1, "maximum": 2, "shared": true });
+  assertEquals(SharedArrayBuffer, memory.buffer.constructor);
+  assertEquals(memory.grow(1), 1);
+  assertEquals(SharedArrayBuffer, memory.buffer.constructor);
+})();
