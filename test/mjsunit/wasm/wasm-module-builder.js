@@ -458,6 +458,23 @@ let kExprI64AtomicCompareExchange32U = 0x4e;
 // Simd opcodes.
 let kExprF32x4Min = 0x9e;
 
+// Compilation hint constants.
+let kCompilationHintStrategyDefault = 0x00;
+let kCompilationHintStrategyLazy = 0x01;
+let kCompilationHintStrategyEager = 0x02;
+let kCompilationHintTierDefault = 0x00;
+let kCompilationHintTierInterpreter = 0x01;
+let kCompilationHintTierBaseline = 0x02;
+let kCompilationHintTierOptimized = 0x03;
+let kCompilationHintFirstTierDefault = kCompilationHintTierDefault << 2;
+let kCompilationHintFirstTierInterpreter = kCompilationHintTierInterpreter << 2;
+let kCompilationHintFirstTierBaseline = kCompilationHintTierBaseline << 2;
+let kCompilationHintFirstTierOptimized = kCompilationHintTierOptimized << 2;
+let kCompilationHintSecondTierDefault = kCompilationHintTierDefault << 4;
+let kCompilationHintSecondTierInterpreter = kCompilationHintTierInterpreter << 4;
+let kCompilationHintSecondTierBaseline = kCompilationHintTierBaseline << 4;
+let kCompilationHintSecondTierOptimized = kCompilationHintTierOptimized << 4;
+
 let kTrapUnreachable          = 0;
 let kTrapMemOutOfBounds       = 1;
 let kTrapDivByZero            = 2;
@@ -627,6 +644,11 @@ class WasmFunctionBuilder {
     return this;
   }
 
+  giveCompilationHint(hint) {
+    this.module.giveCompilationHint(hint, this.index);
+    return this;
+  }
+
   addBody(body) {
     for (let b of body) {
       if (typeof b !== 'number' || (b & (~0xFF)) !== 0 )
@@ -708,6 +730,7 @@ class WasmModuleBuilder {
     this.tables = [];
     this.exceptions = [];
     this.functions = [];
+    this.compilation_hints = [];
     this.element_segments = [];
     this.data_segments = [];
     this.explicit = [];
@@ -742,14 +765,18 @@ class WasmModuleBuilder {
     return result.trunc_buffer()
   }
 
-  addCustomSection(name, bytes) {
+  createCustomSection(name, bytes) {
     name = this.stringToBytes(name);
     var section = new Binary();
     section.emit_u8(0);
     section.emit_u32v(name.length + bytes.length);
     section.emit_bytes(name);
     section.emit_bytes(bytes);
-    this.explicit.push(section.trunc_buffer());
+    return section.trunc_buffer();
+  }
+
+  addCustomSection(name, bytes) {
+    this.explicit.push(this.createCustomSection(name, bytes));
   }
 
   addType(type) {
@@ -845,6 +872,11 @@ class WasmModuleBuilder {
 
   addExportOfKind(name, kind, index) {
     this.exports.push({name: name, kind: kind, index: index});
+    return this;
+  }
+
+  giveCompilationHint(hint, index) {
+    this.compilation_hints.push({hint: hint, index: index});
     return this;
   }
 
@@ -1153,6 +1185,44 @@ class WasmModuleBuilder {
       binary.emit_section(kDataCountSectionCode, section => {
         section.emit_u32v(wasm.data_segments.length);
       });
+    }
+
+    // If there are compilation hints add a custom section 'compilationHints'
+    // after the function section and before the code section.
+    if (wasm.compilation_hints.length > 0) {
+      if (debug) print("emitting compilation hints @ " + binary.length);
+      // Build custom section payload
+      let payloadBinary = new Binary();
+      let implicit_compilation_hints_count = wasm.functions.length;
+      payloadBinary.emit_u32v(implicit_compilation_hints_count);
+      wasm.compilation_hints.sort(function(a, b) {a.index - b.index});
+      // Defaults to the compiler's choice if no better hint was given
+      let defaultHint = kCompilationHintStrategyDefault |
+          kCompilationHintFirstTierDefault | kCompilationHintSecondTierDefault ;
+      // Emit hint byte for every function defined in this module
+      var index = wasm.num_imported_funcs;
+      for (let hint of wasm.compilation_hints) {
+        if (index > hint.index) {
+          throw new Error("Multiple hints for the same function: " + index);
+        }
+        // Insert default hints for skipped functions
+        for (; index < hint.index; index++) {
+          payloadBinary.emit_u8(defaultHint);
+        }
+        // Emit hint
+        payloadBinary.emit_u32v(hint.hint);
+        index++;
+      }
+      // Insert default hints for remaining functions
+      let index_end = wasm.num_imported_funcs +
+          implicit_compilation_hints_count;
+      for (; index < index_end; index++) {
+        payloadBinary.emit_u8(defaultHint);
+      }
+      // Finalize as custom section
+      let name = "compilationHints";
+      let bytes = this.createCustomSection(name, payloadBinary.trunc_buffer());
+      binary.emit_bytes(bytes);
     }
 
     // Add function bodies.
