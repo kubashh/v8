@@ -177,6 +177,16 @@ void WasmGlobalObject::SetAnyRef(Handle<Object> value) {
   tagged_buffer()->set(offset(), *value);
 }
 
+bool WasmGlobalObject::SetAnyFunc(Isolate* isolate, Handle<Object> value) {
+  DCHECK_EQ(type(), wasm::kWasmAnyFunc);
+  if (!value->IsNull(isolate) &&
+      !WasmExportedFunction::IsWasmExportedFunction(*value)) {
+    return false;
+  }
+  tagged_buffer()->set(offset(), *value);
+  return true;
+}
+
 // WasmInstanceObject
 PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_start, byte*, kMemoryStartOffset)
 PRIMITIVE_ACCESSORS(WasmInstanceObject, memory_size, size_t, kMemorySizeOffset)
