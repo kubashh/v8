@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "c9211f28_ead94ea0",
+        "filename": "src/frames.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1677,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-15T18:21:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d5c71f25_f1383c18",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e6b24501_42bda8ea",
         "filename": "src/frames.h",
         "patchSetId": 3
@@ -119,6 +137,30 @@
       "side": 1,
       "message": "The issue is that AsJavaScript returns a const JavaScriptFrameSummary. I could introduce a non-const version of that but since it\u0027s mostly called on non-const FrameSummary objects, that overload would be used in most places. That would allow real (but still hypothetical) mutators to be easily called, which would go against the intent of constness in the first place.\n\nThe alternative is that I make the functions non-const and then do the cast directly without going through AsJavaScript.",
       "parentUuid": "e6b24501_42bda8ea",
+      "range": {
+        "startLine": 576,
+        "startChar": 39,
+        "endLine": 576,
+        "endChar": 45
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "41047c35_75bade02",
+        "filename": "src/frames.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-15T18:21:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "136010c9_91a17de1",
       "range": {
         "startLine": 576,
         "startChar": 39,
@@ -260,6 +302,30 @@
     },
     {
       "key": {
+        "uuid": "f9e420b7_5d948668",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-15T18:21:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8f421de7_c01b2a89",
+      "range": {
+        "startLine": 217,
+        "startChar": 2,
+        "endLine": 222,
+        "endChar": 3
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13a2d987_c3c67271",
         "filename": "src/objects/code.cc",
         "patchSetId": 3
@@ -289,6 +355,24 @@
       "side": 1,
       "message": "This function isn\u0027t static and would need to be handlified for that to work. It\u0027s called from Object::Print, which would mean making all of the Print code static and handlified.\n\n(also we don\u0027t have a SharedFunctionInfo in BytecodeArray)",
       "parentUuid": "13a2d987_c3c67271",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eaf3c1df_27b4ecc1",
+        "filename": "src/objects/code.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-15T18:21:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "928d9699_3379560a",
       "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -377,6 +461,30 @@
       "side": 1,
       "message": "Changed the name. I think the comment already says, but let me know if you wanted something else.",
       "parentUuid": "0f13aa88_27d69384",
+      "range": {
+        "startLine": 788,
+        "startChar": 19,
+        "endLine": 788,
+        "endChar": 45
+      },
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6ab985db_58fce084",
+        "filename": "src/objects/code.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-15T18:21:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "97d54e02_8bb80686",
       "range": {
         "startLine": 788,
         "startChar": 19,

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bb13189_561a12ea",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-15T18:21:00Z",
+      "side": 1,
+      "message": "Revert this? :)",
+      "revId": "1ccfd634a8f028fdbc84c52921754b60aa515e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb50f7e2_cd6d45e9",
+        "filename": "src/source-position-table.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-15T18:21:00Z",
+      "side": 1,
+      "message": "Fix indenting / newlines",
+      "revId": "1ccfd634a8f028fdbc84c52921754b60aa515e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
