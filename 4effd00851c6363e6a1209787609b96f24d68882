@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "829b520a_95a89eaf",
+        "filename": "src/libplatform/default-worker-threads-task-runner.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-03-15T14:11:31Z",
+      "side": 1,
+      "message": "As discussed offline, lets make a new DefaultWorkerThread class that takes the task runner.",
+      "range": {
+        "startLine": 17,
+        "startChar": 45,
+        "endLine": 17,
+        "endChar": 57
+      },
+      "revId": "4effd00851c6363e6a1209787609b96f24d68882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eac9c47_f89eb3fd",
+        "filename": "test/unittests/libplatform/default-worker-threads-task-runner-unittest.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-03-15T14:11:31Z",
+      "side": 1,
+      "message": "Do you want to use a FakeTime here and make delays larger?",
+      "range": {
+        "startLine": 63,
+        "startChar": 43,
+        "endLine": 63,
+        "endChar": 51
+      },
+      "revId": "4effd00851c6363e6a1209787609b96f24d68882",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
