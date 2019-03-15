@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "495f39e1_4429f240",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-15T14:29:49Z",
+      "side": 1,
+      "message": "nit: Not super important, but we try to punctuate all sentences in comments (even when they are short). Here and a couple of times below.",
+      "range": {
+        "startLine": 1008,
+        "startChar": 40,
+        "endLine": 1008,
+        "endChar": 45
+      },
+      "revId": "093fb4309ca998ccd1e4ed0d31d1ac54481487f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fd44df9_0b3e6469",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-15T14:29:49Z",
+      "side": 1,
+      "message": "nit: \"downgrades\"",
+      "range": {
+        "startLine": 1038,
+        "startChar": 45,
+        "endLine": 1038,
+        "endChar": 54
+      },
+      "revId": "093fb4309ca998ccd1e4ed0d31d1ac54481487f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "032ee10d_80f379d2",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-15T14:29:49Z",
+      "side": 1,
+      "message": "nit: \"compilation\"",
+      "range": {
+        "startLine": 161,
+        "startChar": 35,
+        "endLine": 161,
+        "endChar": 46
+      },
+      "revId": "093fb4309ca998ccd1e4ed0d31d1ac54481487f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05112e6f_4b87302f",
+        "filename": "test/mjsunit/wasm/compilation-hints-decoder.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-15T14:29:49Z",
+      "side": 1,
+      "message": "nit: 2019",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "093fb4309ca998ccd1e4ed0d31d1ac54481487f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbe7a5eb_ed22cd8d",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-15T14:29:49Z",
+      "side": 1,
+      "message": "suggestion: Lets add a small check here that hint.index \u003e\u003d index, which should prevent two (different) hints being added for the same function. It is OK not to add a test this. It is just meant as an additional safety net for people writing tests. I was thinking along the lines of ...\n\nif (hint.index \u003c index) {\n  throw new Error(\"Multiple hints for the same function: \" + index);\n}\n\nWDYT?",
+      "range": {
+        "startLine": 1204,
+        "startChar": 0,
+        "endLine": 1206,
+        "endChar": 45
+      },
+      "revId": "093fb4309ca998ccd1e4ed0d31d1ac54481487f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
