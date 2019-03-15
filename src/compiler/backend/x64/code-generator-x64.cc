@@ -1952,6 +1952,27 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     }
+    case kX64DecompressSigned: {
+      CHECK(instr->HasOutput());
+      __ DecompressTaggedSigned(i.OutputRegister(), i.MemoryOperand());
+      break;
+    }
+    case kX64DecompressPointer: {
+      CHECK(instr->HasOutput());
+      __ DecompressTaggedPointer(i.OutputRegister(), i.MemoryOperand());
+      break;
+    }
+    case kX64DecompressAny: {
+      CHECK(instr->HasOutput());
+      __ DecompressAnyTagged(i.OutputRegister(), i.MemoryOperand(),
+                             i.TempRegister(0));
+      break;
+    }
+    case X64Compress: {
+      // Don't emit code for compressing. For example, if we have a
+      // compress+movq combo will get rewritten as movl.
+      break;
+    }
     case kX64Movq:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, i, __ pc_offset());
       if (instr->HasOutput()) {
