@@ -468,6 +468,24 @@
       "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7c1a7ec_6fc399dc",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1157,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-15T17:22:30Z",
+      "side": 1,
+      "message": "Peter tells me this test is doing non-standard things using the internals of the cpu profiler directly. This means it bypasses many of the normal things that happen in CpuProfiler::StartProcessorIfNotStarted like calling LogCompiledFunctions.\n\nI\u0027ve added a TODO to explain it.",
+      "parentUuid": "fee162fa_d00107f0",
+      "revId": "6a61306f332fa5b80199c9ca929a3068e3824d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
