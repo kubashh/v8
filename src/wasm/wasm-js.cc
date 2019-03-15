@@ -1202,6 +1202,8 @@ void WebAssemblyGlobal(const v8::FunctionCallbackInfo<v8::Value>& args) {
       type = i::wasm::kWasmF64;
     } else if (string->StringEquals(v8_str(isolate, "anyref"))) {
       type = i::wasm::kWasmAnyRef;
+    } else if (string->StringEquals(v8_str(isolate, "anyfunc"))) {
+      type = i::wasm::kWasmAnyFunc;
     } else {
       thrower.TypeError(
           "Descriptor property 'value' must be 'i32', 'i64', 'f32', or "
@@ -1282,6 +1284,23 @@ void WebAssemblyGlobal(const v8::FunctionCallbackInfo<v8::Value>& args) {
         break;
       }
       global_obj->SetAnyRef(Utils::OpenHandle(*value));
+      break;
+    }
+    case i::wasm::kWasmAnyFunc: {
+      if (args.Length() < 2) {
+        // When no inital value is provided, we have to use the WebAssembly
+        // default value 'null', and not the JS default value 'undefined'.
+        global_obj->SetAnyFunc(
+            i_isolate,
+            handle(i::ReadOnlyRoots(i_isolate).null_value(), i_isolate));
+        break;
+      }
+
+      if (!global_obj->SetAnyFunc(i_isolate, Utils::OpenHandle(*value))) {
+        thrower.TypeError(
+            "The value of anyfunc globals must be null or a "
+            "WasmExportedFunction");
+      }
       break;
     }
     default:
@@ -1640,6 +1659,7 @@ void WebAssemblyGlobalGetValueCommon(
       return_value.Set(receiver->GetF64());
       break;
     case i::wasm::kWasmAnyRef:
+    case i::wasm::kWasmAnyFunc:
       return_value.Set(Utils::ToLocal(receiver->GetAnyRef()));
       break;
     default:
@@ -1709,6 +1729,14 @@ void WebAssemblyGlobalSetValue(
     }
     case i::wasm::kWasmAnyRef: {
       receiver->SetAnyRef(Utils::OpenHandle(*args[0]));
+      break;
+    }
+    case i::wasm::kWasmAnyFunc: {
+      if (!receiver->SetAnyFunc(i_isolate, Utils::OpenHandle(*args[0]))) {
+        thrower.TypeError(
+            "value of an anyfunc reference must be either null or a "
+            "WasmExportedFunction");
+      }
       break;
     }
     default:
