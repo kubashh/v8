@@ -6,6 +6,7 @@
 #include "src/feedback-vector-inl.h"
 #include "src/ic/handler-configuration-inl.h"
 #include "src/ic/ic-inl.h"
+#include "src/interpreter/interpreter.h"
 #include "src/objects.h"
 #include "src/objects/data-handler-inl.h"
 #include "src/objects/hash-table-inl.h"
@@ -207,6 +208,32 @@ FeedbackSlot FeedbackVector::GetTypeProfileSlot() const {
 }
 
 // static
+Handle<FixedArray> ClosureFeedbackCellArray::New(
+    Isolate* isolate, Handle<SharedFunctionInfo> shared) {
+  Factory* factory = isolate->factory();
+
+  int num_feedback_cells =
+      shared->feedback_metadata()->closure_feedback_cell_count();
+
+  Handle<FixedArray> feedback_cell_array =
+      factory->NewFixedArray(num_feedback_cells, AllocationType::kOld);
+  // Initialize header fields
+  // In some tests, we create a feedback vector for builtins.
+  DCHECK(
+      shared->HasBytecodeArray() ||
+      (shared->HasBuiltinId() && shared->builtin_id() == Builtins::kIllegal));
+  feedback_cell_array->set(0,
+                           Smi::FromInt(FLAG_budget_for_feedback_allocation));
+  DCHECK_EQ(kNumHeaderFields, 1);
+  for (int i = kNumHeaderFields; i < num_feedback_cells; i++) {
+    Handle<FeedbackCell> cell =
+        factory->NewNoClosuresCell(factory->undefined_value());
+    feedback_cell_array->set(i, *cell);
+  }
+  return feedback_cell_array;
+}
+
+// static
 Handle<FeedbackVector> FeedbackVector::New(
     Isolate* isolate, Handle<SharedFunctionInfo> shared,
     Handle<FixedArray> closure_feedback_cell_array) {
@@ -295,27 +322,6 @@ Handle<FeedbackVector> FeedbackVector::New(
     AddToVectorsForProfilingTools(isolate, result);
   }
   return result;
-}
-
-// static
-Handle<FixedArray> FeedbackVector::NewClosureFeedbackCellArray(
-    Isolate* isolate, Handle<SharedFunctionInfo> shared) {
-  Factory* factory = isolate->factory();
-
-  int num_feedback_cells =
-      shared->feedback_metadata()->closure_feedback_cell_count();
-  if (num_feedback_cells == 0) {
-    return factory->empty_fixed_array();
-  }
-
-  Handle<FixedArray> feedback_cell_array =
-      factory->NewFixedArray(num_feedback_cells, AllocationType::kOld);
-  for (int i = 0; i < num_feedback_cells; i++) {
-    Handle<FeedbackCell> cell =
-        factory->NewNoClosuresCell(factory->undefined_value());
-    feedback_cell_array->set(i, *cell);
-  }
-  return feedback_cell_array;
 }
 
 // static

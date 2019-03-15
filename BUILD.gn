@@ -44,7 +44,7 @@ declare_args() {
   # Lite mode disables a number of performance optimizations to reduce memory
   # at the cost of performance.
   # Sets --DV8_LITE_MODE.
-  v8_enable_lite_mode = false
+  v8_enable_lite_mode = true
 
   # Sets -DVERIFY_HEAP.
   v8_enable_verify_heap = ""

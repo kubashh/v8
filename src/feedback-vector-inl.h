@@ -93,6 +93,12 @@ int FeedbackMetadata::GetSlotSize(FeedbackSlotKind kind) {
   return 1;
 }
 
+// static
+FeedbackCell ClosureFeedbackCellArray::GetFeedbackCell(
+    FixedArray closure_feedback_cell_array, int index) {
+  return FeedbackCell::cast(closure_feedback_cell_array->get(index));
+}
+
 ACCESSORS(FeedbackVector, shared_function_info, SharedFunctionInfo,
           kSharedFunctionInfoOffset)
 WEAK_ACCESSORS(FeedbackVector, optimized_code_weak_or_smi, kOptimizedCodeOffset)
@@ -162,7 +168,8 @@ MaybeObject FeedbackVector::get(int index) const {
 Handle<FeedbackCell> FeedbackVector::GetClosureFeedbackCell(int index) const {
   DCHECK_GE(index, 0);
   FixedArray cell_array = closure_feedback_cell_array();
-  return handle(FeedbackCell::cast(cell_array.get(index)), GetIsolate());
+  return handle(ClosureFeedbackCellArray::GetFeedbackCell(cell_array, index),
+                GetIsolate());
 }
 
 void FeedbackVector::Set(FeedbackSlot slot, MaybeObject value,

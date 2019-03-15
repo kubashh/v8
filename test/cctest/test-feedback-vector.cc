@@ -93,7 +93,7 @@ TEST(VectorStructure) {
     spec.AddForInSlot();
     vector = NewFeedbackVector(isolate, &spec);
     FeedbackVectorHelper helper(vector);
-    FeedbackCell cell = *vector->GetClosureFeedbackCell(0);
+    FeedbackCell cell = *vector->GetClosureFeedbackCell(1);
     CHECK_EQ(cell->value(), *factory->undefined_value());
   }
 }

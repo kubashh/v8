@@ -4940,7 +4940,7 @@ void JSFunction::EnsureClosureFeedbackCellArray(Handle<JSFunction> function) {
   Handle<SharedFunctionInfo> shared(function->shared(), isolate);
   DCHECK(function->shared()->HasBytecodeArray());
   Handle<HeapObject> feedback_cell_array =
-      FeedbackVector::NewClosureFeedbackCellArray(isolate, shared);
+      ClosureFeedbackCellArray::New(isolate, shared);
   // Many closure cell is used as a way to specify that there is no
   // feedback cell for this function and a new feedback cell has to be
   // allocated for this funciton. For ex: for eval functions, we have to create
@@ -4982,7 +4982,7 @@ void JSFunction::EnsureFeedbackVector(Handle<JSFunction> function) {
 
 // static
 void JSFunction::InitializeFeedbackCell(Handle<JSFunction> function) {
-  if (FLAG_lite_mode) {
+  if (FLAG_lazy_feedback_allocation) {
     EnsureClosureFeedbackCellArray(function);
   } else {
     EnsureFeedbackVector(function);

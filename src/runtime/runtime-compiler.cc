@@ -180,7 +180,6 @@ RUNTIME_FUNCTION(Runtime_NotifyDeoptimized) {
   return ReadOnlyRoots(isolate).undefined_value();
 }
 
-
 static bool IsSuitableForOnStackReplacement(Isolate* isolate,
                                             Handle<JSFunction> function) {
   // Keep track of whether we've succeeded in optimizing.
