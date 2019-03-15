@@ -9,7 +9,7 @@
 
 #include "include/libplatform/libplatform-export.h"
 #include "src/base/macros.h"
-#include "src/base/platform/mutex.h"
+#include "src/base/platform/condition-variable.h"
 #include "src/base/platform/semaphore.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
 
@@ -29,7 +29,7 @@ class V8_PLATFORM_EXPORT TaskQueue {
 
   // Returns the next task to process. Blocks if no task is available. Returns
   // nullptr if the queue is terminated.
-  std::unique_ptr<Task> GetNext();
+  virtual std::unique_ptr<Task> GetNext();
 
   // Terminate the queue.
   void Terminate();
@@ -39,7 +39,8 @@ class V8_PLATFORM_EXPORT TaskQueue {
 
   void BlockUntilQueueEmptyForTesting();
 
-  base::Semaphore process_queue_semaphore_;
+ protected:
+  base::ConditionVariable process_queue_condition_var_;
   base::Mutex lock_;
   std::queue<std::unique_ptr<Task>> task_queue_;
   bool terminated_;

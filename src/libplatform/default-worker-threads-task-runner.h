@@ -6,22 +6,28 @@
 #define V8_LIBPLATFORM_DEFAULT_WORKER_THREADS_TASK_RUNNER_H_
 
 #include "include/v8-platform.h"
-#include "src/libplatform/task-queue.h"
+#include "src/libplatform/delayed-task-queue.h"
 
 namespace v8 {
 namespace platform {
 
 class Thread;
+
 class WorkerThread;
 
 class V8_PLATFORM_EXPORT DefaultWorkerThreadsTaskRunner
     : public NON_EXPORTED_BASE(TaskRunner) {
  public:
-  DefaultWorkerThreadsTaskRunner(uint32_t thread_pool_size);
+  using TimeFunction = double (*)();
+
+  DefaultWorkerThreadsTaskRunner(uint32_t thread_pool_size,
+                                 TimeFunction time_function);
 
   ~DefaultWorkerThreadsTaskRunner() override;
 
   void Terminate();
+
+  double MonotonicallyIncreasingTime();
 
   // v8::TaskRunner implementation.
   void PostTask(std::unique_ptr<Task> task) override;
@@ -36,8 +42,9 @@ class V8_PLATFORM_EXPORT DefaultWorkerThreadsTaskRunner
  private:
   bool terminated_ = false;
   base::Mutex lock_;
-  TaskQueue queue_;
+  DelayedTaskQueue queue_;
   std::vector<std::unique_ptr<WorkerThread>> thread_pool_;
+  TimeFunction time_function_;
 };
 
 }  // namespace platform
