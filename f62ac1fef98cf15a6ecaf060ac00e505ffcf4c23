@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c0f4120_96b58633",
+        "filename": "src/torque/torque-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-15T13:03:58Z",
+      "side": 1,
+      "message": "My plan is to use this struct to return the data generated for the language server (as well as all collected lint warnings), so contextuals won\u0027t \"leak\" past this interface.",
+      "range": {
+        "startLine": 24,
+        "startChar": 7,
+        "endLine": 24,
+        "endChar": 27
+      },
+      "revId": "f62ac1fef98cf15a6ecaf060ac00e505ffcf4c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
