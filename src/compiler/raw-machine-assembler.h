@@ -5,6 +5,9 @@
 #ifndef V8_COMPILER_RAW_MACHINE_ASSEMBLER_H_
 #define V8_COMPILER_RAW_MACHINE_ASSEMBLER_H_
 
+#include <initializer_list>
+#include <utility>
+
 #include "src/assembler.h"
 #include "src/compiler/access-builder.h"
 #include "src/compiler/common-operator.h"
@@ -17,6 +20,7 @@
 #include "src/globals.h"
 #include "src/heap/factory.h"
 #include "src/isolate.h"
+#include "src/type-traits.h"
 
 namespace v8 {
 namespace internal {
@@ -849,68 +853,49 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
 
   // Tail call a given call descriptor and the given arguments.
   // The call target is passed as part of the {inputs} array.
-  Node* TailCallN(CallDescriptor* call_descriptor, int input_count,
+  Node* TailCallN(CallDescriptor* call_descripwor, int input_count,
                   Node* const* inputs);
 
-  // Call to a C function with zero arguments.
-  Node* CallCFunction0(MachineType return_type, Node* function);
-  // Call to a C function with one parameter.
-  Node* CallCFunction1(MachineType return_type, MachineType arg0_type,
-                       Node* function, Node* arg0);
-  // Call to a C function with one argument, while saving/restoring caller
-  // registers.
-  Node* CallCFunction1WithCallerSavedRegisters(
-      MachineType return_type, MachineType arg0_type, Node* function,
-      Node* arg0, SaveFPRegsMode mode = kSaveFPRegs);
-  // Call to a C function with two arguments.
-  Node* CallCFunction2(MachineType return_type, MachineType arg0_type,
-                       MachineType arg1_type, Node* function, Node* arg0,
-                       Node* arg1);
-  // Call to a C function with three arguments.
-  Node* CallCFunction3(MachineType return_type, MachineType arg0_type,
-                       MachineType arg1_type, MachineType arg2_type,
-                       Node* function, Node* arg0, Node* arg1, Node* arg2);
-  // Call to a C function with three arguments, while saving/restoring caller
-  // registers.
-  Node* CallCFunction3WithCallerSavedRegisters(
-      MachineType return_type, MachineType arg0_type, MachineType arg1_type,
-      MachineType arg2_type, Node* function, Node* arg0, Node* arg1, Node* arg2,
-      SaveFPRegsMode mode = kSaveFPRegs);
-  // Call to a C function with four arguments.
-  Node* CallCFunction4(MachineType return_type, MachineType arg0_type,
-                       MachineType arg1_type, MachineType arg2_type,
-                       MachineType arg3_type, Node* function, Node* arg0,
-                       Node* arg1, Node* arg2, Node* arg3);
-  // Call to a C function with five arguments.
-  Node* CallCFunction5(MachineType return_type, MachineType arg0_type,
-                       MachineType arg1_type, MachineType arg2_type,
-                       MachineType arg3_type, MachineType arg4_type,
-                       Node* function, Node* arg0, Node* arg1, Node* arg2,
-                       Node* arg3, Node* arg4);
-  // Call to a C function with six arguments.
-  Node* CallCFunction6(MachineType return_type, MachineType arg0_type,
-                       MachineType arg1_type, MachineType arg2_type,
-                       MachineType arg3_type, MachineType arg4_type,
-                       MachineType arg5_type, Node* function, Node* arg0,
-                       Node* arg1, Node* arg2, Node* arg3, Node* arg4,
-                       Node* arg5);
-  // Call to a C function with eight arguments.
-  Node* CallCFunction8(MachineType return_type, MachineType arg0_type,
-                       MachineType arg1_type, MachineType arg2_type,
-                       MachineType arg3_type, MachineType arg4_type,
-                       MachineType arg5_type, MachineType arg6_type,
-                       MachineType arg7_type, Node* function, Node* arg0,
-                       Node* arg1, Node* arg2, Node* arg3, Node* arg4,
-                       Node* arg5, Node* arg6, Node* arg7);
-  // Call to a C function with nine arguments.
-  Node* CallCFunction9(MachineType return_type, MachineType arg0_type,
-                       MachineType arg1_type, MachineType arg2_type,
-                       MachineType arg3_type, MachineType arg4_type,
-                       MachineType arg5_type, MachineType arg6_type,
-                       MachineType arg7_type, MachineType arg8_type,
-                       Node* function, Node* arg0, Node* arg1, Node* arg2,
-                       Node* arg3, Node* arg4, Node* arg5, Node* arg6,
-                       Node* arg7, Node* arg8);
+  // Type representing C function argument with type info.
+  typedef std::pair<MachineType, Node*> CFunctionArg;
+
+  // Call to a C function.
+  template <class... CArgs>
+  Node* CallCFunction(Node* function, MachineType return_type, CArgs... cargs) {
+    static_assert(v8::internal::conjunction<
+                      std::is_convertible<CArgs, CFunctionArg>...>::value,
+                  "invalid argument types");
+    MachineSignature::Builder builder(zone(), 1, sizeof...(cargs));
+    builder.AddReturn(return_type);
+    (void)std::initializer_list<int>{(builder.AddParam(cargs.first), 0)...};
+
+    auto call_descriptor =
+        Linkage::GetSimplifiedCDescriptor(zone(), builder.Build());
+
+    return AddNode(common()->Call(call_descriptor), function, cargs.second...);
+  }
+
+  // Call to a C function, while saving/restoring caller registers.
+  template <class... CArgs>
+  Node* CallCFunctionWithCallerSavedRegisters(Node* function,
+                                              MachineType return_type,
+                                              SaveFPRegsMode mode,
+                                              CArgs... cargs) {
+    static_assert(v8::internal::conjunction<
+                      std::is_convertible<CArgs, CFunctionArg>...>::value,
+                  "invalid argument types");
+    MachineSignature::Builder builder(zone(), 1, sizeof...(cargs));
+    builder.AddReturn(return_type);
+    (void)std::initializer_list<int>{(builder.AddParam(cargs.first), 0)...};
+
+    auto call_descriptor =
+        Linkage::GetSimplifiedCDescriptor(zone(), builder.Build());
+
+    call_descriptor->set_save_fp_mode(mode);
+
+    return AddNode(common()->CallWithCallerSavedRegisters(call_descriptor),
+                   function, cargs.second...);
+  }
 
   // ===========================================================================
   // The following utility methods deal with control flow, hence might switch
