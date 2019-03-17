@@ -64,6 +64,15 @@ std::ostream& operator<<(std::ostream& os, const Generic& g) {
   return os;
 }
 
+void Callable::IncrementReturns() {
+  ++returns_;
+  if (signature().return_type->GetConstexprValueCount() > 0 && returns_ > 1) {
+    ReportError(
+        "callables returning struct with constexpr fields must only have a "
+        "single return");
+  }
+}
+
 base::Optional<const Type*> Generic::InferTypeArgument(
     size_t i, const TypeVector& arguments) {
   const std::string type_name = declaration()->generic_parameters[i]->value;

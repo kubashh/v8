@@ -145,15 +145,19 @@ void CSAGenerator::ProcessArgumentsCommon(
     std::vector<std::string>* constexpr_arguments, Stack<std::string>* stack) {
   for (auto it = parameter_types.rbegin(); it != parameter_types.rend(); ++it) {
     const Type* type = *it;
-    VisitResult arg;
     if (type->IsConstexpr()) {
       args->push_back(std::move(constexpr_arguments->back()));
       constexpr_arguments->pop_back();
     } else {
       std::stringstream s;
       size_t slot_count = LoweredSlotCount(type);
-      VisitResult arg = VisitResult(type, stack->TopRange(slot_count));
-      EmitCSAValue(arg, *stack, s);
+      if (type->IsStructType()) {
+        VisitResult arg = VisitResult(type, stack->TopRange(slot_count), {});
+        EmitCSAValue(arg, *stack, s);
+      } else {
+        VisitResult arg = VisitResult(type, stack->TopRange(slot_count));
+        EmitCSAValue(arg, *stack, s);
+      }
       args->push_back(s.str());
       stack->PopMany(slot_count);
     }
