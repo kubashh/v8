@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcaeb412_353e358f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 8873,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-18T15:39:44Z",
+      "side": 1,
+      "message": "Please add var_ prefixes to the names to be consistent with the surrounding code.",
+      "revId": "d053e7221a5728761e36cf5ed79689953e989001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b62f5c8e_08e75374",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 8881,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-18T15:39:44Z",
+      "side": 1,
+      "message": "We could have defined var_[first|last]_descriptor_key_index values as 0 and nof_descriptors for the first iteration ...",
+      "revId": "d053e7221a5728761e36cf5ed79689953e989001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ab57688_7a49b0aa",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 8887,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-18T15:39:44Z",
+      "side": 1,
+      "message": "... and used them here ...",
+      "revId": "d053e7221a5728761e36cf5ed79689953e989001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21e6b0fc_7e27b4a9",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 8909,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-18T15:39:44Z",
+      "side": 1,
+      "message": "... instead of doing index filtering inside the loop. Thus on a second iteration the DescriptorArrayForEach() will automatically use the cropped index range.",
+      "revId": "d053e7221a5728761e36cf5ed79689953e989001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df15da61_d40779fd",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 8921,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-18T15:39:44Z",
+      "side": 1,
+      "message": "How about var_is_symbol_processing_loop?\n\nAnd maybe also GotoIf(var_is_symbol_processing_loop.value(), \u0026if_name_ok); and put the body of the record_symbol block below. Thus we will keep all the symbol-related processing inside if_symbol block for better readability.",
+      "range": {
+        "startLine": 8921,
+        "startChar": 19,
+        "endLine": 8921,
+        "endChar": 33
+      },
+      "revId": "d053e7221a5728761e36cf5ed79689953e989001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16da5651_8483c845",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 8926,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-18T15:39:44Z",
+      "side": 1,
+      "message": "How about if_first_symbol?",
+      "range": {
+        "startLine": 8926,
+        "startChar": 18,
+        "endLine": 8926,
+        "endChar": 37
+      },
+      "revId": "d053e7221a5728761e36cf5ed79689953e989001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "546d05ca_5d9f1adc",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 8940,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-18T15:39:44Z",
+      "side": 1,
+      "message": "Comment is out of sync with the var name.",
+      "revId": "d053e7221a5728761e36cf5ed79689953e989001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
