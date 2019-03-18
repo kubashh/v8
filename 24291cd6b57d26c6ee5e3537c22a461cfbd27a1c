@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e584372f_e8e6e9b6",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1544,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-03-18T08:47:41Z",
+      "side": 1,
+      "message": "Intuitively this should be a `original_length \u003d CheckBounds(original_length, kMaxFastArrayLength)`.\n\nDid you use NumberLessThan+CheckIf here because CheckBounds now leaves a check in the graph even if the types indicate that it\u0027s redundandt?",
+      "revId": "24291cd6b57d26c6ee5e3537c22a461cfbd27a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
