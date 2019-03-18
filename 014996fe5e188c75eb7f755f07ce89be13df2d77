@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92877822_53f23499",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T15:10:33Z",
+      "side": 1,
+      "message": "follow-up nit: this should be named default_tier according to our style guide.",
+      "range": {
+        "startLine": 353,
+        "startChar": 57,
+        "endLine": 353,
+        "endChar": 68
+      },
+      "revId": "014996fe5e188c75eb7f755f07ce89be13df2d77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
