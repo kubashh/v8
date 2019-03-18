@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "368d9fdc_d99364d5",
+        "filename": "src/compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-18T06:22:03Z",
+      "side": 1,
+      "message": "Cannot we have a setter that expresses the intent in the name? Then it would be clearer what is going on.",
+      "range": {
+        "startLine": 1150,
+        "startChar": 4,
+        "endLine": 1150,
+        "endChar": 75
+      },
+      "revId": "1ccfd634a8f028fdbc84c52921754b60aa515e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6bb13189_561a12ea",
         "filename": "src/flag-definitions.h",
         "patchSetId": 5
@@ -13,6 +36,52 @@
       "writtenOn": "2019-03-15T18:21:00Z",
       "side": 1,
       "message": "Revert this? :)",
+      "revId": "1ccfd634a8f028fdbc84c52921754b60aa515e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6658fed6_d3265424",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-18T06:22:03Z",
+      "side": 1,
+      "message": "I do not understand how this changes anything?\n\nIf DidSourcePositionGenerationFail() returns true, then the table is not undefined, so the first clause would be already true. No?\n\nPerhaps this should be \n\nreturn !(maybe_table-\u003eIsUndefined() || DidSourcePositionGenerationFail());",
+      "range": {
+        "startLine": 728,
+        "startChar": 36,
+        "endLine": 728,
+        "endChar": 73
+      },
+      "revId": "1ccfd634a8f028fdbc84c52921754b60aa515e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9acc5d61_e42c2420",
+        "filename": "src/objects/code.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-18T06:22:03Z",
+      "side": 1,
+      "message": "Please make into a bullet list of all the possible things that the field can contain (and say when). The list should also explicitly contain empty bytecode array and say when that can happen.",
+      "range": {
+        "startLine": 778,
+        "startChar": 0,
+        "endLine": 781,
+        "endChar": 55
+      },
       "revId": "1ccfd634a8f028fdbc84c52921754b60aa515e96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
