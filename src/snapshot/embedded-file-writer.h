@@ -42,8 +42,11 @@ class PlatformDependentEmbeddedFileWriter final {
   void DeclarePointerToSymbol(const char* name, const char* target);
 
   void DeclareLabel(const char* name);
-
+#ifdef V8_OS_AIX
+  void SourceInfo(const char* filename, int line);
+#else
   void SourceInfo(int fileid, int line);
+#endif
   void DeclareFunctionBegin(const char* name);
   void DeclareFunctionEnd(const char* name);
 
@@ -236,8 +239,14 @@ class EmbeddedFileWriter : public EmbeddedFileWriterInterface {
     while (i < size) {
       if (i == next_offset) {
         // Write source directive.
+#ifdef V8_OS_AIX
+        w->SourceInfo(GetExternallyCompiledFilename(
+                          positions.source_position().ExternalFileId()),
+                      positions.source_position().ExternalLine());
+#else
         w->SourceInfo(positions.source_position().ExternalFileId(),
                       positions.source_position().ExternalLine());
+#endif
         positions.Advance();
         next_offset = static_cast<uint32_t>(
             positions.done() ? size : positions.code_offset());
@@ -308,13 +317,13 @@ class EmbeddedFileWriter : public EmbeddedFileWriterInterface {
 
   // GCC MASM on Aix doesn't have an .octa directive, use .llong instead.
 
-  static constexpr DataDirective kByteChunkDirective = kQuad;
-  static constexpr int kByteChunkSize = 8;
+  static constexpr DataDirective kByteChunkDirective = kLong;
+  static constexpr int kByteChunkSize = 4;
 
   static int WriteByteChunk(PlatformDependentEmbeddedFileWriter* w,
                             int current_line_length, const uint8_t* data) {
-    const uint64_t* quad_ptr = reinterpret_cast<const uint64_t*>(data);
-    return current_line_length + w->HexLiteral(*quad_ptr);
+    const uint32_t* long_ptr = reinterpret_cast<const uint32_t*>(data);
+    return current_line_length + w->HexLiteral(*long_ptr);
   }
 #else  // defined(V8_COMPILER_IS_MSVC) || defined(V8_OS_AIX)
   static constexpr DataDirective kByteChunkDirective = kOcta;
