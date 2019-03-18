@@ -1271,6 +1271,52 @@ void InstructionSelector::VisitChangeUint32ToUint64(Node* node) {
   Emit(kX64Movl, g.DefineAsRegister(node), g.Use(value));
 }
 
+// TODO(solanes): Do we need these three? Can they be just one? As in
+// ChangeTaggedToCompressed (no matter if it is pointer or signed)
+void InstructionSelector::VisitChangeTaggedToCompressed(Node* node) {
+  X64OperandGenerator g(this);
+  Node* value = node->InputAt(0);
+  Emit(kX64Movl, g.DefineAsRegister(node), g.Use(value));
+}
+
+void InstructionSelector::VisitChangeTaggedPointerToCompressedPointer(
+    Node* node) {
+  X64OperandGenerator g(this);
+  Node* value = node->InputAt(0);
+  Emit(kX64Movl, g.DefineAsRegister(node), g.Use(value));
+}
+
+void InstructionSelector::VisitChangeTaggedSignedToCompressedSigned(
+    Node* node) {
+  X64OperandGenerator g(this);
+  Node* value = node->InputAt(0);
+  Emit(kX64Movl, g.DefineAsRegister(node), g.Use(value));
+}
+
+// TODO(solanes): Do I need to do something with the root register? Like
+// DecompressAnyTagged does in macro assembler
+void InstructionSelector::VisitChangeCompressedToTagged(Node* node) {
+  X64OperandGenerator g(this);
+  Node* const value = node->InputAt(0);
+  Emit(kX64Movsxlq, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
+// TODO(solanes): Do I need to do something with the root register? Like
+// DecompressTaggedPointer does in macro assembler
+void InstructionSelector::VisitChangeCompressedPointerToTaggedPointer(
+    Node* node) {
+  X64OperandGenerator g(this);
+  Node* const value = node->InputAt(0);
+  Emit(kX64Movsxlq, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
+void InstructionSelector::VisitChangeCompressedSignedToTaggedSigned(
+    Node* node) {
+  X64OperandGenerator g(this);
+  Node* const value = node->InputAt(0);
+  Emit(kX64Movsxlq, g.DefineAsRegister(node), g.Use(node->InputAt(0)));
+}
+
 namespace {
 
 void VisitRO(InstructionSelector* selector, Node* node,
