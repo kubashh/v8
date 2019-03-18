@@ -277,8 +277,9 @@ void PlatformDependentEmbeddedFileWriter::DeclareLabel(const char* name) {
   fprintf(fp_, "%s:\n", name);
 }
 
-void PlatformDependentEmbeddedFileWriter::SourceInfo(int fileid, int line) {
-  fprintf(fp_, ".loc %d %d\n", fileid, line);
+void PlatformDependentEmbeddedFileWriter::SourceInfo(const char* filename,
+                                                     int line) {
+  fprintf(fp_, ".xline %d, \"%s\"\n", line, filename);
 }
 
 void PlatformDependentEmbeddedFileWriter::DeclareFunctionBegin(
