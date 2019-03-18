@@ -34,6 +34,24 @@
       "revId": "24291cd6b57d26c6ee5e3537c22a461cfbd27a1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c46d9c71_a610dc62",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1544,
+      "author": {
+        "id": 1118564
+      },
+      "writtenOn": "2019-03-18T11:52:29Z",
+      "side": 1,
+      "message": "Right on, I\u0027m happy to use CheckBounds, done.\n\nAs for the constant, the nature of the bug is that the runtime constructor creates a dictionary only when the length is greater than JSArray::kMaxFastArrayLength (a much larger constant). So that\u0027s the case I want to prevent, hard stop.",
+      "parentUuid": "e5ea704e_38766e9f",
+      "revId": "24291cd6b57d26c6ee5e3537c22a461cfbd27a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
