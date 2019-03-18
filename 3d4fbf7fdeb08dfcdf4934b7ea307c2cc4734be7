@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d8837e9e_62766c9d",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-03-18T21:32:49Z",
+      "side": 1,
+      "message": "Good point. I didn\u0027t realize there were cases like Code with larger padding. I think there\u0027s still a need for this behavior where we pad to the required alignment for the following field, but we\u0027ll eventually need to extend the syntax so we can specify a different alignment size for the Code case.",
+      "parentUuid": "5d00875b_5126610a",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9cfc884b_1bd6c3c3",
         "filename": "src/builtins/base.tq",
         "patchSetId": 7
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "4ce1f556_bbfc2bda",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-03-18T21:32:49Z",
+      "side": 1,
+      "message": "I\u0027m somewhat relieved that you and Igor find this pattern uncomfortable too. I expressed similar concerns in an email to Daniel a few weeks back:\n\n\u003e I’m a little bit hesitant about that approach: it turns Map::kSize into a footgun, it complicates Map::BodyDescriptor because pointer fields are split across Map and a subclass, and it scatters a handful of new casts throughout the code. None of these things are terrible, but all together they feel kind of inelegant compared to the current representation of Map as a single class.\n\nIgor\u0027s suggestion of typedefing Map to either MapWithLayoutDescriptor or MapWithoutLayoutDescriptor would alleviate most of the ugliness in the runtime code, but it would still be nicer to define a single Torque class. To summarize the options I\u0027ve heard so far (and there are probably others):\n\n1. Use the C preprocessor. I like this option for its instantly familiar syntax, and it\u0027s powerful enough that we may find other uses for it too.\n2. Add new Torque syntax that decorates a field type as optional based on a flag.\n3. Use a special type (LayoutDescriptorIfUnboxDoubleFields?), that is known to the compiler to mean \"LayoutDescriptor or empty, depending on FLAG_unbox_double_fields\". This keeps the Torque syntax as simple as possible, but at the cost of putting some additional knowledge about the program being compiled into the compiler itself.\n\nWith options 1 and 2, we need to specify a list of values (such as FLAG_unbox_double_fields) that should be available at Torque compilation time. We wouldn\u0027t want to pass the original cflags and duplicate a bunch of logic from build-config.h and globals.h. Seems like we could just put this list in a .cc file and include it in the compiled torque executable.\n\nWhich solution would you prefer?",
+      "parentUuid": "9cfc884b_1bd6c3c3",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7efb1ae_b4c86893",
         "filename": "src/objects/map.h",
         "patchSetId": 7
@@ -47,6 +83,24 @@
       "writtenOn": "2019-03-18T11:18:47Z",
       "side": 1,
       "message": "Given that we will not have maps with and without the descriptor field at the same time it would be much cleaner to keep having only one definition of the Map class. Let us discuss what we can do on Torque side to make it possible.\n\nAnyway, I think it would be better if we define Map as typedef to either MapWithLayoutDescriptor or MapWithoutLayoutDescriptor otherwise it really causes confusion on runtime side.",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "988f5919_36d9501a",
+        "filename": "src/objects/map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-03-18T21:32:49Z",
+      "side": 1,
+      "message": "Responded in another closely-related comment thread: https://chromium-review.googlesource.com/c/v8/v8/+/1480919/7/src/builtins/base.tq#135",
+      "parentUuid": "b7efb1ae_b4c86893",
       "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
