@@ -1,0 +1,214 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5631d907_dbb063e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "very very minor nit: Avoid past tense in the description. Say what the CL does, not what you did ;)",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b37570be_2d771cc6",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "nit: can we keep the order consistent, i.e. name, source map, compilation hints?",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b30f522_15470292",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "nit: can we keep the order consistent, i.e. name, source map, compilation hints?",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf66f718_a94da532",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "nit: an early return would increase readability (no need to check whether an \"else\" exists) and decrease indentation of the following code block. you might even want to skip the local variables then.",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f95c445_f94ecf9d",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "If you encounter a decoding error in this loop, you might be left with partial data in {module_-\u003ecompilation_hints}. Is that the wanted behaviour?",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fef3a129_9f8b2be5",
+        "filename": "src/wasm/module-decoder.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1449,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "nit: I don\u0027t see a change in this string. why did it get reformatted?",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "508545d9_2e98f7da",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "typo, and missing period at EOL.",
+      "range": {
+        "startLine": 161,
+        "startChar": 35,
+        "endLine": 161,
+        "endChar": 46
+      },
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9613a55_1cee08f4",
+        "filename": "test/mjsunit/wasm/compilation-hints-decoder.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "Since the compilation hint always consists of three fields, shouldn\u0027t we pass the three values to {giveCompilationHint} and encode it into a single value there? That should also eliminate the distinction between first tier and second tier in the constants.",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a354d53c_fc649abc",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "nit: we are not really consistent here already, but please add proper punctuation to new comments (several more below).",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df5ba8ee_89ed878d",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "I am not a javascript expert, but isn\u0027t there a \"return\" missing?\nMaybe rewrite this as a lambda: \"(a, b) \u003d\u003e a.index - b.index\".",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4faac2e_fcdacb78",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 1204,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "This loop would be a bit simpler IMO if you would just iterate \"for (let index \u003d wasm.num_imported_funcs; index \u003c ...; ++index)\", and in each iteration use (and \"shift\") the first element from the hints array if the index matches, or use the default otherwise.",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87ffcdd0_88c64de8",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 10
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:46:43Z",
+      "side": 1,
+      "message": "That\u0027s dangerous. During decoding, you read the hint as u8.",
+      "revId": "ed246aaedfa52df4ba6e5d24c2b7b4c2ea20e255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
