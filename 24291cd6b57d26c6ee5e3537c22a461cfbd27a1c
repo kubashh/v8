@@ -16,6 +16,24 @@
       "revId": "24291cd6b57d26c6ee5e3537c22a461cfbd27a1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5ea704e_38766e9f",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1544,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-03-18T09:13:09Z",
+      "side": 1,
+      "message": "Also shouldn\u0027t this be JSArray::kInitialMaxFastElementArray? That\u0027s what we use in JSCreateLowering and runtime-array.cc",
+      "parentUuid": "e584372f_e8e6e9b6",
+      "revId": "24291cd6b57d26c6ee5e3537c22a461cfbd27a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
