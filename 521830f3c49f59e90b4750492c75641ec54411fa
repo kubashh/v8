@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "720f4440_492bdd8f",
+        "filename": "src/builtins/builtins-microtask-queue-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-18T10:30:12Z",
+      "side": 1,
+      "message": "I wonder if this could just be AnyTagged \u0026 skip the bitcast.",
+      "revId": "521830f3c49f59e90b4750492c75641ec54411fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
