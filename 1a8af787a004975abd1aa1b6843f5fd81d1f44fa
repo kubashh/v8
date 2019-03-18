@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49cba847_36cdc4a0",
+        "filename": "test/cctest/wasm/test-streaming-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-03-18T10:56:53Z",
+      "side": 1,
+      "message": "If this condition ever gets false, we would not notice is, and all the error_message testing would become dead code. Are there error_reasons which are not strings?",
+      "range": {
+        "startLine": 113,
+        "startChar": 8,
+        "endLine": 113,
+        "endChar": 74
+      },
+      "revId": "1a8af787a004975abd1aa1b6843f5fd81d1f44fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
