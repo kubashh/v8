@@ -22,6 +22,30 @@
       "revId": "1a8af787a004975abd1aa1b6843f5fd81d1f44fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7033823c_c3d0b1a1",
+        "filename": "test/cctest/wasm/test-streaming-compilation.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T15:36:00Z",
+      "side": 1,
+      "message": "Right, we should always get a valid String object here. Changed to {ToHandleChecked} such that we notice if we ever fail to construct this String.",
+      "parentUuid": "49cba847_36cdc4a0",
+      "range": {
+        "startLine": 113,
+        "startChar": 8,
+        "endLine": 113,
+        "endChar": 74
+      },
+      "revId": "1a8af787a004975abd1aa1b6843f5fd81d1f44fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
