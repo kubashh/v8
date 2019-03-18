@@ -33,6 +33,23 @@
       "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7efb1ae_b4c86893",
+        "filename": "src/objects/map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-18T11:18:47Z",
+      "side": 1,
+      "message": "Given that we will not have maps with and without the descriptor field at the same time it would be much cleaner to keep having only one definition of the Map class. Let us discuss what we can do on Torque side to make it possible.\n\nAnyway, I think it would be better if we define Map as typedef to either MapWithLayoutDescriptor or MapWithoutLayoutDescriptor otherwise it really causes confusion on runtime side.",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
