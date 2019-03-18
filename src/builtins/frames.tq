@@ -143,3 +143,5 @@ Cast<ArgumentsAdaptorFrame>(implicit context: Context)(f: Frame):
 macro LoadTargetFromFrame(): JSFunction {
   return LoadFramePointer().function;
 }
+
+intrinsic %GetCallerArguments<>(argc: Smi, frame: StandardFrame): constexpr Arguments;

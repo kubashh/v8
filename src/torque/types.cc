@@ -268,6 +268,31 @@ const Field& AggregateType::LookupField(const std::string& name) const {
   ReportError("no field ", name, " found");
 }
 
+bool StructType::HasConstFields() const {
+  for (auto& field : fields()) {
+    if (field.const_qualified) {
+      return true;
+    } else if (const StructType* field_struct =
+                   StructType::DynamicCast(field.name_and_type.type)) {
+      if (field_struct->HasConstFields()) return true;
+    }
+  }
+  return false;
+}
+
+size_t StructType::GetConstexprValueCount() const {
+  size_t result = 0;
+  for (auto& field : fields()) {
+    if (field.name_and_type.type->IsConstexpr()) {
+      ++result;
+    } else if (const StructType* field_struct =
+                   StructType::DynamicCast(field.name_and_type.type)) {
+      result += field_struct->GetConstexprValueCount();
+    }
+  }
+  return result;
+}
+
 std::string StructType::GetGeneratedTypeNameImpl() const {
   return nspace()->ExternalName() + "::" + name();
 }
@@ -447,12 +472,26 @@ VisitResult ProjectStructField(VisitResult structure,
   // Check constructor this super classes for fields.
   const StructType* type = StructType::cast(structure.type());
   auto& fields = type->fields();
+  size_t constexpr_count = 0;
   for (auto& field : fields) {
-    BottomOffset end = begin + LoweredSlotCount(field.name_and_type.type);
+    const Type* field_type = field.name_and_type.type;
+    BottomOffset end = begin + LoweredSlotCount(field_type);
+    size_t field_constexpr_count = field_type->GetConstexprValueCount();
     if (field.name_and_type.name == fieldname) {
-      return VisitResult(field.name_and_type.type, StackRange{begin, end});
+      base::Optional<std::vector<std::string>> constexpr_values;
+      if (field_constexpr_count != 0) {
+        auto constexpr_begin = structure.constexpr_values()->begin();
+        if (field.name_and_type.type->IsConstexpr()) {
+          return VisitResult(field_type, *constexpr_begin);
+        }
+        auto constexpr_end = constexpr_begin + field_constexpr_count;
+        constexpr_values =
+            std::vector<std::string>{constexpr_begin, constexpr_end};
+      }
+      return VisitResult(field_type, StackRange{begin, end}, constexpr_values);
     }
     begin = end;
+    constexpr_count += field_constexpr_count;
   }
 
   ReportError("struct '", type->name(), "' doesn't contain a field '",
@@ -460,13 +499,14 @@ VisitResult ProjectStructField(VisitResult structure,
 }
 
 namespace {
-void AppendLoweredTypes(const Type* type, std::vector<const Type*>* result) {
+void AppendLoweredTypes(const Type* type, std::vector<const Type*>* result,
+                        bool ignore_constexpr = true) {
   DCHECK_NE(type, TypeOracle::GetNeverType());
-  if (type->IsConstexpr()) return;
+  if (ignore_constexpr && type->IsConstexpr()) return;
   if (type == TypeOracle::GetVoidType()) return;
   if (auto* s = StructType::DynamicCast(type)) {
     for (const Field& field : s->fields()) {
-      AppendLoweredTypes(field.name_and_type.type, result);
+      AppendLoweredTypes(field.name_and_type.type, result, ignore_constexpr);
     }
   } else {
     result->push_back(type);
@@ -474,9 +514,9 @@ void AppendLoweredTypes(const Type* type, std::vector<const Type*>* result) {
 }
 }  // namespace
 
-TypeVector LowerType(const Type* type) {
+TypeVector LowerType(const Type* type, bool ignore_constexpr) {
   TypeVector result;
-  AppendLoweredTypes(type, &result);
+  AppendLoweredTypes(type, &result, ignore_constexpr);
   return result;
 }
 
