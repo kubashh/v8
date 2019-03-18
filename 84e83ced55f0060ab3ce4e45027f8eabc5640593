@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae25738e_0213ef41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T15:11:30Z",
+      "side": 1,
+      "message": "And before it gets forgotton: Please reference the tracking bug.",
+      "revId": "84e83ced55f0060ab3ce4e45027f8eabc5640593",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
