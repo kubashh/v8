@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d18307a_006b0ed1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:56:03Z",
+      "side": 1,
+      "message": "nit: \"Enable\", i.e. active tense. And I would drop the \"for First and Second Tier\" to make the subject fit within 50 characters.",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 20
+      },
+      "revId": "99cfdcb4fe1d331c969676906b34e6d4ef47ed74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdd325e3_1f8e30df",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:56:03Z",
+      "side": 1,
+      "message": "nit: why did this get reformatted?",
+      "revId": "99cfdcb4fe1d331c969676906b34e6d4ef47ed74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24ab8972_2ab38ec5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:56:03Z",
+      "side": 1,
+      "message": "nit: It\u0027s simpler IMO to return the ExecutionTier instead of manipulating the pointer argument. That increases readability at the call site.",
+      "revId": "99cfdcb4fe1d331c969676906b34e6d4ef47ed74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4981f110_7a87c7dd",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:56:03Z",
+      "side": 1,
+      "message": "nit: please add proper punctuation (here and below).",
+      "revId": "99cfdcb4fe1d331c969676906b34e6d4ef47ed74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9b5176c_5fe5bf85",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:56:03Z",
+      "side": 1,
+      "message": "hint_index is unsigned anyway. better check before that func_index \u003e\u003d native_module_-\u003enum_imported_functions()",
+      "revId": "99cfdcb4fe1d331c969676906b34e6d4ef47ed74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07557c44_a84bd849",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-18T11:56:03Z",
+      "side": 1,
+      "message": "The \"!compilation_hints_enabled\" checks seems unnecessary. Please drop it, and then maybe remove the \"compilation_hints_enabled\" local variable.",
+      "revId": "99cfdcb4fe1d331c969676906b34e6d4ef47ed74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
