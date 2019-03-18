@@ -248,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "a3675265_e744424e",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-03-18T18:11:04Z",
+      "side": 1,
+      "message": "I remove ... arguments and it works. I think even we don\u0027t use \"receiver\" but it is fine to pass receiver as an argument, right?",
+      "parentUuid": "17ebc5d7_eb0b243c",
+      "range": {
+        "startLine": 21,
+        "startChar": 50,
+        "endLine": 21,
+        "endChar": 62
+      },
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7537d8ee_587030fe",
         "filename": "src/builtins/proxy-revoke.tq",
         "patchSetId": 3
