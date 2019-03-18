@@ -224,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "17ebc5d7_eb0b243c",
+        "filename": "src/builtins/proxy-revoke.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-18T09:42:16Z",
+      "side": 1,
+      "message": "We could assert(arguments.length \u003d\u003d 0) and add a comment explaining the situation. Perhaps also open a bug to add compiler support and link to it from the todo :)",
+      "parentUuid": "919093ed_0251832a",
+      "range": {
+        "startLine": 21,
+        "startChar": 50,
+        "endLine": 21,
+        "endChar": 62
+      },
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7537d8ee_587030fe",
         "filename": "src/builtins/proxy-revoke.tq",
         "patchSetId": 3
@@ -362,6 +386,24 @@
       "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e9ec2a7_824974f9",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-18T09:42:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "019289ab_87b73b54",
+      "revId": "a85288e62ebcd1c5bd07791d1d1739b59928ad58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

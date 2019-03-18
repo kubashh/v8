@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74154280_efac49c4",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-18T09:42:16Z",
+      "side": 1,
+      "message": "I\u0027d vote for just \u0027ContextSlot\u0027, the mechanism isn\u0027t specific to proxies. E.g. async functions and promises are examples of other spots where we define custom context slots.",
+      "revId": "e2e6ea8a4f30694c086351229f0dc27645ba53a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
