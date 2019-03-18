@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e2f0dcd1_c857dc6b",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2019-03-18T18:47:04Z",
+      "side": 1,
+      "message": ".loc doesn\u0027t exist in AIX, instead xline is used in this format:\n.xline \u003cline-number\u003e \u003cfile-name\u003e",
+      "parentUuid": "5ba25a7a_d737a6d8",
+      "revId": "c4c68225eba7d60f99fa258a2a0b24476aab07c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ceb9ac5_2a479428",
         "filename": "src/snapshot/embedded-file-writer.h",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2019-03-18T13:48:40Z",
       "side": 1,
       "message": "Let\u0027s avoid this #ifdef; given the file id, it\u0027s possible to look up the name. Why not do that in the impl?",
+      "revId": "c4c68225eba7d60f99fa258a2a0b24476aab07c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a032fdd_1273c80d",
+        "filename": "src/snapshot/embedded-file-writer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1323125
+      },
+      "writtenOn": "2019-03-18T18:47:04Z",
+      "side": 1,
+      "message": "How would you recommend an implementation of looking up the name from impl? Doing so isn\u0027t possible with current implementation since I need access to the EmbeddedFileWriter object which was originally initialized to populate the external_filenames_by_index_ vector.\n\nAnother suggestion is we can declare the function in this format instead \"SourceInfo(int fileid, const char* filename, int line)\", similar to how \"DeclareExternalFilename\" is declared.\n\nI can see through comments \"MSVC\" platform needs to implement this behaviour in a similar way.",
+      "parentUuid": "1ceb9ac5_2a479428",
       "revId": "c4c68225eba7d60f99fa258a2a0b24476aab07c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
