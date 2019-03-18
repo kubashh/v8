@@ -111,11 +111,11 @@ class BackgroundCompileScope {
   std::shared_ptr<NativeModule> const native_module_;
 };
 
-// The {CompilationStateImpl} keeps track of the compilation state of the
-// owning NativeModule, i.e. which functions are left to be compiled.
-// It contains a task manager to allow parallel and asynchronous background
-// compilation of functions.
-// It's public interface {CompilationState} lives in compilation-environment.h.
+// The {CompilationStateImpl} keeps track of the compilation state of the owning
+// NativeModule, i.e. which functions are left to be compiled. It contains a
+// task manager to allow parallel and asynchronous background compilation of
+// functions. It's public interface {CompilationState} lives in
+// compilation-environment.h.
 class CompilationStateImpl {
  public:
   CompilationStateImpl(const std::shared_ptr<NativeModule>& native_module,
@@ -349,6 +349,25 @@ void CompileLazy(Isolate* isolate, NativeModule* native_module,
 
 namespace {
 
+void apply_hint_to_execution_tier(WasmCompilationHintTier hint,
+                                  ExecutionTier* tier) {
+  switch (hint) {
+    case WasmCompilationHintTier::kDefault:
+      // Keep default tier.
+      return;
+    case WasmCompilationHintTier::kInterpreter:
+      *tier = ExecutionTier::kInterpreter;
+      return;
+    case WasmCompilationHintTier::kBaseline:
+      *tier = ExecutionTier::kBaseline;
+      return;
+    case WasmCompilationHintTier::kOptimized:
+      *tier = ExecutionTier::kOptimized;
+      return;
+  }
+  UNREACHABLE();
+}
+
 // The {CompilationUnitBuilder} builds compilation units and stores them in an
 // internal buffer. The buffer is moved into the working queue of the
 // {CompilationStateImpl} when {Commit} is called.
@@ -363,14 +382,44 @@ class CompilationUnitBuilder {
 
   void AddUnit(uint32_t func_index) {
     switch (compilation_state()->compile_mode()) {
-      case CompileMode::kTiering:
-        tiering_units_.emplace_back(
-            CreateUnit(func_index, ExecutionTier::kOptimized));
-        baseline_units_.emplace_back(
-            CreateUnit(func_index, ExecutionTier::kBaseline));
-        return;
       case CompileMode::kRegular:
         baseline_units_.emplace_back(CreateUnit(func_index, default_tier_));
+        return;
+      case CompileMode::kTiering:
+
+        // Default tiering behaviour
+        ExecutionTier first_tier = ExecutionTier::kBaseline;
+        ExecutionTier second_tier = ExecutionTier::kOptimized;
+
+        // Check if compilation hints override default tiering behaviour
+        bool compilation_hints_enabled =
+            native_module_->enabled_features().compilation_hints;
+        if (compilation_hints_enabled) {
+          // Find compilation hint
+          uint32_t hint_index =
+              func_index - native_module_->num_imported_functions();
+          DCHECK_GE(hint_index, 0);
+          const std::vector<WasmCompilationHint>& compilation_hints =
+              native_module_->module()->compilation_hints;
+          if (hint_index < compilation_hints.size()) {
+            WasmCompilationHint hint = compilation_hints[hint_index];
+
+            // Apply compilation hint
+            apply_hint_to_execution_tier(hint.first_tier, &first_tier);
+            apply_hint_to_execution_tier(hint.second_tier, &second_tier);
+          }
+        }
+
+        // Create compilation units and suppress duplicate compilation
+        baseline_units_.emplace_back(
+            CreateUnit(func_index, std::move(first_tier)));
+        static_assert(ExecutionTier::kInterpreter < ExecutionTier::kBaseline &&
+                          ExecutionTier::kBaseline < ExecutionTier::kOptimized,
+                      "Assume an order on execution tiers");
+        if (!compilation_hints_enabled || first_tier < second_tier) {
+          tiering_units_.emplace_back(
+              CreateUnit(func_index, std::move(second_tier)));
+        }
         return;
     }
     UNREACHABLE();
@@ -1516,22 +1565,27 @@ void CompilationStateImpl::AddCompilationUnits(
   {
     base::MutexGuard guard(&mutex_);
 
-    if (compile_mode_ == CompileMode::kTiering) {
-      DCHECK_EQ(baseline_units.size(), tiering_units.size());
-      DCHECK_EQ(tiering_units.back()->requested_tier(),
-                ExecutionTier::kOptimized);
-      tiering_compilation_units_.insert(
-          tiering_compilation_units_.end(),
-          std::make_move_iterator(tiering_units.begin()),
-          std::make_move_iterator(tiering_units.end()));
-    } else {
-      DCHECK(tiering_compilation_units_.empty());
-    }
+    DCHECK_LE(tiering_units.size(), baseline_units.size());
+    DCHECK_IMPLIES(compile_mode_ == CompileMode::kTiering &&
+                       !native_module_->enabled_features().compilation_hints,
+                   tiering_units.size() == baseline_units.size());
+    DCHECK_IMPLIES(
+        compile_mode_ == CompileMode::kTiering &&
+            !native_module_->enabled_features().compilation_hints,
+        tiering_units.back()->requested_tier() == ExecutionTier::kOptimized);
+    DCHECK_IMPLIES(compile_mode_ == CompileMode::kRegular,
+                   tiering_compilation_units_.empty());
 
     baseline_compilation_units_.insert(
         baseline_compilation_units_.end(),
         std::make_move_iterator(baseline_units.begin()),
         std::make_move_iterator(baseline_units.end()));
+    if (!tiering_units.empty()) {
+      tiering_compilation_units_.insert(
+          tiering_compilation_units_.end(),
+          std::make_move_iterator(tiering_units.begin()),
+          std::make_move_iterator(tiering_units.end()));
+    }
   }
 
   RestartBackgroundTasks();
