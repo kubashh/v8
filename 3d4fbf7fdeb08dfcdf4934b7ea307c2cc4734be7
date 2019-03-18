@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d00875b_5126610a",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-18T11:16:42Z",
+      "side": 1,
+      "message": "Note: Code objects will require a different padding, they are aligned to kCodeAlignment.",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cfc884b_1bd6c3c3",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-18T11:16:42Z",
+      "side": 1,
+      "message": "Did you consider different solutions that avoid the addtl Map class? This feels pretty awkward to me, esp. compared with the previous solution which was just \n\n  V(kLayoutDescriptorOffset, FLAG_unbox_double_fields ? kTaggedSize : 0)    \\\n\nFor example, what about emulating current behavior by adding Torque syntax for conditional fields? Or using a dedicated type just for layout_descriptor that is size 0 if the flag is unset? Or, not sure if/when this will happen, wait until double-unboxing is removed when pointer compression ships?",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
