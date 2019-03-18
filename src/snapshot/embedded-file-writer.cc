@@ -277,8 +277,9 @@ void PlatformDependentEmbeddedFileWriter::DeclareLabel(const char* name) {
   fprintf(fp_, "%s:\n", name);
 }
 
-void PlatformDependentEmbeddedFileWriter::SourceInfo(int fileid, int line) {
-  fprintf(fp_, ".loc %d %d\n", fileid, line);
+void PlatformDependentEmbeddedFileWriter::SourceInfo(const char* filename,
+                                                     int line) {
+  fprintf(fp_, ".xline %d, \"%s\"\n", line, filename);
 }
 
 void PlatformDependentEmbeddedFileWriter::DeclareFunctionBegin(
@@ -303,7 +304,9 @@ void PlatformDependentEmbeddedFileWriter::FilePrologue() {}
 
 void PlatformDependentEmbeddedFileWriter::DeclareExternalFilename(
     int fileid, const char* filename) {
-  fprintf(fp_, ".file %d \"%s\"\n", fileid, filename);
+  // File name cannot be declared with an identifier on AIX.
+  // We use the SourceInfo method to emit debug info in
+  //.xline <line-number> <file-name> format.
 }
 
 void PlatformDependentEmbeddedFileWriter::FileEpilogue() {}
