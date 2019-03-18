@@ -3317,8 +3317,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
       ForEachDescriptorBodyFunction;
 
   void DescriptorArrayForEach(VariableList& variable_list,
-                              TNode<Uint32T> start_descriptor,
-                              TNode<Uint32T> end_descriptor,
+                              TNode<IntPtrT> start_index,
+                              TNode<IntPtrT> end_index,
                               const ForEachDescriptorBodyFunction& body);
 
   // Descriptor array accessors based on key_index, which is equal to
