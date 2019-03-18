@@ -16,6 +16,29 @@
       "revId": "521830f3c49f59e90b4750492c75641ec54411fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6588ebc0_20c2bdd4",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-03-18T11:47:14Z",
+      "side": 1,
+      "message": "Unfortunately the new include breaks this invariant. This is not so much about compilation speed as it is about architectural separation of concerns. It is vital for maintainability that internals of TurboFan (i.e. things in the compiler directory) are not exposed outside of that component. There are only a handful of interfaces into TurboFan, namely {CodeAssembler}, {Pipeline} and things in \"wasm-compiler.h\". These three APIs are the only headers that are allowed to be included from outside the \"compiler\" directory and we have DEPS guards for that. These APIs in turn are not allowed to leak any of the internal declarations, which is why they are not allowed to include any further headers inside the \"compiler\" directory.\n\nSo in short, unless we can do this refactoring without breaking that invariant, I don\u0027t feel comfortable with this refactoring.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 50
+      },
+      "revId": "521830f3c49f59e90b4750492c75641ec54411fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
