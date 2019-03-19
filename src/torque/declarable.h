@@ -247,7 +247,7 @@ class Callable : public Scope {
   bool HasReturnValue() const {
     return !signature_.return_type->IsVoidOrNever();
   }
-  void IncrementReturns() { ++returns_; }
+  void IncrementReturns();
   bool HasReturns() const { return returns_; }
   bool IsTransitioning() const { return transitioning_; }
   base::Optional<Statement*> body() const { return body_; }
@@ -287,6 +287,10 @@ class Macro : public Callable {
       for (const Type* type : label.types) {
         if (type->IsStructType()) return true;
       }
+    }
+    if (const StructType* struct_type =
+            StructType::DynamicCast(signature().return_type)) {
+      if (struct_type->GetConstexprValueCount() != 0) return true;
     }
     return Callable::ShouldBeInlined();
   }

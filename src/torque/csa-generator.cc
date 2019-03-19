@@ -145,14 +145,15 @@ void CSAGenerator::ProcessArgumentsCommon(
     std::vector<std::string>* constexpr_arguments, Stack<std::string>* stack) {
   for (auto it = parameter_types.rbegin(); it != parameter_types.rend(); ++it) {
     const Type* type = *it;
-    VisitResult arg;
-    if (type->IsConstexpr()) {
+    size_t constexpr_count = type->GetConstexprValueCount();
+    for (size_t i = 0; i < constexpr_count; ++i) {
       args->push_back(std::move(constexpr_arguments->back()));
       constexpr_arguments->pop_back();
-    } else {
+    }
+    if (!type->IsConstexpr()) {
       std::stringstream s;
       size_t slot_count = LoweredSlotCount(type);
-      VisitResult arg = VisitResult(type, stack->TopRange(slot_count));
+      VisitResult arg = VisitResult(type, stack->TopRange(slot_count), {});
       EmitCSAValue(arg, *stack, s);
       args->push_back(s.str());
       stack->PopMany(slot_count);
@@ -169,6 +170,13 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
   TypeVector parameter_types =
       instruction.intrinsic->signature().parameter_types.types;
   ProcessArgumentsCommon(parameter_types, &args, &constexpr_arguments, stack);
+
+  if (instruction.intrinsic->ExternalName() == "%GetFrameArguments") {
+    out_ << "    CodeStubAssembler csa_parent_arguments(state_);\n";
+    out_ << "    CodeStubArguments  parent_arguments(&csa_parent_arguments,";
+    PrintCommaSeparatedList(out_, args);
+    out_ << ",CodeStubAssembler::SMI_PARAMETERS);\n";
+  }
 
   Stack<std::string> pre_call_stack = *stack;
   const Type* return_type = instruction.intrinsic->signature().return_type;
@@ -260,20 +268,24 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
   } else if (instruction.intrinsic->ExternalName() ==
              "%AllocateInternalClass") {
     out_ << "CodeStubAssembler(state_).AllocateUninitializedFixedArray";
+  } else if (instruction.intrinsic->ExternalName() == "%GetFrameArguments") {
+    // Nothing to do
   } else {
     ReportError("no built in intrinsic with name " +
                 instruction.intrinsic->ExternalName());
   }
 
-  out_ << "(";
-  PrintCommaSeparatedList(out_, args);
-  if (instruction.intrinsic->ExternalName() == "%Allocate") out_ << ")";
-  if (instruction.intrinsic->ExternalName() == "%GetAllocationBaseSize")
-    out_ << "))";
-  if (return_type->IsStructType()) {
-    out_ << ").Flatten();\n";
-  } else {
-    out_ << ");\n";
+  if (instruction.intrinsic->ExternalName() != "%GetFrameArguments") {
+    out_ << "(";
+    PrintCommaSeparatedList(out_, args);
+    if (instruction.intrinsic->ExternalName() == "%Allocate") out_ << ")";
+    if (instruction.intrinsic->ExternalName() == "%GetAllocationBaseSize")
+      out_ << "))";
+    if (return_type->IsStructType()) {
+      out_ << ").Flatten();\n";
+    } else {
+      out_ << ");\n";
+    }
   }
   if (instruction.intrinsic->ExternalName() == "%Allocate") {
     out_ << "    CodeStubAssembler(state_).InitializeFieldsWithRoot("

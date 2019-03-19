@@ -215,6 +215,34 @@ macro NewJSArray(implicit context: Context)(): JSArray {
   };
 }
 
+struct HoleIterator {
+  Next(): Object labels NoMore() {
+    if (this.remaining-- == 0) goto NoMore;
+    return Hole;
+  }
+  remaining: Smi;
+}
+
+struct ArgumentsIterator {
+  Next(): Object labels NoMore() {
+    if (this.current == this.arguments.length) goto NoMore;
+    return this.arguments[this.current++];
+  }
+  const arguments: constexpr Arguments;
+  current: intptr;
+}
+
+macro NewArgumentsIterator(a: constexpr Arguments): ArgumentsIterator {
+  return ArgumentsIterator{a, 0};
+}
+
+macro NewJSArray(implicit context: Context)(map: Map, length: Smi): JSArray {
+  const map = GetFastPackedSmiElementsJSArrayMap();
+  let i = HoleIterator{length};
+  const elements = new FixedArray{map, length, ...i};
+  return new JSArray{map, kEmptyFixedArray, elements, length};
+}
+
 // A HeapObject with a JSArray map, and either fast packed elements, or fast
 // holey elements when the global NoElementsProtector is not invalidated.
 transient type FastJSArray extends JSArray;
@@ -1967,11 +1995,11 @@ struct FastJSArrayWitness {
     }
   }
 
-  stable: JSArray;
+  const stable: JSArray;
   unstable: FastJSArray;
-  map: Map;
-  hasDoubles: bool;
-  hasSmis: bool;
+  const map: Map;
+  const hasDoubles: bool;
+  const hasSmis: bool;
   arrayIsPushable: bool;
 }
 
