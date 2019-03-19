@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ab7f1b19_6454f01c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1322339
+      },
+      "writtenOn": "2019-03-19T21:27:45Z",
+      "side": 1,
+      "message": "ohh.. Initially I added another error message fix to the same CL, but then realised opening a different CL will be a better approach. I missed out on removing this line from the commit message. I\u0027ll update it. Thanks.",
+      "parentUuid": "eb771ed5_888bb7d6",
+      "revId": "1270bcb819bf47baf05b7e6cefb2f112a4f5bc4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "490f31a8_09e9eff5",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 5
