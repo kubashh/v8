@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "701ca5a9_7341e464",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-19T14:34:47Z",
+      "side": 1,
+      "message": "/s/movl/StoreTaggedField",
+      "range": {
+        "startLine": 1592,
+        "startChar": 7,
+        "endLine": 1592,
+        "endChar": 67
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e012ef9_374b5fc3",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-19T14:34:47Z",
+      "side": 1,
+      "message": "Just to check, this is actually storing to the field on the heap - I thought the idea of these instructions was to just do the actual compression / decompression (e.g., into registers) and then later have a later instruction do the (32bit) store of the value into the field? Maybe I\u0027m missing the overall plan though.",
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20b39e7c_6fb410c8",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1975,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-19T14:34:47Z",
+      "side": 1,
+      "message": "ditto with question on Arm64 above (and same applies for the Decompression).",
+      "range": {
+        "startLine": 1975,
+        "startChar": 8,
+        "endLine": 1975,
+        "endChar": 13
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8839760a_a0d70851",
+        "filename": "test/cctest/compiler/test-run-machops.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-19T14:34:47Z",
+      "side": 1,
+      "message": "ditto with comments below, maybe do one of each.",
+      "range": {
+        "startLine": 404,
+        "startChar": 17,
+        "endLine": 404,
+        "endChar": 30
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4086d63_2c935eb5",
+        "filename": "test/cctest/compiler/test-run-machops.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-19T14:34:47Z",
+      "side": 1,
+      "message": "Could this be a HeapConstant (e.g., a heap number) so that it is doing real compression / decompression on a heap address rather than a fixed 64bit value?",
+      "range": {
+        "startLine": 411,
+        "startChar": 15,
+        "endLine": 411,
+        "endChar": 35
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "563b1cf9_b78b9c3d",
+        "filename": "test/cctest/compiler/test-run-machops.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-19T14:34:47Z",
+      "side": 1,
+      "message": "Maybe explicitly make this a Smi constant?",
+      "range": {
+        "startLine": 419,
+        "startChar": 15,
+        "endLine": 419,
+        "endChar": 36
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
