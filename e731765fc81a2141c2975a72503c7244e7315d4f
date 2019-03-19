@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53a1742c_599b0ca4",
+        "filename": "src/snapshot/embedded-file-writer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-03-19T14:49:08Z",
+      "side": 1,
+      "message": "nit: end with a \u0027.\u0027",
+      "revId": "e731765fc81a2141c2975a72503c7244e7315d4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
