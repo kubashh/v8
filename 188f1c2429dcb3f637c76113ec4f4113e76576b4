@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "88bd48ee_0aef7607",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-19T12:52:28Z",
+      "side": 1,
+      "message": "Technically, it\u0027s compiled with Turbofan, but you are right, semantically we should not mark it as turbofan-tiered.\nI introduces helper methods to get the code kind and code tier from the ExecutionTier.",
+      "parentUuid": "dc4f215e_3edd34c9",
+      "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "336a47f2_752e9028",
         "filename": "src/wasm/function-compiler.h",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "003569a1_3dfa5e57",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-19T12:52:28Z",
+      "side": 1,
+      "message": "Ack, dropped the TODO.",
+      "parentUuid": "336a47f2_752e9028",
+      "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "324cb631_0c2c1fef",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-19T12:52:28Z",
+      "side": 1,
+      "message": "You are right, this does not really belong here. I moved it to the NativeModule, where it makes much more sense.\nI also renamed it to \"AddCompiledCode\", as it then just calls \"AddCode\" with information extracted from the WasmCompilationResult.",
+      "parentUuid": "0b91167b_f2464dc4",
+      "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cfacc2f9_2bb375f0",
         "filename": "src/wasm/function-compiler.h",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b333ed9c_30ade923",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-19T12:52:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfacc2f9_2bb375f0",
+      "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
