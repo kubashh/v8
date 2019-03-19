@@ -1572,6 +1572,40 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
     case kArm64Str:
       __ Str(i.InputOrZeroRegister64(0), i.MemoryOperand(1));
       break;
+    case kArm64DecompressSigned: {
+      __ DecompressTaggedSigned(i.OutputRegister(), i.MemoryOperand());
+      EmitWordLoadPoisoningIfNeeded(this, opcode, instr, i);
+      break;
+    }
+    case kArm64DecompressPointer: {
+      __ DecompressTaggedPointer(i.OutputRegister(), i.MemoryOperand());
+      EmitWordLoadPoisoningIfNeeded(this, opcode, instr, i);
+      break;
+    }
+    case kArm64DecompressAny: {
+      __ DecompressAnyTagged(i.OutputRegister(), i.MemoryOperand());
+      EmitWordLoadPoisoningIfNeeded(this, opcode, instr, i);
+      break;
+    }
+    // TODO(solanes): Combine into one Compress? They seem to be identical.
+    case kArm64CompressSigned: {
+      // TODO(solanes): We might get away with doing a no-op here. The movl
+      // instruction is the conservative way for the moment.
+      __ StoreTaggedField(i.InputOrZeroRegister64(0), i.MemoryOperand(1));
+      break;
+    }
+    case kArm64CompressPointer: {
+      // TODO(solanes): We might get away with doing a no-op here. The movl
+      // instruction is the conservative way for the moment.
+      __ StoreTaggedField(i.InputOrZeroRegister64(0), i.MemoryOperand(1));
+      break;
+    }
+    case kArm64CompressAny: {
+      // TODO(solanes): We might get away with doing a no-op here. The movl
+      // instruction is the conservative way for the moment.
+      __ StoreTaggedField(i.InputOrZeroRegister64(0), i.MemoryOperand(1));
+      break;
+    }
     case kArm64LdrS:
       __ Ldr(i.OutputDoubleRegister().S(), i.MemoryOperand());
       break;
