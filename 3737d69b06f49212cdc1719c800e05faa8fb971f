@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dfc99c13_f715d99d",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1592,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-19T18:00:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "701ca5a9_7341e464",
+      "range": {
+        "startLine": 1592,
+        "startChar": 7,
+        "endLine": 1592,
+        "endChar": 67
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e012ef9_374b5fc3",
         "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
         "patchSetId": 6
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "f8a4306f_dc47ad25",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-19T18:00:16Z",
+      "side": 1,
+      "message": "You are right. Updated!\n(Arm64 still a WIP)",
+      "parentUuid": "2e012ef9_374b5fc3",
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20b39e7c_6fb410c8",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 6
@@ -53,6 +95,30 @@
       "writtenOn": "2019-03-19T14:34:47Z",
       "side": 1,
       "message": "ditto with question on Arm64 above (and same applies for the Decompression).",
+      "range": {
+        "startLine": 1975,
+        "startChar": 8,
+        "endLine": 1975,
+        "endChar": 13
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1894290c_97ba7383",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1975,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-19T18:00:16Z",
+      "side": 1,
+      "message": "Udpated!",
+      "parentUuid": "20b39e7c_6fb410c8",
       "range": {
         "startLine": 1975,
         "startChar": 8,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "fbdab8fc_476ef86a",
+        "filename": "test/cctest/compiler/test-run-machops.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-19T18:00:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8839760a_a0d70851",
+      "range": {
+        "startLine": 404,
+        "startChar": 17,
+        "endLine": 404,
+        "endChar": 30
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4086d63_2c935eb5",
         "filename": "test/cctest/compiler/test-run-machops.cc",
         "patchSetId": 6
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "ade774e2_a6fd977d",
+        "filename": "test/cctest/compiler/test-run-machops.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-19T18:00:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4086d63_2c935eb5",
+      "range": {
+        "startLine": 411,
+        "startChar": 15,
+        "endLine": 411,
+        "endChar": 35
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "563b1cf9_b78b9c3d",
         "filename": "test/cctest/compiler/test-run-machops.cc",
         "patchSetId": 6
@@ -131,6 +245,30 @@
       "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93f42848_04dd0e2f",
+        "filename": "test/cctest/compiler/test-run-machops.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-19T18:00:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "563b1cf9_b78b9c3d",
+      "range": {
+        "startLine": 419,
+        "startChar": 15,
+        "endLine": 419,
+        "endChar": 36
+      },
+      "revId": "3737d69b06f49212cdc1719c800e05faa8fb971f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

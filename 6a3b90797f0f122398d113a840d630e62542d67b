@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e9016081_265a2f16",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1958,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-19T18:00:16Z",
+      "side": 1,
+      "message": "Regarding MemoryOperand() here and below, that is the way it should be written. There is no \"Operand()\".",
+      "parentUuid": "47d4b19a_f66a92d7",
+      "range": {
+        "startLine": 1958,
+        "startChar": 54,
+        "endLine": 1958,
+        "endChar": 67
+      },
+      "revId": "6a3b90797f0f122398d113a840d630e62542d67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60dffdc1_2d5f8f29",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 2
