@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e875757_23b9e9fd",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 8889,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-19T19:56:12Z",
+      "side": 0,
+      "message": "Ouch. It seems that we are exposing too much details. Let\u0027s just inline the whole DescriptorArrayForEach() to the caller and remove it. I think it will be more obvious how we are iterating the descriptor array and why this way.",
+      "revId": "1cb05f1ff4d8c1a4eea79e557f33d9d6dcadaf5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

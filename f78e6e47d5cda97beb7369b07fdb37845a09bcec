@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "525a4916_caa4550e",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 8918,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-19T19:56:12Z",
+      "side": 1,
+      "message": "How about var_start_key_index and var_end_key_index (keeping in mind that the latter is exclusive).",
+      "revId": "f78e6e47d5cda97beb7369b07fdb37845a09bcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8546fd44_11427a66",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 8957,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-19T19:56:12Z",
+      "side": 1,
+      "message": "And please add a comment here that we are calculating smaller range for processing symbols and the var_end_key_index value is still inclusive at this point.",
+      "revId": "f78e6e47d5cda97beb7369b07fdb37845a09bcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31b76d7f_bef7857f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 9078,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-03-19T19:56:12Z",
+      "side": 1,
+      "message": "// Add DescriptorArray::kEntrySize to make the var_end_key_index exclusive as BuildFastLoop() expects.",
+      "revId": "f78e6e47d5cda97beb7369b07fdb37845a09bcec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
