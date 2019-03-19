@@ -5999,6 +5999,7 @@ wasm::WasmCompilationResult CompileWasmInterpreterEntry(
       wasm_engine, incoming, &jsgraph, Code::WASM_INTERPRETER_ENTRY,
       wasm::WasmCode::kInterpreterEntry, func_name.start(),
       WasmStubAssemblerOptions());
+  result.executed_tier = wasm::ExecutionTier::kInterpreter;
 
   return result;
 }
