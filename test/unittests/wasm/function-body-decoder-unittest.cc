@@ -2113,6 +2113,25 @@ TEST_F(FunctionBodyDecoderTest, GetTable) {
                                       WASM_GET_TABLE(oob_tab, WASM_I32V(3)))});
 }
 
+TEST_F(FunctionBodyDecoderTest, MultiTableCallIndirect) {
+  WASM_FEATURE_SCOPE(anyref);
+  TestModuleBuilder builder;
+  module = builder.module();
+  byte tab_ref = builder.AddTable(kWasmAnyRef, 10, true, 20);
+  byte tab_func = builder.AddTable(kWasmAnyFunc, 20, true, 30);
+
+  ValueType sig_types[]{kWasmAnyRef, kWasmAnyFunc, kWasmI32};
+  FunctionSig sig(0, 3, sig_types);
+  byte sig_index = builder.AddSignature(sigs.i_v());
+
+  // We can store anyfunc values as anyref, but not the other way around.
+  ExpectValidates(sigs.i_v(),
+                  {kExprI32Const, 0, kExprCallIndirect, sig_index, tab_func});
+
+  ExpectFailure(sigs.i_v(),
+                {kExprI32Const, 0, kExprCallIndirect, sig_index, tab_ref});
+}
+
 TEST_F(FunctionBodyDecoderTest, WasmMemoryGrow) {
   TestModuleBuilder builder;
   module = builder.module();

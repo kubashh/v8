@@ -1445,7 +1445,8 @@ class ThreadImpl {
         return pc + 1 + imm.length;
       }
       case kExprCallIndirect: {
-        CallIndirectImmediate<Decoder::kNoValidate> imm(decoder, code->at(pc));
+        CallIndirectImmediate<Decoder::kNoValidate> imm(wasm::kAllWasmFeatures,
+                                                        decoder, code->at(pc));
         return pc + 1 + imm.length;
       }
       default:
@@ -2697,8 +2698,8 @@ class ThreadImpl {
         } break;
 
         case kExprCallIndirect: {
-          CallIndirectImmediate<Decoder::kNoValidate> imm(&decoder,
-                                                          code->at(pc));
+          CallIndirectImmediate<Decoder::kNoValidate> imm(
+              wasm::kAllWasmFeatures, &decoder, code->at(pc));
           uint32_t entry_index = Pop().to<uint32_t>();
           // Assume only one table for now.
           DCHECK_LE(module()->tables.size(), 1u);
@@ -2769,8 +2770,8 @@ class ThreadImpl {
         } break;
 
         case kExprReturnCallIndirect: {
-          CallIndirectImmediate<Decoder::kNoValidate> imm(&decoder,
-                                                          code->at(pc));
+          CallIndirectImmediate<Decoder::kNoValidate> imm(
+              wasm::kAllWasmFeatures, &decoder, code->at(pc));
           uint32_t entry_index = Pop().to<uint32_t>();
           // Assume only one table for now.
           DCHECK_LE(module()->tables.size(), 1u);
