@@ -105,6 +105,7 @@ void Parser::ReportUnexpectedTokenAt(Scanner::Location location,
       break;
     case Token::AWAIT:
     case Token::ENUM:
+    case Token::VAR:
       message = MessageTemplate::kUnexpectedReserved;
       break;
     case Token::LET:
