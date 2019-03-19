@@ -54,7 +54,11 @@ SYNCHRONIZED_ACCESSORS_CHECKED(Map, layout_descriptor, LayoutDescriptor,
 WEAK_ACCESSORS(Map, raw_transitions, kTransitionsOrPrototypeInfoOffset)
 
 // |bit_field| fields.
-BIT_FIELD_ACCESSORS(Map, bit_field, has_non_instance_prototype,
+// Concurrent access to |has_prototype_slot| and |has_non_instance_prototype|
+// is explicitly whitelisted here. The former is never modified after the map
+// is setup but it's being read by concurrent marker when pointer compression
+// is enabled. The latter bit can be modified on a live objects.
+BIT_FIELD_ACCESSORS(Map, relaxed_bit_field, has_non_instance_prototype,
                     Map::HasNonInstancePrototypeBit)
 BIT_FIELD_ACCESSORS(Map, bit_field, is_callable, Map::IsCallableBit)
 BIT_FIELD_ACCESSORS(Map, bit_field, has_named_interceptor,
@@ -65,7 +69,7 @@ BIT_FIELD_ACCESSORS(Map, bit_field, is_undetectable, Map::IsUndetectableBit)
 BIT_FIELD_ACCESSORS(Map, bit_field, is_access_check_needed,
                     Map::IsAccessCheckNeededBit)
 BIT_FIELD_ACCESSORS(Map, bit_field, is_constructor, Map::IsConstructorBit)
-BIT_FIELD_ACCESSORS(Map, bit_field, has_prototype_slot,
+BIT_FIELD_ACCESSORS(Map, relaxed_bit_field, has_prototype_slot,
                     Map::HasPrototypeSlotBit)
 
 // |bit_field2| fields.
@@ -75,7 +79,8 @@ BIT_FIELD_ACCESSORS(Map, bit_field2, is_in_retained_map_list,
                     Map::IsInRetainedMapListBit)
 
 // |bit_field3| fields.
-BIT_FIELD_ACCESSORS(Map, bit_field3, owns_descriptors, Map::OwnsDescriptorsBit)
+BIT_FIELD_ACCESSORS(Map, relaxed_bit_field3, owns_descriptors,
+                    Map::OwnsDescriptorsBit)
 BIT_FIELD_ACCESSORS(Map, bit_field3, has_hidden_prototype,
                     Map::HasHiddenPrototypeBit)
 BIT_FIELD_ACCESSORS(Map, bit_field3, is_deprecated, Map::IsDeprecatedBit)
@@ -169,14 +174,15 @@ int Map::LastAdded() const {
 }
 
 int Map::NumberOfOwnDescriptors() const {
-  return NumberOfOwnDescriptorsBits::decode(bit_field3());
+  return NumberOfOwnDescriptorsBits::decode(relaxed_bit_field3());
 }
 
 void Map::SetNumberOfOwnDescriptors(int number) {
   DCHECK_LE(number, instance_descriptors()->number_of_descriptors());
   CHECK_LE(static_cast<unsigned>(number),
            static_cast<unsigned>(kMaxNumberOfDescriptors));
-  set_bit_field3(NumberOfOwnDescriptorsBits::update(bit_field3(), number));
+  set_relaxed_bit_field3(
+      NumberOfOwnDescriptorsBits::update(relaxed_bit_field3(), number));
 }
 
 int Map::EnumLength() const { return EnumLengthBits::decode(bit_field3()); }
@@ -422,6 +428,14 @@ void Map::set_bit_field(byte value) {
   WRITE_BYTE_FIELD(*this, kBitFieldOffset, value);
 }
 
+byte Map::relaxed_bit_field() const {
+  return RELAXED_READ_BYTE_FIELD(*this, kBitFieldOffset);
+}
+
+void Map::set_relaxed_bit_field(byte value) {
+  RELAXED_WRITE_BYTE_FIELD(*this, kBitFieldOffset, value);
+}
+
 byte Map::bit_field2() const {
   return READ_BYTE_FIELD(*this, kBitField2Offset);
 }
@@ -499,7 +513,7 @@ bool Map::is_dictionary_map() const {
 }
 
 void Map::mark_unstable() {
-  set_bit_field3(IsUnstableBit::update(bit_field3(), true));
+  set_relaxed_bit_field3(IsUnstableBit::update(relaxed_bit_field3(), true));
 }
 
 bool Map::is_stable() const { return !IsUnstableBit::decode(bit_field3()); }
@@ -617,12 +631,20 @@ void Map::InitializeDescriptors(Isolate* isolate, DescriptorArray descriptors,
   }
 }
 
-void Map::set_bit_field3(uint32_t bits) {
-  RELAXED_WRITE_UINT32_FIELD(*this, kBitField3Offset, bits);
+uint32_t Map::bit_field3() const {
+  return READ_UINT32_FIELD(*this, kBitField3Offset);
 }
 
-uint32_t Map::bit_field3() const {
+void Map::set_bit_field3(uint32_t bits) {
+  WRITE_UINT32_FIELD(*this, kBitField3Offset, bits);
+}
+
+uint32_t Map::relaxed_bit_field3() const {
   return RELAXED_READ_UINT32_FIELD(*this, kBitField3Offset);
+}
+
+void Map::set_relaxed_bit_field3(uint32_t bits) {
+  RELAXED_WRITE_UINT32_FIELD(*this, kBitField3Offset, bits);
 }
 
 void Map::clear_padding() {
