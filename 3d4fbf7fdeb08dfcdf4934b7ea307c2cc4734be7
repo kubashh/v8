@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "2a955a0b_efab70e2",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-03-19T13:06:51Z",
+      "side": 1,
+      "message": "BTW, If we don\u0027t go the pre-process way, then the typedef of Map to the right class would definitely reduce the amount of code churn, and should be added to this patch for any short-term solution.\n\nSo, any preference on how to handle this? Do you want to try to first try to land with with the two-class solution and add the #ifdefs support later? Even better would be to pre-land the pre-processor support in a separate CL. Although we can do this on our side, Tobias in on vacation and I\u0027m traveling right now, so I am not sure how quickly it would get done if it\u0027s on our plate. You\u0027re welcome to give it a shot.",
+      "parentUuid": "a409b4e4_dac9010f",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7efb1ae_b4c86893",
         "filename": "src/objects/map.h",
         "patchSetId": 7
