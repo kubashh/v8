@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d808d3d_ba400111",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-19T12:56:33Z",
+      "side": 0,
+      "message": "Btw, thanks for removing this outdated comment.",
+      "revId": "55bbcc4c0893dcefff6b44099c5a99f1ea1b267b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
