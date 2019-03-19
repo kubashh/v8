@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "a409b4e4_dac9010f",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-03-19T01:09:31Z",
+      "side": 1,
+      "message": "OK, I think you\u0027ve convinced me. Up until now, I was quite hesitant to use #defines just because this adds a whole new level to the machinery we already have for a small number of cases, but it seems everybody is more comfortable with that than the multiple class definitions. \n\nIf we go this route, than I very strongly prefer 1). \n\nI am probably just being daft, but why do we not want to specify build-config.h and global.h when running the preprocessor? It seems like the simplest and most robust way to do this to not have to maintain multiple lists.",
+      "parentUuid": "4ce1f556_bbfc2bda",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7efb1ae_b4c86893",
         "filename": "src/objects/map.h",
         "patchSetId": 7
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Responded in another closely-related comment thread: https://chromium-review.googlesource.com/c/v8/v8/+/1480919/7/src/builtins/base.tq#135",
       "parentUuid": "b7efb1ae_b4c86893",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "235413e8_ae8b6227",
+        "filename": "src/objects/map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1115890
+      },
+      "writtenOn": "2019-03-19T01:09:31Z",
+      "side": 1,
+      "message": "As discussed in the other class, let\u0027s hook up the C++ preprocessor to do this, using the #if/#endif syntax.",
+      "parentUuid": "988f5919_36d9501a",
       "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
