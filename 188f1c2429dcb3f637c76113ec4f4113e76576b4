@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc4f215e_3edd34c9",
+        "filename": "src/wasm/function-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-19T12:20:08Z",
+      "side": 1,
+      "message": "Should this be kOther for the interpreter?",
+      "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "336a47f2_752e9028",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-19T12:20:08Z",
+      "side": 1,
+      "message": "I would prefer not to do this.",
+      "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b91167b_f2464dc4",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-19T12:20:08Z",
+      "side": 1,
+      "message": "Hmm, the style guide recommends against helpers on structs. It somehow doesn\u0027t feel right here, because then WasmCompilationResult is not just a data structure, but something that knows stuff about native modules. I would recommend making this a top level function or keeping it in the compilation unit.",
+      "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfacc2f9_2bb375f0",
+        "filename": "src/wasm/function-compiler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-19T12:20:08Z",
+      "side": 1,
+      "message": "result_tier?",
+      "revId": "188f1c2429dcb3f637c76113ec4f4113e76576b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
