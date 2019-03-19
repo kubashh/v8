@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb771ed5_888bb7d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-03-19T21:15:02Z",
+      "side": 1,
+      "message": "This bit of the commit message doesn\u0027t seem to refer to anything in this CL. Or am I missing something?",
+      "revId": "1270bcb819bf47baf05b7e6cefb2f112a4f5bc4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "490f31a8_09e9eff5",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 3735,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-03-19T21:15:02Z",
+      "side": 1,
+      "message": "No need to use the \"...At\" variety if you\u0027re passing the current location. This can just be:\n\n  ReportMessage(MessageTemplate::kMissingFunctionName);",
+      "range": {
+        "startLine": 3735,
+        "startChar": 14,
+        "endLine": 3735,
+        "endChar": 29
+      },
+      "revId": "1270bcb819bf47baf05b7e6cefb2f112a4f5bc4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
