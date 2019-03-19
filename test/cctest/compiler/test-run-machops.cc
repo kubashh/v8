@@ -397,6 +397,32 @@ TEST(RunWord64Popcnt) {
   CHECK_EQ(22, m.Call(uint64_t(0xE00DC103E00DC103)));
   CHECK_EQ(18, m.Call(uint64_t(0x000DC107000DC107)));
 }
+
+#ifdef V8_COMPRESS_POINTERS
+TEST(CompressDecompressTagged) {
+  RawMachineAssemblerTester<int64_t> m;
+  Node* node = m.Int64Constant(123);
+  m.Return(m.ChangeCompressedToTagged(m.ChangeTaggedToCompressed(node)));
+  CHECK_EQ(123, m.Call());
+}
+
+TEST(CompressDecompressTaggedPointer) {
+  RawMachineAssemblerTester<int64_t> m;
+  Node* node = m.Int64Constant(123);
+  m.Return(m.ChangeCompressedPointerToTaggedPointer(
+      m.ChangeTaggedPointerToCompressedPointer(node)));
+  CHECK_EQ(123, m.Call());
+}
+
+TEST(CompressDecompressTaggedSigned) {
+  RawMachineAssemblerTester<int64_t> m;
+  Node* node = m.Int64Constant(123);
+  m.Return(m.ChangeCompressedSignedToTaggedSigned(
+      m.ChangeTaggedSignedToCompressedSigned(node)));
+  CHECK_EQ(123, m.Call());
+}
+#endif  // V8_COMPRESS_POINTERS
+
 #endif  // V8_TARGET_ARCH_64_BIT
 
 
@@ -4090,7 +4116,6 @@ TEST(RunChangeUint32ToFloat64) {
 
   FOR_UINT32_INPUTS(i) { CHECK_DOUBLE_EQ(static_cast<double>(i), m.Call(i)); }
 }
-
 
 TEST(RunTruncateFloat32ToInt32) {
   BufferedRawMachineAssemblerTester<int32_t> m(MachineType::Float32());
