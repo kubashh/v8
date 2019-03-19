@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58b58141_f6c923c2",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 3735,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-03-19T23:50:59Z",
+      "side": 1,
+      "message": "No need for \"impl()-\u003e\" here, since ReportMessage is defined in ParserBase.",
+      "range": {
+        "startLine": 3735,
+        "startChar": 6,
+        "endLine": 3735,
+        "endChar": 14
+      },
+      "revId": "90d60b52dd6848e100d9c743513325ec3bd67ec2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
