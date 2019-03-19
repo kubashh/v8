@@ -1952,6 +1952,37 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       }
       break;
     }
+    case kX64DecompressSigned: {
+      CHECK(instr->HasOutput());
+      __ DecompressTaggedSigned(i.OutputRegister(), i.MemoryOperand());
+      break;
+    }
+    case kX64DecompressPointer: {
+      CHECK(instr->HasOutput());
+      __ DecompressTaggedPointer(i.OutputRegister(), i.MemoryOperand());
+      break;
+    }
+    case kX64DecompressAny: {
+      CHECK(instr->HasOutput());
+      __ DecompressAnyTagged(i.OutputRegister(), i.MemoryOperand(),
+                             i.TempRegister(0));
+      break;
+    }
+    // TODO(solanes): Combine into one Compress? They seem to be identical.
+    // TODO(solanes): We might get away with doing a no-op in these three cases.
+    // The movl instruction is the conservative way for the moment.
+    case kX64CompressSigned: {
+      __ movl(i.OutputRegister(), i.MemoryOperand());
+      break;
+    }
+    case kX64CompressPointer: {
+      __ movl(i.OutputRegister(), i.MemoryOperand());
+      break;
+    }
+    case kX64CompressAny: {
+      __ movl(i.OutputRegister(), i.MemoryOperand());
+      break;
+    }
     case kX64Movq:
       EmitOOLTrapIfNeeded(zone(), this, opcode, instr, i, __ pc_offset());
       if (instr->HasOutput()) {
