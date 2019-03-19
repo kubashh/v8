@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ccf6d7b9_e5b79f2b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000264
+      },
+      "writtenOn": "2019-03-19T18:42:29Z",
+      "side": 1,
+      "message": "Is it possible to write a unit test that exercises any of those cases?\n\nI am guessing it would be difficult to create a unit test that exercises the case of getting EXCEPTION_ACCESS_VIOLATION during early thread startup, but I thought I should at least ask. :-)",
+      "parentUuid": "93ba5e38_7f916ece",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 14,
+        "endChar": 44
+      },
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a9f0fc6a_69acce51",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
