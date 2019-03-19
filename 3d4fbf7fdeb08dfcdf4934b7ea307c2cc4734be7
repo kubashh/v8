@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "8978fa89_0fbcbd72",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-03-19T04:03:27Z",
+      "side": 1,
+      "message": "Great point regarding globals.h and build-config. I was making things way more complicated than they need to be, when we could include those files directly in the preprocessing step.",
+      "parentUuid": "a409b4e4_dac9010f",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b7efb1ae_b4c86893",
         "filename": "src/objects/map.h",
         "patchSetId": 7
