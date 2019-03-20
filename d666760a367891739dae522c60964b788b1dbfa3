@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b20e515_f4f7fa2a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-20T12:01:49Z",
+      "side": 1,
+      "message": "Thanks for the very detailed commit message! One small suggestion here would be to reword this to be more procedural, e.g.\n\nlock the module, allocate all the code space, release the lock, copy the code, lock the module, publish the code, and then release the lock. It makes it clearer that the middle part is not protected by the lock.",
+      "revId": "d666760a367891739dae522c60964b788b1dbfa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
