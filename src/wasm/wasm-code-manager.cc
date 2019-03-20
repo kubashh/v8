@@ -736,7 +736,8 @@ WasmCode* NativeModule::CreateEmptyJumpTable(uint32_t jump_table_size) {
       OwnedVector<const uint8_t>{},             // source_pos
       WasmCode::kJumpTable,                     // kind
       WasmCode::kOther}};                       // tier
-  memset(code->instructions().start(), 0, code->instructions().size());
+  ZapCode(reinterpret_cast<Address>(code->instructions().start()),
+          code->instructions().size());
   return PublishCode(std::move(code));
 }
 
