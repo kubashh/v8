@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "00f5c3dd_e340f232",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-20T12:16:41Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "b849de2b_90e7dafd",
+      "revId": "ac357b31f21d68b27a1defc137213738475b28e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c1a75b1_2bb4d08c",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "ac357b31f21d68b27a1defc137213738475b28e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c3b9a04_76826c05",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-20T12:16:41Z",
+      "side": 0,
+      "message": "Right, it does not need the lock, because it has its own spin lock. It might still be beneficial to lock externally to explicitly prevent the lock from bouncing between threads too much.\nBut that\u0027s purely speculative, so I moved this to AddCode for now. We can still optimize locking here later.",
+      "parentUuid": "1c1a75b1_2bb4d08c",
+      "revId": "ac357b31f21d68b27a1defc137213738475b28e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
