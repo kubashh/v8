@@ -69,6 +69,24 @@
       "revId": "77bd447f1806f8698de7f4a10249c12b30985259",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "88c09a52_aafa36ed",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-20T21:42:03Z",
+      "side": 1,
+      "message": "Do we need a mov? I was assuming we could use i.InputRegister(0) instead of I.OutputRegister() as the source operand both here and on line 1592.",
+      "parentUuid": "7d88994a_b1e40c10",
+      "revId": "77bd447f1806f8698de7f4a10249c12b30985259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
