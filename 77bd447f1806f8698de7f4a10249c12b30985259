@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a382cc35_c07bcb0f",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-20T17:55:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40db819e_1ed30123",
+      "revId": "77bd447f1806f8698de7f4a10249c12b30985259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2298e810_eef2b923",
         "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
         "patchSetId": 11
@@ -33,6 +51,24 @@
       "revId": "77bd447f1806f8698de7f4a10249c12b30985259",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d88994a_b1e40c10",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-20T17:55:48Z",
+      "side": 1,
+      "message": "Is it worth it in this case? Above the Sxtw would change to a mov (as in, we would still need an instruction there)",
+      "parentUuid": "2298e810_eef2b923",
+      "revId": "77bd447f1806f8698de7f4a10249c12b30985259",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
