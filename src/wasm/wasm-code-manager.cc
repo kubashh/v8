@@ -742,7 +742,7 @@ WasmCode* NativeModule::CreateEmptyJumpTable(uint32_t jump_table_size) {
   // Only call this if we really need a jump table.
   DCHECK_LT(0, jump_table_size);
   OwnedVector<byte> instructions = OwnedVector<byte>::New(jump_table_size);
-  memset(instructions.start(), 0, instructions.size());
+  ZapCode(reinterpret_cast<Address>(instructions.start()), instructions.size());
   return AddOwnedCode(WasmCode::kAnonymousFuncIndex,  // index
                       instructions.as_vector(),       // instructions
                       0,                              // stack_slots
