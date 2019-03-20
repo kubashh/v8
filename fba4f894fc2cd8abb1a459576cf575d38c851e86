@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "363c7f1f_9db55185",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-20T12:48:14Z",
+      "side": 1,
+      "message": "How does this work with isolates that can be entered/exited from multiple threads? AFAICT this is orthogonal to isolates, since it is basically a shadow stack for C++, but without seeing usage yet, it\u0027s hard to tell.",
+      "revId": "fba4f894fc2cd8abb1a459576cf575d38c851e86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c63630c9_915cbc3b",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-20T12:48:14Z",
+      "side": 1,
+      "message": "It\u0027s hard to see why we need the extra configurability without seeing some uses here. Can you explain? Is it just a performance optimization? If so, I think we should leave it out until forced to implement it.",
+      "revId": "fba4f894fc2cd8abb1a459576cf575d38c851e86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
