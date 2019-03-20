@@ -1987,6 +1987,10 @@ void HeapObject::HeapObjectShortPrint(std::ostream& os) {  // NOLINT
       }
       break;
     }
+    case CLOSURE_FEEDBACK_CELL_ARRAY_TYPE:
+      os << "<ClosureFeedbackCellArray["
+         << ClosureFeedbackCellArray::cast(*this)->length() << "]>";
+      break;
     case FEEDBACK_VECTOR_TYPE:
       os << "<FeedbackVector[" << FeedbackVector::cast(*this)->length() << "]>";
       break;
