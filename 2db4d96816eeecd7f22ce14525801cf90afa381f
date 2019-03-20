@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "315e5618_484d452b",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-20T13:58:13Z",
+      "side": 1,
+      "message": "I am not sure if we really need a new instance type. Since it is 16-bit field, I thought it would be cleaner having a new instance type.",
+      "revId": "2db4d96816eeecd7f22ce14525801cf90afa381f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
