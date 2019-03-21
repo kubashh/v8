@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "2c4b351b_27435388",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-21T09:19:52Z",
+      "side": 1,
+      "message": "The question is: how do we find all the WasmCodeRefScope chains? If they are not tied to isolates, but OS threads, presumably we would need to find all OS threads that have scope chains? IIUC the plan was to set the ref count to be equal to (or perhaps one greater?) to the number of isolates that share a  module, and then the isolates decrement the refcounts as they get around to walking their own stacks. But if isolates can be used from multiple threads, an isolate may only see the WasmCodeRefScope chain of its current thread.",
+      "parentUuid": "fd9efc47_5ad527a0",
+      "revId": "fba4f894fc2cd8abb1a459576cf575d38c851e86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c63630c9_915cbc3b",
         "filename": "src/wasm/wasm-code-manager.h",
         "patchSetId": 2
