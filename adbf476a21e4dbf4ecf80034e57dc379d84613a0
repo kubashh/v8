@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5bd55ed8_58850014",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-21T10:20:38Z",
+      "side": 1,
+      "message": "We talked offline with Ross yesterday about this. Having 3 flavors has the added benefit of telling us when we (mistakenly) try to do decompressSigned(compressPointer(x)). I think it can help during development so that bugs like this pop up during this time.\n\nIt is also easier to go from three flavors to one, than vice versa. It can be done after implementing everything in a cleanup CL.",
+      "parentUuid": "4c52a89e_8bdd333e",
+      "range": {
+        "startLine": 1599,
+        "startChar": 7,
+        "endLine": 1599,
+        "endChar": 75
+      },
+      "revId": "adbf476a21e4dbf4ecf80034e57dc379d84613a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3eed98b_79dc31d2",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 16
@@ -57,6 +81,24 @@
       "revId": "adbf476a21e4dbf4ecf80034e57dc379d84613a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6515e4bc_464417ac",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1968,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-03-21T10:20:38Z",
+      "side": 1,
+      "message": "The whole point is not to use the current functions as we do not want to go to memory. Just compress / decompress from Register to Register.\n\nTake a look at Arm64 where I think it is more clear: we are skipping the Ldr and Str.\n\nWe can extract the common parts, but this will make it so that there are some extra instructions (e.g and extra Ldr in Decompress in Arm64)",
+      "parentUuid": "8d0202b3_edd02a12",
+      "revId": "adbf476a21e4dbf4ecf80034e57dc379d84613a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
