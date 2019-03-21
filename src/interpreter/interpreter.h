@@ -40,6 +40,9 @@ class Interpreter {
   // Returns the interrupt budget which should be used for the profiler counter.
   static int InterruptBudget();
 
+  // Returns the budget to determine when to allocate feedback vectors.
+  static int FeedbackVectorAllocationBudget();
+
   // Creates a compilation job which will generate bytecode for |literal|.
   // Additionally, if |eager_inner_literals| is not null, adds any eagerly
   // compilable inner FunctionLiterals to this list.

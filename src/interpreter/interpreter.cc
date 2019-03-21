@@ -139,6 +139,10 @@ int Interpreter::InterruptBudget() {
   return FLAG_interrupt_budget;
 }
 
+int Interpreter::FeedbackVectorAllocationBudget() {
+  return FLAG_budget_for_feedback_vector_allocation;
+}
+
 namespace {
 
 void MaybePrintAst(ParseInfo* parse_info,
