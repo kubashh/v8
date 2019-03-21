@@ -23,6 +23,11 @@ base::Optional<Stack<std::string>> CSAGenerator::EmitGraph(
          << (block->IsDeferred() ? "kDeferred" : "kNonDeferred") << ");\n";
   }
 
+  for (auto arg : cfg_.GetFrameArguments()) {
+    out_ << "  std::unique_ptr<CodeStubArguments> " << arg << ";\n";
+  }
+  out_ << "  CodeStubAssembler csa(state_);\n";
+
   EmitInstruction(GotoInstruction{cfg_.start()}, &parameters);
   for (Block* block : cfg_.blocks()) {
     if (cfg_.end() && *cfg_.end() == block) continue;
@@ -34,6 +39,7 @@ base::Optional<Stack<std::string>> CSAGenerator::EmitGraph(
     out_ << "\n";
     return EmitBlock(*cfg_.end());
   }
+
   return base::nullopt;
 }
 
@@ -145,14 +151,15 @@ void CSAGenerator::ProcessArgumentsCommon(
     std::vector<std::string>* constexpr_arguments, Stack<std::string>* stack) {
   for (auto it = parameter_types.rbegin(); it != parameter_types.rend(); ++it) {
     const Type* type = *it;
-    VisitResult arg;
-    if (type->IsConstexpr()) {
-      args->push_back(std::move(constexpr_arguments->back()));
+    size_t constexpr_count = type->GetConstexprValueCount();
+    for (size_t i = 0; i < constexpr_count; ++i) {
+      args->push_back(constexpr_arguments->back());
       constexpr_arguments->pop_back();
-    } else {
+    }
+    if (!type->IsConstexpr()) {
       std::stringstream s;
       size_t slot_count = LoweredSlotCount(type);
-      VisitResult arg = VisitResult(type, stack->TopRange(slot_count));
+      VisitResult arg = VisitResult(type, stack->TopRange(slot_count), {});
       EmitCSAValue(arg, *stack, s);
       args->push_back(s.str());
       stack->PopMany(slot_count);
@@ -168,7 +175,18 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
   std::vector<std::string> args;
   TypeVector parameter_types =
       instruction.intrinsic->signature().parameter_types.types;
+  base::Optional<std::string> constexpr_return;
+  if (instruction.intrinsic->ExternalName() == "%GetFrameArguments") {
+    constexpr_return = constexpr_arguments.back();
+    constexpr_arguments.pop_back();
+  }
+
   ProcessArgumentsCommon(parameter_types, &args, &constexpr_arguments, stack);
+
+  if (instruction.intrinsic->ExternalName() == "%GetFrameArguments") {
+    args.insert(args.begin(), "&csa");
+    args.push_back("CodeStubAssembler::SMI_PARAMETERS");
+  }
 
   Stack<std::string> pre_call_stack = *stack;
   const Type* return_type = instruction.intrinsic->signature().return_type;
@@ -182,7 +200,13 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
   }
   out_ << "    ";
 
-  if (return_type->IsStructType()) {
+  if (constexpr_return) {
+    if (instruction.intrinsic->ExternalName() == "%GetFrameArguments") {
+      out_ << *constexpr_return << ".reset(";
+    } else {
+      out_ << *constexpr_return << " = ";
+    }
+  } else if (return_type->IsStructType()) {
     out_ << "std::tie(";
     PrintCommaSeparatedList(out_, results);
     out_ << ") = ";
@@ -248,18 +272,20 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
     // Special case classes that may not always have a fixed size (e.g.
     // JSObjects). Their size must be fetched from the map.
     if (class_type != TypeOracle::GetJSObjectType()) {
-      out_ << "CodeStubAssembler(state_).IntPtrConstant((";
+      out_ << "csa.IntPtrConstant((";
       args[0] = std::to_string(class_type->size());
     } else {
-      out_ << "CodeStubAssembler(state_).TimesTaggedSize(CodeStubAssembler("
+      out_ << "csa.TimesTaggedSize(CodeStubAssembler("
               "state_).LoadMapInstanceSizeInWords(";
     }
   } else if (instruction.intrinsic->ExternalName() == "%Allocate") {
     out_ << "ca_.UncheckedCast<" << return_type->GetGeneratedTNodeTypeName()
-         << ">(CodeStubAssembler(state_).Allocate";
+         << ">(csa.Allocate";
   } else if (instruction.intrinsic->ExternalName() ==
              "%AllocateInternalClass") {
-    out_ << "CodeStubAssembler(state_).AllocateUninitializedFixedArray";
+    out_ << "csa.AllocateUninitializedFixedArray";
+  } else if (instruction.intrinsic->ExternalName() == "%GetFrameArguments") {
+    out_ << "new CodeStubArguments";
   } else {
     ReportError("no built in intrinsic with name " +
                 instruction.intrinsic->ExternalName());
@@ -268,6 +294,8 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
   out_ << "(";
   PrintCommaSeparatedList(out_, args);
   if (instruction.intrinsic->ExternalName() == "%Allocate") out_ << ")";
+  if (instruction.intrinsic->ExternalName() == "%GetFrameArguments")
+    out_ << ")";
   if (instruction.intrinsic->ExternalName() == "%GetAllocationBaseSize")
     out_ << "))";
   if (return_type->IsStructType()) {
@@ -276,9 +304,8 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
     out_ << ");\n";
   }
   if (instruction.intrinsic->ExternalName() == "%Allocate") {
-    out_ << "    CodeStubAssembler(state_).InitializeFieldsWithRoot("
-         << results[0] << ", ";
-    out_ << "CodeStubAssembler(state_).IntPtrConstant("
+    out_ << "    csa.InitializeFieldsWithRoot(" << results[0] << ", ";
+    out_ << "csa.IntPtrConstant("
          << std::to_string(ClassType::cast(return_type)->size()) << "), ";
     PrintCommaSeparatedList(out_, args);
     out_ << ", RootIndex::kUndefinedValue);\n";
@@ -435,7 +462,7 @@ void CSAGenerator::EmitInstruction(const CallBuiltinInstruction& instruction,
   std::vector<const Type*> result_types =
       LowerType(instruction.builtin->signature().return_type);
   if (instruction.is_tailcall) {
-    out_ << "   CodeStubAssembler(state_).TailCallBuiltin(Builtins::k"
+    out_ << "   csa.TailCallBuiltin(Builtins::k"
          << instruction.builtin->ExternalName() << ", ";
     PrintCommaSeparatedList(out_, arguments);
     out_ << ");\n";
@@ -454,7 +481,7 @@ void CSAGenerator::EmitInstruction(const CallBuiltinInstruction& instruction,
       stack->Push(result_name);
       out_ << "    " << result_name << " = ";
       if (generated_type != "Object") out_ << "TORQUE_CAST(";
-      out_ << "CodeStubAssembler(state_).CallBuiltin(Builtins::k"
+      out_ << "csa.CallBuiltin(Builtins::k"
            << instruction.builtin->ExternalName() << ", ";
       PrintCommaSeparatedList(out_, arguments);
       if (generated_type != "Object") out_ << ")";
@@ -464,7 +491,7 @@ void CSAGenerator::EmitInstruction(const CallBuiltinInstruction& instruction,
       DCHECK_EQ(0, result_types.size());
       // TODO(tebbi): Actually, builtins have to return a value, so we should
       // not have to handle this case.
-      out_ << "    CodeStubAssembler(state_).CallBuiltin(Builtins::k"
+      out_ << "    csa.CallBuiltin(Builtins::k"
            << instruction.builtin->ExternalName() << ", ";
       PrintCommaSeparatedList(out_, arguments);
       out_ << ");\n";
@@ -495,7 +522,7 @@ void CSAGenerator::EmitInstruction(
   out_ << "    compiler::TNode<" << generated_type << "> " << stack->Top()
        << " = ";
   if (generated_type != "Object") out_ << "TORQUE_CAST(";
-  out_ << "CodeStubAssembler(state_).CallBuiltinPointer(Builtins::"
+  out_ << "csa.CallBuiltinPointer(Builtins::"
           "CallableFor(ca_."
           "isolate(),"
           "ExampleBuiltinForTorqueFunctionPointerType("
@@ -561,7 +588,7 @@ void CSAGenerator::EmitInstruction(const CallRuntimeInstruction& instruction,
     ReportError("runtime function must have at most one result");
   }
   if (instruction.is_tailcall) {
-    out_ << "    CodeStubAssembler(state_).TailCallRuntime(Runtime::k"
+    out_ << "    csa.TailCallRuntime(Runtime::k"
          << instruction.runtime_function->ExternalName() << ", ";
     PrintCommaSeparatedList(out_, arguments);
     out_ << ");\n";
@@ -578,19 +605,19 @@ void CSAGenerator::EmitInstruction(const CallRuntimeInstruction& instruction,
     if (result_types.size() == 1) {
       stack->Push(result_name);
       out_ << "    " << result_name
-           << " = TORQUE_CAST(CodeStubAssembler(state_).CallRuntime(Runtime::k"
+           << " = TORQUE_CAST(csa.CallRuntime(Runtime::k"
            << instruction.runtime_function->ExternalName() << ", ";
       PrintCommaSeparatedList(out_, arguments);
       out_ << "));\n";
       out_ << "    USE(" << result_name << ");\n";
     } else {
       DCHECK_EQ(0, result_types.size());
-      out_ << "    CodeStubAssembler(state_).CallRuntime(Runtime::k"
+      out_ << "    csa.CallRuntime(Runtime::k"
            << instruction.runtime_function->ExternalName() << ", ";
       PrintCommaSeparatedList(out_, arguments);
       out_ << ");\n";
       if (return_type == TypeOracle::GetNeverType()) {
-        out_ << "    CodeStubAssembler(state_).Unreachable();\n";
+        out_ << "    csa.Unreachable();\n";
       } else {
         DCHECK(return_type == TypeOracle::GetVoidType());
       }
@@ -652,7 +679,7 @@ void CSAGenerator::EmitInstruction(const ReturnInstruction& instruction,
   if (*linkage_ == Builtin::kVarArgsJavaScript) {
     out_ << "    " << ARGUMENTS_VARIABLE_STRING << "->PopAndReturn(";
   } else {
-    out_ << "    CodeStubAssembler(state_).Return(";
+    out_ << "    csa.Return(";
   }
   out_ << stack->Pop() << ");\n";
 }
@@ -660,8 +687,7 @@ void CSAGenerator::EmitInstruction(const ReturnInstruction& instruction,
 void CSAGenerator::EmitInstruction(
     const PrintConstantStringInstruction& instruction,
     Stack<std::string>* stack) {
-  out_ << "    CodeStubAssembler(state_).Print("
-       << StringLiteralQuote(instruction.message) << ");\n";
+  out_ << "    csa.Print(" << StringLiteralQuote(instruction.message) << ");\n";
 }
 
 void CSAGenerator::EmitInstruction(const AbortInstruction& instruction,
@@ -669,18 +695,17 @@ void CSAGenerator::EmitInstruction(const AbortInstruction& instruction,
   switch (instruction.kind) {
     case AbortInstruction::Kind::kUnreachable:
       DCHECK(instruction.message.empty());
-      out_ << "    CodeStubAssembler(state_).Unreachable();\n";
+      out_ << "    csa.Unreachable();\n";
       break;
     case AbortInstruction::Kind::kDebugBreak:
       DCHECK(instruction.message.empty());
-      out_ << "    CodeStubAssembler(state_).DebugBreak();\n";
+      out_ << "    csa.DebugBreak();\n";
       break;
     case AbortInstruction::Kind::kAssertionFailure: {
       std::string file =
           StringLiteralQuote(SourceFileMap::GetSource(instruction.pos.source));
-      out_ << "    CodeStubAssembler(state_).FailAssert("
-           << StringLiteralQuote(instruction.message) << ", " << file << ", "
-           << instruction.pos.start.line + 1 << ");\n";
+      out_ << "    csa.FailAssert(" << StringLiteralQuote(instruction.message)
+           << ", " << file << ", " << instruction.pos.start.line + 1 << ");\n";
       break;
     }
   }
@@ -710,16 +735,16 @@ void CSAGenerator::EmitInstruction(
     out_ << field.name_and_type.type->GetGeneratedTypeName() << " "
          << result_name << " = ca_.UncheckedCast<"
          << field.name_and_type.type->GetGeneratedTNodeTypeName()
-         << ">(CodeStubAssembler(state_).LoadObjectField(" << stack->Top()
-         << ", " << field.aggregate->GetGeneratedTNodeTypeName() << "::k"
+         << ">(csa.LoadObjectField(" << stack->Top() << ", "
+         << field.aggregate->GetGeneratedTNodeTypeName() << "::k"
          << CamelifyString(field.name_and_type.name) << "Offset, "
          << machine_type + "));\n";
   } else {
     out_ << field.name_and_type.type->GetGeneratedTypeName() << " "
          << result_name << " = ca_.UncheckedCast<"
          << field.name_and_type.type->GetGeneratedTNodeTypeName()
-         << ">(CodeStubAssembler(state_).UnsafeLoadFixedArrayElement("
-         << stack->Top() << ", " << (field.offset / kTaggedSize) << "));\n";
+         << ">(csa.UnsafeLoadFixedArrayElement(" << stack->Top() << ", "
+         << (field.offset / kTaggedSize) << "));\n";
   }
   stack->Poke(stack->AboveTop() - 1, result_name);
 }
@@ -734,11 +759,10 @@ void CSAGenerator::EmitInstruction(
   if (instruction.class_type->IsExtern()) {
     if (field.name_and_type.type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
       if (field.offset == 0) {
-        out_ << "    CodeStubAssembler(state_).StoreMap(" << object << ", "
-             << value << ");\n";
+        out_ << "    csa.StoreMap(" << object << ", " << value << ");\n";
       } else {
-        out_ << "    CodeStubAssembler(state_).StoreObjectField(" << object
-             << ", " << field.offset << ", " << value << ");\n";
+        out_ << "    csa.StoreObjectField(" << object << ", " << field.offset
+             << ", " << value << ");\n";
       }
     } else {
       size_t field_size;
@@ -749,14 +773,13 @@ void CSAGenerator::EmitInstruction(
       if (field.offset == 0) {
         ReportError("the first field in a class object must be a map");
       }
-      out_ << "    CodeStubAssembler(state_).StoreObjectFieldNoWriteBarrier("
-           << object << ", " << field.offset << ", " << value << ", "
-           << machine_type << ".representation());\n";
+      out_ << "    csa.StoreObjectFieldNoWriteBarrier(" << object << ", "
+           << field.offset << ", " << value << ", " << machine_type
+           << ".representation());\n";
     }
   } else {
-    out_ << "    CodeStubAssembler(state_).UnsafeStoreFixedArrayElement("
-         << object << ", " << (field.offset / kTaggedSize) << ", " << value
-         << ");\n";
+    out_ << "    csa.UnsafeStoreFixedArrayElement(" << object << ", "
+         << (field.offset / kTaggedSize) << ", " << value << ");\n";
   }
 }
 

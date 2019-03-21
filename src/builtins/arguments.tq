@@ -41,4 +41,16 @@ namespace arguments {
       formalParameterCount
     };
   }
+
+  macro EmitFastNewRestParameter(implicit context: Context)(f: JSFunction):
+      JSArray {
+    const info = GetArgumentsFrameAndCount(f);
+    const map = GetFastHoleyElementsJSArrayMap();
+    const length = Convert<Smi>(info.argument_count);
+    const frame = Cast<StandardFrame>(info.frame) otherwise unreachable;
+    const arguments = %GetFrameArguments(length, frame);
+    let i = ArgumentsIterator{arguments, 0};
+    const elements = new FixedArray{map, length, ...i};
+    return new JSArray{map, kEmptyFixedArray, elements, length};
+  }
 }

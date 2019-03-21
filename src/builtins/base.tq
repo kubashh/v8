@@ -215,6 +215,34 @@ macro NewJSArray(implicit context: Context)(): JSArray {
   };
 }
 
+struct HoleIterator {
+  Next(): Object labels NoMore() {
+    if (this.remaining-- == 0) goto NoMore;
+    return Hole;
+  }
+  remaining: Smi;
+}
+
+struct ArgumentsIterator {
+  Next(): Object labels NoMore() {
+    if (this.current == this.arguments.length) goto NoMore;
+    return this.arguments[this.current++];
+  }
+  const arguments: constexpr Arguments;
+  current: intptr;
+}
+
+macro NewArgumentsIterator(a: constexpr Arguments): ArgumentsIterator {
+  return ArgumentsIterator{a, 0};
+}
+
+macro NewJSArray(implicit context: Context)(map: Map, length: Smi): JSArray {
+  const map = GetFastPackedSmiElementsJSArrayMap();
+  let i = HoleIterator{length};
+  const elements = new FixedArray{map, length, ...i};
+  return new JSArray{map, kEmptyFixedArray, elements, length};
+}
+
 // A HeapObject with a JSArray map, and either fast packed elements, or fast
 // holey elements when the global NoElementsProtector is not invalidated.
 transient type FastJSArray extends JSArray;
@@ -341,6 +369,8 @@ const ITERATOR_RESULT_MAP_INDEX: constexpr NativeContextSlot
     generates 'Context::ITERATOR_RESULT_MAP_INDEX';
 const JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX: constexpr NativeContextSlot
     generates 'Context::JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX';
+const JS_ARRAY_HOLEY_ELEMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::JS_ARRAY_HOLEY_ELEMENTS_MAP_INDEX';
 extern operator '[]' macro LoadContextElement(
     NativeContext, NativeContextSlot): Object;
 extern operator '[]=' macro StoreContextElement(
@@ -1606,6 +1636,10 @@ extern macro SmiToBInt(Smi): bint;
 Convert<bint, Smi>(v: Smi): bint {
   return SmiToBInt(v);
 }
+extern macro BIntToSmi(bint): Smi;
+Convert<Smi, bint>(v: bint): Smi {
+  return BIntToSmi(v);
+}
 
 macro BranchIf<A: type, B: type>(implicit context: Context)(o: B): never
     labels True, False {
@@ -1792,6 +1826,11 @@ macro GetFastPackedSmiElementsJSArrayMap(implicit context: Context)(): Map {
       LoadNativeContext(context)[JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX]);
 }
 
+macro GetFastHoleyElementsJSArrayMap(implicit context: Context)(): Map {
+  return UnsafeCast<Map>(
+      LoadNativeContext(context)[JS_ARRAY_HOLEY_ELEMENTS_MAP_INDEX]);
+}
+
 extern transitioning macro Call(Context, Callable, Object): Object;
 extern transitioning macro Call(Context, Callable, Object, Object): Object;
 extern transitioning macro Call(
@@ -1967,11 +2006,11 @@ struct FastJSArrayWitness {
     }
   }
 
-  stable: JSArray;
+  const stable: JSArray;
   unstable: FastJSArray;
-  map: Map;
-  hasDoubles: bool;
-  hasSmis: bool;
+  const map: Map;
+  const hasDoubles: bool;
+  const hasSmis: bool;
   arrayIsPushable: bool;
 }
 
