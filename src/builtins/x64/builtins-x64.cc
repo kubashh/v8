@@ -1101,10 +1101,14 @@ void Builtins::Generate_InterpreterEntryTrampoline(MacroAssembler* masm) {
   __ Push(rsi);  // Callee's context.
   __ Push(rdi);  // Callee's JS function.
 
-  // Reset code age.
-  __ movb(FieldOperand(kInterpreterBytecodeArrayRegister,
-                       BytecodeArray::kBytecodeAgeOffset),
-          Immediate(BytecodeArray::kNoAgeBytecodeAge));
+  // Reset code age and the OSR arming. The OSR field and BytecodeAgeOffset are
+  // 8-bit fields next to each other, so we could just optimize by writing a
+  // 16-bit. These static asserts guard our assumption is valid.
+  STATIC_ASSERT(BytecodeArray::kBytecodeAgeOffset ==
+                BytecodeArray::kOSRNestingLevelOffset + kCharSize);
+  __ movw(FieldOperand(kInterpreterBytecodeArrayRegister,
+                       BytecodeArray::kOSRNestingLevelOffset),
+          Immediate((0 << kCharSize) + BytecodeArray::kNoAgeBytecodeAge));
 
   // Load initial bytecode offset.
   __ movq(kInterpreterBytecodeOffsetRegister,
