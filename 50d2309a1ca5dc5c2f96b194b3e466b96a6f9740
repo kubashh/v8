@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f999c4bc_17808b91",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-21T12:48:38Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "1cd69cd1_ba790a4f",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc89843c_67ed27b7",
         "filename": "src/builtins/arm/builtins-arm.cc",
         "patchSetId": 11
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "55fd02b0_0f280c09",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-21T12:48:38Z",
+      "side": 1,
+      "message": "Thanks, Done.",
+      "parentUuid": "dc89843c_67ed27b7",
+      "range": {
+        "startLine": 1094,
+        "startChar": 38,
+        "endLine": 1094,
+        "endChar": 39
+      },
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcc011d1_fb2a1506",
         "filename": "src/builtins/ia32/builtins-ia32.cc",
         "patchSetId": 11
@@ -56,6 +98,24 @@
       "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26a4f649_fe04c68b",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-21T12:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcc011d1_fb2a1506",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "dc0d584f_b0068c4b",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-21T12:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d356eb6_86578dc2",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c202f49_c6714650",
         "filename": "src/flag-definitions.h",
         "patchSetId": 11
@@ -90,6 +168,24 @@
       "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "607dfb4f_d7a6ddbc",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-21T12:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c202f49_c6714650",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "452be717_7be97349",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-21T12:48:38Z",
+      "side": 1,
+      "message": "Thanks! Done",
+      "parentUuid": "3abbbc3f_e1508b6d",
+      "range": {
+        "startLine": 427,
+        "startChar": 10,
+        "endLine": 427,
+        "endChar": 30
+      },
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43f0f9c0_668fe1b8",
         "filename": "src/heap/factory.h",
         "patchSetId": 11
@@ -139,6 +259,30 @@
     },
     {
       "key": {
+        "uuid": "1270441f_3f95452d",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-21T12:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43f0f9c0_668fe1b8",
+      "range": {
+        "startLine": 159,
+        "startChar": 44,
+        "endLine": 159,
+        "endChar": 46
+      },
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3de82cd7_0d913924",
         "filename": "src/interpreter/interpreter.h",
         "patchSetId": 11
@@ -156,6 +300,24 @@
     },
     {
       "key": {
+        "uuid": "a8887ae4_6b000a08",
+        "filename": "src/interpreter/interpreter.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-21T12:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3de82cd7_0d913924",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5acfb385_a536f605",
         "filename": "test/mjsunit/osr-elements-kind.js",
         "patchSetId": 11
@@ -170,6 +332,24 @@
       "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1745285_b9b38df2",
+        "filename": "test/mjsunit/osr-elements-kind.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-03-21T12:48:38Z",
+      "side": 1,
+      "message": "Done. This gets OSRed, but still EnsureFeedbackVector is sufficient, since we don\u0027t need to hold onto the bytecode.",
+      "parentUuid": "5acfb385_a536f605",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
