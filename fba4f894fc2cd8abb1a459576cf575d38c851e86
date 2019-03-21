@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fd9efc47_5ad527a0",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-21T09:12:57Z",
+      "side": 1,
+      "message": "Yes, this is totally orthogonal; WasmCode references live independent of isolates. I don\u0027t see any connection. Can you explain where you see potential problems?",
+      "parentUuid": "363c7f1f_9db55185",
+      "revId": "fba4f894fc2cd8abb1a459576cf575d38c851e86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c63630c9_915cbc3b",
         "filename": "src/wasm/wasm-code-manager.h",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "fba4f894fc2cd8abb1a459576cf575d38c851e86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "090c234c_f3fa204e",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-21T09:12:57Z",
+      "side": 1,
+      "message": "Yes, just a performance optimization for e.g. stack walking, where the code cannot die anyway. But as you said, it\u0027s unclear whether that\u0027s needed and we can still add it later.\nRemoved it.",
+      "parentUuid": "c63630c9_915cbc3b",
+      "revId": "fba4f894fc2cd8abb1a459576cf575d38c851e86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
