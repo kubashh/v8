@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cd69cd1_ba790a4f",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-21T11:04:11Z",
+      "side": 1,
+      "message": "Looks like you\u0027ve missed doing this on arm64. When doing it there you should be able to just store the zero register (xzr) directly given my comments below.",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc89843c_67ed27b7",
+        "filename": "src/builtins/arm/builtins-arm.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1094,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-21T11:04:11Z",
+      "side": 1,
+      "message": "I think this is the wrong way round (it would be kNoAgeBytecodeAge is the higher bits given the assert above). Saying that, how about we just static assert BytecodeArray::kNoAgeBytecodeAge is zero and set load 0 directly here?",
+      "range": {
+        "startLine": 1094,
+        "startChar": 38,
+        "endLine": 1094,
+        "endChar": 39
+      },
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcc011d1_fb2a1506",
+        "filename": "src/builtins/ia32/builtins-ia32.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-21T11:04:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d356eb6_86578dc2",
+        "filename": "src/builtins/x64/builtins-x64.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-21T11:04:11Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c202f49_c6714650",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-21T11:04:11Z",
+      "side": 1,
+      "message": ".. budget in amount of bytecode executed by a function before we decide to ...",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3abbbc3f_e1508b6d",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-21T11:04:11Z",
+      "side": 1,
+      "message": "Should this be |allocation|?",
+      "range": {
+        "startLine": 427,
+        "startChar": 10,
+        "endLine": 427,
+        "endChar": 30
+      },
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43f0f9c0_668fe1b8",
+        "filename": "src/heap/factory.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-21T11:04:11Z",
+      "side": 1,
+      "message": "nit - delete extra space",
+      "range": {
+        "startLine": 159,
+        "startChar": 44,
+        "endLine": 159,
+        "endChar": 46
+      },
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3de82cd7_0d913924",
+        "filename": "src/interpreter/interpreter.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-21T11:04:11Z",
+      "side": 1,
+      "message": "I don\u0027t think we need this, can we just use the flag directly in Factory? If you think we need it, I think it should live in FeedbackVector or ClosureFeedbackCellArray instead of Interpreter.",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5acfb385_a536f605",
+        "filename": "test/mjsunit/osr-elements-kind.js",
+        "patchSetId": 11
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-03-21T11:04:11Z",
+      "side": 1,
+      "message": "Looks like this is never optimized, you should use %EnsureFeedbackVectorForFunction I think.",
+      "revId": "50d2309a1ca5dc5c2f96b194b3e466b96a6f9740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
