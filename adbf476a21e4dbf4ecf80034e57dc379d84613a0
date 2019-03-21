@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4c52a89e_8bdd333e",
+        "filename": "src/compiler/backend/arm64/code-generator-arm64.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-21T06:38:51Z",
+      "side": 1,
+      "message": "Makes sense, thanks.\n\nNon-actionable comment: Now I am also wondering whether we really need three flavours of ChangeTaggedToCompressed*. I guess we can save some pointer map bits when using ChangeTaggedToCompressedSigned, but I do not see any other benefit.",
+      "range": {
+        "startLine": 1599,
+        "startChar": 7,
+        "endLine": 1599,
+        "endChar": 75
+      },
+      "revId": "adbf476a21e4dbf4ecf80034e57dc379d84613a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3eed98b_79dc31d2",
         "filename": "src/compiler/backend/x64/code-generator-x64.cc",
         "patchSetId": 16
@@ -13,6 +36,24 @@
       "writtenOn": "2019-03-20T21:14:34Z",
       "side": 1,
       "message": "I think it would be nicer to use existing DecompressXXX functions from macro assembler to keep all the decompressing code in one place. Same for arm64 and for CompressXXX instructions below.",
+      "revId": "adbf476a21e4dbf4ecf80034e57dc379d84613a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d0202b3_edd02a12",
+        "filename": "src/compiler/backend/x64/code-generator-x64.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1968,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-03-21T06:38:51Z",
+      "side": 1,
+      "message": "+1.",
+      "parentUuid": "c3eed98b_79dc31d2",
       "revId": "adbf476a21e4dbf4ecf80034e57dc379d84613a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
