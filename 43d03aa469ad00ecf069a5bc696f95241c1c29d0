@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2b45f75_fd5e33c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-22T10:41:16Z",
+      "side": 1,
+      "message": "This line includes the right new builders. Please also keep the old line - can be side by side:\nCq-Include-Trybots: luci.v8.try:v8_linux64_ubsan_rel_ng,v8_linux64_tsan_rel\nCq-Include-Trybots: luci.chromium.try:fuchsia_x64,linux-rel",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 59
+      },
+      "revId": "43d03aa469ad00ecf069a5bc696f95241c1c29d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
