@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73747778_3a733fbc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-22T09:48:47Z",
+      "side": 1,
+      "message": "Those are not the right builders. Please c/p the exact content I commented on the revert CL. You can have multiple entries of Cq-Include-Trybots:",
+      "range": {
+        "startLine": 30,
+        "startChar": 76,
+        "endLine": 30,
+        "endChar": 97
+      },
+      "revId": "cbf11a5506f7f688afdd366d1869730cbdf3b197",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
