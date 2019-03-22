@@ -514,5 +514,32 @@ TEST_F(MicrotaskQueueTest, DetachGlobal_HandlerContext) {
           .FromJust());
 }
 
+TEST_F(MicrotaskQueueTest, DetachGlobal_Chain) {
+  Handle<JSPromise> stale_resolved_promise;
+
+  Local<v8::Context> sub_context = v8::Context::New(v8_isolate());
+  {
+    v8::Context::Scope scope(sub_context);
+    stale_resolved_promise = RunJS<JSPromise>("Promise.resolve()");
+  }
+  sub_context->DetachGlobal();
+  sub_context.Clear();
+
+  SetGlobalProperty(
+      "stale_resolved_promise",
+      Utils::ToLocal(Handle<JSReceiver>::cast(stale_resolved_promise)));
+  Handle<JSArray> result = RunJS<JSArray>(
+      "let result = [false];"
+      "stale_resolved_promise"
+      "  .catch(() => {})"
+      "  .then(() => {"
+      "    result[0] = true;"
+      "  });"
+      "result");
+  microtask_queue()->RunMicrotasks(isolate());
+  EXPECT_TRUE(
+      Object::GetElement(isolate(), result, 0).ToHandleChecked()->IsTrue());
+}
+
 }  // namespace internal
 }  // namespace v8
