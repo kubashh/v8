@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "d00f4557_25316645",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-22T19:40:29Z",
+      "side": 1,
+      "message": "I couldn\u0027t think of a way to test this specific condition. For the only repros I know of, it requires a condition to occur between launching a thread and any user code running in it (e.g. an out-of-memory condition), or to enable the loader logging you need to reboot after setting or clearing the system flag.",
+      "parentUuid": "ccf6d7b9_e5b79f2b",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 14,
+        "endChar": 44
+      },
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9f0fc6a_69acce51",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -143,6 +167,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "24289e75_c1978eb9",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 0
+      },
+      "revId": "188356ba69ba0e8b1c57a60c9bc5d09c131faf8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef9e3e78_a851385c",
+        "filename": "src/trap-handler/DEPS",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1322303
+      },
+      "writtenOn": "2019-03-22T19:40:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9d899cf_1e100303",
       "range": {
         "startLine": 1,
         "startChar": 0,
