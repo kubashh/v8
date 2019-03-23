@@ -4,8 +4,47 @@
 
 namespace arguments {
 
+  struct ArgumentsIterator {
+    Next(): Object labels NoMore() {
+      if (this.current == this.arguments.length) goto NoMore;
+      return this.arguments[this.current++];
+    }
+    const arguments: constexpr Arguments;
+    current: intptr;
+  }
+
   struct ArgumentsInfo {
-    frame: Frame;
+    NewRestArguments(implicit context: Context)(): JSArray {
+      const argumentCount = Convert<intptr>(this.argument_count);
+      const formalParameterCount = Convert<intptr>(this.formal_parameter_count);
+      const map = GetFastHoleyElementsJSArrayMap();
+      if (formalParameterCount >= argumentCount) {
+        // Handle empty arrays separately so that allocation folding and
+        // write barrier elimination can fully apply to the non-empty case
+        return NewJSArray(map, kEmptyFixedArray);
+      }
+      const arguments = %GetFrameArguments(argumentCount, this.frame);
+      const i = ArgumentsIterator{arguments, formalParameterCount};
+      const length = Convert<Smi>(argumentCount - formalParameterCount);
+      const elements = new FixedArray{kFixedArrayMap, length, ...i};
+      return NewJSArray(map, elements);
+    }
+
+    NewStrictArguments(implicit context: Context)(): JSStrictArgumentsObject {
+      const argumentCount = Convert<intptr>(this.argument_count);
+      if (argumentCount == 0) {
+        // Handle empty arrays separately so that allocation folding and
+        // write barrier elimination can fully apply to the non-empty case
+        return NewJSStrictArgumentsObject(kEmptyFixedArray);
+      }
+      const arguments = %GetFrameArguments(argumentCount, this.frame);
+      const i = ArgumentsIterator{arguments, 0};
+      const length = Convert<Smi>(argumentCount);
+      const elements = new FixedArray{kFixedArrayMap, length, ...i};
+      return NewJSStrictArgumentsObject(elements);
+    }
+
+    frame: FrameWithArguments;
     argument_count: bint;
     formal_parameter_count: bint;
   }
@@ -31,14 +70,29 @@ namespace arguments {
         Convert<bint>(Convert<int32>(shared.formal_parameter_count));
     let argumentCount: bint = formalParameterCount;
 
-    const adaptor: ArgumentsAdaptorFrame =
-        Cast<ArgumentsAdaptorFrame>(frame.caller)
-        otherwise return ArgumentsInfo{frame, argumentCount, formalParameterCount};
+    const adaptor = Cast<ArgumentsAdaptorFrame>(frame.caller)
+        otherwise return ArgumentsInfo{
+      (Cast<StandardFrame>(frame) otherwise unreachable),
+      argumentCount,
+      formalParameterCount
+    };
 
     return ArgumentsInfo{
       adaptor,
       Convert<bint>(adaptor.length),
       formalParameterCount
     };
+  }
+
+  macro EmitFastNewRestArguments(implicit context: Context)(f: JSFunction):
+      JSArray {
+    const info = GetArgumentsFrameAndCount(f);
+    return info.NewRestArguments();
+  }
+
+  macro EmitFastNewStrictArguments(implicit context: Context)(f: JSFunction):
+      JSStrictArgumentsObject {
+    const info = GetArgumentsFrameAndCount(f);
+    return info.NewStrictArguments();
   }
 }

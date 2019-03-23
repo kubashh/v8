@@ -13,6 +13,7 @@
 #include "src/interface-descriptors.h"
 #include "src/objects-inl.h"
 #include "src/objects/arguments.h"
+#include "torque-generated/builtins-arguments-from-dsl-gen.h"
 
 namespace v8 {
 namespace internal {
@@ -105,105 +106,6 @@ Node* ArgumentsBuiltinsAssembler::ConstructParametersObjectFromArgs(
                     },
                     first_arg, nullptr, param_mode);
   return result;
-}
-
-Node* ArgumentsBuiltinsAssembler::EmitFastNewRestParameter(Node* context,
-                                                           Node* function) {
-  ParameterMode mode = OptimalParameterMode();
-  Node* zero = IntPtrOrSmiConstant(0, mode);
-
-  ArgumentsBuiltinsFromDSLAssembler::ArgumentsInfo info =
-      GetArgumentsFrameAndCount(CAST(context),
-                                UncheckedCast<JSFunction>(function));
-
-  VARIABLE(result, MachineRepresentation::kTagged);
-  Label no_rest_parameters(this), runtime(this, Label::kDeferred),
-      done(this, &result);
-
-  Node* rest_count =
-      IntPtrOrSmiSub(info.argument_count, info.formal_parameter_count, mode);
-  Node* const native_context = LoadNativeContext(context);
-  Node* const array_map =
-      LoadJSArrayElementsMap(PACKED_ELEMENTS, native_context);
-  GotoIf(IntPtrOrSmiLessThanOrEqual(rest_count, zero, mode),
-         &no_rest_parameters);
-
-  GotoIfFixedArraySizeDoesntFitInNewSpace(
-      rest_count, &runtime, JSArray::kSize + FixedArray::kHeaderSize, mode);
-
-  // Allocate the Rest JSArray and the elements together and fill in the
-  // contents with the arguments above |formal_parameter_count|.
-  result.Bind(ConstructParametersObjectFromArgs(
-      array_map, info.frame, info.argument_count, info.formal_parameter_count,
-      rest_count, mode, JSArray::kSize));
-  Goto(&done);
-
-  BIND(&no_rest_parameters);
-  {
-    Node* arguments;
-    Node* elements;
-    Node* unused;
-    std::tie(arguments, elements, unused) =
-        AllocateArgumentsObject(array_map, zero, nullptr, mode, JSArray::kSize);
-    result.Bind(arguments);
-    Goto(&done);
-  }
-
-  BIND(&runtime);
-  {
-    result.Bind(CallRuntime(Runtime::kNewRestParameter, context, function));
-    Goto(&done);
-  }
-
-  BIND(&done);
-  return result.value();
-}
-
-Node* ArgumentsBuiltinsAssembler::EmitFastNewStrictArguments(Node* context,
-                                                             Node* function) {
-  VARIABLE(result, MachineRepresentation::kTagged);
-  Label done(this, &result), empty(this), runtime(this, Label::kDeferred);
-
-  ParameterMode mode = OptimalParameterMode();
-  Node* zero = IntPtrOrSmiConstant(0, mode);
-
-  ArgumentsBuiltinsFromDSLAssembler::ArgumentsInfo info =
-      GetArgumentsFrameAndCount(CAST(context),
-                                UncheckedCast<JSFunction>(function));
-
-  GotoIfFixedArraySizeDoesntFitInNewSpace(
-      info.argument_count, &runtime,
-      JSStrictArgumentsObject::kSize + FixedArray::kHeaderSize, mode);
-
-  Node* const native_context = LoadNativeContext(context);
-  Node* const map =
-      LoadContextElement(native_context, Context::STRICT_ARGUMENTS_MAP_INDEX);
-  GotoIf(WordEqual(info.argument_count, zero), &empty);
-
-  result.Bind(ConstructParametersObjectFromArgs(
-      map, info.frame, info.argument_count, zero, info.argument_count, mode,
-      JSStrictArgumentsObject::kSize));
-  Goto(&done);
-
-  BIND(&empty);
-  {
-    Node* arguments;
-    Node* elements;
-    Node* unused;
-    std::tie(arguments, elements, unused) = AllocateArgumentsObject(
-        map, zero, nullptr, mode, JSStrictArgumentsObject::kSize);
-    result.Bind(arguments);
-    Goto(&done);
-  }
-
-  BIND(&runtime);
-  {
-    result.Bind(CallRuntime(Runtime::kNewStrictArguments, context, function));
-    Goto(&done);
-  }
-
-  BIND(&done);
-  return result.value();
 }
 
 Node* ArgumentsBuiltinsAssembler::EmitFastNewSloppyArguments(Node* context,

@@ -26,6 +26,7 @@
 #include "src/objects/module.h"
 #include "src/objects/oddball.h"
 #include "src/ostreams.h"
+#include "torque-generated/builtins-arguments-from-dsl-gen.h"
 
 namespace v8 {
 namespace internal {
@@ -2783,9 +2784,9 @@ IGNITION_HANDLER(CreateMappedArguments, InterpreterAssembler) {
 IGNITION_HANDLER(CreateUnmappedArguments, InterpreterAssembler) {
   Node* context = GetContext();
   Node* closure = LoadRegister(Register::function_closure());
-  ArgumentsBuiltinsAssembler builtins_assembler(state());
-  Node* result =
-      builtins_assembler.EmitFastNewStrictArguments(context, closure);
+  ArgumentsBuiltinsFromDSLAssembler builtins_assembler(state());
+  Node* result = builtins_assembler.EmitFastNewStrictArguments(CAST(context),
+                                                               CAST(closure));
   SetAccumulator(result);
   Dispatch();
 }
@@ -2796,8 +2797,9 @@ IGNITION_HANDLER(CreateUnmappedArguments, InterpreterAssembler) {
 IGNITION_HANDLER(CreateRestParameter, InterpreterAssembler) {
   Node* closure = LoadRegister(Register::function_closure());
   Node* context = GetContext();
-  ArgumentsBuiltinsAssembler builtins_assembler(state());
-  Node* result = builtins_assembler.EmitFastNewRestParameter(context, closure);
+  ArgumentsBuiltinsFromDSLAssembler builtins_assembler(state());
+  Node* result =
+      builtins_assembler.EmitFastNewRestArguments(CAST(context), CAST(closure));
   SetAccumulator(result);
   Dispatch();
 }
