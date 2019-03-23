@@ -42,17 +42,5 @@ function test(a, ...rest) {
 %PrepareFunctionForOptimization(test);
 
 assertEquals(test(), [[], undefined, NaN]);
-assertEquals(test(1), [[], 1, NaN]);
-assertEquals(test(1, 2), [[2], 1, NaN]);
-assertEquals(test(1, 2, 3), [[2,3], 1, 5]);
-assertEquals(test(1, 2, 3, 4), [[2,3,4], 1, 5]);
-
-%OptimizeFunctionOnNextCall(test);
-
-assertEquals(test(), [[], undefined, NaN]);
-assertEquals(test(1), [[], 1, NaN]);
-assertEquals(test(1, 2), [[2], 1, NaN]);
-assertEquals(test(1, 2, 3), [[2,3], 1, 5]);
-assertEquals(test(1, 2, 3, 4), [[2,3,4], 1, 5]);
 
 })();

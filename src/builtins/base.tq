@@ -188,6 +188,15 @@ extern class JSSloppyArgumentsObject extends JSArgumentsObjectWithLength {
   callee: Object;
 }
 
+extern class JSStrictArgumentsObject extends JSArgumentsObjectWithLength {}
+
+macro NewJSStrictArgumentsObject(implicit context: Context)(
+    elements: FixedArray): JSStrictArgumentsObject {
+  const map = GetStricetArgumentsMap();
+  return new
+  JSStrictArgumentsObject{map, kEmptyFixedArray, elements, elements.length};
+}
+
 extern class JSArrayIterator extends JSObject {
   iterated_object: JSReceiver;
   next_index: Number;
@@ -213,6 +222,21 @@ macro NewJSArray(implicit context: Context)(): JSArray {
     kEmptyFixedArray,
     0
   };
+}
+
+struct HoleIterator {
+  Next(): Object labels NoMore() {
+    if (this.remaining-- == 0) goto NoMore;
+    return Hole;
+  }
+  remaining: Smi;
+}
+
+macro NewJSArray(implicit context: Context)(map: Map, length: Smi): JSArray {
+  const map = GetFastPackedSmiElementsJSArrayMap();
+  let i = HoleIterator{length};
+  const elements = new FixedArray{map, length, ...i};
+  return new JSArray{map, kEmptyFixedArray, elements, length};
 }
 
 // A HeapObject with a JSArray map, and either fast packed elements, or fast
@@ -335,12 +359,16 @@ const ARRAY_BUFFER_MAP_INDEX: constexpr NativeContextSlot
     generates 'Context::ARRAY_BUFFER_MAP_INDEX';
 const ARRAY_JOIN_STACK_INDEX: constexpr NativeContextSlot
     generates 'Context::ARRAY_JOIN_STACK_INDEX';
+const STRICT_ARGUMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::STRICT_ARGUMENTS_MAP_INDEX';
 const OBJECT_FUNCTION_INDEX: constexpr NativeContextSlot
     generates 'Context::OBJECT_FUNCTION_INDEX';
 const ITERATOR_RESULT_MAP_INDEX: constexpr NativeContextSlot
     generates 'Context::ITERATOR_RESULT_MAP_INDEX';
 const JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX: constexpr NativeContextSlot
     generates 'Context::JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX';
+const JS_ARRAY_HOLEY_ELEMENTS_MAP_INDEX: constexpr NativeContextSlot
+    generates 'Context::JS_ARRAY_HOLEY_ELEMENTS_MAP_INDEX';
 extern operator '[]' macro LoadContextElement(
     NativeContext, NativeContextSlot): Object;
 extern operator '[]=' macro StoreContextElement(
@@ -627,6 +655,8 @@ const kAllFixedArrays: constexpr ExtractFixedArrayFlags
 const kFixedArrays: constexpr ExtractFixedArrayFlags
     generates 'CodeStubAssembler::ExtractFixedArrayFlag::kFixedArrays';
 
+const kFixedArrayMapRootIndex:
+    constexpr RootIndex generates 'RootIndex::kFixedArrayMap';
 const kFixedCOWArrayMapRootIndex:
     constexpr RootIndex generates 'RootIndex::kFixedCOWArrayMap';
 const kEmptyFixedArrayRootIndex:
@@ -1602,9 +1632,17 @@ extern macro IntPtrToBInt(intptr): bint;
 Convert<bint, intptr>(v: intptr): bint {
   return IntPtrToBInt(v);
 }
+extern macro BIntToIntPtr(bint): intptr;
+Convert<intptr, bint>(v: bint): intptr {
+  return BIntToIntPtr(v);
+}
 extern macro SmiToBInt(Smi): bint;
 Convert<bint, Smi>(v: Smi): bint {
   return SmiToBInt(v);
+}
+extern macro BIntToSmi(bint): Smi;
+Convert<Smi, bint>(v: bint): Smi {
+  return BIntToSmi(v);
 }
 
 macro BranchIf<A: type, B: type>(implicit context: Context)(o: B): never
@@ -1632,6 +1670,8 @@ UnsafeCast<Object>(o: Object): Object {
   return o;
 }
 
+const kFixedArrayMap: Map =
+    %RawDownCast<Map>(LoadRoot(kFixedArrayMapRootIndex));
 const kCOWMap: Map = %RawDownCast<Map>(LoadRoot(kFixedCOWArrayMapRootIndex));
 const kEmptyFixedArray: FixedArray =
     %RawDownCast<FixedArray>(LoadRoot(kEmptyFixedArrayRootIndex));
@@ -1790,6 +1830,15 @@ macro GetArrayBufferNoInitFunction(implicit context: Context)(): JSFunction {
 macro GetFastPackedSmiElementsJSArrayMap(implicit context: Context)(): Map {
   return UnsafeCast<Map>(
       LoadNativeContext(context)[JS_ARRAY_PACKED_SMI_ELEMENTS_MAP_INDEX]);
+}
+
+macro GetFastHoleyElementsJSArrayMap(implicit context: Context)(): Map {
+  return UnsafeCast<Map>(
+      LoadNativeContext(context)[JS_ARRAY_HOLEY_ELEMENTS_MAP_INDEX]);
+}
+macro GetStricetArgumentsMap(implicit context: Context)(): Map {
+  return UnsafeCast<Map>(
+      LoadNativeContext(context)[STRICT_ARGUMENTS_MAP_INDEX]);
 }
 
 extern transitioning macro Call(Context, Callable, Object): Object;
@@ -1967,11 +2016,11 @@ struct FastJSArrayWitness {
     }
   }
 
-  stable: JSArray;
+  const stable: JSArray;
   unstable: FastJSArray;
-  map: Map;
-  hasDoubles: bool;
-  hasSmis: bool;
+  const map: Map;
+  const hasDoubles: bool;
+  const hasSmis: bool;
   arrayIsPushable: bool;
 }
 
