@@ -240,9 +240,10 @@ class ValueHelper {
       0xEEEEEEEE, 0xFFFFFFFD, 0xF0000000, 0x007FFFFF, 0x003FFFFF, 0x001FFFFF,
       0x000FFFFF, 0x0007FFFF, 0x0003FFFF, 0x0001FFFF, 0x0000FFFF, 0x00007FFF,
       0x00003FFF, 0x00001FFF, 0x00000FFF, 0x000007FF, 0x000003FF, 0x000001FF,
-      // Bit pattern of a quiet NaN and signaling NaN, with or without
-      // additional payload.
-      0x7FC00000, 0x7F800000, 0x7FFFFFFF, 0x7F876543};
+      // Bit patterns of a quiet NaN and signaling NaN, with or without
+      // additional payload, and Infinity and -Infinity.
+      0x7FC00000, 0xFFC00000, 0x7FFFFFFF, 0x7F800000, 0xFF800000, 0x7F876543,
+      0xFF876543, 0x7F800000, 0xFF800000};
 
   static constexpr Vector<const uint32_t> uint32_vector() {
     return ArrayVector(uint32_array);
