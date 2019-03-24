@@ -438,9 +438,46 @@ WASM_SIMD_COMPILED_TEST(F32x4ConvertI32x4) {
   }
 }
 
+bool IsSameNanPayload(float x, float y) {
+  uint32_t x_bits = bit_cast<uint32_t>(x) & ~0xFF800000;
+  uint32_t y_bits = bit_cast<uint32_t>(y) & ~0xFF800000;
+  return x_bits == y_bits;
+}
+
+bool IsCanonical(float x) {
+  uint32_t x_bits = bit_cast<uint32_t>(x);
+  return (x_bits & 0xFFC00000) == x_bits;
+}
+
+void CheckFloatResult(float x, float y, float expected, float actual,
+                      bool exact = true) {
+  if (std::isnan(expected)) {
+    CHECK(std::isnan(actual));
+    CHECK(IsSameNanPayload(x, actual) || IsSameNanPayload(y, actual) ||
+          IsSameNanPayload(actual, expected) || IsCanonical(actual));
+  } else {
+    if (exact) {
+      CHECK_EQ(expected, actual);
+      // The sign of 0's must match.
+      CHECK_EQ(std::signbit(expected), std::signbit(actual));
+      return;
+    }
+    // Otherwise, perform an approximate equality test. First check for
+    // equality to handle +/-Infinity where approximate equality doesn't work.
+    if (expected == actual) return;
+
+    // 1% error allows all platforms to pass easily.
+    constexpr float kApproximationError = 0.01f;
+    float abs_error = std::abs(expected) * kApproximationError,
+          min = expected - abs_error, max = expected + abs_error;
+    CHECK_LE(min, actual);
+    CHECK_GE(max, actual);
+  }
+}
+
 void RunF32x4UnOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
                       WasmOpcode opcode, FloatUnOp expected_op,
-                      bool approximate = false) {
+                      bool exact = true) {
   WasmRunner<int32_t, float> r(execution_tier, lower_simd);
   // Global to hold output.
   float* g = r.builder().AddGlobal<float>(kWasmS128);
@@ -454,25 +491,13 @@ void RunF32x4UnOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
   FOR_FLOAT32_INPUTS(x) {
     if (!PlatformCanRepresent(x)) continue;
     // Extreme values have larger errors so skip them for approximation tests.
-    if (approximate && IsExtreme(x)) continue;
+    if (!exact && IsExtreme(x)) continue;
     float expected = expected_op(x);
     if (!PlatformCanRepresent(expected)) continue;
     r.Call(x);
     for (int i = 0; i < 4; i++) {
       float actual = ReadLittleEndianValue<float>(&g[i]);
-      if (std::isnan(expected)) {
-        CHECK(std::isnan(actual));
-      } else {
-        // First check for equality, to handle +/-Inf, since min and max would
-        // be NaNs in those cases.
-        if (expected == actual) continue;
-        // 1% error allows all platforms to pass easily.
-        constexpr float kApproximationError = 0.01f;
-        float abs_error = std::abs(expected) * kApproximationError,
-              min = expected - abs_error, max = expected + abs_error;
-        CHECK_LE(min, actual);
-        CHECK_GE(max, actual);
-      }
+      CheckFloatResult(x, x, expected, actual, exact);
     }
   }
 }
@@ -486,12 +511,12 @@ WASM_SIMD_TEST(F32x4Neg) {
 
 WASM_SIMD_TEST(F32x4RecipApprox) {
   RunF32x4UnOpTest(execution_tier, lower_simd, kExprF32x4RecipApprox,
-                   base::Recip, true /* approximate */);
+                   base::Recip, false /* !exact */);
 }
 
 WASM_SIMD_TEST(F32x4RecipSqrtApprox) {
   RunF32x4UnOpTest(execution_tier, lower_simd, kExprF32x4RecipSqrtApprox,
-                   base::RecipSqrt, true /* approximate */);
+                   base::RecipSqrt, false /* !exact */);
 }
 
 void RunF32x4BinOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
@@ -518,18 +543,7 @@ void RunF32x4BinOpTest(ExecutionTier execution_tier, LowerSimd lower_simd,
       r.Call(x, y);
       for (int i = 0; i < 4; i++) {
         float actual = ReadLittleEndianValue<float>(&g[i]);
-        if (std::isnan(expected)) {
-          CHECK(std::isnan(actual));
-          // Finally, check that NaN outputs are canonical. The sign bit is
-          // allowed to be non-deterministic.
-          uint32_t expected_bits = bit_cast<uint32_t>(expected) & ~0x80000000;
-          uint32_t actual_bits = bit_cast<uint32_t>(actual) & ~0x80000000;
-          CHECK_EQ(expected_bits, actual_bits);
-        } else {
-          CHECK_EQ(expected, actual);
-          // The sign of 0's must match.
-          CHECK_EQ(std::signbit(expected), std::signbit(actual));
-        }
+        CheckFloatResult(x, y, expected, actual, true /* exact */);
       }
     }
   }
