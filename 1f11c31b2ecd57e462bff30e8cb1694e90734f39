@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0a64b7e_8ef6714f",
+        "filename": "src/execution.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-03-25T09:50:29Z",
+      "side": 1,
+      "message": "Can we add one for this too? I know you can infer it from HandleInterrupts, but it\u0027d be nice to be explicit.",
+      "range": {
+        "startLine": 664,
+        "startChar": 32,
+        "endLine": 664,
+        "endChar": 61
+      },
+      "revId": "1f11c31b2ecd57e462bff30e8cb1694e90734f39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
