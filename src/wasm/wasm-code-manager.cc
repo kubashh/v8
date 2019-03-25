@@ -448,6 +448,9 @@ WasmCode* NativeModule::AddOwnedCode(
         code_comments_offset, unpadded_binary_size,
         std::move(protected_instructions), std::move(reloc_info),
         std::move(source_position_table), kind, tier);
+    if (this->module_) {
+      code->SetSourceMap(this->module_->source_map_);
+    }
 
     owned_code_.emplace_back(code);
   }
