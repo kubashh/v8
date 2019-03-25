@@ -658,15 +658,27 @@ class SeqTwoByteString::BodyDescriptor final : public BodyDescriptorBase {
 class WasmInstanceObject::BodyDescriptor final : public BodyDescriptorBase {
  public:
   static bool IsValidSlot(Map map, HeapObject obj, int offset) {
-    if (offset < kMemoryStartOffset) return true;
-    if (offset < kModuleObjectOffset) return false;
+    if (offset % kTaggedSize == 0) {
+      int index = offset / kTaggedSize;
+      DCHECK_GT(8 * sizeof(kTaggedFields), index);
+      return kTaggedFields & (uint64_t{1} << index);
+    }
     return IsValidJSObjectSlotImpl(map, obj, offset);
   }
 
   template <typename ObjectVisitor>
   static inline void IterateBody(Map map, HeapObject obj, int object_size,
                                  ObjectVisitor* v) {
-    IteratePointers(obj, kPropertiesOrHashOffset, kEndOfTaggedFieldsOffset, v);
+    STATIC_ASSERT(sizeof(kTaggedFields) == sizeof(uint64_t));
+    constexpr int kLastOffset =
+        64 - base::bits::CountLeadingZeros(kTaggedFields);
+    for (int offset = 0; offset < kLastOffset; ++offset) {
+      if ((kTaggedFields & (uint64_t{1} << offset)) == 0) continue;
+      int start = offset;
+      // Visit whole ranges at once if possible.
+      while (kTaggedFields & (uint64_t{1} << offset)) ++offset;
+      IteratePointers(obj, kTaggedSize * start, kTaggedSize * (offset + 1), v);
+    }
     IterateJSObjectBodyImpl(map, obj, kSize, object_size, v);
   }
 
