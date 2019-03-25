@@ -222,6 +222,8 @@ void RuntimeProfiler::MarkCandidatesForOptimization() {
   if (!isolate_->use_optimizer()) return;
 
   DisallowHeapAllocation no_gc;
+  TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.compile"),
+               "RuntimeProfiler::MarkCandidatesForOptimization");
 
   // Run through the JavaScript frames and collect them. If we already
   // have a sample of the function, we mark it for optimizations
