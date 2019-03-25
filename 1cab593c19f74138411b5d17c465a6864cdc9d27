@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "87bcbbc4_dc98453c",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-03-25T09:12:17Z",
+      "side": 1,
+      "message": "nit: Weak",
+      "range": {
+        "startLine": 234,
+        "startChar": 15,
+        "endLine": 234,
+        "endChar": 19
+      },
+      "revId": "1cab593c19f74138411b5d17c465a6864cdc9d27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7736172b_691ea213",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-03-25T09:12:17Z",
+      "side": 1,
+      "message": "nit: Weak",
+      "revId": "1cab593c19f74138411b5d17c465a6864cdc9d27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
