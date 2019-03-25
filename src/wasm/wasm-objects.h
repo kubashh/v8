@@ -478,46 +478,46 @@ class WasmInstanceObject : public JSObject {
   DECL_VERIFIER(WasmInstanceObject)
 
 // Layout description.
-#define WASM_INSTANCE_OBJECT_FIELDS(V)                                    \
-  /* Tagged values. */                                                    \
-  V(kModuleObjectOffset, kTaggedSize)                                     \
-  V(kExportsObjectOffset, kTaggedSize)                                    \
-  V(kNativeContextOffset, kTaggedSize)                                    \
-  V(kMemoryObjectOffset, kTaggedSize)                                     \
-  V(kUntaggedGlobalsBufferOffset, kTaggedSize)                            \
-  V(kTaggedGlobalsBufferOffset, kTaggedSize)                              \
-  V(kImportedMutableGlobalsBuffersOffset, kTaggedSize)                    \
-  V(kDebugInfoOffset, kTaggedSize)                                        \
-  V(kTablesOffset, kTaggedSize)                                           \
-  V(kImportedFunctionRefsOffset, kTaggedSize)                             \
-  V(kIndirectFunctionTableRefsOffset, kTaggedSize)                        \
-  V(kManagedNativeAllocationsOffset, kTaggedSize)                         \
-  V(kExceptionsTableOffset, kTaggedSize)                                  \
-  V(kUndefinedValueOffset, kTaggedSize)                                   \
-  V(kNullValueOffset, kTaggedSize)                                        \
-  V(kCEntryStubOffset, kTaggedSize)                                       \
-  V(kWasmExportedFunctionsOffset, kTaggedSize)                            \
-  /* Raw data. */                                                         \
-  V(kIndirectFunctionTableSizeOffset, kUInt32Size)                        \
-  /* Optional padding to align system pointer size fields */              \
-  V(kOptionalPaddingOffset, POINTER_SIZE_PADDING(kOptionalPaddingOffset)) \
-  V(kMemoryStartOffset, kSystemPointerSize)                               \
-  V(kMemorySizeOffset, kSizetSize)                                        \
-  V(kMemoryMaskOffset, kSizetSize)                                        \
-  V(kIsolateRootOffset, kSystemPointerSize)                               \
-  V(kStackLimitAddressOffset, kSystemPointerSize)                         \
-  V(kRealStackLimitAddressOffset, kSystemPointerSize)                     \
-  V(kImportedFunctionTargetsOffset, kSystemPointerSize)                   \
-  V(kGlobalsStartOffset, kSystemPointerSize)                              \
-  V(kImportedMutableGlobalsOffset, kSystemPointerSize)                    \
-  V(kIndirectFunctionTableSigIdsOffset, kSystemPointerSize)               \
-  V(kIndirectFunctionTableTargetsOffset, kSystemPointerSize)              \
-  V(kJumpTableStartOffset, kSystemPointerSize)                            \
-  V(kDataSegmentStartsOffset, kSystemPointerSize)                         \
-  V(kDataSegmentSizesOffset, kSystemPointerSize)                          \
-  V(kDroppedDataSegmentsOffset, kSystemPointerSize)                       \
-  V(kDroppedElemSegmentsOffset, kSystemPointerSize)                       \
-  /* Header size. */                                                      \
+#define WASM_INSTANCE_OBJECT_FIELDS(V)                                      \
+  /* Often-accessed fields should be placed first to minimize code size. */ \
+  V(kMemoryStartOffset, kSystemPointerSize)                                 \
+  V(kMemorySizeOffset, kSizetSize)                                          \
+  V(kMemoryMaskOffset, kSizetSize)                                          \
+  V(kImportedFunctionRefsOffset, kTaggedSize)                               \
+  V(kImportedFunctionTargetsOffset, kSystemPointerSize)                     \
+  V(kIndirectFunctionTableRefsOffset, kTaggedSize)                          \
+  V(kIndirectFunctionTableTargetsOffset, kSystemPointerSize)                \
+  V(kIndirectFunctionTableSigIdsOffset, kSystemPointerSize)                 \
+  V(kIndirectFunctionTableSizeOffset, kUInt32Size)                          \
+  /* Optional padding to align system pointer size fields */                \
+  V(kOptionalPaddingOffset, POINTER_SIZE_PADDING(kOptionalPaddingOffset))   \
+  V(kUndefinedValueOffset, kTaggedSize)                                     \
+  V(kIsolateRootOffset, kSystemPointerSize)                                 \
+  V(kJumpTableStartOffset, kSystemPointerSize)                              \
+  /* End of often-accessed fields. */                                       \
+  V(kModuleObjectOffset, kTaggedSize)                                       \
+  V(kExportsObjectOffset, kTaggedSize)                                      \
+  V(kNativeContextOffset, kTaggedSize)                                      \
+  V(kMemoryObjectOffset, kTaggedSize)                                       \
+  V(kUntaggedGlobalsBufferOffset, kTaggedSize)                              \
+  V(kTaggedGlobalsBufferOffset, kTaggedSize)                                \
+  V(kImportedMutableGlobalsBuffersOffset, kTaggedSize)                      \
+  V(kDebugInfoOffset, kTaggedSize)                                          \
+  V(kTablesOffset, kTaggedSize)                                             \
+  V(kManagedNativeAllocationsOffset, kTaggedSize)                           \
+  V(kExceptionsTableOffset, kTaggedSize)                                    \
+  V(kNullValueOffset, kTaggedSize)                                          \
+  V(kCEntryStubOffset, kTaggedSize)                                         \
+  V(kWasmExportedFunctionsOffset, kTaggedSize)                              \
+  V(kStackLimitAddressOffset, kSystemPointerSize)                           \
+  V(kRealStackLimitAddressOffset, kSystemPointerSize)                       \
+  V(kGlobalsStartOffset, kSystemPointerSize)                                \
+  V(kImportedMutableGlobalsOffset, kSystemPointerSize)                      \
+  V(kDataSegmentStartsOffset, kSystemPointerSize)                           \
+  V(kDataSegmentSizesOffset, kSystemPointerSize)                            \
+  V(kDroppedDataSegmentsOffset, kSystemPointerSize)                         \
+  V(kDroppedElemSegmentsOffset, kSystemPointerSize)                         \
+  /* Header size. */                                                        \
   V(kSize, 0)
 
   DEFINE_FIELD_OFFSET_CONSTANTS(JSObject::kHeaderSize,
