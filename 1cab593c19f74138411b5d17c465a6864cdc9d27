@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24fc64df_ac68e990",
+        "filename": "src/execution.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-03-25T09:17:18Z",
+      "side": 0,
+      "message": "ewww implicit local variable used by macro",
+      "range": {
+        "startLine": 18,
+        "startChar": 10,
+        "endLine": 18,
+        "endChar": 31
+      },
+      "revId": "1cab593c19f74138411b5d17c465a6864cdc9d27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
