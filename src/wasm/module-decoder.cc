@@ -974,6 +974,8 @@ class ModuleDecoderImpl : public Decoder {
           inner.start() + inner.GetBufferRelativeOffset(url.offset());
       module_->source_map_url.assign(reinterpret_cast<const char*>(url_start),
                                      url.length());
+      module_->source_map_ = std::make_shared<WasmModuleSourceMap>(
+          module_->source_map_url.c_str());
       set_seen_unordered_section(kSourceMappingURLSectionCode);
     }
     consume_bytes(static_cast<uint32_t>(end_ - start_), nullptr);

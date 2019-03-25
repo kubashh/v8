@@ -151,6 +151,13 @@ class V8_EXPORT_PRIVATE WasmCode final {
   static constexpr uint32_t kAnonymousFuncIndex = 0xffffffff;
   STATIC_ASSERT(kAnonymousFuncIndex > kV8MaxWasmFunctions);
 
+  std::shared_ptr<WasmModuleSourceMap> GetSourceMap() const {
+    return source_map_;
+  }
+  void SetSourceMap(std::shared_ptr<WasmModuleSourceMap> new_source_map) {
+    source_map_ = new_source_map;
+  }
+
  private:
   friend class NativeModule;
 
@@ -215,6 +222,8 @@ class V8_EXPORT_PRIVATE WasmCode final {
   intptr_t trap_handler_index_ = -1;
   OwnedVector<trap_handler::ProtectedInstructionData> protected_instructions_;
   Tier tier_;
+
+  std::shared_ptr<WasmModuleSourceMap> source_map_;
 
   DISALLOW_COPY_AND_ASSIGN(WasmCode);
 };

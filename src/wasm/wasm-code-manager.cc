@@ -663,6 +663,7 @@ std::unique_ptr<WasmCode> NativeModule::AddCodeWithCodeSpace(
   code->Validate();
 
   code->RegisterTrapHandlerData();
+  code->SetSourceMap(this->module_->source_map_);
 
   return code;
 }
@@ -722,6 +723,7 @@ WasmCode* NativeModule::AddDeserializedCode(
       std::move(source_position_table), kind, tier}};
 
   code->RegisterTrapHandlerData();
+  code->SetSourceMap(this->module_->source_map_);
 
   // Note: we do not flush the i-cache here, since the code needs to be
   // relocated anyway. The caller is responsible for flushing the i-cache later.

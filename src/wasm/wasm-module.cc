@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
 #include <functional>
 #include <memory>
 
@@ -323,6 +327,159 @@ size_t EstimateStoredSize(const WasmModule* module) {
          VectorSize(module->export_table) + VectorSize(module->exceptions) +
          VectorSize(module->elem_segments);
 }
+
+WasmModuleSourceMap::WasmModuleSourceMap(const char* src_map_file) {
+  FILE* fp;
+  size_t lsize;
+  char* json_str;
+
+  fp = fopen(src_map_file, "r");
+  if (!fp) {
+    perror(src_map_file);
+    exit(1);
+  }
+
+  fseek(fp, 0, SEEK_END);
+  lsize = ftell(fp);
+  rewind(fp);
+
+  json_str = reinterpret_cast<char*>(malloc(lsize + 1));
+  if (!json_str) {
+    perror("Fail to allocate memory");
+    exit(1);
+  }
+
+  if (fread(json_str, 1, lsize, fp) != lsize) {
+    perror("Fail to read file");
+    exit(1);
+  }
+
+  json_str[lsize] = '\0';
+
+  std::cout << lsize << std::endl;
+  std::cout << json_str << std::endl;
+
+  // parse "sources" field
+  char* source_pos = strstr(json_str, "\"sources\":");
+
+  char* lSqr = strchr(source_pos, '[');
+  char* rSqr = strchr(source_pos, ']');
+
+  size_t source_size = rSqr - lSqr - 1;
+
+  char* source = reinterpret_cast<char*>(malloc(source_size + 1));
+
+  if (!source) {
+    perror("Fail to allocate memory");
+    exit(1);
+  }
+
+  memcpy(source, lSqr + 1, source_size);
+  source[source_size] = '\0';
+
+  char* source_ptr = source;
+  char *save, *filename;
+
+  while ((filename = strtok_r(source_ptr, ",\"", &save)) != NULL) {
+    char* cwd = getcwd(NULL, 1000);
+    std::cout << cwd << std::endl;
+    filenames.push_back(std::string(cwd) + '/' + filename);
+    source_ptr = NULL;
+  }
+
+  // parse "mappings" field
+  char* mappings_pos = strstr(json_str, "\"mappings\":");
+
+  char* lQuo = strchr(mappings_pos + sizeof("\"mappings\":") - 1, '"');
+  char* rQuo = strchr(lQuo + 1, '"');
+
+  size_t mapping_size = rQuo - lQuo - 1;
+
+  char* mapping = reinterpret_cast<char*>(malloc(mapping_size + 1));
+
+  if (!mapping) {
+    perror("Fail to allocate memory");
+    exit(1);
+  }
+
+  memcpy(mapping, lQuo + 1, mapping_size);
+  mapping[mapping_size] = '\0';
+
+  decodeMapping(mapping);
+
+  free(json_str);
+  free(mapping);
+  free(source);
+}
+
+std::size_t WasmModuleSourceMap::SourceLine(std::size_t wasm_offset) {
+  std::vector<std::size_t>::iterator up =
+      upper_bound(offsets.begin(), offsets.end(), wasm_offset);
+
+  // Corner case treatment
+  std::size_t idx = up - offsets.begin() - 1;
+  return sourceRow[idx];
+}
+
+int WasmModuleSourceMap::VLQBase64Decode(const std::string& s,
+                                         std::size_t& pos) {
+  unsigned int CONTINUE_SHIFT = 5;
+  unsigned int CONTINUE_MASK = 1 << CONTINUE_SHIFT;
+  unsigned int DATA_MASK = CONTINUE_MASK - 1;
+
+  unsigned int res = 0;
+  int shift = 0;
+  bool toContinue = true;
+
+  while (toContinue) {
+    if (pos >= s.size()) {
+      perror("Access out of range of memory");
+      exit(1);
+    }
+    int digit = charToDigitDecode(s[pos]);
+    if (digit == -1) {
+      perror("Unsupported symbol");
+      exit(1);
+    }
+    toContinue = !!(digit & CONTINUE_MASK);
+    res += (digit & DATA_MASK) << shift;
+    shift += CONTINUE_SHIFT;
+    pos++;
+  }
+
+  return (res & 1) ? -(res >> 1) : (res >> 1);
+}
+
+void WasmModuleSourceMap::decodeMapping(const std::string& s) {
+  std::size_t pos = 0;
+  std::size_t genCol = 0, genLine = 0, fileIdx = 0, oriCol = 0, oriLine = 0;
+
+  while (pos < s.size()) {
+    if (s[pos] == ';') {
+      genLine++;
+      genCol = 0;
+      ++pos;
+    } else if (s[pos] == ',') {
+      ++pos;
+
+    } else {
+      genCol += VLQBase64Decode(s, pos);
+      if (s[pos] != ';' && s[pos] != ',' && pos < s.size()) {
+        fileIdx += VLQBase64Decode(s, pos);
+        oriLine += VLQBase64Decode(s, pos);
+        oriCol += VLQBase64Decode(s, pos);
+      }
+
+      fileIdxs.push_back(fileIdx);
+      sourceRow.push_back(oriLine);
+      sourceCol.push_back(oriCol);
+      offsets.push_back(genCol);
+    }
+  }
+  //  offsets.push_back(std::numeric_limits<std::size_t>::max());
+  std::cout << std::endl;
+}
+
 }  // namespace wasm
 }  // namespace internal
 }  // namespace v8
