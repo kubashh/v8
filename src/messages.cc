@@ -290,18 +290,24 @@ MaybeHandle<String> FormatEvalOrigin(Isolate* isolate, Handle<Script> script) {
 }  // namespace
 
 Handle<Object> StackFrameBase::GetEvalOrigin() {
-  if (!HasScript()) return isolate_->factory()->undefined_value();
-  return FormatEvalOrigin(isolate_, GetScript()).ToHandleChecked();
+  Handle<Script> script;
+  if (!GetScript().ToHandle(&script)) {
+    return isolate_->factory()->undefined_value();
+  } else {
+    return FormatEvalOrigin(isolate_, script).ToHandleChecked();
+  }
 }
 
 int StackFrameBase::GetScriptId() const {
-  if (!HasScript()) return kNone;
-  return GetScript()->id();
+  Handle<Script> script;
+  if (!GetScript().ToHandle(&script)) return kNone;
+  return script->id();
 }
 
 bool StackFrameBase::IsEval() {
-  return HasScript() &&
-         GetScript()->compilation_type() == Script::COMPILATION_TYPE_EVAL;
+  Handle<Script> script;
+  return GetScript().ToHandle(&script) &&
+         script->compilation_type() == Script::COMPILATION_TYPE_EVAL;
 }
 
 MaybeHandle<String> StackFrameBase::ToString() {
@@ -343,16 +349,21 @@ Handle<Object> JSStackFrame::GetFunction() const {
 }
 
 Handle<Object> JSStackFrame::GetFileName() {
-  if (!HasScript()) return isolate_->factory()->null_value();
-  return handle(GetScript()->name(), isolate_);
+  Handle<Script> script;
+  if (!GetScript().ToHandle(&script)) {
+    return isolate_->factory()->null_value();
+  } else {
+    return handle(script->name(), isolate_);
+  }
 }
 
 Handle<Object> JSStackFrame::GetFunctionName() {
   Handle<String> result = JSFunction::GetName(function_);
   if (result->length() != 0) return result;
 
-  if (HasScript() &&
-      GetScript()->compilation_type() == Script::COMPILATION_TYPE_EVAL) {
+  Handle<Script> script;
+  if (GetScript().ToHandle(&script) &&
+      script->compilation_type() == Script::COMPILATION_TYPE_EVAL) {
     return isolate_->factory()->eval_string();
   }
   return isolate_->factory()->null_value();
@@ -386,8 +397,12 @@ Handle<Object> ScriptNameOrSourceUrl(Handle<Script> script, Isolate* isolate) {
 }  // namespace
 
 Handle<Object> JSStackFrame::GetScriptNameOrSourceUrl() {
-  if (!HasScript()) return isolate_->factory()->null_value();
-  return ScriptNameOrSourceUrl(GetScript(), isolate_);
+  Handle<Script> script;
+  if (!GetScript().ToHandle(&script)) {
+    return isolate_->factory()->null_value();
+  } else {
+    return ScriptNameOrSourceUrl(script, isolate_);
+  }
 }
 
 Handle<Object> JSStackFrame::GetMethodName() {
@@ -472,14 +487,18 @@ Handle<Object> JSStackFrame::GetTypeName() {
 
 int JSStackFrame::GetLineNumber() {
   DCHECK_LE(0, GetPosition());
-  if (HasScript()) return Script::GetLineNumber(GetScript(), GetPosition()) + 1;
+  Handle<Script> script;
+  if (GetScript().ToHandle(&script)) {
+    return Script::GetLineNumber(script, GetPosition()) + 1;
+  }
   return kNone;
 }
 
 int JSStackFrame::GetColumnNumber() {
   DCHECK_LE(0, GetPosition());
-  if (HasScript()) {
-    return Script::GetColumnNumber(GetScript(), GetPosition()) + 1;
+  Handle<Script> script;
+  if (GetScript().ToHandle(&script)) {
+    return Script::GetColumnNumber(script, GetPosition()) + 1;
   }
   return kNone;
 }
@@ -489,7 +508,8 @@ int JSStackFrame::GetPromiseIndex() const {
 }
 
 bool JSStackFrame::IsNative() {
-  return HasScript() && GetScript()->type() == Script::TYPE_NATIVE;
+  Handle<Script> script;
+  return GetScript().ToHandle(&script) && script->type() == Script::TYPE_NATIVE;
 }
 
 bool JSStackFrame::IsToplevel() {
@@ -669,12 +689,13 @@ void JSStackFrame::ToString(IncrementalStringBuilder& builder) {
 
 int JSStackFrame::GetPosition() const { return code_->SourcePosition(offset_); }
 
-bool JSStackFrame::HasScript() const {
-  return function_->shared()->script()->IsScript();
-}
-
-Handle<Script> JSStackFrame::GetScript() const {
-  return handle(Script::cast(function_->shared()->script()), isolate_);
+MaybeHandle<Script> JSStackFrame::GetScript() const {
+  Object script = function_->shared()->script();
+  if (script->IsScript()) {
+    return handle(Script::cast(script), isolate_);
+  } else {
+    return MaybeHandle<Script>();
+  }
 }
 
 void WasmStackFrame::FromFrameArray(Isolate* isolate, Handle<FrameArray> array,
@@ -762,9 +783,7 @@ Handle<Object> WasmStackFrame::Null() const {
   return isolate_->factory()->null_value();
 }
 
-bool WasmStackFrame::HasScript() const { return true; }
-
-Handle<Script> WasmStackFrame::GetScript() const {
+MaybeHandle<Script> WasmStackFrame::GetScript() const {
   return handle(wasm_instance_->module_object()->script(), isolate_);
 }
 
