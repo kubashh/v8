@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c4162513_1f4d258f",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-03-26T13:07:43Z",
+      "side": 0,
+      "message": "Is there some more advanced macro-fu that we could do here to also generate the offsets table? E.g. we could add another argument to V():\n\nV(kMyFieldOffset, kMyFieldSize, bool)\n\nAnd then the offsets table can be an array of bools. That at least keeps it all in one place.",
+      "revId": "040887988ace0299014a6fc7a2e1d28beddae314",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
