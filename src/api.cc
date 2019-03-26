@@ -2820,8 +2820,12 @@ ScriptOrigin Message::GetScriptOrigin() const {
   i::Isolate* isolate = Utils::OpenHandle(this)->GetIsolate();
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
   auto message = i::Handle<i::JSMessageObject>::cast(Utils::OpenHandle(this));
-  i::Handle<i::Script> script(message->script(), isolate);
-  return GetScriptOriginForScript(isolate, script);
+  if (message->script().IsScript()) {
+    i::Handle<i::Script> script(message->script(), isolate);
+    return GetScriptOriginForScript(isolate, script);
+  } else {
+    return v8::ScriptOrigin(Local<Value>());
+  }
 }
 
 
@@ -3019,6 +3023,13 @@ bool StackFrame::IsConstructor() const {
 
 bool StackFrame::IsWasm() const {
   return i::StackTraceFrame::IsWasm(Utils::OpenHandle(this));
+}
+
+ScriptOrigin StackFrame::GetScriptOrigin() const {
+  i::Handle<i::StackTraceFrame> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  i::Handle<i::Script> script = i::StackTraceFrame::GetScript(self);
+  return GetScriptOriginForScript(isolate, script);
 }
 
 // --- J S O N ---

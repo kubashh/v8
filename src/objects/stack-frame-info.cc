@@ -61,6 +61,11 @@ bool StackTraceFrame::IsWasm(Handle<StackTraceFrame> frame) {
   return GetFrameInfo(frame)->is_wasm();
 }
 
+Handle<Script> StackTraceFrame::GetScript(Handle<StackTraceFrame> frame) {
+  if (frame->frame_info()->IsUndefined()) InitializeFrameInfo(frame);
+  return handle(GetFrameInfo(frame)->script(), frame->GetIsolate());
+}
+
 Handle<StackFrameInfo> StackTraceFrame::GetFrameInfo(
     Handle<StackTraceFrame> frame) {
   return handle(StackFrameInfo::cast(frame->frame_info()), frame->GetIsolate());

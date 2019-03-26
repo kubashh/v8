@@ -1933,6 +1933,11 @@ class V8_EXPORT StackFrame {
    * Returns whether or not the associated functions is defined in wasm.
    */
   bool IsWasm() const;
+
+  /**
+   * Returns the origin for the script of this stack frame
+   */
+  ScriptOrigin GetScriptOrigin() const;
 };
 
 
