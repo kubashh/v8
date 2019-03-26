@@ -16,6 +16,24 @@
       "revId": "040887988ace0299014a6fc7a2e1d28beddae314",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba13c660_e284ba38",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-03-26T13:29:28Z",
+      "side": 0,
+      "message": "That\u0027s what I wanted to do first, but then this list is not compatible with DEFINE_FIELD_OFFSET_CONSTANTS anymore. Refactoring that macro is more involved and needs changes all over the code base, so I thought it\u0027s simpler to just add the tagged information separately.",
+      "parentUuid": "c4162513_1f4d258f",
+      "revId": "040887988ace0299014a6fc7a2e1d28beddae314",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
