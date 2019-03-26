@@ -258,5 +258,11 @@ RUNTIME_FUNCTION(Runtime_ResolvePromise) {
   return *result;
 }
 
+RUNTIME_FUNCTION(Runtime_GetIncumbentContext) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(0, args.length());
+  return *isolate->GetIncumbentContext();
+}
+
 }  // namespace internal
 }  // namespace v8

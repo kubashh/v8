@@ -229,6 +229,7 @@ namespace internal {
   F(ReThrow, 1, 1)                                   \
   F(RunMicrotaskCallback, 2, 1)                      \
   F(PerformMicrotaskCheckpoint, 0, 1)                \
+  F(GetIncumbentContext, 0, 1)                       \
   F(StackGuard, 0, 1)                                \
   F(Throw, 1, 1)                                     \
   F(ThrowApplyNonFunction, 1, 1)                     \

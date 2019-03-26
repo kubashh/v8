@@ -6153,7 +6153,7 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
             .ToHandle(&handler_context);
       }
       if (handler_context.is_null())
-        handler_context = isolate->native_context();
+        handler_context = isolate->GetIncumbentContext();
 
       task->synchronized_set_map(
           ReadOnlyRoots(isolate).promise_fulfill_reaction_job_task_map());
@@ -6176,7 +6176,7 @@ Handle<Object> JSPromise::TriggerPromiseReactions(Isolate* isolate,
             .ToHandle(&handler_context);
       }
       if (handler_context.is_null())
-        handler_context = isolate->native_context();
+        handler_context = isolate->GetIncumbentContext();
       task->synchronized_set_map(
           ReadOnlyRoots(isolate).promise_reject_reaction_job_task_map());
       Handle<PromiseRejectReactionJobTask>::cast(task)->set_argument(*argument);
