@@ -269,6 +269,88 @@ class OutOfLineTruncateDoubleToI final : public OutOfLineCode {
   Zone* zone_;
 };
 
+class OutOfLineCorrectFloat32MinSSE final : public OutOfLineCode {
+ public:
+  OutOfLineCorrectFloat32MinSSE(CodeGenerator* gen, XMMRegister result,
+                                XMMRegister scratch)
+      : OutOfLineCode(gen), result_(result), scratch_(scratch) {}
+
+  void Generate() final {
+    // propagate -0's and NaNs, which may be non-canonical.
+    __ orps(scratch_, result_);
+    // Canonicalize NaNs by quieting and clearing the payload.
+    __ cmpps(result_, scratch_, 3);
+    __ orps(scratch_, result_);
+    __ psrld(result_, 10);
+    __ andnps(result_, scratch_);
+  }
+
+ private:
+  XMMRegister const result_;
+  XMMRegister const scratch_;
+};
+
+class OutOfLineCorrectFloat32MinAVX final : public OutOfLineCode {
+ public:
+  OutOfLineCorrectFloat32MinAVX(CodeGenerator* gen, XMMRegister result,
+                                XMMRegister scratch)
+      : OutOfLineCode(gen), result_(result), scratch_(scratch) {}
+
+  void Generate() final {
+    __ vorps(result_, result_, scratch_);
+    __ vcmpneqps(scratch_, result_, result_);
+    __ vorps(result_, result_, scratch_);
+    __ vpsrld(scratch_, scratch_, 10);
+    __ vandnps(result_, scratch_, result_);
+  }
+
+ private:
+  XMMRegister const result_;
+  XMMRegister const scratch_;
+};
+
+class OutOfLineCorrectFloat32MaxSSE final : public OutOfLineCode {
+ public:
+  OutOfLineCorrectFloat32MaxSSE(CodeGenerator* gen, XMMRegister result,
+                                XMMRegister scratch)
+      : OutOfLineCode(gen), result_(result), scratch_(scratch) {}
+
+  void Generate() final {
+    // Propagate NaNs, which may be non-canonical.
+    __ orps(result_, scratch_);
+    // Propagate sign discrepancy and (subtle) quiet signaling NaNs.
+    __ subps(result_, scratch_);
+    // Canonicalize NaNs by clearing the payload. Sign is non-deterministic.
+    __ cmpps(scratch_, result_, 3);
+    __ psrld(scratch_, 10);
+    __ andnps(scratch_, result_);
+    __ movaps(result_, scratch_);
+  }
+
+ private:
+  XMMRegister const result_;
+  XMMRegister const scratch_;
+};
+
+class OutOfLineCorrectFloat32MaxAVX final : public OutOfLineCode {
+ public:
+  OutOfLineCorrectFloat32MaxAVX(CodeGenerator* gen, XMMRegister result,
+                                XMMRegister scratch)
+      : OutOfLineCode(gen), result_(result), scratch_(scratch) {}
+
+  void Generate() final {
+    __ vorps(result_, result_, scratch_);
+    __ vsubps(result_, result_, scratch_);
+    __ vcmpneqps(scratch_, result_, result_);
+    __ vpsrld(scratch_, scratch_, 10);
+    __ vandnps(result_, scratch_, result_);
+  }
+
+ private:
+  XMMRegister const result_;
+  XMMRegister const scratch_;
+};
+
 class OutOfLineRecordWrite final : public OutOfLineCode {
  public:
   OutOfLineRecordWrite(CodeGenerator* gen, Register object, Operand operand,
@@ -1952,21 +2034,22 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       break;
     }
     case kSSEF32x4Min: {
+      CpuFeatureScope sse_scope(tasm(), SSE4_1);
       XMMRegister src1 = i.InputSimd128Register(1),
                   dst = i.OutputSimd128Register();
       DCHECK_EQ(dst, i.InputSimd128Register(0));
       // The minps instruction doesn't propagate NaNs and +0's in its first
-      // operand. Perform minps in both orders, merge the resuls, and adjust.
+      // operand. Perform minps in both orders, check for discrepancies and
+      // correct if necessary.
       __ movaps(kScratchDoubleReg, src1);
       __ minps(kScratchDoubleReg, dst);
       __ minps(dst, src1);
-      // propagate -0's and NaNs, which may be non-canonical.
-      __ orps(dst, kScratchDoubleReg);
-      // Canonicalize NaNs by clearing the payload. Sign is non-deterministic.
-      __ movaps(kScratchDoubleReg, dst);
-      __ cmpps(dst, dst, 4);
-      __ psrld(dst, 10);
-      __ andnps(dst, kScratchDoubleReg);
+      __ xorps(kScratchDoubleReg, dst);
+      __ ptest(kScratchDoubleReg, kScratchDoubleReg);
+      auto ool = new (zone())
+          OutOfLineCorrectFloat32MinSSE(this, dst, kScratchDoubleReg);
+      __ j(not_equal, ool->entry());
+      __ bind(ool->exit());
       break;
     }
     case kAVXF32x4Min: {
@@ -1977,10 +2060,12 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ movups(kScratchDoubleReg, src1);
       __ vminps(kScratchDoubleReg, kScratchDoubleReg, dst);
       __ vminps(dst, dst, src1);
-      __ vorps(dst, dst, kScratchDoubleReg);
-      __ vcmpneqps(kScratchDoubleReg, dst, dst);
-      __ vpsrld(kScratchDoubleReg, kScratchDoubleReg, 10);
-      __ vandnps(dst, kScratchDoubleReg, dst);
+      __ vxorps(kScratchDoubleReg, kScratchDoubleReg, dst);
+      __ vptest(kScratchDoubleReg, kScratchDoubleReg);
+      auto ool = new (zone())
+          OutOfLineCorrectFloat32MinAVX(this, dst, kScratchDoubleReg);
+      __ j(not_equal, ool->entry());
+      __ bind(ool->exit());
       break;
     }
     case kSSEF32x4Max: {
@@ -1988,21 +2073,17 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
                   dst = i.OutputSimd128Register();
       DCHECK_EQ(dst, i.InputSimd128Register(0));
       // The maxps instruction doesn't propagate NaNs and +0's in its first
-      // operand. Perform maxps in both orders, merge the resuls, and adjust.
+      // operand. Perform maxps in both orders, check for discrepancies and
+      // correct if necessary.
       __ movaps(kScratchDoubleReg, src1);
       __ maxps(kScratchDoubleReg, dst);
       __ maxps(dst, src1);
-      // Find discrepancies.
       __ xorps(kScratchDoubleReg, dst);
-      // Propagate NaNs, which may be non-canonical.
-      __ orps(dst, kScratchDoubleReg);
-      // Propagate sign discrepancy. NaNs and correct lanes are preserved.
-      __ subps(dst, kScratchDoubleReg);
-      // Canonicalize NaNs by clearing the payload. Sign is non-deterministic.
-      __ movaps(kScratchDoubleReg, dst);
-      __ cmpps(dst, dst, 4);
-      __ psrld(dst, 10);
-      __ andnps(dst, kScratchDoubleReg);
+      __ ptest(kScratchDoubleReg, kScratchDoubleReg);
+      auto ool = new (zone())
+          OutOfLineCorrectFloat32MaxSSE(this, dst, kScratchDoubleReg);
+      __ j(not_equal, ool->entry());
+      __ bind(ool->exit());
       break;
     }
     case kAVXF32x4Max: {
@@ -2014,11 +2095,11 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
       __ vmaxps(kScratchDoubleReg, kScratchDoubleReg, dst);
       __ vmaxps(dst, dst, src1);
       __ vxorps(kScratchDoubleReg, kScratchDoubleReg, dst);
-      __ vorps(dst, dst, kScratchDoubleReg);
-      __ vsubps(dst, dst, kScratchDoubleReg);
-      __ vcmpneqps(kScratchDoubleReg, dst, dst);
-      __ vpsrld(kScratchDoubleReg, kScratchDoubleReg, 10);
-      __ vandnps(dst, kScratchDoubleReg, dst);
+      __ vptest(kScratchDoubleReg kScratchDoubleReg);
+      auto ool = new (zone())
+          OutOfLineCorrectFloat32MaxAVX(this, dst, kScratchDoubleReg);
+      __ j(not_equal, ool->entry());
+      __ bind(ool->exit());
       break;
     }
     case kSSEF32x4Eq: {
