@@ -1531,9 +1531,8 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromEval(
   return result;
 }
 
-
 bool Compiler::CodeGenerationFromStringsAllowed(Isolate* isolate,
-                                                Handle<Context> context,
+                                                Handle<NativeContext> context,
                                                 Handle<String> source) {
   DCHECK(context->allow_code_gen_from_strings()->IsFalse(isolate));
   // Check with callback if set.
@@ -1553,7 +1552,7 @@ MaybeHandle<JSFunction> Compiler::GetFunctionFromString(
     Handle<Context> context, Handle<String> source,
     ParseRestriction restriction, int parameters_end_pos) {
   Isolate* const isolate = context->GetIsolate();
-  Handle<Context> native_context(context->native_context(), isolate);
+  Handle<NativeContext> native_context(context->native_context(), isolate);
 
   // Check if native context allows code generation from
   // strings. Throw an exception if it doesn't.

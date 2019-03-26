@@ -52,7 +52,7 @@ class Bootstrapper final {
 
   // Creates a JavaScript Global Context with initial object graph.
   // The returned value is a global handle casted to V8Environment*.
-  Handle<Context> CreateEnvironment(
+  Handle<NativeContext> CreateEnvironment(
       MaybeHandle<JSGlobalProxy> maybe_global_proxy,
       v8::Local<v8::ObjectTemplate> global_object_template,
       v8::ExtensionConfiguration* extensions, size_t context_snapshot_index,

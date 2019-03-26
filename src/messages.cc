@@ -987,7 +987,7 @@ MaybeHandle<Object> ErrorUtils::FormatStackTrace(Isolate* isolate,
   const bool in_recursion = isolate->formatting_stack_trace();
   if (!in_recursion) {
     if (isolate->HasPrepareStackTraceCallback()) {
-      Handle<Context> error_context = error->GetCreationContext();
+      Handle<NativeContext> error_context = error->GetCreationContext();
       DCHECK(!error_context.is_null() && error_context->IsNativeContext());
       PrepareStackTraceScope scope(isolate);
 
