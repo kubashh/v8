@@ -16,6 +16,24 @@
       "revId": "0102ef78bc6905663088d5638a21fb35a9f0ef1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87fcdef1_21e3ac90",
+        "filename": "test/cctest/wasm/test-run-wasm-simd.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1001213
+      },
+      "writtenOn": "2019-03-26T23:58:10Z",
+      "side": 1,
+      "message": "My thinking was that these map to single instructions on all architectures so we would be very surprised to find errors. It might catch future errors and would simplify things though so I\u0027ll do this for all the F32x4 operations (unary and binary). Let\u0027s see if they pass.",
+      "parentUuid": "0163ede0_8294ce79",
+      "revId": "0102ef78bc6905663088d5638a21fb35a9f0ef1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
