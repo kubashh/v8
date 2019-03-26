@@ -591,6 +591,7 @@ extern class StackFrameInfo extends Struct {
   function_name: Object;
   flag: Smi;
   id: Smi;
+  script: Script;
 }
 
 extern class ClassPositions extends Struct {
