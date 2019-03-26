@@ -119,7 +119,7 @@ class RegisteredExtension {
   V(Module, Module)                            \
   V(Function, JSReceiver)                      \
   V(Message, JSMessageObject)                  \
-  V(Context, Context)                          \
+  V(Context, NativeContext)                    \
   V(External, Object)                          \
   V(StackTrace, FixedArray)                    \
   V(StackFrame, StackTraceFrame)               \
@@ -145,7 +145,7 @@ class Utils {
                                const char* location, bool is_heap_oom);
 
   static inline Local<Context> ToLocal(
-      v8::internal::Handle<v8::internal::Context> obj);
+      v8::internal::Handle<v8::internal::NativeContext> obj);
   static inline Local<Value> ToLocal(
       v8::internal::Handle<v8::internal::Object> obj);
   static inline Local<Module> ToLocal(

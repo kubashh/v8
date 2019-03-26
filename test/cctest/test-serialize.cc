@@ -692,7 +692,7 @@ UNINITIALIZED_TEST(PartialSerializerCustomContext) {
                  v8::DeserializeInternalFieldsCallback())
                  .ToHandleChecked();
       CHECK(root->IsContext());
-      Handle<Context> context = Handle<Context>::cast(root);
+      Handle<NativeContext> context = Handle<NativeContext>::cast(root);
 
       // Add context to the weak native context list
       context->set(Context::NEXT_CONTEXT_LINK,

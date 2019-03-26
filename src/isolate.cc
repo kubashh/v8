@@ -1355,8 +1355,9 @@ bool Isolate::MayAccess(Handle<Context> accessing_context,
   {
     // Leaving JavaScript.
     VMState<EXTERNAL> state(this);
-    return callback(v8::Utils::ToLocal(accessing_context),
-                    v8::Utils::ToLocal(receiver), v8::Utils::ToLocal(data));
+    return callback(
+        v8::Utils::ToLocal(handle(accessing_context->native_context(), this)),
+        v8::Utils::ToLocal(receiver), v8::Utils::ToLocal(data));
   }
 }
 
@@ -2582,13 +2583,14 @@ void Isolate::SetAbortOnUncaughtExceptionCallback(
 
 bool Isolate::AreWasmThreadsEnabled(Handle<Context> context) {
   if (wasm_threads_enabled_callback()) {
-    v8::Local<v8::Context> api_context = v8::Utils::ToLocal(context);
+    v8::Local<v8::Context> api_context =
+        v8::Utils::ToLocal(handle(context->native_context(), this));
     return wasm_threads_enabled_callback()(api_context);
   }
   return FLAG_experimental_wasm_threads;
 }
 
-Handle<Context> Isolate::GetIncumbentContext() {
+Handle<NativeContext> Isolate::GetIncumbentContext() {
   JavaScriptFrameIterator it(this);
 
   // 1st candidate: most-recently-entered author function's context
@@ -2602,7 +2604,7 @@ Handle<Context> Isolate::GetIncumbentContext() {
   if (!it.done() &&
       (!top_backup_incumbent || it.frame()->sp() < top_backup_incumbent)) {
     Context context = Context::cast(it.frame()->context());
-    return Handle<Context>(context->native_context(), this);
+    return Handle<NativeContext>(context->native_context(), this);
   }
 
   // 2nd candidate: the last Context::Scope's incumbent context if any.
@@ -4213,8 +4215,7 @@ MaybeHandle<JSPromise> NewRejectedPromise(Isolate* isolate,
 
 MaybeHandle<JSPromise> Isolate::RunHostImportModuleDynamicallyCallback(
     Handle<Script> referrer, Handle<Object> specifier) {
-  v8::Local<v8::Context> api_context =
-      v8::Utils::ToLocal(Handle<Context>(native_context()));
+  v8::Local<v8::Context> api_context = v8::Utils::ToLocal(native_context());
 
   if (host_import_module_dynamically_callback_ == nullptr) {
     Handle<Object> exception =
@@ -4253,8 +4254,7 @@ Handle<JSObject> Isolate::RunHostInitializeImportMetaObjectCallback(
   if (host_meta->IsTheHole(this)) {
     host_meta = factory()->NewJSObjectWithNullProto();
     if (host_initialize_import_meta_object_callback_ != nullptr) {
-      v8::Local<v8::Context> api_context =
-          v8::Utils::ToLocal(Handle<Context>(native_context()));
+      v8::Local<v8::Context> api_context = v8::Utils::ToLocal(native_context());
       host_initialize_import_meta_object_callback_(
           api_context, Utils::ToLocal(module),
           v8::Local<v8::Object>::Cast(v8::Utils::ToLocal(host_meta)));
@@ -4270,7 +4270,8 @@ void Isolate::SetHostInitializeImportMetaObjectCallback(
 }
 
 MaybeHandle<Object> Isolate::RunPrepareStackTraceCallback(
-    Handle<Context> context, Handle<JSObject> error, Handle<JSArray> sites) {
+    Handle<NativeContext> context, Handle<JSObject> error,
+    Handle<JSArray> sites) {
   v8::Local<v8::Context> api_context = Utils::ToLocal(context);
 
   v8::Local<v8::Value> stack;

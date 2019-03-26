@@ -1775,7 +1775,7 @@ void Debug::OnException(Handle<Object> exception, Handle<Object> promise,
   HandleScope scope(isolate_);
   DisableBreak no_recursive_break(this);
 
-  Handle<Context> native_context(isolate_->native_context());
+  Handle<NativeContext> native_context(isolate_->native_context());
   debug_delegate_->ExceptionThrown(
       v8::Utils::ToLocal(native_context), v8::Utils::ToLocal(exception),
       v8::Utils::ToLocal(promise), uncaught, exception_type);
@@ -1806,7 +1806,7 @@ void Debug::OnDebugBreak(Handle<FixedArray> break_points_hit) {
     ++inspector_break_points_count;
   }
 
-  Handle<Context> native_context(isolate_->native_context());
+  Handle<NativeContext> native_context(isolate_->native_context());
   debug_delegate_->BreakProgramRequested(v8::Utils::ToLocal(native_context),
                                          inspector_break_points_hit);
 }

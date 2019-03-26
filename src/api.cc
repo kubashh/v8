@@ -4837,7 +4837,7 @@ Local<v8::Object> v8::Object::Clone() {
 
 Local<v8::Context> v8::Object::CreationContext() {
   auto self = Utils::OpenHandle(this);
-  i::Handle<i::Context> context = self->GetCreationContext();
+  i::Handle<i::NativeContext> context = self->GetCreationContext();
   return Utils::ToLocal(context);
 }
 
@@ -5865,8 +5865,8 @@ template <typename ObjectType>
 struct InvokeBootstrapper;
 
 template <>
-struct InvokeBootstrapper<i::Context> {
-  i::Handle<i::Context> Invoke(
+struct InvokeBootstrapper<i::NativeContext> {
+  i::Handle<i::NativeContext> Invoke(
       i::Isolate* isolate, i::MaybeHandle<i::JSGlobalProxy> maybe_global_proxy,
       v8::Local<v8::ObjectTemplate> global_proxy_template,
       v8::ExtensionConfiguration* extensions, size_t context_snapshot_index,
@@ -6016,7 +6016,7 @@ Local<Context> NewContext(
   i::HandleScope scope(isolate);
   ExtensionConfiguration no_extensions;
   if (extensions == nullptr) extensions = &no_extensions;
-  i::Handle<i::Context> env = CreateEnvironment<i::Context>(
+  i::Handle<i::NativeContext> env = CreateEnvironment<i::NativeContext>(
       isolate, extensions, global_template, global_object,
       context_snapshot_index, embedder_fields_deserializer, microtask_queue);
   if (env.is_null()) {
@@ -7986,9 +7986,9 @@ v8::Local<v8::Context> Isolate::GetCurrentContext() {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
   i::Context context = isolate->context();
   if (context.is_null()) return Local<Context>();
-  i::Context native_context = context->native_context();
+  i::NativeContext native_context = context->native_context();
   if (native_context.is_null()) return Local<Context>();
-  return Utils::ToLocal(i::Handle<i::Context>(native_context, isolate));
+  return Utils::ToLocal(i::handle(native_context, isolate));
 }
 
 
@@ -7997,7 +7997,8 @@ v8::Local<v8::Context> Isolate::GetEnteredContext() {
   i::Handle<i::Object> last =
       isolate->handle_scope_implementer()->LastEnteredContext();
   if (last.is_null()) return Local<Context>();
-  return Utils::ToLocal(i::Handle<i::Context>::cast(last));
+  DCHECK(last->IsNativeContext());
+  return Utils::ToLocal(i::Handle<i::NativeContext>::cast(last));
 }
 
 v8::Local<v8::Context> Isolate::GetEnteredOrMicrotaskContext() {
@@ -8006,12 +8007,12 @@ v8::Local<v8::Context> Isolate::GetEnteredOrMicrotaskContext() {
       isolate->handle_scope_implementer()->LastEnteredOrMicrotaskContext();
   if (last.is_null()) return Local<Context>();
   DCHECK(last->IsNativeContext());
-  return Utils::ToLocal(i::Handle<i::Context>::cast(last));
+  return Utils::ToLocal(i::Handle<i::NativeContext>::cast(last));
 }
 
 v8::Local<v8::Context> Isolate::GetIncumbentContext() {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(this);
-  i::Handle<i::Context> context = isolate->GetIncumbentContext();
+  i::Handle<i::NativeContext> context = isolate->GetIncumbentContext();
   return Utils::ToLocal(context);
 }
 
