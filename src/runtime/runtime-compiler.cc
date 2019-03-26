@@ -299,7 +299,7 @@ static Object CompileGlobalEval(Isolate* isolate, Handle<String> source,
                                 LanguageMode language_mode,
                                 int eval_scope_position, int eval_position) {
   Handle<Context> context(isolate->context(), isolate);
-  Handle<Context> native_context(context->native_context(), isolate);
+  Handle<NativeContext> native_context(context->native_context(), isolate);
 
   // Check if native context allows code generation from
   // strings. Throw an exception if it doesn't.

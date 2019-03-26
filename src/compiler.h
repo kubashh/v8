@@ -134,7 +134,7 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
   // Returns true if the embedder permits compiling the given source string in
   // the given context.
   static bool CodeGenerationFromStringsAllowed(Isolate* isolate,
-                                               Handle<Context> context,
+                                               Handle<NativeContext> context,
                                                Handle<String> source);
 
   // Create a (bound) function for a String source within a context for eval.

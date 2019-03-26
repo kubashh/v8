@@ -282,7 +282,7 @@ V8_EXPORT_PRIVATE MaybeHandle<WasmModuleObject> CreateModuleObjectFromBytes(
     Vector<const byte> asm_offset_table);
 
 V8_EXPORT_PRIVATE bool IsWasmCodegenAllowed(Isolate* isolate,
-                                            Handle<Context> context);
+                                            Handle<NativeContext> context);
 
 V8_EXPORT_PRIVATE Handle<JSArray> GetImports(Isolate* isolate,
                                              Handle<WasmModuleObject> module);
