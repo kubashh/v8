@@ -908,6 +908,13 @@ static int EnterMicrotaskContextWrapper(HandleScopeImplementer* hsi,
 
 FUNCTION_REFERENCE(call_enter_context_function, EnterMicrotaskContextWrapper)
 
+static Address GetIncumbentContextWrapper(Isolate* isolate) {
+  HandleScope scope(isolate);
+  return isolate->GetIncumbentContext()->ptr();
+}
+
+FUNCTION_REFERENCE(get_incumbent_context_function, GetIncumbentContextWrapper)
+
 bool operator==(ExternalReference lhs, ExternalReference rhs) {
   return lhs.address() == rhs.address();
 }

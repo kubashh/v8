@@ -8543,7 +8543,7 @@ void Isolate::EnqueueMicrotask(Local<Function> v8_function) {
   i::Handle<i::NativeContext> handler_context;
   if (!i::JSReceiver::GetContextForMicrotask(function).ToHandle(
           &handler_context))
-    handler_context = isolate->native_context();
+    handler_context = isolate->GetIncumbentContext();
   handler_context->microtask_queue()->EnqueueMicrotask(this, v8_function);
 }
 
