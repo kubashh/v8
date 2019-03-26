@@ -117,13 +117,14 @@ PromiseBuiltinsAssembler::CreatePromiseResolvingFunctions(
 void PromiseBuiltinsAssembler::ExtractHandlerContext(Node* handler,
                                                      Variable* var_context) {
   VARIABLE(var_handler, MachineRepresentation::kTagged, handler);
-  Label loop(this, &var_handler), done(this, Label::kDeferred);
+  Label loop(this, &var_handler), loop_end(this, Label::kDeferred),
+      done(this, Label::kDeferred), use_incumbent(this, Label::kDeferred);
   Goto(&loop);
   BIND(&loop);
   {
     Label if_function(this), if_bound_function(this, Label::kDeferred),
         if_proxy(this, Label::kDeferred);
-    GotoIf(TaggedIsSmi(var_handler.value()), &done);
+    GotoIf(TaggedIsSmi(var_handler.value()), &loop_end);
 
     int32_t case_values[] = {
         JS_FUNCTION_TYPE,
@@ -138,7 +139,7 @@ void PromiseBuiltinsAssembler::ExtractHandlerContext(Node* handler,
     static_assert(arraysize(case_values) == arraysize(case_labels), "");
     TNode<Map> handler_map = LoadMap(var_handler.value());
     TNode<Int32T> handler_type = LoadMapInstanceType(handler_map);
-    Switch(handler_type, &done, case_values, case_labels,
+    Switch(handler_type, &loop_end, case_values, case_labels,
            arraysize(case_labels));
 
     BIND(&if_bound_function);
@@ -165,12 +166,27 @@ void PromiseBuiltinsAssembler::ExtractHandlerContext(Node* handler,
       Node* handler_context =
           LoadObjectField(var_handler.value(), JSFunction::kContextOffset);
       var_context->Bind(LoadNativeContext(CAST(handler_context)));
-      Goto(&done);
+      Goto(&loop_end);
     }
   }
 
-  // If no valid context is available, |var_context| is unchanged and the caller
-  // will use a fallback context.
+  // If no valid context is available, use incumbent context as a fallback.
+  BIND(&loop_end);
+  Branch(IsUndefined(var_context->value()), &use_incumbent, &done);
+
+  BIND(&use_incumbent);
+  {
+    Node* function =
+        ExternalConstant(ExternalReference::get_incumbent_context_function());
+    Node* isolate_ptr =
+        ExternalConstant(ExternalReference::isolate_address(isolate()));
+
+    var_context->Bind(CallCFunction1(MachineType::AnyTagged(),
+                                     MachineType::Pointer(), function,
+                                     isolate_ptr));
+    Goto(&done);
+  }
+
   BIND(&done);
 }
 
@@ -441,7 +457,8 @@ void PromiseBuiltinsAssembler::PerformPromiseThen(
 
     BIND(&enqueue);
     {
-      VARIABLE(var_handler_context, MachineRepresentation::kTagged, context);
+      VARIABLE(var_handler_context, MachineRepresentation::kTagged,
+               UndefinedConstant());
       ExtractHandlerContext(var_handler.value(), &var_handler_context);
 
       Node* argument =
@@ -585,7 +602,8 @@ Node* PromiseBuiltinsAssembler::TriggerPromiseReactions(
       GotoIf(TaggedIsSmi(current), &done_loop);
       var_current.Bind(LoadObjectField(current, PromiseReaction::kNextOffset));
 
-      VARIABLE(var_context, MachineRepresentation::kTagged, context);
+      VARIABLE(var_context, MachineRepresentation::kTagged,
+               UndefinedConstant());
 
       // Morph {current} from a PromiseReaction into a PromiseReactionJobTask
       // and schedule that on the microtask queue. We try to minimize the number
