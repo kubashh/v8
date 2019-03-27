@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "31b2c24f_4b15a6ef",
+        "filename": "src/objects/code-inl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-03-27T16:19:01Z",
+      "side": 1,
+      "message": "Forgot to say I added a test that checks that HasSourcePositionTable returns false in the exception case.",
+      "parentUuid": "7f453a1f_c595ccc4",
+      "range": {
+        "startLine": 728,
+        "startChar": 36,
+        "endLine": 728,
+        "endChar": 73
+      },
+      "revId": "1ccfd634a8f028fdbc84c52921754b60aa515e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9acc5d61_e42c2420",
         "filename": "src/objects/code.h",
         "patchSetId": 5
