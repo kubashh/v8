@@ -2099,6 +2099,7 @@ void StackFrameInfo::StackFrameInfoVerify(Isolate* isolate) {
   VerifyPointer(isolate, script_name());
   VerifyPointer(isolate, script_name_or_source_url());
   VerifyPointer(isolate, function_name());
+  VerifyPointer(isolate, script());
 }
 
 void PreparseData::PreparseDataVerify(Isolate* isolate) {

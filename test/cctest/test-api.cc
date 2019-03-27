@@ -16525,6 +16525,12 @@ void AnalyzeStackInNativeCode(const v8::FunctionCallbackInfo<v8::Value>& args) {
     // The last frame is an anonymous function which has the initial eval call.
     checkStackFrame(origin, "", 10, 1, false, false,
                     stackTrace->GetFrame(isolate, 3));
+    // Verify we can read the ScriptOrigin for the frame.
+    v8::ScriptOrigin origin_f =
+        stackTrace->GetFrame(isolate, 0)->GetScriptOrigin();
+    CHECK_EQ(0, strcmp(*v8::String::Utf8Value(isolate, origin_f.ResourceName()),
+                       origin));
+    CHECK(origin_f.HostDefinedOptions()->Get(isolate, 0)->IsSymbol());
   } else if (testGroup == kFunctionName) {
     v8::Local<v8::StackTrace> stackTrace = v8::StackTrace::CurrentStackTrace(
         args.GetIsolate(), 5, v8::StackTrace::kOverview);
@@ -16565,6 +16571,7 @@ void AnalyzeStackInNativeCode(const v8::FunctionCallbackInfo<v8::Value>& args) {
 TEST(CaptureStackTrace) {
   v8::Isolate* isolate = CcTest::isolate();
   v8::HandleScope scope(isolate);
+
   v8::Local<v8::String> origin = v8_str("capture-stack-trace-test");
   Local<ObjectTemplate> templ = ObjectTemplate::New(isolate);
   templ->Set(v8_str("AnalyzeStackInNativeCode"),
@@ -16607,7 +16614,16 @@ TEST(CaptureStackTrace) {
   // Make the script using a non-zero line and column offset.
   v8::Local<v8::Integer> line_offset = v8::Integer::New(isolate, 3);
   v8::Local<v8::Integer> column_offset = v8::Integer::New(isolate, 5);
-  v8::ScriptOrigin detailed_origin(origin, line_offset, column_offset);
+
+  Local<v8::PrimitiveArray> array(v8::PrimitiveArray::New(isolate, 1));
+  Local<v8::Symbol> symbol(v8::Symbol::New(isolate));
+  array->Set(isolate, 0, symbol);
+
+  v8::ScriptOrigin detailed_origin(
+      origin, line_offset, column_offset, v8::False(isolate),
+      v8::Local<v8::Integer>(), v8_str("http://sourceMapUrl"),
+      v8::False(isolate), v8::False(isolate), v8::False(isolate), array);
+
   v8::ScriptCompiler::Source script_source2(detailed_src, detailed_origin);
   v8::Local<v8::UnboundScript> detailed_script(
       v8::ScriptCompiler::CompileUnboundScript(isolate, &script_source2)
