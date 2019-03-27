@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a33937cf_60a34708",
+        "filename": "include/v8.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1938,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-27T16:24:56Z",
+      "side": 1,
+      "message": "nit: Comments end with a dot in V8.",
+      "revId": "7c9f8242b0e20fca2a10838a93e45a0201a70123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7489b62_540ecf02",
+        "filename": "src/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3024,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-27T16:24:56Z",
+      "side": 1,
+      "message": "@Georg: Do we need an EscapeHandleScope here? I rarely used Handles/HandleScopes until now so I am unsure about the correct semantics.",
+      "revId": "7c9f8242b0e20fca2a10838a93e45a0201a70123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ade28b55_d2cf6978",
+        "filename": "src/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3032,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-27T16:24:56Z",
+      "side": 1,
+      "message": "nit: Else is not necessary. I am also fine with a ternary operator here, no strong opinion.\n\nEdit: Here and everywhere else.",
+      "range": {
+        "startLine": 3030,
+        "startChar": 3,
+        "endLine": 3032,
+        "endChar": 3
+      },
+      "revId": "7c9f8242b0e20fca2a10838a93e45a0201a70123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ff614c4_583c831e",
+        "filename": "test/cctest/test-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 16528,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-03-27T16:24:56Z",
+      "side": 1,
+      "message": "nit: Missing dot.",
+      "revId": "7c9f8242b0e20fca2a10838a93e45a0201a70123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
