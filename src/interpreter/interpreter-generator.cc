@@ -26,6 +26,7 @@
 #include "src/objects/module.h"
 #include "src/objects/oddball.h"
 #include "src/ostreams.h"
+#include "torque-generated/builtins-arguments-from-dsl-gen.h"
 
 namespace v8 {
 namespace internal {
@@ -36,6 +37,7 @@ namespace {
 using compiler::Node;
 typedef CodeStubAssembler::Label Label;
 typedef CodeStubAssembler::Variable Variable;
+typedef compiler::CodeAssemblerState CodeAssemblerState;
 
 #define IGNITION_HANDLER(Name, BaseAssembler)                         \
   class Name##Assembler : public BaseAssembler {                      \
@@ -2761,9 +2763,9 @@ IGNITION_HANDLER(CreateMappedArguments, InterpreterAssembler) {
 
   BIND(&if_not_duplicate_parameters);
   {
-    ArgumentsBuiltinsAssembler constructor_assembler(state());
-    Node* result =
-        constructor_assembler.EmitFastNewSloppyArguments(context, closure);
+    ArgumentsBuiltinsFromDSLAssembler constructor_assembler(state());
+    Node* result = constructor_assembler.EmitFastNewSloppyArguments(
+        CAST(context), CAST(closure));
     SetAccumulator(result);
     Dispatch();
   }
@@ -2783,9 +2785,9 @@ IGNITION_HANDLER(CreateMappedArguments, InterpreterAssembler) {
 IGNITION_HANDLER(CreateUnmappedArguments, InterpreterAssembler) {
   Node* context = GetContext();
   Node* closure = LoadRegister(Register::function_closure());
-  ArgumentsBuiltinsAssembler builtins_assembler(state());
-  Node* result =
-      builtins_assembler.EmitFastNewStrictArguments(context, closure);
+  ArgumentsBuiltinsFromDSLAssembler builtins_assembler(state());
+  Node* result = builtins_assembler.EmitFastNewStrictArguments(CAST(context),
+                                                               CAST(closure));
   SetAccumulator(result);
   Dispatch();
 }
@@ -2796,8 +2798,9 @@ IGNITION_HANDLER(CreateUnmappedArguments, InterpreterAssembler) {
 IGNITION_HANDLER(CreateRestParameter, InterpreterAssembler) {
   Node* closure = LoadRegister(Register::function_closure());
   Node* context = GetContext();
-  ArgumentsBuiltinsAssembler builtins_assembler(state());
-  Node* result = builtins_assembler.EmitFastNewRestParameter(context, closure);
+  ArgumentsBuiltinsFromDSLAssembler builtins_assembler(state());
+  Node* result =
+      builtins_assembler.EmitFastNewRestArguments(CAST(context), CAST(closure));
   SetAccumulator(result);
   Dispatch();
 }

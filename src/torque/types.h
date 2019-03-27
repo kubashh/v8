@@ -128,6 +128,9 @@ class Type : public TypeBase {
   virtual const Type* NonConstexprVersion() const = 0;
   static const Type* CommonSupertype(const Type* a, const Type* b);
   void AddAlias(std::string alias) const { aliases_.insert(std::move(alias)); }
+  virtual size_t GetConstexprValueCount() const {
+    return IsConstexpr() ? 1 : 0;
+  }
 
  protected:
   Type(TypeBase::Kind kind, const Type* parent)
@@ -176,6 +179,7 @@ struct Field {
   NameAndType name_and_type;
   size_t offset;
   bool is_weak;
+  bool const_qualified;
 };
 
 std::ostream& operator<<(std::ostream& os, const Field& name_and_type);
@@ -452,6 +456,9 @@ class StructType final : public AggregateType {
   DECLARE_TYPE_BOILERPLATE(StructType)
   std::string ToExplicitString() const override;
   std::string GetGeneratedTypeNameImpl() const override;
+  size_t GetConstexprValueCount() const override;
+
+  bool HasConstFields() const;
 
  private:
   friend class TypeOracle;
@@ -506,30 +513,54 @@ inline std::ostream& operator<<(std::ostream& os, const Type& t) {
 class VisitResult {
  public:
   VisitResult() = default;
-  VisitResult(const Type* type, const std::string& constexpr_value)
-      : type_(type), constexpr_value_(constexpr_value) {
+  VisitResult(const Type* type, std::string constexpr_value) : type_(type) {
+    constexpr_values_ = std::vector<std::string>{};
+    constexpr_values_->push_back(std::move(constexpr_value));
     DCHECK(type->IsConstexpr());
+    DCHECK(!type->IsStructType());
   }
   static VisitResult NeverResult();
   VisitResult(const Type* type, StackRange stack_range)
       : type_(type), stack_range_(stack_range) {
     DCHECK(!type->IsConstexpr());
+    DCHECK(!type->IsStructType());
+  }
+  VisitResult(const Type* type, StackRange stack_range,
+              base::Optional<std::vector<std::string>> constexpr_values)
+      : type_(type),
+        constexpr_values_(constexpr_values),
+        stack_range_(stack_range) {
+    DCHECK_IMPLIES(constexpr_values, constexpr_values->size() > 0);
+    DCHECK_IMPLIES(type->IsConstexpr(), constexpr_values.has_value());
+    DCHECK_IMPLIES(!type->IsStructType() && !type->IsConstexpr(),
+                   !constexpr_values.has_value());
   }
   const Type* type() const { return type_; }
-  const std::string& constexpr_value() const { return *constexpr_value_; }
+  const std::string& constexpr_value() const { return (*constexpr_values_)[0]; }
+  base::Optional<std::vector<std::string>> constexpr_values() const {
+    return constexpr_values_;
+  }
   const StackRange& stack_range() const { return *stack_range_; }
   void SetType(const Type* new_type) { type_ = new_type; }
   bool IsOnStack() const { return stack_range_ != base::nullopt; }
+  bool HasConstexprValues() const {
+    DCHECK_IMPLIES(constexpr_values_.has_value(),
+                   constexpr_values_->size() > 0);
+    return constexpr_values_.has_value();
+  }
   bool operator==(const VisitResult& other) const {
-    return type_ == other.type_ && constexpr_value_ == other.constexpr_value_ &&
+    return type_ == other.type_ &&
+           constexpr_values_ == other.constexpr_values_ &&
            stack_range_ == other.stack_range_;
   }
 
  private:
   const Type* type_ = nullptr;
-  base::Optional<std::string> constexpr_value_;
+  base::Optional<std::vector<std::string>> constexpr_values_;
   base::Optional<StackRange> stack_range_;
 };
+
+typedef std::map<const Field*, VisitResult> FieldValueMap;
 
 VisitResult ProjectStructField(VisitResult structure,
                                const std::string& fieldname);
@@ -612,7 +643,7 @@ std::ostream& operator<<(std::ostream& os, const Signature& sig);
 
 bool IsAssignableFrom(const Type* to, const Type* from);
 
-TypeVector LowerType(const Type* type);
+TypeVector LowerType(const Type* type, bool ignore_constexpr = true);
 size_t LoweredSlotCount(const Type* type);
 TypeVector LowerParameterTypes(const TypeVector& parameters);
 TypeVector LowerParameterTypes(const ParameterTypes& parameter_types,

@@ -11,6 +11,7 @@
 namespace v8 {
 namespace internal {
 
+#if 0
 typedef compiler::Node Node;
 typedef compiler::CodeAssemblerState CodeAssemblerState;
 typedef compiler::CodeAssemblerLabel CodeAssemblerLabel;
@@ -21,9 +22,7 @@ class ArgumentsBuiltinsAssembler : public CodeStubAssembler,
   explicit ArgumentsBuiltinsAssembler(CodeAssemblerState* state)
       : CodeStubAssembler(state), ArgumentsBuiltinsFromDSLAssembler(state) {}
 
-  Node* EmitFastNewStrictArguments(Node* context, Node* function);
-  Node* EmitFastNewSloppyArguments(Node* context, Node* function);
-  Node* EmitFastNewRestParameter(Node* context, Node* function);
+//  Node* EmitFastNewSloppyArguments(Node* context, Node* function);
 
  private:
   // Allocates an an arguments (either rest, strict or sloppy) together with the
@@ -48,6 +47,7 @@ class ArgumentsBuiltinsAssembler : public CodeStubAssembler,
                                           ParameterMode param_mode,
                                           int base_size);
 };
+#endif
 
 }  // namespace internal
 }  // namespace v8
