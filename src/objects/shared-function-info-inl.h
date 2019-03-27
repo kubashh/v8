@@ -494,9 +494,7 @@ void SharedFunctionInfo::set_bytecode_array(BytecodeArray bytecode) {
   set_function_data(bytecode);
 }
 
-bool SharedFunctionInfo::ShouldFlushBytecode() {
-  if (!FLAG_flush_bytecode) return false;
-
+bool SharedFunctionInfo::ShouldFlushBytecode(bool stress_flush_bytecode) {
   // TODO(rmcilroy): Enable bytecode flushing for resumable functions.
   if (IsResumableFunction(kind()) || !allows_lazy_compilation()) {
     return false;
@@ -508,7 +506,7 @@ bool SharedFunctionInfo::ShouldFlushBytecode() {
   Object data = function_data();
   if (!data->IsBytecodeArray()) return false;
 
-  if (FLAG_stress_flush_bytecode) return true;
+  if (stress_flush_bytecode) return true;
 
   BytecodeArray bytecode = BytecodeArray::cast(data);
 

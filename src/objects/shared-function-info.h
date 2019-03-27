@@ -553,8 +553,10 @@ class SharedFunctionInfo : public HeapObject {
           gc_notify_updated_slot =
               [](HeapObject object, ObjectSlot slot, HeapObject target) {});
 
-  // Returns true if the function has old bytecode that could be flushed.
-  inline bool ShouldFlushBytecode();
+  // Returns true if the function has old bytecode that could be flushed. This
+  // function shouldn't access any flags as it is used by concurrent marker. It
+  // is the responsibility of caller to check if FLAG_flush_bytecode is enabled.
+  inline bool ShouldFlushBytecode(bool stress_flush_bytecode);
 
   // Check whether or not this function is inlineable.
   bool IsInlineable();
