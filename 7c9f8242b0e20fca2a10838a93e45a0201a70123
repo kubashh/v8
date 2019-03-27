@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "601a803d_bdf43726",
+        "filename": "src/api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3024,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-03-27T16:57:28Z",
+      "side": 1,
+      "message": "Looks fine to me. My understanding is that you use EscapeHandleScope when you want to use a handle scope but need to return one of the created handles to the caller. Here we don\u0027t want to create a handle scope at all. And if we needed to, we would have to make further changes such that the handles created in GetScriptOriginForScript can escape.",
+      "parentUuid": "b7489b62_540ecf02",
+      "revId": "7c9f8242b0e20fca2a10838a93e45a0201a70123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ade28b55_d2cf6978",
         "filename": "src/api.cc",
         "patchSetId": 3
