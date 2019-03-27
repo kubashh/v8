@@ -462,7 +462,7 @@ class MapRef : public HeapObjectRef {
 
   void SerializePrototype();
   bool serialized_prototype() const;
-  ObjectRef prototype() const;
+  HeapObjectRef prototype() const;
 
   void SerializeForElementLoad();
 
