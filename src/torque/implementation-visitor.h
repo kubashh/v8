@@ -141,6 +141,7 @@ class LocationReference {
 
 struct InitializerResults {
   std::vector<VisitResult> results;
+  std::vector<bool> apply_spread;
 };
 
 template <class T>
@@ -263,13 +264,17 @@ class ImplementationVisitor : public FileVisitor {
   InitializerResults VisitInitializerResults(
       const std::vector<Expression*>& expressions);
 
+  void InitializeFieldFromSpread(VisitResult object, const Field& field,
+                                 VisitResult spreadee);
+
   size_t InitializeAggregateHelper(
       const AggregateType* aggregate_type, VisitResult allocate_result,
-      const InitializerResults& initializer_results);
+      const InitializerResults& initializer_results,
+      std::vector<std::string>* constexpr_values);
 
-  void InitializeAggregate(const AggregateType* aggregate_type,
-                           VisitResult allocate_result,
-                           const InitializerResults& initializer_results);
+  VisitResult InitializeAggregate(
+      const AggregateType* aggregate_type, VisitResult allocate_result,
+      const InitializerResults& initializer_results);
 
   VisitResult TemporaryUninitializedStruct(const StructType* struct_type,
                                            const std::string& reason);
@@ -327,6 +332,7 @@ class ImplementationVisitor : public FileVisitor {
   VisitResult Visit(TryLabelExpression* expr);
   VisitResult Visit(StatementExpression* expr);
   VisitResult Visit(NewExpression* expr);
+  VisitResult Visit(SpreadExpression* expr);
 
   const Type* Visit(ReturnStatement* stmt);
   const Type* Visit(GotoStatement* stmt);
@@ -355,6 +361,7 @@ class ImplementationVisitor : public FileVisitor {
                               BindingsManager<LocalLabel>);
   DECLARE_CONTEXTUAL_VARIABLE(CurrentCallable, Callable*);
   DECLARE_CONTEXTUAL_VARIABLE(CurrentReturnValue, base::Optional<VisitResult>);
+  DECLARE_CONTEXTUAL_VARIABLE(CurrentReturnCount, size_t);
 
   // A BindingsManagersScope has to be active for local bindings to be created.
   // Shadowing an existing BindingsManagersScope by creating a new one hides all
@@ -403,8 +410,10 @@ class ImplementationVisitor : public FileVisitor {
       visitor_->assembler().DeleteRange(
           StackRange{base_, result.stack_range().begin()});
       base_ = visitor_->assembler().CurrentStack().AboveTop();
-      return VisitResult(result.type(), visitor_->assembler().TopRange(
-                                            result.stack_range().Size()));
+      return VisitResult(
+          result.type(),
+          visitor_->assembler().TopRange(result.stack_range().Size()),
+          result.constexpr_values());
     }
 
     void Close() {
@@ -461,6 +470,13 @@ class ImplementationVisitor : public FileVisitor {
                            const Container& declaration_container,
                            const Arguments& arguments,
                            const TypeVector& specialization_types);
+
+  FieldValueMap GetFieldValueMap(const ClassType* class_type,
+                                 const InitializerResults& initializer_results);
+
+  VisitResult AddVariableObjectSize(VisitResult object_size,
+                                    const ClassType* class_type,
+                                    FieldValueMap* field_values);
 
   Method* LookupMethod(const std::string& name, LocationReference target,
                        const Arguments& arguments,
@@ -521,8 +537,12 @@ class ImplementationVisitor : public FileVisitor {
   std::vector<Binding<LocalLabel>*> LabelsFromIdentifiers(
       const std::vector<std::string>& names);
 
-  StackRange LowerParameter(const Type* type, const std::string& parameter_name,
-                            Stack<std::string>* lowered_parameters);
+  std::pair<base::Optional<StackRange>,
+            base::Optional<std::vector<std::string>>>
+  LowerParameter(const Type* type, const std::string& parameter_name,
+                 Stack<std::string>* lowered_parameters,
+                 Stack<const Type*>* lowered_parameters_types,
+                 base::Optional<std::vector<VisitResult>*> arguments);
 
   void LowerLabelParameter(const Type* type, const std::string& parameter_name,
                            std::vector<std::string>* lowered_parameters);
@@ -553,7 +573,6 @@ class ImplementationVisitor : public FileVisitor {
   void SetReturnValue(VisitResult return_value) {
     base::Optional<VisitResult>& current_return_value =
         CurrentReturnValue::Get();
-    DCHECK_IMPLIES(current_return_value, *current_return_value == return_value);
     current_return_value = std::move(return_value);
   }
 

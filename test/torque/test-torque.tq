@@ -820,4 +820,32 @@ namespace test {
     check(o.a == 6);
     check(o.b == 5);
   }
+
+  struct StructWithConstexpr {
+    TestMethod1(): constexpr int32 {
+      return this.b;
+    }
+    TestMethod2(): Object {
+      return this.a;
+    }
+    a: Object;
+    const b: constexpr int32;
+  }
+
+  macro TestConstexprInStructs2(p: StructWithConstexpr): Object {
+    return p.a;
+  }
+
+  macro TestConstexprInStructs() {
+    const x = StructWithConstexpr{Null, 1};
+    const val = x.TestMethod1();
+    let val2 = x.TestMethod2();
+  }
+
+  macro TestParentFrameArguments(implicit context: Context)() {
+    let parentFrame = LoadParentFramePointer();
+    let castFrame = Cast<StandardFrame>(parentFrame) otherwise unreachable;
+    const args = %GetFrameArguments(1, castFrame);
+    let i = arguments::ArgumentsIterator{args, 0};
+  }
 }

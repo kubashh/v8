@@ -494,58 +494,6 @@ RUNTIME_FUNCTION(Runtime_NewSloppyArguments_Generic) {
   return *NewSloppyArguments(isolate, callee, argument_getter, argument_count);
 }
 
-
-RUNTIME_FUNCTION(Runtime_NewStrictArguments) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(JSFunction, callee, 0);
-  // This generic runtime function can also be used when the caller has been
-  // inlined, we use the slow but accurate {GetCallerArguments}.
-  int argument_count = 0;
-  std::unique_ptr<Handle<Object>[]> arguments =
-      GetCallerArguments(isolate, &argument_count);
-  Handle<JSObject> result =
-      isolate->factory()->NewArgumentsObject(callee, argument_count);
-  if (argument_count) {
-    Handle<FixedArray> array =
-        isolate->factory()->NewUninitializedFixedArray(argument_count);
-    DisallowHeapAllocation no_gc;
-    WriteBarrierMode mode = array->GetWriteBarrierMode(no_gc);
-    for (int i = 0; i < argument_count; i++) {
-      array->set(i, *arguments[i], mode);
-    }
-    result->set_elements(*array);
-  }
-  return *result;
-}
-
-
-RUNTIME_FUNCTION(Runtime_NewRestParameter) {
-  HandleScope scope(isolate);
-  DCHECK_EQ(1, args.length());
-  CONVERT_ARG_HANDLE_CHECKED(JSFunction, callee, 0)
-  int start_index = callee->shared()->internal_formal_parameter_count();
-  // This generic runtime function can also be used when the caller has been
-  // inlined, we use the slow but accurate {GetCallerArguments}.
-  int argument_count = 0;
-  std::unique_ptr<Handle<Object>[]> arguments =
-      GetCallerArguments(isolate, &argument_count);
-  int num_elements = std::max(0, argument_count - start_index);
-  Handle<JSObject> result = isolate->factory()->NewJSArray(
-      PACKED_ELEMENTS, num_elements, num_elements,
-      DONT_INITIALIZE_ARRAY_ELEMENTS);
-  {
-    DisallowHeapAllocation no_gc;
-    FixedArray elements = FixedArray::cast(result->elements());
-    WriteBarrierMode mode = elements->GetWriteBarrierMode(no_gc);
-    for (int i = 0; i < num_elements; i++) {
-      elements->set(i, *arguments[i + start_index], mode);
-    }
-  }
-  return *result;
-}
-
-
 RUNTIME_FUNCTION(Runtime_NewSloppyArguments) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
