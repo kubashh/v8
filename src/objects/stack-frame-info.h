@@ -29,6 +29,7 @@ class StackFrameInfo : public Struct {
   DECL_BOOLEAN_ACCESSORS(is_wasm)
   DECL_INT_ACCESSORS(flag)
   DECL_INT_ACCESSORS(id)
+  DECL_ACCESSORS(script, Script)
 
   DECL_CAST(StackFrameInfo)
 
@@ -90,6 +91,8 @@ class StackTraceFrame : public Struct {
   static bool IsEval(Handle<StackTraceFrame> frame);
   static bool IsConstructor(Handle<StackTraceFrame> frame);
   static bool IsWasm(Handle<StackTraceFrame> frame);
+
+  static Handle<Script> GetScript(Handle<StackTraceFrame> frame);
 
  private:
   OBJECT_CONSTRUCTORS(StackTraceFrame, Struct);

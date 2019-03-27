@@ -36,6 +36,7 @@ BOOL_ACCESSORS(StackFrameInfo, flag, is_eval, kIsEvalBit)
 BOOL_ACCESSORS(StackFrameInfo, flag, is_constructor, kIsConstructorBit)
 BOOL_ACCESSORS(StackFrameInfo, flag, is_wasm, kIsWasmBit)
 SMI_ACCESSORS(StackFrameInfo, id, kIdOffset)
+ACCESSORS(StackFrameInfo, script, Script, kScriptOffset)
 
 OBJECT_CONSTRUCTORS_IMPL(StackTraceFrame, Struct)
 NEVER_READ_ONLY_SPACE_IMPL(StackTraceFrame)

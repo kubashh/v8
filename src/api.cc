@@ -3021,6 +3021,17 @@ bool StackFrame::IsWasm() const {
   return i::StackTraceFrame::IsWasm(Utils::OpenHandle(this));
 }
 
+ScriptOrigin StackFrame::GetScriptOrigin() const {
+  i::Handle<i::StackTraceFrame> self = Utils::OpenHandle(this);
+  i::Isolate* isolate = self->GetIsolate();
+  i::Handle<i::Script> script = i::StackTraceFrame::GetScript(self);
+  if (script->IsScript()) {
+    return GetScriptOriginForScript(isolate, script);
+  } else {
+    return v8::ScriptOrigin(Local<Value>());
+  }
+}
+
 // --- J S O N ---
 
 MaybeLocal<Value> JSON::Parse(Local<Context> context,
