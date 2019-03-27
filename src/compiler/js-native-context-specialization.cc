@@ -535,8 +535,9 @@ JSNativeContextSpecialization::InferHasInPrototypeChain(
                                         &receiver_maps);
   if (result == NodeProperties::kNoReceiverMaps) return kMayBeInPrototypeChain;
 
-  // Check if either all or none of the {receiver_maps} have the given
-  // {prototype} in their prototype chain.
+  // Try to determine either that all of the {receiver_maps} have the given
+  // {prototype} in their chain, or that none do. If we can't tell, return
+  // kMayBeInPrototypeChain.
   bool all = true;
   bool none = true;
   for (size_t i = 0; i < receiver_maps.size(); ++i) {
@@ -544,14 +545,9 @@ JSNativeContextSpecialization::InferHasInPrototypeChain(
     if (receiver_map->instance_type() <= LAST_SPECIAL_RECEIVER_TYPE) {
       return kMayBeInPrototypeChain;
     }
-    if (result == NodeProperties::kUnreliableReceiverMaps) {
-      // In case of an unreliable {result} we need to ensure that all
-      // {receiver_maps} are stable, because otherwise we cannot trust
-      // the {receiver_maps} information, since arbitrary side-effects
-      // may have happened.
-      if (!receiver_map->is_stable()) {
-        return kMayBeInPrototypeChain;
-      }
+    if (result == NodeProperties::kUnreliableReceiverMaps &&
+        !receiver_map->is_stable()) {
+      return kMayBeInPrototypeChain;
     }
     for (PrototypeIterator j(isolate(), receiver_map);; j.Advance()) {
       if (j.IsAtEnd()) {
@@ -571,10 +567,16 @@ JSNativeContextSpecialization::InferHasInPrototypeChain(
     }
   }
   DCHECK_IMPLIES(all, !none);
+  if (!all && !none) return kMayBeInPrototypeChain;
 
-  if (all) return kIsInPrototypeChain;
-  if (none) return kIsNotInPrototypeChain;
-  return kMayBeInPrototypeChain;
+  if (result == NodeProperties::kUnreliableReceiverMaps) {
+    base::Optional<JSObjectRef> last_prototype;
+    if (all)
+      last_prototype.emplace(broker(), Handle<JSObject>::cast(prototype));
+    dependencies()->DependOnStablePrototypeChains(receiver_maps, last_prototype,
+                                                  kStartAtReceiver);
+  }
+  return all ? kIsInPrototypeChain : kIsNotInPrototypeChain;
 }
 
 Reduction JSNativeContextSpecialization::ReduceJSHasInPrototypeChain(
