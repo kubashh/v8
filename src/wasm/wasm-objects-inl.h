@@ -296,7 +296,7 @@ SMI_ACCESSORS(WasmExportedFunctionData, jump_table_offset,
 SMI_ACCESSORS(WasmExportedFunctionData, function_index, kFunctionIndexOffset)
 
 // WasmDebugInfo
-ACCESSORS(WasmDebugInfo, wasm_instance, WasmInstanceObject, kInstanceOffset)
+ACCESSORS(WasmDebugInfo, wasm_instance, WasmInstanceObject, kWasmInstanceOffset)
 ACCESSORS(WasmDebugInfo, interpreter_handle, Object, kInterpreterHandleOffset)
 ACCESSORS(WasmDebugInfo, interpreted_functions, FixedArray,
           kInterpretedFunctionsOffset)
