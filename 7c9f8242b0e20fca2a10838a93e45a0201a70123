@@ -59,6 +59,23 @@
     },
     {
       "key": {
+        "uuid": "d9f40876_6503a849",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3907,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-03-27T16:52:00Z",
+      "side": 1,
+      "message": "You can\u0027t cast a Smi to a Script. If you want this field to be able to hold something other than a Script, you need to change its type to e.g. Object.",
+      "revId": "7c9f8242b0e20fca2a10838a93e45a0201a70123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8ff614c4_583c831e",
         "filename": "test/cctest/test-api.cc",
         "patchSetId": 3
