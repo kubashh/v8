@@ -93,12 +93,23 @@ class ConsoleHelper {
   void reportCall(ConsoleAPIType type,
                   const std::vector<v8::Local<v8::Value>>& arguments) {
     if (!m_groupId) return;
+    bool fullStack = false;
+    switch (type) {
+      case ConsoleAPIType::kAssert:
+      case ConsoleAPIType::kError:
+      case ConsoleAPIType::kTrace:
+      case ConsoleAPIType::kWarning:
+        fullStack = true;
+        break;
+      default:
+        break;
+    }
     std::unique_ptr<V8ConsoleMessage> message =
         V8ConsoleMessage::createForConsoleAPI(
             m_context, m_contextId, m_groupId, m_inspector,
             m_inspector->client()->currentTimeMS(), type, arguments,
             consoleContextToString(m_isolate, m_consoleContext),
-            m_inspector->debugger()->captureStackTrace(false));
+            m_inspector->debugger()->captureStackTrace(fullStack));
     consoleMessageStorage()->addMessage(std::move(message));
   }
 

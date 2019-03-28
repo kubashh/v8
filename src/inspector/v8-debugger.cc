@@ -1015,7 +1015,11 @@ std::unique_ptr<V8StackTraceImpl> V8Debugger::captureStackTrace(
             stackSize = V8StackTraceImpl::maxCallStackSizeToCapture;
         });
   }
-  return V8StackTraceImpl::capture(this, contextGroupId, stackSize);
+
+  std::unique_ptr<V8StackTraceImpl> stack =
+      V8StackTraceImpl::capture(this, contextGroupId, stackSize);
+  if (stack && !fullStack) stack->dropAsyncChain();
+  return stack;
 }
 
 int V8Debugger::currentContextGroupId() {
