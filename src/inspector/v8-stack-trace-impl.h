@@ -66,6 +66,8 @@ class V8StackTraceImpl : public V8StackTrace {
   std::unique_ptr<protocol::Runtime::StackTrace> buildInspectorObjectImpl(
       V8Debugger* debugger, int maxAsyncDepth) const;
 
+  void dropAsyncChain();
+
   // V8StackTrace implementation.
   // This method drops the async stack trace.
   std::unique_ptr<V8StackTrace> clone() override;

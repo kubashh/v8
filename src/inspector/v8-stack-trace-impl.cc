@@ -228,6 +228,8 @@ V8StackTraceImpl::V8StackTraceImpl(
 
 V8StackTraceImpl::~V8StackTraceImpl() = default;
 
+void V8StackTraceImpl::dropAsyncChain() { m_asyncParent.reset(); }
+
 std::unique_ptr<V8StackTrace> V8StackTraceImpl::clone() {
   return std::unique_ptr<V8StackTrace>(new V8StackTraceImpl(
       m_frames, 0, std::shared_ptr<AsyncStackTrace>(), V8StackTraceId()));
