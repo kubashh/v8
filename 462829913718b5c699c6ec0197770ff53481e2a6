@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e85b28d5_95fd52dd",
+        "filename": "src/perf-jit.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-03-28T08:45:44Z",
+      "side": 1,
+      "message": "Hi Tianyou, the std::cout is for testing. I will remove them in later version. Thanks!",
+      "parentUuid": "f26068ef_e47b2eab",
+      "revId": "462829913718b5c699c6ec0197770ff53481e2a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e144a7bf_a5761b88",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-03-28T07:21:32Z",
       "side": 1,
       "message": "seems: 1) I\u0027m not sure if we should use c++ file api; 2) not exception safe for new/free",
+      "revId": "462829913718b5c699c6ec0197770ff53481e2a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcd1ce42_6809cc7f",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-03-28T08:45:44Z",
+      "side": 1,
+      "message": "I paid little attention to the exception safe issues. I will study the c++ file api and make sure it\u0027s the right choice. Thanks!",
+      "parentUuid": "e144a7bf_a5761b88",
       "revId": "462829913718b5c699c6ec0197770ff53481e2a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "faf8223c_d134c64d",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-03-28T08:45:44Z",
+      "side": 1,
+      "message": "OK, it\u0027s a better implementation to use unique_ptr, which avoids direct memory manipulation. Thanks!",
+      "parentUuid": "b180ee05_4b7c4b36",
+      "revId": "462829913718b5c699c6ec0197770ff53481e2a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "99322bc4_c53fe1e8",
         "filename": "src/wasm/wasm-module.cc",
         "patchSetId": 2
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "6976c0c2_b001fa51",
+        "filename": "src/wasm/wasm-module.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-03-28T08:45:44Z",
+      "side": 1,
+      "message": "Yes, exit will abort the current process. The error handling is indeed a big problem in this patch, I will reconsider it. I\u0027m not sure if the error handling utilities provided by V8 are good choices. Tianyou, could you share your comment of this idea? Thanks!",
+      "parentUuid": "99322bc4_c53fe1e8",
+      "revId": "462829913718b5c699c6ec0197770ff53481e2a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "556ce77d_47d015fd",
         "filename": "src/wasm/wasm-module.h",
         "patchSetId": 2
@@ -81,6 +153,30 @@
       "writtenOn": "2019-03-28T07:21:32Z",
       "side": 1,
       "message": "Where this comes from? Any existing code in v8 we can reuse?",
+      "range": {
+        "startLine": 208,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 52
+      },
+      "revId": "462829913718b5c699c6ec0197770ff53481e2a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfa100db_887d6644",
+        "filename": "src/wasm/wasm-module.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1304487
+      },
+      "writtenOn": "2019-03-28T08:45:44Z",
+      "side": 1,
+      "message": "This is base64 conversion table which maps characters to base64 values. The source of this table is https://en.wikipedia.org/wiki/Base64. I will double check if any existing code can be reused here. Thanks!",
+      "parentUuid": "556ce77d_47d015fd",
       "range": {
         "startLine": 208,
         "startChar": 0,
