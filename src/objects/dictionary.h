@@ -164,7 +164,8 @@ class BaseNameDictionary : public Dictionary<Derived, Shape> {
 
   // Collect the keys into the given KeyAccumulator, in ascending chronological
   // order of property creation.
-  static void CollectKeysTo(Handle<Derived> dictionary, KeyAccumulator* keys);
+  V8_WARN_UNUSED_RESULT static bool CollectKeysTo(Handle<Derived> dictionary,
+                                                  KeyAccumulator* keys);
 
   // Return the key indices sorted by its enumeration index.
   static Handle<FixedArray> IterationIndices(Isolate* isolate,

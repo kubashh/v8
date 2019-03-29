@@ -13,10 +13,10 @@
 namespace v8 {
 namespace internal {
 
-inline void ElementsAccessor::CollectElementIndices(Handle<JSObject> object,
+inline bool ElementsAccessor::CollectElementIndices(Handle<JSObject> object,
                                                     KeyAccumulator* keys) {
-  CollectElementIndices(object, handle(object->elements(), keys->isolate()),
-                        keys);
+  return CollectElementIndices(
+      object, handle(object->elements(), keys->isolate()), keys);
 }
 
 inline MaybeHandle<FixedArray> ElementsAccessor::PrependElementIndices(

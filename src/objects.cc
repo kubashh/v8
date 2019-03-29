@@ -7815,7 +7815,7 @@ Handle<FixedArray> BaseNameDictionary<Derived, Shape>::IterationIndices(
 }
 
 template <typename Derived, typename Shape>
-void BaseNameDictionary<Derived, Shape>::CollectKeysTo(
+bool BaseNameDictionary<Derived, Shape>::CollectKeysTo(
     Handle<Derived> dictionary, KeyAccumulator* keys) {
   Isolate* isolate = keys->isolate();
   ReadOnlyRoots roots(isolate);
@@ -7860,16 +7860,17 @@ void BaseNameDictionary<Derived, Shape>::CollectKeysTo(
       has_seen_symbol = true;
       continue;
     }
-    keys->AddKey(key, DO_NOT_CONVERT);
+    if (!keys->AddKey(key, DO_NOT_CONVERT)) return false;
   }
   if (has_seen_symbol) {
     for (int i = 0; i < array_size; i++) {
       int index = Smi::ToInt(array->get(i));
       Object key = dictionary->NameAt(index);
       if (!key->IsSymbol()) continue;
-      keys->AddKey(key, DO_NOT_CONVERT);
+      if (!keys->AddKey(key, DO_NOT_CONVERT)) return false;
     }
   }
+  return true;
 }
 
 // Backwards lookup (slow).
@@ -8513,14 +8514,14 @@ BaseNameDictionary<NameDictionary, NameDictionaryShape>::CopyEnumKeysTo(
 template Handle<FixedArray>
 BaseNameDictionary<GlobalDictionary, GlobalDictionaryShape>::IterationIndices(
     Isolate* isolate, Handle<GlobalDictionary> dictionary);
-template void
+template bool
 BaseNameDictionary<GlobalDictionary, GlobalDictionaryShape>::CollectKeysTo(
     Handle<GlobalDictionary> dictionary, KeyAccumulator* keys);
 
 template Handle<FixedArray>
 BaseNameDictionary<NameDictionary, NameDictionaryShape>::IterationIndices(
     Isolate* isolate, Handle<NameDictionary> dictionary);
-template void
+template bool
 BaseNameDictionary<NameDictionary, NameDictionaryShape>::CollectKeysTo(
     Handle<NameDictionary> dictionary, KeyAccumulator* keys);
 

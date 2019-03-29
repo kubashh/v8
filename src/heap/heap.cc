@@ -5500,7 +5500,7 @@ void Heap::AddKeepDuringJobTarget(Handle<JSReceiver> target) {
     table =
         handle(OrderedHashSet::cast(weak_refs_keep_during_job()), isolate());
   }
-  table = OrderedHashSet::Add(isolate(), table, target);
+  table = OrderedHashSet::Add(isolate(), table, target).ToHandleChecked();
   set_weak_refs_keep_during_job(*table);
 }
 

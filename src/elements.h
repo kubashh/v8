@@ -81,12 +81,12 @@ class ElementsAccessor {
   // Copy all indices that have elements from |object| into the given
   // KeyAccumulator. For Dictionary-based element-kinds we filter out elements
   // whose PropertyAttribute match |filter|.
-  virtual void CollectElementIndices(Handle<JSObject> object,
-                                     Handle<FixedArrayBase> backing_store,
-                                     KeyAccumulator* keys) = 0;
+  V8_WARN_UNUSED_RESULT virtual bool CollectElementIndices(
+      Handle<JSObject> object, Handle<FixedArrayBase> backing_store,
+      KeyAccumulator* keys) = 0;
 
-  inline void CollectElementIndices(Handle<JSObject> object,
-                                    KeyAccumulator* keys);
+  V8_WARN_UNUSED_RESULT inline bool CollectElementIndices(
+      Handle<JSObject> object, KeyAccumulator* keys);
 
   virtual Maybe<bool> CollectValuesOrEntries(
       Isolate* isolate, Handle<JSObject> object,
@@ -102,9 +102,9 @@ class ElementsAccessor {
       Handle<JSObject> object, Handle<FixedArray> keys,
       GetKeysConversion convert, PropertyFilter filter = ALL_PROPERTIES);
 
-  virtual void AddElementsToKeyAccumulator(Handle<JSObject> receiver,
-                                           KeyAccumulator* accumulator,
-                                           AddKeyConversion convert) = 0;
+  V8_WARN_UNUSED_RESULT virtual bool AddElementsToKeyAccumulator(
+      Handle<JSObject> receiver, KeyAccumulator* accumulator,
+      AddKeyConversion convert) = 0;
 
   virtual void TransitionElementsKind(Handle<JSObject> object,
                                       Handle<Map> map) = 0;
