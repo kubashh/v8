@@ -54,6 +54,7 @@ def postprocess(output):
   output = re.sub(r'%\s*FromConstexpr', r'%FromConstexpr', output)
   output = re.sub(r'%\s*Allocate', r'%Allocate', output)
   output = re.sub(r'%\s*GetAllocationBaseSize', r'%GetAllocationBaseSize', output)
+  output = re.sub(r'%\s*GetFrameArguments', r'%GetFrameArguments', output)
   output = re.sub(r'\/\*COxp\*\/', r'constexpr', output)
   output = re.sub(r'(\S+)\s*: type([,>])', r'\1: type\2', output)
   output = re.sub(r'(\n\s*)labels( [A-Z])', r'\1    labels\2', output)

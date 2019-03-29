@@ -134,6 +134,8 @@ Cast<ArgumentsAdaptorFrame>(implicit context: Context)(f: Frame):
   goto CastError;
 }
 
+type FrameWithArguments = StandardFrame | ArgumentsAdaptorFrame;
+
 // Load target function from the current JS frame.
 // This is an alternative way of getting the target function in addition to
 // Parameter(Descriptor::kJSTarget). The latter should be used near the
@@ -143,3 +145,6 @@ Cast<ArgumentsAdaptorFrame>(implicit context: Context)(f: Frame):
 macro LoadTargetFromFrame(): JSFunction {
   return LoadFramePointer().function;
 }
+
+intrinsic %GetFrameArguments<>(argc: intptr, frame: FrameWithArguments):
+        constexpr Arguments;

@@ -363,18 +363,7 @@ void JSGenericLowering::LowerJSCreate(Node* node) {
 
 
 void JSGenericLowering::LowerJSCreateArguments(Node* node) {
-  CreateArgumentsType const type = CreateArgumentsTypeOf(node->op());
-  switch (type) {
-    case CreateArgumentsType::kMappedArguments:
-      ReplaceWithRuntimeCall(node, Runtime::kNewSloppyArguments_Generic);
-      break;
-    case CreateArgumentsType::kUnmappedArguments:
-      ReplaceWithRuntimeCall(node, Runtime::kNewStrictArguments);
-      break;
-    case CreateArgumentsType::kRestParameter:
-      ReplaceWithRuntimeCall(node, Runtime::kNewRestParameter);
-      break;
-  }
+  UNREACHABLE();  // Eliminated in create lowering.
 }
 
 
