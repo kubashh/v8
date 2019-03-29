@@ -387,11 +387,8 @@ namespace internal {
   F(NewClosure, 2, 1)                     \
   F(NewClosure_Tenured, 2, 1)             \
   F(NewFunctionContext, 1, 1)             \
-  F(NewRestParameter, 1, 1)               \
   F(NewScriptContext, 1, 1)               \
-  F(NewSloppyArguments, 3, 1)             \
   F(NewSloppyArguments_Generic, 1, 1)     \
-  F(NewStrictArguments, 1, 1)             \
   F(PushBlockContext, 1, 1)               \
   F(PushCatchContext, 2, 1)               \
   F(PushModuleContext, 2, 1)              \
