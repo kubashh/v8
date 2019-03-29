@@ -64,6 +64,8 @@ std::ostream& operator<<(std::ostream& os, const Generic& g) {
   return os;
 }
 
+void Callable::MarkHasReturns() { has_returns_ = true; }
+
 base::Optional<const Type*> Generic::InferTypeArgument(
     size_t i, const TypeVector& arguments) {
   const std::string type_name = declaration()->generic_parameters[i]->value;
