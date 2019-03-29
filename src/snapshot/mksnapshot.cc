@@ -247,7 +247,7 @@ void WriteEmbeddedFile(i::EmbeddedFileWriter* writer) {
 }
 }  // namespace
 
-typedef std::map<std::string, int> CounterMap;
+using CounterMap = std::map<std::string, int>;
 CounterMap* counter_map_;
 
 int main(int argc, char** argv) {
