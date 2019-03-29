@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12be3e1e_890f2498",
+        "filename": "tools/locs.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-29T13:30:34Z",
+      "side": 1,
+      "message": "I don\u0027t fully understand this change. Note also that temp_file_name is now unused and could be removed.",
+      "range": {
+        "startLine": 311,
+        "startChar": 19,
+        "endLine": 311,
+        "endChar": 48
+      },
+      "revId": "99d992c6f0f3f464c4614a82f852d9258a7ceb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7222375_a885586f",
+        "filename": "tools/locs.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-29T13:30:34Z",
+      "side": 1,
+      "message": "nit: return tuple",
+      "range": {
+        "startLine": 312,
+        "startChar": 11,
+        "endLine": 312,
+        "endChar": 12
+      },
+      "revId": "99d992c6f0f3f464c4614a82f852d9258a7ceb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "530733f3_b4d77136",
+        "filename": "tools/locs.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-03-29T13:30:34Z",
+      "side": 1,
+      "message": "Do you ever need that anywhere?",
+      "range": {
+        "startLine": 312,
+        "startChar": 68,
+        "endLine": 312,
+        "endChar": 75
+      },
+      "revId": "99d992c6f0f3f464c4614a82f852d9258a7ceb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
