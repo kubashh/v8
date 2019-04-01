@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1be2ca05_8505108d",
+        "filename": "test/mjsunit/regress/regress-crbug-947949-1.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-01T09:35:25Z",
+      "side": 1,
+      "message": "Nit: 2019.",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "b4931421a2509659dee6a3035f7757cf0035b798",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
