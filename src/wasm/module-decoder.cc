@@ -1,6 +1,7 @@
 // Copyright 2015 the V8 project authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+#include <fstream>
 
 #include "src/wasm/module-decoder.h"
 
@@ -974,6 +975,13 @@ class ModuleDecoderImpl : public Decoder {
           inner.start() + inner.GetBufferRelativeOffset(url.offset());
       module_->source_map_url.assign(reinterpret_cast<const char*>(url_start),
                                      url.length());
+      if (!module_->source_map_url.empty()) {
+        std::ifstream source_map_file(module_->source_map_url);
+        if (source_map_file.good()) {
+          module_->source_map_ = std::make_shared<WasmModuleSourceMap>(
+              module_->source_map_url.c_str());
+        }
+      }
       set_seen_unordered_section(kSourceMappingURLSectionCode);
     }
     consume_bytes(static_cast<uint32_t>(end_ - start_), nullptr);

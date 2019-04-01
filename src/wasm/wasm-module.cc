@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include <stdio.h>
+#include <string.h>
+
+#include <fstream>
 #include <functional>
 #include <memory>
 
@@ -323,6 +327,130 @@ size_t EstimateStoredSize(const WasmModule* module) {
          VectorSize(module->export_table) + VectorSize(module->exceptions) +
          VectorSize(module->elem_segments);
 }
+
+WasmModuleSourceMap::WasmModuleSourceMap(const char* src_map_file_url) {
+  std::ifstream src_map_file;
+
+  src_map_file.open(src_map_file_url, std::ifstream::in);
+  CHECK_EQ(src_map_file.is_open(), true);
+
+  src_map_file.seekg(0, src_map_file.end);
+  int64_t lsize = src_map_file.tellg();
+  src_map_file.seekg(0, src_map_file.beg);
+  CHECK_NE(lsize, -1);
+
+  std::unique_ptr<char[]> json_str_buf(new char[lsize + 1]);
+  src_map_file.read(json_str_buf.get(), lsize);
+  json_str_buf[lsize] = '\0';
+  std::string json_str(json_str_buf.release());
+
+  // parse "sources" field
+  size_t source_pos = json_str.find("\"sources\":");
+  size_t lSqr = json_str.find('[', source_pos);
+  size_t rSqr = json_str.find(']', source_pos);
+  size_t source_size = rSqr - lSqr - 1;
+  CHECK_NE(source_pos, -1);
+  CHECK_NE(lSqr, -1);
+  CHECK_NE(rSqr, -1);
+  CHECK_LT(lSqr, rSqr);
+
+  std::string source = json_str.substr(lSqr + 1, source_size);
+
+  std::unique_ptr<char[]> source_buf(new char[source_size + 1]);
+  char* source_ptr = source_buf.get();
+  memcpy(source_ptr, source.c_str(), source_size);
+
+#if V8_OS_WIN
+#define strtok_r strtok_s
+#endif
+  char *save, *filename;
+  while ((filename = strtok_r(source_ptr, ",\"", &save)) != NULL) {
+    filenames.emplace_back(filename);
+    source_ptr = NULL;
+  }
+
+#if V8_OS_WIN
+#undef strtok_r
+#endif
+
+  // parse "mappings" field
+  size_t mappings_pos = json_str.find("\"mappings\":");
+  CHECK_NE(mappings_pos, -1);
+  mappings_pos += sizeof("\"mappings\":") - 1;
+  size_t lQuo = json_str.find('"', mappings_pos);
+  size_t rQuo = json_str.find('"', lQuo + 1);
+  size_t mapping_size = rQuo - lQuo - 1;
+  CHECK_NE(lQuo, -1);
+  CHECK_NE(rQuo, -1);
+  CHECK_LT(lQuo, rQuo);
+
+  std::string mapping = json_str.substr(lQuo + 1, mapping_size);
+
+  decodeMapping(mapping);
+
+  src_map_file.close();
+}
+
+std::size_t WasmModuleSourceMap::SourceLine(std::size_t wasm_offset) {
+  std::vector<std::size_t>::iterator up =
+      upper_bound(offsets.begin(), offsets.end(), wasm_offset);
+
+  // Corner case treatment
+  std::size_t idx = up - offsets.begin() - 1;
+  return sourceRow[idx];
+}
+
+int WasmModuleSourceMap::VLQBase64Decode(const std::string& s,
+                                         std::size_t& pos) {
+  unsigned int CONTINUE_SHIFT = 5;
+  unsigned int CONTINUE_MASK = 1 << CONTINUE_SHIFT;
+  unsigned int DATA_MASK = CONTINUE_MASK - 1;
+
+  unsigned int res = 0;
+  int shift = 0;
+  bool toContinue = true;
+
+  while (toContinue) {
+    CHECK_LT(pos, s.size());
+    int digit = charToDigitDecode(s[pos]);
+    CHECK_NE(digit, -1);
+    toContinue = !!(digit & CONTINUE_MASK);
+    res += (digit & DATA_MASK) << shift;
+    shift += CONTINUE_SHIFT;
+    pos++;
+  }
+
+  return (res & 1) ? -static_cast<int>(res >> 1) : (res >> 1);
+}
+
+void WasmModuleSourceMap::decodeMapping(const std::string& s) {
+  std::size_t pos = 0;
+  std::size_t genCol = 0, genLine = 0, fileIdx = 0, oriCol = 0, oriLine = 0;
+
+  while (pos < s.size()) {
+    if (s[pos] == ';') {
+      genLine++;
+      genCol = 0;
+      ++pos;
+    } else if (s[pos] == ',') {
+      ++pos;
+
+    } else {
+      genCol += VLQBase64Decode(s, pos);
+      if (s[pos] != ';' && s[pos] != ',' && pos < s.size()) {
+        fileIdx += VLQBase64Decode(s, pos);
+        oriLine += VLQBase64Decode(s, pos);
+        oriCol += VLQBase64Decode(s, pos);
+      }
+
+      fileIdxs.push_back(fileIdx);
+      sourceRow.push_back(oriLine);
+      sourceCol.push_back(oriCol);
+      offsets.push_back(genCol);
+    }
+  }
+}
+
 }  // namespace wasm
 }  // namespace internal
 }  // namespace v8
