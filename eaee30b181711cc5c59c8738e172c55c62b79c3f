@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "993c573e_d312241d",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-01T13:30:39Z",
+      "side": 1,
+      "message": "nit: We recently made a move to switch from \"typedef\" to \"using\". Lets write this as {using CFunctionArg \u003d std::pair\u003cMachineType, Node*\u003e} instead.",
+      "range": {
+        "startLine": 1333,
+        "startChar": 2,
+        "endLine": 1333,
+        "endChar": 53
+      },
+      "revId": "eaee30b181711cc5c59c8738e172c55c62b79c3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12efd51c_98c49f61",
+        "filename": "src/compiler/raw-machine-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-01T13:30:39Z",
+      "side": 1,
+      "message": "nit: Likewise.",
+      "range": {
+        "startLine": 608,
+        "startChar": 56,
+        "endLine": 608,
+        "endChar": 73
+      },
+      "revId": "eaee30b181711cc5c59c8738e172c55c62b79c3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f939657a_450c831d",
+        "filename": "src/compiler/raw-machine-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-01T13:30:39Z",
+      "side": 1,
+      "message": "nit: Since we only have two call-site for this within the same file, I\u0027d vote to skip the default arguments and be explicit at the one call-site below that uses these default arguments.",
+      "range": {
+        "startLine": 608,
+        "startChar": 27,
+        "endLine": 608,
+        "endChar": 34
+      },
+      "revId": "eaee30b181711cc5c59c8738e172c55c62b79c3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4481dd23_382bb8dd",
+        "filename": "src/compiler/raw-machine-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-01T13:30:39Z",
+      "side": 1,
+      "message": "nit: Looks like a stray change/typo.",
+      "range": {
+        "startLine": 855,
+        "startChar": 34,
+        "endLine": 855,
+        "endChar": 49
+      },
+      "revId": "eaee30b181711cc5c59c8738e172c55c62b79c3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "771d8cc8_5bf47448",
+        "filename": "src/compiler/raw-machine-assembler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-01T13:30:39Z",
+      "side": 1,
+      "message": "nit: We recently made a move to switch from \"typedef\" to \"using\". Lets write this as {using CFunctionArg \u003d std::pair\u003cMachineType, Node*\u003e} instead.",
+      "range": {
+        "startLine": 859,
+        "startChar": 2,
+        "endLine": 859,
+        "endChar": 9
+      },
+      "revId": "eaee30b181711cc5c59c8738e172c55c62b79c3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
