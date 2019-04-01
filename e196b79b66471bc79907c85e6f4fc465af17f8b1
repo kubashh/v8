@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "589ace34_580834b4",
+        "filename": "src/heap/factory.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3524,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-04-01T08:54:31Z",
+      "side": 1,
+      "message": "Actually, let me try to get rid of this.",
+      "revId": "e196b79b66471bc79907c85e6f4fc465af17f8b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
