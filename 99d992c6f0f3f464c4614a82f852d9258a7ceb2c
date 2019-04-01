@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "52dc869f_04988bda",
+        "filename": "tools/locs.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-01T08:21:33Z",
+      "side": 1,
+      "message": "Removed, thanks!",
+      "parentUuid": "12be3e1e_890f2498",
+      "range": {
+        "startLine": 311,
+        "startChar": 19,
+        "endLine": 311,
+        "endChar": 48
+      },
+      "revId": "99d992c6f0f3f464c4614a82f852d9258a7ceb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c7222375_a885586f",
         "filename": "tools/locs.py",
         "patchSetId": 1
@@ -68,6 +92,54 @@
       "revId": "99d992c6f0f3f464c4614a82f852d9258a7ceb2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f24bab9_7a10c2bf",
+        "filename": "tools/locs.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-01T08:21:33Z",
+      "side": 1,
+      "message": "Removed, thanks!",
+      "parentUuid": "530733f3_b4d77136",
+      "range": {
+        "startLine": 312,
+        "startChar": 68,
+        "endLine": 312,
+        "endChar": 75
+      },
+      "revId": "99d992c6f0f3f464c4614a82f852d9258a7ceb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "daabf2c1_f9532834",
+        "filename": "tools/locs.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-01T08:21:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7222375_a885586f",
+      "range": {
+        "startLine": 312,
+        "startChar": 11,
+        "endLine": 312,
+        "endChar": 12
+      },
+      "revId": "99d992c6f0f3f464c4614a82f852d9258a7ceb2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
