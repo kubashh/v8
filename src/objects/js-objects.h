@@ -84,8 +84,8 @@ class JSReceiver : public HeapObject {
       Handle<JSReceiver> receiver);
 
   // Get the first non-hidden prototype.
-  static inline MaybeHandle<HeapObject> GetPrototype(
-      Isolate* isolate, Handle<JSReceiver> receiver);
+  static inline MaybeHandle<Object> GetPrototype(Isolate* isolate,
+                                                 Handle<JSReceiver> receiver);
 
   V8_WARN_UNUSED_RESULT static Maybe<bool> HasInPrototypeChain(
       Isolate* isolate, Handle<JSReceiver> object, Handle<Object> proto);

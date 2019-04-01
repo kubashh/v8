@@ -80,14 +80,14 @@ Handle<Object> JSReceiver::GetDataProperty(Handle<JSReceiver> object,
   return GetDataProperty(&it);
 }
 
-MaybeHandle<HeapObject> JSReceiver::GetPrototype(Isolate* isolate,
-                                                 Handle<JSReceiver> receiver) {
+MaybeHandle<Object> JSReceiver::GetPrototype(Isolate* isolate,
+                                             Handle<JSReceiver> receiver) {
   // We don't expect access checks to be needed on JSProxy objects.
   DCHECK(!receiver->IsAccessCheckNeeded() || receiver->IsJSObject());
   PrototypeIterator iter(isolate, receiver, kStartAtReceiver,
                          PrototypeIterator::END_AT_NON_HIDDEN);
   do {
-    if (!iter.AdvanceFollowingProxies()) return MaybeHandle<HeapObject>();
+    if (!iter.AdvanceFollowingProxies()) return MaybeHandle<Object>();
   } while (!iter.IsAtEnd());
   return PrototypeIterator::GetCurrent(iter);
 }

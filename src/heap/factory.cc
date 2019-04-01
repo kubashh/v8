@@ -3498,7 +3498,7 @@ MaybeHandle<JSBoundFunction> Factory::NewJSBoundFunction(
   }
 
   // Determine the prototype of the {target_function}.
-  Handle<HeapObject> prototype;
+  Handle<Object> prototype;
   ASSIGN_RETURN_ON_EXCEPTION(
       isolate(), prototype,
       JSReceiver::GetPrototype(isolate(), target_function), JSBoundFunction);
@@ -3521,7 +3521,9 @@ MaybeHandle<JSBoundFunction> Factory::NewJSBoundFunction(
                         ? isolate()->bound_function_with_constructor_map()
                         : isolate()->bound_function_without_constructor_map();
   if (map->prototype() != *prototype) {
-    map = Map::TransitionToPrototype(isolate(), map, prototype);
+    CHECK(prototype->IsHeapObject());
+    map = Map::TransitionToPrototype(isolate(), map,
+                                     Handle<HeapObject>::cast(prototype));
   }
   DCHECK_EQ(target_function->IsConstructor(), map->is_constructor());
 
