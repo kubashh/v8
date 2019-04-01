@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fad6f620_9a24178c",
+        "filename": "src/compiler/js-native-context-specialization.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-01T09:52:36Z",
+      "side": 1,
+      "message": "How about inserting DCHECK_EQ(all, !none) for documentation purposes?",
+      "revId": "25ecd288fe5221acff9aa49549f78858a4659020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
