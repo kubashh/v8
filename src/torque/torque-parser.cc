@@ -306,6 +306,13 @@ base::Optional<ParseResult> MakeUnaryOperator(
                               std::vector<Statement*>{})};
 }
 
+base::Optional<ParseResult> MakeSpreadExpression(
+    ParseResultIterator* child_results) {
+  auto spreadee = child_results->NextAs<Expression*>();
+  Expression* result = MakeNode<SpreadExpression>(spreadee);
+  return ParseResult{result};
+}
+
 template <bool has_varargs>
 base::Optional<ParseResult> MakeParameterListFromTypes(
     ParseResultIterator* child_results) {
@@ -1104,17 +1111,19 @@ base::Optional<ParseResult> MakeNameAndType(
 
 base::Optional<ParseResult> MakeClassField(ParseResultIterator* child_results) {
   auto weak = child_results->NextAs<bool>();
+  auto is_const = child_results->NextAs<bool>();
   auto name = child_results->NextAs<Identifier*>();
   auto index = child_results->NextAs<base::Optional<std::string>>();
   auto type = child_results->NextAs<TypeExpression*>();
-  return ParseResult{ClassFieldExpression{{name, type}, index, weak}};
+  return ParseResult{ClassFieldExpression{{name, type}, index, weak, is_const}};
 }
 
 base::Optional<ParseResult> MakeStructField(
     ParseResultIterator* child_results) {
+  auto is_const = child_results->NextAs<bool>();
   auto name = child_results->NextAs<Identifier*>();
   auto type = child_results->NextAs<TypeExpression*>();
-  return ParseResult{StructFieldExpression{{name, type}}};
+  return ParseResult{StructFieldExpression{{name, type}, is_const}};
 }
 
 base::Optional<ParseResult> ExtractAssignmentOperator(
@@ -1309,12 +1318,13 @@ struct TorqueGrammar : Grammar {
       Optional<std::string>(Sequence({Token("["), &identifier, Token("]")}))};
 
   Symbol classField = {
-      Rule({CheckIf(Token("weak")), &name, optionalArraySpecifier, Token(":"),
-            &type, Token(";")},
+      Rule({CheckIf(Token("weak")), CheckIf(Token("const")), &name,
+            optionalArraySpecifier, Token(":"), &type, Token(";")},
            MakeClassField)};
 
   Symbol structField = {
-      Rule({&name, Token(":"), &type, Token(";")}, MakeStructField)};
+      Rule({CheckIf(Token("const")), &name, Token(":"), &type, Token(";")},
+           MakeStructField)};
 
   // Result: ParameterList
   Symbol parameterListNoVararg = {
@@ -1418,6 +1428,7 @@ struct TorqueGrammar : Grammar {
   Symbol unaryExpression = {
       Rule({&primaryExpression}),
       Rule({OneOf({"+", "-", "!", "~"}), &unaryExpression}, MakeUnaryOperator),
+      Rule({Token("..."), &unaryExpression}, MakeSpreadExpression),
       Rule({&incrementDecrementOperator, &locationExpression},
            MakeIncrementDecrementExpressionPrefix),
       Rule({&locationExpression, &incrementDecrementOperator},
