@@ -22,6 +22,30 @@
       "revId": "8610146ce8dfdf6b2917abbfc64b7361da6f0bf5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be10a6f0_f55ef1e8",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-04-01T11:44:58Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "52139b02_810c03aa",
+      "range": {
+        "startLine": 559,
+        "startChar": 34,
+        "endLine": 559,
+        "endChar": 38
+      },
+      "revId": "8610146ce8dfdf6b2917abbfc64b7361da6f0bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

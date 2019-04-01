@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5b09084_133aa4ca",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-04-01T11:44:58Z",
+      "side": 1,
+      "message": "I added this in heap, because mark-compact and concurrent-marking use it. I am not sure this is the right place though. Happy to move it to a different place or remove it.",
+      "revId": "b8996756053cfaaa302b6bc2d280501d620b0215",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
