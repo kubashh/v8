@@ -2049,10 +2049,20 @@ void TurboAssembler::ComputeCodeStartAddress(Register dst) {
 }
 
 void TurboAssembler::CallForDeoptimization(Address target, int deopt_id) {
-  NoRootArrayScope no_root_array(this);
-  // Save the deopt id in ebx (we don't need the roots array from now on).
-  mov(ebx, deopt_id);
-  call(target, RelocInfo::RUNTIME_ENTRY);
+  push(eax);
+  push(esi);
+  {
+    // Save the deopt id into the isolate data.
+    mov(eax, Immediate(deopt_id));
+
+    ExternalReference deoptimization_id_address = ExternalReference::Create(
+        IsolateAddressId::kDeoptimizationIdAddress, isolate());
+    mov(ExternalReferenceAsOperand(deoptimization_id_address, esi), eax);
+  }
+  pop(esi);
+  pop(eax);
+
+  call(target, RelocInfo::OFF_HEAP_TARGET);
 }
 
 }  // namespace internal

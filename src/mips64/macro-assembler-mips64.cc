@@ -5897,13 +5897,24 @@ void TurboAssembler::ResetSpeculationPoisonRegister() {
 }
 
 void TurboAssembler::CallForDeoptimization(Address target, int deopt_id) {
-  NoRootArrayScope no_root_array(this);
-
-  // Save the deopt id in kRootRegister (we don't need the roots array from now
-  // on).
   DCHECK_LE(deopt_id, 0xFFFF);
-  li(kRootRegister, deopt_id);
-  Call(target, RelocInfo::RUNTIME_ENTRY);
+
+  push(kScratchReg);
+  push(kScratchReg2);
+  {
+    // Save the deopt id into the isolate data.
+    li(kScratchReg2, deopt_id);
+
+    IndirectLoadExternalReference(
+        kScratchReg,
+        ExternalReference::Create(IsolateAddressId::kDeoptimizationIdAddress,
+                                  isolate()));
+    sw(kScratchReg2, MemOperand(kScratchReg));
+  }
+  pop(kScratchReg2);
+  pop(kScratchReg);
+
+  Call(target, RelocInfo::OFF_HEAP_TARGET);
 }
 
 }  // namespace internal

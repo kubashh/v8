@@ -25,7 +25,7 @@ class ThreadLocalTop {
   // TODO(all): This is not particularly beautiful. We should probably
   // refactor this to really consist of just Addresses and 32-bit
   // integer fields.
-  static constexpr uint32_t kSizeInBytes = 23 * kSystemPointerSize;
+  static constexpr uint32_t kSizeInBytes = 24 * kSystemPointerSize;
 
   // Does early low-level initialization that does not depend on the
   // isolate being present.
@@ -94,6 +94,8 @@ class ThreadLocalTop {
   Address handler_ = kNullAddress;
   // C function that was called at c entry.
   Address c_function_ = kNullAddress;
+
+  int deoptimization_id_ = kNoDeoptimizationId;
 
   // Throwing an exception may cause a Promise rejection.  For this purpose
   // we keep track of a stack of nested promises and the corresponding

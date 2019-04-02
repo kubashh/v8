@@ -41,11 +41,6 @@ bool IsUnexpectedCodeObject(Isolate* isolate, HeapObject obj) {
 
   Code code = Code::cast(obj);
 
-  // TODO(v8:8768): Deopt entry code should not be serialized.
-  if (code->kind() == Code::STUB && isolate->deoptimizer_data() != nullptr) {
-    if (isolate->deoptimizer_data()->IsDeoptEntryCode(code)) return false;
-  }
-
   if (code->kind() == Code::REGEXP) return false;
   if (!code->is_builtin()) return true;
   if (!FLAG_embedded_builtins) return false;

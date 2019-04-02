@@ -493,10 +493,6 @@ class Deoptimizer : public Malloced {
 
   static const int kNotDeoptimizationEntry = -1;
 
-  static void EnsureCodeForDeoptimizationEntry(Isolate* isolate,
-                                               DeoptimizeKind kind);
-  static void EnsureCodeForDeoptimizationEntries(Isolate* isolate);
-
   Isolate* isolate() const { return isolate_; }
 
   static const int kMaxNumberOfEntries = 16384;
@@ -512,9 +508,6 @@ class Deoptimizer : public Malloced {
   Code FindOptimizedCode();
   void PrintFunctionName();
   void DeleteFrameDescriptions();
-
-  static bool IsDeoptimizationEntry(Isolate* isolate, Address addr,
-                                    DeoptimizeKind type);
 
   void DoComputeOutputFrames();
   void DoComputeInterpretedFrame(TranslatedFrame* translated_frame,
@@ -820,22 +813,10 @@ class DeoptimizerData {
   explicit DeoptimizerData(Heap* heap);
   ~DeoptimizerData();
 
-#ifdef DEBUG
-  bool IsDeoptEntryCode(Code code) const {
-    for (int i = 0; i < kLastDeoptimizeKind + 1; i++) {
-      if (code == deopt_entry_code_[i]) return true;
-    }
-    return false;
-  }
-#endif  // DEBUG
-
  private:
   Heap* heap_;
   static const int kLastDeoptimizeKind =
       static_cast<int>(DeoptimizeKind::kLastDeoptimizeKind);
-  Code deopt_entry_code_[kLastDeoptimizeKind + 1];
-  Code deopt_entry_code(DeoptimizeKind kind);
-  void set_deopt_entry_code(DeoptimizeKind kind, Code code);
 
   Deoptimizer* current_;
 

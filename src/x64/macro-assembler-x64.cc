@@ -2695,10 +2695,21 @@ void TurboAssembler::ResetSpeculationPoisonRegister() {
 }
 
 void TurboAssembler::CallForDeoptimization(Address target, int deopt_id) {
-  NoRootArrayScope no_root_array(this);
-  // Save the deopt id in r13 (we don't need the roots array from now on).
-  movq(r13, Immediate(deopt_id));
-  call(target, RelocInfo::RUNTIME_ENTRY);
+  pushq(rax);
+  pushq(rbx);
+  {
+    // Save the deopt id into the isolate data.
+    movq(rax, Immediate(deopt_id));
+
+    IndirectLoadExternalReference(
+        rbx, ExternalReference::Create(
+                 IsolateAddressId::kDeoptimizationIdAddress, isolate()));
+    movq(Operand(rbx, 0), rax);
+  }
+  popq(rbx);
+  popq(rax);
+
+  Call(target, RelocInfo::OFF_HEAP_TARGET);
 }
 
 }  // namespace internal

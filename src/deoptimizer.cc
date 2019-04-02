@@ -137,23 +137,9 @@ class FrameWriter {
 };
 
 DeoptimizerData::DeoptimizerData(Heap* heap) : heap_(heap), current_(nullptr) {
-  Code* start = &deopt_entry_code_[0];
-  Code* end = &deopt_entry_code_[DeoptimizerData::kLastDeoptimizeKind + 1];
-  heap_->RegisterStrongRoots(FullObjectSlot(start), FullObjectSlot(end));
 }
-
 
 DeoptimizerData::~DeoptimizerData() {
-  Code* start = &deopt_entry_code_[0];
-  heap_->UnregisterStrongRoots(FullObjectSlot(start));
-}
-
-Code DeoptimizerData::deopt_entry_code(DeoptimizeKind kind) {
-  return deopt_entry_code_[static_cast<int>(kind)];
-}
-
-void DeoptimizerData::set_deopt_entry_code(DeoptimizeKind kind, Code code) {
-  deopt_entry_code_[static_cast<int>(kind)] = code;
 }
 
 Code Deoptimizer::FindDeoptimizingCode(Address addr) {
@@ -572,32 +558,41 @@ void Deoptimizer::DeleteFrameDescriptions() {
 
 Address Deoptimizer::GetDeoptimizationEntry(Isolate* isolate,
                                             DeoptimizeKind kind) {
-  DeoptimizerData* data = isolate->deoptimizer_data();
   CHECK_LE(kind, DeoptimizerData::kLastDeoptimizeKind);
-  CHECK(!data->deopt_entry_code(kind).is_null());
-  return data->deopt_entry_code(kind)->raw_instruction_start();
-}
 
-bool Deoptimizer::IsDeoptimizationEntry(Isolate* isolate, Address addr,
-                                        DeoptimizeKind type) {
-  DeoptimizerData* data = isolate->deoptimizer_data();
-  CHECK_LE(type, DeoptimizerData::kLastDeoptimizeKind);
-  Code code = data->deopt_entry_code(type);
-  if (code.is_null()) return false;
-  return addr == code->raw_instruction_start();
+  switch (kind) {
+    case DeoptimizeKind::kEager:
+      return isolate->builtins()
+          ->builtin(Builtins::kDeoptimizationEntryEager)
+          .InstructionStart();
+    case DeoptimizeKind::kSoft:
+      return isolate->builtins()
+          ->builtin(Builtins::kDeoptimizationEntrySoft)
+          .InstructionStart();
+    case DeoptimizeKind::kLazy:
+      return isolate->builtins()
+          ->builtin(Builtins::kDeoptimizationEntryLazy)
+          .InstructionStart();
+  }
 }
 
 bool Deoptimizer::IsDeoptimizationEntry(Isolate* isolate, Address addr,
                                         DeoptimizeKind* type) {
-  if (IsDeoptimizationEntry(isolate, addr, DeoptimizeKind::kEager)) {
+  if (isolate->builtins()
+          ->builtin_handle(Builtins::kDeoptimizationEntryEager)
+          .address() == addr) {
     *type = DeoptimizeKind::kEager;
     return true;
   }
-  if (IsDeoptimizationEntry(isolate, addr, DeoptimizeKind::kSoft)) {
+  if (isolate->builtins()
+          ->builtin_handle(Builtins::kDeoptimizationEntrySoft)
+          .address() == addr) {
     *type = DeoptimizeKind::kSoft;
     return true;
   }
-  if (IsDeoptimizationEntry(isolate, addr, DeoptimizeKind::kLazy)) {
+  if (isolate->builtins()
+          ->builtin_handle(Builtins::kDeoptimizationEntryLazy)
+          .address() == addr) {
     *type = DeoptimizeKind::kLazy;
     return true;
   }
@@ -1822,38 +1817,6 @@ unsigned Deoptimizer::ComputeIncomingArgumentSize(SharedFunctionInfo shared) {
   int parameter_slots = shared->internal_formal_parameter_count() + 1;
   if (kPadArguments) parameter_slots = RoundUp(parameter_slots, 2);
   return parameter_slots * kSystemPointerSize;
-}
-
-void Deoptimizer::EnsureCodeForDeoptimizationEntry(Isolate* isolate,
-                                                   DeoptimizeKind kind) {
-  CHECK(kind == DeoptimizeKind::kEager || kind == DeoptimizeKind::kSoft ||
-        kind == DeoptimizeKind::kLazy);
-  DeoptimizerData* data = isolate->deoptimizer_data();
-  if (!data->deopt_entry_code(kind).is_null()) return;
-
-  MacroAssembler masm(isolate, CodeObjectRequired::kYes,
-                      NewAssemblerBuffer(16 * KB));
-  masm.set_emit_debug_code(false);
-  GenerateDeoptimizationEntries(&masm, masm.isolate(), kind);
-  CodeDesc desc;
-  masm.GetCode(isolate, &desc);
-  DCHECK(!RelocInfo::RequiresRelocationAfterCodegen(desc));
-
-  // Allocate the code as immovable since the entry addresses will be used
-  // directly and there is no support for relocating them.
-  Handle<Code> code = isolate->factory()->NewCode(
-      desc, Code::STUB, Handle<Object>(), Builtins::kNoBuiltinId,
-      MaybeHandle<ByteArray>(), MaybeHandle<DeoptimizationData>(), kImmovable);
-  CHECK(isolate->heap()->IsImmovable(*code));
-
-  CHECK(data->deopt_entry_code(kind).is_null());
-  data->set_deopt_entry_code(kind, *code);
-}
-
-void Deoptimizer::EnsureCodeForDeoptimizationEntries(Isolate* isolate) {
-  EnsureCodeForDeoptimizationEntry(isolate, DeoptimizeKind::kEager);
-  EnsureCodeForDeoptimizationEntry(isolate, DeoptimizeKind::kLazy);
-  EnsureCodeForDeoptimizationEntry(isolate, DeoptimizeKind::kSoft);
 }
 
 FrameDescription::FrameDescription(uint32_t frame_size, int parameter_count)
