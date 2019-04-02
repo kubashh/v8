@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b614aa4c_02e7e0f2",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-02T19:55:11Z",
+      "side": 1,
+      "message": "The flag could also be named --current_os, but that might just move the confusion elsewhere...",
+      "range": {
+        "startLine": 1144,
+        "startChar": 9,
+        "endLine": 1144,
+        "endChar": 18
+      },
+      "revId": "720da0f85dbb832a260822d981c442ee78fa5916",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
