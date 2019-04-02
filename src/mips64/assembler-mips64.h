@@ -55,7 +55,7 @@ class SafepointTableBuilder;
 // -----------------------------------------------------------------------------
 // Machine instruction Operands.
 constexpr int kSmiShift = kSmiTagSize + kSmiShiftSize;
-constexpr uint64_t kSmiShiftMask = (1UL << kSmiShift) - 1;
+constexpr uint64_t kSmiShiftMask = (1ULL << kSmiShift) - 1;
 // Class Operand represents a shifter operand in data processing instructions.
 class Operand {
  public:

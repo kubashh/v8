@@ -2488,22 +2488,23 @@ void TurboAssembler::ResetSpeculationPoisonRegister() {
 }
 
 void TurboAssembler::CallForDeoptimization(Address target, int deopt_id) {
-  NoRootArrayScope no_root_array(this);
-
-  // Save the deopt id in r10 (we don't need the roots array from now on).
   DCHECK_LE(deopt_id, 0xFFFF);
-  if (CpuFeatures::IsSupported(ARMv7)) {
-    // On ARMv7, we can use movw (with a maximum immediate of 0xFFFF)
-    movw(r10, deopt_id);
-  } else {
-    // On ARMv6, we might need two instructions.
-    mov(r10, Operand(deopt_id & 0xFF));  // Set the low byte.
-    if (deopt_id >= 0xFF) {
-      orr(r10, r10, Operand(deopt_id & 0xFF00));  // Set the high byte.
-    }
-  }
 
-  Call(target, RelocInfo::RUNTIME_ENTRY);
+  Push(r0);
+  Push(r1);
+  {
+    // Save the deopt id into the isolate data.
+    Move32BitImmediate(r0, Operand(deopt_id));
+
+    IndirectLoadExternalReference(
+        r1, ExternalReference::Create(
+                IsolateAddressId::kDeoptimizationIdAddress, isolate()));
+    str(r0, MemOperand(r1));
+  }
+  Pop(r1);
+  Pop(r0);
+
+  Call(target, RelocInfo::OFF_HEAP_TARGET);
   CheckConstPool(false, false);
 }
 
