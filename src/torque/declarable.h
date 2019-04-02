@@ -247,8 +247,8 @@ class Callable : public Scope {
   bool HasReturnValue() const {
     return !signature_.return_type->IsVoidOrNever();
   }
-  void IncrementReturns() { ++returns_; }
-  bool HasReturns() const { return returns_; }
+  void MarkHasReturns();
+  bool HasReturns() const { return has_returns_; }
   bool IsTransitioning() const { return transitioning_; }
   base::Optional<Statement*> body() const { return body_; }
   bool IsExternal() const { return !body_.has_value(); }
@@ -265,7 +265,7 @@ class Callable : public Scope {
         readable_name_(std::move(readable_name)),
         signature_(std::move(signature)),
         transitioning_(transitioning),
-        returns_(0),
+        has_returns_(false),
         body_(body) {
     DCHECK(!body || *body);
   }
@@ -275,7 +275,7 @@ class Callable : public Scope {
   std::string readable_name_;
   Signature signature_;
   bool transitioning_;
-  size_t returns_;
+  bool has_returns_;
   base::Optional<Statement*> body_;
 };
 
@@ -287,6 +287,10 @@ class Macro : public Callable {
       for (const Type* type : label.types) {
         if (type->IsStructType()) return true;
       }
+    }
+    if (const StructType* struct_type =
+            StructType::DynamicCast(signature().return_type)) {
+      if (struct_type->HasConstexprFields()) return true;
     }
     return Callable::ShouldBeInlined();
   }
