@@ -1922,9 +1922,7 @@ TEST(FunctionDetails) {
       "script_b", true);
   script_b->Run(env).ToLocalChecked();
   const v8::CpuProfile* profile = i::ProfilerExtension::last_profile;
-  const v8::CpuProfileNode* current = profile->GetTopDownRoot();
-  reinterpret_cast<ProfileNode*>(
-      const_cast<v8::CpuProfileNode*>(current))->Print(0);
+  reinterpret_cast<const i::CpuProfile*>(profile)->Print();
   // The tree should look like this:
   //  0   (root) 0 #1
   //  0    "" 19 #2 no reason script_b:1
@@ -1999,9 +1997,7 @@ TEST(FunctionDetailsInlining) {
   script_a->Run(env).ToLocalChecked();
 
   const v8::CpuProfile* profile = i::ProfilerExtension::last_profile;
-  const v8::CpuProfileNode* current = profile->GetTopDownRoot();
-  reinterpret_cast<ProfileNode*>(const_cast<v8::CpuProfileNode*>(current))
-      ->Print(0);
+  reinterpret_cast<const i::CpuProfile*>(profile)->Print();
   //   The tree should look like this:
   //  0  (root) 0 #1
   //  5    (program) 0 #6
