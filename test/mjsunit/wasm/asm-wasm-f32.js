@@ -217,6 +217,7 @@ var funcs = [
       } else {
         for (a of inputs) {
           for (b of inputs) {
+            // print("a:" + a + " b:" + b);
             assertEquals(func(a, b), module.main(a, b));
             assertEquals(func(a / 11,  b), module.main(a / 11, b));
             assertEquals(func(a, b / 420.9), module.main(a, b / 420.9));

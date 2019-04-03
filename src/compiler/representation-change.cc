@@ -355,7 +355,7 @@ Node* RepresentationChanger::GetTaggedSignedRepresentationFor(
     }
   } else if (output_rep == MachineRepresentation::kCompressedSigned) {
     op = machine()->ChangeCompressedSignedToTaggedSigned();
-  } else if (output_rep == MachineRepresentation::kCompressed) {
+  } else if (CanBeCompressedPointer(output_rep)) {
     if (use_info.type_check() == TypeCheckKind::kSignedSmall) {
       op = simplified()->CheckedCompressedToTaggedSigned(use_info.feedback());
     } else if (output_type.Is(Type::SignedSmall())) {
@@ -449,7 +449,7 @@ Node* RepresentationChanger::GetTaggedPointerRepresentationFor(
     op = simplified()->CheckedTaggedToTaggedPointer(use_info.feedback());
   } else if (output_rep == MachineRepresentation::kCompressedPointer) {
     op = machine()->ChangeCompressedPointerToTaggedPointer();
-  } else if (output_rep == MachineRepresentation::kCompressed &&
+  } else if (CanBeCompressedSigned(output_rep) &&
              use_info.type_check() == TypeCheckKind::kHeapObject) {
     if (!output_type.Maybe(Type::SignedSmall())) {
       return node;
@@ -631,6 +631,30 @@ Node* RepresentationChanger::GetCompressedPointerRepresentationFor(
     op = simplified()->CheckedTaggedToCompressedPointer(use_info.feedback());
     return TypeError(node, output_rep, output_type,
                      MachineRepresentation::kCompressedPointer);
+  } else if (output_rep == MachineRepresentation::kBit) {
+    // TODO(solanes): specialize here and below
+    node = GetTaggedPointerRepresentationFor(node, output_rep, output_type,
+                                             use_node, use_info);
+    op = machine()->ChangeTaggedPointerToCompressedPointer();
+  } else if (IsWord(output_rep)) {
+    node = GetTaggedPointerRepresentationFor(node, output_rep, output_type,
+                                             use_node, use_info);
+    op = machine()->ChangeTaggedPointerToCompressedPointer();
+  } else if (output_rep == MachineRepresentation::kWord64) {
+    node = GetTaggedPointerRepresentationFor(node, output_rep, output_type,
+                                             use_node, use_info);
+    op = machine()->ChangeTaggedPointerToCompressedPointer();
+  } else if (output_rep == MachineRepresentation::kFloat32) {
+    node = GetTaggedPointerRepresentationFor(node, output_rep, output_type,
+                                             use_node, use_info);
+    op = machine()->ChangeTaggedPointerToCompressedPointer();
+  } else if (output_rep == MachineRepresentation::kFloat64) {
+    node = GetTaggedPointerRepresentationFor(node, output_rep, output_type,
+                                             use_node, use_info);
+    op = machine()->ChangeTaggedPointerToCompressedPointer();
+  } else {
+    return TypeError(node, output_rep, output_type,
+                     MachineRepresentation::kCompressedPointer);
   }
   return InsertConversion(node, op, use_node);
 }
@@ -736,6 +760,19 @@ Node* RepresentationChanger::GetFloat32RepresentationFor(
     return GetFloat32RepresentationFor(intermediate_node,
                                        MachineRepresentation::kTagged,
                                        output_type, truncation);
+  } else if (output_rep == MachineRepresentation::kCompressedPointer) {
+    UNREACHABLE();
+    // TODO(solanes): Is this the right way for the use node?
+    // Node* intermediate_use_node = nullptr;
+    // UseInfo intermediate_use_info(MachineRepresentation::kFloat32,
+    //                               Truncation::Any(),
+    //                               TypeCheckKind::kNumber);
+    // Node* intermediate_node = GetTaggedPointerRepresentationFor(
+    //     node, output_rep, output_type, intermediate_use_node,
+    //     intermediate_use_info);
+    // return GetFloat32RepresentationFor(intermediate_node,
+    //                                    MachineRepresentation::kTaggedPointer,
+    //                                    output_type, truncation);
   } else if (output_rep == MachineRepresentation::kFloat64) {
     op = machine()->TruncateFloat64ToFloat32();
   } else if (output_rep == MachineRepresentation::kWord64) {
@@ -830,6 +867,13 @@ Node* RepresentationChanger::GetFloat64RepresentationFor(
     return GetFloat64RepresentationFor(intermediate_node,
                                        MachineRepresentation::kTagged,
                                        output_type, use_node, use_info);
+  } else if (output_rep == MachineRepresentation::kCompressedPointer) {
+    UNREACHABLE();
+    // Node* intermediate_node = GetTaggedPointerRepresentationFor(
+    //     node, output_rep, output_type, use_node, use_info);
+    // return GetFloat64RepresentationFor(intermediate_node,
+    //                                    MachineRepresentation::kTaggedPointer,
+    //                                    output_type, use_node, use_info);
   } else if (output_rep == MachineRepresentation::kFloat32) {
     op = machine()->ChangeFloat32ToFloat64();
   } else if (output_rep == MachineRepresentation::kWord64) {
@@ -985,6 +1029,12 @@ Node* RepresentationChanger::GetWord32RepresentationFor(
     return GetWord32RepresentationFor(intermediate_node,
                                       MachineRepresentation::kTagged,
                                       output_type, use_node, use_info);
+  } else if (output_rep == MachineRepresentation::kCompressedPointer) {
+    Node* intermediate_node = GetTaggedPointerRepresentationFor(
+        node, output_rep, output_type, use_node, use_info);
+    return GetWord32RepresentationFor(intermediate_node,
+                                      MachineRepresentation::kTaggedPointer,
+                                      output_type, use_node, use_info);
   } else if (output_rep == MachineRepresentation::kWord32) {
     // Only the checked case should get here, the non-checked case is
     // handled in GetRepresentationFor.
@@ -1104,6 +1154,16 @@ Node* RepresentationChanger::GetBitRepresentationFor(
         node, output_rep, output_type, Truncation::Any());
     return GetBitRepresentationFor(intermediate_node,
                                    MachineRepresentation::kTagged, output_type);
+  } else if (output_rep == MachineRepresentation::kCompressedPointer) {
+    // TODO(solanes): Is this the right way for the use node?
+    Node* intermediate_use_node = nullptr;
+    UseInfo intermediate_use_info(MachineRepresentation::kBit,
+                                  Truncation::Any(), TypeCheckKind::kNumber);
+    Node* intermediate_node = GetTaggedPointerRepresentationFor(
+        node, output_rep, output_type, intermediate_use_node,
+        intermediate_use_info);
+    return GetBitRepresentationFor(
+        intermediate_node, MachineRepresentation::kTaggedPointer, output_type);
   } else if (IsWord(output_rep)) {
     node = jsgraph()->graph()->NewNode(machine()->Word32Equal(), node,
                                        jsgraph()->Int32Constant(0));
@@ -1240,6 +1300,12 @@ Node* RepresentationChanger::GetWord64RepresentationFor(
         node, output_rep, output_type, use_info.truncation());
     return GetWord64RepresentationFor(intermediate_node,
                                       MachineRepresentation::kTagged,
+                                      output_type, use_node, use_info);
+  } else if (output_rep == MachineRepresentation::kCompressedPointer) {
+    Node* intermediate_node = GetTaggedPointerRepresentationFor(
+        node, output_rep, output_type, use_node, use_info);
+    return GetWord64RepresentationFor(intermediate_node,
+                                      MachineRepresentation::kTaggedPointer,
                                       output_type, use_node, use_info);
   } else {
     return TypeError(node, output_rep, output_type,
