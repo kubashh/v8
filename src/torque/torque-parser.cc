@@ -306,6 +306,13 @@ base::Optional<ParseResult> MakeUnaryOperator(
                               std::vector<Statement*>{})};
 }
 
+base::Optional<ParseResult> MakeSpreadExpression(
+    ParseResultIterator* child_results) {
+  auto spreadee = child_results->NextAs<Expression*>();
+  Expression* result = MakeNode<SpreadExpression>(spreadee);
+  return ParseResult{result};
+}
+
 template <bool has_varargs>
 base::Optional<ParseResult> MakeParameterListFromTypes(
     ParseResultIterator* child_results) {
@@ -1422,6 +1429,7 @@ struct TorqueGrammar : Grammar {
   Symbol unaryExpression = {
       Rule({&primaryExpression}),
       Rule({OneOf({"+", "-", "!", "~"}), &unaryExpression}, MakeUnaryOperator),
+      Rule({Token("..."), &unaryExpression}, MakeSpreadExpression),
       Rule({&incrementDecrementOperator, &locationExpression},
            MakeIncrementDecrementExpressionPrefix),
       Rule({&locationExpression, &incrementDecrementOperator},

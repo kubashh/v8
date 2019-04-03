@@ -14,10 +14,137 @@ extern macro GetFrameArguments(FrameWithArguments, intptr): Arguments;
 
 namespace arguments {
 
+  const kParameterMapStart: constexpr int31
+  generates 'SloppyArgumentsElements::kParameterMapStart';
+
+  struct ArgumentsIterator {
+    Next(): Object labels NoMore {
+      if (this.current == this.arguments.length) goto NoMore;
+      return this.arguments[this.current++];
+    }
+    const arguments: Arguments;
+    current: intptr;
+  }
+
+  struct ParameterMapIterator {
+    Next(): Object labels NoMore {
+      const currentCopy = this.current++;
+      if (currentCopy > 1) {
+        if (this.index == this.end) goto NoMore;
+        return this.index--;
+      } else if (currentCopy == 0) {
+        return this.context;
+      } else {
+        assert(currentCopy == 1);
+        return this.elements;
+      }
+    }
+    context: Context;
+    elements: FixedArray;
+    index: Smi;
+    end: Smi;
+    current: Smi;
+  }
+
+  macro NewParameterMapIterator(
+      context: Context, elements: FixedArray, index: Smi,
+      end: Smi): ParameterMapIterator {
+    return ParameterMapIterator{context, elements, index, end, 0};
+  }
+
+  struct ParameterValueIterator {
+    Next(): Object labels NoMore() {
+      if (this.mapped_count != 0) {
+        this.mapped_count--;
+        return Hole;
+      }
+      if (this.current == this.arguments.length) goto NoMore;
+      return this.arguments[this.current++];
+    }
+    mapped_count: intptr;
+    const arguments: Arguments;
+    current: intptr;
+  }
+
+  macro NewParameterValueIterator(mappedCount: intptr, arguments: Arguments):
+      ParameterValueIterator {
+    return ParameterValueIterator{mappedCount, arguments, mappedCount};
+  }
+
   struct ArgumentsInfo {
-    frame: Frame;
+    frame: FrameWithArguments;
     argument_count: bint;
     formal_parameter_count: bint;
+  }
+
+  macro NewRestArguments(implicit context: Context)(info: ArgumentsInfo):
+      JSArray {
+    const argumentCount = Convert<intptr>(info.argument_count);
+    const formalParameterCount = Convert<intptr>(info.formal_parameter_count);
+    const map = GetFastHoleyElementsJSArrayMap();
+    if (formalParameterCount >= argumentCount) {
+      // Handle empty arrays separately so that allocation folding and
+      // write barrier elimination can fully apply to the non-empty case
+      return NewJSArray(map, kEmptyFixedArray);
+    }
+    const arguments = GetFrameArguments(info.frame, argumentCount);
+    const i = ArgumentsIterator{arguments, formalParameterCount};
+    const length = Convert<Smi>(argumentCount - formalParameterCount);
+    const elements = new FixedArray{kFixedArrayMap, length, ...i};
+    return NewJSArray(map, elements);
+  }
+
+  macro NewStrictArguments(implicit context: Context)(info: ArgumentsInfo):
+      JSStrictArgumentsObject {
+    const argumentCount = Convert<intptr>(info.argument_count);
+    if (argumentCount == 0) {
+      // Handle empty arrays separately so that allocation folding and
+      // write barrier elimination can fully apply to the non-empty case
+      return NewJSStrictArgumentsObject(kEmptyFixedArray);
+    }
+    const arguments = GetFrameArguments(info.frame, argumentCount);
+    const i = ArgumentsIterator{arguments, 0};
+    const length = Convert<Smi>(argumentCount);
+    const elements = new FixedArray{kFixedArrayMap, length, ...i};
+    return NewJSStrictArgumentsObject(elements);
+  }
+
+  macro NewSloppyArguments(implicit context: Context)(
+      info: ArgumentsInfo, callee: JSFunction): JSSloppyArgumentsObject {
+    const argumentCount = Convert<intptr>(info.argument_count);
+    if (argumentCount == 0) {
+      // Handle empty arrays separately so that allocation folding and
+      // write barrier elimination can fully apply to the non-empty case
+      return NewJSSloppyArgumentsObject(kEmptyFixedArray, callee);
+    }
+    const arguments = GetFrameArguments(info.frame, argumentCount);
+    const formalParameterCount = Convert<intptr>(info.formal_parameter_count);
+    const length = Convert<Smi>(argumentCount);
+    if (formalParameterCount == 0) {
+      const i = ArgumentsIterator{arguments, 0};
+      const elements = new FixedArray{kFixedArrayMap, length, ...i};
+      return NewJSSloppyArgumentsObject(elements, callee);
+    }
+    const mappedCount = IntPtrMin(formalParameterCount, argumentCount);
+    const i = NewParameterValueIterator(mappedCount, arguments);
+    const parameterValues = new FixedArray{kFixedArrayMap, length, ...i};
+    // Copy the parameter slots and the holes in the arguments.
+    // We need to fill in mapped_count slots. They index the context,
+    // where parameters are stored in reverse order, at
+    //   MIN_CONTEXT_SLOTS .. MIN_CONTEXT_SLOTS+argumentCount-1
+    // The mapped parameter thus need to get assigned indices
+    //   MIN_CONTEXT_SLOTS+formalParameterCount-1 ..
+    //       MIN_CONTEXT_SLOTS+formalParameterCount-mappedCount
+    const firstSlot = MIN_CONTEXT_SLOTS + formalParameterCount - 1;
+    const lastSlot = firstSlot - mappedCount;
+    let paramIter = NewParameterMapIterator(
+        context, parameterValues, Convert<Smi>(firstSlot),
+        Convert<Smi>(lastSlot));
+    const elementsLength =
+        Convert<Smi>(mappedCount + kSloppyArgumentsParameterMapStart);
+    const map = kSloppyArgumentsElementsMap;
+    const elements = new FixedArray{map, elementsLength, ...paramIter};
+    return NewJSFastAliasedArgumentsObject(elements, length, callee);
   }
 
   // Calculates and returns the frame pointer, argument count and formal
@@ -31,7 +158,7 @@ namespace arguments {
   // It is difficult to actually check/assert this, since interpreted or JITted
   // frames are StandardFrames, but so are hand-written builtins. Doing that
   // more refined check would be prohibitively expensive.
-  macro GetArgumentsFrameAndCount(implicit context: Context)(f: JSFunction):
+  macro GetArgumentsInfo(implicit context: Context)(f: JSFunction):
       ArgumentsInfo {
     let frame: Frame = LoadParentFramePointer();
     assert(frame.function == f);
@@ -41,14 +168,35 @@ namespace arguments {
         Convert<bint>(Convert<int32>(shared.formal_parameter_count));
     let argumentCount: bint = formalParameterCount;
 
-    const adaptor: ArgumentsAdaptorFrame =
-        Cast<ArgumentsAdaptorFrame>(frame.caller)
-        otherwise return ArgumentsInfo{frame, argumentCount, formalParameterCount};
+    const adaptor = Cast<ArgumentsAdaptorFrame>(frame.caller)
+        otherwise return ArgumentsInfo{
+      (Cast<StandardFrame>(frame) otherwise unreachable),
+      argumentCount,
+      formalParameterCount
+    };
 
     return ArgumentsInfo{
       adaptor,
       Convert<bint>(adaptor.length),
       formalParameterCount
     };
+  }
+
+  macro EmitFastNewRestArguments(implicit context: Context)(f: JSFunction):
+      JSArray {
+    const info = GetArgumentsInfo(f);
+    return NewRestArguments(info);
+  }
+
+  macro EmitFastNewStrictArguments(implicit context: Context)(f: JSFunction):
+      JSStrictArgumentsObject {
+    const info = GetArgumentsInfo(f);
+    return NewStrictArguments(info);
+  }
+
+  macro EmitFastNewSloppyArguments(implicit context: Context)(f: JSFunction):
+      JSSloppyArgumentsObject {
+    const info = GetArgumentsInfo(f);
+    return NewSloppyArguments(info, f);
   }
 }
