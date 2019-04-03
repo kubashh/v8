@@ -13684,6 +13684,12 @@ BaseBuiltinsFromDSLAssembler::Arguments CodeStubAssembler::GetFrameArguments(
       .GetTorqueArguments();
 }
 
+BaseBuiltinsFromDSLAssembler::Arguments CodeStubAssembler::GetFrameArguments(
+    TNode<IntPtrT> argc, TNode<RawPtrT> frame) {
+  CodeStubArguments args(this, argc, frame, INTPTR_PARAMETERS);
+  return BaseBuiltinsFromDSLAssembler::Arguments{frame, args.GetBase(), argc};
+}
+
 void CodeStubAssembler::Print(const char* s) {
   std::string formatted(s);
   formatted += "\n";

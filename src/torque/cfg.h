@@ -87,6 +87,12 @@ class ControlFlowGraph {
     }
   }
   const std::vector<Block*>& blocks() const { return placed_blocks_; }
+  void RegisterFrameArguments(std::string arg) {
+    frame_arguments_variables_.push_back(arg);
+  }
+  const std::vector<std::string>& GetFrameArguments() const {
+    return frame_arguments_variables_;
+  }
 
  private:
   std::list<Block> blocks_;
@@ -94,6 +100,7 @@ class ControlFlowGraph {
   std::vector<Block*> placed_blocks_;
   base::Optional<Block*> end_;
   base::Optional<const Type*> return_type_;
+  std::vector<std::string> frame_arguments_variables_;
   size_t next_block_id_ = 0;
 };
 
@@ -149,6 +156,13 @@ class CfgAssembler {
   void Unreachable();
   void DebugBreak();
 
+  std::string NewFrameArguments() {
+    std::string result =
+        "frame_arguments_" + std::to_string(frame_arguments_++);
+    cfg_.RegisterFrameArguments(result);
+    return result;
+  }
+
   void PrintCurrentStack(std::ostream& s) { s << "stack: " << current_stack_; }
 
  private:
@@ -156,6 +170,7 @@ class CfgAssembler {
   Stack<const Type*> current_stack_;
   ControlFlowGraph cfg_;
   Block* current_block_ = cfg_.start();
+  size_t frame_arguments_ = 0;
 };
 
 class CfgAssemblerScopedTemporaryBlock {

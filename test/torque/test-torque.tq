@@ -835,4 +835,24 @@ namespace test {
   macro TestConstexprInStructs() {
     const x = StructWithConst{Null, 1};
   }
+
+  macro TestParentFrameArguments(implicit context: Context)() {
+    let parentFrame = LoadParentFramePointer();
+    let castFrame = Cast<StandardFrame>(parentFrame) otherwise unreachable;
+    const args = GetFrameArguments(castFrame, 1);
+    let i = arguments::ArgumentsIterator{args, 0};
+  }
+
+  struct TestIterator {
+    Next(): Object labels NoMore {
+      if (this.count-- == 0) goto NoMore;
+      return Hole;
+    }
+    count: Smi;
+  }
+
+  macro TestNewFixedArrayFromSpread(implicit context: Context)(): Object {
+    let i = TestIterator{5};
+    return new FixedArray{kFixedArrayMap, 5, ...i};
+  }
 }
