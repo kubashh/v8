@@ -15,6 +15,7 @@
 #include "src/locked-queue-inl.h"
 #include "src/log.h"
 #include "src/profiler/cpu-profiler-inl.h"
+#include "src/profiler/profiler-stats.h"
 #include "src/vm-state-inl.h"
 #include "src/wasm/wasm-engine.h"
 
@@ -31,7 +32,13 @@ class CpuSampler : public sampler::Sampler {
 
   void SampleStack(const v8::RegisterState& regs) override {
     TickSample* sample = processor_->StartTickSample();
-    if (sample == nullptr) return;
+    if (sample == nullptr) {
+      ProfilerStats::Instance()->AddReason(
+          ProfilerStats::Reason::kTickBufferFull);
+      return;
+    }
+    // Every bailout up until here resulted in a dropped sample. From now on,
+    // the sample is created in the buffer.
     Isolate* isolate = reinterpret_cast<Isolate*>(this->isolate());
     sample->Init(isolate, regs, TickSample::kIncludeCEntryFrame, true);
     if (is_counting_samples_ && !sample->timestamp.IsNull()) {
