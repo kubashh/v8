@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "266c8790_8b1fb2cf",
+        "filename": "src/interpreter/interpreter-generator.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1175774
+      },
+      "writtenOn": "2019-04-03T14:52:57Z",
+      "side": 1,
+      "message": "worth it just for this :)",
+      "range": {
+        "startLine": 827,
+        "startChar": 8,
+        "endLine": 827,
+        "endChar": 25
+      },
+      "revId": "55c75766da43497ae455ba9838870bdc8698d691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
