@@ -9,6 +9,8 @@
 #include "src/torque/type-oracle.h"
 #include "src/torque/types.h"
 
+#include "src/torque/implementation-visitor.h"
+
 namespace v8 {
 namespace internal {
 namespace torque {

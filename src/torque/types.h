@@ -25,7 +25,7 @@ static const char* const CONSTEXPR_BOOL_TYPE_STRING = "constexpr bool";
 static const char* const CONSTEXPR_INTPTR_TYPE_STRING = "constexpr intptr";
 static const char* const BOOL_TYPE_STRING = "bool";
 static const char* const VOID_TYPE_STRING = "void";
-static const char* const ARGUMENTS_TYPE_STRING = "constexpr Arguments";
+static const char* const ARGUMENTS_TYPE_STRING = "Arguments";
 static const char* const CONTEXT_TYPE_STRING = "Context";
 static const char* const MAP_TYPE_STRING = "Map";
 static const char* const OBJECT_TYPE_STRING = "Object";
@@ -176,6 +176,7 @@ struct Field {
   NameAndType name_and_type;
   size_t offset;
   bool is_weak;
+  bool const_qualified;
 };
 
 std::ostream& operator<<(std::ostream& os, const Field& name_and_type);
@@ -530,6 +531,8 @@ class VisitResult {
   base::Optional<std::string> constexpr_value_;
   base::Optional<StackRange> stack_range_;
 };
+
+typedef std::map<const Field*, VisitResult> FieldValueMap;
 
 VisitResult ProjectStructField(VisitResult structure,
                                const std::string& fieldname);
