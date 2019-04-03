@@ -22,6 +22,23 @@
       "revId": "720da0f85dbb832a260822d981c442ee78fa5916",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a86dd900_4c62b8f1",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-03T08:16:10Z",
+      "side": 1,
+      "message": "Not sure I like this change:\n\nThere\u0027s already a bunch of confusion in embedded-file-writer around target- and host-os: for windows we look at the target OS, for AIX/OSX we look at the host OS. This basically works by accident because we don\u0027t use the more exotic build configs in our build process.\n\nNow this CL changes a single use of V8_TARGET_OS_WIN to the given flag. Others parts of this file still use the define and don\u0027t know about the flag. That feels pretty unintuitive to me. Probably also wrong in the case of .rdata/.rodata above?\n\nSo IMO we\u0027re not in a good place right now regarding cross-compiles and this change seems to be digging a deeper hole. \n\nTwo questions:\n\n1. I gotta admit, I also still don\u0027t fully understand when we\u0027d need to use mksnapshot to generate a snapshot for the host. What host binary needs the snapshot?\n2. Would it make sense to build 2 mksnapshot copies, each with the correct TARGET_OS define?\n\nI agree we need to fix mksnapshot for cross-compilation, but we should be systematic about it. One option is to consistently use TARGET_OS and TARGET_ARCH defines everywhere. Another, if required, is to use runtime flags. Let me perhaps write a short design doc and move discussion there?",
+      "revId": "720da0f85dbb832a260822d981c442ee78fa5916",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
