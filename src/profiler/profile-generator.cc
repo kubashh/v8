@@ -11,6 +11,7 @@
 #include "src/objects-inl.h"
 #include "src/profiler/cpu-profiler.h"
 #include "src/profiler/profile-generator-inl.h"
+#include "src/profiler/profiler-stats.h"
 #include "src/tracing/trace-event.h"
 #include "src/tracing/traced-value.h"
 #include "src/unicode.h"
@@ -310,16 +311,14 @@ bool ProfileNode::GetLineTicks(v8::CpuProfileNode::LineTick* entries,
   return true;
 }
 
-
-void ProfileNode::Print(int indent) {
+void ProfileNode::Print(int indent) const {
   int line_number = line_number_ != 0 ? line_number_ : entry_->line_number();
   base::OS::Print("%5u %*s %s:%d %d #%d", self_ticks_, indent, "",
                   entry_->name(), line_number, entry_->script_id(), id());
   if (entry_->resource_name()[0] != '\0')
     base::OS::Print(" %s:%d", entry_->resource_name(), entry_->line_number());
   base::OS::Print("\n");
-  for (size_t i = 0; i < deopt_infos_.size(); ++i) {
-    CpuProfileDeoptInfo& info = deopt_infos_[i];
+  for (const CpuProfileDeoptInfo& info : deopt_infos_) {
     base::OS::Print("%*s;;; deopted at script_id: %d position: %" PRIuS
                     " with reason '%s'.\n",
                     indent + 10, "", info.stack[0].script_id,
@@ -341,7 +340,6 @@ void ProfileNode::Print(int indent) {
     child.second->Print(indent + 2);
   }
 }
-
 
 class DeleteNodesCallback {
  public:
@@ -595,9 +593,11 @@ void CpuProfile::FinishProfile() {
                               "ProfileChunk", id_, "data", std::move(value));
 }
 
-void CpuProfile::Print() {
+void CpuProfile::Print() const {
   base::OS::Print("[Top down]:\n");
   top_down_.Print();
+  ProfilerStats::Instance()->Print();
+  ProfilerStats::Instance()->Clear();
 }
 
 CodeMap::CodeMap() = default;
@@ -832,6 +832,8 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
           // former case we don't so we simply replace the frame with
           // 'unresolved' entry.
           if (!sample.has_external_callback) {
+            ProfilerStats::Instance()->AddReason(
+                ProfilerStats::Reason::kInCallOrApply);
             stack_trace.push_back(
                 {CodeEntry::unresolved_entry(), no_line_info});
           }
@@ -896,6 +898,11 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
     }
     // If no frames were symbolized, put the VM state entry in.
     if (no_symbolized_entries) {
+      if (sample.pc == nullptr)
+        ProfilerStats::Instance()->AddReason(ProfilerStats::Reason::kNullPC);
+      else
+        ProfilerStats::Instance()->AddReason(
+            ProfilerStats::Reason::kNoSymbolizedFrames);
       stack_trace.push_back({EntryForVMState(sample.state), no_line_info});
     }
   }
