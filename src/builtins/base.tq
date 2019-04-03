@@ -215,6 +215,21 @@ macro NewJSArray(implicit context: Context)(): JSArray {
   };
 }
 
+struct HoleIterator {
+  Next(): Object labels NoMore() {
+    if (this.remaining-- == 0) goto NoMore;
+    return Hole;
+  }
+  remaining: Smi;
+}
+
+macro NewJSArray(implicit context: Context)(map: Map, length: Smi): JSArray {
+  const map = GetFastPackedSmiElementsJSArrayMap();
+  let i = HoleIterator{length};
+  const elements = new FixedArray{map, length, ...i};
+  return new JSArray{map, kEmptyFixedArray, elements, length};
+}
+
 // A HeapObject with a JSArray map, and either fast packed elements, or fast
 // holey elements when the global NoElementsProtector is not invalidated.
 transient type FastJSArray extends JSArray;
@@ -671,6 +686,8 @@ const kAllFixedArrays: constexpr ExtractFixedArrayFlags
 const kFixedArrays: constexpr ExtractFixedArrayFlags
     generates 'CodeStubAssembler::ExtractFixedArrayFlag::kFixedArrays';
 
+const kFixedArrayMapRootIndex:
+    constexpr RootIndex generates 'RootIndex::kFixedArrayMap';
 const kFixedCOWArrayMapRootIndex:
     constexpr RootIndex generates 'RootIndex::kFixedCOWArrayMap';
 const kEmptyFixedArrayRootIndex:
@@ -1681,6 +1698,8 @@ UnsafeCast<Object>(o: Object): Object {
   return o;
 }
 
+const kFixedArrayMap: Map =
+    %RawDownCast<Map>(LoadRoot(kFixedArrayMapRootIndex));
 const kCOWMap: Map = %RawDownCast<Map>(LoadRoot(kFixedCOWArrayMapRootIndex));
 const kEmptyFixedArray: FixedArray =
     %RawDownCast<FixedArray>(LoadRoot(kEmptyFixedArrayRootIndex));
