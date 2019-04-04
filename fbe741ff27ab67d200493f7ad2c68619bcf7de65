@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7a71c5e_ca0afa12",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-04T14:45:30Z",
+      "side": 1,
+      "message": "I think this can be const. Even if the iterator was stateful, it could be const because we create a copy in the desugaring (which I think is the right behavior).",
+      "range": {
+        "startLine": 254,
+        "startChar": 2,
+        "endLine": 254,
+        "endChar": 6
+      },
+      "revId": "fbe741ff27ab67d200493f7ad2c68619bcf7de65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e2e4f29_a16b6321",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-04T14:45:30Z",
+      "side": 1,
+      "message": "StackScope stack_scope(this);\nshould have the same effect.",
+      "range": {
+        "startLine": 1328,
+        "startChar": 2,
+        "endLine": 1330,
+        "endChar": 76
+      },
+      "revId": "fbe741ff27ab67d200493f7ad2c68619bcf7de65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e59ab856_fd340cab",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-04T14:45:30Z",
+      "side": 1,
+      "message": "How about \"_Done\", to highlight that it\u0027s not accessible from user-code.",
+      "range": {
+        "startLine": 1356,
+        "startChar": 62,
+        "endLine": 1356,
+        "endChar": 68
+      },
+      "revId": "fbe741ff27ab67d200493f7ad2c68619bcf7de65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9de41ca_0dd12b1e",
+        "filename": "test/torque/test-torque.tq",
+        "patchSetId": 12
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-04T14:45:30Z",
+      "side": 1,
+      "message": "Here too, it can be const I think.",
+      "range": {
+        "startLine": 858,
+        "startChar": 4,
+        "endLine": 858,
+        "endChar": 8
+      },
+      "revId": "fbe741ff27ab67d200493f7ad2c68619bcf7de65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
