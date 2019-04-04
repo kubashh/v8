@@ -148,8 +148,8 @@ void CodeSerializer::SerializeObject(HeapObject obj) {
     }
     // We don't want to serialize host options to avoid serializing unnecessary
     // object graph.
-    FixedArray host_options = script_obj->host_defined_options();
-    script_obj->set_host_defined_options(roots.empty_fixed_array());
+    Object host_options = script_obj->host_defined_options();
+    script_obj->set_host_defined_options(roots.the_hole_value());
     SerializeGeneric(obj);
     script_obj->set_host_defined_options(host_options);
     script_obj->set_context_data(context_data);

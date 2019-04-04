@@ -340,8 +340,8 @@ static ScriptOrigin GetScriptOriginForScript(i::Isolate* isolate,
                                              i::Handle<i::Script> script) {
   i::Handle<i::Object> scriptName(script->GetNameOrSourceURL(), isolate);
   i::Handle<i::Object> source_map_url(script->source_mapping_url(), isolate);
-  i::Handle<i::FixedArray> host_defined_options(script->host_defined_options(),
-                                                isolate);
+  i::Handle<i::Object> host_defined_options(script->host_defined_options(),
+                                            isolate);
   v8::Isolate* v8_isolate = reinterpret_cast<v8::Isolate*>(isolate);
   ScriptOriginOptions options(script->origin_options());
   v8::ScriptOrigin origin(
@@ -2190,12 +2190,16 @@ Local<Value> ScriptOrModule::GetResourceName() {
   return ToApiHandle<Value>(val);
 }
 
-Local<PrimitiveArray> ScriptOrModule::GetHostDefinedOptions() {
+Local<Value> ScriptOrModule::GetHostDefinedOptions() {
   i::Handle<i::Script> obj = Utils::OpenHandle(this);
   i::Isolate* isolate = obj->GetIsolate();
   ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
-  i::Handle<i::FixedArray> val(obj->host_defined_options(), isolate);
-  return ToApiHandle<PrimitiveArray>(val);
+  if (obj->host_defined_options()->IsTheHole()) {
+    return Local<Value>();
+  } else {
+    i::Handle<i::Object> val(obj->host_defined_options(), isolate);
+    return ToApiHandle<Value>(val);
+  }
 }
 
 Local<UnboundScript> Script::GetUnboundScript() {
@@ -2203,46 +2207,6 @@ Local<UnboundScript> Script::GetUnboundScript() {
   i::SharedFunctionInfo sfi = i::JSFunction::cast(*obj)->shared();
   i::Isolate* isolate = sfi->GetIsolate();
   return ToApiHandle<UnboundScript>(i::handle(sfi, isolate));
-}
-
-// static
-Local<PrimitiveArray> PrimitiveArray::New(Isolate* v8_isolate, int length) {
-  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
-  Utils::ApiCheck(length >= 0, "v8::PrimitiveArray::New",
-                  "length must be equal or greater than zero");
-  i::Handle<i::FixedArray> array = isolate->factory()->NewFixedArray(length);
-  return ToApiHandle<PrimitiveArray>(array);
-}
-
-int PrimitiveArray::Length() const {
-  i::Handle<i::FixedArray> array = Utils::OpenHandle(this);
-  return array->length();
-}
-
-void PrimitiveArray::Set(Isolate* v8_isolate, int index,
-                         Local<Primitive> item) {
-  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  i::Handle<i::FixedArray> array = Utils::OpenHandle(this);
-  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
-  Utils::ApiCheck(index >= 0 && index < array->length(),
-                  "v8::PrimitiveArray::Set",
-                  "index must be greater than or equal to 0 and less than the "
-                  "array length");
-  i::Handle<i::Object> i_item = Utils::OpenHandle(*item);
-  array->set(index, *i_item);
-}
-
-Local<Primitive> PrimitiveArray::Get(Isolate* v8_isolate, int index) {
-  i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
-  i::Handle<i::FixedArray> array = Utils::OpenHandle(this);
-  ENTER_V8_NO_SCRIPT_NO_EXCEPTION(isolate);
-  Utils::ApiCheck(index >= 0 && index < array->length(),
-                  "v8::PrimitiveArray::Get",
-                  "index must be greater than or equal to 0 and less than the "
-                  "array length");
-  i::Handle<i::Object> i_item(array->get(index), isolate);
-  return ToApiHandle<Primitive>(i_item);
 }
 
 Module::Status Module::GetStatus() const {
@@ -2359,7 +2323,7 @@ namespace {
 i::Compiler::ScriptDetails GetScriptDetails(
     i::Isolate* isolate, Local<Value> resource_name,
     Local<Integer> resource_line_offset, Local<Integer> resource_column_offset,
-    Local<Value> source_map_url, Local<PrimitiveArray> host_defined_options) {
+    Local<Value> source_map_url, Local<Value> host_defined_options) {
   i::Compiler::ScriptDetails script_details;
   if (!resource_name.IsEmpty()) {
     script_details.name_obj = Utils::OpenHandle(*(resource_name));
@@ -2372,7 +2336,6 @@ i::Compiler::ScriptDetails GetScriptDetails(
     script_details.column_offset =
         static_cast<int>(resource_column_offset->Value());
   }
-  script_details.host_defined_options = isolate->factory()->empty_fixed_array();
   if (!host_defined_options.IsEmpty()) {
     script_details.host_defined_options =
         Utils::OpenHandle(*(host_defined_options));

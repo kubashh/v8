@@ -1863,7 +1863,7 @@ Handle<Script> NewScript(Isolate* isolate, ParseInfo* parse_info,
   if (script_details.source_map_url.ToHandle(&source_map_url)) {
     script->set_source_mapping_url(*source_map_url);
   }
-  Handle<FixedArray> host_defined_options;
+  Handle<Object> host_defined_options;
   if (script_details.host_defined_options.ToHandle(&host_defined_options)) {
     script->set_host_defined_options(*host_defined_options);
   }

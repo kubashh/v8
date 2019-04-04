@@ -120,7 +120,7 @@ class V8_EXPORT_PRIVATE Compiler : public AllStatic {
     int column_offset;
     i::MaybeHandle<i::Object> name_obj;
     i::MaybeHandle<i::Object> source_map_url;
-    i::MaybeHandle<i::FixedArray> host_defined_options;
+    i::MaybeHandle<i::Object> host_defined_options;
   };
 
   // Create a function that results from wrapping |source| in a function,

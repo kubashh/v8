@@ -41,7 +41,7 @@ ACCESSORS(Script, shared_function_infos, WeakFixedArray,
 SMI_ACCESSORS(Script, flags, kFlagsOffset)
 ACCESSORS(Script, source_url, Object, kSourceUrlOffset)
 ACCESSORS(Script, source_mapping_url, Object, kSourceMappingUrlOffset)
-ACCESSORS(Script, host_defined_options, FixedArray, kHostDefinedOptionsOffset)
+ACCESSORS(Script, host_defined_options, Object, kHostDefinedOptionsOffset)
 ACCESSORS_CHECKED(Script, wasm_module_object, Object,
                   kEvalFromSharedOrWrappedArgumentsOffset,
                   this->type() == TYPE_WASM)

@@ -77,7 +77,6 @@ class String;
 class StringObject;
 class Symbol;
 class SymbolObject;
-class PrimitiveArray;
 class Private;
 class Uint32;
 class Utils;
@@ -1126,23 +1125,7 @@ class V8_EXPORT ScriptOrModule {
    * The options that were passed by the embedder as HostDefinedOptions to
    * the ScriptOrigin.
    */
-  Local<PrimitiveArray> GetHostDefinedOptions();
-};
-
-/**
- * An array to hold Primitive values. This is used by the embedder to
- * pass host defined options to the ScriptOptions during compilation.
- *
- * This is passed back to the embedder as part of
- * HostImportModuleDynamicallyCallback for module loading.
- *
- */
-class V8_EXPORT PrimitiveArray {
- public:
-  static Local<PrimitiveArray> New(Isolate* isolate, int length);
-  int Length() const;
-  void Set(Isolate* isolate, int index, Local<Primitive> item);
-  Local<Primitive> Get(Isolate* isolate, int index);
+  Local<Value> GetHostDefinedOptions();
 };
 
 /**
@@ -1194,14 +1177,14 @@ class ScriptOrigin {
       Local<Boolean> resource_is_opaque = Local<Boolean>(),
       Local<Boolean> is_wasm = Local<Boolean>(),
       Local<Boolean> is_module = Local<Boolean>(),
-      Local<PrimitiveArray> host_defined_options = Local<PrimitiveArray>());
+      Local<Value> host_defined_options = Local<Value>());
 
   V8_INLINE Local<Value> ResourceName() const;
   V8_INLINE Local<Integer> ResourceLineOffset() const;
   V8_INLINE Local<Integer> ResourceColumnOffset() const;
   V8_INLINE Local<Integer> ScriptID() const;
   V8_INLINE Local<Value> SourceMapUrl() const;
-  V8_INLINE Local<PrimitiveArray> HostDefinedOptions() const;
+  V8_INLINE Local<Value> HostDefinedOptions() const;
   V8_INLINE ScriptOriginOptions Options() const { return options_; }
 
  private:
@@ -1211,7 +1194,7 @@ class ScriptOrigin {
   ScriptOriginOptions options_;
   Local<Integer> script_id_;
   Local<Value> source_map_url_;
-  Local<PrimitiveArray> host_defined_options_;
+  Local<Value> host_defined_options_;
 };
 
 /**
@@ -1465,7 +1448,7 @@ class V8_EXPORT ScriptCompiler {
     Local<Integer> resource_column_offset;
     ScriptOriginOptions resource_options;
     Local<Value> source_map_url;
-    Local<PrimitiveArray> host_defined_options;
+    Local<Value> host_defined_options;
 
     // Cached data from previous compilation (if a kConsume*Cache flag is
     // set), or hold newly generated cache data (kProduce*Cache flags) are
@@ -10209,7 +10192,7 @@ ScriptOrigin::ScriptOrigin(Local<Value> resource_name,
                            Local<Value> source_map_url,
                            Local<Boolean> resource_is_opaque,
                            Local<Boolean> is_wasm, Local<Boolean> is_module,
-                           Local<PrimitiveArray> host_defined_options)
+                           Local<Value> host_defined_options)
     : resource_name_(resource_name),
       resource_line_offset_(resource_line_offset),
       resource_column_offset_(resource_column_offset),
@@ -10224,7 +10207,7 @@ ScriptOrigin::ScriptOrigin(Local<Value> resource_name,
 
 Local<Value> ScriptOrigin::ResourceName() const { return resource_name_; }
 
-Local<PrimitiveArray> ScriptOrigin::HostDefinedOptions() const {
+Local<Value> ScriptOrigin::HostDefinedOptions() const {
   return host_defined_options_;
 }
 

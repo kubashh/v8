@@ -1694,7 +1694,7 @@ Handle<Script> Factory::NewScriptWithId(Handle<String> source, int script_id,
   script->set_shared_function_infos(*empty_weak_fixed_array(),
                                     SKIP_WRITE_BARRIER);
   script->set_flags(0);
-  script->set_host_defined_options(*empty_fixed_array());
+  script->set_host_defined_options(*the_hole_value());
   Handle<WeakArrayList> scripts = script_list();
   scripts = WeakArrayList::AddToEnd(isolate(), scripts,
                                     MaybeObjectHandle::Weak(script));

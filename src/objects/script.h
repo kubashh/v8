@@ -106,7 +106,7 @@ class Script : public Struct {
   DECL_ACCESSORS(wasm_module_object, Object)
 
   // [host_defined_options]: Options defined by the embedder.
-  DECL_ACCESSORS(host_defined_options, FixedArray)
+  DECL_ACCESSORS(host_defined_options, Object)
 
   // [compilation_type]: how the the script was compiled. Encoded in the
   // 'flags' field.
