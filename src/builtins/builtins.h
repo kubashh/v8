@@ -252,6 +252,18 @@ class Builtins {
 Builtins::Name ExampleBuiltinForTorqueFunctionPointerType(
     size_t function_pointer_type_id);
 
+void Generate_DeoptimizationEntry(MacroAssembler* masm,
+                                  DeoptimizeKind deopt_kind);
+inline void Builtins::Generate_DeoptimizationEntryEager(MacroAssembler* masm) {
+  Generate_DeoptimizationEntry(masm, DeoptimizeKind::kEager);
+}
+inline void Builtins::Generate_DeoptimizationEntrySoft(MacroAssembler* masm) {
+  Generate_DeoptimizationEntry(masm, DeoptimizeKind::kSoft);
+}
+inline void Builtins::Generate_DeoptimizationEntryLazy(MacroAssembler* masm) {
+  Generate_DeoptimizationEntry(masm, DeoptimizeKind::kLazy);
+}
+
 }  // namespace internal
 }  // namespace v8
 

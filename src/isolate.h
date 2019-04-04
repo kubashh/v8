@@ -635,6 +635,10 @@ class Isolate final : private HiddenFactory {
     return &thread_local_top()->js_entry_sp_;
   }
 
+  inline int* deoptimization_id_address() {
+    return &thread_local_top()->deoptimization_id_;
+  }
+
   // Returns the global object of the current context. It could be
   // a builtin object, or a JS global object.
   inline Handle<JSGlobalObject> global_object();

@@ -1243,7 +1243,12 @@ namespace internal {
   CPP(FinalizationGroupRegister)                                               \
   CPP(FinalizationGroupUnregister)                                             \
   CPP(WeakRefConstructor)                                                      \
-  CPP(WeakRefDeref)
+  CPP(WeakRefDeref)                                                            \
+                                                                               \
+  /* Deoptimization */                                                         \
+  ASM(DeoptimizationEntryEager, Dummy)                                         \
+  ASM(DeoptimizationEntrySoft, Dummy)                                          \
+  ASM(DeoptimizationEntryLazy, Dummy)
 
 #ifdef V8_INTL_SUPPORT
 #define BUILTIN_LIST_INTL(CPP, TFJ, TFS)                               \

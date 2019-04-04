@@ -4427,10 +4427,22 @@ void TurboAssembler::StoreReturnAddressAndCall(Register target) {
 void TurboAssembler::CallForDeoptimization(Address target, int deopt_id) {
   NoRootArrayScope no_root_array(this);
 
-  // Save the deopt id in r10 (we don't need the roots array from now on).
   DCHECK_LE(deopt_id, 0xFFFF);
-  lghi(r10, Operand(deopt_id));
-  Call(target, RelocInfo::RUNTIME_ENTRY);
+
+  Register scratch1 = r6;
+  Register scratch2 = r7;
+  Push(scratch1, scratch2);
+  {
+    // Save the deopt id into the isolate data.
+    lghi(scratch2, Operand(deopt_id));
+    IndirectLoadExternalReference(
+        scratch1, ExternalReference::Create(
+                      IsolateAddressId::kDeoptimizationIdAddress, isolate()));
+    StoreP(scratch2, MemOperand(scratch1));
+  }
+  Pop(scratch1, scratch2);
+
+  Call(target, RelocInfo::OFF_HEAP_TARGET);
 }
 
 }  // namespace internal

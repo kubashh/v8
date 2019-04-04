@@ -2140,23 +2140,27 @@ bool TurboAssembler::IsNearCallOffset(int64_t offset) {
 }
 
 void TurboAssembler::CallForDeoptimization(Address target, int deopt_id) {
-  BlockPoolsScope scope(this);
-  NoRootArrayScope no_root_array(this);
-
 #ifdef DEBUG
   Label start;
   Bind(&start);
 #endif
-  // Make sure that the deopt id can be encoded in 16 bits, so can be encoded
-  // in a single movz instruction with a zero shift.
+  // Make sure that the deopt id can be encoded in 16 bits.
   DCHECK(is_uint16(deopt_id));
-  movz(x26, deopt_id);
-  int64_t offset = static_cast<int64_t>(target) -
-                   static_cast<int64_t>(options().code_range_start);
-  DCHECK_EQ(offset % kInstrSize, 0);
-  offset = offset / static_cast<int>(kInstrSize);
-  DCHECK(IsNearCallOffset(offset));
-  near_call(static_cast<int>(offset), RelocInfo::RUNTIME_ENTRY);
+
+  Register scratch1 = x4;
+  Register scratch2 = x5;
+  Push(scratch1, scratch2);
+  {
+    // Save the deopt id into the isolate data.
+    movz(scratch1, deopt_id);
+    IndirectLoadExternalReference(
+        scratch2, ExternalReference::Create(
+                      IsolateAddressId::kDeoptimizationIdAddress, isolate()));
+    Str(scratch1, MemOperand(scratch2));
+  }
+  Pop(scratch2, scratch1);
+
+  IndirectCall(target, RelocInfo::OFF_HEAP_TARGET);
 }
 
 void MacroAssembler::TryRepresentDoubleAsInt(Register as_int, VRegister value,
