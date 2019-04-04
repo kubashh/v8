@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24f0d65e_112317c1",
+        "filename": "src/api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2375,
+      "author": {
+        "id": 1310861
+      },
+      "writtenOn": "2019-04-04T19:22:01Z",
+      "side": 0,
+      "message": "Shouldn\u0027t this field still need to be provided an empty value?",
+      "revId": "75ae54c55be91f2fa5cd19ac1a690ab3d3f4659b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
