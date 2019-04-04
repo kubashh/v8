@@ -37,9 +37,6 @@ class ProxiesCodeStubAssembler : public CodeStubAssembler {
   };
 
   void GotoIfRevokedProxy(Node* object, Label* if_proxy_revoked);
-  Node* AllocateJSArrayForCodeStubArguments(Node* context,
-                                            CodeStubArguments& args, Node* argc,
-                                            ParameterMode mode);
   void CheckHasTrapResult(Node* context, Node* target, Node* proxy, Node* name,
                           Label* check_passed, Label* if_bailout);
 

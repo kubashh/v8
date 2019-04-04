@@ -84,6 +84,7 @@ void ImplementationVisitor::BeginNamespaceFile(Namespace* nspace) {
          << "namespace internal {\n"
          << "\n";
 
+  header << "class CodeStubArguments;\n";
   header << "class " << nspace->ExternalName() << " {\n";
   header << " public:\n";
   header << "  explicit " << nspace->ExternalName()
