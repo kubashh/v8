@@ -1250,12 +1250,36 @@ VisitResult ImplementationVisitor::Visit(StatementExpression* expr) {
 }
 
 InitializerResults ImplementationVisitor::VisitInitializerResults(
+    const AggregateType* current_aggregate,
     const std::vector<NameAndExpression>& initializers) {
   InitializerResults result;
   for (const NameAndExpression& initializer : initializers) {
     result.names.push_back(initializer.name);
-    result.results.push_back(Visit(initializer.expression));
+    Expression* e = initializer.expression;
+    if (SpreadExpression* s = SpreadExpression::DynamicCast(e)) {
+      e = s->spreadee;
+      result.apply_spread.push_back(true);
+    } else {
+      result.apply_spread.push_back(false);
+    }
+    result.results.push_back(Visit(e));
   }
+
+  auto i = result.results.rbegin();
+  while (current_aggregate != nullptr) {
+    auto current_field = current_aggregate->fields().rbegin();
+    while (current_field != current_aggregate->fields().rend()) {
+      result.field_value_map[&*current_field] = *i;
+      ++current_field;
+      ++i;
+    }
+    if (current_aggregate->IsClassType()) {
+      current_aggregate = ClassType::cast(current_aggregate)->GetSuperClass();
+    } else {
+      break;
+    }
+  }
+
   return result;
 }
 
@@ -1285,11 +1309,21 @@ size_t ImplementationVisitor::InitializeAggregateHelper(
                   "\" instead of \"", fieldname->value, "\"");
     }
     if (aggregate_type->IsClassType()) {
-      allocate_result.SetType(aggregate_type);
-      GenerateCopy(allocate_result);
-      GenerateImplicitConvert(f.name_and_type.type, current_value);
-      assembler().Emit(StoreObjectFieldInstruction(
-          ClassType::cast(aggregate_type), f.name_and_type.name));
+      if (f.index) {
+        if (!initializer_results.apply_spread[current]) {
+          ReportError(
+              "indexed class fields must be initialized with a spread "
+              "expression");
+        }
+        InitializeFieldFromSpread(allocate_result, f, current_value,
+                                  initializer_results);
+      } else {
+        allocate_result.SetType(aggregate_type);
+        GenerateCopy(allocate_result);
+        GenerateImplicitConvert(f.name_and_type.type, current_value);
+        assembler().Emit(StoreObjectFieldInstruction(
+            ClassType::cast(aggregate_type), f.name_and_type.name));
+      }
     } else {
       LocationReference struct_field_ref = LocationReference::VariableAccess(
           ProjectStructField(allocate_result, f.name_and_type.name));
@@ -1298,6 +1332,69 @@ size_t ImplementationVisitor::InitializeAggregateHelper(
     ++current;
   }
   return current;
+}
+
+void ImplementationVisitor::InitializeFieldFromSpread(
+    VisitResult object, const Field& field, VisitResult spreadee,
+    const InitializerResults& initializer_results) {
+  // Continuation block must be allocated before creating any values used during
+  // the desugaring to ensure stack is returned to prestine state.
+  Block* post_exit_block = assembler().NewBlock(assembler().CurrentStack());
+
+  VisitResult zero(TypeOracle::GetConstInt31Type(), "0");
+  const Type* index_type = (*field.index)->name_and_type.type;
+  VisitResult index = GenerateImplicitConvert(index_type, zero);
+  Block* exit_block = assembler().NewBlock(assembler().CurrentStack());
+  Block* body_block = assembler().NewBlock(assembler().CurrentStack());
+  Block* fail_block = assembler().NewBlock(assembler().CurrentStack(), true);
+  Block* header_block = assembler().NewBlock(assembler().CurrentStack());
+
+  assembler().Goto(header_block);
+
+  assembler().Bind(header_block);
+  Arguments compare_arguments;
+  compare_arguments.parameters.push_back(index);
+  compare_arguments.parameters.push_back(
+      initializer_results.field_value_map.at(*(field.index)));
+  GenerateExpressionBranch(
+      [&]() { return GenerateCall("<", compare_arguments); }, body_block,
+      exit_block);
+
+  assembler().Bind(body_block);
+  {
+    LocationReference target = LocationReference::VariableAccess(spreadee);
+    Binding<LocalLabel> no_more{&LabelBindingsManager::Get(), "Done",
+                                LocalLabel{fail_block}};
+
+    // Call the Next() method of the iterator
+    Arguments next_arguments;
+    next_arguments.labels.push_back(&no_more);
+    Callable* callable = LookupMethod("Next", target, next_arguments, {});
+    VisitResult next_result =
+        GenerateCall(callable, target, next_arguments, {}, false);
+    Arguments assign_arguments;
+    assign_arguments.parameters.push_back(object);
+    assign_arguments.parameters.push_back(index);
+    assign_arguments.parameters.push_back(next_result);
+    GenerateCall("[]=", assign_arguments);
+
+    // Increment the indexed field index.
+    LocationReference index_ref = LocationReference::VariableAccess(index);
+    Arguments increment_arguments;
+    VisitResult one = {TypeOracle::GetConstInt31Type(), "1"};
+    increment_arguments.parameters = {index, one};
+    VisitResult assignment_value = GenerateCall("+", increment_arguments);
+    GenerateAssignToLocation(index_ref, assignment_value);
+  }
+  assembler().Goto(header_block);
+
+  assembler().Bind(fail_block);
+  assembler().Emit(AbortInstruction(AbortInstruction::Kind::kUnreachable));
+
+  assembler().Bind(exit_block);
+  assembler().Goto(post_exit_block);
+
+  assembler().Bind(post_exit_block);
 }
 
 void ImplementationVisitor::InitializeAggregate(
@@ -1309,6 +1406,38 @@ void ImplementationVisitor::InitializeAggregate(
     ReportError("more initializers than fields present in ",
                 aggregate_type->name());
   }
+}
+
+VisitResult ImplementationVisitor::AddVariableObjectSize(
+    VisitResult object_size, const ClassType* current_class,
+    const InitializerResults& initializer_results) {
+  while (current_class != nullptr) {
+    auto current_field = current_class->fields().begin();
+    while (current_field != current_class->fields().end()) {
+      if (current_field->index) {
+        if (!current_field->name_and_type.type->IsSubtypeOf(
+                TypeOracle::GetObjectType())) {
+          ReportError(
+              "allocating objects containing indexed fields of non-object "
+              "types is not yet supported");
+        }
+        VisitResult index_field_size =
+            VisitResult(TypeOracle::GetConstInt31Type(), "kTaggedSize");
+        VisitResult initializer_value =
+            initializer_results.field_value_map.at(*(current_field->index));
+        VisitResult index_intptr_size =
+            GenerateCall("Convert", {{initializer_value}, {}},
+                         {TypeOracle::GetIntPtrType()}, false);
+        VisitResult variable_size = GenerateCall(
+            "*", {{index_intptr_size, index_field_size}, {}}, {}, false);
+        object_size =
+            GenerateCall("+", {{object_size, variable_size}, {}}, {}, false);
+      }
+      ++current_field;
+    }
+    current_class = current_class->GetSuperClass();
+  }
+  return object_size;
 }
 
 VisitResult ImplementationVisitor::Visit(NewExpression* expr) {
@@ -1327,7 +1456,7 @@ VisitResult ImplementationVisitor::Visit(NewExpression* expr) {
   }
 
   InitializerResults initializer_results =
-      VisitInitializerResults(expr->initializers);
+      VisitInitializerResults(class_type, expr->initializers);
 
   // Output the code to generate an uninitialized object of the class size in
   // the GC heap.
@@ -1342,6 +1471,10 @@ VisitResult ImplementationVisitor::Visit(NewExpression* expr) {
     size_arguments.parameters.push_back(object_map);
     VisitResult object_size = GenerateCall("%GetAllocationBaseSize",
                                            size_arguments, {class_type}, false);
+
+    object_size =
+        AddVariableObjectSize(object_size, class_type, initializer_results);
+
     Arguments allocate_arguments;
     allocate_arguments.parameters.push_back(object_size);
     allocate_result =
@@ -1430,6 +1563,12 @@ const Type* ImplementationVisitor::Visit(ForLoopStatement* stmt) {
 
   assembler().Bind(exit_block);
   return TypeOracle::GetVoidType();
+}
+
+VisitResult ImplementationVisitor::Visit(SpreadExpression* expr) {
+  ReportError(
+      "spread operators are only currently supported in indexed class field "
+      "initialization expressions");
 }
 
 void ImplementationVisitor::GenerateImplementation(const std::string& dir,
@@ -1706,10 +1845,12 @@ VisitResult ImplementationVisitor::Visit(StructExpression* expr) {
     ReportError(*raw_type, " is not a struct but used like one");
   }
 
-  InitializerResults initialization_results =
-      ImplementationVisitor::VisitInitializerResults(expr->initializers);
-
   const StructType* struct_type = StructType::cast(raw_type);
+
+  InitializerResults initialization_results =
+      ImplementationVisitor::VisitInitializerResults(struct_type,
+                                                     expr->initializers);
+
   // Push uninitialized 'this'
   VisitResult result = TemporaryUninitializedStruct(
       struct_type, "it's not initialized in the struct " + struct_type->name());
@@ -2331,9 +2472,8 @@ void ImplementationVisitor::GenerateBranch(const VisitResult& condition,
   assembler().Branch(true_block, false_block);
 }
 
-void ImplementationVisitor::GenerateExpressionBranch(Expression* expression,
-                                                     Block* true_block,
-                                                     Block* false_block) {
+void ImplementationVisitor::GenerateExpressionBranch(
+    VisitResultGenerator generator, Block* true_block, Block* false_block) {
   // Conditional expressions can either explicitly return a bit
   // type, or they can be backed by macros that don't return but
   // take a true and false label. By declaring the labels before
@@ -2345,12 +2485,19 @@ void ImplementationVisitor::GenerateExpressionBranch(Expression* expression,
   Binding<LocalLabel> false_binding{&LabelBindingsManager::Get(),
                                     kFalseLabelName, LocalLabel{false_block}};
   StackScope stack_scope(this);
-  VisitResult expression_result = Visit(expression);
+  VisitResult expression_result = generator();
   if (!expression_result.type()->IsNever()) {
     expression_result = stack_scope.Yield(
         GenerateImplicitConvert(TypeOracle::GetBoolType(), expression_result));
     GenerateBranch(expression_result, true_block, false_block);
   }
+}
+
+void ImplementationVisitor::GenerateExpressionBranch(Expression* expression,
+                                                     Block* true_block,
+                                                     Block* false_block) {
+  GenerateExpressionBranch([&]() { return this->Visit(expression); },
+                           true_block, false_block);
 }
 
 VisitResult ImplementationVisitor::GenerateImplicitConvert(
