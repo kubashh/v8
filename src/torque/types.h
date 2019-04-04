@@ -532,6 +532,8 @@ class VisitResult {
   base::Optional<StackRange> stack_range_;
 };
 
+typedef std::map<const Field*, VisitResult> FieldValueMap;
+
 VisitResult ProjectStructField(VisitResult structure,
                                const std::string& fieldname);
 
