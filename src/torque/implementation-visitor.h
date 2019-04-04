@@ -268,6 +268,10 @@ class ImplementationVisitor : public FileVisitor {
   void InitializeFieldFromSpread(VisitResult object, const Field& field,
                                  const InitializerResults& initializer_results);
 
+  void InitializeFieldFromSpread(VisitResult object, const Field& field,
+                                 VisitResult spreadee,
+                                 const InitializerResults& initializer_results);
+
   size_t InitializeAggregateHelper(
       const AggregateType* aggregate_type, VisitResult allocate_result,
       const InitializerResults& initializer_results);

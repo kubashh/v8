@@ -84,6 +84,7 @@ void ImplementationVisitor::BeginNamespaceFile(Namespace* nspace) {
          << "namespace internal {\n"
          << "\n";
 
+  header << "class CodeStubArguments;\n";
   header << "class " << nspace->ExternalName() << " {\n";
   header << " public:\n";
   header << "  explicit " << nspace->ExternalName()
@@ -555,7 +556,7 @@ const Type* ImplementationVisitor::Visit(
   base::Optional<const Type*> type;
   if (stmt->type) {
     type = Declarations::GetType(*stmt->type);
-    if ((*type)->IsConstexpr() && !stmt->const_qualified) {
+    if ((*type)->IsConstexpr() != 0 && !stmt->const_qualified) {
       ReportError(
           "cannot declare variable with constexpr type. Use 'const' instead.");
     }
@@ -993,7 +994,7 @@ std::string FormatAssertSource(const std::string& str) {
 }  // namespace
 
 const Type* ImplementationVisitor::Visit(AssertStatement* stmt) {
-  bool do_check = !stmt->debug_only;
+  bool do_check = true;
 #if defined(DEBUG)
   do_check = true;
 #endif
