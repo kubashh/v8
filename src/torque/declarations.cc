@@ -42,7 +42,7 @@ void CheckAlreadyDeclared(const std::string& name, const char* new_type) {
       FilterDeclarables<T>(Declarations::TryLookupShallow(QualifiedName(name)));
   if (!declarations.empty()) {
     Scope* scope = CurrentScope::Get();
-    ReportError("cannot redeclare ", name, " (type ", new_type, scope, ")");
+    ReportError("cannot redeclare ", name, " (type ", *new_type, scope, ")");
   }
 }
 
