@@ -364,7 +364,7 @@
 # define V8_EXPORT
 #endif  // BUILDING_V8_SHARED
 
-#if defined(_M_X64) || defined(__x86_64__)
+#if defined(V8_TARGET_ARCH_X64)
 #  define V8_OS_WIN_X64 true
 #endif
 
