@@ -1,0 +1,39 @@
+// Copyright 2019 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include 'src/builtins/builtins-proxy-gen.h'
+
+namespace proxy {
+
+  extern macro ProxiesCodeStubAssembler::AllocateProxy(
+      JSReceiver, JSReceiver, Context): JSProxy;
+  macro AllocateProxy(implicit context: Context)(
+      target: JSReceiver, handler: JSReceiver): JSProxy {
+    return AllocateProxy(target, handler, context);
+  }
+
+  macro IsRevokedProxy(implicit context: Context)(o: JSReceiver): bool {
+    try {
+      const proxy: JSProxy = Cast<JSProxy>(o) otherwise ReturnFalse;
+      const handler: JSReceiver =
+          Cast<JSReceiver>(proxy.handler) otherwise ReturnTrue;
+      return false;
+    }
+    label ReturnFalse {
+      return false;
+    }
+    label ReturnTrue {
+      return true;
+    }
+  }
+
+  macro ValidateProxy(context: Context, o: Object, method: String): JSProxy {
+    try {
+      return Cast<JSProxy>(o) otherwise CastError;
+    }
+    label CastError {
+      ThrowTypeError(kIncompatibleMethodReceiver, method);
+    }
+  }
+}
