@@ -39,6 +39,12 @@
   '*': [SKIP],
 }],  # variant == no_wasm_traps
 
+['asan', {
+  'intl/locale/locale-canonicalization': [SKIP],
+  'intl/locale/locale-constructor': [SKIP],
+  'intl/locale/locale-properties': [SKIP],
+}],  # asan
+
 ['system == windows', {
   # noi18n cannot turn on ICU backend for Date
   'relative-time-format/default-locale-fr-CA': [SKIP],
