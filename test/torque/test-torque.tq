@@ -838,4 +838,17 @@ namespace test {
     y.a = Undefined;
     const copy = x;
   }
+
+  struct TestIterator {
+    Next(): Object labels NoMore {
+      if (this.count-- == 0) goto NoMore;
+      return Hole;
+    }
+    count: Smi;
+  }
+
+  macro TestNewFixedArrayFromSpread(implicit context: Context)(): Object {
+    let i = TestIterator{5};
+    return new FixedArray{kFixedArrayMap, 5, ...i};
+  }
 }
