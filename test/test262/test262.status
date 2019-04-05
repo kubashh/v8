@@ -458,7 +458,6 @@
   'intl402/NumberFormat/currency-digits': [FAIL],
 
   # https://bugs.chromium.org/p/chromium/issues/detail?id=943348
-  'intl402/ListFormat/prototype/format/en-us-short': [FAIL],
   'intl402/ListFormat/prototype/formatToParts/en-us-short': [FAIL],
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=9040
@@ -508,32 +507,10 @@
   'language/expressions/prefix-increment/eval': [SKIP],
   'language/expressions/prefix-increment/eval-nostrict': [SKIP],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9047
-  'annexB/built-ins/Function/createdynfn-no-line-terminator-html-close-comment-body': [FAIL],
-
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9048
-  'built-ins/JSON/stringify/bigint-tojson-receiver': [FAIL],
-
   # https://bugs.chromium.org/p/v8/issues/detail?id=9049
   'language/comments/hashbang/use-strict': [SKIP],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9050
-  'language/statements/async-generator/return-undefined-implicit-and-explicit': [FAIL],
-
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9051
-  'language/statements/async-generator/yield-star-return-then-getter-ticks': [FAIL],
-
   # https://bugs.chromium.org/p/v8/issues/detail?id=9052
-  'built-ins/RegExp/property-escapes/generated/Alphabetic': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Assigned': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Cased': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Case_Ignorable': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Changes_When_Casefolded': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Changes_When_Casemapped': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Changes_When_Lowercased': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Changes_When_NFKC_Casefolded': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Changes_When_Titlecased': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Changes_When_Uppercased': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Diacritic': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Emoji': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Emoji_Modifier_Base': [FAIL],
@@ -570,7 +547,6 @@
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Common': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Devanagari': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Egyptian_Hieroglyphs': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Elymaic': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Grantha': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Hiragana': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Inherited': [FAIL],
@@ -581,9 +557,7 @@
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Masaram_Gondi': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Miao': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Mongolian': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Nandinagari': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Newa': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Nyiakeng_Puachue_Hmong': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Oriya': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Soyombo': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Takri': [FAIL],
@@ -591,22 +565,17 @@
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Tangut': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Telugu': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Tirhuta': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Wancho': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Miao': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Script_-_Nandinagari': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Newa': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Script_-_Nyiakeng_Puachue_Hmong': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Soyombo': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Takri': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Tamil': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Tangut': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Telugu': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Script_-_Wancho': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Adlam': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Common': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Devanagari': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Egyptian_Hieroglyphs': [FAIL],
-  'built-ins/RegExp/property-escapes/generated/Script_-_Elymaic': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Hiragana': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Inherited': [FAIL],
   'built-ins/RegExp/property-escapes/generated/Script_-_Katakana': [FAIL],
@@ -617,15 +586,15 @@
   'built-ins/RegExp/property-escapes/generated/XID_Continue': [FAIL],
   'built-ins/RegExp/property-escapes/generated/XID_Start': [FAIL],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9081
-  'built-ins/Date/prototype/toUTCString/negative-year': [FAIL],
-  'built-ins/Date/prototype/toString/negative-year': [FAIL],
-  'built-ins/Date/prototype/toDateString/negative-year': [FAIL],
   ######################## NEEDS INVESTIGATION ###########################
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=7833
   'built-ins/Atomics/wait/cannot-suspend-throws': [SKIP],
   'built-ins/Atomics/wait/undefined-index-defaults-to-zero': [SKIP],
+
+  # https://bugs.chromium.org/p/v8/issues/detail?id=9086
+  'intl402/fallback-locales-are-supported': [SKIP],
+  'intl402/supportedLocalesOf-consistent-with-resolvedOptions': [SKIP],
 
   ##################### DELIBERATE INCOMPATIBILITIES #####################
 
