@@ -235,6 +235,9 @@
 
   # BUG(v8:8169)
   'external-backing-store-gc': [SKIP],
+
+  # https://bugs.chromium.org/p/v8/issues/detail?id=9086
+  'intl-numberformat-formattoparts': [FAIL],
 }],  # ALWAYS
 
 ['novfp3 == True', {
