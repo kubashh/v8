@@ -508,25 +508,16 @@
   'language/expressions/prefix-increment/eval': [SKIP],
   'language/expressions/prefix-increment/eval-nostrict': [SKIP],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9047
-  'annexB/built-ins/Function/createdynfn-no-line-terminator-html-close-comment-body': [FAIL],
-
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9048
-  'built-ins/JSON/stringify/bigint-tojson-receiver': [FAIL],
-
   # https://bugs.chromium.org/p/v8/issues/detail?id=9049
   'language/comments/hashbang/use-strict': [SKIP],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9050
-  'language/statements/async-generator/return-undefined-implicit-and-explicit': [FAIL],
+  # https://bugs.chromium.org/p/v8/issues/detail?id=9052
+  'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Oriya': [FAIL],
+  'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Soyombo': [FAIL],
+  'built-ins/RegExp/property-escapes/generated/Script_Extensions_-_Telugu': [FAIL],
+  'built-ins/RegExp/property-escapes/generated/Terminal_Punctuation': [FAIL],
+  'built-ins/RegExp/property-escapes/generated/XID_Continue': [FAIL],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9051
-  'language/statements/async-generator/yield-star-return-then-getter-ticks': [FAIL],
-
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9081
-  'built-ins/Date/prototype/toUTCString/negative-year': [FAIL],
-  'built-ins/Date/prototype/toString/negative-year': [FAIL],
-  'built-ins/Date/prototype/toDateString/negative-year': [FAIL],
   ######################## NEEDS INVESTIGATION ###########################
 
   # https://bugs.chromium.org/p/v8/issues/detail?id=7833
