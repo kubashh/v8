@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef09eb87_e2e98355",
+        "filename": "test/intl/intl.status",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-05T11:17:12Z",
+      "side": 1,
+      "message": "Please don\u0027t use this bug here. There\u0027s no clang roll in this roll. This must be due to the ICU roll. Please create a new bug. Also in the other files.\n\nPrefer using short URLs.",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 56
+      },
+      "revId": "27d04f9b1ac279aa154a4c3a1cc03d9019fdc954",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
