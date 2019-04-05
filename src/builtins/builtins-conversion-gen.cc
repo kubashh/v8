@@ -213,10 +213,10 @@ TF_BUILTIN(NumberToString, CodeStubAssembler) {
 
 // ES section #sec-tostring
 TF_BUILTIN(ToString, CodeStubAssembler) {
-  Node* context = Parameter(Descriptor::kContext);
-  Node* input = Parameter(Descriptor::kArgument);
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<Object> input = CAST(Parameter(Descriptor::kArgument));
 
-  Return(ToString(context, input));
+  Return(ToStringTorque(context, input));
 }
 
 // 7.1.1.1 OrdinaryToPrimitive ( O, hint )

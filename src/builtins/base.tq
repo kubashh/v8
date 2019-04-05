@@ -707,6 +707,8 @@ const kTypedArrayTooShort: constexpr MessageTemplate
     generates 'MessageTemplate::kTypedArrayTooShort';
 const kInvalidCountValue: constexpr MessageTemplate
     generates 'MessageTemplate::kInvalidCountValue';
+const kSymbolToString: constexpr MessageTemplate
+    generates 'MessageTemplate::kSymbolToString';
 
 const kMaxArrayIndex:
     constexpr uint32 generates 'JSArray::kMaxArrayIndex';
@@ -937,6 +939,7 @@ extern macro IsNullOrUndefined(Object): bool;
 extern macro IsTheHole(Object): bool;
 extern macro IsString(HeapObject): bool;
 extern builtin ToString(Context, Object): String;
+extern builtin NonPrimitiveToPrimitive_String(Context, Object): Object;
 
 extern transitioning runtime NormalizeElements(Context, JSObject);
 extern transitioning runtime TransitionElementsKindWithKind(
@@ -946,6 +949,7 @@ extern macro LoadBufferObject(RawPtr, constexpr int32): Object;
 extern macro LoadBufferPointer(RawPtr, constexpr int32): RawPtr;
 extern macro LoadBufferSmi(RawPtr, constexpr int32): Smi;
 extern macro LoadFixedTypedArrayOnHeapBackingStore(FixedTypedArrayBase): RawPtr;
+extern macro LoadObjectField(HeapObject, constexpr int32): Object;
 
 extern macro LoadRoot(constexpr RootIndex): Object;
 extern macro StoreRoot(constexpr RootIndex, Object): Object;
@@ -1317,6 +1321,18 @@ Cast<FixedTypedArrayBase>(o: HeapObject): FixedTypedArrayBase
 Cast<String>(o: HeapObject): String
     labels CastError {
   return HeapObjectToString(o) otherwise CastError;
+}
+
+Cast<Oddball>(o: HeapObject): Oddball
+    labels CastError {
+  if (IsOddball(o)) return %RawDownCast<Oddball>(o);
+  goto CastError;
+}
+
+Cast<Symbol>(o: HeapObject): Symbol
+    labels CastError {
+  if (IsSymbol(o)) return %RawDownCast<Symbol>(o);
+  goto CastError;
 }
 
 Cast<DirectString>(o: HeapObject): DirectString
@@ -2062,6 +2078,8 @@ extern macro IsHeapNumber(HeapObject): bool;
 extern macro IsFixedArray(HeapObject): bool;
 extern macro IsNumber(Object): bool;
 extern macro IsNumberNormalized(Number): bool;
+extern macro IsOddball(HeapObject): bool;
+extern macro IsSymbol(HeapObject): bool;
 extern macro IsJSArrayMap(Map): bool;
 extern macro IsExtensibleMap(Map): bool;
 extern macro IsCustomElementsReceiverInstanceType(int32): bool;
@@ -2233,4 +2251,39 @@ transitioning builtin FastCreateDataProperty(implicit context: Context)(
     CreateDataProperty(receiver, key, value);
   }
   return Undefined;
+}
+
+namespace slow {
+  extern runtime ToString(Context, Object): String;
+}
+
+const kOddballToStringOffset: constexpr int32
+    generates 'Oddball::kToStringOffset';
+macro ToStringTorque(context: Context, o: Object): String {
+  let result: Object = o;
+  while (true) {
+    typeswitch (result) {
+      case (str: String): {
+        return str;
+      }
+      case (num: Number): {
+        return NumberToString(num);
+      }
+      case (oddball: Oddball): {
+        result = LoadObjectField(oddball, kOddballToStringOffset);
+        return %RawDownCast<String>(result);
+      }
+      case (Symbol): {
+        ThrowTypeError(kSymbolToString);
+      }
+      case (JSReceiver): {
+        result = NonPrimitiveToPrimitive_String(context, result);
+        continue;
+      }
+      case (Object): {
+        return slow::ToString(context, o);
+      }
+    }
+  }
+  return slow::ToString(context, o);
 }
