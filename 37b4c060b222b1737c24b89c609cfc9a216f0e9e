@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d916a32b_fc5f48a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-04-08T23:44:33Z",
+      "side": 1,
+      "message": "Please add a reason for this revert.",
+      "revId": "37b4c060b222b1737c24b89c609cfc9a216f0e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
