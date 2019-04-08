@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e77e6862_263b90f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-08T11:47:36Z",
+      "side": 1,
+      "message": "on Chromium",
+      "revId": "bd9f6364fcf3e96fe7ec76589e84b7329b990af9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7290d5f_55ef03d5",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-08T11:47:36Z",
+      "side": 1,
+      "message": "Is the exception for wasm code needed, or could we just check for \n\n win64_unwindinfo::CanRegisterUnwindInfoForNonABICompliantCodeRange\n\nhere as elsewhere?",
+      "revId": "bd9f6364fcf3e96fe7ec76589e84b7329b990af9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
