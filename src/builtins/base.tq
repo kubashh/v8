@@ -16,6 +16,7 @@
 #include 'src/objects/js-regexp-string-iterator.h'
 #include 'src/objects/module.h'
 #include 'src/objects/stack-frame-info.h'
+#include 'src/builtins/builtins-regexp-gen.h'
 
 type void;
 type never;
@@ -877,6 +878,11 @@ extern class JSRegExp extends JSObject {
   flags: Smi | Undefined;
 }
 
+transient type FastJSRegExp extends JSRegExp;
+
+extern operator '.flagGlobal' macro
+RegExpBuiltinsAssembler::FastFlagGetterGlobal(FastJSRegExp): bool;
+
 extern class JSRegExpResult extends JSArray {
   index: Object;
   input: Object;
@@ -1400,6 +1406,12 @@ Cast<JSArgumentsObjectWithLength>(implicit context: Context)(o: HeapObject):
   label True {
     return %RawDownCast<JSArgumentsObjectWithLength>(o);
   }
+}
+
+Cast<FastJSRegExp>(implicit context: Context)(o: HeapObject): FastJSRegExp
+    labels CastError {
+  if (regexp::BranchIfFastRegExp(o)) return %RawDownCast<FastJSRegExp>(o);
+  goto CastError;
 }
 
 Cast<FastJSArray>(implicit context: Context)(o: HeapObject): FastJSArray
