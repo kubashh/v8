@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2d07b640_736d1e0d",
+        "filename": "include/v8config.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-08T11:35:11Z",
+      "side": 1,
+      "message": "In some cases, V8_TARGET_ARCH_ macros are defined in base/build_config.h, which (I\u0027d assume) is not included here.\n\nCould we move the definition of V8_OS_WIN_X64 into a place that *does* include build_config.h? I remember vaguely that there was some reason to add it here initially.",
+      "revId": "dfcf8a0983a23ec6ddd4a19dba19620f32420eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
