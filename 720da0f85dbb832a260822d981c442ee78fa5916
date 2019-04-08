@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0a317fac_5f8213dd",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1166470
+      },
+      "writtenOn": "2019-04-08T19:36:10Z",
+      "side": 1,
+      "message": "renamed to ebt_os after reading Jakob\u0027s doc https://docs.google.com/document/d/1A8p_OXE8fXE-IvL_qnpz7dYfs__VuUkVpivtLQFjY-Q/edit?usp\u003dsharing_eip\u0026ts\u003d5cab144b",
+      "parentUuid": "b614aa4c_02e7e0f2",
+      "range": {
+        "startLine": 1144,
+        "startChar": 9,
+        "endLine": 1144,
+        "endChar": 18
+      },
+      "revId": "720da0f85dbb832a260822d981c442ee78fa5916",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a86dd900_4c62b8f1",
         "filename": "src/snapshot/embedded-file-writer.cc",
         "patchSetId": 2
