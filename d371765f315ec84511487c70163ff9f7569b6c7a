@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "b60292c1_ed2b7d21",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T13:44:19Z",
+      "side": 1,
+      "message": "nit: extends JSObject.",
+      "revId": "d371765f315ec84511487c70163ff9f7569b6c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3c277de_d8454b2e",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T13:44:19Z",
+      "side": 1,
+      "message": "q: Would it make sense to stay consistent with \u0027instance\u0027 in WasmExportedFunctionData and rename the WasmDebugInfo::wasm_instance accessor instead?",
+      "revId": "d371765f315ec84511487c70163ff9f7569b6c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72190f39_d55316e7",
         "filename": "src/objects-debug.cc",
         "patchSetId": 1
