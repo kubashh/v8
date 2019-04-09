@@ -489,6 +489,11 @@ void BytecodeArray::BytecodeArrayVerify(Isolate* isolate) {
   // - No consecutive sequences of prefix Wide / ExtraWide.
   CHECK(IsBytecodeArray());
   CHECK(constant_pool()->IsFixedArray());
+  CHECK(source_position_table()->IsException() ||
+        source_position_table()->IsUndefined() ||
+        source_position_table()->IsByteArray() ||
+        source_position_table()->IsSourcePositionTableWithFrameCache());
+  CHECK(handler_table()->IsByteArray());
   VerifyHeapPointer(isolate, constant_pool());
 }
 
@@ -722,12 +727,15 @@ void FixedArray::FixedArrayVerify(Isolate* isolate) {
 }
 
 void WeakFixedArray::WeakFixedArrayVerify(Isolate* isolate) {
+  VerifySmiField(kLengthOffset);
   for (int i = 0; i < length(); i++) {
     MaybeObject::VerifyMaybeObjectPointer(isolate, Get(i));
   }
 }
 
 void WeakArrayList::WeakArrayListVerify(Isolate* isolate) {
+  VerifySmiField(kCapacityOffset);
+  VerifySmiField(kLengthOffset);
   for (int i = 0; i < length(); i++) {
     MaybeObject::VerifyMaybeObjectPointer(isolate, Get(i));
   }
@@ -1382,6 +1390,7 @@ void JSFinalizationGroup::JSFinalizationGroupVerify(Isolate* isolate) {
   if (cleared_cells()->IsWeakCell()) {
     CHECK(WeakCell::cast(cleared_cells())->prev()->IsUndefined(isolate));
   }
+  CHECK(next()->IsUndefined(isolate) || next()->IsJSFinalizationGroup());
 }
 
 void JSFinalizationGroupCleanupIterator::
@@ -1845,6 +1854,12 @@ void Tuple3::Tuple3Verify(Isolate* isolate) {
   VerifyObjectField(isolate, kValue1Offset);
   VerifyObjectField(isolate, kValue2Offset);
   VerifyObjectField(isolate, kValue3Offset);
+}
+
+void SourcePositionTableWithFrameCache::SourcePositionTableWithFrameCacheVerify(
+  Isolate* isolate) {
+  CHECK(source_position_table()->IsByteArray());
+  VerifyObjectField(isolate, kStackFrameCacheOffset);
 }
 
 void ClassPositions::ClassPositionsVerify(Isolate* isolate) {
