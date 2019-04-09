@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "72190f39_d55316e7",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2087,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-09T13:32:34Z",
+      "side": 1,
+      "message": "Why add this? VerifyPointer does the same using the getter instead of raw access.",
+      "range": {
+        "startLine": 2087,
+        "startChar": 2,
+        "endLine": 2087,
+        "endChar": 48
+      },
+      "revId": "d371765f315ec84511487c70163ff9f7569b6c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
