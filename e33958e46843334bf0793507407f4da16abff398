@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3c75084_408981c0",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T13:07:57Z",
+      "side": 1,
+      "message": "Bit confused here. This seems to define a normal argument called \u0027newTarget\u0027 while what we need later on is the actual new target (defined implicitly in builtins-descriptors.h for TFJ builtins).\n\nIf that\u0027s correct, it\u0027s a bit scary that no tests fail :) Could you verify \u0026 fix/add tests if necessary?\n\nOr am I missing something?",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1eae984_8f74858e",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T13:07:57Z",
+      "side": 1,
+      "message": "nit: I\u0027d inline single-use throw blocks.",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fe59fd6_15be9d35",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T13:07:57Z",
+      "side": 1,
+      "message": "This doesn\u0027t take a string arg, does it? Same below.",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "717e1961_adfa27e4",
+        "filename": "src/builtins/proxy.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T13:07:57Z",
+      "side": 1,
+      "message": "I got hung up on this for a bit due to the behavior change if o is a JSProxy. The old code in proxy-revocable then returned the exact opposite of what happens here, right? Was that a bug?\n\nI\u0027d suggest a slight simplification:\n\n const proxy: JSProxy \u003d Cast\u003cJSProxy\u003e(o) otherwise return false;\n return !IsJSReceiver(proxy.handler);",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6f37dd0_d8241203",
+        "filename": "src/builtins/proxy.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T13:07:57Z",
+      "side": 1,
+      "message": "Suggestion: otherwise ThrowTypeError(...)",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
