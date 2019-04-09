@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "00a3196b_42d19b12",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-09T21:59:24Z",
+      "side": 1,
+      "message": "filed v8:9108",
+      "parentUuid": "bd0ff155_931e634b",
+      "range": {
+        "startLine": 33,
+        "startChar": 33,
+        "endLine": 33,
+        "endChar": 40
+      },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "897b4714_9aad1a40",
         "filename": "src/builtins/base.tq",
         "patchSetId": 1
@@ -89,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "b0918f27_fa8604e6",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-09T21:59:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e2afe8c_835a42a8",
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8d01289_60e50130",
         "filename": "src/builtins/base.tq",
         "patchSetId": 1
@@ -106,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "1d504766_b0bf5949",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-09T21:59:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8d01289_60e50130",
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2bdde4e4_2a4a431c",
         "filename": "src/builtins/base.tq",
         "patchSetId": 1
@@ -120,6 +180,24 @@
       "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13ccabe4_83e94805",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-09T21:59:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bdde4e4_2a4a431c",
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -143,6 +221,30 @@
       "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ad4d930_36b33ea9",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-09T21:59:24Z",
+      "side": 1,
+      "message": "Removed AllocationSite from this change as it needs more thought.",
+      "parentUuid": "e0531491_4ded2de0",
+      "range": {
+        "startLine": 809,
+        "startChar": 0,
+        "endLine": 810,
+        "endChar": 42
+      },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +292,30 @@
       "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94c3e92c_1c185728",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-09T21:59:24Z",
+      "side": 1,
+      "message": "AllocationSite seems to be sensitive to the order of the fields. At least I cannot reorder them without making other changes to the class (the tests are failing with the fields not having the right types). So removed AllocationSite from this change to proceed with others.",
+      "parentUuid": "6d57f1f0_e1dd665e",
+      "range": {
+        "startLine": 812,
+        "startChar": 13,
+        "endLine": 812,
+        "endChar": 32
+      },
+      "revId": "37e1a9ad037bde342d3e9d2f091009bf94d372eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
