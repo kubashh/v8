@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7398b34_4c1998e2",
+        "filename": "src/arm/deoptimizer-arm.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 0,
+      "message": "q: could these methods stay in src/arch/deoptimier-arch.cc and just be called from builtins-arch.cc? Or was there a specific reason to move the code over?",
+      "revId": "d2d73e9e963933b7cc7da4e84a74fc49024eddc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

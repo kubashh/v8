@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "690fa288_9a9fa4b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 1,
+      "message": "Let\u0027s add it to the Bug: line then ;)",
+      "revId": "999413e60add90339fc1e247c33c51d02b1ff0cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "358b0901_773da4bc",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 1,
+      "message": "Might be nice to create a new dedicated descriptor DeoptimizationEntryDescriptor; it doesn\u0027t need to have any contents, just perhaps a brief comment explaining how deopt entries are called/used.",
+      "revId": "999413e60add90339fc1e247c33c51d02b1ff0cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e34482e4_3a238112",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 1,
+      "message": "suggestion: Personally I\u0027d remove this and call Deoptimizer::GenerateDeoptimizationEntries() instead.",
+      "revId": "999413e60add90339fc1e247c33c51d02b1ff0cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e345b14a_9fde9654",
+        "filename": "src/builtins/builtins.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 1,
+      "message": "Could we put these in builtins-internal-gen.cc (they don\u0027t need to be inline)?",
+      "revId": "999413e60add90339fc1e247c33c51d02b1ff0cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ce759d1_6b3bed4f",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 1,
+      "message": "nit: maybe move the ctor definition into the header",
+      "revId": "999413e60add90339fc1e247c33c51d02b1ff0cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beffaf67_a3e6933c",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 1,
+      "message": "nit: can we remove this?",
+      "revId": "999413e60add90339fc1e247c33c51d02b1ff0cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "265677bd_d69d4566",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 1,
+      "message": "suggestion: add a table somewhere and initialize it once per isolate.\n\nOnce embedded builtins are always on (should happen soonish) the table could be per-process. You could then also use EmbeddedData to get instruction starts, then you would not need the Isolate.",
+      "revId": "999413e60add90339fc1e247c33c51d02b1ff0cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5475f652_35a6dab7",
+        "filename": "src/deoptimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "999413e60add90339fc1e247c33c51d02b1ff0cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df2b3afb_ecf9de27",
+        "filename": "src/globals.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1456,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-09T14:58:40Z",
+      "side": 1,
+      "message": "Just curious, did you consider making this a Smi root?",
+      "revId": "999413e60add90339fc1e247c33c51d02b1ff0cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
