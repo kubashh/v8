@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fe8ea4ce_6cf48a7b",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-09T20:08:06Z",
+      "side": 1,
+      "message": "I followed https://cs.chromium.org/chromium/src/v8/src/builtins/typed-array-createtypedarray.tq?rcl\u003db4c008bb49b5c37a8b0c446957695d6bbc75e394\u0026l\u003d280 where newTarget arguments is passed as normal argument as well and it works.\n\nI added a test for this (which is missing). Please let me know.",
+      "parentUuid": "c3c75084_408981c0",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1eae984_8f74858e",
         "filename": "src/builtins/proxy-constructor.tq",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "c2de345c_39f0e825",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-09T20:08:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1eae984_8f74858e",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1fe59fd6_15be9d35",
         "filename": "src/builtins/proxy-constructor.tq",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2019-04-09T13:07:57Z",
       "side": 1,
       "message": "This doesn\u0027t take a string arg, does it? Same below.",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d1b47bf_1b69e64e",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-09T20:08:06Z",
+      "side": 1,
+      "message": "It can take a string arg but I will remove it.",
+      "parentUuid": "1fe59fd6_15be9d35",
       "revId": "e33958e46843334bf0793507407f4da16abff398",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "e2256ff9_b89cd3d0",
+        "filename": "src/builtins/proxy.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-09T20:08:06Z",
+      "side": 1,
+      "message": "What we do here is mimic GotoIfRevokedProxy in builtins-proxy-gen.h. The code in proxy-revocable also returned the same thing. \n\nI added a test (which was missing IMO) for proxy-revocable to cover this macro. IsJSReceiver only accepts HeapObject argument while proxy.handler is Object so I still keep the Cast\u003cJSReceiver\u003e",
+      "parentUuid": "717e1961_adfa27e4",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b6f37dd0_d8241203",
         "filename": "src/builtins/proxy.tq",
         "patchSetId": 1
@@ -84,6 +156,24 @@
       "revId": "e33958e46843334bf0793507407f4da16abff398",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffde017e_f961e77a",
+        "filename": "src/builtins/proxy.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-09T20:08:06Z",
+      "side": 1,
+      "message": "The marco is not used yet so removed for now.",
+      "parentUuid": "b6f37dd0_d8241203",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
