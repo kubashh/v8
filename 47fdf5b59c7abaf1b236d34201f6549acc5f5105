@@ -16,6 +16,24 @@
       "revId": "47fdf5b59c7abaf1b236d34201f6549acc5f5105",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69350710_4510f7a0",
+        "filename": "src/snapshot/mksnapshot.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-09T10:19:52Z",
+      "side": 1,
+      "message": "Ack, resolved.",
+      "parentUuid": "50aff188_38dc5bf0",
+      "revId": "47fdf5b59c7abaf1b236d34201f6549acc5f5105",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
