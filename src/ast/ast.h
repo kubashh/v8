@@ -2336,12 +2336,14 @@ class FunctionLiteral final : public Expression {
     function_literal_id_ = function_literal_id;
   }
 
-  void set_requires_instance_members_initializer(bool value) {
+  void set_requires_instance_members_initializer(bool value, int member_count) {
     bit_field_ = RequiresInstanceMembersInitializer::update(bit_field_, value);
+    member_count_ = member_count;
   }
   bool requires_instance_members_initializer() const {
     return RequiresInstanceMembersInitializer::decode(bit_field_);
   }
+  int instance_member_count() const { return member_count_; }
 
   ProducedPreparseData* produced_preparse_data() const {
     return produced_preparse_data_;
@@ -2366,6 +2368,7 @@ class FunctionLiteral final : public Expression {
         function_token_position_(kNoSourcePosition),
         suspend_count_(0),
         function_literal_id_(function_literal_id),
+        member_count_(0),
         raw_name_(name ? ast_value_factory->NewConsString(name) : nullptr),
         scope_(scope),
         body_(0, nullptr),
@@ -2400,6 +2403,7 @@ class FunctionLiteral final : public Expression {
   int function_token_position_;
   int suspend_count_;
   int function_literal_id_;
+  int member_count_;
 
   const AstConsString* raw_name_;
   DeclarationScope* scope_;

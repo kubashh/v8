@@ -5493,7 +5493,7 @@ int JSFunction::CalculateExpectedNofProperties(Isolate* isolate,
         Compiler::Compile(func, Compiler::CLEAR_EXCEPTION,
                           &is_compiled_scope)) {
       DCHECK(shared->is_compiled());
-      int count = shared->expected_nof_properties();
+      int count = shared->total_property_count();
       // Check that the estimate is sane.
       if (expected_nof_properties <= JSObject::kMaxInObjectProperties - count) {
         expected_nof_properties += count;

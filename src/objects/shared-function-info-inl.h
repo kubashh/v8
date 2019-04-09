@@ -133,6 +133,8 @@ UINT16_ACCESSORS(SharedFunctionInfo, internal_formal_parameter_count,
                  kFormalParameterCountOffset)
 UINT16_ACCESSORS(SharedFunctionInfo, expected_nof_properties,
                  kExpectedNofPropertiesOffset)
+UINT16_ACCESSORS(SharedFunctionInfo, instance_member_count,
+                 kExpectedNofPropertiesOffset)
 UINT16_ACCESSORS(SharedFunctionInfo, raw_function_token_offset,
                  kFunctionTokenOffsetOffset)
 RELAXED_INT32_ACCESSORS(SharedFunctionInfo, flags, kFlagsOffset)
@@ -439,6 +441,12 @@ bool SharedFunctionInfo::HasLength() const {
 
 bool SharedFunctionInfo::has_simple_parameters() {
   return scope_info()->HasSimpleParameters();
+}
+
+uint16_t SharedFunctionInfo::total_property_count() const {
+  printf("** Nof %d mem %d\n", expected_nof_properties(),
+         instance_member_count());
+  return expected_nof_properties() + instance_member_count();
 }
 
 bool SharedFunctionInfo::IsApiFunction() const {

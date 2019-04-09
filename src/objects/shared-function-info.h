@@ -318,6 +318,11 @@ class SharedFunctionInfo : public HeapObject {
   // function. The value is only reliable when the function has been compiled.
   DECL_UINT16_ACCESSORS(expected_nof_properties)
 
+  // [instance_member_count]: Number of instance members.
+  DECL_UINT16_ACCESSORS(instance_member_count)
+
+  inline uint16_t total_property_count() const;
+
   // [function data]: This field holds some additional data for function.
   // Currently it has one of:
   //  - a FunctionTemplateInfo to make benefit the API [IsApiFunction()].
