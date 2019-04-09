@@ -168,21 +168,9 @@ class DebugInfo : public Struct {
   DECL_PRINTER(DebugInfo)
   DECL_VERIFIER(DebugInfo)
 
-// Layout description.
-#define DEBUG_INFO_FIELDS(V)                   \
-  V(kSharedFunctionInfoOffset, kTaggedSize)    \
-  V(kDebuggerHintsOffset, kTaggedSize)         \
-  V(kScriptOffset, kTaggedSize)                \
-  V(kOriginalBytecodeArrayOffset, kTaggedSize) \
-  V(kDebugBytecodeArrayOffset, kTaggedSize)    \
-  V(kBreakPointsStateOffset, kTaggedSize)      \
-  V(kFlagsOffset, kTaggedSize)                 \
-  V(kCoverageInfoOffset, kTaggedSize)          \
-  /* Total size. */                            \
-  V(kSize, 0)
-
-  DEFINE_FIELD_OFFSET_CONSTANTS(Struct::kHeaderSize, DEBUG_INFO_FIELDS)
-#undef DEBUG_INFO_FIELDS
+  // Layout description.
+  DEFINE_FIELD_OFFSET_CONSTANTS(Struct::kHeaderSize,
+                                TORQUE_GENERATED_DEBUG_INFO_FIELDS)
 
   static const int kEstimatedNofBreakPointsInFunction = 4;
 
