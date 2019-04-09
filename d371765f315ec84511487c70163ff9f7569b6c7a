@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "864a9060_b408386f",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-09T13:57:46Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "d3c277de_d8454b2e",
+      "revId": "d371765f315ec84511487c70163ff9f7569b6c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72190f39_d55316e7",
         "filename": "src/objects-debug.cc",
         "patchSetId": 1
@@ -56,6 +74,23 @@
       "revId": "d371765f315ec84511487c70163ff9f7569b6c7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4eceb68_a527d6db",
+        "filename": "src/objects-printer.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1867,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-09T13:57:46Z",
+      "side": 1,
+      "message": "Thanks for adding this!",
+      "revId": "d371765f315ec84511487c70163ff9f7569b6c7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
