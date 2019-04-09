@@ -1865,12 +1865,10 @@ void AsmWasmData::AsmWasmDataVerify(Isolate* isolate) {
 
 void WasmDebugInfo::WasmDebugInfoVerify(Isolate* isolate) {
   CHECK(IsWasmDebugInfo());
-  VerifyObjectField(isolate, kInstanceOffset);
   CHECK(wasm_instance()->IsWasmInstanceObject());
-  VerifyObjectField(isolate, kInterpreterHandleOffset);
   CHECK(interpreter_handle()->IsUndefined(isolate) ||
         interpreter_handle()->IsForeign());
-  VerifyObjectField(isolate, kInterpretedFunctionsOffset);
+  CHECK(interpreted_functions()->IsFixedArray());
   VerifyObjectField(isolate, kLocalsNamesOffset);
   VerifyObjectField(isolate, kCWasmEntriesOffset);
   VerifyObjectField(isolate, kCWasmEntryMapOffset);
@@ -1900,7 +1898,7 @@ void WasmExportedFunctionData::WasmExportedFunctionDataVerify(
   VerifyObjectField(isolate, kWrapperCodeOffset);
   CHECK(wrapper_code()->kind() == Code::JS_TO_WASM_FUNCTION ||
         wrapper_code()->kind() == Code::C_WASM_ENTRY);
-  VerifyObjectField(isolate, kInstanceOffset);
+  CHECK(instance()->IsWasmInstanceObject());
   VerifySmiField(kJumpTableOffsetOffset);
   VerifySmiField(kFunctionIndexOffset);
 }
