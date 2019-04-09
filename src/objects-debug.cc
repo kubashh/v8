@@ -1828,15 +1828,19 @@ void PrototypeUsers::Verify(WeakArrayList array) {
 
 void Tuple2::Tuple2Verify(Isolate* isolate) {
   CHECK(IsTuple2());
+  VerifyObjectField(isolate, kValue1Offset);
+  VerifyObjectField(isolate, kValue2Offset);
+}
+
+void EnumCache::EnumCacheVerify(Isolate* isolate) {
+  CHECK(IsEnumCache());
   Heap* heap = isolate->heap();
   if (*this == ReadOnlyRoots(heap).empty_enum_cache()) {
-    CHECK_EQ(ReadOnlyRoots(heap).empty_fixed_array(),
-             EnumCache::cast(*this)->keys());
-    CHECK_EQ(ReadOnlyRoots(heap).empty_fixed_array(),
-             EnumCache::cast(*this)->indices());
+    CHECK_EQ(ReadOnlyRoots(heap).empty_fixed_array(), keys());
+    CHECK_EQ(ReadOnlyRoots(heap).empty_fixed_array(), indices());
   } else {
-    VerifyObjectField(isolate, kValue1Offset);
-    VerifyObjectField(isolate, kValue2Offset);
+    CHECK(keys()->IsFixedArray());
+    CHECK(indices()->IsFixedArray());
   }
 }
 
@@ -2040,6 +2044,10 @@ void ObjectTemplateInfo::ObjectTemplateInfoVerify(Isolate* isolate) {
 
 void AllocationSite::AllocationSiteVerify(Isolate* isolate) {
   CHECK(IsAllocationSite());
+  CHECK(dependent_code()->IsDependentCode());
+  CHECK(transition_info_or_boilerplate()->IsSmi() ||
+        transition_info_or_boilerplate()->IsJSObject());
+  CHECK(nested_site()->IsAllocationSite() || nested_site() == Smi::kZero);
 }
 
 void AllocationMemento::AllocationMementoVerify(Isolate* isolate) {
@@ -2086,10 +2094,15 @@ void NormalizedMapCache::NormalizedMapCacheVerify(Isolate* isolate) {
 
 void DebugInfo::DebugInfoVerify(Isolate* isolate) {
   CHECK(IsDebugInfo());
-  VerifyPointer(isolate, shared());
-  VerifyPointer(isolate, script());
-  VerifyPointer(isolate, original_bytecode_array());
-  VerifyPointer(isolate, break_points());
+  VerifySmiField(kFlagsOffset);
+  VerifySmiField(kDebuggerHintsOffset);
+  CHECK(shared()->IsSharedFunctionInfo());
+  CHECK(script()->IsScript());
+  CHECK(original_bytecode_array()->IsUndefined(isolate) ||
+        original_bytecode_array()->IsBytecodeArray());
+  CHECK(debug_bytecode_array()->IsUndefined(isolate) ||
+        debug_bytecode_array()->IsBytecodeArray());
+  CHECK(break_points()->IsFixedArray());
 }
 
 void StackTraceFrame::StackTraceFrameVerify(Isolate* isolate) {

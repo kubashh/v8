@@ -22,18 +22,21 @@ class Handle;
 class Isolate;
 
 // An EnumCache is a pair used to hold keys and indices caches.
-class EnumCache : public Tuple2 {
+class EnumCache : public Struct {
  public:
   DECL_ACCESSORS(keys, FixedArray)
   DECL_ACCESSORS(indices, FixedArray)
 
   DECL_CAST(EnumCache)
 
-  // Layout description.
-  static const int kKeysOffset = kValue1Offset;
-  static const int kIndicesOffset = kValue2Offset;
+  DECL_PRINTER(EnumCache)
+  DECL_VERIFIER(EnumCache)
 
-  OBJECT_CONSTRUCTORS(EnumCache, Tuple2);
+  // Layout description.
+  DEFINE_FIELD_OFFSET_CONSTANTS(Struct::kHeaderSize,
+                                TORQUE_GENERATED_ENUM_CACHE_FIELDS)
+
+  OBJECT_CONSTRUCTORS(EnumCache, Struct);
 };
 
 // A DescriptorArray is a custom array that holds instance descriptors.
@@ -136,20 +139,11 @@ class DescriptorArray : public HeapObject {
   static const int kNotFound = -1;
 
   // Layout description.
-#define DESCRIPTOR_ARRAY_FIELDS(V)                    \
-  V(kNumberOfAllDescriptorsOffset, kUInt16Size)       \
-  V(kNumberOfDescriptorsOffset, kUInt16Size)          \
-  V(kRawNumberOfMarkedDescriptorsOffset, kUInt16Size) \
-  V(kFiller16BitsOffset, kUInt16Size)                 \
-  V(kPointersStartOffset, 0)                          \
-  V(kEnumCacheOffset, kTaggedSize)                    \
-  V(kHeaderSize, 0)
-
   DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
-                                DESCRIPTOR_ARRAY_FIELDS)
-#undef DESCRIPTOR_ARRAY_FIELDS
+                                TORQUE_GENERATED_DESCRIPTOR_ARRAY_FIELDS)
+  static constexpr int kHeaderSize = kSize;
 
-  STATIC_ASSERT(IsAligned(kPointersStartOffset, kTaggedSize));
+  STATIC_ASSERT(IsAligned(kStartOfPointerFieldsOffset, kTaggedSize));
   STATIC_ASSERT(IsAligned(kHeaderSize, kTaggedSize));
 
   // Garbage collection support.
@@ -171,7 +165,8 @@ class DescriptorArray : public HeapObject {
   inline ObjectSlot GetKeySlot(int descriptor);
   inline MaybeObjectSlot GetValueSlot(int descriptor);
 
-  using BodyDescriptor = FlexibleWeakBodyDescriptor<kPointersStartOffset>;
+  using BodyDescriptor =
+    FlexibleWeakBodyDescriptor<kStartOfPointerFieldsOffset>;
 
   // Layout of descriptor.
   // Naming is consistent with Dictionary classes for easy templating.
