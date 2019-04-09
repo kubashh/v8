@@ -34,6 +34,24 @@
       "revId": "37b4c060b222b1737c24b89c609cfc9a216f0e9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3671e490_7882eb97",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-09T17:08:13Z",
+      "side": 1,
+      "message": "Yes, an assert I\u0027ve added is firing in this config. I\u0027ve built emulated arm with enabled slow checks and lite mode on Windows and can repro the failure. Looking into it.",
+      "parentUuid": "ad161bf9_2debca7b",
+      "revId": "37b4c060b222b1737c24b89c609cfc9a216f0e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
