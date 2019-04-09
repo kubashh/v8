@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28b4e0cd_6e8e034e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-09T19:36:40Z",
+      "side": 1,
+      "message": "The missing type was found on \"Linux-arm-sim-lite-debug\" config but I don\u0027t see a config like this (the important bits are both lite mode and slow checks being enabled) amond the ones available for try jobs. I validated that the assert fired on my windows devbox prior to the fix and not after it, but it would be nice if I could run a bigger suit of tests before checking-in. Is that possible?",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "84127ec6a9dda4bb3640c687620c00c437afa190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
