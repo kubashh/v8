@@ -16,6 +16,24 @@
       "revId": "dbb8ee20cf67409c498169f069062c36fd771406",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b19b115_e939dfa5",
+        "filename": "src/elements.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-10T18:13:10Z",
+      "side": 1,
+      "message": "Make sense. Added",
+      "parentUuid": "1837c8b2_ce61169f",
+      "revId": "dbb8ee20cf67409c498169f069062c36fd771406",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
