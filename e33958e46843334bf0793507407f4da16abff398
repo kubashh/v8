@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8cb45031_5b3112af",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T08:46:30Z",
+      "side": 1,
+      "message": "The difference is that CreateTypedArray is an internal TFS builtin. There, newTarget is just a standard argument.\n\nProxyConstructor OTOH is a JS-linkage builtin (TFJ). And the new target is not a normal argument but passed according to JS calling conventions.\n\nThe easiest way to reference it right now will be to wrap CSA\u0027s `Parameter(Descriptor::kJSNewTarget)` in a function and call it from torque.\n\nI\u0027m still surprised that this CL doesn\u0027t fail any tests. We should understand why..",
+      "parentUuid": "fe8ea4ce_6cf48a7b",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1eae984_8f74858e",
         "filename": "src/builtins/proxy-constructor.tq",
         "patchSetId": 1
@@ -107,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "8a9b03ce_81be2a27",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T08:46:30Z",
+      "side": 1,
+      "message": "I meant, the kProxyNonObject message template does not take a string argument so it does not make sense to pass one. That is why the different overrides of ThrowTypeError (with different arg counts) exist.\n\nSee https://cs.chromium.org/chromium/src/v8/src/message-template.h?l\u003d224\u0026rcl\u003db68b2c11c89f00af36793f365e03427f5cc13621",
+      "parentUuid": "5d1b47bf_1b69e64e",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "717e1961_adfa27e4",
         "filename": "src/builtins/proxy.tq",
         "patchSetId": 1
@@ -136,6 +172,24 @@
       "side": 1,
       "message": "What we do here is mimic GotoIfRevokedProxy in builtins-proxy-gen.h. The code in proxy-revocable also returned the same thing. \n\nI added a test (which was missing IMO) for proxy-revocable to cover this macro. IsJSReceiver only accepts HeapObject argument while proxy.handler is Object so I still keep the Cast\u003cJSReceiver\u003e",
       "parentUuid": "717e1961_adfa27e4",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4efcdf4f_2db4dea1",
+        "filename": "src/builtins/proxy.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T08:46:30Z",
+      "side": 1,
+      "message": "About behavioral change:\n\nThe old version of IsRevokedProxy in proxy-revocable.tq that you removed in this CL (https://crrev.com/c/1553007/2/src/builtins/proxy-revocable.tq#b26) did the reverse of the current behavior, right?\n\nOld version:\n      const handler: JSReceiver \u003d\n          Cast\u003cJSReceiver\u003e(proxy.handler) otherwise ReturnFalse;\n\nNew version:\n      const handler: JSReceiver \u003d\n          Cast\u003cJSReceiver\u003e(proxy.handler) otherwise ReturnTrue;\n\nSo a test that covers this path should fail before this CL and pass now.",
+      "parentUuid": "e2256ff9_b89cd3d0",
       "revId": "e33958e46843334bf0793507407f4da16abff398",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
