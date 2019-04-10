@@ -16,6 +16,24 @@
       "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7726e95_59ea0e2d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1735,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-10T17:26:05Z",
+      "side": 1,
+      "message": "That seemed to work at first but only because the other function body in the test case was also invalid. Hence, the compilation failed but not in the intended way. {DecodeFunctionBody} does not affect the decoder state even if validation is requested.\nI like the idea though. Can we discuss this offline?",
+      "parentUuid": "caf67b5d_74fdd614",
+      "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
