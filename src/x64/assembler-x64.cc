@@ -1138,7 +1138,7 @@ void Assembler::near_jmp(Address addr, RelocInfo::Mode rmode) {
   emit(0xE9);
   intptr_t value = static_cast<intptr_t>(addr);
   DCHECK(is_int32(value));
-  RecordRelocInfo(rmode);
+  if (!RelocInfo::IsNone(rmode)) RecordRelocInfo(rmode);
   emitl(static_cast<int32_t>(value));
 }
 

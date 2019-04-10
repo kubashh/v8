@@ -45,8 +45,10 @@ void JumpTableAssembler::EmitRuntimeStubSlot(Address builtin_target) {
 }
 
 void JumpTableAssembler::EmitJumpSlot(Address target) {
-  movq(kScratchRegister, static_cast<uint64_t>(target));
-  jmp(kScratchRegister);
+  // On x64, all code is allocated within a single code section, so we can use
+  // relative jumps.
+  static_assert(kMaxWasmCodeMemory <= size_t{2} * GB, "can use relative jump");
+  near_jmp(target, RelocInfo::NONE);
 }
 
 void JumpTableAssembler::NopBytes(int bytes) {
