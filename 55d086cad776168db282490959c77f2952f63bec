@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cb20a80_f6ac0eb5",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4366,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-04-10T06:41:07Z",
+      "side": 1,
+      "message": "Does this work? Promise.all resolve element functions behave a little bit differently.\n\ns/all/all_settled/",
+      "range": {
+        "startLine": 4366,
+        "startChar": 22,
+        "endLine": 4366,
+        "endChar": 64
+      },
+      "revId": "55d086cad776168db282490959c77f2952f63bec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44ca94c6_f7fd45fe",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 4373,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-04-10T06:41:07Z",
+      "side": 1,
+      "message": "s/all/all_settled/",
+      "revId": "55d086cad776168db282490959c77f2952f63bec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "812c2089_16d7bf89",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-04-10T06:41:07Z",
+      "side": 1,
+      "message": "Nit: s/promise.allSettled/Promise.allSettled/",
+      "revId": "55d086cad776168db282490959c77f2952f63bec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
