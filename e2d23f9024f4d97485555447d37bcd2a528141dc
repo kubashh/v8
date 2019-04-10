@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fe0e80b0_ce6302cf",
+        "filename": "src/torque/torque.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-04-10T13:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01e8437c_470beeff",
+      "revId": "e2d23f9024f4d97485555447d37bcd2a528141dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db601018_66296424",
         "filename": "test/unittests/torque/ls-server-data-unittest.cc",
         "patchSetId": 6
@@ -30,6 +48,30 @@
       "writtenOn": "2019-04-10T11:36:16Z",
       "side": 1,
       "message": "I\u0027d prefer the explicit type here, but I don\u0027t insist.",
+      "range": {
+        "startLine": 26,
+        "startChar": 10,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "e2d23f9024f4d97485555447d37bcd2a528141dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "acc798af_b6683252",
+        "filename": "test/unittests/torque/ls-server-data-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-04-10T13:16:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db601018_66296424",
       "range": {
         "startLine": 26,
         "startChar": 10,
