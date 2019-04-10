@@ -910,6 +910,9 @@
   # Flaky crash on Odroid devices: https://crbug.com/v8/7678
   'regress/regress-336820': [PASS, ['arch == arm and not simulator_run', SKIP]],
 
+  # Goes OOM on ODROID devices: https://crbug.com/v8/9026
+  'es6/classes': [PASS, ['arch == arm and not simulator_run', SKIP]],
+
   # Too slow for TSAN in stress mode.
   'es6/classes': [PASS, ['tsan', SKIP]],
   'regress/regress-1122': [PASS, ['tsan', SKIP]],
