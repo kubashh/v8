@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "caf67b5d_74fdd614",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1735,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-10T14:28:03Z",
+      "side": 1,
+      "message": "suggestion: Would it be possible to instead pass a different boolean flag to {DecodeFunctionBody} indicating that we want to verify function bodies when lazy compilation is requested. In that case we would have only one invocation of the decoder and just have special handling upon return of the decoder. I was thinking along the lines of the following ...\n\n  bool is_lazy \u003d IsLazyCompilation(module, native_module,\n                          native_module-\u003eenabled_features(), func_index);\n\n  decoder_.DecodeFunctionBody(\n      num_functions_, static_cast\u003cuint32_t\u003e(bytes.length()), offset, is_lazy);\n\n  if (is_lazy) {\n    if (!decoder_.ok()) {\n      FinishAsyncCompileJobWithError(decoder_.FinishDecoding(false).error());\n      return false;\n    }\n    native_module-\u003eUseLazyStub(func_index);\n  } else {\n    DCHECK(decoder_.ok());\n    compilation_unit_builder_-\u003eAddUnits(func_index);\n  }",
+      "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
