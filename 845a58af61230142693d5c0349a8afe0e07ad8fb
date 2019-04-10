@@ -34,6 +34,24 @@
       "revId": "845a58af61230142693d5c0349a8afe0e07ad8fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b348a68_f8392157",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-10T21:23:55Z",
+      "side": 1,
+      "message": "I attempted adding ENUM_CACHE_TYPE instance type (ps#6) but mksnapshot fails in v8::internal::Heap::CreateInitialMaps with:\n\n# Fatal error in ../../v8\\src/objects/descriptor-array-inl.h, line 28\n# Check failed: !v8::internal::FLAG_enable_slow_asserts || (IsEnumCache()).\n\ndescriptor-array-inl.h:28\nOBJECT_CONSTRUCTORS_IMPL(EnumCache, Struct)\n\nFrom looking at other types that derive from Struct (e.g. PrototypeInfo) I cannot figure out what I might be missing. Could you please help?",
+      "parentUuid": "6f22f5f6_2c8a42a8",
+      "revId": "845a58af61230142693d5c0349a8afe0e07ad8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed5d4b48_3d8d0132",
+        "filename": "src/objects.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-10T21:23:55Z",
+      "side": 0,
+      "message": "Had to remove because it conflicted with STRUCT_LIST_GENERATOR",
+      "range": {
+        "startLine": 357,
+        "startChar": 4,
+        "endLine": 357,
+        "endChar": 13
+      },
+      "revId": "0b1e9ef244c0e9e92bb477938e6de4df5c3ac841",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

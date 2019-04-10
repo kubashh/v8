@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54a8cfd5_2449acd3",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-10T21:23:55Z",
+      "side": 1,
+      "message": "Is this needed? (I thought it might be because descriptor_array, created below, uses EnumCache)",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 77
+      },
+      "revId": "53d6416b794db0657242c6722d03fab55c43e5d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a108fe74_d3a13f6b",
+        "filename": "src/objects/allocation-site.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-10T21:23:55Z",
+      "side": 1,
+      "message": "Undo the indentation change.",
+      "revId": "53d6416b794db0657242c6722d03fab55c43e5d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d3917d6f_f60aa1c2",
+        "filename": "tools/v8heapconst.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-10T21:23:55Z",
+      "side": 1,
+      "message": "What is this script used for? Is the order significant?",
+      "range": {
+        "startLine": 136,
+        "startChar": 1,
+        "endLine": 136,
+        "endChar": 25
+      },
+      "revId": "53d6416b794db0657242c6722d03fab55c43e5d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
