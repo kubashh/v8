@@ -196,6 +196,24 @@
     },
     {
       "key": {
+        "uuid": "7f814382_71a10f06",
+        "filename": "src/builtins/proxy.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-04-10T13:44:05Z",
+      "side": 1,
+      "message": "AFAIK the \"revoked proxy\" means one for which the handler is not a JSReceriver, so we should  stick to the new version, which corresponds to the name - it says \"true\" (proxy is revoked) if the cast was unsuccessful. But indeed we need a test that fails with the old version.",
+      "parentUuid": "4efcdf4f_2db4dea1",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b6f37dd0_d8241203",
         "filename": "src/builtins/proxy.tq",
         "patchSetId": 1

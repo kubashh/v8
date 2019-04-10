@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e0d2c94_e292ba21",
+        "filename": "test/mjsunit/es6/proxies-constructor.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-04-10T13:44:05Z",
+      "side": 1,
+      "message": "Nice for adding this test!\n\nIt took me a while though to realize how is it different than the working first line of testConstructionFromProxy. What about adding a second condition,\n  assertDoesNotThrow(function(){ new Proxy({}, {}); });\nfor instance? Though then the test name doesn\u0027t match the behaviour anymore, so maybe this can be done in a separate \"testHasNewTarget\" case.",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 25
+      },
+      "revId": "28accf24b1ba46b58efe1be4ebcdf9afb3ad23a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
