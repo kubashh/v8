@@ -16,6 +16,24 @@
       "revId": "845a58af61230142693d5c0349a8afe0e07ad8fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f22f5f6_2c8a42a8",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T10:52:26Z",
+      "side": 1,
+      "message": "mstarzinger pointed out that more work is necessary here since this CL converts EnumCache from a Tuple2 subclass to a direct Struct subclass. In that case we\u0027ll need to assign a new dedicated instance type and add EnumCache to the STRUCT_LIST in objects-definitions.h. Factory::NewEnumCache will also need to be updated.\n\nFinally, ignore my initial comment to extend HeapObjectVerify dispatch; this should be done automatically once STRUCT_LIST has been extended.",
+      "parentUuid": "413e81df_78ef4387",
+      "revId": "845a58af61230142693d5c0349a8afe0e07ad8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
