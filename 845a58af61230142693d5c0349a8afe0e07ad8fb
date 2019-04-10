@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "413e81df_78ef4387",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T10:41:46Z",
+      "side": 1,
+      "message": "The dispatch in HeapObject::HeapObjectVerify will need to be extended to call this new function.",
+      "revId": "845a58af61230142693d5c0349a8afe0e07ad8fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
