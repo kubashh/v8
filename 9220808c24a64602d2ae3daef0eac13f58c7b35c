@@ -2,6 +2,91 @@
   "comments": [
     {
       "key": {
+        "uuid": "3158095d_9a2f5a1a",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 1,
+      "message": "note: a fast regexp has the extra condition of \u0027lastIndex is a positive smi\u0027. Our current use of \u0027transitioning\u0027 doesn\u0027t capture that, so it\u0027s possible to turn fast into slow without the transient type noticing.\n\nIn the future I hope we can avoid this weird condition with bailout-through-fn-ptrs.\n\nUntil then we should document this in a comment.",
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96f99261_e9089260",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 1,
+      "message": "Perhaps implicit Context here as well.",
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5cf7908_6b375d23",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 1,
+      "message": "nit: I think full names \u0027regexp\u0027 and \u0027string\u0027 may be more consistent with our current naming schemes.",
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f3e1241_584d85f2",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 1,
+      "message": "wdyt about calling this accessor just \u0027global\u0027?",
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d594de92_c1c00bba",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 1,
+      "message": "nit: slight preference for \u0027return cond ? a : b\u0027 over \u0027 if (cond) { return a; } return b\u0027. But up to you.",
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9e667735_dbbda44a",
         "filename": "src/builtins/regexp-replace.tq",
         "patchSetId": 2
@@ -13,6 +98,30 @@
       "writtenOn": "2019-04-10T05:07:28Z",
       "side": 1,
       "message": "nit: Omit type declaration.",
+      "range": {
+        "startLine": 48,
+        "startChar": 24,
+        "endLine": 48,
+        "endChar": 36
+      },
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5142f5a2_34f44c03",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 1,
+      "message": "Is the new fastRx variable needed or could we continue using rx?",
+      "parentUuid": "9e667735_dbbda44a",
       "range": {
         "startLine": 48,
         "startChar": 24,
@@ -42,6 +151,64 @@
         "endLine": 51,
         "endChar": 25
       },
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35dab15c_b22bd049",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "a02d3fbc_d29cc3c2",
+      "range": {
+        "startLine": 49,
+        "startChar": 10,
+        "endLine": 51,
+        "endChar": 25
+      },
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "456649de_e7f0893b",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 1,
+      "message": "nice, you picked up the recent fix :)",
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e8b82fce_092125ed",
+        "filename": "src/code-stub-assembler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 1,
+      "message": "suggestion: Add DCHECK(strlen(single_char) \u003d\u003d 0), and rename the arg to single_char.",
       "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

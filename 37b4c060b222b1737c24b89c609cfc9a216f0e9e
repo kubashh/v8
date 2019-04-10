@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0643283_270a8526",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T09:16:24Z",
+      "side": 0,
+      "message": "Why remove this? It\u0027s still valid, until we improve the whole situation, right?",
+      "revId": "37b4c060b222b1737c24b89c609cfc9a216f0e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
