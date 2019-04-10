@@ -329,6 +329,7 @@ class CompilationStateImpl {
   }
 
   CompileMode compile_mode() const { return compile_mode_; }
+  Counters* counters() const { return async_counters_.get(); }
   WasmFeatures* detected_features() { return &detected_features_; }
 
   void SetWireBytesStorage(
@@ -1733,24 +1734,34 @@ bool AsyncStreamingProcessor::ProcessFunctionBody(Vector<const uint8_t> bytes,
   decoder_.DecodeFunctionBody(
       num_functions_, static_cast<uint32_t>(bytes.length()), offset, false);
 
+  NativeModule* native_module = job_->native_module_.get();
+  const WasmModule* module = native_module->module();
   uint32_t func_index =
       num_functions_ + decoder_.module()->num_imported_functions;
 
-  NativeModule* native_module = job_->native_module_.get();
-  if (IsLazyCompilation(native_module->module(), native_module,
+  if (IsLazyCompilation(module, native_module,
                         native_module->enabled_features(), func_index)) {
-    ErrorThrower thrower(job_->isolate(), "WebAssembly.compile()");
-    auto counters = job_->isolate()->counters();
-    auto allocator = job_->isolate()->allocator();
-    ValidateSequentially(counters, allocator, native_module, func_index,
-                         &thrower);
-    native_module->UseLazyStub(func_index);
-    if (thrower.error()) {
-      // TODO(frgossen): Add test coverage for this path.
-      DCHECK(native_module->enabled_features().compilation_hints);
-      thrower.Reset();
+    // TODO(frgossen): Unify this code with ValidateSequentially.
+    const WasmFunction* func = &module->functions[func_index];
+    FunctionBody body{func->sig, func->code.offset(), bytes.start(),
+                      bytes.end()};
+    DecodeResult result;
+    {
+      Counters* counters = Impl(native_module->compilation_state())->counters();
+      auto time_counter = SELECT_WASM_COUNTER(counters, module->origin,
+                                              wasm_decode, function_time);
+
+      TimedHistogramScope wasm_decode_function_time_scope(time_counter);
+      WasmFeatures detected;
+      result = VerifyWasmCode(native_module->engine()->allocator(),
+                              native_module->enabled_features(), module,
+                              &detected, body);
+    }
+    if (result.failed()) {
+      FinishAsyncCompileJobWithError(result.error());
       return false;
     }
+    native_module->UseLazyStub(func_index);
   } else {
     compilation_unit_builder_->AddUnits(func_index);
   }
@@ -1773,6 +1784,7 @@ void AsyncStreamingProcessor::OnFinishedChunk() {
 // Finish the processing of the stream.
 void AsyncStreamingProcessor::OnFinishedStream(OwnedVector<uint8_t> bytes) {
   TRACE_STREAMING("Finish stream...\n");
+
   ModuleResult result = decoder_.FinishDecoding(false);
   if (result.failed()) {
     FinishAsyncCompileJobWithError(result.error());
