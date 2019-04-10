@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6927daac_6ecc5aa4",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-10T15:33:23Z",
+      "side": 1,
+      "message": "I just realize that this is another place where will have to add a reference to the WasmCodeRefScope. Will do that in a separate CL.",
+      "revId": "02cbfb838de5ca767a34f47615e37551b1426896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
