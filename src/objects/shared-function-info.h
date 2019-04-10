@@ -566,8 +566,8 @@ class SharedFunctionInfo : public HeapObject {
   static void InitFromFunctionLiteral(Handle<SharedFunctionInfo> shared_info,
                                       FunctionLiteral* lit, bool is_toplevel);
 
-  // Sets the expected number of properties based on estimate from parser.
-  void SetExpectedNofPropertiesFromEstimate(FunctionLiteral* literal);
+  // Updatess the expected number of properties based on estimate from parser.
+  void UpdateExpectedNofPropertiesFromEstimate(FunctionLiteral* literal);
 
   // Sets the FunctionTokenOffset field based on the given token position and
   // start position.
