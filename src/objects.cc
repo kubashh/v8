@@ -5371,6 +5371,7 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
                  IsClassConstructor(lit->kind()));
   shared_info->set_requires_instance_members_initializer(
       lit->requires_instance_members_initializer());
+  shared_info->UpdateExpectedNofPropertiesFromEstimate(lit);
 
   shared_info->set_is_toplevel(is_toplevel);
   DCHECK(shared_info->outer_scope_info()->IsTheHole());
@@ -5388,7 +5389,6 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
   if (lit->ShouldEagerCompile()) {
     shared_info->set_length(lit->function_length());
     shared_info->set_has_duplicate_parameters(lit->has_duplicate_parameters());
-    shared_info->SetExpectedNofPropertiesFromEstimate(lit);
     shared_info->set_is_safe_to_skip_arguments_adaptor(
         lit->SafeToSkipArgumentsAdaptor());
     DCHECK_NULL(lit->produced_preparse_data());
@@ -5424,9 +5424,12 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
   }
 }
 
-void SharedFunctionInfo::SetExpectedNofPropertiesFromEstimate(
+void SharedFunctionInfo::UpdateExpectedNofPropertiesFromEstimate(
     FunctionLiteral* literal) {
   int estimate = literal->expected_property_count();
+
+  // We may have been initialized with properties.
+  estimate += expected_nof_properties();
 
   // If no properties are added in the constructor, they are more likely
   // to be added later.
