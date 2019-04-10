@@ -22,6 +22,30 @@
       "revId": "84127ec6a9dda4bb3640c687620c00c437afa190",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bce7a2d_7efed1cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-10T08:01:36Z",
+      "side": 1,
+      "message": "Locally, sure, run the entire V8 test suite with:\n\n $ tools/run-tests.py --outdir out/debug\n\nOn the CQ, if there\u0027s no bot you\u0027re probably out of luck.",
+      "parentUuid": "28b4e0cd_6e8e034e",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "84127ec6a9dda4bb3640c687620c00c437afa190",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
