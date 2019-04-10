@@ -2744,6 +2744,12 @@ class FastPackedFrozenObjectElementsAccessor
                       uint32_t new_capacity) {
     UNREACHABLE();
   }
+
+  static void SetLengthImpl(Isolate* isolate, Handle<JSArray> array,
+                            uint32_t length,
+                            Handle<FixedArrayBase> backing_store) {
+    UNREACHABLE();
+  }
 };
 
 class FastPackedSealedObjectElementsAccessor
@@ -2786,6 +2792,13 @@ class FastPackedSealedObjectElementsAccessor
                       Handle<Object> value, PropertyAttributes attributes,
                       uint32_t new_capacity) {
     UNREACHABLE();
+  }
+
+  static void SetLengthImpl(Isolate* isolate, Handle<JSArray> array,
+                            uint32_t length,
+                            Handle<FixedArrayBase> backing_store) {
+    // Do nothing
+    return;
   }
 };
 
