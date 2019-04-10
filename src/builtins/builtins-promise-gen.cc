@@ -2337,6 +2337,30 @@ TF_BUILTIN(PromiseAll, PromiseBuiltinsAssembler) {
       });
 }
 
+// ES#sec-promise.allSettled
+// Promise.allSettled ( iterable )
+TF_BUILTIN(PromiseAllSettled, PromiseBuiltinsAssembler) {
+  TNode<Object> receiver = Cast(Parameter(Descriptor::kReceiver));
+  TNode<Context> context = Cast(Parameter(Descriptor::kContext));
+  TNode<Object> iterable = Cast(Parameter(Descriptor::kIterable));
+  Generate_PromiseAll(
+      context, receiver, iterable,
+      [this](TNode<Context> context, TNode<Smi> index,
+             TNode<NativeContext> native_context,
+             TNode<PromiseCapability> capability) {
+        return CreatePromiseAllResolveElementFunction(
+            context, index, native_context,
+            Context::PROMISE_ALL_SETTLED_RESOLVE_ELEMENT_SHARED_FUN);
+      },
+      [this](TNode<Context> context, TNode<Smi> index,
+             TNode<NativeContext> native_context,
+             TNode<PromiseCapability> capability) {
+        return CreatePromiseAllResolveElementFunction(
+            context, index, native_context,
+            Context::PROMISE_ALL_SETTLED_REJECT_ELEMENT_SHARED_FUN);
+      });
+}
+
 void PromiseBuiltinsAssembler::Generate_PromiseAllResolveElementClosure(
     TNode<Context> context, TNode<Object> value, TNode<JSFunction> function,
     const CreatePromiseAllResolveElementFunctionValue& callback) {
@@ -2461,6 +2485,62 @@ TF_BUILTIN(PromiseAllResolveElementClosure, PromiseBuiltinsAssembler) {
   Generate_PromiseAllResolveElementClosure(
       context, value, function,
       [](TNode<Object> context, TNode<Object> value) { return value; });
+}
+
+TF_BUILTIN(PromiseAllSettledResolveElementClosure, PromiseBuiltinsAssembler) {
+  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<JSFunction> function = CAST(Parameter(Descriptor::kJSTarget));
+
+  Generate_PromiseAllResolveElementClosure(
+      context, value, function,
+      [this](TNode<Context> context, TNode<Object> value) {
+        // 9. Let obj be ! ObjectCreate(%ObjectPrototype%).
+        TNode<HeapObject> object_function =
+            Cast(LoadContextElement(context, Context::OBJECT_FUNCTION_INDEX));
+        TNode<Map> object_function_map = Cast(LoadObjectField(
+            object_function, JSFunction::kPrototypeOrInitialMapOffset));
+        TNode<JSObject> obj =
+            Cast(AllocateJSObjectFromMap(object_function_map));
+
+        // 10. Perform ! CreateDataProperty(obj, "status", "fulfilled").
+        CallBuiltin(Builtins::kFastCreateDataProperty, context, obj,
+                    StringConstant("status"), StringConstant("fulfilled"));
+
+        // 11. Perform ! CreateDataProperty(obj, "value", x).
+        CallBuiltin(Builtins::kFastCreateDataProperty, context, obj,
+                    StringConstant("value"), value);
+
+        return obj;
+      });
+}
+
+TF_BUILTIN(PromiseAllSettledRejectElementClosure, PromiseBuiltinsAssembler) {
+  TNode<Object> value = CAST(Parameter(Descriptor::kValue));
+  TNode<Context> context = CAST(Parameter(Descriptor::kContext));
+  TNode<JSFunction> function = CAST(Parameter(Descriptor::kJSTarget));
+
+  Generate_PromiseAllResolveElementClosure(
+      context, value, function,
+      [this](TNode<Context> context, TNode<Object> value) {
+        // 9. Let obj be ! ObjectCreate(%ObjectPrototype%).
+        TNode<HeapObject> object_function =
+            Cast(LoadContextElement(context, Context::OBJECT_FUNCTION_INDEX));
+        TNode<Map> object_function_map = Cast(LoadObjectField(
+            object_function, JSFunction::kPrototypeOrInitialMapOffset));
+        TNode<JSObject> obj =
+            Cast(AllocateJSObjectFromMap(object_function_map));
+
+        // 10. Perform ! CreateDataProperty(obj, "status", "rejected").
+        CallBuiltin(Builtins::kFastCreateDataProperty, context, obj,
+                    StringConstant("status"), StringConstant("reject"));
+
+        // 11. Perform ! CreateDataProperty(obj, "reason", x).
+        CallBuiltin(Builtins::kFastCreateDataProperty, context, obj,
+                    StringConstant("reason"), value);
+
+        return obj;
+      });
 }
 
 // ES#sec-promise.race
