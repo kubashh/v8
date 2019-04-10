@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "88dc7d59_b2a80461",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-10T23:00:35Z",
+      "side": 1,
+      "message": "You are right. I want to understand why it work as well, hmm ..",
+      "parentUuid": "8cb45031_5b3112af",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1eae984_8f74858e",
         "filename": "src/builtins/proxy-constructor.tq",
         "patchSetId": 1
@@ -143,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "44327bcb_93031864",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-10T23:00:35Z",
+      "side": 1,
+      "message": "Got you. Thanks for clarification :)",
+      "parentUuid": "8a9b03ce_81be2a27",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "717e1961_adfa27e4",
         "filename": "src/builtins/proxy.tq",
         "patchSetId": 1
@@ -208,6 +244,24 @@
       "side": 1,
       "message": "AFAIK the \"revoked proxy\" means one for which the handler is not a JSReceriver, so we should  stick to the new version, which corresponds to the name - it says \"true\" (proxy is revoked) if the cast was unsuccessful. But indeed we need a test that fails with the old version.",
       "parentUuid": "4efcdf4f_2db4dea1",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33228853_f160dd78",
+        "filename": "src/builtins/proxy.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-10T23:00:35Z",
+      "side": 1,
+      "message": "@Jakob: Sorry, I forgot to mention that the old version is wrong and we were missing a test to fail it but I did add it in the CL :)",
+      "parentUuid": "7f814382_71a10f06",
       "revId": "e33958e46843334bf0793507407f4da16abff398",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

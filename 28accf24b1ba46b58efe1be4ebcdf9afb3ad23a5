@@ -22,6 +22,30 @@
       "revId": "28accf24b1ba46b58efe1be4ebcdf9afb3ad23a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78387bbb_7a1a2aa0",
+        "filename": "test/mjsunit/es6/proxies-constructor.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-10T23:00:35Z",
+      "side": 1,
+      "message": "Thanks for your suggestion. Added test.",
+      "parentUuid": "3e0d2c94_e292ba21",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 25
+      },
+      "revId": "28accf24b1ba46b58efe1be4ebcdf9afb3ad23a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
