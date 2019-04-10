@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01e8437c_470beeff",
+        "filename": "src/torque/torque.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-10T11:36:16Z",
+      "side": 1,
+      "message": "Can you write SourceFileMap::Scope source_file_map_scope(result.source_file_map); here?",
+      "revId": "e2d23f9024f4d97485555447d37bcd2a528141dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db601018_66296424",
+        "filename": "test/unittests/torque/ls-server-data-unittest.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-10T11:36:16Z",
+      "side": 1,
+      "message": "I\u0027d prefer the explicit type here, but I don\u0027t insist.",
+      "range": {
+        "startLine": 26,
+        "startChar": 10,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "e2d23f9024f4d97485555447d37bcd2a528141dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
