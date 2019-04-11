@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "4a1d0c43_ecddc106",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-11T08:23:37Z",
+      "side": 1,
+      "message": "JSTrampolineDescriptor does define kNewTarget https://cs.chromium.org/chromium/src/v8/src/interface-descriptors.h?rcl\u003d3304bd02ab699042e4cf0492489814b6cb4ea5cb\u0026l\u003d457 \n\nAnyway, might be not the reason. Hmm ..",
+      "parentUuid": "cc5edf04_a4170c9b",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1eae984_8f74858e",
         "filename": "src/builtins/proxy-constructor.tq",
         "patchSetId": 1
