@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "73f6e547_1ba96728",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-11T09:30:34Z",
+      "side": 1,
+      "message": "Possibly, I\u0027m not sure. Let\u0027s try to stay consistent with these workarounds, so please either use an RT suffix or update RegExpReplaceRT if you choose something different.",
+      "parentUuid": "eb6f2115_dcfb41cc",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8c73dac6_23798429",
         "filename": "src/builtins/base.tq",
         "patchSetId": 2
@@ -161,6 +179,24 @@
       "side": 1,
       "message": "Naming \"macro ToString()\" here would cause conflict with \"extern builtin ToString()\".",
       "parentUuid": "d4dc28ac_58d74355",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18603181_9c8cfea7",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-11T09:30:34Z",
+      "side": 1,
+      "message": "I see. AFAICT there\u0027s only one use of that (in array-join.tq), maybe we can replace it with ToString_Inline.",
+      "parentUuid": "14aea748_f20a4391",
       "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
