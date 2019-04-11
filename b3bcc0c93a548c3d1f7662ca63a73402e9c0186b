@@ -52,6 +52,40 @@
       "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6550d41a_4fc2ef2c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1744,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-11T14:25:43Z",
+      "side": 1,
+      "message": "Can you add a short note mentioning what needs to be done for this to work? I don\u0027t see what the error was originally.",
+      "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf037e5f_6f3c4de9",
+        "filename": "test/mjsunit/wasm/compilation-hints-compiler.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-11T14:25:43Z",
+      "side": 1,
+      "message": "nit: indentation seems wrong here.",
+      "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
