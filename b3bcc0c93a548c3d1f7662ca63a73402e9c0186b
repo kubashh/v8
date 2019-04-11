@@ -34,6 +34,24 @@
       "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3eae715f_db242431",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1735,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-11T11:49:49Z",
+      "side": 1,
+      "message": "Ack. Thanks for exploring this idea. I am totally fine with landing this as-is for now. The important thing is to first increase the test coverage. We can unify/cleanup later.",
+      "parentUuid": "b7726e95_59ea0e2d",
+      "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
