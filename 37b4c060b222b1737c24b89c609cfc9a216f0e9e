@@ -16,6 +16,24 @@
       "revId": "37b4c060b222b1737c24b89c609cfc9a216f0e9e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb9294c4_fa72c697",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-04-11T14:27:00Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "f0643283_270a8526",
+      "revId": "37b4c060b222b1737c24b89c609cfc9a216f0e9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

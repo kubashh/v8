@@ -224,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "7f054d83_d940d3fe",
+        "filename": "src/builtins/regexp-replace.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1153590
+      },
+      "writtenOn": "2019-04-11T14:27:00Z",
+      "side": 1,
+      "message": "Omitted type declaration.\nJakob, unfortunately after the (newly :)) transitioning ToString_Inline a new FastJSRegExp variable is needed to keep Torque happy.",
+      "parentUuid": "5142f5a2_34f44c03",
+      "range": {
+        "startLine": 48,
+        "startChar": 24,
+        "endLine": 48,
+        "endChar": 36
+      },
+      "revId": "9220808c24a64602d2ae3daef0eac13f58c7b35c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a02d3fbc_d29cc3c2",
         "filename": "src/builtins/regexp-replace.tq",
         "patchSetId": 2
