@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae6abf23_bc905d93",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-04-11T18:49:51Z",
+      "side": 1,
+      "message": "Not being familiar with this code, it\u0027s not clear whether this is a behavior change or a no-op. Can you mention it in the CL description?",
+      "revId": "2aa9d2d7ca3ccad4b5658a93cd7f9f8c883ac7bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
