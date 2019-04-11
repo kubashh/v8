@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "cc5edf04_a4170c9b",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-11T07:37:05Z",
+      "side": 1,
+      "message": "The ProxyConstructor was TFJ before and after your CL, this did not change. A Torque \u0027javascript builtin\u0027 means \u0027TFJ\u0027 in CSA-land.\n\nThis is getting a bit ugly, but you could use Builtin_ProxyConstructor_InterfaceDescriptor::kJSNewTarget explicitly. I\u0027d also open a bug at crbug.com/v8 for torque to add support for new target accesses from JS builtins.",
+      "parentUuid": "1abbde57_11f51a17",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1eae984_8f74858e",
         "filename": "src/builtins/proxy-constructor.tq",
         "patchSetId": 1
