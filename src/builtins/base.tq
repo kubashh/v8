@@ -278,6 +278,7 @@ extern class SharedFunctionInfo extends HeapObject {
   expected_nof_properties: uint16;
   function_token_offset: int16;
   flags: int32;
+  initialized: int32;
 }
 
 extern class SharedFunctionInfoWithID extends SharedFunctionInfo {

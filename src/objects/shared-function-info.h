@@ -485,6 +485,7 @@ class SharedFunctionInfo : public HeapObject {
   // Indicates that the function has been reported for binary code coverage.
   DECL_BOOLEAN_ACCESSORS(has_reported_binary_coverage)
 
+  DECL_INT_ACCESSORS(initialized)
   inline FunctionKind kind() const;
 
   // Defines the index in a native context of closure's map instantiated using
@@ -566,8 +567,10 @@ class SharedFunctionInfo : public HeapObject {
   static void InitFromFunctionLiteral(Handle<SharedFunctionInfo> shared_info,
                                       FunctionLiteral* lit, bool is_toplevel);
 
-  // Sets the expected number of properties based on estimate from parser.
-  void SetExpectedNofPropertiesFromEstimate(FunctionLiteral* literal);
+  // Updates the expected number of properties based on estimate from parser.
+  void UpdateExpectedNofPropertiesFromEstimate(FunctionLiteral* literal);
+  void UpdateAndFinalizeExpectedNofPropertiesFromEstimate(
+      FunctionLiteral* literal);
 
   // Sets the FunctionTokenOffset field based on the given token position and
   // start position.
