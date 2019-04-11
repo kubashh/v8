@@ -503,7 +503,9 @@ void MarkCompactCollector::CollectGarbage() {
   ClearNonLiveReferences();
   VerifyMarking();
 
-  RecordObjectStats();
+  if (heap()->is_current_gc_forced()) {
+    RecordObjectStats();
+  }
 
   StartSweepSpaces();
 
@@ -1741,26 +1743,27 @@ void MarkCompactCollector::ProcessTopOptimizedFrame(ObjectVisitor* visitor) {
 
 void MarkCompactCollector::RecordObjectStats() {
   if (V8_UNLIKELY(FLAG_gc_stats)) {
-    heap()->CreateObjectStats();
-    ObjectStatsCollector collector(heap(), heap()->live_object_stats_.get(),
-                                   heap()->dead_object_stats_.get());
-    collector.Collect();
-    if (V8_UNLIKELY(FLAG_gc_stats &
-                    v8::tracing::TracingCategoryObserver::ENABLED_BY_TRACING)) {
-      std::stringstream live, dead;
-      heap()->live_object_stats_->Dump(live);
-      heap()->dead_object_stats_->Dump(dead);
-      TRACE_EVENT_INSTANT2(TRACE_DISABLED_BY_DEFAULT("v8.gc_stats"),
-                           "V8.GC_Objects_Stats", TRACE_EVENT_SCOPE_THREAD,
-                           "live", TRACE_STR_COPY(live.str().c_str()), "dead",
-                           TRACE_STR_COPY(dead.str().c_str()));
-    }
     if (FLAG_trace_gc_object_stats) {
-      heap()->live_object_stats_->PrintJSON("live");
-      heap()->dead_object_stats_->PrintJSON("dead");
+      PreciseContextMapper precise_mapper(heap());
+      ApproxContextMapper approx_mapper(heap());
+      PerContextObjectStats precise(heap());
+      precise.SetContextMapper(&precise_mapper);
+      PerContextObjectStats approx(heap());
+      approx.SetContextMapper(&approx_mapper);
+      {
+        PerContextObjectStats dead(heap());
+        dead.SetContextMapper(&precise_mapper);
+        ObjectStatsCollector collector(heap(), &precise, &dead);
+        collector.Collect();
+      }
+      {
+        PerContextObjectStats dead(heap());
+        dead.SetContextMapper(&precise_mapper);
+        ObjectStatsCollector collector(heap(), &approx, &dead);
+        collector.Collect();
+      }
+      PerContextObjectStats::ReportPerContext(&precise, &approx);
     }
-    heap()->live_object_stats_->CheckpointObjectStats();
-    heap()->dead_object_stats_->ClearObjectStats();
   }
 }
 
