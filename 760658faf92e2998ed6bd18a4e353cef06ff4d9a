@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "e85104c9_49bf56e7",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-11T08:22:54Z",
+      "side": 1,
+      "message": "Re runtime/builtin/macro naming collisions: I recently used an \u0027RT\u0027 suffix to disambiguate RegExpReplace (builtin) and RegExpReplaceRT (runtime). Not ideal but I like the \u0027slow\u0027 namespace even less ;) If you do go with a namespace, I\u0027d suggest \u0027runtime\u0027.",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8c73dac6_23798429",
         "filename": "src/builtins/base.tq",
         "patchSetId": 2
@@ -94,6 +111,40 @@
       "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4dc28ac_58d74355",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-11T08:22:54Z",
+      "side": 1,
+      "message": "I also don\u0027t like the \u0027Torque\u0027 suffix. Could this be just \u0027ToString\u0027?",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f858c075_0efdd00e",
+        "filename": "src/builtins/builtins-conversion-gen.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-11T08:22:54Z",
+      "side": 1,
+      "message": "Why this duplicate declaration?",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
