@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47c7204e_6c0d2d0e",
+        "filename": "src/builtins/builtins-proxy-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-11T09:25:13Z",
+      "side": 1,
+      "message": "Since this is specialized for ProxyConstructor, let\u0027s name this GetProxyConstructorJSNewTarget. Could you still open a bug and reference it in a TODO here to remove this once torque support exists?",
+      "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeff30c3_7d56b9ea",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-11T09:25:13Z",
+      "side": 1,
+      "message": "Did you find out why no test failed although the calling convention of this was completely off? Please add a test that fails before this fix and passes afterwards.",
+      "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
