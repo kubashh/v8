@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "eb6f2115_dcfb41cc",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-11T09:10:18Z",
+      "side": 1,
+      "message": "But namespace \u0027runtime\u0027 will conflict with the Torque keyword runtime, I think, right?",
+      "parentUuid": "e85104c9_49bf56e7",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8c73dac6_23798429",
         "filename": "src/builtins/base.tq",
         "patchSetId": 2
@@ -125,6 +143,24 @@
       "writtenOn": "2019-04-11T08:22:54Z",
       "side": 1,
       "message": "I also don\u0027t like the \u0027Torque\u0027 suffix. Could this be just \u0027ToString\u0027?",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14aea748_f20a4391",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-11T09:10:18Z",
+      "side": 1,
+      "message": "Naming \"macro ToString()\" here would cause conflict with \"extern builtin ToString()\".",
+      "parentUuid": "d4dc28ac_58d74355",
       "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
