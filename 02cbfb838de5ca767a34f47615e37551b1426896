@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7c096a75_4b7668bd",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-04-11T13:40:51Z",
+      "side": 1,
+      "message": "please no assignment in conditions.",
+      "range": {
+        "startLine": 479,
+        "startChar": 23,
+        "endLine": 479,
+        "endChar": 24
+      },
+      "revId": "02cbfb838de5ca767a34f47615e37551b1426896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6927daac_6ecc5aa4",
         "filename": "src/wasm/wasm-code-manager.h",
         "patchSetId": 1
