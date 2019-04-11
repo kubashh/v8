@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "1abbde57_11f51a17",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-11T00:37:46Z",
+      "side": 1,
+      "message": "I tried to wrap `Parameter(Descriptor::kJSNewTarget) but it need to be defined within TF_BUILTIN(). Is there a way to hack around it?\n\nI looked at https://cs.chromium.org/chromium/src/v8/src/builtins/builtins.cc?rcl\u003d790137c150aceab523179662ca3534b5050ef81b\u0026l\u003d154 and saw that it use JSTrampolineDescriptor for TFJ. Is this the reason for not failing before?",
+      "parentUuid": "88dc7d59_b2a80461",
+      "revId": "e33958e46843334bf0793507407f4da16abff398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e1eae984_8f74858e",
         "filename": "src/builtins/proxy-constructor.tq",
         "patchSetId": 1
