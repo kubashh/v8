@@ -34,6 +34,24 @@
       "revId": "2aa9d2d7ca3ccad4b5658a93cd7f9f8c883ac7bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97ff4960_eaebf58b",
+        "filename": "test/mjsunit/wasm/wasm-module-builder.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-04-11T20:34:54Z",
+      "side": 1,
+      "message": "Yes, thanks!",
+      "parentUuid": "acc9dd08_7309afdc",
+      "revId": "2aa9d2d7ca3ccad4b5658a93cd7f9f8c883ac7bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
