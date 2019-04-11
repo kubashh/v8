@@ -5371,6 +5371,7 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
                  IsClassConstructor(lit->kind()));
   shared_info->set_requires_instance_members_initializer(
       lit->requires_instance_members_initializer());
+  shared_info->set_initialized(false);
 
   shared_info->set_is_toplevel(is_toplevel);
   DCHECK(shared_info->outer_scope_info()->IsTheHole());
@@ -5388,7 +5389,6 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
   if (lit->ShouldEagerCompile()) {
     shared_info->set_length(lit->function_length());
     shared_info->set_has_duplicate_parameters(lit->has_duplicate_parameters());
-    shared_info->SetExpectedNofPropertiesFromEstimate(lit);
     shared_info->set_is_safe_to_skip_arguments_adaptor(
         lit->SafeToSkipArgumentsAdaptor());
     DCHECK_NULL(lit->produced_preparse_data());
@@ -5397,6 +5397,7 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
     // TODO(leszeks): This should be explicitly passed as a parameter, rather
     // than relying on a property of the literal.
     needs_position_info = false;
+    shared_info->UpdateAndFinalizeExpectedNofPropertiesFromEstimate(lit);
   } else {
     // Set an invalid length for lazy functions. This way we can set the correct
     // value after compiling, but avoid overwriting values set manually by the
@@ -5414,6 +5415,9 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
       shared_info->set_uncompiled_data(*data);
       needs_position_info = false;
     }
+    if (lit->expected_property_count()) {
+      shared_info->UpdateExpectedNofPropertiesFromEstimate(lit);
+    }
   }
   if (needs_position_info) {
     Handle<UncompiledData> data =
@@ -5424,9 +5428,14 @@ void SharedFunctionInfo::InitFromFunctionLiteral(
   }
 }
 
-void SharedFunctionInfo::SetExpectedNofPropertiesFromEstimate(
+void SharedFunctionInfo::UpdateExpectedNofPropertiesFromEstimate(
     FunctionLiteral* literal) {
   int estimate = literal->expected_property_count();
+  // printf("** %d %d %d\n", estimate, expected_nof_properties(),
+  // initialized());
+
+  // We may have been initialized with properties.
+  estimate += expected_nof_properties();
 
   // If no properties are added in the constructor, they are more likely
   // to be added later.
@@ -5438,6 +5447,16 @@ void SharedFunctionInfo::SetExpectedNofPropertiesFromEstimate(
   estimate = std::min(estimate, kMaxUInt8);
 
   set_expected_nof_properties(estimate);
+}
+
+void SharedFunctionInfo::UpdateAndFinalizeExpectedNofPropertiesFromEstimate(
+    FunctionLiteral* literal) {
+  //  printf("** finalizing\n");
+  if (initialized()) {
+    return;
+  }
+  UpdateExpectedNofPropertiesFromEstimate(literal);
+  set_initialized(true);
 }
 
 void SharedFunctionInfo::SetFunctionTokenPosition(int function_token_position,
