@@ -4,6 +4,7 @@
   "run_count": 3,
   "run_count_arm": 1,
   "run_count_arm64": 1,
+  "retry_count_arm64": 1,
   "timeout": 120,
   "timeout_arm64": 240,
   "units": "score",
