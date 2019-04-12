@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5b8acbb6_e957cce2",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-12T07:13:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c4e5f44_51fd1b73",
+      "range": {
+        "startLine": 958,
+        "startChar": 0,
+        "endLine": 958,
+        "endChar": 71
+      },
+      "revId": "5ccc0fcdd54932bd81b580c6abf9f4f0121ac35f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "765d8cbd_54119041",
         "filename": "src/builtins/base.tq",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "5ccc0fcdd54932bd81b580c6abf9f4f0121ac35f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c6363f9_7ca723fd",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-12T07:13:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "765d8cbd_54119041",
+      "range": {
+        "startLine": 968,
+        "startChar": 0,
+        "endLine": 968,
+        "endChar": 66
+      },
+      "revId": "5ccc0fcdd54932bd81b580c6abf9f4f0121ac35f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a62061e2_f296fdf3",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-12T07:13:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e5627a3_e639d65b",
+      "range": {
+        "startLine": 2274,
+        "startChar": 2,
+        "endLine": 2274,
+        "endChar": 51
+      },
+      "revId": "5ccc0fcdd54932bd81b580c6abf9f4f0121ac35f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98ac88cf_4b51cfed",
         "filename": "src/builtins/base.tq",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "b001e4a8_8fdfe915",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 3
+      },
+      "lineNbr": 2289,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-12T07:13:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98ac88cf_4b51cfed",
+      "range": {
+        "startLine": 2288,
+        "startChar": 8,
+        "endLine": 2289,
+        "endChar": 44
+      },
+      "revId": "5ccc0fcdd54932bd81b580c6abf9f4f0121ac35f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea85b06d_4543050a",
         "filename": "src/builtins/builtins-conversion-gen.cc",
         "patchSetId": 3
@@ -105,6 +201,30 @@
       "writtenOn": "2019-04-11T13:43:27Z",
       "side": 1,
       "message": "This builtin could also be ported to Torque. See https://chromium-review.googlesource.com/c/v8/v8/+/1499495 for an example.",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 41
+      },
+      "revId": "5ccc0fcdd54932bd81b580c6abf9f4f0121ac35f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f8695bc_6ea7d6c3",
+        "filename": "src/builtins/builtins-conversion-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-12T07:13:08Z",
+      "side": 1,
+      "message": "Shall I create a string.tq file and port this builtin ToString there? Like:\n\nnamespace string {\n    transitioning builtin ToString(context: Context, o: Object): String {\n        return ToStringTorque(context, o);\n    }\n}",
+      "parentUuid": "ea85b06d_4543050a",
       "range": {
         "startLine": 215,
         "startChar": 0,

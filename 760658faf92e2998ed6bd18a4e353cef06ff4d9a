@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "6b041764_207a81a8",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2274,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-12T07:13:08Z",
+      "side": 1,
+      "message": "I add an RT suffix to runtime ToString and update all its references.",
+      "parentUuid": "73f6e547_1ba96728",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c73dac6_23798429",
         "filename": "src/builtins/base.tq",
         "patchSetId": 2
@@ -200,6 +218,24 @@
       "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01f7f561_82b6a4a9",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-12T07:13:08Z",
+      "side": 1,
+      "message": "We can use ToString_Inline in array-join.tq. However, this will cause performance regression for  Array.prototype.toString/join when the array elements are objects (~8% regression according to my micro-bench). Is this acceptable?",
+      "parentUuid": "18603181_9c8cfea7",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
