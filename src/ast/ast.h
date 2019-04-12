@@ -2237,11 +2237,10 @@ class FunctionLiteral final : public Expression {
 
   static bool NeedsHomeObject(Expression* expr);
 
-  int expected_property_count() {
-    // Not valid for lazy functions.
-    DCHECK(ShouldEagerCompile());
-    return expected_property_count_;
+  void add_expected_properties(int number_properties) {
+    expected_property_count_ += number_properties;
   }
+  int expected_property_count() { return expected_property_count_; }
   int parameter_count() { return parameter_count_; }
   int function_length() { return function_length_; }
 
