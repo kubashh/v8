@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "20693d7d_0e5d639a",
+        "filename": "src/builtins/builtins-proxy-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-12T00:45:02Z",
+      "side": 1,
+      "message": "Here is the bug: https://bugs.chromium.org/p/v8/issues/detail?id\u003d9120",
+      "parentUuid": "c0c1a5a2_feda714b",
+      "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eeff30c3_7d56b9ea",
         "filename": "src/builtins/proxy-constructor.tq",
         "patchSetId": 4
@@ -48,6 +66,24 @@
       "writtenOn": "2019-04-11T09:25:13Z",
       "side": 1,
       "message": "Did you find out why no test failed although the calling convention of this was completely off? Please add a test that fails before this fix and passes afterwards.",
+      "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "532c4e75_18f29c1c",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-12T00:45:02Z",
+      "side": 1,
+      "message": "I haven\u0027t figured it out the reason :( I did tried to debug it and observe:\n\nWhen we add newTarget parameter as \nTFJ(ProxyConstructor, 3, kReceiver, kNewTarget, kTarget, kHandler)\nIn term of enum ParameterIndices: kNewTarget will be 1 and kJSNewTarget will be 4\n\nthen\nCase 1: new Proxy({}, {}) -\u003e JSNewTarget is a function kind while parameter newTarget is the hole -\u003e both are not equal Undefined \nCase 2: Proxy({},{}) -\u003e missing \u0027new\u0027 -\u003e JSNewTarget and newTarget are both Undefined.\n\nThat \"sort of\" explained why no test was failing.\n\nIf we move the position of newTarget parameter (not right before kReceiver), e.g.\nTFJ(ProxyConstructor, 3, kReceiver, kTarget, kHandler, kNewTarget) then the above observation is not hold. newTarget will be a normal parameter in this case (JS_Object_Type).\n\nI still don\u0027t truly understand how NewTarget paramter can get value like that for the above 2 cases.\n\nAlso, how can we add a test for this one?.\nPlease let me know if you figure it out.\nThanks.",
+      "parentUuid": "eeff30c3_7d56b9ea",
       "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
