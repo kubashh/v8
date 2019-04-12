@@ -19,6 +19,46 @@
     },
     {
       "key": {
+        "uuid": "a40b287d_057e1a20",
+        "filename": "src/builtins/builtins-definitions.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-04-12T06:49:59Z",
+      "side": 1,
+      "message": "This should be lowercase \"allsettled\" (based on the precedent set by e.g. #sec-array.prototype.reduceright). I just fixed the draft spec as well.",
+      "range": {
+        "startLine": 861,
+        "startChar": 21,
+        "endLine": 861,
+        "endChar": 31
+      },
+      "revId": "49ee11c5040767bfc80ad6cca108eff784c56e63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a1fb701_61395417",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2338,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-04-12T06:49:59Z",
+      "side": 1,
+      "message": "Nit: lowercase",
+      "revId": "49ee11c5040767bfc80ad6cca108eff784c56e63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9bff716c_dda41a79",
         "filename": "src/builtins/builtins-promise-gen.cc",
         "patchSetId": 4
@@ -47,6 +87,57 @@
       "writtenOn": "2019-04-12T06:02:34Z",
       "side": 1,
       "message": "Same here.",
+      "revId": "49ee11c5040767bfc80ad6cca108eff784c56e63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7e9489b_667a4d39",
+        "filename": "test/mjsunit/harmony/promise-all-settled.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-04-12T06:49:59Z",
+      "side": 1,
+      "message": "Maybe prepend\n\n// 1. Let C be the this value.\n\nfor clarity",
+      "revId": "49ee11c5040767bfc80ad6cca108eff784c56e63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0791d74_7c57a0f7",
+        "filename": "test/mjsunit/harmony/promise-all-settled.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-04-12T06:49:59Z",
+      "side": 1,
+      "message": "Let\u0027s add a TODO here pointing to https://github.com/tc39/proposal-promise-allSettled/pull/40",
+      "revId": "49ee11c5040767bfc80ad6cca108eff784c56e63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e9e1714_5a61a4b0",
+        "filename": "test/mjsunit/harmony/promise-all-settled.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-04-12T06:49:59Z",
+      "side": 1,
+      "message": "nit: weird indentation",
       "revId": "49ee11c5040767bfc80ad6cca108eff784c56e63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
