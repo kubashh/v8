@@ -9,12 +9,12 @@ from __future__ import print_function
 from collections import namedtuple
 import coverage
 import json
-from mock import MagicMock, patch
+import mock
 import os
-from os import path, sys
 import platform
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RUN_PERF = os.path.join(BASE_DIR, 'run_perf.py')
 TEST_DATA = os.path.join(BASE_DIR, 'unittests', 'testdata')
 
-TEST_WORKSPACE = path.join(tempfile.gettempdir(), "test-v8-run-perf")
+TEST_WORKSPACE = os.path.join(tempfile.gettempdir(), "test-v8-run-perf")
 
 V8_JSON = {
   "path": ["."],
@@ -93,10 +93,9 @@ Output = namedtuple("Output", "stdout, stderr, timed_out, exit_code")
 class PerfTest(unittest.TestCase):
   @classmethod
   def setUpClass(cls):
-    cls.base = path.dirname(path.dirname(path.abspath(__file__)))
-    sys.path.append(cls.base)
+    sys.path.insert(0, BASE_DIR)
     cls._cov = coverage.coverage(
-        include=([os.path.join(cls.base, "run_perf.py")]))
+        include=([os.path.join(BASE_DIR, "run_perf.py")]))
     cls._cov.start()
     import run_perf
     from testrunner.local import command
@@ -111,17 +110,17 @@ class PerfTest(unittest.TestCase):
 
   def setUp(self):
     self.maxDiff = None
-    if path.exists(TEST_WORKSPACE):
+    if os.path.exists(TEST_WORKSPACE):
       shutil.rmtree(TEST_WORKSPACE)
     os.makedirs(TEST_WORKSPACE)
 
   def tearDown(self):
-    patch.stopall()
-    if path.exists(TEST_WORKSPACE):
+    mock.patch.stopall()
+    if os.path.exists(TEST_WORKSPACE):
       shutil.rmtree(TEST_WORKSPACE)
 
   def _WriteTestInput(self, json_content):
-    self._test_input = path.join(TEST_WORKSPACE, "test.json")
+    self._test_input = os.path.join(TEST_WORKSPACE, "test.json")
     with open(self._test_input, "w") as f:
       f.write(json.dumps(json_content))
 
@@ -133,27 +132,27 @@ class PerfTest(unittest.TestCase):
                            exit_code=kwargs.get("exit_code", 0))
                     for arg in args[1]]
     def create_cmd(*args, **kwargs):
-      cmd = MagicMock()
+      cmd = mock.MagicMock()
       def execute(*args, **kwargs):
         return test_outputs.pop()
-      cmd.execute = MagicMock(side_effect=execute)
+      cmd.execute = mock.MagicMock(side_effect=execute)
       return cmd
 
-    patch.object(
+    mock.patch.object(
         run_perf.command, 'PosixCommand',
-        MagicMock(side_effect=create_cmd)).start()
+        mock.MagicMock(side_effect=create_cmd)).start()
 
     # Check that d8 is called from the correct cwd for each test run.
-    dirs = [path.join(TEST_WORKSPACE, arg) for arg in args[0]]
+    dirs = [os.path.join(TEST_WORKSPACE, arg) for arg in args[0]]
     def chdir(*args, **kwargs):
       self.assertEquals(dirs.pop(), args[0])
-    os.chdir = MagicMock(side_effect=chdir)
+    os.chdir = mock.MagicMock(side_effect=chdir)
 
-    subprocess.check_call = MagicMock()
-    platform.system = MagicMock(return_value='Linux')
+    subprocess.check_call = mock.MagicMock()
+    platform.system = mock.MagicMock(return_value='Linux')
 
   def _CallMain(self, *args):
-    self._test_output = path.join(TEST_WORKSPACE, "results.json")
+    self._test_output = os.path.join(TEST_WORKSPACE, "results.json")
     all_args=[
       "--json-test-results",
       self._test_output,
@@ -178,7 +177,7 @@ class PerfTest(unittest.TestCase):
     self.assertEquals(errors, self._LoadResults()["errors"])
 
   def _VerifyMock(self, binary, *args, **kwargs):
-    shell = path.join(path.dirname(self.base), binary)
+    shell = os.path.join(os.path.dirname(BASE_DIR), binary)
     command.Command.assert_called_with(
         cmd_prefix=[],
         shell=shell,
@@ -190,7 +189,7 @@ class PerfTest(unittest.TestCase):
     for arg, actual in zip(args, command.Command.call_args_list):
       expected = {
         'cmd_prefix': [],
-        'shell': path.join(path.dirname(self.base), arg[0]),
+        'shell': os.path.join(os.path.dirname(BASE_DIR), arg[0]),
         'args': list(arg[1:]),
         'timeout': kwargs.get('timeout', 60)
       }
@@ -205,7 +204,8 @@ class PerfTest(unittest.TestCase):
       {"name": "DeltaBlue", "results": ["10657567.0"], "stddev": ""},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(path.join("out", "x64.release", "d7"), "--flag", "run.js")
+    self._VerifyMock(
+        os.path.join("out", "x64.release", "d7"), "--flag", "run.js")
 
   def testOneRunWithTestFlags(self):
     test_input = dict(V8_JSON)
@@ -218,8 +218,8 @@ class PerfTest(unittest.TestCase):
       {"name": "DeltaBlue", "results": ["10657567.0"], "stddev": ""},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(path.join("out", "x64.release", "d7"), "--flag", "run.js",
-                     "--", "2", "test_name")
+    self._VerifyMock(os.path.join(
+      "out", "x64.release", "d7"), "--flag", "run.js", "--", "2", "test_name")
 
   def testTwoRuns_Units_SuiteName(self):
     test_input = dict(V8_JSON)
@@ -236,7 +236,8 @@ class PerfTest(unittest.TestCase):
       {"name": "DeltaBlue", "results": ["300.0", "200.0"], "stddev": ""},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(path.join("out", "x64.release", "d7"), "--flag", "run.js")
+    self._VerifyMock(os.path.join(
+      "out", "x64.release", "d7"), "--flag", "run.js")
 
   def testTwoRuns_SubRegexp(self):
     test_input = dict(V8_JSON)
@@ -254,7 +255,8 @@ class PerfTest(unittest.TestCase):
       {"name": "DeltaBlue", "results": ["300.0", "200.0"], "stddev": ""},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(path.join("out", "x64.release", "d7"), "--flag", "run.js")
+    self._VerifyMock(os.path.join(
+      "out", "x64.release", "d7"), "--flag", "run.js")
 
   def testNestedSuite(self):
     self._WriteTestInput(V8_NESTED_SUITES_JSON)
@@ -282,12 +284,13 @@ class PerfTest(unittest.TestCase):
       ], self._LoadResults()["traces"])
     self._VerifyErrors([])
     self._VerifyMockMultiple(
-        (path.join("out", "x64.release", "d7"), "--flag", "run.js"),
-        (path.join("out", "x64.release", "d7"), "--flag", "run.js"),
-        (path.join("out", "x64.release", "d8"), "--flag", "run.js"),
-        (path.join("out", "x64.release", "d8"), "--flag", "run.js"),
-        (path.join("out", "x64.release", "d8"), "--flag", "run.js"),
-        (path.join("out", "x64.release", "d8"), "--flag", "--flag2", "run.js"))
+        (os.path.join("out", "x64.release", "d7"), "--flag", "run.js"),
+        (os.path.join("out", "x64.release", "d7"), "--flag", "run.js"),
+        (os.path.join("out", "x64.release", "d8"), "--flag", "run.js"),
+        (os.path.join("out", "x64.release", "d8"), "--flag", "run.js"),
+        (os.path.join("out", "x64.release", "d8"), "--flag", "run.js"),
+        (os.path.join("out", "x64.release", "d8"),
+         "--flag", "--flag2", "run.js"))
 
   def testOneRunStdDevRegExp(self):
     test_input = dict(V8_JSON)
@@ -301,7 +304,8 @@ class PerfTest(unittest.TestCase):
       {"name": "DeltaBlue", "results": ["10657567.0"], "stddev": "106"},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(path.join("out", "x64.release", "d7"), "--flag", "run.js")
+    self._VerifyMock(
+        os.path.join("out", "x64.release", "d7"), "--flag", "run.js")
 
   def testTwoRunsStdDevRegExp(self):
     test_input = dict(V8_JSON)
@@ -324,7 +328,8 @@ class PerfTest(unittest.TestCase):
          "by the test.",
          "Regexp \"^DeltaBlue\-stddev: (.+)$\" didn't match for test "
          "test/DeltaBlue."])
-    self._VerifyMock(path.join("out", "x64.release", "d7"), "--flag", "run.js")
+    self._VerifyMock(
+        os.path.join("out", "x64.release", "d7"), "--flag", "run.js")
 
   def testBuildbot(self):
     self._WriteTestInput(V8_JSON)
@@ -335,7 +340,7 @@ class PerfTest(unittest.TestCase):
       {"name": "DeltaBlue", "results": ["10657567.0"], "stddev": ""},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(path.join("out", "Release", "d7"), "--flag", "run.js")
+    self._VerifyMock(os.path.join("out", "Release", "d7"), "--flag", "run.js")
 
   def testBuildbotWithTotal(self):
     test_input = dict(V8_JSON)
@@ -349,7 +354,7 @@ class PerfTest(unittest.TestCase):
       {"name": "Total", "results": ["3626.49109719"], "stddev": ""},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(path.join("out", "Release", "d7"), "--flag", "run.js")
+    self._VerifyMock(os.path.join("out", "Release", "d7"), "--flag", "run.js")
 
   def testBuildbotWithTotalAndErrors(self):
     test_input = dict(V8_JSON)
@@ -365,7 +370,7 @@ class PerfTest(unittest.TestCase):
         ["Regexp \"^Richards: (.+)$\" "
          "returned a non-numeric for test test/Richards.",
          "Not all traces have the same number of results."])
-    self._VerifyMock(path.join("out", "Release", "d7"), "--flag", "run.js")
+    self._VerifyMock(os.path.join("out", "Release", "d7"), "--flag", "run.js")
 
   def testRegexpNoMatch(self):
     self._WriteTestInput(V8_JSON)
@@ -377,7 +382,8 @@ class PerfTest(unittest.TestCase):
     ])
     self._VerifyErrors(
         ["Regexp \"^Richards: (.+)$\" didn't match for test test/Richards."])
-    self._VerifyMock(path.join("out", "x64.release", "d7"), "--flag", "run.js")
+    self._VerifyMock(
+        os.path.join("out", "x64.release", "d7"), "--flag", "run.js")
 
   def testOneRunGeneric(self):
     test_input = dict(V8_GENERIC_JSON)
@@ -407,7 +413,7 @@ class PerfTest(unittest.TestCase):
        "stddev": ""},
       ], self._LoadResults()["traces"])
     self._VerifyErrors(["Found non-numeric in test/Infra/Constant4"])
-    self._VerifyMock(path.join("out", "x64.release", "cc"), "--flag", "")
+    self._VerifyMock(os.path.join("out", "x64.release", "cc"), "--flag", "")
 
   def testOneRunCrashed(self):
     self._WriteTestInput(V8_JSON)
@@ -419,7 +425,8 @@ class PerfTest(unittest.TestCase):
       {"name": "DeltaBlue", "results": [], "stddev": ""},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(path.join("out", "x64.release", "d7"), "--flag", "run.js")
+    self._VerifyMock(
+        os.path.join("out", "x64.release", "d7"), "--flag", "run.js")
 
   def testOneRunTimingOut(self):
     test_input = dict(V8_JSON)
@@ -432,8 +439,8 @@ class PerfTest(unittest.TestCase):
       {"name": "DeltaBlue", "results": [], "stddev": ""},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(
-        path.join("out", "x64.release", "d7"), "--flag", "run.js", timeout=70)
+    self._VerifyMock(os.path.join("out", "x64.release", "d7"),
+                     "--flag", "run.js", timeout=70)
 
   # Simple test that mocks out the android platform. Testing the platform would
   # require lots of complicated mocks for the android tools.
@@ -441,14 +448,15 @@ class PerfTest(unittest.TestCase):
     self._WriteTestInput(V8_JSON)
     # FIXME(machenbach): This is not test-local!
     platform = run_perf.AndroidPlatform
-    platform.PreExecution = MagicMock(return_value=None)
-    platform.PostExecution = MagicMock(return_value=None)
-    platform.PreTests = MagicMock(return_value=None)
-    platform.Run = MagicMock(
+    platform.PreExecution = mock.MagicMock(return_value=None)
+    platform.PostExecution = mock.MagicMock(return_value=None)
+    platform.PreTests = mock.MagicMock(return_value=None)
+    platform.Run = mock.MagicMock(
         return_value=("Richards: 1.234\nDeltaBlue: 10657567\n", None))
-    run_perf.AndroidPlatform = MagicMock(return_value=platform)
-    with patch.object(run_perf.Platform, 'ReadBuildConfig',
-        MagicMock(return_value={'is_android': True})):
+    run_perf.AndroidPlatform = mock.MagicMock(return_value=platform)
+    with mock.patch.object(
+        run_perf.Platform, 'ReadBuildConfig',
+        mock.MagicMock(return_value={'is_android': True})):
       self.assertEquals(0, self._CallMain("--arch", "arm"))
     self._VerifyResults("test", "score", [
       {"name": "Richards", "results": ["1.234"], "stddev": ""},
@@ -464,7 +472,8 @@ class PerfTest(unittest.TestCase):
                        "Richards: 200\nDeltaBlue: 20\n",
                        "Richards: 50\nDeltaBlue: 200\n",
                        "Richards: 100\nDeltaBlue: 20\n"])
-    test_output_secondary = path.join(TEST_WORKSPACE, "results_secondary.json")
+    test_output_secondary = os.path.join(
+        TEST_WORKSPACE, "results_secondary.json")
     self.assertEquals(0, self._CallMain(
         "--outdir-secondary", "out-secondary",
         "--json-test-results-secondary", test_output_secondary,
@@ -479,10 +488,12 @@ class PerfTest(unittest.TestCase):
     ], test_output_secondary)
     self._VerifyErrors([])
     self._VerifyMockMultiple(
-        (path.join("out", "x64.release", "d7"), "--flag", "run.js"),
-        (path.join("out-secondary", "x64.release", "d7"), "--flag", "run.js"),
-        (path.join("out", "x64.release", "d7"), "--flag", "run.js"),
-        (path.join("out-secondary", "x64.release", "d7"), "--flag", "run.js"),
+        (os.path.join("out", "x64.release", "d7"), "--flag", "run.js"),
+        (os.path.join("out-secondary", "x64.release", "d7"),
+         "--flag", "run.js"),
+        (os.path.join("out", "x64.release", "d7"), "--flag", "run.js"),
+        (os.path.join("out-secondary", "x64.release", "d7"),
+         "--flag", "run.js"),
     )
 
   def testWrongBinaryWithProf(self):
@@ -495,7 +506,7 @@ class PerfTest(unittest.TestCase):
       {"name": "DeltaBlue", "results": ["10657567.0"], "stddev": ""},
     ])
     self._VerifyErrors([])
-    self._VerifyMock(path.join("out", "x64.release", "d7"),
+    self._VerifyMock(os.path.join("out", "x64.release", "d7"),
                      "--flag", "--prof", "run.js")
 
   def testUnzip(self):
@@ -510,9 +521,9 @@ class PerfTest(unittest.TestCase):
   ### System tests
 
   def _RunPerf(self, mocked_d8, test_json):
-    output_json = path.join(TEST_WORKSPACE, "output.json")
+    output_json = os.path.join(TEST_WORKSPACE, "output.json")
     args = [
-      sys.executable, RUN_PERF,
+      os.sys.executable, RUN_PERF,
       "--binary-override-path", os.path.join(TEST_DATA, mocked_d8),
       "--json-test-results", output_json,
       os.path.join(TEST_DATA, test_json),
