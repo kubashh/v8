@@ -333,7 +333,11 @@ bool AccessInfoFactory::ComputeDataFieldAccessInfo(
   } else if (details_representation.IsHeapObject()) {
     // Extract the field type from the property details (make sure its
     // representation is TaggedPointer to reflect the heap object case).
+#ifdef V8_COMPRESS_POINTERS
+    field_representation = MachineRepresentation::kCompressedPointer;
+#else
     field_representation = MachineRepresentation::kTaggedPointer;
+#endif
     Handle<FieldType> descriptors_field_type(descriptors->GetFieldType(number),
                                              isolate());
     if (descriptors_field_type->IsNone()) {
@@ -703,6 +707,7 @@ bool AccessInfoFactory::LookupTransition(
                                                         details_representation);
   Type field_type = Type::NonInternal();
   MaybeHandle<Map> field_map;
+  // TODO(v8:8977): Should we add these three cases as well?
   MachineRepresentation field_representation = MachineRepresentation::kTagged;
   if (details_representation.IsSmi()) {
     field_type = Type::SignedSmall();
