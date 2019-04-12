@@ -2638,7 +2638,9 @@ RUNTIME_FUNCTION(Runtime_ElementsTransitionAndStoreIC_Miss) {
   }
 }
 
-static bool CanFastCloneObject(Handle<Map> map) {
+namespace {
+
+bool CanFastCloneObject(Handle<Map> map) {
   DisallowHeapAllocation no_gc;
   if (map->IsNullOrUndefinedMap()) return true;
   if (!map->IsJSObjectMap() ||
@@ -2660,8 +2662,19 @@ static bool CanFastCloneObject(Handle<Map> map) {
   return true;
 }
 
-static Handle<Map> FastCloneObjectMap(Isolate* isolate,
-                                      Handle<HeapObject> source, int flags) {
+bool AllFieldsDefaultAttributes(Handle<Map> map) {
+  DisallowHeapAllocation no_gc;
+  DescriptorArray descriptors = map->instance_descriptors();
+  for (int i = 0; i < map->NumberOfOwnDescriptors(); i++) {
+    if (descriptors->GetDetails(i).attributes() != NONE) {
+      return false;
+    }
+  }
+  return true;
+}
+
+Handle<Map> FastCloneObjectMap(Isolate* isolate, Handle<HeapObject> source,
+                               int flags) {
   Handle<Map> source_map(source->map(), isolate);
   SLOW_DCHECK(source->IsNullOrUndefined() || CanFastCloneObject(source_map));
   Handle<JSFunction> constructor(isolate->native_context()->object_function(),
@@ -2669,6 +2682,89 @@ static Handle<Map> FastCloneObjectMap(Isolate* isolate,
   DCHECK(constructor->has_initial_map());
   Handle<Map> initial_map(constructor->initial_map(), isolate);
   Handle<Map> map = initial_map;
+
+  // TODO(bmeurer): PAY ATTENTION TO ONGOING SLACK TRACKING!
+  // PREVIOUS CLONE OBJECT IC WAS PROBABLY BROKEN WITH SLACK TRACKING :-(
+
+  // TODO(bmeurer)
+  if (source_map->IsJSObjectMap() &&
+      source_map->GetConstructor() == *constructor) {
+    Handle<HeapObject> prototype(((flags & ObjectLiteral::kHasNullPrototype)
+                                      ? ReadOnlyRoots(isolate).null_value()
+                                      : initial_map->prototype()),
+                                 isolate);
+    if (AllFieldsDefaultAttributes(source_map)) {
+      if (source_map->prototype() != *prototype) {
+        source_map = Map::TransitionToPrototype(isolate, source_map, prototype);
+      }
+      return source_map;
+    }
+
+    Handle<Map> root_map(source_map->FindRootMap(isolate), isolate);
+    if (AllFieldsDefaultAttributes(root_map)) {
+      Handle<Map> map = root_map;
+      Handle<DescriptorArray> source_descriptors(
+          source_map->instance_descriptors(), isolate);
+      for (int i = root_map->NumberOfOwnDescriptors();
+           i < source_map->NumberOfOwnDescriptors(); ++i) {
+        PropertyDetails details = source_descriptors->GetDetails(i);
+        Handle<Name> name(source_descriptors->GetKey(i), isolate);
+        // TODO(bmeurer): Do this more efficiently without reaching out to
+        // the value on {source}, but just using the representation from
+        // {details}.
+        FieldIndex field_index = FieldIndex::ForDescriptor(*source_map, i);
+        Handle<Object> value =
+            JSObject::FastPropertyAt(Handle<JSObject>::cast(source),
+                                     details.representation(), field_index);
+        // TODO(bmeurer): This is incorrect with field representation changes
+        // in-place, since the new {map} is not updated with {source_map}.
+        // One way to go about this for now here is to just always generalize
+        // Smi and HeapObject fields to Tagged at this point. Shouldn't be
+        // too bad since we don't expect to hit this path very often.
+        map = Map::TransitionToDataProperty(isolate, map, name, value, NONE,
+                                            details.constness(),
+                                            StoreOrigin::kNamed);
+      }
+      if (source_map->prototype() != *prototype) {
+        map = Map::TransitionToPrototype(isolate, map, prototype);
+      }
+      return map;
+    }
+  }
+
+  if (source_map->IsJSObjectMap() && source_map->GetInObjectProperties() ==
+                                         initial_map->GetInObjectProperties()) {
+    DCHECK_EQ(source_map->instance_size(), initial_map->instance_size());
+    DCHECK_EQ(0, initial_map->NumberOfOwnDescriptors());
+    Handle<Map> map = initial_map;
+    Handle<DescriptorArray> source_descriptors(
+        source_map->instance_descriptors(), isolate);
+    for (int i = initial_map->NumberOfOwnDescriptors();
+         i < source_map->NumberOfOwnDescriptors(); ++i) {
+      PropertyDetails details = source_descriptors->GetDetails(i);
+      Handle<Name> name(source_descriptors->GetKey(i), isolate);
+      // TODO(bmeurer): Do this more efficiently without reaching out to
+      // the value on {source}, but just using the representation from
+      // {details}.
+      FieldIndex field_index = FieldIndex::ForDescriptor(*source_map, i);
+      Handle<Object> value =
+          JSObject::FastPropertyAt(Handle<JSObject>::cast(source),
+                                   details.representation(), field_index);
+      // TODO(bmeurer): This is incorrect with field representation changes
+      // in-place, since the new {map} is not updated with {source_map}.
+      // One way to go about this for now here is to just always generalize
+      // Smi and HeapObject fields to Tagged at this point. Shouldn't be
+      // too bad since we don't expect to hit this path very often.
+      map = Map::TransitionToDataProperty(isolate, map, name, value, NONE,
+                                          details.constness(),
+                                          StoreOrigin::kNamed);
+    }
+    if (flags & ObjectLiteral::kHasNullPrototype) {
+      map = Map::TransitionToPrototype(isolate, map,
+                                       isolate->factory()->null_value());
+    }
+    return map;
+  }
 
   if (source_map->IsJSObjectMap() && source_map->GetInObjectProperties() !=
                                          initial_map->GetInObjectProperties()) {
@@ -2714,9 +2810,9 @@ static Handle<Map> FastCloneObjectMap(Isolate* isolate,
   return map;
 }
 
-static MaybeHandle<JSObject> CloneObjectSlowPath(Isolate* isolate,
-                                                 Handle<HeapObject> source,
-                                                 int flags) {
+MaybeHandle<JSObject> CloneObjectSlowPath(Isolate* isolate,
+                                          Handle<HeapObject> source,
+                                          int flags) {
   Handle<JSObject> new_object;
   if (flags & ObjectLiteral::kHasNullPrototype) {
     new_object = isolate->factory()->NewJSObjectWithNullProto();
@@ -2735,6 +2831,8 @@ static MaybeHandle<JSObject> CloneObjectSlowPath(Isolate* isolate,
                MaybeHandle<JSObject>());
   return new_object;
 }
+
+}  // namespace
 
 RUNTIME_FUNCTION(Runtime_CloneObjectIC_Miss) {
   HandleScope scope(isolate);
