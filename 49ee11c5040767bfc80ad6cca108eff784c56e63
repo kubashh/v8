@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0b83cfa_5aaa392b",
+        "filename": "src/bootstrapper.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 4368,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-04-12T06:02:34Z",
+      "side": 1,
+      "message": "Side note: we should try to find a way to put these SFIs into the roots or somewhere onto the isolate. It\u0027s odd that we have a copy of these for each native context.",
+      "revId": "49ee11c5040767bfc80ad6cca108eff784c56e63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bff716c_dda41a79",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-04-12T06:02:34Z",
+      "side": 1,
+      "message": "Please leave a TODO here saying that we should eventually optimize this using a an appropriately cached map (from the native context).",
+      "revId": "49ee11c5040767bfc80ad6cca108eff784c56e63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "721444d6_d0386426",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2528,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-04-12T06:02:34Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "49ee11c5040767bfc80ad6cca108eff784c56e63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
