@@ -234,6 +234,30 @@
       "revId": "5ccc0fcdd54932bd81b580c6abf9f4f0121ac35f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd6042c3_f01141c1",
+        "filename": "src/builtins/builtins-conversion-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-12T12:27:15Z",
+      "side": 1,
+      "message": "You could do that, or you just replace the extern ToString declaration in base.tq.",
+      "parentUuid": "5f8695bc_6ea7d6c3",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 215,
+        "endChar": 41
+      },
+      "revId": "5ccc0fcdd54932bd81b580c6abf9f4f0121ac35f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
