@@ -235,6 +235,7 @@ bool Heap::CreateInitialMaps() {
                          fixed_cow_array)
     DCHECK_NE(roots.fixed_array_map(), roots.fixed_cow_array_map());
 
+    ALLOCATE_PARTIAL_MAP(ENUM_CACHE_TYPE, kVariableSizeSentinel, enum_cache);
     ALLOCATE_PARTIAL_MAP(DESCRIPTOR_ARRAY_TYPE, kVariableSizeSentinel,
                          descriptor_array)
 
@@ -314,7 +315,7 @@ bool Heap::CreateInitialMaps() {
   // Allocate the empty enum cache.
   {
     AllocationResult allocation =
-        Allocate(roots.tuple2_map(), AllocationType::kReadOnly);
+        Allocate(roots.enum_cache_map(), AllocationType::kReadOnly);
     if (!allocation.To(&obj)) return false;
   }
   set_empty_enum_cache(EnumCache::cast(obj));
