@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "28347621_8e045e3d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-15T23:23:57Z",
+      "side": 1,
+      "message": "Can you add a short summary of the change here in the commit description?",
+      "revId": "b304f03bb1a908e802902091225e379a313c86bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a62efaf7_a2cbdcec",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-15T23:23:57Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 734,
+        "startChar": 28,
+        "endLine": 734,
+        "endChar": 31
+      },
+      "revId": "b304f03bb1a908e802902091225e379a313c86bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
