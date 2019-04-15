@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a2cd1544_ef8e36b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-15T14:35:26Z",
+      "side": 1,
+      "message": "nit: This (as in \"this CL\") fixes the problem and makes the layout test pass. :)",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 30
+      },
+      "revId": "fcca7a6c46ab8ca9d290a4b5d7cff644debc32ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "415cf9d0_912b33fe",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-15T14:35:26Z",
+      "side": 1,
+      "message": "As discussed offline, it looks really brittle that there are three paths through this object that seem to trigger a down-ref. I am no longer confident that we will be able to maintain consistent reference count here without accidentally breaking this at some point. I like your suggestion of separating the \"list of codes to log\" from this task, because it seems hard to have proper scoping as part of the task. I am of course happy to do this as a follow-up and just leave a TODO here.",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 12
+      },
+      "revId": "fcca7a6c46ab8ca9d290a4b5d7cff644debc32ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
