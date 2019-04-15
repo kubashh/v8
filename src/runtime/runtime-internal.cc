@@ -16,6 +16,7 @@
 #include "src/feedback-vector-inl.h"
 #include "src/frames-inl.h"
 #include "src/isolate-inl.h"
+#include "src/json-parser2.h"
 #include "src/message-template.h"
 #include "src/objects/js-array-inl.h"
 #include "src/objects/template-objects-inl.h"
@@ -28,6 +29,19 @@
 
 namespace v8 {
 namespace internal {
+
+RUNTIME_FUNCTION(Runtime_ParseJson2) {
+  HandleScope scope(isolate);
+  DCHECK_EQ(1, args.length());
+  CONVERT_ARG_HANDLE_CHECKED(String, string, 0);
+
+  string = String::Flatten(isolate, string);
+
+  JsonParser2<uint8_t> parser(isolate);
+  parser.ParseJson(string);
+  Handle<Object> result = parser.InternalizeJson(isolate);
+  return *result;
+}
 
 RUNTIME_FUNCTION(Runtime_AccessCheck) {
   HandleScope scope(isolate);
