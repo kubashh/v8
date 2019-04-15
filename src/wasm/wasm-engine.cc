@@ -36,6 +36,7 @@ class LogCodesTask : public Task {
         engine_(engine) {
     DCHECK_NOT_NULL(task_slot);
     DCHECK_NOT_NULL(isolate);
+    // foobar
   }
 
   ~LogCodesTask() {
