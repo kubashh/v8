@@ -158,9 +158,23 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
   }
   Node* Store(MachineRepresentation rep, Node* base, Node* index, Node* value,
               WriteBarrierKind write_barrier) {
+#ifdef V8_COMPRESS_POINTERS
+    if (rep == MachineRepresentation::kTagged) {
+      rep = MachineRepresentation::kCompressed;
+    }
+
+    // TODO(solanes): Value here is not in a register. What to do?
+    // In VisitChangeTaggedToCompressed we have g.DefineAsRegister(node) for the
+    // input but here it is trying to use a stack slot it seems
+    Node* changedValue = AddNode(machine()->ChangeTaggedToCompressed(), value);
+    return AddNode(machine()->Store(StoreRepresentation(rep, write_barrier)),
+                   base, index, changedValue);
+#else
     return AddNode(machine()->Store(StoreRepresentation(rep, write_barrier)),
                    base, index, value);
+#endif
   }
+  // TODO(solanes): Should I do these optimized two as well?
   void OptimizedStoreField(MachineRepresentation rep, Node* object, int offset,
                            Node* value, WriteBarrierKind write_barrier) {
     AddNode(simplified()->StoreField(FieldAccess(

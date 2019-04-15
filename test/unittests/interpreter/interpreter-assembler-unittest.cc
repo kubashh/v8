@@ -612,6 +612,8 @@ TARGET_TEST_F(InterpreterAssemblerTest, LoadFeedbackVector) {
   }
 }
 
+// TODO(solanes): How to make store tests?
+
 }  // namespace interpreter_assembler_unittest
 }  // namespace interpreter
 }  // namespace internal
