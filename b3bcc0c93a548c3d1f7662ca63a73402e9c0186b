@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "9dcd3a86_8fa10b83",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1744,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-15T09:19:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6550d41a_4fc2ef2c",
+      "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf037e5f_6f3c4de9",
         "filename": "test/mjsunit/wasm/compilation-hints-compiler.js",
         "patchSetId": 2
@@ -86,6 +104,24 @@
       "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67e31db8_37209035",
+        "filename": "test/mjsunit/wasm/compilation-hints-compiler.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-15T09:19:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf037e5f_6f3c4de9",
+      "revId": "b3bcc0c93a548c3d1f7662ca63a73402e9c0186b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
