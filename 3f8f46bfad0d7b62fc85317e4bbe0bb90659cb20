@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e01e6b53_6d611eca",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-15T23:16:31Z",
+      "side": 1,
+      "message": "Not sure this is needed (thought it might be, because DescriptorArray uses enum cache and is allocated below).",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 77
+      },
+      "revId": "3f8f46bfad0d7b62fc85317e4bbe0bb90659cb20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a651293_b6ec64a0",
+        "filename": "tools/v8heapconst.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-15T23:16:31Z",
+      "side": 1,
+      "message": "Does the order in this list matter?",
+      "range": {
+        "startLine": 136,
+        "startChar": 2,
+        "endLine": 136,
+        "endChar": 25
+      },
+      "revId": "3f8f46bfad0d7b62fc85317e4bbe0bb90659cb20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
