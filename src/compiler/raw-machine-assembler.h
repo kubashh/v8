@@ -132,12 +132,24 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
   }
   Node* Load(MachineType rep, Node* base, Node* index,
              LoadSensitivity needs_poisoning = LoadSensitivity::kSafe) {
+#ifdef V8_COMPRESS_POINTERS
+    bool isRepTagged = rep == MachineType::AnyTagged();
+    if (isRepTagged) {
+      rep = MachineType::AnyCompressed();
+    }
+#endif
     const Operator* op = machine()->Load(rep);
     CHECK_NE(PoisoningMitigationLevel::kPoisonAll, poisoning_level_);
     if (needs_poisoning == LoadSensitivity::kCritical &&
         poisoning_level_ == PoisoningMitigationLevel::kPoisonCriticalOnly) {
       op = machine()->PoisonedLoad(rep);
     }
+#ifdef V8_COMPRESS_POINTERS
+    if (isRepTagged) {
+      Node* load = AddNode(op, base, index);
+      return AddNode(machine()->ChangeCompressedToTagged(), load);
+    }
+#endif
     return AddNode(op, base, index);
   }
   Node* Store(MachineRepresentation rep, Node* base, Node* value,
