@@ -87,6 +87,24 @@
       "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65c60334_9dde5531",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-15T12:45:34Z",
+      "side": 1,
+      "message": "When you inserted the \u0027newTarget\u0027 parameter before \u0027target\u0027, all args were shifted by one:\n\nWhat was called \u0027newTarget\u0027 actually contained \u0027target\u0027. \u0027target\u0027 contained \u0027handler\u0027. \u0027handler\u0027 was, I guess, undefined if you only pass in 2 args.\n\nHere\u0027s a test case you can use to check validity:\n\nFor \u0027new Proxy(1, 2)\u0027, newTarget should be the Proxy function, target should be Smi 1, handler should be Smi 2. For \u0027Proxy(1, 2)\u0027, newTarget should be undefined, target: 1, handler: 2.\n\nAny constructed Proxy where the handler does any real work should fail at PS3 since args are shifted. E.g. this simple example:\n\n d8\u003e var handler \u003d { get: function(obj, prop) { console.log(\u0027get\u0027); return obj[prop]; }};\n d8\u003e var o \u003d {}\n d8\u003e var p \u003d new Proxy(o, handler)\n d8\u003e p[42]\n get\n\nIn PS3, I\u0027d expect the get handler to never be called.. Is that not the case?",
+      "parentUuid": "532c4e75_18f29c1c",
+      "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
