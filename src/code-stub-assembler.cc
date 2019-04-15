@@ -1233,15 +1233,20 @@ TNode<HeapObject> CodeStubAssembler::Allocate(TNode<IntPtrT> size_in_bytes,
                                               AllocationFlags flags) {
   Comment("Allocate");
   bool const new_space = !(flags & kPretenured);
-  if (!(flags & kAllowLargeObjectAllocation)) {
+  bool const allow_large_objects = flags & kAllowLargeObjectAllocation;
+  bool const space_guaranteed =
+      !new_space || !allow_large_objects || FLAG_young_generation_large_objects;
+  if (!allow_large_objects) {
     intptr_t size_constant;
     if (ToIntPtrConstant(size_in_bytes, size_constant)) {
       CHECK_LE(size_constant, kMaxRegularHeapObjectSize);
     }
   }
-  if (!(flags & kDoubleAlignment) && !(flags & kAllowLargeObjectAllocation)) {
-    return OptimizedAllocate(size_in_bytes, new_space ? AllocationType::kYoung
-                                                      : AllocationType::kOld);
+  if (!(flags & kDoubleAlignment) && space_guaranteed) {
+    return OptimizedAllocate(
+        size_in_bytes,
+        new_space ? AllocationType::kYoung : AllocationType::kOld,
+        allow_large_objects);
   }
   TNode<ExternalReference> top_address = ExternalConstant(
       new_space
