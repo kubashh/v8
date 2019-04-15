@@ -171,6 +171,15 @@ void WasmFunctionBuilder::SetAsmFunctionStartPosition(
   last_asm_source_position_ = function_position_u32;
 }
 
+void WasmFunctionBuilder::GiveCompilationHint(
+    WasmCompilationHintStrategy strategy, WasmCompilationHintTier baseline,
+    WasmCompilationHintTier top_tier) {
+  uint8_t hint_byte = static_cast<uint8_t>(strategy) |
+                      static_cast<uint8_t>(baseline) << 2 |
+                      static_cast<uint8_t>(top_tier) << 4;
+  hint_ = hint_byte;
+}
+
 void WasmFunctionBuilder::DeleteCodeAfter(size_t position) {
   DCHECK_LE(position, body_.size());
   body_.Truncate(position);
@@ -495,6 +504,34 @@ void WasmModuleBuilder::WriteTo(ZoneBuffer& buffer) const {
       buffer.write_size(index + function_imports_.size());
     }
 
+    FixupSection(buffer, start);
+  }
+
+  // == emit compilation hints section =========================================
+  bool emit_compilation_hints = false;
+  for (auto fn : functions_) {
+    if (fn->hint_.has_value()) {
+      emit_compilation_hints = true;
+      break;
+    }
+  }
+  if (emit_compilation_hints) {
+    // Emit the section code.
+    buffer.write_u8(kUnknownSectionCode);
+    // Emit a placeholder for section length.
+    size_t start = buffer.reserve_u32v();
+    // Emit custom section name.
+    buffer.write_size(16);
+    buffer.write(reinterpret_cast<const byte*>("compilationHints"), 16);
+    // Emit hint count.
+    buffer.write_size(functions_.size());
+    // Emit hint bytes.
+    const uint8_t default_hint = 0x00;
+    for (auto fn : functions_) {
+      uint8_t hint_byte = default_hint;
+      if (fn->hint_.has_value()) hint_byte = fn->hint_.value();
+      buffer.write_u8(hint_byte);
+    }
     FixupSection(buffer, start);
   }
 
