@@ -239,6 +239,24 @@
     },
     {
       "key": {
+        "uuid": "e4a71e4f_19711748",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-15T13:11:44Z",
+      "side": 1,
+      "message": "Probably although we should prefer resolving the naming conflict another way. A few suggestions:\n\n - Inline into the ToString builtin above and use that at all call sites.\n - ToString_Macro (since it\u0027s a torque macro disambiguation).\n - string::ToString\n - internal::ToString\n - macros::ToString\n - ToString_Full\n \nNone of the above are ideal, but I like ToStringTorque even less ;) Wdyt?",
+      "parentUuid": "01f7f561_82b6a4a9",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f858c075_0efdd00e",
         "filename": "src/builtins/builtins-conversion-gen.cc",
         "patchSetId": 2
