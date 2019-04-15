@@ -29,6 +29,7 @@ class LogCodesTask : public Task {
       : mutex_(mutex), task_slot_(task_slot), isolate_(isolate) {
     DCHECK_NOT_NULL(task_slot);
     DCHECK_NOT_NULL(isolate);
+    // foobar
   }
 
   ~LogCodesTask() {
