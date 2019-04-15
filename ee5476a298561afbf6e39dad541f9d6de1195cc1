@@ -105,6 +105,24 @@
       "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18ce170b_f19eaa70",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-15T17:45:10Z",
+      "side": 1,
+      "message": "Hey Jakob, I am afaid it is not aligned with your guess. Since it was not failing the test in https://cs.chromium.org/chromium/src/v8/test/mjsunit/es6/proxies-keys.js?rcl\u003d81260d20b1cfb15752913acb657113c92c6c0026\u0026l\u003d53 for PS3 as you can see.\n\nThe problem was that handler and target was still getting the correct passing value in any case.\n\nAnd the newTarget parameter was also getting the correct value (Underfined) in case \u0027Proxy(1,2)\u0027. \n\nOnly for case \u0027new Proxy(1,2)\u0027, the newTarget was `the hole` for PS3 while it should be the Proxy function.\n\nHence, instead of checking newTarget is Undefined or not, if we check it is JSFunction like:\n\nconst newTargetFunction \u003d Cast\u003cJSFunction\u003e(newTarget) otherwise ThrowTypeError(kConstructorNotFunction, \u0027Proxy\u0027);\n\nthen PS3 would fail. However, it is little different to the spec.",
+      "parentUuid": "65c60334_9dde5531",
+      "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
