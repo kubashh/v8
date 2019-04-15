@@ -257,6 +257,24 @@
     },
     {
       "key": {
+        "uuid": "aa37f1bb_05c0affd",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-15T14:46:05Z",
+      "side": 1,
+      "message": "To add one more to the list of suggestions: How about ToStringImplementation? I think this suggests better that you essentially never want to call this directly.",
+      "parentUuid": "e4a71e4f_19711748",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f858c075_0efdd00e",
         "filename": "src/builtins/builtins-conversion-gen.cc",
         "patchSetId": 2
