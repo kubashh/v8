@@ -22,6 +22,30 @@
       "revId": "fd8ce36550e5995b8176a8512c9bec396f032559",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c2bafc1_fee18f41",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-04-15T13:32:35Z",
+      "side": 1,
+      "message": "I tried various ways of adding RTTI in case \"is_ubsan\" is set in our own BUILD.gn files. Unfortunately gtest/gmock were compiled without RTTI in those cases, which caused link failures. The only clean solution I found was adding \"is_ubsan_vptr\" (my GN skills are lacking though, so there might be an easy way to achieve this).",
+      "parentUuid": "fed9e27d_3ace5195",
+      "range": {
+        "startLine": 762,
+        "startChar": 57,
+        "endLine": 762,
+        "endChar": 75
+      },
+      "revId": "fd8ce36550e5995b8176a8512c9bec396f032559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
