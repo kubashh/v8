@@ -273,12 +273,14 @@ class JsonTestProgressIndicator(ProgressIndicator):
     self.mode = mode
     self.results = []
     self.tests = []
+    # TODO: temporary solution, merge with the format above
+    self.findit_format = {
+      'tests': {},
+      'seconds_since_epoch': time.time(),
+    }
 
   def _on_result_for(self, test, result):
-    if result.is_rerun:
-      self.process_results(test, result.results)
-    else:
-      self.process_results(test, [result])
+    self.process_results(test, result.results if result.is_rerun else [result])
 
   def process_results(self, test, results):
     for run, result in enumerate(results):
@@ -287,6 +289,21 @@ class JsonTestProgressIndicator(ProgressIndicator):
       # Buffer all tests for sorting the durations in the end.
       # TODO(machenbach): Running average + buffer only slowest 20 tests.
       self.tests.append((test, output.duration, result.cmd))
+
+      # HACK: creates the test trie
+      node = self.findit_format['tests']
+      for token in test.procid.split('/'):
+        if token not in node:
+          node[token] = {}
+
+        node = node[token]
+
+      node.update({
+        "expected": test.expected_outcomes[0],
+        "actual": "PASS" if not result.output.exit_code else "FAIL",
+        "is_flaky": result.is_rerun,
+        "is_unexpected": result.has_unexpected_output,
+      })
 
       # Omit tests that run as expected on the first try.
       # Everything that happens after the first run is included in the output
@@ -338,14 +355,28 @@ class JsonTestProgressIndicator(ProgressIndicator):
       } for (test, duration, cmd) in self.tests[:20]
     ]
 
-    complete_results.append({
+    self.findit_format.update({
+      "version": 3,
+      "interrupted": False,
+      "path_delimiter": "/",
+      "num_failures_by_type": {
+        "FAIL": len(self.results),
+        "PASS": len(self.tests) - len(self.results),
+      },
+    })
+
+    full_output = {
       "arch": self.arch,
       "mode": self.mode,
       "results": self.results,
       "slowest_tests": slowest_tests,
       "duration_mean": duration_mean,
       "test_total": len(self.tests),
-    })
+    }
+
+    full_output.update(self.findit_format)
+
+    complete_results.append(full_output)
 
     with open(self.json_test_results, "w") as f:
       f.write(json.dumps(complete_results))
