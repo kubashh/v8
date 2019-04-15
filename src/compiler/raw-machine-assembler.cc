@@ -70,8 +70,11 @@ Node* RawMachineAssembler::RelocatableIntPtrConstant(intptr_t value,
 }
 
 Node* RawMachineAssembler::OptimizedAllocate(Node* size,
-                                             AllocationType allocation) {
-  return AddNode(simplified()->AllocateRaw(Type::Any(), allocation), size);
+                                             AllocationType allocation,
+                                             bool allow_large_objects) {
+  return AddNode(
+      simplified()->AllocateRaw(Type::Any(), allocation, allow_large_objects),
+      size);
 }
 
 Schedule* RawMachineAssembler::Export() {
