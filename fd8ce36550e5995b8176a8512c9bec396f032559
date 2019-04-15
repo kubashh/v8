@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fed9e27d_3ace5195",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-15T13:24:57Z",
+      "side": 1,
+      "message": "Could we not set use_rtti instead in our BUILD.gn file when we use ubsan? Otherwise people might forget to set both is_ubsan and is_ubsan_vptr when reproing locally.\n\nNot sure if we can set use_rtti early enough though.",
+      "range": {
+        "startLine": 762,
+        "startChar": 57,
+        "endLine": 762,
+        "endChar": 75
+      },
+      "revId": "fd8ce36550e5995b8176a8512c9bec396f032559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
