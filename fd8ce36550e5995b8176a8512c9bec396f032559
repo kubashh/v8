@@ -46,6 +46,30 @@
       "revId": "fd8ce36550e5995b8176a8512c9bec396f032559",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a22fc2c9_ef1f8d00",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-15T13:45:32Z",
+      "side": 1,
+      "message": "I also gave it a try: https://crrev.com/c/1565900. Let\u0027s see if builder runs those tests successfully.",
+      "parentUuid": "1c2bafc1_fee18f41",
+      "range": {
+        "startLine": 762,
+        "startChar": 57,
+        "endLine": 762,
+        "endChar": 75
+      },
+      "revId": "fd8ce36550e5995b8176a8512c9bec396f032559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
