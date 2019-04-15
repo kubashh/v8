@@ -696,6 +696,7 @@ config("toolchain") {
   # Chromium uses a hand-picked subset of UBSan coverage. We want everything.
   if (is_ubsan) {
     cflags += [ "-fsanitize=undefined" ]
+    use_rtti = true
   }
 }
 
