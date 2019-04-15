@@ -123,6 +123,24 @@
       "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c528a92d_6ec4807f",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-15T19:29:04Z",
+      "side": 1,
+      "message": "Based on that, if we default cast newTarget as JSFunction then we can avoid this scenario.",
+      "parentUuid": "18ce170b_f19eaa70",
+      "revId": "ee5476a298561afbf6e39dad541f9d6de1195cc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
