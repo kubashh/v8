@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c06dc82_808be86c",
+        "filename": "src/ast/ast.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 2396,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-15T18:35:00Z",
+      "side": 1,
+      "message": "Please add a comment here explaining this is the sum of fields + props and it could vary based on whether we lazy or eager parse this function",
+      "revId": "094e7f6c7d8849db700b08bc157eb46654a88e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c92a3aae_39d68572",
+        "filename": "src/objects.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 5557,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-15T18:35:00Z",
+      "side": 1,
+      "message": "Should we DCHECK(literal-\u003eShouldEagerCompile()) ?",
+      "revId": "094e7f6c7d8849db700b08bc157eb46654a88e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a95762f8_1dcaa88e",
+        "filename": "src/objects/shared-function-info.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-15T18:35:00Z",
+      "side": 1,
+      "message": "Can you please add a line explaining why these are mutually exclusive?",
+      "revId": "094e7f6c7d8849db700b08bc157eb46654a88e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9604ecce_9470e1ac",
+        "filename": "test/cctest/test-inobject-slack-tracking.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-15T18:35:00Z",
+      "side": 1,
+      "message": "We\u0027ll need tests for eagerly parsed constructors. There\u0027s a FLAG_no_lazy that you can use for this I think.",
+      "revId": "094e7f6c7d8849db700b08bc157eb46654a88e30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
