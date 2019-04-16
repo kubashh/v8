@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f569cd80_fa0609e9",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-16T13:31:33Z",
+      "side": 1,
+      "message": "nit: We could express this as follows to make it slightly easier to read and save one level of indentation ...\n\nif (only_lazy_functions \u0026\u0026 !IsLazyCompilation(...)) {\n  continue;\n}",
+      "range": {
+        "startLine": 843,
+        "startChar": 0,
+        "endLine": 845,
+        "endChar": 38
+      },
+      "revId": "935aee7e8fe821d56440ab0210e46813e87ea95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12ac9a5f_1feede8e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-16T13:31:33Z",
+      "side": 1,
+      "message": "nit: Not sure we should have this wrapper just to pass a different (default) value for the \"only_lazy_functions\". I\u0027d rather call the underlying function directly. I you are worried about readability of the call-sites, I\u0027d rather change the boolean flag to ...\n\nenum class OnlyLazyFunctions : bool { no \u003d false, yes };",
+      "range": {
+        "startLine": 870,
+        "startChar": 5,
+        "endLine": 870,
+        "endChar": 38
+      },
+      "revId": "935aee7e8fe821d56440ab0210e46813e87ea95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7654da6a_162c3de7",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-16T13:31:33Z",
+      "side": 1,
+      "message": "nit: Just \"wasm_module\" should work. I know we are inconsistent with the naming. :/",
+      "range": {
+        "startLine": 988,
+        "startChar": 25,
+        "endLine": 988,
+        "endChar": 48
+      },
+      "revId": "935aee7e8fe821d56440ab0210e46813e87ea95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "592c5fd3_a7f9e00c",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1742,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-16T13:31:33Z",
+      "side": 1,
+      "message": "typo: \"module\"",
+      "range": {
+        "startLine": 1742,
+        "startChar": 18,
+        "endLine": 1742,
+        "endChar": 24
+      },
+      "revId": "935aee7e8fe821d56440ab0210e46813e87ea95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
