@@ -2778,6 +2778,13 @@ void Parser::DeclareClassVariable(const AstRawString* name,
   }
 }
 
+void Parser::DeclareClassBrandVariable(ClassScope* scope, ClassInfo* class_info,
+                                       int class_token_pos) {
+  class_info->brand =
+      CreateSyntheticContextVariable(ast_value_factory()->dot_brand_string());
+  class_info->brand->set_initializer_position(class_token_pos);
+}
+
 // TODO(gsathya): Ideally, this should just bypass scope analysis and
 // allocate a slot directly on the context. We should just store this
 // index in the AST, instead of storing the variable.
@@ -2803,12 +2810,12 @@ Variable* Parser::CreatePrivateNameVariable(ClassScope* scope,
   return proxy->var();
 }
 
-void Parser::DeclareClassField(ClassScope* scope,
-                               ClassLiteralProperty* property,
-                               const AstRawString* property_name,
-                               bool is_static, bool is_computed_name,
-                               bool is_private, ClassInfo* class_info) {
-  DCHECK(allow_harmony_public_fields() || allow_harmony_private_fields());
+void Parser::DeclarePublicClassField(ClassScope* scope,
+                                     const AstRawString* property_name,
+                                     ClassLiteralProperty* property,
+                                     bool is_static, bool is_computed_name,
+                                     ClassInfo* class_info) {
+  DCHECK(allow_harmony_public_fields());
 
   if (is_static) {
     class_info->static_fields->Add(property, zone());
@@ -2816,7 +2823,6 @@ void Parser::DeclareClassField(ClassScope* scope,
     class_info->instance_fields->Add(property, zone());
   }
 
-  DCHECK_IMPLIES(is_computed_name, !is_private);
   if (is_computed_name) {
     // We create a synthetic variable name here so that scope
     // analysis doesn't dedupe the vars.
@@ -2825,34 +2831,55 @@ void Parser::DeclareClassField(ClassScope* scope,
             ast_value_factory(), class_info->computed_field_count));
     property->set_computed_name_var(computed_name_var);
     class_info->properties->Add(property, zone());
-  } else if (is_private) {
-    Variable* private_name_var =
-        CreatePrivateNameVariable(scope, property_name);
-    int pos = property->value()->position();
-    if (pos == kNoSourcePosition) {
-      pos = property->key()->position();
-    }
-    private_name_var->set_initializer_position(pos);
-    property->set_private_name_var(private_name_var);
-    class_info->properties->Add(property, zone());
   }
+}
+
+void Parser::DeclarePrivateClassMember(ClassScope* scope,
+                                       const AstRawString* property_name,
+                                       ClassLiteralProperty* property,
+                                       ClassLiteralProperty::Kind kind,
+                                       bool is_static, ClassInfo* class_info) {
+  DCHECK(allow_harmony_private_fields());
+
+  // We do not support private accessors yet (which allow declaring the same
+  // private name twice). Make them noops.
+  if (kind != ClassLiteralProperty::Kind::FIELD &&
+      kind != ClassLiteralProperty::Kind::METHOD) {
+    return;
+  }
+  if (is_static) {
+    class_info->static_fields->Add(property, zone());
+  } else {
+    class_info->instance_fields->Add(property, zone());
+  }
+
+  Variable* private_name_var = CreatePrivateNameVariable(scope, property_name);
+  int pos = property->value()->position();
+  if (pos == kNoSourcePosition) {
+    pos = property->key()->position();
+  }
+  private_name_var->set_initializer_position(pos);
+  property->set_private_name_var(private_name_var);
+  class_info->properties->Add(property, zone());
 }
 
 // This method declares a property of the given class.  It updates the
 // following fields of class_info, as appropriate:
 //   - constructor
 //   - properties
-void Parser::DeclareClassProperty(ClassScope* scope,
-                                  const AstRawString* class_name,
-                                  ClassLiteralProperty* property,
-                                  bool is_constructor, ClassInfo* class_info) {
+void Parser::DeclarePublicClassMethod(ClassScope* scope,
+                                      const AstRawString* property_name,
+                                      ClassLiteralProperty* property,
+                                      bool is_constructor, bool is_static,
+                                      ClassInfo* class_info) {
   if (is_constructor) {
     DCHECK(!class_info->constructor);
     class_info->constructor = property->value()->AsFunctionLiteral();
     DCHECK_NOT_NULL(class_info->constructor);
     class_info->constructor->set_raw_name(
-        class_name != nullptr ? ast_value_factory()->NewConsString(class_name)
-                              : nullptr);
+        property_name != nullptr
+            ? ast_value_factory()->NewConsString(property_name)
+            : nullptr);
     return;
   }
 
@@ -2861,14 +2888,15 @@ void Parser::DeclareClassProperty(ClassScope* scope,
 
 FunctionLiteral* Parser::CreateInitializerFunction(
     const char* name, DeclarationScope* scope,
-    ZonePtrList<ClassLiteral::Property>* fields) {
+    ZonePtrList<ClassLiteral::Property>* fields, Variable* brand) {
   DCHECK_EQ(scope->function_kind(),
             FunctionKind::kClassMembersInitializerFunction);
   // function() { .. class fields initializer .. }
   ScopedPtrList<Statement> statements(pointer_buffer());
-  InitializeClassMembersStatement* static_fields =
-      factory()->NewInitializeClassMembersStatement(fields, kNoSourcePosition);
-  statements.Add(static_fields);
+  InitializeClassMembersStatement* stmt =
+      factory()->NewInitializeClassMembersStatement(fields, brand,
+                                                    kNoSourcePosition);
+  statements.Add(stmt);
   return factory()->NewFunctionLiteral(
       ast_value_factory()->GetOneByteString(name), scope, statements, 0, 0, 0,
       FunctionLiteral::kNoDuplicateParameters,
@@ -2909,19 +2937,19 @@ Expression* Parser::RewriteClassLiteral(ClassScope* block_scope,
   if (class_info->has_static_class_fields) {
     static_fields_initializer = CreateInitializerFunction(
         "<static_fields_initializer>", class_info->static_fields_scope,
-        class_info->static_fields);
+        class_info->static_fields, nullptr);
   }
 
   FunctionLiteral* instance_members_initializer_function = nullptr;
   if (class_info->has_instance_members) {
     instance_members_initializer_function = CreateInitializerFunction(
         "<instance_members_initializer>", class_info->instance_members_scope,
-        class_info->instance_fields);
+        class_info->instance_fields, class_info->brand);
     class_info->constructor->set_requires_instance_members_initializer(true);
   }
 
   ClassLiteral* class_literal = factory()->NewClassLiteral(
-      block_scope, class_info->variable, class_info->extends,
+      block_scope, class_info->variable, class_info->brand, class_info->extends,
       class_info->constructor, class_info->properties,
       static_fields_initializer, instance_members_initializer_function, pos,
       end_pos, class_info->has_name_static_property,
