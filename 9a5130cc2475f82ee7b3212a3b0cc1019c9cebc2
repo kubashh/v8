@@ -16,6 +16,87 @@
       "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "064144a0_189727cb",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-16T07:51:34Z",
+      "side": 1,
+      "message": "+1 + comment explaining what this means. It is very confusing now.\n\nI guess the idea is that the only case OptimizedAllocate cannot handle is allocating large object in new space when there is no large object new space.",
+      "parentUuid": "55e90a8b_438a2c1e",
+      "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfe02b45_be800b05",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-16T07:51:34Z",
+      "side": 1,
+      "message": "Just to make sure I understand: This previously disallowed large object old space allocation. Is it ok to do it now because you added the bailout to the memory optimizer?",
+      "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeb0594b_085e9f3d",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-16T07:51:34Z",
+      "side": 1,
+      "message": "Please, d-check consistence of {allow_large_objects} with {allocation} and FLAG_young_generation_large_objects.",
+      "range": {
+        "startLine": 1126,
+        "startChar": 2,
+        "endLine": 1126,
+        "endChar": 70
+      },
+      "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2da91eff_91a8d754",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-16T07:51:34Z",
+      "side": 1,
+      "message": "Enum, please.",
+      "range": {
+        "startLine": 1662,
+        "startChar": 42,
+        "endLine": 1662,
+        "endChar": 66
+      },
+      "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
