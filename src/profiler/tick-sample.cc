@@ -155,7 +155,7 @@ DISABLE_ASAN void TickSample::Init(Isolate* v8_isolate,
   this->update_stats = update_stats;
   SampleInfo info;
   RegisterState regs = reg_state;
-  if (!GetStackSample(v8_isolate, &regs, record_c_entry_frame, stack,
+  if (!GetStackSample(v8_isolate, &regs, record_c_entry_frame, stack, contexts,
                       kMaxFramesCount, &info, use_simulator_reg_state)) {
     // It is executing JS but failed to collect a stack trace.
     // Mark the sample as spoiled.
@@ -169,6 +169,7 @@ DISABLE_ASAN void TickSample::Init(Isolate* v8_isolate,
   has_external_callback = info.external_callback_entry != nullptr;
   if (has_external_callback) {
     external_callback_entry = info.external_callback_entry;
+    top_context = info.top_context;
   } else if (frames_count) {
     // sp register may point at an arbitrary place in memory, make
     // sure sanitizers don't complain about it.
@@ -189,13 +190,15 @@ DISABLE_ASAN void TickSample::Init(Isolate* v8_isolate,
 
 bool TickSample::GetStackSample(Isolate* v8_isolate, RegisterState* regs,
                                 RecordCEntryFrame record_c_entry_frame,
-                                void** frames, size_t frames_limit,
+                                void** frames, void** contexts,
+                                size_t frames_limit,
                                 v8::SampleInfo* sample_info,
                                 bool use_simulator_reg_state) {
   i::Isolate* isolate = reinterpret_cast<i::Isolate*>(v8_isolate);
   sample_info->frames_count = 0;
   sample_info->vm_state = isolate->current_vm_state();
   sample_info->external_callback_entry = nullptr;
+  sample_info->top_context = nullptr;
   if (sample_info->vm_state == GC) return true;
 
   i::Address js_entry_sp = isolate->js_entry_sp();
@@ -232,6 +235,28 @@ bool TickSample::GetStackSample(Isolate* v8_isolate, RegisterState* regs,
         external_callback_entry_ptr == nullptr
             ? nullptr
             : reinterpret_cast<void*>(*external_callback_entry_ptr);
+
+    if (contexts) {
+      i::Context top_context = isolate->context();
+      if (!top_context.is_null()) {
+        sample_info->top_context =
+            reinterpret_cast<void*>(top_context.native_context().ptr());
+      }
+    }
+    /*
+    i::Address context_address = isolate->context().ptr();
+    if (context_address != i::kNullAddress) {
+      // TODO(acomminos): factor this out
+      int native_context_offset =
+          i::Context::SlotOffset(i::Context::NATIVE_CONTEXT_INDEX);
+      i::Address native_context_slot_address =
+          context_address + native_context_offset;
+      i::Address native_context_address =
+          i::Memory<i::Address>(native_context_slot_address);
+      sample_info->top_context =
+          reinterpret_cast<void*>(native_context_address);
+    }
+    */
   }
 
   i::SafeStackFrameIterator it(isolate, reinterpret_cast<i::Address>(regs->fp),
@@ -254,6 +279,32 @@ bool TickSample::GetStackSample(Isolate* v8_isolate, RegisterState* regs,
       timer = timer->parent();
     }
     if (i == frames_limit) break;
+
+    // Attempt to read the native context associated with the frame from the
+    // heap.
+    if (it.frame()->is_standard() && contexts) {
+      i::Address context_address = i::Memory<i::Address>(
+          it.frame()->fp() + i::StandardFrameConstants::kContextOffset);
+      if (HAS_HEAP_OBJECT_TAG(context_address)) {
+        int native_context_offset =
+            i::Context::SlotOffset(i::Context::NATIVE_CONTEXT_INDEX);
+        i::Address native_context_slot_address =
+            context_address + native_context_offset;
+
+        // Note that once a native context has been assigned to a context, the
+        // slot is no longer mutated. Since we don't record TickSamples during
+        // GC, the only other situation where the address here would be invalid
+        // is if it's being reassigned, which isn't possible.
+        i::Address native_context_address =
+            i::Memory<i::Address>(native_context_slot_address);
+        DCHECK(HAS_HEAP_OBJECT_TAG(native_context_address));
+
+        contexts[i] = reinterpret_cast<void*>(native_context_address);
+      } else {
+        fprintf(stderr, "couldn't get context\n");
+      }
+    }
+
     if (it.frame()->is_interpreted()) {
       // For interpreted frames use the bytecode array pointer as the pc.
       i::InterpretedFrame* frame =

@@ -58,9 +58,12 @@ struct V8_EXPORT TickSample {
       : state(OTHER),
         pc(nullptr),
         external_callback_entry(nullptr),
+        top_context(nullptr),
         frames_count(0),
         has_external_callback(false),
-        update_stats(true) {}
+        update_stats(true) {
+    memset(contexts, 0, sizeof(contexts));
+  }
 
   /**
    * Initialize a tick sample from the isolate.
@@ -99,8 +102,8 @@ struct V8_EXPORT TickSample {
    */
   static bool GetStackSample(Isolate* isolate, v8::RegisterState* state,
                              RecordCEntryFrame record_c_entry_frame,
-                             void** frames, size_t frames_limit,
-                             v8::SampleInfo* sample_info,
+                             void** frames, void** contexts,
+                             size_t frames_limit, v8::SampleInfo* sample_info,
                              bool use_simulator_reg_state = true);
   StateTag state;  // The state of the VM.
   void* pc;        // Instruction pointer.
@@ -111,6 +114,8 @@ struct V8_EXPORT TickSample {
   static const unsigned kMaxFramesCountLog2 = 8;
   static const unsigned kMaxFramesCount = (1 << kMaxFramesCountLog2) - 1;
   void* stack[kMaxFramesCount];                 // Call stack.
+  void* contexts[kMaxFramesCount];  // Stack of associated native contexts
+  void* top_context;  // Address to the top native context on the call stack.
   unsigned frames_count : kMaxFramesCountLog2;  // Number of captured frames.
   bool has_external_callback : 1;
   bool update_stats : 1;  // Whether the sample should update aggregated stats.
@@ -350,13 +355,15 @@ class V8_EXPORT CpuProfiler {
    * be recorded in addition to the aggregated tree.
    */
   void StartProfiling(Local<String> title, CpuProfilingMode mode,
-                      bool record_samples = false);
+                      bool record_samples = false,
+                      Local<Context> context = Local<Context>());
   /**
    * The same as StartProfiling above, but the CpuProfilingMode defaults to
    * kLeafNodeLineNumbers mode, which was the previous default behavior of the
    * profiler.
    */
-  void StartProfiling(Local<String> title, bool record_samples = false);
+  void StartProfiling(Local<String> title, bool record_samples = false,
+                      Local<Context> context = Local<Context>());
 
   /**
    * Stops collecting CPU profile with a given title and returns it.
