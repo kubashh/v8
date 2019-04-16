@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9258684d_b4073932",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-16T09:10:40Z",
+      "side": 1,
+      "message": "The field looks uninitialized.",
+      "range": {
+        "startLine": 75,
+        "startChar": 14,
+        "endLine": 75,
+        "endChar": 21
+      },
+      "revId": "7e540cfc820d905a47e3cde9aff208f6e3e02968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d65827e_5144dc04",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-16T09:10:40Z",
+      "side": 1,
+      "message": "Question just for my own understanding: I assume this destructor is only called from {WasmEngine::RemoveIsolate} where we hold the mutex that is guarding this entire data-structure including the {code_to_log} vector. Correct?\n\nAlternatively we could move the down-ref into {WasmEngine::RemoveIsolate} and just DCHECK here that the vector is empty. Not sure that is safer/clearer though. Just an idea. Your call.",
+      "range": {
+        "startLine": 118,
+        "startChar": 3,
+        "endLine": 118,
+        "endChar": 14
+      },
+      "revId": "7e540cfc820d905a47e3cde9aff208f6e3e02968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
