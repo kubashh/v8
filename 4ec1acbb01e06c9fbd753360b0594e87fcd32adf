@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ab41a42a_ada00888",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "This means that a private method declaration now also triggers the creation of a class member initializer (the instance_members_initializer or static_fields_initializer) so that the brand can be assigned there.",
+      "parentUuid": "f51cdfcb_4771415e",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2c851a99_73b4d88e",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 12
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "173cc32b_7293c873",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c851a99_73b4d88e",
+      "range": {
+        "startLine": 2015,
+        "startChar": 0,
+        "endLine": 2015,
+        "endChar": 67
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5f64e10_5677146d",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 12
@@ -53,6 +95,24 @@
       "writtenOn": "2019-04-16T16:58:06Z",
       "side": 1,
       "message": "Please add tests for these cases",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d657263c_528159b2",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "I believe the anonymous class expressions in private-methods.js should cover these? Like this\n\n\n{\n  const C \u003d class {\n    #a() { }\n  }\n  new C;\n}\n\nWhich gives me\n\n -\u003e 0x3198c79df54c @   38 : 61 5b 01 f6 01    CallRuntime [CreatePrivateNameSymbol], r5-r5\n      [          r5 -\u003e 0x319809580751 \u003cString[#0]: \u003e ]\n      [ accumulator \u003c- 0x3198c79df709 \u003cSymbol: \u003e ]\n\nIn the --trace-ignition output.",
+      "parentUuid": "b5f64e10_5677146d",
       "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "ef224feb_a2573c4e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "In nested classes:\n\nclass A {\n  #foo() {\n     class B {\n       #bar() { }\n     }\n  }\n}\n\nWhen visiting the initializer for B,\n\nstmt-\u003escope() // B, class scope, has brand\nstmt-\u003escope()-\u003eouter_scope()  // #foo, not a class scope\nstmt-\u003escope()-\u003eouter_scope()-\u003eouter_scope()  // A, class scope, has brand",
+      "parentUuid": "92490721_1b4875ac",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c4ad4294_ffcbee9b",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 12
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "638228af_c9c12480",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2159,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4ad4294_ffcbee9b",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a6d7fba_8c067f20",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 12
@@ -104,6 +200,24 @@
       "writtenOn": "2019-04-16T16:58:06Z",
       "side": 1,
       "message": "Shouldn\u0027t this happen before we parse the function literal, so that we the method is parsed within the initializer scope? Is this observable?",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2953f2d1_f10c1415",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2245,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "Parsing the method in the initializer scope triggers a DCHECK in BytecodeGenerator::VisitFunctionLiteral():\n\nDCHECK(expr-\u003escope()-\u003eouter_scope() \u003d\u003d current_scope());\n\nI don\u0027t think the initializer scopes actually have any declarations that should be accessible to the private methods? So it\u0027s probably not observable.",
+      "parentUuid": "1a6d7fba_8c067f20",
       "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -133,6 +247,30 @@
     },
     {
       "key": {
+        "uuid": "1fb7ad30_0eab1e9e",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 4313,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae6d81e9_70f99f5b",
+      "range": {
+        "startLine": 4313,
+        "startChar": 17,
+        "endLine": 4313,
+        "endChar": 26
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf035d6f_6575a9bf",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 12
@@ -153,6 +291,30 @@
       "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d614c7a7_c2d37eaf",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 4327,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf035d6f_6575a9bf",
+      "range": {
+        "startLine": 4327,
+        "startChar": 25,
+        "endLine": 4327,
+        "endChar": 63
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -179,6 +341,30 @@
     },
     {
       "key": {
+        "uuid": "d5b38be5_a8c84afa",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 4348,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "173489f3_21c9d945",
+      "range": {
+        "startLine": 4348,
+        "startChar": 59,
+        "endLine": 4348,
+        "endChar": 74
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d88bcdc_3cd6dd82",
         "filename": "src/parsing/parser.cc",
         "patchSetId": 12
@@ -193,6 +379,24 @@
       "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73e5899d_87275418",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2835,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d88bcdc_3cd6dd82",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -213,6 +417,24 @@
     },
     {
       "key": {
+        "uuid": "20324317_429a9ee6",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2837,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4298325d_8a13b805",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0ac330b_ae6b1e18",
         "filename": "src/runtime/runtime-object.cc",
         "patchSetId": 12
@@ -230,6 +452,24 @@
     },
     {
       "key": {
+        "uuid": "ebeaf167_37994216",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "I don\u0027t think this is actually reachable? We have some DCHECKs to prevent this. I\u0027ll switch this to a DCHECK.",
+      "parentUuid": "f0ac330b_ae6b1e18",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "03d39b67_1ccb9c07",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 12
@@ -241,6 +481,30 @@
       "writtenOn": "2019-04-16T16:58:06Z",
       "side": 1,
       "message": "why do we need this?",
+      "range": {
+        "startLine": 5700,
+        "startChar": 46,
+        "endLine": 5700,
+        "endChar": 71
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b5c7dde_cf721430",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5700,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-16T18:40:16Z",
+      "side": 1,
+      "message": "There are some test cases above that use public fields e.g. \"#a\\n b\\n\".\n\nOr maybe private fields should imply public fields now?",
+      "parentUuid": "03d39b67_1ccb9c07",
       "range": {
         "startLine": 5700,
         "startChar": 46,
