@@ -154,11 +154,6 @@ def GeometricMean(values):
   return str(math.exp(sum(map(math.log, values)) / len(values)))
 
 
-class TestFailedError(Exception):
-  """Error raised when a test has failed due to a non-infra issue."""
-  pass
-
-
 class Results(object):
   """Place holder for result traces."""
   def __init__(self, traces=None, errors=None):
@@ -292,7 +287,7 @@ def AccumulateResults(
                          This is needed so that we reuse this script for both CI
                          and trybot, but want to ignore second run on CI without
                          having to spread this logic throughout the script.
-    calc_total: Boolean flag to speficy the calculation of a summary trace.
+    calc_total: Boolean flag to specify the calculation of a summary trace.
   Returns: A 'Results' object.
   """
   measurements = [
@@ -580,6 +575,7 @@ class RunnableTraceConfig(TraceConfig, RunnableConfig):
     )
 
 
+# TODO(sergiyb): Deprecate and remove. No benchmarks are using this code.
 class RunnableGenericConfig(RunnableConfig):
   """Represents a runnable suite definition with generic traces."""
   def __init__(self, suite, parent, arch):
@@ -675,15 +671,28 @@ class Platform(object):
 
   def _TimedRun(self, runnable, count, secondary=False):
     runnable_start_time = datetime.datetime.utcnow()
-    stdout = self._Run(runnable, count, secondary)
+    output = self._Run(runnable, count, secondary)
     runnable_duration = datetime.datetime.utcnow() - runnable_start_time
-    if runnable_duration.total_seconds() > 0.9 * runnable.timeout:
+    output.duration = output.duration or runnable_duration
+    if output.duration > 0.9 * runnable.timeout:
       runnable.has_near_timeouts = True
-    # TODO(sergiyb): Move creating this object closer to the actual command
-    # execution and popupate more fields with actual data.
-    return Output(
-        exit_code=0, timed_out=False, stdout=stdout, stderr=None, pid=None,
-        duration=runnable_duration)
+    if output.stdout:
+      logging.info(title % 'Stdout' + '\n%s', output.stdout)
+    if output.stderr:  # pragma: no cover
+      # Print stderr for debugging.
+      logging.info(title % 'Stderr' + '\n%s', output.stderr)
+    if output.timed_out:
+      runnable.has_timeouts = True
+      logging.warning('>>> Test timed out after %ss.', runnable.timeout)
+    if output.exit_code != 0:
+      logging.warning('>>> Test crashed with exit code %d.' $ output.exit_code)
+    # TODO(sergiyb): Deprecate process_size and replace with cmd_prefix.
+    if runner.process_size:
+      if output.stderr:
+        output.stdout += output.stderr
+      else:
+        output.stdout += 'MaxMemory: Unsupported'
+    return output
 
   def Run(self, runnable, count):
     """Execute the benchmark's main file.
@@ -746,17 +755,6 @@ class DesktopPlatform(Platform):
       logging.exception(title % 'OSError')
       raise
 
-    logging.info(title % 'Stdout' + '\n%s', output.stdout)
-    if output.stderr:  # pragma: no cover
-      # Print stderr for debugging.
-      logging.info(title % 'Stderr' + '\n%s', output.stderr)
-    if output.timed_out:
-      logging.warning('>>> Test timed out after %ss.', runnable.timeout)
-      runnable.has_timeouts = True
-      raise TestFailedError()
-    if output.exit_code != 0:
-      logging.warning('>>> Test crashed.')
-      raise TestFailedError()
     if '--prof' in self.extra_flags:
       os_prefix = {'linux': 'linux', 'macos': 'mac'}.get(utils.GuessOS())
       if os_prefix:
@@ -766,10 +764,7 @@ class DesktopPlatform(Platform):
         logging.warning(
             'Profiler option currently supported on Linux and Mac OS.')
 
-    # time outputs to stderr
-    if runnable.process_size:
-      return output.stdout + output.stderr
-    return output.stdout
+    return output
 
 
 class AndroidPlatform(Platform):  # pragma: no cover
@@ -827,28 +822,18 @@ class AndroidPlatform(Platform):  # pragma: no cover
       logging.debug('Dumping logcat into %s', logcat_file)
 
     try:
-      stdout = self.driver.run(
+      return Output(stdout=self.driver.run(
           target_dir=target_dir,
           binary=runnable.binary,
           args=runnable.GetCommandFlags(self.extra_flags),
           rel_path=bench_rel,
           timeout=runnable.timeout,
           logcat_file=logcat_file,
-      )
-      logging.info(title % 'Stdout' + '\n%s', stdout)
+      ))
     except android.CommandFailedException as e:
-      logging.info(title % 'Stdout' + '\n%s', e.output)
-      logging.warning('>>> Test crashed.')
-      raise TestFailedError()
+      return Output(stdout=e.output, exit_code=e.status)
     except android.TimeoutException as e:
-      if e.output is not None:
-        logging.info(title % 'Stdout' + '\n%s', e.output)
-      logging.warning('>>> Test timed out after %ss.', runnable.timeout)
-      runnable.has_timeouts = True
-      raise TestFailedError()
-    if runnable.process_size:
-      return stdout + 'MaxMemory: Unsupported'
-    return stdout
+      return Output(stdout=e.output, timed_out=True)
 
 class CustomMachineConfiguration:
   def __init__(self, disable_aslr = False, governor = None):
@@ -1127,16 +1112,15 @@ def Main(args):
           for i in range(0, max(1, total_runs)):
             attempts_left = runnable.retry_count + 1
             while attempts_left:
-              try:
-                yield platform.Run(runnable, i)
-              except TestFailedError:
-                attempts_left -= 1
-                if not attempts_left:  # ignore failures until last attempt
-                  have_failed_tests[0] = True
-                else:
-                  logging.info('>>> Retrying suite: %s', runnable_name)
-              else:
+              output = platform.Run(runnable, i)
+              if output.exit_code == 0 and not output.timed_out:
+                yield output
                 break
+              attempts_left -= 1
+              if not attempts_left:  # ignore failures until last attempt
+                have_failed_tests[0] = True
+              else:
+                logging.info('>>> Retrying suite: %s', runnable_name)
 
         # Let runnable iterate over all runs and handle output.
         result, result_secondary = runnable.Run(
