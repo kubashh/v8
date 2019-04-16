@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6aa48e5b_7f49e61a",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-16T11:31:09Z",
+      "side": 1,
+      "message": "Yep, thanks for catching this before the roller caught it. Fixed.",
+      "parentUuid": "9258684d_b4073932",
+      "range": {
+        "startLine": 75,
+        "startChar": 14,
+        "endLine": 75,
+        "endChar": 21
+      },
+      "revId": "7e540cfc820d905a47e3cde9aff208f6e3e02968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d65827e_5144dc04",
         "filename": "src/wasm/wasm-engine.cc",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "7e540cfc820d905a47e3cde9aff208f6e3e02968",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bed13da2_49f4381e",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-16T11:31:09Z",
+      "side": 1,
+      "message": "Yes, it sounds better to put all logic in the engine. This {IsolateInfo} should be a plain dump struct.\nThanks for that suggestion, done.",
+      "parentUuid": "8d65827e_5144dc04",
+      "range": {
+        "startLine": 118,
+        "startChar": 3,
+        "endLine": 118,
+        "endChar": 14
+      },
+      "revId": "7e540cfc820d905a47e3cde9aff208f6e3e02968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
