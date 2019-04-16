@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93775cb1_cc010e4a",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-16T14:13:36Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this make us skip the native-module check on the item that is sitting in [i] afterwards? I think for this to work properly we need to not increment {i} on this path.",
+      "range": {
+        "startLine": 611,
+        "startChar": 0,
+        "endLine": 613,
+        "endChar": 66
+      },
+      "revId": "8c3ee5372fa81d06be5cf28443aa26475b4fc71a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
