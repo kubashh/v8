@@ -16,6 +16,24 @@
       "revId": "3abfe4790a9e459c353393e234ad90b00ebd2874",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "006d5322_89e47643",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-04-16T16:21:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5eec525_89fbf906",
+      "revId": "3abfe4790a9e459c353393e234ad90b00ebd2874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
