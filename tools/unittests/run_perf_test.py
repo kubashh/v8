@@ -128,7 +128,8 @@ class PerfTest(unittest.TestCase):
     # Fake output for each test run.
     test_outputs = [Output(stdout=arg,
                            timed_out=kwargs.get('timed_out', False),
-                           exit_code=kwargs.get('exit_code', 0))
+                           exit_code=kwargs.get('exit_code', 0),
+                           duration=42)
                     for arg in args[1]]
     def create_cmd(*args, **kwargs):
       cmd = mock.MagicMock()
@@ -166,11 +167,14 @@ class PerfTest(unittest.TestCase):
 
   def _VerifyResults(self, suite, units, traces, file_name=None):
     self.assertEquals([
-      {'units': units,
-       'graphs': [suite, trace['name']],
-       'results': trace['results'],
-       'stddev': trace['stddev']} for trace in traces],
-      self._LoadResults(file_name)['traces'])
+      {
+        'units': units,
+        'graphs': [suite, trace['name']],
+        'results': trace['results'],
+        'stddev': trace['stddev'],
+        'durations': trace.get('durations', [42] * len(trace['results'])),
+      } for trace in traces
+    ], self._LoadResults(file_name)['traces'])
 
   def _VerifyErrors(self, errors):
     self.assertEquals(errors, self._LoadResults()['errors'])
@@ -271,15 +275,18 @@ class PerfTest(unittest.TestCase):
       {'units': 'score',
        'graphs': ['test', 'Richards'],
        'results': ['50.0', '100.0'],
-       'stddev': ''},
+       'stddev': '',
+       'durations': [42, 42]},
       {'units': 'ms',
        'graphs': ['test', 'Sub', 'Leaf'],
        'results': ['3.0', '2.0', '1.0'],
-       'stddev': ''},
+       'stddev': '',
+       'durations': [42, 42, 42]},
       {'units': 'score',
        'graphs': ['test', 'DeltaBlue'],
        'results': ['200.0'],
-       'stddev': ''},
+       'stddev': '',
+       'durations': [42]},
       ], self._LoadResults()['traces'])
     self._VerifyErrors([])
     self._VerifyMockMultiple(
@@ -354,9 +361,22 @@ class PerfTest(unittest.TestCase):
         mock.MagicMock(return_value={'is_android': False})).start()
     self.assertEquals(0, self._CallMain('--buildbot'))
     self._VerifyResults('test', 'score', [
-      {'name': 'Richards', 'results': ['1.234'], 'stddev': ''},
-      {'name': 'DeltaBlue', 'results': ['10657567.0'], 'stddev': ''},
-      {'name': 'Total', 'results': ['3626.49109719'], 'stddev': ''},
+      {
+        'name': 'Richards',
+        'results': ['1.234'],
+        'stddev': '',
+      },
+      {
+        'name': 'DeltaBlue',
+        'results': ['10657567.0'],
+        'stddev': '',
+      },
+      {
+        'name': 'Total',
+        'results': ['3626.49109719'],
+        'stddev': '',
+        'durations': [84],
+      },
     ])
     self._VerifyErrors([])
     self._VerifyMock(os.path.join('out', 'Release', 'd7'), '--flag', 'run.js')
@@ -425,10 +445,11 @@ class PerfTest(unittest.TestCase):
     mock.patch('run_perf.AndroidPlatform.PreExecution').start()
     mock.patch('run_perf.AndroidPlatform.PostExecution').start()
     mock.patch('run_perf.AndroidPlatform.PreTests').start()
+    mock_output = Output(
+        stdout='Richards: 1.234\nDeltaBlue: 10657567\n', duration=42)
     mock.patch(
         'run_perf.AndroidPlatform.Run',
-        return_value=(Output(stdout='Richards: 1.234\nDeltaBlue: 10657567\n'),
-                      None)).start()
+        return_value=(mock_output, None)).start()
     mock.patch('testrunner.local.android._Driver', autospec=True).start()
     mock.patch(
         'run_perf.Platform.ReadBuildConfig',
@@ -505,7 +526,12 @@ class PerfTest(unittest.TestCase):
       os.path.join(TEST_DATA, test_json),
     ]
     subprocess.check_output(args)
-    return self._LoadResults(output_json)
+    results = self._LoadResults(output_json)
+    # Replace durations with a fake value since they are unpredictable.
+    for trace in results['traces']:
+      assert 'durations' in trace
+      trace['durations'] = [42]
+    return results
 
   def testNormal(self):
     results = self._RunPerf('d8_mocked1.py', 'test1.json')
@@ -516,12 +542,14 @@ class PerfTest(unittest.TestCase):
         'graphs': ['test1', 'Richards'],
         'results': [u'1.2', u'1.2'],
         'stddev': '',
+        'durations': [42],
       },
       {
         'units': 'score',
         'graphs': ['test1', 'DeltaBlue'],
         'results': [u'2.1', u'2.1'],
         'stddev': '',
+        'durations': [42],
       },
     ], results['traces'])
 
@@ -534,12 +562,14 @@ class PerfTest(unittest.TestCase):
         'graphs': ['test2', 'Richards'],
         'results': [u'1.2', u'1.2'],
         'stddev': '',
+        'durations': [42],
       },
       {
         'units': 'score',
         'graphs': ['test2', 'DeltaBlue'],
         'results': [u'2.1', u'2.1'],
         'stddev': '',
+        'durations': [42],
       },
     ], results['traces'])
 
@@ -552,12 +582,14 @@ class PerfTest(unittest.TestCase):
         'graphs': ['test3', 'Octane', 'Richards'],
         'results': [u'1.2'],
         'stddev': '',
+        'durations': [42],
       },
       {
         'units': 'score',
         'graphs': ['test3', 'Octane', 'DeltaBlue'],
         'results': [u'2.1'],
         'stddev': '',
+        'durations': [42],
       },
     ], results['traces'])
 
