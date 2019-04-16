@@ -1,0 +1,255 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f51cdfcb_4771415e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "What is the class member initializer that you\u0027re referring to?",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c851a99_73b4d88e",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2015,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "should this be a check for ClassLiteral::Property::METHOD?",
+      "range": {
+        "startLine": 2015,
+        "startChar": 0,
+        "endLine": 2015,
+        "endChar": 67
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5f64e10_5677146d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "Please add tests for these cases",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92490721_1b4875ac",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2135,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "When can this be false?",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4ad4294_ffcbee9b",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2159,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "Add TODO",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a6d7fba_8c067f20",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2245,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this happen before we parse the function literal, so that we the method is parsed within the initializer scope? Is this observable?",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae6d81e9_70f99f5b",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 4313,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "should this be requires_brand?",
+      "range": {
+        "startLine": 4313,
+        "startChar": 17,
+        "endLine": 4313,
+        "endChar": 26
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf035d6f_6575a9bf",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 4327,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "just pass in name and prop_info to this method",
+      "range": {
+        "startLine": 4327,
+        "startChar": 25,
+        "endLine": 4327,
+        "endChar": 63
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "173489f3_21c9d945",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 4348,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "is this correct? should this be kNoSourcePosition?",
+      "range": {
+        "startLine": 4348,
+        "startChar": 59,
+        "endLine": 4348,
+        "endChar": 74
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d88bcdc_3cd6dd82",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2835,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "DCHECK(allow_harmony_private_methods())",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4298325d_8a13b805",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 2837,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "Add TODO",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0ac330b_ae6b1e18",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "Can you add a test for this?",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03d39b67_1ccb9c07",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5700,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-16T16:58:06Z",
+      "side": 1,
+      "message": "why do we need this?",
+      "range": {
+        "startLine": 5700,
+        "startChar": 46,
+        "endLine": 5700,
+        "endChar": 71
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
