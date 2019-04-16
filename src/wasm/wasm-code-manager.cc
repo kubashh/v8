@@ -1486,7 +1486,10 @@ void WasmCodeRefScope::AddRef(WasmCode* code) {
   DCHECK_NOT_NULL(current_scope);
   auto entry = current_scope->code_ptrs_.insert(code);
   // If we added a new entry, increment the ref counter.
-  if (entry.second) code->IncRef();
+  if (entry.second) {
+    DCHECK_NOT_NULL(code);
+    code->IncRef();
+  }
 }
 
 }  // namespace wasm
