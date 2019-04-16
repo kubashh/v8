@@ -275,6 +275,24 @@
     },
     {
       "key": {
+        "uuid": "83f51d90_8473a4a2",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 2279,
+      "author": {
+        "id": 1236458
+      },
+      "writtenOn": "2019-04-16T01:53:35Z",
+      "side": 1,
+      "message": "Thanks for your suggestions! I would like to go with ToStringImpl due to the following concerns.\n\n - Inline into the ToString builtin and update the call sites\n\nThis may introduce function call overhead to call sites that call macro ToString (Only StringAdd_ConvertLeft/Right though). \n\n - namespace::ToString\n\nAdding namespace works fine for reference inside Torque, but I don\u0027t know how to use it or \nwhether it is allowed to be used for call sites outside Torque like for StringAdd_ConvertLeft/Right in builtins-string-gen.cc\n\nTherefore, I choose to use ToStringImpl to be consistent with the usage of ArrayJoinImpl for ArrayJoin. WDYT?",
+      "parentUuid": "aa37f1bb_05c0affd",
+      "revId": "760658faf92e2998ed6bd18a4e353cef06ff4d9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f858c075_0efdd00e",
         "filename": "src/builtins/builtins-conversion-gen.cc",
         "patchSetId": 2
