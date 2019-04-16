@@ -149,6 +149,12 @@ extern class FixedDoubleArray extends FixedArrayBase {
 
 extern class ByteArray extends FixedArrayBase {}
 
+@generatePrint
+extern class EnumCache extends Struct {
+  keys: FixedArray;
+  indices: FixedArray;
+}
+
 // These intrinsics should never be called from Torque code. They're used
 // internally by the 'new' operator and only declared here because it's simpler
 // than building the definition from C++.
