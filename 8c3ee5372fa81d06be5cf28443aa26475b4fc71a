@@ -22,6 +22,30 @@
       "revId": "8c3ee5372fa81d06be5cf28443aa26475b4fc71a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fcf5cea_8ca1f491",
+        "filename": "src/wasm/wasm-engine.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-16T16:49:18Z",
+      "side": 1,
+      "message": "Argh, you are right. Thanks for spotting.\nI switched to a while loop instead of the if, so we don\u0027t increment {i} in between. This is a bit nicer than conditionally incrementing {i} IMO.",
+      "parentUuid": "93775cb1_cc010e4a",
+      "range": {
+        "startLine": 611,
+        "startChar": 0,
+        "endLine": 613,
+        "endChar": 66
+      },
+      "revId": "8c3ee5372fa81d06be5cf28443aa26475b4fc71a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
