@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a63a3a60_4f2ed0b2",
+        "filename": "src/objects-debug.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1838,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-16T09:54:26Z",
+      "side": 0,
+      "message": "Please keep the VerifyObjectField calls in addition to the new IsFixedArray checks; they verify the pointer is located in the heap.",
+      "revId": "02703a099a997aecdca7c6d73304dba5df40f173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

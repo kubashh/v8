@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "eabffb5a_2ee281e6",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-16T09:54:26Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s needed. We seem to alloc partial maps for all struct types in L318 below.",
+      "parentUuid": "e01e6b53_6d611eca",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 77
+      },
+      "revId": "3f8f46bfad0d7b62fc85317e4bbe0bb90659cb20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a651293_b6ec64a0",
         "filename": "tools/v8heapconst.py",
         "patchSetId": 1
