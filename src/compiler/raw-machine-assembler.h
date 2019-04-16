@@ -172,11 +172,51 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
   }
   Node* Store(MachineRepresentation rep, Node* base, Node* index, Node* value,
               WriteBarrierKind write_barrier) {
+#ifdef V8_COMPRESS_POINTERS
+    switch (rep) {
+      case MachineRepresentation::kTaggedPointer:
+        rep = MachineRepresentation::kCompressedPointer;
+        value =
+            AddNode(machine()->ChangeTaggedPointerToCompressedPointer(), value);
+        break;
+      case MachineRepresentation::kTaggedSigned:
+        rep = MachineRepresentation::kCompressedSigned;
+        value =
+            AddNode(machine()->ChangeTaggedSignedToCompressedSigned(), value);
+        break;
+      case MachineRepresentation::kTagged:
+        rep = MachineRepresentation::kCompressed;
+        value = AddNode(machine()->ChangeTaggedToCompressed(), value);
+        break;
+      default:
+        break;
+    }
+#endif
     return AddNode(machine()->Store(StoreRepresentation(rep, write_barrier)),
                    base, index, value);
   }
   void OptimizedStoreField(MachineRepresentation rep, Node* object, int offset,
                            Node* value, WriteBarrierKind write_barrier) {
+#ifdef V8_COMPRESS_POINTERS
+    switch (rep) {
+      case MachineRepresentation::kTaggedPointer:
+        rep = MachineRepresentation::kCompressedPointer;
+        value =
+            AddNode(machine()->ChangeTaggedPointerToCompressedPointer(), value);
+        break;
+      case MachineRepresentation::kTaggedSigned:
+        rep = MachineRepresentation::kCompressedSigned;
+        value =
+            AddNode(machine()->ChangeTaggedSignedToCompressedSigned(), value);
+        break;
+      case MachineRepresentation::kTagged:
+        rep = MachineRepresentation::kCompressed;
+        value = AddNode(machine()->ChangeTaggedToCompressed(), value);
+        break;
+      default:
+        break;
+    }
+#endif
     AddNode(simplified()->StoreField(FieldAccess(
                 BaseTaggedness::kTaggedBase, offset, MaybeHandle<Name>(),
                 MaybeHandle<Map>(), Type::Any(),
