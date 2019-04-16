@@ -18,9 +18,9 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
          .addBody([kExprGetLocal, 0,
                    kExprGetLocal, 0,
                    kExprCallFunction, 0])
-         .giveCompilationHint(kCompilationHintStrategyLazy,
-                              kCompilationHintTierDefault,
-                              kCompilationHintTierDefault)
+         .setCompilationHint(kCompilationHintStrategyLazy,
+                             kCompilationHintTierDefault,
+                             kCompilationHintTierDefault)
          .exportFunc();
   let bytes = builder.toBuffer();
   assertPromiseResult(WebAssembly.instantiateStreaming(Promise.resolve(bytes), {mod: {pow: Math.pow}}).then(
@@ -39,9 +39,9 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
          .addBody([kExprGetLocal, 0,
                    kExprGetLocal, 0,
                    kExprCallFunction, 0])
-         .giveCompilationHint(kCompilationHintStrategyLazy,
-                              kCompilationHintTierOptimized,
-                              kCompilationHintTierBaseline)
+         .setCompilationHint(kCompilationHintStrategyLazy,
+                             kCompilationHintTierOptimized,
+                             kCompilationHintTierBaseline)
          .exportFunc();
   let bytes = builder.toBuffer();
   assertPromiseResult(WebAssembly.instantiateStreaming(Promise.resolve(bytes), {mod: {pow: Math.pow}}).then(
@@ -62,9 +62,9 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
          .addBody([kExprGetLocal, 0,
                    kExprGetLocal, 0,
                    kExprCallFunction, 0])
-         .giveCompilationHint(kCompilationHintStrategyLazy,
-                              kCompilationHintTierDefault,
-                              kCompilationHintTierDefault)
+         .setCompilationHint(kCompilationHintStrategyLazy,
+                             kCompilationHintTierDefault,
+                             kCompilationHintTierDefault)
          .exportFunc();
   let bytes = builder.toBuffer();
   assertPromiseResult(WebAssembly.instantiateStreaming(Promise.resolve(bytes), {mod: {pow: Math.pow}}).then(
@@ -88,9 +88,9 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
          .addBody([kExprGetLocal, 0,
                    kExprGetLocal, 0,
                    kExprCallFunction, 0])
-         .giveCompilationHint(kCompilationHintStrategyLazy,
-                              kCompilationHintTierDefault,
-                              kCompilationHintTierDefault)
+         .setCompilationHint(kCompilationHintStrategyLazy,
+                             kCompilationHintTierDefault,
+                             kCompilationHintTierDefault)
          .exportFunc();
   let bytes = builder.toBuffer();
   assertPromiseResult(WebAssembly.instantiateStreaming(Promise.resolve(bytes), {mod: {pow: Math.pow}}).then(
