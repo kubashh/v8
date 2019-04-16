@@ -227,6 +227,7 @@ namespace internal {
   F(PromoteScheduledException, 0, 1)                 \
   F(ReportMessage, 1, 1)                             \
   F(ReThrow, 1, 1)                                   \
+  F(ParseJson2, 1, 1)                                \
   F(RunMicrotaskCallback, 2, 1)                      \
   F(PerformMicrotaskCheckpoint, 0, 1)                \
   F(StackGuard, 0, 1)                                \
