@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5eec525_89fbf906",
+        "filename": "src/builtins/proxy-constructor.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-16T09:29:15Z",
+      "side": 1,
+      "message": "Let\u0027s not do this. After all, it can be undefined. And the spec text only cares whether the new target is undefined or not.\n\nThe previous patchset without this change (PS6) lgtm.",
+      "revId": "3abfe4790a9e459c353393e234ad90b00ebd2874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
