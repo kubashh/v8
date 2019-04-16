@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6176779d_d10fbfe8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-16T13:59:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d2ea67c_67423cfd",
+      "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7d0cd87_502c5cfd",
         "filename": "src/wasm/wasm-code-manager.cc",
         "patchSetId": 3
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "0e73442b_2b4b510e",
+        "filename": "src/wasm/wasm-code-manager.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-16T13:59:32Z",
+      "side": 1,
+      "message": "I ran onto segfaults when attempting to use {GetCode} to check if code exists. With {HasCode}, this was no longer an issue but it would have helped me to locate the error. Moved the DCHECK to the beginning of the method.",
+      "parentUuid": "c7d0cd87_502c5cfd",
+      "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f374eea_bb23848f",
         "filename": "src/wasm/wasm-module-builder.cc",
         "patchSetId": 3
@@ -50,6 +86,24 @@
       "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c87b6c72_47ae3e17",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-16T13:59:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f374eea_bb23848f",
+      "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -76,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "d85de898_3565002d",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-16T13:59:32Z",
+      "side": 1,
+      "message": "That is much nicer indeed! Thank you. Applied this change also to the name section where had found this initially.",
+      "parentUuid": "9db6ef9f_5557f32b",
+      "range": {
+        "startLine": 524,
+        "startChar": 0,
+        "endLine": 525,
+        "endChar": 72
+      },
+      "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60dabe8b_4c038cad",
         "filename": "src/wasm/wasm-module-builder.cc",
         "patchSetId": 3
@@ -90,6 +168,24 @@
       "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bf36e07_86a1c1d5",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-16T13:59:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60dabe8b_4c038cad",
+      "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +206,24 @@
     },
     {
       "key": {
+        "uuid": "211b8d37_04bf43f8",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 530,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-16T13:59:32Z",
+      "side": 1,
+      "message": "Applied this to other places in the same file, too.",
+      "parentUuid": "bf3af25b_c889d90c",
+      "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ebabb95_fba96677",
         "filename": "src/wasm/wasm-module-builder.h",
         "patchSetId": 3
@@ -124,6 +238,24 @@
       "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24ba2d73_a4c9286a",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-16T13:59:32Z",
+      "side": 1,
+      "message": "Applied this change also in the mjsunit tests.",
+      "parentUuid": "8ebabb95_fba96677",
+      "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -144,6 +276,24 @@
     },
     {
       "key": {
+        "uuid": "2b2b61e3_55186d66",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-16T13:59:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb868548_bb7b9008",
+      "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ae89841_37064653",
         "filename": "test/cctest/wasm/test-run-wasm-module.cc",
         "patchSetId": 3
@@ -158,6 +308,24 @@
       "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd2a7e21_e2e71950",
+        "filename": "test/cctest/wasm/test-run-wasm-module.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-16T13:59:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ae89841_37064653",
+      "revId": "f90c2612aa3094192504d0f1df09098345f236b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
