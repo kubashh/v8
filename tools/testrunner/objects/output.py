@@ -34,7 +34,8 @@ from ..local import utils
 
 class Output(object):
 
-  def __init__(self, exit_code, timed_out, stdout, stderr, pid, duration):
+  def __init__(self, exit_code=0, timed_out=False, stdout=None, stderr=None,
+               pid=None, duration=None):
     self.exit_code = exit_code
     self.timed_out = timed_out
     self.stdout = stdout
