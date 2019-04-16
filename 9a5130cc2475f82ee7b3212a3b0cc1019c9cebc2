@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55e90a8b_438a2c1e",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-16T06:55:09Z",
+      "side": 1,
+      "message": "Drive-by: I don\u0027t get the meaning of this flag at first glance. Maybe there\u0027s a better name, or can the RHS be decomposed into named parts that are easier to grasp?\n\nMaybe it\u0027s just me :)",
+      "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
