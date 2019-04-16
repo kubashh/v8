@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce6dc766_8d7f6f1e",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-16T17:17:44Z",
+      "side": 1,
+      "message": "Much of this code was previously duplicated in AndroidPlatform and DesktopPlatform classes and is removed below.",
+      "revId": "932479c938d49d61c9c8e71880ef20c25f125153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fca6cfd_e2d8a2b0",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-16T17:17:44Z",
+      "side": 1,
+      "message": "Previously a failed primary generated an exception and secondary run below was never attempted. Now it will be attempted anyway, which is good since we\u0027ll be able to see whether refbuild fails as well in which case it\u0027s more likely an infrastructure failure rather than test failure.",
+      "revId": "932479c938d49d61c9c8e71880ef20c25f125153",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
