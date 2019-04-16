@@ -48,6 +48,23 @@
     },
     {
       "key": {
+        "uuid": "58782d28_e8e23209",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-16T14:15:09Z",
+      "side": 1,
+      "message": "nit: constants should be named \"kFoo\", i.e. \"kOnlyLazyFunctions\" here.",
+      "revId": "935aee7e8fe821d56440ab0210e46813e87ea95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7654da6a_162c3de7",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -65,6 +82,23 @@
         "endLine": 988,
         "endChar": 48
       },
+      "revId": "935aee7e8fe821d56440ab0210e46813e87ea95c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "779d24c4_f3b410b4",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-16T14:15:09Z",
+      "side": 1,
+      "message": "Can we assign the {result} of this validation to the outer {result} (of type {ModuleResult}), and then just break the loop?\nThis would be a bit nicer IMO since this method then always ends via one of the two existing {DoSync} calls below.",
       "revId": "935aee7e8fe821d56440ab0210e46813e87ea95c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
