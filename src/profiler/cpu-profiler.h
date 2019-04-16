@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "src/allocation.h"
+#include "src/api.h"
 #include "src/base/atomic-utils.h"
 #include "src/base/atomicops.h"
 #include "src/base/platform/condition-variable.h"
@@ -30,21 +31,22 @@ class CpuProfile;
 class CpuProfilesCollection;
 class ProfileGenerator;
 
-#define CODE_EVENTS_TYPE_LIST(V)                         \
-  V(CODE_CREATION, CodeCreateEventRecord)                \
-  V(CODE_MOVE, CodeMoveEventRecord)                      \
-  V(CODE_DISABLE_OPT, CodeDisableOptEventRecord)         \
-  V(CODE_DEOPT, CodeDeoptEventRecord)                    \
+#define CODE_EVENTS_TYPE_LIST(V)                 \
+  V(CODE_CREATION, CodeCreateEventRecord)        \
+  V(CODE_MOVE, CodeMoveEventRecord)              \
+  V(CODE_DISABLE_OPT, CodeDisableOptEventRecord) \
+  V(CODE_DEOPT, CodeDeoptEventRecord)            \
   V(REPORT_BUILTIN, ReportBuiltinEventRecord)
 
+#define VM_EVENTS_TYPE_LIST(V)                           \
+  CODE_EVENTS_TYPE_LIST(V)                               \
+  V(NATIVE_CONTEXT_ASSOC, NativeContextAssocEventRecord) \
+  V(NATIVE_CONTEXT_MOVE, NativeContextMoveEventRecord)
 
 class CodeEventRecord {
  public:
 #define DECLARE_TYPE(type, ignore) type,
-  enum Type {
-    NONE = 0,
-    CODE_EVENTS_TYPE_LIST(DECLARE_TYPE)
-  };
+  enum Type { NONE = 0, VM_EVENTS_TYPE_LIST(DECLARE_TYPE) };
 #undef DECLARE_TYPE
 
   Type type;
@@ -102,6 +104,24 @@ class ReportBuiltinEventRecord : public CodeEventRecord {
   V8_INLINE void UpdateCodeMap(CodeMap* code_map);
 };
 
+// Associates a context filter with the given address.
+class NativeContextAssocEventRecord : public CodeEventRecord {
+ public:
+  // Heap-allocated weak pointer. We use a weak pointer here because the
+  // profiler may be stopped before the event is processed, and a raw
+  // heap-allocated pointer to it because this is used in a union.
+  std::weak_ptr<ContextFilter>* context_filter;
+  Address context_address;
+
+  V8_INLINE void UpdateContextFilter();
+};
+
+// Signals that a native context's address has changed.
+class NativeContextMoveEventRecord : public CodeEventRecord {
+ public:
+  Address from_address;
+  Address to_address;
+};
 
 class TickSampleEventRecord {
  public:
@@ -124,7 +144,7 @@ class CodeEventsContainer {
   union  {
     CodeEventRecord generic;
 #define DECLARE_CLASS(ignore, type) type type##_;
-    CODE_EVENTS_TYPE_LIST(DECLARE_CLASS)
+    VM_EVENTS_TYPE_LIST(DECLARE_CLASS)
 #undef DECLARE_CLASS
   };
 };
@@ -150,6 +170,11 @@ class V8_EXPORT_PRIVATE ProfilerEventsProcessor : public base::Thread,
   void AddDeoptStack(Address from, int fp_to_sp_delta);
   // Add a sample into the tick sample events buffer. Used for testing.
   void AddSample(TickSample sample);
+
+  // Enqueues an event to associate the given context filter with the provided
+  // address.
+  void EnqueueFilterAssoc(std::shared_ptr<ContextFilter> context_filter,
+                          Address context_address);
 
  protected:
   ProfilerEventsProcessor(Isolate* isolate, ProfileGenerator* generator);
@@ -228,9 +253,12 @@ class V8_EXPORT_PRIVATE CpuProfiler {
 
   void set_sampling_interval(base::TimeDelta value);
   void CollectSample();
-  void StartProfiling(const char* title, bool record_samples = false,
-                      ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers);
-  void StartProfiling(String title, bool record_samples, ProfilingMode mode);
+  void StartProfiling(
+      const char* title, bool record_samples = false,
+      ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers,
+      MaybeHandle<Context> native_context = MaybeHandle<Context>());
+  void StartProfiling(String title, bool record_samples, ProfilingMode mode,
+                      MaybeHandle<Context> native_context);
   CpuProfile* StopProfiling(const char* title);
   CpuProfile* StopProfiling(String title);
   int GetProfilesCount();

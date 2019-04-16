@@ -1963,6 +1963,7 @@ struct SampleInfo {
   StateTag vm_state;              // Current VM state.
   void* external_callback_entry;  // External callback address if VM is
                                   // executing an external callback.
+  void* top_context;              // Top native context on the callstack.
 };
 
 struct MemoryRange {
