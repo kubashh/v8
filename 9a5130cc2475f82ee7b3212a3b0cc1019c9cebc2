@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "0fb44159_b4086086",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-17T13:59:48Z",
+      "side": 1,
+      "message": "Yes, the bailout handles both pretenured and normal LOS allocations.\nWhat is still forbidden is doing a non-pretenured allocation in old-generation LOS, because this would confuse write barrier elimination and because we use AllocateInYoungGeneration, which has a CHECK to ensure this doesn\u0027t happen. Essentially, I just didn\u0027t want to change the generational guarantees of AllocateRaw nodes.",
+      "parentUuid": "cfe02b45_be800b05",
+      "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eeb0594b_085e9f3d",
         "filename": "src/compiler/code-assembler.cc",
         "patchSetId": 6
@@ -65,6 +83,30 @@
       "writtenOn": "2019-04-16T07:51:34Z",
       "side": 1,
       "message": "Please, d-check consistence of {allow_large_objects} with {allocation} and FLAG_young_generation_large_objects.",
+      "range": {
+        "startLine": 1126,
+        "startChar": 2,
+        "endLine": 1126,
+        "endChar": 70
+      },
+      "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8022815_5d282398",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-17T13:59:48Z",
+      "side": 1,
+      "message": "I did it in simplified-operator.cc to ensure it\u0027s hit on all code paths.",
+      "parentUuid": "eeb0594b_085e9f3d",
       "range": {
         "startLine": 1126,
         "startChar": 2,
@@ -97,6 +139,30 @@
       "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b15ede0_a6a25b48",
+        "filename": "src/compiler/simplified-operator.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-17T13:59:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2da91eff_91a8d754",
+      "range": {
+        "startLine": 1662,
+        "startChar": 42,
+        "endLine": 1662,
+        "endChar": 66
+      },
+      "revId": "9a5130cc2475f82ee7b3212a3b0cc1019c9cebc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
