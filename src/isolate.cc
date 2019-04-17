@@ -84,6 +84,7 @@
 #ifdef V8_INTL_SUPPORT
 #include "unicode/uobject.h"
 #endif  // V8_INTL_SUPPORT
+#include "src/debug/debug-coverage.h"
 
 #if defined(V8_OS_WIN_X64)
 #include "src/unwinding-info-win64.h"
@@ -3526,6 +3527,8 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
     double ms = timer.Elapsed().InMillisecondsF();
     PrintF("[Initializing isolate from scratch took %0.3f ms]\n", ms);
   }
+
+  Coverage::SelectMode(this, debug::CoverageMode::kPreciseCount);
 
   return true;
 }
