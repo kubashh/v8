@@ -2684,6 +2684,12 @@ void TurboAssembler::CallCFunction(Register function, int num_arguments) {
 void TurboAssembler::CheckPageFlag(Register object, Register scratch, int mask,
                                    Condition cc, Label* condition_met,
                                    Label::Distance condition_met_distance) {
+#if V8_COMPRESS_POINTERS
+  // If pointer compression is on, we need to sign extend and add the root
+  // register for the page header check.
+  movsxlq(object, object);
+  addq(object, kRootRegister);
+#endif
   DCHECK(cc == zero || cc == not_zero);
   if (scratch == object) {
     andq(scratch, Immediate(~kPageAlignmentMask));
