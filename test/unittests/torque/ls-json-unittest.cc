@@ -99,7 +99,7 @@ TEST(LanguageServerJson, TestJsonObjects) {
 // issue with exceptions enabled for Torque.
 // TODO(szuend): Remove the OS check when errors are reported differently,
 //               or the issue is resolved.
-#if !defined(V8_OS_WIN)
+// #if !defined(V8_OS_WIN)
 using ::testing::HasSubstr;
 TEST(LanguageServerJson, ParserError) {
   JsonParserResult result = ParseJson("{]");
@@ -113,7 +113,7 @@ TEST(LanguageServerJson, LexerError) {
   ASSERT_TRUE(result.error.has_value());
   EXPECT_THAT(result.error->message, HasSubstr("Lexer Error: unknown token"));
 }
-#endif
+// #endif
 
 }  // namespace ls
 }  // namespace torque
