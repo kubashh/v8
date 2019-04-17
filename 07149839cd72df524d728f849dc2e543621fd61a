@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2a6c5c55_d232f02f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11376,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-04-17T11:59:53Z",
+      "side": 1,
+      "message": "Yeah, although the Combine/Override changes do in some cases improve the code generation (e.g., reducing the live-range of the var_type_feedback in cases where we don\u0027t need to combine with previous feedback but can instead just Override it). Updated description to point this out.",
+      "parentUuid": "d06b9257_4efdad92",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1f1525c9_844e6e92",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-04-17T10:53:52Z",
       "side": 1,
       "message": "Oh I see, there\u0027s no Node* overload for OverwriteFeedback. Could we add one for readability?",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fec844e_0b469e32",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11690,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-04-17T11:59:53Z",
+      "side": 1,
+      "message": "No longer needed.",
+      "parentUuid": "1f1525c9_844e6e92",
       "revId": "07149839cd72df524d728f849dc2e543621fd61a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3f305491_05cbf680",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11697,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-04-17T11:59:53Z",
+      "side": 1,
+      "message": "In the case of EqualStrict this will be the first value bound to var_type_feedback, however I missed the fact that this function is also called within the loop in Equal, so you are right, this is not safe, moving back to Combine, good catch, thanks!",
+      "parentUuid": "a87447ea_c1801d1a",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "345b9db9_f9974f9f",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 2
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "1675d93d_182536a2",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 12206,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-04-17T11:59:53Z",
+      "side": 1,
+      "message": "Yes, I\u0027m avoiding creating seperate bindings to kNone on the if_same branch and kAny on the if_notsame branch which was causing bad codegen. Binding to kNone outside both branches generates better code.",
+      "parentUuid": "345b9db9_f9974f9f",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c1e2988_5d54ef5a",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 2
@@ -81,6 +153,24 @@
       "writtenOn": "2019-04-17T10:53:52Z",
       "side": 1,
       "message": "Similar q here but other way around; this used to be OverwriteFeedback, now it is CombineFeedback.",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee725f75_125e22ab",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 12249,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-04-17T11:59:53Z",
+      "side": 1,
+      "message": "This is related to changing the initial feedback from kAny to kNone, so now we want to combine with that feedback rather than overwriting it (actually either would work given it is kNone initially, but using Combine here results in better codegen improving the \"while (i !\u003d\u003d n) i++\" case by about 10% compared to using Overwrite because the register allocator does a better job when it knows the var_type_feedback bound here is related to the one initialized to kNone above.",
+      "parentUuid": "7c1e2988_5d54ef5a",
       "revId": "07149839cd72df524d728f849dc2e543621fd61a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
