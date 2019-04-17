@@ -149,25 +149,27 @@ function testOOBThrows() {
     .exportFunc();
 
   var module = builder.instantiate();
-  var offset;
 
-  function read() { return module.exports.geti(0, offset); }
-  function write() { return module.exports.geti(offset, 0); }
+  function read(offset) { return module.exports.geti(0, offset); }
+  function write(offset) { return module.exports.geti(offset, 0); }
 
-  for (offset = 0; offset < 65533; offset++) {
-    assertEquals(0, read());
-    assertEquals(0, write());
+  for (offset = 0; offset < kPageSize - 3; offset++) {
+    assertEquals(0, read(offset));
+    assertEquals(0, write(offset));
   }
 
   // Note that this test might be run concurrently in multiple Isolates, which
-  // makes an exact comparison of the expected trap count unreliable. But is is
+  // makes an exact comparison of the expected trap count unreliable. But it is
   // still possible to check the lower bound for the expected trap count.
-  for (offset = 65534; offset < 66536; offset++) {
-    const trap_count = %GetWasmRecoveredTrapCount();
-    assertTraps(kTrapMemOutOfBounds, read);
-    assertTraps(kTrapMemOutOfBounds, write);
+  for (offset = kPageSize - 2; offset < kPageSize; offset++) {
+    const old_trap_count = %GetWasmRecoveredTrapCount();
+    assertTraps(kTrapMemOutOfBounds, () => read(offset));
+    assertTraps(kTrapMemOutOfBounds, () => write(offset));
     if (%IsWasmTrapHandlerEnabled()) {
-      assertTrue(trap_count + 2 <= %GetWasmRecoveredTrapCount());
+      const new_trap_count = %GetWasmRecoveredTrapCount();
+      assertTrue(
+          new_trap_count >= old_trap_count + 2,
+          '2 more traps: ' + old_trap_count + ' -> ' + new_trap_count);
     }
   }
 }
