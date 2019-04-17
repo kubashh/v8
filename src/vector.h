@@ -260,19 +260,13 @@ class OwnedVector {
   size_t length_ = 0;
 };
 
-inline int StrLength(const char* string) {
-  size_t length = strlen(string);
-  DCHECK(length == static_cast<size_t>(static_cast<int>(length)));
-  return static_cast<int>(length);
-}
-
 template <size_t N>
 constexpr Vector<const uint8_t> StaticCharVector(const char (&array)[N]) {
   return Vector<const uint8_t>::cast(Vector<const char>(array, N - 1));
 }
 
 inline Vector<const char> CStrVector(const char* data) {
-  return Vector<const char>(data, StrLength(data));
+  return Vector<const char>(data, strlen(data));
 }
 
 inline Vector<const uint8_t> OneByteVector(const char* data, int length) {
@@ -280,16 +274,16 @@ inline Vector<const uint8_t> OneByteVector(const char* data, int length) {
 }
 
 inline Vector<const uint8_t> OneByteVector(const char* data) {
-  return OneByteVector(data, StrLength(data));
+  return OneByteVector(data, strlen(data));
 }
 
 inline Vector<char> MutableCStrVector(char* data) {
-  return Vector<char>(data, StrLength(data));
+  return Vector<char>(data, strlen(data));
 }
 
 inline Vector<char> MutableCStrVector(char* data, int max) {
-  int length = StrLength(data);
-  return Vector<char>(data, (length < max) ? length : max);
+  DCHECK_LE(0, max);
+  return Vector<char>(data, std::max(strlen(data), static_cast<size_t>(max)));
 }
 
 template <typename T, int N>
