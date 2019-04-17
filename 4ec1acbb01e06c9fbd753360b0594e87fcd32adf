@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "5a7efe68_4fa4de0d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-17T08:57:32Z",
+      "side": 1,
+      "message": "Yes. I\u0027ll revise the description to avoid the confusion, thanks!",
+      "parentUuid": "9bf7b155_61565400",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c851a99_73b4d88e",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 12
@@ -542,6 +560,24 @@
     },
     {
       "key": {
+        "uuid": "e29a1d07_4eabc5a0",
+        "filename": "src/runtime/runtime-object.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-17T08:57:32Z",
+      "side": 1,
+      "message": "Looks like I can reach this with super return...I\u0027ll throw here and add a test.",
+      "parentUuid": "85d8ec3e_33f022bf",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03d39b67_1ccb9c07",
         "filename": "test/cctest/test-parsing.cc",
         "patchSetId": 12
@@ -601,6 +637,30 @@
       "side": 1,
       "message": "public fields are on by default so this flag shouldn\u0027t matter at all",
       "parentUuid": "5b5c7dde_cf721430",
+      "range": {
+        "startLine": 5700,
+        "startChar": 46,
+        "endLine": 5700,
+        "endChar": 71
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa0491c7_2e0f10a0",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5700,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-17T08:57:32Z",
+      "side": 1,
+      "message": "Looks like in test-parsing the public fields flag is explicitly overridden to false if it\u0027s not passed to the test helper\n\nhttps://cs.chromium.org/chromium/src/v8/test/cctest/test-parsing.cc?q\u003dkAllowHarmonyPublicFields\u0026dr\u003dCSs\u0026l\u003d1545",
+      "parentUuid": "847316dd_0b41411c",
       "range": {
         "startLine": 5700,
         "startChar": 46,
