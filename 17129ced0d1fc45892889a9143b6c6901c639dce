@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "008e6d26_a212ab7e",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3115,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-17T15:57:32Z",
+      "side": 1,
+      "message": "In hand-written builtins object and value are already decompressed.",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00e3f7d5_30ca5769",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3122,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-17T15:57:32Z",
+      "side": 1,
+      "message": "ditto.",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c84e9d1b_8a8562d8",
+        "filename": "src/compiler/raw-machine-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-17T15:57:32Z",
+      "side": 1,
+      "message": "If you use COMPRESS_POINTERS_BOOL it may help us to keep both modes in compilable state.",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42f9aa35_016561a7",
+        "filename": "src/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-17T15:57:32Z",
+      "side": 1,
+      "message": "ditto.",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48de30d5_167cef46",
+        "filename": "src/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-17T15:57:32Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
