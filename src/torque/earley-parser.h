@@ -20,7 +20,7 @@ namespace torque {
 class Symbol;
 class Item;
 
-class ParseResultHolderBase {
+class V8_EXPORT_PRIVATE ParseResultHolderBase {
  public:
   enum class TypeId;
   virtual ~ParseResultHolderBase() = default;

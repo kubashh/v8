@@ -12,6 +12,10 @@ namespace internal {
 namespace torque {
 
 template <>
+V8_EXPORT_PRIVATE const ParseResultTypeId ParseResultHolder<std::string>::id =
+    ParseResultTypeId::kStdString;
+
+template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId ParseResultHolder<ls::JsonValue>::id =
     ParseResultTypeId::kJsonValue;
 

@@ -39,8 +39,8 @@ struct TorqueCompilerResult {
 
 V8_EXPORT_PRIVATE TorqueCompilerResult
 CompileTorque(const std::string& source, TorqueCompilerOptions options);
-TorqueCompilerResult CompileTorque(std::vector<std::string> files,
-                                   TorqueCompilerOptions options);
+V8_EXPORT_PRIVATE TorqueCompilerResult
+CompileTorque(std::vector<std::string> files, TorqueCompilerOptions options);
 
 }  // namespace torque
 }  // namespace internal

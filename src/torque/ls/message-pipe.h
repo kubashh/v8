@@ -6,6 +6,7 @@
 #define V8_TORQUE_LS_MESSAGE_PIPE_H_
 
 #include <memory>
+#include "src/base/macros.h"
 #include "src/torque/ls/json.h"
 
 namespace v8 {
@@ -13,8 +14,8 @@ namespace internal {
 namespace torque {
 namespace ls {
 
-JsonValue ReadMessage();
-void WriteMessage(JsonValue& message);
+V8_EXPORT_PRIVATE JsonValue ReadMessage();
+V8_EXPORT_PRIVATE void WriteMessage(JsonValue& message);
 
 }  // namespace ls
 }  // namespace torque
