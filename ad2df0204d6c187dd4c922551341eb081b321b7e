@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "deb122b4_42452f53",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-17T09:38:02Z",
+      "side": 1,
+      "message": "Isn\u0027t this now a dead try-catch? Remove the whole thing?",
+      "range": {
+        "startLine": 750,
+        "startChar": 3,
+        "endLine": 751,
+        "endChar": 11
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11432e93_804c6aae",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-17T09:38:02Z",
+      "side": 1,
+      "message": "Note the semantic change here: Previously we\u0027d bail out before this code on timeout and crash. Now we execute it anyways. Not sure about the implications. E.g. if we crashed earlier, maybe now the profiler might crash too and lead to a different, maybe masking error?",
+      "range": {
+        "startLine": 753,
+        "startChar": 4,
+        "endLine": 753,
+        "endChar": 36
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d7cfade_89937e1b",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-17T09:38:02Z",
+      "side": 1,
+      "message": "For consistency I think the Output objects should always include a valid duration. Also if the command failed or timed out you could measure the duration and include it.",
+      "range": {
+        "startLine": 831,
+        "startChar": 13,
+        "endLine": 831,
+        "endChar": 56
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cca91e6_6033d087",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-17T09:38:02Z",
+      "side": 1,
+      "message": "nit: I\u0027d drop the redundant \"Output\" from the name as the variable is already called like that and also called like that on the call site. Recent TotT wisdom :)",
+      "range": {
+        "startLine": 1109,
+        "startChar": 21,
+        "endLine": 1109,
+        "endChar": 27
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8f8e82c_0b677325",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-17T09:38:02Z",
+      "side": 1,
+      "message": "Could we ensure this to be not-none? E.g. use null-object pattern in the error cases? Then this helper could be moved more OO-style into the output class.",
+      "range": {
+        "startLine": 1110,
+        "startChar": 10,
+        "endLine": 1111,
+        "endChar": 23
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
