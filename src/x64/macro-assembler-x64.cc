@@ -294,6 +294,14 @@ void TurboAssembler::DecompressTaggedSigned(Register destination,
 }
 
 void TurboAssembler::DecompressTaggedPointer(Register destination,
+                                             Register source) {
+  RecordComment("[ DecompressTaggedPointer");
+  movsxlq(destination, source);
+  addq(destination, kRootRegister);
+  RecordComment("]");
+}
+
+void TurboAssembler::DecompressTaggedPointer(Register destination,
                                              Operand field_operand) {
   RecordComment("[ DecompressTaggedPointer");
   movsxlq(destination, field_operand);
@@ -500,11 +508,13 @@ void MacroAssembler::RecordWrite(Register object, Register address,
     JumpIfSmi(value, &done);
   }
 
+  DecompressTaggedPointer(value, value);
   CheckPageFlag(value,
                 value,  // Used as scratch.
                 MemoryChunk::kPointersToHereAreInterestingMask, zero, &done,
                 Label::kNear);
 
+  DecompressTaggedPointer(object, object);
   CheckPageFlag(object,
                 value,  // Used as scratch.
                 MemoryChunk::kPointersFromHereAreInterestingMask,
