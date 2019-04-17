@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8e5e3d34_eee43c13",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-17T14:58:20Z",
+      "side": 1,
+      "message": "Yes, I moved logging to _TimedRun. Removed",
+      "parentUuid": "deb122b4_42452f53",
+      "range": {
+        "startLine": 750,
+        "startChar": 3,
+        "endLine": 751,
+        "endChar": 11
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11432e93_804c6aae",
         "filename": "tools/run_perf.py",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3df88cd9_b2ec0bb4",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-17T14:58:20Z",
+      "side": 1,
+      "message": "Hm. Good point. I\u0027ll protect it with a condition that output is successful.",
+      "parentUuid": "11432e93_804c6aae",
+      "range": {
+        "startLine": 753,
+        "startChar": 4,
+        "endLine": 753,
+        "endChar": 36
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3053a666_522b990f",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-17T14:58:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d7cfade_89937e1b",
+      "range": {
+        "startLine": 831,
+        "startChar": 13,
+        "endLine": 831,
+        "endChar": 56
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4cca91e6_6033d087",
         "filename": "tools/run_perf.py",
         "patchSetId": 8
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "3b53d486_3488d077",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-17T14:58:20Z",
+      "side": 1,
+      "message": "Good point. Done.",
+      "parentUuid": "4cca91e6_6033d087",
+      "range": {
+        "startLine": 1109,
+        "startChar": 21,
+        "endLine": 1109,
+        "endChar": 27
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8f8e82c_0b677325",
         "filename": "tools/run_perf.py",
         "patchSetId": 8
@@ -114,6 +210,30 @@
       "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e05c722_3864f96d",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-17T14:58:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8f8e82c_0b677325",
+      "range": {
+        "startLine": 1110,
+        "startChar": 10,
+        "endLine": 1111,
+        "endChar": 23
+      },
+      "revId": "ad2df0204d6c187dd4c922551341eb081b321b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
