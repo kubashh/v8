@@ -87,6 +87,10 @@ enum SectionCode : int8_t {
   kFirstUnorderedSection = kDataCountSectionCode,
 };
 
+// Binary encoding of compilation hints.
+constexpr uint8_t kDefaultCompilationHint = 0x0;
+constexpr uint8_t kNoCompilationHint = kMaxUInt8;
+
 // Binary encoding of name section kinds.
 enum NameSectionKindCode : uint8_t { kModule = 0, kFunction = 1, kLocal = 2 };
 
