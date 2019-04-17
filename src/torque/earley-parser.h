@@ -39,7 +39,7 @@ class ParseResultHolderBase {
   const TypeId type_id_;
 };
 
-enum class ParseResultHolderBase::TypeId {
+enum V8_EXPORT_PRIVATE class ParseResultHolderBase::TypeId {
   kStdString,
   kBool,
   kStdVectorOfString,

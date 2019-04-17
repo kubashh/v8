@@ -3266,7 +3266,7 @@ group("v8_base") {
   ]
 }
 
-v8_source_set("torque_base") {
+v8_component("torque_base") {
   visibility = [ ":*" ]  # Only targets in this file can depend on this.
 
   sources = [
@@ -3331,7 +3331,7 @@ v8_source_set("torque_base") {
   }
 }
 
-v8_source_set("torque_ls_base") {
+v8_component("torque_ls_base") {
   sources = [
     "src/torque/ls/globals.h",
     "src/torque/ls/json-parser.cc",
