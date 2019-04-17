@@ -418,9 +418,7 @@ NativeModule::NativeModule(WasmEngine* engine, const WasmFeatures& enabled,
           new WasmImportWrapperCache(this))),
       free_code_space_(code_space.region()),
       engine_(engine),
-      can_request_more_memory_(can_request_more),
-      use_trap_handler_(trap_handler::IsTrapHandlerEnabled() ? kUseTrapHandler
-                                                             : kNoTrapHandler) {
+      can_request_more_memory_(can_request_more) {
   // We receive a pointer to an empty {std::shared_ptr}, and install ourselve
   // there.
   DCHECK_NOT_NULL(shared_this);
@@ -431,6 +429,12 @@ NativeModule::NativeModule(WasmEngine* engine, const WasmFeatures& enabled,
   DCHECK_NOT_NULL(module_);
   owned_code_space_.emplace_back(std::move(code_space));
   owned_code_.reserve(num_functions());
+
+  if (trap_handler::IsTrapHandlerEnabled() && !engine->use_trap_handler()) {
+    FATAL(
+        "You enabled trap handlers too late; enable them before creating the "
+        "first wasm engine");
+  }
 
 #if defined(V8_OS_WIN_X64)
   // On some platforms, specifically Win64, we need to reserve some pages at
@@ -483,8 +487,9 @@ void NativeModule::LogWasmCodes(Isolate* isolate) {
 }
 
 CompilationEnv NativeModule::CreateCompilationEnv() const {
-  return {module(), use_trap_handler_, kRuntimeExceptionSupport,
-          enabled_features_};
+  return {module(),
+          engine_->use_trap_handler() ? kUseTrapHandler : kNoTrapHandler,
+          kRuntimeExceptionSupport, enabled_features_};
 }
 
 WasmCode* NativeModule::AddCodeForTesting(Handle<Code> code) {

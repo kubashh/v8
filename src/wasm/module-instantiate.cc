@@ -266,11 +266,11 @@ MaybeHandle<WasmInstanceObject> InstanceBuilder::Build() {
     Handle<JSArrayBuffer> memory = memory_.ToHandleChecked();
     memory->set_is_detachable(false);
 
-    DCHECK_IMPLIES(native_module->use_trap_handler(),
+    DCHECK_IMPLIES(native_module->engine()->use_trap_handler(),
                    module_->origin == kAsmJsOrigin ||
                        memory->is_wasm_memory() ||
                        memory->backing_store() == nullptr);
-  } else if (initial_pages > 0 || native_module->use_trap_handler()) {
+  } else if (initial_pages > 0 || native_module->engine()->use_trap_handler()) {
     // We need to unconditionally create a guard region if using trap handlers,
     // even when the size is zero to prevent null-dereference issues
     // (e.g. https://crbug.com/769637).
