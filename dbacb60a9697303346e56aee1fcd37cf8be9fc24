@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5de19248_29e867ca",
+        "filename": "src/wasm/wasm-module-builder.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-17T15:41:30Z",
+      "side": 1,
+      "message": "nit: even though it would not help debugging here, I would recommend to always use DCHECK_NE for such comparisons.",
+      "revId": "dbacb60a9697303346e56aee1fcd37cf8be9fc24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fbb38d1_6fb4a79f",
+        "filename": "src/wasm/wasm-module-builder.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-17T15:41:30Z",
+      "side": 1,
+      "message": "This include is not needed any more.",
+      "revId": "dbacb60a9697303346e56aee1fcd37cf8be9fc24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "305d05de_659b1c11",
+        "filename": "test/cctest/wasm/test-run-wasm-module.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-17T15:41:30Z",
+      "side": 1,
+      "message": "nit: in this case, we usually just \"CHECK(!foo)\". it also reads a bit nicer IMO.",
+      "revId": "dbacb60a9697303346e56aee1fcd37cf8be9fc24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
