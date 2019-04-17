@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b3f453f_8c16d698",
+        "filename": "tools/unittests/run_perf_test.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-17T15:01:46Z",
+      "side": 1,
+      "message": "output.HasCrashed asserts that exit_code is negative, hence this change.",
+      "range": {
+        "startLine": 427,
+        "startChar": 75,
+        "endLine": 427,
+        "endChar": 77
+      },
+      "revId": "e56b9df65d59df7a6d37489a51dbed1bbcb43178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
