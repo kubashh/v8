@@ -36,24 +36,6 @@
 namespace v8 {
 namespace internal {
 
-namespace {
-
-// For using StringToArrayIndex.
-class OneByteStringStream {
- public:
-  explicit OneByteStringStream(Vector<const byte> lb) :
-      literal_bytes_(lb), pos_(0) {}
-
-  bool HasMore() { return pos_ < literal_bytes_.length(); }
-  uint16_t GetNext() { return literal_bytes_[pos_++]; }
-
- private:
-  Vector<const byte> literal_bytes_;
-  int pos_;
-};
-
-}  // namespace
-
 class AstRawStringInternalizationKey : public StringTableKey {
  public:
   explicit AstRawStringInternalizationKey(const AstRawString* string)
