@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "70ca9cec_bcb2e43c",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3115,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-17T18:06:20Z",
+      "side": 1,
+      "message": "At the moment, we do not support that, but I do not see why we could not support compressed parameters. Ideally, we would only support only all-compressed config. We could also perhaps do per-parameter distinction, but I do not see much value in that.\n\nIn the optimizing compiler it seems easy - we would have to say in representation selection that the parameter is compressed (here: https://cs.chromium.org/chromium/src/v8/src/compiler/simplified-lowering.cc?l\u003d1650\u0026rcl\u003dfd3e5e3a30df06b3f5ef428dab42c3d625ef2c0b), and the machinery would take care of the changes. We could also quite easily pass compressed pointers to calls.\n\nIn CSA, it would be more annoying - whenever you access parameter, we would have to insert decompression node, and hope that the reducer machinery will get rid of it.",
+      "parentUuid": "48ad46d8_a26503bb",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00e3f7d5_30ca5769",
         "filename": "src/arm64/macro-assembler-arm64.cc",
         "patchSetId": 7
