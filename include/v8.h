@@ -9706,6 +9706,12 @@ class V8_EXPORT Unwinder {
   static bool PCIsInV8(const UnwindState& unwind_state, void* pc);
 };
 
+class V8_EXPORT ProtobufDeserializer {
+ public:
+  static Local<Object> Deserialize(Isolate* isolate, const uint8_t*,
+                                   size_t length);
+};
+
 // --- Implementation ---
 
 template <class T>
