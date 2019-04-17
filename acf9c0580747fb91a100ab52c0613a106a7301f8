@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b1ba632f_c4db3e24",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-17T15:09:36Z",
+      "side": 1,
+      "message": "Alternatives in my order of preference: suite_durations, execution_durations, total_durations, infra_durations. Please pick one or offer your own alternative :-). I\u0027ll then change it everywhere including JSON output format, but except Output object, because it\u0027s connected to an output from a binary and has nothing to do with metrics.",
+      "parentUuid": "b0d97970_37d1693c",
+      "range": {
+        "startLine": 203,
+        "startChar": 4,
+        "endLine": 203,
+        "endChar": 23
+      },
+      "revId": "acf9c0580747fb91a100ab52c0613a106a7301f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2594291_63811d67",
         "filename": "tools/run_perf.py",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-04-17T09:55:08Z",
       "side": 1,
       "message": "So this is similar to above:\nsum of all traces per attempt\n\nIs this the more interesting value or would the revers be more interesting? I.e.\nsum (or average) of all attempts per trace",
+      "range": {
+        "startLine": 322,
+        "startChar": 2,
+        "endLine": 322,
+        "endChar": 17
+      },
+      "revId": "acf9c0580747fb91a100ab52c0613a106a7301f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7074c156_aed4d883",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-17T15:09:36Z",
+      "side": 1,
+      "message": "TBH, I wasn\u0027t even sure if we wanted to include this field on total-metrics, but decided to keep the output consistent to avoid forcing users to check if value exists first. In principle, I don\u0027t have a preference: it could be sum, average or even geometric mean as above. It\u0027s just that to me \"total\" means sum, but happy to change it to whichever you think makes more sense to our users or even remove it altogether if you think that\u0027s better to avoid confusion.",
+      "parentUuid": "e2594291_63811d67",
       "range": {
         "startLine": 322,
         "startChar": 2,
