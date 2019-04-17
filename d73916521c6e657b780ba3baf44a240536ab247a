@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b0fdb26_814d299d",
+        "filename": "src/x64/macro-assembler-x64.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2692,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-17T14:53:06Z",
+      "side": 1,
+      "message": "(both for x64 and arm64) Please introduce DecompressTaggedPointer(Register,Register) and move the call to callers of CheckPageFlag(). I think there are cases where this decompression is not necessary. For example in RecordWrite may already get the object in decompressed form and same for the value. It will also make it obvious that the CallRecordWriteStub will get uncompressed object value.",
+      "revId": "d73916521c6e657b780ba3baf44a240536ab247a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
