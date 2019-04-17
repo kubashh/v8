@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "d1087132_7104368e",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3115,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-17T16:04:12Z",
+      "side": 1,
+      "message": "Ha! I wonder if TF could support compressed arguments that are passed on registers?",
+      "parentUuid": "008e6d26_a212ab7e",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "00e3f7d5_30ca5769",
         "filename": "src/arm64/macro-assembler-arm64.cc",
         "patchSetId": 7
