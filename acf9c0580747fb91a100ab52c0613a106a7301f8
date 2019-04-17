@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0d97970_37d1693c",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-17T09:55:08Z",
+      "side": 1,
+      "message": "Maybe comment or change name somehow to clarify that these are not the durations we target to measure as part of the benchmark objective, but that those are raw infra durations.",
+      "range": {
+        "startLine": 203,
+        "startChar": 4,
+        "endLine": 203,
+        "endChar": 23
+      },
+      "revId": "acf9c0580747fb91a100ab52c0613a106a7301f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2594291_63811d67",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-17T09:55:08Z",
+      "side": 1,
+      "message": "So this is similar to above:\nsum of all traces per attempt\n\nIs this the more interesting value or would the revers be more interesting? I.e.\nsum (or average) of all attempts per trace",
+      "range": {
+        "startLine": 322,
+        "startChar": 2,
+        "endLine": 322,
+        "endChar": 17
+      },
+      "revId": "acf9c0580747fb91a100ab52c0613a106a7301f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
