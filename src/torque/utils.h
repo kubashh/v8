@@ -20,8 +20,8 @@ namespace v8 {
 namespace internal {
 namespace torque {
 
-std::string StringLiteralUnquote(const std::string& s);
-std::string StringLiteralQuote(const std::string& s);
+V8_EXPORT_PRIVATE std::string StringLiteralUnquote(const std::string& s);
+V8_EXPORT_PRIVATE std::string StringLiteralQuote(const std::string& s);
 
 // Decodes "file://" URIs into file paths which can then be used
 // with the standard stream API.
