@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa8d12ce_9e60bc45",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 2980,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-17T10:27:16Z",
+      "side": 1,
+      "message": "maybe this is worth a short comment here? linux and mac are obvious, but ios is not, given that the file names contain \"posix\".",
+      "revId": "835946bbeeda620d8c4f7a74dda6a5409e40d2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
