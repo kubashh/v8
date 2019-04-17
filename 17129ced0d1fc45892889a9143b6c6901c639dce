@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "48ad46d8_a26503bb",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3115,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-04-17T16:27:36Z",
+      "side": 1,
+      "message": "Done.\nRegarding the support, I think Jaro would be better suited to answer that.",
+      "parentUuid": "d1087132_7104368e",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00e3f7d5_30ca5769",
         "filename": "src/arm64/macro-assembler-arm64.cc",
         "patchSetId": 7
@@ -51,6 +69,24 @@
       "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e147bb6f_a2ab516f",
+        "filename": "src/arm64/macro-assembler-arm64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 3122,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-04-17T16:27:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00e3f7d5_30ca5769",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "576adffb_023e2a88",
+        "filename": "src/compiler/raw-machine-assembler.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-04-17T16:27:36Z",
+      "side": 1,
+      "message": "Done. I replaced the other ifdef cases as well.",
+      "parentUuid": "c84e9d1b_8a8562d8",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42f9aa35_016561a7",
         "filename": "src/x64/macro-assembler-x64.cc",
         "patchSetId": 7
@@ -88,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "1317a7e1_0409d5d9",
+        "filename": "src/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-04-17T16:27:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42f9aa35_016561a7",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48de30d5_167cef46",
         "filename": "src/x64/macro-assembler-x64.cc",
         "patchSetId": 7
@@ -102,6 +174,24 @@
       "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db4d5c14_978d9b46",
+        "filename": "src/x64/macro-assembler-x64.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-04-17T16:27:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48de30d5_167cef46",
+      "revId": "17129ced0d1fc45892889a9143b6c6901c639dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
