@@ -3419,6 +3419,14 @@ int Shell::Main(int argc, char* argv[]) {
   if (i::FLAG_redirect_code_traces_to == nullptr) {
     SetFlagsFromString("--redirect-code-traces-to=code.asm");
   }
+
+  if (V8_TRAP_HANDLER_SUPPORTED && i::FLAG_wasm_trap_handler) {
+    constexpr bool use_default_trap_handler = true;
+    if (!v8::V8::EnableWebAssemblyTrapHandler(use_default_trap_handler)) {
+      FATAL("Could not register trap handler");
+    }
+  }
+
   v8::V8::InitializePlatform(g_platform.get());
   v8::V8::Initialize();
   if (options.natives_blob || options.snapshot_blob) {
@@ -3460,13 +3468,6 @@ int Shell::Main(int argc, char* argv[]) {
     create_params.counter_lookup_callback = LookupCounter;
     create_params.create_histogram_callback = CreateHistogram;
     create_params.add_histogram_sample_callback = AddHistogramSample;
-  }
-
-  if (V8_TRAP_HANDLER_SUPPORTED && i::FLAG_wasm_trap_handler) {
-    constexpr bool use_default_trap_handler = true;
-    if (!v8::V8::EnableWebAssemblyTrapHandler(use_default_trap_handler)) {
-      FATAL("Could not register trap handler");
-    }
   }
 
   Isolate* isolate = Isolate::New(create_params);
