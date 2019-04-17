@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d06b9257_4efdad92",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11376,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-17T10:53:52Z",
+      "side": 1,
+      "message": "I guess this (and the other deferred below) are the changes to avoid frame construction and combine/overwrite changes are just drive-by\u0027s?",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f1525c9_844e6e92",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11690,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-17T10:53:52Z",
+      "side": 1,
+      "message": "Oh I see, there\u0027s no Node* overload for OverwriteFeedback. Could we add one for readability?",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a87447ea_c1801d1a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 11697,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-17T10:53:52Z",
+      "side": 1,
+      "message": "Not familiar with this handler; how did you determine it\u0027s safe to overwrite instead of combine here and in similar spots?",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "345b9db9_f9974f9f",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 12206,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-17T10:53:52Z",
+      "side": 1,
+      "message": "Bit confused by this change; Overwrite(kNone) used to be on the if_same branch but now happens unconditionally. Is that needed?",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c1e2988_5d54ef5a",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 12249,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-17T10:53:52Z",
+      "side": 1,
+      "message": "Similar q here but other way around; this used to be OverwriteFeedback, now it is CombineFeedback.",
+      "revId": "07149839cd72df524d728f849dc2e543621fd61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
