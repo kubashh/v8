@@ -35,7 +35,7 @@ class MemoryOptimizer final {
 
   MemoryOptimizer(JSGraph* jsgraph, Zone* zone,
                   PoisoningMitigationLevel poisoning_level,
-                  AllocationFolding allocation_folding);
+                  AllocationFolding allocation_folding, const char* name);
   ~MemoryOptimizer() = default;
 
   void Optimize();
@@ -123,7 +123,8 @@ class MemoryOptimizer final {
   void VisitOtherEffect(Node*, AllocationState const*);
 
   Node* ComputeIndex(ElementAccess const&, Node*);
-  WriteBarrierKind ComputeWriteBarrierKind(Node* object,
+  WriteBarrierKind ComputeWriteBarrierKind(Node* node, Node* object,
+                                           Node* value,
                                            AllocationState const* state,
                                            WriteBarrierKind);
 
@@ -153,6 +154,7 @@ class MemoryOptimizer final {
   GraphAssembler graph_assembler_;
   PoisoningMitigationLevel poisoning_level_;
   AllocationFolding allocation_folding_;
+  const char* name_;
 
   DISALLOW_IMPLICIT_CONSTRUCTORS(MemoryOptimizer);
 };

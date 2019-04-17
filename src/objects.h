@@ -186,16 +186,29 @@ namespace internal {
 struct InliningPosition;
 class PropertyDescriptorObject;
 
-// SKIP_WRITE_BARRIER skips the write barrier.
+// UNSAFE_SKIP_WRITE_BARRIER skips the write barrier.
+// SKIP_WRITE_BARRIER skips the write barrier and asserts that this is safe in
+// the MemoryOptimizer
 // UPDATE_WEAK_WRITE_BARRIER skips the marking part of the write barrier and
 // only performs the generational part.
 // UPDATE_WRITE_BARRIER is doing the full barrier, marking and generational.
-enum WriteBarrierMode {
+enum class WriteBarrierMode {
   SKIP_WRITE_BARRIER,
+  UNSAFE_SKIP_WRITE_BARRIER,
   UPDATE_WEAK_WRITE_BARRIER,
   UPDATE_EPHEMERON_KEY_WRITE_BARRIER,
   UPDATE_WRITE_BARRIER
 };
+constexpr WriteBarrierMode SKIP_WRITE_BARRIER =
+    WriteBarrierMode::SKIP_WRITE_BARRIER;
+constexpr WriteBarrierMode UNSAFE_SKIP_WRITE_BARRIER =
+    WriteBarrierMode::UNSAFE_SKIP_WRITE_BARRIER;
+constexpr WriteBarrierMode UPDATE_WEAK_WRITE_BARRIER =
+    WriteBarrierMode::UPDATE_WEAK_WRITE_BARRIER;
+constexpr WriteBarrierMode UPDATE_EPHEMERON_KEY_WRITE_BARRIER =
+    WriteBarrierMode::UPDATE_EPHEMERON_KEY_WRITE_BARRIER;
+constexpr WriteBarrierMode UPDATE_WRITE_BARRIER =
+    WriteBarrierMode::UPDATE_WRITE_BARRIER;
 
 // PropertyNormalizationMode is used to specify whether to keep
 // inobject properties when normalizing properties of a JSObject.
