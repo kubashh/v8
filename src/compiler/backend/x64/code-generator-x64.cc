@@ -247,6 +247,9 @@ class OutOfLineRecordWrite final : public OutOfLineCode {
     if (mode_ > RecordWriteMode::kValueIsPointer) {
       __ JumpIfSmi(value_, exit());
     }
+#if V8_COMPRESS_POINTERS
+    __ DecompressTaggedPointer(value_, value_);
+#endif
     __ CheckPageFlag(value_, scratch0_,
                      MemoryChunk::kPointersToHereAreInterestingMask, zero,
                      exit());
@@ -1018,6 +1021,9 @@ CodeGenerator::CodeGenResult CodeGenerator::AssembleArchInstruction(
           OutOfLineRecordWrite(this, object, operand, value, scratch0, scratch1,
                                mode, DetermineStubCallMode());
       __ StoreTaggedField(operand, value);
+#if V8_COMPRESS_POINTERS
+      __ DecompressTaggedPointer(object, object);
+#endif
       __ CheckPageFlag(object, scratch0,
                        MemoryChunk::kPointersFromHereAreInterestingMask,
                        not_zero, ool->entry());
