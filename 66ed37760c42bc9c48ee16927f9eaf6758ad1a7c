@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "fff9c2a4_5e96971b",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5920,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-18T19:21:07Z",
+      "side": 1,
+      "message": "It\u0027s used in the torque builtin when casting to DebugInfo.",
+      "parentUuid": "79fbe0c7_fe79a863",
+      "range": {
+        "startLine": 5920,
+        "startChar": 0,
+        "endLine": 5920,
+        "endChar": 50
+      },
+      "revId": "66ed37760c42bc9c48ee16927f9eaf6758ad1a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82c3f86e_b6294f76",
         "filename": "src/runtime/runtime-debug.cc",
         "patchSetId": 5
@@ -71,6 +95,30 @@
       "writtenOn": "2019-04-18T18:18:31Z",
       "side": 1,
       "message": "is there a reason why we even need to keep this logic? Do we expect anyone would still call this method?",
+      "range": {
+        "startLine": 740,
+        "startChar": 2,
+        "endLine": 740,
+        "endChar": 13
+      },
+      "revId": "66ed37760c42bc9c48ee16927f9eaf6758ad1a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b538bf0_1ce64113",
+        "filename": "src/runtime/runtime-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-18T19:21:07Z",
+      "side": 1,
+      "message": "Yeah; we first emit a call to Runtime::kIncBlockCounter before that is ultimately lowered to the builtin call. The method body is never called but it still needs to exist for its ID.",
+      "parentUuid": "82c3f86e_b6294f76",
       "range": {
         "startLine": 740,
         "startChar": 2,
