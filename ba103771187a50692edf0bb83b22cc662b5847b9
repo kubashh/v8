@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c36e5067_f4c945f4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-04-18T12:53:09Z",
+      "side": 1,
+      "message": "Can we restructure this to unify the private field / method stuff above, i.e.:\n\nif (property-\u003eis_private()) {\n  switch (property-\u003ekind()) {\n    case ClassLiteral::Property::FIELD: ...\n    case ClassLiteral::Property::METHOD ...\n  }\n  // We don\u0027t compute private fields or methods here, but instead do it in the\n  // initializer function.\n  continue;\n}",
+      "range": {
+        "startLine": 2014,
+        "startChar": 6,
+        "endLine": 2014,
+        "endChar": 35
+      },
+      "revId": "ba103771187a50692edf0bb83b22cc662b5847b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ff3dd92_aa68cc2d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-04-18T12:53:09Z",
+      "side": 1,
+      "message": "Add a comment please",
+      "revId": "ba103771187a50692edf0bb83b22cc662b5847b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cb2449f_fe1f032a",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 15
+      },
+      "lineNbr": 2162,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-04-18T12:53:09Z",
+      "side": 1,
+      "message": "Not keen on this continue deep in the loop. Can we keep it how it looked previously and add a \n\nif (property-\u003eis_private() \u0026\u0026 property-\u003ekind() \u003d\u003d ClassLiteral::Property::METHOD) {\n  // \u003cComment explaining why we don\u0027t initialize here.\u003e\n  // TODO...\n  continue;\n} \n\nUp at the top of the loop.",
+      "range": {
+        "startLine": 2160,
+        "startChar": 8,
+        "endLine": 2162,
+        "endChar": 17
+      },
+      "revId": "ba103771187a50692edf0bb83b22cc662b5847b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
