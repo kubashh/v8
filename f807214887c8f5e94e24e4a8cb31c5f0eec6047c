@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "134bb62a_4f760df2",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-18T17:59:34Z",
+      "side": 1,
+      "message": "I think both the WasmModule and the enabled features can be obtained from the NativeModule, which is already stored in the CompilationStateImpl. So both arguments can be dropped.",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a127acd0_ef0ef10e",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-18T17:59:34Z",
+      "side": 1,
+      "message": "Please add comments explaining what each strategy is. They are really not self-explanatory.\nAlso, (as discussed offline), let\u0027s discuss whether we can find better names.\nMaybe:\na) kLazyLazy, kEagerEager, kLazyEager (first refers to baseline, second to top tier); or\nb) kLazy, kEager, kLazyBaselineEagerTopTier",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "038af3fb_c7ee5d50",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-18T17:59:34Z",
+      "side": 1,
+      "message": "You can reduce nesting by using early returns:\nif (!enabled_features...) return ...kEager;\nauto hint \u003d ...\nif (!hint) return ...kEager;\nswitch (hint) {...}\n\nYou can also extend the enum class CompileStrategy to contain \"kDefault \u003d kEager\", and use kDefault for the early returns here.",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1624aa8_42ed8726",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-18T17:59:34Z",
+      "side": 1,
+      "message": "The trick of having bool as underlying type of the enum allows to you just use the enum value as a bool here. I.e., just do \"if (only_lazy_functions) ...\"",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa1816fc_a8f09e6d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-18T17:59:34Z",
+      "side": 1,
+      "message": "Aha, I already misunderstood what kLazyBaseline means. I thought it\u0027s lazy, and as soon as we hit the function, we lazily compile baseline and trigger top-tier background compile. In fact, it means that we trigger top-tier background compile right away, and only use lazy baseline compile if the top-tier code is not finished when we need it, right?",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac37616f_a466faf8",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-18T17:59:34Z",
+      "side": 1,
+      "message": "This gets more complex, and will probably take longer to execute also.\nWDYT about adding a vector to the CompilationStateImpl which tracks for each function:\na) highest reached tier so far;\nb) tier needed for \"baseline finished\";\nc) tier needed for \"top tier finished\".\nAll of these should fit in a single byte per function. The logic here would then simply:\na) decrement outstanding_baseline_functions_ if highest tier so far \u003c (b) and new tier \u003e\u003d (b);\nb) decrement outstanding_top_tier_functions_ if highest tier so far \u003c (c) and new tier \u003e\u003d (c);\nc) update highest tier so far.\n\nI image that being way simpler.\nThe vector would then be initialized during \"SetNumberOfFunctionsToCompile\" by iterating the compilation hints. At the same time we calculate outstanding_baseline_functions_ and outstanding_top_tier_functions_. The counters \"num_lazy_compilation_hints\" and \"num_lazy_baseline_compilation_hints\" can be dropped completely.",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
