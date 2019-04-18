@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "435df98d_a6683282",
+        "filename": "src/heap/setup-heap-internal.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-18T18:39:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54a8cfd5_2449acd3",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 77
+      },
+      "revId": "53d6416b794db0657242c6722d03fab55c43e5d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a108fe74_d3a13f6b",
         "filename": "src/objects/allocation-site.h",
         "patchSetId": 6
@@ -86,6 +110,30 @@
       "revId": "53d6416b794db0657242c6722d03fab55c43e5d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49aaf9bc_ce866563",
+        "filename": "tools/v8heapconst.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-18T18:39:29Z",
+      "side": 1,
+      "message": "Extracted into separate CL and resolved there.",
+      "parentUuid": "556a3fe4_a257262f",
+      "range": {
+        "startLine": 136,
+        "startChar": 1,
+        "endLine": 136,
+        "endChar": 25
+      },
+      "revId": "53d6416b794db0657242c6722d03fab55c43e5d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

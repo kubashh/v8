@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ae68074_9a4d812e",
+        "filename": "src/objects/feedback-cell.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-04-18T18:39:29Z",
+      "side": 1,
+      "message": "Or would it be better to use kUnalignedSize here?",
+      "range": {
+        "startLine": 45,
+        "startChar": 64,
+        "endLine": 45,
+        "endChar": 69
+      },
+      "revId": "0bec9201392cb7cea08aa038d4b5a0dd16d4ab87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
