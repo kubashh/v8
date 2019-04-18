@@ -128,6 +128,7 @@ TEST(Run_WasmModule_CompilationHintsLazy) {
     int func_index = 0;
     NativeModule* native_module = module.ToHandleChecked()->native_module();
     CHECK(!native_module->HasCode(func_index));
+    CHECK(native_module->compilation_state()->baseline_compilation_finished());
 
     // Instantiate and invoke function.
     MaybeHandle<WasmInstanceObject> instance =
@@ -147,6 +148,7 @@ TEST(Run_WasmModule_CompilationHintsLazy) {
                   "Assume an order on execution tiers");
     ExecutionTier baseline_tier = ExecutionTier::kLiftoff;
     CHECK_LE(baseline_tier, actual_tier);
+    CHECK(native_module->compilation_state()->baseline_compilation_finished());
   }
   Cleanup();
 }
@@ -190,6 +192,8 @@ TEST(Run_WasmModule_CompilationHintsNoTiering) {
     ExecutionTier expected_tier = ExecutionTier::kLiftoff;
     ExecutionTier actual_tier = native_module->GetCode(func_index)->tier();
     CHECK_EQ(expected_tier, actual_tier);
+    CHECK(native_module->compilation_state()->baseline_compilation_finished());
+    CHECK(native_module->compilation_state()->top_tier_compilation_finished());
   }
   Cleanup();
 }
@@ -225,7 +229,7 @@ TEST(Run_WasmModule_CompilationHintsTierUp) {
         isolate, &thrower, ModuleWireBytes(buffer.begin(), buffer.end()));
     CHECK(!module.is_null());
 
-    // Expect code baseline code or top tier code.
+    // Expect baseline code or top tier code.
     int func_index = 0;
     NativeModule* native_module = module.ToHandleChecked()->native_module();
     CHECK(native_module->HasCode(func_index));
@@ -238,6 +242,67 @@ TEST(Run_WasmModule_CompilationHintsTierUp) {
     CHECK_LE(baseline_tier, actual_tier);
     ExecutionTier top_tier = ExecutionTier::kTurbofan;
     CHECK_LE(actual_tier, top_tier);
+    CHECK(native_module->compilation_state()->baseline_compilation_finished());
+  }
+  Cleanup();
+}
+
+TEST(Run_WasmModule_CompilationHintsLazyBaseline) {
+  if (!FLAG_wasm_tier_up || !FLAG_liftoff) return;
+  {
+    EXPERIMENTAL_FLAG_SCOPE(compilation_hints);
+
+    static const int32_t kReturnValue = 114;
+    TestSignatures sigs;
+    v8::internal::AccountingAllocator allocator;
+    Zone zone(&allocator, ZONE_NAME);
+
+    // Build module with tiering compilation hint.
+    WasmModuleBuilder* builder = new (&zone) WasmModuleBuilder(&zone);
+    WasmFunctionBuilder* f = builder->AddFunction(sigs.i_v());
+    ExportAsMain(f);
+    byte code[] = {WASM_I32V_2(kReturnValue)};
+    EMIT_CODE_WITH_END(f, code);
+    f->SetCompilationHint(WasmCompilationHintStrategy::kLazyBaseline,
+                          WasmCompilationHintTier::kBaseline,
+                          WasmCompilationHintTier::kOptimized);
+
+    // Compile module.
+    ZoneBuffer buffer(&zone);
+    builder->WriteTo(buffer);
+    Isolate* isolate = CcTest::InitIsolateOnce();
+    HandleScope scope(isolate);
+    testing::SetupIsolateForWasmModule(isolate);
+    ErrorThrower thrower(isolate, "CompileAndRunWasmModule");
+    MaybeHandle<WasmModuleObject> module = testing::CompileForTesting(
+        isolate, &thrower, ModuleWireBytes(buffer.begin(), buffer.end()));
+    CHECK(!module.is_null());
+    NativeModule* native_module = module.ToHandleChecked()->native_module();
+    CHECK(native_module->compilation_state()->baseline_compilation_finished());
+
+    // Wait for top tier compilation.
+    auto top_tier_finished_semaphore = std::make_shared<base::Semaphore>(0);
+    native_module->compilation_state()->AddCallback(
+        [top_tier_finished_semaphore](CompilationEvent event) {
+          // Baseline was already finished. We do not expect this event again.
+          CHECK(event != CompilationEvent::kFinishedBaselineCompilation);
+          if (event == CompilationEvent::kFailedCompilation) {
+            top_tier_finished_semaphore->Signal();
+          }
+        });
+    int func_index = 0;
+    if (!native_module->HasCode(func_index)) {
+      top_tier_finished_semaphore->Wait();
+    }
+
+    // Check top tier.
+    CHECK(native_module->HasCode(func_index));
+    WasmCodeRefScope code_ref_scope;
+    ExecutionTier expected_tier = ExecutionTier::kTurbofan;
+    ExecutionTier actual_tier = native_module->GetCode(func_index)->tier();
+    CHECK_EQ(expected_tier, actual_tier);
+    CHECK(native_module->compilation_state()->baseline_compilation_finished());
+    CHECK(native_module->compilation_state()->top_tier_compilation_finished());
   }
   Cleanup();
 }

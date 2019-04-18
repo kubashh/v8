@@ -1010,18 +1010,19 @@ class ModuleDecoderImpl : public Decoder {
 
     // Decode sequence of compilation hints.
     if (decoder.ok()) {
-      module_->compilation_hints.reserve(hint_count);
       module_->num_lazy_compilation_hints = 0;
+      module_->num_lazy_baseline_compilation_hints = 0;
+      module_->compilation_hints.reserve(hint_count);
     }
     for (uint32_t i = 0; decoder.ok() && i < hint_count; i++) {
       TRACE("DecodeCompilationHints[%d] module+%d\n", i,
             static_cast<int>(pc_ - start_));
 
       // Compilation hints are encoded in one byte each.
-      // +-------+----------+---------------+------------------+
-      // | 2 bit | 2 bit    | 2 bit         | 2 bit            |
-      // | ...   | Top tier | Baseline tier | Lazy compilation |
-      // +-------+----------+---------------+------------------+
+      // +-------+----------+---------------+----------+
+      // | 2 bit | 2 bit    | 2 bit         | 2 bit    |
+      // | ...   | Top tier | Baseline tier | Strategy |
+      // +-------+----------+---------------+----------+
       uint8_t hint_byte = decoder.consume_u8("compilation hint");
       if (!decoder.ok()) break;
 
@@ -1033,13 +1034,6 @@ class ModuleDecoderImpl : public Decoder {
           static_cast<WasmCompilationHintTier>(hint_byte >> 2 & 0x3);
       hint.top_tier =
           static_cast<WasmCompilationHintTier>(hint_byte >> 4 & 0x3);
-
-      // Check strategy.
-      if (hint.strategy > WasmCompilationHintStrategy::kEager) {
-        decoder.errorf(decoder.pc(),
-                       "Invalid compilation hint %#x (unknown strategy)",
-                       hint_byte);
-      }
 
       // Ensure that the top tier never downgrades a compilation result.
       // If baseline and top tier are the same compilation will be invoked only
@@ -1053,8 +1047,11 @@ class ModuleDecoderImpl : public Decoder {
 
       // Happily accept compilation hint.
       if (decoder.ok()) {
-        if (hint.strategy == WasmCompilationHintStrategy::kLazy) {
+        auto strategy = hint.strategy;
+        if (strategy == WasmCompilationHintStrategy::kLazy) {
           module_->num_lazy_compilation_hints++;
+        } else if (strategy == WasmCompilationHintStrategy::kLazyBaseline) {
+          module_->num_lazy_baseline_compilation_hints++;
         }
         module_->compilation_hints.push_back(std::move(hint));
       }
@@ -1062,8 +1059,9 @@ class ModuleDecoderImpl : public Decoder {
 
     // If section was invalid reset compilation hints.
     if (decoder.failed()) {
-      module_->compilation_hints.clear();
       module_->num_lazy_compilation_hints = 0;
+      module_->num_lazy_baseline_compilation_hints = 0;
+      module_->compilation_hints.clear();
     }
 
     // @TODO(frgossen) Skip the whole compilation hints section in the outer
