@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43d6ffdc_8cc845c6",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-18T12:21:19Z",
+      "side": 1,
+      "message": "Note the object definitions were cherry-picked from https://crrev.com/c/1521910. I\u0027ll rebase once that has landed.",
+      "revId": "66ed37760c42bc9c48ee16927f9eaf6758ad1a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
