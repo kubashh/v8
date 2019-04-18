@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "e314d05d_69c99cbb",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-18T19:22:05Z",
+      "side": 1,
+      "message": "Yes although I pulled in only what was needed. These are used in the Torque builtin.",
+      "parentUuid": "764bffac_c1a040f0",
+      "revId": "66ed37760c42bc9c48ee16927f9eaf6758ad1a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "79fbe0c7_fe79a863",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 5
