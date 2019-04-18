@@ -85,7 +85,7 @@ const PropertyConstness kDefaultFieldConstness =
 
 class Representation {
  public:
-  enum Kind {
+  enum Kind : uint8_t {
     kNone,
     kSmi,
     kDouble,
