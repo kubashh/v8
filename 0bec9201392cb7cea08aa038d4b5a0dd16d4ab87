@@ -22,6 +22,30 @@
       "revId": "0bec9201392cb7cea08aa038d4b5a0dd16d4ab87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "008b68d2_7b60326c",
+        "filename": "src/objects/feedback-cell.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-18T19:29:55Z",
+      "side": 1,
+      "message": "Same difference ;)",
+      "parentUuid": "3ae68074_9a4d812e",
+      "range": {
+        "startLine": 45,
+        "startChar": 64,
+        "endLine": 45,
+        "endChar": 69
+      },
+      "revId": "0bec9201392cb7cea08aa038d4b5a0dd16d4ab87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
