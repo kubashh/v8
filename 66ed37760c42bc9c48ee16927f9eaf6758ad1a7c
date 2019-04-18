@@ -16,6 +16,70 @@
       "revId": "66ed37760c42bc9c48ee16927f9eaf6758ad1a7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "764bffac_c1a040f0",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1017,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2019-04-18T18:18:31Z",
+      "side": 1,
+      "message": "I think this might answer my other question, you pulled in Debug helpers from another branch?",
+      "parentUuid": "43d6ffdc_8cc845c6",
+      "revId": "66ed37760c42bc9c48ee16927f9eaf6758ad1a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79fbe0c7_fe79a863",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5920,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2019-04-18T18:18:31Z",
+      "side": 1,
+      "message": "Is this method only used when debugging coverage, seems like an oddly generic addition.",
+      "range": {
+        "startLine": 5920,
+        "startChar": 0,
+        "endLine": 5920,
+        "endChar": 50
+      },
+      "revId": "66ed37760c42bc9c48ee16927f9eaf6758ad1a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "82c3f86e_b6294f76",
+        "filename": "src/runtime/runtime-debug.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1341998
+      },
+      "writtenOn": "2019-04-18T18:18:31Z",
+      "side": 1,
+      "message": "is there a reason why we even need to keep this logic? Do we expect anyone would still call this method?",
+      "range": {
+        "startLine": 740,
+        "startChar": 2,
+        "endLine": 740,
+        "endChar": 13
+      },
+      "revId": "66ed37760c42bc9c48ee16927f9eaf6758ad1a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
