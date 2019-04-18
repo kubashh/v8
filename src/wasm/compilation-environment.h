@@ -119,6 +119,8 @@ class CompilationState {
   void AddCallback(callback_t);
 
   bool failed() const;
+  bool baseline_compilation_finished() const;
+  bool top_tier_compilation_finished() const;
 
   void OnFinishedUnit(WasmCode*);
   void OnFinishedUnits(Vector<WasmCode*>);
