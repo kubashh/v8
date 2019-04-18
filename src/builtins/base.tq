@@ -159,6 +159,14 @@ extern class EnumCache extends Struct {
   indices: FixedArray;
 }
 
+extern class DescriptorArray extends HeapObject {
+  number_of_all_descriptors: uint16;
+  number_of_descriptors: uint16;
+  raw_number_of_marked_descriptors: uint16;
+  filler16_bits: uint16;
+  enum_cache: EnumCache;
+}
+
 // These intrinsics should never be called from Torque code. They're used
 // internally by the 'new' operator and only declared here because it's simpler
 // than building the definition from C++.
@@ -340,7 +348,6 @@ extern class Script extends Struct {
   source_mapping_url: Object;
   host_defined_options: Object;
 }
-type DebugInfo extends HeapObject;
 
 extern class EmbedderDataArray extends HeapObject { length: Smi; }
 
@@ -1019,6 +1026,38 @@ extern class AccessorPair extends Struct {
 
 extern class BreakPoint extends Tuple2 {}
 extern class BreakPointInfo extends Tuple2 {}
+extern class CoverageInfo extends FixedArray {}
+
+extern class DebugInfo extends Struct {
+  shared_function_info: HeapObject;
+  debugger_hints: Smi;
+  script: Undefined | Script;
+  original_bytecode_array: Undefined | BytecodeArray;
+  debug_bytecode_array: Undefined | BytecodeArray;
+  break_points: FixedArray;
+  flags: Smi;
+  coverage_info: CoverageInfo | Undefined;
+}
+
+extern class FeedbackVector extends HeapObject {
+  shared_function_info: SharedFunctionInfo;
+  optimized_code_weak_or_smi: Object;  // MaybeObject
+  closure_feedback_cell_array: FixedArray;
+  length: int32;
+  invocation_count: int32;
+  profiler_ticks: int32;
+  deopt_count: int32;
+}
+
+extern class FeedbackCell extends Struct {
+  value: Undefined | FeedbackVector | FixedArray;
+  interrupt_budget: int32;
+}
+
+type AllocationSite extends Struct;
+extern class AllocationMemento extends Struct {
+  allocation_site: AllocationSite;
+}
 
 extern class WasmModuleObject extends JSObject {
   native_module: Foreign;
