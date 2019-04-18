@@ -16,6 +16,24 @@
       "revId": "bdc305c5142b36572e32456de0e6b30f3d09a878",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ea40bb8_d70eeb4a",
+        "filename": "test/mjsunit/regress/regress-crbug-951400.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-04-18T12:25:46Z",
+      "side": 1,
+      "message": "It\u0027s not, removing it.",
+      "parentUuid": "f7a3667a_fbfb023d",
+      "revId": "bdc305c5142b36572e32456de0e6b30f3d09a878",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
