@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7a3667a_fbfb023d",
+        "filename": "test/mjsunit/regress/regress-crbug-951400.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-04-18T10:36:20Z",
+      "side": 1,
+      "message": "Is this try-catch necessary?",
+      "revId": "bdc305c5142b36572e32456de0e6b30f3d09a878",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
