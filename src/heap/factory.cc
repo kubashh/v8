@@ -3096,7 +3096,7 @@ Handle<JSObject> Factory::NewJSObjectFromMap(
 
   DCHECK(js_obj->HasFastElements() || js_obj->HasFixedTypedArrayElements() ||
          js_obj->HasFastStringWrapperElements() ||
-         js_obj->HasFastArgumentsElements());
+         js_obj->HasFastArgumentsElements() || js_obj->HasDictionaryElements());
   return js_obj;
 }
 
