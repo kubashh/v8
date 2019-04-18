@@ -31,6 +31,20 @@
 namespace v8 {
 namespace internal {
 
+// Simple stream over a vector.
+class OneByteStringStream {
+ public:
+  explicit OneByteStringStream(Vector<const byte> lb)
+      : literal_bytes_(lb), pos_(0) {}
+
+  bool HasMore() { return pos_ < literal_bytes_.length(); }
+  uint16_t GetNext() { return literal_bytes_[pos_++]; }
+
+ private:
+  Vector<const byte> literal_bytes_;
+  int pos_;
+};
+
 // ----------------------------------------------------------------------------
 // General helper functions
 
