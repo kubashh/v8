@@ -2400,8 +2400,6 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
                          SloppyTNode<Object> input);
 
   // Convert any object to a String.
-  TNode<String> ToString(SloppyTNode<Context> context,
-                         SloppyTNode<Object> input);
   TNode<String> ToString_Inline(SloppyTNode<Context> context,
                                 SloppyTNode<Object> input);
 
