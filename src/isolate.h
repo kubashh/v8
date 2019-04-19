@@ -393,6 +393,8 @@ using DebugObjectCache = std::vector<Handle<HeapObject>>;
   V(int, external_script_source_size, 0)                                       \
   /* true if being profiled. Causes collection of extra compile info. */       \
   V(bool, is_profiling, false)                                                 \
+  /* Number of CPU profilers running on the isolate. */                        \
+  V(size_t, num_cpu_profilers, 0)                                              \
   /* true if a trace is being formatted through Error.prepareStackTrace. */    \
   V(bool, formatting_stack_trace, false)                                       \
   /* Perform side effect checks on function call and API callbacks. */         \
@@ -2026,6 +2028,28 @@ class StackTraceFailureMessage {
   void* code_objects_[4];
   char js_stack_trace_[kStacktraceBufferSize];
   uintptr_t end_marker_ = kEndMarker;
+};
+
+// Maintains the number of active CPU profilers in an isolate.
+class ProfilingScope {
+ public:
+  explicit ProfilingScope(Isolate* isolate) : isolate_(isolate) {
+    size_t profiler_count = isolate_->num_cpu_profilers();
+    profiler_count++;
+    isolate_->set_num_cpu_profilers(profiler_count);
+    isolate_->set_is_profiling(true);
+  }
+
+  ~ProfilingScope() {
+    size_t profiler_count = isolate_->num_cpu_profilers();
+    DCHECK_GT(profiler_count, 0);
+    profiler_count--;
+    isolate_->set_num_cpu_profilers(profiler_count);
+    if (profiler_count == 0) isolate_->set_is_profiling(false);
+  }
+
+ private:
+  Isolate* const isolate_;
 };
 
 }  // namespace internal

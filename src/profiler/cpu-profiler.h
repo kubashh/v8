@@ -173,6 +173,7 @@ class V8_EXPORT_PRIVATE ProfilerEventsProcessor : public base::Thread,
   std::atomic<unsigned> last_code_event_id_;
   unsigned last_processed_code_event_id_;
   Isolate* isolate_;
+  ProfilingScope profiling_scope_;
 };
 
 class V8_EXPORT_PRIVATE SamplingEventsProcessor
@@ -266,7 +267,6 @@ class V8_EXPORT_PRIVATE CpuProfiler {
   std::unique_ptr<ProfileGenerator> generator_;
   std::unique_ptr<ProfilerEventsProcessor> processor_;
   std::unique_ptr<ProfilerListener> profiler_listener_;
-  bool saved_is_logging_;
   bool is_profiling_;
 
   DISALLOW_COPY_AND_ASSIGN(CpuProfiler);
