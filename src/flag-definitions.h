@@ -220,8 +220,9 @@ DEFINE_IMPLICATION(harmony_private_methods, harmony_private_fields)
   V(harmony_weak_refs, "harmony weak references")
 
 #ifdef V8_INTL_SUPPORT
-#define HARMONY_INPROGRESS(V)                                              \
-  HARMONY_INPROGRESS_BASE(V)                                               \
+#define HARMONY_INPROGRESS(V)                                \
+  HARMONY_INPROGRESS_BASE(V)                                 \
+  V(harmony_intl_related_year, "DateTimeFormat relatedYear") \
   V(harmony_intl_date_format_range, "DateTimeFormat formatRange")
 #else
 #define HARMONY_INPROGRESS(V) HARMONY_INPROGRESS_BASE(V)

@@ -60,6 +60,7 @@ static const std::vector<PatternItem> BuildPatternItems() {
   const std::vector<const char*> kLongShort = {"long", "short"};
   const std::vector<const char*> kNarrowLongShort = {"narrow", "long", "short"};
   const std::vector<const char*> k2DigitNumeric = {"2-digit", "numeric"};
+  const std::vector<const char*> kNumeric = {"numeric"};
   const std::vector<const char*> kNarrowLongShort2DigitNumeric = {
       "narrow", "long", "short", "2-digit", "numeric"};
   const std::vector<PatternItem> kPatternItems = {
@@ -105,7 +106,8 @@ static const std::vector<PatternItem> BuildPatternItems() {
       PatternItem("second", {{"ss", "2-digit"}, {"s", "numeric"}},
                   k2DigitNumeric),
       PatternItem("timeZoneName", {{"zzzz", "long"}, {"z", "short"}},
-                  kLongShort)};
+                  kLongShort),
+      PatternItem("relatedYear", {{"r", "numeric"}}, kNumeric)};
   return kPatternItems;
 }
 
@@ -902,11 +904,20 @@ std::unique_ptr<icu::SimpleDateFormat> CreateICUDateFormat(
   // locale for the pattern match is not quite right. Moreover, what to
   // do with 'related year' part when 'chinese/dangi' calendar is specified
   // has to be discussed. Revisit once the spec is clarified/revised.
+
+  std::string skeleton_utf8;
+  skeleton_utf8 = skeleton.toUTF8String<std::string>(skeleton_utf8);
+  printf("skeleton %s\n", skeleton_utf8.c_str());
+
   icu::UnicodeString pattern;
   UErrorCode status = U_ZERO_ERROR;
   pattern = generator.getBestPattern(skeleton, UDATPG_MATCH_HOUR_FIELD_LENGTH,
                                      status);
   CHECK(U_SUCCESS(status));
+
+  std::string pattern_utf8;
+  pattern_utf8 = pattern.toUTF8String<std::string>(pattern_utf8);
+  printf("pattern %s\n", pattern_utf8.c_str());
 
   // Make formatter from skeleton. Calendar and numbering system are added
   // to the locale as Unicode extension (if they were specified at all).
