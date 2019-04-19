@@ -1448,6 +1448,7 @@ MaybeHandle<JSObject> Intl::SupportedLocalesOf(
 }
 
 namespace {
+
 template <typename T>
 bool IsValidExtension(const icu::Locale& locale, const char* key,
                       const std::string& value) {
@@ -1478,7 +1479,9 @@ bool IsValidCollation(const icu::Locale& locale, const std::string& value) {
   return IsValidExtension<icu::Collator>(locale, "collation", value);
 }
 
-bool IsValidNumberingSystem(const std::string& value) {
+}  // namespace
+
+bool Intl::IsValidNumberingSystem(const std::string& value) {
   std::set<std::string> invalid_values = {"native", "traditio", "finance"};
   if (invalid_values.find(value) != invalid_values.end()) return false;
   UErrorCode status = U_ZERO_ERROR;
@@ -1486,6 +1489,8 @@ bool IsValidNumberingSystem(const std::string& value) {
       icu::NumberingSystem::createInstanceByName(value.c_str(), status));
   return U_SUCCESS(status) && numbering_system.get() != nullptr;
 }
+
+namespace {
 
 std::map<std::string, std::string> LookupAndValidateUnicodeExtensions(
     icu::Locale* icu_locale, const std::set<std::string>& relevant_keys) {
@@ -1548,7 +1553,7 @@ std::map<std::string, std::string> LookupAndValidateUnicodeExtensions(
         std::set<std::string> valid_values = {"upper", "lower", "false"};
         is_valid_value = valid_values.find(bcp47_value) != valid_values.end();
       } else if (strcmp("nu", bcp47_key) == 0) {
-        is_valid_value = IsValidNumberingSystem(bcp47_value);
+        is_valid_value = Intl::IsValidNumberingSystem(bcp47_value);
       }
       if (is_valid_value) {
         extensions.insert(
