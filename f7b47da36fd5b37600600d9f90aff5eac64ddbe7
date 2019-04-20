@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91054ce6_0f918c84",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2034,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-04-20T01:25:09Z",
+      "side": 1,
+      "message": "Should it be moved into cpu_profiler?",
+      "revId": "f7b47da36fd5b37600600d9f90aff5eac64ddbe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
