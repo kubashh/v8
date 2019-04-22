@@ -11,6 +11,7 @@
 #include "include/v8-profiler.h"
 #include "src/base/platform/elapsed-timer.h"
 #include "src/code-events.h"
+#include "src/isolate.h"
 #include "src/objects.h"
 
 namespace v8 {
@@ -59,7 +60,6 @@ namespace internal {
 
 // Forward declarations.
 class CodeEventListener;
-class Isolate;
 class JitLogger;
 class Log;
 class LowLevelLogger;
@@ -248,11 +248,10 @@ class Logger : public CodeEventListener {
                                         StartEnd se, bool expose_to_api);
 
   bool is_logging() {
+    // Disable logging while the CPU profiler is running.
+    if (isolate_->is_profiling()) return false;
     return is_logging_;
   }
-
-  // Used by CpuProfiler. TODO(petermarshall): Untangle
-  void set_is_logging(bool new_value) { is_logging_ = new_value; }
 
   bool is_listening_to_code_events() override {
     return is_logging() || jit_logger_ != nullptr;
