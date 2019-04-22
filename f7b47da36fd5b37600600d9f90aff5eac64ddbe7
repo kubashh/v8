@@ -16,6 +16,24 @@
       "revId": "f7b47da36fd5b37600600d9f90aff5eac64ddbe7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c93257e_fb26bc4d",
+        "filename": "src/isolate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2034,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-04-22T18:37:17Z",
+      "side": 1,
+      "message": "SGTM, done.",
+      "parentUuid": "91054ce6_0f918c84",
+      "revId": "f7b47da36fd5b37600600d9f90aff5eac64ddbe7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
