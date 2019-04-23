@@ -200,11 +200,13 @@ class Measurement(object):
     self.results = []
     self.errors = []
     self.stddev = ''
+    self.durations = []
 
   def ConsumeOutput(self, output):
     try:
       result = re.search(self.results_regexp, output.stdout, re.M).group(1)
       self.results.append(str(float(result)))
+      self.durations.append(output.duration)
     except ValueError:
       self.errors.append('Regexp "%s" returned a non-numeric for test %s.'
                          % (self.results_regexp, self.name))
@@ -229,6 +231,7 @@ class Measurement(object):
       'units': self.units,
       'results': self.results,
       'stddev': self.stddev,
+      'durations': self.durations,
     }], self.errors)
 
 
@@ -305,16 +308,24 @@ def AccumulateResults(
     res.errors.append('Not all traces have the same number of results.')
     return res
 
-  # Calculate the geometric means for all traces. Above we made sure that
-  # there is at least one trace and that the number of results is the same
-  # for each trace.
+  # Assume all traces have same number of durations as results.
+  if any(len(t['durations']) != len(t['results']) for t in res.traces):
+    res.erros.append('Mismatching number of durations and results.')
+    return res
+
+  # Calculate the geometric means for all traces and sum of the durations. Above
+  # we made sure that there is at least one trace and that the number of results
+  # and durations is the same for each trace.
   n_results = len(res.traces[0]['results'])
   total_results = [GeometricMean(t['results'][i] for t in res.traces)
                    for i in range(0, n_results)]
+  total_durations = [sum(t['durations'][i] for t in res.traces)
+                     for i in range(0, n_results)]
   res.traces.append({
     'graphs': graph_names + ['Total'],
     'units': res.traces[0]['units'],
     'results': total_results,
+    'durations': total_durations,
     'stddev': '',
   })
   return res
