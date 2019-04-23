@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db580720_429b7c9d",
+        "filename": "src/log.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-04-23T09:56:18Z",
+      "side": 1,
+      "message": "I\u0027d prefer to push the definition into the .cc file and not need the isolate include",
+      "range": {
+        "startLine": 250,
+        "startChar": 7,
+        "endLine": 250,
+        "endChar": 17
+      },
+      "revId": "b5700859978288e5598295fef1ac742e66c025df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
