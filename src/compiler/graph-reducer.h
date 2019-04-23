@@ -9,6 +9,7 @@
 #include "src/compiler/node-marker.h"
 #include "src/globals.h"
 #include "src/zone/zone-containers.h"
+#include "src/zone/zone-handle-set.h"
 
 namespace v8 {
 namespace internal {
@@ -16,6 +17,7 @@ namespace compiler {
 
 // Forward declarations.
 class Graph;
+class JSGraph;
 class Node;
 
 
@@ -123,7 +125,6 @@ class AdvancedReducer : public Reducer {
  private:
   Editor* const editor_;
 };
-
 
 // Performs an iterative reduction of a node graph.
 class V8_EXPORT_PRIVATE GraphReducer

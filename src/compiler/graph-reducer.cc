@@ -5,11 +5,15 @@
 #include <functional>
 #include <limits>
 
-#include "src/compiler/graph.h"
+#include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/graph-reducer.h"
-#include "src/compiler/node.h"
+#include "src/compiler/graph.h"
+#include "src/compiler/js-graph.h"
 #include "src/compiler/node-properties.h"
+#include "src/compiler/node.h"
+#include "src/compiler/simplified-operator.h"
 #include "src/compiler/verifier.h"
+#include "src/objects/map-inl.h"
 
 namespace v8 {
 namespace internal {
