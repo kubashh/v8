@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "965e0902_c5b20aab",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-23T09:40:22Z",
+      "side": 1,
+      "message": "nit: might be more readable when just using one constant in output e.g.:\nNULL_OUTPUT and making direct comparison with that.\n\nGiven that in nulloutput the stdout is None, the first check here is redundant.\n\nOr also below just check directly output.stdout is None\nsince stdout is used afterwards and in nullobjects it\u0027s none.",
+      "range": {
+        "startLine": 257,
+        "startChar": 24,
+        "endLine": 257,
+        "endChar": 34
+      },
+      "revId": "e56b9df65d59df7a6d37489a51dbed1bbcb43178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5209cd4c_5b962ba6",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-23T09:40:22Z",
+      "side": 1,
+      "message": "nit: drop comment?",
+      "range": {
+        "startLine": 337,
+        "startChar": 6,
+        "endLine": 337,
+        "endChar": 66
+      },
+      "revId": "e56b9df65d59df7a6d37489a51dbed1bbcb43178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8b3f453f_8c16d698",
         "filename": "tools/unittests/run_perf_test.py",
         "patchSetId": 9
