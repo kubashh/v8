@@ -242,13 +242,13 @@ ArchOpcode GetLoadOpcode(LoadRepresentation load_rep) {
       break;
 #ifdef V8_COMPRESS_POINTERS
     case MachineRepresentation::kTaggedSigned:
-      opcode = kX64MovqDecompressTaggedSigned;
+      opcode = kX64Movq;
       break;
     case MachineRepresentation::kTaggedPointer:
-      opcode = kX64MovqDecompressTaggedPointer;
+      opcode = kX64Movq;
       break;
     case MachineRepresentation::kTagged:
-      opcode = kX64MovqDecompressAnyTagged;
+      opcode = kX64Movq;
       break;
     case MachineRepresentation::kCompressedSigned:   // Fall through.
     case MachineRepresentation::kCompressedPointer:  // Fall through.
@@ -302,7 +302,7 @@ ArchOpcode GetStoreOpcode(StoreRepresentation store_rep) {
     case MachineRepresentation::kTaggedSigned:   // Fall through.
     case MachineRepresentation::kTaggedPointer:  // Fall through.
     case MachineRepresentation::kTagged:
-      return kX64MovqCompressTagged;
+      return kX64Movq;
     case MachineRepresentation::kCompressedSigned:   // Fall through.
     case MachineRepresentation::kCompressedPointer:  // Fall through.
     case MachineRepresentation::kCompressed:
