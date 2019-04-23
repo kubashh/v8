@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "575a1fbd_c1e0718f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-23T08:57:59Z",
+      "side": 1,
+      "message": "The previous sentence talks about spec operations, from here on you describe implementation details. Confused me a bit, perhaps mention that somehow :)",
+      "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0552c5_22d4f133",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-23T08:57:59Z",
+      "side": 1,
+      "message": "Please add a comment here, it\u0027s not obvious why we do this otherwise.",
+      "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29996b4c_a309a126",
+        "filename": "src/builtins/builtins-promise-gen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-23T08:57:59Z",
+      "side": 1,
+      "message": "nit: PromiseResolve",
+      "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f2c09ef_a6ab4efc",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5843,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-04-23T08:57:59Z",
+      "side": 1,
+      "message": "Nit: Why not add this in builtins-promise-gen since that\u0027s the only use site? Also it\u0027d be nice to write new code in TNode style :)",
+      "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
