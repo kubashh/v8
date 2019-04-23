@@ -159,8 +159,12 @@ class Results(object):
   def __init__(self, traces=None, errors=None):
     self.traces = traces or []
     self.errors = errors or []
+    # TODO(sergiyb): Deprecate self.timeouts/near_timeouts and compute them in
+    # the recipe based on self.runnable_durations. Also cleanup RunnableConfig
+    # by removing has_timeouts/has_near_timeouts there.
     self.timeouts = []
     self.near_timeouts = []  # > 90% of the max runtime
+    self.runnable_durations = []
 
   def ToDict(self):
     return {
@@ -168,6 +172,7 @@ class Results(object):
         'errors': self.errors,
         'timeouts': self.timeouts,
         'near_timeouts': self.near_timeouts,
+        'runnable_durations': self.runnable_durations,
     }
 
   def WriteToFile(self, file_name):
@@ -179,6 +184,7 @@ class Results(object):
     self.errors += other.errors
     self.timeouts += other.timeouts
     self.near_timeouts += other.near_timeouts
+    self.runnable_durations += other.runnable_durations
     return self
 
   def __str__(self):  # pragma: no cover
@@ -436,6 +442,7 @@ class RunnableConfig(GraphConfig):
     super(RunnableConfig, self).__init__(suite, parent, arch)
     self.has_timeouts = False
     self.has_near_timeouts = False
+    self.durations = []
 
   @property
   def main(self):
@@ -606,6 +613,7 @@ class Platform(object):
       raise
     if output.duration > 0.9 * runnable.timeout:
       runnable.has_near_timeouts = True
+    runnable.durations.append(output.duration)
     if output.stdout:
       logging.info(title % 'Stdout' + '\n%s', output.stdout)
     if output.stderr:  # pragma: no cover
@@ -1060,6 +1068,11 @@ def Main(args):
           results.timeouts.append(runnable_name)
         if runnable.has_near_timeouts:
           results.near_timeouts.append(runnable_name)
+        results.runnable_durations.append({
+          'graphs': runnable.graphs,
+          'durations': runnable.durations,
+          'timeout': runnable.timeout,
+        })
       platform.PostExecution()
 
     if options.json_test_results:
