@@ -22,6 +22,30 @@
       "revId": "b5700859978288e5598295fef1ac742e66c025df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf6c1663_023fe067",
+        "filename": "src/log.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-04-23T20:33:44Z",
+      "side": 1,
+      "message": "cctest doesn\u0027t link against the object file containing `log.cc` (but invokes this method), so sadly this does need to be defined in a header :(",
+      "parentUuid": "db580720_429b7c9d",
+      "range": {
+        "startLine": 250,
+        "startChar": 7,
+        "endLine": 250,
+        "endChar": 17
+      },
+      "revId": "b5700859978288e5598295fef1ac742e66c025df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
