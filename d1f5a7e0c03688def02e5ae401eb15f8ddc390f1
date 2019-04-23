@@ -52,6 +52,24 @@
       "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86e9e1b4_cc1ce813",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-23T23:12:26Z",
+      "side": 1,
+      "message": "\u003e Why isn\u0027t this safe?\n\nParser::RewriteClassLiteral() currently expects that `class_info-\u003ehas_instance_members` implies `class_info-\u003einstance_members_scope !\u003d nullptr`:\n\nhttps://cs.chromium.org/chromium/src/v8/src/parsing/parser.cc?q\u003dRewriteClassLiteral\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d2916\nhttps://cs.chromium.org/chromium/src/v8/src/parsing/parser.cc?q\u003dRewriteClassLiteral\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d2865\n\nIf it is a nullptr, e.g. for `class A { #fn(){} }`, what should the scope for the initializer function?\n\nI think the word initializer is ambiguous here, it\u0027s not the initializer of a single field (the part after \u003d), but the instance_members_initializer that initializes all the fields as well as the brand?",
+      "parentUuid": "2a7fb286_e9846802",
+      "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
