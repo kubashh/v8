@@ -206,7 +206,8 @@ Handle<Code> BuildTeardownFunction(Isolate* isolate,
     Node* param = __ Parameter(i + 2);
     switch (parameters[i].representation()) {
       case MachineRepresentation::kTagged:
-        __ StoreFixedArrayElement(result_array, i, param, SKIP_WRITE_BARRIER);
+        __ StoreFixedArrayElement(result_array, i, param,
+                                  UNSAFE_SKIP_WRITE_BARRIER);
         break;
       // Box FP values into HeapNumbers.
       case MachineRepresentation::kFloat32:
@@ -229,7 +230,7 @@ Handle<Code> BuildTeardownFunction(Isolate* isolate,
                       ->I32x4ExtractLane(lane),
                   param));
           __ StoreFixedArrayElement(vector, lane, lane_value,
-                                    SKIP_WRITE_BARRIER);
+                                    UNSAFE_SKIP_WRITE_BARRIER);
         }
         break;
       }
