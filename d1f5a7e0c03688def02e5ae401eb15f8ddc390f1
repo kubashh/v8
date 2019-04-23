@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b006daa6_61395774",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-23T03:58:16Z",
+      "side": 1,
+      "message": "Why do we need an initializer scope for private methods/accessors?",
+      "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
