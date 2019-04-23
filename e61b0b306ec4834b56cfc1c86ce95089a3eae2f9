@@ -16,6 +16,24 @@
       "revId": "e61b0b306ec4834b56cfc1c86ce95089a3eae2f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bd89e34_c096e775",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-23T15:32:28Z",
+      "side": 1,
+      "message": "Ack, I drop the verbose guard.",
+      "parentUuid": "d1516130_d13a3ae7",
+      "revId": "e61b0b306ec4834b56cfc1c86ce95089a3eae2f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
