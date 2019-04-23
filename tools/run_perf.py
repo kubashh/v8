@@ -112,7 +112,7 @@ import copy
 import json
 import logging
 import math
-import optparse
+import argparse
 import os
 import re
 import subprocess
@@ -873,71 +873,65 @@ class CustomMachineConfiguration:
                       % cur_value )
 
 def Main(args):
-  parser = optparse.OptionParser()
-  parser.add_option('--android-build-tools', help='Deprecated.')
-  parser.add_option('--arch',
-                    help=('The architecture to run tests for, '
-                          '"auto" or "native" for auto-detect'),
-                    default='x64')
-  parser.add_option('--buildbot',
-                    help='Adapt to path structure used on buildbots and adds '
-                         'timestamps/level to all logged status messages',
-                    default=False, action='store_true')
-  parser.add_option('-d', '--device',
-                    help='The device ID to run Android tests on. If not given '
-                         'it will be autodetected.')
-  parser.add_option('--extra-flags',
-                    help='Additional flags to pass to the test executable',
-                    default='')
-  parser.add_option('--json-test-results',
-                    help='Path to a file for storing json results.')
-  parser.add_option('--json-test-results-secondary',
-                    '--json-test-results-no-patch',  # TODO(sergiyb): Deprecate.
-                    help='Path to a file for storing json results from run '
-                         'without patch or for reference build run.')
-  parser.add_option('--outdir', help='Base directory with compile output',
-                    default='out')
-  parser.add_option('--outdir-secondary',
-                    '--outdir-no-patch',  # TODO(sergiyb): Deprecate.
-                    help='Base directory with compile output without patch or '
-                         'for reference build')
-  parser.add_option('--binary-override-path',
-                    help='JavaScript engine binary. By default, d8 under '
-                    'architecture-specific build dir. '
-                    'Not supported in conjunction with outdir-secondary.')
-  parser.add_option('--prioritize',
-                    help='Raise the priority to nice -20 for the benchmarking '
-                    'process.Requires Linux, schedtool, and sudo privileges.',
-                    default=False, action='store_true')
-  parser.add_option('--affinitize',
-                    help='Run benchmarking process on the specified core. '
-                    'For example: '
-                    '--affinitize=0 will run the benchmark process on core 0. '
-                    '--affinitize=3 will run the benchmark process on core 3. '
-                    'Requires Linux, schedtool, and sudo privileges.',
-                    default=None)
-  parser.add_option('--noaslr',
-                    help='Disable ASLR for the duration of the benchmarked '
-                    'process. Requires Linux and sudo privileges.',
-                    default=False, action='store_true')
-  parser.add_option('--cpu-governor',
-                    help='Set cpu governor to specified policy for the '
-                    'duration of the benchmarked process. Typical options: '
-                    '"powersave" for more stable results, or "performance" '
-                    'for shorter completion time of suite, with potentially '
-                    'more noise in results.')
-  parser.add_option('--filter',
-                    help='Only run the benchmarks beginning with this string. '
-                    'For example: '
-                    '--filter=JSTests/TypedArrays/ will run only TypedArray '
-                    'benchmarks from the JSTests suite.',
-                    default='')
-  parser.add_option('--run-count-multiplier', default=1, type='int',
-                    help='Multipled used to increase number of times each test '
-                    'is retried.')
-  parser.add_option('--dump-logcats-to',
-                    help='Writes logcat output from each test into specified '
-                    'directory. Only supported for android targets.')
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--android-build-tools', help='Deprecated.')
+  parser.add_argument('--arch',
+                      help='The architecture to run tests for, "auto" or '
+                      '"native" for auto-detect',
+                      default='x64')
+  parser.add_argument('--buildbot',
+                      help='Adapt to path structure used on buildbots and adds '
+                      'timestamps/level to all logged status messages',
+                      default=False, action='store_true')
+  parser.add_argument('-d', '--device',
+                      help='The device ID to run Android tests on. If not '
+                      'given it will be autodetected.')
+  parser.add_argument('--extra-flags',
+                      help='Additional flags to pass to the test executable',
+                      default='')
+  parser.add_argument('--json-test-results',
+                      help='Path to a file for storing json results.')
+  parser.add_argument('--json-test-results-secondary',
+                      help='Path to a file for storing json results from run '
+                      'without patch or for reference build run.')
+  parser.add_argument('--outdir', help='Base directory with compile output',
+                      default='out')
+  parser.add_argument('--outdir-secondary',
+                      help='Base directory with compile output without patch '
+                      'or for reference build')
+  parser.add_argument('--binary-override-path',
+                      help='JavaScript engine binary. By default, d8 under '
+                      'architecture-specific build dir. '
+                      'Not supported in conjunction with outdir-secondary.')
+  parser.add_argument('--prioritize',
+                      help='Raise the priority to nice -20 for the '
+                      'benchmarking process.Requires Linux, schedtool, and '
+                      'sudo privileges.', default=False, action='store_true')
+  parser.add_argument('--affinitize',
+                      help='Run benchmarking process on the specified core. '
+                      'For example: --affinitize=0 will run the benchmark '
+                      'process on core 0. --affinitize=3 will run the '
+                      'benchmark process on core 3. Requires Linux, schedtool, '
+                      'and sudo privileges.', default=None)
+  parser.add_argument('--noaslr',
+                      help='Disable ASLR for the duration of the benchmarked '
+                      'process. Requires Linux and sudo privileges.',
+                      default=False, action='store_true')
+  parser.add_argument('--cpu-governor',
+                      help='Set cpu governor to specified policy for the '
+                      'duration of the benchmarked process. Typical options: '
+                      '"powersave" for more stable results, or "performance" '
+                      'for shorter completion time of suite, with potentially '
+                      'more noise in results.')
+  parser.add_argument('--filter',
+                      help='Only run the benchmarks beginning with this '
+                      'string. For example: '
+                      '--filter=JSTests/TypedArrays/ will run only TypedArray '
+                      'benchmarks from the JSTests suite.',
+                      default='')
+  parser.add_argument('--dump-logcats-to',
+                      help='Writes logcat output from each test into specified '
+                      'directory. Only supported for android targets.')
 
   (options, args) = parser.parse_args(args)
 
@@ -1043,8 +1037,7 @@ def Main(args):
 
         def Runner():
           """Output generator that reruns several times."""
-          total_runs = runnable.run_count * options.run_count_multiplier
-          for i in range(0, max(1, total_runs)):
+          for i in range(0, max(1, runnable.run_count)):
             attempts_left = runnable.retry_count + 1
             while attempts_left:
               output, output_secondary = platform.Run(runnable, i)
