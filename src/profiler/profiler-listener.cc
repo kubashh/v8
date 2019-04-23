@@ -102,7 +102,7 @@ void ProfilerListener::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
   CodeCreateEventRecord* rec = &evt_rec.CodeCreateEventRecord_;
   rec->instruction_start = abstract_code->InstructionStart();
   std::unique_ptr<SourcePositionTable> line_table;
-  std::unordered_map<int, std::vector<CodeEntryAndLineNumber>> inline_stacks;
+  std::unordered_map<int, std::vector<ProfileStackFrame>> inline_stacks;
   std::unordered_set<std::unique_ptr<CodeEntry>, CodeEntry::Hasher,
                      CodeEntry::Equals>
       cached_inline_entries;
@@ -137,7 +137,7 @@ void ProfilerListener::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
             it.source_position().InliningStack(handle(code, isolate_));
         DCHECK(!stack.empty());
 
-        std::vector<CodeEntryAndLineNumber> inline_stack;
+        std::vector<ProfileStackFrame> inline_stack;
         for (SourcePositionInfo& pos_info : stack) {
           if (pos_info.position.ScriptOffset() == kNoSourcePosition) continue;
           if (pos_info.script.is_null()) continue;
@@ -173,8 +173,7 @@ void ProfilerListener::CodeCreateEvent(CodeEventListener::LogEventsAndTags tag,
           CodeEntry* cached_entry = GetOrInsertCachedEntry(
               &cached_inline_entries, std::move(inline_entry));
 
-          inline_stack.push_back(
-              CodeEntryAndLineNumber{cached_entry, line_number});
+          inline_stack.push_back(ProfileStackFrame{cached_entry, line_number});
         }
         DCHECK(!inline_stack.empty());
         inline_stacks.emplace(inlining_id, std::move(inline_stack));
@@ -273,6 +272,14 @@ void ProfilerListener::SetterCallbackEvent(Name name, Address entry_point) {
   rec->entry =
       new CodeEntry(CodeEventListener::CALLBACK_TAG, GetConsName("set ", name));
   rec->instruction_size = 1;
+  DispatchCodeEvent(evt_rec);
+}
+
+void ProfilerListener::NativeContextMoveEvent(Address from, Address to) {
+  CodeEventsContainer evt_rec(CodeEventRecord::NATIVE_CONTEXT_MOVE);
+  NativeContextMoveEventRecord* rec = &evt_rec.NativeContextMoveEventRecord_;
+  rec->from_address = from;
+  rec->to_address = to;
   DispatchCodeEvent(evt_rec);
 }
 

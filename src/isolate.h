@@ -834,7 +834,6 @@ class Isolate final : private HiddenFactory {
   }
   ISOLATE_INIT_LIST(GLOBAL_ACCESSOR)
 #undef GLOBAL_ACCESSOR
-
 #define GLOBAL_ARRAY_ACCESSOR(type, name, length)                       \
   inline type* name() {                                                 \
     DCHECK(OFFSET_OF(Isolate, name##_) == name##_debug_offset_);        \

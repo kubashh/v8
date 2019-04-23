@@ -52,6 +52,15 @@ void ReportBuiltinEventRecord::UpdateCodeMap(CodeMap* code_map) {
   entry->SetBuiltinId(builtin_id);
 }
 
+void NativeContextAssocEventRecord::UpdateContextFilter() {
+  // The context filter may have been deallocated if no profiler using it is
+  // still recording.
+  if (std::shared_ptr<ContextFilter> filter = context_filter->lock()) {
+    filter->SetNativeContextAddress(context_address);
+  }
+  delete context_filter;
+}
+
 TickSample* SamplingEventsProcessor::StartTickSample() {
   void* address = ticks_buffer_.StartEnqueue();
   if (address == nullptr) return nullptr;
