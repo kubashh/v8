@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "16a0005e_5a390d6c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-23T16:59:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "575a1fbd_c1e0718f",
+      "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da0552c5_22d4f133",
         "filename": "src/builtins/builtins-promise-gen.cc",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb79ae16_b6ece0df",
+        "filename": "src/builtins/builtins-promise-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-23T16:59:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da0552c5_22d4f133",
+      "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "eedd076c_19f9c538",
+        "filename": "src/builtins/builtins-promise-gen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-23T16:59:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29996b4c_a309a126",
+      "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f2c09ef_a6ab4efc",
         "filename": "src/code-stub-assembler.cc",
         "patchSetId": 3
@@ -67,6 +121,24 @@
       "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14e0601f_0b26d35d",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 5843,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-23T16:59:38Z",
+      "side": 1,
+      "message": "Good point about TNode! Done. This seems like a generic helper that might be useful elsewhere too, so I\u0027d like to leave it here.",
+      "parentUuid": "7f2c09ef_a6ab4efc",
+      "revId": "ae6572425bce89122f88af3f83ab3929393bb73c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
