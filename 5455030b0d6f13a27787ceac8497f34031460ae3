@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "55530fcd_cfb68b44",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-23T14:40:15Z",
+      "side": 1,
+      "message": "fly-by comment: Now the timed run is inside run.",
+      "range": {
+        "startLine": 606,
+        "startChar": 6,
+        "endLine": 606,
+        "endChar": 15
+      },
+      "revId": "5455030b0d6f13a27787ceac8497f34031460ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb72d1c2_3d7797b8",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-23T14:40:15Z",
+      "side": 1,
+      "message": "Isnt it called has_timeouts or is there also timeout somewhere?",
+      "range": {
+        "startLine": 1074,
+        "startChar": 30,
+        "endLine": 1074,
+        "endChar": 37
+      },
+      "revId": "5455030b0d6f13a27787ceac8497f34031460ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
