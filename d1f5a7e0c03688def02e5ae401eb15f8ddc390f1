@@ -34,6 +34,24 @@
       "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a7fb286_e9846802",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-23T22:03:18Z",
+      "side": 1,
+      "message": "But the field isn\u0027t parsed in this scope, only the initializer is. We start this initializer scope only after the `\u003d` at which point we know if it\u0027s a field or not.\n\n\u003e Or otherwise the instance initializer scope would be different depending on whether all the private members are methods/accessors, I am not sure if that is safe\n\nWhy isn\u0027t this safe?",
+      "parentUuid": "2add4b07_b6526b4d",
+      "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
