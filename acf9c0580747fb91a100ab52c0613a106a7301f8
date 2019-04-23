@@ -93,6 +93,30 @@
       "revId": "acf9c0580747fb91a100ab52c0613a106a7301f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb3e83f1_54630dee",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-23T12:24:55Z",
+      "side": 1,
+      "message": "Not sure if totals for durations will be useful. Maybe first add it when we know we need it?\n\nThe other durations: It\u0027d be nice if we have duration only on runnable level. And e.g. not for each trace that is just a subtrace of the same runnable. Otherwise it will be hard to interpret these values on the client side.",
+      "parentUuid": "7074c156_aed4d883",
+      "range": {
+        "startLine": 322,
+        "startChar": 2,
+        "endLine": 322,
+        "endChar": 17
+      },
+      "revId": "acf9c0580747fb91a100ab52c0613a106a7301f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
