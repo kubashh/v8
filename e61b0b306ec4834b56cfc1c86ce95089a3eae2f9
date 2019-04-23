@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1516130_d13a3ae7",
+        "filename": "tools/testrunner/local/command.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-23T15:31:36Z",
+      "side": 1,
+      "message": "This now duplicates print on line 215 for Windows bots. Perhaps remove it there and make sure it\u0027s only printed when verbose mode is enabled here:\n\n  if self.verbose:\n    print(\u0027Attempting to kill process %s\u0027 % process.pid)\n    sys.stdout.flush()",
+      "revId": "e61b0b306ec4834b56cfc1c86ce95089a3eae2f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
