@@ -16,6 +16,24 @@
       "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2add4b07_b6526b4d",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-23T10:48:07Z",
+      "side": 1,
+      "message": "The private fields also share this scope in the initializer, when parsing properties we do not know whether there will be private fields later, so I think we might as well just create one for the initializer function? (Or otherwise the instance initializer scope would be different depending on whether all the private members are methods/accessors, I am not sure if that is safe).",
+      "parentUuid": "b006daa6_61395774",
+      "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
