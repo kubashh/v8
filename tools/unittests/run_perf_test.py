@@ -559,6 +559,14 @@ class PerfTest(unittest.TestCase):
       },
     ], results['traces'])
 
+  def testRunnableDurations(self):
+    results = self._RunPerf('d8_mocked1.py', 'test1.json')
+    self.assertEqual(1, len(results['runnable_durations']))
+    self.assertEqual(60, results['runnable_durations'][0]['timeout'])
+    self.assertListEqual(['test1'], results['runnable_durations'][0]['graphs'])
+    # We do not check actual duration values since they are random.
+    self.assertEqual(2, len(results['runnable_durations'][0]['durations']))
+
 
 if __name__ == '__main__':
   unittest.main()
