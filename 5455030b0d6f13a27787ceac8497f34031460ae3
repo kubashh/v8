@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "49b9577e_41bf1811",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-23T15:05:12Z",
+      "side": 1,
+      "message": "Good point. Renamed to _LoggedRun since it\u0027s mostly doing logging now. The processing of output should be gone once has_timeouts and has_near_timeouts is removed (as per TODO added in this CL).",
+      "parentUuid": "55530fcd_cfb68b44",
+      "range": {
+        "startLine": 606,
+        "startChar": 6,
+        "endLine": 606,
+        "endChar": 15
+      },
+      "revId": "5455030b0d6f13a27787ceac8497f34031460ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb72d1c2_3d7797b8",
         "filename": "tools/run_perf.py",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "5455030b0d6f13a27787ceac8497f34031460ae3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30bde8cc_8b0c3e38",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-23T15:05:12Z",
+      "side": 1,
+      "message": "This is actual timeout specified in the config, i.e. a number of seconds as opposed to whether runnable timed out or not.",
+      "parentUuid": "bb72d1c2_3d7797b8",
+      "range": {
+        "startLine": 1074,
+        "startChar": 30,
+        "endLine": 1074,
+        "endChar": 37
+      },
+      "revId": "5455030b0d6f13a27787ceac8497f34031460ae3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
