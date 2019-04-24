@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f68c11f_14c74a92",
+        "filename": "src/builtins/array-slice.tq",
+        "patchSetId": 9
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-24T13:32:33Z",
+      "side": 1,
+      "message": "Could you add a comment explaining why it is safe to skip the WB?",
+      "range": {
+        "startLine": 70,
+        "startChar": 50,
+        "endLine": 70,
+        "endChar": 75
+      },
+      "revId": "463bff82d2a25cd10287bf8d6c20e7ac7500447f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
