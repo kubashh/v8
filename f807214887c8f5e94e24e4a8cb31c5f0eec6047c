@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "863f42da_59c0e9cc",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-24T14:43:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "134bb62a_4f760df2",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a127acd0_ef0ef10e",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1444760b_5021e4d3",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-24T14:43:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a127acd0_ef0ef10e",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f0eb4a17_0134ecaa",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-24T14:43:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "038af3fb_c7ee5d50",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1624aa8_42ed8726",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -67,6 +121,24 @@
       "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7f90d63_499e0000",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-24T14:43:04Z",
+      "side": 1,
+      "message": "It seems that only works for enums, not enum classes. {OnlyLazyFunctions} is now an enum.",
+      "parentUuid": "b1624aa8_42ed8726",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "b65b092a_b86c9f88",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-24T14:43:04Z",
+      "side": 1,
+      "message": "Exactly! I added comments as suggested, hopefully making it easier for the next person to understand this.",
+      "parentUuid": "aa1816fc_a8f09e6d",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac37616f_a466faf8",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 4
@@ -101,6 +191,24 @@
       "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a455eda2_eb6d566d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-24T14:43:04Z",
+      "side": 1,
+      "message": "Done. Additionally, the compile strategy is needed. I fear the overall logic has not become much simpler but it might be a little faster.",
+      "parentUuid": "ac37616f_a466faf8",
+      "revId": "f807214887c8f5e94e24e4a8cb31c5f0eec6047c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
