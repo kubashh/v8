@@ -88,6 +88,24 @@
       "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "114b8d88_5e9d3050",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-24T07:47:52Z",
+      "side": 1,
+      "message": "\u003e Why do we need an initializer function for `class A { #fn() {} }`? I think we should not create an initializer function here at all. You can just install the brand directly in VisitCallSuper and GenerateBytecodeBody.\n\nYeah, we probably don\u0027t need to do this in the initializer function but can instead just inline this in the constructor. We should be able to just add something in BuildInstanceMemberInitialization() before loading and calling the initializer function.",
+      "parentUuid": "cdc97234_b62ab628",
+      "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
