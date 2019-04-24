@@ -46,6 +46,30 @@
       "revId": "b5700859978288e5598295fef1ac742e66c025df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6be82bfc_36589585",
+        "filename": "src/log.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-04-24T08:49:25Z",
+      "side": 1,
+      "message": "Rule #1 of weird cctest link failures, slap a V8_EXPORT_PRIVATE private on it and see if it works... in this case it does :D. That\u0027s what we do for e.g. LogCompiledFunctions() below which has the same problem",
+      "parentUuid": "cf6c1663_023fe067",
+      "range": {
+        "startLine": 250,
+        "startChar": 7,
+        "endLine": 250,
+        "endChar": 17
+      },
+      "revId": "b5700859978288e5598295fef1ac742e66c025df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
