@@ -16,6 +16,24 @@
       "revId": "8d2d9a2016194a81a7a601953e6b960ac4e10dee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4670ecf1_9f8ef6ec",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-24T14:43:43Z",
+      "side": 1,
+      "message": "Nvm. Figured this out. It scans \u0027triggers\u0027 property, which is set through cr-buildbucket.cfg.",
+      "parentUuid": "95033cf3_d7b5642c",
+      "revId": "8d2d9a2016194a81a7a601953e6b960ac4e10dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
