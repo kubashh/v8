@@ -70,6 +70,24 @@
       "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdc97234_b62ab628",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-04-24T04:53:45Z",
+      "side": 1,
+      "message": "(a) Why do we need an initializer function for `class A { #fn() {} }`? I think we should not create an initializer function here at all. You can just install the brand directly in VisitCallSuper and GenerateBytecodeBody. Maybe Ross has thoughts on this? \n\n\n(b) Why do we need to pass in ClassScope to InitializeClassMembersStatement? Isn\u0027t current_scope()-\u003eGetClassScope() enough?",
+      "parentUuid": "86e9e1b4_cc1ce813",
+      "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
