@@ -140,6 +140,23 @@
       "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f4eeb10b_f056ebcc",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-24T15:55:18Z",
+      "side": 1,
+      "message": "This code was wrong as we were considering all results accumulated in the ResultTracker, including those from other runnables. Now I\u0027ve updated the code to only consider results added in this call.",
+      "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
