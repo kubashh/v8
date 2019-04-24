@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95033cf3_d7b5642c",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-24T14:41:37Z",
+      "side": 1,
+      "message": "How does a builder know that it needs to build/isolate \u0027perf\u0027? Does it scan through all testers? If yes, how does it find them? I don\u0027t see parent_buildername key here.",
+      "revId": "8d2d9a2016194a81a7a601953e6b960ac4e10dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
