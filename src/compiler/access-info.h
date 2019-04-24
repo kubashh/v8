@@ -7,6 +7,7 @@
 
 #include <iosfwd>
 
+#include "src/compiler/compilation-dependencies.h"
 #include "src/compiler/types.h"
 #include "src/feedback-vector.h"
 #include "src/field-index.h"
@@ -24,7 +25,6 @@ class Factory;
 namespace compiler {
 
 // Forward declarations.
-class CompilationDependencies;
 class ElementAccessFeedback;
 class Type;
 class TypeCache;
@@ -82,7 +82,8 @@ class PropertyAccessInfo final {
       FieldIndex field_index, MachineRepresentation field_representation,
       Type field_type, MaybeHandle<Map> field_map = MaybeHandle<Map>(),
       MaybeHandle<JSObject> holder = MaybeHandle<JSObject>(),
-      MaybeHandle<Map> transition_map = MaybeHandle<Map>());
+      MaybeHandle<Map> transition_map = MaybeHandle<Map>(),
+      std::vector<CompilationDependencies::Dependency*> deps = {});
   static PropertyAccessInfo AccessorConstant(MapHandles const& receiver_maps,
                                              Handle<Object> constant,
                                              MaybeHandle<JSObject> holder);
@@ -94,6 +95,8 @@ class PropertyAccessInfo final {
 
   bool Merge(PropertyAccessInfo const* that, AccessMode access_mode,
              Zone* zone) V8_WARN_UNUSED_RESULT;
+
+  void RecordDependencies(CompilationDependencies* dependencies) const;
 
   bool IsInvalid() const { return kind() == kInvalid; }
   bool IsNotFound() const { return kind() == kNotFound; }
@@ -122,6 +125,8 @@ class PropertyAccessInfo final {
   Handle<Cell> export_cell() const;
 
  private:
+  friend class AccessInfoFactory;
+
   PropertyAccessInfo(Kind kind, MaybeHandle<JSObject> holder,
                      MapHandles const& receiver_maps);
   PropertyAccessInfo(Kind kind, MaybeHandle<JSObject> holder,
@@ -141,6 +146,7 @@ class PropertyAccessInfo final {
   MachineRepresentation field_representation_;
   Type field_type_;
   MaybeHandle<Map> field_map_;
+  std::vector<CompilationDependencies::Dependency*> dependencies_;
 };
 
 
@@ -159,9 +165,6 @@ class AccessInfoFactory final {
   PropertyAccessInfo ComputePropertyAccessInfo(Handle<Map> map,
                                                Handle<Name> name,
                                                AccessMode access_mode) const;
-  PropertyAccessInfo ComputePropertyAccessInfo(MapHandles const& maps,
-                                               Handle<Name> name,
-                                               AccessMode access_mode) const;
   void ComputePropertyAccessInfos(
       MapHandles const& maps, Handle<Name> name, AccessMode access_mode,
       ZoneVector<PropertyAccessInfo>* access_infos) const;
@@ -171,6 +174,9 @@ class AccessInfoFactory final {
   bool FinalizePropertyAccessInfos(
       ZoneVector<PropertyAccessInfo> infos, AccessMode access_mode,
       ZoneVector<PropertyAccessInfo>* result) const;
+
+  PropertyAccessInfo FinalizePropertyAccessInfosAsOne(
+      ZoneVector<PropertyAccessInfo> infos, AccessMode access_mode) const;
 
  private:
   bool ConsolidateElementLoad(ElementAccessFeedback const& processed,
@@ -187,6 +193,10 @@ class AccessInfoFactory final {
   PropertyAccessInfo ComputeAccessorDescriptorAccessInfo(
       Handle<Map> receiver_map, Handle<Name> name, Handle<Map> map,
       MaybeHandle<JSObject> holder, int number, AccessMode access_mode) const;
+
+  void MergePropertyAccessInfos(ZoneVector<PropertyAccessInfo> infos,
+                                AccessMode access_mode,
+                                ZoneVector<PropertyAccessInfo>* result) const;
 
   CompilationDependencies* dependencies() const { return dependencies_; }
   JSHeapBroker* broker() const { return broker_; }
