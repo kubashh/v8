@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a2034fe_ce5b3a64",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-24T14:08:36Z",
+      "side": 1,
+      "message": "Maybe here would be a good place to document the format? E.g. intuitively it\u0027s not clear what some values mean. E.g. is timeout a bool or an int?",
+      "range": {
+        "startLine": 157,
+        "startChar": 2,
+        "endLine": 157,
+        "endChar": 49
+      },
+      "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3e540f9_952e58b5",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-24T14:08:36Z",
+      "side": 1,
+      "message": "I wonder if this case could be made more explicit. We have two cases:\n1) We run once or several times and calculate the stddev ourselves based on the average of the runs.\n2) We run once and the test suite internally ran several times, delivering one average result and one stddev.\n\nIn case 2 it should be asserted/guaranteed that we only run once.",
+      "range": {
+        "startLine": 181,
+        "startChar": 6,
+        "endLine": 182,
+        "endChar": 41
+      },
+      "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf676144_0d7d18d5",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-24T14:08:36Z",
+      "side": 1,
+      "message": "Could you document which durations these are? Are that different durations of the sub-tests of one runnable or different runs?",
+      "range": {
+        "startLine": 188,
+        "startChar": 43,
+        "endLine": 188,
+        "endChar": 52
+      },
+      "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
