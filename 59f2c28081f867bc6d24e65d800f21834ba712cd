@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "eb69bb5a_abf05387",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-24T15:52:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a2034fe_ce5b3a64",
+      "range": {
+        "startLine": 157,
+        "startChar": 2,
+        "endLine": 157,
+        "endChar": 49
+      },
+      "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3e540f9_952e58b5",
         "filename": "tools/run_perf.py",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "55450bc8_61e53e27",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-24T15:52:30Z",
+      "side": 1,
+      "message": "AFAIK, (1) was not done before the refactoring and I was not planning on adding it as part of this CL. Only (2) is supported by some benchmarks and that\u0027s what we check in the assert above. And even if we implement (1) at some point, we should only every provide a single stddev value - either built-in or computed in this script. Multiple values would mean wrong logic in the script and thus the assert should fire.",
+      "parentUuid": "c3e540f9_952e58b5",
+      "range": {
+        "startLine": 181,
+        "startChar": 6,
+        "endLine": 182,
+        "endChar": 41
+      },
+      "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf676144_0d7d18d5",
         "filename": "tools/run_perf.py",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aaa187c_90e7c609",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-24T15:52:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf676144_0d7d18d5",
+      "range": {
+        "startLine": 188,
+        "startChar": 43,
+        "endLine": 188,
+        "endChar": 52
+      },
+      "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
