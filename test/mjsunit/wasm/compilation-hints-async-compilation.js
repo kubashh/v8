@@ -58,3 +58,17 @@ load('test/mjsunit/wasm/wasm-module-builder.js');
   assertPromiseResult(WebAssembly.instantiate(bytes)
     .then(({module, instance}) => assertEquals(42, instance.exports.id(42))));
 })();
+
+(function testCompileLazyBaselineModule() {
+  print(arguments.callee.name);
+  let builder = new WasmModuleBuilder();
+  builder.addFunction('id', kSig_i_i)
+         .addBody([kExprGetLocal, 0])
+         .setCompilationHint(kCompilationHintStrategyLazyBaseline,
+                             kCompilationHintTierDefault,
+                             kCompilationHintTierDefault)
+         .exportFunc();
+  let bytes = builder.toBuffer();
+  assertPromiseResult(WebAssembly.instantiate(bytes)
+    .then(({module, instance}) => assertEquals(42, instance.exports.id(42))));
+})();
