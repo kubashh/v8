@@ -153,38 +153,86 @@ def GeometricMean(values):
   return str(math.exp(sum(map(math.log, values)) / len(values)))
 
 
-class Results(object):
-  """Place holder for result traces."""
-  def __init__(self, traces=None, errors=None):
-    self.traces = traces or []
-    self.errors = errors or []
+class ResultTracker(object):
+  """Class that tracks trace/runnable results and produces script output.
+
+  The output is structured like this:
+  {
+    "traces": [
+      {
+        "graphs": ["path", "to", "trace", "config"],
+        "units": <string describing units, e.g. "ms" or "KB">,
+        "results": [<list of values measured in each run>],
+        "stddev": <stddev of the value if measure by script or ''>
+      },
+      ...
+    ],
+    "runnables": [
+      {
+        "graphs": ["path", "to", "runnable", "config"],
+        "durations": [<list of durations of each runnable run in seconds>],
+        "timeout": <timeout configured for runnable in seconds>,
+      },
+      ...
+    ],
+    "errors": [<list of strings describing errors>],
+  }
+  """
+  def __init__(self):
+    self.traces = {}
+    self.errors = []
     # TODO(sergiyb): Deprecate self.timeouts/near_timeouts and compute them in
     # the recipe based on self.runnable_durations. Also cleanup RunnableConfig
     # by removing has_timeouts/has_near_timeouts there.
     self.timeouts = []
     self.near_timeouts = []  # > 90% of the max runtime
-    self.runnable_durations = []
+    self.runnables = {}
+
+  def AddTraceResults(self, trace, results, stddev):
+    if trace.name not in self.traces:
+      self.traces[trace.name] = {
+        'graphs': trace.graphs,
+        'units': trace.units,
+        'results': results,
+        'stddev': stddev or '',
+      }
+    else:
+      existing_entry = self.traces[trace.name]
+      assert trace.graphs == existing_entry['graphs']
+      assert trace.units == existing_entry['units']
+      assert not (stddev and existing_entry['stddev'])
+      existing_entry['stddev'] = stddev
+      existing_entry['results'].extend(results)
+
+  def AddErrors(self, errors):
+    self.errors.extend(errors)
+
+  def AddRunnableDurations(self, runnable, durations):
+    """Adds a list of durations of the different runs of the runnable."""
+    if runnable.name not in self.runnables:
+      self.runnables[runnable.name] = {
+        'graphs': runnable.graphs,
+        'durations': durations,
+        'timeout': runnable.timeout,
+      }
+    else:
+      existing_entry = self.runnables[runnable.name]
+      assert runnable.timeout == existing_entry['timeout']
+      assert runnable.graphs == existing_entry['graphs']
+      existing_entry['durations'].extend(durations)
 
   def ToDict(self):
     return {
-        'traces': self.traces,
+        'traces': self.traces.values(),
         'errors': self.errors,
         'timeouts': self.timeouts,
         'near_timeouts': self.near_timeouts,
-        'runnable_durations': self.runnable_durations,
+        'runnables': self.runnables.values(),
     }
 
   def WriteToFile(self, file_name):
     with open(file_name, 'w') as f:
       f.write(json.dumps(self.ToDict()))
-
-  def __add__(self, other):
-    self.traces += other.traces
-    self.errors += other.errors
-    self.timeouts += other.timeouts
-    self.near_timeouts += other.near_timeouts
-    self.runnable_durations += other.runnable_durations
-    return self
 
   def __str__(self):  # pragma: no cover
     return str(self.ToDict())
@@ -196,10 +244,8 @@ class Measurement(object):
   The results are from repetitive runs of the same executable. They are
   gathered by repeated calls to ConsumeOutput.
   """
-  def __init__(self, graphs, units, results_regexp, stddev_regexp):
-    self.name = '/'.join(graphs)
-    self.graphs = graphs
-    self.units = units
+  def __init__(self, trace, results_regexp, stddev_regexp):
+    self.trace = trace
     self.results_regexp = results_regexp
     self.stddev_regexp = stddev_regexp
     self.results = []
@@ -212,29 +258,28 @@ class Measurement(object):
       self.results.append(str(float(result)))
     except ValueError:
       self.errors.append('Regexp "%s" returned a non-numeric for test %s.'
-                         % (self.results_regexp, self.name))
+                         % (self.results_regexp, self.trace.name))
     except:
       self.errors.append('Regexp "%s" did not match for test %s.'
-                         % (self.results_regexp, self.name))
+                         % (self.results_regexp, self.trace.name))
 
     try:
       if self.stddev_regexp and self.stddev:
         self.errors.append('Test %s should only run once since a stddev '
-                           'is provided by the test.' % self.name)
+                           'is provided by the test.' % self.trace.name)
       if self.stddev_regexp:
         self.stddev = re.search(
             self.stddev_regexp, output.stdout, re.M).group(1)
     except:
       self.errors.append('Regexp "%s" did not match for test %s.'
-                         % (self.stddev_regexp, self.name))
+                         % (self.stddev_regexp, self.trace.name))
+
+  def UpdateResults(self, results):
+    results.AddTraceResults(self.trace, self.results, self.stddev)
+    results.AddErrors(self.errors)
 
   def GetResults(self):
-    return Results([{
-      'graphs': self.graphs,
-      'units': self.units,
-      'results': self.results,
-      'stddev': self.stddev,
-    }], self.errors)
+    return self.results
 
 
 class NullMeasurement(object):
@@ -244,8 +289,11 @@ class NullMeasurement(object):
   def ConsumeOutput(self, output):
     pass
 
+  def UpdateResults(self, results):
+    pass
+
   def GetResults(self):
-    return Results()
+    return []
 
 
 def Unzip(iterable):
@@ -277,52 +325,47 @@ def RunResultsProcessor(results_processor, output, count):
 
 
 def AccumulateResults(
-    graph_names, trace_configs, output_iter, perform_measurement, calc_total):
+    graph, output_iter, perform_measurement, calc_total, results):
   """Iterates over the output of multiple benchmark reruns and accumulates
   results for a configured list of traces.
 
   Args:
-    graph_names: List of names that configure the base path of the traces. E.g.
-                 ['v8', 'Octane'].
-    trace_configs: List of 'TraceConfig' instances. Each trace config defines
-                   how to perform a measurement.
+    graph: Parent GraphConfig for which results are to be accumulated.
     output_iter: Iterator over the output of each test run.
     perform_measurement: Whether to actually run tests and perform measurements.
                          This is needed so that we reuse this script for both CI
                          and trybot, but want to ignore second run on CI without
                          having to spread this logic throughout the script.
     calc_total: Boolean flag to specify the calculation of a summary trace.
-  Returns: A 'Results' object.
+    results: Results object to be updated.
   """
-  measurements = [
-    trace.CreateMeasurement(perform_measurement) for trace in trace_configs]
+  measurements = [trace.CreateMeasurement(perform_measurement)
+                  for trace in graph.children]
   for output in output_iter():
     for measurement in measurements:
       measurement.ConsumeOutput(output)
 
-  res = reduce(lambda r, m: r + m.GetResults(), measurements, Results())
+  for measurement in measurements:
+    measurement.UpdateResults(results)
 
-  if not res.traces or not calc_total:
-    return res
+  raw_results = [m.GetResults() for m in measurements]
+  if not raw_results or not calc_total:
+    return
 
   # Assume all traces have the same structure.
-  if len(set(map(lambda t: len(t['results']), res.traces))) != 1:
-    res.errors.append('Not all traces have the same number of results.')
-    return res
+  if len(set(map(lambda r: len(r), raw_results))) != 1:
+    results.AddErrors(['Not all traces have the same number of results.'])
+    return
 
   # Calculate the geometric means for all traces. Above we made sure that
   # there is at least one trace and that the number of results is the same
   # for each trace.
-  n_results = len(res.traces[0]['results'])
-  total_results = [GeometricMean(t['results'][i] for t in res.traces)
+  n_results = len(raw_results[0])
+  total_results = [GeometricMean(r[i] for r in raw_results)
                    for i in range(0, n_results)]
-  res.traces.append({
-    'graphs': graph_names + ['Total'],
-    'units': res.traces[0]['units'],
-    'results': total_results,
-    'stddev': '',
-  })
-  return res
+  total_trace = TraceConfig(
+      {'name': 'Total', 'units': graph.children[0].units}, graph, graph.arch)
+  results.AddTraceResults(total_trace, total_results, '')
 
 
 class Node(object):
@@ -332,6 +375,10 @@ class Node(object):
 
   def AppendChild(self, child):
     self._children.append(child)
+
+  @property
+  def children(self):
+    return self._children
 
 
 class DefaultSentinel(Node):
@@ -364,6 +411,7 @@ class GraphConfig(Node):
   def __init__(self, suite, parent, arch):
     super(GraphConfig, self).__init__()
     self._suite = suite
+    self.arch = arch
 
     assert isinstance(suite.get('path', []), list)
     assert isinstance(suite.get('owners', []), list)
@@ -414,6 +462,10 @@ class GraphConfig(Node):
       stddev_default = None
     self.stddev_regexp = suite.get('stddev_regexp', stddev_default)
 
+  @property
+  def name(self):
+    return '/'.join(self.graphs)
+
 
 class TraceConfig(GraphConfig):
   """Represents a leaf in the suite tree structure."""
@@ -426,12 +478,7 @@ class TraceConfig(GraphConfig):
     if not perform_measurement:
       return NullMeasurement()
 
-    return Measurement(
-        self.graphs,
-        self.units,
-        self.results_regexp,
-        self.stddev_regexp,
-    )
+    return Measurement(self, self.results_regexp, self.stddev_regexp)
 
 
 class RunnableConfig(GraphConfig):
@@ -486,24 +533,22 @@ class RunnableConfig(GraphConfig):
         args=self.GetCommandFlags(extra_flags=extra_flags),
         timeout=self.timeout or 60)
 
-  def Run(self, runner, trybot):
+  def Run(self, runner, secondary, results, results_secondary):
     """Iterates over several runs and handles the output for all traces."""
     output, output_secondary = Unzip(runner())
-    return (
-        AccumulateResults(
-            self.graphs,
-            self._children,
-            output_iter=self.PostProcess(output),
-            perform_measurement=True,
-            calc_total=self.total,
-        ),
-        AccumulateResults(
-            self.graphs,
-            self._children,
-            output_iter=self.PostProcess(output_secondary),
-            perform_measurement=trybot,  # only run second time on trybots
-            calc_total=self.total,
-        ),
+    AccumulateResults(
+        self,
+        output_iter=self.PostProcess(output),
+        perform_measurement=True,
+        calc_total=self.total,
+        results=results,
+     )
+    AccumulateResults(
+        self,
+        output_iter=self.PostProcess(output_secondary),
+        perform_measurement=secondary,  # only run second time on trybots
+        calc_total=self.total,
+        results=results_secondary,
     )
 
 
@@ -512,17 +557,16 @@ class RunnableTraceConfig(TraceConfig, RunnableConfig):
   def __init__(self, suite, parent, arch):
     super(RunnableTraceConfig, self).__init__(suite, parent, arch)
 
-  def Run(self, runner, trybot):
+  def Run(self, runner, secondary, results, results_secondary):
     """Iterates over several runs and handles the output."""
     measurement = self.CreateMeasurement(perform_measurement=True)
-    measurement_secondary = self.CreateMeasurement(perform_measurement=trybot)
+    measurement_secondary = self.CreateMeasurement(
+        perform_measurement=secondary)
     for output, output_secondary in runner():
       measurement.ConsumeOutput(output)
       measurement_secondary.ConsumeOutput(output_secondary)
-    return (
-        measurement.GetResults(),
-        measurement_secondary.GetResults(),
-    )
+    measurement.UpdateResults(results)
+    measurement_secondary.UpdateResults(results_secondary)
 
 
 def MakeGraphConfig(suite, arch, parent):
@@ -995,8 +1039,8 @@ def Main(argv):
   prev_cpu_gov = None
   platform = Platform.GetPlatform(args)
 
-  results = Results()
-  results_secondary = Results()
+  results = ResultTracker()
+  results_secondary = ResultTracker()
   # We use list here to allow modification in nested function below.
   have_failed_tests = [False]
   with CustomMachineConfiguration(governor = args.cpu_governor,
@@ -1052,25 +1096,15 @@ def Main(argv):
                 logging.info('>>> Retrying suite: %s', runnable_name)
 
         # Let runnable iterate over all runs and handle output.
-        result, result_secondary = runnable.Run(
-          Runner, trybot=args.shell_dir_secondary)
-        results += result
-        results_secondary += result_secondary
+        runnable.Run(
+          Runner, args.shell_dir_secondary, results, results_secondary)
         if runnable.has_timeouts:
           results.timeouts.append(runnable_name)
         if runnable.has_near_timeouts:
           results.near_timeouts.append(runnable_name)
-        results.runnable_durations.append({
-          'graphs': runnable.graphs,
-          'durations': durations,
-          'timeout': runnable.timeout,
-        })
+        results.AddRunnableDurations(runnable, durations)
         if durations_secondary:
-          results_secondary.runnable_durations.append({
-            'graphs': runnable.graphs,
-            'durations': durations_secondary,
-            'timeout': runnable.timeout,
-          })
+          results_secondary.AddRunnableDurations(runnable, durations_secondary)
 
       platform.PostExecution()
 
