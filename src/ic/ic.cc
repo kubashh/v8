@@ -45,7 +45,7 @@ namespace internal {
 char IC::TransitionMarkFromState(IC::State state) {
   switch (state) {
     case NO_FEEDBACK:
-      UNREACHABLE();
+      return 'X';
     case UNINITIALIZED:
       return '0';
     case PREMONOMORPHIC:
@@ -91,7 +91,8 @@ const char* GetModifier(KeyedAccessStoreMode mode) {
 void IC::TraceIC(const char* type, Handle<Object> name) {
   if (V8_LIKELY(!TracingFlags::is_ic_stats_enabled())) return;
   if (AddressIsDeoptimizedCode()) return;
-  State new_state = nexus()->ic_state();
+  State new_state =
+      (state() == NO_FEEDBACK) ? NO_FEEDBACK : nexus()->ic_state();
   TraceIC(type, name, state(), new_state);
 }
 
@@ -105,7 +106,9 @@ void IC::TraceIC(const char* type, Handle<Object> name, State old_state,
   }
 
   const char* modifier = "";
-  if (IsKeyedLoadIC()) {
+  if (state() == NO_FEEDBACK) {
+    modifier = "";
+  } else if (IsKeyedLoadIC()) {
     KeyedAccessLoadMode mode = nexus()->GetKeyedAccessLoadMode();
     modifier = GetModifier(mode);
   } else if (IsKeyedStoreIC() || IsStoreInArrayLiteralICKind(kind())) {
