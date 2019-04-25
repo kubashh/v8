@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "3c21c72e_7ade5047",
+        "filename": "src/torque/ls/message-handler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-25T08:37:30Z",
+      "side": 1,
+      "message": ", because",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 3
+      },
+      "revId": "a6e426308f47bcd2ed6f0a5d4cdcf80619ceab6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a676e38f_d3bc1d4e",
+        "filename": "src/torque/ls/message-handler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-25T08:37:30Z",
+      "side": 1,
+      "message": "resets",
+      "range": {
+        "startLine": 83,
+        "startChar": 43,
+        "endLine": 83,
+        "endChar": 55
+      },
+      "revId": "a6e426308f47bcd2ed6f0a5d4cdcf80619ceab6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41bfe4c2_95c076e2",
+        "filename": "src/torque/ls/message-handler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-25T08:37:30Z",
+      "side": 1,
+      "message": "Thus",
+      "range": {
+        "startLine": 84,
+        "startChar": 16,
+        "endLine": 84,
+        "endChar": 21
+      },
+      "revId": "a6e426308f47bcd2ed6f0a5d4cdcf80619ceab6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f124c045_a097e4a6",
+        "filename": "src/torque/ls/message-handler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-25T08:37:30Z",
+      "side": 1,
+      "message": "GetOrCreate",
+      "range": {
+        "startLine": 119,
+        "startChar": 34,
+        "endLine": 119,
+        "endChar": 58
+      },
+      "revId": "a6e426308f47bcd2ed6f0a5d4cdcf80619ceab6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "940f65e5_9c999d0d",
         "filename": "src/torque/utils.cc",
         "patchSetId": 2
@@ -13,6 +105,30 @@
       "writtenOn": "2019-04-25T07:30:05Z",
       "side": 1,
       "message": "FYI: This single quote was escaped before serializing but not properly recognized by VS Code so the whole notification was ignored.",
+      "range": {
+        "startLine": 141,
+        "startChar": 45,
+        "endLine": 141,
+        "endChar": 50
+      },
+      "revId": "a6e426308f47bcd2ed6f0a5d4cdcf80619ceab6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7508a05_3d48a835",
+        "filename": "src/torque/utils.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-04-25T08:37:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "940f65e5_9c999d0d",
       "range": {
         "startLine": 141,
         "startChar": 45,
