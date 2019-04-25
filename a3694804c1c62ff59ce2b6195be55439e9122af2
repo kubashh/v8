@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e5f0457b_52fc2f8c",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-04-25T19:59:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ee86d33_029e05af",
+      "range": {
+        "startLine": 1158,
+        "startChar": 57,
+        "endLine": 1158,
+        "endChar": 63
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7fcf33e_675253c4",
         "filename": "src/wasm/c-api.cc",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b6d8fea_617c8325",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-04-25T19:59:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7fcf33e_675253c4",
+      "range": {
+        "startLine": 1170,
+        "startChar": 6,
+        "endLine": 1170,
+        "endChar": 11
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9d5e9e2d_d150a04f",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-04-25T19:59:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff757022_0c16ff63",
+      "range": {
+        "startLine": 1182,
+        "startChar": 0,
+        "endLine": 1185,
+        "endChar": 50
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d240f68_266172e1",
         "filename": "src/wasm/c-api.cc",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4916ee06_a9d48170",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-04-25T19:59:27Z",
+      "side": 1,
+      "message": "Maybe. {Foreign} objects are currently unused by the existing examples, and their definition is so minimal as to appear rather useless to me (observe how this {make} function only takes a {Store*}, but no value whatsoever). I suggest to fix this when we have an idea of what it\u0027s supposed to be doing :-)\n\nI\u0027ve filed https://github.com/WebAssembly/wasm-c-api/issues/67 to figure it out.",
+      "parentUuid": "3d240f68_266172e1",
+      "range": {
+        "startLine": 1363,
+        "startChar": 13,
+        "endLine": 1363,
+        "endChar": 40
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "83d217f9_925cbbe9",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-04-25T19:59:27Z",
+      "side": 1,
+      "message": "Sounds good. Done.",
+      "parentUuid": "5e1e123b_463bd0de",
+      "range": {
+        "startLine": 1390,
+        "startChar": 21,
+        "endLine": 1390,
+        "endChar": 23
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a6aed12_c6fda1be",
         "filename": "src/wasm/c-api.cc",
         "patchSetId": 3
@@ -137,6 +257,30 @@
       "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a2e8986_0e96390a",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-04-25T19:59:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a6aed12_c6fda1be",
+      "range": {
+        "startLine": 1643,
+        "startChar": 6,
+        "endLine": 1643,
+        "endChar": 42
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "e40d8cd1_a740a26b",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-04-25T19:59:27Z",
+      "side": 1,
+      "message": "Done (added TODO).",
+      "parentUuid": "ed60c924_f311be37",
+      "range": {
+        "startLine": 1731,
+        "startChar": 40,
+        "endLine": 1731,
+        "endChar": 58
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fa6b2db_80933540",
         "filename": "src/wasm/c-api.cc",
         "patchSetId": 3
@@ -183,6 +351,30 @@
       "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b97e9b8_34ab7638",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-04-25T19:59:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fa6b2db_80933540",
+      "range": {
+        "startLine": 2151,
+        "startChar": 6,
+        "endLine": 2151,
+        "endChar": 42
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
