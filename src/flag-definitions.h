@@ -364,7 +364,7 @@ DEFINE_INT(interrupt_budget, 144 * KB,
 DEFINE_INT(budget_for_feedback_vector_allocation, 1 * KB,
            "The budget in amount of bytecode executed by a function before we "
            "decide to allocate feedback vectors")
-DEFINE_BOOL(lazy_feedback_allocation, false, "Allocate feedback vectors lazily")
+DEFINE_BOOL(lazy_feedback_allocation, true, "Allocate feedback vectors lazily")
 
 // Flags for Ignition.
 DEFINE_BOOL(ignition_elide_noneffectful_bytecodes, true,
