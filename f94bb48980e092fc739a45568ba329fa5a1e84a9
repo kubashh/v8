@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f10abf8_a2f387e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T09:56:43Z",
+      "side": 1,
+      "message": "typo: \"startup\"",
+      "range": {
+        "startLine": 11,
+        "startChar": 12,
+        "endLine": 11,
+        "endChar": 19
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46e6d42d_5a7438b2",
+        "filename": "src/wasm/compilation-environment.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T09:56:43Z",
+      "side": 1,
+      "message": "nit: I think now that the tests have been switched to busy-wait and no longer install a callback, we no longer need to export the {AddCallback} method.",
+      "range": {
+        "startLine": 119,
+        "startChar": 2,
+        "endLine": 119,
+        "endChar": 19
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a3de36c_c26d0615",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T09:56:43Z",
+      "side": 1,
+      "message": "nit: Why was this changed to {int} here? I don\u0027t have a strong opinion but thought our function indices are consistently encoded as {uint32_t} in most places.",
+      "range": {
+        "startLine": 629,
+        "startChar": 16,
+        "endLine": 629,
+        "endChar": 19
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9ed7a28_2b1091ba",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T09:56:43Z",
+      "side": 1,
+      "message": "nit: I see that this was suggested/discussed in a previous comment, but I actually preferred the \"enum class\" here because it forces callers to use the proper enum values instead of just allowing any \"bool\" to be passed as a parameter.",
+      "range": {
+        "startLine": 716,
+        "startChar": 0,
+        "endLine": 716,
+        "endChar": 22
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc85314d_55a7ac6d",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2076,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T09:56:43Z",
+      "side": 1,
+      "message": "As discussed offline, we should leave a comment here explaining that \"reached_tier\" is only tracking the state for units added during initialization. Any baseline code generated due to lazy compilation does not updated \"reached_tier\".",
+      "range": {
+        "startLine": 2076,
+        "startChar": 21,
+        "endLine": 2076,
+        "endChar": 57
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
