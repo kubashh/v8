@@ -70,8 +70,8 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
     return FindTransitionToDataProperty(name, kFieldOnly);
   }
 
-  Handle<String> ExpectedTransitionKey();
-  Handle<Map> ExpectedTransitionTarget();
+  inline Handle<String> ExpectedTransitionKey();
+  inline Handle<Map> ExpectedTransitionTarget();
 
   int NumberOfTransitions();
   // The size of transition arrays are limited so they do not end up in large
@@ -170,7 +170,30 @@ class V8_EXPORT_PRIVATE TransitionsAccessor {
 #endif
   }
 
-  void Initialize();
+  inline void Initialize() {
+    raw_transitions_ = map_->raw_transitions();
+    HeapObject heap_object;
+    if (raw_transitions_->IsSmi() || raw_transitions_->IsCleared()) {
+      encoding_ = kUninitialized;
+    } else if (raw_transitions_->IsWeak()) {
+      encoding_ = kWeakRef;
+    } else if (raw_transitions_->GetHeapObjectIfStrong(&heap_object)) {
+      if (heap_object->IsTransitionArray()) {
+        encoding_ = kFullTransitionArray;
+      } else if (heap_object->IsPrototypeInfo()) {
+        encoding_ = kPrototypeInfo;
+      } else {
+        DCHECK(map_->is_deprecated());
+        DCHECK(heap_object->IsMap());
+        encoding_ = kMigrationTarget;
+      }
+    } else {
+      UNREACHABLE();
+    }
+#if DEBUG
+    needs_reload_ = false;
+#endif
+  }
 
   inline Map GetSimpleTransition();
   bool HasSimpleTransitionTo(Map map);
