@@ -34,6 +34,24 @@
       "revId": "8d2d9a2016194a81a7a601953e6b960ac4e10dee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bd3a0282_801425f1",
+        "filename": "infra/testing/builders.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-25T06:28:40Z",
+      "side": 1,
+      "message": "The builder tester integration is standard logic. But there\u0027s still something not working that I need to investigate...",
+      "parentUuid": "4670ecf1_9f8ef6ec",
+      "revId": "8d2d9a2016194a81a7a601953e6b960ac4e10dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
