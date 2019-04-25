@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "940f65e5_9c999d0d",
+        "filename": "src/torque/utils.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-04-25T07:30:05Z",
+      "side": 1,
+      "message": "FYI: This single quote was escaped before serializing but not properly recognized by VS Code so the whole notification was ignored.",
+      "range": {
+        "startLine": 141,
+        "startChar": 45,
+        "endLine": 141,
+        "endChar": 50
+      },
+      "revId": "a6e426308f47bcd2ed6f0a5d4cdcf80619ceab6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
