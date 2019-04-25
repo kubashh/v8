@@ -58,6 +58,25 @@ namespace {
 
 enum class CompileMode : uint8_t { kRegular, kTiering };
 
+enum class CompileStrategy : uint8_t {
+  // Compiles functions on first use. In this case, execution will block until
+  // the function's baseline is reached and top tier compilation starts in
+  // background (if applicable).
+  // Lazy compilation can help to reduce startup time and code size at the risk
+  // of blocking execution.
+  kLazy,
+  // Compiles baseline ahead of execution and starts top tier compilation in
+  // background (if applicable).
+  kEager,
+  // Triggers baseline compilation on first use (just like {kLazy}) with the
+  // difference that top tier compilation is started eagerly.
+  // This strategy can help to reduce startup time at the risk of blocking
+  // execution, but only in its early phase (until top tier compilation
+  // finishes).
+  kLazyBaselineEagerTopTier,
+  kDefault = kEager,
+};
+
 // Background compile jobs hold a shared pointer to this token. The token is
 // used to notify them that they should stop. As soon as they see this (after
 // finishing their current compilation unit), they will stop.
@@ -300,10 +319,10 @@ class CompilationStateImpl {
   // this before destructing this object.
   void AbortCompilation();
 
-  // Set the number of compilations unit expected to be executed. Needs to be
-  // set before {AddCompilationUnits} is run, which triggers background
-  // compilation.
-  void SetNumberOfFunctionsToCompile(int num_functions, int num_lazy_functions);
+  // Initialize compilation progress. Set compilation tiers to expect for
+  // baseline and top tier compilation. Must be set before {AddCompilationUnits}
+  // is invoked which triggers background compilation.
+  void InitializeCompilationProgress();
 
   // Add the callback function to be called on compilation events. Needs to be
   // set before {AddCompilationUnits} is run to ensure that it receives all
@@ -336,6 +355,12 @@ class CompilationStateImpl {
     base::MutexGuard guard(&callbacks_mutex_);
     DCHECK_LE(outstanding_baseline_functions_, outstanding_top_tier_functions_);
     return outstanding_baseline_functions_ == 0;
+  }
+
+  bool top_tier_compilation_finished() const {
+    base::MutexGuard guard(&callbacks_mutex_);
+    DCHECK_LE(outstanding_baseline_functions_, outstanding_top_tier_functions_);
+    return outstanding_top_tier_functions_ == 0;
   }
 
   CompileMode compile_mode() const { return compile_mode_; }
@@ -408,10 +433,15 @@ class CompilationStateImpl {
 
   int outstanding_baseline_functions_ = 0;
   int outstanding_top_tier_functions_ = 0;
-  std::vector<ExecutionTier> highest_execution_tier_;
+  std::vector<uint8_t> compilation_progress_;
 
   // End of fields protected by {callbacks_mutex_}.
   //////////////////////////////////////////////////////////////////////////////
+
+  // Encoding of fields in the {compilation_progress_} vector.
+  class RequiredBaselineTierField : public BitField8<ExecutionTier, 0, 2> {};
+  class RequiredTopTierField : public BitField8<ExecutionTier, 2, 2> {};
+  class ReachedTierField : public BitField8<ExecutionTier, 4, 2> {};
 };
 
 CompilationStateImpl* Impl(CompilationState* compilation_state) {
@@ -457,6 +487,14 @@ void CompilationState::AddCallback(CompilationState::callback_t callback) {
 }
 
 bool CompilationState::failed() const { return Impl(this)->failed(); }
+
+bool CompilationState::baseline_compilation_finished() const {
+  return Impl(this)->baseline_compilation_finished();
+}
+
+bool CompilationState::top_tier_compilation_finished() const {
+  return Impl(this)->top_tier_compilation_finished();
+}
 
 void CompilationState::OnFinishedUnit(WasmCode* code) {
   Impl(this)->OnFinishedUnit(code);
@@ -506,23 +544,30 @@ const WasmCompilationHint* GetCompilationHint(const WasmModule* module,
   return nullptr;
 }
 
-bool IsLazyCompilation(const WasmModule* module,
-                       const WasmFeatures& enabled_features,
-                       uint32_t func_index) {
-  if (enabled_features.compilation_hints) {
-    const WasmCompilationHint* hint = GetCompilationHint(module, func_index);
-    return hint != nullptr &&
-           hint->strategy == WasmCompilationHintStrategy::kLazy;
+CompileStrategy GetCompileStrategy(const WasmModule* module,
+                                   const WasmFeatures& enabled_features,
+                                   uint32_t func_index) {
+  if (!enabled_features.compilation_hints) return CompileStrategy::kDefault;
+  auto* hint = GetCompilationHint(module, func_index);
+  if (hint == nullptr) return CompileStrategy::kDefault;
+  switch (hint->strategy) {
+    case WasmCompilationHintStrategy::kLazy:
+      return CompileStrategy::kLazy;
+    case WasmCompilationHintStrategy::kEager:
+      return CompileStrategy::kEager;
+    case WasmCompilationHintStrategy::kLazyBaselineEagerTopTier:
+      return CompileStrategy::kLazyBaselineEagerTopTier;
+    case WasmCompilationHintStrategy::kDefault:
+      return CompileStrategy::kDefault;
   }
-  return false;
 }
 
-bool IsLazyCompilation(const WasmModule* module,
-                       const NativeModule* native_module,
-                       const WasmFeatures& enabled_features,
-                       uint32_t func_index) {
-  if (native_module->lazy_compilation()) return true;
-  return IsLazyCompilation(module, enabled_features, func_index);
+CompileStrategy GetCompileStrategy(const WasmModule* module,
+                                   const NativeModule* native_module,
+                                   const WasmFeatures& enabled_features,
+                                   uint32_t func_index) {
+  if (native_module->lazy_compilation()) return CompileStrategy::kLazy;
+  return GetCompileStrategy(module, enabled_features, func_index);
 }
 
 struct ExecutionTierPair {
@@ -534,12 +579,14 @@ ExecutionTierPair GetRequestedExecutionTiers(
     const WasmModule* module, CompileMode compile_mode,
     const WasmFeatures& enabled_features, uint32_t func_index) {
   ExecutionTierPair result;
+
   switch (compile_mode) {
     case CompileMode::kRegular:
       result.baseline_tier =
           WasmCompilationUnit::GetDefaultExecutionTier(module);
       result.top_tier = result.baseline_tier;
       return result;
+
     case CompileMode::kTiering:
 
       // Default tiering behaviour.
@@ -588,6 +635,19 @@ class CompilationUnitBuilder {
     if (tiers.baseline_tier != tiers.top_tier) {
       tiering_units_.emplace_back(CreateUnit(func_index, tiers.top_tier));
     }
+  }
+
+  void AddTopTierUnit(int func_index) {
+    ExecutionTierPair tiers = GetRequestedExecutionTiers(
+        native_module_->module(), compilation_state()->compile_mode(),
+        native_module_->enabled_features(), func_index);
+    // In this case, the baseline is lazily compiled, if at all. The compilation
+    // unit is added even if the baseline tier is the same.
+    DCHECK_EQ(
+        GetCompileStrategy(native_module_->module(),
+                           native_module_->enabled_features(), func_index),
+        CompileStrategy::kLazyBaselineEagerTopTier);
+    tiering_units_.emplace_back(CreateUnit(func_index, tiers.top_tier));
   }
 
   bool Commit() {
@@ -654,22 +714,28 @@ DecodeResult ValidateSingleFunction(const WasmModule* module, int func_index,
   return result;
 }
 
-enum class OnlyLazyFunctions : bool { kNo = false, kYes = true };
+enum OnlyLazyFunctions : bool {
+  kAllFunctions = false,
+  kOnlyLazyFunctions = true,
+};
 
 void ValidateSequentially(
     const WasmModule* module, NativeModule* native_module, Counters* counters,
     AccountingAllocator* allocator, ErrorThrower* thrower,
-    OnlyLazyFunctions only_lazy_functions = OnlyLazyFunctions::kNo) {
+    OnlyLazyFunctions only_lazy_functions = kAllFunctions) {
   DCHECK(!thrower->error());
   uint32_t start = module->num_imported_functions;
   uint32_t end = start + module->num_declared_functions;
   auto enabled_features = native_module->enabled_features();
   for (uint32_t func_index = start; func_index < end; func_index++) {
     // Skip non-lazy functions if requested.
-    if (only_lazy_functions == OnlyLazyFunctions::kYes &&
-        !IsLazyCompilation(module, native_module, enabled_features,
-                           func_index)) {
-      continue;
+    if (only_lazy_functions) {
+      CompileStrategy strategy = GetCompileStrategy(
+          module, native_module, enabled_features, func_index);
+      if (strategy != CompileStrategy::kLazy &&
+          strategy != CompileStrategy::kLazyBaselineEagerTopTier) {
+        continue;
+      }
     }
 
     ModuleWireBytes wire_bytes{native_module->wire_bytes()};
@@ -745,7 +811,11 @@ bool CompileLazy(Isolate* isolate, NativeModule* native_module,
   int throughput_sample = static_cast<int>(func_kb / compilation_seconds);
   counters->wasm_lazy_compilation_throughput()->AddSample(throughput_sample);
 
-  if (tiers.baseline_tier < tiers.top_tier) {
+  if (enabled_features.compilation_hints &&
+      GetCompileStrategy(module, enabled_features, func_index) ==
+          CompileStrategy::kLazy &&
+      tiers.baseline_tier < tiers.top_tier) {
+    DCHECK(!FLAG_wasm_lazy_compilation);
     auto tiering_unit =
         base::make_unique<WasmCompilationUnit>(func_index, tiers.top_tier);
     compilation_state->AddTopTierCompilationUnit(std::move(tiering_unit));
@@ -880,28 +950,25 @@ bool ExecuteCompilationUnits(
 }
 
 void InitializeCompilationUnits(NativeModule* native_module) {
-  // Set number of functions that must be compiled to consider the module fully
-  // compiled.
-  auto wasm_module = native_module->module();
-  int num_functions = wasm_module->num_declared_functions;
-  DCHECK_IMPLIES(!native_module->enabled_features().compilation_hints,
-                 wasm_module->num_lazy_compilation_hints == 0);
-  int num_lazy_functions = wasm_module->num_lazy_compilation_hints;
   CompilationStateImpl* compilation_state =
       Impl(native_module->compilation_state());
-  compilation_state->SetNumberOfFunctionsToCompile(num_functions,
-                                                   num_lazy_functions);
+  compilation_state->InitializeCompilationProgress();
 
   ModuleWireBytes wire_bytes(native_module->wire_bytes());
-  const WasmModule* module = native_module->module();
   CompilationUnitBuilder builder(native_module);
+  auto* module = native_module->module();
   uint32_t start = module->num_imported_functions;
   uint32_t end = start + module->num_declared_functions;
   for (uint32_t func_index = start; func_index < end; func_index++) {
-    if (IsLazyCompilation(module, native_module,
-                          native_module->enabled_features(), func_index)) {
+    CompileStrategy strategy = GetCompileStrategy(
+        module, native_module, native_module->enabled_features(), func_index);
+    if (strategy == CompileStrategy::kLazy) {
+      native_module->UseLazyStub(func_index);
+    } else if (strategy == CompileStrategy::kLazyBaselineEagerTopTier) {
+      builder.AddTopTierUnit(func_index);
       native_module->UseLazyStub(func_index);
     } else {
+      DCHECK_EQ(strategy, CompileStrategy::kEager);
       builder.AddUnits(func_index);
     }
   }
@@ -916,7 +983,7 @@ void CompileNativeModule(Isolate* isolate, ErrorThrower* thrower,
                          const WasmModule* wasm_module,
                          NativeModule* native_module) {
   ModuleWireBytes wire_bytes(native_module->wire_bytes());
-
+  auto* compilation_state = Impl(native_module->compilation_state());
   if (FLAG_wasm_lazy_compilation ||
       (FLAG_asm_wasm_lazy_compilation && wasm_module->origin == kAsmJsOrigin)) {
     if (wasm_module->origin == kWasmOrigin && !FLAG_wasm_lazy_validation) {
@@ -928,6 +995,7 @@ void CompileNativeModule(Isolate* isolate, ErrorThrower* thrower,
       // On error: Return and leave the module in an unexecutable state.
       if (thrower->error()) return;
     }
+    compilation_state->InitializeCompilationProgress();
     native_module->set_lazy_compilation(true);
     native_module->UseLazyStubs();
     return;
@@ -936,8 +1004,7 @@ void CompileNativeModule(Isolate* isolate, ErrorThrower* thrower,
   if (native_module->enabled_features().compilation_hints &&
       !FLAG_wasm_lazy_validation) {
     ValidateSequentially(wasm_module, native_module, isolate->counters(),
-                         isolate->allocator(), thrower,
-                         OnlyLazyFunctions::kYes);
+                         isolate->allocator(), thrower, kOnlyLazyFunctions);
     // On error: Return and leave the module in an unexecutable state.
     if (thrower->error()) return;
   }
@@ -946,7 +1013,6 @@ void CompileNativeModule(Isolate* isolate, ErrorThrower* thrower,
   // use the node cache.
   CanonicalHandleScope canonical(isolate);
 
-  auto* compilation_state = Impl(native_module->compilation_state());
   DCHECK_GE(kMaxInt, native_module->module()->num_declared_functions);
 
   // Install a callback to notify us once background compilation finished, or
@@ -1451,7 +1517,12 @@ class AsyncCompileJob::DecodeModule : public AsyncCompileJob::CompileStep {
           const WasmFunction* func = &module->functions[func_index];
           Vector<const uint8_t> code = job->wire_bytes_.GetFunctionBytes(func);
 
-          if (IsLazyCompilation(module, enabled_features, func_index)) {
+          CompileStrategy strategy =
+              GetCompileStrategy(module, enabled_features, func_index);
+          bool validate_lazily_compiled_function =
+              strategy == CompileStrategy::kLazy ||
+              strategy == CompileStrategy::kLazyBaselineEagerTopTier;
+          if (validate_lazily_compiled_function) {
             DecodeResult function_result =
                 ValidateSingleFunction(module, func_index, code, counters_,
                                        allocator, enabled_features);
@@ -1693,16 +1764,7 @@ bool AsyncStreamingProcessor::ProcessCodeSectionHeader(
       decoder_.shared_module(), false);
   auto* compilation_state = Impl(job_->native_module_->compilation_state());
   compilation_state->SetWireBytesStorage(std::move(wire_bytes_storage));
-
-  // Set number of functions that must be compiled to consider the module fully
-  // compiled.
-  auto wasm_module = job_->native_module_->module();
-  int num_functions = wasm_module->num_declared_functions;
-  DCHECK_IMPLIES(!job_->native_module_->enabled_features().compilation_hints,
-                 wasm_module->num_lazy_compilation_hints == 0);
-  int num_lazy_functions = wasm_module->num_lazy_compilation_hints;
-  compilation_state->SetNumberOfFunctionsToCompile(num_functions,
-                                                   num_lazy_functions);
+  compilation_state->InitializeCompilationProgress();
 
   // Set outstanding_finishers_ to 2, because both the AsyncCompileJob and the
   // AsyncStreamingProcessor have to finish.
@@ -1726,24 +1788,34 @@ bool AsyncStreamingProcessor::ProcessFunctionBody(Vector<const uint8_t> bytes,
   uint32_t func_index =
       num_functions_ + decoder_.module()->num_imported_functions;
 
-  if (IsLazyCompilation(module, native_module, enabled_features, func_index)) {
-    if (!FLAG_wasm_lazy_validation) {
-      Counters* counters = Impl(native_module->compilation_state())->counters();
-      AccountingAllocator* allocator = native_module->engine()->allocator();
+  CompileStrategy strategy =
+      GetCompileStrategy(module, enabled_features, func_index);
+  bool validate_lazily_compiled_function =
+      !FLAG_wasm_lazy_validation &&
+      (strategy == CompileStrategy::kLazy ||
+       strategy == CompileStrategy::kLazyBaselineEagerTopTier);
+  if (validate_lazily_compiled_function) {
+    Counters* counters = Impl(native_module->compilation_state())->counters();
+    AccountingAllocator* allocator = native_module->engine()->allocator();
 
-      // The native module does not own the wire bytes until {SetWireBytes} is
-      // called in {OnFinishedStream}. Validation must use {bytes} parameter.
-      DecodeResult result = ValidateSingleFunction(
-          module, func_index, bytes, counters, allocator, enabled_features);
+    // The native module does not own the wire bytes until {SetWireBytes} is
+    // called in {OnFinishedStream}. Validation must use {bytes} parameter.
+    DecodeResult result = ValidateSingleFunction(
+        module, func_index, bytes, counters, allocator, enabled_features);
 
-      if (result.failed()) {
-        FinishAsyncCompileJobWithError(result.error());
-        return false;
-      }
+    if (result.failed()) {
+      FinishAsyncCompileJobWithError(result.error());
+      return false;
     }
+  }
 
+  if (strategy == CompileStrategy::kLazy) {
+    native_module->UseLazyStub(func_index);
+  } else if (strategy == CompileStrategy::kLazyBaselineEagerTopTier) {
+    compilation_unit_builder_->AddTopTierUnit(func_index);
     native_module->UseLazyStub(func_index);
   } else {
+    DCHECK_EQ(strategy, CompileStrategy::kEager);
     compilation_unit_builder_->AddUnits(func_index);
   }
 
@@ -1864,21 +1936,63 @@ void CompilationStateImpl::AbortCompilation() {
   callbacks_.clear();
 }
 
-void CompilationStateImpl::SetNumberOfFunctionsToCompile(
-    int num_functions, int num_lazy_functions) {
+void CompilationStateImpl::InitializeCompilationProgress() {
+  auto enabled_features = native_module_->enabled_features();
+  auto* module = native_module_->module();
   DCHECK(!failed());
+
   base::MutexGuard guard(&callbacks_mutex_);
+  outstanding_baseline_functions_ = 0;
+  outstanding_top_tier_functions_ = 0;
+  compilation_progress_.reserve(module->num_declared_functions);
 
-  int num_functions_to_compile = num_functions - num_lazy_functions;
-  outstanding_baseline_functions_ = num_functions_to_compile;
-  outstanding_top_tier_functions_ = num_functions_to_compile;
-  highest_execution_tier_.assign(num_functions, ExecutionTier::kNone);
+  int start = module->num_imported_functions;
+  int end = start + module->num_declared_functions;
+  for (int func_index = start; func_index < end; func_index++) {
+    ExecutionTierPair requested_tiers = GetRequestedExecutionTiers(
+        module, compile_mode(), enabled_features, func_index);
+    CompileStrategy strategy = GetCompileStrategy(module, native_module_,
+                                                  enabled_features, func_index);
 
-  // Degenerate case of an empty module. Trigger callbacks immediately.
-  if (num_functions_to_compile == 0) {
+    bool is_baseline_required = strategy == CompileStrategy::kEager;
+    bool is_top_tier_required = strategy != CompileStrategy::kLazy;
+    DCHECK_IMPLIES(is_top_tier_required,
+                   strategy == CompileStrategy::kEager ||
+                       strategy == CompileStrategy::kLazyBaselineEagerTopTier);
+
+    // Count functions to complete baseline and top tier compilation.
+    if (is_baseline_required) outstanding_baseline_functions_++;
+    if (is_top_tier_required) outstanding_top_tier_functions_++;
+
+    // Initialize function's compilation progress.
+    ExecutionTier required_baseline_tier = is_baseline_required
+                                               ? requested_tiers.baseline_tier
+                                               : ExecutionTier::kNone;
+    ExecutionTier required_top_tier =
+        is_top_tier_required ? requested_tiers.top_tier : ExecutionTier::kNone;
+    uint8_t function_progress = ReachedTierField::encode(ExecutionTier::kNone);
+    function_progress = RequiredBaselineTierField::update(
+        function_progress, required_baseline_tier);
+    function_progress =
+        RequiredTopTierField::update(function_progress, required_top_tier);
+    compilation_progress_.push_back(function_progress);
+  }
+  DCHECK_IMPLIES(!enabled_features.compilation_hints,
+                 outstanding_baseline_functions_ ==
+                     static_cast<int>(module->num_declared_functions));
+  DCHECK_IMPLIES(!enabled_features.compilation_hints,
+                 outstanding_top_tier_functions_ ==
+                     static_cast<int>(module->num_declared_functions));
+  DCHECK_LE(outstanding_baseline_functions_, outstanding_top_tier_functions_);
+
+  // Trigger callbacks if module needs no baseline or top tier compilation. This
+  // can be the case for an empty or fully lazy module.
+  if (outstanding_baseline_functions_ == 0) {
     for (auto& callback : callbacks_) {
       callback(CompilationEvent::kFinishedBaselineCompilation);
     }
+  }
+  if (outstanding_top_tier_functions_ == 0) {
     for (auto& callback : callbacks_) {
       callback(CompilationEvent::kFinishedTopTierCompilation);
     }
@@ -1925,61 +2039,51 @@ void CompilationStateImpl::OnFinishedUnits(Vector<WasmCode*> code_vector) {
                     ExecutionTier::kLiftoff < ExecutionTier::kTurbofan,
                 "Assume an order on execution tiers");
 
-  auto module = native_module_->module();
-  auto enabled_features = native_module_->enabled_features();
+  DCHECK_EQ(compilation_progress_.size(),
+            native_module_->module()->num_declared_functions);
+
   for (WasmCode* code : code_vector) {
     DCHECK_NOT_NULL(code);
     DCHECK_NE(code->tier(), ExecutionTier::kNone);
     native_module_->engine()->LogCode(code);
 
-    // Skip lazily compiled code as we do not consider this for the completion
-    // of baseline respectively top tier compilation.
-    int func_index = code->index();
-    if (IsLazyCompilation(module, native_module_, enabled_features,
-                          func_index)) {
-      continue;
+    // Read function's compilation progress.
+    int slot_index =
+        code->index() - native_module_->module()->num_imported_functions;
+    uint8_t function_progress = compilation_progress_[slot_index];
+    ExecutionTier required_baseline_tier =
+        RequiredBaselineTierField::decode(function_progress);
+    ExecutionTier required_top_tier =
+        RequiredTopTierField::decode(function_progress);
+    ExecutionTier reached_tier = ReachedTierField::decode(function_progress);
+
+    bool completes_baseline_compilation = false;
+    bool completes_top_tier_compilation = false;
+
+    // Check whether required baseline or top tier are reached.
+    if (reached_tier < required_baseline_tier &&
+        required_baseline_tier <= code->tier()) {
+      DCHECK_GT(outstanding_baseline_functions_, 0);
+      outstanding_baseline_functions_--;
+      if (outstanding_baseline_functions_ == 0) {
+        completes_baseline_compilation = true;
+      }
+    }
+    if (reached_tier < required_top_tier && required_top_tier <= code->tier()) {
+      DCHECK_GT(outstanding_top_tier_functions_, 0);
+      outstanding_top_tier_functions_--;
+      if (outstanding_top_tier_functions_ == 0) {
+        completes_top_tier_compilation = true;
+      }
     }
 
-    // Determine whether we are reaching baseline or top tier with the given
-    // code.
-    uint32_t slot_index = code->index() - module->num_imported_functions;
-    ExecutionTierPair requested_tiers = GetRequestedExecutionTiers(
-        module, compile_mode(), enabled_features, func_index);
-    DCHECK_EQ(highest_execution_tier_.size(), module->num_declared_functions);
-    ExecutionTier prior_tier = highest_execution_tier_[slot_index];
-    bool had_reached_baseline = prior_tier >= requested_tiers.baseline_tier;
-    bool had_reached_top_tier = prior_tier >= requested_tiers.top_tier;
-    DCHECK_IMPLIES(had_reached_baseline, prior_tier > ExecutionTier::kNone);
-    bool reaches_baseline = !had_reached_baseline;
-    bool reaches_top_tier =
-        !had_reached_top_tier && code->tier() >= requested_tiers.top_tier;
-    DCHECK_IMPLIES(reaches_baseline,
-                   code->tier() >= requested_tiers.baseline_tier);
-    DCHECK_IMPLIES(reaches_top_tier, had_reached_baseline || reaches_baseline);
-
-    // Remember compilation state before update.
-    bool had_completed_baseline_compilation =
-        outstanding_baseline_functions_ == 0;
-    bool had_completed_top_tier_compilation =
-        outstanding_top_tier_functions_ == 0;
-
-    // Update compilation state.
-    if (code->tier() > prior_tier) {
-      highest_execution_tier_[slot_index] = code->tier();
+    // Update function's compilation progress.
+    if (code->tier() > reached_tier) {
+      compilation_progress_[slot_index] = ReachedTierField::update(
+          compilation_progress_[slot_index], code->tier());
     }
-    if (reaches_baseline) outstanding_baseline_functions_--;
-    if (reaches_top_tier) outstanding_top_tier_functions_--;
     DCHECK_LE(0, outstanding_baseline_functions_);
     DCHECK_LE(outstanding_baseline_functions_, outstanding_top_tier_functions_);
-
-    // Conclude if we are completing baseline or top tier compilation.
-    bool completes_baseline_compilation = !had_completed_baseline_compilation &&
-                                          outstanding_baseline_functions_ == 0;
-    bool completes_top_tier_compilation = !had_completed_top_tier_compilation &&
-                                          outstanding_top_tier_functions_ == 0;
-    DCHECK_IMPLIES(
-        completes_top_tier_compilation,
-        had_completed_baseline_compilation || completes_baseline_compilation);
 
     // Trigger callbacks.
     if (completes_baseline_compilation) {
