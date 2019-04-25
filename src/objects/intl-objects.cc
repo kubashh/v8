@@ -992,11 +992,24 @@ Handle<Object> Intl::CompareStrings(Isolate* isolate,
                                     Handle<String> string1,
                                     Handle<String> string2) {
   Factory* factory = isolate->factory();
+  UCollationResult result;
+
+  if (*string1 == *string2) {
+    size_t string1_length = string1->length();
+    size_t string2_length = string2->length();
+    if (string1_length == string2_length) {
+      result = UCollationResult::UCOL_EQUAL;
+    } else if (string1_length < string2_length) {
+      result = UCollationResult::UCOL_LESS;
+    } else {
+      result = UCollationResult::UCOL_GREATER;
+    }
+    return factory->NewNumberFromInt(result);
+  }
 
   string1 = String::Flatten(isolate, string1);
   string2 = String::Flatten(isolate, string2);
 
-  UCollationResult result;
   UErrorCode status = U_ZERO_ERROR;
   icu::UnicodeString string_val1 = Intl::ToICUUnicodeString(isolate, string1);
   icu::UnicodeString string_val2 = Intl::ToICUUnicodeString(isolate, string2);
