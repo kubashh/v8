@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ec9bc0c_3bedd6b6",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-25T13:44:59Z",
+      "side": 1,
+      "message": "Maybe add a newline before kDefault, and a \"// Marker for default stragy.\" comment.",
+      "revId": "8afdedd98d80a8e699e770aff4bb980b972cff21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7107480_36f99253",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-25T13:44:59Z",
+      "side": 1,
+      "message": "mini-nit: I personally like the convention to put the expected value first. Other APIs require that (e.g. out mjsunit tests). For DCHECK_EQ, it does not really matter, but once you get used to that it actually increases readability.",
+      "revId": "8afdedd98d80a8e699e770aff4bb980b972cff21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39cf073f_98ff9085",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1962,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-25T13:44:59Z",
+      "side": 1,
+      "message": "I think we can use a stronger DCHECK_EQ here.",
+      "revId": "8afdedd98d80a8e699e770aff4bb980b972cff21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
