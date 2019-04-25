@@ -10,6 +10,7 @@
 #include "src/torque/implementation-visitor.h"
 #include "src/torque/parameter-difference.h"
 #include "src/torque/server-data.h"
+#include "src/torque/type-visitor.h"
 
 namespace v8 {
 namespace internal {
@@ -557,7 +558,7 @@ const Type* ImplementationVisitor::Visit(
 
   base::Optional<const Type*> type;
   if (stmt->type) {
-    type = Declarations::GetType(*stmt->type);
+    type = TypeVisitor::ComputeType(*stmt->type);
     if ((*type)->IsConstexpr() && !stmt->const_qualified) {
       ReportError(
           "cannot declare variable with constexpr type. Use 'const' instead.");
@@ -774,8 +775,8 @@ VisitResult ImplementationVisitor::Visit(NumberLiteralExpression* expr) {
 
 VisitResult ImplementationVisitor::Visit(AssumeTypeImpossibleExpression* expr) {
   VisitResult result = Visit(expr->expression);
-  const Type* result_type =
-      SubtractType(result.type(), Declarations::GetType(expr->excluded_type));
+  const Type* result_type = SubtractType(
+      result.type(), TypeVisitor::ComputeType(expr->excluded_type));
   if (result_type->IsNever()) {
     ReportError("unreachable code");
   }
@@ -1123,7 +1124,7 @@ const Type* ImplementationVisitor::Visit(ForOfLoopStatement* stmt) {
       VisitResult result = GenerateCall("[]", {{expression_result, index}, {}});
       if (stmt->var_declaration->type) {
         const Type* declared_type =
-            Declarations::GetType(*stmt->var_declaration->type);
+            TypeVisitor::ComputeType(*stmt->var_declaration->type);
         result = GenerateImplicitConvert(declared_type, result);
       }
       element_result = element_scope.Yield(result);
@@ -1191,7 +1192,7 @@ VisitResult ImplementationVisitor::Visit(TryLabelExpression* expr) {
     TypeVector parameter_types;
     for (size_t i = 0; i < parameter_count; ++i) {
       const Type* type =
-          Declarations::GetType(expr->label_block->parameters.types[i]);
+          TypeVisitor::ComputeType(expr->label_block->parameters.types[i]);
       parameter_types.push_back(type);
       if (type->IsConstexpr()) {
         ReportError("no constexpr type allowed for label arguments");
@@ -1438,7 +1439,7 @@ VisitResult ImplementationVisitor::AddVariableObjectSize(
 
 VisitResult ImplementationVisitor::Visit(NewExpression* expr) {
   StackScope stack_scope(this);
-  const Type* type = Declarations::GetType(expr->type);
+  const Type* type = TypeVisitor::ComputeType(expr->type);
   const ClassType* class_type = ClassType::DynamicCast(type);
   if (class_type == nullptr) {
     ReportError("type for new expression must be a class, \"", *type,
@@ -1809,14 +1810,14 @@ Callable* ImplementationVisitor::LookupCallable(
     const QualifiedName& name, const Container& declaration_container,
     const Arguments& arguments, const TypeVector& specialization_types) {
   return LookupCallable(name, declaration_container,
-                        arguments.parameters.GetTypeVector(), arguments.labels,
-                        specialization_types);
+                        arguments.parameters.ComputeTypeVector(),
+                        arguments.labels, specialization_types);
 }
 
 Method* ImplementationVisitor::LookupMethod(
     const std::string& name, LocationReference this_reference,
     const Arguments& arguments, const TypeVector& specialization_types) {
-  TypeVector types(arguments.parameters.GetTypeVector());
+  TypeVector types(arguments.parameters.ComputeTypeVector());
   types.insert(types.begin(), this_reference.ReferencedType());
   return Method::cast(LookupCallable(
       {{}, name},
@@ -1848,7 +1849,7 @@ VisitResult ImplementationVisitor::GenerateCopy(const VisitResult& to_copy) {
 
 VisitResult ImplementationVisitor::Visit(StructExpression* expr) {
   StackScope stack_scope(this);
-  const Type* raw_type = Declarations::GetType(expr->type);
+  const Type* raw_type = TypeVisitor::ComputeType(expr->type);
   if (!raw_type->IsStructType()) {
     ReportError(*raw_type, " is not a struct but used like one");
   }
@@ -1991,8 +1992,8 @@ LocationReference ImplementationVisitor::GetLocationReference(
   }
   if (expr->generic_arguments.size() != 0) {
     Generic* generic = Declarations::LookupUniqueGeneric(name);
-    Callable* specialization = GetOrCreateSpecialization(
-        SpecializationKey{generic, GetTypeVector(expr->generic_arguments)});
+    Callable* specialization = GetOrCreateSpecialization(SpecializationKey{
+        generic, TypeVisitor::ComputeTypeVector(expr->generic_arguments)});
     if (Builtin* builtin = Builtin::DynamicCast(specialization)) {
       DCHECK(!builtin->IsExternal());
       return LocationReference::Temporary(GetBuiltinCode(builtin),
@@ -2088,7 +2089,7 @@ void ImplementationVisitor::GenerateAssignToLocation(
 VisitResult ImplementationVisitor::GeneratePointerCall(
     Expression* callee, const Arguments& arguments, bool is_tailcall) {
   StackScope scope(this);
-  TypeVector parameter_types(arguments.parameters.GetTypeVector());
+  TypeVector parameter_types(arguments.parameters.ComputeTypeVector());
   VisitResult callee_result = Visit(callee);
   if (!callee_result.type()->IsBuiltinPointerType()) {
     std::stringstream stream;
@@ -2426,7 +2427,7 @@ VisitResult ImplementationVisitor::Visit(CallExpression* expr,
   QualifiedName name = QualifiedName(expr->callee->namespace_qualification,
                                      expr->callee->name->value);
   TypeVector specialization_types =
-      GetTypeVector(expr->callee->generic_arguments);
+      TypeVisitor::ComputeTypeVector(expr->callee->generic_arguments);
   bool has_template_arguments = !specialization_types.empty();
   for (Expression* arg : expr->arguments)
     arguments.parameters.push_back(Visit(arg));
@@ -2452,7 +2453,7 @@ VisitResult ImplementationVisitor::Visit(CallMethodExpression* expr) {
   Arguments arguments;
   std::string method_name = expr->method->name->value;
   TypeVector specialization_types =
-      GetTypeVector(expr->method->generic_arguments);
+      TypeVisitor::ComputeTypeVector(expr->method->generic_arguments);
   LocationReference target = GetLocationReference(expr->target);
   if (!target.IsVariableAccess()) {
     VisitResult result = GenerateFetchFromLocation(target);
@@ -2467,7 +2468,7 @@ VisitResult ImplementationVisitor::Visit(CallMethodExpression* expr) {
     arguments.parameters.push_back(Visit(arg));
   }
   arguments.labels = LabelsFromIdentifiers(expr->labels);
-  TypeVector argument_types = arguments.parameters.GetTypeVector();
+  TypeVector argument_types = arguments.parameters.ComputeTypeVector();
   DCHECK_EQ(expr->method->namespace_qualification.size(), 0);
   QualifiedName qualified_name = QualifiedName(method_name);
   Callable* callable = nullptr;
@@ -2478,7 +2479,8 @@ VisitResult ImplementationVisitor::Visit(CallMethodExpression* expr) {
 VisitResult ImplementationVisitor::Visit(IntrinsicCallExpression* expr) {
   StackScope scope(this);
   Arguments arguments;
-  TypeVector specialization_types = GetTypeVector(expr->generic_arguments);
+  TypeVector specialization_types =
+      TypeVisitor::ComputeTypeVector(expr->generic_arguments);
   for (Expression* arg : expr->arguments)
     arguments.parameters.push_back(Visit(arg));
   return scope.Yield(
@@ -2659,7 +2661,6 @@ void ImplementationVisitor::GenerateCatchBlock(
     }
   }
 }
-
 void ImplementationVisitor::VisitAllDeclarables() {
   CurrentCallable::Scope current_callable(nullptr);
   const std::vector<std::unique_ptr<Declarable>>& all_declarables =

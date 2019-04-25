@@ -882,4 +882,13 @@ namespace test {
     check(array.a == 2);
     check(array.b == 9);
   }
+
+  extern class Foo extends JSObject { fooField: FooType; }
+
+  extern class Bar extends Foo { barField: Bartype; }
+
+  type Bartype = FooType;
+
+  type FooType = Smi;
+
 }

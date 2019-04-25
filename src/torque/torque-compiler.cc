@@ -53,10 +53,14 @@ void CompileCurrentAst(TorqueCompilerOptions options) {
   }
   TypeOracle::Scope type_oracle;
 
-  DeclarationVisitor declaration_visitor;
+  TypeDeclarationVisitor type_declaration_visitor;
 
-  declaration_visitor.Visit(GlobalContext::Get().ast());
-  declaration_visitor.FinalizeStructsAndClasses();
+  type_declaration_visitor.Visit(GlobalContext::Get().ast());
+  type_declaration_visitor.ResolveAliases();
+
+  DeclarationVisitor().Visit(GlobalContext::Get().ast());
+
+  type_declaration_visitor.FinalizeClasses();
 
   ImplementationVisitor implementation_visitor;
   for (Namespace* n : GlobalContext::Get().GetNamespaces()) {

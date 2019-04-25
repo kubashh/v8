@@ -6,7 +6,10 @@
 #include <iostream>
 
 #include "src/torque/declarable.h"
+#include "src/torque/declaration-visitor.h"
+#include "src/torque/declarations.h"
 #include "src/torque/global-context.h"
+#include "src/torque/type-visitor.h"
 
 namespace v8 {
 namespace internal {
@@ -125,6 +128,18 @@ bool Namespace::IsDefaultNamespace() const {
 }
 
 bool Namespace::IsTestNamespace() const { return name() == kTestNamespaceName; }
+
+void TypeAlias::Resolve() const {
+  if (type_) return;
+  if (!delayed_) {
+    ReportError("Cannot resolve non-delayed type alias");
+  }
+  TypeDeclaration* decl = *delayed_;
+  delayed_ = {};
+  CurrentScope::Scope scope_activator(ParentScope());
+  CurrentSourcePosition::Scope position_activator(pos());
+  type_ = TypeVisitor::ComputeType(decl);
+}
 
 }  // namespace torque
 }  // namespace internal

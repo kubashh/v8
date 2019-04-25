@@ -10,7 +10,6 @@
 
 #include "src/base/macros.h"
 #include "src/torque/declarations.h"
-#include "src/torque/file-visitor.h"
 #include "src/torque/global-context.h"
 #include "src/torque/types.h"
 #include "src/torque/utils.h"
@@ -19,42 +18,53 @@ namespace v8 {
 namespace internal {
 namespace torque {
 
-class DeclarationVisitor : public FileVisitor {
+Namespace* GetOrCreateNamespace(const std::string& name);
+
+class TypeDeclarationVisitor {
  public:
   void Visit(Ast* ast) {
     CurrentScope::Scope current_namespace(GlobalContext::GetDefaultNamespace());
     for (Declaration* child : ast->declarations()) Visit(child);
   }
-
   void Visit(Declaration* decl);
-
-  Namespace* GetOrCreateNamespace(const std::string& name) {
-    std::vector<Namespace*> existing_namespaces = FilterDeclarables<Namespace>(
-        Declarations::TryLookupShallow(QualifiedName(name)));
-    if (existing_namespaces.empty()) {
-      return Declarations::DeclareNamespace(name);
-    }
-    DCHECK_EQ(1, existing_namespaces.size());
-    return existing_namespaces.front();
+  void Visit(NamespaceDeclaration* decl) {
+    CurrentScope::Scope current_scope(GetOrCreateNamespace(decl->name));
+    for (Declaration* child : decl->declarations) Visit(child);
+  }
+  void Visit(AbstractTypeDeclaration* decl);
+  void Visit(StructDeclaration* decl) {
+    Declarations::PreDeclareTypeAlias(decl->name, decl, false);
+  }
+  void Visit(ClassDeclaration* decl) {
+    const TypeAlias* alias =
+        Declarations::PreDeclareTypeAlias(decl->name, decl, false);
+    class_declarations_.push_back(std::make_tuple(decl, alias));
+  }
+  void Visit(TypeAliasDeclaration* decl) {
+    Declarations::PreDeclareTypeAlias(decl->name, decl, true);
   }
 
+  void ResolveAliases();
+  void FinalizeClasses();
+
+ private:
+  std::vector<std::tuple<ClassDeclaration*, const TypeAlias*>>
+      class_declarations_;
+};
+
+class DeclarationVisitor {
+ public:
+  void Visit(Ast* ast) {
+    CurrentScope::Scope current_namespace(GlobalContext::GetDefaultNamespace());
+    for (Declaration* child : ast->declarations()) Visit(child);
+  }
+  void Visit(Declaration* decl);
   void Visit(NamespaceDeclaration* decl) {
     CurrentScope::Scope current_scope(GetOrCreateNamespace(decl->name));
     for (Declaration* child : decl->declarations) Visit(child);
   }
 
-  void Visit(TypeDeclaration* decl);
-
-  void DeclareMethods(AggregateType* container,
-                      const std::vector<Declaration*>& methods);
-  void Visit(StructDeclaration* decl);
-  void Visit(ClassDeclaration* decl);
-
-  void Visit(TypeAliasDeclaration* decl) {
-    const Type* type = Declarations::GetType(decl->type);
-    type->AddAlias(decl->name->value);
-    Declarations::DeclareType(decl->name, type, true);
-  }
+  void Visit(TypeDeclaration* decl) { Declarations::ResolveType(decl->name); }
 
   Builtin* CreateBuiltin(BuiltinDeclaration* decl, std::string external_name,
                          std::string readable_name, Signature signature,
@@ -93,20 +103,8 @@ class DeclarationVisitor : public FileVisitor {
                        base::Optional<const CallableNodeSignature*> signature,
                        base::Optional<Statement*> body);
 
-  void FinalizeStructsAndClasses();
-
  private:
   void DeclareSpecializedTypes(const SpecializationKey& key);
-
-  void FinalizeStructFieldsAndMethods(StructType* struct_type,
-                                      StructDeclaration* struct_declaration);
-  void FinalizeClassFieldsAndMethods(ClassType* class_type,
-                                     ClassDeclaration* class_declaration);
-
-  std::vector<std::tuple<Scope*, StructDeclaration*, StructType*>>
-      struct_declarations_;
-  std::vector<std::tuple<Scope*, ClassDeclaration*, ClassType*>>
-      class_declarations_;
 };
 
 }  // namespace torque
