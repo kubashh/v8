@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ee86d33_029e05af",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:15:46Z",
+      "side": 1,
+      "message": "nit: Is there a particular reason for the \"2\" post-fix? I\u0027d vote to just use {value} here.",
+      "range": {
+        "startLine": 1158,
+        "startChar": 57,
+        "endLine": 1158,
+        "endChar": 63
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7fcf33e_675253c4",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:15:46Z",
+      "side": 1,
+      "message": "suggestion: Would \"UNREACHABLE\" instead of the \"break\" also make the compiler happy?",
+      "range": {
+        "startLine": 1170,
+        "startChar": 6,
+        "endLine": 1170,
+        "endChar": 11
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff757022_0c16ff63",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:15:46Z",
+      "side": 1,
+      "message": "As discussed, other places use to map values exceeding limits to either \"+infinity\" or \"-infinity\". If we want to stick with this here as well we could even used {DoubleToFloat32} here.",
+      "range": {
+        "startLine": 1182,
+        "startChar": 0,
+        "endLine": 1185,
+        "endChar": 50
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d240f68_266172e1",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:15:46Z",
+      "side": 1,
+      "message": "question: Shouldn\u0027t this call {Factory::NewJSObject} instead?",
+      "range": {
+        "startLine": 1363,
+        "startChar": 13,
+        "endLine": 1363,
+        "endChar": 40
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e1e123b_463bd0de",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:15:46Z",
+      "side": 1,
+      "message": "question: My understanding is that this will still call the base destructor of {ErrorThrower} and hence set a pending exception. Should we call {Reset} explicitly here to make sure all errors are swallowed?",
+      "range": {
+        "startLine": 1390,
+        "startChar": 21,
+        "endLine": 1390,
+        "endChar": 23
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a6aed12_c6fda1be",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:15:46Z",
+      "side": 1,
+      "message": "nit: Lets use {WasmEngine::SyncInstantiate} here. Even though it is just a direct dispatch to the same function (for now), we should try to make all compilation/instantiation requests go through the engine.",
+      "range": {
+        "startLine": 1643,
+        "startChar": 6,
+        "endLine": 1643,
+        "endChar": 42
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed60c924_f311be37",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1731,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:15:46Z",
+      "side": 1,
+      "message": "suggestion: I think eventually we should use {Execution::TryCall} here instead of the {v8::TryCatch} scope above. That way we don\u0027t have to call {OptionalRescheduleException} explicitly here. Internally it uses the same mechanism, but at least it is all encapsulated. Happy to do this in a separate CL and just leave a TODO here of course.",
+      "range": {
+        "startLine": 1731,
+        "startChar": 40,
+        "endLine": 1731,
+        "endChar": 58
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fa6b2db_80933540",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:15:46Z",
+      "side": 1,
+      "message": "nit: Likewise, lets use {WasmEngine::SyncInstantiate} here.",
+      "range": {
+        "startLine": 2151,
+        "startChar": 6,
+        "endLine": 2151,
+        "endChar": 42
+      },
+      "revId": "a3694804c1c62ff59ce2b6195be55439e9122af2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
