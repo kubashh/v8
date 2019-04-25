@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "52a37af8_4e1cd308",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-25T15:32:54Z",
+      "side": 1,
+      "message": "As discussed offline, we generalized this. Now it works also with deserialized lazy modules.",
+      "parentUuid": "aa362ab4_84abe658",
+      "revId": "2c23fa2dc44760a62747e071d52461b25f02d150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f9b0399_2427eee5",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 1
