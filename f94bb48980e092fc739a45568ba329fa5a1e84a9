@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "87799e4c_6c295aa0",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:30:25Z",
+      "side": 1,
+      "message": "Ack. Works for me then.",
+      "parentUuid": "984eb20e_9ea09822",
+      "range": {
+        "startLine": 629,
+        "startChar": 16,
+        "endLine": 629,
+        "endChar": 19
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9ed7a28_2b1091ba",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 6
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "Just tested this and it seems that even this way one cannot pass a plain bool literal.",
       "parentUuid": "c9ed7a28_2b1091ba",
+      "range": {
+        "startLine": 716,
+        "startChar": 0,
+        "endLine": 716,
+        "endChar": 22
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4ca3a118_6ed35355",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-25T13:30:25Z",
+      "side": 1,
+      "message": "Ack. This resolves my worries. Thanks for checking! Please disregard this comment then.",
+      "parentUuid": "6c0b3c65_512332a1",
       "range": {
         "startLine": 716,
         "startChar": 0,
