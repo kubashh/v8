@@ -107,16 +107,21 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   SlackTrackingPrediction DependOnInitialMapInstanceSizePrediction(
       const JSFunctionRef& function);
 
+  class Dependency;
+  void RecordDependency(Dependency* dependency);
+  Dependency* TransitionDependencyOffTheRecord(const MapRef& target_map);
+  Dependency* FieldRepresentationDependencyOffTheRecord(const MapRef& map,
+                                                        int descriptor);
+  Dependency* FieldTypeDependencyOffTheRecord(const MapRef& map,
+                                              int descriptor);
+
   // Exposed only for testing purposes.
   bool AreValid() const;
-
-  // Exposed only because C++.
-  class Dependency;
 
  private:
   Zone* const zone_;
   JSHeapBroker* const broker_;
-  ZoneForwardList<Dependency*> dependencies_;
+  ZoneForwardList<Dependency*> dependencies_;  // XXX const?
 };
 
 }  // namespace compiler
