@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "1cf13056_f629a8f7",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-25T13:00:21Z",
+      "side": 1,
+      "message": "Indeed we calculate the stddev for 2 on the infra side.",
+      "parentUuid": "55450bc8_61e53e27",
+      "range": {
+        "startLine": 181,
+        "startChar": 6,
+        "endLine": 182,
+        "endChar": 41
+      },
+      "revId": "59f2c28081f867bc6d24e65d800f21834ba712cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf676144_0d7d18d5",
         "filename": "tools/run_perf.py",
         "patchSetId": 4

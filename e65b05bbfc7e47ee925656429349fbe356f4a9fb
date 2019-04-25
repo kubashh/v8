@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb35cc91_ece54ce5",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-25T13:00:21Z",
+      "side": 1,
+      "message": "nit: Here my english is at its limits. But I feel this could be misconstrued: i.e. a list of values would be the result of each run. But there will be only one value per run. Maybe rephrase as:\nlist of values measured over several runs?",
+      "range": {
+        "startLine": 165,
+        "startChar": 21,
+        "endLine": 165,
+        "endChar": 56
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "467ec8e8_799ff9e0",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-25T13:00:21Z",
+      "side": 1,
+      "message": "nit: Please add also those two to documentation above.",
+      "range": {
+        "startLine": 228,
+        "startChar": 8,
+        "endLine": 229,
+        "endChar": 44
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe4bba42_b080e94d",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-25T13:00:21Z",
+      "side": 1,
+      "message": "nit: maybe call \"result_tracker\" to clarify what this is. And e.g. to differentiate from the results below. Maybe everywhere in the file?",
+      "range": {
+        "startLine": 277,
+        "startChar": 26,
+        "endLine": 277,
+        "endChar": 33
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64ca9941_80dddb73",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-25T13:00:21Z",
+      "side": 1,
+      "message": "Is this still used? Given the code above it looks like self.results should be an implementation detail and the API between Measurement and ResultTracker is the method above.",
+      "range": {
+        "startLine": 281,
+        "startChar": 2,
+        "endLine": 282,
+        "endChar": 23
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01476aa4_6416e569",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-25T13:00:21Z",
+      "side": 1,
+      "message": "Could the code below not move now into the ResultTracker class to be better encapsulated?",
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b19dd6da_66fd28c5",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-25T13:00:21Z",
+      "side": 1,
+      "message": "nit: just map len?",
+      "range": {
+        "startLine": 356,
+        "startChar": 17,
+        "endLine": 356,
+        "endChar": 33
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
