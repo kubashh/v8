@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f8d9a8a9_cc212c11",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-25T13:02:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f10abf8_a2f387e1",
+      "range": {
+        "startLine": 11,
+        "startChar": 12,
+        "endLine": 11,
+        "endChar": 19
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46e6d42d_5a7438b2",
         "filename": "src/wasm/compilation-environment.h",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc99bb53_c63f9833",
+        "filename": "src/wasm/compilation-environment.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-25T13:02:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46e6d42d_5a7438b2",
+      "range": {
+        "startLine": 119,
+        "startChar": 2,
+        "endLine": 119,
+        "endChar": 19
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "984eb20e_9ea09822",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-25T13:02:07Z",
+      "side": 1,
+      "message": "As discussed offline, {int} is frequently used for function indices in the module compiler.",
+      "parentUuid": "3a3de36c_c26d0615",
+      "range": {
+        "startLine": 629,
+        "startChar": 16,
+        "endLine": 629,
+        "endChar": 19
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c9ed7a28_2b1091ba",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 6
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "6c0b3c65_512332a1",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-25T13:02:07Z",
+      "side": 1,
+      "message": "Just tested this and it seems that even this way one cannot pass a plain bool literal.",
+      "parentUuid": "c9ed7a28_2b1091ba",
+      "range": {
+        "startLine": 716,
+        "startChar": 0,
+        "endLine": 716,
+        "endChar": 22
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc85314d_55a7ac6d",
         "filename": "src/wasm/module-compiler.cc",
         "patchSetId": 6
@@ -114,6 +210,30 @@
       "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e9613d3_2c4ef3ca",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 2076,
+      "author": {
+        "id": 1332625
+      },
+      "writtenOn": "2019-04-25T13:02:07Z",
+      "side": 1,
+      "message": "I added this comment to CL 1583720 (\"[wasm-hints] Refactor Compile Strategy\")",
+      "parentUuid": "fc85314d_55a7ac6d",
+      "range": {
+        "startLine": 2076,
+        "startChar": 21,
+        "endLine": 2076,
+        "endChar": 57
+      },
+      "revId": "f94bb48980e092fc739a45568ba329fa5a1e84a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
