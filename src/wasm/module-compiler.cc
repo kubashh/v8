@@ -68,6 +68,12 @@ enum class CompileStrategy : uint8_t {
   // Compiles baseline ahead of execution and starts top tier compilation in
   // background (if applicable).
   kEager,
+  // Triggers baseline compilation on first use (just like {kLazy}) with the
+  // difference that top tier compilation is started eagerly.
+  // This strategy can help to reduce startup time at the risk of blocking
+  // execution, but only in its early phase (until top tier compilation
+  // finishes).
+  kLazyBaselineEagerTopTier,
   kDefault = kEager,
 };
 
@@ -549,6 +555,8 @@ CompileStrategy GetCompileStrategy(const WasmModule* module,
       return CompileStrategy::kLazy;
     case WasmCompilationHintStrategy::kEager:
       return CompileStrategy::kEager;
+    case WasmCompilationHintStrategy::kLazyBaselineEagerTopTier:
+      return CompileStrategy::kLazyBaselineEagerTopTier;
     case WasmCompilationHintStrategy::kDefault:
       return CompileStrategy::kDefault;
   }
@@ -627,6 +635,19 @@ class CompilationUnitBuilder {
     if (tiers.baseline_tier != tiers.top_tier) {
       tiering_units_.emplace_back(CreateUnit(func_index, tiers.top_tier));
     }
+  }
+
+  void AddTopTierUnit(int func_index) {
+    ExecutionTierPair tiers = GetRequestedExecutionTiers(
+        native_module_->module(), compilation_state()->compile_mode(),
+        native_module_->enabled_features(), func_index);
+    // In this case, the baseline is lazily compiled, if at all. The compilation
+    // unit is added even if the baseline tier is the same.
+    DCHECK_EQ(
+        GetCompileStrategy(native_module_->module(),
+                           native_module_->enabled_features(), func_index),
+        CompileStrategy::kLazyBaselineEagerTopTier);
+    tiering_units_.emplace_back(CreateUnit(func_index, tiers.top_tier));
   }
 
   bool Commit() {
@@ -711,7 +732,10 @@ void ValidateSequentially(
     if (only_lazy_functions) {
       CompileStrategy strategy = GetCompileStrategy(
           module, native_module, enabled_features, func_index);
-      if (strategy != CompileStrategy::kLazy) continue;
+      if (strategy != CompileStrategy::kLazy &&
+          strategy != CompileStrategy::kLazyBaselineEagerTopTier) {
+        continue;
+      }
     }
 
     ModuleWireBytes wire_bytes{native_module->wire_bytes()};
@@ -790,6 +814,8 @@ bool CompileLazy(Isolate* isolate, NativeModule* native_module,
   DCHECK(enabled_features.compilation_hints || FLAG_wasm_lazy_compilation ||
          (FLAG_asm_wasm_lazy_compilation && module->origin == kAsmJsOrigin));
   if (enabled_features.compilation_hints &&
+      GetCompileStrategy(module, enabled_features, func_index) ==
+          CompileStrategy::kLazy &&
       tiers.baseline_tier < tiers.top_tier) {
     DCHECK(!FLAG_wasm_lazy_compilation &&
            !(FLAG_asm_wasm_lazy_compilation && module->origin == kAsmJsOrigin));
@@ -940,6 +966,9 @@ void InitializeCompilationUnits(NativeModule* native_module) {
     CompileStrategy strategy = GetCompileStrategy(
         module, native_module, native_module->enabled_features(), func_index);
     if (strategy == CompileStrategy::kLazy) {
+      native_module->UseLazyStub(func_index);
+    } else if (strategy == CompileStrategy::kLazyBaselineEagerTopTier) {
+      builder.AddTopTierUnit(func_index);
       native_module->UseLazyStub(func_index);
     } else {
       DCHECK_EQ(strategy, CompileStrategy::kEager);
@@ -1493,7 +1522,10 @@ class AsyncCompileJob::DecodeModule : public AsyncCompileJob::CompileStep {
 
           CompileStrategy strategy =
               GetCompileStrategy(module, enabled_features, func_index);
-          if (strategy == CompileStrategy::kLazy) {
+          bool validate_lazily_compiled_function =
+              strategy == CompileStrategy::kLazy ||
+              strategy == CompileStrategy::kLazyBaselineEagerTopTier;
+          if (validate_lazily_compiled_function) {
             DecodeResult function_result =
                 ValidateSingleFunction(module, func_index, code, counters_,
                                        allocator, enabled_features);
@@ -1762,7 +1794,9 @@ bool AsyncStreamingProcessor::ProcessFunctionBody(Vector<const uint8_t> bytes,
   CompileStrategy strategy =
       GetCompileStrategy(module, enabled_features, func_index);
   bool validate_lazily_compiled_function =
-      !FLAG_wasm_lazy_validation && strategy == CompileStrategy::kLazy;
+      !FLAG_wasm_lazy_validation &&
+      (strategy == CompileStrategy::kLazy ||
+       strategy == CompileStrategy::kLazyBaselineEagerTopTier);
   if (validate_lazily_compiled_function) {
     Counters* counters = Impl(native_module->compilation_state())->counters();
     AccountingAllocator* allocator = native_module->engine()->allocator();
@@ -1779,6 +1813,9 @@ bool AsyncStreamingProcessor::ProcessFunctionBody(Vector<const uint8_t> bytes,
   }
 
   if (strategy == CompileStrategy::kLazy) {
+    native_module->UseLazyStub(func_index);
+  } else if (strategy == CompileStrategy::kLazyBaselineEagerTopTier) {
+    compilation_unit_builder_->AddTopTierUnit(func_index);
     native_module->UseLazyStub(func_index);
   } else {
     DCHECK_EQ(strategy, CompileStrategy::kEager);
@@ -1921,7 +1958,10 @@ void CompilationStateImpl::InitializeCompilationProgress() {
                                                   enabled_features, func_index);
 
     bool required_for_baseline = strategy == CompileStrategy::kEager;
-    bool required_for_top_tier = strategy == CompileStrategy::kEager;
+    bool required_for_top_tier = strategy != CompileStrategy::kLazy;
+    DCHECK_IMPLIES(required_for_top_tier,
+                   strategy == CompileStrategy::kEager ||
+                       strategy == CompileStrategy::kLazyBaselineEagerTopTier);
 
     // Count functions to complete baseline and top tier compilation.
     if (required_for_baseline) outstanding_baseline_functions_++;
