@@ -107,16 +107,27 @@ class V8_EXPORT_PRIVATE CompilationDependencies : public ZoneObject {
   SlackTrackingPrediction DependOnInitialMapInstanceSizePrediction(
       const JSFunctionRef& function);
 
+  // The methods below allow for gathering dependencies without actually
+  // recording them. They can be recorded at a later time (or they can be
+  // ignored). For example,
+  //   DependOnTransition(map);
+  // is equivalent to:
+  //   RecordDependency(TransitionDependencyOffTheRecord(map));
+  class Dependency;
+  void RecordDependency(Dependency* dependency);
+  Dependency* TransitionDependencyOffTheRecord(const MapRef& target_map) const;
+  Dependency* FieldRepresentationDependencyOffTheRecord(const MapRef& map,
+                                                        int descriptor) const;
+  Dependency* FieldTypeDependencyOffTheRecord(const MapRef& map,
+                                              int descriptor) const;
+
   // Exposed only for testing purposes.
   bool AreValid() const;
-
-  // Exposed only because C++.
-  class Dependency;
 
  private:
   Zone* const zone_;
   JSHeapBroker* const broker_;
-  ZoneForwardList<Dependency*> dependencies_;
+  ZoneForwardList<Dependency*> dependencies_;  // XXX const?
 };
 
 }  // namespace compiler

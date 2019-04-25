@@ -382,42 +382,41 @@ class InitialMapInstanceSizePredictionDependency final
   int instance_size_;
 };
 
+void CompilationDependencies::RecordDependency(Dependency* dependency) {
+  if (dependency != nullptr) dependencies_.push_front(dependency);
+}
+
 MapRef CompilationDependencies::DependOnInitialMap(
     const JSFunctionRef& function) {
   MapRef map = function.initial_map();
-  dependencies_.push_front(new (zone_) InitialMapDependency(function, map));
+  RecordDependency(new (zone_) InitialMapDependency(function, map));
   return map;
 }
 
 ObjectRef CompilationDependencies::DependOnPrototypeProperty(
     const JSFunctionRef& function) {
   ObjectRef prototype = function.prototype();
-  dependencies_.push_front(
-      new (zone_) PrototypePropertyDependency(function, prototype));
+  RecordDependency(new (zone_)
+                       PrototypePropertyDependency(function, prototype));
   return prototype;
 }
 
 void CompilationDependencies::DependOnStableMap(const MapRef& map) {
   if (map.CanTransition()) {
-    dependencies_.push_front(new (zone_) StableMapDependency(map));
+    RecordDependency(new (zone_) StableMapDependency(map));
   } else {
     DCHECK(map.is_stable());
   }
 }
 
 void CompilationDependencies::DependOnTransition(const MapRef& target_map) {
-  if (target_map.CanBeDeprecated()) {
-    dependencies_.push_front(new (zone_) TransitionDependency(target_map));
-  } else {
-    DCHECK(!target_map.is_deprecated());
-  }
+  RecordDependency(TransitionDependencyOffTheRecord(target_map));
 }
 
 AllocationType CompilationDependencies::DependOnPretenureMode(
     const AllocationSiteRef& site) {
   AllocationType allocation = site.GetAllocationType();
-  dependencies_.push_front(new (zone_)
-                               PretenureModeDependency(site, allocation));
+  RecordDependency(new (zone_) PretenureModeDependency(site, allocation));
   return allocation;
 }
 
@@ -440,41 +439,30 @@ PropertyConstness CompilationDependencies::DependOnFieldConstness(
   }
 
   DCHECK_EQ(constness, PropertyConstness::kConst);
-  dependencies_.push_front(new (zone_)
-                               FieldConstnessDependency(owner, descriptor));
+  RecordDependency(new (zone_) FieldConstnessDependency(owner, descriptor));
   return PropertyConstness::kConst;
 }
 
 void CompilationDependencies::DependOnFieldRepresentation(const MapRef& map,
                                                           int descriptor) {
-  MapRef owner = map.FindFieldOwner(descriptor);
-  PropertyDetails details = owner.GetPropertyDetails(descriptor);
-  DCHECK(details.representation().Equals(
-      map.GetPropertyDetails(descriptor).representation()));
-  dependencies_.push_front(new (zone_) FieldRepresentationDependency(
-      owner, descriptor, details.representation()));
+  RecordDependency(FieldRepresentationDependencyOffTheRecord(map, descriptor));
 }
 
 void CompilationDependencies::DependOnFieldType(const MapRef& map,
                                                 int descriptor) {
-  MapRef owner = map.FindFieldOwner(descriptor);
-  ObjectRef type = owner.GetFieldType(descriptor);
-  DCHECK(type.equals(map.GetFieldType(descriptor)));
-  dependencies_.push_front(new (zone_)
-                               FieldTypeDependency(owner, descriptor, type));
+  RecordDependency(FieldTypeDependencyOffTheRecord(map, descriptor));
 }
 
 void CompilationDependencies::DependOnGlobalProperty(
     const PropertyCellRef& cell) {
   PropertyCellType type = cell.property_details().cell_type();
   bool read_only = cell.property_details().IsReadOnly();
-  dependencies_.push_front(new (zone_)
-                               GlobalPropertyDependency(cell, type, read_only));
+  RecordDependency(new (zone_) GlobalPropertyDependency(cell, type, read_only));
 }
 
 bool CompilationDependencies::DependOnProtector(const PropertyCellRef& cell) {
   if (cell.value().AsSmi() != Isolate::kProtectorValid) return false;
-  dependencies_.push_front(new (zone_) ProtectorDependency(cell));
+  RecordDependency(new (zone_) ProtectorDependency(cell));
   return true;
 }
 
@@ -521,7 +509,7 @@ void CompilationDependencies::DependOnElementsKind(
                           ? site.boilerplate().value().GetElementsKind()
                           : site.GetElementsKind();
   if (AllocationSite::ShouldTrack(kind)) {
-    dependencies_.push_front(new (zone_) ElementsKindDependency(site, kind));
+    RecordDependency(new (zone_) ElementsKindDependency(site, kind));
   }
 }
 
@@ -644,11 +632,41 @@ CompilationDependencies::DependOnInitialMapInstanceSizePrediction(
   // Currently, we always install the prediction dependency. If this turns out
   // to be too expensive, we can only install the dependency if slack
   // tracking is active.
-  dependencies_.push_front(
-      new (zone_)
-          InitialMapInstanceSizePredictionDependency(function, instance_size));
+  RecordDependency(new (zone_) InitialMapInstanceSizePredictionDependency(
+      function, instance_size));
   DCHECK_LE(instance_size, function.initial_map().instance_size());
   return SlackTrackingPrediction(initial_map, instance_size);
+}
+
+CompilationDependencies::Dependency*
+CompilationDependencies::TransitionDependencyOffTheRecord(
+    const MapRef& target_map) const {
+  if (target_map.CanBeDeprecated()) {
+    return new (zone_) TransitionDependency(target_map);
+  } else {
+    DCHECK(!target_map.is_deprecated());
+    return nullptr;
+  }
+}
+
+CompilationDependencies::Dependency*
+CompilationDependencies::FieldRepresentationDependencyOffTheRecord(
+    const MapRef& map, int descriptor) const {
+  MapRef owner = map.FindFieldOwner(descriptor);
+  PropertyDetails details = owner.GetPropertyDetails(descriptor);
+  DCHECK(details.representation().Equals(
+      map.GetPropertyDetails(descriptor).representation()));
+  return new (zone_) FieldRepresentationDependency(owner, descriptor,
+                                                   details.representation());
+}
+
+CompilationDependencies::Dependency*
+CompilationDependencies::FieldTypeDependencyOffTheRecord(const MapRef& map,
+                                                         int descriptor) const {
+  MapRef owner = map.FindFieldOwner(descriptor);
+  ObjectRef type = owner.GetFieldType(descriptor);
+  DCHECK(type.equals(map.GetFieldType(descriptor)));
+  return new (zone_) FieldTypeDependency(owner, descriptor, type);
 }
 
 }  // namespace compiler
