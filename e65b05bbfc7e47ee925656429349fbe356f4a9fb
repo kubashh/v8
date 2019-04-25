@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bc9c9218_6df85fae",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-25T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb35cc91_ece54ce5",
+      "range": {
+        "startLine": 165,
+        "startChar": 21,
+        "endLine": 165,
+        "endChar": 56
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "467ec8e8_799ff9e0",
         "filename": "tools/run_perf.py",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e2f09ad_68f4666e",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-25T15:35:38Z",
+      "side": 1,
+      "message": "They will die in next CL, but okay...",
+      "parentUuid": "467ec8e8_799ff9e0",
+      "range": {
+        "startLine": 228,
+        "startChar": 8,
+        "endLine": 229,
+        "endChar": 44
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f91ac005_57acdba1",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-25T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe4bba42_b080e94d",
+      "range": {
+        "startLine": 277,
+        "startChar": 26,
+        "endLine": 277,
+        "endChar": 33
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64ca9941_80dddb73",
         "filename": "tools/run_perf.py",
         "patchSetId": 6
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "e4723e8d_9e6e534c",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-25T15:35:38Z",
+      "side": 1,
+      "message": "It is used in AccumulateResults below to get results computed for a given trace only, such that we can compute Total metric.",
+      "parentUuid": "64ca9941_80dddb73",
+      "range": {
+        "startLine": 281,
+        "startChar": 2,
+        "endLine": 282,
+        "endChar": 23
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01476aa4_6416e569",
         "filename": "tools/run_perf.py",
         "patchSetId": 6
@@ -108,6 +204,24 @@
       "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82ee99b6_924b5fba",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-25T15:35:38Z",
+      "side": 1,
+      "message": "It will be in a follow up CL: https://crrev.com/c/1584325",
+      "parentUuid": "01476aa4_6416e569",
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -131,6 +245,30 @@
       "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30bca166_b90d0370",
+        "filename": "tools/run_perf.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1153089
+      },
+      "writtenOn": "2019-04-25T15:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b19dd6da_66fd28c5",
+      "range": {
+        "startLine": 356,
+        "startChar": 17,
+        "endLine": 356,
+        "endChar": 33
+      },
+      "revId": "e65b05bbfc7e47ee925656429349fbe356f4a9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
