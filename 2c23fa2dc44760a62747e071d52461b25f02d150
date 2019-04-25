@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b58095f6_e68b68d2",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-25T10:45:30Z",
+      "side": 1,
+      "message": "To document the reasoning behind this, you could add this:\nDCHECK_IMPLIES(!enabled_features.compilation_hints, tiers.baseline_tier \u003d\u003d tiers.top_tier);\n\nThis will also ensure that we do not forget to update this code if this condition ever changes.",
+      "revId": "2c23fa2dc44760a62747e071d52461b25f02d150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f9b0399_2427eee5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-25T10:45:30Z",
+      "side": 1,
+      "message": "nit: I would prefer to have this precondition as the first line in this method.",
+      "revId": "2c23fa2dc44760a62747e071d52461b25f02d150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83d7c502_c0a761ea",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1908,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-25T10:45:30Z",
+      "side": 1,
+      "message": "Should we DCHECK this instead? According to the documentation, we need to call this method before adding any units.",
+      "revId": "2c23fa2dc44760a62747e071d52461b25f02d150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c3580fd_9a1bd260",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1920,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-25T10:45:30Z",
+      "side": 1,
+      "message": "The names of this variables can be improved IMO. WDYT about \"required_for_baseline\"?",
+      "revId": "2c23fa2dc44760a62747e071d52461b25f02d150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
