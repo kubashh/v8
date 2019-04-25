@@ -243,6 +243,33 @@ void TransitionArray::SetNumberOfTransitions(int number_of_transitions) {
       MaybeObject::FromSmi(Smi::FromInt(number_of_transitions)));
 }
 
+Handle<String> TransitionsAccessor::ExpectedTransitionKey() {
+  DisallowHeapAllocation no_gc;
+  switch (encoding()) {
+    case kPrototypeInfo:
+    case kUninitialized:
+    case kMigrationTarget:
+    case kFullTransitionArray:
+      return Handle<String>::null();
+    case kWeakRef: {
+      Map target = Map::cast(raw_transitions_->GetHeapObjectAssumeWeak());
+      PropertyDetails details = GetSimpleTargetDetails(target);
+      if (details.location() != kField) return Handle<String>::null();
+      DCHECK_EQ(kData, details.kind());
+      if (details.attributes() != NONE) return Handle<String>::null();
+      Name name = GetSimpleTransitionKey(target);
+      if (!name->IsString()) return Handle<String>::null();
+      return handle(String::cast(name), isolate_);
+    }
+  }
+  UNREACHABLE();
+}
+
+Handle<Map> TransitionsAccessor::ExpectedTransitionTarget() {
+  DCHECK(!ExpectedTransitionKey().is_null());
+  return handle(GetTarget(0), isolate_);
+}
+
 }  // namespace internal
 }  // namespace v8
 
