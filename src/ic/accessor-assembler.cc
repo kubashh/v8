@@ -2633,22 +2633,24 @@ void AccessorAssembler::BranchIfPrototypeShouldbeFast(Node* receiver_map,
     Node* map = var_map.value();
     Node* prototype = LoadMapPrototype(map);
     GotoIf(IsNull(prototype), prototype_fast);
-    TNode<PrototypeInfo> proto_info =
-        LoadMapPrototypeInfo(receiver_map, prototype_not_fast);
-    GotoIf(IsNull(prototype), prototype_not_fast);
-    TNode<Uint32T> flags =
-        LoadObjectField<Uint32T>(proto_info, PrototypeInfo::kBitFieldOffset);
-    GotoIf(Word32Equal(flags, Uint32Constant(0)), prototype_not_fast);
 
     Node* prototype_map = LoadMap(prototype);
+    TNode<PrototypeInfo> proto_info =
+        LoadMapPrototypeInfo(prototype_map, prototype_not_fast);
+    GotoIf(IsNull(proto_info), prototype_not_fast);
+    TNode<Int32T> flags = SmiToInt32(
+        LoadObjectField<Smi>(proto_info, PrototypeInfo::kBitFieldOffset));
+    TNode<Int32T> mask = Int32Constant(1 << PrototypeInfo::kShouldBeFastBit);
+    GotoIf(Word32Equal(Word32And(flags, mask), Uint32Constant(0)),
+           prototype_not_fast);
+
     var_map.Bind(prototype_map);
     Goto(&loop_body);
   }
 }
 
 void AccessorAssembler::LoadIC_Uninitialized(const LoadICParameters* p) {
-  Label miss(this, Label::kDeferred),
-      check_if_fast_prototype(this, Label::kDeferred),
+  Label miss(this, Label::kDeferred), check_if_fast_prototype(this),
       check_function_prototype(this);
   Node* receiver = p->receiver;
   GotoIf(TaggedIsSmi(receiver), &miss);
