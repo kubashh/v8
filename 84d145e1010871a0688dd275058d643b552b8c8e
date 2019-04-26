@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "042913a4_5efd20e2",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-04-26T08:31:35Z",
+      "side": 1,
+      "message": "nit: I am not sure about this implication, I\u0027d keep the two flags separate. I see that the stress mode is \"useless\" if the code GC is not enabled, but keeping it a no-op in that case still makes sense in my mind. I am just trying to keep the implications to a minimum in general. WDYT?",
+      "range": {
+        "startLine": 701,
+        "startChar": 0,
+        "endLine": 701,
+        "endChar": 53
+      },
+      "revId": "84d145e1010871a0688dd275058d643b552b8c8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
