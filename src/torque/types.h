@@ -574,7 +574,7 @@ class VisitResultVector : public std::vector<VisitResult> {
   VisitResultVector() : std::vector<VisitResult>() {}
   VisitResultVector(std::initializer_list<VisitResult> init)
       : std::vector<VisitResult>(init) {}
-  TypeVector GetTypeVector() const {
+  TypeVector ComputeTypeVector() const {
     TypeVector result;
     for (auto& visit_result : *this) {
       result.push_back(visit_result.type());
