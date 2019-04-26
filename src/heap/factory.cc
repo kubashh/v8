@@ -630,7 +630,8 @@ Handle<AccessorPair> Factory::NewAccessorPair() {
 }
 
 // Internalized strings are created in the old generation (data space).
-Handle<String> Factory::InternalizeUtf8String(Vector<const char> string) {
+Handle<String> Factory::InternalizeUtf8String(
+    const Vector<const char>& string) {
   Vector<const uint8_t> utf8_data = Vector<const uint8_t>::cast(string);
   Utf8Decoder decoder(utf8_data);
   if (decoder.is_ascii()) return InternalizeOneByteString(utf8_data);
@@ -646,7 +647,8 @@ Handle<String> Factory::InternalizeUtf8String(Vector<const char> string) {
       Vector<const uc16>(buffer.get(), decoder.utf16_length()));
 }
 
-Handle<String> Factory::InternalizeOneByteString(Vector<const uint8_t> string) {
+Handle<String> Factory::InternalizeOneByteString(
+    const Vector<const uint8_t>& string) {
   OneByteStringKey key(string, HashSeed(isolate()));
   return InternalizeStringWithKey(&key);
 }
@@ -657,7 +659,8 @@ Handle<String> Factory::InternalizeOneByteString(
   return InternalizeStringWithKey(&key);
 }
 
-Handle<String> Factory::InternalizeTwoByteString(Vector<const uc16> string) {
+Handle<String> Factory::InternalizeTwoByteString(
+    const Vector<const uc16>& string) {
   TwoByteStringKey key(string, HashSeed(isolate()));
   return InternalizeStringWithKey(&key);
 }
@@ -667,8 +670,8 @@ Handle<String> Factory::InternalizeStringWithKey(StringTableKey* key) {
   return StringTable::LookupKey(isolate(), key);
 }
 
-MaybeHandle<String> Factory::NewStringFromOneByte(Vector<const uint8_t> string,
-                                                  AllocationType allocation) {
+MaybeHandle<String> Factory::NewStringFromOneByte(
+    const Vector<const uint8_t>& string, AllocationType allocation) {
   DCHECK_NE(allocation, AllocationType::kReadOnly);
   int length = string.length();
   if (length == 0) return empty_string();
@@ -685,9 +688,9 @@ MaybeHandle<String> Factory::NewStringFromOneByte(Vector<const uint8_t> string,
   return result;
 }
 
-MaybeHandle<String> Factory::NewStringFromUtf8(Vector<const char> data,
+MaybeHandle<String> Factory::NewStringFromUtf8(const Vector<const char>& string,
                                                AllocationType allocation) {
-  Vector<const uint8_t> utf8_data = Vector<const uint8_t>::cast(data);
+  Vector<const uint8_t> utf8_data = Vector<const uint8_t>::cast(string);
   Utf8Decoder decoder(utf8_data);
 
   if (decoder.utf16_length() == 0) return empty_string();
@@ -783,8 +786,8 @@ MaybeHandle<String> Factory::NewStringFromTwoByte(const uc16* string,
   }
 }
 
-MaybeHandle<String> Factory::NewStringFromTwoByte(Vector<const uc16> string,
-                                                  AllocationType allocation) {
+MaybeHandle<String> Factory::NewStringFromTwoByte(
+    const Vector<const uc16>& string, AllocationType allocation) {
   return NewStringFromTwoByte(string.start(), string.length(), allocation);
 }
 
@@ -836,7 +839,7 @@ Handle<SeqOneByteString> Factory::AllocateRawOneByteInternalizedString(
 }
 
 Handle<String> Factory::AllocateTwoByteInternalizedString(
-    Vector<const uc16> str, uint32_t hash_field) {
+    const Vector<const uc16>& str, uint32_t hash_field) {
   CHECK_GE(String::kMaxLength, str.length());
   DCHECK_NE(0, str.length());  // Use Heap::empty_string() instead.
 
@@ -895,8 +898,8 @@ Handle<String> Factory::AllocateInternalizedStringImpl(T t, int chars,
   return answer;
 }
 
-Handle<String> Factory::NewOneByteInternalizedString(Vector<const uint8_t> str,
-                                                     uint32_t hash_field) {
+Handle<String> Factory::NewOneByteInternalizedString(
+    const Vector<const uint8_t>& str, uint32_t hash_field) {
   Handle<SeqOneByteString> result =
       AllocateRawOneByteInternalizedString(str.length(), hash_field);
   DisallowHeapAllocation no_allocation;
@@ -915,8 +918,8 @@ Handle<String> Factory::NewOneByteInternalizedSubString(
   return result;
 }
 
-Handle<String> Factory::NewTwoByteInternalizedString(Vector<const uc16> str,
-                                                     uint32_t hash_field) {
+Handle<String> Factory::NewTwoByteInternalizedString(
+    const Vector<const uc16>& str, uint32_t hash_field) {
   return AllocateTwoByteInternalizedString(str, hash_field);
 }
 
