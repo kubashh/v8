@@ -205,7 +205,7 @@ class SequentialStringKey : public StringTableKey {
   Vector<const Char> string_;
 };
 
-class OneByteStringKey : public SequentialStringKey<uint8_t> {
+class OneByteStringKey final : public SequentialStringKey<uint8_t> {
  public:
   OneByteStringKey(Vector<const uint8_t> str, uint64_t seed)
       : SequentialStringKey<uint8_t>(str, seed) {}
@@ -217,7 +217,7 @@ class OneByteStringKey : public SequentialStringKey<uint8_t> {
   Handle<String> AsHandle(Isolate* isolate) override;
 };
 
-class SeqOneByteSubStringKey : public StringTableKey {
+class SeqOneByteSubStringKey final : public StringTableKey {
  public:
 // VS 2017 on official builds gives this spurious warning:
 // warning C4789: buffer 'key' of size 16 bytes will be overrun; 4 bytes will
@@ -253,7 +253,7 @@ class SeqOneByteSubStringKey : public StringTableKey {
   int length_;
 };
 
-class TwoByteStringKey : public SequentialStringKey<uc16> {
+class TwoByteStringKey final : public SequentialStringKey<uc16> {
  public:
   explicit TwoByteStringKey(Vector<const uc16> str, uint64_t seed)
       : SequentialStringKey<uc16>(str, seed) {}
@@ -263,27 +263,6 @@ class TwoByteStringKey : public SequentialStringKey<uc16> {
   }
 
   Handle<String> AsHandle(Isolate* isolate) override;
-};
-
-// Utf8StringKey carries a vector of chars as key.
-class Utf8StringKey : public StringTableKey {
- public:
-  explicit Utf8StringKey(Vector<const char> string, uint64_t seed)
-      : StringTableKey(StringHasher::ComputeUtf8Hash(string, seed, &chars_)),
-        string_(string) {}
-
-  bool IsMatch(Object string) override {
-    return String::cast(string)->IsUtf8EqualTo(string_);
-  }
-
-  Handle<String> AsHandle(Isolate* isolate) override {
-    return isolate->factory()->NewInternalizedStringFromUtf8(string_, chars_,
-                                                             HashField());
-  }
-
- private:
-  Vector<const char> string_;
-  int chars_;  // Caches the number of characters when computing the hash code.
 };
 
 bool String::Equals(String other) {
@@ -300,6 +279,13 @@ bool String::Equals(Isolate* isolate, Handle<String> one, Handle<String> two) {
     return false;
   }
   return SlowEquals(isolate, one, two);
+}
+
+template <typename Char>
+const Char* String::GetChars(const DisallowHeapAllocation& no_gc) {
+  return StringShape(*this).IsExternal()
+             ? CharTraits<Char>::ExternalString::cast(*this).GetChars()
+             : CharTraits<Char>::String::cast(*this).GetChars(no_gc);
 }
 
 Handle<String> String::Flatten(Isolate* isolate, Handle<String> string,
