@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d3851ce3_7366a4d5",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-04-26T08:21:50Z",
+      "side": 1,
+      "message": "Feel free to also add it here to run it additionally on the gc fuzzer.\n\nYou could also add it here:\nhttps://cs.chromium.org/chromium/src/v8/tools/clusterfuzz/v8_foozzie.py?l\u003d88\n\nIn the end of the list with e.g. prob 0.1",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 22
+      },
+      "revId": "e209768a36a548c06b0b2dd77ecf7f8f6e5b83d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
