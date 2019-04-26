@@ -157,6 +157,9 @@ class Vector {
     return true;
   }
 
+ protected:
+  void UpdateStart(T* new_start) { start_ = new_start; }
+
  private:
   T* start_;
   size_t length_;
