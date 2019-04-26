@@ -2514,7 +2514,6 @@ void AccessorAssembler::LoadIC_BytecodeHandler(const LoadICParameters* p,
   BIND(&stub_call);
   {
     Comment("LoadIC_BytecodeHandler_noninlined");
-
     // Call into the stub that implements the non-inlined parts of LoadIC.
     Callable ic =
         Builtins::CallableFor(isolate(), Builtins::kLoadIC_Noninlined);
@@ -2587,7 +2586,7 @@ void AccessorAssembler::LoadIC_Noninlined(const LoadICParameters* p,
                                           TVariable<MaybeObject>* var_handler,
                                           Label* if_handler, Label* miss,
                                           ExitPoint* exit_point) {
-  Label try_uninitialized(this, Label::kDeferred);
+  //  Label try_uninitialized(this, Label::kDeferred);
 
   // Neither deprecated map nor monomorphic. These cases are handled in the
   // bytecode handler.
@@ -2599,21 +2598,21 @@ void AccessorAssembler::LoadIC_Noninlined(const LoadICParameters* p,
   {
     // Check megamorphic case.
     GotoIfNot(WordEqual(feedback, LoadRoot(RootIndex::kmegamorphic_symbol)),
-              &try_uninitialized);
+              miss);
 
     TryProbeStubCache(isolate()->load_stub_cache(), p->receiver, p->name,
                       if_handler, var_handler, miss);
   }
 
-  BIND(&try_uninitialized);
-  {
-    // Check uninitialized case.
-    GotoIfNot(WordEqual(feedback, LoadRoot(RootIndex::kuninitialized_symbol)),
-              miss);
-    exit_point->ReturnCallStub(
-        Builtins::CallableFor(isolate(), Builtins::kLoadIC_Uninitialized),
-        p->context, p->receiver, p->name, p->slot, p->vector);
-  }
+  /* BIND(&try_uninitialized);
+   {
+     // Check uninitialized case.
+     GotoIfNot(WordEqual(feedback, LoadRoot(RootIndex::kuninitialized_symbol)),
+               miss);
+     exit_point->ReturnCallStub(
+         Builtins::CallableFor(isolate(), Builtins::kLoadIC_Uninitialized),
+         p->context, p->receiver, p->name, p->slot, p->vector);
+   }*/
 }
 
 // TODO(8860): This check is only required so we can make prototypes fast on
@@ -2633,22 +2632,24 @@ void AccessorAssembler::BranchIfPrototypeShouldbeFast(Node* receiver_map,
     Node* map = var_map.value();
     Node* prototype = LoadMapPrototype(map);
     GotoIf(IsNull(prototype), prototype_fast);
-    TNode<PrototypeInfo> proto_info =
-        LoadMapPrototypeInfo(receiver_map, prototype_not_fast);
-    GotoIf(IsNull(prototype), prototype_not_fast);
-    TNode<Uint32T> flags =
-        LoadObjectField<Uint32T>(proto_info, PrototypeInfo::kBitFieldOffset);
-    GotoIf(Word32Equal(flags, Uint32Constant(0)), prototype_not_fast);
 
     Node* prototype_map = LoadMap(prototype);
+    TNode<PrototypeInfo> proto_info =
+        LoadMapPrototypeInfo(prototype_map, prototype_not_fast);
+    GotoIf(IsNull(proto_info), prototype_not_fast);
+    TNode<Int32T> flags = SmiToInt32(
+        LoadObjectField<Smi>(proto_info, PrototypeInfo::kBitFieldOffset));
+    TNode<Int32T> mask = Int32Constant(1 << PrototypeInfo::kShouldBeFastBit);
+    GotoIf(Word32Equal(Word32And(flags, mask), Uint32Constant(0)),
+           prototype_not_fast);
+
     var_map.Bind(prototype_map);
     Goto(&loop_body);
   }
 }
 
 void AccessorAssembler::LoadIC_Uninitialized(const LoadICParameters* p) {
-  Label miss(this, Label::kDeferred),
-      check_if_fast_prototype(this, Label::kDeferred),
+  Label miss(this, Label::kDeferred), check_if_fast_prototype(this),
       check_function_prototype(this);
   Node* receiver = p->receiver;
   GotoIf(TaggedIsSmi(receiver), &miss);
@@ -2656,12 +2657,6 @@ void AccessorAssembler::LoadIC_Uninitialized(const LoadICParameters* p) {
   Node* instance_type = LoadMapInstanceType(receiver_map);
 
   GotoIf(IsUndefined(p->vector), &check_if_fast_prototype);
-  // Optimistically write the state transition to the vector.
-  StoreFeedbackVectorSlot(p->vector, p->slot,
-                          LoadRoot(RootIndex::kpremonomorphic_symbol),
-                          SKIP_WRITE_BARRIER, 0, SMI_PARAMETERS);
-  StoreWeakReferenceInFeedbackVector(p->vector, p->slot, receiver_map,
-                                     kTaggedSize, SMI_PARAMETERS);
   Goto(&check_function_prototype);
 
   BIND(&check_if_fast_prototype);
@@ -2690,15 +2685,6 @@ void AccessorAssembler::LoadIC_Uninitialized(const LoadICParameters* p) {
 
   BIND(&miss);
   {
-    Label call_runtime(this, Label::kDeferred);
-    GotoIf(IsUndefined(p->vector), &call_runtime);
-    // Undo the optimistic state transition.
-    StoreFeedbackVectorSlot(p->vector, p->slot,
-                            LoadRoot(RootIndex::kuninitialized_symbol),
-                            SKIP_WRITE_BARRIER, 0, SMI_PARAMETERS);
-    Goto(&call_runtime);
-
-    BIND(&call_runtime);
     TailCallRuntime(Runtime::kLoadIC_Miss, p->context, p->receiver, p->name,
                     p->slot, p->vector);
   }
@@ -3044,9 +3030,9 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
   Label if_handler(this, &var_handler),
       if_handler_from_stub_cache(this, &var_handler, Label::kDeferred),
       try_polymorphic(this, Label::kDeferred),
-      try_megamorphic(this, Label::kDeferred),
-      try_uninitialized(this, Label::kDeferred), miss(this, Label::kDeferred),
+      try_megamorphic(this, Label::kDeferred), miss(this, Label::kDeferred),
       no_feedback(this, Label::kDeferred);
+  // try_uninitialized(this, Label::kDeferred)
 
   Node* receiver_map = LoadReceiverMap(p->receiver);
   GotoIf(IsDeprecatedMap(receiver_map), &miss);
@@ -3079,18 +3065,18 @@ void AccessorAssembler::StoreIC(const StoreICParameters* p) {
     // Check megamorphic case.
     GotoIfNot(
         WordEqual(strong_feedback, LoadRoot(RootIndex::kmegamorphic_symbol)),
-        &try_uninitialized);
+        &miss);
 
     TryProbeStubCache(isolate()->store_stub_cache(), p->receiver, p->name,
                       &if_handler, &var_handler, &miss);
   }
-  BIND(&try_uninitialized);
+  /*BIND(&try_uninitialized);
   {
     // Check uninitialized case.
     Branch(
         WordEqual(strong_feedback, LoadRoot(RootIndex::kuninitialized_symbol)),
         &no_feedback, &miss);
-  }
+  }*/
 
   BIND(&no_feedback);
   {

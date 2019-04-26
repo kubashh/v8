@@ -45,7 +45,7 @@ namespace internal {
 char IC::TransitionMarkFromState(IC::State state) {
   switch (state) {
     case NO_FEEDBACK:
-      UNREACHABLE();
+      return 'X';
     case UNINITIALIZED:
       return '0';
     case PREMONOMORPHIC:
@@ -91,7 +91,8 @@ const char* GetModifier(KeyedAccessStoreMode mode) {
 void IC::TraceIC(const char* type, Handle<Object> name) {
   if (V8_LIKELY(!TracingFlags::is_ic_stats_enabled())) return;
   if (AddressIsDeoptimizedCode()) return;
-  State new_state = nexus()->ic_state();
+  State new_state =
+      (state() == NO_FEEDBACK) ? NO_FEEDBACK : nexus()->ic_state();
   TraceIC(type, name, state(), new_state);
 }
 
@@ -105,7 +106,9 @@ void IC::TraceIC(const char* type, Handle<Object> name, State old_state,
   }
 
   const char* modifier = "";
-  if (IsKeyedLoadIC()) {
+  if (state() == NO_FEEDBACK) {
+    modifier = "";
+  } else if (IsKeyedLoadIC()) {
     KeyedAccessLoadMode mode = nexus()->GetKeyedAccessLoadMode();
     modifier = GetModifier(mode);
   } else if (IsKeyedStoreIC() || IsStoreInArrayLiteralICKind(kind())) {
@@ -438,6 +441,7 @@ MaybeHandle<Object> LoadIC::Load(Handle<Object> object, Handle<Name> name) {
   if (IsAnyHas() ? !object->IsJSReceiver()
                  : object->IsNullOrUndefined(isolate())) {
     if (use_ic && state() != PREMONOMORPHIC) {
+      UNREACHABLE();
       // Ensure the IC state progresses.
       TRACE_HANDLER_STATS(isolate(), LoadIC_NonReceiver);
       update_receiver_map(object);
@@ -706,7 +710,8 @@ void IC::PatchCache(Handle<Name> name, const MaybeObjectHandle& handler) {
 }
 
 void LoadIC::UpdateCaches(LookupIterator* lookup) {
-  if (state() == UNINITIALIZED && !IsLoadGlobalIC()) {
+  if ((state() == UNINITIALIZED && !FLAG_lazy_feedback_allocation) &&
+      !IsLoadGlobalIC()) {
     // This is the first time we execute this inline cache. Set the target to
     // the pre monomorphic stub to delay setting the monomorphic state.
     TRACE_HANDLER_STATS(isolate(), LoadIC_Premonomorphic);
@@ -1476,6 +1481,7 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
   // properties on it; throw a TypeError in that case.
   if (object->IsNullOrUndefined(isolate())) {
     if (use_ic && state() != PREMONOMORPHIC) {
+      UNREACHABLE();
       // Ensure the IC state progresses.
       TRACE_HANDLER_STATS(isolate(), StoreIC_NonReceiver);
       update_receiver_map(object);
@@ -1512,7 +1518,8 @@ MaybeHandle<Object> StoreIC::Store(Handle<Object> object, Handle<Name> name,
 
 void StoreIC::UpdateCaches(LookupIterator* lookup, Handle<Object> value,
                            StoreOrigin store_origin) {
-  if (state() == UNINITIALIZED && !IsStoreGlobalIC()) {
+  if (!FLAG_lazy_feedback_allocation && state() == UNINITIALIZED &&
+      !IsStoreGlobalIC()) {
     // This is the first time we execute this inline cache. Transition
     // to premonomorphic state to delay setting the monomorphic state.
     TRACE_HANDLER_STATS(isolate(), StoreIC_Premonomorphic);
@@ -1886,7 +1893,8 @@ void KeyedStoreIC::UpdateStoreElement(Handle<Map> receiver_map,
     // Transition to PREMONOMORPHIC state here and remember a weak-reference
     // to the {receiver_map} in case TurboFan sees this function before the
     // IC can transition further.
-    ConfigureVectorState(receiver_map);
+    UNREACHABLE();
+    // ConfigureVectorState(receiver_map);
   } else if (target_receiver_maps.size() == 1) {
     ConfigureVectorState(Handle<Name>(), target_receiver_maps[0], handlers[0]);
   } else {
