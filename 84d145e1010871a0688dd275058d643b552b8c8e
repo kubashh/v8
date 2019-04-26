@@ -46,6 +46,30 @@
       "revId": "84d145e1010871a0688dd275058d643b552b8c8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e4b45d4_fdff19e0",
+        "filename": "src/flag-definitions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-26T10:03:58Z",
+      "side": 1,
+      "message": "After offline discussion: Removed the implication, will enable --wasm-code-gc explicitly where needed.",
+      "parentUuid": "31f7145d_e6f327a1",
+      "range": {
+        "startLine": 701,
+        "startChar": 0,
+        "endLine": 701,
+        "endChar": 53
+      },
+      "revId": "84d145e1010871a0688dd275058d643b552b8c8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
