@@ -70,6 +70,11 @@ void Builtins::Generate_StoreIC_Uninitialized(
   StoreICUninitializedGenerator::Generate(state);
 }
 
+void Builtins::Generate_StoreInArrayLiteralIC_Uninitialized(
+    compiler::CodeAssemblerState* state) {
+  StoreInArrayLiteralICUninitializedGenerator::Generate(state);
+}
+
 // TODO(mythria): Check if we can remove feedback vector and slot parameters in
 // descriptor.
 void HandlerBuiltinsAssembler::Generate_KeyedStoreIC_Slow() {

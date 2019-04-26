@@ -42,6 +42,11 @@ class StoreICUninitializedGenerator {
   static void Generate(compiler::CodeAssemblerState* state);
 };
 
+class StoreInArrayLiteralICUninitializedGenerator {
+ public:
+  static void Generate(compiler::CodeAssemblerState* state);
+};
+
 }  // namespace internal
 }  // namespace v8
 
