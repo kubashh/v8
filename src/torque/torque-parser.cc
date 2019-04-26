@@ -530,7 +530,7 @@ base::Optional<ParseResult> MakeTypeAliasDeclaration(
   return ParseResult{result};
 }
 
-base::Optional<ParseResult> MakeTypeDeclaration(
+base::Optional<ParseResult> MakeAbstractTypeDeclaration(
     ParseResultIterator* child_results) {
   auto transient = child_results->NextAs<bool>();
   auto name = child_results->NextAs<Identifier*>();
@@ -541,9 +541,9 @@ base::Optional<ParseResult> MakeTypeDeclaration(
   auto generates = child_results->NextAs<base::Optional<std::string>>();
   auto constexpr_generates =
       child_results->NextAs<base::Optional<std::string>>();
-  Declaration* result =
-      MakeNode<TypeDeclaration>(name, transient, extends, std::move(generates),
-                                std::move(constexpr_generates));
+  Declaration* result = MakeNode<AbstractTypeDeclaration>(
+      name, transient, extends, std::move(generates),
+      std::move(constexpr_generates));
   return ParseResult{result};
 }
 
@@ -575,7 +575,7 @@ base::Optional<ParseResult> MakeClassDeclaration(
   if (!IsValidTypeName(name->value)) {
     NamingConventionError("Type", name->value, "UpperCamelCase");
   }
-  auto extends = child_results->NextAs<base::Optional<std::string>>();
+  auto extends = child_results->NextAs<base::Optional<Identifier*>>();
   auto generates = child_results->NextAs<base::Optional<std::string>>();
   auto methods = child_results->NextAs<std::vector<Declaration*>>();
   auto fields = child_results->NextAs<std::vector<ClassFieldExpression>>();
@@ -1647,7 +1647,7 @@ struct TorqueGrammar : Grammar {
            MakeExternConstDeclaration),
       Rule({CheckIf(Token("@generatePrint")), CheckIf(Token("extern")),
             CheckIf(Token("transient")), Token("class"), &name,
-            Optional<std::string>(Sequence({Token("extends"), &identifier})),
+            Optional<Identifier*>(Sequence({Token("extends"), &name})),
             Optional<std::string>(
                 Sequence({Token("generates"), &externalString})),
             Token("{"), List<Declaration*>(&method),
@@ -1663,7 +1663,7 @@ struct TorqueGrammar : Grammar {
             Optional<std::string>(
                 Sequence({Token("constexpr"), &externalString})),
             Token(";")},
-           MakeTypeDeclaration),
+           MakeAbstractTypeDeclaration),
       Rule({Token("type"), &name, Token("="), &type, Token(";")},
            MakeTypeAliasDeclaration),
       Rule({Token("intrinsic"), &intrinsicName,
