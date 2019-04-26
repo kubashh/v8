@@ -205,7 +205,7 @@ class SequentialStringKey : public StringTableKey {
   Vector<const Char> string_;
 };
 
-class OneByteStringKey : public SequentialStringKey<uint8_t> {
+class OneByteStringKey final : public SequentialStringKey<uint8_t> {
  public:
   OneByteStringKey(Vector<const uint8_t> str, uint64_t seed)
       : SequentialStringKey<uint8_t>(str, seed) {}
@@ -217,7 +217,7 @@ class OneByteStringKey : public SequentialStringKey<uint8_t> {
   Handle<String> AsHandle(Isolate* isolate) override;
 };
 
-class SeqOneByteSubStringKey : public StringTableKey {
+class SeqOneByteSubStringKey final : public StringTableKey {
  public:
 // VS 2017 on official builds gives this spurious warning:
 // warning C4789: buffer 'key' of size 16 bytes will be overrun; 4 bytes will
@@ -253,7 +253,7 @@ class SeqOneByteSubStringKey : public StringTableKey {
   int length_;
 };
 
-class TwoByteStringKey : public SequentialStringKey<uc16> {
+class TwoByteStringKey final : public SequentialStringKey<uc16> {
  public:
   explicit TwoByteStringKey(Vector<const uc16> str, uint64_t seed)
       : SequentialStringKey<uc16>(str, seed) {}
@@ -279,6 +279,13 @@ bool String::Equals(Isolate* isolate, Handle<String> one, Handle<String> two) {
     return false;
   }
   return SlowEquals(isolate, one, two);
+}
+
+template <typename Char>
+const Char* String::GetChars(const DisallowHeapAllocation& no_gc) {
+  return StringShape(*this).IsExternal()
+             ? CharTraits<Char>::ExternalString::cast(*this).GetChars()
+             : CharTraits<Char>::String::cast(*this).GetChars(no_gc);
 }
 
 Handle<String> String::Flatten(Isolate* isolate, Handle<String> string,

@@ -6490,10 +6490,15 @@ Handle<String> SeqOneByteSubStringKey::AsHandle(Isolate* isolate) {
       string_, from_, length_, HashField());
 }
 
-bool SeqOneByteSubStringKey::IsMatch(Object string) {
+bool SeqOneByteSubStringKey::IsMatch(Object object) {
   DisallowHeapAllocation no_gc;
-  Vector<const uint8_t> chars(string_->GetChars(no_gc) + from_, length_);
-  return String::cast(string)->IsOneByteEqualTo(chars);
+  String string = String::cast(object);
+  if (string.IsOneByteRepresentation()) {
+    const uint8_t* data = string.GetChars<uint8_t>(no_gc);
+    return CompareChars(string_->GetChars(no_gc) + from_, data, length_) == 0;
+  }
+  const uint16_t* data = string.GetChars<uint16_t>(no_gc);
+  return CompareChars(string_->GetChars(no_gc) + from_, data, length_) == 0;
 }
 
 // InternalizedStringKey carries a string/internalized-string object as key.
