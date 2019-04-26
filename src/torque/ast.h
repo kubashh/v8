@@ -61,15 +61,18 @@ namespace torque {
   V(VarDeclarationStatement)            \
   V(GotoStatement)
 
+#define AST_TYPE_DECLARATION_NODE_KIND_LIST(V) \
+  V(AbstractTypeDeclaration)                   \
+  V(TypeAliasDeclaration)                      \
+  V(ClassDeclaration)                          \
+  V(StructDeclaration)
+
 #define AST_DECLARATION_NODE_KIND_LIST(V) \
-  V(TypeDeclaration)                      \
-  V(TypeAliasDeclaration)                 \
+  AST_TYPE_DECLARATION_NODE_KIND_LIST(V)  \
   V(StandardDeclaration)                  \
   V(GenericDeclaration)                   \
   V(SpecializationDeclaration)            \
   V(ExternConstDeclaration)               \
-  V(ClassDeclaration)                     \
-  V(StructDeclaration)                    \
   V(NamespaceDeclaration)                 \
   V(ConstDeclaration)                     \
   V(CppIncludeDeclaration)
@@ -667,30 +670,35 @@ struct BlockStatement : Statement {
 };
 
 struct TypeDeclaration : Declaration {
-  DEFINE_AST_NODE_LEAF_BOILERPLATE(TypeDeclaration)
-  TypeDeclaration(SourcePosition pos, Identifier* name, bool transient,
-                  base::Optional<Identifier*> extends,
-                  base::Optional<std::string> generates,
-                  base::Optional<std::string> constexpr_generates)
-      : Declaration(kKind, pos),
-        name(name),
+  DEFINE_AST_NODE_INNER_BOILERPLATE(TypeDeclaration)
+  TypeDeclaration(Kind kKind, SourcePosition pos, Identifier* name)
+      : Declaration(kKind, pos), name(name) {}
+  Identifier* name;
+};
+
+struct AbstractTypeDeclaration : TypeDeclaration {
+  DEFINE_AST_NODE_LEAF_BOILERPLATE(AbstractTypeDeclaration)
+  AbstractTypeDeclaration(SourcePosition pos, Identifier* name, bool transient,
+                          base::Optional<Identifier*> extends,
+                          base::Optional<std::string> generates,
+                          base::Optional<std::string> constexpr_generates)
+      : TypeDeclaration(kKind, pos, name),
         transient(transient),
         extends(extends),
         generates(std::move(generates)),
         constexpr_generates(std::move(constexpr_generates)) {}
-  Identifier* name;
   bool transient;
   base::Optional<Identifier*> extends;
   base::Optional<std::string> generates;
   base::Optional<std::string> constexpr_generates;
+  base::Optional<Identifier*> non_constexpr_version;
 };
 
-struct TypeAliasDeclaration : Declaration {
+struct TypeAliasDeclaration : TypeDeclaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(TypeAliasDeclaration)
   TypeAliasDeclaration(SourcePosition pos, Identifier* name,
                        TypeExpression* type)
-      : Declaration(kKind, pos), name(name), type(type) {}
-  Identifier* name;
+      : TypeDeclaration(kKind, pos, name), type(type) {}
   TypeExpression* type;
 };
 
@@ -897,30 +905,27 @@ struct ExternConstDeclaration : Declaration {
   std::string literal;
 };
 
-struct StructDeclaration : Declaration {
+struct StructDeclaration : TypeDeclaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(StructDeclaration)
   StructDeclaration(SourcePosition pos, Identifier* name,
                     std::vector<Declaration*> methods,
                     std::vector<StructFieldExpression> fields)
-      : Declaration(kKind, pos),
-        name(name),
+      : TypeDeclaration(kKind, pos, name),
         methods(std::move(methods)),
         fields(std::move(fields)) {}
-  Identifier* name;
   std::vector<Declaration*> methods;
   std::vector<StructFieldExpression> fields;
 };
 
-struct ClassDeclaration : Declaration {
+struct ClassDeclaration : TypeDeclaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(ClassDeclaration)
   ClassDeclaration(SourcePosition pos, Identifier* name, bool is_extern,
                    bool generate_print, bool transient,
-                   base::Optional<std::string> super,
+                   base::Optional<Identifier*> super,
                    base::Optional<std::string> generates,
                    std::vector<Declaration*> methods,
                    std::vector<ClassFieldExpression> fields)
-      : Declaration(kKind, pos),
-        name(name),
+      : TypeDeclaration(kKind, pos, name),
         is_extern(is_extern),
         generate_print(generate_print),
         transient(transient),
@@ -928,11 +933,10 @@ struct ClassDeclaration : Declaration {
         generates(std::move(generates)),
         methods(std::move(methods)),
         fields(std::move(fields)) {}
-  Identifier* name;
   bool is_extern;
   bool generate_print;
   bool transient;
-  base::Optional<std::string> super;
+  base::Optional<Identifier*> super;
   base::Optional<std::string> generates;
   std::vector<Declaration*> methods;
   std::vector<ClassFieldExpression> fields;
