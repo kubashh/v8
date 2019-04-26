@@ -1,0 +1,103 @@
+// Copyright 2019 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#ifndef V8_PARSING_LITERAL_BUFFER_H_
+#define V8_PARSING_LITERAL_BUFFER_H_
+
+#include "src/unicode-decoder.h"
+#include "src/vector.h"
+
+namespace v8 {
+namespace internal {
+
+// LiteralBuffer -  Collector of chars of literals.
+class LiteralBuffer {
+ public:
+  LiteralBuffer() : backing_store_(), position_(0), is_one_byte_(true) {}
+
+  ~LiteralBuffer() { backing_store_.Dispose(); }
+
+  V8_INLINE void AddChar(char code_unit) {
+    DCHECK(IsValidAscii(code_unit));
+    AddOneByteChar(static_cast<byte>(code_unit));
+  }
+
+  V8_INLINE void AddChar(uc32 code_unit) {
+    if (is_one_byte()) {
+      if (code_unit <= static_cast<uc32>(unibrow::Latin1::kMaxChar)) {
+        AddOneByteChar(static_cast<byte>(code_unit));
+        return;
+      }
+      ConvertToTwoByte();
+    }
+    AddTwoByteChar(code_unit);
+  }
+
+  bool is_one_byte() const { return is_one_byte_; }
+
+  bool Equals(Vector<const char> keyword) const {
+    return is_one_byte() && keyword.length() == position_ &&
+           (memcmp(keyword.start(), backing_store_.start(), position_) == 0);
+  }
+
+  Vector<const uint16_t> two_byte_literal() const {
+    DCHECK(!is_one_byte());
+    DCHECK_EQ(position_ & 0x1, 0);
+    return Vector<const uint16_t>(
+        reinterpret_cast<const uint16_t*>(backing_store_.start()),
+        position_ >> 1);
+  }
+
+  Vector<const uint8_t> one_byte_literal() const {
+    DCHECK(is_one_byte());
+    return Vector<const uint8_t>(
+        reinterpret_cast<const uint8_t*>(backing_store_.start()), position_);
+  }
+
+  int length() const { return is_one_byte() ? position_ : (position_ >> 1); }
+
+  void Start() {
+    position_ = 0;
+    is_one_byte_ = true;
+  }
+
+  Handle<String> Internalize(Isolate* isolate) const;
+
+ private:
+  static const int kInitialCapacity = 16;
+  static const int kGrowthFactor = 4;
+  static const int kMaxGrowth = 1 * MB;
+
+  inline bool IsValidAscii(char code_unit) {
+    // Control characters and printable characters span the range of
+    // valid ASCII characters (0-127). Chars are unsigned on some
+    // platforms which causes compiler warnings if the validity check
+    // tests the lower bound >= 0 as it's always true.
+    return iscntrl(code_unit) || isprint(code_unit);
+  }
+
+  V8_INLINE void AddOneByteChar(byte one_byte_char) {
+    DCHECK(is_one_byte());
+    if (position_ >= backing_store_.length()) ExpandBuffer();
+    backing_store_[position_] = one_byte_char;
+    position_ += kOneByteSize;
+  }
+
+  void AddTwoByteChar(uc32 code_unit);
+  int NewCapacity(int min_capacity);
+  void ExpandBuffer();
+  void ConvertToTwoByte();
+
+  Vector<byte> backing_store_;
+  int position_;
+
+  bool is_one_byte_;
+
+  DISALLOW_COPY_AND_ASSIGN(LiteralBuffer);
+};
+
+}  // namespace internal
+}  // namespace v8
+
+#endif  // V8_PARSING_LITERAL_BUFFER_H_
