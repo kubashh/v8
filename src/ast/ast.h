@@ -2435,12 +2435,10 @@ class ClassLiteralProperty final : public LiteralProperty {
   }
 
   void set_private_name_var(Variable* var) {
-    DCHECK_EQ(FIELD, kind());
     DCHECK(is_private());
     private_or_computed_name_var_ = var;
   }
   Variable* private_name_var() const {
-    DCHECK_EQ(FIELD, kind());
     DCHECK(is_private());
     return private_or_computed_name_var_;
   }
@@ -2462,21 +2460,26 @@ class InitializeClassMembersStatement final : public Statement {
   typedef ClassLiteralProperty Property;
 
   ZonePtrList<Property>* fields() const { return fields_; }
+  ClassScope* scope() { return scope_; }
 
  private:
   friend class AstNodeFactory;
 
-  InitializeClassMembersStatement(ZonePtrList<Property>* fields, int pos)
-      : Statement(pos, kInitializeClassMembersStatement), fields_(fields) {}
+  InitializeClassMembersStatement(ZonePtrList<Property>* fields,
+                                  ClassScope* scope, int pos)
+      : Statement(pos, kInitializeClassMembersStatement),
+        fields_(fields),
+        scope_(scope) {}
 
   ZonePtrList<Property>* fields_;
+  ClassScope* scope_;
 };
 
 class ClassLiteral final : public Expression {
  public:
   typedef ClassLiteralProperty Property;
 
-  Scope* scope() const { return scope_; }
+  ClassScope* scope() const { return scope_; }
   Variable* class_variable() const { return class_variable_; }
   Expression* extends() const { return extends_; }
   FunctionLiteral* constructor() const { return constructor_; }
@@ -2508,7 +2511,7 @@ class ClassLiteral final : public Expression {
  private:
   friend class AstNodeFactory;
 
-  ClassLiteral(Scope* scope, Variable* class_variable, Expression* extends,
+  ClassLiteral(ClassScope* scope, Variable* class_variable, Expression* extends,
                FunctionLiteral* constructor, ZonePtrList<Property>* properties,
                FunctionLiteral* static_fields_initializer,
                FunctionLiteral* instance_members_initializer_function,
@@ -2531,7 +2534,7 @@ class ClassLiteral final : public Expression {
   }
 
   int end_position_;
-  Scope* scope_;
+  ClassScope* scope_;
   Variable* class_variable_;
   Expression* extends_;
   FunctionLiteral* constructor_;
@@ -3226,7 +3229,7 @@ class AstNodeFactory final {
   }
 
   ClassLiteral* NewClassLiteral(
-      Scope* scope, Variable* variable, Expression* extends,
+      ClassScope* scope, Variable* variable, Expression* extends,
       FunctionLiteral* constructor,
       ZonePtrList<ClassLiteral::Property>* properties,
       FunctionLiteral* static_fields_initializer,
@@ -3284,8 +3287,8 @@ class AstNodeFactory final {
   }
 
   InitializeClassMembersStatement* NewInitializeClassMembersStatement(
-      ZonePtrList<ClassLiteral::Property>* args, int pos) {
-    return new (zone_) InitializeClassMembersStatement(args, pos);
+      ZonePtrList<ClassLiteral::Property>* fields, ClassScope* scope, int pos) {
+    return new (zone_) InitializeClassMembersStatement(fields, scope, pos);
   }
 
   Zone* zone() const { return zone_; }
