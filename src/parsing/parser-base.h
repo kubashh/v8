@@ -539,6 +539,7 @@ class ParserBase {
           has_static_computed_names(false),
           has_static_class_fields(false),
           has_instance_members(false),
+          requires_brand(false),
           is_anonymous(false),
           static_fields_scope(nullptr),
           instance_members_scope(nullptr),
@@ -555,6 +556,7 @@ class ParserBase {
     bool has_static_computed_names;
     bool has_static_class_fields;
     bool has_instance_members;
+    bool requires_brand;
     bool is_anonymous;
     DeclarationScope* static_fields_scope;
     DeclarationScope* instance_members_scope;
@@ -4276,19 +4278,25 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseClassLiteral(
       class_info.has_static_computed_names = true;
     }
     is_constructor &= class_info.has_seen_constructor;
-
-    if (V8_UNLIKELY(property_kind == ClassLiteralProperty::FIELD)) {
-      if (prop_info.is_computed_name) {
-        DCHECK(!prop_info.is_private);
-        class_info.computed_field_count++;
-      }
-
-      impl()->DeclareClassField(class_scope, property, prop_info.name,
-                                prop_info.is_static, prop_info.is_computed_name,
-                                prop_info.is_private, &class_info);
+    bool is_field = property_kind == ClassLiteralProperty::FIELD;
+    if (V8_UNLIKELY(prop_info.is_private)) {
+      DCHECK(!is_constructor);
+      class_info.requires_brand |= !is_field;
+      impl()->DeclarePrivateClassMember(class_scope, prop_info.name, property,
+                                        property_kind, prop_info.is_static,
+                                        &class_info);
     } else {
-      impl()->DeclareClassProperty(class_scope, name, property, is_constructor,
-                                   &class_info);
+      if (V8_UNLIKELY(is_field)) {
+        if (prop_info.is_computed_name) {
+          class_info.computed_field_count++;
+        }
+        impl()->DeclarePublicClassField(
+            class_scope, property, prop_info.is_static,
+            prop_info.is_computed_name, &class_info);
+      } else {
+        impl()->DeclarePublicClassMethod(name, property, is_constructor,
+                                         &class_info);
+      }
     }
     impl()->InferFunctionName();
   }
@@ -4304,6 +4312,10 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseClassLiteral(
                             MessageTemplate::kInvalidPrivateFieldResolution,
                             unresolvable->raw_name(), kSyntaxError);
     return impl()->FailureExpression();
+  }
+
+  if (class_info.requires_brand) {
+    class_scope->DeclareBrandVariable(ast_value_factory(), kNoSourcePosition);
   }
 
   return impl()->RewriteClassLiteral(class_scope, name, &class_info,

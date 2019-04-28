@@ -1156,10 +1156,22 @@ void BytecodeGenerator::GenerateBytecodeBody() {
   builder()->StackCheck(info()->literal()->start_position());
 
   // The derived constructor case is handled in VisitCallSuper.
-  if (IsBaseConstructor(function_kind()) &&
-      info()->literal()->requires_instance_members_initializer()) {
-    BuildInstanceMemberInitialization(Register::function_closure(),
-                                      builder()->Receiver());
+  if (IsBaseConstructor(function_kind())) {
+    // If there are no variables declared in the outer scope, the outer
+    // class scope may be elided when the function is deserialized after
+    // preparsing.
+    Scope* outer = info()->literal()->scope()->outer_scope();
+    if (outer->is_class_scope()) {
+      Variable* brand = outer->AsClassScope()->brand();
+      if (brand != nullptr) {
+        BuildPrivateBrandInitialization(brand, builder()->Receiver());
+      }
+    }
+
+    if (info()->literal()->requires_instance_members_initializer()) {
+      BuildInstanceMemberInitialization(Register::function_closure(),
+                                        builder()->Receiver());
+    }
   }
 
   // Visit statements in the function body.
@@ -1993,19 +2005,41 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr, Register name) {
         }
       }
 
-      if (property->kind() == ClassLiteral::Property::FIELD) {
-        if (property->is_private()) {
-          RegisterAllocationScope private_name_register_scope(this);
-          Register private_name = register_allocator()->NewRegister();
-          VisitForRegisterValue(property->key(), private_name);
-          builder()
-              ->LoadLiteral(property->key()->AsLiteral()->AsRawPropertyName())
-              .StoreAccumulatorInRegister(private_name)
-              .CallRuntime(Runtime::kCreatePrivateNameSymbol, private_name);
-          DCHECK_NOT_NULL(property->private_name_var());
-          BuildVariableAssignment(property->private_name_var(), Token::INIT,
-                                  HoleCheckMode::kElided);
+      if (property->is_private()) {
+        switch (property->kind()) {
+          case ClassLiteral::Property::FIELD: {
+            // Create the private name symbols for fields during class
+            // evaluation and store them on the context. These will be
+            // used as keys later during instance or static initialization.
+            RegisterAllocationScope private_name_register_scope(this);
+            Register private_name = register_allocator()->NewRegister();
+            VisitForRegisterValue(property->key(), private_name);
+            builder()
+                ->LoadLiteral(property->key()->AsLiteral()->AsRawPropertyName())
+                .StoreAccumulatorInRegister(private_name)
+                .CallRuntime(Runtime::kCreatePrivateNameSymbol, private_name);
+            DCHECK_NOT_NULL(property->private_name_var());
+            BuildVariableAssignment(property->private_name_var(), Token::INIT,
+                                    HoleCheckMode::kElided);
+            break;
+          }
+          case ClassLiteral::Property::METHOD: {
+            // Create the closures for private methods.
+            VisitForAccumulatorValue(property->value());
+            BuildVariableAssignment(property->private_name_var(), Token::INIT,
+                                    HoleCheckMode::kElided);
+            break;
+          }
+          default:
+            // TODO(joyee): Private accessors are not yet supported.
+            UNREACHABLE();
         }
+        // We don't compute private fields or methods here, but instead do it in
+        // the initializer function.
+        continue;
+      }
+
+      if (property->kind() == ClassLiteral::Property::FIELD) {
         // We don't compute field's value here, but instead do it in the
         // initializer function.
         continue;
@@ -2026,6 +2060,23 @@ void BytecodeGenerator::BuildClassLiteral(ClassLiteral* expr, Register name) {
            expr->class_variable()->IsContextSlot());
     builder()->LoadAccumulatorWithRegister(class_constructor);
     BuildVariableAssignment(expr->class_variable(), Token::INIT,
+                            HoleCheckMode::kElided);
+  }
+
+  // Create the class brand symbol and store it on the context
+  // during class evaluation. This will be stored in the
+  // receiver later by the initializer built below.
+  if (expr->scope()->brand() != nullptr) {
+    Register brand = register_allocator()->NewRegister();
+    const AstRawString* class_name =
+        expr->class_variable() != nullptr
+            ? expr->class_variable()->raw_name()
+            : ast_string_constants()->empty_string();
+    builder()
+        ->LoadLiteral(class_name)
+        .StoreAccumulatorInRegister(brand)
+        .CallRuntime(Runtime::kCreatePrivateNameSymbol, brand);
+    BuildVariableAssignment(expr->scope()->brand(), Token::INIT,
                             HoleCheckMode::kElided);
   }
 
@@ -2110,6 +2161,13 @@ void BytecodeGenerator::VisitInitializeClassMembersStatement(
 
   for (int i = 0; i < stmt->fields()->length(); i++) {
     ClassLiteral::Property* property = stmt->fields()->at(i);
+    if (property->is_private() &&
+        property->kind() == ClassLiteral::Property::METHOD) {
+      // Skip early to avoid doing this deep in the loop.
+      // TODO(joyee): Private methods should be looked up from the
+      // context slots directly.
+      continue;
+    }
 
     if (property->is_computed_name()) {
       DCHECK_EQ(property->kind(), ClassLiteral::Property::FIELD);
@@ -2120,8 +2178,7 @@ void BytecodeGenerator::VisitInitializeClassMembersStatement(
       // variable at class definition time.
       BuildVariableLoad(var, HoleCheckMode::kElided);
       builder()->StoreAccumulatorInRegister(key);
-    } else if (property->kind() == ClassLiteral::Property::FIELD &&
-               property->is_private()) {
+    } else if (property->is_private()) {
       Variable* private_name_var = property->private_name_var();
       DCHECK_NOT_NULL(private_name_var);
       BuildVariableLoad(private_name_var, HoleCheckMode::kElided);
@@ -2141,6 +2198,16 @@ void BytecodeGenerator::VisitInitializeClassMembersStatement(
             : Runtime::kAddPrivateField;
     builder()->CallRuntime(function_id, args);
   }
+}
+
+void BytecodeGenerator::BuildPrivateBrandInitialization(Variable* brand,
+                                                        Register receiver) {
+  RegisterList brand_args = register_allocator()->NewRegisterList(2);
+  BuildVariableLoad(brand, HoleCheckMode::kElided);
+  builder()
+      ->StoreAccumulatorInRegister(brand_args[1])
+      .MoveRegister(receiver, brand_args[0])
+      .CallRuntime(Runtime::kAddPrivateBrand, brand_args);
 }
 
 void BytecodeGenerator::BuildInstanceMemberInitialization(Register constructor,
@@ -4473,6 +4540,20 @@ void BytecodeGenerator::VisitCallSuper(Call* expr) {
   if (!IsDefaultConstructor(info()->literal()->kind())) {
     Variable* var = closure_scope()->GetReceiverScope()->receiver();
     BuildVariableAssignment(var, Token::INIT, HoleCheckMode::kRequired);
+  }
+
+  // If there are no variables declared in the outer scope, the outer
+  // class scope may be elided when the function is deserialized after
+  // preparsing.
+  Scope* outer = info()->literal()->scope()->outer_scope();
+  if (outer->is_class_scope()) {
+    Register instance = register_allocator()->NewRegister();
+    builder()->StoreAccumulatorInRegister(instance);
+
+    Variable* brand = outer->AsClassScope()->brand();
+    if (brand != nullptr) {
+      BuildPrivateBrandInitialization(brand, instance);
+    }
   }
 
   // The derived constructor has the correct bit set always, so we
