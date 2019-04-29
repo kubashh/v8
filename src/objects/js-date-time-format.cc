@@ -1134,15 +1134,15 @@ class DateTimePatternGeneratorCache {
  public:
   // Return a clone copy that the caller have to free.
   icu::DateTimePatternGenerator* CreateGenerator(const icu::Locale& locale) {
-    std::string key(locale.getBaseName());
+    std::string key(locale.getName());
     base::MutexGuard guard(&mutex_);
     auto it = map_.find(key);
     if (it != map_.end()) {
       return it->second->clone();
     }
     UErrorCode status = U_ZERO_ERROR;
-    map_[key].reset(icu::DateTimePatternGenerator::createInstance(
-        icu::Locale(key.c_str()), status));
+    map_[key].reset(
+        icu::DateTimePatternGenerator::createInstance(locale, status));
     CHECK(U_SUCCESS(status));
     return map_[key]->clone();
   }
@@ -1560,6 +1560,8 @@ Handle<String> IcuDateFieldIdToDateType(int32_t field_id, Isolate* isolate) {
       return isolate->factory()->timeZoneName_string();
     case UDAT_ERA_FIELD:
       return isolate->factory()->era_string();
+    case UDAT_RELATED_YEAR_FIELD:
+      return isolate->factory()->relatedYear_string();
     default:
       // Other UDAT_*_FIELD's cannot show up because there is no way to specify
       // them via options of Intl.DateTimeFormat.

@@ -68,6 +68,7 @@
   V(_, plusSign_string, "plusSign")                                 \
   V(_, quarter_string, "quarter")                                   \
   V(_, region_string, "region")                                     \
+  V(_, relatedYear_string, "relatedYear")                           \
   V(_, second_string, "second")                                     \
   V(_, segment_string, "segment")                                   \
   V(_, SegmentIterator_string, "Segment Iterator")                  \
