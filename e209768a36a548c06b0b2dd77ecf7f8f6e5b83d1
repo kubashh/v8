@@ -22,6 +22,30 @@
       "revId": "e209768a36a548c06b0b2dd77ecf7f8f6e5b83d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d943063a_df282c9e",
+        "filename": "tools/testrunner/standard_runner.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-04-29T13:50:16Z",
+      "side": 1,
+      "message": "Thanks for the suggestions. I think we don\u0027t need to add this to random-gc-stress, since there is nothing random in this flag. If needed, we can still add a --random-stress-wasm-code-gc flag later.\nAlso foozzie seems unnecessary, since it\u0027s very unlikely that we get a semantic change if something fails. Instead, we would just crash.\nSo I think we are good with just adding this to gc-stress.",
+      "parentUuid": "d3851ce3_7366a4d5",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 22
+      },
+      "revId": "e209768a36a548c06b0b2dd77ecf7f8f6e5b83d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
