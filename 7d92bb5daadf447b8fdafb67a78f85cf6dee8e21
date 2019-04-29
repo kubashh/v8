@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "e95f2f0d_a17e92d4",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1273,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-04-29T18:36:06Z",
+      "side": 1,
+      "message": "Now I remember why this was here. When the above \u0027if\u0027 is enabled (and the one below disabled), then I get the following test failure:\n\n\u003d\u003d\u003d mjsunit/optimized-foreach \u003d\u003d\u003d\n#\n# Fatal error in ../../src/compiler/node.cc, line 64\n# Node::New() Error: #356:DeoptimizeUnless[1] is nullptr\n#\n#\n#\n#FailureMessage Object: 0x7fff5bcfd0d0\n\u003d\u003d\u003d\u003d C stack trace \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\n    /usr/local/google/home/neis/v8/out/Optdebug/libv8_libbase.so(v8::base::debug::StackTrace::StackTrace()+0x13) [0x7f626ad3ed93]\n    /usr/local/google/home/neis/v8/out/Optdebug/libv8_libplatform.so(+0x1381b) [0x7f626ad0f81b]\n    /usr/local/google/home/neis/v8/out/Optdebug/libv8_libbase.so(V8_Fatal(char const*, int, char const*, ...)+0x148) [0x7f626ad35a48]\n    /usr/local/google/home/neis/v8/out/Optdebug/libv8.so(+0x16538cc) [0x7f626a4678cc]\n    /usr/local/google/home/neis/v8/out/Optdebug/libv8.so(v8::internal::compiler::Graph::NewNode(v8::internal::compiler::Operator const*, int, v8::internal::compiler::Node* const*, bool)+0x32) [0x7f626a353d22]\n    /usr/local/google/home/neis/v8/out/Optdebug/libv8.so(v8::internal::compiler::GraphAssembler::DeoptimizeIfNot(v8::internal::DeoptimizeReason, v8::internal::VectorSlotPair const\u0026, v8::internal::compiler::Node*, v8::internal::compiler::Node*, v8::internal::compiler::IsSafetyCheck)+0x59) [0x7f626a3469f9]\n    /usr/local/google/home/neis/v8/out/Optdebug/libv8.so(v8::internal::compiler::EffectControlLinearizer::LowerCheckedUint32Bounds(v8::internal::compiler::Node*, v8::internal::compiler::Node*)+0xef) [0x7f626a31c30f]\n    /usr/local/google/home/neis/v8/out/Optdebug/libv8.so(v8::internal::compiler::EffectControlLinearizer::TryWireInStateEffect(v8::internal::compiler::Node*, v8::internal::compiler::Node*, v8::internal::compiler::Node**, v8::internal::compiler::Node**)+0xe2) [0x7f626a314372]\n    /usr/local/google/home/neis/v8/out/Optdebug/libv8.so(v8::interna\n[...]\n\nI don\u0027t understand what\u0027s going on. This happens only here and in ReduceArrayMap (test failure in optimized-map.js).",
+      "parentUuid": "dced84af_dc2ce492",
+      "range": {
+        "startLine": 1273,
+        "startChar": 2,
+        "endLine": 1273,
+        "endChar": 33
+      },
+      "revId": "7d92bb5daadf447b8fdafb67a78f85cf6dee8e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecb8eb20_6e409aa5",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 8
