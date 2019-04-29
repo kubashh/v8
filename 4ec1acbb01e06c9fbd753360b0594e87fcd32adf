@@ -296,6 +296,24 @@
     },
     {
       "key": {
+        "uuid": "f474fd55_4822504c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2245,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-29T09:02:54Z",
+      "side": 1,
+      "message": "the method is parsed as usual now.",
+      "parentUuid": "2953f2d1_f10c1415",
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae6d81e9_70f99f5b",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 12

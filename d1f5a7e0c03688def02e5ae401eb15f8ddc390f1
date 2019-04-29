@@ -106,6 +106,24 @@
       "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbe25500_cb2e2f92",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-04-29T09:02:54Z",
+      "side": 1,
+      "message": "The AddPrivateBrand calls are now done in the constructor, and I\u0027ve removed the class scope in InitializeClassMembersStatement",
+      "parentUuid": "114b8d88_5e9d3050",
+      "revId": "d1f5a7e0c03688def02e5ae401eb15f8ddc390f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
