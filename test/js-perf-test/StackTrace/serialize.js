@@ -31,6 +31,7 @@ function InlineSetup() {
   function Middle() { return Inner(); }
   function Outer() { return Middle(); }
 
+  %PrepareFunctionForOptimization(outer);
   Outer();
   Outer();
   %OptimizeFunctionOnNextCall(Outer);

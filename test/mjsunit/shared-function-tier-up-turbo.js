@@ -17,9 +17,10 @@ assertFalse(isNeverOptimize());
   var sum = 0;
   var i = 0;
   for (var i = 0; i < 3; ++i) {
-    var f = function(x) {
+    function f(x) {
       return 2 * x;
     }
+    %PrepareFunctionForOptimization(f);
     sum += f(i);
 
     if (i == 1) {
