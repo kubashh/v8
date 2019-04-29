@@ -2379,13 +2379,15 @@ void InterpreterData::InterpreterDataPrint(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
-void MaybeObject::Print() {
+template <HeapObjectReferenceType kRefType>
+void ObjectImpl<kRefType>::Print() {
   StdoutStream os;
   this->Print(os);
   os << std::flush;
 }
 
-void MaybeObject::Print(std::ostream& os) {
+template <HeapObjectReferenceType kRefType>
+void ObjectImpl<kRefType>::Print(std::ostream& os) {
   Smi smi;
   HeapObject heap_object;
   if (ToSmi(&smi)) {

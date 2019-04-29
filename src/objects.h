@@ -23,6 +23,7 @@
 #include "src/flags.h"
 #include "src/message-template.h"
 #include "src/objects-definitions.h"
+#include "src/objects/object-impl.h"
 #include "src/objects/object-list-macros.h"
 #include "src/property-details.h"
 #include "src/utils.h"
@@ -717,7 +718,8 @@ bool Object::IsHeapObject() const {
 
 struct Brief {
   V8_EXPORT_PRIVATE explicit Brief(const Object v);
-  explicit Brief(const MaybeObject v);
+  template <HeapObjectReferenceType kRefType>
+  explicit Brief(const ObjectImpl<kRefType> v);
   // {value} is a tagged heap object reference (weak or strong), equivalent to
   // a MaybeObject's payload. It has a plain Address type to keep #includes
   // lightweight.
