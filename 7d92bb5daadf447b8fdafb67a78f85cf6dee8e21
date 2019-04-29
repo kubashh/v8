@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "2428cf5c_d185f413",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-29T15:21:26Z",
+      "side": 1,
+      "message": "Nit: Should not this be std::function\u003cbool(InstanceType)\u003e?",
+      "range": {
+        "startLine": 62,
+        "startChar": 48,
+        "endLine": 62,
+        "endChar": 71
+      },
+      "revId": "7d92bb5daadf447b8fdafb67a78f85cf6dee8e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "571227d7_672f550f",
         "filename": "src/compiler/js-call-reducer.cc",
         "patchSetId": 8
@@ -13,6 +36,52 @@
       "writtenOn": "2019-04-29T15:16:24Z",
       "side": 1,
       "message": "XXX",
+      "revId": "7d92bb5daadf447b8fdafb67a78f85cf6dee8e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dced84af_dc2ce492",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1273,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-29T15:21:26Z",
+      "side": 1,
+      "message": "Uncomment.",
+      "range": {
+        "startLine": 1273,
+        "startChar": 2,
+        "endLine": 1273,
+        "endChar": 33
+      },
+      "revId": "7d92bb5daadf447b8fdafb67a78f85cf6dee8e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecb8eb20_6e409aa5",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-04-29T15:21:26Z",
+      "side": 1,
+      "message": "Uncomment.",
+      "range": {
+        "startLine": 1714,
+        "startChar": 2,
+        "endLine": 1714,
+        "endChar": 33
+      },
       "revId": "7d92bb5daadf447b8fdafb67a78f85cf6dee8e21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
