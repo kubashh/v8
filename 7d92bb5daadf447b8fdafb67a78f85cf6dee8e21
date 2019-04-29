@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "571227d7_672f550f",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1273,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-04-29T15:16:24Z",
+      "side": 1,
+      "message": "XXX",
+      "revId": "7d92bb5daadf447b8fdafb67a78f85cf6dee8e21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
