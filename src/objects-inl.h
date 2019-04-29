@@ -29,6 +29,7 @@
 #include "src/objects/heap-object.h"
 #include "src/objects/js-proxy-inl.h"  // TODO(jkummerow): Drop.
 #include "src/objects/literal-objects.h"
+#include "src/objects/object-impl-inl.h"
 #include "src/objects/oddball.h"
 #include "src/objects/regexp-match-info.h"
 #include "src/objects/scope-info.h"
@@ -743,21 +744,6 @@ bool Object::ToArrayLength(uint32_t* index) const {
 
 bool Object::ToArrayIndex(uint32_t* index) const {
   return Object::ToUint32(index) && *index != kMaxUInt32;
-}
-
-bool Object::GetHeapObjectIfStrong(HeapObject* result) const {
-  return GetHeapObject(result);
-}
-
-bool Object::GetHeapObject(HeapObject* result) const {
-  if (!IsHeapObject()) return false;
-  *result = HeapObject::cast(*this);
-  return true;
-}
-
-HeapObject Object::GetHeapObject() const {
-  DCHECK(IsHeapObject());
-  return HeapObject::cast(*this);
 }
 
 int RegExpMatchInfo::NumberOfCaptureRegisters() {
