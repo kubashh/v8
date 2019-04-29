@@ -373,7 +373,6 @@ class V8_EXPORT_PRIVATE NativeModule final {
   uint32_t num_imported_functions() const {
     return module_->num_imported_functions;
   }
-  UseTrapHandler use_trap_handler() const { return use_trap_handler_; }
   void set_lazy_compile_frozen(bool frozen) { lazy_compile_frozen_ = frozen; }
   bool lazy_compile_frozen() const { return lazy_compile_frozen_; }
   void set_lazy_compilation(bool lazy) { lazy_compilation_ = lazy; }
@@ -526,7 +525,6 @@ class V8_EXPORT_PRIVATE NativeModule final {
   std::atomic<size_t> freed_code_size_{0};
   int modification_scope_depth_ = 0;
   bool can_request_more_memory_;
-  UseTrapHandler use_trap_handler_ = kNoTrapHandler;
   bool is_executable_ = false;
   bool lazy_compile_frozen_ = false;
   bool lazy_compilation_ = false;

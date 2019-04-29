@@ -122,6 +122,8 @@ class V8_EXPORT_PRIVATE WasmEngine {
 
   AccountingAllocator* allocator() { return &allocator_; }
 
+  bool use_trap_handler() const { return use_trap_handler_; }
+
   // Compilation statistics for TurboFan compilations.
   CompilationStatistics* GetOrCreateTurboStatistics();
 
@@ -219,6 +221,10 @@ class V8_EXPORT_PRIVATE WasmEngine {
   WasmMemoryTracker memory_tracker_;
   WasmCodeManager code_manager_;
   AccountingAllocator allocator_;
+
+  // This is set when the engine is initialized depending on whether trap
+  // handlers have been enabled process-wide at that point.
+  const bool use_trap_handler_;
 
   // Task manager managing all background compile jobs. Before shut down of the
   // engine, they must all be finished because they access the allocator.

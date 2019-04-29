@@ -11,6 +11,7 @@
 #include "src/objects/heap-number.h"
 #include "src/objects/js-promise.h"
 #include "src/ostreams.h"
+#include "src/trap-handler/trap-handler.h"
 #include "src/wasm/function-compiler.h"
 #include "src/wasm/module-compiler.h"
 #include "src/wasm/module-decoder.h"
@@ -157,7 +158,8 @@ struct WasmEngine::NativeModuleInfo {
 };
 
 WasmEngine::WasmEngine()
-    : code_manager_(&memory_tracker_, FLAG_wasm_max_code_space * MB) {}
+    : code_manager_(&memory_tracker_, FLAG_wasm_max_code_space * MB),
+      use_trap_handler_(trap_handler::IsTrapHandlerEnabled()) {}
 
 WasmEngine::~WasmEngine() {
   // Synchronize on all background compile tasks.

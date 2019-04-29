@@ -304,13 +304,14 @@ int main(int argc, char* argv[]) {
   std::unique_ptr<v8::Platform> platform(v8::platform::NewDefaultPlatform());
   v8::V8::InitializePlatform(platform.get());
   v8::internal::FlagList::SetFlagsFromCommandLine(&argc, argv, true);
-  v8::V8::Initialize();
-  v8::V8::InitializeExternalStartupData(argv[0]);
 
   if (V8_TRAP_HANDLER_SUPPORTED && i::FLAG_wasm_trap_handler) {
     constexpr bool use_default_signal_handler = true;
     CHECK(v8::V8::EnableWebAssemblyTrapHandler(use_default_signal_handler));
   }
+
+  v8::V8::Initialize();
+  v8::V8::InitializeExternalStartupData(argv[0]);
 
   CcTest::set_array_buffer_allocator(
       v8::ArrayBuffer::Allocator::NewDefaultAllocator());
