@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "196de6f3_22557ddd",
+        "filename": "src/torque/ast.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-29T12:39:32Z",
+      "side": 1,
+      "message": "If AbstractTypeDeclaration was desugared in the parser, it wouldn\u0027t need constexpr_generates, since that\u0027s only consumed by the desugaring in the DeclarationVisitor, right?\nIf it had a bool is_constexpr, then it wouldn\u0027t need non_constexpr_version since that would be identical to name.\nI think this would be easier to understand and more orthogonal.",
+      "range": {
+        "startLine": 679,
+        "startChar": 7,
+        "endLine": 679,
+        "endChar": 30
+      },
+      "revId": "a2f1229916cb9f7cff5068b49446bb66442f0af1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe89734f_0faefebe",
+        "filename": "src/torque/declarable.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-29T12:39:32Z",
+      "side": 1,
+      "message": "I don\u0027t think that \"type alias\" makes sense to the user, it could for example be two struct declarations referencing each other. It\u0027s a bit of a historic hack that everything is considered an \"alias\".\nI don\u0027t think this can trigger without cyclic type definitions, so I think the error message could read something like:\n\"Cannot create type {typename} due to circular dependencies.\"",
+      "range": {
+        "startLine": 136,
+        "startChar": 26,
+        "endLine": 136,
+        "endChar": 36
+      },
+      "revId": "a2f1229916cb9f7cff5068b49446bb66442f0af1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d4784e5_7e3e36dc",
+        "filename": "src/torque/declaration-visitor.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-29T12:39:32Z",
+      "side": 1,
+      "message": "Is this triggered in the right order, that is, superclass before subclass?\nAt the moment, it might work for the wrong reason, since we don\u0027t really use the Torque-computed field offsets, emitting the C++-defined constants instead.",
+      "range": {
+        "startLine": 409,
+        "startChar": 2,
+        "endLine": 409,
+        "endChar": 55
+      },
+      "revId": "a2f1229916cb9f7cff5068b49446bb66442f0af1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c400705_4d25488e",
+        "filename": "src/torque/declarations.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-29T12:39:32Z",
+      "side": 1,
+      "message": "This is always true now I think.",
+      "range": {
+        "startLine": 77,
+        "startChar": 26,
+        "endLine": 77,
+        "endChar": 44
+      },
+      "revId": "a2f1229916cb9f7cff5068b49446bb66442f0af1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82e94775_7b93380e",
+        "filename": "src/torque/type-visitor.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-29T12:39:32Z",
+      "side": 1,
+      "message": "Could ComputeType(TypeDeclaration* decl) be only accessible to TypeAlias, by friending it?",
+      "range": {
+        "startLine": 28,
+        "startChar": 2,
+        "endLine": 32,
+        "endChar": 62
+      },
+      "revId": "a2f1229916cb9f7cff5068b49446bb66442f0af1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef08e02f_4a693b3d",
+        "filename": "src/torque/type-visitor.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-04-29T12:39:32Z",
+      "side": 1,
+      "message": "I guess these could live in the cc file only.",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 79
+      },
+      "revId": "a2f1229916cb9f7cff5068b49446bb66442f0af1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
