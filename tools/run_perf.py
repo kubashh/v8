@@ -472,7 +472,6 @@ class RunnableConfig(GraphConfig):
       result_tracker: ResultTracker object to be updated.
       count: Index of the test run (used for better logging).
     """
-    result_tracker.AddRunnableDuration(self, output.duration)
     if self.results_processor:
       output = RunResultsProcessor(self.results_processor, output, count)
 
@@ -1016,14 +1015,16 @@ def Main(argv):
             runnable_name + '/' != args.filter):
           continue
         logging.info('>>> Running suite: %s', runnable_name)
-        durations = []
-        durations_secondary = []
 
         for i in range(0, max(1, args.run_count or runnable.run_count)):
           attempts_left = runnable.retry_count + 1
           while attempts_left:
             output, output_secondary = platform.Run(
                 runnable, i, secondary=args.shell_dir_secondary)
+            result_tracker.AddRunnableDuration(runnable, output.duration)
+            result_tracker_secondary.AddRunnableDuration(
+                runnable, output_secondary.duration)
+
             if output.IsSuccess() and output_secondary.IsSuccess():
               runnable.ProcessOutput(output, result_tracker, i)
               if output_secondary is not NULL_OUTPUT:
