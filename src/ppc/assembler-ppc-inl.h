@@ -160,13 +160,17 @@ Address Assembler::return_address_from_call_start(Address pc) {
 }
 
 HeapObject RelocInfo::target_object() {
-  DCHECK(IsCodeTarget(rmode_) || rmode_ == EMBEDDED_OBJECT);
+  DCHECK(IsCodeTarget(rmode_) || rmode_ == FULL_EMBEDDED_OBJECT);
   return HeapObject::cast(
       Object(Assembler::target_address_at(pc_, constant_pool_)));
 }
 
+HeapObject RelocInfo::target_object_no_host(Isolate* isolate) {
+  return target_object();
+}
+
 Handle<HeapObject> RelocInfo::target_object_handle(Assembler* origin) {
-  DCHECK(IsCodeTarget(rmode_) || rmode_ == EMBEDDED_OBJECT);
+  DCHECK(IsCodeTarget(rmode_) || rmode_ == FULL_EMBEDDED_OBJECT);
   return Handle<HeapObject>(reinterpret_cast<Address*>(
       Assembler::target_address_at(pc_, constant_pool_)));
 }
@@ -174,7 +178,7 @@ Handle<HeapObject> RelocInfo::target_object_handle(Assembler* origin) {
 void RelocInfo::set_target_object(Heap* heap, HeapObject target,
                                   WriteBarrierMode write_barrier_mode,
                                   ICacheFlushMode icache_flush_mode) {
-  DCHECK(IsCodeTarget(rmode_) || rmode_ == EMBEDDED_OBJECT);
+  DCHECK(IsCodeTarget(rmode_) || rmode_ == FULL_EMBEDDED_OBJECT);
   Assembler::set_target_address_at(pc_, constant_pool_, target->ptr(),
                                    icache_flush_mode);
   if (write_barrier_mode == UPDATE_WRITE_BARRIER && !host().is_null()) {
@@ -213,7 +217,7 @@ Address RelocInfo::target_off_heap_target() {
 }
 
 void RelocInfo::WipeOut() {
-  DCHECK(IsEmbeddedObject(rmode_) || IsCodeTarget(rmode_) ||
+  DCHECK(IsFullEmbeddedObject(rmode_) || IsCodeTarget(rmode_) ||
          IsRuntimeEntry(rmode_) || IsExternalReference(rmode_) ||
          IsInternalReference(rmode_) || IsInternalReferenceEncoded(rmode_) ||
          IsOffHeapTarget(rmode_));
