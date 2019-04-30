@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7eeae68_0f178884",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-04-30T20:50:52Z",
+      "side": 0,
+      "message": "Without this for loop, how do you handle looking up through multiple levels of classes, e.g.:\n\nclass C {\n  #foo;\n  bar() {\n    class D {\n      baz(x) {\n        return x.#foo;\n      }\n    }\n  }\n}",
+      "revId": "4349e32d4cd7e9af391987d11b4b555109c14cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

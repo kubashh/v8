@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "461ef87e_220e1e51",
+        "filename": "src/ast/scopes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-04-30T20:50:52Z",
+      "side": 1,
+      "message": "Please add a comment for this method.",
+      "revId": "bcaffa4ae298fe003893f51df1501383467e7f90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c101babf_02357df0",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-04-30T20:50:52Z",
+      "side": 1,
+      "message": "Please add a comment for this class.\n\nAlso, the name seems a little off...I can see that you\u0027re in a funny place, since \"State\" is already in the name and \"Scope\" might be confusing. But I find it particularly strange that this class is called PrivateStateEnv but that the private_state_env_ variable is actually a Scope*.",
+      "revId": "bcaffa4ae298fe003893f51df1501383467e7f90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7df727a2_e836158a",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 11478,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-04-30T20:50:52Z",
+      "side": 1,
+      "message": "Can you also add functional mjsunit tests showing that you can access the outer private fields from the extends clause?",
+      "revId": "bcaffa4ae298fe003893f51df1501383467e7f90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
