@@ -11475,6 +11475,33 @@ TEST(HashbangSyntaxErrors) {
   SyntaxErrorTest(other_context_data, hashbang_data);
 }
 
+TEST(PrivateNamesClassHeritageSyntaxError) {
+  i::Isolate* isolate = CcTest::i_isolate();
+  i::HandleScope scope(isolate);
+  LocalContext env;
+
+  const char* context_data[][2] = {
+      {"", ""}, {"\"use strict\";", ""}, {nullptr, nullptr}};
+
+  const char* statement_data[] = {
+      "class X extends { #foo } { p = this.#foo }",
+      "class X extends { p = this.#foo } { #foo }",
+
+      "class X extends { #foo } {} { p = this.#foo }",
+      "class X extends { #foo } { p = this.#foo} {}",
+
+      "class X extends { } { #foo } { p = this.#foo }",
+      "class X extends { p = this.#foo} { #foo } {}",
+
+      "class X extends { } { p = this.#foo } { #foo }",
+      "class X extends { p = this.#foo} {} { #foo }",
+      nullptr};
+
+  static const ParserFlag flags[] = {kAllowHarmonyPrivateFields};
+  RunParserSyncTest(context_data, statement_data, kError, nullptr, 0, flags, 1);
+  RunParserSyncTest(context_data, statement_data, kError);
+}
+
 }  // namespace test_parsing
 }  // namespace internal
 }  // namespace v8
