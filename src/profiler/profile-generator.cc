@@ -474,10 +474,12 @@ using v8::tracing::TracedValue;
 std::atomic<uint32_t> CpuProfile::last_id_;
 
 CpuProfile::CpuProfile(CpuProfiler* profiler, const char* title,
-                       bool record_samples, ProfilingMode mode)
+                       bool record_samples, ProfilingMode mode,
+                       unsigned max_samples)
     : title_(title),
       record_samples_(record_samples),
       mode_(mode),
+      max_samples_(max_samples),
       start_time_(base::TimeTicks::HighResolutionNow()),
       top_down_(profiler->isolate()),
       profiler_(profiler),
@@ -493,6 +495,9 @@ CpuProfile::CpuProfile(CpuProfiler* profiler, const char* title,
 void CpuProfile::AddPath(base::TimeTicks timestamp,
                          const ProfileStackTrace& path, int src_line,
                          bool update_stats) {
+  // Avoid adding any new frames or samples once sample capacity is reached.
+  if (max_samples_ != kNoSampleLimit && samples_.size() >= max_samples_) return;
+
   ProfileNode* top_frame_node =
       top_down_.AddPathFromEnd(path, src_line, update_stats, mode_);
 
@@ -698,7 +703,8 @@ CpuProfilesCollection::CpuProfilesCollection(Isolate* isolate)
 
 bool CpuProfilesCollection::StartProfiling(const char* title,
                                            bool record_samples,
-                                           ProfilingMode mode) {
+                                           ProfilingMode mode,
+                                           unsigned max_samples) {
   current_profiles_semaphore_.Wait();
   if (static_cast<int>(current_profiles_.size()) >= kMaxSimultaneousProfiles) {
     current_profiles_semaphore_.Signal();
@@ -713,11 +719,10 @@ bool CpuProfilesCollection::StartProfiling(const char* title,
     }
   }
   current_profiles_.emplace_back(
-      new CpuProfile(profiler_, title, record_samples, mode));
+      new CpuProfile(profiler_, title, record_samples, mode, max_samples));
   current_profiles_semaphore_.Signal();
   return true;
 }
-
 
 CpuProfile* CpuProfilesCollection::StopProfiling(const char* title) {
   const bool empty_title = (title[0] == '\0');
