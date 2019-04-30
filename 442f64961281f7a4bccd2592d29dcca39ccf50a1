@@ -1,0 +1,288 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56c89aa9_e3fdc553",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "These can also be\n  using XXX \u003d BitField8\u003c...\u003e;",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ef4e593_788864cf",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "// cursor_ value will be updated only if an element value will be successfully parsed.",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d94fdd56_32c25999",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "TryAddIndexChar() already does IsDecimalDigit(c) check so you can remove if (!IsDecimalDigit(c)) above.",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f9ece04_8f0dbace",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "Is it legal to call this in case of pending exception that may appear during ParseJsonValue()?",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "882b382f_eb6f1ff6",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "How about\n  if (TryParseElement(json_object)) continue;\n?",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb635632_6b1f8fc9",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "We may get here in an error state (when cursor_ \u003d\u003d end_) and will proceed doing stuff even if ExpectNext(JsonToken::STRING) above failed.",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2931594d_c2bb19e3",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "In case of parse failure in ParseJsonValue() we may unnecessarily generalize this field.",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aeafcda3_e4eb6a48",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "We may get here if we fail to parse the last property\u0027s value.\nI guess we should return from the loop upon parsing errors like we did before (kNullHandle and key.is_null()).",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07953686_8261ec0f",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "Again, upon parse failure we may allocate stuff for no reason.",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66bc7061_8298cd3b",
+        "filename": "src/json-parser.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "I guess cursor_ is still pointing to the first char of the literal, so\n  \u003c N - 1",
+      "range": {
+        "startLine": 123,
+        "startChar": 58,
+        "endLine": 123,
+        "endChar": 63
+      },
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46845a8b_b5508ad9",
+        "filename": "src/json-parser.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "STATIC_ASSERT(N \u003e 2); to indicate that we aware of potential --todo underflow but we are not going to use this method for one char literals or \"\".",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8572aba7_8abfaa03",
+        "filename": "src/json-parser.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "Please add a comment that the first char is already compared by one-char-token computation so you are not checking it here.",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2430741a_7c96e0dc",
+        "filename": "src/json-parser.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "I\u0027d personally prefer incrementing both values before the if or even checking the full string.\nAt least please add parentheses: *(++foo).",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "377d4eea_3553556d",
+        "filename": "src/json-parser.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "Now this comment also belongs to cursor_ and end_.",
+      "range": {
+        "startLine": 239,
+        "startChar": 59,
+        "endLine": 239,
+        "endChar": 65
+      },
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d087db1_8de0ce1d",
+        "filename": "src/json-parser.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "Do you still want to do this?",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f73a9985_51db99a9",
+        "filename": "src/objects/string-inl.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T15:14:03Z",
+      "side": 1,
+      "message": "There is an effort happening to change typedefs to using\u003d, so\n  using XxxByteStringKey \u003d SequentialStringKey\u003cyyy\u003e;",
+      "revId": "442f64961281f7a4bccd2592d29dcca39ccf50a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
