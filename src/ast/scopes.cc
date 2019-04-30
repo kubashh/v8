@@ -2413,19 +2413,13 @@ Variable* ClassScope::LookupPrivateNameInScopeInfo(const AstRawString* name) {
 Variable* ClassScope::LookupPrivateName(VariableProxy* proxy) {
   DCHECK(!proxy->is_resolved());
 
-  for (Scope* scope = this; !scope->is_script_scope();
-       scope = scope->outer_scope_) {
-    if (!scope->is_class_scope()) continue;  // Only search in class scopes
-    ClassScope* class_scope = scope->AsClassScope();
-    // Try finding it in the private name map first, if it can't be found,
-    // try the deseralized scope info.
-    Variable* var = class_scope->LookupLocalPrivateName(proxy->raw_name());
-    if (var == nullptr && !class_scope->scope_info_.is_null()) {
-      var = class_scope->LookupPrivateNameInScopeInfo(proxy->raw_name());
-    }
-    return var;
+  // Try finding it in the private name map first, if it can't be found,
+  // try the deseralized scope info.
+  Variable* var = LookupLocalPrivateName(proxy->raw_name());
+  if (var == nullptr && !scope_info_.is_null()) {
+    var = LookupPrivateNameInScopeInfo(proxy->raw_name());
   }
-  return nullptr;
+  return var;
 }
 
 bool ClassScope::ResolvePrivateNames(ParseInfo* info) {
@@ -2463,7 +2457,8 @@ VariableProxy* ClassScope::ResolvePrivateNamesPartially() {
   }
 
   ClassScope* outer_class_scope =
-      outer_scope_ == nullptr ? nullptr : outer_scope_->GetClassScope();
+      rare_data_->private_env_outer_scope->GetClassScope();
+
   UnresolvedList& unresolved = rare_data_->unresolved_private_names;
   bool has_private_names = rare_data_->private_name_map.capacity() > 0;
 
@@ -2510,6 +2505,14 @@ VariableProxy* ClassScope::ResolvePrivateNamesPartially() {
 
   DCHECK(unresolved.is_empty());
   return nullptr;
+}
+
+void ClassScope::SetOuterScopeForPrivateEnvironment(
+    Scope* private_state_outer_scope) {
+  if (rare_data_ == nullptr) return;
+  rare_data_->private_env_outer_scope = private_state_outer_scope == nullptr
+                                            ? outer_scope()
+                                            : private_state_outer_scope;
 }
 
 }  // namespace internal
