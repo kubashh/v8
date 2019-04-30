@@ -14,12 +14,13 @@ var e = [,,,,0.5,3,4];
 // hole check)
 (function() {
   var result = 0;
-  var polymorph1 = function(arg) {
+  function polymorph1(arg) {
     var sum = function(v,i,o) {
       result += i;
     }
     arg.forEach(sum);
   }
+  %PrepareFunctionForOptimization(polymorph1);
   polymorph1(a);
   polymorph1(a);
   polymorph1(b);
@@ -34,12 +35,13 @@ var e = [,,,,0.5,3,4];
 // Make sure that calls to forEach handle a certain degree of polymorphism.
 (function() {
   var result = 0;
-  var polymorph1 = function(arg) {
+  function polymorph1(arg) {
     var sum = function(v,i,o) {
       result += i;
     }
     arg.forEach(sum);
   }
+  %PrepareFunctionForOptimization(polymorph1);
   polymorph1(a);
   polymorph1(a);
   polymorph1(b);
@@ -56,12 +58,13 @@ var e = [,,,,0.5,3,4];
 // forEach.
 (function() {
   var result = 0;
-  var polymorph1 = function(arg) {
+  function polymorph1(arg) {
     var sum = function(v,i,o) {
       result += i;
     }
     arg.forEach(sum);
   }
+  %PrepareFunctionForOptimization(polymorph1);
   polymorph1(a);
   polymorph1(a);
   polymorph1(b);
@@ -77,12 +80,13 @@ var e = [,,,,0.5,3,4];
 // Make sure that calls to forEach with double arrays get the right result
 (function() {
   var result = 0;
-  var polymorph1 = function(arg) {
+  function polymorph1(arg) {
     var sum = function(v,i,o) {
       result += v;
     }
     arg.forEach(sum);
   }
+  %PrepareFunctionForOptimization(polymorph1);
   polymorph1(d);
   polymorph1(d);
   polymorph1(d);
@@ -95,12 +99,13 @@ var e = [,,,,0.5,3,4];
 // Make sure that calls to forEach with mixed double arrays get the right result
 (function() {
   var result = 0;
-  var polymorph1 = function(arg) {
+  function polymorph1(arg) {
     var sum = function(v,i,o) {
       result += v;
     }
     arg.forEach(sum);
   }
+  %PrepareFunctionForOptimization(polymorph1);
   polymorph1(d);
   polymorph1(e);
   polymorph1(d);

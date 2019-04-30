@@ -10,7 +10,7 @@
 (function() {
   var a = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];
   var result = 0;
-  var eagerDeoptInCalled = function(deopt) {
+ function eagerDeoptInCalled(deopt) {
     var callback = function(v,i,o) {
       if (i == 13 && deopt) {
         a.abc = 25;
@@ -23,7 +23,8 @@
       return true;
     }
     return a.filter(callback);
-  }
+  };
+  %PrepareFunctionForOptimization(eagerDeoptInCalled);
   eagerDeoptInCalled();
   eagerDeoptInCalled();
   %OptimizeFunctionOnNextCall(eagerDeoptInCalled);
@@ -36,7 +37,7 @@
 
 // Length change detected during loop, must cause properly handled eager deopt.
 (function() {
-  var eagerDeoptInCalled = function(deopt) {
+  function eagerDeoptInCalled(deopt) {
     var a = [1,2,3,4,5,6,7,8,9,10];
     var callback = function(v,i,o) {
       a.length = (i == 5 && deopt) ? 8 : 10;
@@ -44,6 +45,7 @@
     }
     return a.filter(callback);
   }
+  %PrepareFunctionForOptimization(eagerDeoptInCalled);
   var like_a = [1,2,3,4,5,6,7,8,9,10];
   assertEquals(like_a.slice(1), eagerDeoptInCalled());
   eagerDeoptInCalled();
@@ -57,7 +59,7 @@
 // the value stored in the output array is from the original read.
 (function() {
   var a = [1, 2, 3, 4, 5];
-  var lazyChanger = function(deopt) {
+  function lazyChanger(deopt) {
     var callback = function(v,i,o) {
       if (i === 2 && deopt) {
         a[2] = 100;
@@ -67,6 +69,7 @@
     }
     return a.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyChanger);
   assertEquals(a, lazyChanger());
   lazyChanger();
   %OptimizeFunctionOnNextCall(lazyChanger);
@@ -79,7 +82,7 @@
 // Ensure the non-selection is respected in the output array.
 (function() {
   var a = [1, 2, 3, 4, 5];
-  var lazyDeselection = function(deopt) {
+  function lazyDeselection(deopt) {
     var callback = function(v,i,o) {
       if (i === 2 && deopt) {
         %DeoptimizeNow();
@@ -89,6 +92,7 @@
     }
     return a.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyDeselection);
   assertEquals(a, lazyDeselection());
   lazyDeselection();
   %OptimizeFunctionOnNextCall(lazyDeselection);
@@ -101,7 +105,7 @@
 // Escape analyzed array
 (function() {
   var result = 0;
-  var eagerDeoptInCalled = function(deopt) {
+  function eagerDeoptInCalled(deopt) {
     var a_noescape = [0,1,2,3,4,5];
     var callback = function(v,i,o) {
       result += v;
@@ -112,6 +116,7 @@
     }
     a_noescape.filter(callback);
   }
+  %PrepareFunctionForOptimization(eagerDeoptInCalled);
   eagerDeoptInCalled();
   eagerDeoptInCalled();
   %OptimizeFunctionOnNextCall(eagerDeoptInCalled);
@@ -126,7 +131,7 @@
 // deopt being properly stored in a place on the stack that gets GC'ed.
 (function() {
   var result = 0;
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var b = [1,2,3];
     var callback = function(v,i,o) {
       result += i;
@@ -139,6 +144,7 @@
     %NeverOptimizeFunction(callback);
     b.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   lazyDeopt();
   lazyDeopt();
   %OptimizeFunctionOnNextCall(lazyDeopt);
@@ -151,7 +157,7 @@
 (function() {
   var a = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];
   var result = 0;
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var callback = function(v,i,o) {
       result += i;
       if (i == 13 && deopt) {
@@ -161,6 +167,7 @@
     }
     a.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   lazyDeopt();
   lazyDeopt();
   %OptimizeFunctionOnNextCall(lazyDeopt);
@@ -174,7 +181,7 @@
 (function() {
   var a = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];
   var result = 0;
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var callback = function(v,i,o) {
       result += i;
       if (i == 13 && deopt) {
@@ -185,6 +192,7 @@
     %NeverOptimizeFunction(callback);
     a.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   lazyDeopt();
   lazyDeopt();
   %OptimizeFunctionOnNextCall(lazyDeopt);
@@ -197,7 +205,7 @@
 (function() {
   var a = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];
   var result = 0;
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var callback = function(v,i,o) {
       result += i;
       if (i == 13 && deopt) {
@@ -210,6 +218,7 @@
     }
     a.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   lazyDeopt();
   lazyDeopt();
   %OptimizeFunctionOnNextCall(lazyDeopt);
@@ -225,7 +234,7 @@
   var a = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25];
   var caught = false;
   var result = 0;
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var callback = function(v,i,o) {
       result += i;
       if (i == 1 && deopt) {
@@ -239,6 +248,7 @@
       caught = true;
     }
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   lazyDeopt();
   lazyDeopt();
   %OptimizeFunctionOnNextCall(lazyDeopt);
@@ -254,7 +264,7 @@
   var a = [1,2,3,4,5,6,7,8,9,10];
   var caught = false;
   var result = 0;
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var callback = function(v,i,o) {
       result += i;
       if (i == 1 && deopt) {
@@ -269,6 +279,7 @@
       caught = true;
     }
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   lazyDeopt();
   lazyDeopt();
   %OptimizeFunctionOnNextCall(lazyDeopt);
@@ -282,7 +293,7 @@
 // being called throws into a deoptimized caller function.
 (function TestThrowIntoDeoptimizedOuter() {
   var a = [1,2,3,4];
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var callback = function(v,i,o) {
       if (i == 1 && deopt) {
         %DeoptimizeFunction(lazyDeopt);
@@ -300,6 +311,7 @@
     }
     return result;
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   assertEquals([1,2,3,4], lazyDeopt(false));
   assertEquals([1,2,3,4], lazyDeopt(false));
   assertEquals("nope", lazyDeopt(true));
@@ -313,7 +325,7 @@
 // stack trace.
 (function() {
   var re = /Array\.filter/;
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var b = [1,2,3];
     var result = 0;
     var callback = function(v,i,o) {
@@ -327,6 +339,7 @@
     var o = [1,2,3];
     b.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   lazyDeopt();
   lazyDeopt();
   %OptimizeFunctionOnNextCall(lazyDeopt);
@@ -337,7 +350,7 @@
 // includes filter in it's stack trace.
 (function() {
   var re = /Array\.filter/;
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var b = [1,2,3];
     var result = 0;
     var callback = function(v,i,o) {
@@ -352,6 +365,7 @@
     var o = [1,2,3];
     b.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   lazyDeopt();
   lazyDeopt();
   %OptimizeFunctionOnNextCall(lazyDeopt);
@@ -362,7 +376,7 @@
 // includes filter in it's stack trace.
 (function() {
   var re = /Array\.filter/;
-  var lazyDeopt = function(deopt) {
+  function lazyDeopt(deopt) {
     var b = [1,2,3];
     var result = 0;
     var callback = function(v,i,o) {
@@ -378,6 +392,7 @@
     var o = [1,2,3];
     b.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   lazyDeopt();
   lazyDeopt();
   %OptimizeFunctionOnNextCall(lazyDeopt);
@@ -391,7 +406,7 @@
   var re = /Array\.filter/;
   var a = [1,2,3];
   var result = 0;
-  var lazyDeopt = function() {
+  function lazyDeopt() {
     var callback = function(v,i,o) {
       result += i;
       if (i == 1) {
@@ -402,6 +417,7 @@
     };
     a.filter(callback);
   }
+  %PrepareFunctionForOptimization(lazyDeopt);
   assertThrows(() => lazyDeopt());
   assertThrows(() => lazyDeopt());
   try {
@@ -428,6 +444,7 @@
       return true;
     });
   }
+  %PrepareFunctionForOptimization(withHoles);
   withHoles();
   withHoles();
   %OptimizeFunctionOnNextCall(withHoles);
@@ -445,6 +462,7 @@
       return true;
     });
   }
+  %PrepareFunctionForOptimization(withHoles);
   withHoles();
   withHoles();
   %OptimizeFunctionOnNextCall(withHoles);
@@ -461,6 +479,7 @@
     return a.filter(x => x % 2 === 0, side_effect(a, b));
   }
 
+  %PrepareFunctionForOptimization(unreliable);
   let a = [1, 2, 3];
   unreliable(a, false);
   unreliable(a, false);
@@ -474,13 +493,14 @@
 (function() {
   var result = 0;
   var a = [1,2,3];
-  var species_breakage = function() {
+  function species_breakage() {
     var callback = function(v,i,o) {
       result += v;
       return true;
     }
     a.filter(callback);
   }
+  %PrepareFunctionForOptimization(species_breakage);
   species_breakage();
   species_breakage();
   %OptimizeFunctionOnNextCall(species_breakage);
