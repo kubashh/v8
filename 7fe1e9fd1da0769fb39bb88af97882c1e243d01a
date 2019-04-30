@@ -16,6 +16,24 @@
       "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e1792d4_effe6b23",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-04-30T18:42:40Z",
+      "side": 1,
+      "message": "I don\u0027t think we do. That would make profiles that reach the sample limit harder to reason about, since they might overrepresent old functions in the profile (as they may not include new functions that are logged after reaching the sample limit).",
+      "parentUuid": "6b8cb369_57060c01",
+      "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
