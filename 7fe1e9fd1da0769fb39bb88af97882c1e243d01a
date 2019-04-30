@@ -34,6 +34,24 @@
       "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f55974c2_37ffb102",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-04-30T19:25:39Z",
+      "side": 1,
+      "message": "Ah, so it\u0027s not about just stop collecting samples into the array, but in fact it\u0027s like completely stopping the profiler. Right?\n\nIf so, then the parameter name is misleading. There\u0027s a notion of samples buffer as opposed to tick count associated with each profile node, and the parameter name reads as it limits just the samples buffer.\n\nBasically what you want is to auto stop profiling when certain number of samples is collected, no matter if the samples were recorded to the buffer or not. The confusion probably comes from a fact there\u0027s record_samples parameter, and the name of max_samples suggests they are related.\n\nBtw, what is the use-case for the change?",
+      "parentUuid": "2e1792d4_effe6b23",
+      "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
