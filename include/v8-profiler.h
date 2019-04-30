@@ -235,6 +235,8 @@ class V8_EXPORT CpuProfileNode {
   static const int kNoColumnNumberInfo = Message::kNoColumnInfo;
 };
 
+// Indicates that the sample buffer size should not be explicitly limited.
+static const unsigned kNoSampleLimit = 0;
 
 /**
  * CpuProfile contains a CPU profile in a form of top-down call tree
@@ -358,15 +360,22 @@ class V8_EXPORT CpuProfiler {
    *
    * |record_samples| parameter controls whether individual samples should
    * be recorded in addition to the aggregated tree.
+   *
+   * |max_samples| parameter controls the maximum size of the sample buffer.
+   * Samples taken after this limit will not be included in the profile.
+   * Default is to not limit the number of samples. Only applicable if
+   * record_samples is true.
    */
   void StartProfiling(Local<String> title, CpuProfilingMode mode,
-                      bool record_samples = false);
+                      bool record_samples = false,
+                      unsigned max_samples = kNoSampleLimit);
   /**
    * The same as StartProfiling above, but the CpuProfilingMode defaults to
    * kLeafNodeLineNumbers mode, which was the previous default behavior of the
    * profiler.
    */
-  void StartProfiling(Local<String> title, bool record_samples = false);
+  void StartProfiling(Local<String> title, bool record_samples = false,
+                      unsigned max_samples = kNoSampleLimit);
 
   /**
    * Stops collecting CPU profile with a given title and returns it.
