@@ -52,6 +52,24 @@
       "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2f62667a_505b8609",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-04-30T19:56:49Z",
+      "side": 1,
+      "message": "\u003e Ah, so it\u0027s not about just stop collecting samples into the array, but in fact it\u0027s like completely stopping the profiler. Right?\n\nThat\u0027s right, yeah.\n\n\u003e If so, then the parameter name is misleading. There\u0027s a notion of samples buffer as opposed to tick count associated with each profile node, and the parameter name reads as it limits just the samples buffer.\n\nGot it, thanks. Suggestions for a more accurate name and semantics? `tick_limit` perhaps?\n\n\u003e Btw, what is the use-case for the change?\n\nFor purposed of the JS Self-Profiling API, we want to be able to prevent profiles from running for an indefinitely long amount of time so that sites don\u0027t accidentally OOM themselves (e.g. if an error is thrown, and the profiler never gets stopped when it\u0027s supposed to).",
+      "parentUuid": "f55974c2_37ffb102",
+      "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
