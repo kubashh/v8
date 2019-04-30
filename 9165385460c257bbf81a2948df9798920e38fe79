@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d435618f_bc87a272",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T17:20:03Z",
+      "side": 1,
+      "message": "We may need\n  DCHECK_IMPLIES(requires_internalization, hint-\u003eIsInternalizedString());\nsomewhere in the function.",
+      "revId": "9165385460c257bbf81a2948df9798920e38fe79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6932566f_346058dc",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 28
+      },
+      "lineNbr": 856,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T17:20:03Z",
+      "side": 1,
+      "message": "It would be nice if we could expand the buffer and memcopy into it.",
+      "revId": "9165385460c257bbf81a2948df9798920e38fe79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90e2e18b_e0a38ce9",
+        "filename": "src/parsing/literal-buffer.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-04-30T17:20:03Z",
+      "side": 1,
+      "message": "final",
+      "revId": "9165385460c257bbf81a2948df9798920e38fe79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
