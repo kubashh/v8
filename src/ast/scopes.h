@@ -1206,6 +1206,8 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
   void MigrateUnresolvedPrivateNameTail(AstNodeFactory* ast_node_factory,
                                         UnresolvedList::Iterator tail);
 
+  void SetOuterScopeForPrivateEnvironment(Scope* private_state_outer_scope);
+
  private:
   friend class Scope;
   // Find the private name declared in the private name map first,
@@ -1222,6 +1224,7 @@ class V8_EXPORT_PRIVATE ClassScope : public Scope {
     explicit RareData(Zone* zone) : private_name_map(zone) {}
     UnresolvedList unresolved_private_names;
     VariableMap private_name_map;
+    Scope* private_env_outer_scope;
   };
 
   V8_INLINE RareData* EnsureRareData() {

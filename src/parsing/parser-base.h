@@ -262,6 +262,7 @@ class ParserBase {
         function_literal_id_(0),
         script_id_(script_id),
         default_eager_compile_hint_(FunctionLiteral::kShouldLazyCompile),
+        private_state_env_(nullptr),
         allow_natives_(false),
         allow_harmony_public_fields_(false),
         allow_harmony_static_fields_(false),
@@ -345,6 +346,21 @@ class ParserBase {
   };
 
   class ClassLiteralChecker;
+
+  class PrivateStateEnv {
+   public:
+    PrivateStateEnv(Scope** private_state_env_stack, Scope* scope)
+        : private_state_env_stack_(private_state_env_stack),
+          outer_scope_(*private_state_env_stack) {
+      *private_state_env_stack_ = scope;
+    }
+
+    ~PrivateStateEnv() { *private_state_env_stack_ = outer_scope_; }
+
+   private:
+    Scope** const private_state_env_stack_;
+    Scope* const outer_scope_;
+  };
 
   // ---------------------------------------------------------------------------
   // BlockState and FunctionState implement the parser's scope stack.
@@ -1405,6 +1421,8 @@ class ParserBase {
   int script_id_;
 
   FunctionLiteral::EagerCompileHint default_eager_compile_hint_;
+
+  Scope* private_state_env_;
 
   // This struct is used to move information about the next arrow function from
   // the place where the arrow head was parsed to where the body will be parsed.
@@ -4248,9 +4266,13 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseClassLiteral(
   scope()->set_start_position(end_position());
   if (Check(Token::EXTENDS)) {
     FuncNameInferrerState fni_state(&fni_);
-    ExpressionParsingScope scope(impl());
+    ExpressionParsingScope expression_scope(impl());
+    Scope* outer_private_env = private_state_env_ == nullptr
+                                   ? scope()->outer_scope()
+                                   : private_state_env_;
+    PrivateStateEnv private_env(&private_state_env_, outer_private_env);
     class_info.extends = ParseLeftHandSideExpression();
-    scope.ValidateExpression();
+    expression_scope.ValidateExpression();
   }
 
   Expect(Token::LBRACE);
@@ -4296,7 +4318,7 @@ typename ParserBase<Impl>::ExpressionT ParserBase<Impl>::ParseClassLiteral(
   Expect(Token::RBRACE);
   int end_pos = end_position();
   class_scope->set_end_position(end_pos);
-
+  class_scope->SetOuterScopeForPrivateEnvironment(private_state_env_);
   VariableProxy* unresolvable = class_scope->ResolvePrivateNamesPartially();
   if (unresolvable != nullptr) {
     impl()->ReportMessageAt(Scanner::Location(unresolvable->position(),
