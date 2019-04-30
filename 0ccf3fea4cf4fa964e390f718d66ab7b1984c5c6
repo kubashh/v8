@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "39d17f71_534dd743",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-04-30T15:15:20Z",
+      "side": 1,
+      "message": "+1. It should automatically be cached anyway?",
+      "parentUuid": "2ae52d60_5fff6c2b",
+      "range": {
+        "startLine": 152,
+        "startChar": 18,
+        "endLine": 152,
+        "endChar": 31
+      },
+      "revId": "0ccf3fea4cf4fa964e390f718d66ab7b1984c5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "254e98cd_e659d6d3",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 21
