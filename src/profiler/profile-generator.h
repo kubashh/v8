@@ -55,7 +55,7 @@ class V8_EXPORT_PRIVATE SourcePositionTable : public Malloced {
   DISALLOW_COPY_AND_ASSIGN(SourcePositionTable);
 };
 
-struct CodeEntryAndLineNumber;
+struct ProfileStackFrame;
 
 class CodeEntry {
  public:
@@ -131,10 +131,8 @@ class CodeEntry {
   void SetInlineStacks(
       std::unordered_set<std::unique_ptr<CodeEntry>, Hasher, Equals>
           inline_entries,
-      std::unordered_map<int, std::vector<CodeEntryAndLineNumber>>
-          inline_stacks);
-  const std::vector<CodeEntryAndLineNumber>* GetInlineStack(
-      int pc_offset) const;
+      std::unordered_map<int, std::vector<ProfileStackFrame>> inline_stacks);
+  const std::vector<ProfileStackFrame>* GetInlineStack(int pc_offset) const;
 
   void set_instruction_start(Address start) { instruction_start_ = start; }
   Address instruction_start() const { return instruction_start_; }
@@ -173,7 +171,7 @@ class CodeEntry {
     const char* deopt_reason_ = kNoDeoptReason;
     const char* bailout_reason_ = kEmptyBailoutReason;
     int deopt_id_ = kNoDeoptimizationId;
-    std::unordered_map<int, std::vector<CodeEntryAndLineNumber>> inline_stacks_;
+    std::unordered_map<int, std::vector<ProfileStackFrame>> inline_stacks_;
     std::unordered_set<std::unique_ptr<CodeEntry>, Hasher, Equals>
         inline_entries_;
     std::vector<CpuProfileDeoptFrame> deopt_inlined_frames_;
@@ -229,12 +227,49 @@ class CodeEntry {
   DISALLOW_COPY_AND_ASSIGN(CodeEntry);
 };
 
-struct CodeEntryAndLineNumber {
-  CodeEntry* code_entry;
-  int line_number;
+// Filters stack frames from sources other than a target native context.
+class ContextFilter {
+ public:
+  ContextFilter() : state_(kPending), native_context_address_(kNullAddress) {}
+
+  // Returns true if the stack frame passes a context check.
+  bool Check(const ProfileStackFrame&);
+
+  // Update the context's tracked address based on VM-thread events.
+  void SetNativeContextAddress(Address address);
+
+  bool is_active() const { return state_ == kActive; }
+  Address native_context_address() const { return native_context_address_; }
+
+ private:
+  enum {
+    // The filter is pending receipt of a heap address for filtration in the VM
+    // events queue.
+    kPending,
+    // The context filter has an active native context address.
+    kActive,
+  } state_;
+
+  Address native_context_address_;
 };
 
-typedef std::vector<CodeEntryAndLineNumber> ProfileStackTrace;
+struct ProfileStackFrame {
+  ProfileStackFrame(CodeEntry* code_entry, int line_number,
+                    Address native_context)
+      : code_entry(code_entry),
+        line_number(line_number),
+        native_context(native_context) {}
+  ProfileStackFrame(CodeEntry* code_entry, int line_number)
+      : code_entry(code_entry),
+        line_number(line_number),
+        native_context(kNullAddress) {}
+
+  CodeEntry* code_entry;
+  int line_number;
+  Address native_context;
+};
+
+typedef std::vector<ProfileStackFrame> ProfileStackTrace;
 
 class ProfileTree;
 
@@ -277,14 +312,13 @@ class V8_EXPORT_PRIVATE ProfileNode {
 
  private:
   struct Equals {
-    bool operator()(CodeEntryAndLineNumber lhs,
-                    CodeEntryAndLineNumber rhs) const {
+    bool operator()(ProfileStackFrame lhs, ProfileStackFrame rhs) const {
       return lhs.code_entry->IsSameFunctionAs(rhs.code_entry) &&
              lhs.line_number == rhs.line_number;
     }
   };
   struct Hasher {
-    std::size_t operator()(CodeEntryAndLineNumber pair) const {
+    std::size_t operator()(ProfileStackFrame pair) const {
       return pair.code_entry->GetHash() ^ ComputeUnseededHash(pair.line_number);
     }
   };
@@ -292,8 +326,7 @@ class V8_EXPORT_PRIVATE ProfileNode {
   ProfileTree* tree_;
   CodeEntry* entry_;
   unsigned self_ticks_;
-  std::unordered_map<CodeEntryAndLineNumber, ProfileNode*, Hasher, Equals>
-      children_;
+  std::unordered_map<ProfileStackFrame, ProfileNode*, Hasher, Equals> children_;
   int line_number_;
   std::vector<ProfileNode*> children_list_;
   ProfileNode* parent_;
@@ -321,7 +354,8 @@ class V8_EXPORT_PRIVATE ProfileTree {
       const ProfileStackTrace& path,
       int src_line = v8::CpuProfileNode::kNoLineNumberInfo,
       bool update_stats = true,
-      ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers);
+      ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers,
+      ContextFilter* context_filter = nullptr);
   ProfileNode* root() const { return root_; }
   unsigned next_node_id() { return next_node_id_++; }
   unsigned GetFunctionId(const ProfileNode* node);
@@ -367,7 +401,7 @@ class CpuProfile {
   };
 
   CpuProfile(CpuProfiler* profiler, const char* title, bool record_samples,
-             ProfilingMode mode);
+             ProfilingMode mode, std::shared_ptr<ContextFilter> context_filter);
 
   // Add pc -> ... -> main() call path to the profile.
   void AddPath(base::TimeTicks timestamp, const ProfileStackTrace& path,
@@ -383,6 +417,7 @@ class CpuProfile {
   base::TimeTicks start_time() const { return start_time_; }
   base::TimeTicks end_time() const { return end_time_; }
   CpuProfiler* cpu_profiler() const { return profiler_; }
+  ContextFilter* context_filter() const { return context_filter_.get(); }
 
   void UpdateTicksScale();
 
@@ -394,6 +429,7 @@ class CpuProfile {
   const char* title_;
   bool record_samples_;
   ProfilingMode mode_;
+  std::shared_ptr<ContextFilter> context_filter_;
   base::TimeTicks start_time_;
   base::TimeTicks end_time_;
   std::deque<SampleInfo> samples_;
@@ -451,7 +487,8 @@ class V8_EXPORT_PRIVATE CpuProfilesCollection {
 
   void set_cpu_profiler(CpuProfiler* profiler) { profiler_ = profiler; }
   bool StartProfiling(const char* title, bool record_samples,
-                      ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers);
+                      ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers,
+                      std::shared_ptr<ContextFilter> context_filter = nullptr);
   CpuProfile* StopProfiling(const char* title);
   std::vector<std::unique_ptr<CpuProfile>>* profiles() {
     return &finished_profiles_;
@@ -464,6 +501,9 @@ class V8_EXPORT_PRIVATE CpuProfilesCollection {
   void AddPathToCurrentProfiles(base::TimeTicks timestamp,
                                 const ProfileStackTrace& path, int src_line,
                                 bool update_stats);
+
+  // Called from profile generator thread.
+  void UpdateNativeContextAddressForCurrentProfiles(Address from, Address to);
 
   // Limits the number of profiles that can be simultaneously collected.
   static const int kMaxSimultaneousProfiles = 100;
@@ -485,6 +525,8 @@ class V8_EXPORT_PRIVATE ProfileGenerator {
   explicit ProfileGenerator(CpuProfilesCollection* profiles);
 
   void RecordTickSample(const TickSample& sample);
+
+  void UpdateNativeContextAddress(Address from, Address to);
 
   CodeMap* code_map() { return &code_map_; }
 

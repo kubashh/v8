@@ -107,6 +107,17 @@ void ProfilerEventsProcessor::AddSample(TickSample sample) {
   ticks_from_vm_buffer_.Enqueue(record);
 }
 
+void ProfilerEventsProcessor::EnqueueFilterAssoc(
+    std::shared_ptr<ContextFilter> context_filter, Address context_address) {
+  CodeEventsContainer evt_rec(CodeEventRecord::NATIVE_CONTEXT_ASSOC);
+  NativeContextAssocEventRecord* rec = &evt_rec.NativeContextAssocEventRecord_;
+  // Wrap in a heap-allocated weak pointer in case the profiler is stopped
+  // prior to context assignment.
+  rec->context_filter = new std::weak_ptr<ContextFilter>(context_filter);
+  rec->context_address = context_address;
+  Enqueue(evt_rec);
+}
+
 void ProfilerEventsProcessor::StopSynchronously() {
   if (!base::Relaxed_AtomicExchange(&running_, 0)) return;
   {
@@ -129,6 +140,19 @@ bool ProfilerEventsProcessor::ProcessCodeEvent() {
       CODE_EVENTS_TYPE_LIST(PROFILER_TYPE_CASE)
 
 #undef PROFILER_TYPE_CASE
+      case CodeEventRecord::NATIVE_CONTEXT_ASSOC: {
+        NativeContextAssocEventRecord& nc_record =
+            record.NativeContextAssocEventRecord_;
+        nc_record.UpdateContextFilter();
+        break;
+      }
+      case CodeEventRecord::NATIVE_CONTEXT_MOVE: {
+        NativeContextMoveEventRecord& nc_record =
+            record.NativeContextMoveEventRecord_;
+        generator_->UpdateNativeContextAddress(nc_record.from_address,
+                                               nc_record.to_address);
+        break;
+      }
       default: return true;  // Skip record.
     }
     last_processed_code_event_id_ = record.generic.order;
@@ -143,6 +167,8 @@ void ProfilerEventsProcessor::CodeEventHandler(
     case CodeEventRecord::CODE_CREATION:
     case CodeEventRecord::CODE_MOVE:
     case CodeEventRecord::CODE_DISABLE_OPT:
+    case CodeEventRecord::NATIVE_CONTEXT_ASSOC:
+    case CodeEventRecord::NATIVE_CONTEXT_MOVE:
       Enqueue(evt_rec);
       break;
     case CodeEventRecord::CODE_DEOPT: {
@@ -377,16 +403,32 @@ void CpuProfiler::CollectSample() {
 }
 
 void CpuProfiler::StartProfiling(const char* title, bool record_samples,
-                                 ProfilingMode mode) {
-  if (profiles_->StartProfiling(title, record_samples, mode)) {
+                                 ProfilingMode mode,
+                                 MaybeHandle<Context> context) {
+  std::shared_ptr<ContextFilter> context_filter;
+  if (!context.is_null()) context_filter = std::make_shared<ContextFilter>();
+
+  if (profiles_->StartProfiling(title, record_samples, mode, context_filter)) {
     TRACE_EVENT0("v8", "CpuProfiler::StartProfiling");
     StartProcessorIfNotStarted();
+    // Once the processor is started, begin monitoring movements of the native
+    // context being tracked. This needs to be enqueued in the profiler's VM
+    // thread event buffer, as it may need to catch up to prior move events.
+    if (context_filter) {
+      // Disallow heap allocation, which can trigger a GC and invalidate our
+      // native context address.
+      DisallowHeapAllocation no_gc;
+      Handle<Context> handle = context.ToHandleChecked();
+      Address context_address = handle->native_context().ptr();
+      processor_->EnqueueFilterAssoc(context_filter, context_address);
+    }
   }
 }
 
 void CpuProfiler::StartProfiling(String title, bool record_samples,
-                                 ProfilingMode mode) {
-  StartProfiling(profiles_->GetName(title), record_samples, mode);
+                                 ProfilingMode mode,
+                                 MaybeHandle<Context> context) {
+  StartProfiling(profiles_->GetName(title), record_samples, mode, context);
   isolate_->debug()->feature_tracker()->Track(DebugFeatureTracker::kProfiler);
 }
 

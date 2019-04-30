@@ -150,13 +150,12 @@ int CodeEntry::GetSourceLine(int pc_offset) const {
 void CodeEntry::SetInlineStacks(
     std::unordered_set<std::unique_ptr<CodeEntry>, Hasher, Equals>
         inline_entries,
-    std::unordered_map<int, std::vector<CodeEntryAndLineNumber>>
-        inline_stacks) {
+    std::unordered_map<int, std::vector<ProfileStackFrame>> inline_stacks) {
   EnsureRareData()->inline_entries_ = std::move(inline_entries);
   rare_data_->inline_stacks_ = std::move(inline_stacks);
 }
 
-const std::vector<CodeEntryAndLineNumber>* CodeEntry::GetInlineStack(
+const std::vector<ProfileStackFrame>* CodeEntry::GetInlineStack(
     int pc_offset) const {
   if (!line_info_) return nullptr;
 
@@ -403,12 +402,14 @@ ProfileNode* ProfileTree::AddPathFromEnd(const std::vector<CodeEntry*>& path,
 
 ProfileNode* ProfileTree::AddPathFromEnd(const ProfileStackTrace& path,
                                          int src_line, bool update_stats,
-                                         ProfilingMode mode) {
+                                         ProfilingMode mode,
+                                         ContextFilter* context_filter) {
   ProfileNode* node = root_;
   CodeEntry* last_entry = nullptr;
   int parent_line_number = v8::CpuProfileNode::kNoLineNumberInfo;
   for (auto it = path.rbegin(); it != path.rend(); ++it) {
     if ((*it).code_entry == nullptr) continue;
+    if (context_filter && !context_filter->Check(*it)) continue;
     last_entry = (*it).code_entry;
     node = node->FindOrAddChild((*it).code_entry, parent_line_number);
     parent_line_number = mode == ProfilingMode::kCallerLineNumbers
@@ -426,7 +427,6 @@ ProfileNode* ProfileTree::AddPathFromEnd(const ProfileStackTrace& path,
   }
   return node;
 }
-
 
 class Position {
  public:
@@ -469,15 +469,39 @@ void ProfileTree::TraverseDepthFirst(Callback* callback) {
   }
 }
 
+bool ContextFilter::Check(const ProfileStackFrame& frame) {
+  // Metadata frames should always pass the context filter.
+  if (frame.code_entry == CodeEntry::program_entry() ||
+      frame.code_entry == CodeEntry::idle_entry() ||
+      frame.code_entry == CodeEntry::gc_entry() ||
+      frame.code_entry == CodeEntry::unresolved_entry() ||
+      frame.code_entry == CodeEntry::root_entry()) {
+    return true;
+  }
+
+  // Reject all frames before receiving a context address.
+  if (state_ == kPending) return false;
+
+  return frame.native_context == native_context_address_;
+}
+
+void ContextFilter::SetNativeContextAddress(Address address) {
+  DCHECK(state_ == kPending || state_ == kActive);
+  native_context_address_ = address;
+  state_ = kActive;
+}
+
 using v8::tracing::TracedValue;
 
 std::atomic<uint32_t> CpuProfile::last_id_;
 
 CpuProfile::CpuProfile(CpuProfiler* profiler, const char* title,
-                       bool record_samples, ProfilingMode mode)
+                       bool record_samples, ProfilingMode mode,
+                       std::shared_ptr<ContextFilter> context_filter)
     : title_(title),
       record_samples_(record_samples),
       mode_(mode),
+      context_filter_(context_filter),
       start_time_(base::TimeTicks::HighResolutionNow()),
       top_down_(profiler->isolate()),
       profiler_(profiler),
@@ -493,8 +517,8 @@ CpuProfile::CpuProfile(CpuProfiler* profiler, const char* title,
 void CpuProfile::AddPath(base::TimeTicks timestamp,
                          const ProfileStackTrace& path, int src_line,
                          bool update_stats) {
-  ProfileNode* top_frame_node =
-      top_down_.AddPathFromEnd(path, src_line, update_stats, mode_);
+  ProfileNode* top_frame_node = top_down_.AddPathFromEnd(
+      path, src_line, update_stats, mode_, context_filter_.get());
 
   if (record_samples_ && !timestamp.IsNull()) {
     samples_.push_back({top_frame_node, timestamp, src_line});
@@ -592,6 +616,8 @@ void CpuProfile::StreamPendingTraceEvents() {
 
 void CpuProfile::FinishProfile() {
   end_time_ = base::TimeTicks::HighResolutionNow();
+  // Stop tracking context movements after profiling stops.
+  context_filter_ = nullptr;
   StreamPendingTraceEvents();
   auto value = TracedValue::Create();
   value->SetDouble("endTime", (end_time_ - base::TimeTicks()).InMicroseconds());
@@ -696,9 +722,9 @@ void CodeMap::Print() {
 CpuProfilesCollection::CpuProfilesCollection(Isolate* isolate)
     : profiler_(nullptr), current_profiles_semaphore_(1) {}
 
-bool CpuProfilesCollection::StartProfiling(const char* title,
-                                           bool record_samples,
-                                           ProfilingMode mode) {
+bool CpuProfilesCollection::StartProfiling(
+    const char* title, bool record_samples, ProfilingMode mode,
+    std::shared_ptr<ContextFilter> context_filter) {
   current_profiles_semaphore_.Wait();
   if (static_cast<int>(current_profiles_.size()) >= kMaxSimultaneousProfiles) {
     current_profiles_semaphore_.Signal();
@@ -713,11 +739,10 @@ bool CpuProfilesCollection::StartProfiling(const char* title,
     }
   }
   current_profiles_.emplace_back(
-      new CpuProfile(profiler_, title, record_samples, mode));
+      new CpuProfile(profiler_, title, record_samples, mode, context_filter));
   current_profiles_semaphore_.Signal();
   return true;
 }
-
 
 CpuProfile* CpuProfilesCollection::StopProfiling(const char* title) {
   const bool empty_title = (title[0] == '\0');
@@ -774,6 +799,19 @@ void CpuProfilesCollection::AddPathToCurrentProfiles(
   current_profiles_semaphore_.Signal();
 }
 
+void CpuProfilesCollection::UpdateNativeContextAddressForCurrentProfiles(
+    Address from, Address to) {
+  current_profiles_semaphore_.Wait();
+  for (const std::unique_ptr<CpuProfile>& profile : current_profiles_) {
+    if (auto* context_filter = profile->context_filter()) {
+      if (!context_filter->is_active()) continue;
+      if (context_filter->native_context_address() != from) continue;
+      context_filter->SetNativeContextAddress(to);
+    }
+  }
+  current_profiles_semaphore_.Signal();
+}
+
 ProfileGenerator::ProfileGenerator(CpuProfilesCollection* profiles)
     : profiles_(profiles) {}
 
@@ -799,7 +837,7 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
       // that a callback calls itself.
       stack_trace.push_back(
           {FindEntry(reinterpret_cast<Address>(sample.external_callback_entry)),
-           no_line_info});
+           no_line_info, reinterpret_cast<Address>(sample.top_context)});
     } else {
       Address attributed_pc = reinterpret_cast<Address>(sample.pc);
       CodeEntry* pc_entry = FindEntry(attributed_pc);
@@ -823,7 +861,8 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
           src_line = pc_entry->line_number();
         }
         src_line_not_found = false;
-        stack_trace.push_back({pc_entry, src_line});
+        stack_trace.push_back({pc_entry, src_line,
+                               reinterpret_cast<Address>(sample.top_context)});
 
         if (pc_entry->builtin_id() == Builtins::kFunctionPrototypeApply ||
             pc_entry->builtin_id() == Builtins::kFunctionPrototypeCall) {
@@ -843,6 +882,7 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
 
     for (unsigned i = 0; i < sample.frames_count; ++i) {
       Address stack_pos = reinterpret_cast<Address>(sample.stack[i]);
+      Address native_context = reinterpret_cast<Address>(sample.contexts[i]);
       CodeEntry* entry = FindEntry(stack_pos);
       int line_number = no_line_info;
       if (entry) {
@@ -850,7 +890,7 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
         int pc_offset =
             static_cast<int>(stack_pos - entry->instruction_start());
         // TODO(petermarshall): pc_offset can still be negative in some cases.
-        const std::vector<CodeEntryAndLineNumber>* inline_stack =
+        const std::vector<ProfileStackFrame>* inline_stack =
             entry->GetInlineStack(pc_offset);
         if (inline_stack) {
           int most_inlined_frame_line_number = entry->GetSourceLine(pc_offset);
@@ -866,6 +906,12 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
           DCHECK(!inline_stack->empty());
           size_t index = stack_trace.size() - inline_stack->size();
           stack_trace[index].line_number = most_inlined_frame_line_number;
+          // Set the native context of inlined frames to be equal to that of
+          // their parent. This is safe, as functions cannot inline themselves
+          // into a parent from another native context.
+          for (size_t i = index; i < stack_trace.size(); i++) {
+            stack_trace[i].native_context = native_context;
+          }
         }
         // Skip unresolved frames (e.g. internal frame) and get source line of
         // the first JS caller.
@@ -884,7 +930,7 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
         // so we use it instead of pushing entry to stack_trace.
         if (inline_stack) continue;
       }
-      stack_trace.push_back({entry, line_number});
+      stack_trace.push_back({entry, line_number, native_context});
     }
   }
 
@@ -904,6 +950,10 @@ void ProfileGenerator::RecordTickSample(const TickSample& sample) {
 
   profiles_->AddPathToCurrentProfiles(sample.timestamp, stack_trace, src_line,
                                       sample.update_stats);
+}
+
+void ProfileGenerator::UpdateNativeContextAddress(Address from, Address to) {
+  profiles_->UpdateNativeContextAddressForCurrentProfiles(from, to);
 }
 
 CodeEntry* ProfileGenerator::EntryForVMState(StateTag tag) {
