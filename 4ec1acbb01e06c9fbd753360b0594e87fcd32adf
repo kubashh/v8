@@ -688,6 +688,30 @@
       "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "757a14c0_2b46a08d",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 5700,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-01T06:38:52Z",
+      "side": 1,
+      "message": "Obsolete after https://chromium-review.googlesource.com/c/v8/v8/+/1590164",
+      "parentUuid": "fa0491c7_2e0f10a0",
+      "range": {
+        "startLine": 5700,
+        "startChar": 46,
+        "endLine": 5700,
+        "endChar": 71
+      },
+      "revId": "4ec1acbb01e06c9fbd753360b0594e87fcd32adf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

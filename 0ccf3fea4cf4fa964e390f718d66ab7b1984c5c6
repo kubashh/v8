@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a14763f5_a08e52e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-01T06:38:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77b6f3c1_1db7191f",
+      "revId": "0ccf3fea4cf4fa964e390f718d66ab7b1984c5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ae52d60_5fff6c2b",
         "filename": "src/ast/scopes.cc",
         "patchSetId": 21
@@ -66,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "5da43a4d_2922ce45",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-01T06:38:52Z",
+      "side": 1,
+      "message": "This is also run by classes that do not have brands, in that case they will always do a lookup in the scope info for a variable that does not exist during deserialization. Is that OK?",
+      "parentUuid": "39d17f71_534dd743",
+      "range": {
+        "startLine": 152,
+        "startChar": 18,
+        "endLine": 152,
+        "endChar": 31
+      },
+      "revId": "0ccf3fea4cf4fa964e390f718d66ab7b1984c5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "254e98cd_e659d6d3",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 21
@@ -89,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "182b6dee_90b96502",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-01T06:38:52Z",
+      "side": 1,
+      "message": "I\u0027ve refactored these into BuildPrivateBrandInitialization()",
+      "parentUuid": "254e98cd_e659d6d3",
+      "range": {
+        "startLine": 1160,
+        "startChar": 0,
+        "endLine": 1169,
+        "endChar": 5
+      },
+      "revId": "0ccf3fea4cf4fa964e390f718d66ab7b1984c5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff1cd44b_74dc1741",
         "filename": "src/parsing/parser-base.h",
         "patchSetId": 21
@@ -109,6 +175,30 @@
       "revId": "0ccf3fea4cf4fa964e390f718d66ab7b1984c5c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61216ce4_30ac075c",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 4300,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-01T06:38:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff1cd44b_74dc1741",
+      "range": {
+        "startLine": 4276,
+        "startChar": 0,
+        "endLine": 4300,
+        "endChar": 5
+      },
+      "revId": "0ccf3fea4cf4fa964e390f718d66ab7b1984c5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
