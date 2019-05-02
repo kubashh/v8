@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "748988be_1f212ac7",
+        "filename": "src/snapshot/serializer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-05-02T12:08:33Z",
+      "side": 1,
+      "message": "I think this part of the code could also be simplified a bit. This DCHECK seems useless now.",
+      "range": {
+        "startLine": 815,
+        "startChar": 11,
+        "endLine": 815,
+        "endChar": 37
+      },
+      "revId": "f27a6e9221e2737448603b9524c71fba76a04245",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
