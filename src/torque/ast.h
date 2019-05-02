@@ -707,6 +707,7 @@ struct StructFieldExpression {
 struct ClassFieldExpression {
   NameAndTypeExpression name_and_type;
   base::Optional<std::string> index;
+  base::Optional<std::string> conditional;
   bool weak;
   bool const_qualified;
 };
