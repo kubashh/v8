@@ -533,12 +533,10 @@ void DeclarationVisitor::FinalizeClassFieldsAndMethods(
            field_expression.const_qualified});
       size_t field_size;
       std::string size_string;
-      std::string machine_type;
-      std::tie(field_size, size_string, machine_type) =
-          field.GetFieldSizeInformation();
+      std::tie(field_size, size_string) = field.GetFieldSizeInformation();
       // Our allocations don't support alignments beyond kTaggedSize.
       size_t alignment = std::min(size_t{kTaggedSize}, field_size);
-      if (class_offset % alignment != 0) {
+      if (alignment > 0 && class_offset % alignment != 0) {
         ReportError("field ", field_expression.name_and_type.name,
                     " at offset ", class_offset, " is not ", alignment,
                     "-byte aligned.");
@@ -552,7 +550,9 @@ void DeclarationVisitor::FinalizeClassFieldsAndMethods(
   // function and define a corresponding '.field' operator. The
   // implementation iterator will turn the snippits into code.
   for (auto& field : class_type->fields()) {
-    if (field.index) continue;
+    if (field.index || field.name_and_type.type == TypeOracle::GetVoidType()) {
+      continue;
+    }
     CurrentSourcePosition::Scope position_activator(field.pos);
     IdentifierExpression* parameter =
         MakeNode<IdentifierExpression>(MakeNode<Identifier>(std::string{"o"}));
