@@ -18,6 +18,7 @@
     }
   }
 
+  %EnsureFeedbackVectorForFunction(g);
   g();
 })();
 
@@ -33,5 +34,6 @@
     }
   }
 
+  %EnsureFeedbackVectorForFunction(g);
   g();
 })();

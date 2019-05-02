@@ -3870,19 +3870,33 @@ TEST(AllocationSiteCreation) {
   Heap* heap = isolate->heap();
   HandleScope scope(isolate);
   i::FLAG_enable_one_shot_optimization = true;
+  i::FLAG_allow_natives_syntax = true;
+  i::FLAG_lazy_feedback_allocation = false;
 
   // Array literals.
-  CheckNumberOfAllocations(heap, "function f1() { return []; }; f1()", 1, 0);
-  CheckNumberOfAllocations(heap, "function f2() { return [1, 2]; }; f2()", 1,
-                           0);
-  CheckNumberOfAllocations(heap, "function f3() { return [[1], [2]]; }; f3()",
+  CheckNumberOfAllocations(heap,
+                           "function f1() { return []; } "
+                           "%EnsureFeedbackVectorForFunction(f1);"
+                           "f1()",
+                           1, 0);
+  CheckNumberOfAllocations(heap,
+                           "function f2() { return [1, 2]; } "
+                           "%EnsureFeedbackVectorForFunction(f2);"
+                           "f2()",
+                           1, 0);
+  CheckNumberOfAllocations(heap,
+                           "function f3() { return [[1], [2]]; }"
+                           "%EnsureFeedbackVectorForFunction(f3);"
+                           "f3()",
                            1, 2);
 
   CheckNumberOfAllocations(heap,
                            "function f4() { "
                            "return [0, [1, 1.1, 1.2, "
                            "], 1.5, [2.1, 2.2], 3];"
-                           "}; f4();",
+                           "}"
+                           "%EnsureFeedbackVectorForFunction(f4);"
+                           "f4();",
                            1, 2);
 
   // No allocation sites within IIFE/top-level
@@ -3915,19 +3929,29 @@ TEST(AllocationSiteCreation) {
                            0, 0);
 
   // Object literals have lazy AllocationSites
-  CheckNumberOfAllocations(heap, "function f5() { return {}; }; f5(); ", 0, 0);
+  CheckNumberOfAllocations(heap,
+                           "function f5() { return {}; };"
+                           "%EnsureFeedbackVectorForFunction(f5);"
+                           "f5(); ",
+                           0, 0);
 
   // No AllocationSites are created for the empty object literal.
   for (int i = 0; i < 5; i++) {
     CheckNumberOfAllocations(heap, "f5(); ", 0, 0);
   }
 
-  CheckNumberOfAllocations(heap, "function f6() { return {a:1}; }; f6(); ", 0,
-                           0);
+  CheckNumberOfAllocations(heap,
+                           "function f6() { return {a:1}; };"
+                           "%EnsureFeedbackVectorForFunction(f6);"
+                           "f6(); ",
+                           0, 0);
 
   CheckNumberOfAllocations(heap, "f6(); ", 1, 0);
 
-  CheckNumberOfAllocations(heap, "function f7() { return {a:1, b:2}; }; f7(); ",
+  CheckNumberOfAllocations(heap,
+                           "function f7() { return {a:1, b:2}; };"
+                           "%EnsureFeedbackVectorForFunction(f7);"
+                           "f7(); ",
                            0, 0);
   CheckNumberOfAllocations(heap, "f7(); ", 1, 0);
 
@@ -3935,7 +3959,9 @@ TEST(AllocationSiteCreation) {
   CheckNumberOfAllocations(heap,
                            "function f8() {"
                            "return {a:{}, b:{ a:2, c:{ d:{f:{}}} } }; "
-                           "}; f8(); ",
+                           "};"
+                           "%EnsureFeedbackVectorForFunction(f8);"
+                           "f8(); ",
                            0, 0);
   CheckNumberOfAllocations(heap, "f8(); ", 1, 0);
 
@@ -3944,7 +3970,9 @@ TEST(AllocationSiteCreation) {
   CheckNumberOfAllocations(heap,
                            "function f9() {"
                            "return {a:[1, 2, 3], b:{ a:2, c:{ d:{f:[]} } }}; "
-                           "}; f9(); ",
+                           "};"
+                           "%EnsureFeedbackVectorForFunction(f9);"
+                           "f9(); ",
                            1, 2);
 
   // No new AllocationSites created on the second invocation.
@@ -4338,6 +4366,7 @@ TEST(WeakFunctionInConstructor) {
   if (FLAG_always_opt) return;
   FLAG_stress_compaction = false;
   FLAG_stress_incremental_marking = false;
+  FLAG_allow_natives_syntax = true;
   CcTest::InitializeVM();
   v8::Isolate* isolate = CcTest::isolate();
   LocalContext env;
@@ -4345,7 +4374,8 @@ TEST(WeakFunctionInConstructor) {
   CompileRun(
       "function createObj(obj) {"
       "  return new obj();"
-      "}");
+      "}"
+      "%EnsureFeedbackVectorForFunction(createObj);");
   i::Handle<JSFunction> createObj = Handle<JSFunction>::cast(
       v8::Utils::OpenHandle(*v8::Local<v8::Function>::Cast(
           CcTest::global()
@@ -4358,6 +4388,7 @@ TEST(WeakFunctionInConstructor) {
     const char* source =
         " (function() {"
         "   function hat() { this.x = 5; }"
+        "   %EnsureFeedbackVectorForFunction(hat);"
         "   createObj(hat);"
         "   createObj(hat);"
         "   return hat;"
@@ -4388,6 +4419,7 @@ TEST(WeakFunctionInConstructor) {
   CHECK(slot_value->IsCleared());
   CompileRun(
       "function coat() { this.x = 6; }"
+      "%EnsureFeedbackVectorForFunction(coat);"
       "createObj(coat);");
   slot_value = feedback_vector->Get(FeedbackSlot(0));
   CHECK(slot_value->IsWeak());

@@ -11,6 +11,7 @@
     }
     return 23;
   }
+  %EnsureFeedbackVectorForFunction(gen1);
   var g = gen1();
   assertEquals({ value:23, done:true }, g.next());
 })();
@@ -23,6 +24,7 @@
     }
     return 23;
   }
+  %EnsureFeedbackVectorForFunction(gen2);
   var g = gen2();
   assertEquals({ value:0, done:false }, g.next());
   assertEquals({ value:1, done:false }, g.next());
@@ -38,6 +40,7 @@
     }
     return 23;
   }
+  %EnsureFeedbackVectorForFunction(gen3);
   var g = gen3();
   assertEquals({ value:0, done:false }, g.next());
   assertEquals({ value:1, done:false }, g.next());
@@ -57,6 +60,7 @@
     }
     return 23;
   }
+  %EnsureFeedbackVectorForFunction(gen4);
   var g = gen4();
   assertEquals({ value:0, done:false }, g.next());
   assertEquals({ value:1, done:false }, g.next());

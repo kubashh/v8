@@ -44,6 +44,7 @@ function bar(goal) {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(bar);
 
 for (var i = 0; i < 13; i++) {
   %DeoptimizeFunction(bar);

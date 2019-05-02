@@ -35,6 +35,7 @@ function foo() {
   }
   return result;
 }
+%EnsureFeedbackVectorForFunction(foo);
 
 test(1, foo);
 
@@ -54,5 +55,6 @@ function smo() {
   }
   return result;
 }
+%EnsureFeedbackVectorForFunction(smo);
 
 test(11, smo);

@@ -40,6 +40,7 @@ function f() {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(f);
 
 
 assertEquals(1450, f());

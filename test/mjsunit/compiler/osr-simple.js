@@ -15,6 +15,7 @@ function f() {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(f);
 
 
 for (var i = 0; i < 2; i++) {

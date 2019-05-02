@@ -19,6 +19,7 @@ function SingleLoop() {
     }
   }
 }
+%EnsureFeedbackVectorForFunction(SingleLoop);
 
 
 // These function could also fail if the exception handlers are not updated at
@@ -38,6 +39,7 @@ function EmptyBody() {
     a++;
   }
 }
+%EnsureFeedbackVectorForFunction(EmptyBody);
 
 function NestedLoops() {
   for (var a = 0; a < 2; a++) {
@@ -52,6 +54,7 @@ function NestedLoops() {
     }
   }
 }
+%EnsureFeedbackVectorForFunction(NestedLoops);
 
 
 SingleLoop();

@@ -30,6 +30,8 @@ SerializerTester::SerializerTester(const char* source)
   FLAG_always_opt = false;
   // We need allocation of executable memory for the compilation.
   FLAG_jitless = false;
+  // We need feedback vectors for optimizing.
+  FLAG_lazy_feedback_allocation = false;
 
   std::string function_string = "(function() { ";
   function_string += source;

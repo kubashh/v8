@@ -1381,6 +1381,7 @@ bool Compiler::Compile(Handle<JSFunction> function, ClearExceptionFlag flag,
       PrintF(" because --always-opt]\n");
     }
     Handle<Code> opt_code;
+    JSFunction::EnsureFeedbackVector(function);
     if (GetOptimizedCode(function, ConcurrencyMode::kNotConcurrent)
             .ToHandle(&opt_code)) {
       code = opt_code;

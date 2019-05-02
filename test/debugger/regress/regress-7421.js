@@ -23,6 +23,7 @@ function wrapper1() {
   }
   f1();
 }
+%EnsureFeedbackVectorForFunction(wrapper1);
 
 function f2() {
   counter++;

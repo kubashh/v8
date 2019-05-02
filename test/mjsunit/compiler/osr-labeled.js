@@ -17,6 +17,7 @@ function foo() {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(foo);
 
 assertEquals(30, foo());
 assertEquals(30, foo());
@@ -36,6 +37,7 @@ function bar(a) {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(bar);
 
 assertEquals(1, bar(1));
 assertEquals(1, bar(1));

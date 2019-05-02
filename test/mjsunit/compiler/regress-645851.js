@@ -16,4 +16,5 @@ function f() {
   return sum;
 }
 
+%EnsureFeedbackVectorForFunction(f);
 f();

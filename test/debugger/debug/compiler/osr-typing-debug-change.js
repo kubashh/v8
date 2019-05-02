@@ -37,6 +37,7 @@ function ChangeSmiConstantAndOsr() {
   }
   return j;
 }
+%EnsureFeedbackVectorForFunction(ChangeSmiConstantAndOsr);
 var r1 = ChangeSmiConstantAndOsr();
 if (changed) {
   assertEquals("result", r1);
@@ -54,6 +55,7 @@ function ChangeFloatConstantAndOsr() {
   }
   return j;
 }
+%EnsureFeedbackVectorForFunction(ChangeFloatConstantAndOsr);
 var r2 = ChangeFloatConstantAndOsr();
 if (changed) {
   assertEquals("result", r2);
@@ -72,6 +74,7 @@ function ChangeFloatVarAndOsr() {
   }
   return j;
 }
+%EnsureFeedbackVectorForFunction(ChangeFloatVarAndOsr);
 var r3 = ChangeFloatVarAndOsr();
 if (changed) {
   assertEquals("result0.1", r3);
@@ -105,6 +108,7 @@ function ChangeIntVarAndOsr() {
   }
   return j;
 }
+%EnsureFeedbackVectorForFunction(ChangeIntVarAndOsr);
 
 var r4 = ChangeIntVarAndOsr();
 if (changed) {

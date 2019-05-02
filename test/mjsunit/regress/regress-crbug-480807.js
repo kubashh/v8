@@ -16,6 +16,8 @@ function foo() {
   }
   return c;
 }
+%EnsureFeedbackVectorForFunction(foo);
+
 try {
   foo();
 } catch (e) {

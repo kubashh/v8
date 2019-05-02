@@ -8,6 +8,7 @@
   function f(a, b, c) {
     return a.indexOf(b, c);
   }
+  %PrepareFunctionForOptimization(f);
   f("abc", "de", 1);
   f("abc", "de", 1);
   %OptimizeFunctionOnNextCall(f);
@@ -21,6 +22,7 @@
   function f(a, b, c) {
     return a.indexOf(b, c);
   }
+  %PrepareFunctionForOptimization(f);
   f("abc", "de", 1);
   f("abc", "de", 1);
   %OptimizeFunctionOnNextCall(f);
@@ -34,6 +36,7 @@
   function f(a, b, c) {
     return a.substring(b, c);
   }
+  %PrepareFunctionForOptimization(f);
   f("abcde", 1, 4);
   f("abcde", 1, 4);
   %OptimizeFunctionOnNextCall(f);
@@ -47,6 +50,7 @@
   function f(a, b, c) {
     return a.substring(b, c);
   }
+  %PrepareFunctionForOptimization(f);
   f("abcde", 1, 4);
   f("abcde", 1, 4);
   %OptimizeFunctionOnNextCall(f);

@@ -13,6 +13,7 @@ function foo(a) {
   }
   return r;
 }
+%EnsureFeedbackVectorForFunction(foo);
 
 function bar(a) {
   for (var i = 0; i < 10; i++) {
@@ -21,6 +22,7 @@ function bar(a) {
   }
   return r;
 }
+%EnsureFeedbackVectorForFunction(bar);
 
 function baz(a) {
   for (var i = 0; i < 10; i++) {
@@ -28,6 +30,7 @@ function baz(a) {
   }
   return /\0/;
 }
+%EnsureFeedbackVectorForFunction(baz);
 
 function qux(a) {
   for (var i = 0; i < 10; i++) {
@@ -39,6 +42,7 @@ function qux(a) {
   }
   return r;
 }
+%EnsureFeedbackVectorForFunction(qux);
 
 function test(f) {
   // Test the reference equality of regex's created in OSR'd function.
