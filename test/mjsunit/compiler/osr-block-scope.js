@@ -28,6 +28,7 @@ function test(expected, func, depth) {
   for (var depth = 1; depth < 4; depth++) {
     var body = nest(orig, name, depth);
     func = eval("(" + body + ")");
+    %EnsureFeedbackVectorForFunction(func);
 
     assertEquals(expected, func());
     assertEquals(expected, func());
@@ -47,6 +48,7 @@ function foo() {
   }
   return result;
 }
+%EnsureFeedbackVectorForFunction(foo);
 
 test(45, foo);
 
@@ -58,6 +60,7 @@ function bar() {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(bar);
 
 test(45, bar);
 
@@ -71,6 +74,7 @@ function bon() {
     return sum;
   }
 }
+%EnsureFeedbackVectorForFunction(bon);
 
 test(45, bon);
 
@@ -87,6 +91,7 @@ function row() {
   }
   return 11;
 }
+%EnsureFeedbackVectorForFunction(row);
 
 test(7, row);
 
@@ -98,6 +103,7 @@ function nub() {
   }
   return i;
 }
+%EnsureFeedbackVectorForFunction(nub);
 
 test(2, nub);
 
@@ -112,5 +118,6 @@ function kub() {
   }
   return result;
 }
+%EnsureFeedbackVectorForFunction(kub);
 
 test(1, kub);

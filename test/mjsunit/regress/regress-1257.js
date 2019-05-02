@@ -31,4 +31,5 @@ function foo () {
     };
 }
 
+%EnsureFeedbackVectorForFunction(foo);
 foo();

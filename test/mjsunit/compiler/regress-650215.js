@@ -13,4 +13,5 @@ function f() {
   return x;
 }
 
+%EnsureFeedbackVectorForFunction(f);
 assertEquals(0, f());

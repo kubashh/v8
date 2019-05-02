@@ -41,4 +41,5 @@ function f(x, b, c) {
   return a + 4;
 }
 
+%EnsureFeedbackVectorForFunction(f);
 assertEquals(55, f(5, "122", "1221"));

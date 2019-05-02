@@ -20,5 +20,6 @@ function f(x) {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(f);
 
 assertEquals(500, f(5));

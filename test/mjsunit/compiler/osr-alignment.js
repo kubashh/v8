@@ -38,6 +38,7 @@ function f1() {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(f1);
 
 function f2() {
   var sum = 0;
@@ -50,6 +51,7 @@ function f2() {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(f2);
 
 function f3() {
   var sum = 0;
@@ -62,6 +64,7 @@ function f3() {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(f3);
 
 function test1() {
   var j = 11;

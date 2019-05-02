@@ -12,4 +12,5 @@ function f() {
   }
 }
 
+%EnsureFeedbackVectorForFunction(f);
 f();

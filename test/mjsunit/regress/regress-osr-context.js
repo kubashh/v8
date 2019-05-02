@@ -16,5 +16,6 @@
     }
     return a;
   }
+  %EnsureFeedbackVectorForFunction(f);
   assertEquals(18, f());
 })();

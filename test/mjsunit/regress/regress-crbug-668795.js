@@ -17,5 +17,6 @@ function f() {
   }
   return result;
 }
+%EnsureFeedbackVectorForFunction(f);
 
 assertEquals("R:121212", f());

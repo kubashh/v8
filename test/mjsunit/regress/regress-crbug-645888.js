@@ -15,4 +15,5 @@ function f() {
     throw "no loop, thank you";
   }
 }
+%EnsureFeedbackVectorForFunction(f);
 assertThrows(f);

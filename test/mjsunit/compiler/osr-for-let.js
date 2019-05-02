@@ -24,6 +24,7 @@ function bar() {
   }
   return result;
 }
+%EnsureFeedbackVectorForFunction(bar);
 
 test(4005, bar);
 
@@ -35,6 +36,7 @@ function baz() {
   }
   return sum;
 }
+%EnsureFeedbackVectorForFunction(baz);
 
 test(2, baz);
 
@@ -46,6 +48,7 @@ function qux() {
   }
   return result;
 }
+%EnsureFeedbackVectorForFunction(qux);
 
 test(1, qux);
 
@@ -60,6 +63,7 @@ function nux() {
   }
   return result;
 }
+%EnsureFeedbackVectorForFunction(nux);
 
 test(1, nux);
 
@@ -78,5 +82,6 @@ function blo() {
   }
   return result;
 }
+%EnsureFeedbackVectorForFunction(blo);
 
 test(4005, blo());
