@@ -1123,6 +1123,7 @@ namespace internal {
   TFC(WasmStackOverflow, NoContext)                                            \
   TFC(WasmToNumber, TypeConversion)                                            \
   TFC(WasmThrow, WasmThrow)                                                    \
+  TFC(WasmRethrow, WasmRethrow)                                                \
   TFS(ThrowWasmTrapUnreachable)                                                \
   TFS(ThrowWasmTrapMemOutOfBounds)                                             \
   TFS(ThrowWasmTrapUnalignedAccess)                                            \
@@ -1439,7 +1440,8 @@ namespace internal {
   V(WasmThrow)                           \
   V(DoubleToI)                           \
   V(WasmI64ToBigInt)                     \
-  V(WasmBigIntToI64)
+  V(WasmBigIntToI64)                     \
+  V(WasmRethrow)
 
 // The exception thrown in the following builtins are caught internally and will
 // not be propagated further or re-thrown

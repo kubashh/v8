@@ -39,6 +39,7 @@ class DebugInfo;
 class EnumCache;
 class FinalizationGroupCleanupJobTask;
 class FreshlyAllocatedBigInt;
+class WasmCapiFunctionData;
 class Isolate;
 class JSDataView;
 class JSGeneratorObject;
@@ -874,6 +875,9 @@ class V8_EXPORT_PRIVATE Factory {
   Handle<SharedFunctionInfo> NewSharedFunctionInfoForApiFunction(
       MaybeHandle<String> maybe_name,
       Handle<FunctionTemplateInfo> function_template_info, FunctionKind kind);
+
+  Handle<SharedFunctionInfo> NewSharedFunctionInfoForWasmCapiFunction(
+      Handle<WasmCapiFunctionData> data);
 
   Handle<SharedFunctionInfo> NewSharedFunctionInfoForBuiltin(
       MaybeHandle<String> name, int builtin_index,
