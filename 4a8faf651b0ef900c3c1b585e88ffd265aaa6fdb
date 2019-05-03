@@ -22,6 +22,30 @@
       "revId": "4a8faf651b0ef900c3c1b585e88ffd265aaa6fdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d4e0fad_c79c5ecc",
+        "filename": "test/debugger/debug/regress/regress-5279.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-05-03T14:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11b179f6_35b29893",
+      "range": {
+        "startLine": 18,
+        "startChar": 1,
+        "endLine": 18,
+        "endChar": 32
+      },
+      "revId": "4a8faf651b0ef900c3c1b585e88ffd265aaa6fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
