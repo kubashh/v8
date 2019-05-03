@@ -3,7 +3,9 @@
 // found in the LICENSE file.
 
 #include <cctype>
+#include <unordered_map>
 
+#include "src/globals.h"
 #include "src/torque/earley-parser.h"
 #include "src/torque/torque-parser.h"
 #include "src/torque/utils.h"
@@ -28,6 +30,30 @@ struct TypeswitchCase {
   TypeExpression* type;
   Statement* block;
 };
+
+class BuildFlags : public ContextualClass<BuildFlags> {
+ public:
+  BuildFlags() {
+    build_flags_["V8_SFI_HAS_UNIQUE_ID"] = V8_SFI_HAS_UNIQUE_ID;
+    build_flags_["TAGGED_SIZE_8_BYTES"] = kTaggedSize == 8;
+    build_flags_["TAGGED_SIZE_4_BYTES"] = kTaggedSize == 4;
+    build_flags_["V8_DOUBLE_FIELDS_UNBOXING"] = V8_DOUBLE_FIELDS_UNBOXING;
+    build_flags_["TRUE_FOR_TESTING"] = true;
+    build_flags_["FALSE_FOR_TESTING"] = false;
+  }
+  static bool GetFlag(const std::string& name, const char* production) {
+    auto it = Get().build_flags_.find(name);
+    if (it == Get().build_flags_.end()) {
+      ReportError("Unknown flag used in ", production, ": ", name,
+                  ". Please add it to the list in BuildFlags.");
+    }
+    return it->second;
+  }
+
+ private:
+  std::unordered_map<std::string, bool> build_flags_;
+};
+DEFINE_CONTEXTUAL_VARIABLE(BuildFlags)
 
 template <>
 V8_EXPORT_PRIVATE const ParseResultTypeId ParseResultHolder<std::string>::id =
@@ -578,7 +604,16 @@ base::Optional<ParseResult> MakeClassDeclaration(
   auto extends = child_results->NextAs<base::Optional<TypeExpression*>>();
   auto generates = child_results->NextAs<base::Optional<std::string>>();
   auto methods = child_results->NextAs<std::vector<Declaration*>>();
-  auto fields = child_results->NextAs<std::vector<ClassFieldExpression>>();
+  auto fields_raw = child_results->NextAs<std::vector<ClassFieldExpression>>();
+
+  // Filter to only include fields that should be present based on decoration.
+  std::vector<ClassFieldExpression> fields;
+  std::copy_if(fields_raw.begin(), fields_raw.end(), std::back_inserter(fields),
+               [](const ClassFieldExpression& exp) {
+                 return !exp.conditional.has_value() ||
+                        BuildFlags::GetFlag(*exp.conditional, "@ifdef");
+               });
+
   Declaration* result = MakeNode<ClassDeclaration>(
       name, is_extern, generate_print, transient, std::move(extends),
       std::move(generates), std::move(methods), fields);
@@ -1150,13 +1185,14 @@ base::Optional<ParseResult> MakeNameAndExpressionFromExpression(
 }
 
 base::Optional<ParseResult> MakeClassField(ParseResultIterator* child_results) {
+  auto conditional = child_results->NextAs<base::Optional<std::string>>();
   auto weak = child_results->NextAs<bool>();
   auto const_qualified = child_results->NextAs<bool>();
   auto name = child_results->NextAs<Identifier*>();
   auto index = child_results->NextAs<base::Optional<std::string>>();
   auto type = child_results->NextAs<TypeExpression*>();
-  return ParseResult{
-      ClassFieldExpression{{name, type}, index, weak, const_qualified}};
+  return ParseResult{ClassFieldExpression{
+      {name, type}, index, conditional, weak, const_qualified}};
 }
 
 base::Optional<ParseResult> MakeStructField(
@@ -1359,10 +1395,12 @@ struct TorqueGrammar : Grammar {
   Symbol* optionalArraySpecifier =
       Optional<std::string>(Sequence({Token("["), &identifier, Token("]")}));
 
-  Symbol classField = {
-      Rule({CheckIf(Token("weak")), CheckIf(Token("const")), &name,
-            optionalArraySpecifier, Token(":"), &type, Token(";")},
-           MakeClassField)};
+  Symbol classField = {Rule(
+      {Optional<std::string>(
+           Sequence({Token("@ifdef"), Token("("), &identifier, Token(")")})),
+       CheckIf(Token("weak")), CheckIf(Token("const")), &name,
+       optionalArraySpecifier, Token(":"), &type, Token(";")},
+      MakeClassField)};
 
   Symbol structField = {
       Rule({CheckIf(Token("const")), &name, Token(":"), &type, Token(";")},
@@ -1722,7 +1760,10 @@ struct TorqueGrammar : Grammar {
 
 }  // namespace
 
-void ParseTorque(const std::string& input) { TorqueGrammar().Parse(input); }
+void ParseTorque(const std::string& input) {
+  BuildFlags::Scope build_flags_scope;
+  TorqueGrammar().Parse(input);
+}
 
 }  // namespace torque
 }  // namespace internal

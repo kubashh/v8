@@ -2876,9 +2876,7 @@ void ImplementationVisitor::GenerateClassDefinitions(std::string& file_name) {
       }
       size_t field_size;
       std::string size_string;
-      std::string machine_type;
-      std::tie(field_size, size_string, machine_type) =
-          f.GetFieldSizeInformation();
+      std::tie(field_size, size_string) = f.GetFieldSizeInformation();
       new_contents_stream << "V(k" << CamelifyString(f.name_and_type.name)
                           << "Offset, " << size_string << ") \\\n";
     }
