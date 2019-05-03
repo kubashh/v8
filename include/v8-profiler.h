@@ -235,7 +235,6 @@ class V8_EXPORT CpuProfileNode {
   static const int kNoColumnNumberInfo = Message::kNoColumnInfo;
 };
 
-
 /**
  * CpuProfile contains a CPU profile in a form of top-down call tree
  * (from main() down to functions that do all the work).
@@ -312,6 +311,9 @@ enum CpuProfilingNamingMode {
  */
 class V8_EXPORT CpuProfiler {
  public:
+  // Indicates that the tick buffer size should not be explicitly limited.
+  static const unsigned kNoTickLimit = 0;
+
   /**
    * Creates a new CPU profiler for the |isolate|. The isolate must be
    * initialized. The profiler object must be disposed after use by calling
@@ -358,15 +360,22 @@ class V8_EXPORT CpuProfiler {
    *
    * |record_samples| parameter controls whether individual samples should
    * be recorded in addition to the aggregated tree.
+   *
+   * |tick_limit| controls the maximum number of ticks that should be recorded
+   * by the profiler. The tick count gets incremented whenever a stack is
+   * obtained from the VM. Once this limit is reached, the profile will no
+   * longer gather any new stacks.
    */
   void StartProfiling(Local<String> title, CpuProfilingMode mode,
-                      bool record_samples = false);
+                      bool record_samples = false,
+                      unsigned tick_limit = kNoTickLimit);
   /**
    * The same as StartProfiling above, but the CpuProfilingMode defaults to
    * kLeafNodeLineNumbers mode, which was the previous default behavior of the
    * profiler.
    */
-  void StartProfiling(Local<String> title, bool record_samples = false);
+  void StartProfiling(Local<String> title, bool record_samples = false,
+                      unsigned tick_limit = kNoTickLimit);
 
   /**
    * Stops collecting CPU profile with a given title and returns it.
