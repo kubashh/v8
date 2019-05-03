@@ -18,6 +18,7 @@
     a[i] = 5.3;
   }
 
+  %PrepareFunctionForOptimization(foo);
   foo(a, 1);
   foo(a, 2);
   foo(a, 3);
@@ -29,6 +30,7 @@
   assertUnoptimized(foo);
   assertTrue(%HasDictionaryElements(a));
 
+  %PrepareFunctionForOptimization(foo);
   var b = [];
   foo(b, 1);
   foo(b, 2);
@@ -55,6 +57,7 @@
   }
 
   // The KeyedStoreIC will learn GROW_MODE.
+  %PrepareFunctionForOptimization(foo2);
   foo2(a, 10);
   foo2(a, 12);
   foo2(a, 31);
