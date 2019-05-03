@@ -1,0 +1,32 @@
+--- encoding/encoding.h	2019-04-30 11:31:33.641671526 -0700
++++ encoding/encoding.h	2019-05-03 15:12:10.896180450 -0700
+@@ -2,8 +2,8 @@
+ // Use of this source code is governed by a BSD-style license that can be
+ // found in the LICENSE file.
+ 
+-#ifndef INSPECTOR_PROTOCOL_ENCODING_ENCODING_H_
+-#define INSPECTOR_PROTOCOL_ENCODING_ENCODING_H_
++#ifndef V8_INSPECTOR_PROTOCOL_ENCODING_ENCODING_H_
++#define V8_INSPECTOR_PROTOCOL_ENCODING_ENCODING_H_
+ 
+ #include <cstddef>
+ #include <cstdint>
+@@ -12,8 +12,7 @@
+ #include <string>
+ #include <vector>
+ 
+-namespace inspector_protocol_encoding {
+-
++namespace v8_inspector_protocol_encoding {
+ // =============================================================================
+ // span - sequence of bytes
+ // =============================================================================
+@@ -500,6 +499,6 @@
+                          span<uint8_t> json,
+                          std::string* cbor);
+ }  // namespace json
+-}  // namespace inspector_protocol_encoding
++}  // namespace v8_inspector_protocol_encoding
+ 
+-#endif  // INSPECTOR_PROTOCOL_ENCODING_ENCODING_H_
++#endif  // V8_INSPECTOR_PROTOCOL_ENCODING_ENCODING_H_

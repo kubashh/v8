@@ -1,0 +1,17 @@
+--- encoding.cc	2019-05-01 17:21:50.562456480 -0700
++++ encoding.cc	2019-05-03 15:12:10.896180450 -0700
+@@ -10,7 +10,7 @@
+ #include <limits>
+ #include <stack>
+ 
+-namespace inspector_protocol_encoding {
++namespace v8_inspector_protocol_encoding {
+ // =============================================================================
+ // Status and Error codes
+ // =============================================================================
+@@ -2127,4 +2127,4 @@
+   return ConvertJSONToCBORTmpl(platform, json, cbor);
+ }
+ }  // namespace json
+-}  // namespace inspector_protocol_encoding
++}  // namespace v8_inspector_protocol_encoding
