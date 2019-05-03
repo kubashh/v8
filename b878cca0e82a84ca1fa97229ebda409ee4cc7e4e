@@ -22,6 +22,52 @@
       "revId": "b878cca0e82a84ca1fa97229ebda409ee4cc7e4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7be0c3ca_a04b74f5",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-03T13:21:06Z",
+      "side": 1,
+      "message": "Alternatively, callable-\u003eidentifier_position() could just default to callable-\u003eposition(), no?",
+      "range": {
+        "startLine": 2443,
+        "startChar": 6,
+        "endLine": 2448,
+        "endChar": 37
+      },
+      "revId": "b878cca0e82a84ca1fa97229ebda409ee4cc7e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0125476_d5680b7e",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-03T13:21:06Z",
+      "side": 1,
+      "message": "I would kind of expect this to be the default. What is the default at the moment?",
+      "range": {
+        "startLine": 464,
+        "startChar": 6,
+        "endLine": 464,
+        "endChar": 40
+      },
+      "revId": "b878cca0e82a84ca1fa97229ebda409ee4cc7e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
