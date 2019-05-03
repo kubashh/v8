@@ -108,6 +108,30 @@
     },
     {
       "key": {
+        "uuid": "4a653ba5_6b64b162",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-03T09:14:45Z",
+      "side": 1,
+      "message": "Ping, do you prefer that I add a DCHECK here, or just remove the condition?",
+      "parentUuid": "5da43a4d_2922ce45",
+      "range": {
+        "startLine": 152,
+        "startChar": 18,
+        "endLine": 152,
+        "endChar": 31
+      },
+      "revId": "0ccf3fea4cf4fa964e390f718d66ab7b1984c5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "254e98cd_e659d6d3",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 21
