@@ -83,6 +83,7 @@ namespace internal {
   V(WasmI32AtomicWait)                \
   V(WasmI64AtomicWait)                \
   V(WasmMemoryGrow)                   \
+  V(WasmRethrow)                      \
   V(WasmTableGet)                     \
   V(WasmTableSet)                     \
   V(WasmThrow)                        \
@@ -1192,6 +1193,14 @@ class WasmThrowDescriptor final : public CallInterfaceDescriptor {
   DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result 1
                                     MachineType::AnyTagged())  // kException
   DECLARE_DESCRIPTOR(WasmThrowDescriptor, CallInterfaceDescriptor)
+};
+
+class WasmRethrowDescriptor final : public CallInterfaceDescriptor {
+ public:
+  DEFINE_PARAMETERS_NO_CONTEXT(kException)
+  DEFINE_RESULT_AND_PARAMETER_TYPES(MachineType::AnyTagged(),  // result 1
+                                    MachineType::AnyTagged())  // kException
+  DECLARE_DESCRIPTOR(WasmRethrowDescriptor, CallInterfaceDescriptor)
 };
 
 class I64ToBigIntDescriptor final : public CallInterfaceDescriptor {

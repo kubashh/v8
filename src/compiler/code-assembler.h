@@ -306,6 +306,7 @@ class CompilationCacheTable;
 class Constructor;
 class Filler;
 class FunctionTemplateRareData;
+class WasmCapiFunctionData;
 class InternalizedString;
 class JSArgumentsObject;
 class JSArrayBufferView;

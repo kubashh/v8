@@ -68,6 +68,7 @@ enum class WasmImportCallKind : uint8_t {
   kLinkError,                      // static WASM->WASM type error
   kRuntimeTypeError,               // runtime WASM->JS type error
   kWasmToWasm,                     // fast WASM->WASM call
+  kWasmToHost,                     // fast WASM->Host call
   kJSFunctionArityMatch,           // fast WASM->JS call
   kJSFunctionArityMatchSloppy,     // fast WASM->JS call, sloppy receiver
   kJSFunctionArityMismatch,        // WASM->JS, needs adapter frame
@@ -110,6 +111,11 @@ GetWasmImportCallKind(Handle<JSReceiver> callable, wasm::FunctionSig* sig,
 V8_EXPORT_PRIVATE wasm::WasmCode* CompileWasmImportCallWrapper(
     wasm::WasmEngine*, wasm::NativeModule*, WasmImportCallKind,
     wasm::FunctionSig*, bool source_positions);
+
+// Compiles a host call wrapper, which allows WASM to call host functions.
+wasm::WasmCode* CompileWasmHostCallWrapper(wasm::WasmEngine*,
+                                           wasm::NativeModule*,
+                                           wasm::FunctionSig*, Address address);
 
 // Creates a code object calling a wasm function with the given signature,
 // callable from JS.
@@ -263,6 +269,8 @@ class WasmGraphBuilder {
                    wasm::WasmCodePosition position);
   Node* ReturnCallIndirect(uint32_t table_index, uint32_t sig_index,
                            Node** args, wasm::WasmCodePosition position);
+
+  void BuildHostCall(Address address);
 
   Node* Invert(Node* node);
 
