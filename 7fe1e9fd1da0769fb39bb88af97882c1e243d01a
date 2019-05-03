@@ -200,6 +200,24 @@
       "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eadf5470_e2395002",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-05-03T23:32:25Z",
+      "side": 1,
+      "message": "I\u0027m not completely convinced that we need to stop collecting statistics when the max_samples limit is reached. At least if the idea behind this patch is to limit memory consumption of the profiles. The profile tree is usually pretty small compared to samples arrays.",
+      "parentUuid": "6589faa1_6d83d175",
+      "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
