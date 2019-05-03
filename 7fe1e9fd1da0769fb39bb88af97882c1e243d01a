@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "b42aeb9e_6da0dd94",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-03T12:51:10Z",
+      "side": 1,
+      "message": "I would suggest moving this inside CpuProfiler or another class to namespace it, otherwise the full name is v8::kNoSampleLimit which isn\u0027t specific to cpu profiling",
+      "range": {
+        "startLine": 239,
+        "startChar": 22,
+        "endLine": 239,
+        "endChar": 36
+      },
+      "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88699b5c_fa0db9f0",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-03T12:51:10Z",
+      "side": 1,
+      "message": "Given we are introducing more options/configurations/modes for the profiler and the profiles, what do you think about an \u0027options bag\u0027 or config struct/class? This saves us having to pass them through all the interfaces so explicitly when we add new switches.\n\nWe could also deprecate both the existing StartProfiling() methods (there are two because we had to avoid breaking the Node.js ABI... long story).\n\nNot as part of this CL but just an idea if we are planning to add more switches",
+      "range": {
+        "startLine": 371,
+        "startChar": 45,
+        "endLine": 371,
+        "endChar": 61
+      },
+      "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6b8cb369_57060c01",
         "filename": "src/profiler/profile-generator.cc",
         "patchSetId": 3
@@ -70,6 +116,24 @@
       "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d963dae0_43c586cb",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-03T12:51:10Z",
+      "side": 1,
+      "message": "So the semantics are that a profile started with max_samples \u003d 10 and record_samples \u003d true will have GetSamplesCount() \u003c\u003d 10 and the sum of GetHitCount() for all nodes in the profile will also be \u003c\u003d 10?\n\nIn that case I think max_samples is an OK name but it unfortunately collides with the v8-profiler notion of samples which refers specifically to full samples saved via record_samples as opposed to just statistical tick data... \n\nSo yeah I\u0027d say go with tick_limit but introduce in the API comments the idea that a profile is made up of many ticks and that this will essentially auto-stop the profile after n ticks, then the profile will stay the same and can be retrieved by calling StopProfiling().",
+      "parentUuid": "2f62667a_505b8609",
+      "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
