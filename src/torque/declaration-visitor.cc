@@ -152,8 +152,13 @@ void DeclarationVisitor::Visit(TorqueBuiltinDeclaration* decl,
 void DeclarationVisitor::Visit(TorqueMacroDeclaration* decl,
                                const Signature& signature,
                                base::Optional<Statement*> body) {
-  Declarations::DeclareMacro(decl->name, base::nullopt, signature,
-                             decl->transitioning, body, decl->op);
+  Macro* macro =
+      Declarations::DeclareMacro(decl->name, base::nullopt, signature,
+                                 decl->transitioning, body, decl->op);
+  macro->position() = decl->pos;
+  // TODO(szuend): Set this to decl->name->pos once all callable names are
+  //               changed from std::string to Identifier*.
+  macro->identifier_position() = decl->pos;
 }
 
 void DeclarationVisitor::Visit(IntrinsicDeclaration* decl,
@@ -395,7 +400,7 @@ Callable* DeclarationVisitor::SpecializeImplicit(const SpecializationKey& key) {
           nullptr) {
     ReportError("missing specialization of ", key.generic->name(),
                 " with types <", key.specialized_types, "> declared at ",
-                key.generic->pos());
+                key.generic->position());
   }
   CurrentScope::Scope generic_scope(key.generic->ParentScope());
   Callable* result =

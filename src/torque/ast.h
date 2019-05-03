@@ -972,6 +972,12 @@ inline bool IsDeferred(Statement* stmt) {
 DECLARE_CONTEXTUAL_VARIABLE(CurrentAst, Ast);
 
 template <class T, class... Args>
+T* MakeNode(SourcePosition pos, Args... args) {
+  return CurrentAst::Get().AddNode(
+      base::make_unique<T>(pos, std::move(args)...));
+}
+
+template <class T, class... Args>
 T* MakeNode(Args... args) {
   return CurrentAst::Get().AddNode(std::unique_ptr<T>(
       new T(CurrentSourcePosition::Get(), std::move(args)...)));

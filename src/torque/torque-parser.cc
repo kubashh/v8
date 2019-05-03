@@ -461,7 +461,8 @@ base::Optional<ParseResult> MakeTorqueMacroDeclaration(
   auto labels = child_results->NextAs<LabelAndTypesVector>();
   auto body = child_results->NextAs<base::Optional<Statement*>>();
   MacroDeclaration* macro = MakeNode<TorqueMacroDeclaration>(
-      transitioning, name, operator_name, args, return_type, labels);
+      child_results->matched_input().pos, transitioning, name, operator_name,
+      args, return_type, labels);
   Declaration* result;
   if (generic_parameters.empty()) {
     if (!body) ReportError("A non-generic declaration needs a body.");
