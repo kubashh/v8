@@ -8,3 +8,24 @@ static_library("encoding") {
     "encoding/encoding.h",
   ]
 }
+
+
+import("../../gni/v8.gni")
+
+v8_source_set("encoding_test") {
+  sources = [
+    "encoding/encoding_test.cc",
+    "encoding/encoding_test_helper.h",
+  ]
+  configs = [
+    "../..:external_config",
+    "../..:internal_config_base",
+  ]
+  deps = [
+    ":encoding",
+    "../..:v8_libbase",
+    "//testing/gmock",
+    "//testing/gtest",
+  ]
+  testonly = true
+}
