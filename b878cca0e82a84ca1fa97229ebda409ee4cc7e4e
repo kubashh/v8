@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "29fd6520_b975e103",
+        "filename": "src/torque/ast.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 975,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-05-06T10:51:34Z",
+      "side": 1,
+      "message": "Removed this template function all-together as CurrentSourcePosition::Get() holds the whole match.",
+      "parentUuid": "8400cb27_1a2adc1b",
+      "range": {
+        "startLine": 975,
+        "startChar": 3,
+        "endLine": 975,
+        "endChar": 11
+      },
+      "revId": "b878cca0e82a84ca1fa97229ebda409ee4cc7e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7be0c3ca_a04b74f5",
         "filename": "src/torque/implementation-visitor.cc",
         "patchSetId": 1
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "164ab94a_6ac79869",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 2448,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-05-06T10:51:34Z",
+      "side": 1,
+      "message": "Done, replaced with proper getters and setters.",
+      "parentUuid": "a60aa396_ae392833",
+      "range": {
+        "startLine": 2443,
+        "startChar": 6,
+        "endLine": 2448,
+        "endChar": 37
+      },
+      "revId": "b878cca0e82a84ca1fa97229ebda409ee4cc7e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0125476_d5680b7e",
         "filename": "src/torque/torque-parser.cc",
         "patchSetId": 1
@@ -116,6 +164,30 @@
       "revId": "b878cca0e82a84ca1fa97229ebda409ee4cc7e4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "965d3c9c_49bf7e23",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-05-06T10:51:34Z",
+      "side": 1,
+      "message": "Disregard the above comment. As discussed offline, fixing the source position of MatchedInput fixes the SourcePosition when running an action.",
+      "parentUuid": "1db3f83a_22e80ab6",
+      "range": {
+        "startLine": 464,
+        "startChar": 6,
+        "endLine": 464,
+        "endChar": 40
+      },
+      "revId": "b878cca0e82a84ca1fa97229ebda409ee4cc7e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
