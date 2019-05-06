@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05e472dd_65158bab",
+        "filename": "src/torque/torque-compiler.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-06T14:28:18Z",
+      "side": 1,
+      "message": "Structs or classes? I\u0027m confused.",
+      "revId": "e5985d34d0db36a23086d9da6316e37a36411c47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
