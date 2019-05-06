@@ -16,6 +16,98 @@
       "revId": "e5985d34d0db36a23086d9da6316e37a36411c47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46fc3f36_3ccbe1e2",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-06T14:45:35Z",
+      "side": 1,
+      "message": "Can we shomehow DCHECK that this TypeAlias refers to the same ClassDeclaration*?\nAn alternative would be to pass the TypeAlias that triggered ComputeType as an argument to ComputeType.",
+      "range": {
+        "startLine": 130,
+        "startChar": 6,
+        "endLine": 130,
+        "endChar": 70
+      },
+      "revId": "e5985d34d0db36a23086d9da6316e37a36411c47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f9ba4aa_eb2b3d48",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-06T14:45:35Z",
+      "side": 1,
+      "message": "This comment is out-of-date: We can\u0027t compute the offset here.",
+      "range": {
+        "startLine": 135,
+        "startChar": 3,
+        "endLine": 136,
+        "endChar": 74
+      },
+      "revId": "e5985d34d0db36a23086d9da6316e37a36411c47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67891573_30eb01b3",
+        "filename": "src/torque/types.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-06T14:45:35Z",
+      "side": 1,
+      "message": "A comment would be good when it\u0027s OK to call this.",
+      "range": {
+        "startLine": 257,
+        "startChar": 28,
+        "endLine": 257,
+        "endChar": 47
+      },
+      "revId": "e5985d34d0db36a23086d9da6316e37a36411c47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a31931e_b117c876",
+        "filename": "src/torque/types.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-06T14:45:35Z",
+      "side": 1,
+      "message": "Can we DCHECK that this coincides with whether the name starts with \"constexpr \"?",
+      "range": {
+        "startLine": 204,
+        "startChar": 11,
+        "endLine": 204,
+        "endChar": 44
+      },
+      "revId": "e5985d34d0db36a23086d9da6316e37a36411c47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
