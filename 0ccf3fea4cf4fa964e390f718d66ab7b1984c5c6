@@ -156,6 +156,30 @@
     },
     {
       "key": {
+        "uuid": "d9ed5fd3_70029d00",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-06T19:19:57Z",
+      "side": 1,
+      "message": "Just realized there is already a DCHECK on L155 that\u0027s checking the same thing.",
+      "parentUuid": "1adb17b5_49cb9699",
+      "range": {
+        "startLine": 152,
+        "startChar": 18,
+        "endLine": 152,
+        "endChar": 31
+      },
+      "revId": "0ccf3fea4cf4fa964e390f718d66ab7b1984c5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "254e98cd_e659d6d3",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 21

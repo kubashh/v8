@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8e327f77_8ec2cfcc",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2059,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-06T19:19:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15431b3c_14e0de9d",
+      "range": {
+        "startLine": 2059,
+        "startChar": 27,
+        "endLine": 2059,
+        "endChar": 50
+      },
+      "revId": "3a7be14e239548bf8d0d8c043ae798dc941a61ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65d6cc2d_d950f3cd",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 24
@@ -45,6 +69,30 @@
       "revId": "3a7be14e239548bf8d0d8c043ae798dc941a61ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31c2cc86_16fbf1c4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-06T19:19:57Z",
+      "side": 1,
+      "message": "Yeah, there is always the class name variable declared, so it\u0027s not exactly \"no variables\". Thanks for catching that!",
+      "parentUuid": "65d6cc2d_d950f3cd",
+      "range": {
+        "startLine": 2195,
+        "startChar": 21,
+        "endLine": 2195,
+        "endChar": 30
+      },
+      "revId": "3a7be14e239548bf8d0d8c043ae798dc941a61ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
