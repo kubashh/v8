@@ -10527,7 +10527,8 @@ void CodeStubAssembler::EmitElementStore(Node* object, Node* key, Node* value,
   CSA_ASSERT(this, Word32BinaryNot(IsJSProxy(object)));
 
   Node* elements = LoadElements(object);
-  if (!IsSmiOrObjectElementsKind(elements_kind)) {
+  if (!(IsSmiOrObjectElementsKind(elements_kind) ||
+        IsPackedFrozenOrSealedElementsKind(elements_kind))) {
     CSA_ASSERT(this, Word32BinaryNot(IsFixedCOWArrayMap(LoadMap(elements))));
   } else if (!IsCOWHandlingStoreMode(store_mode)) {
     GotoIf(IsFixedCOWArrayMap(LoadMap(elements)), bailout);
