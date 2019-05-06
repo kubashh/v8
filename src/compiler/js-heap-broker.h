@@ -32,6 +32,7 @@ class JSGlobalProxy;
 class JSRegExp;
 class JSTypedArray;
 class NativeContext;
+class OptimizedCompilationInfo;
 class ScriptContextTable;
 class VectorSlotPair;
 
@@ -778,12 +779,15 @@ struct FeedbackSource {
 
 class V8_EXPORT_PRIVATE JSHeapBroker {
  public:
-  JSHeapBroker(Isolate* isolate, Zone* broker_zone);
+  JSHeapBroker(Isolate* isolate, Zone* broker_zone,
+               OptimizedCompilationInfo* info);
 
   void SetNativeContextRef();
   void SerializeStandardObjects();
 
   Isolate* isolate() const { return isolate_; }
+  // {info()} can return nullptr when the broker is initialized for tests.
+  OptimizedCompilationInfo* info() const { return optimized_compilation_info_; }
   Zone* zone() const { return current_zone_; }
   NativeContextRef native_context() const { return native_context_.value(); }
   PerIsolateCompilerCache* compiler_cache() const { return compiler_cache_; }
@@ -838,6 +842,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   void CollectArrayAndObjectPrototypes();
 
   Isolate* const isolate_;
+  OptimizedCompilationInfo* const optimized_compilation_info_;
   Zone* const broker_zone_;
   Zone* current_zone_;
   base::Optional<NativeContextRef> native_context_;
