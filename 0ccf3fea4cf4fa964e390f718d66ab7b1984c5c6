@@ -132,6 +132,30 @@
     },
     {
       "key": {
+        "uuid": "1adb17b5_49cb9699",
+        "filename": "src/ast/scopes.cc",
+        "patchSetId": 21
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-05-06T05:48:01Z",
+      "side": 1,
+      "message": "Let\u0027s add a DCHECK for now. I don\u0027t know if this is going to cause any perf impact, but better to err on the side of being safe I guess.. unless anyone else has other thoughts here",
+      "parentUuid": "4a653ba5_6b64b162",
+      "range": {
+        "startLine": 152,
+        "startChar": 18,
+        "endLine": 152,
+        "endChar": 31
+      },
+      "revId": "0ccf3fea4cf4fa964e390f718d66ab7b1984c5c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "254e98cd_e659d6d3",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 21
