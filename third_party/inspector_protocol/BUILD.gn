@@ -8,3 +8,17 @@ static_library("encoding") {
     "encoding/encoding.h",
   ]
 }
+
+static_library("encoding_test") {
+  sources = [
+    "encoding/encoding_test.cc",
+    "encoding/encoding_test_helper.h",
+  ]
+  deps = [
+    ":encoding",
+    "../..:v8_libbase",
+    "//testing/gmock",
+    "//testing/gtest",
+  ]
+  testonly = true
+}
