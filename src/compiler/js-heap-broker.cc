@@ -1848,8 +1848,10 @@ ObjectRef ContextRef::get(int index) const {
   return ObjectRef(broker(), data()->AsContext()->GetSlot(index));
 }
 
-JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone)
+JSHeapBroker::JSHeapBroker(Isolate* isolate, Zone* broker_zone,
+                           OptimizedCompilationInfo* info)
     : isolate_(isolate),
+      optimized_compilation_info_(info),
       broker_zone_(broker_zone),
       current_zone_(broker_zone),
       refs_(new (zone())

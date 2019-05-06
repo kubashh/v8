@@ -18,14 +18,13 @@ GraphTest::GraphTest(int num_parameters)
     : canonical_(isolate()),
       common_(zone()),
       graph_(zone()),
-      broker_(isolate(), zone()),
+      broker_(isolate(), zone(), nullptr),
       source_positions_(&graph_),
       node_origins_(&graph_) {
   graph()->SetStart(graph()->NewNode(common()->Start(num_parameters)));
   graph()->SetEnd(graph()->NewNode(common()->End(1), graph()->start()));
   broker()->SetNativeContextRef();
 }
-
 
 GraphTest::~GraphTest() = default;
 
