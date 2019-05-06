@@ -11,6 +11,7 @@
 #include "src/interpreter/bytecode-array-iterator.h"
 #include "src/objects/code.h"
 #include "src/objects/shared-function-info-inl.h"
+#include "src/optimized-compilation-info.h"
 #include "src/vector-slot-pair.h"
 #include "src/zone/zone.h"
 
@@ -277,6 +278,16 @@ Hints SerializerForBackgroundCompilation::Run() {
     return Hints(zone());
   }
   shared.SetSerializedForCompilation(feedback_vector);
+
+  // We eagerly call the {EnsureSourcePositionsAvailable} for all serialized
+  // SFIs while still on the main thread. Source positions will later be used
+  // by JSInliner::ReduceJSCall. In tests the OptimizedCompilationInfo stored
+  // in the broker can be nullptr.
+  if (broker()->info() && broker()->info()->is_source_positions_enabled()) {
+    SharedFunctionInfo::EnsureSourcePositionsAvailable(
+        broker()->isolate(), environment()->function().shared);
+  }
+
   feedback_vector.SerializeSlots();
   TraverseBytecode();
   return environment()->return_value_hints();
