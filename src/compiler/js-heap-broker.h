@@ -778,12 +778,17 @@ struct FeedbackSource {
 
 class V8_EXPORT_PRIVATE JSHeapBroker {
  public:
-  JSHeapBroker(Isolate* isolate, Zone* broker_zone);
+  JSHeapBroker(Isolate* isolate, Zone* broker_zone,
+               bool is_source_positions_enabled);
 
   void SetNativeContextRef();
   void SerializeStandardObjects();
 
   Isolate* isolate() const { return isolate_; }
+  // Can return {false} also when the broker is initialized for tests.
+  bool is_source_positions_enabled() const {
+    return is_source_positions_enabled_;
+  }
   Zone* zone() const { return current_zone_; }
   NativeContextRef native_context() const { return native_context_.value(); }
   PerIsolateCompilerCache* compiler_cache() const { return compiler_cache_; }
@@ -838,6 +843,7 @@ class V8_EXPORT_PRIVATE JSHeapBroker {
   void CollectArrayAndObjectPrototypes();
 
   Isolate* const isolate_;
+  bool is_source_positions_enabled_;
   Zone* const broker_zone_;
   Zone* current_zone_;
   base::Optional<NativeContextRef> native_context_;
