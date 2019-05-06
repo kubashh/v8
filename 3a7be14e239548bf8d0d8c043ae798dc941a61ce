@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15431b3c_14e0de9d",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2059,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-05-06T18:37:19Z",
+      "side": 1,
+      "message": "This is incorrect now",
+      "range": {
+        "startLine": 2059,
+        "startChar": 27,
+        "endLine": 2059,
+        "endChar": 50
+      },
+      "revId": "3a7be14e239548bf8d0d8c043ae798dc941a61ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65d6cc2d_d950f3cd",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 24
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-05-06T18:37:19Z",
+      "side": 1,
+      "message": "Only the class name is declared in the outer class scope, right? Can this comment be updated to just say class name?",
+      "range": {
+        "startLine": 2195,
+        "startChar": 21,
+        "endLine": 2195,
+        "endChar": 30
+      },
+      "revId": "3a7be14e239548bf8d0d8c043ae798dc941a61ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
