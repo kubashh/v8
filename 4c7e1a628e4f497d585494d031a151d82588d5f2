@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c1be6a9_cfe57c9e",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-06T18:12:41Z",
+      "side": 1,
+      "message": "I can\u0027t see why this is needed.",
+      "revId": "4c7e1a628e4f497d585494d031a151d82588d5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c77d02_1e416a35",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-06T18:12:41Z",
+      "side": 1,
+      "message": "Nit: bool const ..., for the sake of consistency.",
+      "revId": "4c7e1a628e4f497d585494d031a151d82588d5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb79c4f8_0f42a643",
+        "filename": "test/cctest/compiler/test-js-typed-lowering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-06T18:12:41Z",
+      "side": 1,
+      "message": "Why did you rename this? None of the members here have that suffix (because they are public).",
+      "range": {
+        "startLine": 27,
+        "startChar": 22,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "4c7e1a628e4f497d585494d031a151d82588d5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
