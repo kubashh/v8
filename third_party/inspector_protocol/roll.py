@@ -18,6 +18,9 @@ FILES_TO_SYNC = [
     'code_generator.py',
     'concatenate_protocols.py',
     'convert_protocol_to_json.py',
+    'encoding/encoding.h',
+    'encoding/encoding.cc',
+    'encoding/encoding_test.cc',
     'inspector_protocol.gni',
     'inspector_protocol.gypi',
     'lib/*',
@@ -105,7 +108,7 @@ def main(argv):
   downstream = os.path.normpath(os.path.expanduser(
       args.v8_src_downstream))
   CheckRepoIsClean(upstream, '/src')
-  CheckRepoIsClean(downstream, '/v8')
+  # CheckRepoIsClean(downstream, '/v8')
   CheckRepoIsInspectorProtocolCheckout(upstream)
   CheckRepoIsV8Checkout(downstream)
   # Check that the destination Git repo isn't at the master branch - it's
