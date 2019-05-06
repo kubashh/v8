@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81e77a8b_2d0c558c",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-06T13:30:12Z",
+      "side": 1,
+      "message": "How about calling it \"collect_source_positions\" or \"want_source_positions\", that describes more directly what the flag is used for.\n\n\nOh, sorry, I only now realized that this should be moved to the serializer, as it\u0027s only used there. What do you think?",
+      "revId": "c807fadc018e7369f0abc3d0c3382fa19ef31b19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0b5ed7d_80ee26da",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-06T13:30:12Z",
+      "side": 1,
+      "message": "I don\u0027t understand this comment.",
+      "revId": "c807fadc018e7369f0abc3d0c3382fa19ef31b19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5e0ac0a_69262e4d",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-06T13:30:12Z",
+      "side": 1,
+      "message": "I think this can be const.",
+      "revId": "c807fadc018e7369f0abc3d0c3382fa19ef31b19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de3be6bc_f63a572e",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-06T13:30:12Z",
+      "side": 1,
+      "message": "I\u0027d prefer \u0027shared.object()\u0027 here for clarity.",
+      "range": {
+        "startLine": 287,
+        "startChar": 29,
+        "endLine": 287,
+        "endChar": 61
+      },
+      "revId": "c807fadc018e7369f0abc3d0c3382fa19ef31b19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
