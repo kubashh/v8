@@ -298,6 +298,7 @@ v8_source_set("unittests_sources") {
     "//build/win:default_exe_manifest",
     "//testing/gmock",
     "//testing/gtest",
+    "//third_party/inspector_protocol:encoding_test",
   ]
 
   if (is_win) {
