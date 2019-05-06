@@ -378,6 +378,29 @@
     },
     {
       "key": {
+        "uuid": "852916ef_d2f816a7",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-06T12:26:46Z",
+      "side": 1,
+      "message": "Could you wrap this code in a {WasmCapiFunction::New} function? This would make it consistent with other WebAssembly objects.",
+      "range": {
+        "startLine": 1677,
+        "startChar": 2,
+        "endLine": 1695,
+        "endChar": 59
+      },
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1d82629c_98b0c51d",
         "filename": "src/wasm/module-instantiate.cc",
         "patchSetId": 3
@@ -566,6 +589,23 @@
     },
     {
       "key": {
+        "uuid": "c29ca855_b0d7867f",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-06T12:26:46Z",
+      "side": 1,
+      "message": "Hmm, why don\u0027t you have to call UpdateDispatchTables here?",
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "df2b15e2_eb17efa1",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 3
@@ -610,6 +650,30 @@
       "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf53f384_adc460fc",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-06T12:26:46Z",
+      "side": 1,
+      "message": "Yes, with the anyref proposal we implemented lazy initialization of function tables, see https://docs.google.com/document/d/1gtgsd7aXzqxyeztlx3HKs1ClmSoTEE8mFDrrCa7Xgps/edit#. I.e. during instantiation, we do not initialize function tables with WasmExportedFunctions, but only with an (instance, function_index) tuple. The code below finally creates the WasmExportedFunction from this tuple.\n\nI guess you have to handle WasmCapiFunction here:\n\nif (WasmCapiFunction::IsWasmCapiFunction(*entry)) {\n  return entry;\n}",
+      "parentUuid": "df2b15e2_eb17efa1",
+      "range": {
+        "startLine": 956,
+        "startChar": 0,
+        "endLine": 959,
+        "endChar": 3
+      },
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
