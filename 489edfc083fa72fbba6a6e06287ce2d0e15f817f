@@ -153,6 +153,30 @@
       "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cbb1eda_a89bf92d",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-07T11:58:37Z",
+      "side": 1,
+      "message": "Good catch. I think this is due to a missing \"### gcmole(all) ###\" annotation in the BUILD.gn file. We should definitely fix that.",
+      "parentUuid": "d3dc4a88_f0ca0e2d",
+      "range": {
+        "startLine": 1683,
+        "startChar": 0,
+        "endLine": 1684,
+        "endChar": 62
+      },
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
