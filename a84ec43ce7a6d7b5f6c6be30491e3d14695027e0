@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4aae20e4_17047695",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-07T13:57:27Z",
+      "side": 1,
+      "message": "Can you move this code to a helper method to reduce nesting.",
+      "range": {
+        "startLine": 2000,
+        "startChar": 8,
+        "endLine": 2027,
+        "endChar": 9
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a67d736_c0354382",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-07T13:57:27Z",
+      "side": 1,
+      "message": "Please make the comment relate to why we are skipping, not the fact that we are skipping early.",
+      "range": {
+        "startLine": 2157,
+        "startChar": 6,
+        "endLine": 2157,
+        "endChar": 57
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a41ca3f_2ef295ba",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4551,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-07T13:57:27Z",
+      "side": 1,
+      "message": "You aren\u0027t restoring the accumulator with instance here (e.g., what happens in line 4565 below) - see comment below for a suggestion of how to restructure this.",
+      "range": {
+        "startLine": 4551,
+        "startChar": 0,
+        "endLine": 4551,
+        "endChar": 0
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02427b51_0d0251cf",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-07T13:57:27Z",
+      "side": 1,
+      "message": "Could we add an \"info()-\u003eliteral()-\u003erequires_brand_initialization()\" function and structure this as follows:\n\nRegister instance \u003d register_allocator()-\u003eNewRegister();\nbuilder()-\u003eStoreAccumulatorInRegister(instance);\n\nif (info()-\u003eliteral()-requires_brand_initialization()) {\n   BuildPrivateBrandInitialization(instance);\n}\nif (info()-\u003eliteral()-\u003erequires_instance_members_initializer() ||\n      !IsDerivedConstructor(info()-\u003eliteral()-\u003ekind())) {\n  BuildInstanceMemberInitialization(this_function, instance);\n}\nbuilder()-\u003eLoadAccumulatorWithRegister(instance);\n\nSame for the base-case in GenerateBytecodeBody, and then remove the early-exits in BuildPrivateBrandInitialization.",
+      "range": {
+        "startLine": 4548,
+        "startChar": 2,
+        "endLine": 4566,
+        "endChar": 3
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
