@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9ce004d0_f72b5adc",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5581,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Done. Using a constant for now; regarding future-proofing: the plan is to change the wrapper anyway to have it allocate the Val[] array on the stack, at which point this code will see major adaptations.",
+      "parentUuid": "1864d275_d160e128",
+      "range": {
+        "startLine": 5581,
+        "startChar": 47,
+        "endLine": 5581,
+        "endChar": 48
+      },
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "025012f7_01a29a44",
         "filename": "src/compiler/wasm-compiler.cc",
         "patchSetId": 4
@@ -39,6 +63,24 @@
       "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee0b5e71_44784c11",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5623,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "It\u0027s acceptable for now. I\u0027ve added a TODO.",
+      "parentUuid": "025012f7_01a29a44",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "bc38d4d7_f6f92079",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "I\u0027ll do that in a separate CL (all over this file). Added a TODO.",
+      "parentUuid": "e5454a8f_2e40ff0d",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9af950d9_d7a16952",
         "filename": "src/wasm/c-api.cc",
         "patchSetId": 4
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "92ff8e22_198683f1",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Added a comment.",
+      "parentUuid": "9af950d9_d7a16952",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "455913b5_4d478b00",
         "filename": "src/wasm/c-api.cc",
         "patchSetId": 4
@@ -90,6 +168,24 @@
       "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffaec296_e1f512a4",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "455913b5_4d478b00",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "8c9afcaa_147b0063",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Oh, yes. Done.",
+      "parentUuid": "7c8472ee_8e77f7dc",
+      "range": {
+        "startLine": 1656,
+        "startChar": 11,
+        "endLine": 1656,
+        "endChar": 16
+      },
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50225741_987af606",
         "filename": "src/wasm/c-api.cc",
         "patchSetId": 4
@@ -130,6 +250,24 @@
       "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cef95bad_0e10a8ea",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1663,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Probably yes, or at least parts of it. This whole SignatureHelper class is somewhat temporary; I\u0027d like to unify it for WasmExportedFunction and WasmCapiFunction in a future cleanup. I\u0027ve added a TODO to make that clear :-)",
+      "parentUuid": "50225741_987af606",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -177,6 +315,30 @@
       "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed26b59e_a27dbf8d",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cbb1eda_a89bf92d",
+      "range": {
+        "startLine": 1683,
+        "startChar": 0,
+        "endLine": 1684,
+        "endChar": 62
+      },
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

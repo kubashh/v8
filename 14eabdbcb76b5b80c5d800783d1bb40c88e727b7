@@ -401,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "5acba972_10d78e98",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1695,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "852916ef_d2f816a7",
+      "range": {
+        "startLine": 1677,
+        "startChar": 2,
+        "endLine": 1695,
+        "endChar": 59
+      },
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d82629c_98b0c51d",
         "filename": "src/wasm/module-instantiate.cc",
         "patchSetId": 3
@@ -606,6 +630,24 @@
     },
     {
       "key": {
+        "uuid": "cdaca931_137a09ea",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c29ca855_b0d7867f",
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "df2b15e2_eb17efa1",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 3
@@ -677,6 +719,30 @@
     },
     {
       "key": {
+        "uuid": "e3902bc9_f8d7d0ef",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf53f384_adc460fc",
+      "range": {
+        "startLine": 956,
+        "startChar": 0,
+        "endLine": 959,
+        "endChar": 3
+      },
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6261a59b_63a2a595",
         "filename": "src/wasm/wasm-objects.cc",
         "patchSetId": 3
@@ -727,6 +793,24 @@
       "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "695bc901_f6ae5075",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1816,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-07T17:02:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d540a43_098846fc",
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
