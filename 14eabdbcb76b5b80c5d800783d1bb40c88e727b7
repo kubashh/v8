@@ -694,6 +694,24 @@
     },
     {
       "key": {
+        "uuid": "29cf10c3_2d53985d",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1816,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-07T12:01:52Z",
+      "side": 1,
+      "message": "I initially had the same thought. But then I realized that the kWasmStmt will be part of either the parameters or returns and hence produce a mismatch in either of those sets. Nice trick. But since we both wondered the same thing, I think this deserves at least a comment. :)",
+      "parentUuid": "6261a59b_63a2a595",
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "107183ec_f882ac13",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 3
