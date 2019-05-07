@@ -712,6 +712,24 @@
     },
     {
       "key": {
+        "uuid": "9d540a43_098846fc",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1816,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-07T12:04:11Z",
+      "side": 1,
+      "message": "Ah, that\u0027s true, we would get a mismatch in the loop below. But still, this DCHECK would trigger first, so we would crash, right?\nConsider the simple case where param_count \u003d\u003d 0.",
+      "parentUuid": "29cf10c3_2d53985d",
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "107183ec_f882ac13",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 3
