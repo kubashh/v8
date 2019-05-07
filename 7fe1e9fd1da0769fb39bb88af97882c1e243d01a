@@ -218,6 +218,24 @@
       "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "08147059_090c09ae",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-05-07T00:41:11Z",
+      "side": 1,
+      "message": "I\u0027m not very opinionated about what we limit, since for the sampling profiler ticks \u003d\u003d\u003d samples. Thanks for the insight regarding profiler tree size vs. sample buffer size, this is useful considering this is a heuristic solution.\n\nIf we\u0027re all in agreement, here\u0027s a CL limiting samples but not tree/stats.",
+      "parentUuid": "eadf5470_e2395002",
+      "revId": "7fe1e9fd1da0769fb39bb88af97882c1e243d01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
