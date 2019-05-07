@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0c5419d_605c35e0",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 5623,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-07T09:26:19Z",
+      "side": 1,
+      "message": "I think we will eventually need to set/unset the \"thread-in-wasm\" flag before and after the C call. This can be done via {BuildModifyThreadInWasmFlag}. This flag is used by the trap handler to determine whether we are currently executing Wasm code or not. It would be cool to add test coverage for that, so I think just leaving a TODO and doing it in a separate CL would be better. WDYT?",
+      "range": {
+        "startLine": 5623,
+        "startChar": 4,
+        "endLine": 5623,
+        "endChar": 72
+      },
+      "revId": "c6e1fef6b840409477ee7040f9a13d2de0e58456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
