@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfe60730_38b554e5",
+        "filename": "third_party/inspector_protocol/encoding/encoding.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1280850
+      },
+      "writtenOn": "2019-05-07T00:05:27Z",
+      "side": 1,
+      "message": "This empty line is a very small discrepancy between the upstream and this copy, which I got wrong when propagating manually. Now that it\u0027s done by roll.py, I\u0027d like to fix it.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 0
+      },
+      "revId": "9d787abf8baa7fc08eeffe3e670765e0a27c3f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d7b9c43_67d04562",
+        "filename": "third_party/inspector_protocol/encoding/encoding_test.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1280850
+      },
+      "writtenOn": "2019-05-07T00:05:27Z",
+      "side": 1,
+      "message": "This file is rolled from upstream.\nThe only modification is the namespace, which is automated (see roll.py).",
+      "revId": "9d787abf8baa7fc08eeffe3e670765e0a27c3f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
