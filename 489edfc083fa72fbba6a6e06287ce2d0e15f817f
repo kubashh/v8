@@ -2,6 +2,97 @@
   "comments": [
     {
       "key": {
+        "uuid": "1864d275_d160e128",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5581,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-07T11:50:53Z",
+      "side": 1,
+      "message": "Can we replace this magic 8 by a constant with a name, or (maybe more future-proof) the maximum MemSize of any param or return?",
+      "range": {
+        "startLine": 5581,
+        "startChar": 47,
+        "endLine": 5581,
+        "endChar": 48
+      },
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "025012f7_01a29a44",
+        "filename": "src/compiler/wasm-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 5623,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-07T11:50:53Z",
+      "side": 1,
+      "message": "This builds a simplified C call (without CEntry stub) AFIAK. So this would not support stack walking from within that call. Is that acceptable? The callback would not be allowed to call back into wasm for example.",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5454a8f_2e40ff0d",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-07T11:50:53Z",
+      "side": 1,
+      "message": "Is it a \"vec\" we are iterating here? Should be make it iterable via range based loop?",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9af950d9_d7a16952",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-07T11:50:53Z",
+      "side": 1,
+      "message": "What purpose does this line serve?",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "455913b5_4d478b00",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-07T11:50:53Z",
+      "side": 1,
+      "message": "Why not a \"return i\" instead of \"break\", and \"UNREACHABLE()\" after the loop?",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c8472ee_8e77f7dc",
         "filename": "src/wasm/c-api.cc",
         "patchSetId": 4
@@ -36,6 +127,29 @@
       "writtenOn": "2019-05-06T13:02:41Z",
       "side": 1,
       "message": "Should this function not be in wasm-objects.[h|cc]?",
+      "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3dc4a88_f0ca0e2d",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1684,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-07T11:50:53Z",
+      "side": 1,
+      "message": "This looks dangerous, and gcmole should actually complain about this. Both the receiver and the first argument are handles, and the evaluation order is not defined in C++11. Since C++17 (IIRC), it\u0027s spec\u0027ed that the receiver is evaluated first, which can also break this code if a GC happens in the Serialize method.",
+      "range": {
+        "startLine": 1683,
+        "startChar": 0,
+        "endLine": 1684,
+        "endChar": 62
+      },
       "revId": "489edfc083fa72fbba6a6e06287ce2d0e15f817f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

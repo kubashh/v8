@@ -677,6 +677,23 @@
     },
     {
       "key": {
+        "uuid": "6261a59b_63a2a595",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1816,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-07T11:50:53Z",
+      "side": 1,
+      "message": "Why a DCHECK and not a \"return false\"? Can\u0027t it happen that {sig} has one more param, but one return less, and all params matched so far? In that caser, there would not be a marker here, but another param.",
+      "revId": "14eabdbcb76b5b80c5d800783d1bb40c88e727b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "107183ec_f882ac13",
         "filename": "src/wasm/wasm-objects.h",
         "patchSetId": 3
