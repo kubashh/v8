@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e3a898d2_5099c332",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-07T07:27:03Z",
+      "side": 1,
+      "message": "Removed, thanks!",
+      "parentUuid": "9c1be6a9_cfe57c9e",
+      "revId": "4c7e1a628e4f497d585494d031a151d82588d5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5c77d02_1e416a35",
         "filename": "src/compiler/serializer-for-background-compilation.h",
         "patchSetId": 7
@@ -33,6 +51,24 @@
       "revId": "4c7e1a628e4f497d585494d031a151d82588d5f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5351fbd_a825be3b",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-07T07:27:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5c77d02_1e416a35",
+      "revId": "4c7e1a628e4f497d585494d031a151d82588d5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -56,6 +92,30 @@
       "revId": "4c7e1a628e4f497d585494d031a151d82588d5f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31f60c3b_ad815891",
+        "filename": "test/cctest/compiler/test-js-typed-lowering.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-07T07:27:03Z",
+      "side": 1,
+      "message": "For consistency, but didn\u0027t realize this one is public. Reverting.",
+      "parentUuid": "bb79c4f8_0f42a643",
+      "range": {
+        "startLine": 27,
+        "startChar": 22,
+        "endLine": 27,
+        "endChar": 23
+      },
+      "revId": "4c7e1a628e4f497d585494d031a151d82588d5f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
