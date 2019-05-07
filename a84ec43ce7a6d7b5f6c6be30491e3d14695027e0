@@ -91,6 +91,30 @@
       "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80221bd9_4659087f",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-07T17:09:33Z",
+      "side": 1,
+      "message": "I have tried using a `info()-\u003eliteral()-\u003erequires_brand_initialization()` before, but that requires a bit in the shared function info for deserialization, and there are already 32 bit fields there. Is any one of those SFI bits unused at the moment that we can replace with this instead?",
+      "parentUuid": "02427b51_0d0251cf",
+      "range": {
+        "startLine": 4548,
+        "startChar": 2,
+        "endLine": 4566,
+        "endChar": 3
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
