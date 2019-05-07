@@ -115,6 +115,30 @@
       "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "881b2d1c_7923e298",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-07T17:15:19Z",
+      "side": 1,
+      "message": "Not sure what you mean, literal is a FunctionalLiteral not a SFI. Can\u0027t you do the same checks on the Scope as you are currently doing in BuildPrivateBrandInitialization?",
+      "parentUuid": "80221bd9_4659087f",
+      "range": {
+        "startLine": 4548,
+        "startChar": 2,
+        "endLine": 4566,
+        "endChar": 3
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
