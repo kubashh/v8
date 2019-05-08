@@ -22,6 +22,30 @@
       "revId": "f807e22ca1e20eb5cb1ecfc162e3341c8fc38121",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d338f918_272095fb",
+        "filename": "third_party/inspector_protocol/encoding/encoding.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1280850
+      },
+      "writtenOn": "2019-05-08T18:49:52Z",
+      "side": 1,
+      "message": "It\u0027s undoing a stray edit. I had rolled this file manually, with a copy + editing the namespace. Now it\u0027s scripted and it turns out there is an extra empty line upstream.\n\nhttps://chromium.googlesource.com/deps/inspector_protocol/+/refs/heads/master/encoding/encoding.h\n\nSorry bout the mess.",
+      "parentUuid": "c34b9153_7ec0966e",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 0
+      },
+      "revId": "f807e22ca1e20eb5cb1ecfc162e3341c8fc38121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
