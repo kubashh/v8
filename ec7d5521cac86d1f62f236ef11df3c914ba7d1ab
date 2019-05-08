@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b82f7bd6_28ef8497",
+        "filename": "src/message-template.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1158954
+      },
+      "writtenOn": "2019-05-08T17:42:12Z",
+      "side": 1,
+      "message": "\u0027%\u0027 seems to be the way to quote in this entire file. Can you change this to follow existing conventions?",
+      "revId": "ec7d5521cac86d1f62f236ef11df3c914ba7d1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
