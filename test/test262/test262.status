@@ -530,9 +530,6 @@
   # https://bugs.chromium.org/p/v8/issues/detail?id=9050
   'language/statements/async-generator/return-undefined-implicit-and-explicit': [FAIL],
 
-  # https://bugs.chromium.org/p/v8/issues/detail?id=9051
-  'language/statements/async-generator/yield-star-return-then-getter-ticks': [FAIL],
-
   # https://bugs.chromium.org/p/v8/issues/detail?id=9152
   'built-ins/Promise/all/capability-executor-called-twice': [FAIL],
   'built-ins/Promise/all/capability-resolve-throws-no-close': [FAIL],
