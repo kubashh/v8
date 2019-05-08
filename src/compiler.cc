@@ -1173,6 +1173,8 @@ bool Compiler::ParseAndAnalyze(ParseInfo* parse_info,
 // static
 bool Compiler::CollectSourcePositions(Isolate* isolate,
                                       Handle<SharedFunctionInfo> shared_info) {
+  DisallowHeapAccessIf no_heap_acess(FLAG_concurrent_inlining);
+
   DCHECK(shared_info->is_compiled());
   DCHECK(shared_info->HasBytecodeArray());
   DCHECK(!shared_info->GetBytecodeArray()->HasSourcePositionTable());
