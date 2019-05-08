@@ -53,6 +53,57 @@
     },
     {
       "key": {
+        "uuid": "08e1526a_ea70872e",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T16:45:32Z",
+      "side": 1,
+      "message": "I think we should keep this as it is so that information gets printed even when not passing --trace-heap-broker*",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a560dee_945964dc",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T16:45:32Z",
+      "side": 1,
+      "message": "Nit on old code: simplify to\nreturn !shared_info.construct_as_builtin() \u0026\u0026 !IsDerived...",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a918566_3e24549c",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T16:45:32Z",
+      "side": 1,
+      "message": "I\u0027m again unsure if this can even happen.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7b6cbe9d_b18713fc",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 4
@@ -64,6 +115,23 @@
       "writtenOn": "2019-05-08T15:22:16Z",
       "side": 1,
       "message": "It seems returning an Optional\u003cSharedFunctionInfoRef\u003e would make this much cleaner.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2004be55_b4ce4778",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T16:45:32Z",
+      "side": 1,
+      "message": "Nit: FeedbackCellRef cell(...);",
       "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -98,6 +166,57 @@
       "writtenOn": "2019-05-08T15:22:16Z",
       "side": 1,
       "message": "We check that already in the Ref creation or in the cast below.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d233083_1384cfc0",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T16:45:32Z",
+      "side": 1,
+      "message": "Yes it is.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2842da0_599e849f",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T16:45:32Z",
+      "side": 1,
+      "message": "Nit: Handle\u003cContext\u003e native_context(...);\n\nBut we should probably remove that argument from BuildGraphFromBytecode and extract it from the broker there.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa987290_9a934221",
+        "filename": "src/optimized-compilation-info.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T16:45:32Z",
+      "side": 1,
+      "message": "Let\u0027s discuss this in person.",
       "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
