@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de5ed823_9dd14051",
+        "filename": "src/compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T15:22:16Z",
+      "side": 1,
+      "message": "There are many heap accesses in this code.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6349ab18_4f09bb7b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T15:22:16Z",
+      "side": 1,
+      "message": "Since we decided to do this in the constructor, it can be much simpler:\n\n: HeapObjectData(...), value_(broker-\u003eGetOrCreateData(object-\u003evalue()))) {}",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1f6eef7_070bd95a",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T15:22:16Z",
+      "side": 1,
+      "message": "Is a forward declaration not enough?",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b6cbe9d_b18713fc",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T15:22:16Z",
+      "side": 1,
+      "message": "It seems returning an Optional\u003cSharedFunctionInfoRef\u003e would make this much cleaner.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feceb543_e170d36c",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T15:22:16Z",
+      "side": 1,
+      "message": "Nit: FeedbackCellRef cell(broker(), ...);",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "066524da_b570c392",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-08T15:22:16Z",
+      "side": 1,
+      "message": "We check that already in the Ref creation or in the cast below.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
