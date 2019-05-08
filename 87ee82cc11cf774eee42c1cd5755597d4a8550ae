@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b53de478_07d58a57",
+        "filename": "src/heap/heap.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 5770,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2019-05-08T10:35:50Z",
+      "side": 1,
+      "message": "Do we still need the special DCHECK casting handlers? WDYT?",
+      "range": {
+        "startLine": 5770,
+        "startChar": 5,
+        "endLine": 5770,
+        "endChar": 21
+      },
+      "revId": "87ee82cc11cf774eee42c1cd5755597d4a8550ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a22fc03_bb8b30e3",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1119605
+      },
+      "writtenOn": "2019-05-08T10:35:50Z",
+      "side": 1,
+      "message": "I will make a separate class out of the Registry in a follow-up Cl.",
+      "range": {
+        "startLine": 606,
+        "startChar": 18,
+        "endLine": 606,
+        "endChar": 36
+      },
+      "revId": "87ee82cc11cf774eee42c1cd5755597d4a8550ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
