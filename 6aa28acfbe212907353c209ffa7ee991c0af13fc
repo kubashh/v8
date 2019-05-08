@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "c038b925_b0e02e63",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 26
+      },
+      "lineNbr": 2034,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-08T13:35:26Z",
+      "side": 1,
+      "message": "How about BuildPrivateClassMemberNameAssignment? ClassName alone implies the name of the class to me.",
+      "parentUuid": "3d8d6cb8_71d305c0",
+      "range": {
+        "startLine": 2034,
+        "startChar": 8,
+        "endLine": 2034,
+        "endChar": 33
+      },
+      "revId": "6aa28acfbe212907353c209ffa7ee991c0af13fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a5a24bea_e9ca4e1b",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 26
