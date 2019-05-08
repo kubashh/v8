@@ -129,6 +129,13 @@ bool ProfilerEventsProcessor::ProcessCodeEvent() {
       CODE_EVENTS_TYPE_LIST(PROFILER_TYPE_CASE)
 
 #undef PROFILER_TYPE_CASE
+      case CodeEventRecord::NATIVE_CONTEXT_MOVE: {
+        NativeContextMoveEventRecord& nc_record =
+            record.NativeContextMoveEventRecord_;
+        generator_->UpdateNativeContextAddress(nc_record.from_address,
+                                               nc_record.to_address);
+        break;
+      }
       default: return true;  // Skip record.
     }
     last_processed_code_event_id_ = record.generic.order;
@@ -143,6 +150,7 @@ void ProfilerEventsProcessor::CodeEventHandler(
     case CodeEventRecord::CODE_CREATION:
     case CodeEventRecord::CODE_MOVE:
     case CodeEventRecord::CODE_DISABLE_OPT:
+    case CodeEventRecord::NATIVE_CONTEXT_MOVE:
       Enqueue(evt_rec);
       break;
     case CodeEventRecord::CODE_DEOPT: {
@@ -377,16 +385,33 @@ void CpuProfiler::CollectSample() {
 }
 
 void CpuProfiler::StartProfiling(const char* title, bool record_samples,
-                                 ProfilingMode mode) {
-  if (profiles_->StartProfiling(title, record_samples, mode)) {
+                                 ProfilingMode mode,
+                                 MaybeHandle<Context> context) {
+  std::unique_ptr<ContextFilter> context_filter;
+  if (!context.is_null()) {
+    // If the sampling thread is already running, it's possible that it has
+    // pending relocations for native contexts that haven't been applied yet. To
+    // avoid the rare case of erroneously relocating the provided native context
+    // address, ensure profiling has stopped.
+    if (is_profiling_) StopProcessor();
+
+    DisallowHeapAllocation no_gc;
+    Handle<Context> handle = context.ToHandleChecked();
+    Address context_address = handle->native_context().ptr();
+    context_filter.reset(new ContextFilter(context_address));
+  }
+
+  if (profiles_->StartProfiling(title, record_samples, mode,
+                                std::move(context_filter))) {
     TRACE_EVENT0("v8", "CpuProfiler::StartProfiling");
     StartProcessorIfNotStarted();
   }
 }
 
 void CpuProfiler::StartProfiling(String title, bool record_samples,
-                                 ProfilingMode mode) {
-  StartProfiling(profiles_->GetName(title), record_samples, mode);
+                                 ProfilingMode mode,
+                                 MaybeHandle<Context> context) {
+  StartProfiling(profiles_->GetName(title), record_samples, mode, context);
   isolate_->debug()->feature_tracker()->Track(DebugFeatureTracker::kProfiler);
 }
 
