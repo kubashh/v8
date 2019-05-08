@@ -31,17 +31,18 @@ OBJECT_CONSTRUCTORS_IMPL(Map, HeapObject)
 CAST_ACCESSOR(Map)
 
 DescriptorArray Map::instance_descriptors() const {
-  return DescriptorArray::cast(READ_FIELD(*this, kDescriptorsOffset));
+  return DescriptorArray::cast(READ_FIELD(*this, kInstanceDescriptorsOffset));
 }
 
 DescriptorArray Map::synchronized_instance_descriptors() const {
-  return DescriptorArray::cast(ACQUIRE_READ_FIELD(*this, kDescriptorsOffset));
+  return DescriptorArray::cast(
+      ACQUIRE_READ_FIELD(*this, kInstanceDescriptorsOffset));
 }
 
 void Map::set_synchronized_instance_descriptors(DescriptorArray value,
                                                 WriteBarrierMode mode) {
-  RELEASE_WRITE_FIELD(*this, kDescriptorsOffset, value);
-  CONDITIONAL_WRITE_BARRIER(*this, kDescriptorsOffset, value, mode);
+  RELEASE_WRITE_FIELD(*this, kInstanceDescriptorsOffset, value);
+  CONDITIONAL_WRITE_BARRIER(*this, kInstanceDescriptorsOffset, value, mode);
 }
 
 // A freshly allocated layout descriptor can be set on an existing map.
@@ -730,7 +731,7 @@ void Map::SetBackPointer(Object value, WriteBarrierMode mode) {
 ACCESSORS(Map, dependent_code, DependentCode, kDependentCodeOffset)
 ACCESSORS(Map, prototype_validity_cell, Object, kPrototypeValidityCellOffset)
 ACCESSORS(Map, constructor_or_backpointer, Object,
-          kConstructorOrBackPointerOffset)
+          kConstructorOrBackpointerOffset)
 
 bool Map::IsPrototypeValidityCellValid() const {
   Object validity_cell = prototype_validity_cell();
