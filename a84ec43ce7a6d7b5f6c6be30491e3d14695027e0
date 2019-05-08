@@ -25,6 +25,54 @@
     },
     {
       "key": {
+        "uuid": "18f2b302_2aa75cbd",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-08T09:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4aae20e4_17047695",
+      "range": {
+        "startLine": 2000,
+        "startChar": 8,
+        "endLine": 2027,
+        "endChar": 9
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5ed1e6d_2e46d9ab",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-08T09:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4aae20e4_17047695",
+      "range": {
+        "startLine": 2000,
+        "startChar": 8,
+        "endLine": 2027,
+        "endChar": 9
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a67d736_c0354382",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 25
@@ -48,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "c659deab_7c36c73c",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-08T09:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a67d736_c0354382",
+      "range": {
+        "startLine": 2157,
+        "startChar": 6,
+        "endLine": 2157,
+        "endChar": 57
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a41ca3f_2ef295ba",
         "filename": "src/interpreter/bytecode-generator.cc",
         "patchSetId": 25
@@ -68,6 +140,30 @@
       "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c6e3023_cefe2881",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4551,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-08T09:15:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a41ca3f_2ef295ba",
+      "range": {
+        "startLine": 4551,
+        "startChar": 0,
+        "endLine": 4551,
+        "endChar": 0
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -139,6 +235,30 @@
       "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4098f3d_914d2cf4",
+        "filename": "src/interpreter/bytecode-generator.cc",
+        "patchSetId": 25
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1288325
+      },
+      "writtenOn": "2019-05-08T09:15:36Z",
+      "side": 1,
+      "message": "Ah, I see, we can just compute requires_brand_initialization() on the fly with just the scope information, thanks for the suggestion.\n\nI was thinking about storing this in a bit in FunctionalLiteral, then the FunctionLiteral bit would need to be set from the ParseInfo which may have its bits deserialized from a SFI due to lazy parsing.",
+      "parentUuid": "881b2d1c_7923e298",
+      "range": {
+        "startLine": 4548,
+        "startChar": 2,
+        "endLine": 4566,
+        "endChar": 3
+      },
+      "revId": "a84ec43ce7a6d7b5f6c6be30491e3d14695027e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
