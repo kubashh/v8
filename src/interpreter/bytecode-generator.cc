@@ -3857,7 +3857,10 @@ void BytecodeGenerator::VisitYield(Yield* expr) {
 //           break;
 //         case kReturn:
 //           let iteratorReturn = iterator.return;
-//           if (IS_NULL_OR_UNDEFINED(iteratorReturn)) return input;
+//           if (IS_NULL_OR_UNDEFINED(iteratorReturn)) {
+//             if (IS_ASYNC_GENERATOR) input = await input;
+//             return input;
+//           }
 //           output = iteratorReturn.[[Call]](iterator, «input»);
 //           break;
 //         case kThrow:
@@ -3965,6 +3968,8 @@ void BytecodeGenerator::VisitYieldStar(YieldStar* expr) {
           no_return_method.Bind(builder());
           builder()->LoadAccumulatorWithRegister(input);
           if (iterator_type == IteratorType::kAsync) {
+            // Await input.
+            BuildAwait(expr->position());
             execution_control()->AsyncReturnAccumulator();
           } else {
             execution_control()->ReturnAccumulator();
