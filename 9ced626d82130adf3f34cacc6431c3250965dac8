@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e0c0fd9_7f084de6",
+        "filename": "src/wasm/wasm-objects.cc",
+        "patchSetId": 12
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-08T12:23:04Z",
+      "side": 1,
+      "message": "nit: you could use base::make_unique here.",
+      "range": {
+        "startLine": 1060,
+        "startChar": 2,
+        "endLine": 1060,
+        "endChar": 76
+      },
+      "revId": "9ced626d82130adf3f34cacc6431c3250965dac8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
