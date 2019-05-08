@@ -16,6 +16,24 @@
       "revId": "ec7d5521cac86d1f62f236ef11df3c914ba7d1ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "736331f1_59b8a465",
+        "filename": "src/message-template.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1344892
+      },
+      "writtenOn": "2019-05-08T18:05:21Z",
+      "side": 1,
+      "message": "That makes sense, will do. In the shouldThrow of the webkit tests I\u0027ve changed, should I use:\n\n1) The error string wrapped in double quotes, with a single quote at the start and end and the quotes around the token unescaped.\n2) The error string wrapped in single quotes, with a double quote at the start and end and the quotes around the token escaped.\n\nThe former seems nicer (and would require a smaller change), but I noticed that we seem to use the latter more frequently.",
+      "parentUuid": "b82f7bd6_28ef8497",
+      "revId": "ec7d5521cac86d1f62f236ef11df3c914ba7d1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
