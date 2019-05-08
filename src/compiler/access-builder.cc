@@ -598,7 +598,7 @@ FieldAccess AccessBuilder::ForMapBitField3() {
 // static
 FieldAccess AccessBuilder::ForMapDescriptors() {
   FieldAccess access = {
-      kTaggedBase,           Map::kDescriptorsOffset,
+      kTaggedBase,           Map::kInstanceDescriptorsOffset,
       Handle<Name>(),        MaybeHandle<Map>(),
       Type::OtherInternal(), MachineType::TypeCompressedTaggedPointer(),
       kPointerWriteBarrier};
