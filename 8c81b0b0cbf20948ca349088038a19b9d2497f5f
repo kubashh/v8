@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c45db643_54a6982d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115851
+      },
+      "writtenOn": "2019-05-08T18:32:51Z",
+      "side": 1,
+      "message": "Please flesh out this CL description. The description ought to describe what the change does functionally, not just that it fixes some test (the link to the bug below is usually sufficient for that).\n\nhttps://chromium.googlesource.com/chromium/src/+/master/docs/contributing.md#uploading-a-change-for-review has some nice guidelines for CL descriptions.",
+      "revId": "8c81b0b0cbf20948ca349088038a19b9d2497f5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
