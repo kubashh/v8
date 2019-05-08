@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9cac3a0a_94ea4b45",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-08T23:03:54Z",
+      "side": 1,
+      "message": "Punting on this issue for now; using the @ifdef decorator rather than the \"padding;\" syntax.",
+      "parentUuid": "d8837e9e_62766c9d",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9cfc884b_1bd6c3c3",
         "filename": "src/builtins/base.tq",
         "patchSetId": 7
@@ -144,6 +162,24 @@
     },
     {
       "key": {
+        "uuid": "0f72500e_f044feb3",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-08T23:03:54Z",
+      "side": 1,
+      "message": "The other CL landed in https://chromium-review.googlesource.com/c/v8/v8/+/1536985 and I\u0027ve updated this change to use the new @ifdef decorator.",
+      "parentUuid": "d27b9cad_6ae41b29",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7efb1ae_b4c86893",
         "filename": "src/objects/map.h",
         "patchSetId": 7
@@ -194,6 +230,24 @@
       "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97a9bcb6_4e366835",
+        "filename": "src/objects/map.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 978,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-08T23:03:54Z",
+      "side": 1,
+      "message": "The other CL landed in https://chromium-review.googlesource.com/c/v8/v8/+/1536985 and I\u0027ve updated this change to use the new @ifdef decorator.",
+      "parentUuid": "235413e8_ae8b6227",
+      "revId": "3d4fbf7fdeb08dfcdf4934b7ea307c2cc4734be7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
