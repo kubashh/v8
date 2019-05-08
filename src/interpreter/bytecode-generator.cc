@@ -1201,7 +1201,7 @@ void BytecodeGenerator::BuildGeneratorPrologue() {
   DCHECK_GT(info()->literal()->suspend_count(), 0);
   DCHECK(generator_object().is_valid());
   generator_jump_table_ =
-      builder()->AllocateJumpTable(info()->literal()->suspend_count(), 0);
+      builder()->AllocateJumpTable(info()->literal()->suspend_count() + 1, 0);
 
   // If the generator is not undefined, this is a resume, so perform state
   // dispatch.
@@ -3965,6 +3965,8 @@ void BytecodeGenerator::VisitYieldStar(YieldStar* expr) {
           no_return_method.Bind(builder());
           builder()->LoadAccumulatorWithRegister(input);
           if (iterator_type == IteratorType::kAsync) {
+            // Await input.
+            BuildAwait(expr->position());
             execution_control()->AsyncReturnAccumulator();
           } else {
             execution_control()->ReturnAccumulator();
