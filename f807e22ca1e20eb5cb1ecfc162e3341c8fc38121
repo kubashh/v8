@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c34b9153_7ec0966e",
+        "filename": "third_party/inspector_protocol/encoding/encoding.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1118373
+      },
+      "writtenOn": "2019-05-08T18:42:51Z",
+      "side": 1,
+      "message": "stray edit, or is this just mirroring a change from upstream?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 0
+      },
+      "revId": "f807e22ca1e20eb5cb1ecfc162e3341c8fc38121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
