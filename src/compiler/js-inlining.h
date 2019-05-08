@@ -59,10 +59,9 @@ class JSInliner final : public AdvancedReducer {
   JSHeapBroker* const broker_;
   SourcePositionTable* const source_positions_;
 
-  bool DetermineCallTarget(Node* node,
-                           Handle<SharedFunctionInfo>& shared_info_out);
-  void DetermineCallContext(Node* node, Node*& context_out,
-                            Handle<FeedbackVector>& feedback_vector_out);
+  bool DetermineCallTarget(
+      Node* node, base::Optional<SharedFunctionInfoRef>& shared_info_out);
+  FeedbackVectorRef DetermineCallContext(Node* node, Node*& context_out);
 
   Node* CreateArtificialFrameState(Node* node, Node* outer_frame_state,
                                    int parameter_count, BailoutId bailout_id,

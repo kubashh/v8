@@ -14,6 +14,7 @@
 #include "src/handles.h"
 #include "src/objects.h"
 #include "src/objects/instance-type.h"
+#include "src/objects/shared-function-info.h"
 #include "src/ostreams.h"
 #include "src/zone/zone-containers.h"
 
@@ -78,6 +79,7 @@ enum class OddballType : uint8_t {
   V(Cell)                          \
   V(Code)                          \
   V(DescriptorArray)               \
+  V(FeedbackCell)                  \
   V(FeedbackVector)                \
   V(FixedArrayBase)                \
   V(FunctionTemplateInfo)          \
@@ -403,6 +405,15 @@ class DescriptorArrayRef : public HeapObjectRef {
  public:
   using HeapObjectRef::HeapObjectRef;
   Handle<DescriptorArray> object() const;
+};
+
+class FeedbackCellRef : public HeapObjectRef {
+ public:
+  using HeapObjectRef::HeapObjectRef;
+  Handle<FeedbackCell> object() const;
+
+  void Serialize();
+  ObjectRef value() const;
 };
 
 class FeedbackVectorRef : public HeapObjectRef {

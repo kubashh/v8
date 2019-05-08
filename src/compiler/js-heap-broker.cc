@@ -1107,6 +1107,33 @@ class DescriptorArrayData : public HeapObjectData {
   ZoneVector<PropertyDescriptor> contents_;
 };
 
+class FeedbackCellData : public HeapObjectData {
+ public:
+  FeedbackCellData(JSHeapBroker* broker, ObjectData** storage,
+                   Handle<FeedbackCell> object);
+
+  ObjectData* value() { return value_; }
+  void Serialize(JSHeapBroker* broker);
+
+ private:
+  bool serialized_ = false;
+  ObjectData* value_ = nullptr;
+};
+
+FeedbackCellData::FeedbackCellData(JSHeapBroker* broker, ObjectData** storage,
+                                   Handle<FeedbackCell> object)
+    : HeapObjectData(broker, storage, object) {}
+
+void FeedbackCellData::Serialize(JSHeapBroker* broker) {
+  if (serialized_) return;
+  serialized_ = true;
+
+  TraceScope tracer(broker, this, "FeedbackCellData::Serialize");
+  DCHECK_NULL(value_);
+  auto feedback_cell = Handle<FeedbackCell>::cast(object());
+  value_ = broker->GetOrCreateData(feedback_cell->value());
+}
+
 class FeedbackVectorData : public HeapObjectData {
  public:
   const ZoneVector<ObjectData*>& feedback() { return feedback_; }
@@ -2663,6 +2690,8 @@ BROKER_SFI_FIELDS(DEF_SFI_ACCESSOR)
 
 BIMODAL_ACCESSOR_C(String, int, length)
 
+BIMODAL_ACCESSOR(FeedbackCell, Object, value)
+
 void* JSTypedArrayRef::elements_external_pointer() const {
   if (broker()->mode() == JSHeapBroker::kDisabled) {
     AllowHandleDereference allow_handle_dereference;
@@ -2993,6 +3022,12 @@ ObjectData* FixedArrayData::Get(int i) const {
 Float64 FixedDoubleArrayData::Get(int i) const {
   CHECK_LT(i, static_cast<int>(contents_.size()));
   return contents_[i];
+}
+
+void FeedbackCellRef::Serialize() {
+  if (broker()->mode() == JSHeapBroker::kDisabled) return;
+  CHECK_EQ(broker()->mode(), JSHeapBroker::kSerializing);
+  data()->AsFeedbackCell()->Serialize(broker());
 }
 
 void FeedbackVectorRef::SerializeSlots() {
