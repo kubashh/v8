@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a58a7c46_3aaa8238",
+        "filename": "test/cctest/heap/test-heap.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 3962,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-09T10:25:48Z",
+      "side": 1,
+      "message": "Maybe just move this to:\n if (FLAG_lite_mode || FLAG_lazy_feedback_allocation) return.\nand add a todo.",
+      "range": {
+        "startLine": 3962,
+        "startChar": 1,
+        "endLine": 3962,
+        "endChar": 43
+      },
+      "revId": "0627fb92994d907693a0ebac694658dda4c03537",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
