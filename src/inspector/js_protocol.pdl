@@ -2,6 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+# Changes to remote debugging protocol need to ensure backwards compatibility
+# and commitment to maintain.
+
 version
   major 1
   minor 3
