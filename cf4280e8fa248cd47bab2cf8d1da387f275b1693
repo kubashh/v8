@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "49a59f79_aeb54583",
+        "filename": "src/compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "You\u0027re right, this shouldn\u0027t have been here in the first place.",
+      "parentUuid": "de5ed823_9dd14051",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6349ab18_4f09bb7b",
         "filename": "src/compiler/js-heap-broker.cc",
         "patchSetId": 4
@@ -33,6 +51,24 @@
       "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f54fac3_80ab5dce",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6349ab18_4f09bb7b",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ff2a2b08_c61b42d1",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "Header was unneeded at all, thanks.",
+      "parentUuid": "d1f6eef7_070bd95a",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08e1526a_ea70872e",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 4
@@ -64,6 +118,24 @@
       "writtenOn": "2019-05-08T16:45:32Z",
       "side": 1,
       "message": "I think we should keep this as it is so that information gets printed even when not passing --trace-heap-broker*",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03a2c9a1_ff2c6650",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "Passing Address to PrintF is not really platform-independent (makes 32-bit vs. 64-bit architectures unhappy). Therefore added an StdoutStream member to the JSInliner to mimic the TRACE_BROKER functionality without relying on the --trace-heap-broker flag. Is that fine?",
+      "parentUuid": "08e1526a_ea70872e",
       "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "df59cf93_15d723c1",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "Nice, thanks!",
+      "parentUuid": "3a560dee_945964dc",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a918566_3e24549c",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 4
@@ -98,6 +188,24 @@
       "writtenOn": "2019-05-08T16:45:32Z",
       "side": 1,
       "message": "I\u0027m again unsure if this can even happen.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fde5248c_3441c87e",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "When replaced with a CHECK instead, no tests seem to fail.",
+      "parentUuid": "3a918566_3e24549c",
       "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "9b413e43_765dcaa8",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "You\u0027re right, thanks!",
+      "parentUuid": "7b6cbe9d_b18713fc",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2004be55_b4ce4778",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 4
@@ -135,6 +261,24 @@
       "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "800d0628_6714b959",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2004be55_b4ce4778",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "0ce1ecd3_573c0026",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "feceb543_e170d36c",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "066524da_b570c392",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 4
@@ -169,6 +331,24 @@
       "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e865e746_47d3c6ee",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "Thanks, removed.",
+      "parentUuid": "066524da_b570c392",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "af56047e_d14ab704",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7d233083_1384cfc0",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2842da0_599e849f",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 4
@@ -200,6 +398,24 @@
       "writtenOn": "2019-05-08T16:45:32Z",
       "side": 1,
       "message": "Nit: Handle\u003cContext\u003e native_context(...);\n\nBut we should probably remove that argument from BuildGraphFromBytecode and extract it from the broker there.",
+      "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7875df4a_9edfab0c",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T09:51:24Z",
+      "side": 1,
+      "message": "I decided not to touch the interface of this function for now to avoid conflicts with Jaro. After he\u0027s brokerized the bytecode graph building, we can clean this up, so I\u0027ll leave a comment.",
+      "parentUuid": "e2842da0_599e849f",
       "revId": "cf4280e8fa248cd47bab2cf8d1da387f275b1693",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
