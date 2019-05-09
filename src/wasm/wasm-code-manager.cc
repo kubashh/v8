@@ -1381,9 +1381,24 @@ void NativeModule::FreeCode(Vector<WasmCode* const> codes) {
     Address discard_end = std::min(RoundDown(merged_region.end(), page_size),
                                    RoundUp(region.end(), page_size));
     if (discard_start >= discard_end) continue;
-    // TODO(clemensh): Reenable after fixing https://crbug.com/960707.
-    // allocator->DiscardSystemPages(reinterpret_cast<void*>(discard_start),
-    //                               discard_end - discard_start);
+    auto vmem_contains = [discard_start, discard_end](VirtualMemory& vmem) {
+      return vmem.InVM(discard_start, discard_end - discard_start);
+    };
+    if (std::count_if(owned_code_space_.begin(), owned_code_space_.end(),
+                      vmem_contains) != 1) {
+      printf("to discard: %p - %p\n", reinterpret_cast<void*>(discard_start),
+             reinterpret_cast<void*>(discard_end));
+      for (VirtualMemory& vmem : owned_code_space_) {
+        printf("vmem: %p - %p\n",
+               reinterpret_cast<void*>(vmem.region().begin()),
+               reinterpret_cast<void*>(vmem.region().end()));
+      }
+      fflush(stdout);
+    }
+    CHECK_EQ(1, std::count_if(owned_code_space_.begin(),
+                              owned_code_space_.end(), vmem_contains));
+    allocator->DiscardSystemPages(reinterpret_cast<void*>(discard_start),
+                                  discard_end - discard_start);
   }
 }
 
