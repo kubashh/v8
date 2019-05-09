@@ -13306,6 +13306,12 @@ void CodeStubArguments::PopAndReturn(Node* value) {
                            value);
 }
 
+TNode<BoolT> CodeStubAssembler::IsFrozenOrSealedElementsKind(
+    TNode<Int32T> elements_kind) {
+  return IsElementsKindInRange(elements_kind, PACKED_SEALED_ELEMENTS,
+                               HOLEY_FROZEN_ELEMENTS);
+}
+
 Node* CodeStubAssembler::IsFastElementsKind(Node* elements_kind) {
   STATIC_ASSERT(FIRST_ELEMENTS_KIND == FIRST_FAST_ELEMENTS_KIND);
   return Uint32LessThanOrEqual(elements_kind,

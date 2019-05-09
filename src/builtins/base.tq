@@ -295,6 +295,11 @@ macro NewJSArray(implicit context: Context)(map: Map, length: Smi): JSArray {
 // holey elements when the global NoElementsProtector is not invalidated.
 transient type FastJSArray extends JSArray;
 
+// A HeapObject with a JSArray map, and either fast packed elements, or fast
+// holey elements or frozen, sealed elements when the global NoElementsProtector
+// is not invalidated.
+transient type FastJSArrayForRead extends JSArray;
+
 // A FastJSArray when the global ArraySpeciesProtector is not invalidated.
 transient type FastJSArrayForCopy extends FastJSArray;
 
@@ -1308,6 +1313,8 @@ extern macro IsElementsKindLessThanOrEqual(
 extern macro IsElementsKindGreaterThan(
     ElementsKind, constexpr ElementsKind): bool;
 extern macro IsFastElementsKind(constexpr ElementsKind): constexpr bool;
+extern macro IsFrozenOrSealedElementsKind(constexpr ElementsKind):
+    constexpr bool;
 extern macro IsDoubleElementsKind(constexpr ElementsKind): constexpr bool;
 
 extern macro IsFastAliasedArgumentsMap(implicit context: Context)(Map): bool;
@@ -1727,6 +1734,25 @@ Cast<FastJSArray>(implicit context: Context)(o: HeapObject): FastJSArray
   return %RawDownCast<FastJSArray>(o);
 }
 
+Cast<FastJSArrayForRead>(implicit context: Context)(o: HeapObject):
+    FastJSArrayForRead
+    labels CastError {
+  const map: Map = o.map;
+  if (!IsJSArrayMap(map)) goto CastError;
+
+  // Bailout if receiver has slow elements.
+  const elementsKind: ElementsKind = LoadMapElementsKind(map);
+  if (!IsFrozenOrSealedElementsKind(elementsKind)) {
+    if (!IsFastElementsKind(elementsKind)) goto CastError;
+  }
+
+  // Verify that our prototype is the initial array prototype.
+  if (!IsPrototypeInitialArrayPrototype(map)) goto CastError;
+
+  if (IsNoElementsProtectorCellInvalid()) goto CastError;
+  return %RawDownCast<FastJSArrayForRead>(o);
+}
+
 Cast<FastJSArrayForCopy>(implicit context: Context)(o: HeapObject):
     FastJSArrayForCopy
     labels CastError {
@@ -2141,6 +2167,7 @@ extern macro BasicStoreNumberDictionaryElement(NumberDictionary, intptr, Object)
     labels NotData, IfHole, ReadOnly;
 
 extern macro IsFastElementsKind(ElementsKind): bool;
+extern macro IsFrozenOrSealedElementsKind(ElementsKind): bool;
 extern macro IsDoubleElementsKind(ElementsKind): bool;
 extern macro IsFastSmiOrTaggedElementsKind(ElementsKind): bool;
 extern macro IsFastSmiElementsKind(ElementsKind): bool;
@@ -2580,6 +2607,14 @@ macro BranchIfFastJSArray(o: Object, context: Context): never
   // since it fundamentally breaks the type system.
   GotoIfForceSlowPath() otherwise False;
   BranchIf<FastJSArray>(o) otherwise True, False;
+}
+
+macro BranchIfFastJSArrayForRead(o: Object, context: Context): never
+    labels True, False {
+  // Long-term, it's likely not a good idea to have this slow-path test here,
+  // since it fundamentally breaks the type system.
+  GotoIfForceSlowPath() otherwise False;
+  BranchIf<FastJSArrayForRead>(o) otherwise True, False;
 }
 
 macro BranchIfNotFastJSArray(o: Object, context: Context): never
