@@ -16,6 +16,24 @@
       "revId": "89918e17946dcb95e9cc02b8de6c7b3038e81621",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "137a7c89_6a20b6d9",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-09T11:23:50Z",
+      "side": 1,
+      "message": "I\u0027d vote for turning the flag off, but I\u0027m also fine with the workaround. It just looks that the lazy feedback feature is not particularly related to the serializer that these tests are testing, therefore no need to test them in combination. WDYT?",
+      "parentUuid": "e4cc73f0_fa58ece4",
+      "revId": "89918e17946dcb95e9cc02b8de6c7b3038e81621",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
