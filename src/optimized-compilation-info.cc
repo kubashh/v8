@@ -239,6 +239,7 @@ OptimizedCompilationInfo::InlinedFunctionHolder::InlinedFunctionHolder(
     Handle<SharedFunctionInfo> inlined_shared_info,
     Handle<BytecodeArray> inlined_bytecode, SourcePosition pos)
     : shared_info(inlined_shared_info), bytecode_array(inlined_bytecode) {
+  AllowHandleDereference allow_handle_deref;
   DCHECK_EQ(shared_info->GetBytecodeArray(), *bytecode_array);
   position.position = pos;
   // initialized when generating the deoptimization literals
