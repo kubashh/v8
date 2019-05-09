@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "486555f0_53ed7e19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-09T10:40:38Z",
+      "side": 1,
+      "message": "Could you make the title more specific. E.g:\n\n\"[Interpreter] Await the input value of iterator.return for yield* on async generators\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "2d620d09625743a24300334acf0550ceea72f3d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
