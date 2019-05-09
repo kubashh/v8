@@ -296,13 +296,13 @@
 // Don't bother for debug builds.
 // Use like:
 //   V8_NOINLINE int GetMinusOne() { return -1; }
-#if !defined(DEBUG) && V8_HAS_ATTRIBUTE_NOINLINE
-# define V8_NOINLINE __attribute__((noinline))
-#elif !defined(DEBUG) && V8_HAS_DECLSPEC_NOINLINE
-# define V8_NOINLINE __declspec(noinline)
-#else
+// #if !defined(DEBUG) && V8_HAS_ATTRIBUTE_NOINLINE
+// # define V8_NOINLINE __attribute__((noinline))
+// #elif !defined(DEBUG) && V8_HAS_DECLSPEC_NOINLINE
+// # define V8_NOINLINE __declspec(noinline)
+// #else
 # define V8_NOINLINE /* NOT SUPPORTED */
-#endif
+// #endif
 
 
 // A macro (V8_DEPRECATED) to mark classes or functions as deprecated.
