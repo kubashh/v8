@@ -70,6 +70,30 @@
       "revId": "86f877de5102e62cf100eb14b4f2acd86ee3f24d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "697a3280_3a88220a",
+        "filename": "src/handler-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-09T14:54:53Z",
+      "side": 1,
+      "message": "If it is only the DCHECK that fails, then we could DCHECK that the alignemt padding is \u003c\u003d 4 bytes and also static_assert(4 \u003c\u003d kReturnEntrySize * sizeof(int32_t)) so that we make sure the padding will never kick us to the next entry. Would that make sense? WDYT?",
+      "parentUuid": "5a5c3294_aecdf011",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 74
+      },
+      "revId": "86f877de5102e62cf100eb14b4f2acd86ee3f24d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
