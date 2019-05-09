@@ -936,7 +936,7 @@ void ArrayIncludesIndexofAssembler::Generate(SearchVariant variant,
 
   // Take slow path if not a JSArray, if retrieving elements requires
   // traversing prototype, or if access checks are required.
-  BranchIfFastJSArray(receiver, context, &init_index, &call_runtime);
+  BranchIfFastJSArrayForRead(receiver, context, &init_index, &call_runtime);
 
   BIND(&init_index);
   VARIABLE(index_var, MachineType::PointerRepresentation(), intptr_zero);
@@ -996,6 +996,7 @@ void ArrayIncludesIndexofAssembler::Generate(SearchVariant variant,
   STATIC_ASSERT(HOLEY_ELEMENTS == 3);
   GotoIf(Uint32LessThanOrEqual(elements_kind, Int32Constant(HOLEY_ELEMENTS)),
          &if_smiorobjects);
+  GotoIf(IsFrozenOrSealedElementsKind(elements_kind), &if_smiorobjects);
   GotoIf(Word32Equal(elements_kind, Int32Constant(PACKED_DOUBLE_ELEMENTS)),
          &if_packed_doubles);
   GotoIf(Word32Equal(elements_kind, Int32Constant(HOLEY_DOUBLE_ELEMENTS)),

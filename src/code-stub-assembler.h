@@ -2318,6 +2318,10 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   bool IsFastElementsKind(ElementsKind kind) {
     return v8::internal::IsFastElementsKind(kind);
   }
+  TNode<BoolT> IsFrozenOrSealedElementsKind(TNode<Int32T> elements_kind);
+  bool IsFrozenOrSealedElementsKind(ElementsKind kind) {
+    return v8::internal::IsFrozenOrSealedElementsKind(kind);
+  }
   TNode<BoolT> IsDictionaryElementsKind(TNode<Int32T> elements_kind) {
     return ElementsKindEqual(elements_kind, Int32Constant(DICTIONARY_ELEMENTS));
   }
