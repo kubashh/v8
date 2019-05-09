@@ -34,6 +34,24 @@
       "revId": "89918e17946dcb95e9cc02b8de6c7b3038e81621",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3a70238_572737e9",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-05-09T13:03:25Z",
+      "side": 1,
+      "message": "Thanks Maya, it is not that much for testing coverage but when we enable lazy feedback allocation by default and we are happy with the performance we may want to remove this flag. Then we need to do fix these tests anyway. So if turning off flag is only a minor preference, I will leave the cl as is.",
+      "parentUuid": "137a7c89_6a20b6d9",
+      "revId": "89918e17946dcb95e9cc02b8de6c7b3038e81621",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
