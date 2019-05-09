@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e4cc73f0_fa58ece4",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1145189
+      },
+      "writtenOn": "2019-05-09T10:26:33Z",
+      "side": 1,
+      "message": "I can\u0027t use %EnsureFeedbackVector inside f because it resets hints. Hence this workaround. Alternately we could also just turn off lazy_feedback_allocation flag for these tests. Let me know if you think that would be better. The same also applies to SerializeUnconditionalJump and SerializeConditionalJump",
+      "revId": "89918e17946dcb95e9cc02b8de6c7b3038e81621",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
