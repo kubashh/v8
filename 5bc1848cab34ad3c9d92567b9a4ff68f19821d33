@@ -1,0 +1,249 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cfa784c_0ab45280",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "Please make this const and remove the redundant initialization.",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "321c301e_8d7a8d1b",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 2682,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "HeapObject",
+      "range": {
+        "startLine": 2682,
+        "startChar": 31,
+        "endLine": 2682,
+        "endChar": 37
+      },
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0734ea2_0ad70845",
+        "filename": "src/compiler/js-heap-broker.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "This can be more precise, HeapObjectRef.",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f21546e_e8b51dd1",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "That comment sounds strange to me.\n\nIt\u0027s also no longer true that a missing feedback vector implies the function has never run, so I would suggest to just remove the comment (and the empty line above).",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "919266f5_1eb1991a",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "Let\u0027s remove this comment as well (or extend it if you prefer).",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e0a51f7_668f8b5a",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "If this is still something we \"might\" want to do, it would have to be done in the serializer (and thus very speculatively).",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4044d5a5_468399c2",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "Please re-format.",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "921c3991_ecacf563",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "has?",
+      "range": {
+        "startLine": 423,
+        "startChar": 25,
+        "endLine": 423,
+        "endChar": 36
+      },
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d778f64_5c2f935a",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "...Ref",
+      "range": {
+        "startLine": 424,
+        "startChar": 32,
+        "endLine": 424,
+        "endChar": 50
+      },
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74232651_11dc2850",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "Some word(s) is missing here.\n\nHow about: The broker holds a reference to the bytecode array, which prevents it from getting flushed.",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fbf6203_0d289b7e",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "You mean \"the handles passed here\". But that\u0027s already documented by the fact that we have a DisallowHeapAccess scope at the top of JSLininer, so I don\u0027t think we need to mention it here (or elsewhere).",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86520311_9883b52c",
+        "filename": "src/compiler/map-inference.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "Make that neis please.",
+      "range": {
+        "startLine": 68,
+        "startChar": 10,
+        "endLine": 68,
+        "endChar": 18
+      },
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6d7054a_ad72bf7d",
+        "filename": "src/optimized-compilation-info.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T11:27:57Z",
+      "side": 1,
+      "message": "Please remove that and the DCHECK, as discussed.",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
