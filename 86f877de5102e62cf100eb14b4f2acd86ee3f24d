@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df11d5ff_e52459c4",
+        "filename": "src/handler-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-05-09T11:59:27Z",
+      "side": 1,
+      "message": "Hello Jakob and Michael, I found this is failing on ppc. The issue comes from constant pool alignment will potentially increase handler_table_size. From GDB, I read  handler_table_offset_ in code-generator.cc:308 is 8036, after emitting 6 handlers, pc_offset() becomes 8084. But constant_pool_offset will re-align pc_offset to 8088. Therefore, when we compute handler_table_size \u003d constant_pool_offset - handler_table_offset, handler table becomes 4 bytes larger. How would you recommend to fix this? Can I align handler_table_offset to 8 bytes on 64-bit platform too, so that we can avoid alignment later when emitting constant pool?",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 74
+      },
+      "revId": "86f877de5102e62cf100eb14b4f2acd86ee3f24d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
