@@ -34,6 +34,24 @@
       "revId": "abb9cd568f93a69dfbc66dc58d3480acf92277ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bdd7231_95c84e14",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-05-09T09:10:04Z",
+      "side": 1,
+      "message": "Done. Also renamed the builder on luci.",
+      "parentUuid": "1b46b971_0cbbab70",
+      "revId": "abb9cd568f93a69dfbc66dc58d3480acf92277ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
