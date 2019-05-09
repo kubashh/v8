@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea7f9659_a07e92e3",
+        "filename": "src/compiler/js-heap-broker.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 1115,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T14:42:18Z",
+      "side": 1,
+      "message": "This can be const too :)",
+      "range": {
+        "startLine": 1115,
+        "startChar": 25,
+        "endLine": 1115,
+        "endChar": 26
+      },
+      "revId": "83d7592b339d4f071ec23a803a7ae592d2e7b91c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -224,6 +224,24 @@
     },
     {
       "key": {
+        "uuid": "8f2a8624_e09c5835",
+        "filename": "src/compiler/js-inlining.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-09T14:42:18Z",
+      "side": 1,
+      "message": "I suggest we discuss it in the team and then update/remove the comment accordingly.",
+      "parentUuid": "cc0d0744_c6ebe1c0",
+      "revId": "5bc1848cab34ad3c9d92567b9a4ff68f19821d33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4044d5a5_468399c2",
         "filename": "src/compiler/js-inlining.cc",
         "patchSetId": 8
