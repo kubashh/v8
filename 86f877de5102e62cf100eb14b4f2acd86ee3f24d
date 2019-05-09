@@ -22,6 +22,30 @@
       "revId": "86f877de5102e62cf100eb14b4f2acd86ee3f24d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf6bcf7a_e498dcb0",
+        "filename": "src/handler-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-09T13:17:07Z",
+      "side": 1,
+      "message": "And the constant pool alignment comes from here: https://cs.chromium.org/chromium/src/v8/src/constant-pool.cc?l\u003d189\u0026rcl\u003d7a0e48289084b3dd77fdb1f042a5a7485674b7b3\n\nIt is only the DCHECK that fails, right? We still count the number of entries correctly in L35, since the maximal padding (\u003d 7 bytes) is less than kReturnEntrySize * sizeof(int32_t) (\u003d 8 bytes).",
+      "parentUuid": "df11d5ff_e52459c4",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 74
+      },
+      "revId": "86f877de5102e62cf100eb14b4f2acd86ee3f24d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
