@@ -881,6 +881,8 @@ Vector<byte> NativeModule::AllocateForCode(size_t size) {
       UNREACHABLE();
     }
 
+    // We should not make more than 10 reservations per native module.
+    CHECK_GT(10, owned_code_space_.size());
     Address hint = owned_code_space_.empty() ? kNullAddress
                                              : owned_code_space_.back().end();
 
