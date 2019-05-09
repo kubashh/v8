@@ -46,6 +46,30 @@
       "revId": "86f877de5102e62cf100eb14b4f2acd86ee3f24d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a5c3294_aecdf011",
+        "filename": "src/handler-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1155482
+      },
+      "writtenOn": "2019-05-09T14:21:32Z",
+      "side": 1,
+      "message": "Yes to both questions. And the number of entries should be still correct.",
+      "parentUuid": "cf6bcf7a_e498dcb0",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 74
+      },
+      "revId": "86f877de5102e62cf100eb14b4f2acd86ee3f24d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
