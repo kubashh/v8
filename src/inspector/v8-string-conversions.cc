@@ -4,7 +4,9 @@
 
 #include "src/inspector/v8-string-conversions.h"
 
+#include <limits>
 #include <vector>
+
 #include "src/base/logging.h"
 #include "src/base/v8-fallthrough.h"
 
