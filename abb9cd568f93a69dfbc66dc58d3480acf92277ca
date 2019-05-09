@@ -16,6 +16,24 @@
       "revId": "abb9cd568f93a69dfbc66dc58d3480acf92277ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b46b971_0cbbab70",
+        "filename": "infra/mb/mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1115956
+      },
+      "writtenOn": "2019-05-09T08:26:23Z",
+      "side": 1,
+      "message": "Can do. My motivation was to stay closer to chromium\u0027s naming:\nhttps://ci.chromium.org/p/chromium/builders/luci.chromium.ci/ios-simulator\n\nBut you are probably right and we should stick to our own conventions.",
+      "parentUuid": "25601d92_fad85855",
+      "revId": "abb9cd568f93a69dfbc66dc58d3480acf92277ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
