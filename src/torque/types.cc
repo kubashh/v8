@@ -285,9 +285,7 @@ std::vector<Method*> AggregateType::Methods(const std::string& name) const {
 
 std::string StructType::ToExplicitString() const {
   std::stringstream result;
-  result << "struct " << name() << "{";
-  PrintCommaSeparatedList(result, fields());
-  result << "}";
+  result << "struct " << name();
   return result.str();
 }
 
@@ -326,9 +324,7 @@ std::string ClassType::GetGeneratedTypeNameImpl() const {
 
 std::string ClassType::ToExplicitString() const {
   std::stringstream result;
-  result << "class " << name() << "{";
-  PrintCommaSeparatedList(result, fields());
-  result << "}";
+  result << "class " << name();
   return result.str();
 }
 
@@ -568,62 +564,47 @@ VisitResult VisitResult::NeverResult() {
   return result;
 }
 
-std::tuple<size_t, std::string, std::string> Field::GetFieldSizeInformation()
-    const {
+std::tuple<size_t, std::string> Field::GetFieldSizeInformation() const {
   std::string size_string = "#no size";
-  std::string machine_type = "#no machine type";
   const Type* field_type = this->name_and_type.type;
   size_t field_size = 0;
   if (field_type->IsSubtypeOf(TypeOracle::GetTaggedType())) {
     field_size = kTaggedSize;
     size_string = "kTaggedSize";
-    machine_type = field_type->IsSubtypeOf(TypeOracle::GetSmiType())
-                       ? "MachineType::TaggedSigned()"
-                       : "MachineType::AnyTagged()";
   } else if (field_type->IsSubtypeOf(TypeOracle::GetRawPtrType())) {
     field_size = kSystemPointerSize;
     size_string = "kSystemPointerSize";
-    machine_type = "MachineType::Pointer()";
-  } else if (field_type == TypeOracle::GetInt32Type()) {
-    field_size = kInt32Size;
-    size_string = "kInt32Size";
-    machine_type = "MachineType::Int32()";
-  } else if (field_type == TypeOracle::GetUint32Type()) {
-    field_size = kInt32Size;
-    size_string = "kInt32Size";
-    machine_type = "MachineType::Uint32()";
-  } else if (field_type == TypeOracle::GetInt16Type()) {
-    field_size = kUInt16Size;
-    size_string = "kUInt16Size";
-    machine_type = "MachineType::Int16()";
-  } else if (field_type == TypeOracle::GetUint16Type()) {
-    field_size = kUInt16Size;
-    size_string = "kUInt16Size";
-    machine_type = "MachineType::Uint16()";
-  } else if (field_type == TypeOracle::GetInt8Type()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetInt8Type())) {
     field_size = kUInt8Size;
     size_string = "kUInt8Size";
-    machine_type = "MachineType::Int8()";
-  } else if (field_type == TypeOracle::GetUint8Type()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetUint8Type())) {
     field_size = kUInt8Size;
     size_string = "kUInt8Size";
-    machine_type = "MachineType::Uint8()";
-  } else if (field_type == TypeOracle::GetFloat64Type()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetInt16Type())) {
+    field_size = kUInt16Size;
+    size_string = "kUInt16Size";
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetUint16Type())) {
+    field_size = kUInt16Size;
+    size_string = "kUInt16Size";
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetInt32Type())) {
+    field_size = kInt32Size;
+    size_string = "kInt32Size";
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetUint32Type())) {
+    field_size = kInt32Size;
+    size_string = "kInt32Size";
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetFloat64Type())) {
     field_size = kDoubleSize;
     size_string = "kDoubleSize";
-    machine_type = "MachineType::Float64()";
-  } else if (field_type == TypeOracle::GetIntPtrType()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetIntPtrType())) {
     field_size = kIntptrSize;
     size_string = "kIntptrSize";
-    machine_type = "MachineType::IntPtr()";
-  } else if (field_type == TypeOracle::GetUIntPtrType()) {
+  } else if (field_type->IsSubtypeOf(TypeOracle::GetUIntPtrType())) {
     field_size = kIntptrSize;
     size_string = "kIntptrSize";
-    machine_type = "MachineType::IntPtr()";
   } else {
     ReportError("fields of type ", *field_type, " are not (yet) supported");
   }
-  return std::make_tuple(field_size, size_string, machine_type);
+  return std::make_tuple(field_size, size_string);
 }
 
 }  // namespace torque
