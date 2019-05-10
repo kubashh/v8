@@ -22,6 +22,30 @@
       "revId": "0a282680bd1d478a0083cf5c639f8891db2d5695",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c85daba3_0470fb74",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-10T09:21:01Z",
+      "side": 1,
+      "message": "Ack, done.",
+      "parentUuid": "5bcdf3ef_e5e31c5f",
+      "range": {
+        "startLine": 1318,
+        "startChar": 2,
+        "endLine": 1318,
+        "endChar": 49
+      },
+      "revId": "0a282680bd1d478a0083cf5c639f8891db2d5695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
