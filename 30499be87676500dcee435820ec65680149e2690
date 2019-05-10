@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17820182_7ce5a9f0",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-10T09:03:02Z",
+      "side": 1,
+      "message": "Calling this \"value\" is a little deceptive, because we typically talk about \"min smi value\" as the minimum value that can be encoded as a smi.",
+      "revId": "30499be87676500dcee435820ec65680149e2690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0166335a_1d0c50c2",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-10T09:03:02Z",
+      "side": 1,
+      "message": "Why not just use IsInRange?",
+      "revId": "30499be87676500dcee435820ec65680149e2690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
