@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "82bb3728_adf33a43",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-10T10:07:39Z",
+      "side": 1,
+      "message": "That\u0027s exactly the min/max value that can be encoded as a Smi. These constants actually define the values of Smi::k[Min|Max]Value constants.\nI had to move the constants definition from below here in order to be able to use them in IsValidSmi().",
+      "parentUuid": "17820182_7ce5a9f0",
+      "revId": "30499be87676500dcee435820ec65680149e2690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0166335a_1d0c50c2",
         "filename": "include/v8-internal.h",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "30499be87676500dcee435820ec65680149e2690",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8c89968_6e339a08",
+        "filename": "include/v8-internal.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-10T10:07:39Z",
+      "side": 1,
+      "message": "I didn\u0027t want to expose it to v8 API given this will be the only usage.",
+      "parentUuid": "0166335a_1d0c50c2",
+      "revId": "30499be87676500dcee435820ec65680149e2690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
