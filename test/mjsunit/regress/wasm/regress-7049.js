@@ -45,8 +45,10 @@ let func2 = builder2.addFunction('func2', kSig_i_i)
 
 let instance2 = builder2.instantiate({q: {func1: instance1.exports.func1}});
 
-%RedirectToWasmInterpreter(
-        instance2, parseInt(instance2.exports.func2.name));
+print(instance2.exports.func2.name);
+print(parseInt(instance2.exports.func2.name));
+
+%RedirectToWasmInterpreter(instance2, func2.index);
 
 // Call with 1. This will be passed by the C_WASM_ENTRY via the stack, and the
 // GC will try to dereference it (before the bug fix).

@@ -973,32 +973,10 @@ Handle<Object> WasmTableObject::Get(Isolate* isolate,
 
   // Check if we already compiled a wrapper for the function but did not store
   // it in the table slot yet.
-  MaybeHandle<Object> maybe_entry = WasmInstanceObject::GetWasmExportedFunction(
-      isolate, instance, function_index);
-  if (maybe_entry.ToHandle(&entry)) {
-    entries->set(entry_index, *entry);
-    return entry;
-  }
-
-  const WasmModule* module = instance->module_object()->module();
-  const WasmFunction& function = module->functions[function_index];
-  // Exported functions got their wrapper compiled during instantiation.
-  CHECK(!function.exported);
-  Handle<Code> wrapper_code =
-      compiler::CompileJSToWasmWrapper(isolate, function.sig, function.imported)
-          .ToHandleChecked();
-
-  MaybeHandle<String> function_name = WasmModuleObject::GetFunctionNameOrNull(
-      isolate, handle(instance->module_object(), isolate), function_index);
-
-  Handle<WasmExportedFunction> result = WasmExportedFunction::New(
-      isolate, instance, function_name, function_index,
-      static_cast<int>(function.sig->parameter_count()), wrapper_code);
-
-  entries->set(entry_index, *result);
-  WasmInstanceObject::SetWasmExportedFunction(isolate, instance, function_index,
-                                              result);
-  return result;
+  entry = WasmInstanceObject::GetOrCreateWasmExportedFunction(isolate, instance,
+                                                              function_index);
+  entries->set(entry_index, *entry);
+  return entry;
 }
 
 void WasmTableObject::Fill(Isolate* isolate, Handle<WasmTableObject> table,
@@ -1821,6 +1799,38 @@ MaybeHandle<WasmExportedFunction> WasmInstanceObject::GetWasmExportedFunction(
                                             isolate);
     }
   }
+  return result;
+}
+
+Handle<WasmExportedFunction>
+WasmInstanceObject::GetOrCreateWasmExportedFunction(
+    Isolate* isolate, Handle<WasmInstanceObject> instance, int function_index) {
+  MaybeHandle<WasmExportedFunction> maybe_result =
+      WasmInstanceObject::GetWasmExportedFunction(isolate, instance,
+                                                  function_index);
+
+  Handle<WasmExportedFunction> result;
+  if (maybe_result.ToHandle(&result)) {
+    return result;
+  }
+
+  const WasmModule* module = instance->module_object()->module();
+  const WasmFunction& function = module->functions[function_index];
+  // Exported functions got their wrapper compiled during instantiation.
+  CHECK(!function.exported);
+  Handle<Code> wrapper_code =
+      compiler::CompileJSToWasmWrapper(isolate, function.sig, function.imported)
+          .ToHandleChecked();
+
+  MaybeHandle<String> function_name = WasmModuleObject::GetFunctionNameOrNull(
+      isolate, handle(instance->module_object(), isolate), function_index);
+
+  result = WasmExportedFunction::New(
+      isolate, instance, function_name, function_index,
+      static_cast<int>(function.sig->parameter_count()), wrapper_code);
+
+  WasmInstanceObject::SetWasmExportedFunction(isolate, instance, function_index,
+                                              result);
   return result;
 }
 
