@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "f4d0c962_3a4d5c88",
+        "filename": "src/compiler/decompression-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-10T12:20:30Z",
+      "side": 1,
+      "message": "I\u0027d call this ReduceCompress (since the node you are doing the reduction on is the compress.",
+      "range": {
+        "startLine": 14,
+        "startChar": 36,
+        "endLine": 14,
+        "endChar": 61
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0baece0f_854257a2",
+        "filename": "src/compiler/decompression-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-10T12:20:30Z",
+      "side": 1,
+      "message": "I don\u0027t think we should anything other than\nIrOpcode::kChangeCompressedToX \u003c- IrOpcode::kChangeXToCompressed \nshould we? How about just dropping the separate inputOpcode parameter and just checking if it is any kind of decompress IR with a DCHECK that the X\u0027s match in the compress / decompress nodes.",
+      "range": {
+        "startLine": 34,
+        "startChar": 12,
+        "endLine": 35,
+        "endChar": 74
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9bcfad2b_c25e64e3",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 3
@@ -25,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "5ae905c3_f2354833",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-10T12:20:30Z",
+      "side": 1,
+      "message": "Probably best to. It doesn\u0027t introduce compress/decompress nodes anyway so no need to dcompression_elimination after value numbering anyway.",
+      "parentUuid": "9bcfad2b_c25e64e3",
+      "range": {
+        "startLine": 1547,
+        "startChar": 4,
+        "endLine": 1547,
+        "endChar": 51
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "216b63b8_1e159445",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 3
@@ -36,6 +106,30 @@
       "writtenOn": "2019-05-10T10:17:44Z",
       "side": 1,
       "message": "Should we only add the reducer if pointer compression is enabled? If not, it does not cause any issues, but is redundant.",
+      "range": {
+        "startLine": 1548,
+        "startChar": 4,
+        "endLine": 1550,
+        "endChar": 0
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9de1f47_5f2ca299",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-10T12:20:30Z",
+      "side": 1,
+      "message": "Seems like we should avoid adding the reducer otherwise we will walk the graph one time to do nothing.",
+      "parentUuid": "216b63b8_1e159445",
       "range": {
         "startLine": 1548,
         "startChar": 4,
