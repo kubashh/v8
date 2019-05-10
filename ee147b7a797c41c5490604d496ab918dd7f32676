@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e694abf_1f6173f0",
+        "filename": "src/compiler/decompression-elimination.cc",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-05-10T16:57:26Z",
+      "side": 1,
+      "message": "Adding on the other comment, we also have cases of ChangeCompressedToTagged \u003c- ChangeTaggedPointerToCompressedPointer, where the ChangeTaggedPointerToCompressedPointer was introduced while lowering a NewConsString on effect control linearizer",
+      "range": {
+        "startLine": 24,
+        "startChar": 67,
+        "endLine": 25,
+        "endChar": 68
+      },
+      "revId": "ee147b7a797c41c5490604d496ab918dd7f32676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
