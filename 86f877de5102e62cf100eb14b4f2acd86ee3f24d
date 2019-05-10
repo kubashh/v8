@@ -118,6 +118,30 @@
       "revId": "86f877de5102e62cf100eb14b4f2acd86ee3f24d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde007ca_e644a06d",
+        "filename": "src/handler-table.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-10T08:44:44Z",
+      "side": 1,
+      "message": "I have uploaded the fix I had im mind here: https://chromium-review.googlesource.com/c/v8/v8/+/1605723",
+      "parentUuid": "9d099fe1_5682811d",
+      "range": {
+        "startLine": 41,
+        "startChar": 2,
+        "endLine": 41,
+        "endChar": 74
+      },
+      "revId": "86f877de5102e62cf100eb14b4f2acd86ee3f24d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
