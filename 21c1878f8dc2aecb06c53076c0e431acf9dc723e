@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1fb81a21_a4c501ca",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-10T23:10:51Z",
+      "side": 1,
+      "message": "I\u0027m not super thrilled with anything I\u0027ve come up with for this issue, so please let me know if you have another suggestion you\u0027d prefer. The problem, in short, is that Torque doesn\u0027t emit any field offset constant for fields that don\u0027t exist (such as those removed by @ifdef), but we\u0027d still like to be able to compile. Running gcmole is especially interesting, because it runs Torque once for the host platform (say, ia32), and then compiles files that include the generated Torque files using alternate definitions (say, V8_TARGET_ARCH_X64). So preprocessor definitions might be inconsistent between when torque-parser.cc was compiled and when other files like map-inl.h are compiled.\n\nOptions I\u0027ve considered:\n\n1. In patchset 16, I\u0027m using the preprocessor to avoid referencing any field offset constants that haven\u0027t been generated. Downside: requires some extra goo here in map-inl.h.\n\n2. In patchset 13, I tried another alternative where fields can be of type void to take up zero space in the layout, meaning we can successfully check things like `FIELD_SIZE(kOptionalPaddingOffset) \u003d\u003d 0`. Downside: requires duplicate definitions of the optional fields in base.tq, and of the BuildFlags list.\n\n3. We could adjust the @ifdef semantics so that a false condition would not remove the field but just squash it to zero size. Downside: @ifdef behavior might be a little surprising, and prevents us from having two cases that define the same field in different ways (I don\u0027t know if this would be useful, but it\u0027s currently possible).",
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
