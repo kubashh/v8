@@ -1,0 +1,50 @@
+// Copyright 2019 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include "src/compiler/decompression-elimination.h"
+
+namespace v8 {
+namespace internal {
+namespace compiler {
+
+DecompressionElimination::DecompressionElimination(Editor* editor)
+    : AdvancedReducer(editor) {}
+
+Reduction DecompressionElimination::ReduceDirectDecompression(
+    Node* node, IrOpcode::Value inputOpcode) {
+  DCHECK(node->opcode() == IrOpcode::kChangeTaggedToCompressed ||
+         node->opcode() == IrOpcode::kChangeTaggedSignedToCompressedSigned ||
+         node->opcode() == IrOpcode::kChangeTaggedPointerToCompressedPointer);
+
+  DCHECK_GT(node->InputCount(), 0);
+  Node* input_node = node->InputAt(0);
+  if (input_node->opcode() == inputOpcode) {
+    DCHECK_GT(input_node->InputCount(), 0);
+    return Replace(input_node->InputAt(0));
+  } else {
+    return NoChange();
+  }
+}
+
+Reduction DecompressionElimination::Reduce(Node* node) {
+  DisallowHeapAccess no_heap_access;
+  switch (node->opcode()) {
+    case IrOpcode::kChangeTaggedToCompressed:
+      return ReduceDirectDecompression(node,
+                                       IrOpcode::kChangeCompressedToTagged);
+    case IrOpcode::kChangeTaggedSignedToCompressedSigned:
+      return ReduceDirectDecompression(
+          node, IrOpcode::kChangeCompressedSignedToTaggedSigned);
+    case IrOpcode::kChangeTaggedPointerToCompressedPointer:
+      return ReduceDirectDecompression(
+          node, IrOpcode::kChangeCompressedPointerToTaggedPointer);
+    default:
+      break;
+  }
+  return NoChange();
+}
+
+}  // namespace compiler
+}  // namespace internal
+}  // namespace v8
