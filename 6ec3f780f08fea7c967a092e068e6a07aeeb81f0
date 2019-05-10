@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6def427b_d97af5b5",
+        "filename": "src/compiler/decompression-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-05-10T13:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4d0c962_3a4d5c88",
+      "range": {
+        "startLine": 14,
+        "startChar": 36,
+        "endLine": 14,
+        "endChar": 61
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0baece0f_854257a2",
         "filename": "src/compiler/decompression-elimination.cc",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-05-10T12:20:30Z",
       "side": 1,
       "message": "I don\u0027t think we should anything other than\nIrOpcode::kChangeCompressedToX \u003c- IrOpcode::kChangeXToCompressed \nshould we? How about just dropping the separate inputOpcode parameter and just checking if it is any kind of decompress IR with a DCHECK that the X\u0027s match in the compress / decompress nodes.",
+      "range": {
+        "startLine": 34,
+        "startChar": 12,
+        "endLine": 35,
+        "endChar": 74
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3de5b05b_15a9907f",
+        "filename": "src/compiler/decompression-elimination.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-05-10T13:31:02Z",
+      "side": 1,
+      "message": "If you meant no other than \u0027IrOpcode::kChangeCompressedXToTaggedX \u003c- IrOpcode::kChangeTaggedXToCompressedX\u0027, if we run after effect control linearization then yes. We are running it now on LateOptimization which is after that phase.\n\nIf in the future, we run it before effect control linearization then some changes would be needed. For example the DCHECK would trigger for cases like:\n    ... \u003c- ChangeCompressedToTaggedSigned \u003c- ChangeTaggedSignedToCompressedSigned \u003c- ...\nNote that it is going from Compressed to Tagged*Signed* to Compressed*Signed*.\n\nMoving the IrOpcode to the method ends up adding more code there where it is not needed. We already know which decompress is the one that we are expecting to get. What would be the upside of placing the IrOpcode inside the other method?",
+      "parentUuid": "0baece0f_854257a2",
       "range": {
         "startLine": 34,
         "startChar": 12,
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "4698d457_98dfdef5",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-05-10T13:31:02Z",
+      "side": 1,
+      "message": "Done.\nMoved it to the top so that everything is contained in the if body. Do we want it after any reducers in particular? Seems like before dead_code_elimination would be useful since we are going to be creating dead code if we perform reductions",
+      "parentUuid": "5ae905c3_f2354833",
+      "range": {
+        "startLine": 1547,
+        "startChar": 4,
+        "endLine": 1547,
+        "endChar": 51
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "216b63b8_1e159445",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 3
@@ -139,6 +211,30 @@
       "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b488a6e_1f6e87cf",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-05-10T13:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9de1f47_5f2ca299",
+      "range": {
+        "startLine": 1548,
+        "startChar": 4,
+        "endLine": 1550,
+        "endChar": 0
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
