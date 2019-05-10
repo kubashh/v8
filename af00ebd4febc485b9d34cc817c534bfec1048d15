@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4b38fa6_432d7233",
+        "filename": "src/compiler/decompression-elimination.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-05-10T15:28:41Z",
+      "side": 1,
+      "message": "If we are lowering a CheckedCompressedToTaggedPointer in the effect linearization phase we will change that to ChangeCompressedPointerToTaggedPointer. Then, we might end up with a chain of:\n    Parent \u003c- ChangeCompressedPointerToTaggedPointer \u003c- ChangeTaggedToCompressed \u003c- Child\nSimilarly, we have cases with Signed instead of pointer.\nThen, we have to be able to accept these types of chains.\n\n@Jaro, should we change something else on the code to avoid these types of chains? Or are we okay with having a IrOpcode::IsDecompressOpcode here? The downside would be that we could be missing wrongly created Change nodes that we are simplifying.",
+      "range": {
+        "startLine": 18,
+        "startChar": 13,
+        "endLine": 18,
+        "endChar": 41
+      },
+      "revId": "af00ebd4febc485b9d34cc817c534bfec1048d15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
