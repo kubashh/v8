@@ -116,7 +116,8 @@ const StructType* TypeVisitor::ComputeType(StructDeclaration* decl) {
                                 {field.name_and_type.name->value, field_type},
                                 offset,
                                 false,
-                                field.const_qualified});
+                                field.const_qualified,
+                                false});
     offset += LoweredSlotCount(field_type);
   }
   DeclareMethods(struct_type, decl->methods);
@@ -248,7 +249,8 @@ void TypeVisitor::VisitClassFieldsAndMethods(
            {field_expression.name_and_type.name->value, field_type},
            class_offset,
            field_expression.weak,
-           field_expression.const_qualified});
+           field_expression.const_qualified,
+           field_expression.conditional.has_value()});
     } else {
       if (seen_indexed_field) {
         ReportError("cannot declare non-indexable field \"",
@@ -263,12 +265,12 @@ void TypeVisitor::VisitClassFieldsAndMethods(
            {field_expression.name_and_type.name->value, field_type},
            class_offset,
            field_expression.weak,
-           field_expression.const_qualified});
+           field_expression.const_qualified,
+           field_expression.conditional.has_value()});
       size_t field_size;
       std::string size_string;
       std::string machine_type;
-      std::tie(field_size, size_string, machine_type) =
-          field.GetFieldSizeInformation();
+      std::tie(field_size, size_string) = field.GetFieldSizeInformation();
       // Our allocations don't support alignments beyond kTaggedSize.
       size_t alignment = std::min(size_t{kTaggedSize}, field_size);
       if (class_offset % alignment != 0) {
