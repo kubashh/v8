@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "216b63b8_1e159445",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1550,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-05-10T10:17:44Z",
+      "side": 1,
+      "message": "Should we only add the reducer if pointer compression is enabled? If not, it does not cause any issues, but is redundant.",
+      "range": {
+        "startLine": 1548,
+        "startChar": 4,
+        "endLine": 1550,
+        "endChar": 0
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
