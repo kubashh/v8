@@ -146,7 +146,7 @@ struct Field {
   // TODO(danno): This likely should be refactored, the handling of the types
   // using the universal grab-bag utility with std::tie, as well as the
   // reliance of string types is quite clunky.
-  std::tuple<size_t, std::string, std::string> GetFieldSizeInformation() const;
+  std::tuple<size_t, std::string> GetFieldSizeInformation() const;
 
   SourcePosition pos;
   const AggregateType* aggregate;
@@ -156,6 +156,7 @@ struct Field {
   bool is_weak;
   bool const_qualified;
   bool generate_verify;
+  bool is_conditional;
 };
 
 std::ostream& operator<<(std::ostream& os, const Field& name_and_type);
