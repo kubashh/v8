@@ -1057,7 +1057,9 @@ void AstPrinter::VisitClassLiteral(ClassLiteral* node) {
   Scope* outer = node->constructor()->scope()->outer_scope();
   if (outer->is_class_scope()) {
     Variable* brand = outer->AsClassScope()->brand();
-    PrintLiteralWithModeIndented("BRAND", brand, brand->raw_name());
+    if (brand != nullptr) {
+      PrintLiteralWithModeIndented("BRAND", brand, brand->raw_name());
+    }
   }
   if (node->static_fields_initializer() != nullptr) {
     PrintIndentedVisit("STATIC FIELDS INITIALIZER",
