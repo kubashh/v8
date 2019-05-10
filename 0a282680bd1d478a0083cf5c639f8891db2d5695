@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bcdf3ef_e5e31c5f",
+        "filename": "src/runtime/runtime-test.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 1318,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-10T08:58:09Z",
+      "side": 1,
+      "message": "nit: I think this check should not be needed. A fully initialized Isolate should always have an engine available AFAICT. There should be no way to call a runtime function unless the Isolate is fully initialized.",
+      "range": {
+        "startLine": 1318,
+        "startChar": 2,
+        "endLine": 1318,
+        "endChar": 49
+      },
+      "revId": "0a282680bd1d478a0083cf5c639f8891db2d5695",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
