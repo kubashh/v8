@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9bcfad2b_c25e64e3",
+        "filename": "src/compiler/pipeline.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-05-10T10:56:17Z",
+      "side": 1,
+      "message": "Also, do we still need value numbering to be last? (See https://codereview.chromium.org/2730753003)",
+      "range": {
+        "startLine": 1547,
+        "startChar": 4,
+        "endLine": 1547,
+        "endChar": 51
+      },
+      "revId": "6ec3f780f08fea7c967a092e068e6a07aeeb81f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "216b63b8_1e159445",
         "filename": "src/compiler/pipeline.cc",
         "patchSetId": 3
