@@ -22,6 +22,29 @@
       "revId": "c58b65791507e8c830baa358f54c277d9669dff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d7c14b39_8b77b0d8",
+        "filename": "src/wasm/c-api.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-13T14:22:41Z",
+      "side": 1,
+      "message": "nit: I think constness is not needed for enum values.",
+      "range": {
+        "startLine": 1159,
+        "startChar": 15,
+        "endLine": 1159,
+        "endChar": 20
+      },
+      "revId": "c58b65791507e8c830baa358f54c277d9669dff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
