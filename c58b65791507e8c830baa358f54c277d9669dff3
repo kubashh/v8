@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df10e570_caec73be",
+        "filename": "src/inspector/v8-string-conversions.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-13T12:33:52Z",
+      "side": 1,
+      "message": "Drive-by fix to make it compile with \"use_custom_libcxx \u003d false\".",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "c58b65791507e8c830baa358f54c277d9669dff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
