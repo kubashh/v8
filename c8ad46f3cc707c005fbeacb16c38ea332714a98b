@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6faf54e9_cf8a7e08",
+        "filename": "src/objects/instance-type.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-13T09:25:32Z",
+      "side": 1,
+      "message": "CSA loads instance type as Uint16 which is then automatically zero-extended to Int32, so I guess we are safe here with the full range of Uint16 values. See CodeStubAssembler::LoadMapInstanceType().\nIf we needed to sign-extend instance type to Int32 we would have loaded it as Int16.",
+      "revId": "c8ad46f3cc707c005fbeacb16c38ea332714a98b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

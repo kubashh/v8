@@ -16,6 +16,24 @@
       "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "157f4425_fd828f58",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-13T09:25:32Z",
+      "side": 1,
+      "message": "I\u0027m not a Torque person, but here are my two cents from Map user\u0027s perspective:\n\nI\u0027d personally prefer variant (2). It may also help to have a new way of defining padding fields that will be translated to [XXX|OBJECT_POINTER]_PADDING(kAbcOffset) constructs. This approach would require a bit less @ifdefs.\n\nRegarding GCMole compilation issue, I think we should regenerate Torque files during GCMole build.",
+      "parentUuid": "1fb81a21_a4c501ca",
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
