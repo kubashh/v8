@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "870d5f44_a5d361b8",
+        "filename": "test/mjsunit/regress/wasm/regress-7049.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-13T09:55:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "521f35a5_e1ecaf41",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 46
+      },
+      "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6399f31a_35604d1b",
         "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
         "patchSetId": 3
