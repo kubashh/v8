@@ -16,6 +16,24 @@
       "revId": "c8ad46f3cc707c005fbeacb16c38ea332714a98b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7194b84a_ead5bcd9",
+        "filename": "src/objects/instance-type.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-13T21:27:14Z",
+      "side": 1,
+      "message": "It became unsafe with this CL, since Torque will load the InstanceType as int16 with sign-extension due to the Torque declarations.",
+      "parentUuid": "6faf54e9_cf8a7e08",
+      "revId": "c8ad46f3cc707c005fbeacb16c38ea332714a98b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
