@@ -2828,7 +2828,7 @@ Reduction JSCallReducer::ReduceCallApiFunction(
     //  b. When the {function_template_info} has no signature, we don't
     //     need to do the compatible receiver check, since all receivers
     //     are considered compatible at that point, and the {receiver}
-    //     will be pass as the {holder}.
+    //     will be passed as the {holder}.
     //
     receiver = holder = effect =
         graph()->NewNode(simplified()->ConvertReceiver(p.convert_mode()),
