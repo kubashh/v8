@@ -582,6 +582,18 @@ class WasmInstanceObject : public JSObject {
 
   static MaybeHandle<WasmExportedFunction> GetWasmExportedFunction(
       Isolate* isolate, Handle<WasmInstanceObject> instance, int index);
+
+  // Acquires the {WasmExportedFunction} for a given {function_index} from the
+  // cache of the given {instance}, or creates a new {WasmExportedFunction} if
+  // it does not exist yet. The new {WasmExportedFunction} is added to the
+  // cache of the {instance} immediately.
+  // Note that the parameter {name_for_asmjs} should only be set for asm.js
+  // functions. For WebAssembly, a correct and specification-compiliant name is
+  // generaged within GetOrCreateWasmExportedFunction.
+  static Handle<WasmExportedFunction> GetOrCreateWasmExportedFunction(
+      Isolate* isolate, Handle<WasmInstanceObject> instance,
+      int function_index);
+
   static void SetWasmExportedFunction(Isolate* isolate,
                                       Handle<WasmInstanceObject> instance,
                                       int index,
@@ -650,9 +662,8 @@ class WasmExportedFunction : public JSFunction {
   V8_EXPORT_PRIVATE static bool IsWasmExportedFunction(Object object);
 
   V8_EXPORT_PRIVATE static Handle<WasmExportedFunction> New(
-      Isolate* isolate, Handle<WasmInstanceObject> instance,
-      MaybeHandle<String> maybe_name, int func_index, int arity,
-      Handle<Code> export_wrapper);
+      Isolate* isolate, Handle<WasmInstanceObject> instance, int func_index,
+      int arity, Handle<Code> export_wrapper);
 
   Address GetWasmCallTarget();
 
