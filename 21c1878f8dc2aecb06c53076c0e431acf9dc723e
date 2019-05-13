@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fd06d1eb_95eabc72",
+        "filename": "src/objects/instance-type.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-13T20:17:46Z",
+      "side": 1,
+      "message": "Thanks :)",
+      "range": {
+        "startLine": 392,
+        "startChar": 0,
+        "endLine": 392,
+        "endChar": 35
+      },
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1fb81a21_a4c501ca",
         "filename": "src/objects/map-inl.h",
         "patchSetId": 16
@@ -31,6 +54,47 @@
       "side": 1,
       "message": "I\u0027m not a Torque person, but here are my two cents from Map user\u0027s perspective:\n\nI\u0027d personally prefer variant (2). It may also help to have a new way of defining padding fields that will be translated to [XXX|OBJECT_POINTER]_PADDING(kAbcOffset) constructs. This approach would require a bit less @ifdefs.\n\nRegarding GCMole compilation issue, I think we should regenerate Torque files during GCMole build.",
       "parentUuid": "1fb81a21_a4c501ca",
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f387cd5_d12a289f",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-13T20:17:46Z",
+      "side": 1,
+      "message": "I agree with Igor that we should have some more automatic way to support padding eventually. I\u0027m fine with both solutions (1) and (2), but I especially like about solution (1) that it adds a bit of extra C++ compile-time checking, making it less probable that things work for the wrong reason.",
+      "parentUuid": "157f4425_fd828f58",
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "231254c8_73641925",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-13T20:17:46Z",
+      "side": 1,
+      "message": "How about actually adding a preprocessor macro to globals.h for this? To maintain the convention that this just reifies preprocessor macros.",
+      "range": {
+        "startLine": 41,
+        "startChar": 42,
+        "endLine": 41,
+        "endChar": 58
+      },
       "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
