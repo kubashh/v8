@@ -275,9 +275,42 @@ const char* GetWasmCodeKindAsString(WasmCode::Kind);
 // Manages the code reservations and allocations of a single {NativeModule}.
 class WasmCodeAllocator {
  public:
-  WasmCodeAllocator(WasmCodeManager*, VirtualMemory code_space,
-                    bool can_request_more);
-  ~WasmCodeAllocator();
+  class WasmCodeSubspace {
+   public:
+#ifdef DEBUG
+    ~WasmCodeSubspace() { DCHECK(space_.empty()); }
+    WasmCodeSubspace(WasmCodeSubspace&& other) V8_NOEXCEPT
+        : space_(other.space_) {
+      other.space_ = {};
+    }
+    WasmCodeSubspace& operator=(WasmCodeSubspace&& other) V8_NOEXCEPT {
+      space_ = other.space_;
+      other.space_ = {};
+      return *this;
+    }
+#else
+    // Use defaulted constructors and trivial destructor in release builds.
+    MOVE_ONLY_WITH_DEFAULT_CONSTRUCTORS(WasmCodeSubspace);
+#endif
+
+    V8_EXPORT_PRIVATE Vector<byte> ExtractCodeSpace(
+        const WasmCompilationResult&);
+
+   private:
+    friend class WasmCodeAllocator;
+    explicit WasmCodeSubspace(Vector<byte> space) : space_(space) {}
+
+    Vector<byte> space_;
+#ifdef DEBUG
+    // NOLINTNEXTLINE(readability/constructors)
+    DISALLOW_COPY_AND_ASSIGN(WasmCodeSubspace);
+#endif
+  };
+
+  V8_EXPORT_PRIVATE WasmCodeAllocator(WasmCodeManager*,
+                                      VirtualMemory code_space,
+                                      bool can_request_more);
+  V8_EXPORT_PRIVATE ~WasmCodeAllocator();
 
   size_t committed_code_space() const {
     return committed_code_space_.load(std::memory_order_acquire);
@@ -289,8 +322,14 @@ class WasmCodeAllocator {
     return freed_code_size_.load(std::memory_order_acquire);
   }
 
-  // Allocate code space. Returns a valid buffer or fails with OOM (crash).
-  Vector<byte> AllocateForCode(NativeModule*, size_t size);
+  // Allocate code space, aligned to {kCodeAlignment} (both start and size).
+  // Returns a valid buffer or fails with OOM (crash).
+  V8_EXPORT_PRIVATE Vector<byte> AllocateForCode(NativeModule*, size_t size);
+
+  // Allocate code space for a vector of compilation results. Individual code
+  // regions can be extracted from that subspace.
+  V8_EXPORT_PRIVATE WasmCodeSubspace
+  AllocateSpaceForCodes(NativeModule*, Vector<WasmCompilationResult>);
 
   // Sets permissions of all owned code space to executable, or read-write (if
   // {executable} is false). Returns true on success.
@@ -622,6 +661,13 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
   }
 #endif
 
+  // Reserve virtual memory and register it with the {WasmMemoryTracker}. {size}
+  // will be rounded up to the allocation page size. The caller must ensure to
+  // eventually call {WasmMemoryTracker::ReleaseReservation} with the size of
+  // the returned memory.
+  V8_WARN_UNUSED_RESULT VirtualMemory TryAllocate(size_t size,
+                                                  void* hint = nullptr);
+
   static size_t EstimateNativeModuleCodeSize(const WasmModule* module);
   static size_t EstimateNativeModuleNonCodeSize(const WasmModule* module);
 
@@ -634,8 +680,6 @@ class V8_EXPORT_PRIVATE WasmCodeManager final {
       const WasmFeatures& enabled_features, size_t code_size_estimate,
       bool can_request_more, std::shared_ptr<const WasmModule> module);
 
-  V8_WARN_UNUSED_RESULT VirtualMemory TryAllocate(size_t size,
-                                                  void* hint = nullptr);
   bool Commit(Address, size_t);
   // Currently, we uncommit a whole module, so all we need is account
   // for the freed memory size. We do that in FreeNativeModule.

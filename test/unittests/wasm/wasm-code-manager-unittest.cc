@@ -139,21 +139,20 @@ TEST_F(DisjointAllocationPoolTest, MergingSkipLargerSrcWithGap) {
   CheckPool(a, {{10, 5}, {20, 15}, {36, 4}});
 }
 
-enum ModuleStyle : int { Fixed = 0, Growable = 1 };
+enum ModuleStyle : int { kFixed = 0, kGrowable = 1 };
 
 std::string PrintWasmCodeManageTestParam(
     ::testing::TestParamInfo<ModuleStyle> info) {
   switch (info.param) {
-    case Fixed:
+    case kFixed:
       return "Fixed";
-    case Growable:
+    case kGrowable:
       return "Growable";
   }
   UNREACHABLE();
 }
 
-class WasmCodeManagerTest : public TestWithContext,
-                            public ::testing::WithParamInterface<ModuleStyle> {
+class WasmCodeManagerBase : public TestWithContext {
  public:
   static constexpr uint32_t kNumFunctions = 10;
   static constexpr uint32_t kJumpTableSize = RoundUp<kCodeAlignment>(
@@ -161,7 +160,7 @@ class WasmCodeManagerTest : public TestWithContext,
   static size_t allocate_page_size;
   static size_t commit_page_size;
 
-  WasmCodeManagerTest() {
+  WasmCodeManagerBase() {
     CHECK_EQ(allocate_page_size == 0, commit_page_size == 0);
     if (allocate_page_size == 0) {
       allocate_page_size = AllocatePageSize();
@@ -176,7 +175,7 @@ class WasmCodeManagerTest : public TestWithContext,
   NativeModulePtr AllocModule(size_t size, ModuleStyle style) {
     std::shared_ptr<WasmModule> module(new WasmModule);
     module->num_declared_functions = kNumFunctions;
-    bool can_request_more = style == Growable;
+    bool can_request_more = style == kGrowable;
     return engine()->NewNativeModule(i_isolate(), kAllWasmFeatures, size,
                                      can_request_more, std::move(module));
   }
@@ -208,11 +207,15 @@ class WasmCodeManagerTest : public TestWithContext,
 };
 
 // static
-size_t WasmCodeManagerTest::allocate_page_size = 0;
-size_t WasmCodeManagerTest::commit_page_size = 0;
+size_t WasmCodeManagerBase::allocate_page_size = 0;
+size_t WasmCodeManagerBase::commit_page_size = 0;
+
+class WasmCodeManagerTest : public WasmCodeManagerBase,
+                            public ::testing::WithParamInterface<ModuleStyle> {
+};
 
 INSTANTIATE_TEST_SUITE_P(Parameterized, WasmCodeManagerTest,
-                         ::testing::Values(Fixed, Growable),
+                         ::testing::Values(kFixed, kGrowable),
                          PrintWasmCodeManageTestParam);
 
 TEST_P(WasmCodeManagerTest, EmptyCase) {
@@ -277,9 +280,9 @@ TEST_P(WasmCodeManagerTest, GrowingVsFixedModule) {
 
   NativeModulePtr nm = AllocModule(allocate_page_size, GetParam());
   size_t module_size =
-      GetParam() == Fixed ? kMaxWasmCodeMemory : allocate_page_size;
+      GetParam() == kFixed ? kMaxWasmCodeMemory : allocate_page_size;
   size_t remaining_space_in_module = module_size - kJumpTableSize;
-  if (GetParam() == Fixed) {
+  if (GetParam() == kFixed) {
     // Requesting more than the remaining space fails because the module cannot
     // grow.
     ASSERT_DEATH_IF_SUPPORTED(
@@ -376,6 +379,92 @@ TEST_P(WasmCodeManagerTest, LookupWorksAfterRewrite) {
   CHECK_EQ(1, code1_1->index());
   CHECK_EQ(code1, manager()->LookupCode(code1->instruction_start()));
   CHECK_EQ(code1_1, manager()->LookupCode(code1_1->instruction_start()));
+}
+
+class WasmCodeAllocatorTest : public WasmCodeManagerBase {};
+
+TEST_F(WasmCodeAllocatorTest, CodeAlignment) {
+  constexpr bool kCanRequestMore = false;
+  constexpr size_t kVMSpace = 2 * MB;
+  PageAllocator* page_allocator = GetPlatformPageAllocator();
+  WasmCodeAllocator allocator(manager(), manager()->TryAllocate(kVMSpace),
+                              kCanRequestMore);
+  CHECK_EQ(0, allocator.committed_code_space());
+  CHECK_EQ(0, allocator.generated_code_size());
+  size_t commit_page_size = page_allocator->CommitPageSize();
+  NativeModulePtr mod = AllocModule(kVMSpace, kFixed);
+  size_t total_generated = 0;
+  size_t sizes[] = {1, kCodeAlignment - 1, kCodeAlignment, kCodeAlignment + 1};
+  for (size_t size : sizes) {
+    Vector<byte> space = allocator.AllocateForCode(mod.get(), size);
+    size_t padded_size = RoundUp<kCodeAlignment>(size);
+    CHECK_EQ(padded_size, space.size());
+    total_generated += padded_size;
+    CHECK_EQ(total_generated, allocator.generated_code_size());
+    CHECK_EQ(RoundUp(total_generated, commit_page_size),
+             allocator.committed_code_space());
+  }
+}
+
+WasmCompilationResult MakeCompilationResult(size_t size) {
+  WasmCompilationResult result;
+  CHECK_GE(kMaxInt, size);
+  result.instr_buffer.reset(new uint8_t[size]);
+  result.code_desc.buffer = result.instr_buffer.get();
+  result.code_desc.buffer_size = static_cast<int>(size);
+  result.code_desc.instr_size = static_cast<int>(size);
+  return result;
+}
+
+TEST_F(WasmCodeAllocatorTest, CodeBatch) {
+  constexpr bool kCanRequestMore = false;
+  constexpr size_t kVMSpace = 2 * MB;
+  PageAllocator* page_allocator = GetPlatformPageAllocator();
+  WasmCodeAllocator allocator(manager(), manager()->TryAllocate(kVMSpace),
+                              kCanRequestMore);
+  CHECK_EQ(0, allocator.committed_code_space());
+  CHECK_EQ(0, allocator.generated_code_size());
+  size_t commit_page_size = page_allocator->CommitPageSize();
+  NativeModulePtr mod = AllocModule(kVMSpace, kFixed);
+  size_t total_generated = 0;
+  size_t sizes[] = {1, kCodeAlignment - 1, kCodeAlignment, kCodeAlignment + 1};
+  std::vector<WasmCompilationResult> results;
+  for (size_t size : sizes) {
+    results.emplace_back(MakeCompilationResult(size));
+    size_t padded_size = RoundUp<kCodeAlignment>(size);
+    total_generated += padded_size;
+  }
+  WasmCodeAllocator::WasmCodeSubspace sub_space =
+      allocator.AllocateSpaceForCodes(mod.get(), VectorOf(results));
+  CHECK_EQ(total_generated, allocator.generated_code_size());
+  CHECK_EQ(RoundUp(total_generated, commit_page_size),
+           allocator.committed_code_space());
+  for (WasmCompilationResult& result : results) {
+    Vector<byte> space = sub_space.ExtractCodeSpace(result);
+    size_t padded_size = RoundUp<kCodeAlignment>(result.code_desc.instr_size);
+    CHECK_EQ(padded_size, space.size());
+  }
+}
+
+TEST_F(WasmCodeAllocatorTest, CodeBatchIncomplete) {
+  constexpr bool kCanRequestMore = false;
+  constexpr size_t kVMSpace = 2 * MB;
+  WasmCodeAllocator allocator(manager(), manager()->TryAllocate(kVMSpace),
+                              kCanRequestMore);
+  NativeModulePtr mod = AllocModule(kVMSpace, kFixed);
+  WasmCompilationResult results[] = {MakeCompilationResult(1),
+                                     MakeCompilationResult(5)};
+  base::Optional<WasmCodeAllocator::WasmCodeSubspace> sub_space =
+      allocator.AllocateSpaceForCodes(mod.get(), ArrayVector(results));
+  sub_space->ExtractCodeSpace(results[0]);
+  // Do not extract the second space. This should fail in debug builds.
+#ifdef DEBUG
+  ASSERT_DEATH_IF_SUPPORTED(sub_space.reset(),
+                            "Debug check failed: space_.empty\\(\\)");
+#endif
+  // If death testing is not supported, or in release mode, extract the second
+  // code space.
+  sub_space->ExtractCodeSpace(results[1]);
 }
 
 }  // namespace wasm_heap_unittest
