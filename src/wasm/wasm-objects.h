@@ -582,6 +582,11 @@ class WasmInstanceObject : public JSObject {
 
   static MaybeHandle<WasmExportedFunction> GetWasmExportedFunction(
       Isolate* isolate, Handle<WasmInstanceObject> instance, int index);
+
+  static Handle<WasmExportedFunction> GetOrCreateWasmExportedFunction(
+      Isolate* isolate, Handle<WasmInstanceObject> instance,
+      int function_index);
+
   static void SetWasmExportedFunction(Isolate* isolate,
                                       Handle<WasmInstanceObject> instance,
                                       int index,
