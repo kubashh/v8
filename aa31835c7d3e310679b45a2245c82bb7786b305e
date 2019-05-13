@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "98ba0e27_ed130514",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-13T09:16:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aab817bc_b6a3d2ac",
+      "range": {
+        "startLine": 12,
+        "startChar": 24,
+        "endLine": 12,
+        "endChar": 30
+      },
+      "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a8140ba5_1af1542b",
         "filename": "src/wasm/function-body-decoder-impl.h",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21ac1180_d2f3be5d",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-13T09:16:38Z",
+      "side": 1,
+      "message": "I admit, I just copied the implementation of {MemoryIndexImmediate}. I removed the default constructor now.",
+      "parentUuid": "a8140ba5_1af1542b",
+      "range": {
+        "startLine": 348,
+        "startChar": 2,
+        "endLine": 348,
+        "endChar": 44
+      },
+      "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -91,6 +139,30 @@
       "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c929ed2_6495c70e",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-13T09:16:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6399f31a_35604d1b",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 38
+      },
+      "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
