@@ -1371,31 +1371,17 @@ void InstanceBuilder::ProcessExports(Handle<WasmInstanceObject> instance) {
       case kExternalFunction: {
         // Wrap and export the code as a JSFunction.
         // TODO(wasm): reduce duplication with LoadElemSegment() further below
-        const WasmFunction& function = module_->functions[exp.index];
-        MaybeHandle<WasmExportedFunction> wasm_exported_function =
-            WasmInstanceObject::GetWasmExportedFunction(isolate_, instance,
-                                                        exp.index);
-        if (wasm_exported_function.is_null()) {
-          // Wrap the exported code as a JSFunction.
-          Handle<Code> export_code =
-              export_wrappers->GetValueChecked<Code>(isolate_, export_index);
-          MaybeHandle<String> func_name;
-          if (is_asm_js) {
-            // For modules arising from asm.js, honor the names section.
-            WireBytesRef func_name_ref = module_->LookupFunctionName(
-                ModuleWireBytes(module_object_->native_module()->wire_bytes()),
-                function.func_index);
-            func_name = WasmModuleObject::ExtractUtf8StringFromModuleBytes(
-                            isolate_, module_object_, func_name_ref)
-                            .ToHandleChecked();
-          }
-          wasm_exported_function = WasmExportedFunction::New(
-              isolate_, instance, func_name, function.func_index,
-              static_cast<int>(function.sig->parameter_count()), export_code);
-          WasmInstanceObject::SetWasmExportedFunction(
-              isolate_, instance, exp.index,
-              wasm_exported_function.ToHandleChecked());
+        MaybeHandle<String> function_name;
+        if (is_asm_js) {
+          // We can use the function name only for asm.js. For WebAssembly, the
+          // function name is specified as the function_index.toString(). This
+          // name is generated automatically in GetOrCreateWasmExportedFunction.
+          function_name = WasmModuleObject::GetFunctionNameOrNull(
+              isolate_, handle(instance->module_object(), isolate_), exp.index);
         }
+        MaybeHandle<WasmExportedFunction> wasm_exported_function =
+            WasmInstanceObject::GetOrCreateWasmExportedFunction(
+                isolate_, instance, exp.index, function_name);
         desc.set_value(wasm_exported_function.ToHandleChecked());
         export_index++;
         break;
