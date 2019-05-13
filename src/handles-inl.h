@@ -52,6 +52,7 @@ inline std::ostream& operator<<(std::ostream& os, Handle<T> handle) {
 }
 
 HandleScope::~HandleScope() {
+  if (isolate_ == nullptr) return;
 #ifdef DEBUG
   if (FLAG_check_handle_count) {
     int before = NumberOfHandles(isolate_);
@@ -67,8 +68,41 @@ HandleScope::~HandleScope() {
 #endif  // DEBUG
 }
 
+HandleScope::HandleScope(HandleScope&& other) V8_NOEXCEPT
+    : isolate_(other.isolate_),
+      prev_next_(other.prev_next_),
+      prev_limit_(other.prev_limit_) {
+  other.isolate_ = nullptr;
+}
+
+HandleScope& HandleScope::operator=(HandleScope&& other) V8_NOEXCEPT {
+  if (isolate_ == nullptr) {
+    isolate_ = other.isolate_;
+  } else {
+    DCHECK_EQ(isolate_, other.isolate_);
+#ifdef DEBUG
+    if (FLAG_check_handle_count) {
+      int before = NumberOfHandles(isolate_);
+      CloseScope(isolate_, prev_next_, prev_limit_);
+      int after = NumberOfHandles(isolate_);
+      DCHECK_LT(after - before, kCheckHandleThreshold);
+      DCHECK_LT(before, kCheckHandleThreshold);
+    } else {
+#endif  // DEBUG
+      CloseScope(isolate_, prev_next_, prev_limit_);
+#ifdef DEBUG
+    }
+#endif  // DEBUG
+  }
+  prev_next_ = other.prev_next_;
+  prev_limit_ = other.prev_limit_;
+  other.isolate_ = nullptr;
+  return *this;
+}
+
 void HandleScope::CloseScope(Isolate* isolate, Address* prev_next,
                              Address* prev_limit) {
+  DCHECK_NOT_NULL(isolate);
   HandleScopeData* current = isolate->handle_scope_data();
 
   std::swap(current->next, prev_next);
