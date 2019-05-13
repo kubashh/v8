@@ -365,6 +365,14 @@ const char* GetWasmCodeKindAsString(WasmCode::Kind kind) {
   return "unknown kind";
 }
 
+Vector<byte> WasmCodeAllocator::WasmCodeSubspace::ExtractCodeSpace(
+    const WasmCompilationResult& result) {
+  size_t code_size = RoundUp<kCodeAlignment>(result.code_desc.instr_size);
+  Vector<byte> extracted = space_.SubVector(0, code_size);
+  space_ += code_size;
+  return extracted;
+}
+
 WasmCode::~WasmCode() {
   if (has_trap_handler_index()) {
     trap_handler::ReleaseHandlerData(trap_handler_index());
@@ -497,6 +505,17 @@ Vector<byte> WasmCodeAllocator::AllocateForCode(NativeModule* native_module,
   TRACE_HEAP("Code alloc for %p: %" PRIxPTR ",+%zu\n", this, code_space.begin(),
              size);
   return {reinterpret_cast<byte*>(code_space.begin()), code_space.size()};
+}
+
+WasmCodeAllocator::WasmCodeSubspace WasmCodeAllocator::AllocateSpaceForCodes(
+    NativeModule* native_module, Vector<WasmCompilationResult> results) {
+  size_t total_code_space = 0;
+  for (auto& result : results) {
+    DCHECK(result.succeeded());
+    total_code_space += RoundUp<kCodeAlignment>(result.code_desc.instr_size);
+  }
+  Vector<byte> space = AllocateForCode(native_module, total_code_space);
+  return WasmCodeSubspace{space};
 }
 
 bool WasmCodeAllocator::SetExecutable(bool executable) {
@@ -1353,14 +1372,10 @@ WasmCode* NativeModule::AddCompiledCode(WasmCompilationResult result) {
 std::vector<WasmCode*> NativeModule::AddCompiledCode(
     Vector<WasmCompilationResult> results) {
   DCHECK(!results.empty());
+
   // First, allocate code space for all the results.
-  size_t total_code_space = 0;
-  for (auto& result : results) {
-    DCHECK(result.succeeded());
-    total_code_space += RoundUp<kCodeAlignment>(result.code_desc.instr_size);
-  }
-  Vector<byte> code_space =
-      code_allocator_.AllocateForCode(this, total_code_space);
+  WasmCodeAllocator::WasmCodeSubspace code_space =
+      code_allocator_.AllocateSpaceForCodes(this, results);
 
   std::vector<std::unique_ptr<WasmCode>> generated_code;
   generated_code.reserve(results.size());
@@ -1368,9 +1383,7 @@ std::vector<WasmCode*> NativeModule::AddCompiledCode(
   // Now copy the generated code into the code space and relocate it.
   for (auto& result : results) {
     DCHECK_EQ(result.code_desc.buffer, result.instr_buffer.get());
-    size_t code_size = RoundUp<kCodeAlignment>(result.code_desc.instr_size);
-    Vector<byte> this_code_space = code_space.SubVector(0, code_size);
-    code_space += code_size;
+    Vector<byte> this_code_space = code_space.ExtractCodeSpace(result);
     generated_code.emplace_back(AddCodeWithCodeSpace(
         result.func_index, result.code_desc, result.frame_slot_count,
         result.tagged_parameter_slots, std::move(result.protected_instructions),
@@ -1378,7 +1391,6 @@ std::vector<WasmCode*> NativeModule::AddCompiledCode(
         GetCodeKindForExecutionTier(result.result_tier), result.result_tier,
         this_code_space));
   }
-  DCHECK_EQ(0, code_space.size());
 
   // Under the {allocation_mutex_}, publish the code. The published code is put
   // into the top-most surrounding {WasmCodeRefScope} by {PublishCodeLocked}.
