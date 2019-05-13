@@ -190,6 +190,12 @@ class HandleScope {
 
   inline ~HandleScope();
 
+  // Move constructor.
+  inline HandleScope(HandleScope&& other) V8_NOEXCEPT;
+
+  // Move assignment operator.
+  inline HandleScope& operator=(HandleScope&& other) V8_NOEXCEPT;
+
   // Counts the number of allocated handles.
   V8_EXPORT_PRIVATE static int NumberOfHandles(Isolate* isolate);
 
