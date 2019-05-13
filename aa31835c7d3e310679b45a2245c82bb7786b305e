@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aab817bc_b6a3d2ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-13T08:38:22Z",
+      "side": 1,
+      "message": "nit: \"anyfunc\"",
+      "range": {
+        "startLine": 12,
+        "startChar": 24,
+        "endLine": 12,
+        "endChar": 30
+      },
+      "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8140ba5_1af1542b",
+        "filename": "src/wasm/function-body-decoder-impl.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-13T08:38:22Z",
+      "side": 1,
+      "message": "nit: Default constructor should not be needed since it is not embedded in other classes AFAICT.",
+      "range": {
+        "startLine": 348,
+        "startChar": 2,
+        "endLine": 348,
+        "endChar": 44
+      },
+      "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "521f35a5_e1ecaf41",
+        "filename": "test/mjsunit/regress/wasm/regress-7049.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-13T08:38:22Z",
+      "side": 1,
+      "message": "nit: Should we drop this printing again?",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 46
+      },
+      "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6399f31a_35604d1b",
+        "filename": "test/unittests/wasm/function-body-decoder-unittest.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-13T08:38:22Z",
+      "side": 1,
+      "message": "suggestion: These two signatures exist in {TestSignatures} already, should we just use {sigs.v_ii()} and {sigs.ii_v()} instead?",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 38
+      },
+      "revId": "aa31835c7d3e310679b45a2245c82bb7786b305e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
