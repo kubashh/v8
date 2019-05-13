@@ -35,6 +35,8 @@ class ConstructorBuiltinsAssembler : public CodeStubAssembler {
 
   Node* EmitFastNewObject(Node* context, Node* target, Node* new_target,
                           Label* call_runtime);
+
+  Node* GetDerivedMap(Node* context, Node* target, Node* new_target);
 };
 
 }  // namespace internal

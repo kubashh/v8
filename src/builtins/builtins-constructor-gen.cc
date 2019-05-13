@@ -223,6 +223,38 @@ Node* ConstructorBuiltinsAssembler::EmitFastNewObject(Node* context,
                                  kNone, kWithSlackTracking);
 }
 
+Node* ConstructorBuiltinsAssembler::GetDerivedMap(Node* context, Node* target,
+                                                  Node* new_target) {
+  CSA_ASSERT(this, HasInstanceType(target, JS_FUNCTION_TYPE));
+  CSA_ASSERT(this, IsJSReceiver(new_target));
+
+  VARIABLE(var_obj, MachineRepresentation::kTagged);
+  Label call_runtime(this), end(this), fast(this);
+
+  GotoIf(HasInstanceType(new_target, JS_FUNCTION_TYPE), &fast);
+  Goto(&call_runtime);
+
+  BIND(&fast);
+  Node* initial_map =
+      LoadObjectField(new_target, JSFunction::kPrototypeOrInitialMapOffset);
+  GotoIf(TaggedIsSmi(initial_map), &call_runtime);
+  GotoIf(DoesntHaveInstanceType(initial_map, MAP_TYPE), &call_runtime);
+
+  Node* new_target_constructor =
+      LoadObjectField(initial_map, Map::kConstructorOrBackPointerOffset);
+  GotoIf(WordNotEqual(target, new_target_constructor), &call_runtime);
+  var_obj.Bind(initial_map);
+  Goto(&end);
+
+  BIND(&call_runtime);
+  var_obj.Bind(
+      CallRuntime(Runtime::kGetDerivedMap, context, target, new_target));
+  Goto(&end);
+
+  BIND(&end);
+  return var_obj.value();
+}
+
 Node* ConstructorBuiltinsAssembler::EmitFastNewFunctionContext(
     Node* scope_info, Node* slots_uint32, Node* context, ScopeType scope_type) {
   TNode<IntPtrT> slots = Signed(ChangeUint32ToWord(slots_uint32));
