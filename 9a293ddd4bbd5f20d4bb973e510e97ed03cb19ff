@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8399d857_04ae4423",
+        "filename": "src/wasm/wasm-objects.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-13T10:38:48Z",
+      "side": 1,
+      "message": "nit: This part of the comment no longer applies I think.",
+      "range": {
+        "startLine": 590,
+        "startChar": 0,
+        "endLine": 592,
+        "endChar": 54
+      },
+      "revId": "9a293ddd4bbd5f20d4bb973e510e97ed03cb19ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
