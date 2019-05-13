@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01040753_2fda5842",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-13T11:01:30Z",
+      "side": 1,
+      "message": "nit: IMO this doesn\u0027t need to be part of the commit message. It\u0027s useful to know, but could go into a gerrit comment instead.",
+      "revId": "e36cb13135837e6dee988945628129aa79b9421f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0a245bdf_b7e8412f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-13T11:01:30Z",
+      "side": 1,
+      "message": "The FastJSArray check remains unmodified but you add a new FastJSArrayForRead type, right?",
+      "revId": "e36cb13135837e6dee988945628129aa79b9421f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bccbd711_6cabff2e",
+        "filename": "src/builtins/builtins-array-gen.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-13T11:01:30Z",
+      "side": 1,
+      "message": "Nit: IsElementsKindLessThanOrEqual",
+      "revId": "e36cb13135837e6dee988945628129aa79b9421f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9ce0ff5_7969a0ba",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13359,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-13T11:01:30Z",
+      "side": 1,
+      "message": "Nice find.",
+      "revId": "e36cb13135837e6dee988945628129aa79b9421f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b5337e7c_140a2eea",
+        "filename": "src/code-stub-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 13361,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-13T11:01:30Z",
+      "side": 1,
+      "message": "Nits: We could subtract `higher - lower` at compile-time:\n\n Int32Constant(higher_reference_kind - lower_reference_kind)\n\nAlso we could handle the case where `lower \u003d\u003d 0` (either DCHECK it doesn\u0027t happen, or call IsElementsKindLessThanOrEqual).",
+      "revId": "e36cb13135837e6dee988945628129aa79b9421f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
