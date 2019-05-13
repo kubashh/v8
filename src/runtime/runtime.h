@@ -518,7 +518,7 @@ namespace internal {
   F(WasmNumInterpretedCalls, 1, 1)            \
   F(WasmTraceMemory, 1, 1)                    \
   F(SetWasmThreadsEnabled, 1, 1)              \
-  F(StaticAssert, 1, 1)                       \
+  F(TfStaticAssert, 1, 1)                     \
   F(EnableCodeLoggingForTesting, 0, 1)
 
 #define FOR_EACH_INTRINSIC_TYPEDARRAY(F, I) \
