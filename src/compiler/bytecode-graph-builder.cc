@@ -4037,7 +4037,7 @@ void BuildGraphFromBytecode(JSHeapBroker* broker, Zone* local_zone,
                             Handle<SharedFunctionInfo> shared,
                             Handle<FeedbackVector> feedback_vector,
                             BailoutId osr_offset, JSGraph* jsgraph,
-                            CallFrequency invocation_frequency,
+                            CallFrequency const& invocation_frequency,
                             SourcePositionTable* source_positions,
                             Handle<Context> native_context, int inlining_id,
                             BytecodeGraphBuilderFlags flags) {
