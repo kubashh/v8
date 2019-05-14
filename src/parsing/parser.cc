@@ -1741,8 +1741,8 @@ void Parser::ParseAndRewriteAsyncGeneratorFunctionBody(
 
     // Don't create iterator result for async generators, as the resume methods
     // will create it.
-    // TODO(leszeks): This will create another suspend point, which is
-    // unnecessary if there is already an unconditional return in the body.
+    // Add a catch all return, but per spec we do not await the return value
+    // when both the return and its value are undefined.
     Statement* final_return = BuildReturnStatement(
         factory()->NewUndefinedLiteral(kNoSourcePosition), kNoSourcePosition);
     statements.Add(final_return);
