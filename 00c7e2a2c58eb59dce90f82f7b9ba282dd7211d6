@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93e96094_44feed8e",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-05-14T07:48:17Z",
+      "side": 0,
+      "message": "This is a breaking API change. It should go through the deprecation process: https://v8.dev/docs/api",
+      "range": {
+        "startLine": 326,
+        "startChar": 22,
+        "endLine": 326,
+        "endChar": 50
+      },
+      "revId": "00c7e2a2c58eb59dce90f82f7b9ba282dd7211d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
