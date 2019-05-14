@@ -864,6 +864,11 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
         LoadObjectField(object, offset, MachineType::AnyTagged()));
   }
 
+  //  Node* LoadConstructorOrBackPointer(Node* map) {
+  TNode<Object> LoadConstructorOrBackPointer(TNode<Map> map) {
+    return LoadObjectField(map, JSFunction::kPrototypeOrInitialMapOffset);
+  }
+
   // Reference is the CSA-equivalent of a Torque reference value,
   // representing an inner pointer into a HeapObject.
   struct Reference {
