@@ -96,6 +96,24 @@
     },
     {
       "key": {
+        "uuid": "34698816_28eac6cb",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T17:45:20Z",
+      "side": 1,
+      "message": "Seth, I\u0027m sorry for pushing you back and forth. More ideas on this topic:\nI personally prefer \n  if (DEBUG_BOOL) {\n    blah\n  }\nstyle instead of\n  #ifdef DEBUG\n    blah\n  #endif\nwhere possible because the former helps to find compilation issues quicker, that\u0027s why (2) is my favorite. \n\nHow about @ifs (and maybe @ifnot if it\u0027s easier to implement) instead of @ifdefs?\n  @if(TAGGED_SIZE_8_BYTES) optional_padding: uint32;\n  @if(!TAGGED_SIZE_8_BYTES) optional_padding: void;\n\n  @if(V8_DOUBLE_FIELDS_UNBOXING) layout_descriptor: LayoutDescriptor;\n  @if(!V8_DOUBLE_FIELDS_UNBOXING) layout_descriptor: void;\n\nBtw, does the stuff inside @if() have to be a real macro? I guess it\u0027s enough to require it to be a constexpr. It could even be written this way:\n  @if(kTaggedSize \u003d\u003d 8) optional_padding: uint32;\n  @if(kTaggedSize \u003d\u003d 4) optional_padding: void;\n\n  @if(FLAG_unbox_double_fields) layout_descriptor: LayoutDescriptor;\n  @if(!FLAG_unbox_double_fields) layout_descriptor: void;\n\nTobias, Seth, WDYT?",
+      "parentUuid": "5b0d119c_0af76180",
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "231254c8_73641925",
         "filename": "src/torque/torque-parser.cc",
         "patchSetId": 16
