@@ -22,6 +22,30 @@
       "revId": "37d89edf060984e2619e7aa6af7c2e482da02705",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11570d53_e9719084",
+        "filename": "src/objects/map.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-14T17:00:03Z",
+      "side": 0,
+      "message": "The order changed so transitions are at the end. The transitions field should be checked for equality by this:\n\n      DCHECK_EQ(0, memcmp(reinterpret_cast\u003cvoid*\u003e(fresh-\u003eaddress() + offset),\n                          reinterpret_cast\u003cvoid*\u003e(new_map-\u003eaddress() + offset),\n                          Map::kSize - offset));\n\nI had to read this a bunch of times to work out what it was doing, and I think I got the new version right but I certainly appreciate a fresh pair of eyes on it. To summarize the new logic:\n\n1. check from beginning to dependent code (all non-tagged fields, prototype, constructor, instance descriptors, layout descriptor)\n2. set offset \u003d after validity cell (skipping dependent code and validity cell)\n3. if it\u0027s a prototype map,\n  a. set offset \u003d after transitions (skipping transitions)\n  b. check that fresh transitions are zero\n4. check from offset to end (either transitions, or nothing)",
+      "parentUuid": "3d6d8c67_236d207a",
+      "range": {
+        "startLine": 1513,
+        "startChar": 8,
+        "endLine": 1515,
+        "endChar": 56
+      },
+      "revId": "37d89edf060984e2619e7aa6af7c2e482da02705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

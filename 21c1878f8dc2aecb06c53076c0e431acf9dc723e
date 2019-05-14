@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "5b0d119c_0af76180",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-14T17:00:03Z",
+      "side": 1,
+      "message": "Thanks to both of you for the useful feedback! I\u0027m leaning toward staying with variant (1) for now given Tobias\u0027s point about extra compile-time checking. Does that sound reasonable to you, Igor?",
+      "parentUuid": "1f387cd5_d12a289f",
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "231254c8_73641925",
         "filename": "src/torque/torque-parser.cc",
         "patchSetId": 16
@@ -89,6 +107,30 @@
       "writtenOn": "2019-05-13T20:17:46Z",
       "side": 1,
       "message": "How about actually adding a preprocessor macro to globals.h for this? To maintain the convention that this just reifies preprocessor macros.",
+      "range": {
+        "startLine": 41,
+        "startChar": 42,
+        "endLine": 41,
+        "endChar": 58
+      },
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe21dc31_512baccb",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-14T17:00:03Z",
+      "side": 1,
+      "message": "Good idea, thanks.",
+      "parentUuid": "231254c8_73641925",
       "range": {
         "startLine": 41,
         "startChar": 42,
