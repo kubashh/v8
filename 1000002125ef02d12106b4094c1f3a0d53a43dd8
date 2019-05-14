@@ -16,6 +16,24 @@
       "revId": "1000002125ef02d12106b4094c1f3a0d53a43dd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdd48048_45fcaf58",
+        "filename": "src/compiler/decompression-elimination.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1327869
+      },
+      "writtenOn": "2019-05-14T10:31:36Z",
+      "side": 1,
+      "message": "When effect control linearizer runs, it is invalid to look at types on the nodes. This is because the types on the nodes might not make sense after representation selection.\nThat is why when lowering some nodes we might get this \u0027mismatch\u0027 between decompression and compression.",
+      "parentUuid": "5af4d7e6_516a8140",
+      "revId": "1000002125ef02d12106b4094c1f3a0d53a43dd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
