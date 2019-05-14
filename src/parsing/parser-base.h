@@ -1291,9 +1291,9 @@ class ParserBase {
                                          int end_pos = kNoSourcePosition) {
     if (impl()->IsNull(expr)) {
       expr = factory()->NewUndefinedLiteral(kNoSourcePosition);
-    } else if (is_async_generator()) {
+    } else if (is_async_generator() && pos != kNoSourcePosition) {
       // In async generators, if there is an explicit operand to the return
-      // statement, await the operand.
+      // statement, await the operand but only on an explicit return.
       expr = factory()->NewAwait(expr, kNoSourcePosition);
       function_state_->AddSuspend();
     }
