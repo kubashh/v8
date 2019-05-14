@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e7bf85b_7dd00273",
+        "filename": "src/compiler/js-call-reducer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-14T11:20:58Z",
+      "side": 1,
+      "message": "not clear what that means",
+      "range": {
+        "startLine": 66,
+        "startChar": 42,
+        "endLine": 66,
+        "endChar": 48
+      },
+      "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9b12ed0_ad8f5d32",
+        "filename": "src/ic/call-optimization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-14T11:20:58Z",
+      "side": 1,
+      "message": "\"its compatibility\" isn\u0027t clear",
+      "range": {
+        "startLine": 14,
+        "startChar": 31,
+        "endLine": 14,
+        "endChar": 47
+      },
+      "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59765353_32536e6d",
+        "filename": "src/ic/call-optimization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-14T11:20:58Z",
+      "side": 1,
+      "message": "It\u0027s not really clear what initialization you are talking about and why/where the difference matters.",
+      "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "808600e9_e83db30f",
+        "filename": "src/ic/call-optimization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-14T11:20:58Z",
+      "side": 1,
+      "message": "I think you mean simply \"with a JSFunction\".",
+      "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23d6616f_d26be3a5",
+        "filename": "src/ic/call-optimization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-14T11:20:58Z",
+      "side": 1,
+      "message": "I don\u0027t understand this part.",
+      "range": {
+        "startLine": 34,
+        "startChar": 43,
+        "endLine": 35,
+        "endChar": 12
+      },
+      "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18e40e6a_99823b83",
+        "filename": "src/ic/call-optimization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-14T11:20:58Z",
+      "side": 1,
+      "message": "How about adding a comment here saying that all the methods below assume {is_simple_api_call} to be true.",
+      "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8687bc03_79cf87f5",
+        "filename": "src/ic/call-optimization.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-14T11:20:58Z",
+      "side": 1,
+      "message": "Which property?",
+      "range": {
+        "startLine": 54,
+        "startChar": 12,
+        "endLine": 54,
+        "endChar": 35
+      },
+      "revId": "20d50b51534c6900e84008c505e71f1193ffa08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
