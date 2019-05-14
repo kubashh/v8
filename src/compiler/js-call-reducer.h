@@ -59,6 +59,13 @@ class V8_EXPORT_PRIVATE JSCallReducer final : public AdvancedReducer {
  private:
   Reduction ReduceArrayConstructor(Node* node);
   Reduction ReduceBooleanConstructor(Node* node);
+  // The goal of this is to reduce a call to an API (embedder-provided)
+  // function. This involves the following attempts:
+  // 1. constant-fold the compatible receiver checks;
+  // 2. in case the FunctionTemplateInfo's {accept_any_receiver} bit is set
+  //    and its {signature} is undefined, reduce the access checks and the
+  //    compatible receiver check;
+  // 3. reduce the node to a builtin call that does those checks dynamically.
   Reduction ReduceCallApiFunction(Node* node,
                                   const SharedFunctionInfoRef& shared);
   Reduction ReduceFunctionPrototypeApply(Node* node);
