@@ -317,25 +317,20 @@ class V8_EXPORT CpuProfilingOptions {
 
   /**
    * \param mode Type of computation of stack frame line numbers.
-   * \param record_samples Whether samples should be logged in the profile.
    * \param max_samples The maximum number of samples that should be recorded by
    *                    the profiler. Samples obtained after this limit will be
    *                    discarded.
    */
   CpuProfilingOptions(CpuProfilingMode mode = kLeafNodeLineNumbers,
-                      bool record_samples = false,
                       unsigned max_samples = kNoSampleLimit)
       : mode_(mode),
-        record_samples_(record_samples),
         max_samples_(max_samples) {}
 
   CpuProfilingMode mode() const { return mode_; }
-  bool record_samples() const { return record_samples_; }
   unsigned max_samples() const { return max_samples_; }
 
  private:
   CpuProfilingMode mode_;
-  bool record_samples_;
   unsigned max_samples_;
 };
 
