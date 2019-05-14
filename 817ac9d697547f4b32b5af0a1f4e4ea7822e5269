@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a2ff030_5583c1bd",
+        "filename": "src/parsing/parser-base.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-14T10:30:59Z",
+      "side": 1,
+      "message": "This doesn\u0027t feel like the correct check for implicit return to me.",
+      "range": {
+        "startLine": 1294,
+        "startChar": 36,
+        "endLine": 1294,
+        "endChar": 63
+      },
+      "revId": "817ac9d697547f4b32b5af0a1f4e4ea7822e5269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

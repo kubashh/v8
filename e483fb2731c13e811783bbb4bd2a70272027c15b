@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3f552ba_6d3b2fa0",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-14T10:30:59Z",
+      "side": 0,
+      "message": "Do we need to add an return statement for implicit return here? The bytecode generator will add an implicit return here [1]. This will end up being after the try/catch/finally blocks, but I\u0027m not sure this would change anything if this is a non-awaiting return.\n\n[1] https://cs.chromium.org/chromium/src/v8/src/interpreter/bytecode-generator.cc?q\u003dbytecode-genera\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d1176",
+      "range": {
+        "startLine": 1746,
+        "startChar": 4,
+        "endLine": 1749,
+        "endChar": 0
+      },
+      "revId": "e483fb2731c13e811783bbb4bd2a70272027c15b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
