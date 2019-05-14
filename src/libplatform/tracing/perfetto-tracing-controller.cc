@@ -11,6 +11,7 @@
 #include "src/libplatform/tracing/perfetto-producer.h"
 #include "src/libplatform/tracing/perfetto-shared-memory.h"
 #include "src/libplatform/tracing/perfetto-tasks.h"
+#include "src/libplatform/tracing/trace-event-utils.h"
 
 namespace v8 {
 namespace platform {
@@ -19,7 +20,9 @@ namespace tracing {
 PerfettoTracingController::PerfettoTracingController()
     : writer_key_(base::Thread::CreateThreadLocalKey()),
       producer_ready_semaphore_(0),
-      consumer_finished_semaphore_(0) {}
+      consumer_finished_semaphore_(0),
+      pending_events_stack_key_(base::Thread::CreateThreadLocalKey()),
+      pending_events_index_key_(base::Thread::CreateThreadLocalKey()) {}
 
 void PerfettoTracingController::StartTracing(
     const ::perfetto::TraceConfig& trace_config) {
@@ -96,23 +99,75 @@ PerfettoTracingController::~PerfettoTracingController() {
   base::Thread::DeleteThreadLocalKey(writer_key_);
 }
 
-::perfetto::TraceWriter*
-PerfettoTracingController::GetOrCreateThreadLocalWriter() {
-  // TODO(petermarshall): Use some form of thread-local destructor so that
-  // repeatedly created threads don't cause excessive leaking of TraceWriters.
-  if (base::Thread::HasThreadLocal(writer_key_)) {
-    return static_cast<::perfetto::TraceWriter*>(
-        base::Thread::GetExistingThreadLocal(writer_key_));
-  }
+// All thread locals have the same lifetime and are created and initialized on
+// the first call to either GetOrCreateThreadLocalWriter() or NewPendingEvent();
+void PerfettoTracingController::InitializeThreadLocals() {
+  DCHECK(!base::Thread::HasThreadLocal(writer_key_));
+  DCHECK(!base::Thread::HasThreadLocal(pending_events_stack_key_));
+  DCHECK(!base::Thread::HasThreadLocal(pending_events_index_key_));
 
-  // We leak the TraceWriter objects created for each thread. Perfetto has a
-  // way of getting events from leaked TraceWriters and we can avoid needing a
-  // lock on every trace event this way.
+  // TODO(petermarshall): We never actually remove the trace writer from the
+  // TLS so it will point to an invalid object if we re-start tracing.
+
+  // We leak the TraceWriter objects and pending stacks created for each thread.
+  // Perfetto has a way of getting events from leaked TraceWriters and we can
+  // avoid needing a lock on every trace event this way.
   std::unique_ptr<::perfetto::TraceWriter> tw = producer_->CreateTraceWriter();
   ::perfetto::TraceWriter* writer = tw.release();
 
   base::Thread::SetThreadLocal(writer_key_, writer);
-  return writer;
+
+  // Initialize the thread-local stack of pending events.
+  TempTraceRecord* pending_events_stack =
+      new TempTraceRecord[kPendingStackSize];
+  base::Thread::SetThreadLocal(pending_events_stack_key_, pending_events_stack);
+  base::Thread::SetThreadLocalInt(pending_events_index_key_, 0);
+}
+
+::perfetto::TraceWriter*
+PerfettoTracingController::GetOrCreateThreadLocalWriter() {
+  // TODO(petermarshall): Use some form of thread-local destructor so that
+  // repeatedly created threads don't cause excessive leaking of TraceWriters
+  // and pending event stacks.
+  if (!base::Thread::HasThreadLocal(writer_key_)) {
+    InitializeThreadLocals();
+  }
+
+  return static_cast<::perfetto::TraceWriter*>(
+      base::Thread::GetExistingThreadLocal(writer_key_));
+}
+
+TempTraceRecord* PerfettoTracingController::pending_events_stack() const {
+  DCHECK(base::Thread::HasThreadLocal(pending_events_stack_key_));
+  return static_cast<TempTraceRecord*>(
+      base::Thread::GetExistingThreadLocal(pending_events_stack_key_));
+}
+
+TempTraceRecord* PerfettoTracingController::NewPendingEvent(
+    uint64_t* handle_out) {
+  if (!base::Thread::HasThreadLocal(pending_events_stack_key_)) {
+    InitializeThreadLocals();
+  }
+  int index = base::Thread::GetThreadLocalInt(pending_events_index_key_);
+  if (index == kPendingStackSize) return nullptr;
+
+  *handle_out = index;
+  TempTraceRecord* next_record = pending_events_stack() + index;
+  base::Thread::SetThreadLocalInt(pending_events_index_key_, index + 1);
+  return next_record;
+}
+
+TempTraceRecord* PerfettoTracingController::GetAndRemoveEventByHandle(
+    uint64_t handle) {
+  USE(handle);
+  DCHECK(base::Thread::HasThreadLocal(pending_events_stack_key_));
+  // TODO(petermarshall): Check that the handle is correct once we only run
+  // perfetto and not the legacy tracing controller.
+  int new_index =
+      base::Thread::GetThreadLocalInt(pending_events_index_key_) - 1;
+  TempTraceRecord* next_record = pending_events_stack() + new_index;
+  base::Thread::SetThreadLocalInt(pending_events_index_key_, new_index);
+  return next_record;
 }
 
 void PerfettoTracingController::OnProducerReady() {

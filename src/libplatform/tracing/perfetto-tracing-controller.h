@@ -26,6 +26,7 @@ namespace tracing {
 class PerfettoJSONConsumer;
 class PerfettoProducer;
 class PerfettoTaskRunner;
+struct TempTraceRecord;
 
 // This is the top-level interface for performing tracing with perfetto. The
 // user of this class should call StartTracing() to start tracing, and
@@ -50,6 +51,17 @@ class PerfettoTracingController {
   // PerfettoTracingController creates and owns the TraceWriter.
   ::perfetto::TraceWriter* GetOrCreateThreadLocalWriter();
 
+  // Adds a TempTraceRecord to the pending event stack. Sets |handle_out| to
+  // the index of the TempTraceRecord on the event stack. If the stack is full,
+  // returns nullptr and does not set handle_out.
+  TempTraceRecord* NewPendingEvent(uint64_t* handle_out);
+
+  // Retrieves a TempTraceRecord from the pending event stack. The handle
+  // must reference the top object in the stack. Removes the object from the
+  // stack; calling NewPendingEvent() will invalidate the result of this
+  // function.
+  TempTraceRecord* GetAndRemoveEventByHandle(uint64_t handle);
+
  private:
   // Signals the producer_ready_semaphore_.
   void OnProducerReady();
@@ -70,6 +82,18 @@ class PerfettoTracingController {
 
   // TODO(petermarshall): pass this in instead.
   std::ofstream trace_file_;
+
+  // Same depth that Chrome uses. This is essentially the maximum number of
+  // nested 'X' trace events that perfetto can handle.
+  static constexpr size_t kPendingStackSize = 30;
+  // Thread-local stack of pending 'X' events which come in two parts - begin
+  // and end, but we haven't received the end part yet.
+  base::Thread::LocalStorageKey pending_events_stack_key_;
+  // Index of the next free slot in the pending events stack. There are no free
+  // slots if the pending events index == kPendingStackSize.
+  base::Thread::LocalStorageKey pending_events_index_key_;
+  TempTraceRecord* pending_events_stack() const;
+  void InitializeThreadLocals();
 
   DISALLOW_COPY_AND_ASSIGN(PerfettoTracingController);
 };

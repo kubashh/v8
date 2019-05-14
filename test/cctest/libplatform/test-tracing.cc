@@ -81,6 +81,20 @@ class MockTraceWriter : public TraceWriter {
   std::vector<std::string> events_;
 };
 
+class MockTraceWriterFullTraceObject : public TraceWriter {
+ public:
+  void AppendTraceEvent(TraceObject* trace_event) override {
+    events_.push_back(trace_event);
+  }
+
+  void Flush() override {}
+
+  const std::vector<TraceObject*>& events() const { return events_; }
+
+ private:
+  std::vector<TraceObject*> events_;
+};
+
 TEST(TestTraceBufferRingBuffer) {
   // We should be able to add kChunkSize * 2 + 1 trace events.
   const int HANDLES_COUNT = TraceBufferChunk::kChunkSize * 2 + 1;
@@ -286,43 +300,45 @@ TEST(TestTracingControllerMultipleArgsAndCopy) {
     trace_config->AddIncludedCategory("v8");
     tracing_controller->StartTracing(trace_config);
 
-    TRACE_EVENT1("v8", "v8.Test.aa", "aa", aa);
-    TRACE_EVENT1("v8", "v8.Test.bb", "bb", bb);
-    TRACE_EVENT1("v8", "v8.Test.cc", "cc", cc);
-    TRACE_EVENT1("v8", "v8.Test.dd", "dd", dd);
-    TRACE_EVENT1("v8", "v8.Test.ee", "ee", ee);
-    TRACE_EVENT1("v8", "v8.Test.ff", "ff", ff);
-    TRACE_EVENT1("v8", "v8.Test.gg", "gg", gg);
-    TRACE_EVENT1("v8", "v8.Test.hh", "hh", hh);
-    TRACE_EVENT1("v8", "v8.Test.ii", "ii1", ii1);
-    TRACE_EVENT1("v8", "v8.Test.ii", "ii2", ii2);
-    TRACE_EVENT1("v8", "v8.Test.jj1", "jj1", jj1);
-    TRACE_EVENT1("v8", "v8.Test.jj2", "jj2", jj2);
-    TRACE_EVENT1("v8", "v8.Test.jj3", "jj3", jj3);
-    TRACE_EVENT1("v8", "v8.Test.jj4", "jj4", jj4);
-    TRACE_EVENT1("v8", "v8.Test.jj5", "jj5", jj5);
-    TRACE_EVENT1("v8", "v8.Test.kk", "kk", kk);
-    TRACE_EVENT1("v8", "v8.Test.ll", "ll", ll);
-    TRACE_EVENT1("v8", "v8.Test.mm", "mm", TRACE_STR_COPY(mmm.c_str()));
+    {
+      TRACE_EVENT1("v8", "v8.Test.aa", "aa", aa);
+      TRACE_EVENT1("v8", "v8.Test.bb", "bb", bb);
+      TRACE_EVENT1("v8", "v8.Test.cc", "cc", cc);
+      TRACE_EVENT1("v8", "v8.Test.dd", "dd", dd);
+      TRACE_EVENT1("v8", "v8.Test.ee", "ee", ee);
+      TRACE_EVENT1("v8", "v8.Test.ff", "ff", ff);
+      TRACE_EVENT1("v8", "v8.Test.gg", "gg", gg);
+      TRACE_EVENT1("v8", "v8.Test.hh", "hh", hh);
+      TRACE_EVENT1("v8", "v8.Test.ii", "ii1", ii1);
+      TRACE_EVENT1("v8", "v8.Test.ii", "ii2", ii2);
+      TRACE_EVENT1("v8", "v8.Test.jj1", "jj1", jj1);
+      TRACE_EVENT1("v8", "v8.Test.jj2", "jj2", jj2);
+      TRACE_EVENT1("v8", "v8.Test.jj3", "jj3", jj3);
+      TRACE_EVENT1("v8", "v8.Test.jj4", "jj4", jj4);
+      TRACE_EVENT1("v8", "v8.Test.jj5", "jj5", jj5);
+      TRACE_EVENT1("v8", "v8.Test.kk", "kk", kk);
+      TRACE_EVENT1("v8", "v8.Test.ll", "ll", ll);
+      TRACE_EVENT1("v8", "v8.Test.mm", "mm", TRACE_STR_COPY(mmm.c_str()));
 
-    TRACE_EVENT2("v8", "v8.Test2.1", "aa", aa, "ll", ll);
-    TRACE_EVENT2("v8", "v8.Test2.2", "mm1", TRACE_STR_COPY(mm.c_str()), "mm2",
-                 TRACE_STR_COPY(mmm.c_str()));
+      TRACE_EVENT2("v8", "v8.Test2.1", "aa", aa, "ll", ll);
+      TRACE_EVENT2("v8", "v8.Test2.2", "mm1", TRACE_STR_COPY(mm.c_str()), "mm2",
+                   TRACE_STR_COPY(mmm.c_str()));
 
-    // Check copies are correct.
-    TRACE_EVENT_COPY_INSTANT0("v8", mm.c_str(), TRACE_EVENT_SCOPE_THREAD);
-    TRACE_EVENT_COPY_INSTANT2("v8", mm.c_str(), TRACE_EVENT_SCOPE_THREAD, "mm1",
-                              mm.c_str(), "mm2", mmm.c_str());
-    mm = "CHANGED";
-    mmm = "CHANGED";
+      // Check copies are correct.
+      TRACE_EVENT_COPY_INSTANT0("v8", mm.c_str(), TRACE_EVENT_SCOPE_THREAD);
+      TRACE_EVENT_COPY_INSTANT2("v8", mm.c_str(), TRACE_EVENT_SCOPE_THREAD,
+                                "mm1", mm.c_str(), "mm2", mmm.c_str());
+      mm = "CHANGED";
+      mmm = "CHANGED";
 
-    TRACE_EVENT_INSTANT1("v8", "v8.Test", TRACE_EVENT_SCOPE_THREAD, "a1",
-                         new ConvertableToTraceFormatMock(42));
-    std::unique_ptr<ConvertableToTraceFormatMock> trace_event_arg(
-        new ConvertableToTraceFormatMock(42));
-    TRACE_EVENT_INSTANT2("v8", "v8.Test", TRACE_EVENT_SCOPE_THREAD, "a1",
-                         std::move(trace_event_arg), "a2",
-                         new ConvertableToTraceFormatMock(123));
+      TRACE_EVENT_INSTANT1("v8", "v8.Test", TRACE_EVENT_SCOPE_THREAD, "a1",
+                           new ConvertableToTraceFormatMock(42));
+      std::unique_ptr<ConvertableToTraceFormatMock> trace_event_arg(
+          new ConvertableToTraceFormatMock(42));
+      TRACE_EVENT_INSTANT2("v8", "v8.Test", TRACE_EVENT_SCOPE_THREAD, "a1",
+                           std::move(trace_event_arg), "a2",
+                           new ConvertableToTraceFormatMock(123));
+    }
 
     tracing_controller->StopTracing();
 
@@ -500,6 +516,39 @@ TEST(AddTraceEventMultiThreaded) {
 
   thread.Stop();
   thread.Join();
+
+  i::V8::SetPlatformForTesting(old_platform);
+}
+
+TEST(ScopedEventDuration) {
+  v8::Platform* old_platform = i::V8::GetCurrentPlatform();
+  std::unique_ptr<v8::Platform> default_platform(
+      v8::platform::NewDefaultPlatform());
+  i::V8::SetPlatformForTesting(default_platform.get());
+
+  auto tracing = base::make_unique<v8::platform::tracing::TracingController>();
+  v8::platform::tracing::TracingController* tracing_controller = tracing.get();
+  static_cast<v8::platform::DefaultPlatform*>(default_platform.get())
+      ->SetTracingController(std::move(tracing));
+
+  MockTraceWriterFullTraceObject* writer = new MockTraceWriterFullTraceObject();
+  TraceBuffer* ring_buffer =
+      TraceBuffer::CreateTraceBufferRingBuffer(1, writer);
+  tracing_controller->Initialize(ring_buffer);
+  TraceConfig* trace_config = new TraceConfig();
+  trace_config->AddIncludedCategory("v8");
+  tracing_controller->StartTracing(trace_config);
+
+  {
+    TRACE_EVENT0("v8", "v8.Test.Scoped");
+    base::OS::Sleep(base::TimeDelta::FromMilliseconds(10));
+  }
+
+  tracing_controller->StopTracing();
+
+  CHECK_EQ(1u, writer->events().size());
+  CHECK_EQ(std::string("v8.Test.Scoped"), writer->events()[0]->name());
+  CHECK_GT(writer->events()[0]->duration(), 9000);
 
   i::V8::SetPlatformForTesting(old_platform);
 }
