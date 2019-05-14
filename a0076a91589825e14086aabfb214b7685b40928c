@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "15a67085_b87f7fa0",
+        "filename": "src/builtins/boolean-constructor.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-14T06:46:42Z",
+      "side": 1,
+      "message": "I\u0027d say rename this file to boolean.tq and call the namespace boolean.",
+      "range": {
+        "startLine": 5,
+        "startChar": 10,
+        "endLine": 5,
+        "endChar": 29
+      },
+      "revId": "a0076a91589825e14086aabfb214b7685b40928c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e891fa2a_d27c7306",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-14T06:46:42Z",
+      "side": 1,
+      "message": "Can we move this to Torque as well?",
+      "range": {
+        "startLine": 226,
+        "startChar": 36,
+        "endLine": 226,
+        "endChar": 49
+      },
+      "revId": "a0076a91589825e14086aabfb214b7685b40928c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecd3c277_73fc18d8",
         "filename": "src/builtins/builtins-constructor-gen.cc",
         "patchSetId": 1
