@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c6c719e7_5c2621f8",
+        "filename": "src/builtins/boolean.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-14T12:49:39Z",
+      "side": 1,
+      "message": "Please add a TODO that this needs to be cleaned up and refer to the bug (new.target).",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 13,
+        "endChar": 21
+      },
+      "revId": "f44f5aff09cb7fe103a7bb5706822cf2fe40d4b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef56f07b_364874e2",
+        "filename": "src/builtins/boolean.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-14T12:49:39Z",
+      "side": 1,
+      "message": "const?",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 7
+      },
+      "revId": "f44f5aff09cb7fe103a7bb5706822cf2fe40d4b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

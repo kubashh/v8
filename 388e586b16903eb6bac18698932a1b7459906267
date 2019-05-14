@@ -2,6 +2,69 @@
   "comments": [
     {
       "key": {
+        "uuid": "fce11339_0c477003",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-14T12:49:39Z",
+      "side": 1,
+      "message": "[torque] Port ...",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "388e586b16903eb6bac18698932a1b7459906267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74785963_57ecd1d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-14T12:49:39Z",
+      "side": 1,
+      "message": "Add a description which also mentions GetDerivedMap",
+      "revId": "388e586b16903eb6bac18698932a1b7459906267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25927790_c16335f7",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-14T12:49:39Z",
+      "side": 1,
+      "message": "This is an unfortunate name, because there are other kInitialCapacity in other classes.",
+      "range": {
+        "startLine": 842,
+        "startChar": 6,
+        "endLine": 842,
+        "endChar": 22
+      },
+      "revId": "388e586b16903eb6bac18698932a1b7459906267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bdc9ec91_96dca7f6",
         "filename": "src/code-stub-assembler.h",
         "patchSetId": 2
