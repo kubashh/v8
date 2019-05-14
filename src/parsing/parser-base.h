@@ -1288,10 +1288,11 @@ class ParserBase {
   // Convenience method which determines the type of return statement to emit
   // depending on the current function type.
   inline StatementT BuildReturnStatement(ExpressionT expr, int pos,
-                                         int end_pos = kNoSourcePosition) {
+                                         int end_pos = kNoSourcePosition,
+                                         bool is_explicit_return = true) {
     if (impl()->IsNull(expr)) {
       expr = factory()->NewUndefinedLiteral(kNoSourcePosition);
-    } else if (is_async_generator()) {
+    } else if (is_async_generator() && is_explicit_return) {
       // In async generators, if there is an explicit operand to the return
       // statement, await the operand.
       expr = factory()->NewAwait(expr, kNoSourcePosition);
