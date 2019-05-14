@@ -439,7 +439,6 @@ class ProfilerHelper {
   v8::CpuProfile* Run(
       v8::Local<v8::Function> function, v8::Local<v8::Value> argv[], int argc,
       unsigned min_js_samples = 0, unsigned min_external_samples = 0,
-      bool collect_samples = false,
       ProfilingMode mode = ProfilingMode::kLeafNodeLineNumbers,
       unsigned max_samples = CpuProfilingOptions::kNoSampleLimit);
 
@@ -454,12 +453,11 @@ v8::CpuProfile* ProfilerHelper::Run(v8::Local<v8::Function> function,
                                     v8::Local<v8::Value> argv[], int argc,
                                     unsigned min_js_samples,
                                     unsigned min_external_samples,
-                                    bool collect_samples, ProfilingMode mode,
-                                    unsigned max_samples) {
+                                    ProfilingMode mode, unsigned max_samples) {
   v8::Local<v8::String> profile_name = v8_str("my_profile");
 
   profiler_->SetSamplingInterval(100);
-  profiler_->StartProfiling(profile_name, {mode, collect_samples, max_samples});
+  profiler_->StartProfiling(profile_name, {mode, max_samples});
 
   v8::internal::CpuProfiler* iprofiler =
       reinterpret_cast<v8::internal::CpuProfiler*>(profiler_);
@@ -667,10 +665,10 @@ TEST(CollectCpuProfileCallerLineNumbers) {
   v8::Local<v8::Value> args[] = {
       v8::Integer::New(env->GetIsolate(), profiling_interval_ms)};
   ProfilerHelper helper(env.local());
-  helper.Run(function, args, arraysize(args), 1000, 0, false,
+  helper.Run(function, args, arraysize(args), 1000, 0,
              v8::CpuProfilingMode::kCallerLineNumbers);
   v8::CpuProfile* profile =
-      helper.Run(function, args, arraysize(args), 1000, 0, false,
+      helper.Run(function, args, arraysize(args), 1000, 0,
                  v8::CpuProfilingMode::kCallerLineNumbers);
 
   const v8::CpuProfileNode* root = profile->GetTopDownRoot();
@@ -753,7 +751,7 @@ TEST(CollectCpuProfileSamples) {
       v8::Integer::New(env->GetIsolate(), profiling_interval_ms)};
   ProfilerHelper helper(env.local());
   v8::CpuProfile* profile =
-      helper.Run(function, args, arraysize(args), 1000, 0, true);
+      helper.Run(function, args, arraysize(args), 1000, 0);
 
   CHECK_LE(200, profile->GetSamplesCount());
   uint64_t end_time = profile->GetEndTime();
@@ -2670,7 +2668,7 @@ TEST(NativeFrameStackTrace) {
 
   ProfilerHelper helper(env);
 
-  v8::CpuProfile* profile = helper.Run(function, nullptr, 0, 100, 0, true);
+  v8::CpuProfile* profile = helper.Run(function, nullptr, 0, 100, 0);
 
   // Count the fraction of samples landing in 'jsFunction' (valid stack)
   // vs '(program)' (no stack captured).
@@ -2778,7 +2776,7 @@ TEST(MultipleProfilersSampleIndependently) {
   std::unique_ptr<CpuProfiler> slow_profiler(
       new CpuProfiler(CcTest::i_isolate()));
   slow_profiler->set_sampling_interval(base::TimeDelta::FromSeconds(1));
-  slow_profiler->StartProfiling("1", {kLeafNodeLineNumbers, true});
+  slow_profiler->StartProfiling("1", {kLeafNodeLineNumbers});
 
   CompileRun(R"(
     function start() {
@@ -2791,7 +2789,7 @@ TEST(MultipleProfilersSampleIndependently) {
   )");
   v8::Local<v8::Function> function = GetFunction(env.local(), "start");
   ProfilerHelper helper(env.local());
-  v8::CpuProfile* profile = helper.Run(function, nullptr, 0, 100, 0, true);
+  v8::CpuProfile* profile = helper.Run(function, nullptr, 0, 100, 0);
 
   auto slow_profile = slow_profiler->StopProfiling("1");
   CHECK_GT(profile->GetSamplesCount(), slow_profile->samples_count());
@@ -2857,7 +2855,7 @@ TEST(FastStopProfiling) {
 
   std::unique_ptr<CpuProfiler> profiler(new CpuProfiler(CcTest::i_isolate()));
   profiler->set_sampling_interval(kLongInterval);
-  profiler->StartProfiling("", {kLeafNodeLineNumbers, true});
+  profiler->StartProfiling("", {kLeafNodeLineNumbers});
 
   v8::Platform* platform = v8::internal::V8::GetCurrentPlatform();
   double start = platform->CurrentClockTimeMillis();
@@ -2981,7 +2979,7 @@ TEST(SampleLimit) {
   v8::Local<v8::Function> function = GetFunction(env.local(), "start");
   ProfilerHelper helper(env.local());
   v8::CpuProfile* profile =
-      helper.Run(function, nullptr, 0, 100, 0, true,
+      helper.Run(function, nullptr, 0, 100, 0,
                  v8::CpuProfilingMode::kLeafNodeLineNumbers, 50);
 
   CHECK_EQ(profile->GetSamplesCount(), 50);
