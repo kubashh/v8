@@ -225,6 +225,24 @@
       "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6d88c560_858468ac",
+        "filename": "test/preparser/testcfg.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1315912
+      },
+      "writtenOn": "2019-05-14T15:19:34Z",
+      "side": 1,
+      "message": "Hi! Tamer Tas.\nFriendly ping about execfile and this test.\n\nWe discussed that it is already deprecated.\nCan I commit with the removal of this test?",
+      "parentUuid": "b63e9290_90ad221e",
+      "revId": "78a99de47f4aefef6f44e370e7fa9029023531c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
