@@ -114,6 +114,24 @@
     },
     {
       "key": {
+        "uuid": "5b23a0b9_85e35d90",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-14T17:55:03Z",
+      "side": 1,
+      "message": "Thanks again, and no worries about the back and forth, this is a great discussion :) . @ifdef is a bit of a misnomer at present, it really acts more like #if. I didn\u0027t call it @if because @if caused problems in the formatter, but that should be a pretty quick fix. The stuff inside the parentheses is not a real macro, just an identifier that needs to match one of the items in the list in torque-parser.cc. I doubt we\u0027d want to open up to using arbitrary expressions inside the parentheses, but I think updating to @if and @ifnot would be pretty easy.",
+      "parentUuid": "34698816_28eac6cb",
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "231254c8_73641925",
         "filename": "src/torque/torque-parser.cc",
         "patchSetId": 16
@@ -149,6 +167,30 @@
       "side": 1,
       "message": "Good idea, thanks.",
       "parentUuid": "231254c8_73641925",
+      "range": {
+        "startLine": 41,
+        "startChar": 42,
+        "endLine": 41,
+        "endChar": 58
+      },
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fecdc596_0f50b528",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-14T17:55:03Z",
+      "side": 1,
+      "message": "On second thought, I\u0027m not too sure about this. kTaggedSize is based on some logic including other constexpr values, so getting the preprocessor to know whether kTaggedSize is 8 would require duplicating some logic via #define that already exists via constexpr (for instance, we\u0027d need a preprocessor equivalent for determining kSystemPointerSize). Alternately, we could just `#define TAGGED_SIZE_8_BYTES (kTaggedSize \u003d\u003d 8)`, which is short and would work fine for this usage but would (perhaps surprisingly) always evaluate to false in #if directives.",
+      "parentUuid": "fe21dc31_512baccb",
       "range": {
         "startLine": 41,
         "startChar": 42,
