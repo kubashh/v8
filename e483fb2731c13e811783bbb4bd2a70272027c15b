@@ -46,6 +46,30 @@
       "revId": "e483fb2731c13e811783bbb4bd2a70272027c15b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9604b63c_601143c6",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-14T20:16:41Z",
+      "side": 0,
+      "message": "That wasn\u0027t my question here. The implicit return isn\u0027t usually added by the parser, instead the bytecode generator (implicitly :)) adds it at the end of the function if there wasn\u0027t an explicit return beforehand (see the link above) without there being a corresponding AST node for it.\n\nI the case of AsyncGenerators here the parser does add an AST node for the implicit return at the end of all the parsed statements (bit before the hidden try/catch logic). When we needed a suspend point for the await in the return that was necessary (since the parser needed to add the suspend point), but without it, I\u0027m wondering if we can just depend on the implicit return logic in the bytecode generator without adding any extra ast node for the async generator case. This would move the implicit return to be outside the hidden try and below the hidden finally block, but I don\u0027t think this would matter semantically since the implicit return can\u0027t throw, and it would probably generate better code (no need to add the \"return interception\" logic into the hidden finally block if there isn\u0027t an explicit return within the hidden try block).",
+      "parentUuid": "a4b779aa_82f4ea22",
+      "range": {
+        "startLine": 1746,
+        "startChar": 4,
+        "endLine": 1749,
+        "endChar": 0
+      },
+      "revId": "e483fb2731c13e811783bbb4bd2a70272027c15b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
