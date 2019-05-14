@@ -306,6 +306,7 @@ namespace internal {
   F(InternalSetPrototype, 2, 1)                                 \
   I(IsJSReceiver, 1, 1)                                         \
   F(NewObject, 2, 1)                                            \
+  F(GetDerivedMap, 2, 1)                                        \
   F(ObjectCreate, 2, 1)                                         \
   F(ObjectEntries, 1, 1)                                        \
   F(ObjectEntriesSkipFastPath, 1, 1)                            \
