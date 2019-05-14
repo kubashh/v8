@@ -34,6 +34,24 @@
       "revId": "ec7d5521cac86d1f62f236ef11df3c914ba7d1ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a85d605_16c4854e",
+        "filename": "src/message-template.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-05-14T22:14:31Z",
+      "side": 1,
+      "message": "It doesn’t matter too much. I’d go with option #2.",
+      "parentUuid": "736331f1_59b8a465",
+      "revId": "ec7d5521cac86d1f62f236ef11df3c914ba7d1ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
