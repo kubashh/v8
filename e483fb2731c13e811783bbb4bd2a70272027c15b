@@ -22,6 +22,30 @@
       "revId": "e483fb2731c13e811783bbb4bd2a70272027c15b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4b779aa_82f4ea22",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1122311
+      },
+      "writtenOn": "2019-05-14T19:01:01Z",
+      "side": 0,
+      "message": "This is the implicit return I was trying to fix, per spec it is not supposed to await. I am currently using the pos \u003d\u003d kNoSourcePosition signal to determine whether or not to await. In the older versions of this cl, it passed is_implicit_return\u003dtrue here. Would you prefer the explicit bool?",
+      "parentUuid": "c3f552ba_6d3b2fa0",
+      "range": {
+        "startLine": 1746,
+        "startChar": 4,
+        "endLine": 1749,
+        "endChar": 0
+      },
+      "revId": "e483fb2731c13e811783bbb4bd2a70272027c15b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
