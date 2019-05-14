@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0fd7eead_1b56b4af",
+        "filename": "src/compiler/js-intrinsic-lowering.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-05-14T08:26:59Z",
+      "side": 1,
+      "message": "Nit: Non-obvious abbreviations are frowned upon at Google, please expand Tf to Turbofan (here and elsewhere). See https://google.github.io/styleguide/cppguide.html#General_Naming_Rules",
+      "range": {
+        "startLine": 61,
+        "startChar": 18,
+        "endLine": 61,
+        "endChar": 20
+      },
+      "revId": "828c481ce5423d93bd8e8d5475fb58ab19b18c10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c673e39a_8a7480ba",
+        "filename": "src/compiler/typed-optimization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-05-14T08:26:59Z",
+      "side": 1,
+      "message": "I think we should only do this if the type is inhabited.",
+      "range": {
+        "startLine": 532,
+        "startChar": 11,
+        "endLine": 532,
+        "endChar": 45
+      },
+      "revId": "828c481ce5423d93bd8e8d5475fb58ab19b18c10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
