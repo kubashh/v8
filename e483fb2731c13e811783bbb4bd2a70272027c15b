@@ -70,6 +70,30 @@
       "revId": "e483fb2731c13e811783bbb4bd2a70272027c15b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b430cff1_4f06268e",
+        "filename": "src/parsing/parser.cc",
+        "patchSetId": 8
+      },
+      "lineNbr": 1749,
+      "author": {
+        "id": 1122311
+      },
+      "writtenOn": "2019-05-14T21:03:58Z",
+      "side": 0,
+      "message": "Sorry, yes you are 100% right, thanks for patiently explaining what you actually explained well the first time, I just completely misunderstood your question. ptal.",
+      "parentUuid": "9604b63c_601143c6",
+      "range": {
+        "startLine": 1746,
+        "startChar": 4,
+        "endLine": 1749,
+        "endChar": 0
+      },
+      "revId": "e483fb2731c13e811783bbb4bd2a70272027c15b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
