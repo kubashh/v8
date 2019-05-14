@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5d13ffed_d7230db1",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-14T13:39:20Z",
+      "side": 1,
+      "message": "Tobias says you can write Is\u003cMap\u003e(initialMap). You could also use a type switch to avoid the UnsafeCast below.",
+      "revId": "f44f5aff09cb7fe103a7bb5706822cf2fe40d4b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6c719e7_5c2621f8",
         "filename": "src/builtins/boolean.tq",
         "patchSetId": 4
