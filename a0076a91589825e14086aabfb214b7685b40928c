@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecd3c277_73fc18d8",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-05-14T05:33:02Z",
+      "side": 1,
+      "message": "We should probably have two fast-paths here, one for the very likely case of no subclassing, and one for the cached map on the new.target, i.e.\n\n```\nif (new_target \u003d\u003d target) {\n  initial_map \u003d target.prototype_or_initial_map\n  if (!IsHeapObject(initial_map)) goto slow;\n  if (!IsMap(initial_map)) goto slow;\n  return initial_map;\n} else if (IsJSFunction(new_target)) {\n  initial_map \u003d new_target.prototype_or_initial_map;\n  if (!IsHeapObject(initial_map)) goto slow;\n  if (!IsMap(initial_map)) goto slow;\n  if (initial_map.constructor_or_back_pointer !\u003d target) goto slow;\n  return initial_map;\n}\n\nslow:\n  return %GetDerivedMap(context, target, new_target);\n```",
+      "revId": "a0076a91589825e14086aabfb214b7685b40928c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2229e134_17155850",
+        "filename": "src/builtins/builtins-constructor-gen.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-05-14T05:33:02Z",
+      "side": 1,
+      "message": "Nit: GotoIfNot(IsMap(initial_map), ...)",
+      "revId": "a0076a91589825e14086aabfb214b7685b40928c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
