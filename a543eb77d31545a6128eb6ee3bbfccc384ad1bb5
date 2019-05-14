@@ -1,0 +1,350 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18012c67_8466d372",
+        "filename": "src/handles.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "I guess we don\u0027t need these comments ))",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0437c38e_72ad7f45",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "// |cursor_| will only be updated if the key ends up being an index.",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a8d46e0_78045183",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "I guess this may help a bit:\n  WriteBarrierMode mode \u003d elms.GetWriteBarrierMode(\u0026no_gc);",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0a83cb8_e8b7a3ed",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "Having separate property_stack and elements_stack could avoid unnecessary filtering.",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d2f648c_4c7dfd3e",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": ", mode);",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfbf4c8f_a03e6aca",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "Same here.\nDCHECK_EQ(map.elements_kind(), HOLEY_ELEMENTS);",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fc4784e_72a43814",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": ", mode);",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddaea39c_1ab36235",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "We may already be able to generalize Smi-\u003eTagged and HeapObject-\u003eTagged in-place (see Representation::CanBeInPlaceChangedTo()).",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "402ba668_f010a60f",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "This may be a bit more efficient:\n  Object value \u003d element_stack[i];\n  if (value.IsHeapObject()) {\n    if (HeapObject::cast(value).IsHeapNumber()) {\n      kind \u003d PACKED_DOUBLE_ELEMENTS;\n    } else {\n      kind \u003d PACKED_ELEMENTS;\n      break;\n    }\n  }",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5bd9676_7c7bb36b",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "I guess this may help a bit:\n  WriteBarrierMode mode \u003d\n    (kind \u003d\u003d PACKED_SMI_ELEMENTS) ? SKIP_WRITE_BARRIER\n                                  : elements.GetWriteBarrierMode(\u0026no_gc);",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82adf8ef_e5058e97",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": ", mode);",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4211da7_8cdac15a",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "Why not string.internalize()?",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44201737_76da5519",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7c7dcb4_d790570d",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "Why do you check this flag for one-byte string here but let DecodeString\u003cuint16_t\u003e() handle this  case for two-byte strings?",
+      "range": {
+        "startLine": 900,
+        "startChar": 8,
+        "endLine": 900,
+        "endChar": 28
+      },
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e34f8e06_f24eeb3f",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "Why only for one-byte strings?",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b503d8f6_655589a9",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "How about just\n  JsonString()\nfor such cases?",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a59c26d7_88f29d46",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "Please add a comment about these computations.",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4432c48e_dfb3f6ba",
+        "filename": "src/json-parser.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "You don\u0027t modify values after creation, so you can make all the fields const.",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "922dfb4f_b9845a77",
+        "filename": "src/json-parser.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "String::kMaxLenght has at least 30 bits (on 64-bit and even 28 on 32-bit archs), so |start| and |length| values have 2 unused bits each where you can pack those 4 booleans :)\n\n  STATIC_ASSERT(String::kMaxLength \u003c\u003d (1 \u003c\u003c 30));\n  const uint32_t start_or_index: 30;\n  const uint32_t is_index: 1;\n  const uint32_t has_escape: 1;\n  const uint32_t length: 30;\n  const uint32_t needs_conversion: 1;\n  const uint32_t needs_internalization: 1;",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c5df59d_713175e7",
+        "filename": "src/json-parser.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1183889
+      },
+      "writtenOn": "2019-05-14T21:47:29Z",
+      "side": 1,
+      "message": "Although clang is smart enough let\u0027s pass it by reference.",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
