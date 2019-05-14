@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5af4d7e6_516a8140",
+        "filename": "src/compiler/decompression-elimination.cc",
+        "patchSetId": 11
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002763
+      },
+      "writtenOn": "2019-05-14T10:14:16Z",
+      "side": 1,
+      "message": "nit - could you add a brief comment her as to why it could be IrOpcode::kChangeCompressedToTagged instead of just IrOpcode::kChangeCompressedPointerToTaggedPointer",
+      "revId": "1000002125ef02d12106b4094c1f3a0d53a43dd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
