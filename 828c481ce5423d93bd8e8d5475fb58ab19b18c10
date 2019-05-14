@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0a882705_528c18b3",
+        "filename": "src/compiler/js-intrinsic-lowering.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-05-14T09:18:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fd7eead_1b56b4af",
+      "range": {
+        "startLine": 61,
+        "startChar": 18,
+        "endLine": 61,
+        "endChar": 20
+      },
+      "revId": "828c481ce5423d93bd8e8d5475fb58ab19b18c10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c673e39a_8a7480ba",
         "filename": "src/compiler/typed-optimization.cc",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "828c481ce5423d93bd8e8d5475fb58ab19b18c10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "478224a4_871f210a",
+        "filename": "src/compiler/typed-optimization.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1345174
+      },
+      "writtenOn": "2019-05-14T09:18:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c673e39a_8a7480ba",
+      "range": {
+        "startLine": 532,
+        "startChar": 11,
+        "endLine": 532,
+        "endChar": 45
+      },
+      "revId": "828c481ce5423d93bd8e8d5475fb58ab19b18c10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
