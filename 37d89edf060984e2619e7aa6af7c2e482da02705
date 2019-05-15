@@ -46,6 +46,30 @@
       "revId": "37d89edf060984e2619e7aa6af7c2e482da02705",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcc4b588_c5213cb1",
+        "filename": "src/objects/map.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-15T17:57:17Z",
+      "side": 0,
+      "message": "Marking as resolved, please reopen if you disagree.",
+      "parentUuid": "11570d53_e9719084",
+      "range": {
+        "startLine": 1513,
+        "startChar": 8,
+        "endLine": 1515,
+        "endChar": 56
+      },
+      "revId": "37d89edf060984e2619e7aa6af7c2e482da02705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
