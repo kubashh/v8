@@ -2919,6 +2919,8 @@ void ImplementationVisitor::GenerateClassFieldOffsets(
       ClassType* type = i.second;
       if (!type->IsExtern()) continue;
 
+      std::stringstream optional_fields_stream;
+
       // TODO(danno): Ideally (and we've got several core V8 dev's feedback
       // supporting this), Torque should generate the constants for the offsets
       // directly and not go through the existing layer of macros, which
@@ -2951,10 +2953,15 @@ void ImplementationVisitor::GenerateClassFieldOffsets(
         size_t field_size;
         std::string size_string;
         std::string machine_type;
-        std::tie(field_size, size_string, machine_type) =
-            f.GetFieldSizeInformation();
+        std::tie(field_size, size_string) = f.GetFieldSizeInformation();
         new_contents_stream << "V(k" << CamelifyString(f.name_and_type.name)
                             << "Offset, " << size_string << ") \\\n";
+        if (f.is_conditional) {
+          optional_fields_stream
+              << "#define TORQUE_GENERATED_"
+              << CapifyStringWithUnderscores(i.first) << "_CONTAINS_"
+              << CapifyStringWithUnderscores(f.name_and_type.name) << " true\n";
+        }
       }
       ProcessFieldInSection(&section, &completed_sections,
                             FieldSectionType::kNoSection, &new_contents_stream);
@@ -2972,6 +2979,11 @@ void ImplementationVisitor::GenerateClassFieldOffsets(
         new_contents_stream << "V(kSize, 0) \\\n";
       }
       new_contents_stream << "\n";
+
+      std::string optional_fields(optional_fields_stream.str());
+      if (!optional_fields.empty()) {
+        new_contents_stream << optional_fields << "\n";
+      }
     }
   }
   const std::string output_header_path = output_directory + "/" + file_name;

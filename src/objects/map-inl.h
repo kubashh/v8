@@ -31,26 +31,37 @@ OBJECT_CONSTRUCTORS_IMPL(Map, HeapObject)
 CAST_ACCESSOR(Map)
 
 DescriptorArray Map::instance_descriptors() const {
-  return DescriptorArray::cast(READ_FIELD(*this, kDescriptorsOffset));
+  return DescriptorArray::cast(READ_FIELD(*this, kInstanceDescriptorsOffset));
 }
 
 DescriptorArray Map::synchronized_instance_descriptors() const {
-  return DescriptorArray::cast(ACQUIRE_READ_FIELD(*this, kDescriptorsOffset));
+  return DescriptorArray::cast(
+      ACQUIRE_READ_FIELD(*this, kInstanceDescriptorsOffset));
 }
 
 void Map::set_synchronized_instance_descriptors(DescriptorArray value,
                                                 WriteBarrierMode mode) {
-  RELEASE_WRITE_FIELD(*this, kDescriptorsOffset, value);
-  CONDITIONAL_WRITE_BARRIER(*this, kDescriptorsOffset, value, mode);
+  RELEASE_WRITE_FIELD(*this, kInstanceDescriptorsOffset, value);
+  CONDITIONAL_WRITE_BARRIER(*this, kInstanceDescriptorsOffset, value, mode);
 }
 
 // A freshly allocated layout descriptor can be set on an existing map.
 // We need to use release-store and acquire-load accessor pairs to ensure
 // that the concurrent marking thread observes initializing stores of the
 // layout descriptor.
+#if TORQUE_GENERATED_MAP_CONTAINS_LAYOUT_DESCRIPTOR
 SYNCHRONIZED_ACCESSORS_CHECKED(Map, layout_descriptor, LayoutDescriptor,
                                kLayoutDescriptorOffset,
                                FLAG_unbox_double_fields)
+#else
+LayoutDescriptor Map::layout_descriptor() const {
+  UNREACHABLE();
+  return LayoutDescriptor();
+}
+void Map::set_layout_descriptor(LayoutDescriptor value, WriteBarrierMode mode) {
+  UNREACHABLE();
+}
+#endif
 WEAK_ACCESSORS(Map, raw_transitions, kTransitionsOrPrototypeInfoOffset)
 
 // |bit_field| fields.
@@ -585,18 +596,24 @@ void Map::set_prototype(HeapObject value, WriteBarrierMode mode) {
 
 LayoutDescriptor Map::layout_descriptor_gc_safe() const {
   DCHECK(FLAG_unbox_double_fields);
+  Object layout_desc;
+#if TORQUE_GENERATED_MAP_CONTAINS_LAYOUT_DESCRIPTOR
   // The loaded value can be dereferenced on background thread to load the
   // bitmap. We need acquire load in order to ensure that the bitmap
   // initializing stores are also visible to the background thread.
-  Object layout_desc = ACQUIRE_READ_FIELD(*this, kLayoutDescriptorOffset);
+  layout_desc = ACQUIRE_READ_FIELD(*this, kLayoutDescriptorOffset);
+#endif
   return LayoutDescriptor::cast_gc_safe(layout_desc);
 }
 
 bool Map::HasFastPointerLayout() const {
   DCHECK(FLAG_unbox_double_fields);
+  Object layout_desc;
+#if TORQUE_GENERATED_MAP_CONTAINS_LAYOUT_DESCRIPTOR
   // The loaded value is used for SMI check only and is not dereferenced,
   // so relaxed load is safe.
-  Object layout_desc = RELAXED_READ_FIELD(*this, kLayoutDescriptorOffset);
+  layout_desc = RELAXED_READ_FIELD(*this, kLayoutDescriptorOffset);
+#endif
   return LayoutDescriptor::IsFastPointerLayout(layout_desc);
 }
 
@@ -649,10 +666,11 @@ uint32_t Map::bit_field3() const {
 }
 
 void Map::clear_padding() {
-  if (FIELD_SIZE(kOptionalPaddingOffset) == 0) return;
+#if TORQUE_GENERATED_MAP_CONTAINS_OPTIONAL_PADDING
   DCHECK_EQ(4, FIELD_SIZE(kOptionalPaddingOffset));
   memset(reinterpret_cast<void*>(address() + kOptionalPaddingOffset), 0,
          FIELD_SIZE(kOptionalPaddingOffset));
+#endif
 }
 
 LayoutDescriptor Map::GetLayoutDescriptor() const {
@@ -730,7 +748,7 @@ void Map::SetBackPointer(Object value, WriteBarrierMode mode) {
 ACCESSORS(Map, dependent_code, DependentCode, kDependentCodeOffset)
 ACCESSORS(Map, prototype_validity_cell, Object, kPrototypeValidityCellOffset)
 ACCESSORS(Map, constructor_or_backpointer, Object,
-          kConstructorOrBackPointerOffset)
+          kConstructorOrBackpointerOffset)
 
 bool Map::IsPrototypeValidityCellValid() const {
   Object validity_cell = prototype_validity_cell();
