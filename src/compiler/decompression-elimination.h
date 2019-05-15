@@ -32,6 +32,9 @@ class V8_EXPORT_PRIVATE DecompressionElimination final
   // Can be used for Any, Signed, and Pointer compressions.
   Reduction ReduceCompress(Node* node);
 
+  // Replaces TypedStateValues's input decompressions with their parent node
+  Reduction ReduceTypedStateValues(Node* node);
+
   // Returns true if the decompress opcode is valid for the compressed one.
   bool IsValidDecompress(IrOpcode::Value compressOpcode,
                          IrOpcode::Value decompressOpcode);

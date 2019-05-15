@@ -249,6 +249,205 @@ TEST_F(DecompressionEliminationTest,
   EXPECT_EQ(load, r.replacement());
 }
 
+// -----------------------------------------------------------------------------
+// TypedStateValues
+
+TEST_F(DecompressionEliminationTest, TypedStateValuesOneDecompress) {
+  // Skip test if pointer compression is not enabled
+  if (!COMPRESS_POINTERS_BOOL) {
+    return;
+  }
+
+  // Define variables
+  Node* const control = graph()->start();
+  Node* object = Parameter(Type::Any(), 0);
+  Node* effect = graph()->start();
+  Node* index = Parameter(Type::UnsignedSmall(), 1);
+  const int numberOfInputs = 1;
+  const ZoneVector<MachineType>* types =
+      new (graph()->zone()->New(sizeof(ZoneVector<MachineType>)))
+          ZoneVector<MachineType>(numberOfInputs, graph()->zone());
+  SparseInputMask dense = SparseInputMask::Dense();
+
+  const ElementAccess ElementAccesses[] = {
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::AnyTagged(),
+       kNoWriteBarrier},
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::TaggedSigned(),
+       kNoWriteBarrier},
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::TaggedPointer(),
+       kNoWriteBarrier}};
+
+  // For every access
+  for (size_t i = 0; i < arraysize(ElementAccesses); ++i) {
+    // Create the graph
+    Node* load = graph()->NewNode(simplified()->LoadElement(ElementAccesses[i]),
+                                  object, index, effect, control);
+    Node* changeToTagged = graph()->NewNode(
+        machine()->ChangeCompressedPointerToTaggedPointer(), load);
+    Node* typedStateValuesOneDecompress = graph()->NewNode(
+        common()->TypedStateValues(types, dense), changeToTagged);
+
+    // Reduce
+    StrictMock<MockAdvancedReducerEditor> editor;
+    DecompressionElimination decompression_elimination(&editor);
+    EXPECT_CALL(editor, Replace(changeToTagged, load));
+    Reduction r =
+        decompression_elimination.Reduce(typedStateValuesOneDecompress);
+    ASSERT_TRUE(r.Changed());
+  }
+}
+
+TEST_F(DecompressionEliminationTest, TypedStateValuesTwoDecompresses) {
+  // Skip test if pointer compression is not enabled
+  if (!COMPRESS_POINTERS_BOOL) {
+    return;
+  }
+
+  // Define variables
+  Node* const control = graph()->start();
+  Node* object = Parameter(Type::Any(), 0);
+  Node* effect = graph()->start();
+  Node* index = Parameter(Type::UnsignedSmall(), 1);
+  const int numberOfInputs = 3;
+  const ZoneVector<MachineType>* types =
+      new (graph()->zone()->New(sizeof(ZoneVector<MachineType>)))
+          ZoneVector<MachineType>(numberOfInputs, graph()->zone());
+  SparseInputMask dense = SparseInputMask::Dense();
+  const ElementAccess ElementAccesses[] = {
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::AnyTagged(),
+       kNoWriteBarrier},
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::TaggedSigned(),
+       kNoWriteBarrier},
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::TaggedPointer(),
+       kNoWriteBarrier}};
+
+  // For every access
+  for (size_t i = 0; i < arraysize(ElementAccesses); ++i) {
+    // Create the graph
+    Node* load1 =
+        graph()->NewNode(simplified()->LoadElement(ElementAccesses[i]), object,
+                         index, effect, control);
+    Node* changeToTagged1 = graph()->NewNode(
+        machine()->ChangeCompressedPointerToTaggedPointer(), load1);
+    Node* load2 =
+        graph()->NewNode(simplified()->LoadElement(ElementAccesses[i]), object,
+                         index, effect, control);
+    Node* changeToTagged2 = graph()->NewNode(
+        machine()->ChangeCompressedPointerToTaggedPointer(), load2);
+    Node* typedStateValuesOneDecompress =
+        graph()->NewNode(common()->TypedStateValues(types, dense),
+                         changeToTagged1, load1, changeToTagged2);
+
+    // Reduce
+    StrictMock<MockAdvancedReducerEditor> editor;
+    DecompressionElimination decompression_elimination(&editor);
+    EXPECT_CALL(editor, Replace(changeToTagged1, load1));
+    EXPECT_CALL(editor, Replace(changeToTagged2, load2));
+    Reduction r =
+        decompression_elimination.Reduce(typedStateValuesOneDecompress);
+    ASSERT_TRUE(r.Changed());
+  }
+}
+
+TEST_F(DecompressionEliminationTest, TypedStateValuesAllDecompresses) {
+  // Skip test if pointer compression is not enabled
+  if (!COMPRESS_POINTERS_BOOL) {
+    return;
+  }
+
+  // Define variables
+  Node* const control = graph()->start();
+  Node* object = Parameter(Type::Any(), 0);
+  Node* effect = graph()->start();
+  Node* index = Parameter(Type::UnsignedSmall(), 1);
+  const int numberOfInputs = 3;
+  const ZoneVector<MachineType>* types =
+      new (graph()->zone()->New(sizeof(ZoneVector<MachineType>)))
+          ZoneVector<MachineType>(numberOfInputs, graph()->zone());
+  SparseInputMask dense = SparseInputMask::Dense();
+  const ElementAccess ElementAccesses[] = {
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::AnyTagged(),
+       kNoWriteBarrier},
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::TaggedSigned(),
+       kNoWriteBarrier},
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::TaggedPointer(),
+       kNoWriteBarrier}};
+
+  // For every access
+  for (size_t i = 0; i < arraysize(ElementAccesses); ++i) {
+    // Create the graph
+    Node* load1 =
+        graph()->NewNode(simplified()->LoadElement(ElementAccesses[i]), object,
+                         index, effect, control);
+    Node* changeToTagged1 = graph()->NewNode(
+        machine()->ChangeCompressedPointerToTaggedPointer(), load1);
+    Node* load2 =
+        graph()->NewNode(simplified()->LoadElement(ElementAccesses[i]), object,
+                         index, effect, control);
+    Node* changeToTagged2 = graph()->NewNode(
+        machine()->ChangeCompressedPointerToTaggedPointer(), load2);
+    Node* load3 =
+        graph()->NewNode(simplified()->LoadElement(ElementAccesses[i]), object,
+                         index, effect, control);
+    Node* changeToTagged3 = graph()->NewNode(
+        machine()->ChangeCompressedPointerToTaggedPointer(), load3);
+    Node* typedStateValuesOneDecompress =
+        graph()->NewNode(common()->TypedStateValues(types, dense),
+                         changeToTagged1, changeToTagged2, changeToTagged3);
+
+    // Reduce
+    StrictMock<MockAdvancedReducerEditor> editor;
+    DecompressionElimination decompression_elimination(&editor);
+    EXPECT_CALL(editor, Replace(changeToTagged1, load1));
+    EXPECT_CALL(editor, Replace(changeToTagged2, load2));
+    EXPECT_CALL(editor, Replace(changeToTagged3, load3));
+    Reduction r =
+        decompression_elimination.Reduce(typedStateValuesOneDecompress);
+    ASSERT_TRUE(r.Changed());
+  }
+}
+
+TEST_F(DecompressionEliminationTest, TypedStateValuesNoDecompresses) {
+  // Skip test if pointer compression is not enabled
+  if (!COMPRESS_POINTERS_BOOL) {
+    return;
+  }
+
+  // Define variables
+  Node* const control = graph()->start();
+  Node* object = Parameter(Type::Any(), 0);
+  Node* effect = graph()->start();
+  Node* index = Parameter(Type::UnsignedSmall(), 1);
+  const int numberOfInputs = 3;
+  const ZoneVector<MachineType>* types =
+      new (graph()->zone()->New(sizeof(ZoneVector<MachineType>)))
+          ZoneVector<MachineType>(numberOfInputs, graph()->zone());
+  SparseInputMask dense = SparseInputMask::Dense();
+  const ElementAccess ElementAccesses[] = {
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::AnyTagged(),
+       kNoWriteBarrier},
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::TaggedSigned(),
+       kNoWriteBarrier},
+      {kTaggedBase, kTaggedSize, Type::Any(), MachineType::TaggedPointer(),
+       kNoWriteBarrier}};
+
+  // For every access
+  for (size_t i = 0; i < arraysize(ElementAccesses); ++i) {
+    // Create the graph
+    Node* load = graph()->NewNode(simplified()->LoadElement(ElementAccesses[i]),
+                                  object, index, effect, control);
+    Node* typedStateValuesOneDecompress = graph()->NewNode(
+        common()->TypedStateValues(types, dense), load, load, load);
+
+    // Reduce
+    StrictMock<MockAdvancedReducerEditor> editor;
+    DecompressionElimination decompression_elimination(&editor);
+    Reduction r =
+        decompression_elimination.Reduce(typedStateValuesOneDecompress);
+    ASSERT_FALSE(r.Changed());
+  }
+}
+
 }  // namespace compiler
 }  // namespace internal
 }  // namespace v8

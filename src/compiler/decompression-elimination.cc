@@ -43,6 +43,20 @@ Reduction DecompressionElimination::ReduceCompress(Node* node) {
   }
 }
 
+Reduction DecompressionElimination::ReduceTypedStateValues(Node* node) {
+  DCHECK_EQ(node->opcode(), IrOpcode::kTypedStateValues);
+
+  bool anyChange = false;
+  for (Node* input : node->inputs()) {
+    if (IrOpcode::IsDecompressOpcode(input->opcode())) {
+      DCHECK_EQ(input->InputCount(), 1);
+      Replace(input, input->InputAt(0));
+      anyChange = true;
+    }
+  }
+  return anyChange ? Changed(node) : NoChange();
+}
+
 Reduction DecompressionElimination::Reduce(Node* node) {
   DisallowHeapAccess no_heap_access;
 
@@ -51,6 +65,8 @@ Reduction DecompressionElimination::Reduce(Node* node) {
     case IrOpcode::kChangeTaggedSignedToCompressedSigned:
     case IrOpcode::kChangeTaggedPointerToCompressedPointer:
       return ReduceCompress(node);
+    case IrOpcode::kTypedStateValues:
+      return ReduceTypedStateValues(node);
     default:
       break;
   }
