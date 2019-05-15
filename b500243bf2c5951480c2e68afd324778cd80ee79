@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "313ea85e_38bc9428",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1119499
+      },
+      "writtenOn": "2019-05-15T09:07:05Z",
+      "side": 1,
+      "message": "I\u0027m not sure how much value this class adds. It\u0027s a lot of code to essentially wrap a Vector\u003cbyte\u003e and provide one method that essentially returns a subvector. Is there a simpler way to do this?",
+      "revId": "b500243bf2c5951480c2e68afd324778cd80ee79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
