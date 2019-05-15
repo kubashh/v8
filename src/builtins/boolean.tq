@@ -1,0 +1,36 @@
+// Copyright 2019 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+namespace boolean {
+  const NEW_TARGET_INDEX:
+      constexpr int32 generates 'Descriptor::kJSNewTarget';
+  const TARGET_INDEX: constexpr int32 generates 'Descriptor::kJSTarget';
+
+  extern macro Parameter(constexpr int32): Object;
+  extern macro ConstructorBuiltinsAssembler::IsDictionaryMap(Map): bool;
+  extern macro CodeStubAssembler::AllocateNameDictionary(constexpr int32):
+      NameDictionary;
+
+  javascript builtin
+  BooleanConstructor(context: Context, receiver: Object, ...arguments): Object {
+    const value = SelectBooleanConstant(ToBoolean(arguments[0]));
+
+    const newTarget = Parameter(NEW_TARGET_INDEX);
+    if (newTarget == Undefined) {
+      return value;
+    }
+
+    const target = UnsafeCast<JSFunction>(Parameter(TARGET_INDEX));
+    const map = GetDerivedMap(target, UnsafeCast<JSReceiver>(newTarget));
+    let properties = kEmptyFixedArray;
+    if (IsDictionaryMap(map)) {
+      properties = AllocateNameDictionary(kInitialCapacity);
+    }
+
+    let obj = UnsafeCast<JSValue>(AllocateJSObjectFromMap(
+        map, properties, kEmptyFixedArray, kNone, kWithSlackTracking));
+    obj.value = value;
+    return obj;
+  }
+}
