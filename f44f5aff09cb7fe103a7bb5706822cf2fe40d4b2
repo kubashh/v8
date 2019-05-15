@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8be733c6_ce866d13",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 4
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-05-15T07:26:03Z",
+      "side": 1,
+      "message": "Is\u003cMap\u003e(initialMap) looks good to me. Using typeswitch sounds unreasonable if we only want to consider one particular case. The (in this case one) other cases are then just empty and the function gets more curlied.",
+      "parentUuid": "cdca2dc3_fb3cdcca",
+      "revId": "f44f5aff09cb7fe103a7bb5706822cf2fe40d4b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c6c719e7_5c2621f8",
         "filename": "src/builtins/boolean.tq",
         "patchSetId": 4
