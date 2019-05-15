@@ -242,6 +242,30 @@
       "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a2bc305_4ea6eada",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1325508
+      },
+      "writtenOn": "2019-05-15T12:06:51Z",
+      "side": 1,
+      "message": "Oh, yeah that\u0027s pretty simple, thanks for the detailed explanation. I must have been forgetting that V8_TARGET_ARCH_64_BIT already exists. And good point on using a static assert.",
+      "parentUuid": "f01f0dfc_bc3da9bd",
+      "range": {
+        "startLine": 41,
+        "startChar": 42,
+        "endLine": 41,
+        "endChar": 58
+      },
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
