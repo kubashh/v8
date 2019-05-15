@@ -432,8 +432,6 @@ Reduction JSNativeContextSpecialization::ReduceJSInstanceOf(Node* node) {
                                                   kStartAtPrototype);
 
     // Monomorphic property access.
-    constructor =
-        access_builder.BuildCheckHeapObject(constructor, &effect, control);
     access_builder.BuildCheckMaps(constructor, &effect, control,
                                   access_info.receiver_maps());
 
@@ -1138,8 +1136,6 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
         effect =
             graph()->NewNode(common()->EffectPhi(2), etrue, efalse, control);
       } else {
-        receiver =
-            access_builder.BuildCheckHeapObject(receiver, &effect, control);
         access_builder.BuildCheckMaps(receiver, &effect, control,
                                       access_info.receiver_maps());
       }
@@ -1168,7 +1164,7 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
       }
     }
 
-    // Ensure that {receiver} is a heap object.
+    // Handle the case that {receiver} may be a number.
     Node* receiverissmi_control = nullptr;
     Node* receiverissmi_effect = effect;
     if (receiverissmi_possible) {
@@ -1177,9 +1173,6 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
       control = graph()->NewNode(common()->IfFalse(), branch);
       receiverissmi_control = graph()->NewNode(common()->IfTrue(), branch);
       receiverissmi_effect = effect;
-    } else {
-      receiver =
-          access_builder.BuildCheckHeapObject(receiver, &effect, control);
     }
 
     // Generate code for the various different property access patterns.
@@ -1561,10 +1554,6 @@ Reduction JSNativeContextSpecialization::ReduceElementAccess(
     }
   }
 
-  // Ensure that {receiver} is a heap object.
-  PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
-  receiver = access_builder.BuildCheckHeapObject(receiver, &effect, control);
-
   // Check if we have the necessary data for building element accesses.
   for (ElementAccessInfo const& access_info : access_infos) {
     if (!IsFixedTypedArrayElementsKind(access_info.elements_kind())) continue;
@@ -1581,6 +1570,7 @@ Reduction JSNativeContextSpecialization::ReduceElementAccess(
   }
 
   // Check for the monomorphic case.
+  PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
   if (access_infos.size() == 1) {
     ElementAccessInfo access_info = access_infos.front();
 
@@ -1929,8 +1919,6 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
         effect =
             graph()->NewNode(common()->EffectPhi(2), etrue, efalse, control);
       } else {
-        receiver =
-            access_builder.BuildCheckHeapObject(receiver, &effect, control);
         access_builder.BuildCheckMaps(receiver, &effect, control,
                                       access_info.receiver_maps());
       }
@@ -1959,7 +1947,7 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
       }
     }
 
-    // Ensure that {receiver} is a heap object.
+    // Handle the case that {receiver} may be a number.
     Node* receiverissmi_control = nullptr;
     Node* receiverissmi_effect = effect;
     if (receiverissmi_possible) {
@@ -1968,9 +1956,6 @@ Reduction JSNativeContextSpecialization::ReduceNamedAccess(
       control = graph()->NewNode(common()->IfFalse(), branch);
       receiverissmi_control = graph()->NewNode(common()->IfTrue(), branch);
       receiverissmi_effect = effect;
-    } else {
-      receiver =
-          access_builder.BuildCheckHeapObject(receiver, &effect, control);
     }
 
     // Generate code for the various different property access patterns.
@@ -2616,8 +2601,6 @@ JSNativeContextSpecialization::BuildPropertyStore(
                        MachineRepresentation::kTaggedPointer ||
                    field_representation ==
                        MachineRepresentation::kCompressedPointer) {
-          // Ensure that {value} is a HeapObject.
-          value = access_builder.BuildCheckHeapObject(value, &effect, control);
           Handle<Map> field_map;
           if (access_info.field_map().ToHandle(&field_map)) {
             // Emit a map check for the value.
@@ -2625,6 +2608,10 @@ JSNativeContextSpecialization::BuildPropertyStore(
                 simplified()->CheckMaps(CheckMapsFlag::kNone,
                                         ZoneHandleSet<Map>(field_map)),
                 value, effect, control);
+          } else {
+            // Ensure that {value} is a HeapObject.
+            value = effect = graph()->NewNode(simplified()->CheckHeapObject(),
+                                              value, effect, control);
           }
           field_access.write_barrier_kind = kPointerWriteBarrier;
 
@@ -2735,7 +2722,6 @@ Reduction JSNativeContextSpecialization::ReduceJSStoreDataPropertyInLiteral(
 
   // Monomorphic property access.
   PropertyAccessBuilder access_builder(jsgraph(), broker(), dependencies());
-  receiver = access_builder.BuildCheckHeapObject(receiver, &effect, control);
   access_builder.BuildCheckMaps(receiver, &effect, control,
                                 access_info.receiver_maps());
 
