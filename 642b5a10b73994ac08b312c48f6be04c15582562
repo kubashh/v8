@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4808a01f_7a539d18",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-05-15T13:03:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc6c138c_232ca1fe",
+      "range": {
+        "startLine": 227,
+        "startChar": 3,
+        "endLine": 227,
+        "endChar": 60
+      },
+      "revId": "642b5a10b73994ac08b312c48f6be04c15582562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4d934423_3b4f69c1",
         "filename": "src/builtins/boolean.tq",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2019-05-15T11:54:35Z",
       "side": 1,
       "message": "How about writing this as\nToBoolean(arguments[0]) ? True : False\nor to introduce a Convert\u003cBoolean\u003e(b: bool) macro.",
+      "range": {
+        "startLine": 23,
+        "startChar": 18,
+        "endLine": 23,
+        "endChar": 64
+      },
+      "revId": "642b5a10b73994ac08b312c48f6be04c15582562",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bd8f99d_81ccf9ec",
+        "filename": "src/builtins/boolean.tq",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1345175
+      },
+      "writtenOn": "2019-05-15T13:03:58Z",
+      "side": 1,
+      "message": "In a follow up CL",
+      "parentUuid": "4d934423_3b4f69c1",
       "range": {
         "startLine": 23,
         "startChar": 18,
