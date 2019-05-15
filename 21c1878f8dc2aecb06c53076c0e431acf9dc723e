@@ -132,6 +132,24 @@
     },
     {
       "key": {
+        "uuid": "54780595_43da34e8",
+        "filename": "src/objects/map-inl.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-15T11:42:28Z",
+      "side": 1,
+      "message": "constexpr will fundamentally not work because the Torque compiler doesn\u0027t know the truth value of a constexpr bool.",
+      "parentUuid": "5b23a0b9_85e35d90",
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "231254c8_73641925",
         "filename": "src/torque/torque-parser.cc",
         "patchSetId": 16
@@ -191,6 +209,30 @@
       "side": 1,
       "message": "On second thought, I\u0027m not too sure about this. kTaggedSize is based on some logic including other constexpr values, so getting the preprocessor to know whether kTaggedSize is 8 would require duplicating some logic via #define that already exists via constexpr (for instance, we\u0027d need a preprocessor equivalent for determining kSystemPointerSize). Alternately, we could just `#define TAGGED_SIZE_8_BYTES (kTaggedSize \u003d\u003d 8)`, which is short and would work fine for this usage but would (perhaps surprisingly) always evaluate to false in #if directives.",
       "parentUuid": "fe21dc31_512baccb",
+      "range": {
+        "startLine": 41,
+        "startChar": 42,
+        "endLine": 41,
+        "endChar": 58
+      },
+      "revId": "21c1878f8dc2aecb06c53076c0e431acf9dc723e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f01f0dfc_bc3da9bd",
+        "filename": "src/torque/torque-parser.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-15T11:42:28Z",
+      "side": 1,
+      "message": "I actually thought of using something like\n\n#if V8_TARGET_ARCH_64_BIT \u0026\u0026 !defined(V8_COMPRESS_POINTERS)\n#define TAGGED_SIZE_8_BYTES true\n#else ...\n\nand then having a static assert to make sure it\u0027s the same.",
+      "parentUuid": "fecdc596_0f50b528",
       "range": {
         "startLine": 41,
         "startChar": 42,
