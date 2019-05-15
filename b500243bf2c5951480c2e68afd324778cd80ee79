@@ -16,6 +16,24 @@
       "revId": "b500243bf2c5951480c2e68afd324778cd80ee79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f52e9e07_dd578a24",
+        "filename": "src/wasm/wasm-code-manager.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-15T10:26:31Z",
+      "side": 1,
+      "message": "During the walk-through you were concerned about bugs / complication in the code alignment. This class is there to encapsulate all of that, and additionally it ensures that all code space is actually claimed (the DCHECK in the destructor).\nI agree that this is a lot of additional code, but I don\u0027t see an alternative if we want to put all alignment requirements in the same class and test this functionality in unit tests.",
+      "parentUuid": "313ea85e_38bc9428",
+      "revId": "b500243bf2c5951480c2e68afd324778cd80ee79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
