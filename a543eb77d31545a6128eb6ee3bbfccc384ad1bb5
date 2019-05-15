@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3217f1b0_ef3844d5",
+        "filename": "src/handles.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "18012c67_8466d372",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0437c38e_72ad7f45",
         "filename": "src/json-parser.cc",
         "patchSetId": 14
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "71dae700_86f7e01c",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0437c38e_72ad7f45",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a8d46e0_78045183",
         "filename": "src/json-parser.cc",
         "patchSetId": 14
@@ -47,6 +83,24 @@
       "writtenOn": "2019-05-14T21:47:29Z",
       "side": 1,
       "message": "I guess this may help a bit:\n  WriteBarrierMode mode \u003d elms.GetWriteBarrierMode(\u0026no_gc);",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "819ebd6d_9f8f839b",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Right now it\u0027s not clear that Set won\u0027t allocate, even though I\u0027ve preallocated the right size. I think we need a new Set function that\u0027s guaranteed to not grow first. Another CL ...",
+      "parentUuid": "2a8d46e0_78045183",
       "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "9f49ad77_c2c533c2",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Good idea. In another cl.",
+      "parentUuid": "b0a83cb8_e8b7a3ed",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d2f648c_4c7dfd3e",
         "filename": "src/json-parser.cc",
         "patchSetId": 14
@@ -84,6 +156,24 @@
       "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42157d40_f91aa862",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d2f648c_4c7dfd3e",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "1541c9e7_3f9d1d18",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfbf4c8f_a03e6aca",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fc4784e_72a43814",
         "filename": "src/json-parser.cc",
         "patchSetId": 14
@@ -118,6 +226,24 @@
       "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ee3ff14_7b30bfda",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fc4784e_72a43814",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "5c22bb85_a14e94ee",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddaea39c_1ab36235",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "402ba668_f010a60f",
         "filename": "src/json-parser.cc",
         "patchSetId": 14
@@ -152,6 +296,24 @@
       "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bec09a4f_62f70f4a",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "402ba668_f010a60f",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -172,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "15888b9a_224f78a9",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5bd9676_7c7bb36b",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82adf8ef_e5058e97",
         "filename": "src/json-parser.cc",
         "patchSetId": 14
@@ -186,6 +366,24 @@
       "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d137454c_74e8426b",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82adf8ef_e5058e97",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -206,6 +404,24 @@
     },
     {
       "key": {
+        "uuid": "6812af45_dc13eb46",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4211da7_8cdac15a",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44201737_76da5519",
         "filename": "src/json-parser.cc",
         "patchSetId": 14
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "5b828312_1695f027",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44201737_76da5519",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7c7dcb4_d790570d",
         "filename": "src/json-parser.cc",
         "patchSetId": 14
@@ -234,6 +468,30 @@
       "writtenOn": "2019-05-14T21:47:29Z",
       "side": 1,
       "message": "Why do you check this flag for one-byte string here but let DecodeString\u003cuint16_t\u003e() handle this  case for two-byte strings?",
+      "range": {
+        "startLine": 900,
+        "startChar": 8,
+        "endLine": 900,
+        "endChar": 28
+      },
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7ab0168_347aaa2b",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "This branch is only here for the InternalizeOneByteString case below.",
+      "parentUuid": "e7c7dcb4_d790570d",
       "range": {
         "startLine": 900,
         "startChar": 8,
@@ -263,6 +521,24 @@
     },
     {
       "key": {
+        "uuid": "47ba9fb1_a8dab53b",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Because it was only implemented for that case...\nI can add SeqTwoByteString support, but it seems less likely that we\u0027re going to internalize a two-byte string from a two-byte source (one-byte string from a two-byte source will need conversion).",
+      "parentUuid": "e34f8e06_f24eeb3f",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b503d8f6_655589a9",
         "filename": "src/json-parser.cc",
         "patchSetId": 14
@@ -277,6 +553,24 @@
       "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db8f9042_90dd324b",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "This is because I wanted to make JsonString() UNREACHABLE for std::vector resizing. I guess now since I have a JsonProperty object I could do it :)",
+      "parentUuid": "b503d8f6_655589a9",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -297,6 +591,24 @@
     },
     {
       "key": {
+        "uuid": "9f7ad53e_353cc415",
+        "filename": "src/json-parser.cc",
+        "patchSetId": 14
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a59c26d7_88f29d46",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4432c48e_dfb3f6ba",
         "filename": "src/json-parser.h",
         "patchSetId": 14
@@ -311,6 +623,24 @@
       "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2390a09f_417a3a95",
+        "filename": "src/json-parser.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4432c48e_dfb3f6ba",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -331,6 +661,24 @@
     },
     {
       "key": {
+        "uuid": "d7a7d718_fe5ce5fe",
+        "filename": "src/json-parser.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Actually packing the ints together with bools significantly tanks perf.\nPacking the bools together seems to help a little though.",
+      "parentUuid": "922dfb4f_b9845a77",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c5df59d_713175e7",
         "filename": "src/json-parser.h",
         "patchSetId": 14
@@ -345,6 +693,24 @@
       "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c1a312d_9ec96aba",
+        "filename": "src/json-parser.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-15T08:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c5df59d_713175e7",
+      "revId": "a543eb77d31545a6128eb6ee3bbfccc384ad1bb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
