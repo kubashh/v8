@@ -3369,7 +3369,6 @@ void Shell::CleanupWorkers() {
 }
 
 int Shell::Main(int argc, char* argv[]) {
-  std::ofstream trace_file;
   v8::base::EnsureConsoleOutput();
   if (!SetOptions(argc, argv)) return 1;
   v8::V8::InitializeICUDefaultLocation(argv[0], options.icu_data_file);
@@ -3383,12 +3382,19 @@ int Shell::Main(int argc, char* argv[]) {
   if (options.trace_enabled && !i::FLAG_verify_predictable) {
     tracing = base::make_unique<platform::tracing::TracingController>();
 
+    std::ofstream trace_file;
     trace_file.open(options.trace_path ? options.trace_path : "v8_trace.json");
+    DCHECK(trace_file.good());
+#ifdef V8_USE_PERFETTO
+    tracing->InitializeForPerfetto(&trace_file);
+#else
     platform::tracing::TraceBuffer* trace_buffer =
         platform::tracing::TraceBuffer::CreateTraceBufferRingBuffer(
             platform::tracing::TraceBuffer::kRingBufferChunks,
             platform::tracing::TraceWriter::CreateJSONTraceWriter(trace_file));
     tracing->Initialize(trace_buffer);
+
+#endif  // V8_USE_PERFETTO
   }
 
   platform::tracing::TracingController* tracing_controller = tracing.get();
@@ -3576,6 +3582,9 @@ int Shell::Main(int argc, char* argv[]) {
 
   // Delete the platform explicitly here to write the tracing output to the
   // tracing file.
+  if (options.trace_enabled) {
+    tracing_controller->StopTracing();
+  }
   g_platform.reset();
   return result;
 }

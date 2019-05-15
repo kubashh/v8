@@ -39,7 +39,8 @@ class PerfettoTracingController {
   // Blocks and sets up all required data structures for tracing. It is safe to
   // call GetOrCreateThreadLocalWriter() to obtain thread-local TraceWriters for
   // writing trace events once this call returns.
-  void StartTracing(const ::perfetto::TraceConfig& trace_config);
+  void StartTracing(const ::perfetto::TraceConfig& trace_config,
+                    std::ostream* output_stream);
 
   // Blocks and finishes all existing AddTraceEvent tasks. Stops the tracing
   // thread.
@@ -79,9 +80,6 @@ class PerfettoTracingController {
   // receive trace events.
   base::Semaphore producer_ready_semaphore_;
   base::Semaphore consumer_finished_semaphore_;
-
-  // TODO(petermarshall): pass this in instead.
-  std::ofstream trace_file_;
 
   // Same depth that Chrome uses. This is essentially the maximum number of
   // nested 'X' trace events that perfetto can handle.

@@ -240,6 +240,9 @@ class V8_PLATFORM_EXPORT TracingController
   TracingController();
   ~TracingController() override;
   void Initialize(TraceBuffer* trace_buffer);
+#ifdef V8_USE_PERFETTO
+  void InitializeForPerfetto(std::ostream* output_stream);
+#endif
 
   // v8::TracingController implementation.
   const uint8_t* GetCategoryGroupEnabled(const char* category_group) override;
@@ -285,6 +288,7 @@ class V8_PLATFORM_EXPORT TracingController
 #ifdef V8_USE_PERFETTO
   std::atomic_bool perfetto_recording_{false};
   std::unique_ptr<PerfettoTracingController> perfetto_tracing_controller_;
+  std::ostream* output_stream_;
 #endif
 
   // Disallow copy and assign
