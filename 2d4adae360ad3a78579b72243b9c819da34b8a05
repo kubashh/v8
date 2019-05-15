@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5230feb_e552ea7d",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-15T11:06:00Z",
+      "side": 1,
+      "message": "Could you not just pass in the difference as a parameter, instead of the target height? It does not seem intuitive anyways that the caller of DoStackTransfer has to know the current size of the stack.",
+      "range": {
+        "startLine": 1507,
+        "startChar": 36,
+        "endLine": 1507,
+        "endChar": 43
+      },
+      "revId": "2d4adae360ad3a78579b72243b9c819da34b8a05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2bc10b5_8d70fc96",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1617,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-15T11:06:00Z",
+      "side": 1,
+      "message": "If you define a variable {src}, then the check here would be {DCHECK_LE(dest, src);}, which would be much more readable.",
+      "range": {
+        "startLine": 1617,
+        "startChar": 14,
+        "endLine": 1617,
+        "endChar": 41
+      },
+      "revId": "2d4adae360ad3a78579b72243b9c819da34b8a05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9149d33b_196022de",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1619,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-15T11:06:00Z",
+      "side": 1,
+      "message": "Since {dest} is the destination of the move, maybe you can define {src \u003d stack_height - arity} as the source of the move?",
+      "range": {
+        "startLine": 1619,
+        "startChar": 26,
+        "endLine": 1619,
+        "endChar": 46
+      },
+      "revId": "2d4adae360ad3a78579b72243b9c819da34b8a05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a66fe3b_690d6bee",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-15T11:06:00Z",
+      "side": 1,
+      "message": "You removed {sp_} from the graphic above. Do you also want to remove its use here?",
+      "range": {
+        "startLine": 1620,
+        "startChar": 35,
+        "endLine": 1620,
+        "endChar": 38
+      },
+      "revId": "2d4adae360ad3a78579b72243b9c819da34b8a05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d1610ea_cc6e8a28",
+        "filename": "src/wasm/wasm-interpreter.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-15T11:06:00Z",
+      "side": 1,
+      "message": "Also here it should not be {sizeof(*sp_)} but {sizeof(*stack_)}, or {sizeof(StackValue)}.",
+      "range": {
+        "startLine": 1620,
+        "startChar": 64,
+        "endLine": 1620,
+        "endChar": 67
+      },
+      "revId": "2d4adae360ad3a78579b72243b9c819da34b8a05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
