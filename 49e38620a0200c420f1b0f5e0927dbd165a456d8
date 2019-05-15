@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa6a12b8_9f3dba46",
+        "filename": "src/builtins/builtins-call-gen.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-15T13:24:14Z",
+      "side": 1,
+      "message": "??",
+      "range": {
+        "startLine": 503,
+        "startChar": 30,
+        "endLine": 503,
+        "endChar": 33
+      },
+      "revId": "49e38620a0200c420f1b0f5e0927dbd165a456d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77ec58d5_8d5491e3",
+        "filename": "src/compiler/js-call-reducer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 2847,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-15T13:24:14Z",
+      "side": 1,
+      "message": "The old comment should come before the new comment.",
+      "revId": "49e38620a0200c420f1b0f5e0927dbd165a456d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
