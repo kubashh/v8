@@ -16,6 +16,24 @@
       "revId": "7211d0965332e5b80f9c3b06c8a60366b4d7eb26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34953835_a346e3f2",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4775,
+      "author": {
+        "id": 1344892
+      },
+      "writtenOn": "2019-05-16T10:46:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2e845a4_c89c9134",
+      "revId": "7211d0965332e5b80f9c3b06c8a60366b4d7eb26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
