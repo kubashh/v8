@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2e845a4_c89c9134",
+        "filename": "test/cctest/test-parsing.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 4775,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-16T09:37:26Z",
+      "side": 1,
+      "message": "nit: \u0027{\u0027",
+      "revId": "7211d0965332e5b80f9c3b06c8a60366b4d7eb26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
