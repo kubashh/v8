@@ -19,6 +19,7 @@
 #include "src/objects/js-array.h"
 #include "src/objects/js-regexp.h"
 #include "src/objects/string.h"
+#include "src/objects/template-objects.h"
 
 namespace v8 {
 namespace internal {
@@ -62,7 +63,6 @@ class ScriptContextTable;
 class StackFrameInfo;
 class StackTraceFrame;
 class StoreHandler;
-class TemplateObjectDescription;
 class UncompiledDataWithoutPreparseData;
 class UncompiledDataWithPreparseData;
 class WasmCapiFunctionData;
