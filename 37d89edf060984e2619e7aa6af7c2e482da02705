@@ -70,6 +70,30 @@
       "revId": "37d89edf060984e2619e7aa6af7c2e482da02705",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9740c77_9d9a8ffb",
+        "filename": "src/objects/map.cc",
+        "patchSetId": 16
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-16T14:17:00Z",
+      "side": 0,
+      "message": "Oh right, I missed that piece, thanks!",
+      "parentUuid": "bcc4b588_c5213cb1",
+      "range": {
+        "startLine": 1513,
+        "startChar": 8,
+        "endLine": 1515,
+        "endChar": 56
+      },
+      "revId": "37d89edf060984e2619e7aa6af7c2e482da02705",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
