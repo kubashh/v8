@@ -61,6 +61,7 @@
 #include "src/objects/promise-inl.h"
 #include "src/objects/stack-frame-info-inl.h"
 #include "src/objects/struct-inl.h"
+#include "src/objects/template-objects-inl.h"
 #include "src/ostreams.h"
 #include "src/regexp/jsregexp.h"
 #include "src/transitions-inl.h"
@@ -1662,6 +1663,13 @@ void PrototypeUsers::Verify(WeakArrayList array) {
 }
 
 USE_TORQUE_VERIFIER(Tuple2)
+
+void TemplateObjectDescription::TemplateObjectDescriptionVerify(
+    Isolate* isolate) {
+  // CHECK(IsTemplateObjectDescription());
+  VerifyObjectField(isolate, kRawStringsOffset);
+  VerifyObjectField(isolate, kCookedStringsOffset);
+}
 
 void EnumCache::EnumCacheVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::EnumCacheVerify(*this, isolate);

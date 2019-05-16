@@ -10,6 +10,7 @@
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/objects-inl.h"
 #include "src/objects/oddball.h"
+#include "src/objects/template-objects-inl.h"
 #include "src/roots-inl.h"
 
 // Has to be the last include (doesn't have include guards):
