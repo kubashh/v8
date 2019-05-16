@@ -1306,6 +1306,7 @@ RUNTIME_FUNCTION(Runtime_EnableCodeLoggingForTesting) {
     void RegExpCodeCreateEvent(AbstractCode code, String source) final {}
     void CodeMoveEvent(AbstractCode from, AbstractCode to) final {}
     void SharedFunctionInfoMoveEvent(Address from, Address to) final {}
+    void NativeContextMoveEvent(Address from, Address to) final {}
     void CodeMovingGCEvent() final {}
     void CodeDisableOptEvent(AbstractCode code,
                              SharedFunctionInfo shared) final {}
