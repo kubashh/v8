@@ -22,6 +22,30 @@
       "revId": "983373f52a49965ed67f31a282aa7c4ecd215e9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a80d50d3_d25752d8",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1116524
+      },
+      "writtenOn": "2019-05-17T18:54:55Z",
+      "side": 1,
+      "message": "The posix implementation (in platform-posix.cc) returns -1 for this case, I\u0027m going to do that too here.",
+      "parentUuid": "037c0d15_9ced4bd1",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 19
+      },
+      "revId": "983373f52a49965ed67f31a282aa7c4ecd215e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
