@@ -350,6 +350,7 @@ class KeyedStoreIC : public StoreIC {
 
  protected:
   void UpdateStoreElement(Handle<Map> receiver_map,
+                          Handle<Map> new_receiver_map,
                           KeyedAccessStoreMode store_mode,
                           bool receiver_was_cow);
 

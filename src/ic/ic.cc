@@ -1766,13 +1766,16 @@ MaybeObjectHandle StoreIC::ComputeHandler(LookupIterator* lookup) {
 }
 
 void KeyedStoreIC::UpdateStoreElement(Handle<Map> receiver_map,
+                                      Handle<Map> new_receiver_map,
                                       KeyedAccessStoreMode store_mode,
                                       bool receiver_was_cow) {
   MapHandles target_receiver_maps;
   TargetMaps(&target_receiver_maps);
   if (target_receiver_maps.empty()) {
-    Handle<Map> monomorphic_map =
-        ComputeTransitionedMap(receiver_map, store_mode);
+    Handle<Map> monomorphic_map = new_receiver_map;
+    //    Handle<Map> transitioned_map = ComputeTransitionedMap(receiver_map,
+    //    store_mode); CHECK(new_receiver_map.is_identical_to(transitioned_map)
+    //    || IsHoleyElementsKind(new_receiver_map->elements_kind()));
     store_mode = GetNonTransitioningStoreMode(store_mode, receiver_was_cow);
     Handle<Object> handler = StoreElementHandler(monomorphic_map, store_mode);
     return ConfigureVectorState(Handle<Name>(), monomorphic_map, handler);
@@ -1794,10 +1797,13 @@ void KeyedStoreIC::UpdateStoreElement(Handle<Map> receiver_map,
   old_store_mode = GetKeyedAccessStoreMode();
   Handle<Map> previous_receiver_map = target_receiver_maps.at(0);
   if (state() == MONOMORPHIC) {
-    Handle<Map> transitioned_receiver_map = receiver_map;
+    Handle<Map> transitioned_receiver_map = new_receiver_map;
     if (IsTransitionStoreMode(store_mode)) {
       transitioned_receiver_map =
           ComputeTransitionedMap(receiver_map, store_mode);
+      // CHECK(new_receiver_map.is_identical_to(transitioned_receiver_map));
+    } else {
+      // CHECK(new_receiver_map.is_identical_to(receiver_map));
     }
     if ((receiver_map.is_identical_to(previous_receiver_map) &&
          IsTransitionStoreMode(store_mode)) ||
@@ -1812,6 +1818,14 @@ void KeyedStoreIC::UpdateStoreElement(Handle<Map> receiver_map,
       ConfigureVectorState(Handle<Name>(), transitioned_receiver_map, handler);
       return;
     }
+    /*if (IsTransitionOfMonomorphicTarget(*previous_receiver_map,
+                                        *transitioned_receiver_map)) {
+      store_mode = GetNonTransitioningStoreMode(store_mode, receiver_was_cow);
+      Handle<Object> handler =
+          StoreElementHandler(transitioned_receiver_map, store_mode);
+      ConfigureVectorState(Handle<Name>(), transitioned_receiver_map, handler);
+      return;
+    }*/
     if (receiver_map.is_identical_to(previous_receiver_map) &&
         old_store_mode == STANDARD_STORE &&
         (store_mode == STORE_AND_GROW_NO_TRANSITION_HANDLE_COW ||
@@ -2046,6 +2060,22 @@ bool MayHaveTypedArrayInPrototypeChain(Handle<JSObject> object) {
   return false;
 }
 
+/*KeyedAccessStoreMode GetTransitionModeWithHoley(KeyedAccessStoreMode mode,
+bool needs_holey_transition) { if (!needs_holey_transition) return mode; switch
+(mode) { case STORE_AND_GROW_TRANSITION_TO_DOUBLE: return
+STORE_AND_GROW_TRANSITION_TO_HOLEY_DOUBLE; case
+STORE_AND_GROW_TRANSITION_TO_OBJECT: return
+STORE_AND_GROW_TRANSITION_TO_HOLEY_OBJECT; case
+STORE_AND_GROW_NO_TRANSITION_HANDLE_COW: return
+STORE_AND_GROW_TRANSITION_TO_HOLEY_HANDLE_COW; case STORE_TRANSITION_TO_DOUBLE:
+    case STORE_TRANSITION_TO_OBJECT:
+    case STORE_NO_TRANSITION_IGNORE_OUT_OF_BOUNDS:
+    case STORE_NO_TRANSITION_HANDLE_COW:
+    case STANDARD_STORE:
+      return mode;
+  }
+}*/
+
 KeyedAccessStoreMode GetStoreMode(Handle<JSObject> receiver, uint32_t index,
                                   Handle<Object> value) {
   bool oob_access = IsOutOfBoundsAccess(receiver, index);
@@ -2059,6 +2089,9 @@ KeyedAccessStoreMode GetStoreMode(Handle<JSObject> receiver, uint32_t index,
                       !MayHaveTypedArrayInPrototypeChain(receiver);
   if (allow_growth) {
     // Handle growing array in stub if necessary.
+    //    bool needs_transition_to_holey = receiver->HasPackedElements() &&
+    //    (index > receiver->length() + 1);
+    //   KeyedAccessStoreMode store_mode;
     if (receiver->HasSmiElements()) {
       if (value->IsHeapNumber()) {
         return STORE_AND_GROW_TRANSITION_TO_DOUBLE;
@@ -2210,7 +2243,10 @@ MaybeHandle<Object> KeyedStoreIC::Store(Handle<Object> object,
           // prototype chain does have dictionary elements. This ensures that
           // other non-dictionary receivers in the polymorphic case benefit
           // from fast path keyed stores.
-          UpdateStoreElement(old_receiver_map, store_mode, receiver_was_cow);
+          Handle<JSReceiver> receiver = Handle<JSReceiver>::cast(object);
+          Handle<Map> receiver_map = handle(receiver->map(), isolate());
+          UpdateStoreElement(old_receiver_map, receiver_map, store_mode,
+                             receiver_was_cow);
         } else {
           set_slow_stub_reason("dictionary or proxy prototype");
         }
@@ -2271,7 +2307,8 @@ void StoreInArrayLiteralIC::Store(Handle<JSArray> array, Handle<Object> index,
 
   if (index->IsSmi()) {
     DCHECK(!old_array_map->is_abandoned_prototype_map());
-    UpdateStoreElement(old_array_map, store_mode, array_was_cow);
+    UpdateStoreElement(old_array_map, handle(array->map(), isolate()),
+                       store_mode, array_was_cow);
   } else {
     set_slow_stub_reason("index out of Smi range");
   }
