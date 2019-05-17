@@ -1658,6 +1658,13 @@ void PrototypeUsers::Verify(WeakArrayList array) {
   CHECK_EQ(weak_maps_count + empty_slots_count + 1, array->length());
 }
 
+void TemplateObjectDescription::TemplateObjectDescriptionVerify(
+    Isolate* isolate) {
+  // CHECK(IsTemplateObjectDescription());
+  VerifyObjectField(isolate, kRawStringsOffset);
+  VerifyObjectField(isolate, kCookedStringsOffset);
+}
+
 void EnumCache::EnumCacheVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::EnumCacheVerify(*this, isolate);
   Heap* heap = isolate->heap();
