@@ -10,6 +10,7 @@
 #include "src/heap/heap-write-barrier-inl.h"
 #include "src/objects-inl.h"
 #include "src/objects/oddball.h"
+#include "src/objects/template-objects-inl.h"
 #include "src/roots-inl.h"
 #include "torque-generated/class-definitions-tq-inl.h"
 

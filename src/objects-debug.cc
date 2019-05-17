@@ -61,6 +61,7 @@
 #include "src/objects/promise-inl.h"
 #include "src/objects/stack-frame-info-inl.h"
 #include "src/objects/struct-inl.h"
+#include "src/objects/template-objects-inl.h"
 #include "src/ostreams.h"
 #include "src/regexp/jsregexp.h"
 #include "src/transitions-inl.h"
@@ -1656,6 +1657,13 @@ void PrototypeUsers::Verify(WeakArrayList array) {
   }
 
   CHECK_EQ(weak_maps_count + empty_slots_count + 1, array->length());
+}
+
+void TemplateObjectDescription::TemplateObjectDescriptionVerify(
+    Isolate* isolate) {
+  // CHECK(IsTemplateObjectDescription());
+  VerifyObjectField(isolate, kRawStringsOffset);
+  VerifyObjectField(isolate, kCookedStringsOffset);
 }
 
 void EnumCache::EnumCacheVerify(Isolate* isolate) {
