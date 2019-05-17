@@ -5,6 +5,7 @@
 #ifndef V8_OBJECTS_TEMPLATE_OBJECTS_H_
 #define V8_OBJECTS_TEMPLATE_OBJECTS_H_
 
+#include "src/objects.h"
 #include "src/objects/fixed-array.h"
 #include "src/objects/struct.h"
 
@@ -39,22 +40,25 @@ class CachedTemplateObject final : public Tuple3 {
 // TemplateObjectDescription is a tuple of raw strings and cooked strings for
 // tagged template literals. Used to communicate with the runtime for template
 // object creation within the {Runtime_GetTemplateObject} method.
-class TemplateObjectDescription final : public Tuple2 {
+class TemplateObjectDescription final : public Struct {
  public:
   DECL_ACCESSORS(raw_strings, FixedArray)
   DECL_ACCESSORS(cooked_strings, FixedArray)
+
+  DECL_CAST(TemplateObjectDescription)
 
   static Handle<JSArray> GetTemplateObject(
       Isolate* isolate, Handle<Context> native_context,
       Handle<TemplateObjectDescription> description,
       Handle<SharedFunctionInfo> shared_info, int slot_id);
 
-  DECL_CAST(TemplateObjectDescription)
+  DECL_PRINTER(TemplateObjectDescription)
+  DECL_VERIFIER(TemplateObjectDescription)
 
-  static constexpr int kRawStringsOffset = kValue1Offset;
-  static constexpr int kCookedStringsOffset = kValue2Offset;
+  DEFINE_FIELD_OFFSET_CONSTANTS(
+      Struct::kHeaderSize, TORQUE_GENERATED_TEMPLATE_OBJECT_DESCRIPTION_FIELDS)
 
-  OBJECT_CONSTRUCTORS(TemplateObjectDescription, Tuple2);
+  OBJECT_CONSTRUCTORS(TemplateObjectDescription, Struct);
 };
 
 }  // namespace internal
