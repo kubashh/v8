@@ -50,4 +50,62 @@ namespace string {
 
     return array;
   }
+
+  extern macro UintPtrLessThan(intptr, intptr): bool;
+
+  transitioning macro GenerateStringAt(implicit context: Context)(
+      receiver: Object, position: Object, defaultValue: Object): Object labels
+  InBounds(String, intptr, intptr) {
+    // Check that {receiver} is coercible to Object and convert it to a String.
+    const string: String = ToThisString(receiver, 'String.prototype.charAt');
+    // Convert the {position} to a Smi and check that it's in bounds of
+    // the {string}.
+    const indexNumber: Number =
+        ToInteger_Inline(context, position, kTruncateMinusZero);
+    if (TaggedIsSmi(indexNumber)) {
+      const index: intptr = SmiUntag(UnsafeCast<Smi>(indexNumber));
+      const length: intptr = string.length_intptr;
+      if (UintPtrLessThan(index, length)) {
+        goto InBounds(string, index, length);
+      }
+    }
+    return defaultValue;
+  }
+
+  // ES6 #sec-string.prototype.charat
+  transitioning javascript builtin StringPrototypeCharAt(
+      implicit context: Context)(receiver: Object, position: Object): Object {
+    try {
+      return GenerateStringAt(receiver, position, kEmptyString)
+          otherwise InBounds;
+    }
+    label InBounds(string: String, index: intptr, length: intptr) {
+      const code: int32 = StringCharCodeAt(string, index);
+      return StringFromSingleCharCode(code);
+    }
+  }
+
+  // ES6 #sec-string.prototype.charcodeat
+  transitioning javascript builtin StringPrototypeCharCodeAt(
+      implicit context: Context)(receiver: Object, position: Object): Object {
+    try {
+      return GenerateStringAt(receiver, position, kNaN) otherwise InBounds;
+    }
+    label InBounds(string: String, index: intptr, length: intptr) {
+      const code: int32 = StringCharCodeAt(string, index);
+      return Convert<Smi>(code);
+    }
+  }
+
+  // ES6 #sec-string.prototype.codepointat
+  transitioning javascript builtin StringPrototypeCodePointAt(
+      implicit context: Context)(receiver: Object, position: Object): Object {
+    try {
+      return GenerateStringAt(receiver, position, Undefined) otherwise InBounds;
+    }
+    label InBounds(string: String, index: intptr, length: intptr) {
+      const code: int32 = LoadSurrogatePairAt(string, length, index, UTF32);
+      return Convert<Smi>(code);
+    }
+  }
 }
