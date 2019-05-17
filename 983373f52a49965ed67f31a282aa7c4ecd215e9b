@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "037c0d15_9ced4bd1",
+        "filename": "src/base/platform/platform-fuchsia.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1001385
+      },
+      "writtenOn": "2019-05-17T18:44:51Z",
+      "side": 1,
+      "message": "I think this will compile out to nothing in a release build; the reason that the build was failing previously was that unlike Chromium\u0027s DCHECK, v8 uses a DCHECK that doesn\u0027t reference the |condition| if DCHECKs are disabled.\n\nOS::GetUserTime has a return-value - perhaps we should just change this to a release-mode conditional, i.e.\n\n  if (status !\u003d ZX_OK)\n    return \u003csome v8 error code\u003e\n\n?",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 19
+      },
+      "revId": "983373f52a49965ed67f31a282aa7c4ecd215e9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
