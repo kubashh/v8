@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ee37d629_8be32b22",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-05-20T05:59:42Z",
+      "side": 1,
+      "message": "I think they do different comparison and we can not replace UintPtrLessThan by IntptrLessThan",
+      "parentUuid": "0979039c_234d5705",
+      "range": {
+        "startLine": 54,
+        "startChar": 2,
+        "endLine": 54,
+        "endChar": 53
+      },
+      "revId": "798eafe4842c603840c29d8c8e7d3c18e855fead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ee0a1f72_b9f88e16",
         "filename": "src/builtins/string.tq",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-05-20T05:17:34Z",
       "side": 1,
       "message": "Shouldn\u0027t be the method name passed in as a \"string\" here? The CSA version has different \"String.prototype.\u003cwhatever\u003e\" for all three builtins.",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 77
+      },
+      "revId": "798eafe4842c603840c29d8c8e7d3c18e855fead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77158f04_a998fb18",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-05-20T05:59:42Z",
+      "side": 1,
+      "message": "you are right, I forgot about it. Fixed.",
+      "parentUuid": "ee0a1f72_b9f88e16",
       "range": {
         "startLine": 60,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f95d3baf_a64340c7",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-05-20T05:59:42Z",
+      "side": 1,
+      "message": "yeah, early return might be easier to read",
+      "parentUuid": "401d5be2_ea74cad3",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 24
+      },
+      "revId": "798eafe4842c603840c29d8c8e7d3c18e855fead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d2bae450_611ced87",
         "filename": "src/builtins/string.tq",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "798eafe4842c603840c29d8c8e7d3c18e855fead",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adf410b8_48aaec51",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-05-20T05:59:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2bae450_611ced87",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 32
+      },
+      "revId": "798eafe4842c603840c29d8c8e7d3c18e855fead",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
