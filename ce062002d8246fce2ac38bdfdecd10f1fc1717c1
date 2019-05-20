@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ecfc3fbe_69e2409f",
+        "filename": "src/objects.cc",
+        "patchSetId": 6
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-20T08:21:40Z",
+      "side": 1,
+      "message": "nit: Lets keep this alpha-sorted by moving the new include down to 102 below.",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 42
+      },
+      "revId": "ce062002d8246fce2ac38bdfdecd10f1fc1717c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03fef078_3135da2e",
+        "filename": "src/objects/struct-inl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1118575
+      },
+      "writtenOn": "2019-05-20T08:21:40Z",
+      "side": 1,
+      "message": "nit: It doesn\u0027t look like this include is actually needed to make the \"struct-inl.h\" fiel standalone. We should instead include the \"template-objects-inl\" explicitly in the places where it is needed instead of fulfilling the dependency implicitly like this.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 45
+      },
+      "revId": "ce062002d8246fce2ac38bdfdecd10f1fc1717c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
