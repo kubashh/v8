@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7464d339_31b39540",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-20T08:17:04Z",
+      "side": 1,
+      "message": "Nit: keeping the single unsigned comparison would be slightly nicer :)",
+      "revId": "a4d2d759013fc549e558ee9c3ece68b4798a2a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77026193_eb50eb66",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-20T08:17:04Z",
+      "side": 1,
+      "message": "I like the macro + label approach, could we use it for the OutOfBounds case as well? Feels more natural than the current impl which stays on the straight-line path for the OOB case and jumps to a label for the more common in-bounds case.\n\nSo the call would be:\n\n      GenerateStringAt(\n          receiver, position, \u0027String.prototype.charAt\u0027)\n          otherwise IfInBounds, IfOutOfBounds;\n\nWdyt?",
+      "revId": "a4d2d759013fc549e558ee9c3ece68b4798a2a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
