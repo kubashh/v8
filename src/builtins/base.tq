@@ -14,6 +14,7 @@
 #include 'src/objects/js-generator.h'
 #include 'src/objects/js-promise.h'
 #include 'src/objects/js-regexp-string-iterator.h'
+#include 'src/objects/js-weak-refs.h'
 #include 'src/objects/module.h'
 #include 'src/objects/stack-frame-info.h'
 #include 'src/builtins/builtins-regexp-gen.h'
@@ -36,6 +37,7 @@ extern class HeapObject extends Tagged {
 }
 
 type Object = Smi | HeapObject;
+
 type int32 generates 'TNode<Int32T>' constexpr 'int32_t';
 type uint32 generates 'TNode<Uint32T>' constexpr 'uint32_t';
 type int31 extends int32
@@ -183,8 +185,6 @@ extern class FixedDoubleArray extends FixedArrayBase {
 extern class WeakFixedArray extends HeapObject { length: Smi; }
 
 extern class ByteArray extends FixedArrayBase {}
-
-type BytecodeArray extends FixedArrayBase;
 
 @generatePrint
 extern class EnumCache extends Struct {
@@ -398,7 +398,6 @@ transient type FastJSArrayWithNoCustomIteration extends FastJSArray;
 type NoSharedNameSentinel extends Smi;
 
 type JSModuleNamespace extends JSObject;
-type WeakArrayList extends HeapObject;
 
 @abstract
 @noVerifier
@@ -428,6 +427,13 @@ extern class JSMessageObject extends JSObject {
   start_position: Smi;
   end_position: Smi;
   error_level: Smi;
+}
+
+extern class WeakArrayList extends HeapObject {
+  capacity: Smi;
+  length: Smi;
+  // TODO(v8:8983): declare variable-sized region for contained MaybeObject's
+  // objects[length]: MaybeObject;
 }
 
 extern class PrototypeInfo extends Struct {
@@ -1285,6 +1291,46 @@ extern class AsmWasmData extends Struct {
   export_wrappers: FixedArray;
   asm_js_offset_table: ByteArray;
   uses_bitset: HeapNumber;
+}
+
+extern class JSFinalizationGroup extends JSObject {
+  native_context: NativeContext;
+  cleanup: Object;
+  active_cells: Undefined | WeakCell;
+  cleared_cells: Undefined | WeakCell;
+  key_map: Object;
+  next: Undefined | JSFinalizationGroup;
+  flags: Smi;
+}
+
+extern class JSFinalizationGroupCleanupIterator extends JSObject {
+  finalization_group: JSFinalizationGroup;
+}
+
+extern class WeakCell extends HeapObject {
+  finalization_group: Undefined | JSFinalizationGroup;
+  target: Undefined | JSReceiver;
+  holdings: Object;
+  prev: Undefined | WeakCell;
+  next: Undefined | WeakCell;
+  key: Object;
+  key_list_prev: Undefined | WeakCell;
+  key_list_next: Undefined | WeakCell;
+}
+
+extern class JSWeakRef extends JSObject { target: Undefined | JSReceiver; }
+
+extern class BytecodeArray extends FixedArrayBase {
+  // TODO(v8:8983): bytecode array object sizes vary based on their contents.
+  constant_pool: FixedArray;
+  handler_table: ByteArray;
+  source_position_table: Undefined | ByteArray |
+      SourcePositionTableWithFrameCache;
+  frame_size: Smi;
+  parameter_size: int32;
+  incoming_new_target_or_generator_register: int32;
+  osr_nesting_level: int8;
+  bytecode_age: int8;
 }
 
 extern macro Is64(): constexpr bool;
