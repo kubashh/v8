@@ -33,6 +33,24 @@
       "revId": "a4d2d759013fc549e558ee9c3ece68b4798a2a93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78bd73c0_721a725c",
+        "filename": "src/builtins/string.tq",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1322305
+      },
+      "writtenOn": "2019-05-20T15:50:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77026193_eb50eb66",
+      "revId": "a4d2d759013fc549e558ee9c3ece68b4798a2a93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
