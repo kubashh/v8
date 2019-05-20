@@ -50,4 +50,66 @@ namespace string {
 
     return array;
   }
+
+  transitioning macro GenerateStringAt(implicit context: Context)(
+      receiver: Object, position: Object, defaultValue: Object,
+      methodName: constexpr string): Object labels
+  InBounds(String, intptr, intptr) {
+    // Check that {receiver} is coercible to Object and convert it to a String.
+    const string: String = ToThisString(receiver, methodName);
+    // Convert the {position} to a Smi and check that it's in bounds of
+    // the {string}.
+    const indexNumber: Number =
+        ToInteger_Inline(context, position, kTruncateMinusZero);
+    if (TaggedIsNotSmi(indexNumber)) return defaultValue;
+    const index: intptr = SmiUntag(UnsafeCast<Smi>(indexNumber));
+    const length: intptr = string.length_intptr;
+    if (index < 0) return defaultValue;
+    if (index >= length) return defaultValue;
+    goto InBounds(string, index, length);
+  }
+
+  // ES6 #sec-string.prototype.charat
+  transitioning javascript builtin StringPrototypeCharAt(
+      implicit context: Context)(receiver: Object, position: Object): Object {
+    try {
+      return GenerateStringAt(
+          receiver, position, kEmptyString, 'String.prototype.charAt')
+          otherwise InBounds;
+    }
+    label InBounds(string: String, index: intptr, length: intptr) {
+      const code: int32 = StringCharCodeAt(string, index);
+      return StringFromSingleCharCode(code);
+    }
+  }
+
+  // ES6 #sec-string.prototype.charcodeat
+  transitioning javascript builtin StringPrototypeCharCodeAt(
+      implicit context: Context)(receiver: Object, position: Object): Object {
+    try {
+      return GenerateStringAt(
+          receiver, position, kNaN, 'String.prototype.charCodeAt')
+          otherwise InBounds;
+    }
+    label InBounds(string: String, index: intptr, length: intptr) {
+      const code: int32 = StringCharCodeAt(string, index);
+      return Convert<Smi>(code);
+    }
+  }
+
+  // ES6 #sec-string.prototype.codepointat
+  transitioning javascript builtin StringPrototypeCodePointAt(
+      implicit context: Context)(receiver: Object, position: Object): Object {
+    try {
+      return GenerateStringAt(
+          receiver, position, Undefined, 'String.prototype.codePointAt')
+          otherwise InBounds;
+    }
+    label InBounds(string: String, index: intptr, length: intptr) {
+      // This is always a call to a builtin from Javascript, so we need to
+      // produce UTF32.
+      const code: int32 = LoadSurrogatePairAt(string, length, index, UTF32);
+      return Convert<Smi>(code);
+    }
+  }
 }
