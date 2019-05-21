@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d290a1a2_c0d23c12",
+        "filename": "src/compiler/code-assembler.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-21T14:43:43Z",
+      "side": 1,
+      "message": "TNode\u003cBoolT\u003e",
+      "range": {
+        "startLine": 428,
+        "startChar": 33,
+        "endLine": 428,
+        "endChar": 38
+      },
+      "revId": "5169f2aa8f0dc639bc77c148b13bd42e48661e72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb78d04f_fdd17708",
+        "filename": "src/compiler/code-assembler.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-21T14:43:43Z",
+      "side": 1,
+      "message": "TNode\u003cBoolT\u003e\nIt\u0027s better to provide a typed interface.",
+      "range": {
+        "startLine": 880,
+        "startChar": 20,
+        "endLine": 880,
+        "endChar": 25
+      },
+      "revId": "5169f2aa8f0dc639bc77c148b13bd42e48661e72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
