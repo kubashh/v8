@@ -228,9 +228,6 @@ if (v8_check_microtasks_scopes_consistency == "") {
 if (v8_enable_snapshot_native_code_counters == "") {
   v8_enable_snapshot_native_code_counters = v8_enable_debugging_features
 }
-if (v8_enable_shared_ro_heap == "") {
-  v8_enable_shared_ro_heap = v8_enable_lite_mode
-}
 if (v8_enable_fast_torque == "") {
   v8_enable_fast_torque = v8_enable_fast_mksnapshot
 }
@@ -238,6 +235,9 @@ if (v8_enable_fast_torque == "") {
 if (v8_enable_pointer_compression == "") {
   # TODO(v8:v7703): temporarily enable pointer compression on x64
   v8_enable_pointer_compression = v8_current_cpu == "x64"
+}
+if (v8_enable_shared_ro_heap == "") {
+  v8_enable_shared_ro_heap = !v8_enable_pointer_compression
 }
 
 assert(v8_current_cpu != "x86" || !v8_untrusted_code_mitigations,
