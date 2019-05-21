@@ -3313,10 +3313,14 @@ base::Optional<ObjectRef> GlobalAccessFeedback::GetConstantHint() const {
   return {};
 }
 
-ElementAccessFeedback::ElementAccessFeedback(Zone* zone)
+ElementAccessFeedback::ElementAccessFeedback(Zone* zone,
+                                             KeyedAccessLoadMode load_mode,
+                                             KeyedAccessStoreMode store_mode)
     : ProcessedFeedback(kElementAccess),
       receiver_maps(zone),
-      transitions(zone) {}
+      transitions(zone),
+      load_mode(load_mode),
+      store_mode(store_mode) {}
 
 ElementAccessFeedback::MapIterator::MapIterator(
     ElementAccessFeedback const& processed, JSHeapBroker* broker)
@@ -3389,7 +3393,8 @@ GlobalAccessFeedback const* JSHeapBroker::GetGlobalAccessFeedback(
 }
 
 ElementAccessFeedback const* JSHeapBroker::ProcessFeedbackMapsForElementAccess(
-    MapHandles const& maps) {
+    MapHandles const& maps, KeyedAccessLoadMode load_mode,
+    KeyedAccessStoreMode store_mode) {
   DCHECK(!maps.empty());
 
   // Collect possible transition targets.
@@ -3403,7 +3408,8 @@ ElementAccessFeedback const* JSHeapBroker::ProcessFeedbackMapsForElementAccess(
     }
   }
 
-  ElementAccessFeedback* result = new (zone()) ElementAccessFeedback(zone());
+  ElementAccessFeedback* result =
+      new (zone()) ElementAccessFeedback(zone(), load_mode, store_mode);
 
   // Separate the actual receiver maps and the possible transition sources.
   for (Handle<Map> map : maps) {

@@ -794,9 +794,11 @@ MapHandles GetRelevantReceiverMaps(Isolate* isolate, MapContainer const& maps) {
 
 ElementAccessFeedback const*
 SerializerForBackgroundCompilation::ProcessFeedbackMapsForElementAccess(
-    const MapHandles& maps, AccessMode mode) {
+    const MapHandles& maps, AccessMode mode, KeyedAccessLoadMode load_mode,
+    KeyedAccessStoreMode store_mode) {
   ElementAccessFeedback const* result =
-      broker()->ProcessFeedbackMapsForElementAccess(maps);
+      broker()->ProcessFeedbackMapsForElementAccess(maps, load_mode,
+                                                    store_mode);
   for (ElementAccessFeedback::MapIterator it = result->all_maps(broker());
        !it.done(); it.advance()) {
     switch (mode) {
@@ -864,8 +866,19 @@ void SerializerForBackgroundCompilation::ProcessFeedbackForPropertyAccess(
       static_name.has_value() ? static_name : broker()->GetNameFeedback(nexus);
   if (name.has_value()) {
     processed = ProcessFeedbackMapsForNamedAccess(maps, mode, *name);
-  } else if (nexus.GetKeyType() == ELEMENT && nexus.ic_state() != MEGAMORPHIC) {
-    processed = ProcessFeedbackMapsForElementAccess(maps, mode);
+  } else if (nexus.GetKeyType() == ELEMENT) {
+    DCHECK_NE(nexus.ic_state(), MEGAMORPHIC);
+    KeyedAccessLoadMode load_mode =
+        (IsKeyedLoadICKind(nexus.kind()) || IsKeyedHasICKind(nexus.kind()))
+            ? nexus.GetKeyedAccessLoadMode()
+            : STANDARD_LOAD;
+    KeyedAccessStoreMode store_mode =
+        (IsKeyedStoreICKind(nexus.kind()) ||
+         IsStoreInArrayLiteralICKind(nexus.kind()))
+            ? nexus.GetKeyedAccessStoreMode()
+            : STANDARD_STORE;
+    processed =
+        ProcessFeedbackMapsForElementAccess(maps, mode, load_mode, store_mode);
   }
   broker()->SetFeedback(source, processed);
 }

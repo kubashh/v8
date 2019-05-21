@@ -127,7 +127,7 @@ Node* PropertyAccessBuilder::ResolveHolder(
     PropertyAccessInfo const& access_info, Node* receiver) {
   Handle<JSObject> holder;
   if (access_info.holder().ToHandle(&holder)) {
-    return jsgraph()->Constant(holder);
+    return jsgraph()->Constant(ObjectRef(broker(), holder));
   }
   return receiver;
 }
@@ -135,6 +135,12 @@ Node* PropertyAccessBuilder::ResolveHolder(
 Node* PropertyAccessBuilder::TryBuildLoadConstantDataField(
     NameRef const& name, PropertyAccessInfo const& access_info,
     Node* receiver) {
+  // XXX
+  AllowCodeDependencyChange dependency_change_;
+  AllowHandleAllocation handle_allocation_;
+  AllowHandleDereference handle_dereference_;
+  AllowHeapAllocation heap_allocation_;
+
   // Optimize immutable property loads.
 
   // First, determine if we have a constant holder to load from.
@@ -165,6 +171,12 @@ Node* PropertyAccessBuilder::TryBuildLoadConstantDataField(
   //                              Representation::Tagged(), field_index);
   //
   // here, once we have the immutable bit in the access_info.
+
+  // XXX
+  // When processing constants hints at serialization time, augment
+  // PropertyAccessInfo's {holder} if the constant itself is the holder.
+  // Alternatively, just serialize the constant such that the field in question
+  // can be looked up on it. Using JSObjectRef::(Raw)FastPropertyAt?
 
   // TODO(turbofan): Given that we already have the field_index here, we
   // might be smarter in the future and not rely on the LookupIterator.

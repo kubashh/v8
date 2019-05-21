@@ -94,23 +94,16 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
 
   Reduction ReduceElementAccess(Node* node, Node* index, Node* value,
                                 ElementAccessFeedback const& processed,
-                                AccessMode access_mode,
-                                KeyedAccessLoadMode load_mode,
-                                KeyedAccessStoreMode store_mode);
+                                AccessMode access_mode);
   // In the case of non-keyed (named) accesses, pass the name as {static_name}
   // and use {nullptr} for {key} (load/store modes are irrelevant).
-  Reduction ReducePropertyAccessUsingProcessedFeedback(
+  Reduction ReducePropertyAccess(
       Node* node, Node* key, base::Optional<NameRef> static_name, Node* value,
-      FeedbackNexus const& nexus, AccessMode access_mode,
+      FeedbackSource const& source, AccessMode access_mode,
       KeyedAccessLoadMode load_mode = STANDARD_LOAD,
       KeyedAccessStoreMode store_mode = STANDARD_STORE);
-  Reduction ReduceKeyedAccess(Node* node, Node* key, Node* value,
-                              FeedbackNexus const& nexus,
-                              AccessMode access_mode,
-                              KeyedAccessLoadMode load_mode,
-                              KeyedAccessStoreMode store_mode);
   Reduction ReduceNamedAccessFromNexus(Node* node, Node* value,
-                                       FeedbackNexus const& nexus,
+                                       FeedbackSource const& source,
                                        NameRef const& name,
                                        AccessMode access_mode);
   Reduction ReduceNamedAccess(Node* node, Node* value,
@@ -123,7 +116,6 @@ class V8_EXPORT_PRIVATE JSNativeContextSpecialization final
                                NameRef const& name, AccessMode access_mode,
                                Node* key, PropertyCellRef const& property_cell);
   Reduction ReduceKeyedLoadFromHeapConstant(Node* node, Node* key,
-                                            FeedbackNexus const& nexus,
                                             AccessMode access_mode,
                                             KeyedAccessLoadMode load_mode);
   Reduction ReduceElementAccessOnString(Node* node, Node* index, Node* value,

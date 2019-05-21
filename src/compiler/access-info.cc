@@ -256,9 +256,9 @@ bool PropertyAccessInfo::Merge(PropertyAccessInfo const* that,
   }
 }
 
-Handle<Cell> PropertyAccessInfo::export_cell() const {
+CellRef PropertyAccessInfo::export_cell(JSHeapBroker* broker) const {
   DCHECK_EQ(kModuleExport, kind_);
-  return Handle<Cell>::cast(constant_);
+  return ObjectRef(broker, constant_).AsCell();
 }
 
 AccessInfoFactory::AccessInfoFactory(JSHeapBroker* broker,
@@ -802,7 +802,7 @@ PropertyAccessInfo AccessInfoFactory::LookupTransition(
   unrecorded_dependencies.push_back(
       dependencies()->TransitionDependencyOffTheRecord(
           MapRef(broker(), transition_map)));
-  // Transitioning stores are never stores to constant fields.
+  transition_map_ref.SerializeBackPointer();  // For BuildPropertyStore.
   return PropertyAccessInfo::DataField(
       zone(), map, std::move(unrecorded_dependencies), field_index,
       field_representation, field_type, field_map, holder, transition_map);
