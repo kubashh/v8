@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d9e1dcba_cf2f5916",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-21T12:58:07Z",
+      "side": 1,
+      "message": "Can you just use \n    void* contexts[kMaxFramesCount] \u003d {0};\nin the member definition?",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 42
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04876178_3cdeb6f9",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-21T12:58:07Z",
+      "side": 1,
+      "message": "I think the convention is to convert Locals to Handles within the API layer before calling into internal::. That is difficult here where context is a member of the options class, because we\u0027d have to have a \u0027shadow\u0027 internal::CpuProfilingOptions class which is the same except this arg is a Handle instead. Not sure how to address this here",
+      "range": {
+        "startLine": 344,
+        "startChar": 22,
+        "endLine": 344,
+        "endChar": 32
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d25b9be_03d38c85",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-21T12:58:07Z",
+      "side": 1,
+      "message": "I would rename this to make it clear that it\u0027s for filtering, e.g. filter_context",
+      "range": {
+        "startLine": 349,
+        "startChar": 17,
+        "endLine": 349,
+        "endChar": 24
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "219a2580_460559be",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-21T12:58:07Z",
+      "side": 1,
+      "message": "I prefer not to have this custom mechanism for tracking moving contexts, to some extent it re-implements Handles.\n\nCould we store a GlobalHandle inside ContextFilter which is weak instead? Then it will be updated by the GC on movement, but it won\u0027t keep the context alive unnecessarily. The code to use would be GlobalHandles::MakeWeak(). At the API level, Globals are called Persistents.",
+      "range": {
+        "startLine": 849,
+        "startChar": 28,
+        "endLine": 849,
+        "endChar": 72
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78af3fb1_158064dd",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3375,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-21T12:58:07Z",
+      "side": 1,
+      "message": "You now need %PrepareFunctionForOptimization before calling %OptimizeFunctionOnNextCall. Normally you do\n\n    %PrepareFunctionForOptimization(foo)\n    foo();\n    foo();\n    %OptimizeFunctionOnNextCall(foo)\n\nand call foo twice before optimizing to get any possible IC state from uninitialized -\u003e pre-monomorphic -\u003e monomorphic.",
+      "range": {
+        "startLine": 3375,
+        "startChar": 9,
+        "endLine": 3375,
+        "endChar": 35
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
