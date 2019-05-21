@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05a5c327_ee032629",
+        "filename": "include/libplatform/v8-tracing.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-21T10:37:08Z",
+      "side": 1,
+      "message": "Initialize to nullptr?",
+      "revId": "3b345bbf4240fdce883852f06ca300932ed23974",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
