@@ -425,6 +425,10 @@ void CodeAssembler::Comment(std::string str) {
   raw_assembler()->Comment(str);
 }
 
+void CodeAssembler::StaticAssert(Node* value) {
+  raw_assembler()->StaticAssert(value);
+}
+
 void CodeAssembler::SetSourcePosition(const char* file, int line) {
   raw_assembler()->SetSourcePosition(file, line);
 }
