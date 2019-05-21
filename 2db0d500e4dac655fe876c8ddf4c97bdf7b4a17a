@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "89976ad0_80cca50b",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-05-21T22:08:36Z",
+      "side": 1,
+      "message": "\u003d nullptr",
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "04876178_3cdeb6f9",
         "filename": "include/v8-profiler.h",
         "patchSetId": 10
@@ -71,6 +88,23 @@
     },
     {
       "key": {
+        "uuid": "ce2eea83_6dbeae0a",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-05-21T22:08:36Z",
+      "side": 1,
+      "message": "why\u0027s the change?",
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "219a2580_460559be",
         "filename": "src/profiler/profile-generator.cc",
         "patchSetId": 10
@@ -88,6 +122,23 @@
         "endLine": 849,
         "endChar": 72
       },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18dcad76_1d69133f",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1115861
+      },
+      "writtenOn": "2019-05-21T22:08:36Z",
+      "side": 1,
+      "message": "I wonder why can\u0027t we just pull the native_context() from the JSFunction object during CodeEntry construction instead?\nIs it a different context?",
       "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
