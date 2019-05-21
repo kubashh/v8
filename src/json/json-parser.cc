@@ -1137,13 +1137,13 @@ JsonString JsonParser<Char>::ScanJsonString(bool needs_internalization) {
   int start = position();
   int offset = start;
   bool has_escape = false;
-  uc32 bits = 0;
+  bool convert = sizeof(Char) == 2;
 
   while (true) {
-    cursor_ = std::find_if(cursor_, end_, [&bits](Char c) {
-      if (sizeof(Char) == 2) {
-        bits |= c;
-        if (c > unibrow::Latin1::kMaxChar) return false;
+    cursor_ = std::find_if(cursor_, end_, [&convert](Char c) {
+      if (sizeof(Char) == 2 && V8_UNLIKELY(c > unibrow::Latin1::kMaxChar)) {
+        convert = false;
+        return false;
       }
       return MayTerminateJsonString(character_json_scan_flags[c]);
     });
@@ -1158,8 +1158,6 @@ JsonString JsonParser<Char>::ScanJsonString(bool needs_internalization) {
       int end = position();
       advance();
       int length = end - offset;
-      bool convert = sizeof(Char) == 1 ? bits > unibrow::Latin1::kMaxChar
-                                       : bits <= unibrow::Latin1::kMaxChar;
       return JsonString(start, length, convert, needs_internalization,
                         has_escape);
     }
@@ -1191,7 +1189,7 @@ JsonString JsonParser<Char>::ScanJsonString(bool needs_internalization) {
             ReportUnexpectedCharacter(CurrentCharacter());
             return JsonString();
           }
-          bits |= value;
+          if (value > unibrow::Latin1::kMaxChar) convert = (sizeof(Char) == 1);
           // \uXXXX results in either 1 or 2 Utf16 characters, depending on
           // whether the decoded value requires a surrogate pair.
           offset += 5 - (value > static_cast<uc32>(
