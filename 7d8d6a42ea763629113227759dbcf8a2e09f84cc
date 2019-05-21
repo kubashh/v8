@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45b8a56f_7aeac5d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-05-21T14:43:17Z",
+      "side": 1,
+      "message": "nit: change title to \"[roheap] Make all HeapIterators have matching APIs\"\n\nthen explain why and how below, otherwise the CL\u0027s title just seems odd:)",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "7d8d6a42ea763629113227759dbcf8a2e09f84cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
