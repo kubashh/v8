@@ -381,12 +381,40 @@ class String : public Name {
   }
 
   static inline int NonOneByteStart(const uc16* chars, int length) {
-    const uc16* limit = chars + length;
-    const uc16* start = chars;
+    DCHECK(IsAligned(reinterpret_cast<intptr_t>(chars), sizeof(uc16)));
+    const uint16_t* start = chars;
+    const uint16_t* limit = chars + length;
+
+    if (static_cast<size_t>(length) >= kIntptrSize) {
+      // Check unaligned bytes.
+      while (!IsAligned(reinterpret_cast<intptr_t>(chars), kIntptrSize)) {
+        if (*chars > unibrow::Latin1::kMaxChar) {
+          return static_cast<int>(chars - start);
+        }
+        ++chars;
+      }
+      // Check aligned words.
+      DCHECK_EQ(unibrow::Latin1::kMaxChar, 0xFF);
+#ifdef V8_TARGET_LITTLE_ENDIAN
+      const uintptr_t non_one_byte_mask = kUintptrAllBitsSet / 0xFFFF * 0xFF00;
+#else
+      const uintptr_t non_one_byte_mask = kUintptrAllBitsSet / 0xFFFF * 0x00FF;
+#endif
+      while (chars + sizeof(uintptr_t) <= limit) {
+        if (*reinterpret_cast<const uintptr_t*>(chars) & non_one_byte_mask) {
+          return static_cast<int>(chars - start);
+        }
+        chars += (sizeof(uintptr_t) / sizeof(uc16));
+      }
+    }
+    // Check remaining unaligned bytes.
     while (chars < limit) {
-      if (*chars > kMaxOneByteCharCodeU) return static_cast<int>(chars - start);
+      if (*chars > unibrow::Latin1::kMaxChar) {
+        return static_cast<int>(chars - start);
+      }
       ++chars;
     }
+
     return static_cast<int>(chars - start);
   }
 
