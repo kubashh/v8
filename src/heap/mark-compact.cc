@@ -1428,6 +1428,9 @@ class EvacuateNewSpacePageVisitor final : public HeapObjectVisitor {
         break;
       case NEW_TO_OLD: {
         page->heap()->new_space()->from_space().RemovePage(page);
+        // The page will be swept. Set it to the previous epoch.
+        page->set_mark_compact_epoch(
+            page->heap()->mark_compact_collector()->epoch() - 1);
         Page* new_page = Page::ConvertNewToOld(page);
         DCHECK(!new_page->InYoungGeneration());
         new_page->SetFlag(Page::PAGE_NEW_OLD_PROMOTION);
@@ -1922,8 +1925,6 @@ void MarkCompactCollector::MarkLiveObjects() {
   if (was_marked_incrementally_) {
     heap()->incremental_marking()->Deactivate();
   }
-
-  epoch_++;
 }
 
 void MarkCompactCollector::ClearNonLiveReferences() {
@@ -2769,7 +2770,6 @@ class Evacuator : public Malloced {
 
 void Evacuator::EvacuatePage(MemoryChunk* chunk) {
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.gc"), "Evacuator::EvacuatePage");
-  DCHECK(chunk->SweepingDone());
   intptr_t saved_live_bytes = 0;
   double evacuation_time = 0.0;
   {
@@ -3748,7 +3748,7 @@ void MarkCompactCollector::PostProcessEvacuationCandidates() {
       aborted_pages_verified++;
     } else {
       DCHECK(p->IsEvacuationCandidate());
-      DCHECK(p->SweepingDone());
+      DCHECK(!p->SweepingDone());
       p->owner()->memory_chunk_list().Remove(p);
     }
   }
@@ -3764,7 +3764,7 @@ void MarkCompactCollector::ReleaseEvacuationCandidates() {
     if (!p->IsEvacuationCandidate()) continue;
     PagedSpace* space = static_cast<PagedSpace*>(p->owner());
     non_atomic_marking_state()->SetLiveBytes(p, 0);
-    CHECK(p->SweepingDone());
+    CHECK(!p->SweepingDone());
     space->ReleasePage(p);
   }
   old_space_evacuation_pages_.clear();
@@ -3780,7 +3780,7 @@ void MarkCompactCollector::StartSweepSpace(PagedSpace* space) {
   // Loop needs to support deletion if live bytes == 0 for a page.
   for (auto it = space->begin(); it != space->end();) {
     Page* p = *(it++);
-    DCHECK(p->SweepingDone());
+    DCHECK(!p->SweepingDone());
 
     if (p->IsEvacuationCandidate()) {
       // Will be processed in Evacuate.
@@ -3815,6 +3815,7 @@ void MarkCompactCollector::StartSweepSpace(PagedSpace* space) {
 
 void MarkCompactCollector::StartSweepSpaces() {
   TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_SWEEP);
+  epoch_++;
 #ifdef DEBUG
   state_ = SWEEP_SPACES;
 #endif

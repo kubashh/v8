@@ -359,17 +359,6 @@ class MemoryChunk {
   static const Flags kSkipEvacuationSlotsRecordingMask =
       kEvacuationCandidateMask | kIsInYoungGenerationMask;
 
-  // |kSweepingDone|: The page state when sweeping is complete or sweeping must
-  //   not be performed on that page. Sweeper threads that are done with their
-  //   work will set this value and not touch the page anymore.
-  // |kSweepingPending|: This page is ready for parallel sweeping.
-  // |kSweepingInProgress|: This page is currently swept by a sweeper thread.
-  enum ConcurrentSweepingState {
-    kSweepingDone,
-    kSweepingPending,
-    kSweepingInProgress,
-  };
-
   static const intptr_t kAlignment =
       (static_cast<uintptr_t>(1) << kPageSizeBits);
 
@@ -406,8 +395,7 @@ class MemoryChunk {
       + kSystemPointerSize  // InvalidatedSlots* invalidated_slots_
       + kSystemPointerSize  // std::atomic<intptr_t> high_water_mark_
       + kSystemPointerSize  // base::Mutex* mutex_
-      + kSystemPointerSize  // std::atomic<ConcurrentSweepingState>
-                            // concurrent_sweeping_
+      + kUIntptrSize        // std::atomic<uintptr_t> mark_compact_epoch_
       + kSystemPointerSize  // base::Mutex* page_protection_change_mutex_
       + kSystemPointerSize  // unitptr_t write_unprotect_counter_
       + kSizetSize * ExternalBackingStoreType::kNumTypes
@@ -481,15 +469,13 @@ class MemoryChunk {
     return addr >= area_start() && addr <= area_end();
   }
 
-  void set_concurrent_sweeping_state(ConcurrentSweepingState state) {
-    concurrent_sweeping_ = state;
-  }
+  void increment_mark_compact_epoch() { mark_compact_epoch_++; }
 
-  ConcurrentSweepingState concurrent_sweeping_state() {
-    return static_cast<ConcurrentSweepingState>(concurrent_sweeping_.load());
-  }
+  void set_mark_compact_epoch(uintptr_t epoch) { mark_compact_epoch_ = epoch; }
 
-  bool SweepingDone() { return concurrent_sweeping_ == kSweepingDone; }
+  uintptr_t mark_compact_epoch() { return mark_compact_epoch_; }
+
+  V8_EXPORT_PRIVATE bool SweepingDone();
 
   size_t size() const { return size_; }
   void set_size(size_t size) { size_ = size; }
@@ -762,7 +748,7 @@ class MemoryChunk {
 
   base::Mutex* mutex_;
 
-  std::atomic<intptr_t> concurrent_sweeping_;
+  std::atomic<uintptr_t> mark_compact_epoch_;
 
   base::Mutex* page_protection_change_mutex_;
 
@@ -1118,7 +1104,6 @@ class V8_EXPORT_PRIVATE Space : public Malloced {
   // Tracks off-heap memory used by this space.
   std::atomic<size_t>* external_backing_store_bytes_;
 
- private:
   static const intptr_t kIdOffset = 9 * kSystemPointerSize;
 
   bool allocation_observers_paused_;
