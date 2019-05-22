@@ -13,8 +13,8 @@
 #include "src/execution/isolate.h"
 #include "src/objects-inl.h"
 #include "src/objects/fixed-array.h"
-#include "src/ostreams.h"
 #include "src/snapshot/embedded-data.h"
+#include "src/utils/ostreams.h"
 #include "src/visitors.h"
 
 namespace v8 {

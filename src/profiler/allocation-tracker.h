@@ -11,7 +11,7 @@
 #include "include/v8-profiler.h"
 #include "src/base/hashmap.h"
 #include "src/handles.h"
-#include "src/vector.h"
+#include "src/utils/vector.h"
 
 namespace v8 {
 namespace internal {

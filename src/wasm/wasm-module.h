@@ -9,7 +9,7 @@
 
 #include "src/globals.h"
 #include "src/handles.h"
-#include "src/vector.h"
+#include "src/utils/vector.h"
 #include "src/wasm/signature-map.h"
 #include "src/wasm/wasm-constants.h"
 #include "src/wasm/wasm-opcodes.h"

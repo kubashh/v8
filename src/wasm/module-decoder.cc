@@ -10,7 +10,7 @@
 #include "src/flags.h"
 #include "src/logging/counters.h"
 #include "src/objects-inl.h"
-#include "src/ostreams.h"
+#include "src/utils/ostreams.h"
 #include "src/v8.h"
 #include "src/wasm/decoder.h"
 #include "src/wasm/function-body-decoder-impl.h"

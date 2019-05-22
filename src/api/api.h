@@ -7,7 +7,6 @@
 
 #include "include/v8-testing.h"
 #include "src/contexts.h"
-#include "src/detachable-vector.h"
 #include "src/execution/isolate.h"
 #include "src/heap/factory.h"
 #include "src/objects.h"
@@ -18,6 +17,7 @@
 #include "src/objects/js-proxy.h"
 #include "src/objects/module.h"
 #include "src/objects/shared-function-info.h"
+#include "src/utils/detachable-vector.h"
 
 #include "src/objects/templates.h"
 

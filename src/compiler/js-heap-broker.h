@@ -14,7 +14,7 @@
 #include "src/handles.h"
 #include "src/objects.h"
 #include "src/objects/instance-type.h"
-#include "src/ostreams.h"
+#include "src/utils/ostreams.h"
 #include "src/zone/zone-containers.h"
 
 namespace v8 {

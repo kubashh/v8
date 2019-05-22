@@ -11,7 +11,7 @@
 #include "src/handles.h"
 #include "src/numbers/conversions.h"
 #include "src/objects.h"
-#include "src/ostreams.h"
+#include "src/utils/ostreams.h"
 
 namespace v8 {
 namespace internal {

@@ -31,7 +31,7 @@
 #include "src/codegen/macro-assembler.h"
 #include "src/execution/simulator.h"
 #include "src/objects-inl.h"
-#include "src/ostreams.h"
+#include "src/utils/ostreams.h"
 #include "src/v8.h"
 #include "test/cctest/cctest.h"
 #include "test/common/assembler-tester.h"

@@ -6,8 +6,8 @@
 
 #include "src/debug/interface-types.h"
 #include "src/objects-inl.h"
-#include "src/ostreams.h"
-#include "src/vector.h"
+#include "src/utils/ostreams.h"
+#include "src/utils/vector.h"
 #include "src/wasm/function-body-decoder-impl.h"
 #include "src/wasm/function-body-decoder.h"
 #include "src/wasm/wasm-module.h"
