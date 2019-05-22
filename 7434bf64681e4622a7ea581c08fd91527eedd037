@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "718e2162_5c0b8516",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-22T13:41:07Z",
+      "side": 1,
+      "message": "I think casting down to a subclass of an interface kind of defeats the point of the interface. A \u0027cleaner\u0027 alternative would be to have a DeclareRvaToSymbol method on PlatformEmbeddedFileWriterBase (possibly with a default implementation that does nothing) and then only override it for PlatformEmbeddedFileWriterWin. Then you don\u0027t need to cast the writer (i.e. don\u0027t need to worry about the impl, only the interface).\n\nThis is kind of difficult/contrived for things like StartXdataSection() which could only ever apply to windows. You could push more of this #ifdef\u0027d behaviour into the PlatformEmbeddedFileWriterWin subclass and then have a simpler call like PlatformEmbeddedFileWriterBase::WriteUnwindInfo(). But this kind of changes the definition of PlatformEmbeddedFileWriterBase which was meant to only write individual assembly instructions/lines.\n\nIf in the future we did want to add similar unwind info for mac/some other format, how would we do that? That might answer this question.\n\nSeems like this kind of comes back to merging PlatformEmbeddedFileWriterBase and EmbeddedFileWriter",
+      "range": {
+        "startLine": 288,
+        "startChar": 18,
+        "endLine": 288,
+        "endChar": 47
+      },
+      "revId": "7434bf64681e4622a7ea581c08fd91527eedd037",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98142eb1_b169f657",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-base.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-22T13:41:07Z",
+      "side": 1,
+      "message": "Can\u0027t remember if this has an implicit constructor so that you can just return new X and it will get wrapped up automatically. Then you don\u0027t need to repeat std::unique_ptr\u003cPlatformEmbeddedFileWriterBase\u003e all the time. Possibly harder to read though.",
+      "range": {
+        "startLine": 103,
+        "startChar": 16,
+        "endLine": 103,
+        "endChar": 26
+      },
+      "revId": "7434bf64681e4622a7ea581c08fd91527eedd037",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
