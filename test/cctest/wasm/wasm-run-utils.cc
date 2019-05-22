@@ -498,7 +498,7 @@ void WasmFunctionCompiler::Build(const byte* start, const byte* end) {
 
   Vector<const uint8_t> wire_bytes = builder_->instance_object()
                                          ->module_object()
-                                         ->native_module()
+                                         .native_module()
                                          ->wire_bytes();
 
   CompilationEnv env = builder_->CreateCompilationEnv();
@@ -509,7 +509,7 @@ void WasmFunctionCompiler::Build(const byte* start, const byte* end) {
   FunctionBody func_body{function_->sig, function_->code.offset(),
                          func_wire_bytes.begin(), func_wire_bytes.end()};
   NativeModule* native_module =
-      builder_->instance_object()->module_object()->native_module();
+      builder_->instance_object()->module_object().native_module();
   WasmCompilationUnit unit(function_->func_index, builder_->execution_tier());
   WasmFeatures unused_detected_features;
   WasmCompilationResult result = unit.ExecuteCompilation(
