@@ -824,6 +824,7 @@ namespace test {
   }
 
   @noVerifier
+  @generateCppClass
   extern class TestClassWithAllTypes extends JSObject {
     a: int8;
     b: uint8;

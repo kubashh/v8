@@ -355,13 +355,10 @@ void ClassType::Finalize() const {
   is_finalized_ = true;
   if (GenerateCppClassDefinitions()) {
     for (const Field& f : fields()) {
-      const Type* field_type = f.name_and_type.type;
-      if (!field_type->IsSubtypeOf(TypeOracle::GetObjectType()) ||
-          field_type->IsSubtypeOf(TypeOracle::GetSmiType()) ||
-          field_type->IsSubtypeOf(TypeOracle::GetNumberType())) {
+      if (f.is_weak) {
         Lint("Generation of C++ class for Torque class ", name(),
-             " is not supported yet, because the type of field ",
-             f.name_and_type.name, " cannot be handled yet")
+             " is not supported yet, because field ", f.name_and_type.name,
+             ": ", *f.name_and_type.type, " is a weak field.")
             .Position(f.pos);
       }
     }
