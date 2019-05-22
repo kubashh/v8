@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1deb3631_f2df3cb5",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-05-22T13:16:44Z",
+      "side": 1,
+      "message": "I think the code is more complicated than necessary here. At least I don\u0027t understand it completely. What does the update { *it \u003d *--end; } mean? Does it not just reset the iterator to the element before the last element? How does this make sense?\n\nCan you not just iterate over all units, insert small units to queue, and big units to big_units_queue_?",
+      "range": {
+        "startLine": 214,
+        "startChar": 10,
+        "endLine": 214,
+        "endChar": 22
+      },
+      "revId": "55c93a3774b9d5a53c7c7bb3f04ba3c320283384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
