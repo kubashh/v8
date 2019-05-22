@@ -828,28 +828,15 @@ class BytecodeArray : public FixedArrayBase {
   // Compares only the bytecode array but not any of the header fields.
   bool IsBytecodeEqual(const BytecodeArray other) const;
 
-// Layout description.
-#define BYTECODE_ARRAY_FIELDS(V)                           \
-  /* Pointer fields. */                                    \
-  V(kConstantPoolOffset, kTaggedSize)                      \
-  V(kHandlerTableOffset, kTaggedSize)                      \
-  V(kSourcePositionTableOffset, kTaggedSize)               \
-  V(kFrameSizeOffset, kIntSize)                            \
-  V(kParameterSizeOffset, kIntSize)                        \
-  V(kIncomingNewTargetOrGeneratorRegisterOffset, kIntSize) \
-  V(kOSRNestingLevelOffset, kCharSize)                     \
-  V(kBytecodeAgeOffset, kCharSize)                         \
-  /* Total size. */                                        \
-  V(kHeaderSize, 0)
-
+  // Layout description.
   DEFINE_FIELD_OFFSET_CONSTANTS(FixedArrayBase::kHeaderSize,
-                                BYTECODE_ARRAY_FIELDS)
-#undef BYTECODE_ARRAY_FIELDS
+                                TORQUE_GENERATED_BYTECODE_ARRAY_FIELDS)
+  static constexpr int kHeaderSize = kSize;
 
   // InterpreterEntryTrampoline expects these fields to be next to each other
   // and writes a 16-bit value to reset them.
   STATIC_ASSERT(BytecodeArray::kBytecodeAgeOffset ==
-                kOSRNestingLevelOffset + kCharSize);
+                kOsrNestingLevelOffset + kCharSize);
 
   // Maximal memory consumption for a single BytecodeArray.
   static const int kMaxSize = 512 * MB;
