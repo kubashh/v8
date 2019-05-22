@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "453243d4_0744351d",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-05-22T05:55:18Z",
+      "side": 1,
+      "message": "This is a bit weird, I would hope that any float64 use that is willing to accept number-or-oddball should also specify float64 truncation (otherwise, there is no good way to convert the oddballs). I see that this is not the case in the test case you have, perhaps we should change UseInfo::CheckedNumberOrOddballAsFloat64 to pass float64 truncation?",
+      "range": {
+        "startLine": 847,
+        "startChar": 8,
+        "endLine": 847,
+        "endChar": 64
+      },
+      "revId": "a208d0887b8f2f36eaf92d6114d3ba2871e2f876",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
