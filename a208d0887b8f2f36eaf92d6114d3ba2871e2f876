@@ -22,6 +22,30 @@
       "revId": "a208d0887b8f2f36eaf92d6114d3ba2871e2f876",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc500b0a_ca191006",
+        "filename": "src/compiler/representation-change.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1118629
+      },
+      "writtenOn": "2019-05-22T05:57:07Z",
+      "side": 1,
+      "message": "Actually, is not this what you did in some other CL? Does not that approach work?",
+      "parentUuid": "453243d4_0744351d",
+      "range": {
+        "startLine": 847,
+        "startChar": 8,
+        "endLine": 847,
+        "endChar": 64
+      },
+      "revId": "a208d0887b8f2f36eaf92d6114d3ba2871e2f876",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
