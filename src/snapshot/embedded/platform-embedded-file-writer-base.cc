@@ -6,10 +6,23 @@
 
 #include <string>
 
+#include "src/globals.h"
+#include "src/snapshot/embedded/platform-embedded-file-writer-aix.h"
 #include "src/snapshot/embedded/platform-embedded-file-writer-generic.h"
+#include "src/snapshot/embedded/platform-embedded-file-writer-mac.h"
+#include "src/snapshot/embedded/platform-embedded-file-writer-win.h"
 
 namespace v8 {
 namespace internal {
+
+DataDirective PointerSizeDirective() {
+  if (kSystemPointerSize == 8) {
+    return kQuad;
+  } else {
+    CHECK_EQ(4, kSystemPointerSize);
+    return kLong;
+  }
+}
 
 namespace {
 
@@ -83,9 +96,28 @@ EmbeddedTargetOs ToEmbeddedTargetOs(const char* s) {
 
 std::unique_ptr<PlatformEmbeddedFileWriterBase> NewPlatformEmbeddedFileWriter(
     const char* target_arch, const char* target_os) {
-  return std::unique_ptr<PlatformEmbeddedFileWriterGeneric>(
-      new PlatformEmbeddedFileWriterGeneric(ToEmbeddedTargetArch(target_arch),
-                                            ToEmbeddedTargetOs(target_os)));
+  auto embedded_target_arch = ToEmbeddedTargetArch(target_arch);
+  auto embedded_target_os = ToEmbeddedTargetOs(target_os);
+
+  if (embedded_target_os == EmbeddedTargetOs::kAIX) {
+    return std::unique_ptr<PlatformEmbeddedFileWriterBase>(
+        new PlatformEmbeddedFileWriterAIX(embedded_target_arch,
+                                          embedded_target_os));
+  } else if (embedded_target_os == EmbeddedTargetOs::kMac) {
+    return std::unique_ptr<PlatformEmbeddedFileWriterBase>(
+        new PlatformEmbeddedFileWriterMac(embedded_target_arch,
+                                          embedded_target_os));
+  } else if (embedded_target_os == EmbeddedTargetOs::kWin) {
+    return std::unique_ptr<PlatformEmbeddedFileWriterBase>(
+        new PlatformEmbeddedFileWriterWin(embedded_target_arch,
+                                          embedded_target_os));
+  } else {
+    return std::unique_ptr<PlatformEmbeddedFileWriterBase>(
+        new PlatformEmbeddedFileWriterGeneric(embedded_target_arch,
+                                              embedded_target_os));
+  }
+
+  UNREACHABLE();
 }
 
 }  // namespace internal
