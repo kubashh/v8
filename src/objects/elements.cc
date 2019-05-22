@@ -4634,24 +4634,20 @@ void CopyTypedArrayElementsSlice(Address raw_source, Address raw_destination,
 }
 
 void ElementsAccessor::InitializeOncePerProcess() {
-  static ElementsAccessor* accessor_array[] = {
-#define ACCESSOR_ARRAY(Class, Kind, Store) new Class(#Kind),
-      ELEMENTS_LIST(ACCESSOR_ARRAY)
-#undef ACCESSOR_ARRAY
-  };
-
-  STATIC_ASSERT((sizeof(accessor_array) / sizeof(*accessor_array)) ==
-                kElementsKindCount);
-
-  elements_accessors_ = accessor_array;
+#define SET_UP_ACCESSOR(Class, Kind, Store) \
+  elements_accessors_[Kind] = new Class(#Kind);
+  ELEMENTS_LIST(SET_UP_ACCESSOR)
+#undef SET_UP_ACCESSOR
 }
 
 void ElementsAccessor::TearDown() {
-  if (elements_accessors_ == nullptr) return;
-#define ACCESSOR_DELETE(Class, Kind, Store) delete elements_accessors_[Kind];
-  ELEMENTS_LIST(ACCESSOR_DELETE)
-#undef ACCESSOR_DELETE
-  elements_accessors_ = nullptr;
+  // This method can be called multiple times in a row.
+  if (elements_accessors_[FIRST_ELEMENTS_KIND] == nullptr) return;
+#define DELETE_ACCESSOR(Class, Kind, Store) \
+  delete elements_accessors_[Kind];         \
+  elements_accessors_[Kind] = nullptr;
+  ELEMENTS_LIST(DELETE_ACCESSOR)
+#undef DELETE_ACCESSOR
 }
 
 Handle<JSArray> ElementsAccessor::Concat(Isolate* isolate, Arguments* args,
@@ -4706,7 +4702,7 @@ Handle<JSArray> ElementsAccessor::Concat(Isolate* isolate, Arguments* args,
   return result_array;
 }
 
-ElementsAccessor** ElementsAccessor::elements_accessors_ = nullptr;
+ElementsAccessor* ElementsAccessor::elements_accessors_[] = {nullptr};
 
 #undef ELEMENTS_LIST
 }  // namespace internal
