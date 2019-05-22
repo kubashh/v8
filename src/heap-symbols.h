@@ -80,6 +80,7 @@
   V(_, plusSign_string, "plusSign")                                 \
   V(_, quarter_string, "quarter")                                   \
   V(_, region_string, "region")                                     \
+  V(_, relatedYear_string, "relatedYear")                           \
   V(_, scientific_string, "scientific")                             \
   V(_, second_string, "second")                                     \
   V(_, segment_string, "segment")                                   \
@@ -105,7 +106,8 @@
   V(_, unit_string, "unit")                                         \
   V(_, unitDisplay_string, "unitDisplay")                           \
   V(_, weekday_string, "weekday")                                   \
-  V(_, year_string, "year")
+  V(_, year_string, "year")                                         \
+  V(_, yearName_string, "yearName")
 #else  // V8_INTL_SUPPORT
 #define INTERNALIZED_STRING_LIST_GENERATOR_INTL(V, _)
 #endif  // V8_INTL_SUPPORT
