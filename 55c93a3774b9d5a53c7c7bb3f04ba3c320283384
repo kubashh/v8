@@ -22,6 +22,30 @@
       "revId": "55c93a3774b9d5a53c7c7bb3f04ba3c320283384",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "548ecc46_ad4989c2",
+        "filename": "src/wasm/module-compiler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-22T13:34:12Z",
+      "side": 1,
+      "message": "It moves the last element into the slot at {it}, then decrements the {end} iterator.\nBatch insertion into {std::vector} is usually faster than inserting individual elements in a loop, so I though I just batch-insert them all, then extract those again that are \"big\". But I see that this adds complexity and it\u0027s unclear if this is actually needed. I simplified the code now to either insert into the big_units_queue_, or into the standard queue.",
+      "parentUuid": "1deb3631_f2df3cb5",
+      "range": {
+        "startLine": 214,
+        "startChar": 10,
+        "endLine": 214,
+        "endChar": 22
+      },
+      "revId": "55c93a3774b9d5a53c7c7bb3f04ba3c320283384",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
