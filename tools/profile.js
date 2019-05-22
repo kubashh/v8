@@ -1077,7 +1077,32 @@ function writeJson(s) {
   write(JSON.stringify(s, null, 2));
 }
 
+const BYTECODE_HANDLER_RE = /^_Builtins_(.*)Handler$/;
+const BUILTIN_RE = /^_Builtins_(.*)$/;
+
+function resolveBuiltins(codeEntries) {
+  // Embedded builtins look like C++ functions. here, we somewhat hackily
+  // detect that they are builtins by pattern matching the name.
+  for (let i = 0; i < codeEntries.length; i++) {
+    const code = codeEntries[i];
+    if (code.type === "CPP") {
+      let m;
+      if (m = code.name.match(BYTECODE_HANDLER_RE)) {
+        code.name = m[1];
+        code.type = "CODE";
+        code.kind = "BytecodeHandler";
+      } else if (m = code.name.match(BUILTIN_RE)) {
+        code.name = m[1];
+        code.type = "CODE";
+        code.kind = "Builtin";
+      }
+    }
+  }
+}
+
 JsonProfile.prototype.writeJson = function() {
+  resolveBuiltins(this.codeEntries_);
+
   // Write out the JSON in a partially manual way to avoid creating too-large
   // strings in one JSON.stringify call when there are a lot of ticks.
   write('{\n')
