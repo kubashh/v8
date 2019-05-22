@@ -8,8 +8,8 @@
 #include "src/logging/counters.h"
 #include "src/maybe-handles-inl.h"
 #include "src/numbers/conversions.h"
-#include "src/objects-inl.h"
 #include "src/objects/js-array-buffer-inl.h"
+#include "src/objects/objects-inl.h"
 
 namespace v8 {
 namespace internal {

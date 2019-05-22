@@ -9,7 +9,7 @@
 #include "src/base/logging.h"
 #include "src/identity-map.h"
 #include "src/maybe-handles.h"
-#include "src/objects-inl.h"
+#include "src/objects/objects-inl.h"
 #include "src/roots-inl.h"
 
 #ifdef DEBUG

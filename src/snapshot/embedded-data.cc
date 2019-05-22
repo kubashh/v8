@@ -6,7 +6,7 @@
 
 #include "src/callable.h"
 #include "src/codegen/assembler-inl.h"
-#include "src/objects-inl.h"
+#include "src/objects/objects-inl.h"
 #include "src/snapshot/snapshot.h"
 
 namespace v8 {

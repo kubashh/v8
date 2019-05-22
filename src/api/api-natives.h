@@ -9,7 +9,7 @@
 #include "src/base/macros.h"
 #include "src/handles.h"
 #include "src/maybe-handles.h"
-#include "src/objects.h"
+#include "src/objects/objects.h"
 #include "src/objects/property-details.h"
 
 namespace v8 {
