@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "6a2c3a14_ef36ba8d",
+        "filename": "src/snapshot/embedded-file-writer.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-22T14:06:37Z",
+      "side": 1,
+      "message": "Sounds good thanks",
+      "parentUuid": "35fce0fe_a0b977b0",
+      "range": {
+        "startLine": 288,
+        "startChar": 18,
+        "endLine": 288,
+        "endChar": 47
+      },
+      "revId": "7434bf64681e4622a7ea581c08fd91527eedd037",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98142eb1_b169f657",
         "filename": "src/snapshot/embedded/platform-embedded-file-writer-base.cc",
         "patchSetId": 2
@@ -93,6 +117,30 @@
       "revId": "7434bf64681e4622a7ea581c08fd91527eedd037",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "545240f7_135be451",
+        "filename": "src/snapshot/embedded/platform-embedded-file-writer-base.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1167239
+      },
+      "writtenOn": "2019-05-22T14:06:37Z",
+      "side": 1,
+      "message": "SGTM!",
+      "parentUuid": "1a441f18_e29806a1",
+      "range": {
+        "startLine": 103,
+        "startChar": 16,
+        "endLine": 103,
+        "endChar": 26
+      },
+      "revId": "7434bf64681e4622a7ea581c08fd91527eedd037",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
