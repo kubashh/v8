@@ -709,7 +709,7 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   void VerifyMarkbitsAreClean(LargeObjectSpace* space);
 #endif
 
-  unsigned epoch() const { return epoch_; }
+  uintptr_t epoch() const { return epoch_; }
 
   explicit MarkCompactCollector(Heap* heap);
   ~MarkCompactCollector() override;
@@ -914,7 +914,7 @@ class MarkCompactCollector final : public MarkCompactCollectorBase {
   // - marking descriptor arrays. See NumberOfMarkedDescriptors. Only the lower
   //   two bits are used, so it is okay if this counter overflows and wraps
   //   around.
-  unsigned epoch_ = 0;
+  uintptr_t epoch_ = 0;
 
   friend class FullEvacuator;
   friend class RecordMigratedSlotVisitor;
@@ -1008,7 +1008,7 @@ class MarkingVisitor final
   Heap* const heap_;
   MarkCompactCollector* const collector_;
   MarkingState* const marking_state_;
-  const unsigned mark_compact_epoch_;
+  const uintptr_t mark_compact_epoch_;
 };
 
 class EvacuationScope {
