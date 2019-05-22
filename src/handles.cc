@@ -4,13 +4,13 @@
 
 #include "src/handles.h"
 
-#include "src/address-map.h"
 #include "src/api/api.h"
 #include "src/base/logging.h"
-#include "src/identity-map.h"
 #include "src/maybe-handles.h"
 #include "src/objects-inl.h"
 #include "src/roots-inl.h"
+#include "src/utils/address-map.h"
+#include "src/utils/identity-map.h"
 
 #ifdef DEBUG
 // For GetIsolateFromWritableHeapObject.

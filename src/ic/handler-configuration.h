@@ -11,7 +11,7 @@
 #include "src/objects/data-handler.h"
 #include "src/objects/elements-kind.h"
 #include "src/objects/field-index.h"
-#include "src/utils.h"
+#include "src/utils/utils.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"

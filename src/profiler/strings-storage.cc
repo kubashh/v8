@@ -6,8 +6,8 @@
 
 #include <memory>
 
-#include "src/allocation.h"
 #include "src/objects-inl.h"
+#include "src/utils/allocation.h"
 
 namespace v8 {
 namespace internal {

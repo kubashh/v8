@@ -12,7 +12,7 @@
 #include "src/execution/isolate.h"
 #include "src/objects-inl.h"
 #include "src/objects.h"
-#include "src/ostreams.h"
+#include "src/utils/ostreams.h"
 #include "src/wasm/wasm-interpreter.h"
 #include "src/wasm/wasm-module-builder.h"
 #include "src/wasm/wasm-module.h"

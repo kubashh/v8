@@ -9,7 +9,7 @@
 #include "src/compiler/access-info.h"
 #include "src/handles.h"
 #include "src/maybe-handles.h"
-#include "src/utils.h"
+#include "src/utils/utils.h"
 #include "src/zone/zone-containers.h"
 
 namespace v8 {

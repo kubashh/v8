@@ -36,7 +36,7 @@
 #include "src/execution/simulator.h"
 #include "src/objects-inl.h"
 #include "src/objects/heap-number.h"
-#include "src/ostreams.h"
+#include "src/utils/ostreams.h"
 
 namespace v8 {
 namespace internal {

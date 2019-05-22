@@ -8,7 +8,7 @@
 #include "src/compiler/js-operator.h"
 #include "src/compiler/js-type-hint-lowering.h"
 #include "src/handles.h"
-#include "src/utils.h"
+#include "src/utils/utils.h"
 
 namespace v8 {
 namespace internal {

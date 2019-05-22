@@ -12,7 +12,7 @@
 #include "src/function-kind.h"
 #include "src/globals.h"
 #include "src/objects.h"
-#include "src/pointer-with-payload.h"
+#include "src/utils/pointer-with-payload.h"
 #include "src/zone/zone.h"
 
 namespace v8 {

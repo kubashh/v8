@@ -18,8 +18,8 @@
 #include "src/base/platform/mutex.h"
 #include "src/base/platform/semaphore.h"
 #include "src/globals.h"
-#include "src/identity-map.h"
 #include "src/maybe-handles.h"
+#include "src/utils/identity-map.h"
 #include "testing/gtest/include/gtest/gtest_prod.h"  // nogncheck
 
 namespace v8 {

@@ -13,8 +13,8 @@
 #include "src/globals.h"
 #include "src/handles.h"
 #include "src/objects.h"
-#include "src/utils.h"
-#include "src/vector.h"
+#include "src/utils/utils.h"
+#include "src/utils/vector.h"
 
 namespace v8 {
 

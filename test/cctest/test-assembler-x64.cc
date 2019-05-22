@@ -37,7 +37,7 @@
 #include "src/heap/factory.h"
 #include "src/numbers/double.h"
 #include "src/objects-inl.h"
-#include "src/ostreams.h"
+#include "src/utils/ostreams.h"
 #include "test/cctest/cctest.h"
 #include "test/common/assembler-tester.h"
 

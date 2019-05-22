@@ -4,7 +4,6 @@
 
 #include "src/interpreter/interpreter-intrinsics-generator.h"
 
-#include "src/allocation.h"
 #include "src/builtins/builtins.h"
 #include "src/codegen/code-factory.h"
 #include "src/execution/frames.h"
@@ -15,6 +14,7 @@
 #include "src/objects-inl.h"
 #include "src/objects/js-generator.h"
 #include "src/objects/module.h"
+#include "src/utils/allocation.h"
 
 namespace v8 {
 namespace internal {

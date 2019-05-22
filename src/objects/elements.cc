@@ -20,7 +20,7 @@
 #include "src/objects/js-array-inl.h"
 #include "src/objects/slots-atomic-inl.h"
 #include "src/objects/slots.h"
-#include "src/utils.h"
+#include "src/utils/utils.h"
 
 // Each concrete ElementsAccessor can handle exactly one ElementsKind,
 // several abstract ElementsAccessor classes are used to allow sharing

@@ -7,7 +7,7 @@
 
 #include "include/v8.h"
 #include "src/objects.h"
-#include "src/vector.h"
+#include "src/utils/vector.h"
 
 namespace v8 { class StartupData; }  // Forward declaration.
 
