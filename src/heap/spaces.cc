@@ -709,7 +709,7 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
   chunk->invalidated_slots_ = nullptr;
   chunk->progress_bar_ = 0;
   chunk->high_water_mark_ = static_cast<intptr_t>(area_start - base);
-  chunk->set_concurrent_sweeping_state(kSweepingDone);
+  chunk->set_mark_compact_epoch(heap->mark_compact_collector()->epoch());
   chunk->page_protection_change_mutex_ = new base::Mutex();
   chunk->write_unprotect_counter_ = 0;
   chunk->mutex_ = new base::Mutex();
@@ -1022,6 +1022,10 @@ void MemoryChunk::SetYoungGenerationPageFlags(bool is_marking) {
     ClearFlag(MemoryChunk::POINTERS_FROM_HERE_ARE_INTERESTING);
     ClearFlag(MemoryChunk::INCREMENTAL_MARKING);
   }
+}
+
+bool MemoryChunk::SweepingDone() {
+  return heap_->mark_compact_collector()->epoch() == mark_compact_epoch_;
 }
 
 void Page::ResetAllocationStatistics() {
@@ -1734,7 +1738,6 @@ Page* PagedSpace::RemovePageSafe(int size_in_bytes) {
 }
 
 size_t PagedSpace::AddPage(Page* page) {
-  CHECK(page->SweepingDone());
   page->set_owner(this);
   memory_chunk_list_.PushBack(page);
   AccountCommitted(page->size());
@@ -2117,7 +2120,6 @@ void PagedSpace::VerifyLiveBytes() {
   IncrementalMarking::MarkingState* marking_state =
       heap()->incremental_marking()->marking_state();
   for (Page* page : *this) {
-    CHECK(page->SweepingDone());
     HeapObjectIterator it(page);
     int black_size = 0;
     for (HeapObject object = it.Next(); !object.is_null(); object = it.Next()) {
