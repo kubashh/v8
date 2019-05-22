@@ -1013,50 +1013,21 @@ Handle<String> JsonParser<Char>::MakeString(const JsonString& string,
                                             Handle<String> hint) {
   if (string.length() == 0) return factory()->empty_string();
 
-  if (sizeof(Char) == 1) {
-    if (string.internalize() && !string.has_escape()) {
-      if (!hint.is_null()) {
-        Vector<const Char> data(chars_ + string.start(), string.length());
-        if (Matches(data, hint)) return hint;
-      }
-      if (chars_may_relocate_) {
-        return factory()->InternalizeOneByteString(
-            Handle<SeqOneByteString>::cast(source_), string.start(),
-            string.length());
-      }
-      Vector<const Char> chars(chars_ + string.start(), string.length());
-      return factory()->InternalizeOneByteString(
-          Vector<const uint8_t>::cast(chars));
-    }
-
-    if (V8_UNLIKELY(string.needs_conversion())) {
-      DCHECK(string.has_escape());
-      Handle<SeqTwoByteString> intermediate =
-          factory()->NewRawTwoByteString(string.length()).ToHandleChecked();
-      return DecodeString<uint16_t>(string, intermediate, hint);
-    }
-
-    Handle<SeqOneByteString> intermediate =
-        factory()->NewRawOneByteString(string.length()).ToHandleChecked();
-    return DecodeString<uint8_t>(string, intermediate, hint);
-  }
-
   if (string.internalize() && !string.has_escape()) {
     if (!hint.is_null()) {
       Vector<const Char> data(chars_ + string.start(), string.length());
       if (Matches(data, hint)) return hint;
     }
     if (chars_may_relocate_) {
-      return factory()->InternalizeTwoByteString(
-          Handle<SeqTwoByteString>::cast(source_), string.start(),
-          string.length(), string.needs_conversion());
+      return factory()->InternalizeString(Handle<SeqString>::cast(source_),
+                                          string.start(), string.length());
     }
     Vector<const Char> chars(chars_ + string.start(), string.length());
-    return factory()->InternalizeTwoByteString(
-        Vector<const uint16_t>::cast(chars), string.needs_conversion());
+    return factory()->InternalizeString(chars);
   }
 
-  if (string.needs_conversion()) {
+  if (sizeof(Char) == 1 ? V8_LIKELY(!string.needs_conversion())
+                        : string.needs_conversion()) {
     Handle<SeqOneByteString> intermediate =
         factory()->NewRawOneByteString(string.length()).ToHandleChecked();
     return DecodeString<uint8_t>(string, intermediate, hint);
