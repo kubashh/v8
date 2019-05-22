@@ -1923,15 +1923,15 @@ Address CheckObjectType(Address raw_value, Address raw_type,
   Smi type(raw_type);
   String location = String::cast(Object(raw_location));
   const char* expected;
-  switch (static_cast<ObjectType>(type->value())) {
+  switch (static_cast<ObjectType>(type.value())) {
 #define TYPE_CASE(Name)                                  \
   case ObjectType::k##Name:                              \
-    if (value->Is##Name()) return Smi::FromInt(0).ptr(); \
+    if (value.Is##Name()) return Smi::FromInt(0).ptr(); \
     expected = #Name;                                    \
     break;
 #define TYPE_STRUCT_CASE(NAME, Name, name)               \
   case ObjectType::k##Name:                              \
-    if (value->Is##Name()) return Smi::FromInt(0).ptr(); \
+    if (value.Is##Name()) return Smi::FromInt(0).ptr(); \
     expected = #Name;                                    \
     break;
 
@@ -1945,11 +1945,11 @@ Address CheckObjectType(Address raw_value, Address raw_type,
 #undef TYPE_STRUCT_CASE
   }
   std::stringstream value_description;
-  value->Print(value_description);
+  value.Print(value_description);
   FATAL(
       "Type cast failed in %s\n"
       "  Expected %s but found %s",
-      location->ToAsciiArray(), expected, value_description.str().c_str());
+      location.ToAsciiArray(), expected, value_description.str().c_str());
 #else
   UNREACHABLE();
 #endif

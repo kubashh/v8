@@ -154,8 +154,8 @@ SerializerForBackgroundCompilation::Environment::Environment(
     Zone* zone, CompilationSubject function)
     : zone_(zone),
       function_(function.blueprint()),
-      parameter_count_(function_.shared->GetBytecodeArray()->parameter_count()),
-      register_count_(function_.shared->GetBytecodeArray()->register_count()),
+      parameter_count_(function_.shared->GetBytecodeArray().parameter_count()),
+      register_count_(function_.shared->GetBytecodeArray().register_count()),
       environment_hints_(environment_hints_size(), Hints(zone), zone),
       return_value_hints_(zone) {
   Handle<JSFunction> closure;
@@ -187,7 +187,7 @@ SerializerForBackgroundCompilation::Environment::Environment(
 
   interpreter::Register new_target_reg =
       function_.shared->GetBytecodeArray()
-          ->incoming_new_target_or_generator_register();
+          .incoming_new_target_or_generator_register();
   if (new_target_reg.is_valid()) {
     DCHECK(register_hints(new_target_reg).IsEmpty());
     if (new_target.has_value()) {
@@ -215,7 +215,7 @@ std::ostream& operator<<(
     const SerializerForBackgroundCompilation::Environment& env) {
   std::ostringstream output_stream;
   output_stream << "Function ";
-  env.function_.shared->Name()->Print(output_stream);
+  env.function_.shared->Name().Print(output_stream);
   output_stream << "Parameter count: " << env.parameter_count() << std::endl;
   output_stream << "Register count: " << env.register_count() << std::endl;
 
@@ -344,7 +344,7 @@ void SerializerForBackgroundCompilation::VisitGetSuperConstructor(
     // For JSNativeContextSpecialization::ReduceJSGetSuperConstructor.
     if (!constant->IsJSFunction()) continue;
     MapRef map(broker(),
-               handle(HeapObject::cast(*constant)->map(), broker()->isolate()));
+               handle(HeapObject::cast(*constant).map(), broker()->isolate()));
     map.SerializePrototype();
     ObjectRef proto = map.prototype();
     if (proto.IsHeapObject() && proto.AsHeapObject().map().is_constructor()) {
@@ -573,7 +573,7 @@ Hints SerializerForBackgroundCompilation::RunChildSerializer(
     padded.pop_back();  // Remove the spread element.
     // Fill the rest with empty hints.
     padded.resize(
-        function.blueprint().shared->GetBytecodeArray()->parameter_count(),
+        function.blueprint().shared->GetBytecodeArray().parameter_count(),
         Hints(zone()));
     return RunChildSerializer(function, new_target, padded, false);
   }
@@ -625,7 +625,7 @@ void SerializerForBackgroundCompilation::ProcessCallOrConstruct(
     if (!hint->IsJSFunction()) continue;
 
     Handle<JSFunction> function = Handle<JSFunction>::cast(hint);
-    if (!function->shared()->IsInlineable() || !function->has_feedback_vector())
+    if (!function->shared().IsInlineable() || !function->has_feedback_vector())
       continue;
 
     environment()->accumulator_hints().Add(RunChildSerializer(

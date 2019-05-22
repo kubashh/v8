@@ -86,9 +86,9 @@ Code Interpreter::GetBytecodeHandler(Bytecode bytecode,
 
 void Interpreter::SetBytecodeHandler(Bytecode bytecode,
                                      OperandScale operand_scale, Code handler) {
-  DCHECK(handler->kind() == Code::BYTECODE_HANDLER);
+  DCHECK(handler.kind() == Code::BYTECODE_HANDLER);
   size_t index = GetDispatchTableIndex(bytecode, operand_scale);
-  dispatch_table_[index] = handler->InstructionStart();
+  dispatch_table_[index] = handler.InstructionStart();
 }
 
 // static
@@ -130,7 +130,7 @@ void Interpreter::IterateDispatchTable(RootVisitor* v) {
     Code old_code = code;
     v->VisitRootPointer(Root::kDispatchTable, nullptr, FullObjectSlot(&code));
     if (code != old_code) {
-      dispatch_table_[i] = code->entry();
+      dispatch_table_[i] = code.entry();
     }
   }
 }
@@ -293,7 +293,7 @@ const char* Interpreter::LookupNameOfBytecodeHandler(const Code code) {
 #ifdef ENABLE_DISASSEMBLER
 #define RETURN_NAME(Name, ...)                                 \
   if (dispatch_table_[Bytecodes::ToByte(Bytecode::k##Name)] == \
-      code->entry()) {                                         \
+      code.entry()) {                                         \
     return #Name;                                              \
   }
   BYTECODE_LIST(RETURN_NAME)

@@ -99,7 +99,7 @@ class BaseDictionaryShape : public BaseShape<Key> {
   static inline PropertyDetails DetailsAt(Dictionary dict, int entry) {
     STATIC_ASSERT(Dictionary::kEntrySize == 3);
     DCHECK_GE(entry, 0);  // Not found is -1, which is not caught by get().
-    return PropertyDetails(Smi::cast(dict->get(
+    return PropertyDetails(Smi::cast(dict.get(
         Dictionary::EntryToIndex(entry) + Dictionary::kEntryDetailsIndex)));
   }
 
@@ -107,7 +107,7 @@ class BaseDictionaryShape : public BaseShape<Key> {
   static inline void DetailsAtPut(Isolate* isolate, Dictionary dict, int entry,
                                   PropertyDetails value) {
     STATIC_ASSERT(Dictionary::kEntrySize == 3);
-    dict->set(Dictionary::EntryToIndex(entry) + Dictionary::kEntryDetailsIndex,
+    dict.set(Dictionary::EntryToIndex(entry) + Dictionary::kEntryDetailsIndex,
               value.AsSmi());
   }
 };
