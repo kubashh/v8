@@ -137,22 +137,18 @@ BUILTIN(StringPrototypeLocaleCompare) {
 
   isolate->CountUsage(v8::Isolate::UseCounterFeature::kStringLocaleCompare);
 
-#ifdef V8_INTL_SUPPORT
   TO_THIS_STRING(str1, "String.prototype.localeCompare");
   Handle<String> str2;
   ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
       isolate, str2, Object::ToString(isolate, args.atOrUndefined(isolate, 1)));
-  RETURN_RESULT_OR_FAILURE(
-      isolate, Intl::StringLocaleCompare(isolate, str1, str2,
-                                         args.atOrUndefined(isolate, 2),
-                                         args.atOrUndefined(isolate, 3)));
-#else
-  DCHECK_EQ(2, args.length());
-
-  TO_THIS_STRING(str1, "String.prototype.localeCompare");
-  Handle<String> str2;
-  ASSIGN_RETURN_FAILURE_ON_EXCEPTION(isolate, str2,
-                                     Object::ToString(isolate, args.at(1)));
+  if (args.length() > 2) {
+#ifdef V8_INTL_SUPPORT
+    RETURN_RESULT_OR_FAILURE(
+        isolate, Intl::StringLocaleCompare(isolate, str1, str2,
+                                           args.atOrUndefined(isolate, 2),
+                                           args.atOrUndefined(isolate, 3)));
+#endif  // !V8_INTL_SUPPORT
+  }
 
   if (str1.is_identical_to(str2)) return Smi::kZero;  // Equal.
   int str1_length = str1->length();
@@ -188,7 +184,6 @@ BUILTIN(StringPrototypeLocaleCompare) {
   }
 
   return Smi::FromInt(str1_length - str2_length);
-#endif  // !V8_INTL_SUPPORT
 }
 
 #ifndef V8_INTL_SUPPORT
