@@ -145,6 +145,24 @@
     },
     {
       "key": {
+        "uuid": "77bedcff_ce38990a",
+        "filename": "src/profiler/tick-sample.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-05-23T01:44:48Z",
+      "side": 1,
+      "message": "Good point - a few things:\n\n- The current CodeEntry logging uses SharedFunctionInfo objects for non-optimized code objects. We could add JSFunction logging, but there would likely be memory overhead.\n- IIUC, it\u0027s possible to execute a function with a different context than its creation context. See v8::Function::Call. We may not want to include these outliers to avoid leaking execution info cross-context.\n\nI\u0027m open to exploring your suggestion, I figured that this approach would be the safest (mapping most closely to the Incumbent Realm concept in HTML5).",
+      "parentUuid": "18dcad76_1d69133f",
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78af3fb1_158064dd",
         "filename": "test/cctest/test-cpu-profiler.cc",
         "patchSetId": 10
