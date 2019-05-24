@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8c82662_08919b8e",
+        "filename": "src/objects/oddball.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-24T09:42:28Z",
+      "side": 1,
+      "message": "Should we have a static_assert here that there are no weak fields?",
+      "revId": "7563c84c081ae6e0614ac877946dca474a42fb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "485faa54_fb316469",
+        "filename": "src/torque/implementation-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 3222,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-24T09:42:28Z",
+      "side": 1,
+      "message": "How about: \"Torque type: \"",
+      "range": {
+        "startLine": 3222,
+        "startChar": 18,
+        "endLine": 3222,
+        "endChar": 29
+      },
+      "revId": "7563c84c081ae6e0614ac877946dca474a42fb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "720d22c8_36f92c7c",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-24T09:42:28Z",
+      "side": 1,
+      "message": "non_constexpr_name",
+      "range": {
+        "startLine": 72,
+        "startChar": 18,
+        "endLine": 72,
+        "endChar": 32
+      },
+      "revId": "7563c84c081ae6e0614ac877946dca474a42fb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "842b65a0_7e77c2f4",
+        "filename": "src/torque/type-visitor.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-24T09:42:28Z",
+      "side": 1,
+      "message": "This name is confusing too.",
+      "range": {
+        "startLine": 73,
+        "startChar": 16,
+        "endLine": 73,
+        "endChar": 31
+      },
+      "revId": "7563c84c081ae6e0614ac877946dca474a42fb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77d1624c_f349363f",
+        "filename": "src/torque/types.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-24T09:42:28Z",
+      "side": 1,
+      "message": "Why \"return this\" instead of nullptr?",
+      "range": {
+        "startLine": 219,
+        "startChar": 4,
+        "endLine": 219,
+        "endChar": 16
+      },
+      "revId": "7563c84c081ae6e0614ac877946dca474a42fb78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
