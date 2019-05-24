@@ -1467,10 +1467,13 @@ bool IsValidExtension(const icu::Locale& locale, const char* key,
                                    false, status));
   if (U_SUCCESS(status)) {
     int32_t length;
-    std::string legacy_type(uloc_toLegacyType(key, value.c_str()));
+    const char* legacy_type = uloc_toLegacyType(key, value.c_str());
+    if (legacy_type == nullptr) {
+      return false;
+    }
     for (const char* item = enumeration->next(&length, status); item != nullptr;
          item = enumeration->next(&length, status)) {
-      if (U_SUCCESS(status) && legacy_type == item) {
+      if (U_SUCCESS(status) && strcmp(legacy_type, item) == 0) {
         return true;
       }
     }
