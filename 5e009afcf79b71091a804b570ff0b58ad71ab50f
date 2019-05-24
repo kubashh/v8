@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23c5043f_5e252350",
+        "filename": "test/intl/regress-966285.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-24T09:53:21Z",
+      "side": 1,
+      "message": "nit: 2019",
+      "range": {
+        "startLine": 1,
+        "startChar": 13,
+        "endLine": 1,
+        "endChar": 17
+      },
+      "revId": "5e009afcf79b71091a804b570ff0b58ad71ab50f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a78857fc_ff36e8a2",
+        "filename": "test/intl/regress-966285.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-24T09:53:21Z",
+      "side": 1,
+      "message": "nit: 80col",
+      "range": {
+        "startLine": 8,
+        "startChar": 80,
+        "endLine": 8,
+        "endChar": 83
+      },
+      "revId": "5e009afcf79b71091a804b570ff0b58ad71ab50f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
