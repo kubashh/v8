@@ -22,6 +22,30 @@
       "revId": "969cb0c7a58b4c8b53ff411adde5fc4a5a6785e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfe22ac1_55cc098d",
+        "filename": "src/unwinding-info-win64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-27T09:48:08Z",
+      "side": 1,
+      "message": "+1 this looks suspicious. Should it be\n\n DCHECK_LE(masm.instruction_size(), sizeof(record-\u003eexception_thunk));\n memcpy(\u0026record-\u003eexception_thunk[0], masm.buffer_start(), masm.instruction_size());\n\n?",
+      "parentUuid": "83f92d4f_69d6d2fb",
+      "range": {
+        "startLine": 215,
+        "startChar": 59,
+        "endLine": 215,
+        "endChar": 77
+      },
+      "revId": "969cb0c7a58b4c8b53ff411adde5fc4a5a6785e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
