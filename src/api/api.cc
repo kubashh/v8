@@ -2890,7 +2890,9 @@ Local<StackTrace> StackTrace::CurrentStackTrace(Isolate* isolate,
 // --- S t a c k F r a m e ---
 
 int StackFrame::GetLineNumber() const {
-  return i::StackTraceFrame::GetLineNumber(Utils::OpenHandle(this));
+  int line = i::StackTraceFrame::GetLineNumber(Utils::OpenHandle(this));
+  if (i::StackTraceFrame::IsWasm(Utils::OpenHandle(this)) && line >= 0) line++;
+  return line;
 }
 
 int StackFrame::GetColumn() const {

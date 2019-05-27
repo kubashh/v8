@@ -3765,16 +3765,17 @@ Handle<StackFrameInfo> Factory::NewStackFrameInfo(
 
   const bool is_wasm = frame_array->IsAnyWasmFrame(index);
   info->set_is_wasm(is_wasm);
+  info->set_is_asmjs_wasm(frame_array->IsAsmJsWasmFrame(index));
 
   // Line numbers are 1-based, for Wasm we need to adjust.
   int line = it.Frame()->GetLineNumber();
-  if (is_wasm && line >= 0) line++;
   info->set_line_number(line);
 
   // Column numbers are 1-based. For Wasm we use the position
   // as the iterator does not currently provide a column number.
-  const int column =
-      is_wasm ? it.Frame()->GetPosition() + 1 : it.Frame()->GetColumnNumber();
+  const int column = (is_wasm && !info->is_asmjs_wasm())
+                         ? it.Frame()->GetPosition() + 1
+                         : it.Frame()->GetColumnNumber();
   info->set_column_number(column);
 
   info->set_script_id(it.Frame()->GetScriptId());
@@ -3784,18 +3785,19 @@ Handle<StackFrameInfo> Factory::NewStackFrameInfo(
   // TODO(szuend): Adjust this, once it is decided what name to use in both
   //               "simple" and "detailed" stack traces. This code is for
   //               backwards compatibility to fullfill test expectations.
-  auto function_name = it.Frame()->GetFunctionName();
   if (!is_wasm) {
     Handle<Object> function = it.Frame()->GetFunction();
     if (function->IsJSFunction()) {
       Handle<JSFunction> fun = Handle<JSFunction>::cast(function);
-      function_name = JSFunction::GetDebugName(fun);
 
       const bool is_user_java_script = fun->shared().IsUserJavaScript();
       info->set_is_user_java_script(is_user_java_script);
     }
   }
-  info->set_function_name(*function_name);
+  info->set_function_name(*it.Frame()->GetFunctionName());
+  info->set_method_name(*it.Frame()->GetMethodName());
+  info->set_type_name(*it.Frame()->GetTypeName());
+  info->set_eval_origin(*it.Frame()->GetEvalOrigin());
   info->set_wasm_module_name(*it.Frame()->GetWasmModuleName());
   info->set_is_eval(it.Frame()->IsEval());
   info->set_is_constructor(it.Frame()->IsConstructor());
