@@ -3369,6 +3369,8 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
     setup_delegate_ = new SetupIsolateDelegate(create_heap_objects);
   }
 
+  if (!FLAG_inline_new) heap_.DisableInlineAllocation();
+
   if (!setup_delegate_->SetupHeap(&heap_)) {
     V8::FatalProcessOutOfMemory(this, "heap object creation");
     return false;
@@ -3508,8 +3510,6 @@ bool Isolate::Init(ReadOnlyDeserializer* read_only_deserializer,
   }
 
   initialized_from_snapshot_ = !create_heap_objects;
-
-  if (!FLAG_inline_new) heap_.DisableInlineAllocation();
 
   if (FLAG_stress_sampling_allocation_profiler > 0) {
     uint64_t sample_interval = FLAG_stress_sampling_allocation_profiler;
