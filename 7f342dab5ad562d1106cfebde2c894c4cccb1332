@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8440aa1a_f5eff48a",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-27T10:05:38Z",
+      "side": 1,
+      "message": "Wasn\u0027t this also kIntSize / contains an int?",
+      "revId": "7f342dab5ad562d1106cfebde2c894c4cccb1332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5e04575_7412e401",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-05-27T10:05:38Z",
+      "side": 1,
+      "message": "Since this changes from kIntSize to int32, we should update accessors to use int32_t instead of int. Same for all other kIntSize -\u003e int32 fields (like incoming_new_target_or_generator_register, frame_size).",
+      "revId": "7f342dab5ad562d1106cfebde2c894c4cccb1332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
