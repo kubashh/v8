@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c6fe250_ddf4e3bc",
+        "filename": "src/compiler/memory-optimizer.cc",
+        "patchSetId": 3
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1002405
+      },
+      "writtenOn": "2019-05-27T10:41:16Z",
+      "side": 1,
+      "message": "Jaro, I am guarding based on inline_new flag. The previous approach does not work because it makes the case of disabled allocation folding too slow (each non-folded allocation goes to runtime).",
+      "range": {
+        "startLine": 308,
+        "startChar": 48,
+        "endLine": 308,
+        "endChar": 66
+      },
+      "revId": "337bb1df7648cf06607f32cab7f2100b7283d465",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
