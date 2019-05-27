@@ -119,7 +119,7 @@ V8_EXPORT_PRIVATE const char* IntToCString(int n, Vector<char> buffer);
 char* DoubleToFixedCString(double value, int f);
 char* DoubleToExponentialCString(double value, int f);
 char* DoubleToPrecisionCString(double value, int f);
-char* DoubleToRadixCString(double value, int radix);
+V8_EXPORT_PRIVATE char* DoubleToRadixCString(double value, int radix);
 
 static inline bool IsMinusZero(double value) {
   return bit_cast<int64_t>(value) == bit_cast<int64_t>(-0.0);
