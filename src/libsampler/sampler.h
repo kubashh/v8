@@ -92,7 +92,7 @@ class V8_EXPORT_PRIVATE Sampler {
 
 #ifdef USE_SIGNALS
 
-typedef std::atomic_bool AtomicMutex;
+using AtomicMutex = std::atomic_bool;
 
 // A helper that uses an std::atomic_bool to create a lock that is obtained on
 // construction and released on destruction.

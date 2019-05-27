@@ -193,10 +193,10 @@ std::ostream& operator<<(std::ostream& os, ZoneHandleSet<T> set) {
 template <typename T>
 class ZoneHandleSet<T>::const_iterator {
  public:
-  typedef std::forward_iterator_tag iterator_category;
-  typedef std::ptrdiff_t difference_type;
-  typedef Handle<T> value_type;
-  typedef value_type reference;
+  using iterator_category = std::forward_iterator_tag;
+  using difference_type = std::ptrdiff_t;
+  using value_type = Handle<T>;
+  using reference = value_type;
   typedef value_type* pointer;
 
   const_iterator(const const_iterator& other)

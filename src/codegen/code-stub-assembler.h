@@ -227,7 +227,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   enum SlackTrackingMode { kWithSlackTracking, kNoSlackTracking };
 
-  typedef base::Flags<AllocationFlag> AllocationFlags;
+  using AllocationFlags = base::Flags<AllocationFlag>;
 
   enum ParameterMode { SMI_PARAMETERS, INTPTR_PARAMETERS };
 
@@ -1883,7 +1883,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
     kAllFixedArraysDontCopyCOW = kAllFixedArrays | kDontCopyCOW
   };
 
-  typedef base::Flags<ExtractFixedArrayFlag> ExtractFixedArrayFlags;
+  using ExtractFixedArrayFlags = base::Flags<ExtractFixedArrayFlag>;
 
   // Copy a portion of an existing FixedArray or FixedDoubleArray into a new
   // array, including special appropriate handling for empty arrays and COW
@@ -3444,8 +3444,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<Uint32T> DescriptorArrayGetDetails(TNode<DescriptorArray> descriptors,
                                            TNode<Uint32T> descriptor_number);
 
-  typedef std::function<void(TNode<IntPtrT> descriptor_key_index)>
-      ForEachDescriptorBodyFunction;
+  using ForEachDescriptorBodyFunction =
+      std::function<void(TNode<IntPtrT> descriptor_key_index)>;
 
   // Descriptor array accessors based on key_index, which is equal to
   // DescriptorArray::ToKeyIndex(descriptor).
@@ -3474,8 +3474,8 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   TNode<MaybeObject> LoadFieldTypeByDescriptorEntry(
       TNode<DescriptorArray> descriptors, TNode<IntPtrT> descriptor);
 
-  typedef std::function<void(TNode<Name> key, TNode<Object> value)>
-      ForEachKeyValueFunction;
+  using ForEachKeyValueFunction =
+      std::function<void(TNode<Name> key, TNode<Object> value)>;
 
   enum ForEachEnumerationMode {
     // String and then Symbol properties according to the spec
@@ -3600,7 +3600,7 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
 class V8_EXPORT_PRIVATE CodeStubArguments {
  public:
-  typedef compiler::Node Node;
+  using Node = compiler::Node;
   template <class T>
   using TNode = compiler::TNode<T>;
   template <class T>
@@ -3719,7 +3719,7 @@ class ToDirectStringAssembler : public CodeStubAssembler {
   enum Flag {
     kDontUnpackSlicedStrings = 1 << 0,
   };
-  typedef base::Flags<Flag> Flags;
+  using Flags = base::Flags<Flag>;
 
   ToDirectStringAssembler(compiler::CodeAssemblerState* state, Node* string,
                           Flags flags = Flags());

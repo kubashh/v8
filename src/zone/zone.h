@@ -402,10 +402,10 @@ class ScopedPtrList final {
   size_t end_;
 };
 
-typedef base::PointerTemplateHashMapImpl<ZoneAllocationPolicy> ZoneHashMap;
+using ZoneHashMap = base::PointerTemplateHashMapImpl<ZoneAllocationPolicy>;
 
-typedef base::CustomMatcherTemplateHashMapImpl<ZoneAllocationPolicy>
-    CustomMatcherZoneHashMap;
+using CustomMatcherZoneHashMap =
+    base::CustomMatcherTemplateHashMapImpl<ZoneAllocationPolicy>;
 
 }  // namespace internal
 }  // namespace v8
