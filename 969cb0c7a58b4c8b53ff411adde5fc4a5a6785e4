@@ -46,6 +46,30 @@
       "revId": "969cb0c7a58b4c8b53ff411adde5fc4a5a6785e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0eb9050f_acf09400",
+        "filename": "src/unwinding-info-win64.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-27T09:56:53Z",
+      "side": 1,
+      "message": "Paolo has uploaded a fix: https://chromium-review.googlesource.com/c/v8/v8/+/1629310\n\nThanks for the quick turnaround!",
+      "parentUuid": "cfe22ac1_55cc098d",
+      "range": {
+        "startLine": 215,
+        "startChar": 59,
+        "endLine": 215,
+        "endChar": 77
+      },
+      "revId": "969cb0c7a58b4c8b53ff411adde5fc4a5a6785e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
