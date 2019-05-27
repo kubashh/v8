@@ -206,6 +206,59 @@ struct GlobalIndexImmediate {
   }
 };
 
+namespace function_body_decoder {
+// Decode a byte representing a local type. Return {false} if the encoded
+// byte was invalid or the start of a type index.
+inline bool decode_local_type(uint8_t val, ValueType* result) {
+  switch (static_cast<ValueTypeCode>(val)) {
+    case kLocalVoid:
+      *result = kWasmStmt;
+      return true;
+    case kLocalI32:
+      *result = kWasmI32;
+      return true;
+    case kLocalI64:
+      *result = kWasmI64;
+      return true;
+    case kLocalF32:
+      *result = kWasmF32;
+      return true;
+    case kLocalF64:
+      *result = kWasmF64;
+      return true;
+    case kLocalS128:
+      *result = kWasmS128;
+      return true;
+    case kLocalAnyFunc:
+      *result = kWasmAnyFunc;
+      return true;
+    case kLocalAnyRef:
+      *result = kWasmAnyRef;
+      return true;
+    case kLocalExceptRef:
+      *result = kWasmExceptRef;
+      return true;
+    default:
+      *result = kWasmVar;
+      return false;
+  }
+}
+}  // namespace function_body_decoder
+
+template <Decoder::ValidateFlag validate>
+struct SelectTypeImmediate {
+  uint32_t length = 1;
+  ValueType type;
+
+  inline SelectTypeImmediate(Decoder* decoder, const byte* pc) {
+    uint8_t val = decoder->read_u8<validate>(pc + 1, "select type");
+    if (!function_body_decoder::decode_local_type(val, &type)) {
+      decoder->error(pc + 1, "invalid select type");
+      return;
+    }
+  }
+};
+
 template <Decoder::ValidateFlag validate>
 struct BlockTypeImmediate {
   uint32_t length = 1;
@@ -216,7 +269,7 @@ struct BlockTypeImmediate {
   inline BlockTypeImmediate(const WasmFeatures& enabled, Decoder* decoder,
                             const byte* pc) {
     uint8_t val = decoder->read_u8<validate>(pc + 1, "block type");
-    if (!decode_local_type(val, &type)) {
+    if (!function_body_decoder::decode_local_type(val, &type)) {
       // Handle multi-value blocks.
       if (!VALIDATE(enabled.mv)) {
         decoder->error(pc + 1, "invalid block type");
@@ -230,43 +283,6 @@ struct BlockTypeImmediate {
         return;
       }
       sig_index = static_cast<uint32_t>(index);
-    }
-  }
-
-  // Decode a byte representing a local type. Return {false} if the encoded
-  // byte was invalid or the start of a type index.
-  inline bool decode_local_type(uint8_t val, ValueType* result) {
-    switch (static_cast<ValueTypeCode>(val)) {
-      case kLocalVoid:
-        *result = kWasmStmt;
-        return true;
-      case kLocalI32:
-        *result = kWasmI32;
-        return true;
-      case kLocalI64:
-        *result = kWasmI64;
-        return true;
-      case kLocalF32:
-        *result = kWasmF32;
-        return true;
-      case kLocalF64:
-        *result = kWasmF64;
-        return true;
-      case kLocalS128:
-        *result = kWasmS128;
-        return true;
-      case kLocalAnyFunc:
-        *result = kWasmAnyFunc;
-        return true;
-      case kLocalAnyRef:
-        *result = kWasmAnyRef;
-        return true;
-      case kLocalExceptRef:
-        *result = kWasmExceptRef;
-        return true;
-      default:
-        *result = kWasmVar;
-        return false;
     }
   }
 
@@ -1253,6 +1269,10 @@ class WasmDecoder : public Decoder {
         LocalIndexImmediate<validate> imm(decoder, pc);
         return 1 + imm.length;
       }
+      case kExprSelectWithType: {
+        SelectTypeImmediate<validate> imm(decoder, pc);
+        return 1 + imm.length;
+      }
       case kExprBrTable: {
         BranchTableImmediate<validate> imm(decoder, pc);
         BranchTableIterator<validate> iterator(decoder, imm);
@@ -1397,6 +1417,7 @@ class WasmDecoder : public Decoder {
     // clang-format off
     switch (opcode) {
       case kExprSelect:
+      case kExprSelectWithType:
         return {3, 1};
       case kExprSetTable:
       FOREACH_STORE_MEM_OPCODE(DECLARE_OPCODE_CASE)
@@ -1908,6 +1929,17 @@ class WasmFullDecoder : public WasmDecoder<validate> {
           auto tval = Pop(0, fval.type);
           auto* result = Push(tval.type == kWasmVar ? fval.type : tval.type);
           CALL_INTERFACE_IF_REACHABLE(Select, cond, fval, tval, result);
+          break;
+        }
+        case kExprSelectWithType: {
+          CHECK_PROTOTYPE_OPCODE(anyref);
+          SelectTypeImmediate<validate> imm(this, this->pc_);
+          auto cond = Pop(2, kWasmI32);
+          auto fval = Pop(1, imm.type);
+          auto tval = Pop(0, imm.type);
+          auto* result = Push(imm.type);
+          CALL_INTERFACE_IF_REACHABLE(Select, cond, fval, tval, result);
+          len = 1 + imm.length;
           break;
         }
         case kExprBr: {

@@ -140,6 +140,14 @@
       kExprCatch, catchstmt, kExprEnd
 
 #define WASM_SELECT(tval, fval, cond) tval, fval, cond, kExprSelect
+#define WASM_SELECT_I(tval, fval, cond) \
+  tval, fval, cond, kExprSelectWithType, kLocalI32
+#define WASM_SELECT_L(tval, fval, cond) \
+  tval, fval, cond, kExprSelectWithType, kLocalI64
+#define WASM_SELECT_F(tval, fval, cond) \
+  tval, fval, cond, kExprSelectWithType, kLocalF32
+#define WASM_SELECT_D(tval, fval, cond) \
+  tval, fval, cond, kExprSelectWithType, kLocalF64
 
 #define WASM_RETURN0 kExprReturn
 #define WASM_RETURN1(val) val, kExprReturn
