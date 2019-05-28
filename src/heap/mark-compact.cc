@@ -1921,8 +1921,6 @@ void MarkCompactCollector::MarkLiveObjects() {
   if (was_marked_incrementally_) {
     heap()->incremental_marking()->Deactivate();
   }
-
-  epoch_++;
 }
 
 void MarkCompactCollector::ClearNonLiveReferences() {
@@ -2767,7 +2765,6 @@ class Evacuator : public Malloced {
 
 void Evacuator::EvacuatePage(MemoryChunk* chunk) {
   TRACE_EVENT0(TRACE_DISABLED_BY_DEFAULT("v8.gc"), "Evacuator::EvacuatePage");
-  DCHECK(chunk->SweepingDone());
   intptr_t saved_live_bytes = 0;
   double evacuation_time = 0.0;
   {
@@ -2996,6 +2993,8 @@ void MarkCompactCollector::EvacuatePagesInParallel() {
         // going to sweep the page and add page->live_byte_count.
         heap()->old_space()->DecreaseAllocatedBytes(page->allocated_bytes(),
                                                     page);
+        page->set_mark_compact_epoch(heap_->mark_compact_collector()->epoch() -
+                                     1);
       } else {
         EvacuateNewSpacePageVisitor<NEW_TO_NEW>::Move(page);
       }
@@ -3746,7 +3745,7 @@ void MarkCompactCollector::PostProcessEvacuationCandidates() {
       aborted_pages_verified++;
     } else {
       DCHECK(p->IsEvacuationCandidate());
-      DCHECK(p->SweepingDone());
+      DCHECK(!p->SweepingDone());
       p->owner()->memory_chunk_list().Remove(p);
     }
   }
@@ -3762,7 +3761,7 @@ void MarkCompactCollector::ReleaseEvacuationCandidates() {
     if (!p->IsEvacuationCandidate()) continue;
     PagedSpace* space = static_cast<PagedSpace*>(p->owner());
     non_atomic_marking_state()->SetLiveBytes(p, 0);
-    CHECK(p->SweepingDone());
+    CHECK(!p->SweepingDone());
     space->ReleasePage(p);
   }
   old_space_evacuation_pages_.clear();
@@ -3778,7 +3777,7 @@ void MarkCompactCollector::StartSweepSpace(PagedSpace* space) {
   // Loop needs to support deletion if live bytes == 0 for a page.
   for (auto it = space->begin(); it != space->end();) {
     Page* p = *(it++);
-    DCHECK(p->SweepingDone());
+    DCHECK(!p->SweepingDone());
 
     if (p->IsEvacuationCandidate()) {
       // Will be processed in Evacuate.
@@ -3813,6 +3812,11 @@ void MarkCompactCollector::StartSweepSpace(PagedSpace* space) {
 
 void MarkCompactCollector::StartSweepSpaces() {
   TRACE_GC(heap()->tracer(), GCTracer::Scope::MC_SWEEP);
+
+  // We increment the epoch when sweeping starts. That will make all sweepable
+  // pages of the old generation not swept.
+  epoch_++;
+
 #ifdef DEBUG
   state_ = SWEEP_SPACES;
 #endif
@@ -4844,6 +4848,10 @@ void MinorMarkCompactCollector::EvacuatePagesInParallel() {
     live_bytes += live_bytes_on_page;
     if (ShouldMovePage(page, live_bytes_on_page)) {
       if (page->IsFlagSet(MemoryChunk::NEW_SPACE_BELOW_AGE_MARK)) {
+        // A page is promoted to the old generation. We have to give it the
+        // current MC epoch counter. It will take part in the sweeping phase
+        // of the next MC.
+        page->set_mark_compact_epoch(heap_->mark_compact_collector()->epoch());
         EvacuateNewSpacePageVisitor<NEW_TO_OLD>::Move(page);
       } else {
         EvacuateNewSpacePageVisitor<NEW_TO_NEW>::Move(page);
