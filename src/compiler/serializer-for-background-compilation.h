@@ -317,7 +317,6 @@ class SerializerForBackgroundCompilation {
                           bool with_spread = false);
 
   void ProcessJump(interpreter::BytecodeArrayIterator* iterator);
-  void MergeAfterJump(interpreter::BytecodeArrayIterator* iterator);
 
   void ProcessKeyedPropertyAccess(Hints const& receiver, Hints const& key,
                                   FeedbackSlot slot, AccessMode mode);
@@ -339,6 +338,9 @@ class SerializerForBackgroundCompilation {
                            base::Optional<Hints> new_target,
                            const HintsVector& arguments, bool with_spread);
 
+  void ContributeToJumpTargetEnvironment(int target_offset);
+  void IncorporateJumpTargetEnvironment(int target_offset);
+
   JSHeapBroker* broker() const { return broker_; }
   CompilationDependencies* dependencies() const { return dependencies_; }
   Zone* zone() const { return zone_; }
@@ -349,7 +351,7 @@ class SerializerForBackgroundCompilation {
   CompilationDependencies* const dependencies_;
   Zone* const zone_;
   Environment* const environment_;
-  ZoneUnorderedMap<int, Environment*> stashed_environments_;
+  ZoneUnorderedMap<int, Environment*> jump_target_environments_;
   SerializerForBackgroundCompilationFlags const flags_;
 };
 
