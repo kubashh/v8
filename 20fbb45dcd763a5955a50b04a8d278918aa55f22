@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "84191c63_8c8e5e3f",
+        "filename": "src/compiler/serializer-for-background-compilation.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-28T08:39:25Z",
+      "side": 1,
+      "message": "If you want to throw away the term \"stashed environments\" from this use-case by renaming the storage variable (to jump_target_environments_), then please reword this comment accordingly, as now it doesn\u0027t fit with what the code says.",
+      "range": {
+        "startLine": 110,
+        "startChar": 41,
+        "endLine": 110,
+        "endChar": 48
+      },
+      "revId": "20fbb45dcd763a5955a50b04a8d278918aa55f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6844dce3_f5fcfb43",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-28T08:39:25Z",
+      "side": 1,
+      "message": "nit: true",
+      "range": {
+        "startLine": 281,
+        "startChar": 16,
+        "endLine": 281,
+        "endChar": 17
+      },
+      "revId": "20fbb45dcd763a5955a50b04a8d278918aa55f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b179674_7514e747",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-28T08:39:25Z",
+      "side": 1,
+      "message": "nit: spaces around",
+      "range": {
+        "startLine": 282,
+        "startChar": 39,
+        "endLine": 282,
+        "endChar": 41
+      },
+      "revId": "20fbb45dcd763a5955a50b04a8d278918aa55f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
