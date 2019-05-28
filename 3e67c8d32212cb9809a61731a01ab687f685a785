@@ -55,6 +55,47 @@
     },
     {
       "key": {
+        "uuid": "ffbdaf5e_8c44c29b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-28T11:51:18Z",
+      "side": 1,
+      "message": "More specifically: there is test/mjsunit/number-tostring.js already, which is large enough that I wouldn\u0027t extend it, so maybe test/mjsunit/number-tostring-subnormal.js. I don\u0027t think you need very many tests there, given that expressing these strings in JavaScript is more cumbersome than in C++, so I\u0027d only add two or so tests there, just to ascertain that the behavior tested in the unittest matches what\u0027s exposed to JavaScript.",
+      "parentUuid": "3e581e6f_dc6e63bf",
+      "revId": "3e67c8d32212cb9809a61731a01ab687f685a785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e15d1fb_ab0799d8",
+        "filename": "AUTHORS",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-28T11:51:18Z",
+      "side": 1,
+      "message": "Please insert this entry after line 129 to maintain alpha-sorting.",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 38
+      },
+      "revId": "3e67c8d32212cb9809a61731a01ab687f685a785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "816ec637_a47b2689",
         "filename": "test/unittests/numbers/conversions-unittest.cc",
         "patchSetId": 1
@@ -69,6 +110,24 @@
       "revId": "3e67c8d32212cb9809a61731a01ab687f685a785",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "006902ea_673be060",
+        "filename": "test/unittests/numbers/conversions-unittest.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-28T11:51:18Z",
+      "side": 1,
+      "message": "I think the variable names are enough explanation :-)",
+      "parentUuid": "816ec637_a47b2689",
+      "revId": "3e67c8d32212cb9809a61731a01ab687f685a785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
