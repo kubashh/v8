@@ -79,8 +79,9 @@ class V8_EXPORT_PRIVATE LocalEmbedderHeapTracer final {
   void IncreaseAllocatedSize(size_t bytes) {
     remote_stats_.allocated_size += bytes;
     remote_stats_.accumulated_allocated_size += bytes;
-    if (remote_stats_.allocated_size >
-        remote_stats_.allocated_size_limit_for_check) {
+    if (FLAG_global_gc_scheduling &&
+        remote_stats_.allocated_size >
+            remote_stats_.allocated_size_limit_for_check) {
       StartIncrementalMarkingIfNeeded();
       remote_stats_.allocated_size_limit_for_check =
           remote_stats_.allocated_size + kEmbedderAllocatedThreshold;
