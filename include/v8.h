@@ -1238,6 +1238,7 @@ class V8_EXPORT Location {
 /**
  * A compiled JavaScript module.
  */
+class JSModule;
 class V8_EXPORT Module {
  public:
   /**

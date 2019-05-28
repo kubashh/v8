@@ -12,9 +12,9 @@
 #include "src/objects/contexts.h"
 #include "src/objects/js-collection.h"
 #include "src/objects/js-generator.h"
+#include "src/objects/js-module.h"
 #include "src/objects/js-promise.h"
 #include "src/objects/js-proxy.h"
-#include "src/objects/module.h"
 #include "src/objects/objects.h"
 #include "src/objects/shared-function-info.h"
 #include "src/utils/detachable-vector.h"
@@ -113,7 +113,8 @@ class RegisteredExtension {
   V(Script, JSFunction)                        \
   V(UnboundModuleScript, SharedFunctionInfo)   \
   V(UnboundScript, SharedFunctionInfo)         \
-  V(Module, Module)                            \
+  V(Module, JSModule)                          \
+  V(JSModule, JSModule)                        \
   V(Function, JSReceiver)                      \
   V(Message, JSMessageObject)                  \
   V(Context, Context)                          \
@@ -146,6 +147,8 @@ class Utils {
       v8::internal::Handle<v8::internal::Object> obj);
   static inline Local<Module> ToLocal(
       v8::internal::Handle<v8::internal::Module> obj);
+  static inline Local<JSModule> ToLocal(
+      v8::internal::Handle<v8::internal::JSModule> obj);
   static inline Local<Name> ToLocal(
       v8::internal::Handle<v8::internal::Name> obj);
   static inline Local<String> ToLocal(

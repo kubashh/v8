@@ -312,7 +312,7 @@ Type::bitset BitsetType::Lub(const MapRefLike& map) {
     case SCRIPT_TYPE:
     case CODE_TYPE:
     case PROPERTY_CELL_TYPE:
-    case MODULE_TYPE:
+    case JS_MODULE_TYPE:
     case MODULE_INFO_ENTRY_TYPE:
     case CELL_TYPE:
     case PREPARSE_DATA_TYPE:

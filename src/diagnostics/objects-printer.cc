@@ -1742,16 +1742,26 @@ void ModuleInfoEntry::ModuleInfoEntryPrint(std::ostream& os) {  // NOLINT
   os << "\n";
 }
 
+void Module::PrintFields(std::ostream& os) {
+  os << "\n - exports: " << Brief(exports());
+  os << "\n - status: " << status();
+  os << "\n - exception: " << Brief(exception());
+}
+
 void Module::ModulePrint(std::ostream& os) {  // NOLINT
   PrintHeader(os, "Module");
+  Module::PrintFields(os);
+  os << "\n";
+}
+
+void JSModule::JSModulePrint(std::ostream& os) {  // NOLINT
+  PrintHeader(os, "JSModule");
+  Module::PrintFields(os);
   os << "\n - origin: " << Brief(script().GetNameOrSourceURL());
   os << "\n - code: " << Brief(code());
-  os << "\n - exports: " << Brief(exports());
   os << "\n - requested_modules: " << Brief(requested_modules());
   os << "\n - script: " << Brief(script());
   os << "\n - import_meta: " << Brief(import_meta());
-  os << "\n - status: " << status();
-  os << "\n - exception: " << Brief(exception());
   os << "\n";
 }
 

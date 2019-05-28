@@ -4261,7 +4261,7 @@ void Isolate::SetHostImportModuleDynamicallyCallback(
 }
 
 Handle<JSObject> Isolate::RunHostInitializeImportMetaObjectCallback(
-    Handle<Module> module) {
+    Handle<JSModule> module) {
   Handle<Object> host_meta(module->import_meta(), this);
   if (host_meta->IsTheHole(this)) {
     host_meta = factory()->NewJSObjectWithNullProto();
@@ -4269,7 +4269,7 @@ Handle<JSObject> Isolate::RunHostInitializeImportMetaObjectCallback(
       v8::Local<v8::Context> api_context =
           v8::Utils::ToLocal(Handle<Context>(native_context()));
       host_initialize_import_meta_object_callback_(
-          api_context, Utils::ToLocal(module),
+          api_context, Utils::ToLocal(Handle<Module>::cast(module)),
           v8::Local<v8::Object>::Cast(v8::Utils::ToLocal(host_meta)));
     }
     module->set_import_meta(*host_meta);

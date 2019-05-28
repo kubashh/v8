@@ -89,8 +89,8 @@ namespace internal {
   V(FUNCTION_TEMPLATE_RARE_DATA_TYPE)                    \
   V(INTERCEPTOR_INFO_TYPE)                               \
   V(INTERPRETER_DATA_TYPE)                               \
+  V(JS_MODULE_TYPE)                                      \
   V(MODULE_INFO_ENTRY_TYPE)                              \
-  V(MODULE_TYPE)                                         \
   V(OBJECT_TEMPLATE_INFO_TYPE)                           \
   V(PROMISE_CAPABILITY_TYPE)                             \
   V(PROMISE_REACTION_TYPE)                               \
@@ -108,7 +108,6 @@ namespace internal {
   V(WASM_EXCEPTION_TAG_TYPE)                             \
   V(WASM_EXPORTED_FUNCTION_DATA_TYPE)                    \
   V(WASM_JS_FUNCTION_DATA_TYPE)                          \
-                                                         \
   V(CALLABLE_TASK_TYPE)                                  \
   V(CALLBACK_TASK_TYPE)                                  \
   V(PROMISE_FULFILL_REACTION_JOB_TASK_TYPE)              \
@@ -309,7 +308,6 @@ namespace internal {
   V(_, INTERCEPTOR_INFO_TYPE, InterceptorInfo, interceptor_info)               \
   V(_, INTERPRETER_DATA_TYPE, InterpreterData, interpreter_data)               \
   V(_, MODULE_INFO_ENTRY_TYPE, ModuleInfoEntry, module_info_entry)             \
-  V(_, MODULE_TYPE, Module, module)                                            \
   V(_, OBJECT_TEMPLATE_INFO_TYPE, ObjectTemplateInfo, object_template_info)    \
   V(_, PROMISE_CAPABILITY_TYPE, PromiseCapability, promise_capability)         \
   V(_, PROMISE_REACTION_TYPE, PromiseReaction, promise_reaction)               \
@@ -332,6 +330,7 @@ namespace internal {
   V(_, WASM_EXPORTED_FUNCTION_DATA_TYPE, WasmExportedFunctionData,             \
     wasm_exported_function_data)                                               \
   V(_, WASM_JS_FUNCTION_DATA_TYPE, WasmJSFunctionData, wasm_js_function_data)  \
+  V(_, JS_MODULE_TYPE, JSModule, js_module)                                    \
   V(_, CALLABLE_TASK_TYPE, CallableTask, callable_task)                        \
   V(_, CALLBACK_TASK_TYPE, CallbackTask, callback_task)                        \
   V(_, PROMISE_FULFILL_REACTION_JOB_TASK_TYPE, PromiseFulfillReactionJobTask,  \

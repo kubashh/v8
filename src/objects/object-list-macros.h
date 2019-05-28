@@ -27,6 +27,7 @@ class FunctionLiteral;
 class FunctionTemplateInfo;
 class JSAsyncGeneratorObject;
 class JSGlobalProxy;
+class JSModule;
 class JSPromise;
 class JSProxy;
 class JSProxyRevocableResult;

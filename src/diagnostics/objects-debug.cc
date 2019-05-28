@@ -1559,24 +1559,12 @@ void ModuleInfoEntry::ModuleInfoEntryVerify(Isolate* isolate) {
   CHECK_IMPLIES(export_name().IsString() && import_name().IsString(),
                 local_name().IsUndefined(isolate));
 }
-
 void Module::ModuleVerify(Isolate* isolate) {
-  CHECK(IsModule());
-
-  VerifyPointer(isolate, code());
   VerifyPointer(isolate, exports());
   VerifyPointer(isolate, module_namespace());
-  VerifyPointer(isolate, requested_modules());
-  VerifyPointer(isolate, script());
-  VerifyPointer(isolate, import_meta());
   VerifyPointer(isolate, exception());
   VerifySmiField(kHashOffset);
   VerifySmiField(kStatusOffset);
-
-  CHECK((status() >= kEvaluating && code().IsModuleInfo()) ||
-        (status() == kInstantiated && code().IsJSGeneratorObject()) ||
-        (status() == kInstantiating && code().IsJSFunction()) ||
-        (code().IsSharedFunctionInfo()));
 
   CHECK_EQ(status() == kErrored, !exception().IsTheHole(isolate));
 
@@ -1587,11 +1575,27 @@ void Module::ModuleVerify(Isolate* isolate) {
     CHECK_EQ(JSModuleNamespace::cast(module_namespace()).module(), *this);
   }
 
+  CHECK_NE(hash(), 0);
+}
+
+void JSModule::JSModuleVerify(Isolate* isolate) {
+  CHECK(IsJSModule());
+
+  VerifyPointer(isolate, code());
+  VerifyPointer(isolate, requested_modules());
+  VerifyPointer(isolate, script());
+  VerifyPointer(isolate, import_meta());
+
+  CHECK((status() >= kEvaluating && code().IsModuleInfo()) ||
+        (status() == kInstantiated && code().IsJSGeneratorObject()) ||
+        (status() == kInstantiating && code().IsJSFunction()) ||
+        (code().IsSharedFunctionInfo()));
+
   CHECK_EQ(requested_modules().length(), info().module_requests().length());
 
   CHECK(import_meta().IsTheHole(isolate) || import_meta().IsJSObject());
 
-  CHECK_NE(hash(), 0);
+  this->Module::ModuleVerify(isolate);
 }
 
 void PrototypeInfo::PrototypeInfoVerify(Isolate* isolate) {

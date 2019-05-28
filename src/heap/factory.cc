@@ -1483,7 +1483,7 @@ Handle<ScriptContextTable> Factory::NewScriptContextTable() {
   return context_table;
 }
 
-Handle<Context> Factory::NewModuleContext(Handle<Module> module,
+Handle<Context> Factory::NewModuleContext(Handle<JSModule> module,
                                           Handle<NativeContext> outer,
                                           Handle<ScopeInfo> scope_info) {
   DCHECK_EQ(scope_info->scope_type(), MODULE_SCOPE);
@@ -3020,7 +3020,7 @@ Handle<JSGeneratorObject> Factory::NewJSGeneratorObject(
   return Handle<JSGeneratorObject>::cast(NewJSObjectFromMap(map));
 }
 
-Handle<Module> Factory::NewModule(Handle<SharedFunctionInfo> code) {
+Handle<JSModule> Factory::NewJSModule(Handle<SharedFunctionInfo> code) {
   Handle<ModuleInfo> module_info(code->scope_info().ModuleDescriptorInfo(),
                                  isolate());
   Handle<ObjectHashTable> exports =
@@ -3035,8 +3035,8 @@ Handle<Module> Factory::NewModule(Handle<SharedFunctionInfo> code) {
                                    : empty_fixed_array();
 
   ReadOnlyRoots roots(isolate());
-  Handle<Module> module =
-      Handle<Module>::cast(NewStruct(MODULE_TYPE, AllocationType::kOld));
+  Handle<JSModule> module =
+      Handle<JSModule>::cast(NewStruct(JS_MODULE_TYPE, AllocationType::kOld));
   module->set_code(*code);
   module->set_exports(*exports);
   module->set_regular_exports(*regular_exports);

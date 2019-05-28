@@ -89,7 +89,7 @@ enum class OddballType : uint8_t {
   V(HeapNumber)                    \
   V(JSObject)                      \
   V(Map)                           \
-  V(Module)                        \
+  V(JSModule)                      \
   V(MutableHeapNumber)             \
   V(Name)                          \
   V(PropertyCell)                  \
@@ -663,10 +663,10 @@ class JSTypedArrayRef : public JSObjectRef {
   HeapObjectRef buffer() const;
 };
 
-class ModuleRef : public HeapObjectRef {
+class JSModuleRef : public HeapObjectRef {
  public:
   using HeapObjectRef::HeapObjectRef;
-  Handle<Module> object() const;
+  Handle<JSModule> object() const;
 
   void Serialize();
 

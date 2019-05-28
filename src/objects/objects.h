@@ -170,6 +170,7 @@
 //           - PromiseRejectReactionJobTask
 //         - PromiseResolveThenableJobTask
 //       - Module
+//         - JSModule
 //       - ModuleInfoEntry
 //     - FeedbackCell
 //     - FeedbackVector

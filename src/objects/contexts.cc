@@ -105,12 +105,12 @@ ScopeInfo Context::scope_info() {
   return ScopeInfo::cast(get(SCOPE_INFO_INDEX));
 }
 
-Module Context::module() {
+JSModule Context::module() {
   Context current = *this;
   while (!current.IsModuleContext()) {
     current = current.previous();
   }
-  return Module::cast(current.extension());
+  return JSModule::cast(current.extension());
 }
 
 JSGlobalObject Context::global_object() {

@@ -68,6 +68,7 @@ inline Local<To> Utils::Convert(v8::internal::Handle<From> obj) {
 MAKE_TO_LOCAL(ToLocal, Context, Context)
 MAKE_TO_LOCAL(ToLocal, Object, Value)
 MAKE_TO_LOCAL(ToLocal, Module, Module)
+MAKE_TO_LOCAL(ToLocal, JSModule, JSModule)
 MAKE_TO_LOCAL(ToLocal, Name, Name)
 MAKE_TO_LOCAL(ToLocal, String, String)
 MAKE_TO_LOCAL(ToLocal, Symbol, Symbol)

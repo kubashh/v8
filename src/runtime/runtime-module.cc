@@ -5,7 +5,7 @@
 #include "src/execution/arguments-inl.h"
 #include "src/logging/counters.h"
 #include "src/objects/js-promise.h"
-#include "src/objects/module.h"
+#include "src/objects/module-inl.h"
 #include "src/objects/objects-inl.h"
 #include "src/runtime/runtime-utils.h"
 
@@ -33,14 +33,14 @@ RUNTIME_FUNCTION(Runtime_GetModuleNamespace) {
   HandleScope scope(isolate);
   DCHECK_EQ(1, args.length());
   CONVERT_SMI_ARG_CHECKED(module_request, 0);
-  Handle<Module> module(isolate->context().module(), isolate);
-  return *Module::GetModuleNamespace(isolate, module, module_request);
+  Handle<JSModule> module(isolate->context().module(), isolate);
+  return *JSModule::GetModuleNamespace(isolate, module, module_request);
 }
 
 RUNTIME_FUNCTION(Runtime_GetImportMetaObject) {
   HandleScope scope(isolate);
   DCHECK_EQ(0, args.length());
-  Handle<Module> module(isolate->context().module(), isolate);
+  Handle<JSModule> module(isolate->context().module(), isolate);
   return *isolate->RunHostInitializeImportMetaObjectCallback(module);
 }
 

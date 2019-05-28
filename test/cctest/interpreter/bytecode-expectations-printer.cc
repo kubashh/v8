@@ -108,7 +108,8 @@ BytecodeExpectationsPrinter::GetBytecodeArrayForModule(
     v8::Local<v8::Module> module) const {
   i::Handle<i::Module> i_module = v8::Utils::OpenHandle(*module);
   return i::handle(
-      SharedFunctionInfo::cast(i_module->code()).GetBytecodeArray(),
+      SharedFunctionInfo::cast(Handle<i::JSModule>::cast(i_module)->code())
+          .GetBytecodeArray(),
       i_isolate());
 }
 
