@@ -12,6 +12,7 @@
 #include "src/torque/server-data.h"
 #include "src/torque/source-positions.h"
 #include "src/torque/torque-compiler.h"
+#include "src/torque/version.h"
 
 namespace v8 {
 namespace internal {
@@ -191,6 +192,56 @@ void RecompileTorqueWithDiagnostics(MessageWriter writer) {
   RecompileTorque(writer);
 }
 
+base::Optional<std::string> LoadTorqueVersionHeader(
+    InitializeRequest* request) {
+  if (request->params().IsNull("rootUri")) {
+    Logger::Log("[warning] No 'rootUri', skipping version check!\n");
+    return base::nullopt;
+  }
+
+  const base::Optional<std::string> maybe_workspace_uri =
+      FileUriDecode(request->params().rootUri());
+  if (!maybe_workspace_uri) {
+    Logger::Log("[warning] Unable to decode workspace uri: ",
+                request->params().rootUri());
+    return base::nullopt;
+  }
+
+  const std::string version_path =
+      *maybe_workspace_uri + "/src/torque/version.h";
+  std::ifstream version_file_stream(version_path);
+  if (!version_file_stream.good()) {
+    Logger::Log("[warning] Unable to open version header: ", version_path);
+    return base::nullopt;
+  }
+
+  return std::string{std::istreambuf_iterator<char>(version_file_stream),
+                     std::istreambuf_iterator<char>()};
+}
+
+}  // namespace
+
+void CheckTorqueVersionMatches(const std::string& header_content,
+                               uint32_t expected_version,
+                               MessageWriter writer) {
+  const std::string expected_version_string =
+      "constexpr uint32_t kTorqueVersion = " +
+      std::to_string(expected_version) + ";";
+
+  if (header_content.find(expected_version_string) == std::string::npos) {
+    ShowMessageNotification notification;
+    notification.set_method("window/showMessage");
+    notification.params().set_type(MessageType::kWarning);
+    notification.params().set_message(
+        "Torque Language Server is outdated. Please recompile the Torque "
+        "Language Server and restart Visual Studio Code!");
+
+    writer(notification.GetJsonValue());
+  }
+}
+
+namespace {
+
 void HandleInitializeRequest(InitializeRequest request, MessageWriter writer) {
   InitializeResponse response;
   response.set_id(request.id());
@@ -206,6 +257,13 @@ void HandleInitializeRequest(InitializeRequest request, MessageWriter writer) {
   // TODO(szuend): Check if client supports "LocationLink". This will
   //               influence the result of "goto definition".
   writer(response.GetJsonValue());
+
+  // Check that the user is running an up-to-date Torque Language Server.
+  base::Optional<std::string> header_content =
+      LoadTorqueVersionHeader(&request);
+  if (header_content) {
+    CheckTorqueVersionMatches(*header_content, kTorqueVersion, writer);
+  }
 }
 
 void HandleInitializedNotification(MessageWriter writer) {
