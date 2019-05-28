@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "74018070_05bd81f0",
+        "filename": "src/torque/ls/message-handler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-28T14:11:45Z",
+      "side": 1,
+      "message": "Isn\u0027t the language server supposed to be editor independent?",
+      "range": {
+        "startLine": 237,
+        "startChar": 37,
+        "endLine": 237,
+        "endChar": 55
+      },
+      "revId": "62f89419257dc1e63d371ab01110d21e6617196e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5b4c94f1_449670ba",
         "filename": "src/torque/version.h",
         "patchSetId": 2
@@ -13,6 +36,30 @@
       "writtenOn": "2019-05-28T08:27:27Z",
       "side": 1,
       "message": "I fear that having Torque versions distinct from V8 versions is a huge complication. Can we use the V8 version number? Or would that make the check ineffective?",
+      "range": {
+        "startLine": 18,
+        "startChar": 36,
+        "endLine": 18,
+        "endChar": 37
+      },
+      "revId": "62f89419257dc1e63d371ab01110d21e6617196e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "791edbf4_3df64acb",
+        "filename": "src/torque/version.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-05-28T14:11:45Z",
+      "side": 1,
+      "message": "I can see the advantage of having it separate if we increment the version exactly when we have user-facing Torque changes.",
+      "parentUuid": "5b4c94f1_449670ba",
       "range": {
         "startLine": 18,
         "startChar": 36,
