@@ -44,5 +44,9 @@
         "package": "src/inspector/protocol",
         "output": "protocol",
         "string_header": "src/inspector/string-util.h"
+    },
+    "encoding_lib": {
+        "header": "../../../third_party/inspector_protocol/encoding/encoding.h",
+        "namespace": ["v8_inspector_protocol_encoding"]
     }
 }
