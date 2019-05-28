@@ -6,6 +6,7 @@
 
 #include <cstring>
 
+#include "src/base/lsan.h"
 #include "src/base/once.h"
 #include "src/heap/heap-inl.h"
 #include "src/heap/heap-write-barrier-inl.h"
@@ -66,6 +67,7 @@ void ReadOnlyHeap::OnCreateHeapObjectsComplete(Isolate* isolate) {
 // static
 ReadOnlyHeap* ReadOnlyHeap::CreateAndAttachToIsolate(Isolate* isolate) {
   auto* ro_heap = new ReadOnlyHeap(new ReadOnlySpace(isolate->heap()));
+  LSAN_IGNORE_OBJECT(ro_heap);
   isolate->heap()->SetUpFromReadOnlyHeap(ro_heap);
   return ro_heap;
 }
@@ -97,7 +99,6 @@ void ReadOnlyHeap::ClearSharedHeapForTest() {
   DCHECK_NOT_NULL(shared_ro_heap);
   // TODO(v8:7464): Just leak read-only space for now. The paged-space heap
   // is null so there isn't a nice way to do this.
-  delete shared_ro_heap;
   shared_ro_heap = nullptr;
   setup_ro_heap_once = 0;
 #endif

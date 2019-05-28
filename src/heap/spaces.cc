@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "src/base/bits.h"
+#include "src/base/lsan.h"
 #include "src/base/macros.h"
 #include "src/base/platform/semaphore.h"
 #include "src/base/template-utils.h"
@@ -832,6 +833,7 @@ void Page::AllocateFreeListCategories() {
   for (int i = kFirstCategory; i < kNumberOfCategories; i++) {
     categories_[i] = new FreeListCategory(
         reinterpret_cast<PagedSpace*>(owner())->free_list(), this);
+    LSAN_IGNORE_OBJECT(categories_[i]);
   }
 }
 
@@ -1530,6 +1532,7 @@ void MemoryChunk::ReleaseYoungGenerationBitmap() {
 void MemoryChunk::AllocateMarkingBitmap() {
   DCHECK_NULL(marking_bitmap_);
   marking_bitmap_ = static_cast<Bitmap*>(calloc(1, Bitmap::kSize));
+  LSAN_IGNORE_OBJECT(marking_bitmap_);
 }
 
 void MemoryChunk::ReleaseMarkingBitmap() {
@@ -3372,10 +3375,14 @@ ReadOnlySpace::ReadOnlySpace(Heap* heap)
 
 void ReadOnlyPage::MakeHeaderRelocatable() {
   if (mutex_ != nullptr) {
+    // Sadly we have to keep the marking bitmap around.
     delete mutex_;
     heap_ = nullptr;
     mutex_ = nullptr;
     local_tracker_ = nullptr;
+    delete page_protection_change_mutex_;
+    page_protection_change_mutex_ = nullptr;
+    invalidated_slots_ = nullptr;
     reservation_.Reset();
   }
 }
