@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aff49d36_80cf7891",
+        "filename": "src/compiler/serializer-for-background-compilation.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1119597
+      },
+      "writtenOn": "2019-05-28T05:52:20Z",
+      "side": 1,
+      "message": "Renaming this to make it clearer. The \"stash\" analogy doesn\u0027t fit so well anymore.",
+      "range": {
+        "startLine": 354,
+        "startChar": 38,
+        "endLine": 354,
+        "endChar": 63
+      },
+      "revId": "4ec3fbf8eb553501f6e19d56e54a974086456c94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
