@@ -885,6 +885,11 @@ TEST_F(DecompressionEliminationTest, DecompressionConstantWord64Equal) {
 }
 
 TEST_F(DecompressionEliminationTest, DecompressionHeapConstantWord64Equal) {
+  // TODO(v8:8977): Disabling HeapConstant until CompressedHeapConstant
+  // exists, since it breaks with verify CSA on.
+  if (false) {
+    return;
+  }
   // Skip test if pointer compression is not enabled
   if (!COMPRESS_POINTERS_BOOL) {
     return;
