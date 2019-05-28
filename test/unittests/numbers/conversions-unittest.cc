@@ -15,7 +15,6 @@ class ConversionsTest : public ::testing::Test {
  public:
   ConversionsTest() = default;
   ~ConversionsTest() override = default;
-
   SourcePosition toPos(int offset) {
     return SourcePosition(offset, offset % 10 - 1);
   }
@@ -40,7 +39,6 @@ static IntStringPair int_pairs[] = {{0, "0"},
 
 TEST_F(ConversionsTest, IntToCString) {
   std::unique_ptr<char[]> buf(new char[4096]);
-
   for (size_t i = 0; i < arraysize(int_pairs); i++) {
     ASSERT_STREQ(IntToCString(int_pairs[i].integer, {buf.get(), 4096}),
                  int_pairs[i].string.c_str());
@@ -64,7 +62,6 @@ static DoubleStringPair double_pairs[] = {
 
 TEST_F(ConversionsTest, DoubleToCString) {
   std::unique_ptr<char[]> buf(new char[4096]);
-
   for (size_t i = 0; i < arraysize(double_pairs); i++) {
     ASSERT_STREQ(DoubleToCString(double_pairs[i].number, {buf.get(), 4096}),
                  double_pairs[i].string.c_str());
