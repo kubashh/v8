@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2de1982_a2d8f0a1",
+        "filename": "src/objects/js-objects.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 2620,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-28T08:13:20Z",
+      "side": 1,
+      "message": "Can we simply use\n\nFieldIndex index \u003d FieldIndex::ForDescriptor(map, map-\u003eLastAdded());\nif (index.is_inobject() || index.outobject_array_index() \u003c property_array_length) {\n\n  if (index.is_double() \u0026\u0026 !object-\u003eIsUnboxedDoubleField(index)) {\n    auto value \u003d isolate-\u003efactory()-\u003eNewMutableHeapNumberWithHoleNaN();\n    object-\u003eRawFastPropertyAtPut(index, *value);\n  }\n  object-\u003esynchronized_set_map(*new_map);\n}\n\n...",
+      "revId": "3accbb0c142187dd48f128e6886aae5e2e49562d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
