@@ -96,7 +96,7 @@ void InstructionBase::InvalidateTransientTypes(
 
 void CallIntrinsicInstruction::TypeInstruction(Stack<const Type*>* stack,
                                                ControlFlowGraph* cfg) const {
-  std::vector<const Type*> parameter_types =
+  TypeList parameter_types =
       LowerParameterTypes(intrinsic->signature().parameter_types);
   for (intptr_t i = parameter_types.size() - 1; i >= 0; --i) {
     const Type* arg_type = stack->Pop();
@@ -115,7 +115,7 @@ void CallIntrinsicInstruction::TypeInstruction(Stack<const Type*>* stack,
 
 void CallCsaMacroInstruction::TypeInstruction(Stack<const Type*>* stack,
                                               ControlFlowGraph* cfg) const {
-  std::vector<const Type*> parameter_types =
+  TypeList parameter_types =
       LowerParameterTypes(macro->signature().parameter_types);
   for (intptr_t i = parameter_types.size() - 1; i >= 0; --i) {
     const Type* arg_type = stack->Pop();
@@ -142,7 +142,7 @@ void CallCsaMacroInstruction::TypeInstruction(Stack<const Type*>* stack,
 
 void CallCsaMacroAndBranchInstruction::TypeInstruction(
     Stack<const Type*>* stack, ControlFlowGraph* cfg) const {
-  std::vector<const Type*> parameter_types =
+  TypeList parameter_types =
       LowerParameterTypes(macro->signature().parameter_types);
   for (intptr_t i = parameter_types.size() - 1; i >= 0; --i) {
     const Type* arg_type = stack->Pop();
@@ -190,7 +190,7 @@ void CallCsaMacroAndBranchInstruction::TypeInstruction(
 
 void CallBuiltinInstruction::TypeInstruction(Stack<const Type*>* stack,
                                              ControlFlowGraph* cfg) const {
-  std::vector<const Type*> argument_types = stack->PopMany(argc);
+  TypeList argument_types = stack->PopMany(argc);
   if (argument_types !=
       LowerParameterTypes(builtin->signature().parameter_types)) {
     ReportError("wrong argument types");
@@ -210,7 +210,7 @@ void CallBuiltinInstruction::TypeInstruction(Stack<const Type*>* stack,
 
 void CallBuiltinPointerInstruction::TypeInstruction(
     Stack<const Type*>* stack, ControlFlowGraph* cfg) const {
-  std::vector<const Type*> argument_types = stack->PopMany(argc);
+  TypeList argument_types = stack->PopMany(argc);
   const BuiltinPointerType* f = BuiltinPointerType::DynamicCast(stack->Pop());
   if (!f) ReportError("expected function pointer type");
   if (argument_types != LowerParameterTypes(f->parameter_types())) {
@@ -224,7 +224,7 @@ void CallBuiltinPointerInstruction::TypeInstruction(
 
 void CallRuntimeInstruction::TypeInstruction(Stack<const Type*>* stack,
                                              ControlFlowGraph* cfg) const {
-  std::vector<const Type*> argument_types = stack->PopMany(argc);
+  TypeList argument_types = stack->PopMany(argc);
   if (argument_types !=
       LowerParameterTypes(runtime_function->signature().parameter_types,
                           argc)) {
@@ -301,7 +301,7 @@ void LoadReferenceInstruction::TypeInstruction(Stack<const Type*>* stack,
                                                ControlFlowGraph* cfg) const {
   ExpectType(TypeOracle::GetIntPtrType(), stack->Pop());
   ExpectType(TypeOracle::GetHeapObjectType(), stack->Pop());
-  DCHECK_EQ(std::vector<const Type*>{type}, LowerType(type));
+  DCHECK_EQ(TypeList{type}, LowerType(type));
   stack->Push(type);
 }
 

@@ -15,7 +15,7 @@ namespace torque {
 
 class ParameterDifference {
  public:
-  ParameterDifference(const TypeVector& to, const TypeVector& from) {
+  ParameterDifference(const TypeList& to, const TypeList& from) {
     DCHECK_EQ(to.size(), from.size());
     for (size_t i = 0; i < to.size(); ++i) {
       AddParameter(to[i], from[i]);

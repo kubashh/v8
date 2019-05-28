@@ -140,7 +140,7 @@ void CSAGenerator::EmitInstruction(
 }
 
 void CSAGenerator::ProcessArgumentsCommon(
-    const TypeVector& parameter_types, std::vector<std::string>* args,
+    const TypeList& parameter_types, std::vector<std::string>* args,
     std::vector<std::string>* constexpr_arguments, Stack<std::string>* stack) {
   for (auto it = parameter_types.rbegin(); it != parameter_types.rend(); ++it) {
     const Type* type = *it;
@@ -165,7 +165,7 @@ void CSAGenerator::EmitInstruction(const CallIntrinsicInstruction& instruction,
   std::vector<std::string> constexpr_arguments =
       instruction.constexpr_arguments;
   std::vector<std::string> args;
-  TypeVector parameter_types =
+  TypeList parameter_types =
       instruction.intrinsic->signature().parameter_types.types;
   ProcessArgumentsCommon(parameter_types, &args, &constexpr_arguments, stack);
 
@@ -289,7 +289,7 @@ void CSAGenerator::EmitInstruction(const CallCsaMacroInstruction& instruction,
   std::vector<std::string> constexpr_arguments =
       instruction.constexpr_arguments;
   std::vector<std::string> args;
-  TypeVector parameter_types =
+  TypeList parameter_types =
       instruction.macro->signature().parameter_types.types;
   ProcessArgumentsCommon(parameter_types, &args, &constexpr_arguments, stack);
 
@@ -343,7 +343,7 @@ void CSAGenerator::EmitInstruction(
   std::vector<std::string> constexpr_arguments =
       instruction.constexpr_arguments;
   std::vector<std::string> args;
-  TypeVector parameter_types =
+  TypeList parameter_types =
       instruction.macro->signature().parameter_types.types;
   ProcessArgumentsCommon(parameter_types, &args, &constexpr_arguments, stack);
 
@@ -362,10 +362,10 @@ void CSAGenerator::EmitInstruction(
 
   std::vector<std::string> label_names;
   std::vector<std::vector<std::string>> var_names;
-  const LabelDeclarationVector& labels = instruction.macro->signature().labels;
+  const LabelDeclarationList& labels = instruction.macro->signature().labels;
   DCHECK_EQ(labels.size(), instruction.label_blocks.size());
   for (size_t i = 0; i < labels.size(); ++i) {
-    TypeVector label_parameters = labels[i].types;
+    TypeList label_parameters = labels[i].types;
     label_names.push_back("label" + std::to_string(i));
     var_names.push_back({});
     for (size_t j = 0; j < label_parameters.size(); ++j) {
@@ -443,7 +443,7 @@ void CSAGenerator::EmitInstruction(
 void CSAGenerator::EmitInstruction(const CallBuiltinInstruction& instruction,
                                    Stack<std::string>* stack) {
   std::vector<std::string> arguments = stack->PopMany(instruction.argc);
-  std::vector<const Type*> result_types =
+  TypeList result_types =
       LowerType(instruction.builtin->signature().return_type);
   if (instruction.is_tailcall) {
     out_ << "   CodeStubAssembler(state_).TailCallBuiltin(Builtins::k"
@@ -492,8 +492,7 @@ void CSAGenerator::EmitInstruction(
     Stack<std::string>* stack) {
   std::vector<std::string> function_and_arguments =
       stack->PopMany(1 + instruction.argc);
-  std::vector<const Type*> result_types =
-      LowerType(instruction.type->return_type());
+  TypeList result_types = LowerType(instruction.type->return_type());
   if (result_types.size() != 1) {
     ReportError("builtins must have exactly one result");
   }
@@ -564,7 +563,7 @@ void CSAGenerator::EmitInstruction(const CallRuntimeInstruction& instruction,
   std::vector<std::string> arguments = stack->PopMany(instruction.argc);
   const Type* return_type =
       instruction.runtime_function->signature().return_type;
-  std::vector<const Type*> result_types;
+  TypeList result_types;
   if (return_type != TypeOracle::GetNeverType()) {
     result_types = LowerType(return_type);
   }

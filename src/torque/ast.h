@@ -155,6 +155,8 @@ struct TypeExpression : AstNode {
   DEFINE_AST_NODE_INNER_BOILERPLATE(TypeExpression)
 };
 
+using TypeExpressionList = std::vector<TypeExpression*>;
+
 struct Declaration : AstNode {
   Declaration(Kind kind, SourcePosition pos) : AstNode(kind, pos) {}
   DEFINE_AST_NODE_INNER_BOILERPLATE(Declaration)
@@ -218,31 +220,31 @@ struct IdentifierExpression : LocationExpression {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(IdentifierExpression)
   IdentifierExpression(SourcePosition pos,
                        std::vector<std::string> namespace_qualification,
-                       Identifier* name, std::vector<TypeExpression*> args = {})
+                       Identifier* name, TypeExpressionList args = {})
       : LocationExpression(kKind, pos),
         namespace_qualification(std::move(namespace_qualification)),
         name(name),
         generic_arguments(std::move(args)) {}
   IdentifierExpression(SourcePosition pos, Identifier* name,
-                       std::vector<TypeExpression*> args = {})
+                       TypeExpressionList args = {})
       : IdentifierExpression(pos, {}, name, std::move(args)) {}
   bool IsThis() const { return name->value == kThisParameterName; }
   std::vector<std::string> namespace_qualification;
   Identifier* name;
-  std::vector<TypeExpression*> generic_arguments;
+  TypeExpressionList generic_arguments;
 };
 
 struct IntrinsicCallExpression : Expression {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(IntrinsicCallExpression)
   IntrinsicCallExpression(SourcePosition pos, std::string name,
-                          std::vector<TypeExpression*> generic_arguments,
+                          TypeExpressionList generic_arguments,
                           std::vector<Expression*> arguments)
       : Expression(kKind, pos),
         name(std::move(name)),
         generic_arguments(std::move(generic_arguments)),
         arguments(std::move(arguments)) {}
   std::string name;
-  std::vector<TypeExpression*> generic_arguments;
+  TypeExpressionList generic_arguments;
   std::vector<Expression*> arguments;
 };
 
@@ -425,19 +427,17 @@ struct NewExpression : Expression {
 
 struct ParameterList {
   std::vector<Identifier*> names;
-  std::vector<TypeExpression*> types;
+  TypeExpressionList types;
   size_t implicit_count;
   bool has_varargs;
   std::string arguments_variable;
 
   static ParameterList Empty() { return ParameterList{{}, {}, 0, false, ""}; }
-  std::vector<TypeExpression*> GetImplicitTypes() {
-    return std::vector<TypeExpression*>(types.begin(),
-                                        types.begin() + implicit_count);
+  TypeExpressionList GetImplicitTypes() {
+    return TypeExpressionList(types.begin(), types.begin() + implicit_count);
   }
-  std::vector<TypeExpression*> GetExplicitTypes() {
-    return std::vector<TypeExpression*>(types.begin() + implicit_count,
-                                        types.end());
+  TypeExpressionList GetExplicitTypes() {
+    return TypeExpressionList(types.begin() + implicit_count, types.end());
   }
 };
 
@@ -457,13 +457,12 @@ struct BasicTypeExpression : TypeExpression {
 
 struct FunctionTypeExpression : TypeExpression {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(FunctionTypeExpression)
-  FunctionTypeExpression(SourcePosition pos,
-                         std::vector<TypeExpression*> parameters,
+  FunctionTypeExpression(SourcePosition pos, TypeExpressionList parameters,
                          TypeExpression* return_type)
       : TypeExpression(kKind, pos),
         parameters(std::move(parameters)),
         return_type(return_type) {}
-  std::vector<TypeExpression*> parameters;
+  TypeExpressionList parameters;
   TypeExpression* return_type;
 };
 
@@ -736,21 +735,21 @@ struct ClassFieldExpression {
 
 struct LabelAndTypes {
   Identifier* name;
-  std::vector<TypeExpression*> types;
+  TypeExpressionList types;
 };
 
-using LabelAndTypesVector = std::vector<LabelAndTypes>;
+using LabelAndTypesList = std::vector<LabelAndTypes>;
 
 struct CallableNodeSignature {
   ParameterList parameters;
   TypeExpression* return_type;
-  LabelAndTypesVector labels;
+  LabelAndTypesList labels;
 };
 
 struct CallableNode : AstNode {
   CallableNode(AstNode::Kind kind, SourcePosition pos, bool transitioning,
                std::string name, ParameterList parameters,
-               TypeExpression* return_type, const LabelAndTypesVector& labels)
+               TypeExpression* return_type, const LabelAndTypesList& labels)
       : AstNode(kind, pos),
         transitioning(transitioning),
         name(std::move(name)),
@@ -766,7 +765,7 @@ struct MacroDeclaration : CallableNode {
   MacroDeclaration(AstNode::Kind kind, SourcePosition pos, bool transitioning,
                    std::string name, base::Optional<std::string> op,
                    ParameterList parameters, TypeExpression* return_type,
-                   const LabelAndTypesVector& labels)
+                   const LabelAndTypesList& labels)
       : CallableNode(kind, pos, transitioning, std::move(name),
                      std::move(parameters), return_type, labels),
         op(std::move(op)) {}
@@ -780,7 +779,7 @@ struct ExternalMacroDeclaration : MacroDeclaration {
                            std::string name, base::Optional<std::string> op,
                            ParameterList parameters,
                            TypeExpression* return_type,
-                           const LabelAndTypesVector& labels)
+                           const LabelAndTypesList& labels)
       : MacroDeclaration(kKind, pos, transitioning, std::move(name),
                          std::move(op), std::move(parameters), return_type,
                          labels),
@@ -801,7 +800,7 @@ struct TorqueMacroDeclaration : MacroDeclaration {
   TorqueMacroDeclaration(SourcePosition pos, bool transitioning,
                          std::string name, base::Optional<std::string> op,
                          ParameterList parameters, TypeExpression* return_type,
-                         const LabelAndTypesVector& labels, bool export_to_csa)
+                         const LabelAndTypesList& labels, bool export_to_csa)
       : MacroDeclaration(kKind, pos, transitioning, std::move(name),
                          std::move(op), std::move(parameters), return_type,
                          labels),
@@ -891,10 +890,10 @@ struct GenericDeclaration : Declaration {
 struct SpecializationDeclaration : Declaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(SpecializationDeclaration)
   SpecializationDeclaration(SourcePosition pos, Identifier* name,
-                            std::vector<TypeExpression*> generic_parameters,
+                            TypeExpressionList generic_parameters,
                             ParameterList parameters,
                             TypeExpression* return_type,
-                            LabelAndTypesVector labels, Statement* b)
+                            LabelAndTypesList labels, Statement* b)
       : Declaration(kKind, pos),
         name(name),
         external(false),
@@ -904,7 +903,7 @@ struct SpecializationDeclaration : Declaration {
         body(b) {}
   Identifier* name;
   bool external;
-  std::vector<TypeExpression*> generic_parameters;
+  TypeExpressionList generic_parameters;
   std::unique_ptr<CallableNodeSignature> signature;
   Statement* body;
 };

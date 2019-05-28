@@ -223,7 +223,7 @@ void DeclarationVisitor::Visit(SpecializationDeclaration* decl) {
   for (Generic* generic : generic_list) {
     Signature generic_signature_with_types =
         MakeSpecializedSignature(SpecializationKey{
-            generic, TypeVisitor::ComputeTypeVector(decl->generic_parameters)});
+            generic, TypeVisitor::ComputeTypeList(decl->generic_parameters)});
     if (signature_with_types.HasSameTypesAs(generic_signature_with_types,
                                             ParameterMode::kIgnoreImplicit)) {
       if (matching_generic != nullptr) {
@@ -252,7 +252,7 @@ void DeclarationVisitor::Visit(SpecializationDeclaration* decl) {
       stream << "\n  "
              << MakeSpecializedSignature(SpecializationKey{
                     generic,
-                    TypeVisitor::ComputeTypeVector(decl->generic_parameters)});
+                    TypeVisitor::ComputeTypeList(decl->generic_parameters)});
     }
     ReportError(stream.str());
   }
@@ -262,7 +262,7 @@ void DeclarationVisitor::Visit(SpecializationDeclaration* decl) {
                                       matching_generic->IdentifierPosition());
   }
 
-  Specialize(SpecializationKey{matching_generic, TypeVisitor::ComputeTypeVector(
+  Specialize(SpecializationKey{matching_generic, TypeVisitor::ComputeTypeList(
                                                      decl->generic_parameters)},
              matching_generic->declaration()->callable, decl->signature.get(),
              decl->body, decl->pos);

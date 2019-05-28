@@ -64,8 +64,7 @@ class Declarations {
 
   static Value* LookupValue(const QualifiedName& name);
 
-  static Macro* TryLookupMacro(const std::string& name,
-                               const TypeVector& types);
+  static Macro* TryLookupMacro(const std::string& name, const TypeList& types);
   static base::Optional<Builtin*> TryLookupBuiltin(const QualifiedName& name);
 
   static std::vector<Generic*> LookupGeneric(const std::string& name);
@@ -138,7 +137,7 @@ class Declarations {
   static Macro* DeclareOperator(const std::string& name, Macro* m);
 
   static std::string GetGeneratedCallableName(
-      const std::string& name, const TypeVector& specialized_types);
+      const std::string& name, const TypeList& specialized_types);
 };
 
 }  // namespace torque

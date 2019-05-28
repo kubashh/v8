@@ -16,8 +16,8 @@ namespace torque {
 
 class TypeVisitor {
  public:
-  static TypeVector ComputeTypeVector(const std::vector<TypeExpression*>& v) {
-    TypeVector result;
+  static TypeList ComputeTypeList(const TypeExpressionList& v) {
+    TypeList result;
     for (TypeExpression* t : v) {
       result.push_back(ComputeType(t));
     }

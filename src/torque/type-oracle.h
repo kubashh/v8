@@ -47,7 +47,7 @@ class TypeOracle : public ContextualClass<TypeOracle> {
   }
 
   static const BuiltinPointerType* GetBuiltinPointerType(
-      TypeVector argument_types, const Type* return_type) {
+      TypeList argument_types, const Type* return_type) {
     TypeOracle& self = Get();
     const Type* builtin_type = self.GetBuiltinType(BUILTIN_POINTER_TYPE_STRING);
     const BuiltinPointerType* result = self.function_pointer_types_.Add(
@@ -209,7 +209,7 @@ class TypeOracle : public ContextualClass<TypeOracle> {
       if (base::Optional<Callable*> specialization =
               from_constexpr->GetSpecialization({to, from})) {
         if ((*specialization)->signature().GetExplicitTypes() ==
-            TypeVector{from}) {
+            TypeList{from}) {
           return true;
         }
       }

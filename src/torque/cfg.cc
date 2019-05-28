@@ -113,7 +113,7 @@ void CfgAssembler::DropTo(BottomOffset new_level) {
 
 StackRange CfgAssembler::Peek(StackRange range,
                               base::Optional<const Type*> type) {
-  std::vector<const Type*> lowered_types;
+  TypeList lowered_types;
   if (type) {
     lowered_types = LowerType(*type);
     DCHECK_EQ(lowered_types.size(), range.Size());
@@ -131,7 +131,7 @@ void CfgAssembler::Poke(StackRange destination, StackRange origin,
   DCHECK_EQ(destination.Size(), origin.Size());
   DCHECK_LE(destination.end(), origin.begin());
   DCHECK_EQ(origin.end(), CurrentStack().AboveTop());
-  std::vector<const Type*> lowered_types;
+  TypeList lowered_types;
   if (type) {
     lowered_types = LowerType(*type);
     DCHECK_EQ(lowered_types.size(), origin.Size());

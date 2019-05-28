@@ -26,12 +26,12 @@ std::ostream& operator<<(std::ostream& os, const Callable& m) {
   os << "callable " << m.ReadableName() << "(";
   if (m.signature().implicit_count != 0) {
     os << "implicit ";
-    TypeVector implicit_parameter_types(
+    TypeList implicit_parameter_types(
         m.signature().parameter_types.types.begin(),
         m.signature().parameter_types.types.begin() +
             m.signature().implicit_count);
     os << implicit_parameter_types << ")(";
-    TypeVector explicit_parameter_types(
+    TypeList explicit_parameter_types(
         m.signature().parameter_types.types.begin() +
             m.signature().implicit_count,
         m.signature().parameter_types.types.end());
@@ -83,8 +83,8 @@ base::Optional<const Type*> InferTypeArgument(const std::string& to_infer,
 }
 
 base::Optional<const Type*> InferTypeArgument(
-    const std::string& to_infer, const std::vector<TypeExpression*>& parameters,
-    const TypeVector& arguments) {
+    const std::string& to_infer, const TypeExpressionList& parameters,
+    const TypeList& arguments) {
   for (size_t i = 0; i < arguments.size() && i < parameters.size(); ++i) {
     if (base::Optional<const Type*> inferred =
             InferTypeArgument(to_infer, parameters[i], arguments[i])) {
@@ -96,10 +96,9 @@ base::Optional<const Type*> InferTypeArgument(
 
 }  // namespace
 
-base::Optional<TypeVector> Generic::InferSpecializationTypes(
-    const TypeVector& explicit_specialization_types,
-    const TypeVector& arguments) {
-  TypeVector result = explicit_specialization_types;
+base::Optional<TypeList> Generic::InferSpecializationTypes(
+    const TypeList& explicit_specialization_types, const TypeList& arguments) {
+  TypeList result = explicit_specialization_types;
   size_t type_parameter_count = declaration()->generic_parameters.size();
   if (explicit_specialization_types.size() > type_parameter_count) {
     return base::nullopt;
@@ -109,10 +108,10 @@ base::Optional<TypeVector> Generic::InferSpecializationTypes(
     const std::string type_name = declaration()->generic_parameters[i]->value;
     size_t implicit_count =
         declaration()->callable->signature->parameters.implicit_count;
-    const std::vector<TypeExpression*>& parameters =
+    const TypeExpressionList& parameters =
         declaration()->callable->signature->parameters.types;
-    std::vector<TypeExpression*> explicit_parameters(
-        parameters.begin() + implicit_count, parameters.end());
+    TypeExpressionList explicit_parameters(parameters.begin() + implicit_count,
+                                           parameters.end());
     base::Optional<const Type*> inferred =
         InferTypeArgument(type_name, explicit_parameters, arguments);
     if (!inferred) return base::nullopt;

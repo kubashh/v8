@@ -188,7 +188,7 @@ const Type* TypeVisitor::ComputeType(TypeExpression* type_expression) {
         ComputeType(reference_type->referenced_type));
   } else {
     auto* function_type_exp = FunctionTypeExpression::cast(type_expression);
-    TypeVector argument_types;
+    TypeList argument_types;
     for (TypeExpression* type_exp : function_type_exp->parameters) {
       argument_types.push_back(ComputeType(type_exp));
     }
@@ -198,9 +198,9 @@ const Type* TypeVisitor::ComputeType(TypeExpression* type_expression) {
 }
 
 Signature TypeVisitor::MakeSignature(const CallableNodeSignature* signature) {
-  LabelDeclarationVector definition_vector;
+  LabelDeclarationList definition_vector;
   for (const auto& label : signature->labels) {
-    LabelDeclaration def = {label.name, ComputeTypeVector(label.types)};
+    LabelDeclaration def = {label.name, ComputeTypeList(label.types)};
     definition_vector.push_back(def);
   }
   base::Optional<std::string> arguments_variable;
@@ -208,7 +208,7 @@ Signature TypeVisitor::MakeSignature(const CallableNodeSignature* signature) {
     arguments_variable = signature->parameters.arguments_variable;
   Signature result{signature->parameters.names,
                    arguments_variable,
-                   {ComputeTypeVector(signature->parameters.types),
+                   {ComputeTypeList(signature->parameters.types),
                     signature->parameters.has_varargs},
                    signature->parameters.implicit_count,
                    ComputeType(signature->return_type),

@@ -257,10 +257,9 @@ struct LocalValue {
 
 struct LocalLabel {
   Block* block;
-  std::vector<const Type*> parameter_types;
+  TypeList parameter_types;
 
-  explicit LocalLabel(Block* block,
-                      std::vector<const Type*> parameter_types = {})
+  explicit LocalLabel(Block* block, TypeList parameter_types = {})
       : block(block), parameter_types(std::move(parameter_types)) {}
 };
 
@@ -270,7 +269,7 @@ struct Arguments {
 };
 
 // Determine if a callable should be considered as an overload.
-bool IsCompatibleSignature(const Signature& sig, const TypeVector& types,
+bool IsCompatibleSignature(const Signature& sig, const TypeList& types,
                            size_t label_count);
 
 class ImplementationVisitor {
@@ -481,22 +480,22 @@ class ImplementationVisitor {
   template <class Container>
   Callable* LookupCallable(const QualifiedName& name,
                            const Container& declaration_container,
-                           const TypeVector& types,
+                           const TypeList& types,
                            const std::vector<Binding<LocalLabel>*>& labels,
-                           const TypeVector& specialization_types,
+                           const TypeList& specialization_types,
                            bool silence_errors = false);
   bool TestLookupCallable(const QualifiedName& name,
-                          const TypeVector& parameter_types);
+                          const TypeList& parameter_types);
 
   template <class Container>
   Callable* LookupCallable(const QualifiedName& name,
                            const Container& declaration_container,
                            const Arguments& arguments,
-                           const TypeVector& specialization_types);
+                           const TypeList& specialization_types);
 
   Method* LookupMethod(const std::string& name, LocationReference target,
                        const Arguments& arguments,
-                       const TypeVector& specialization_types);
+                       const TypeList& specialization_types);
 
   const Type* GetCommonType(const Type* left, const Type* right);
 
@@ -514,14 +513,14 @@ class ImplementationVisitor {
   VisitResult GenerateCall(Callable* callable,
                            base::Optional<LocationReference> this_parameter,
                            Arguments parameters,
-                           const TypeVector& specialization_types = {},
+                           const TypeList& specialization_types = {},
                            bool tail_call = false);
   VisitResult GenerateCall(const QualifiedName& callable_name,
                            Arguments parameters,
-                           const TypeVector& specialization_types = {},
+                           const TypeList& specialization_types = {},
                            bool tail_call = false);
   VisitResult GenerateCall(std::string callable_name, Arguments parameters,
-                           const TypeVector& specialization_types = {},
+                           const TypeList& specialization_types = {},
                            bool tail_call = false) {
     return GenerateCall(QualifiedName(std::move(callable_name)),
                         std::move(parameters), specialization_types, tail_call);
@@ -543,7 +542,7 @@ class ImplementationVisitor {
                                         Macro* macro);
   std::vector<std::string> GenerateFunctionDeclaration(
       std::ostream& o, const std::string& macro_prefix, const std::string& name,
-      const Signature& signature, const NameVector& parameter_names,
+      const Signature& signature, const NameList& parameter_names,
       bool pass_code_assembler_state = true);
 
   VisitResult GenerateImplicitConvert(const Type* destination_type,

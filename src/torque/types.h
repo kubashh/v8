@@ -126,9 +126,9 @@ class V8_EXPORT_PRIVATE Type : public TypeBase {
   mutable std::set<std::string> aliases_;
 };
 
-using TypeVector = std::vector<const Type*>;
+using TypeList = std::vector<const Type*>;
 
-inline size_t hash_value(const TypeVector& types) {
+inline size_t hash_value(const TypeList& types) {
   size_t hash = 0;
   for (const Type* t : types) {
     hash = base::hash_combine(hash, t);
@@ -266,7 +266,7 @@ class V8_EXPORT_PRIVATE BuiltinPointerType final : public Type {
     return parent()->GetGeneratedTNodeTypeName();
   }
 
-  const TypeVector& parameter_types() const { return parameter_types_; }
+  const TypeList& parameter_types() const { return parameter_types_; }
   const Type* return_type() const { return return_type_; }
 
   friend size_t hash_value(const BuiltinPointerType& p) {
@@ -284,14 +284,14 @@ class V8_EXPORT_PRIVATE BuiltinPointerType final : public Type {
 
  private:
   friend class TypeOracle;
-  BuiltinPointerType(const Type* parent, TypeVector parameter_types,
+  BuiltinPointerType(const Type* parent, TypeList parameter_types,
                      const Type* return_type, size_t function_pointer_type_id)
       : Type(Kind::kBuiltinPointerType, parent),
         parameter_types_(parameter_types),
         return_type_(return_type),
         function_pointer_type_id_(function_pointer_type_id) {}
 
-  const TypeVector parameter_types_;
+  const TypeList parameter_types_;
   const Type* const return_type_;
   const size_t function_pointer_type_id_;
 };
@@ -616,8 +616,8 @@ class VisitResultVector : public std::vector<VisitResult> {
   VisitResultVector() : std::vector<VisitResult>() {}
   VisitResultVector(std::initializer_list<VisitResult> init)
       : std::vector<VisitResult>(init) {}
-  TypeVector ComputeTypeVector() const {
-    TypeVector result;
+  TypeList ComputeTypeList() const {
+    TypeList result;
     for (auto& visit_result : *this) {
       result.push_back(visit_result.type());
     }
@@ -625,26 +625,22 @@ class VisitResultVector : public std::vector<VisitResult> {
   }
 };
 
-std::ostream& operator<<(std::ostream& os, const TypeVector& types);
-
-using NameAndTypeVector = std::vector<NameAndType>;
+std::ostream& operator<<(std::ostream& os, const TypeList& types);
 
 struct LabelDefinition {
   std::string name;
-  NameAndTypeVector parameters;
+  std::vector<NameAndType> parameters;
 };
-
-using LabelDefinitionVector = std::vector<LabelDefinition>;
 
 struct LabelDeclaration {
   Identifier* name;
-  TypeVector types;
+  TypeList types;
 };
 
-using LabelDeclarationVector = std::vector<LabelDeclaration>;
+using LabelDeclarationList = std::vector<LabelDeclaration>;
 
 struct ParameterTypes {
-  TypeVector types;
+  TypeList types;
   bool var_args;
 };
 
@@ -652,11 +648,11 @@ std::ostream& operator<<(std::ostream& os, const ParameterTypes& parameters);
 
 enum class ParameterMode { kProcessImplicit, kIgnoreImplicit };
 
-using NameVector = std::vector<Identifier*>;
+using NameList = std::vector<Identifier*>;
 
 struct Signature {
-  Signature(NameVector n, base::Optional<std::string> arguments_variable,
-            ParameterTypes p, size_t i, const Type* r, LabelDeclarationVector l)
+  Signature(NameList n, base::Optional<std::string> arguments_variable,
+            ParameterTypes p, size_t i, const Type* r, LabelDeclarationList l)
       : parameter_names(std::move(n)),
         arguments_variable(arguments_variable),
         parameter_types(std::move(p)),
@@ -664,23 +660,23 @@ struct Signature {
         return_type(r),
         labels(std::move(l)) {}
   Signature() : implicit_count(0), return_type(nullptr) {}
-  const TypeVector& types() const { return parameter_types.types; }
-  NameVector parameter_names;
+  const TypeList& types() const { return parameter_types.types; }
+  NameList parameter_names;
   base::Optional<std::string> arguments_variable;
   ParameterTypes parameter_types;
   size_t implicit_count;
   const Type* return_type;
-  LabelDeclarationVector labels;
+  LabelDeclarationList labels;
   bool HasSameTypesAs(
       const Signature& other,
       ParameterMode mode = ParameterMode::kProcessImplicit) const;
-  TypeVector GetImplicitTypes() const {
-    return TypeVector(parameter_types.types.begin(),
-                      parameter_types.types.begin() + implicit_count);
+  TypeList GetImplicitTypes() const {
+    return TypeList(parameter_types.types.begin(),
+                    parameter_types.types.begin() + implicit_count);
   }
-  TypeVector GetExplicitTypes() const {
-    return TypeVector(parameter_types.types.begin() + implicit_count,
-                      parameter_types.types.end());
+  TypeList GetExplicitTypes() const {
+    return TypeList(parameter_types.types.begin() + implicit_count,
+                    parameter_types.types.end());
   }
 };
 
@@ -689,11 +685,11 @@ std::ostream& operator<<(std::ostream& os, const Signature& sig);
 
 bool IsAssignableFrom(const Type* to, const Type* from);
 
-TypeVector LowerType(const Type* type);
+TypeList LowerType(const Type* type);
 size_t LoweredSlotCount(const Type* type);
-TypeVector LowerParameterTypes(const TypeVector& parameters);
-TypeVector LowerParameterTypes(const ParameterTypes& parameter_types,
-                               size_t vararg_count = 0);
+TypeList LowerParameterTypes(const TypeList& parameters);
+TypeList LowerParameterTypes(const ParameterTypes& parameter_types,
+                             size_t vararg_count = 0);
 
 }  // namespace torque
 }  // namespace internal

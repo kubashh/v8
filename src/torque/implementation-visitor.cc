@@ -200,7 +200,7 @@ VisitResult ImplementationVisitor::InlineMacro(
   base::Optional<Binding<LocalLabel>> macro_end_binding;
   if (can_return) {
     Stack<const Type*> stack = assembler().CurrentStack();
-    std::vector<const Type*> lowered_return_types = LowerType(return_type);
+    TypeList lowered_return_types = LowerType(return_type);
     stack.PushMany(lowered_return_types);
     if (!return_type->IsConstexpr()) {
       SetReturnValue(VisitResult(return_type,
@@ -511,7 +511,7 @@ const Type* ImplementationVisitor::Visit(
     if ((*type)->IsConstexpr()) {
       ReportError("constexpr variables need an initializer");
     }
-    TypeVector lowered_types = LowerType(*type);
+    TypeList lowered_types = LowerType(*type);
     for (const Type* type : lowered_types) {
       assembler().Emit(PushUninitializedInstruction{TypeOracle::GetTopType(
           "uninitialized variable '" + stmt->name->value + "' of type " +
@@ -714,7 +714,7 @@ VisitResult ImplementationVisitor::Visit(AssumeTypeImpossibleExpression* expr) {
   if (result_type->IsNever()) {
     ReportError("unreachable code");
   }
-  CHECK_EQ(LowerType(result_type), TypeVector{result_type});
+  CHECK_EQ(LowerType(result_type), TypeList{result_type});
   assembler().Emit(UnsafeCastInstruction{result_type});
   result.SetType(result_type);
   return result;
@@ -1103,7 +1103,7 @@ VisitResult ImplementationVisitor::TemporaryUninitializedStruct(
       std::string descriptor = "uninitialized field '" + f.name_and_type.name +
                                "' declared at " + PositionAsString(f.pos) +
                                " (" + reason + ")";
-      TypeVector lowered_types = LowerType(f.name_and_type.type);
+      TypeList lowered_types = LowerType(f.name_and_type.type);
       for (const Type* type : lowered_types) {
         assembler().Emit(PushUninitializedInstruction{
             TypeOracle::GetTopType(descriptor, type)});
@@ -1128,7 +1128,7 @@ VisitResult ImplementationVisitor::Visit(TryLabelExpression* expr) {
       ReportError("cannot use ... for label parameters");
     }
     Stack<const Type*> label_input_stack = assembler().CurrentStack();
-    TypeVector parameter_types;
+    TypeList parameter_types;
     for (size_t i = 0; i < parameter_count; ++i) {
       const Type* type =
           TypeVisitor::ComputeType(expr->label_block->parameters.types[i]);
@@ -1487,7 +1487,7 @@ void ImplementationVisitor::GenerateMacroFunctionDeclaration(
 
 std::vector<std::string> ImplementationVisitor::GenerateFunctionDeclaration(
     std::ostream& o, const std::string& macro_prefix, const std::string& name,
-    const Signature& signature, const NameVector& parameter_names,
+    const Signature& signature, const NameList& parameter_names,
     bool pass_code_assembler_state) {
   std::vector<std::string> generated_parameter_names;
   if (signature.return_type->IsVoidOrNever()) {
@@ -1548,7 +1548,7 @@ std::vector<std::string> ImplementationVisitor::GenerateFunctionDeclaration(
 namespace {
 
 void FailCallableLookup(const std::string& reason, const QualifiedName& name,
-                        const TypeVector& parameter_types,
+                        const TypeList& parameter_types,
                         const std::vector<Binding<LocalLabel>*>& labels,
                         const std::vector<Signature>& candidates) {
   std::stringstream stream;
@@ -1608,7 +1608,7 @@ Block* ImplementationVisitor::LookupSimpleLabel(const std::string& name) {
 // an error if no matching callable was found, but return false instead.
 // This is used to test the presence of overloaded field accessors.
 bool ImplementationVisitor::TestLookupCallable(
-    const QualifiedName& name, const TypeVector& parameter_types) {
+    const QualifiedName& name, const TypeList& parameter_types) {
   return LookupCallable(name, Declarations::TryLookup(name), parameter_types,
                         {}, {}, true) != nullptr;
 }
@@ -1616,16 +1616,16 @@ bool ImplementationVisitor::TestLookupCallable(
 template <class Container>
 Callable* ImplementationVisitor::LookupCallable(
     const QualifiedName& name, const Container& declaration_container,
-    const TypeVector& parameter_types,
+    const TypeList& parameter_types,
     const std::vector<Binding<LocalLabel>*>& labels,
-    const TypeVector& specialization_types, bool silence_errors) {
+    const TypeList& specialization_types, bool silence_errors) {
   Callable* result = nullptr;
 
   std::vector<Declarable*> overloads;
   std::vector<Signature> overload_signatures;
   for (auto* declarable : declaration_container) {
     if (Generic* generic = Generic::DynamicCast(declarable)) {
-      base::Optional<TypeVector> inferred_specialization_types =
+      base::Optional<TypeList> inferred_specialization_types =
           generic->InferSpecializationTypes(specialization_types,
                                             parameter_types);
       if (!inferred_specialization_types) continue;
@@ -1710,16 +1710,16 @@ Callable* ImplementationVisitor::LookupCallable(
 template <class Container>
 Callable* ImplementationVisitor::LookupCallable(
     const QualifiedName& name, const Container& declaration_container,
-    const Arguments& arguments, const TypeVector& specialization_types) {
+    const Arguments& arguments, const TypeList& specialization_types) {
   return LookupCallable(name, declaration_container,
-                        arguments.parameters.ComputeTypeVector(),
+                        arguments.parameters.ComputeTypeList(),
                         arguments.labels, specialization_types);
 }
 
 Method* ImplementationVisitor::LookupMethod(
     const std::string& name, LocationReference this_reference,
-    const Arguments& arguments, const TypeVector& specialization_types) {
-  TypeVector types(arguments.parameters.ComputeTypeVector());
+    const Arguments& arguments, const TypeList& specialization_types) {
+  TypeList types(arguments.parameters.ComputeTypeList());
   types.insert(types.begin(), this_reference.ReferencedType());
   return Method::cast(LookupCallable(
       {{}, name},
@@ -1896,7 +1896,7 @@ LocationReference ImplementationVisitor::GetLocationReference(
   if (expr->generic_arguments.size() != 0) {
     Generic* generic = Declarations::LookupUniqueGeneric(name);
     Callable* specialization = GetOrCreateSpecialization(SpecializationKey{
-        generic, TypeVisitor::ComputeTypeVector(expr->generic_arguments)});
+        generic, TypeVisitor::ComputeTypeList(expr->generic_arguments)});
     if (Builtin* builtin = Builtin::DynamicCast(specialization)) {
       DCHECK(!builtin->IsExternal());
       return LocationReference::Temporary(GetBuiltinCode(builtin),
@@ -1990,7 +1990,7 @@ void ImplementationVisitor::GenerateAssignToLocation(
 VisitResult ImplementationVisitor::GeneratePointerCall(
     Expression* callee, const Arguments& arguments, bool is_tailcall) {
   StackScope scope(this);
-  TypeVector parameter_types(arguments.parameters.ComputeTypeVector());
+  TypeList parameter_types(arguments.parameters.ComputeTypeList());
   VisitResult callee_result = Visit(callee);
   if (!callee_result.type()->IsBuiltinPointerType()) {
     std::stringstream stream;
@@ -2057,7 +2057,7 @@ void ImplementationVisitor::AddCallParameter(
 
 VisitResult ImplementationVisitor::GenerateCall(
     Callable* callable, base::Optional<LocationReference> this_reference,
-    Arguments arguments, const TypeVector& specialization_types,
+    Arguments arguments, const TypeList& specialization_types,
     bool is_tailcall) {
   // Operators used in a branching context can also be function calls that never
   // return but have a True and False label
@@ -2305,7 +2305,7 @@ VisitResult ImplementationVisitor::GenerateCall(
 
 VisitResult ImplementationVisitor::GenerateCall(
     const QualifiedName& callable_name, Arguments arguments,
-    const TypeVector& specialization_types, bool is_tailcall) {
+    const TypeList& specialization_types, bool is_tailcall) {
   Callable* callable =
       LookupCallable(callable_name, Declarations::Lookup(callable_name),
                      arguments, specialization_types);
@@ -2328,8 +2328,8 @@ VisitResult ImplementationVisitor::Visit(CallExpression* expr,
   Arguments arguments;
   QualifiedName name = QualifiedName(expr->callee->namespace_qualification,
                                      expr->callee->name->value);
-  TypeVector specialization_types =
-      TypeVisitor::ComputeTypeVector(expr->callee->generic_arguments);
+  TypeList specialization_types =
+      TypeVisitor::ComputeTypeList(expr->callee->generic_arguments);
   bool has_template_arguments = !specialization_types.empty();
   for (Expression* arg : expr->arguments)
     arguments.parameters.push_back(Visit(arg));
@@ -2354,8 +2354,8 @@ VisitResult ImplementationVisitor::Visit(CallMethodExpression* expr) {
   StackScope scope(this);
   Arguments arguments;
   std::string method_name = expr->method->name->value;
-  TypeVector specialization_types =
-      TypeVisitor::ComputeTypeVector(expr->method->generic_arguments);
+  TypeList specialization_types =
+      TypeVisitor::ComputeTypeList(expr->method->generic_arguments);
   LocationReference target = GetLocationReference(expr->target);
   if (!target.IsVariableAccess()) {
     VisitResult result = GenerateFetchFromLocation(target);
@@ -2370,7 +2370,7 @@ VisitResult ImplementationVisitor::Visit(CallMethodExpression* expr) {
     arguments.parameters.push_back(Visit(arg));
   }
   arguments.labels = LabelsFromIdentifiers(expr->labels);
-  TypeVector argument_types = arguments.parameters.ComputeTypeVector();
+  TypeList argument_types = arguments.parameters.ComputeTypeList();
   DCHECK_EQ(expr->method->namespace_qualification.size(), 0);
   QualifiedName qualified_name = QualifiedName(method_name);
   Callable* callable = nullptr;
@@ -2385,8 +2385,8 @@ VisitResult ImplementationVisitor::Visit(CallMethodExpression* expr) {
 VisitResult ImplementationVisitor::Visit(IntrinsicCallExpression* expr) {
   StackScope scope(this);
   Arguments arguments;
-  TypeVector specialization_types =
-      TypeVisitor::ComputeTypeVector(expr->generic_arguments);
+  TypeList specialization_types =
+      TypeVisitor::ComputeTypeList(expr->generic_arguments);
   for (Expression* arg : expr->arguments)
     arguments.parameters.push_back(Visit(arg));
   return scope.Yield(
@@ -2536,7 +2536,7 @@ DEFINE_CONTEXTUAL_VARIABLE(ImplementationVisitor::LabelBindingsManager)
 DEFINE_CONTEXTUAL_VARIABLE(ImplementationVisitor::CurrentCallable)
 DEFINE_CONTEXTUAL_VARIABLE(ImplementationVisitor::CurrentReturnValue)
 
-bool IsCompatibleSignature(const Signature& sig, const TypeVector& types,
+bool IsCompatibleSignature(const Signature& sig, const TypeList& types,
                            size_t label_count) {
   auto i = sig.parameter_types.types.begin() + sig.implicit_count;
   if ((sig.parameter_types.types.size() - sig.implicit_count) > types.size())

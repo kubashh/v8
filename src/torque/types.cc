@@ -465,7 +465,7 @@ std::ostream& operator<<(std::ostream& os, const Signature& sig) {
   return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const TypeVector& types) {
+std::ostream& operator<<(std::ostream& os, const TypeList& types) {
   PrintCommaSeparatedList(os, types);
   return os;
 }
@@ -534,7 +534,7 @@ VisitResult ProjectStructField(VisitResult structure,
 }
 
 namespace {
-void AppendLoweredTypes(const Type* type, std::vector<const Type*>* result) {
+void AppendLoweredTypes(const Type* type, TypeList* result) {
   DCHECK_NE(type, TypeOracle::GetNeverType());
   if (type->IsConstexpr()) return;
   if (type == TypeOracle::GetVoidType()) return;
@@ -551,25 +551,25 @@ void AppendLoweredTypes(const Type* type, std::vector<const Type*>* result) {
 }
 }  // namespace
 
-TypeVector LowerType(const Type* type) {
-  TypeVector result;
+TypeList LowerType(const Type* type) {
+  TypeList result;
   AppendLoweredTypes(type, &result);
   return result;
 }
 
 size_t LoweredSlotCount(const Type* type) { return LowerType(type).size(); }
 
-TypeVector LowerParameterTypes(const TypeVector& parameters) {
-  std::vector<const Type*> result;
+TypeList LowerParameterTypes(const TypeList& parameters) {
+  TypeList result;
   for (const Type* t : parameters) {
     AppendLoweredTypes(t, &result);
   }
   return result;
 }
 
-TypeVector LowerParameterTypes(const ParameterTypes& parameter_types,
-                               size_t arg_count) {
-  std::vector<const Type*> result = LowerParameterTypes(parameter_types.types);
+TypeList LowerParameterTypes(const ParameterTypes& parameter_types,
+                             size_t arg_count) {
+  TypeList result = LowerParameterTypes(parameter_types.types);
   for (size_t i = parameter_types.types.size(); i < arg_count; ++i) {
     DCHECK(parameter_types.var_args);
     AppendLoweredTypes(TypeOracle::GetObjectType(), &result);

@@ -265,9 +265,7 @@ class Callable : public Scope {
   const std::string& ExternalName() const { return external_name_; }
   const std::string& ReadableName() const { return readable_name_; }
   const Signature& signature() const { return signature_; }
-  const NameVector& parameter_names() const {
-    return signature_.parameter_names;
-  }
+  const NameList& parameter_names() const { return signature_.parameter_names; }
   bool HasReturnValue() const {
     return !signature_.return_type->IsVoidOrNever();
   }
@@ -458,20 +456,19 @@ class Generic : public Declarable {
     return declaration()->generic_parameters;
   }
   const std::string& name() const { return name_; }
-  void AddSpecialization(const TypeVector& type_arguments,
+  void AddSpecialization(const TypeList& type_arguments,
                          Callable* specialization) {
     DCHECK_EQ(0, specializations_.count(type_arguments));
     specializations_[type_arguments] = specialization;
   }
   base::Optional<Callable*> GetSpecialization(
-      const TypeVector& type_arguments) const {
+      const TypeList& type_arguments) const {
     auto it = specializations_.find(type_arguments);
     if (it != specializations_.end()) return it->second;
     return base::nullopt;
   }
-  base::Optional<TypeVector> InferSpecializationTypes(
-      const TypeVector& explicit_specialization_types,
-      const TypeVector& arguments);
+  base::Optional<TypeList> InferSpecializationTypes(
+      const TypeList& explicit_specialization_types, const TypeList& arguments);
 
  private:
   friend class Declarations;
@@ -481,14 +478,14 @@ class Generic : public Declarable {
         declaration_(declaration) {}
 
   std::string name_;
-  std::unordered_map<TypeVector, Callable*, base::hash<TypeVector>>
+  std::unordered_map<TypeList, Callable*, base::hash<TypeList>>
       specializations_;
   GenericDeclaration* declaration_;
 };
 
 struct SpecializationKey {
   Generic* generic;
-  TypeVector specialized_types;
+  TypeList specialized_types;
 };
 
 class TypeAlias : public Declarable {

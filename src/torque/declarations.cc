@@ -105,7 +105,7 @@ Value* Declarations::LookupValue(const QualifiedName& name) {
 }
 
 Macro* Declarations::TryLookupMacro(const std::string& name,
-                                    const TypeVector& types) {
+                                    const TypeList& types) {
   std::vector<Macro*> macros = TryLookup<Macro>(QualifiedName(name));
   for (auto& m : macros) {
     auto signature_types = m->signature().GetExplicitTypes();
@@ -279,7 +279,7 @@ Generic* Declarations::DeclareGeneric(const std::string& name,
 }
 
 std::string Declarations::GetGeneratedCallableName(
-    const std::string& name, const TypeVector& specialized_types) {
+    const std::string& name, const TypeList& specialized_types) {
   std::string result = name;
   for (auto type : specialized_types) {
     std::string type_string = type->MangledName();
