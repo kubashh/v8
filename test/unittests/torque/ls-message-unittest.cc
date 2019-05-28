@@ -2,12 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "src/torque/ls/globals.h"
 #include "src/torque/ls/json.h"
 #include "src/torque/ls/message-handler.h"
 #include "src/torque/ls/message.h"
 #include "src/torque/server-data.h"
 #include "src/torque/source-positions.h"
 #include "test/unittests/test-utils.h"
+#include "testing/gmock-support.h"
 
 namespace v8 {
 namespace internal {
@@ -15,10 +17,12 @@ namespace torque {
 namespace ls {
 
 TEST(LanguageServerMessage, InitializeRequest) {
+  Logger::Scope log_scope;
   InitializeRequest request;
   request.set_id(5);
   request.set_method("initialize");
   request.params();
+  request.params().SetNull("rootUri");
 
   HandleMessage(request.GetJsonValue(), [](JsonValue& raw_response) {
     InitializeResponse response(raw_response);
@@ -28,6 +32,39 @@ TEST(LanguageServerMessage, InitializeRequest) {
     EXPECT_EQ(response.id(), 5);
     EXPECT_TRUE(response.result().capabilities().definitionProvider());
     EXPECT_TRUE(response.result().capabilities().documentSymbolProvider());
+  });
+}
+
+TEST(LanguageServerMessage, UpToDateServerVersion) {
+  const std::string header_content = R"(
+    // Some random comment.
+    namespace torque {
+    constexpr uint32_t kTorqueVersion = 1;
+    }   // namespace torque
+  )";
+
+  CheckTorqueVersionMatches(header_content, 1, [](JsonValue&) {
+    FAIL() << "Sending unexpected response!";
+  });
+}
+
+using ::testing::HasSubstr;
+TEST(LanguageServerMessage, OutdatedServerVersion) {
+  const std::string header_content = R"(
+    // Some random comment.
+    namespace torque {
+    constexpr uint32_t kTorqueVersion = 2;
+    }   // namespace torque
+  )";
+
+  // TODO(szuend): Turn lambda into a std::function<> so we can capture locals
+  //               and assert that the callback is actually called.
+  CheckTorqueVersionMatches(header_content, 1, [](JsonValue& raw_notification) {
+    ShowMessageNotification notification(raw_notification);
+
+    ASSERT_EQ(notification.method(), "window/showMessage");
+    EXPECT_EQ(notification.params().type(), MessageType::kWarning);
+    EXPECT_THAT(notification.params().message(), HasSubstr("recompile"));
   });
 }
 

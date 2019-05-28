@@ -320,6 +320,21 @@ class SymbolInformation : public NestedJsonAccessor {
   JSON_STRING_ACCESSORS(containerName)
 };
 
+enum MessageType {
+  kError = 1,
+  kWarning = 2,
+  kInfo = 3,
+  kLog = 4,
+};
+
+class ShowMessageParams : public NestedJsonAccessor {
+ public:
+  using NestedJsonAccessor::NestedJsonAccessor;
+
+  JSON_INT_ACCESSORS(type)
+  JSON_STRING_ACCESSORS(message)
+};
+
 template <class T>
 class Request : public Message {
  public:
@@ -337,6 +352,7 @@ using GotoDefinitionRequest = Request<TextDocumentPositionParams>;
 using DidChangeWatchedFilesNotification = Request<DidChangeWatchedFilesParams>;
 using PublishDiagnosticsNotification = Request<PublishDiagnosticsParams>;
 using DocumentSymbolRequest = Request<DocumentSymbolParams>;
+using ShowMessageNotification = Request<ShowMessageParams>;
 
 template <class T>
 class Response : public Message {

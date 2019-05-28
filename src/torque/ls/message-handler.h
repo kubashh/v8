@@ -32,6 +32,10 @@ V8_EXPORT_PRIVATE void HandleMessage(JsonValue& raw_message, MessageWriter);
 V8_EXPORT_PRIVATE void CompilationFinished(TorqueCompilerResult result,
                                            MessageWriter);
 
+V8_EXPORT_PRIVATE void CheckTorqueVersionMatches(
+    const std::string& header_content, uint32_t expected_version,
+    MessageWriter writer);
+
 }  // namespace ls
 }  // namespace torque
 }  // namespace internal

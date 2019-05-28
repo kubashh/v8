@@ -3366,6 +3366,7 @@ v8_source_set("torque_base") {
     "src/torque/types.h",
     "src/torque/utils.cc",
     "src/torque/utils.h",
+    "src/torque/version.h",
   ]
 
   deps = [
