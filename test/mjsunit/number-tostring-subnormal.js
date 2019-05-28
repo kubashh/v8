@@ -1,0 +1,85 @@
+// Copyright 2019 the V8 project authors. All rights reserved.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+//       copyright notice, this list of conditions and the following
+//       disclaimer in the documentation and/or other materials provided
+//       with the distribution.
+//     * Neither the name of Google Inc. nor the names of its
+//       contributors may be used to endorse or promote products derived
+//       from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// Tests Number.prototype.toString for numbers within or near the subnormal range,
+// when the radix argument is 2.
+
+// A JavaScript number is a IEEE 754 binary64 (double-precision floating-point) value,
+// so we should be able to provide a binary string representation that is exact.
+
+const zeros = count => '0'.repeat(count);
+
+// 2**-1074
+assertEquals(`0.${zeros(1073)}1`, (Number.MIN_VALUE).toString(2));
+
+assertEquals(`0.${zeros(1022)}1101100011110111011100000100011001111101110001010111`, (1.8858070859709815e-308).toString(2));
+assertEquals(`0.${zeros(1021)}11110111001111000110110111011101110001000000000000001`, (4.297800585227606e-308).toString(2));
+
+// 10 doubles smaller than 2**-1021 (4.450147717014403e-308), that are not subnormal.
+// Like the subnormals, these values have a gap of Number.MIN_VALUE between themselves and the next double.
+assertEquals(`0.${zeros(1021)}11100001110000011100111110011010010100100010001001001`, (3.924423154449847e-308).toString(2));
+assertEquals(`-0.${zeros(1021)}11001101101111001101100010110110011000000011010111001`, (-3.57641826104544e-308).toString(2));
+assertEquals(`-0.${zeros(1021)}11101100100000100110110001000010010001001000101110001`, (-4.1113361447183043e-308).toString(2));
+assertEquals(`0.${zeros(1021)}11111001101000111100111001001101101001001011010001101`, (4.339587042263274e-308).toString(2));
+assertEquals(`0.${zeros(1021)}10111011101001010010101011100001110000000001011110001`, (3.261909352323954e-308).toString(2));
+assertEquals(`0.${zeros(1021)}10001001101101110110000110001011100001100111111111001`, (2.3939766453008923e-308).toString(2));
+assertEquals(`-0.${zeros(1021)}11101001000110010001100111110111001001000001100010011`, (-4.052034242003901e-308).toString(2));
+assertEquals(`-0.${zeros(1021)}10001111010010000100000110100010101101001000110010101`, (-2.4907311894031355e-308).toString(2));
+assertEquals(`-0.${zeros(1021)}10101100001001010011101010001110011010000001111000001`, (-2.9924709724070097e-308).toString(2));
+assertEquals(`-0.${zeros(1021)}11111101001111010110001011001001000100110101001010111`, (-4.402165887028534e-308).toString(2));
+
+// 10 subnormal doubles, i.e. numbers smaller than 2**-1022 (2.2250738585072014e-308).
+assertEquals(`0.${zeros(1022)}1100111101100011000101110111111000011111110001001011`, (1.802545172319673e-308).toString(2));
+assertEquals(`0.${zeros(1022)}1111001000101011101110111111011111111100111101101011`, (2.104874994274149e-308).toString(2));
+assertEquals(`-0.${zeros(1022)}1001110011110110110010010010010001111100001111101011`, (-1.3642832344349763e-308).toString(2));
+assertEquals(`0.${zeros(1023)}111101010100011111101110111101011000001110011101101`, (1.0659537476238824e-308).toString(2));
+assertEquals(`-0.${zeros(1023)}100101011110101100111101101001110011101011110111101`, (-6.51524700064251e-309).toString(2));
+assertEquals(`-0.${zeros(1024)}10011100110100110010111101001001111100000101000111`, (-3.407686279964664e-309).toString(2));
+assertEquals(`-0.${zeros(1024)}11101001001010000001101111010101011111111011010111`, (-5.06631661953108e-309).toString(2));
+assertEquals(`-0.${zeros(1024)}10111100111100001100010100110011001011000011011101`, (-4.105533080656306e-309).toString(2));
+assertEquals(`0.${zeros(1025)}1101111100101101111110101111001010101100001100111`, (2.42476131288505e-309).toString(2));
+assertEquals(`-0.${zeros(1025)}1001000100011011100101010010101010101011101000111`, (-1.576540281929606e-309).toString(2));
+
+// All the tests above are known to fail in v8-7.2.502 to v8-7.6.302.
+
+// More subnormals
+assertEquals(`0.${zeros(1023)}111101100001000000001011101011101010001110011111101`, (1.0693508455891784e-308).toString(2));
+assertEquals(`0.${zeros(1024)}11100010101101001101011010110001110101110100010001`, (4.926157093545696e-309).toString(2));
+assertEquals(`-0.${zeros(1027)}1001011110000111111000010101100101011110001101`, (-4.1158103328176e-310).toString(2));
+assertEquals(`0.${zeros(1030)}111110100101110101101011010001110100111`, (8.500372841691e-311).toString(2));
+assertEquals(`0.${zeros(1033)}101001010011111001100100001010001101`, (7.01292938871e-312).toString(2));
+assertEquals(`0.${zeros(1037)}11101010101101100111000110100111001`, (6.22574126804e-313).toString(2));
+assertEquals(`-0.${zeros(1040)}10100001001101011011111001111111`, (-5.3451064043e-314).toString(2));
+assertEquals(`-0.${zeros(1043)}100110010110010000000100001111`, (-6.35731246e-315).toString(2));
+assertEquals(`0.${zeros(1046)}10101110110100011010110001`, (9.05676893e-316).toString(2));
+assertEquals(`-0.${zeros(1050)}11001010000110011100011`, (-6.5438353e-317).toString(2));
+assertEquals(`0.${zeros(1053)}111001010000010001`, (9.269185e-318).toString(2));
+assertEquals(`-0.${zeros(1057)}1100001000010101`, (-4.90953e-319).toString(2));
+assertEquals(`-0.${zeros(1059)}10011001001111`, (-9.6906e-320).toString(2));
+assertEquals(`0.${zeros(1063)}111101111`, (9.782e-321).toString(2));
+assertEquals(`0.${zeros(1067)}10011`, (3.75e-322).toString(2));
+assertEquals(`-0.${zeros(1070)}1`, (-4e-323).toString(2));
