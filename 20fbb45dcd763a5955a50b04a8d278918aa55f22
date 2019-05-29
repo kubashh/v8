@@ -140,6 +140,30 @@
       "revId": "20fbb45dcd763a5955a50b04a8d278918aa55f22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cfc55c8_f31df38b",
+        "filename": "test/cctest/compiler/serializer-tester.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1283477
+      },
+      "writtenOn": "2019-05-29T07:12:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "43b03b64_9f5ce219",
+      "range": {
+        "startLine": 282,
+        "startChar": 39,
+        "endLine": 282,
+        "endChar": 41
+      },
+      "revId": "20fbb45dcd763a5955a50b04a8d278918aa55f22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
