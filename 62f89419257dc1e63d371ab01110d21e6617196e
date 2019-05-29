@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b7e6dc39_eac9b5b8",
+        "filename": "src/torque/ls/message-handler.cc",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-05-29T06:58:45Z",
+      "side": 1,
+      "message": "Nice catch, done!",
+      "parentUuid": "74018070_05bd81f0",
+      "range": {
+        "startLine": 237,
+        "startChar": 37,
+        "endLine": 237,
+        "endChar": 55
+      },
+      "revId": "62f89419257dc1e63d371ab01110d21e6617196e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b4c94f1_449670ba",
         "filename": "src/torque/version.h",
         "patchSetId": 2
@@ -60,6 +84,30 @@
       "side": 1,
       "message": "I can see the advantage of having it separate if we increment the version exactly when we have user-facing Torque changes.",
       "parentUuid": "5b4c94f1_449670ba",
+      "range": {
+        "startLine": 18,
+        "startChar": 36,
+        "endLine": 18,
+        "endChar": 37
+      },
+      "revId": "62f89419257dc1e63d371ab01110d21e6617196e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a44cd9b_ce0c621b",
+        "filename": "src/torque/version.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1323977
+      },
+      "writtenOn": "2019-05-29T06:58:45Z",
+      "side": 1,
+      "message": "To summarize yesterdays offline discussion with Sigurd:\n* Some people compile all targets during dev, which would implicitly keep the LS up-to-date.\n  (An editor restart is still required though, which the user won\u0027t know)\n* To not forget the version increment, a presubmit check might be necessary.\n* This version number could be miss-used.",
+      "parentUuid": "791edbf4_3df64acb",
       "range": {
         "startLine": 18,
         "startChar": 36,
