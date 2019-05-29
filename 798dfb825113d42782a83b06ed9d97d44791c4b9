@@ -22,6 +22,30 @@
       "revId": "798dfb825113d42782a83b06ed9d97d44791c4b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "436299b0_cfb93bd8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-29T09:46:12Z",
+      "side": 1,
+      "message": "haha, maybe it makes some Krach while crashing :)",
+      "parentUuid": "fb1841b2_afec212c",
+      "range": {
+        "startLine": 14,
+        "startChar": 31,
+        "endLine": 14,
+        "endChar": 36
+      },
+      "revId": "798dfb825113d42782a83b06ed9d97d44791c4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
