@@ -132,6 +132,13 @@ bool ProfilerEventsProcessor::ProcessCodeEvent() {
       CODE_EVENTS_TYPE_LIST(PROFILER_TYPE_CASE)
 
 #undef PROFILER_TYPE_CASE
+      case CodeEventRecord::NATIVE_CONTEXT_MOVE: {
+        NativeContextMoveEventRecord& nc_record =
+            record.NativeContextMoveEventRecord_;
+        generator_->UpdateNativeContextAddress(nc_record.from_address,
+                                               nc_record.to_address);
+        break;
+      }
       default: return true;  // Skip record.
     }
     last_processed_code_event_id_ = record.generic.order;
@@ -146,6 +153,7 @@ void ProfilerEventsProcessor::CodeEventHandler(
     case CodeEventRecord::CODE_CREATION:
     case CodeEventRecord::CODE_MOVE:
     case CodeEventRecord::CODE_DISABLE_OPT:
+    case CodeEventRecord::NATIVE_CONTEXT_MOVE:
       Enqueue(evt_rec);
       break;
     case CodeEventRecord::CODE_DEOPT: {
@@ -402,10 +410,23 @@ void CpuProfiler::CollectSample() {
 
 void CpuProfiler::StartProfiling(const char* title,
                                  CpuProfilingOptions options) {
+  if (!options.filter_context().IsEmpty()) {
+    // If the sampling thread is already running, it's possible that it has
+    // enqueued relocations for native contexts that haven't been applied yet.
+    // To avoid the rare case of erroneously relocating the provided native
+    // context address, ensure profiling has stopped.
+    if (is_profiling_) StopProcessor();
+  }
+
+  StartProcessorIfNotStarted();
+
+  DisallowHeapAllocation no_gc;
   if (profiles_->StartProfiling(title, options)) {
     TRACE_EVENT0("v8", "CpuProfiler::StartProfiling");
     AdjustSamplingInterval();
-    StartProcessorIfNotStarted();
+    processor_->AddCurrentStack();
+  } else {
+    StopProcessor();
   }
 }
 
@@ -414,10 +435,7 @@ void CpuProfiler::StartProfiling(String title, CpuProfilingOptions options) {
 }
 
 void CpuProfiler::StartProcessorIfNotStarted() {
-  if (processor_) {
-    processor_->AddCurrentStack();
-    return;
-  }
+  if (processor_) return;
   isolate_->wasm_engine()->EnableCodeLogging(isolate_);
   Logger* logger = isolate_->logger();
 
@@ -449,7 +467,6 @@ void CpuProfiler::StartProcessorIfNotStarted() {
     LogBuiltins();
   }
   // Enable stack sampling.
-  processor_->AddCurrentStack();
   processor_->StartSynchronously();
 }
 
