@@ -101,6 +101,9 @@ def read_config():
             ".lib": False,
             ".lib.export_macro": "",
             ".lib.export_header": False,
+            ".encoding_lib": { "header": "", "namespace": []},
+            ".encoding_lib.header": "",
+            ".encoding_lib.namespace": [],
         }
         for key_value in config_values:
             parts = key_value.split("=")
