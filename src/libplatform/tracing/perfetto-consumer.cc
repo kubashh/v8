@@ -19,16 +19,16 @@ PerfettoConsumer::PerfettoConsumer(base::Semaphore* finished)
 
 void PerfettoConsumer::OnTraceData(std::vector<::perfetto::TracePacket> packets,
                                    bool has_more) {
-  for (const ::perfetto::TracePacket& packet : packets) {
-    perfetto::protos::ChromeTracePacket proto_packet;
-    bool success = packet.Decode(&proto_packet);
-    USE(success);
-    DCHECK(success);
+  // for (const ::perfetto::TracePacket& packet : packets) {
+    // perfetto::protos::ChromeTracePacket proto_packet;
+    // bool success = packet.Decode(&proto_packet);
+    // USE(success);
+    // DCHECK(success);
 
-    for (TraceEventListener* listener : listeners_) {
-      listener->ProcessPacket(proto_packet);
-    }
-  }
+    // for (TraceEventListener* listener : listeners_) {
+    //   listener->ProcessPacket(proto_packet);
+    // }
+  // }
   // PerfettoTracingController::StopTracing() waits on this sempahore. This is
   // so that we can ensure that this consumer has finished consuming all of the
   // trace events from the buffer before the buffer is destroyed.

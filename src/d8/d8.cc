@@ -48,6 +48,8 @@
 #include "src/utils/utils.h"
 #include "src/wasm/wasm-engine.h"
 
+#include "perfetto/public/tracing.h"
+
 #if !defined(_WIN32) && !defined(_WIN64)
 #include <unistd.h>  // NOLINT
 #else
@@ -3349,9 +3351,12 @@ int Shell::Main(int argc, char* argv[]) {
     tracing->Initialize(trace_buffer);
 
 #ifdef V8_USE_PERFETTO
-    perfetto_trace_file.open("v8_perfetto_trace.json");
-    DCHECK(trace_file.good());
-    tracing->InitializeForPerfetto(&perfetto_trace_file);
+    // perfetto_trace_file.open("v8_perfetto_trace.json");
+    // DCHECK(trace_file.good());
+    // tracing->InitializeForPerfetto(&perfetto_trace_file);
+    perfetto::TracingInitArgs init_args;
+    init_args.backends = perfetto::BackendType::kInProcessBackend;
+    perfetto::Tracing::Initialize(init_args);
 #endif  // V8_USE_PERFETTO
   }
 
