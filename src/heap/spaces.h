@@ -699,7 +699,11 @@ class MemoryChunk {
                                  Executability executable, Space* owner,
                                  VirtualMemory reservation);
 
-  // Should be called when memory chunk is about to be freed.
+  // Release all memory allocated by the chunk. Should be called when memory
+  // chunk is about to be freed.
+  void ReleaseAllocatedMemoryForWritableChunk();
+  // Release memory allocated by the chunk, except that which is needed by
+  // read-only space chunks.
   void ReleaseAllocatedMemory();
 
   // Sets the requested page permissions only if the write unprotect counter
@@ -1205,7 +1209,7 @@ class MemoryAllocator {
         chunk = GetMemoryChunkSafe<kRegular>();
         if (chunk != nullptr) {
           // For stolen chunks we need to manually free any allocated memory.
-          chunk->ReleaseAllocatedMemory();
+          chunk->ReleaseAllocatedMemoryForWritableChunk();
         }
       }
       return chunk;
