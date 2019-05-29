@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "src/base/bits.h"
+#include "src/base/lsan.h"
 #include "src/base/macros.h"
 #include "src/base/platform/semaphore.h"
 #include "src/base/template-utils.h"
@@ -1181,7 +1182,7 @@ void MemoryAllocator::PreFreeMemory(MemoryChunk* chunk) {
 void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
   DCHECK(chunk->IsFlagSet(MemoryChunk::UNREGISTERED));
   DCHECK(chunk->IsFlagSet(MemoryChunk::PRE_FREED));
-  chunk->ReleaseAllocatedMemory();
+  chunk->ReleaseAllocatedMemory(MemoryChunkLeakMode::kReleaseEverything);
 
   VirtualMemory* reservation = chunk->reserved_memory();
   if (chunk->IsFlagSet(MemoryChunk::POOLED)) {
@@ -1368,7 +1369,7 @@ bool MemoryAllocator::CommitExecutableMemory(VirtualMemory* vm, Address start,
 // -----------------------------------------------------------------------------
 // MemoryChunk implementation
 
-void MemoryChunk::ReleaseAllocatedMemory() {
+void MemoryChunk::ReleaseAllocatedMemory(MemoryChunkLeakMode mode) {
   if (mutex_ != nullptr) {
     delete mutex_;
     mutex_ = nullptr;
@@ -1377,19 +1378,34 @@ void MemoryChunk::ReleaseAllocatedMemory() {
     delete page_protection_change_mutex_;
     page_protection_change_mutex_ = nullptr;
   }
+
   ReleaseSlotSet<OLD_TO_NEW>();
   ReleaseSlotSet<OLD_TO_OLD>();
   ReleaseTypedSlotSet<OLD_TO_NEW>();
   ReleaseTypedSlotSet<OLD_TO_OLD>();
   ReleaseInvalidatedSlots();
+
   if (local_tracker_ != nullptr) ReleaseLocalTracker();
   if (young_generation_bitmap_ != nullptr) ReleaseYoungGenerationBitmap();
-  if (marking_bitmap_ != nullptr) ReleaseMarkingBitmap();
   if (code_object_registry_ != nullptr) delete code_object_registry_;
 
+  // Marking bitmap.
+  if (mode == MemoryChunkLeakMode::kReleaseEverything) {
+    if (marking_bitmap_ != nullptr) ReleaseMarkingBitmap();
+  } else {
+    LSAN_IGNORE_OBJECT(marking_bitmap_);
+  }
+
+  // Free list categories.
   if (!IsLargePage()) {
-    Page* page = static_cast<Page*>(this);
-    page->ReleaseFreeListCategories();
+    if (mode == MemoryChunkLeakMode::kReleaseEverything) {
+      Page* page = static_cast<Page*>(this);
+      page->ReleaseFreeListCategories();
+    } else {
+      for (int i = kFirstCategory; i < kNumberOfCategories; i++) {
+        LSAN_IGNORE_OBJECT(categories_[i]);
+      }
+    }
   }
 }
 
@@ -3371,13 +3387,8 @@ ReadOnlySpace::ReadOnlySpace(Heap* heap)
 }
 
 void ReadOnlyPage::MakeHeaderRelocatable() {
-  if (mutex_ != nullptr) {
-    delete mutex_;
-    heap_ = nullptr;
-    mutex_ = nullptr;
-    local_tracker_ = nullptr;
-    reservation_.Reset();
-  }
+  ReleaseAllocatedMemory(MemoryChunkLeakMode::kLeakForReadOnlySpace);
+  heap_ = nullptr;
 }
 
 void ReadOnlySpace::SetPermissionsForPages(MemoryAllocator* memory_allocator,
