@@ -1982,9 +1982,14 @@ void AccessorAssembler::EmitElementLoad(
       Node* buffer = LoadObjectField(object, JSArrayBufferView::kBufferOffset);
       GotoIf(IsDetachedBuffer(buffer), miss);
 
-      // Bounds check.
+      // Bounds check, here we rely on the fact that all negative indices
+      // in intptr_t represenntation are considered out of bounds for
+      // TypedArrays, that's why we need the special branch in case of
+      // failing the UintPtrLessThan test.
+      CHECK_LE(JSTypedArray::kMaxLength, std::numeric_limits<intptr_t>::max());
+      Label if_oob(this, Label::kDeferred);
       TNode<UintPtrT> length = LoadJSTypedArrayLength(CAST(object));
-      GotoIfNot(UintPtrLessThan(intptr_index, length), out_of_bounds);
+      GotoIfNot(UintPtrLessThan(intptr_index, length), &if_oob);
       if (access_mode == LoadAccessMode::kHas) {
         exit_point->Return(TrueConstant());
       } else {
@@ -2083,6 +2088,15 @@ void AccessorAssembler::EmitElementLoad(
               backing_store, intptr_index, BIGUINT64_ELEMENTS,
               INTPTR_PARAMETERS));
         }
+      }
+
+      BIND(&if_oob);
+      {
+        // The {intptr_index} is either negative or positive and
+        // outside of bounds, and we have to miss if the index is
+        // negative, otherwise we have a deopt loop with TurboFan.
+        Branch(IntPtrLessThan(intptr_index, IntPtrConstant(0)), miss,
+               out_of_bounds);
       }
     }
   }
