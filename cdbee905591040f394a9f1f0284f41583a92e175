@@ -19,6 +19,52 @@
     },
     {
       "key": {
+        "uuid": "a707c7b9_219175fa",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-29T09:44:30Z",
+      "side": 1,
+      "message": "representation",
+      "range": {
+        "startLine": 1986,
+        "startChar": 21,
+        "endLine": 1986,
+        "endChar": 36
+      },
+      "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3caccc7b_b8f1ed12",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-29T09:44:30Z",
+      "side": 1,
+      "message": "STATIC_ASSERT",
+      "range": {
+        "startLine": 1989,
+        "startChar": 6,
+        "endLine": 1989,
+        "endChar": 14
+      },
+      "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25f41eff_81690fa5",
         "filename": "src/ic/accessor-assembler.cc",
         "patchSetId": 5
@@ -30,6 +76,29 @@
       "writtenOn": "2019-05-29T09:39:37Z",
       "side": 1,
       "message": "This comment is pretty hard to decode.",
+      "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bb40c4f_604a15c1",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2008,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-29T09:44:30Z",
+      "side": 1,
+      "message": "STATIC_ASSERT(JSArray::kMaxArrayIndex \u003c\u003d std::numeric_limits\u003cuint32_t\u003e::max()) to protect the static_cast?",
+      "range": {
+        "startLine": 2008,
+        "startChar": 4,
+        "endLine": 2008,
+        "endChar": 12
+      },
       "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -64,6 +133,52 @@
       "writtenOn": "2019-05-29T09:39:37Z",
       "side": 1,
       "message": "JSArray::kMaxLength?",
+      "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "057a81c6_7a8f21ba",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2090,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-29T09:44:30Z",
+      "side": 1,
+      "message": "Does it make sense to have a constant for this?",
+      "range": {
+        "startLine": 2090,
+        "startChar": 64,
+        "endLine": 2090,
+        "endChar": 74
+      },
+      "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01660938_a91524af",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2106,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-05-29T09:44:30Z",
+      "side": 1,
+      "message": "Is it safe to move this here? (thinking of the runtime call above)",
+      "range": {
+        "startLine": 2106,
+        "startChar": 28,
+        "endLine": 2106,
+        "endChar": 50
+      },
       "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
