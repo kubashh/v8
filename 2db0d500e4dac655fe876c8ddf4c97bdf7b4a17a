@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f71e6b90_0d69bfcc",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-05-29T20:33:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9e1dcba_cf2f5916",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 42
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89976ad0_80cca50b",
         "filename": "include/v8-profiler.h",
         "patchSetId": 10
@@ -39,6 +63,24 @@
       "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "837c41a0_4784cce1",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-05-29T20:33:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89976ad0_80cca50b",
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "bd949686_c5829bc8",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-05-29T20:33:52Z",
+      "side": 1,
+      "message": "Agreed, we should likely produce some internal, isomorphic CpuProfilingOptions. I\u0027ll think about this some more.",
+      "parentUuid": "04876178_3cdeb6f9",
+      "range": {
+        "startLine": 344,
+        "startChar": 22,
+        "endLine": 344,
+        "endChar": 32
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d25b9be_03d38c85",
         "filename": "include/v8-profiler.h",
         "patchSetId": 10
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "62742f2e_9ee03ce3",
+        "filename": "include/v8-profiler.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-05-29T20:33:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d25b9be_03d38c85",
+      "range": {
+        "startLine": 349,
+        "startChar": 17,
+        "endLine": 349,
+        "endChar": 24
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ce2eea83_6dbeae0a",
         "filename": "src/profiler/profile-generator.cc",
         "patchSetId": 10
@@ -102,6 +192,24 @@
       "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beb9d24c_f876a1eb",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-05-29T20:33:52Z",
+      "side": 1,
+      "message": "It\u0027s now possible for a profile to receive samples from before it started, with the changes to CpuProfiler::StartProfiling to start the processor prior to starting a profiler.",
+      "parentUuid": "ce2eea83_6dbeae0a",
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -125,6 +233,30 @@
       "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ec09770_62e83a09",
+        "filename": "src/profiler/profile-generator.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-05-29T20:33:52Z",
+      "side": 1,
+      "message": "The issue with this is that if the native context moves while a sample is enqueued for processing, the profile generator will compare native contexts using the most up-to-date native context addresses, rather than the ones at the time the sample was taken. This is likely to cause false negatives.",
+      "parentUuid": "219a2580_460559be",
+      "range": {
+        "startLine": 849,
+        "startChar": 28,
+        "endLine": 849,
+        "endChar": 72
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -183,6 +315,30 @@
       "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bba6a22_030ef5c5",
+        "filename": "test/cctest/test-cpu-profiler.cc",
+        "patchSetId": 10
+      },
+      "lineNbr": 3375,
+      "author": {
+        "id": 1305811
+      },
+      "writtenOn": "2019-05-29T20:33:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78af3fb1_158064dd",
+      "range": {
+        "startLine": 3375,
+        "startChar": 9,
+        "endLine": 3375,
+        "endChar": 35
+      },
+      "revId": "2db0d500e4dac655fe876c8ddf4c97bdf7b4a17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
