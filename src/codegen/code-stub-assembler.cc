@@ -10606,17 +10606,12 @@ void CodeStubAssembler::EmitElementStore(Node* object, Node* key, Node* value,
   TNode<IntPtrT> intptr_key = TryToIntptr(key, bailout);
 
   if (IsTypedArrayElementsKind(elements_kind)) {
-    Label done(this);
+    Label done(this), if_oob(this, Label::kDeferred);
 
     // IntegerIndexedElementSet converts value to a Number/BigInt prior to the
     // bounds check.
     value = PrepareValueForWriteToTypedArray(CAST(value), elements_kind,
                                              CAST(context));
-
-    // There must be no allocations between the buffer load and
-    // and the actual store to backing store, because GC may decide that
-    // the buffer is not alive or move the elements.
-    // TODO(ishell): introduce DisallowHeapAllocationCode scope here.
 
     // Check if buffer has been detached.
     Node* buffer = LoadObjectField(object, JSArrayBufferView::kBufferOffset);
@@ -10628,7 +10623,7 @@ void CodeStubAssembler::EmitElementStore(Node* object, Node* key, Node* value,
     if (store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
       // Skip the store if we write beyond the length or
       // to a property with a negative integer index.
-      GotoIfNot(UintPtrLessThan(intptr_key, length), &done);
+      GotoIfNot(UintPtrLessThan(intptr_key, length), &if_oob);
     } else if (store_mode == STANDARD_STORE) {
       GotoIfNot(UintPtrLessThan(intptr_key, length), bailout);
     } else {
@@ -10639,10 +10634,19 @@ void CodeStubAssembler::EmitElementStore(Node* object, Node* key, Node* value,
       DebugBreak();
     }
 
+    // The use of {object} here makes sure that we keep the {buffer}
+    // alive until this point, which prevents the GC from releasing
+    // the backing store of the {buffer}, and so it's safe to access
+    // the raw memory here.
     TNode<RawPtrT> backing_store = LoadJSTypedArrayBackingStore(CAST(object));
     StoreElement(backing_store, elements_kind, intptr_key, value,
                  parameter_mode);
     Goto(&done);
+
+    if (store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
+      BIND(&if_oob);
+      Branch(IntPtrLessThan(intptr_key, IntPtrConstant(0)), bailout, &done);
+    }
 
     BIND(&done);
     return;
