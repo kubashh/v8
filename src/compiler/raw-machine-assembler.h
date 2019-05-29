@@ -491,6 +491,10 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
   Node* Int64AddWithOverflow(Node* a, Node* b) {
     return AddNode(machine()->Int64AddWithOverflow(), a, b);
   }
+  Node* Uint32AddWithOverflow(Node* a, Node* b) { UNREACHABLE(); }
+  Node* Uint64AddWithOverflow(Node* a, Node* b) {
+    return AddNode(machine()->Uint64AddWithOverflow(), a, b);
+  }
   Node* Int64Sub(Node* a, Node* b) {
     return AddNode(machine()->Int64Sub(), a, b);
   }
@@ -578,7 +582,7 @@ class V8_EXPORT_PRIVATE RawMachineAssembler {
     return kSystemPointerSize == 8 ? prefix##64##name(a, b)  \
                                    : prefix##32##name(a, b); \
   }
-
+  UINTPTR_BINOP(Uint, AddWithOverflow)
   UINTPTR_BINOP(Uint, LessThan)
   UINTPTR_BINOP(Uint, LessThanOrEqual)
   UINTPTR_BINOP(Uint, GreaterThanOrEqual)

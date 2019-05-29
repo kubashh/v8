@@ -515,6 +515,9 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
 
   TNode<IntPtrT> TryIntPtrAdd(TNode<IntPtrT> a, TNode<IntPtrT> b,
                               Label* if_overflow);
+
+  UintPtrWithCarryResult UintPtrAddWithCarry(TNode<UintPtrT> a,
+                                             TNode<UintPtrT> b);
   TNode<IntPtrT> TryIntPtrSub(TNode<IntPtrT> a, TNode<IntPtrT> b,
                               Label* if_overflow);
   TNode<Int32T> TryInt32Mul(TNode<Int32T> a, TNode<Int32T> b,
@@ -1537,10 +1540,17 @@ class V8_EXPORT_PRIVATE CodeStubAssembler
   // Like above, but allowing custom bitfield initialization.
   TNode<BigInt> AllocateRawBigInt(TNode<IntPtrT> length);
   void StoreBigIntBitfield(TNode<BigInt> bigint, TNode<Word32T> bitfield);
-  void StoreBigIntDigit(TNode<BigInt> bigint, int digit_index,
+  void StoreBigIntDigit(TNode<BigInt> bigint, intptr_t digit_index,
                         TNode<UintPtrT> digit);
+
+  void StoreBigIntDigit(TNode<BigInt> bigint, TNode<IntPtrT> digit_index,
+                        TNode<UintPtrT> digit);
+
   TNode<Word32T> LoadBigIntBitfield(TNode<BigInt> bigint);
-  TNode<UintPtrT> LoadBigIntDigit(TNode<BigInt> bigint, int digit_index);
+  TNode<UintPtrT> LoadBigIntDigit(TNode<BigInt> bigint, intptr_t digit_index);
+
+  TNode<UintPtrT> LoadBigIntDigit(TNode<BigInt> bigint,
+                                  TNode<IntPtrT> digit_index);
 
   // Allocate a SeqOneByteString with the given length.
   TNode<String> AllocateSeqOneByteString(uint32_t length,

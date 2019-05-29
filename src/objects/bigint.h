@@ -16,6 +16,11 @@
 namespace v8 {
 namespace internal {
 
+void MutableBigInt_MakeImmutableHelper(Address addr, intptr_t new_length,
+                                       intptr_t to_trim);
+void MutableBigInt_AbsoluteAddHelper(Address result_addr, Address x_addr,
+                                     Address y_addr);
+
 class BigInt;
 class ValueDeserializer;
 class ValueSerializer;
@@ -23,6 +28,9 @@ class ValueSerializer;
 // BigIntBase is just the raw data object underlying a BigInt. Use with care!
 // Most code should be using BigInts instead.
 class BigIntBase : public HeapObject {
+  friend void MutableBigInt_MakeImmutableHelper(Address, intptr_t, intptr_t);
+  friend void MutableBigInt_AbsoluteAddHelper(Address, Address, Address);
+
  public:
   inline int length() const {
     int32_t bitfield = RELAXED_READ_INT32_FIELD(*this, kBitfieldOffset);

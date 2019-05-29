@@ -882,6 +882,16 @@ void InstructionSelector::VisitInt64AddWithOverflow(Node* node) {
   VisitBinop(this, node, kX64Add, &cont);
 }
 
+void InstructionSelector::VisitUint64AddWithOverflow(Node* node) {
+  if (Node* carry = NodeProperties::FindProjection(node, 1)) {
+    FlagsContinuation cont =
+        FlagsContinuation::ForSet(kUnsignedLessThan, carry);
+    return VisitBinop(this, node, kX64Add, &cont);
+  }
+  FlagsContinuation cont;
+  VisitBinop(this, node, kX64Add, &cont);
+}
+
 void InstructionSelector::VisitInt32Sub(Node* node) {
   X64OperandGenerator g(this);
   DCHECK_EQ(node->InputCount(), 2);
@@ -2115,6 +2125,9 @@ void InstructionSelector::VisitWordCompareZero(Node* user, Node* value,
                 return VisitBinop(this, node, kX64Imul32, cont);
               case IrOpcode::kInt64AddWithOverflow:
                 cont->OverwriteAndNegateIfEqual(kOverflow);
+                return VisitBinop(this, node, kX64Add, cont);
+              case IrOpcode::kUint64AddWithOverflow:
+                cont->OverwriteAndNegateIfEqual(kUnsignedLessThan);
                 return VisitBinop(this, node, kX64Add, cont);
               case IrOpcode::kInt64SubWithOverflow:
                 cont->OverwriteAndNegateIfEqual(kOverflow);

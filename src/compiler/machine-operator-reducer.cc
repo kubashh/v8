@@ -762,6 +762,15 @@ Reduction MachineOperatorReducer::ReduceInt64Add(Node* node) {
     return ReplaceInt64(
         base::AddWithWraparound(m.left().Value(), m.right().Value()));
   }
+  if (m.right().HasValue() && m.left().IsInt64Add()) {
+    Int64BinopMatcher n(m.left().node());
+    if (n.right().HasValue()) {
+      node->ReplaceInput(1, Int64Constant(base::AddWithWraparound(
+                                m.right().Value(), n.right().Value())));
+      node->ReplaceInput(0, n.left().node());
+      return Changed(node);
+    }
+  }
   return NoChange();
 }
 

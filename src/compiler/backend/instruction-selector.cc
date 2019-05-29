@@ -1450,6 +1450,8 @@ void InstructionSelector::VisitNode(Node* node) {
       return MarkAsWord64(node), VisitInt64Add(node);
     case IrOpcode::kInt64AddWithOverflow:
       return MarkAsWord64(node), VisitInt64AddWithOverflow(node);
+    case IrOpcode::kUint64AddWithOverflow:
+      return MarkAsWord64(node), VisitUint64AddWithOverflow(node);
     case IrOpcode::kInt64Sub:
       return MarkAsWord64(node), VisitInt64Sub(node);
     case IrOpcode::kInt64SubWithOverflow:
@@ -2547,6 +2549,7 @@ void InstructionSelector::VisitProjection(Node* node) {
     case IrOpcode::kInt32SubWithOverflow:
     case IrOpcode::kInt32MulWithOverflow:
     case IrOpcode::kInt64AddWithOverflow:
+    case IrOpcode::kUint64AddWithOverflow:
     case IrOpcode::kInt64SubWithOverflow:
     case IrOpcode::kTryTruncateFloat32ToInt64:
     case IrOpcode::kTryTruncateFloat64ToInt64:

@@ -283,6 +283,7 @@ class V8_EXPORT_PRIVATE MachineOperatorBuilder final
 
   const Operator* Int64Add();
   const Operator* Int64AddWithOverflow();
+  const Operator* Uint64AddWithOverflow();
   const Operator* Int64Sub();
   const Operator* Int64SubWithOverflow();
   const Operator* Int64Mul();

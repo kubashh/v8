@@ -364,11 +364,12 @@ MachineType AtomicOpType(Operator const* op) {
   V(Float32RoundTiesEven, Operator::kNoProperties, 1, 0, 1) \
   V(Float64RoundTiesEven, Operator::kNoProperties, 1, 0, 1)
 
-#define OVERFLOW_OP_LIST(V)                                                \
-  V(Int32AddWithOverflow, Operator::kAssociative | Operator::kCommutative) \
-  V(Int32SubWithOverflow, Operator::kNoProperties)                         \
-  V(Int32MulWithOverflow, Operator::kAssociative | Operator::kCommutative) \
-  V(Int64AddWithOverflow, Operator::kAssociative | Operator::kCommutative) \
+#define OVERFLOW_OP_LIST(V)                                                 \
+  V(Int32AddWithOverflow, Operator::kAssociative | Operator::kCommutative)  \
+  V(Int32SubWithOverflow, Operator::kNoProperties)                          \
+  V(Int32MulWithOverflow, Operator::kAssociative | Operator::kCommutative)  \
+  V(Int64AddWithOverflow, Operator::kAssociative | Operator::kCommutative)  \
+  V(Uint64AddWithOverflow, Operator::kAssociative | Operator::kCommutative) \
   V(Int64SubWithOverflow, Operator::kNoProperties)
 
 #define MACHINE_TYPE_LIST(V) \

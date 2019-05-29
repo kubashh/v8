@@ -640,6 +640,12 @@ TNode<IntPtrT> CodeStubAssembler::TryIntPtrAdd(TNode<IntPtrT> a,
   return Projection<0>(pair);
 }
 
+CodeStubAssembler::UintPtrWithCarryResult
+CodeStubAssembler::UintPtrAddWithCarry(TNode<UintPtrT> a, TNode<UintPtrT> b) {
+  TNode<PairT<UintPtrT, BoolT>> pair = UintPtrAddWithOverflow(a, b);
+  return UintPtrWithCarryResult{Projection<0>(pair), Projection<1>(pair)};
+}
+
 TNode<IntPtrT> CodeStubAssembler::TryIntPtrSub(TNode<IntPtrT> a,
                                                TNode<IntPtrT> b,
                                                Label* if_overflow) {
@@ -3155,12 +3161,12 @@ TNode<BigInt> CodeStubAssembler::AllocateBigInt(TNode<IntPtrT> length) {
 TNode<BigInt> CodeStubAssembler::AllocateRawBigInt(TNode<IntPtrT> length) {
   // This is currently used only for 64-bit wide BigInts. If more general
   // applicability is required, a large-object check must be added.
-  CSA_ASSERT(this, UintPtrLessThan(length, IntPtrConstant(3)));
+  // CSA_ASSERT(this, UintPtrLessThan(length, IntPtrConstant(3)));
 
   TNode<IntPtrT> size =
       IntPtrAdd(IntPtrConstant(BigInt::kHeaderSize),
                 Signed(WordShl(length, kSystemPointerSizeLog2)));
-  Node* raw_result = Allocate(size, kNone);
+  Node* raw_result = Allocate(size, kAllowLargeObjectAllocation);
   StoreMapNoWriteBarrier(raw_result, RootIndex::kBigIntMap);
   if (FIELD_SIZE(BigInt::kOptionalPaddingOffset) != 0) {
     DCHECK_EQ(4, FIELD_SIZE(BigInt::kOptionalPaddingOffset));
@@ -3177,11 +3183,14 @@ void CodeStubAssembler::StoreBigIntBitfield(TNode<BigInt> bigint,
                                  MachineRepresentation::kWord32);
 }
 
-void CodeStubAssembler::StoreBigIntDigit(TNode<BigInt> bigint, int digit_index,
+void CodeStubAssembler::StoreBigIntDigit(TNode<BigInt> bigint,
+                                         intptr_t digit_index,
                                          TNode<UintPtrT> digit) {
   StoreObjectFieldNoWriteBarrier(
-      bigint, BigInt::kDigitsOffset + digit_index * kSystemPointerSize, digit,
-      UintPtrT::kMachineRepresentation);
+      bigint,
+      BigInt::kDigitsOffset +
+          static_cast<int>(digit_index) * kSystemPointerSize,
+      digit, UintPtrT::kMachineRepresentation);
 }
 
 TNode<Word32T> CodeStubAssembler::LoadBigIntBitfield(TNode<BigInt> bigint) {
@@ -3190,10 +3199,32 @@ TNode<Word32T> CodeStubAssembler::LoadBigIntBitfield(TNode<BigInt> bigint) {
 }
 
 TNode<UintPtrT> CodeStubAssembler::LoadBigIntDigit(TNode<BigInt> bigint,
-                                                   int digit_index) {
-  return UncheckedCast<UintPtrT>(LoadObjectField(
-      bigint, BigInt::kDigitsOffset + digit_index * kSystemPointerSize,
-      MachineType::UintPtr()));
+                                                   intptr_t digit_index) {
+  CHECK(is_int32(digit_index));
+  return UncheckedCast<UintPtrT>(
+      LoadObjectField(bigint,
+                      BigInt::kDigitsOffset +
+                          static_cast<int>(digit_index) * kSystemPointerSize,
+                      MachineType::UintPtr()));
+}
+
+TNode<UintPtrT> CodeStubAssembler::LoadBigIntDigit(TNode<BigInt> bigint,
+                                                   TNode<IntPtrT> digit_index) {
+  TNode<IntPtrT> offset =
+      IntPtrAdd(IntPtrConstant(BigInt::kDigitsOffset),
+                IntPtrMul(digit_index, IntPtrConstant(kSystemPointerSize)));
+  return UncheckedCast<UintPtrT>(
+      LoadObjectField(bigint, offset, MachineType::UintPtr()));
+}
+
+void CodeStubAssembler::StoreBigIntDigit(TNode<BigInt> bigint,
+                                         TNode<IntPtrT> digit_index,
+                                         TNode<UintPtrT> digit) {
+  TNode<IntPtrT> offset =
+      IntPtrAdd(IntPtrConstant(BigInt::kDigitsOffset),
+                IntPtrMul(digit_index, IntPtrConstant(kSystemPointerSize)));
+  StoreObjectFieldNoWriteBarrier(bigint, offset, digit,
+                                 UintPtrT::kMachineRepresentation);
 }
 
 TNode<String> CodeStubAssembler::AllocateSeqOneByteString(

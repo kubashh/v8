@@ -528,6 +528,7 @@
   V(Word64Ror)                   \
   V(Int64Add)                    \
   V(Int64AddWithOverflow)        \
+  V(Uint64AddWithOverflow)       \
   V(Int64Sub)                    \
   V(Int64SubWithOverflow)        \
   V(Int64Mul)                    \

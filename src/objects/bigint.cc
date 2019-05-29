@@ -41,6 +41,8 @@ namespace internal {
 // indicating that they will be used in a read-only capacity, and both
 // {BigInt} and {MutableBigInt} objects can be passed in.
 class MutableBigInt : public FreshlyAllocatedBigInt {
+  friend void MutableBigInt_AbsoluteAddHelper(Address, Address, Address);
+
  public:
   // Bottleneck for converting MutableBigInts to BigInts.
   static MaybeHandle<BigInt> MakeImmutable(MaybeHandle<MutableBigInt> maybe);
@@ -353,16 +355,7 @@ Handle<BigInt> MutableBigInt::MakeImmutable(Handle<MutableBigInt> result) {
   while (new_length > 0 && result->digit(new_length - 1) == 0) new_length--;
   int to_trim = old_length - new_length;
   if (to_trim != 0) {
-    int size_delta = to_trim * kDigitSize;
-    Address new_end = result->address() + BigInt::SizeFor(new_length);
-    Heap* heap = result->GetHeap();
-    if (!heap->IsLargeObject(*result)) {
-      // We do not create a filler for objects in large object space.
-      // TODO(hpayer): We should shrink the large object page if the size
-      // of the object changed significantly.
-      heap->CreateFillerObjectAt(new_end, size_delta, ClearRecordedSlots::kNo);
-    }
-    result->synchronized_set_length(new_length);
+    MutableBigInt_MakeImmutableHelper(result->ptr(), new_length, to_trim);
 
     // Canonicalize -0n.
     if (new_length == 0) {
@@ -1130,6 +1123,32 @@ void BigInt::BigIntShortPrint(std::ostream& os) {
 
 // Internal helpers.
 
+void MutableBigInt_AbsoluteAddHelper(Address result_addr, Address x_addr,
+                                     Address y_addr) {
+  using digit_t = MutableBigInt::digit_t;
+
+  BigIntBase x = BigIntBase::unchecked_cast(Object(x_addr));
+  BigIntBase y = BigIntBase::unchecked_cast(Object(y_addr));
+  MutableBigInt result = MutableBigInt::unchecked_cast(Object(result_addr));
+
+  digit_t carry = 0;
+  int i = 0;
+  for (; i < y.length(); i++) {
+    digit_t new_carry = 0;
+    digit_t sum = MutableBigInt::digit_add(x.digit(i), y.digit(i), &new_carry);
+    sum = MutableBigInt::digit_add(sum, carry, &new_carry);
+    result.set_digit(i, sum);
+    carry = new_carry;
+  }
+  for (; i < x.length(); i++) {
+    digit_t new_carry = 0;
+    digit_t sum = MutableBigInt::digit_add(x.digit(i), carry, &new_carry);
+    result.set_digit(i, sum);
+    carry = new_carry;
+  }
+  result.set_digit(i, carry);
+}
+
 MaybeHandle<BigInt> MutableBigInt::AbsoluteAdd(Isolate* isolate,
                                                Handle<BigInt> x,
                                                Handle<BigInt> y,
@@ -1146,22 +1165,9 @@ MaybeHandle<BigInt> MutableBigInt::AbsoluteAdd(Isolate* isolate,
   if (!New(isolate, x->length() + 1).ToHandle(&result)) {
     return MaybeHandle<BigInt>();
   }
-  digit_t carry = 0;
-  int i = 0;
-  for (; i < y->length(); i++) {
-    digit_t new_carry = 0;
-    digit_t sum = digit_add(x->digit(i), y->digit(i), &new_carry);
-    sum = digit_add(sum, carry, &new_carry);
-    result->set_digit(i, sum);
-    carry = new_carry;
-  }
-  for (; i < x->length(); i++) {
-    digit_t new_carry = 0;
-    digit_t sum = digit_add(x->digit(i), carry, &new_carry);
-    result->set_digit(i, sum);
-    carry = new_carry;
-  }
-  result->set_digit(i, carry);
+
+  MutableBigInt_AbsoluteAddHelper(result->ptr(), x->ptr(), y->ptr());
+
   result->set_sign(result_sign);
   return MakeImmutable(result);
 }
@@ -2673,6 +2679,23 @@ void BigInt::BigIntPrint(std::ostream& os) {
   os << std::dec << "\n";
 }
 #endif  // OBJECT_PRINT
+
+void MutableBigInt_MakeImmutableHelper(Address addr, intptr_t new_length,
+                                       intptr_t to_trim) {
+  MutableBigInt result = MutableBigInt::unchecked_cast(Object(addr));
+
+  int size_delta = static_cast<int>(to_trim) * MutableBigInt::kDigitSize;
+  Address new_end =
+      result.address() + BigInt::SizeFor(static_cast<int>(new_length));
+  Heap* heap = result.GetHeap();
+  if (!heap->IsLargeObject(result)) {
+    // We do not create a filler for objects in large object space.
+    // TODO(hpayer): We should shrink the large object page if the size
+    // of the object changed significantly.
+    heap->CreateFillerObjectAt(new_end, size_delta, ClearRecordedSlots::kNo);
+  }
+  result.synchronized_set_length(static_cast<int>(new_length));
+}
 
 }  // namespace internal
 }  // namespace v8

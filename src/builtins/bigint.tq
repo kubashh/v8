@@ -1,0 +1,268 @@
+// Copyright 2019 the V8 project authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+#include 'src/builtins/builtins-bigint-gen.h'
+
+// TODO(nicohartmann): Discuss whether types used by multiple builtins should be
+// in global namespace
+@noVerifier
+extern class BigIntBase extends HeapObject generates 'TNode<BigInt>' {
+  bitfield: uint32;
+  optional_padding: int32;
+  digits: intptr;
+}
+
+type BigInt extends BigIntBase;
+
+@noVerifier
+@hasSameInstanceTypeAsParent
+extern class MutableBigInt extends BigIntBase generates 'TNode<BigInt>' {
+}
+
+namespace runtime {
+  extern runtime
+  BigIntBinaryOp(Context, Object, Object, Smi): BigInt;
+}
+
+// TODO(nicohartmann): decide how to use BigInts from data-view.tq
+namespace bigint {
+
+  const kPositiveFlag: bool = false;
+  const kNegativeFlag: bool = true;
+
+  extern macro CodeStubAssembler::LoadBigIntBitfield(BigIntBase): uint32;
+  extern macro BigIntBuiltinsAssembler::EncodeBigIntBits(
+      constexpr bool, constexpr int31): uint32;
+  extern macro BigIntBuiltinsAssembler::DecodeBigIntSign(BigIntBase): uint32;
+  // TODO(nicohartmann): think about best type for length
+  extern macro BigIntBuiltinsAssembler::DecodeBigIntLength(BigIntBase): intptr;
+  extern macro BigIntBuiltinsAssembler::EncodeBigIntBitfield(bool, intptr):
+      uint32;
+
+  extern macro AllocateBigInt(intptr): MutableBigInt;
+  extern macro StoreBigIntBitfield(MutableBigInt, uint32): void;
+  extern macro StoreBigIntDigit(MutableBigInt, intptr, uintptr): void;
+  extern macro LoadBigIntDigit(BigIntBase, intptr): uintptr;
+  extern macro BigIntBuiltinsAssembler::TrimMutableBigInt(
+      MutableBigInt, intptr, intptr): void;
+  extern macro BigIntBuiltinsAssembler::CppAbsoluteAdd(
+      MutableBigInt, BigIntBase, BigIntBase): void;
+
+  macro AllocateEmptyBigInt(sign: bool, length: intptr): MutableBigInt {
+    let result: MutableBigInt = AllocateBigInt(length);
+
+    StoreBigIntBitfield(result, EncodeBigIntBitfield(sign, length));
+    return result;
+  }
+
+  macro AllocateMutableBigIntCopy(bigint: BigInt): MutableBigInt {
+    const length = DecodeBigIntLength(bigint);
+    const sign = Sign(bigint);
+
+    let copy = AllocateEmptyBigInt(sign, length);
+    for (let i: intptr = 0; i < length; ++i) {
+      StoreBigIntDigit(copy, i, LoadBigIntDigit(bigint, i));
+    }
+
+    return copy;
+  }
+
+  macro MakeImmutable(bigint: MutableBigInt): BigInt {
+    const length = DecodeBigIntLength(bigint);
+    let newLength = length;
+    for (; newLength > 0; --newLength) {
+      if (LoadBigIntDigit(bigint, newLength - 1) != 0) {
+        break;
+      }
+    }
+
+    if (newLength < length) {
+      TrimMutableBigInt(bigint, newLength, length - newLength);
+    }
+
+    if (newLength == 0) {
+      SetSign(bigint, kPositiveFlag);
+    }
+
+    return %RawDownCast<BigInt>(Convert<BigIntBase>(bigint));
+  }
+
+  macro Sign(bigint: BigIntBase): bool {
+    return DecodeBigIntSign(bigint) > 0;
+  }
+
+  macro IsNegative(bigint: BigIntBase): bool {
+    return Sign(bigint) == kNegativeFlag;
+  }
+
+  macro SetSign(bigint: MutableBigInt, sign: bool) {
+    let bitfield = LoadBigIntBitfield(bigint);
+    StoreBigIntBitfield(
+        bigint, EncodeBigIntBitfield(sign, DecodeBigIntLength(bigint)));
+  }
+
+  macro IsZero(implicit context: Context)(bigint: BigInt): bool {
+    return DecodeBigIntLength(bigint) == 0;
+  }
+
+  builtin BigIntUnaryMinus(implicit context: Context)(bigint: BigInt): BigInt {
+    // there is no -0n
+    if (IsZero(bigint)) {
+      return bigint;
+    }
+
+    const result = AllocateMutableBigIntCopy(bigint);
+    SetSign(result, !Sign(bigint));
+    return MakeImmutable(result);
+  }
+
+  struct DigitResult {
+    result: uintptr;
+    handover: uintptr;
+  }
+
+  macro HaveTwoDigitType(): constexpr bool {
+    return false;
+  }
+
+  macro DigitSub(x: uintptr, y: uintptr, borrow: uintptr): DigitResult {
+    // TODO(nicohartmann): check whether we can use platform supported 2-digit
+    // types here
+    if constexpr (HaveTwoDigitType()) {
+      assert(false);
+    }
+    let newBorrow: uintptr = 0;
+    let diff = x - y;
+
+    if (diff > x) {
+      ++newBorrow;
+    }
+    const diffxy = diff;
+    diff -= borrow;
+    if (diff > diffxy) {
+      ++newBorrow;
+    }
+    return DigitResult{result: diff, handover: newBorrow};
+  }
+
+  macro MutableBigIntAbsoluteAdd(implicit context: Context)(
+      xBigint: BigInt, yBigint: BigInt, resultSign: bool): BigInt {
+    let xlength = Convert<intptr>(DecodeBigIntLength(xBigint));
+    let ylength = Convert<intptr>(DecodeBigIntLength(yBigint));
+
+    let x = xBigint;
+    let y = yBigint;
+    if (xlength < ylength) {
+      // swap so that x is the longer one
+      const t = x;
+      const tlength = xlength;
+      x = y;
+      xlength = ylength;
+      y = t;
+      ylength = tlength;
+    }
+
+    // case: 0n + 0n
+    if (xlength == 0) {
+      assert(ylength == 0);
+      return x;
+    }
+
+    // case: x + 0n
+    if (ylength == 0) {
+      return resultSign == Sign(x) ? x : BigIntUnaryMinus(x);
+    }
+
+    // case: x + y
+    // TODO(nicohartmann): handle allocation failure
+    const result = AllocateEmptyBigInt(resultSign, xlength + 1);
+
+    CppAbsoluteAdd(result, x, y);
+
+    return MakeImmutable(result);
+  }
+
+  macro MutableBigIntAbsoluteCompare(x: BigIntBase, y: BigIntBase): int32 {
+    const xlength = DecodeBigIntLength(x);
+    const diff = xlength - DecodeBigIntLength(y);
+    if (diff != 0) {
+      return Convert<int32>(diff);
+    }
+    for (let i: intptr = xlength - 1; i >= 0; --i) {
+      const xdigit = LoadBigIntDigit(x, i);
+      const ydigit = LoadBigIntDigit(y, i);
+      if (xdigit > ydigit) {
+        return 1;
+      } else if (xdigit < ydigit) {
+        return -1;
+      }
+    }
+    return 0;
+  }
+
+  macro MutableBigIntAbsoluteSub(implicit context: Context)(
+      x: BigInt, y: BigInt, resultSign: bool): BigInt {
+    const xlength = DecodeBigIntLength(x);
+    const ylength = DecodeBigIntLength(y);
+    const xsign = Sign(x);
+    assert(xlength >= ylength);
+    assert(MutableBigIntAbsoluteCompare(x, y) >= 0);
+    if (xlength == 0) {
+      assert(ylength == 0);
+      return x;
+    }
+
+    if (ylength == 0) {
+      return resultSign == xsign ? x : BigIntUnaryMinus(x);
+    }
+
+    // TODO (nicohartmann): handle allocation failure
+    let result = AllocateEmptyBigInt(resultSign, xlength);
+
+    let borrow: uintptr = 0;
+    let i: intptr = 0;
+    for (; i < ylength; ++i) {
+      let r: DigitResult =
+          DigitSub(LoadBigIntDigit(x, i), LoadBigIntDigit(y, i), borrow);
+      StoreBigIntDigit(result, i, r.result);
+      borrow = r.handover;
+    }
+    for (; i < xlength; ++i) {
+      let r: DigitResult = DigitSub(LoadBigIntDigit(x, i), 0, borrow);
+      StoreBigIntDigit(result, i, r.result);
+      borrow = r.handover;
+    }
+
+    assert(borrow == 0);
+    return MakeImmutable(result);
+  }
+
+  builtin BigIntAdd(implicit context: Context)(xNum: Numeric, yNum: Numeric):
+      BigInt {
+    try {
+      const x = Cast<BigInt>(xNum) otherwise SlowPath;
+      const y = Cast<BigInt>(yNum) otherwise SlowPath;
+
+      const xsign = DecodeBigIntSign(x) > 0;
+      const ysign = DecodeBigIntSign(y) > 0;
+      if (xsign == ysign) {
+        // x + y == x + y
+        // -x + -y == -(x + y)
+        return MutableBigIntAbsoluteAdd(x, y, xsign);
+      }
+
+      // x + -y == x - y == -(y - x)
+      // -x + y == y - x == -(x - y)
+      if (MutableBigIntAbsoluteCompare(x, y) >= 0) {
+        return MutableBigIntAbsoluteSub(x, y, xsign);
+      }
+
+      return MutableBigIntAbsoluteSub(y, x, !xsign);
+    }
+    label SlowPath {
+      return runtime::BigIntBinaryOp(context, xNum, yNum, 0);
+    }
+  }
+
+}  // namespace bigint

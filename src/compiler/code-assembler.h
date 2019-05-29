@@ -148,7 +148,7 @@ struct Float64T : UntaggedT {
 };
 
 // Result of a comparison operation.
-struct BoolT : Word32T {};
+struct BoolT : Int32T {};
 
 // Value type of a Turbofan node with two results.
 template <class T1, class T2>
@@ -551,31 +551,32 @@ class CodeAssemblerParameterizedLabel;
   V(UintPtrGreaterThan, BoolT, WordT, WordT)              \
   V(UintPtrGreaterThanOrEqual, BoolT, WordT, WordT)
 
-#define CODE_ASSEMBLER_BINARY_OP_LIST(V)                                \
-  CODE_ASSEMBLER_COMPARE_BINARY_OP_LIST(V)                              \
-  V(Float64Add, Float64T, Float64T, Float64T)                           \
-  V(Float64Sub, Float64T, Float64T, Float64T)                           \
-  V(Float64Mul, Float64T, Float64T, Float64T)                           \
-  V(Float64Div, Float64T, Float64T, Float64T)                           \
-  V(Float64Mod, Float64T, Float64T, Float64T)                           \
-  V(Float64Atan2, Float64T, Float64T, Float64T)                         \
-  V(Float64Pow, Float64T, Float64T, Float64T)                           \
-  V(Float64Max, Float64T, Float64T, Float64T)                           \
-  V(Float64Min, Float64T, Float64T, Float64T)                           \
-  V(Float64InsertLowWord32, Float64T, Float64T, Word32T)                \
-  V(Float64InsertHighWord32, Float64T, Float64T, Word32T)               \
-  V(IntPtrAddWithOverflow, PAIR_TYPE(IntPtrT, BoolT), IntPtrT, IntPtrT) \
-  V(IntPtrSubWithOverflow, PAIR_TYPE(IntPtrT, BoolT), IntPtrT, IntPtrT) \
-  V(Int32Add, Word32T, Word32T, Word32T)                                \
-  V(Int32AddWithOverflow, PAIR_TYPE(Int32T, BoolT), Int32T, Int32T)     \
-  V(Int32Sub, Word32T, Word32T, Word32T)                                \
-  V(Int32SubWithOverflow, PAIR_TYPE(Int32T, BoolT), Int32T, Int32T)     \
-  V(Int32Mul, Word32T, Word32T, Word32T)                                \
-  V(Int32MulWithOverflow, PAIR_TYPE(Int32T, BoolT), Int32T, Int32T)     \
-  V(Int32Div, Int32T, Int32T, Int32T)                                   \
-  V(Int32Mod, Int32T, Int32T, Int32T)                                   \
-  V(WordRor, WordT, WordT, IntegralT)                                   \
-  V(Word32Ror, Word32T, Word32T, Word32T)                               \
+#define CODE_ASSEMBLER_BINARY_OP_LIST(V)                                    \
+  CODE_ASSEMBLER_COMPARE_BINARY_OP_LIST(V)                                  \
+  V(Float64Add, Float64T, Float64T, Float64T)                               \
+  V(Float64Sub, Float64T, Float64T, Float64T)                               \
+  V(Float64Mul, Float64T, Float64T, Float64T)                               \
+  V(Float64Div, Float64T, Float64T, Float64T)                               \
+  V(Float64Mod, Float64T, Float64T, Float64T)                               \
+  V(Float64Atan2, Float64T, Float64T, Float64T)                             \
+  V(Float64Pow, Float64T, Float64T, Float64T)                               \
+  V(Float64Max, Float64T, Float64T, Float64T)                               \
+  V(Float64Min, Float64T, Float64T, Float64T)                               \
+  V(Float64InsertLowWord32, Float64T, Float64T, Word32T)                    \
+  V(Float64InsertHighWord32, Float64T, Float64T, Word32T)                   \
+  V(IntPtrAddWithOverflow, PAIR_TYPE(IntPtrT, BoolT), IntPtrT, IntPtrT)     \
+  V(UintPtrAddWithOverflow, PAIR_TYPE(UintPtrT, BoolT), UintPtrT, UintPtrT) \
+  V(IntPtrSubWithOverflow, PAIR_TYPE(IntPtrT, BoolT), IntPtrT, IntPtrT)     \
+  V(Int32Add, Word32T, Word32T, Word32T)                                    \
+  V(Int32AddWithOverflow, PAIR_TYPE(Int32T, BoolT), Int32T, Int32T)         \
+  V(Int32Sub, Word32T, Word32T, Word32T)                                    \
+  V(Int32SubWithOverflow, PAIR_TYPE(Int32T, BoolT), Int32T, Int32T)         \
+  V(Int32Mul, Word32T, Word32T, Word32T)                                    \
+  V(Int32MulWithOverflow, PAIR_TYPE(Int32T, BoolT), Int32T, Int32T)         \
+  V(Int32Div, Int32T, Int32T, Int32T)                                       \
+  V(Int32Mod, Int32T, Int32T, Int32T)                                       \
+  V(WordRor, WordT, WordT, IntegralT)                                       \
+  V(Word32Ror, Word32T, Word32T, Word32T)                                   \
   V(Word64Ror, Word64T, Word64T, Word64T)
 
 TNode<Float64T> Float64Add(TNode<Float64T> a, TNode<Float64T> b);
