@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1d5aade_e489fc20",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-29T09:39:37Z",
+      "side": 1,
+      "message": "representation",
+      "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25f41eff_81690fa5",
+        "filename": "src/ic/accessor-assembler.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-29T09:39:37Z",
+      "side": 1,
+      "message": "This comment is pretty hard to decode.",
+      "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f8ad516_43a52c2f",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-29T09:39:37Z",
+      "side": 1,
+      "message": "STATIC_ASSERT(JSArray::kMaxIndex \u003c\u003d kMaxUInt32)",
+      "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57c408bc_17344b22",
+        "filename": "src/ic/ic.cc",
+        "patchSetId": 5
+      },
+      "lineNbr": 2090,
+      "author": {
+        "id": 1184114
+      },
+      "writtenOn": "2019-05-29T09:39:37Z",
+      "side": 1,
+      "message": "JSArray::kMaxLength?",
+      "revId": "cdbee905591040f394a9f1f0284f41583a92e175",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
