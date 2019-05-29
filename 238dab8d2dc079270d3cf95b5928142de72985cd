@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34ec79fd_40d62dac",
+        "filename": "test/mjsunit/regress/regress-5767.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-05-29T07:32:58Z",
+      "side": 0,
+      "message": "Why delete this file?",
+      "revId": "238dab8d2dc079270d3cf95b5928142de72985cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

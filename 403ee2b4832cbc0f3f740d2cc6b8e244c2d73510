@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5b7adb5_87d2a4ec",
+        "filename": "test/mjsunit/number-tostring-subnormal.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-05-29T07:32:58Z",
+      "side": 1,
+      "message": "Please use the short license header for new files:\n\n```\n// Copyright 2019 the V8 project authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n```",
+      "revId": "403ee2b4832cbc0f3f740d2cc6b8e244c2d73510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f7e0395_4d1dbff7",
+        "filename": "test/mjsunit/number-tostring-subnormal.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1214214
+      },
+      "writtenOn": "2019-05-29T07:32:58Z",
+      "side": 1,
+      "message": "nit for this entire file: 80col",
+      "revId": "403ee2b4832cbc0f3f740d2cc6b8e244c2d73510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
