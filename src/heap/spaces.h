@@ -143,6 +143,9 @@ enum RememberedSetType {
   NUMBER_OF_REMEMBERED_SET_TYPES = OLD_TO_OLD + 1
 };
 
+// How should MemoryChunk free its allocated memory.
+enum class MemoryChunkLeakMode { kReleaseEverything, kLeakForReadOnlySpace };
+
 // A free list category maintains a linked list of free memory blocks.
 class FreeListCategory {
  public:
@@ -700,7 +703,7 @@ class MemoryChunk {
                                  VirtualMemory reservation);
 
   // Should be called when memory chunk is about to be freed.
-  void ReleaseAllocatedMemory();
+  void ReleaseAllocatedMemory(MemoryChunkLeakMode mode);
 
   // Sets the requested page permissions only if the write unprotect counter
   // has reached 0.
@@ -1205,7 +1208,8 @@ class MemoryAllocator {
         chunk = GetMemoryChunkSafe<kRegular>();
         if (chunk != nullptr) {
           // For stolen chunks we need to manually free any allocated memory.
-          chunk->ReleaseAllocatedMemory();
+          chunk->ReleaseAllocatedMemory(
+              MemoryChunkLeakMode::kReleaseEverything);
         }
       }
       return chunk;
