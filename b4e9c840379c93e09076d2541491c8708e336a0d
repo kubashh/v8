@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf465156_7f506931",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-05-29T13:47:18Z",
+      "side": 1,
+      "message": "nit: mmap, *a* few",
+      "range": {
+        "startLine": 11,
+        "startChar": 43,
+        "endLine": 11,
+        "endChar": 52
+      },
+      "revId": "b4e9c840379c93e09076d2541491c8708e336a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b418b00_c0a145a5",
+        "filename": "src/base/lsan.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-05-29T13:47:18Z",
+      "side": 1,
+      "message": "\"LSAN_IGNORE_OBJECT can only be used with pointer types\"",
+      "range": {
+        "startLine": 25,
+        "startChar": 17,
+        "endLine": 25,
+        "endChar": 38
+      },
+      "revId": "b4e9c840379c93e09076d2541491c8708e336a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc7178f1_50147073",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1204345
+      },
+      "writtenOn": "2019-05-29T13:47:18Z",
+      "side": 1,
+      "message": "How about this for an API:\n\nvoid ReleaseAllAllocatedMemory();\nvoid ReleaseMemoryNeededForWritableChunk();\n\nwhere the first function calls the second and does the extra bit. Then you can lose the enum and the code should be more readable. (Make sure to add a comment for the second to say it\u0027s basically for read-only pages.",
+      "range": {
+        "startLine": 706,
+        "startChar": 2,
+        "endLine": 706,
+        "endChar": 56
+      },
+      "revId": "b4e9c840379c93e09076d2541491c8708e336a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
