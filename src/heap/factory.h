@@ -488,7 +488,8 @@ class V8_EXPORT_PRIVATE Factory {
       int length, AllocationType allocation = AllocationType::kYoung);
 
   Handle<BytecodeArray> NewBytecodeArray(int length, const byte* raw_bytecodes,
-                                         int frame_size, int parameter_count,
+                                         int32_t frame_size,
+                                         int32_t parameter_count,
                                          Handle<FixedArray> constant_pool);
 
   Handle<Cell> NewCell(Handle<Object> value);
