@@ -1433,6 +1433,10 @@ const Operator* RepresentationChanger::Int64OperatorFor(
     case IrOpcode::kSpeculativeSafeIntegerSubtract:
     case IrOpcode::kNumberSubtract:
       return machine()->Int64Sub();
+    case IrOpcode::kNumberLessThan:
+      return machine()->Int64LessThan();
+    case IrOpcode::kNumberLessThanOrEqual:
+      return machine()->Int64LessThanOrEqual();
     default:
       UNREACHABLE();
   }
