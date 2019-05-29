@@ -16,6 +16,24 @@
       "revId": "238dab8d2dc079270d3cf95b5928142de72985cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eacc84ef_785279a8",
+        "filename": "test/mjsunit/regress/regress-5767.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-05-29T08:39:43Z",
+      "side": 0,
+      "message": "Because this test is actually incorrect. It could be fixed, but the hypothetical fixed version is subsumed by the newly added tests. Deleting this is the right choice.",
+      "parentUuid": "34ec79fd_40d62dac",
+      "revId": "238dab8d2dc079270d3cf95b5928142de72985cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
