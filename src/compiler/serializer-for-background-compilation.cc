@@ -100,16 +100,13 @@ class SerializerForBackgroundCompilation::Environment : public ZoneObject {
     DCHECK(IsDead());
   }
 
-  void ReviveForHandlerCode() {
+  void Revive() {
     DCHECK(IsDead());
     environment_hints_.resize(environment_hints_size(), Hints(zone()));
     DCHECK(!IsDead());
   }
 
-  // When control flow bytecodes are encountered, e.g. a conditional jump,
-  // the current environment needs to be stashed together with the target jump
-  // address. Later, when this target bytecode is handled, the stashed
-  // environment will be merged into the current one.
+  // Merge {other} into {this} environment (leaving {other} unmodified).
   void Merge(Environment* other);
 
   FunctionBlueprint function() const { return function_; }
@@ -297,7 +294,7 @@ SerializerForBackgroundCompilation::SerializerForBackgroundCompilation(
       dependencies_(dependencies),
       zone_(zone),
       environment_(new (zone) Environment(zone, {closure, broker_->isolate()})),
-      stashed_environments_(zone),
+      jump_target_environments_(zone),
       flags_(flags) {
   JSFunctionRef(broker, closure).Serialize();
 }
@@ -311,7 +308,7 @@ SerializerForBackgroundCompilation::SerializerForBackgroundCompilation(
       zone_(zone),
       environment_(new (zone) Environment(zone, broker_->isolate(), function,
                                           new_target, arguments)),
-      stashed_environments_(zone),
+      jump_target_environments_(zone),
       flags_(flags) {
   DCHECK(!(flags_ & SerializerForBackgroundCompilationFlag::kOsr));
   TraceScope tracer(
@@ -415,11 +412,13 @@ void SerializerForBackgroundCompilation::TraverseBytecode() {
   ExceptionHandlerMatcher handler_matcher(iterator);
 
   for (; !iterator.done(); iterator.Advance()) {
-    MergeAfterJump(&iterator);
+    IncorporateJumpTargetEnvironment(iterator.current_offset());
 
     if (environment()->IsDead()) {
-      if (handler_matcher.CurrentBytecodeIsExceptionHandlerStart()) {
-        environment()->ReviveForHandlerCode();
+      if (iterator.current_bytecode() ==
+              interpreter::Bytecode::kResumeGenerator ||
+          handler_matcher.CurrentBytecodeIsExceptionHandlerStart()) {
+        environment()->Revive();
       } else {
         continue;  // Skip this bytecode since TF won't generate code for it.
       }
@@ -443,21 +442,6 @@ void SerializerForBackgroundCompilation::TraverseBytecode() {
       }
     }
   }
-}
-
-void SerializerForBackgroundCompilation::VisitIllegal(
-    BytecodeArrayIterator* iterator) {
-  UNREACHABLE();
-}
-
-void SerializerForBackgroundCompilation::VisitWide(
-    BytecodeArrayIterator* iterator) {
-  UNREACHABLE();
-}
-
-void SerializerForBackgroundCompilation::VisitExtraWide(
-    BytecodeArrayIterator* iterator) {
-  UNREACHABLE();
 }
 
 void SerializerForBackgroundCompilation::VisitGetSuperConstructor(
@@ -786,22 +770,32 @@ void SerializerForBackgroundCompilation::ProcessCallVarArgs(
   ProcessCallOrConstruct(callee, base::nullopt, arguments, slot);
 }
 
+void SerializerForBackgroundCompilation::ContributeToJumpTargetEnvironment(
+    int target_offset) {
+  auto it = jump_target_environments_.find(target_offset);
+  if (it == jump_target_environments_.end()) {
+    jump_target_environments_[target_offset] =
+        new (zone()) Environment(*environment());
+  } else {
+    it->second->Merge(environment());
+  }
+}
+
+void SerializerForBackgroundCompilation::IncorporateJumpTargetEnvironment(
+    int target_offset) {
+  auto it = jump_target_environments_.find(target_offset);
+  if (it != jump_target_environments_.end()) {
+    environment()->Merge(it->second);
+    jump_target_environments_.erase(it);
+  }
+}
+
 void SerializerForBackgroundCompilation::ProcessJump(
     interpreter::BytecodeArrayIterator* iterator) {
   int jump_target = iterator->GetJumpTargetOffset();
   int current_offset = iterator->current_offset();
-  if (current_offset >= jump_target) return;
-
-  stashed_environments_[jump_target] = new (zone()) Environment(*environment());
-}
-
-void SerializerForBackgroundCompilation::MergeAfterJump(
-    interpreter::BytecodeArrayIterator* iterator) {
-  int current_offset = iterator->current_offset();
-  auto stash = stashed_environments_.find(current_offset);
-  if (stash != stashed_environments_.end()) {
-    environment()->Merge(stash->second);
-    stashed_environments_.erase(stash);
+  if (current_offset < jump_target) {
+    ContributeToJumpTargetEnvironment(jump_target);
   }
 }
 
@@ -809,6 +803,15 @@ void SerializerForBackgroundCompilation::VisitReturn(
     BytecodeArrayIterator* iterator) {
   environment()->return_value_hints().Add(environment()->accumulator_hints());
   environment()->ClearEphemeralHints();
+}
+
+void SerializerForBackgroundCompilation::VisitSwitchOnSmiNoFeedback(
+    interpreter::BytecodeArrayIterator* iterator) {
+  interpreter::JumpTableTargetOffsets targets =
+      iterator->GetJumpTableTargetOffsets();
+  for (const auto& target : targets) {
+    ContributeToJumpTargetEnvironment(target.target_offset);
+  }
 }
 
 void SerializerForBackgroundCompilation::Environment::ExportRegisterHints(
@@ -1173,6 +1176,22 @@ UNCONDITIONAL_JUMPS_LIST(DEFINE_UNCONDITIONAL_JUMP)
       BytecodeArrayIterator* iterator) {}
 IGNORED_BYTECODE_LIST(DEFINE_IGNORE)
 #undef DEFINE_IGNORE
+
+#define DEFINE_UNREACHABLE(name, ...)                   \
+  void SerializerForBackgroundCompilation::Visit##name( \
+      BytecodeArrayIterator* iterator) {                \
+    UNREACHABLE();                                      \
+  }
+UNREACHABLE_BYTECODE_LIST(DEFINE_UNREACHABLE)
+#undef DEFINE_UNREACHABLE
+
+#define DEFINE_KILL(name, ...)                          \
+  void SerializerForBackgroundCompilation::Visit##name( \
+      BytecodeArrayIterator* iterator) {                \
+    environment()->Kill();                              \
+  }
+KILL_ENVIRONMENT_LIST(DEFINE_KILL)
+#undef DEFINE_KILL
 
 }  // namespace compiler
 }  // namespace internal
