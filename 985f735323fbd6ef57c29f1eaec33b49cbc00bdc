@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1361e14f_f880c5c5",
+        "filename": "src/codegen/code-stub-assembler.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 10616,
+      "author": {
+        "id": 1183894
+      },
+      "writtenOn": "2019-05-29T11:51:05Z",
+      "side": 0,
+      "message": "This comment was already outdated since my last change, since we now hold on to the {object} (and not just it\u0027s elements) until the point where we access the raw memory.",
+      "revId": "985f735323fbd6ef57c29f1eaec33b49cbc00bdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
