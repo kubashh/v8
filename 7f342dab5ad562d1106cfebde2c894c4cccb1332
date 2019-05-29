@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "40d02dff_110d843a",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-05-29T17:05:00Z",
+      "side": 1,
+      "message": "Thank you for catching this! Yes, it should be int32 as well. Somehow messed up when updating the patch.",
+      "parentUuid": "8440aa1a_f5eff48a",
+      "revId": "7f342dab5ad562d1106cfebde2c894c4cccb1332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5e04575_7412e401",
         "filename": "src/builtins/base.tq",
         "patchSetId": 5
@@ -33,6 +51,24 @@
       "revId": "7f342dab5ad562d1106cfebde2c894c4cccb1332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76825650_d664fc68",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1322363
+      },
+      "writtenOn": "2019-05-29T17:05:00Z",
+      "side": 1,
+      "message": "Updated the immediate accessors but didn\u0027t propagate the change through in all cases as that would touch many files. Would you like me to add static_cast\u003cint\u003e on the boundaries to make them explicit or is the implicit conversion ok?",
+      "parentUuid": "b5e04575_7412e401",
+      "revId": "7f342dab5ad562d1106cfebde2c894c4cccb1332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
