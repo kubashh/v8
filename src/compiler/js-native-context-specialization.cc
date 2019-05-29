@@ -2629,24 +2629,18 @@ JSNativeContextSpecialization::BuildElementAccess(
       buffer_or_receiver = buffer;
     }
 
-    if (load_mode == LOAD_IGNORE_OUT_OF_BOUNDS ||
-        store_mode == STORE_IGNORE_OUT_OF_BOUNDS) {
-      // Only check that the {index} is in SignedSmall range. We do the actual
-      // bounds check below and just skip the property access if it's out of
-      // bounds for the {receiver}.
-      index = effect = graph()->NewNode(
-          simplified()->CheckSmi(VectorSlotPair()), index, effect, control);
-
-      // Cast the {index} to Unsigned32 range, so that the bounds checks
-      // below are performed on unsigned values, which means that all the
-      // Negative32 values are treated as out-of-bounds.
-      index = graph()->NewNode(simplified()->NumberToUint32(), index);
-    } else {
-      // Check that the {index} is in the valid range for the {receiver}.
-      index = effect =
-          graph()->NewNode(simplified()->CheckBounds(VectorSlotPair()), index,
-                           length, effect, control);
-    }
+    // Check that {index} is in the valid range for the {receiver}. If out
+    // of bounds accesses are allowed we only check that it's generally a
+    // valid JSTypedArray index, and do the proper bounds check below.
+    // Note: The {index} that comes out of this can be any integer in the
+    // positive safe integer range (on 64-bit architectures).
+    Node* limit = (load_mode == LOAD_IGNORE_OUT_OF_BOUNDS ||
+                   store_mode == STORE_IGNORE_OUT_OF_BOUNDS)
+                      ? jsgraph()->Constant(JSTypedArray::kMaxLength)
+                      : length;
+    index = effect =
+        graph()->NewNode(simplified()->CheckBounds(VectorSlotPair()), index,
+                         limit, effect, control);
 
     // Access the actual element.
     ExternalArrayType external_array_type =
