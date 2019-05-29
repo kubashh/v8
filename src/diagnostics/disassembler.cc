@@ -62,7 +62,7 @@ void V8NameConverter::InitExternalRefsCache() const {
 
   base::AddressRegion addressable_region =
       isolate_->root_register_addressable_region();
-  Address isolate_root = isolate_->isolate_root();
+  Address isolate_root = isolate_->isolate_root().address;
 
   for (uint32_t i = 0; i < ExternalReferenceTable::kSize; i++) {
     Address address = external_reference_table->address(i);

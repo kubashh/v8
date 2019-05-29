@@ -20,6 +20,7 @@
 #include "src/objects/objects-inl.h"
 #include "src/objects/slots-atomic-inl.h"
 #include "src/objects/slots.h"
+#include "src/objects/tagged-value-inl.h"
 #include "src/utils/utils.h"
 
 // Each concrete ElementsAccessor can handle exactly one ElementsKind,
@@ -475,24 +476,20 @@ static void SortIndices(Isolate* isolate, Handle<FixedArray> indices,
   AtomicSlot start(indices->GetFirstElementAddress());
   AtomicSlot end(start + sort_size);
   std::sort(start, end, [isolate](Tagged_t elementA, Tagged_t elementB) {
-#ifdef V8_COMPRESS_POINTERS
-    DEFINE_ROOT_VALUE(isolate);
-    Object a(DecompressTaggedAny(ROOT_VALUE, elementA));
-    Object b(DecompressTaggedAny(ROOT_VALUE, elementB));
-#else
-    Object a(elementA);
-    Object b(elementB);
-#endif
+    StrongTaggedValue a(elementA);
+    StrongTaggedValue b(elementB);
     if (a.IsSmi() || !a.IsUndefined(isolate)) {
       if (!b.IsSmi() && b.IsUndefined(isolate)) {
         return true;
       }
-      return a.Number() < b.Number();
+      Object a_obj = StrongTaggedValue::ToObject(WITH_ROOT(isolate, a));
+      Object b_obj = StrongTaggedValue::ToObject(WITH_ROOT(isolate, b));
+      return a_obj.Number() < b_obj.Number();
     }
     return !b.IsSmi() && b.IsUndefined(isolate);
   });
-  isolate->heap()->WriteBarrierForRange(*indices, ObjectSlot(start),
-                                        ObjectSlot(end));
+  isolate->heap()->WriteBarrierForRange(*indices, StrongTaggedValueSlot(start),
+                                        StrongTaggedValueSlot(end));
 }
 
 static Maybe<bool> IncludesValueSlowPath(Isolate* isolate,
@@ -618,15 +615,15 @@ class ElementsAccessorBase : public InternalElementsAccessor {
 
   static void TryTransitionResultArrayToPacked(Handle<JSArray> array) {
     if (!IsHoleyElementsKind(kind())) return;
-    Handle<FixedArrayBase> backing_store(array->elements(),
-                                         array->GetIsolate());
+    Isolate* isolate = array->GetIsolate();
+    Handle<FixedArrayBase> backing_store(array->elements(), isolate);
     int length = Smi::ToInt(array->length());
     if (!Subclass::IsPackedImpl(*array, *backing_store, 0, length)) return;
 
     ElementsKind packed_kind = GetPackedElementsKind(kind());
     Handle<Map> new_map =
         JSObject::GetElementsTransitionMap(array, packed_kind);
-    JSObject::MigrateToMap(array, new_map);
+    JSObject::MigrateToMap(isolate, array, new_map);
     if (FLAG_trace_elements_transitions) {
       JSObject::PrintElementsTransition(stdout, array, kind(), backing_store,
                                         packed_kind, backing_store);
@@ -862,7 +859,8 @@ class ElementsAccessorBase : public InternalElementsAccessor {
 
   static void TransitionElementsKindImpl(Handle<JSObject> object,
                                          Handle<Map> to_map) {
-    Handle<Map> from_map = handle(object->map(), object->GetIsolate());
+    Isolate* isolate = object->GetIsolate();
+    Handle<Map> from_map = handle(object->map(), isolate);
     ElementsKind from_kind = from_map->elements_kind();
     ElementsKind to_kind = to_map->elements_kind();
     if (IsHoleyElementsKind(from_kind)) {
@@ -874,14 +872,13 @@ class ElementsAccessorBase : public InternalElementsAccessor {
       DCHECK(IsFastElementsKind(to_kind));
       DCHECK_NE(TERMINAL_FAST_ELEMENTS_KIND, from_kind);
 
-      Handle<FixedArrayBase> from_elements(object->elements(),
-                                           object->GetIsolate());
+      Handle<FixedArrayBase> from_elements(object->elements(), isolate);
       if (object->elements() ==
               object->GetReadOnlyRoots().empty_fixed_array() ||
           IsDoubleElementsKind(from_kind) == IsDoubleElementsKind(to_kind)) {
         // No change is needed to the elements() buffer, the transition
         // only requires a map change.
-        JSObject::MigrateToMap(object, to_map);
+        JSObject::MigrateToMap(isolate, object, to_map);
       } else {
         DCHECK(
             (IsSmiElementsKind(from_kind) && IsDoubleElementsKind(to_kind)) ||
@@ -892,9 +889,9 @@ class ElementsAccessorBase : public InternalElementsAccessor {
         JSObject::SetMapAndElements(object, to_map, elements);
       }
       if (FLAG_trace_elements_transitions) {
-        JSObject::PrintElementsTransition(
-            stdout, object, from_kind, from_elements, to_kind,
-            handle(object->elements(), object->GetIsolate()));
+        JSObject::PrintElementsTransition(stdout, object, from_kind,
+                                          from_elements, to_kind,
+                                          handle(object->elements(), isolate));
       }
     }
   }
@@ -2660,7 +2657,7 @@ class FastSealedObjectElementsAccessor
                                     "SlowCopyForSetLengthImpl");
     new_map->set_is_extensible(false);
     new_map->set_elements_kind(DICTIONARY_ELEMENTS);
-    JSObject::MigrateToMap(array, new_map);
+    JSObject::MigrateToMap(isolate, array, new_map);
 
     if (!new_element_dictionary.is_null()) {
       array->set_elements(*new_element_dictionary);
@@ -4140,7 +4137,7 @@ class FastSloppyArgumentsElementsAccessor
         ConvertElementsWithCapacity(object, old_arguments, from_kind, capacity);
     Handle<Map> new_map = JSObject::GetElementsTransitionMap(
         object, FAST_SLOPPY_ARGUMENTS_ELEMENTS);
-    JSObject::MigrateToMap(object, new_map);
+    JSObject::MigrateToMap(isolate, object, new_map);
     elements->set_arguments(FixedArray::cast(*arguments));
     JSObject::ValidateElements(*object);
   }

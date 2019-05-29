@@ -35,11 +35,16 @@ class CompressedObjectSlot : public SlotBase<CompressedObjectSlot, Tagged_t> {
       : SlotBase(slot.address()) {}
 
   inline Object operator*() const;
+  inline Object load(ROOT_PARAM) const;
   inline void store(Object value) const;
 
-  inline Object Acquire_Load() const;
+  inline Smi Relaxed_LoadSmi() const;
+
   inline Object Relaxed_Load() const;
+  inline Object Relaxed_Load(ROOT_PARAM) const;
   inline void Relaxed_Store(Object value) const;
+
+  inline Object Acquire_Load() const;
   inline void Release_Store(Object value) const;
   inline Object Release_CompareAndSwap(Object old, Object target) const;
 };
@@ -64,10 +69,13 @@ class CompressedMapWordSlot : public SlotBase<CompressedMapWordSlot, Tagged_t> {
   // raw value without decompression.
   inline bool contains_value(Address raw_value) const;
 
-  inline Object operator*() const;
+  inline Object load() const;
   inline void store(Object value) const;
 
   inline Object Relaxed_Load() const;
+  inline Object Relaxed_Load(HeapObject host) const;
+  inline Object Relaxed_Load(ROOT_PARAM) const;
+
   inline void Relaxed_Store(Object value) const;
 
   inline Object Acquire_Load() const;
@@ -100,9 +108,11 @@ class CompressedMaybeObjectSlot
       : SlotBase(slot.address()) {}
 
   inline MaybeObject operator*() const;
+  inline MaybeObject load(ROOT_PARAM) const;
   inline void store(MaybeObject value) const;
 
   inline MaybeObject Relaxed_Load() const;
+  inline MaybeObject Relaxed_Load(ROOT_PARAM) const;
   inline void Relaxed_Store(MaybeObject value) const;
   inline void Release_CompareAndSwap(MaybeObject old, MaybeObject target) const;
 };

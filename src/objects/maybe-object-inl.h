@@ -65,7 +65,7 @@ HeapObjectReference HeapObjectReference::ClearedValue(Isolate* isolate) {
 #ifdef V8_COMPRESS_POINTERS
   // This is necessary to make pointer decompression computation also
   // suitable for cleared weak references.
-  Address isolate_root = isolate->isolate_root();
+  Address isolate_root = isolate->isolate_root().address;
   raw_value |= isolate_root;
   DCHECK_EQ(raw_value & (~static_cast<Address>(kClearedWeakHeapObjectLower32)),
             isolate_root);

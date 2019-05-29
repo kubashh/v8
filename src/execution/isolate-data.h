@@ -32,8 +32,8 @@ class IsolateData final {
   static constexpr intptr_t kIsolateRootBias = kRootRegisterBias;
 
   // The value of the kRootRegister.
-  Address isolate_root() const {
-    return reinterpret_cast<Address>(this) + kIsolateRootBias;
+  IsolateRoot isolate_root() const {
+    return IsolateRoot(reinterpret_cast<Address>(this) + kIsolateRootBias);
   }
 
   // Root-register-relative offset of the roots table.

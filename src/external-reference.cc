@@ -339,7 +339,7 @@ FUNCTION_REFERENCE(wasm_call_trap_callback_for_testing,
                    wasm::call_trap_callback_for_testing)
 
 ExternalReference ExternalReference::isolate_root(Isolate* isolate) {
-  return ExternalReference(isolate->isolate_root());
+  return ExternalReference(isolate->isolate_root().address);
 }
 
 ExternalReference ExternalReference::allocation_sites_list_address(

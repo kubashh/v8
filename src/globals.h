@@ -212,14 +212,22 @@ constexpr size_t kReservedCodeRangePages = 0;
 
 STATIC_ASSERT(kSystemPointerSize == (1 << kSystemPointerSizeLog2));
 
+class IsolateRoot final {
+ public:
+  explicit IsolateRoot(Address address) : address(address) {}
+
+  const Address address;
+};
+
 // This macro is used for declaring and defining HeapObject getter methods that
 // are a bit more efficient for the pointer compression case than the default
 // parameterless getters because isolate root doesn't have to be computed from
 // arbitrary field address but it comes "for free" instead.
 // These alternatives are always defined (in order to avoid #ifdef mess but
 // are not supposed to be used when pointer compression is not enabled.
-#define ROOT_VALUE isolate_for_root
-#define ROOT_PARAM Isolate* const ROOT_VALUE
+#define ROOT_VALUE isolate_root
+#define ROOT_PARAM const IsolateRoot ROOT_VALUE
+#define DEFINE_ROOT(isolate) ROOT_PARAM = (isolate)->isolate_root();
 
 #ifdef V8_COMPRESS_POINTERS
 static_assert(
@@ -234,10 +242,11 @@ constexpr int kTaggedSizeLog2 = 2;
 using Tagged_t = int32_t;
 using AtomicTagged_t = base::Atomic32;
 
-#define DEFINE_ROOT_VALUE(isolate) ROOT_PARAM = isolate
+#define DEFINE_ROOT_VALUE(isolate) DEFINE_ROOT(isolate);
 #define WITH_ROOT_PARAM(...) ROOT_PARAM, ##__VA_ARGS__
 #define WITH_ROOT_VALUE(...) ROOT_VALUE, ##__VA_ARGS__
-#define WITH_ROOT(isolate_for_root, ...) isolate_for_root, ##__VA_ARGS__
+#define WITH_ROOT(isolate_for_root, ...) \
+  (isolate_for_root)->isolate_root(), ##__VA_ARGS__
 
 #else
 
@@ -258,7 +267,7 @@ using AtomicTagged_t = base::AtomicWord;
 
 // Defines whether the branchless or branchful implementation of pointer
 // decompression should be used.
-constexpr bool kUseBranchlessPtrDecompression = true;
+constexpr bool kUseBranchlessPtrDecompression = false;
 
 STATIC_ASSERT(kTaggedSize == (1 << kTaggedSizeLog2));
 STATIC_ASSERT((kTaggedSize == 8) == TAGGED_SIZE_8_BYTES);
@@ -609,6 +618,7 @@ class HeapObjectReference;
 class IC;
 class InterceptorInfo;
 class Isolate;
+class IsolateRoot;
 class JSReceiver;
 class JSArray;
 class JSFunction;
@@ -635,6 +645,8 @@ template <HeapObjectReferenceType kRefType, typename StorageType>
 class TaggedImpl;
 class StrongTaggedValue;
 class TaggedValue;
+template <typename TTaggedValue>
+class TaggedValueSlotImpl;
 class CompressedObjectSlot;
 class CompressedMaybeObjectSlot;
 class CompressedMapWordSlot;
@@ -689,6 +701,9 @@ struct SlotTraits<SlotLocation::kOnHeap> {
   using THeapObjectSlot = FullHeapObjectSlot;
 #endif
 };
+
+using StrongTaggedValueSlot = TaggedValueSlotImpl<StrongTaggedValue>;
+using TaggedValueSlot = TaggedValueSlotImpl<TaggedValue>;
 
 // An ObjectSlot instance describes a kTaggedSize-sized on-heap field ("slot")
 // holding Object value (smi or strong heap object).

@@ -166,13 +166,17 @@ class String : public Name {
   // two-byte.  Such strings may appear when the embedder prefers
   // two-byte external representations even for one-byte data.
   inline bool IsOneByteRepresentation() const;
+  inline bool IsOneByteRepresentation(ROOT_PARAM) const;
   inline bool IsTwoByteRepresentation() const;
+  inline bool IsTwoByteRepresentation(ROOT_PARAM) const;
 
   // Cons and slices have an encoding flag that may not represent the actual
   // encoding of the underlying string.  This is taken into account here.
   // This function is static because that helps it get inlined.
   // Requires: string.IsFlat()
   static inline bool IsOneByteRepresentationUnderneath(String string);
+  static inline bool IsOneByteRepresentationUnderneath(ROOT_PARAM,
+                                                       String string);
 
   // Get and set individual two byte chars in the string.
   inline void Set(int index, uint16_t value);

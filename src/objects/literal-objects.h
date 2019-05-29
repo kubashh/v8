@@ -24,7 +24,10 @@ class ClassLiteral;
 class ObjectBoilerplateDescription : public FixedArray {
  public:
   Object name(int index) const;
+  Object name(ROOT_PARAM, int index) const;
+
   Object value(int index) const;
+  Object value(ROOT_PARAM, int index) const;
 
   void set_key_value(int index, Object key, Object value);
 

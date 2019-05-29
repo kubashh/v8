@@ -151,7 +151,7 @@ void LookupIterator::Start() {
   holder_ = initial_holder_;
 
   JSReceiver holder = *holder_;
-  Map map = holder.map();
+  Map map = holder.map(WITH_ROOT(isolate_));
 
   state_ = LookupInHolder<is_element>(map, holder);
   if (IsFound()) return;
@@ -169,7 +169,7 @@ void LookupIterator::Next() {
   has_property_ = false;
 
   JSReceiver holder = *holder_;
-  Map map = holder.map();
+  Map map = holder.map(WITH_ROOT(isolate_));
 
   if (map.IsSpecialReceiverMap()) {
     state_ = IsElement() ? LookupInSpecialHolder<true>(map, holder)
@@ -195,7 +195,7 @@ void LookupIterator::NextInternal(Map map, JSReceiver holder) {
       return;
     }
     holder = maybe_holder;
-    map = holder.map();
+    map = holder.map(WITH_ROOT(isolate_));
     state_ = LookupInHolder<is_element>(map, holder);
   } while (!IsFound());
 
@@ -236,8 +236,10 @@ Handle<JSReceiver> LookupIterator::GetRootForNonJSReceiver(
 }
 
 Handle<Map> LookupIterator::GetReceiverMap() const {
-  if (receiver_->IsNumber()) return factory()->heap_number_map();
-  return handle(Handle<HeapObject>::cast(receiver_)->map(), isolate_);
+  if (receiver_->IsNumber(WITH_ROOT(isolate_)))
+    return factory()->heap_number_map();
+  return handle(Handle<HeapObject>::cast(receiver_)->map(WITH_ROOT(isolate_)),
+                isolate_);
 }
 
 bool LookupIterator::HasAccess() const {
@@ -250,7 +252,8 @@ template <bool is_element>
 void LookupIterator::ReloadPropertyInformation() {
   state_ = BEFORE_PROPERTY;
   interceptor_state_ = InterceptorState::kUninitialized;
-  state_ = LookupInHolder<is_element>(holder_->map(), *holder_);
+  state_ =
+      LookupInHolder<is_element>(holder_->map(WITH_ROOT(isolate_)), *holder_);
   DCHECK(IsFound() || !holder_->HasFastProperties());
 }
 
@@ -265,7 +268,7 @@ bool IsTypedArrayFunctionInAnyContext(Isolate* isolate, JSReceiver holder) {
 #undef TYPED_ARRAY_CONTEXT_SLOTS
   };
 
-  if (!holder.IsJSFunction()) return false;
+  if (!holder.IsJSFunction(WITH_ROOT(isolate))) return false;
 
   return std::any_of(
       std::begin(context_slots), std::end(context_slots),
@@ -305,7 +308,7 @@ void LookupIterator::InternalUpdateProtector() {
       isolate_->InvalidateTypedArraySpeciesProtector();
       return;
     }
-    if (holder_->map().is_prototype_map()) {
+    if (holder_->map(WITH_ROOT(isolate_)).is_prototype_map()) {
       DisallowHeapAllocation no_gc;
       // Setting the constructor of any prototype with the @@species protector
       // (of any realm) also needs to invalidate the protector.
@@ -327,7 +330,7 @@ void LookupIterator::InternalUpdateProtector() {
         if (!isolate_->IsRegExpSpeciesLookupChainIntact()) return;
         isolate_->InvalidateRegExpSpeciesProtector();
       } else if (isolate_->IsInAnyContext(
-                     holder_->map().prototype(),
+                     holder_->map(WITH_ROOT(isolate_)).prototype(),
                      Context::TYPED_ARRAY_PROTOTYPE_INDEX)) {
         if (!isolate_->IsTypedArraySpeciesLookupChainIntact()) return;
         isolate_->InvalidateTypedArraySpeciesProtector();
@@ -485,7 +488,7 @@ void LookupIterator::PrepareForDataProperty(Handle<Object> value) {
       new_constness = PropertyConstness::kMutable;
   }
 
-  Handle<Map> old_map(holder_obj->map(), isolate_);
+  Handle<Map> old_map(holder_obj->map(WITH_ROOT(isolate_)), isolate_);
   Handle<Map> new_map = Map::PrepareForDataProperty(
       isolate(), old_map, descriptor_number(), new_constness, value);
 
@@ -498,7 +501,7 @@ void LookupIterator::PrepareForDataProperty(Handle<Object> value) {
     return;
   }
 
-  JSObject::MigrateToMap(holder_obj, new_map);
+  JSObject::MigrateToMap(isolate_, holder_obj, new_map);
   ReloadPropertyInformation<false>();
 }
 
@@ -524,7 +527,7 @@ void LookupIterator::ReconfigureDataProperty(Handle<Object> value,
                                                    number_, value, attributes);
     ReloadPropertyInformation<true>();
   } else if (holder_obj->HasFastProperties()) {
-    Handle<Map> old_map(holder_obj->map(), isolate_);
+    Handle<Map> old_map(holder_obj->map(WITH_ROOT(isolate_)), isolate_);
     Handle<Map> new_map = Map::ReconfigureExistingProperty(
         isolate_, old_map, descriptor_number(), i::kData, attributes);
     // Force mutable to avoid changing constant value by reconfiguring
@@ -532,19 +535,19 @@ void LookupIterator::ReconfigureDataProperty(Handle<Object> value,
     new_map =
         Map::PrepareForDataProperty(isolate(), new_map, descriptor_number(),
                                     PropertyConstness::kMutable, value);
-    JSObject::MigrateToMap(holder_obj, new_map);
+    JSObject::MigrateToMap(isolate_, holder_obj, new_map);
     ReloadPropertyInformation<false>();
   }
 
   if (!IsElement() && !holder_obj->HasFastProperties()) {
     PropertyDetails details(kData, attributes, PropertyCellType::kMutable);
-    if (holder_obj->map().is_prototype_map() &&
+    if (holder_obj->map(WITH_ROOT(isolate_)).is_prototype_map() &&
         (property_details_.attributes() & READ_ONLY) == 0 &&
         (attributes & READ_ONLY) != 0) {
       // Invalidate prototype validity cell when a property is reconfigured
       // from writable to read-only as this may invalidate transitioning store
       // IC handlers.
-      JSObject::InvalidatePrototypeChains(holder->map());
+      JSObject::InvalidatePrototypeChains(holder->map(WITH_ROOT(isolate_)));
     }
     if (holder_obj->IsJSGlobalObject()) {
       Handle<GlobalDictionary> dictionary(
@@ -597,7 +600,7 @@ void LookupIterator::PrepareTransitionToDataProperty(
   DCHECK_NE(INTEGER_INDEXED_EXOTIC, state_);
   DCHECK(state_ == NOT_FOUND || !HolderIsReceiverOrHiddenPrototype());
 
-  Handle<Map> map(receiver->map(), isolate_);
+  Handle<Map> map(receiver->map(WITH_ROOT(isolate_)), isolate_);
 
   // Dictionary maps can always have additional data properties.
   if (map->is_dictionary_map()) {
@@ -657,12 +660,13 @@ void LookupIterator::ApplyTransitionToDataProperty(
   DCHECK(receiver.is_identical_to(GetStoreTarget<JSReceiver>()));
   holder_ = receiver;
   if (receiver->IsJSGlobalObject()) {
-    JSObject::InvalidatePrototypeChains(receiver->map());
+    JSObject::InvalidatePrototypeChains(receiver->map(WITH_ROOT(isolate_)));
     state_ = DATA;
     return;
   }
   Handle<Map> transition = transition_map();
-  bool simple_transition = transition->GetBackPointer() == receiver->map();
+  bool simple_transition =
+      transition->GetBackPointer() == receiver->map(WITH_ROOT(isolate_));
 
   if (configuration_ == DEFAULT && !transition->is_dictionary_map() &&
       !transition->IsPrototypeValidityCellValid()) {
@@ -674,7 +678,8 @@ void LookupIterator::ApplyTransitionToDataProperty(
   }
 
   if (!receiver->IsJSProxy()) {
-    JSObject::MigrateToMap(Handle<JSObject>::cast(receiver), transition);
+    JSObject::MigrateToMap(isolate_, Handle<JSObject>::cast(receiver),
+                           transition);
   }
 
   if (simple_transition) {
@@ -682,12 +687,13 @@ void LookupIterator::ApplyTransitionToDataProperty(
     number_ = static_cast<uint32_t>(number);
     property_details_ = transition->GetLastDescriptorDetails();
     state_ = DATA;
-  } else if (receiver->map().is_dictionary_map()) {
+  } else if (receiver->map(WITH_ROOT(isolate_)).is_dictionary_map()) {
     Handle<NameDictionary> dictionary(receiver->property_dictionary(),
                                       isolate_);
     int entry;
-    if (receiver->map().is_prototype_map() && receiver->IsJSObject()) {
-      JSObject::InvalidatePrototypeChains(receiver->map());
+    if (receiver->map(WITH_ROOT(isolate_)).is_prototype_map() &&
+        receiver->IsJSObject(WITH_ROOT(isolate_))) {
+      JSObject::InvalidatePrototypeChains(receiver->map(WITH_ROOT(isolate_)));
     }
     dictionary = NameDictionary::Add(isolate(), dictionary, name(),
                                      isolate_->factory()->uninitialized_value(),
@@ -712,7 +718,7 @@ void LookupIterator::Delete() {
     accessor->Delete(object, number_);
   } else {
     DCHECK(!name()->IsPrivateName());
-    bool is_prototype_map = holder->map().is_prototype_map();
+    bool is_prototype_map = holder->map(WITH_ROOT(isolate_)).is_prototype_map();
     RuntimeCallTimerScope stats_scope(
         isolate_, is_prototype_map
                       ? RuntimeCallCounterId::kPrototypeObject_DeleteProperty
@@ -746,8 +752,8 @@ void LookupIterator::TransitionToAccessorProperty(
     attributes = static_cast<PropertyAttributes>(attributes | DONT_ENUM);
   }
 
-  if (!IsElement() && !receiver->map().is_dictionary_map()) {
-    Handle<Map> old_map(receiver->map(), isolate_);
+  if (!IsElement() && !receiver->map(WITH_ROOT(isolate_)).is_dictionary_map()) {
+    Handle<Map> old_map(receiver->map(WITH_ROOT(isolate_)), isolate_);
 
     if (!holder_.is_identical_to(receiver)) {
       holder_ = receiver;
@@ -760,8 +766,9 @@ void LookupIterator::TransitionToAccessorProperty(
 
     Handle<Map> new_map = Map::TransitionToAccessorProperty(
         isolate_, old_map, name_, descriptor, getter, setter, attributes);
-    bool simple_transition = new_map->GetBackPointer() == receiver->map();
-    JSObject::MigrateToMap(receiver, new_map);
+    bool simple_transition =
+        new_map->GetBackPointer() == receiver->map(WITH_ROOT(isolate_));
+    JSObject::MigrateToMap(isolate_, receiver, new_map);
 
     if (simple_transition) {
       int number = new_map->LastAdded();
@@ -832,8 +839,8 @@ void LookupIterator::TransitionToAccessorPair(Handle<Object> pair,
     ReloadPropertyInformation<true>();
   } else {
     PropertyNormalizationMode mode = CLEAR_INOBJECT_PROPERTIES;
-    if (receiver->map().is_prototype_map()) {
-      JSObject::InvalidatePrototypeChains(receiver->map());
+    if (receiver->map(WITH_ROOT(isolate_)).is_prototype_map()) {
+      JSObject::InvalidatePrototypeChains(receiver->map(WITH_ROOT(isolate_)));
       mode = KEEP_INOBJECT_PROPERTIES;
     }
 
@@ -861,12 +868,12 @@ bool LookupIterator::HolderIsReceiverOrHiddenPrototype() const {
   if (!check_prototype_chain()) return true;
   DisallowHeapAllocation no_gc;
   if (*receiver_ == *holder_) return true;
-  if (!receiver_->IsJSReceiver()) return false;
+  if (!receiver_->IsJSReceiver(WITH_ROOT(isolate_))) return false;
   JSReceiver current = JSReceiver::cast(*receiver_);
   JSReceiver object = *holder_;
-  if (!current.map().has_hidden_prototype()) return false;
+  if (!current.map(WITH_ROOT(isolate_)).has_hidden_prototype()) return false;
   // JSProxy do not occur as hidden prototypes.
-  if (object.IsJSProxy()) return false;
+  if (object.IsJSProxy(WITH_ROOT(isolate_))) return false;
   PrototypeIterator iter(isolate(), current, kStartAtPrototype,
                          PrototypeIterator::END_AT_NON_HIDDEN);
   while (!iter.IsAtEnd()) {
@@ -890,11 +897,14 @@ Handle<Object> LookupIterator::FetchValue() const {
   } else if (property_details_.location() == kField) {
     DCHECK_EQ(kData, property_details_.kind());
     Handle<JSObject> holder = GetHolder<JSObject>();
-    FieldIndex field_index = FieldIndex::ForDescriptor(holder->map(), number_);
+    FieldIndex field_index =
+        FieldIndex::ForDescriptor(holder->map(WITH_ROOT(isolate_)), number_);
     return JSObject::FastPropertyAt(holder, property_details_.representation(),
                                     field_index);
   } else {
-    result = holder_->map().instance_descriptors().GetStrongValue(number_);
+    result = holder_->map(WITH_ROOT(isolate_))
+                 .instance_descriptors()
+                 .GetStrongValue(number_);
   }
   return handle(result, isolate_);
 }
@@ -905,9 +915,10 @@ bool LookupIterator::IsConstFieldValueEqualTo(Object value) const {
   DCHECK_EQ(kField, property_details_.location());
   DCHECK_EQ(PropertyConstness::kConst, property_details_.constness());
   Handle<JSObject> holder = GetHolder<JSObject>();
-  FieldIndex field_index = FieldIndex::ForDescriptor(holder->map(), number_);
+  FieldIndex field_index =
+      FieldIndex::ForDescriptor(holder->map(WITH_ROOT(isolate_)), number_);
   if (property_details_.representation().IsDouble()) {
-    if (!value.IsNumber()) return false;
+    if (!value.IsNumber(WITH_ROOT(isolate_))) return false;
     uint64_t bits;
     if (holder->IsUnboxedDoubleField(field_index)) {
       bits = holder->RawFastDoublePropertyAsBitsAt(field_index);
@@ -931,7 +942,8 @@ bool LookupIterator::IsConstFieldValueEqualTo(Object value) const {
     if (current_value.IsUninitialized(isolate()) || current_value == value) {
       return true;
     }
-    return current_value.IsNumber() && value.IsNumber() &&
+    return current_value.IsNumber(WITH_ROOT(isolate_)) &&
+           value.IsNumber(WITH_ROOT(isolate_)) &&
            Object::SameNumberValue(current_value.Number(), value.Number());
   }
 }
@@ -957,7 +969,7 @@ Handle<Map> LookupIterator::GetFieldOwnerMap() const {
   DCHECK(holder_->HasFastProperties());
   DCHECK_EQ(kField, property_details_.location());
   DCHECK(!IsElement());
-  Map holder_map = holder_->map();
+  Map holder_map = holder_->map(WITH_ROOT(isolate_));
   return handle(holder_map.FindFieldOwner(isolate(), descriptor_number()),
                 isolate_);
 }
@@ -967,16 +979,18 @@ FieldIndex LookupIterator::GetFieldIndex() const {
   DCHECK(holder_->HasFastProperties());
   DCHECK_EQ(kField, property_details_.location());
   DCHECK(!IsElement());
-  return FieldIndex::ForDescriptor(holder_->map(), descriptor_number());
+  return FieldIndex::ForDescriptor(holder_->map(WITH_ROOT(isolate_)),
+                                   descriptor_number());
 }
 
 Handle<FieldType> LookupIterator::GetFieldType() const {
   DCHECK(has_property_);
   DCHECK(holder_->HasFastProperties());
   DCHECK_EQ(kField, property_details_.location());
-  return handle(
-      holder_->map().instance_descriptors().GetFieldType(descriptor_number()),
-      isolate_);
+  return handle(holder_->map(WITH_ROOT(isolate_))
+                    .instance_descriptors()
+                    .GetFieldType(descriptor_number()),
+                isolate_);
 }
 
 Handle<PropertyCell> LookupIterator::GetPropertyCell() const {

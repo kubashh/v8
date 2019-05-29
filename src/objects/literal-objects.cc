@@ -23,9 +23,18 @@ Object ObjectBoilerplateDescription::name(int index) const {
   DCHECK_NE(size(), index);
   return get(2 * index + kDescriptionStartIndex);
 }
+Object ObjectBoilerplateDescription::name(ROOT_PARAM, int index) const {
+  // get() already checks for out of bounds access, but we do not want to allow
+  // access to the last element, if it is the number of properties.
+  DCHECK_NE(size(), index);
+  return get(ROOT_VALUE, 2 * index + kDescriptionStartIndex);
+}
 
 Object ObjectBoilerplateDescription::value(int index) const {
   return get(2 * index + 1 + kDescriptionStartIndex);
+}
+Object ObjectBoilerplateDescription::value(ROOT_PARAM, int index) const {
+  return get(ROOT_VALUE, 2 * index + 1 + kDescriptionStartIndex);
 }
 
 void ObjectBoilerplateDescription::set_key_value(int index, Object key,

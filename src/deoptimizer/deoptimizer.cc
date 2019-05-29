@@ -758,7 +758,7 @@ void Deoptimizer::DoComputeOutputFrames() {
 
   FrameDescription* topmost = output_[count - 1];
   topmost->GetRegisterValues()->SetRegister(kRootRegister.code(),
-                                            isolate()->isolate_root());
+                                            isolate()->isolate_root().address);
 
   // Print some helpful diagnostic information.
   if (trace_scope_ != nullptr) {

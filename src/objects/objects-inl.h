@@ -67,25 +67,45 @@ int PropertyDetails::field_width_in_words() const {
 bool HeapObject::IsSloppyArgumentsElements() const {
   return IsFixedArrayExact();
 }
+bool HeapObject::IsSloppyArgumentsElements(ROOT_PARAM) const {
+  return IsFixedArrayExact(ROOT_VALUE);
+}
 
 bool HeapObject::IsJSSloppyArgumentsObject() const {
   return IsJSArgumentsObject();
+}
+bool HeapObject::IsJSSloppyArgumentsObject(ROOT_PARAM) const {
+  return IsJSArgumentsObject(ROOT_VALUE);
 }
 
 bool HeapObject::IsJSGeneratorObject() const {
   return map().instance_type() == JS_GENERATOR_OBJECT_TYPE ||
          IsJSAsyncFunctionObject() || IsJSAsyncGeneratorObject();
 }
+bool HeapObject::IsJSGeneratorObject(ROOT_PARAM) const {
+  return map(ROOT_VALUE).instance_type() == JS_GENERATOR_OBJECT_TYPE ||
+         IsJSAsyncFunctionObject(ROOT_VALUE) ||
+         IsJSAsyncGeneratorObject(ROOT_VALUE);
+}
 
 bool HeapObject::IsDataHandler() const {
   return IsLoadHandler() || IsStoreHandler();
 }
+bool HeapObject::IsDataHandler(ROOT_PARAM) const {
+  return IsLoadHandler(ROOT_VALUE) || IsStoreHandler(ROOT_VALUE);
+}
 
 bool HeapObject::IsClassBoilerplate() const { return IsFixedArrayExact(); }
+bool HeapObject::IsClassBoilerplate(ROOT_PARAM) const {
+  return IsFixedArrayExact(ROOT_VALUE);
+}
 
-#define IS_TYPE_FUNCTION_DEF(type_)                               \
-  bool Object::Is##type_() const {                                \
-    return IsHeapObject() && HeapObject::cast(*this).Is##type_(); \
+#define IS_TYPE_FUNCTION_DEF(type_)                                         \
+  bool Object::Is##type_() const {                                          \
+    return IsHeapObject() && HeapObject::cast(*this).Is##type_();           \
+  }                                                                         \
+  bool Object::Is##type_(ROOT_PARAM) const {                                \
+    return IsHeapObject() && HeapObject::cast(*this).Is##type_(ROOT_VALUE); \
   }
 HEAP_OBJECT_TYPE_LIST(IS_TYPE_FUNCTION_DEF)
 #undef IS_TYPE_FUNCTION_DEF
@@ -143,42 +163,77 @@ bool HeapObject::IsNullOrUndefined() const {
 bool HeapObject::IsUniqueName() const {
   return IsInternalizedString() || IsSymbol();
 }
+bool HeapObject::IsUniqueName(ROOT_PARAM) const {
+  return IsInternalizedString(ROOT_VALUE) || IsSymbol(ROOT_VALUE);
+}
 
 bool HeapObject::IsFunction() const {
   STATIC_ASSERT(LAST_FUNCTION_TYPE == LAST_TYPE);
   return map().instance_type() >= FIRST_FUNCTION_TYPE;
 }
+bool HeapObject::IsFunction(ROOT_PARAM) const {
+  STATIC_ASSERT(LAST_FUNCTION_TYPE == LAST_TYPE);
+  return map(ROOT_VALUE).instance_type() >= FIRST_FUNCTION_TYPE;
+}
 
 bool HeapObject::IsCallable() const { return map().is_callable(); }
+bool HeapObject::IsCallable(ROOT_PARAM) const {
+  return map(ROOT_VALUE).is_callable();
+}
 
 bool HeapObject::IsConstructor() const { return map().is_constructor(); }
+bool HeapObject::IsConstructor(ROOT_PARAM) const {
+  return map(ROOT_VALUE).is_constructor();
+}
 
 bool HeapObject::IsModuleInfo() const {
   return map() == GetReadOnlyRoots().module_info_map();
 }
+bool HeapObject::IsModuleInfo(ROOT_PARAM) const {
+  return map(ROOT_VALUE) == ReadOnlyRoots(ROOT_VALUE).module_info_map();
+}
 
 bool HeapObject::IsTemplateInfo() const {
   return IsObjectTemplateInfo() || IsFunctionTemplateInfo();
+}
+bool HeapObject::IsTemplateInfo(ROOT_PARAM) const {
+  return IsObjectTemplateInfo(ROOT_VALUE) || IsFunctionTemplateInfo(ROOT_VALUE);
 }
 
 bool HeapObject::IsConsString() const {
   if (!IsString()) return false;
   return StringShape(String::cast(*this)).IsCons();
 }
+bool HeapObject::IsConsString(ROOT_PARAM) const {
+  if (!IsString(ROOT_VALUE)) return false;
+  return StringShape(String::cast(*this).map(ROOT_VALUE)).IsCons();
+}
 
 bool HeapObject::IsThinString() const {
   if (!IsString()) return false;
   return StringShape(String::cast(*this)).IsThin();
+}
+bool HeapObject::IsThinString(ROOT_PARAM) const {
+  if (!IsString(ROOT_VALUE)) return false;
+  return StringShape(String::cast(*this).map(ROOT_VALUE)).IsThin();
 }
 
 bool HeapObject::IsSlicedString() const {
   if (!IsString()) return false;
   return StringShape(String::cast(*this)).IsSliced();
 }
+bool HeapObject::IsSlicedString(ROOT_PARAM) const {
+  if (!IsString(ROOT_VALUE)) return false;
+  return StringShape(String::cast(*this).map(ROOT_VALUE)).IsSliced();
+}
 
 bool HeapObject::IsSeqString() const {
   if (!IsString()) return false;
   return StringShape(String::cast(*this)).IsSequential();
+}
+bool HeapObject::IsSeqString(ROOT_PARAM) const {
+  if (!IsString(ROOT_VALUE)) return false;
+  return StringShape(String::cast(*this).map(ROOT_VALUE)).IsSequential();
 }
 
 bool HeapObject::IsSeqOneByteString() const {
@@ -186,16 +241,30 @@ bool HeapObject::IsSeqOneByteString() const {
   return StringShape(String::cast(*this)).IsSequential() &&
          String::cast(*this).IsOneByteRepresentation();
 }
+bool HeapObject::IsSeqOneByteString(ROOT_PARAM) const {
+  if (!IsString(ROOT_VALUE)) return false;
+  return StringShape(String::cast(*this).map(ROOT_VALUE)).IsSequential() &&
+         String::cast(*this).IsOneByteRepresentation(ROOT_VALUE);
+}
 
 bool HeapObject::IsSeqTwoByteString() const {
   if (!IsString()) return false;
   return StringShape(String::cast(*this)).IsSequential() &&
          String::cast(*this).IsTwoByteRepresentation();
 }
+bool HeapObject::IsSeqTwoByteString(ROOT_PARAM) const {
+  if (!IsString(ROOT_VALUE)) return false;
+  return StringShape(String::cast(*this).map(ROOT_VALUE)).IsSequential() &&
+         String::cast(*this).IsTwoByteRepresentation(ROOT_VALUE);
+}
 
 bool HeapObject::IsExternalString() const {
   if (!IsString()) return false;
   return StringShape(String::cast(*this)).IsExternal();
+}
+bool HeapObject::IsExternalString(ROOT_PARAM) const {
+  if (!IsString(ROOT_VALUE)) return false;
+  return StringShape(String::cast(*this).map(ROOT_VALUE)).IsExternal();
 }
 
 bool HeapObject::IsExternalOneByteString() const {
@@ -203,46 +272,103 @@ bool HeapObject::IsExternalOneByteString() const {
   return StringShape(String::cast(*this)).IsExternal() &&
          String::cast(*this).IsOneByteRepresentation();
 }
+bool HeapObject::IsExternalOneByteString(ROOT_PARAM) const {
+  if (!IsString(ROOT_VALUE)) return false;
+  return StringShape(String::cast(*this).map(ROOT_VALUE)).IsExternal() &&
+         String::cast(*this).IsOneByteRepresentation(ROOT_VALUE);
+}
 
 bool HeapObject::IsExternalTwoByteString() const {
   if (!IsString()) return false;
   return StringShape(String::cast(*this)).IsExternal() &&
          String::cast(*this).IsTwoByteRepresentation();
 }
+bool HeapObject::IsExternalTwoByteString(ROOT_PARAM) const {
+  if (!IsString(ROOT_VALUE)) return false;
+  return StringShape(String::cast(*this).map(ROOT_VALUE)).IsExternal() &&
+         String::cast(*this).IsTwoByteRepresentation(ROOT_VALUE);
+}
 
 bool Object::IsNumber() const { return IsSmi() || IsHeapNumber(); }
+bool Object::IsNumber(ROOT_PARAM) const {
+  return IsSmi() || IsHeapNumber(ROOT_VALUE);
+}
 
 bool Object::IsNumeric() const { return IsNumber() || IsBigInt(); }
+bool Object::IsNumeric(ROOT_PARAM) const {
+  return IsNumber(ROOT_VALUE) || IsBigInt(ROOT_VALUE);
+}
 
 bool HeapObject::IsFiller() const {
   InstanceType instance_type = map().instance_type();
+  return instance_type == FREE_SPACE_TYPE || instance_type == FILLER_TYPE;
+}
+bool HeapObject::IsFiller(ROOT_PARAM) const {
+  InstanceType instance_type = map(ROOT_VALUE).instance_type();
   return instance_type == FREE_SPACE_TYPE || instance_type == FILLER_TYPE;
 }
 
 bool HeapObject::IsJSWeakCollection() const {
   return IsJSWeakMap() || IsJSWeakSet();
 }
+bool HeapObject::IsJSWeakCollection(ROOT_PARAM) const {
+  return IsJSWeakMap(ROOT_VALUE) || IsJSWeakSet(ROOT_VALUE);
+}
 
 bool HeapObject::IsJSCollection() const { return IsJSMap() || IsJSSet(); }
+bool HeapObject::IsJSCollection(ROOT_PARAM) const {
+  return IsJSMap(ROOT_VALUE) || IsJSSet(ROOT_VALUE);
+}
 
 bool HeapObject::IsPromiseReactionJobTask() const {
   return IsPromiseFulfillReactionJobTask() || IsPromiseRejectReactionJobTask();
 }
+bool HeapObject::IsPromiseReactionJobTask(ROOT_PARAM) const {
+  return IsPromiseFulfillReactionJobTask(ROOT_VALUE) ||
+         IsPromiseRejectReactionJobTask(ROOT_VALUE);
+}
 
 bool HeapObject::IsFrameArray() const { return IsFixedArrayExact(); }
+bool HeapObject::IsFrameArray(ROOT_PARAM) const {
+  return IsFixedArrayExact(ROOT_VALUE);
+}
 
 bool HeapObject::IsArrayList() const {
   return map() == GetReadOnlyRoots().array_list_map() ||
          *this == GetReadOnlyRoots().empty_fixed_array();
 }
+bool HeapObject::IsArrayList(ROOT_PARAM) const {
+  return map(ROOT_VALUE) == ReadOnlyRoots(ROOT_VALUE).array_list_map() ||
+         *this == ReadOnlyRoots(ROOT_VALUE).empty_fixed_array();
+}
 
 bool HeapObject::IsRegExpMatchInfo() const { return IsFixedArrayExact(); }
+bool HeapObject::IsRegExpMatchInfo(ROOT_PARAM) const {
+  return IsFixedArrayExact(ROOT_VALUE);
+}
 
 bool Object::IsLayoutDescriptor() const { return IsSmi() || IsByteArray(); }
+bool Object::IsLayoutDescriptor(ROOT_PARAM) const {
+  return IsSmi() || IsByteArray(ROOT_VALUE);
+}
 
 bool HeapObject::IsDeoptimizationData() const {
   // Must be a fixed array.
   if (!IsFixedArrayExact()) return false;
+
+  // There's no sure way to detect the difference between a fixed array and
+  // a deoptimization data array.  Since this is used for asserts we can
+  // check that the length is zero or else the fixed size plus a multiple of
+  // the entry size.
+  int length = FixedArray::cast(*this).length();
+  if (length == 0) return true;
+
+  length -= DeoptimizationData::kFirstDeoptEntryIndex;
+  return length >= 0 && length % DeoptimizationData::kDeoptEntrySize == 0;
+}
+bool HeapObject::IsDeoptimizationData(ROOT_PARAM) const {
+  // Must be a fixed array.
+  if (!IsFixedArrayExact(ROOT_VALUE)) return false;
 
   // There's no sure way to detect the difference between a fixed array and
   // a deoptimization data array.  Since this is used for asserts we can
@@ -261,9 +387,22 @@ bool HeapObject::IsHandlerTable() const {
   // a handler table array.
   return true;
 }
+bool HeapObject::IsHandlerTable(ROOT_PARAM) const {
+  if (!IsFixedArrayExact(ROOT_VALUE)) return false;
+  // There's actually no way to see the difference between a fixed array and
+  // a handler table array.
+  return true;
+}
 
 bool HeapObject::IsTemplateList() const {
   if (!IsFixedArrayExact()) return false;
+  // There's actually no way to see the difference between a fixed array and
+  // a template list.
+  if (FixedArray::cast(*this).length() < 1) return false;
+  return true;
+}
+bool HeapObject::IsTemplateList(ROOT_PARAM) const {
+  if (!IsFixedArrayExact(ROOT_VALUE)) return false;
   // There's actually no way to see the difference between a fixed array and
   // a template list.
   if (FixedArray::cast(*this).length() < 1) return false;
@@ -276,58 +415,120 @@ bool HeapObject::IsDependentCode() const {
   // and a dependent codes array.
   return true;
 }
+bool HeapObject::IsDependentCode(ROOT_PARAM) const {
+  if (!IsWeakFixedArray(ROOT_VALUE)) return false;
+  // There's actually no way to see the difference between a weak fixed array
+  // and a dependent codes array.
+  return true;
+}
 
 bool HeapObject::IsAbstractCode() const {
   return IsBytecodeArray() || IsCode();
+}
+bool HeapObject::IsAbstractCode(ROOT_PARAM) const {
+  return IsBytecodeArray(ROOT_VALUE) || IsCode(ROOT_VALUE);
 }
 
 bool HeapObject::IsStringWrapper() const {
   return IsJSValue() && JSValue::cast(*this).value().IsString();
 }
+bool HeapObject::IsStringWrapper(ROOT_PARAM) const {
+  return IsJSValue(ROOT_VALUE) &&
+         JSValue::cast(*this).value().IsString(ROOT_VALUE);
+}
 
 bool HeapObject::IsBooleanWrapper() const {
   return IsJSValue() && JSValue::cast(*this).value().IsBoolean();
+}
+bool HeapObject::IsBooleanWrapper(ROOT_PARAM) const {
+  return IsJSValue(ROOT_VALUE) &&
+         JSValue::cast(*this).value().IsBoolean(ROOT_VALUE);
 }
 
 bool HeapObject::IsScriptWrapper() const {
   return IsJSValue() && JSValue::cast(*this).value().IsScript();
 }
+bool HeapObject::IsScriptWrapper(ROOT_PARAM) const {
+  return IsJSValue(ROOT_VALUE) &&
+         JSValue::cast(*this).value().IsScript(ROOT_VALUE);
+}
 
 bool HeapObject::IsNumberWrapper() const {
   return IsJSValue() && JSValue::cast(*this).value().IsNumber();
+}
+bool HeapObject::IsNumberWrapper(ROOT_PARAM) const {
+  return IsJSValue(ROOT_VALUE) &&
+         JSValue::cast(*this).value().IsNumber(ROOT_VALUE);
 }
 
 bool HeapObject::IsBigIntWrapper() const {
   return IsJSValue() && JSValue::cast(*this).value().IsBigInt();
 }
+bool HeapObject::IsBigIntWrapper(ROOT_PARAM) const {
+  return IsJSValue(ROOT_VALUE) &&
+         JSValue::cast(*this).value().IsBigInt(ROOT_VALUE);
+}
 
 bool HeapObject::IsSymbolWrapper() const {
   return IsJSValue() && JSValue::cast(*this).value().IsSymbol();
+}
+bool HeapObject::IsSymbolWrapper(ROOT_PARAM) const {
+  return IsJSValue(ROOT_VALUE) &&
+         JSValue::cast(*this).value().IsSymbol(ROOT_VALUE);
 }
 
 bool HeapObject::IsJSArrayBufferView() const {
   return IsJSDataView() || IsJSTypedArray();
 }
+bool HeapObject::IsJSArrayBufferView(ROOT_PARAM) const {
+  return IsJSDataView(ROOT_VALUE) || IsJSTypedArray(ROOT_VALUE);
+}
 
 bool HeapObject::IsStringSet() const { return IsHashTable(); }
+bool HeapObject::IsStringSet(ROOT_PARAM) const {
+  return IsHashTable(ROOT_VALUE);
+}
 
 bool HeapObject::IsObjectHashSet() const { return IsHashTable(); }
+bool HeapObject::IsObjectHashSet(ROOT_PARAM) const {
+  return IsHashTable(ROOT_VALUE);
+}
 
 bool HeapObject::IsCompilationCacheTable() const { return IsHashTable(); }
+bool HeapObject::IsCompilationCacheTable(ROOT_PARAM) const {
+  return IsHashTable(ROOT_VALUE);
+}
 
 bool HeapObject::IsMapCache() const { return IsHashTable(); }
+bool HeapObject::IsMapCache(ROOT_PARAM) const {
+  return IsHashTable(ROOT_VALUE);
+}
 
 bool HeapObject::IsObjectHashTable() const { return IsHashTable(); }
+bool HeapObject::IsObjectHashTable(ROOT_PARAM) const {
+  return IsHashTable(ROOT_VALUE);
+}
 
 bool Object::IsHashTableBase() const { return IsHashTable(); }
+bool Object::IsHashTableBase(ROOT_PARAM) const {
+  return IsHashTable(ROOT_VALUE);
+}
 
 bool Object::IsSmallOrderedHashTable() const {
   return IsSmallOrderedHashSet() || IsSmallOrderedHashMap() ||
          IsSmallOrderedNameDictionary();
 }
+bool Object::IsSmallOrderedHashTable(ROOT_PARAM) const {
+  return IsSmallOrderedHashSet(ROOT_VALUE) ||
+         IsSmallOrderedHashMap(ROOT_VALUE) ||
+         IsSmallOrderedNameDictionary(ROOT_VALUE);
+}
 
 bool Object::IsPrimitive() const {
   return IsSmi() || HeapObject::cast(*this).map().IsPrimitiveMap();
+}
+bool Object::IsPrimitive(ROOT_PARAM) const {
+  return IsSmi() || HeapObject::cast(*this).map(ROOT_VALUE).IsPrimitiveMap();
 }
 
 // static
@@ -338,8 +539,19 @@ Maybe<bool> Object::IsArray(Handle<Object> object) {
   if (!heap_object->IsJSProxy()) return Just(false);
   return JSProxy::IsArray(Handle<JSProxy>::cast(object));
 }
+// static
+Maybe<bool> Object::IsArray(ROOT_PARAM, Handle<Object> object) {
+  if (object->IsSmi()) return Just(false);
+  Handle<HeapObject> heap_object = Handle<HeapObject>::cast(object);
+  if (heap_object->IsJSArray(ROOT_VALUE)) return Just(true);
+  if (!heap_object->IsJSProxy(ROOT_VALUE)) return Just(false);
+  return JSProxy::IsArray(Handle<JSProxy>::cast(object));
+}
 
 bool HeapObject::IsUndetectable() const { return map().is_undetectable(); }
+bool HeapObject::IsUndetectable(ROOT_PARAM) const {
+  return map(ROOT_VALUE).is_undetectable();
+}
 
 bool HeapObject::IsAccessCheckNeeded() const {
   if (IsJSGlobalProxy()) {
@@ -348,6 +560,15 @@ bool HeapObject::IsAccessCheckNeeded() const {
     return proxy.IsDetachedFrom(global);
   }
   return map().is_access_check_needed();
+}
+bool HeapObject::IsAccessCheckNeeded(ROOT_PARAM) const {
+  if (IsJSGlobalProxy(ROOT_VALUE)) {
+    const JSGlobalProxy proxy = JSGlobalProxy::cast(*this);
+    JSGlobalObject global =
+        Isolate::FromRoot(ROOT_VALUE)->context().global_object();
+    return proxy.IsDetachedFrom(global);
+  }
+  return map(ROOT_VALUE).is_access_check_needed();
 }
 
 bool HeapObject::IsStruct() const {
@@ -374,10 +595,37 @@ bool HeapObject::IsStruct() const {
   }
 }
 
-#define MAKE_STRUCT_PREDICATE(NAME, Name, name)                  \
-  bool Object::Is##Name() const {                                \
-    return IsHeapObject() && HeapObject::cast(*this).Is##Name(); \
-  }                                                              \
+bool HeapObject::IsStruct(ROOT_PARAM) const {
+  switch (map(ROOT_VALUE).instance_type()) {
+#define MAKE_STRUCT_CASE(TYPE, Name, name) \
+  case TYPE:                               \
+    return true;
+    STRUCT_LIST(MAKE_STRUCT_CASE)
+#undef MAKE_STRUCT_CASE
+    // It is hard to include ALLOCATION_SITE_TYPE in STRUCT_LIST because
+    // that macro is used for many things and AllocationSite needs a few
+    // special cases.
+    case ALLOCATION_SITE_TYPE:
+      return true;
+    case LOAD_HANDLER_TYPE:
+    case STORE_HANDLER_TYPE:
+      return true;
+    case FEEDBACK_CELL_TYPE:
+      return true;
+    case CALL_HANDLER_INFO_TYPE:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#define MAKE_STRUCT_PREDICATE(NAME, Name, name)                            \
+  bool Object::Is##Name() const {                                          \
+    return IsHeapObject() && HeapObject::cast(*this).Is##Name();           \
+  }                                                                        \
+  bool Object::Is##Name(ROOT_PARAM) const {                                \
+    return IsHeapObject() && HeapObject::cast(*this).Is##Name(ROOT_VALUE); \
+  }                                                                        \
   TYPE_CHECKER(Name)
 STRUCT_LIST(MAKE_STRUCT_PREDICATE)
 #undef MAKE_STRUCT_PREDICATE
@@ -639,6 +887,7 @@ ReadOnlyRoots HeapObject::GetReadOnlyRoots() const {
 }
 
 Map HeapObject::map() const { return map_word().ToMap(); }
+Map HeapObject::map(ROOT_PARAM) const { return map_word(ROOT_VALUE).ToMap(); }
 
 void HeapObject::set_map(Map value) {
   if (!value.is_null()) {
@@ -692,24 +941,30 @@ void HeapObject::set_map_after_allocation(Map value, WriteBarrierMode mode) {
   }
 }
 
+using HeapObjectMapField = StrongTaggedField<Map, HeapObject::kMapOffset>;
+
 MapWordSlot HeapObject::map_slot() const {
-  return MapWordSlot(FIELD_ADDR(*this, kMapOffset));
+  return MapWordSlot(HeapObjectMapField::address(*this));
 }
 
 MapWord HeapObject::map_word() const {
-  return MapWord(map_slot().Relaxed_Load().ptr());
+  return MapWord(HeapObjectMapField::Relaxed_Load_raw(*this));
+}
+
+MapWord HeapObject::map_word(ROOT_PARAM) const {
+  return MapWord(HeapObjectMapField::Relaxed_Load_raw(ROOT_VALUE, *this));
 }
 
 void HeapObject::set_map_word(MapWord map_word) {
-  map_slot().Relaxed_Store(Object(map_word.value_));
+  HeapObjectMapField::Relaxed_Store_raw(*this, map_word.value_);
 }
 
 MapWord HeapObject::synchronized_map_word() const {
-  return MapWord(map_slot().Acquire_Load().ptr());
+  return MapWord(HeapObjectMapField::Acquire_Load_raw(*this));
 }
 
 void HeapObject::synchronized_set_map_word(MapWord map_word) {
-  map_slot().Release_Store(Object(map_word.value_));
+  HeapObjectMapField::Release_Store_raw(*this, map_word.value_);
 }
 
 int HeapObject::Size() const { return SizeFromMap(map()); }

@@ -977,6 +977,22 @@ class RuntimeCallTimer final {
   V(RecompileSynchronous)                      \
   V(ReconfigureToDataProperty)                 \
   V(StringLengthGetter)                        \
+  V(PtrComprCounter0)                          \
+  V(PtrComprCounter1)                          \
+  V(PtrComprCounter2)                          \
+  V(PtrComprCounter3)                          \
+  V(PtrComprCounter4)                          \
+  V(PtrComprCounter5)                          \
+  V(PtrComprCounter6)                          \
+  V(PtrComprCounter7)                          \
+  V(PtrComprCounter8)                          \
+  V(PtrComprCounter9)                          \
+  V(PtrComprCounterA)                          \
+  V(PtrComprCounterB)                          \
+  V(PtrComprCounterC)                          \
+  V(PtrComprCounterD)                          \
+  V(PtrComprCounterE)                          \
+  V(PtrComprCounterF)                          \
   V(TestCounter1)                              \
   V(TestCounter2)                              \
   V(TestCounter3)

@@ -74,8 +74,8 @@ int FixedArrayBase::length() const {
                       LAST_FIXED_TYPED_ARRAY_TYPE));
   }
 #endif
-  Object value = READ_FIELD(*this, kLengthOffset);
-  return Smi::ToInt(value);
+  Smi value = LengthField::load(*this);
+  return value->value();
 }
 void FixedArrayBase::set_length(int value) {
   DCHECK(!IsInRange(map().instance_type(), FIRST_FIXED_TYPED_ARRAY_TYPE,
@@ -88,8 +88,8 @@ void FixedTypedArrayBase::set_number_of_elements_onheap_only(int value) {
 }
 
 int FixedTypedArrayBase::number_of_elements_onheap_only() const {
-  Object value = READ_FIELD(*this, kLengthOffset);
-  return Smi::ToInt(value);
+  Smi value = LengthField::load(*this);
+  return value->value();
 }
 
 SMI_ACCESSORS(WeakFixedArray, length, kLengthOffset)
@@ -121,15 +121,21 @@ bool FixedArray::ContainsOnlySmisOrHoles() {
 
 Object FixedArray::get(int index) const {
   DCHECK(index >= 0 && index < this->length());
-  return RELAXED_READ_FIELD(*this, kHeaderSize + index * kTaggedSize);
+  return RELAXED_READ_FIELD(*this, OffsetOfElementAt(index));
+}
+Object FixedArray::get(ROOT_PARAM, int index) const {
+  DCHECK(index >= 0 && index < this->length());
+  return RELAXED_READ_FIELD_WITH_ROOT(*this, OffsetOfElementAt(index));
 }
 
 Handle<Object> FixedArray::get(FixedArray array, int index, Isolate* isolate) {
-  return handle(array.get(index), isolate);
+  DEFINE_ROOT_VALUE(isolate);
+  return handle(array.get(WITH_ROOT_VALUE(index)), isolate);
 }
 
 bool FixedArray::is_the_hole(Isolate* isolate, int index) {
-  return get(index).IsTheHole(isolate);
+  DEFINE_ROOT_VALUE(isolate);
+  return get(WITH_ROOT_VALUE(index)).IsTheHole(isolate);
 }
 
 void FixedArray::set(int index, Smi value) {
@@ -221,8 +227,8 @@ void FixedArray::MoveElements(Isolate* isolate, int dst_index, int src_index,
   DCHECK_LE(dst_index + len, length());
   DCHECK_LE(src_index + len, length());
   DisallowHeapAllocation no_gc;
-  ObjectSlot dst_slot(RawFieldOfElementAt(dst_index));
-  ObjectSlot src_slot(RawFieldOfElementAt(src_index));
+  StrongTaggedValueSlot dst_slot(RawFieldOfElementAt(dst_index));
+  StrongTaggedValueSlot src_slot(RawFieldOfElementAt(src_index));
   isolate->heap()->MoveRange(*this, dst_slot, src_slot, len, mode);
 }
 
@@ -233,9 +239,21 @@ void FixedArray::CopyElements(Isolate* isolate, int dst_index, FixedArray src,
   DCHECK_LE(src_index + len, src.length());
   DisallowHeapAllocation no_gc;
 
-  ObjectSlot dst_slot(RawFieldOfElementAt(dst_index));
-  ObjectSlot src_slot(src.RawFieldOfElementAt(src_index));
+  StrongTaggedValueSlot dst_slot(RawFieldOfElementAt(dst_index));
+  StrongTaggedValueSlot src_slot(src.RawFieldOfElementAt(src_index));
   isolate->heap()->CopyRange(*this, dst_slot, src_slot, len, mode);
+}
+
+void FixedArray::CopyElements(Isolate* isolate, int dst_index, FixedArray src,
+                              int src_index, int len) {
+  if (len == 0) return;
+  DCHECK_LE(dst_index + len, length());
+  DCHECK_LE(src_index + len, src.length());
+  DisallowHeapAllocation no_gc;
+
+  StrongTaggedValueSlot dst_slot(RawFieldOfElementAt(dst_index));
+  StrongTaggedValueSlot src_slot(src.RawFieldOfElementAt(src_index));
+  isolate->heap()->CopyRange(*this, dst_slot, src_slot, len);
 }
 
 // Perform a binary search in a fixed array.
@@ -448,9 +466,21 @@ void WeakFixedArray::CopyElements(Isolate* isolate, int dst_index,
   DCHECK_LE(src_index + len, src.length());
   DisallowHeapAllocation no_gc;
 
-  MaybeObjectSlot dst_slot(data_start() + dst_index);
-  MaybeObjectSlot src_slot(src.data_start() + src_index);
+  TaggedValueSlot dst_slot(data_start() + dst_index);
+  TaggedValueSlot src_slot(src.data_start() + src_index);
   isolate->heap()->CopyRange(*this, dst_slot, src_slot, len, mode);
+}
+
+void WeakFixedArray::CopyElements(Isolate* isolate, int dst_index,
+                                  WeakFixedArray src, int src_index, int len) {
+  if (len == 0) return;
+  DCHECK_LE(dst_index + len, length());
+  DCHECK_LE(src_index + len, src.length());
+  DisallowHeapAllocation no_gc;
+
+  TaggedValueSlot dst_slot(data_start() + dst_index);
+  TaggedValueSlot src_slot(src.data_start() + src_index);
+  isolate->heap()->CopyRange(*this, dst_slot, src_slot, len);
 }
 
 MaybeObject WeakArrayList::Get(int index) const {
@@ -478,9 +508,21 @@ void WeakArrayList::CopyElements(Isolate* isolate, int dst_index,
   DCHECK_LE(src_index + len, src.capacity());
   DisallowHeapAllocation no_gc;
 
-  MaybeObjectSlot dst_slot(data_start() + dst_index);
-  MaybeObjectSlot src_slot(src.data_start() + src_index);
+  TaggedValueSlot dst_slot(data_start() + dst_index);
+  TaggedValueSlot src_slot(src.data_start() + src_index);
   isolate->heap()->CopyRange(*this, dst_slot, src_slot, len, mode);
+}
+
+void WeakArrayList::CopyElements(Isolate* isolate, int dst_index,
+                                 WeakArrayList src, int src_index, int len) {
+  if (len == 0) return;
+  DCHECK_LE(dst_index + len, capacity());
+  DCHECK_LE(src_index + len, src.capacity());
+  DisallowHeapAllocation no_gc;
+
+  TaggedValueSlot dst_slot(data_start() + dst_index);
+  TaggedValueSlot src_slot(src.data_start() + src_index);
+  isolate->heap()->CopyRange(*this, dst_slot, src_slot, len);
 }
 
 HeapObject WeakArrayList::Iterator::Next() {

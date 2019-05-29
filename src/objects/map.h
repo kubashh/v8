@@ -836,6 +836,16 @@ class Map : public HeapObject {
 
   STATIC_ASSERT(kInstanceTypeOffset == Internals::kMapInstanceTypeOffset);
 
+  using DescriptorArrayField =
+      StrongTaggedField<DescriptorArray, kInstanceDescriptorsOffset>;
+  using LayoutDescriptorField =
+      StrongTaggedField<LayoutDescriptor, kLayoutDescriptorOffset>;
+  using LayoutDescriptorGCSafeField =
+      StrongTaggedField<Object, kLayoutDescriptorOffset>;
+  using PrototypeField = StrongTaggedField<HeapObject, kPrototypeOffset>;
+  using TransitionsOrPrototypeInfoField =
+      StrongTaggedField<Object, kTransitionsOrPrototypeInfoOffset>;
+
   class BodyDescriptor;
 
   // Compares this map to another to see if they describe equivalent objects.
@@ -995,6 +1005,7 @@ class NormalizedMapCache : public WeakFixedArray {
 
  private:
   friend bool HeapObject::IsNormalizedMapCache() const;
+  friend bool HeapObject::IsNormalizedMapCache(ROOT_PARAM) const;
 
   static const int kEntries = 64;
 

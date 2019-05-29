@@ -113,13 +113,13 @@
 #define ACCESSORS_CHECKED2(holder, name, type, offset, get_condition, \
                            set_condition)                             \
   type holder::name() const {                                         \
-    type value = type::cast(READ_FIELD(*this, offset));               \
+    type value = StrongTaggedField<type, offset>::load(*this);        \
     DCHECK(get_condition);                                            \
     return value;                                                     \
   }                                                                   \
   void holder::set_##name(type value, WriteBarrierMode mode) {        \
     DCHECK(set_condition);                                            \
-    WRITE_FIELD(*this, offset, value);                                \
+    StrongTaggedField<type, offset>::store(*this, value);             \
     CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);            \
   }
 
@@ -129,17 +129,17 @@
 #define ACCESSORS(holder, name, type, offset) \
   ACCESSORS_CHECKED(holder, name, type, offset, true)
 
-#define SYNCHRONIZED_ACCESSORS_CHECKED2(holder, name, type, offset,   \
-                                        get_condition, set_condition) \
-  type holder::name() const {                                         \
-    type value = type::cast(ACQUIRE_READ_FIELD(*this, offset));       \
-    DCHECK(get_condition);                                            \
-    return value;                                                     \
-  }                                                                   \
-  void holder::set_##name(type value, WriteBarrierMode mode) {        \
-    DCHECK(set_condition);                                            \
-    RELEASE_WRITE_FIELD(*this, offset, value);                        \
-    CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);            \
+#define SYNCHRONIZED_ACCESSORS_CHECKED2(holder, name, type, offset,    \
+                                        get_condition, set_condition)  \
+  type holder::name() const {                                          \
+    type value = StrongTaggedField<type, offset>::Acquire_Load(*this); \
+    DCHECK(get_condition);                                             \
+    return value;                                                      \
+  }                                                                    \
+  void holder::set_##name(type value, WriteBarrierMode mode) {         \
+    DCHECK(set_condition);                                             \
+    StrongTaggedField<type, offset>::Release_Store(*this, value);      \
+    CONDITIONAL_WRITE_BARRIER(*this, offset, value, mode);             \
   }
 
 #define SYNCHRONIZED_ACCESSORS_CHECKED(holder, name, type, offset, condition) \
@@ -169,36 +169,36 @@
   WEAK_ACCESSORS_CHECKED(holder, name, offset, true)
 
 // Getter that returns a Smi as an int and writes an int as a Smi.
-#define SMI_ACCESSORS_CHECKED(holder, name, offset, condition) \
-  int holder::name() const {                                   \
-    DCHECK(condition);                                         \
-    Object value = READ_FIELD(*this, offset);                  \
-    return Smi::ToInt(value);                                  \
-  }                                                            \
-  void holder::set_##name(int value) {                         \
-    DCHECK(condition);                                         \
-    WRITE_FIELD(*this, offset, Smi::FromInt(value));           \
+#define SMI_ACCESSORS_CHECKED(holder, name, offset, condition)         \
+  int holder::name() const {                                           \
+    DCHECK(condition);                                                 \
+    Smi value = StrongTaggedField<Smi, offset>::load(*this);           \
+    return value->value();                                             \
+  }                                                                    \
+  void holder::set_##name(int value) {                                 \
+    DCHECK(condition);                                                 \
+    StrongTaggedField<Smi, offset>::store(*this, Smi::FromInt(value)); \
   }
 
 #define SMI_ACCESSORS(holder, name, offset) \
   SMI_ACCESSORS_CHECKED(holder, name, offset, true)
 
-#define SYNCHRONIZED_SMI_ACCESSORS(holder, name, offset)     \
-  int holder::synchronized_##name() const {                  \
-    Object value = ACQUIRE_READ_FIELD(*this, offset);        \
-    return Smi::ToInt(value);                                \
-  }                                                          \
-  void holder::synchronized_set_##name(int value) {          \
-    RELEASE_WRITE_FIELD(*this, offset, Smi::FromInt(value)); \
+#define SYNCHRONIZED_SMI_ACCESSORS(holder, name, offset)                       \
+  int holder::synchronized_##name() const {                                    \
+    Smi value = StrongTaggedField<Smi, offset>::Acquire_Load(*this);           \
+    return value->value();                                                     \
+  }                                                                            \
+  void holder::synchronized_set_##name(int value) {                            \
+    StrongTaggedField<Smi, offset>::Release_Store(*this, Smi::FromInt(value)); \
   }
 
-#define RELAXED_SMI_ACCESSORS(holder, name, offset)          \
-  int holder::relaxed_read_##name() const {                  \
-    Object value = RELAXED_READ_FIELD(*this, offset);        \
-    return Smi::ToInt(value);                                \
-  }                                                          \
-  void holder::relaxed_write_##name(int value) {             \
-    RELAXED_WRITE_FIELD(*this, offset, Smi::FromInt(value)); \
+#define RELAXED_SMI_ACCESSORS(holder, name, offset)                            \
+  int holder::relaxed_read_##name() const {                                    \
+    Smi value = StrongTaggedField<Smi, offset>::Relaxed_Load(*this);           \
+    return value->value();                                                     \
+  }                                                                            \
+  void holder::relaxed_write_##name(int value) {                               \
+    StrongTaggedField<Smi, offset>::Relaxed_Store(*this, Smi::FromInt(value)); \
   }
 
 #define BOOL_GETTER(holder, field, name, offset) \
@@ -223,9 +223,12 @@
     return instance_type == forinstancetype;            \
   }
 
-#define TYPE_CHECKER(type, ...)                                  \
-  bool HeapObject::Is##type() const {                            \
-    return InstanceTypeChecker::Is##type(map().instance_type()); \
+#define TYPE_CHECKER(type, ...)                                            \
+  bool HeapObject::Is##type() const {                                      \
+    return InstanceTypeChecker::Is##type(map().instance_type());           \
+  }                                                                        \
+  bool HeapObject::Is##type(ROOT_PARAM) const {                            \
+    return InstanceTypeChecker::Is##type(map(ROOT_VALUE).instance_type()); \
   }
 
 #define RELAXED_INT16_ACCESSORS(holder, name, offset) \
@@ -239,6 +242,8 @@
 #define FIELD_ADDR(p, offset) ((p).ptr() + offset - kHeapObjectTag)
 
 #define READ_FIELD(p, offset) (*ObjectSlot(FIELD_ADDR(p, offset)))
+#define READ_FIELD_WITH_ROOT(p, offset) \
+  ObjectSlot(FIELD_ADDR(p, offset)).load(ROOT_VALUE)
 
 #define READ_WEAK_FIELD(p, offset) (*MaybeObjectSlot(FIELD_ADDR(p, offset)))
 
@@ -247,6 +252,11 @@
 
 #define RELAXED_READ_FIELD(p, offset) \
   ObjectSlot(FIELD_ADDR(p, offset)).Relaxed_Load()
+#define RELAXED_READ_FIELD_WITH_ROOT(p, offset) \
+  ObjectSlot(FIELD_ADDR(p, offset)).Relaxed_Load(ROOT_VALUE)
+
+#define RELAXED_READ_SMI_FIELD(p, offset) \
+  ObjectSlot(FIELD_ADDR(p, offset)).Relaxed_LoadSmi()
 
 #define RELAXED_READ_WEAK_FIELD(p, offset) \
   MaybeObjectSlot(FIELD_ADDR(p, offset)).Relaxed_Load()

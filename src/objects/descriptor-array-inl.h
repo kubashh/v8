@@ -129,8 +129,8 @@ Name DescriptorArray::GetSortedKey(int descriptor_number) {
 
 void DescriptorArray::SetSortedKey(int descriptor_index, int pointer) {
   PropertyDetails details = GetDetails(descriptor_index);
-  set(ToDetailsIndex(descriptor_index),
-      MaybeObject::FromObject(details.set_pointer(pointer).AsSmi()));
+  set_smi(ToDetailsIndex(descriptor_index),
+          details.set_pointer(pointer).AsSmi());
 }
 
 MaybeObjectSlot DescriptorArray::GetValueSlot(int descriptor) {
@@ -154,8 +154,8 @@ MaybeObject DescriptorArray::GetValue(int descriptor_number) {
 
 PropertyDetails DescriptorArray::GetDetails(int descriptor_number) {
   DCHECK(descriptor_number < number_of_descriptors());
-  MaybeObject details = get(ToDetailsIndex(descriptor_number));
-  return PropertyDetails(details->ToSmi());
+  Smi details = get_smi(ToDetailsIndex(descriptor_number));
+  return PropertyDetails(details);
 }
 
 int DescriptorArray::GetFieldIndex(int descriptor_number) {
@@ -173,10 +173,12 @@ void DescriptorArray::Set(int descriptor_number, Name key, MaybeObject value,
                           PropertyDetails details) {
   // Range check.
   DCHECK(descriptor_number < number_of_descriptors());
-  set(ToKeyIndex(descriptor_number), MaybeObject::FromObject(key));
-  set(ToValueIndex(descriptor_number), value);
-  set(ToDetailsIndex(descriptor_number),
-      MaybeObject::FromObject(details.AsSmi()));
+  int index = ToKeyIndex(descriptor_number);
+  set(index++, MaybeObject::FromObject(key));
+  DCHECK_EQ(index, ToDetailsIndex(descriptor_number));
+  set_smi(index++, details.AsSmi());
+  DCHECK_EQ(index, ToValueIndex(descriptor_number));
+  set(index, value);
 }
 
 void DescriptorArray::Set(int descriptor_number, Descriptor* desc) {
@@ -224,6 +226,16 @@ void DescriptorArray::set(int index, MaybeObject value) {
   DCHECK(index >= 0 && index < this->length());
   RELAXED_WRITE_WEAK_FIELD(*this, offset(index), value);
   WEAK_WRITE_BARRIER(*this, offset(index), value);
+}
+
+Smi DescriptorArray::get_smi(int index) const {
+  DCHECK(index >= 0 && index < this->length());
+  return RELAXED_READ_SMI_FIELD(*this, offset(index));
+}
+
+void DescriptorArray::set_smi(int index, Smi value) {
+  DCHECK(index >= 0 && index < this->length());
+  RELAXED_WRITE_FIELD(*this, offset(index), value);
 }
 
 }  // namespace internal

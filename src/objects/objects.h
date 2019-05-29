@@ -265,7 +265,9 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
   constexpr Object() : TaggedImpl(kNullAddress) {}
   explicit constexpr Object(Address ptr) : TaggedImpl(ptr) {}
 
-#define IS_TYPE_FUNCTION_DECL(Type) V8_INLINE bool Is##Type() const;
+#define IS_TYPE_FUNCTION_DECL(Type) \
+  V8_INLINE bool Is##Type() const;  \
+  V8_INLINE bool Is##Type(ROOT_PARAM) const;
   OBJECT_TYPE_LIST(IS_TYPE_FUNCTION_DECL)
   HEAP_OBJECT_TYPE_LIST(IS_TYPE_FUNCTION_DECL)
 #undef IS_TYPE_FUNCTION_DECL
@@ -288,16 +290,23 @@ class Object : public TaggedImpl<HeapObjectReferenceType::STRONG, Address> {
 
   enum class Conversion { kToNumber, kToNumeric };
 
-#define DECL_STRUCT_PREDICATE(NAME, Name, name) V8_INLINE bool Is##Name() const;
+#define DECL_STRUCT_PREDICATE(NAME, Name, name) \
+  V8_INLINE bool Is##Name() const;              \
+  V8_INLINE bool Is##Name(ROOT_PARAM) const;
   STRUCT_LIST(DECL_STRUCT_PREDICATE)
 #undef DECL_STRUCT_PREDICATE
 
   // ES6, #sec-isarray.  NOT to be confused with %_IsArray.
   V8_INLINE
   V8_WARN_UNUSED_RESULT static Maybe<bool> IsArray(Handle<Object> object);
+  V8_INLINE
+  V8_WARN_UNUSED_RESULT static Maybe<bool> IsArray(ROOT_PARAM,
+                                                   Handle<Object> object);
 
   V8_INLINE bool IsHashTableBase() const;
+  V8_INLINE bool IsHashTableBase(ROOT_PARAM) const;
   V8_INLINE bool IsSmallOrderedHashTable() const;
+  V8_INLINE bool IsSmallOrderedHashTable(ROOT_PARAM) const;
 
   // Extract the number.
   inline double Number() const;

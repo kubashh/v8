@@ -34,8 +34,17 @@ Handle<T>::Handle(T object, Isolate* isolate)
     : HandleBase(object.ptr(), isolate) {}
 
 template <typename T>
+Handle<T>::Handle(T object, ROOT_PARAM)
+    : HandleBase(object.ptr(), Isolate::FromRoot(ROOT_VALUE)) {}
+
+template <typename T>
 V8_INLINE Handle<T> handle(T object, Isolate* isolate) {
   return Handle<T>(object, isolate);
+}
+
+template <typename T>
+V8_INLINE Handle<T> handle(T object, ROOT_PARAM) {
+  return Handle<T>(object, ROOT_VALUE);
 }
 
 template <typename T>

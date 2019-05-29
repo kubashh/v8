@@ -2556,12 +2556,13 @@ void Map::SetInstanceDescriptors(Isolate* isolate, DescriptorArray descriptors,
 // static
 Handle<PrototypeInfo> Map::GetOrCreatePrototypeInfo(Handle<JSObject> prototype,
                                                     Isolate* isolate) {
-  Object maybe_proto_info = prototype->map().prototype_info();
-  if (maybe_proto_info.IsPrototypeInfo()) {
+  Object maybe_proto_info =
+      prototype->map(isolate->isolate_root()).prototype_info();
+  if (maybe_proto_info.IsPrototypeInfo(isolate->isolate_root())) {
     return handle(PrototypeInfo::cast(maybe_proto_info), isolate);
   }
   Handle<PrototypeInfo> proto_info = isolate->factory()->NewPrototypeInfo();
-  prototype->map().set_prototype_info(*proto_info);
+  prototype->map(isolate->isolate_root()).set_prototype_info(*proto_info);
   return proto_info;
 }
 
@@ -2569,7 +2570,7 @@ Handle<PrototypeInfo> Map::GetOrCreatePrototypeInfo(Handle<JSObject> prototype,
 Handle<PrototypeInfo> Map::GetOrCreatePrototypeInfo(Handle<Map> prototype_map,
                                                     Isolate* isolate) {
   Object maybe_proto_info = prototype_map->prototype_info();
-  if (maybe_proto_info.IsPrototypeInfo()) {
+  if (maybe_proto_info.IsPrototypeInfo(isolate->isolate_root())) {
     return handle(PrototypeInfo::cast(maybe_proto_info), isolate);
   }
   Handle<PrototypeInfo> proto_info = isolate->factory()->NewPrototypeInfo();

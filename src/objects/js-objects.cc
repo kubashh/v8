@@ -2594,9 +2594,9 @@ namespace {
 //     to temporarily store the inobject properties.
 //   * If there are properties left in the backing store, install the backing
 //     store.
-void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
-  Isolate* isolate = object->GetIsolate();
-  Handle<Map> old_map(object->map(), isolate);
+void MigrateFastToFast(ROOT_PARAM, Handle<JSObject> object,
+                       Handle<Map> new_map) {
+  Handle<Map> old_map(object->map(ROOT_VALUE), ROOT_VALUE);
   // In case of a regular transition.
   if (new_map->GetBackPointer() == *old_map) {
     // If the map does not add named properties, simply set the map.
@@ -2629,7 +2629,9 @@ void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
           FieldIndex::ForDescriptor(*new_map, new_map->LastAdded());
       DCHECK(details.representation().IsDouble());
       DCHECK(!new_map->IsUnboxedDoubleField(index));
-      auto value = isolate->factory()->NewMutableHeapNumberWithHoleNaN();
+      auto value = Isolate::FromRoot(ROOT_VALUE)
+                       ->factory()
+                       ->NewMutableHeapNumberWithHoleNaN();
       object->RawFastPropertyAtPut(index, *value);
       object->synchronized_set_map(*new_map);
       return;
@@ -2638,16 +2640,20 @@ void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
     // This migration is a transition from a map that has run out of property
     // space. Extend the backing store.
     int grow_by = new_map->UnusedPropertyFields() + 1;
-    Handle<PropertyArray> old_storage(object->property_array(), isolate);
+    Handle<PropertyArray> old_storage(object->property_array(), ROOT_VALUE);
     Handle<PropertyArray> new_storage =
-        isolate->factory()->CopyPropertyArrayAndGrow(old_storage, grow_by);
+        Isolate::FromRoot(ROOT_VALUE)
+            ->factory()
+            ->CopyPropertyArrayAndGrow(old_storage, grow_by);
 
     // Properly initialize newly added property.
     Handle<Object> value;
     if (details.representation().IsDouble()) {
-      value = isolate->factory()->NewMutableHeapNumberWithHoleNaN();
+      value = Isolate::FromRoot(ROOT_VALUE)
+                  ->factory()
+                  ->NewMutableHeapNumberWithHoleNaN();
     } else {
-      value = isolate->factory()->uninitialized_value();
+      value = Isolate::FromRoot(ROOT_VALUE)->factory()->uninitialized_value();
     }
     DCHECK_EQ(kField, details.location());
     DCHECK_EQ(kData, details.kind());
@@ -2678,16 +2684,17 @@ void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
 
   int total_size = number_of_fields + unused;
   int external = total_size - inobject;
-  Handle<PropertyArray> array = isolate->factory()->NewPropertyArray(external);
+  Handle<PropertyArray> array =
+      Isolate::FromRoot(ROOT_VALUE)->factory()->NewPropertyArray(external);
 
   // We use this array to temporarily store the inobject properties.
   Handle<FixedArray> inobject_props =
-      isolate->factory()->NewFixedArray(inobject);
+      Isolate::FromRoot(ROOT_VALUE)->factory()->NewFixedArray(inobject);
 
   Handle<DescriptorArray> old_descriptors(old_map->instance_descriptors(),
-                                          isolate);
+                                          ROOT_VALUE);
   Handle<DescriptorArray> new_descriptors(new_map->instance_descriptors(),
-                                          isolate);
+                                          ROOT_VALUE);
   int old_nof = old_map->NumberOfOwnDescriptors();
   int new_nof = new_map->NumberOfOwnDescriptors();
 
@@ -2709,13 +2716,16 @@ void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
         // must already be prepared for data of certain type.
         DCHECK(!details.representation().IsNone());
         if (details.representation().IsDouble()) {
-          value = isolate->factory()->NewMutableHeapNumberWithHoleNaN();
+          value = Isolate::FromRoot(ROOT_VALUE)
+                      ->factory()
+                      ->NewMutableHeapNumberWithHoleNaN();
         } else {
-          value = isolate->factory()->uninitialized_value();
+          value =
+              Isolate::FromRoot(ROOT_VALUE)->factory()->uninitialized_value();
         }
       } else {
         DCHECK_EQ(kData, old_details.kind());
-        value = handle(old_descriptors->GetStrongValue(i), isolate);
+        value = handle(old_descriptors->GetStrongValue(i), ROOT_VALUE);
         DCHECK(!old_representation.IsDouble() && !representation.IsDouble());
       }
     } else {
@@ -2724,19 +2734,26 @@ void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
       if (object->IsUnboxedDoubleField(index)) {
         uint64_t old_bits = object->RawFastDoublePropertyAsBitsAt(index);
         if (representation.IsDouble()) {
-          value = isolate->factory()->NewMutableHeapNumberFromBits(old_bits);
+          value = Isolate::FromRoot(ROOT_VALUE)
+                      ->factory()
+                      ->NewMutableHeapNumberFromBits(old_bits);
         } else {
-          value = isolate->factory()->NewHeapNumberFromBits(old_bits);
+          value = Isolate::FromRoot(ROOT_VALUE)
+                      ->factory()
+                      ->NewHeapNumberFromBits(old_bits);
         }
       } else {
-        value = handle(object->RawFastPropertyAt(index), isolate);
+        value = handle(object->RawFastPropertyAt(index),
+                       Isolate::FromRoot(ROOT_VALUE));
         if (!old_representation.IsDouble() && representation.IsDouble()) {
           DCHECK_IMPLIES(old_representation.IsNone(),
-                         value->IsUninitialized(isolate));
-          value = Object::NewStorageFor(isolate, value, representation);
+                         value->IsUninitialized(Isolate::FromRoot(ROOT_VALUE)));
+          value = Object::NewStorageFor(Isolate::FromRoot(ROOT_VALUE), value,
+                                        representation);
         } else if (old_representation.IsDouble() &&
                    !representation.IsDouble()) {
-          value = Object::WrapForRead(isolate, value, old_representation);
+          value = Object::WrapForRead(Isolate::FromRoot(ROOT_VALUE), value,
+                                      old_representation);
         }
       }
     }
@@ -2755,9 +2772,11 @@ void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
     DCHECK_EQ(kData, details.kind());
     Handle<Object> value;
     if (details.representation().IsDouble()) {
-      value = isolate->factory()->NewMutableHeapNumberWithHoleNaN();
+      value = Isolate::FromRoot(ROOT_VALUE)
+                  ->factory()
+                  ->NewMutableHeapNumberWithHoleNaN();
     } else {
-      value = isolate->factory()->uninitialized_value();
+      value = Isolate::FromRoot(ROOT_VALUE)->factory()->uninitialized_value();
     }
     int target_index = new_descriptors->GetFieldIndex(i);
     if (target_index < inobject) {
@@ -2770,7 +2789,7 @@ void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
   // From here on we cannot fail and we shouldn't GC anymore.
   DisallowHeapAllocation no_allocation;
 
-  Heap* heap = isolate->heap();
+  Heap* heap = Isolate::FromRoot(ROOT_VALUE)->heap();
 
   int old_instance_size = old_map->instance_size();
 
@@ -2820,7 +2839,7 @@ void MigrateFastToFast(Handle<JSObject> object, Handle<Map> new_map) {
   object->synchronized_set_map(*new_map);
 }
 
-void MigrateFastToSlow(Handle<JSObject> object, Handle<Map> new_map,
+void MigrateFastToSlow(ROOT_PARAM, Handle<JSObject> object, Handle<Map> new_map,
                        int expected_additional_properties) {
   // The global object is always normalized.
   DCHECK(!object->IsJSGlobalObject());
@@ -2830,7 +2849,7 @@ void MigrateFastToSlow(Handle<JSObject> object, Handle<Map> new_map,
   DCHECK_IMPLIES(new_map->is_prototype_map(),
                  Map::IsPrototypeChainInvalidated(*new_map));
 
-  Isolate* isolate = object->GetIsolate();
+  Isolate* isolate = Isolate::FromRoot(ROOT_VALUE);
   HandleScope scope(isolate);
   Handle<Map> map(object->map(), isolate);
 
@@ -2934,11 +2953,12 @@ void MigrateFastToSlow(Handle<JSObject> object, Handle<Map> new_map,
 
 }  // namespace
 
-void JSObject::MigrateToMap(Handle<JSObject> object, Handle<Map> new_map,
+void JSObject::MigrateToMap(Isolate* isolate, Handle<JSObject> object,
+                            Handle<Map> new_map,
                             int expected_additional_properties) {
-  if (object->map() == *new_map) return;
-  Handle<Map> old_map(object->map(), object->GetIsolate());
-  NotifyMapChange(old_map, new_map, object->GetIsolate());
+  if (object->map(isolate->isolate_root()) == *new_map) return;
+  Handle<Map> old_map(object->map(isolate->isolate_root()), isolate);
+  NotifyMapChange(old_map, new_map, isolate);
 
   if (old_map->is_dictionary_map()) {
     // For slow-to-fast migrations JSObject::MigrateSlowToFast()
@@ -2948,7 +2968,7 @@ void JSObject::MigrateToMap(Handle<JSObject> object, Handle<Map> new_map,
     // Slow-to-slow migration is trivial.
     object->synchronized_set_map(*new_map);
   } else if (!new_map->is_dictionary_map()) {
-    MigrateFastToFast(object, new_map);
+    MigrateFastToFast(isolate->isolate_root(), object, new_map);
     if (old_map->is_prototype_map()) {
       DCHECK(!old_map->is_stable());
       DCHECK(new_map->is_stable());
@@ -2966,7 +2986,8 @@ void JSObject::MigrateToMap(Handle<JSObject> object, Handle<Map> new_map,
       DCHECK(object->map() != *old_map);
     }
   } else {
-    MigrateFastToSlow(object, new_map, expected_additional_properties);
+    MigrateFastToSlow(isolate->isolate_root(), object, new_map,
+                      expected_additional_properties);
   }
 
   // Careful: Don't allocate here!
@@ -2980,11 +3001,11 @@ void JSObject::MigrateToMap(Handle<JSObject> object, Handle<Map> new_map,
 void JSObject::ForceSetPrototype(Handle<JSObject> object,
                                  Handle<HeapObject> proto) {
   // object.__proto__ = proto;
-  Handle<Map> old_map = Handle<Map>(object->map(), object->GetIsolate());
-  Handle<Map> new_map =
-      Map::Copy(object->GetIsolate(), old_map, "ForceSetPrototype");
-  Map::SetPrototype(object->GetIsolate(), new_map, proto);
-  JSObject::MigrateToMap(object, new_map);
+  Isolate* isolate = object->GetIsolate();
+  Handle<Map> old_map = Handle<Map>(object->map(), isolate);
+  Handle<Map> new_map = Map::Copy(isolate, old_map, "ForceSetPrototype");
+  Map::SetPrototype(isolate, new_map, proto);
+  JSObject::MigrateToMap(isolate, object, new_map);
 }
 
 Maybe<bool> JSObject::SetPropertyWithInterceptor(
@@ -3071,16 +3092,17 @@ void JSObject::AllocateStorageForMap(Handle<JSObject> object, Handle<Map> map) {
 }
 
 void JSObject::MigrateInstance(Handle<JSObject> object) {
-  Handle<Map> original_map(object->map(), object->GetIsolate());
-  Handle<Map> map = Map::Update(object->GetIsolate(), original_map);
+  Isolate* isolate = object->GetIsolate();
+  Handle<Map> original_map(object->map(), isolate);
+  Handle<Map> map = Map::Update(isolate, original_map);
   map->set_is_migration_target(true);
-  MigrateToMap(object, map);
+  JSObject::MigrateToMap(isolate, object, map);
   if (FLAG_trace_migration) {
     object->PrintInstanceMigration(stdout, *original_map, *map);
   }
 #if VERIFY_HEAP
   if (FLAG_verify_heap) {
-    object->JSObjectVerify(object->GetIsolate());
+    object->JSObjectVerify(isolate);
   }
 #endif
 }
@@ -3094,7 +3116,7 @@ bool JSObject::TryMigrateInstance(Handle<JSObject> object) {
   if (!Map::TryUpdate(isolate, original_map).ToHandle(&new_map)) {
     return false;
   }
-  JSObject::MigrateToMap(object, new_map);
+  JSObject::MigrateToMap(isolate, object, new_map);
   if (FLAG_trace_migration && *original_map != object->map()) {
     object->PrintInstanceMigration(stdout, *original_map, object->map());
   }
@@ -3244,17 +3266,15 @@ MaybeHandle<Object> JSObject::SetOwnPropertyIgnoreAttributes(
 }
 
 MaybeHandle<Object> JSObject::SetOwnElementIgnoreAttributes(
-    Handle<JSObject> object, uint32_t index, Handle<Object> value,
-    PropertyAttributes attributes) {
-  Isolate* isolate = object->GetIsolate();
+    Isolate* isolate, Handle<JSObject> object, uint32_t index,
+    Handle<Object> value, PropertyAttributes attributes) {
   LookupIterator it(isolate, object, index, object, LookupIterator::OWN);
   return DefineOwnPropertyIgnoreAttributes(&it, value, attributes);
 }
 
 MaybeHandle<Object> JSObject::DefinePropertyOrElementIgnoreAttributes(
-    Handle<JSObject> object, Handle<Name> name, Handle<Object> value,
-    PropertyAttributes attributes) {
-  Isolate* isolate = object->GetIsolate();
+    Isolate* isolate, Handle<JSObject> object, Handle<Name> name,
+    Handle<Object> value, PropertyAttributes attributes) {
   LookupIterator it = LookupIterator::PropertyOrElement(
       isolate, object, name, object, LookupIterator::OWN);
   return DefineOwnPropertyIgnoreAttributes(&it, value, attributes);
@@ -3271,10 +3291,12 @@ void JSObject::NormalizeProperties(Handle<JSObject> object,
                                    const char* reason) {
   if (!object->HasFastProperties()) return;
 
-  Handle<Map> map(object->map(), object->GetIsolate());
-  Handle<Map> new_map = Map::Normalize(object->GetIsolate(), map, mode, reason);
+  Isolate* isolate = object->GetIsolate();
+  Handle<Map> map(object->map(), isolate);
+  Handle<Map> new_map = Map::Normalize(isolate, map, mode, reason);
 
-  MigrateToMap(object, new_map, expected_additional_properties);
+  JSObject::MigrateToMap(isolate, object, new_map,
+                         expected_additional_properties);
 }
 
 void JSObject::MigrateSlowToFast(Handle<JSObject> object,
@@ -3477,7 +3499,7 @@ Handle<NumberDictionary> JSObject::NormalizeElements(Handle<JSObject> object) {
                                        : DICTIONARY_ELEMENTS;
   Handle<Map> new_map = JSObject::GetElementsTransitionMap(object, target_kind);
   // Set the new map first to satify the elements type assert in set_elements().
-  JSObject::MigrateToMap(object, new_map);
+  JSObject::MigrateToMap(isolate, object, new_map);
 
   if (is_sloppy_arguments) {
     SloppyArgumentsElements::cast(object->elements())
@@ -3712,7 +3734,7 @@ Maybe<bool> JSObject::PreventExtensions(Handle<JSObject> object,
       Map::Copy(isolate, handle(object->map(), isolate), "PreventExtensions");
 
   new_map->set_is_extensible(false);
-  JSObject::MigrateToMap(object, new_map);
+  JSObject::MigrateToMap(isolate, object, new_map);
   DCHECK(!object->map().is_extensible());
 
   return Just(true);
@@ -3839,12 +3861,12 @@ Maybe<bool> JSObject::PreventExtensionsWithTransition(
            transition_map->elements_kind() == SLOW_STRING_WRAPPER_ELEMENTS ||
            transition_map->has_frozen_or_sealed_elements());
     DCHECK(!transition_map->is_extensible());
-    JSObject::MigrateToMap(object, transition_map);
+    JSObject::MigrateToMap(isolate, object, transition_map);
   } else if (transitions.CanHaveMoreTransitions()) {
     // Create a new descriptor array with the appropriate property attributes
     Handle<Map> new_map = Map::CopyForPreventExtensions(
         isolate, old_map, attrs, transition_marker, "CopyForPreventExtensions");
-    JSObject::MigrateToMap(object, new_map);
+    JSObject::MigrateToMap(isolate, object, new_map);
   } else {
     DCHECK(old_map->is_dictionary_map() || !old_map->is_prototype_map());
     // Slow path: need to normalize properties for safety
@@ -3863,7 +3885,7 @@ Maybe<bool> JSObject::PreventExtensionsWithTransition(
               : DICTIONARY_ELEMENTS;
       new_map->set_elements_kind(new_kind);
     }
-    JSObject::MigrateToMap(object, new_map);
+    JSObject::MigrateToMap(isolate, object, new_map);
 
     if (attrs != NONE) {
       ReadOnlyRoots roots(isolate);
@@ -4188,10 +4210,10 @@ void JSObject::OptimizeAsPrototype(Handle<JSObject> object,
       JSObject::MigrateSlowToFast(object, 0, "OptimizeAsPrototype");
     }
   } else {
-    Handle<Map> new_map = Map::Copy(object->GetIsolate(),
-                                    handle(object->map(), object->GetIsolate()),
-                                    "CopyAsPrototype");
-    JSObject::MigrateToMap(object, new_map);
+    Isolate* isolate = object->GetIsolate();
+    Handle<Map> new_map =
+        Map::Copy(isolate, handle(object->map(), isolate), "CopyAsPrototype");
+    JSObject::MigrateToMap(isolate, object, new_map);
     object->map().set_is_prototype_map(true);
 
     // Replace the pointer to the exact constructor with the Object function
@@ -4450,7 +4472,7 @@ Maybe<bool> JSObject::SetPrototype(Handle<JSObject> object,
   Handle<Map> new_map =
       Map::TransitionToPrototype(isolate, map, Handle<HeapObject>::cast(value));
   DCHECK(new_map->prototype() == *value);
-  JSObject::MigrateToMap(real_receiver, new_map);
+  JSObject::MigrateToMap(isolate, real_receiver, new_map);
 
   DCHECK(size == object->Size());
   return Just(true);
@@ -4662,9 +4684,10 @@ void JSObject::TransitionElementsKind(Handle<JSObject> object,
     // No change is needed to the elements() buffer, the transition
     // only requires a map change.
     Handle<Map> new_map = GetElementsTransitionMap(object, to_kind);
-    MigrateToMap(object, new_map);
+    Isolate* isolate = object->GetIsolate();
+    JSObject::MigrateToMap(isolate, object, new_map);
     if (FLAG_trace_elements_transitions) {
-      Handle<FixedArrayBase> elms(object->elements(), object->GetIsolate());
+      Handle<FixedArrayBase> elms(object->elements(), isolate);
       PrintElementsTransition(stdout, object, from_kind, elms, to_kind, elms);
     }
   } else {
@@ -5033,7 +5056,7 @@ void JSFunction::SetPrototype(Handle<JSFunction> function,
     Handle<Map> new_map =
         Map::Copy(isolate, handle(function->map(), isolate), "SetPrototype");
 
-    JSObject::MigrateToMap(function, new_map);
+    JSObject::MigrateToMap(isolate, function, new_map);
     new_map->SetConstructor(*value);
     new_map->set_has_non_instance_prototype(true);
 
@@ -5385,7 +5408,7 @@ bool JSFunction::SetName(Handle<JSFunction> function, Handle<Name> name,
   RETURN_ON_EXCEPTION_VALUE(
       isolate,
       JSObject::DefinePropertyOrElementIgnoreAttributes(
-          function, isolate->factory()->name_string(), function_name,
+          isolate, function, isolate->factory()->name_string(), function_name,
           static_cast<PropertyAttributes>(DONT_ENUM | READ_ONLY)),
       false);
   return true;

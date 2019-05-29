@@ -4143,7 +4143,8 @@ void DescriptorArray::Initialize(EnumCache enum_cache,
   set_raw_number_of_marked_descriptors(0);
   set_filler16bits(0);
   set_enum_cache(enum_cache);
-  MemsetTagged(GetDescriptorSlot(0), undefined_value,
+  //  MemsetTagged(GetDescriptorSlot(0), undefined_value,
+  MemsetTagged(GetDescriptorSlot(0), Smi::zero(),
                number_of_all_descriptors() * kEntrySize);
 }
 

@@ -906,9 +906,13 @@ class Isolate final : private HiddenFactory {
   // Generated code can embed this address to get access to the isolate-specific
   // data (for example, roots, external references, builtins, etc.).
   // The kRootRegister is set to this value.
-  Address isolate_root() const { return isolate_data()->isolate_root(); }
+  IsolateRoot isolate_root() const { return isolate_data()->isolate_root(); }
   static size_t isolate_root_bias() {
     return OFFSET_OF(Isolate, isolate_data_) + IsolateData::kIsolateRootBias;
+  }
+  static Isolate* FromRoot(IsolateRoot isolate_root) {
+    return reinterpret_cast<Isolate*>(isolate_root.address -
+                                      isolate_root_bias());
   }
 
   RootsTable& roots_table() { return isolate_data()->roots(); }

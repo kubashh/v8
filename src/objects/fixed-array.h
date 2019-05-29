@@ -100,6 +100,8 @@ class FixedArrayBase : public HeapObject {
   DEFINE_FIELD_OFFSET_CONSTANTS(HeapObject::kHeaderSize,
                                 TORQUE_GENERATED_FIXED_ARRAY_BASE_FIELDS)
 
+  using LengthField = StrongTaggedField<Smi, kLengthOffset>;
+
  protected:
   // Special-purpose constructor for subclasses that have fast paths where
   // their ptr() is a Smi.
@@ -113,6 +115,7 @@ class FixedArray : public FixedArrayBase {
  public:
   // Setter and getter for elements.
   inline Object get(int index) const;
+  inline Object get(ROOT_PARAM, int index) const;
   static inline Handle<Object> get(FixedArray array, int index,
                                    Isolate* isolate);
 
@@ -149,6 +152,9 @@ class FixedArray : public FixedArrayBase {
 
   inline void CopyElements(Isolate* isolate, int dst_index, FixedArray src,
                            int src_index, int len, WriteBarrierMode mode);
+
+  inline void CopyElements(Isolate* isolate, int dst_index, FixedArray src,
+                           int src_index, int len);
 
   inline void FillWithHoles(int from, int to);
 
@@ -291,6 +297,8 @@ class WeakFixedArray : public HeapObject {
 
   inline void CopyElements(Isolate* isolate, int dst_index, WeakFixedArray src,
                            int src_index, int len, WriteBarrierMode mode);
+  inline void CopyElements(Isolate* isolate, int dst_index, WeakFixedArray src,
+                           int src_index, int len);
 
   DECL_PRINTER(WeakFixedArray)
   DECL_VERIFIER(WeakFixedArray)
@@ -352,6 +360,8 @@ class WeakArrayList : public HeapObject {
 
   inline void CopyElements(Isolate* isolate, int dst_index, WeakArrayList src,
                            int src_index, int len, WriteBarrierMode mode);
+  inline void CopyElements(Isolate* isolate, int dst_index, WeakArrayList src,
+                           int src_index, int len);
 
   V8_EXPORT_PRIVATE bool IsFull();
 

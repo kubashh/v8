@@ -92,7 +92,8 @@ int32_t TurboAssemblerBase::RootRegisterOffsetForBuiltinIndex(
 // static
 intptr_t TurboAssemblerBase::RootRegisterOffsetForExternalReference(
     Isolate* isolate, const ExternalReference& reference) {
-  return static_cast<intptr_t>(reference.address() - isolate->isolate_root());
+  return static_cast<intptr_t>(reference.address() -
+                               isolate->isolate_root().address);
 }
 
 // static

@@ -80,12 +80,12 @@ TEST_F(HeapWithPointerCompressionTest, HeapLayout) {
       "}"
       "ar.push(Array(32 * 1024 * 1024));");
 
-  Address isolate_root = i_isolate()->isolate_root();
-  EXPECT_TRUE(IsAligned(isolate_root, size_t{4} * GB));
+  Address isolate_root = i_isolate()->isolate_root().address;
+  EXPECT_TRUE(IsAligned(isolate_root, kPtrComprIsolateRootAlignment));
 
   // Check that all memory chunks belong this region.
-  base::AddressRegion heap_reservation(isolate_root - size_t{2} * GB,
-                                       size_t{4} * GB);
+  base::AddressRegion heap_reservation(isolate_root - kPtrComprIsolateRootBias,
+                                       kPtrComprIsolateRootAlignment);
 
   OldGenerationMemoryChunkIterator iter(i_isolate()->heap());
   for (;;) {

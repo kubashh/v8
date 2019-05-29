@@ -130,10 +130,7 @@ bool JSObject::PrototypeHasNoElements(Isolate* isolate, JSObject object) {
 
 ACCESSORS(JSReceiver, raw_properties_or_hash, Object, kPropertiesOrHashOffset)
 
-FixedArrayBase JSObject::elements() const {
-  Object array = READ_FIELD(*this, kElementsOffset);
-  return FixedArrayBase::cast(array);
-}
+FixedArrayBase JSObject::elements() const { return ElementsField::load(*this); }
 
 void JSObject::EnsureCanContainHeapObjectElements(Handle<JSObject> object) {
   JSObject::ValidateElements(*object);
@@ -225,13 +222,14 @@ void JSObject::EnsureCanContainElements(Handle<JSObject> object,
 
 void JSObject::SetMapAndElements(Handle<JSObject> object, Handle<Map> new_map,
                                  Handle<FixedArrayBase> value) {
-  JSObject::MigrateToMap(object, new_map);
+  Isolate* isolate = object->GetIsolate();
+  JSObject::MigrateToMap(isolate, object, new_map);
   DCHECK((object->map().has_fast_smi_or_object_elements() ||
-          (*value == object->GetReadOnlyRoots().empty_fixed_array()) ||
+          (*value == ReadOnlyRoots(isolate).empty_fixed_array()) ||
           object->map().has_fast_string_wrapper_elements()) ==
-         (value->map() == object->GetReadOnlyRoots().fixed_array_map() ||
-          value->map() == object->GetReadOnlyRoots().fixed_cow_array_map()));
-  DCHECK((*value == object->GetReadOnlyRoots().empty_fixed_array()) ||
+         (value->map() == ReadOnlyRoots(isolate).fixed_array_map() ||
+          value->map() == ReadOnlyRoots(isolate).fixed_cow_array_map()));
+  DCHECK((*value == ReadOnlyRoots(isolate).empty_fixed_array()) ||
          (object->map().has_fast_double_elements() ==
           value->IsFixedDoubleArray()));
   object->set_elements(*value);

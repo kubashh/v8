@@ -64,6 +64,13 @@ ReadOnlyRoots::ReadOnlyRoots(Isolate* isolate)
     : read_only_roots_(reinterpret_cast<Address*>(
           isolate->roots_table().read_only_roots_begin().address())) {}
 
+ReadOnlyRoots::ReadOnlyRoots(IsolateRoot isolate_root)
+    : read_only_roots_(
+          reinterpret_cast<Address*>(Isolate::FromRoot(isolate_root)
+                                         ->roots_table()
+                                         .read_only_roots_begin()
+                                         .address())) {}
+
 ReadOnlyRoots::ReadOnlyRoots(Address* ro_roots) : read_only_roots_(ro_roots) {}
 
 // We use unchecked_cast below because we trust our read-only roots to

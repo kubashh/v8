@@ -2810,9 +2810,9 @@ Isolate* Isolate::New(IsolateAllocationMode mode) {
   void* isolate_ptr = isolate_allocator->isolate_memory();
   Isolate* isolate = new (isolate_ptr) Isolate(std::move(isolate_allocator));
 #if V8_TARGET_ARCH_64_BIT
-  DCHECK_IMPLIES(
-      mode == IsolateAllocationMode::kInV8Heap,
-      IsAligned(isolate->isolate_root(), kPtrComprIsolateRootAlignment));
+  DCHECK_IMPLIES(mode == IsolateAllocationMode::kInV8Heap,
+                 IsAligned(isolate->isolate_root().address,
+                           kPtrComprIsolateRootAlignment));
 #endif
 
 #ifdef DEBUG

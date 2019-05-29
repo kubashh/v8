@@ -215,7 +215,9 @@ class DescriptorArray : public HeapObject {
   }
   inline int length() const;
   inline MaybeObject get(int index) const;
+  inline Smi get_smi(int index) const;
   inline void set(int index, MaybeObject value);
+  inline void set_smi(int index, Smi value);
 
   // Transfer a complete descriptor from the src descriptor array to this
   // descriptor array.

@@ -110,6 +110,10 @@ bool HeapObject::IsUncompiledData() const {
   return IsUncompiledDataWithoutPreparseData() ||
          IsUncompiledDataWithPreparseData();
 }
+bool HeapObject::IsUncompiledData(ROOT_PARAM) const {
+  return IsUncompiledDataWithoutPreparseData(ROOT_VALUE) ||
+         IsUncompiledDataWithPreparseData(ROOT_VALUE);
+}
 
 OBJECT_CONSTRUCTORS_IMPL(InterpreterData, Struct)
 

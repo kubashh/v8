@@ -27,6 +27,11 @@ Object CompressedObjectSlot::operator*() const {
   return Object(DecompressTaggedAny(address(), value));
 }
 
+Object CompressedObjectSlot::load(ROOT_PARAM) const {
+  Tagged_t value = *location();
+  return Object(DecompressTaggedAny(ROOT_VALUE, value));
+}
+
 void CompressedObjectSlot::store(Object value) const {
   *location() = CompressTagged(value.ptr());
 }
@@ -36,9 +41,19 @@ Object CompressedObjectSlot::Acquire_Load() const {
   return Object(DecompressTaggedAny(address(), value));
 }
 
+Smi CompressedObjectSlot::Relaxed_LoadSmi() const {
+  AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(location());
+  return Smi(DecompressTaggedSigned(value));
+}
+
 Object CompressedObjectSlot::Relaxed_Load() const {
   AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(location());
   return Object(DecompressTaggedAny(address(), value));
+}
+
+Object CompressedObjectSlot::Relaxed_Load(ROOT_PARAM) const {
+  AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(location());
+  return Object(DecompressTaggedAny(ROOT_VALUE, value));
 }
 
 void CompressedObjectSlot::Relaxed_Store(Object value) const {
@@ -70,10 +85,10 @@ bool CompressedMapWordSlot::contains_value(Address raw_value) const {
          static_cast<uint32_t>(static_cast<Tagged_t>(raw_value));
 }
 
-Object CompressedMapWordSlot::operator*() const {
-  Tagged_t value = *location();
-  return Object(DecompressTaggedPointer(address(), value));
-}
+// Object CompressedMapWordSlot::operator*() const {
+//   Tagged_t value = *location();
+//   return Object(DecompressTaggedPointer(address(), value));
+// }
 
 void CompressedMapWordSlot::store(Object value) const {
   *location() = CompressTagged(value.ptr());
@@ -82,6 +97,11 @@ void CompressedMapWordSlot::store(Object value) const {
 Object CompressedMapWordSlot::Relaxed_Load() const {
   AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(location());
   return Object(DecompressTaggedPointer(address(), value));
+}
+
+Object CompressedMapWordSlot::Relaxed_Load(ROOT_PARAM) const {
+  AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(location());
+  return Object(DecompressTaggedPointer(ROOT_VALUE, value));
 }
 
 void CompressedMapWordSlot::Relaxed_Store(Object value) const {
@@ -116,6 +136,10 @@ MaybeObject CompressedMaybeObjectSlot::operator*() const {
   Tagged_t value = *location();
   return MaybeObject(DecompressTaggedAny(address(), value));
 }
+MaybeObject CompressedMaybeObjectSlot::load(ROOT_PARAM) const {
+  Tagged_t value = *location();
+  return MaybeObject(DecompressTaggedAny(ROOT_VALUE, value));
+}
 
 void CompressedMaybeObjectSlot::store(MaybeObject value) const {
   *location() = CompressTagged(value.ptr());
@@ -124,6 +148,10 @@ void CompressedMaybeObjectSlot::store(MaybeObject value) const {
 MaybeObject CompressedMaybeObjectSlot::Relaxed_Load() const {
   AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(location());
   return MaybeObject(DecompressTaggedAny(address(), value));
+}
+MaybeObject CompressedMaybeObjectSlot::Relaxed_Load(ROOT_PARAM) const {
+  AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(location());
+  return MaybeObject(DecompressTaggedAny(ROOT_VALUE, value));
 }
 
 void CompressedMaybeObjectSlot::Relaxed_Store(MaybeObject value) const {

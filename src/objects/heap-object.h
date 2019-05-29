@@ -18,6 +18,61 @@ namespace internal {
 
 class Heap;
 
+template <typename T, int kFieldOffset>
+class StrongTaggedField {
+ public:
+  static_assert(std::is_base_of<Object, T>::value,
+                "T must be strong tagged type");
+
+  static constexpr bool kIsSmi = std::is_base_of<Smi, T>::value;
+  static constexpr bool kIsHeapObject = std::is_base_of<HeapObject, T>::value;
+
+  static inline Address address(HeapObject host);
+
+  // Compares memory representation of a value stored in the slot with given
+  // raw value without decompression.
+  static inline bool contains_value(HeapObject host, Address raw_value);
+
+  // static inline Address load_raw(HeapObject host);
+  // static inline Address load_raw(ROOT_PARAM, HeapObject host);
+
+  static inline T load(HeapObject host);
+  static inline T load(ROOT_PARAM, HeapObject host);
+
+  static inline void store(HeapObject host, T value);
+
+  static inline T Relaxed_Load(HeapObject host);
+  static inline T Relaxed_Load(ROOT_PARAM, HeapObject host);
+
+  static inline void Relaxed_Store(HeapObject host, T value);
+
+  static inline T Acquire_Load(HeapObject host);
+  static inline T Acquire_Load(ROOT_PARAM, HeapObject host);
+
+  static inline void Release_Store(HeapObject host, T value);
+
+  //   static inline T Release_CompareAndSwap(T old, T target);
+
+  static inline Address Relaxed_Load_raw(HeapObject host);
+  static inline Address Relaxed_Load_raw(ROOT_PARAM, HeapObject host);
+
+  static inline void Relaxed_Store_raw(HeapObject host, Address value);
+
+  static inline Address Acquire_Load_raw(HeapObject host);
+  static inline Address Acquire_Load_raw(ROOT_PARAM, HeapObject host);
+
+  static inline void Release_Store_raw(HeapObject host, Address value);
+
+ private:
+  static inline Tagged_t* location(HeapObject host);
+
+  template <typename TOnHeapAddress>
+  static inline Address tagged_to_full(TOnHeapAddress on_heap_addr,
+                                       Tagged_t tagged_value);
+
+  static inline Tagged_t full_to_tagged(Address value);
+};
+
 // HeapObject is the superclass for all classes describing heap allocated
 // objects.
 class HeapObject : public Object {
@@ -27,6 +82,7 @@ class HeapObject : public Object {
   // [map]: Contains a map which contains the object's reflective
   // information.
   inline Map map() const;
+  inline Map map(ROOT_PARAM) const;
   inline void set_map(Map value);
 
   inline MapWordSlot map_slot() const;
@@ -52,6 +108,7 @@ class HeapObject : public Object {
   // During garbage collection, the map word of a heap object does not
   // necessarily contain a map pointer.
   inline MapWord map_word() const;
+  inline MapWord map_word(ROOT_PARAM) const;
   inline void set_map_word(MapWord map_word);
 
   // TODO(v8:7464): Once RO_SPACE is shared between isolates, this method can be
@@ -61,7 +118,9 @@ class HeapObject : public Object {
   // places where it might not be safe to access it.
   inline ReadOnlyRoots GetReadOnlyRoots() const;
 
-#define IS_TYPE_FUNCTION_DECL(Type) V8_INLINE bool Is##Type() const;
+#define IS_TYPE_FUNCTION_DECL(Type) \
+  V8_INLINE bool Is##Type() const;  \
+  V8_INLINE bool Is##Type(ROOT_PARAM) const;
   HEAP_OBJECT_TYPE_LIST(IS_TYPE_FUNCTION_DECL)
 #undef IS_TYPE_FUNCTION_DECL
 
@@ -80,7 +139,9 @@ class HeapObject : public Object {
   V8_INLINE bool IsNullOrUndefined(ReadOnlyRoots roots) const;
   V8_INLINE bool IsNullOrUndefined() const;
 
-#define DECL_STRUCT_PREDICATE(NAME, Name, name) V8_INLINE bool Is##Name() const;
+#define DECL_STRUCT_PREDICATE(NAME, Name, name) \
+  V8_INLINE bool Is##Name() const;              \
+  V8_INLINE bool Is##Name(ROOT_PARAM) const;
   STRUCT_LIST(DECL_STRUCT_PREDICATE)
 #undef DECL_STRUCT_PREDICATE
 

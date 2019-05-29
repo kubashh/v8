@@ -390,14 +390,15 @@ class JSObject : public JSReceiver {
                                  PropertyAttributes attributes);
 
   V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
-  SetOwnElementIgnoreAttributes(Handle<JSObject> object, uint32_t index,
-                                Handle<Object> value,
+  SetOwnElementIgnoreAttributes(Isolate* isolate, Handle<JSObject> object,
+                                uint32_t index, Handle<Object> value,
                                 PropertyAttributes attributes);
 
   // Equivalent to one of the above depending on whether |name| can be converted
   // to an array index.
   V8_EXPORT_PRIVATE V8_WARN_UNUSED_RESULT static MaybeHandle<Object>
-  DefinePropertyOrElementIgnoreAttributes(Handle<JSObject> object,
+  DefinePropertyOrElementIgnoreAttributes(Isolate* isolate,
+                                          Handle<JSObject> object,
                                           Handle<Name> name,
                                           Handle<Object> value,
                                           PropertyAttributes attributes = NONE);
@@ -595,7 +596,7 @@ class JSObject : public JSReceiver {
   // |expected_additional_properties| is only used for fast-to-slow transitions
   // and ignored otherwise.
   V8_EXPORT_PRIVATE static void MigrateToMap(
-      Handle<JSObject> object, Handle<Map> new_map,
+      Isolate* isolate, Handle<JSObject> object, Handle<Map> new_map,
       int expected_additional_properties = 0);
 
   // Forces a prototype without any of the checks that the regular SetPrototype
@@ -784,6 +785,8 @@ class JSObject : public JSReceiver {
   STATIC_ASSERT(kHeaderSize +
                     kMaxEmbedderFields * kEmbedderDataSlotSizeInTaggedSlots <=
                 kMaxInstanceSize);
+
+  using ElementsField = StrongTaggedField<FixedArrayBase, kElementsOffset>;
 
   class BodyDescriptor;
 

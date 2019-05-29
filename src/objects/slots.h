@@ -84,6 +84,32 @@ class SlotBase {
   Address ptr_;
 };
 
+template <typename TStrongTaggedValue>
+class TaggedValueSlotImpl
+    : public SlotBase<TaggedValueSlotImpl<TStrongTaggedValue>, Tagged_t> {
+  using Super = SlotBase<TaggedValueSlotImpl<TStrongTaggedValue>, Tagged_t>;
+
+ public:
+  using TTaggedValue = TStrongTaggedValue;
+  using TData = Tagged_t;
+
+  TaggedValueSlotImpl() : Super(kNullAddress) {}
+  explicit TaggedValueSlotImpl(Address ptr) : Super(ptr) {}
+  template <typename T>
+  explicit TaggedValueSlotImpl(SlotBase<T, TData> slot)
+      : Super(slot.address()) {}
+
+  //  bool contains_value(Address raw_value) const;
+
+  inline TStrongTaggedValue operator*() const;
+  inline void store(TStrongTaggedValue value) const;
+
+  inline TStrongTaggedValue Acquire_Load() const;
+  inline TStrongTaggedValue Relaxed_Load() const;
+  inline void Relaxed_Store(TStrongTaggedValue value) const;
+  inline void Release_Store(TStrongTaggedValue value) const;
+};
+
 // An FullObjectSlot instance describes a kSystemPointerSize-sized field
 // ("slot") holding a tagged pointer (smi or strong heap object).
 // Its address() is the address of the slot.
@@ -110,11 +136,16 @@ class FullObjectSlot : public SlotBase<FullObjectSlot, Address> {
   inline bool contains_value(Address raw_value) const;
 
   inline const Object operator*() const;
+  inline const Object load(ROOT_PARAM) const;
   inline void store(Object value) const;
 
-  inline Object Acquire_Load() const;
   inline Object Relaxed_Load() const;
+  inline Object Relaxed_Load(ROOT_PARAM) const;
   inline void Relaxed_Store(Object value) const;
+
+  inline Smi Relaxed_LoadSmi() const;
+
+  inline Object Acquire_Load() const;
   inline void Release_Store(Object value) const;
   inline Object Release_CompareAndSwap(Object old, Object target) const;
 };
@@ -143,9 +174,11 @@ class FullMaybeObjectSlot
       : SlotBase(slot.address()) {}
 
   inline const MaybeObject operator*() const;
+  inline const MaybeObject load(ROOT_PARAM) const;
   inline void store(MaybeObject value) const;
 
   inline MaybeObject Relaxed_Load() const;
+  inline MaybeObject Relaxed_Load(ROOT_PARAM) const;
   inline void Relaxed_Store(MaybeObject value) const;
   inline void Release_CompareAndSwap(MaybeObject old, MaybeObject target) const;
 };

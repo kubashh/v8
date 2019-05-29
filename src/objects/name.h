@@ -43,15 +43,19 @@ class Name : public HeapObject {
   // symbol properties are added, so we can optimize lookups on objects
   // that don't have the flag.
   inline bool IsInterestingSymbol() const;
+  inline bool IsInterestingSymbol(ROOT_PARAM) const;
 
   // If the name is private, it can only name own properties.
   inline bool IsPrivate();
+  inline bool IsPrivate(ROOT_PARAM);
 
   // If the name is a private name, it should behave like a private
   // symbol but also throw on property access miss.
   inline bool IsPrivateName();
+  inline bool IsPrivateName(ROOT_PARAM);
 
   inline bool IsUniqueName() const;
+  inline bool IsUniqueName(ROOT_PARAM) const;
 
   static inline bool ContainsCachedArrayIndex(uint32_t hash);
 

@@ -23,20 +23,27 @@ V8_INLINE Tagged_t CompressTagged(Address tagged) {
 template <typename TOnHeapAddress>
 V8_INLINE Address GetIsolateRoot(TOnHeapAddress on_heap_addr);
 
-template <>
-V8_INLINE Address GetIsolateRoot<Address>(Address on_heap_addr) {
+V8_INLINE Address GetIsolateRoot0(Address on_heap_addr) {
   return RoundDown<kPtrComprIsolateRootAlignment>(on_heap_addr +
                                                   kPtrComprIsolateRootBias);
 }
 
 template <>
-V8_INLINE Address GetIsolateRoot<Isolate*>(Isolate* isolate) {
-  return isolate->isolate_root();
+V8_INLINE Address GetIsolateRoot<Address>(Address on_heap_addr) {
+  intptr_t compr = static_cast<intptr_t>(static_cast<int32_t>(on_heap_addr));
+  Address isolate_root = on_heap_addr - static_cast<Address>(compr);
+  DCHECK_EQ(isolate_root, GetIsolateRoot0(on_heap_addr));
+  return isolate_root;
 }
 
 template <>
-V8_INLINE Address GetIsolateRoot<const Isolate*>(const Isolate* isolate) {
-  return isolate->isolate_root();
+V8_INLINE Address GetIsolateRoot<Isolate*>(Isolate* isolate) {
+  return isolate->isolate_root().address;
+}
+
+template <>
+V8_INLINE Address GetIsolateRoot<IsolateRoot>(IsolateRoot isolate_root) {
+  return isolate_root.address;
 }
 
 // Decompresses smi value.

@@ -51,6 +51,13 @@ bool Name::IsUniqueName() const {
   SLOW_DCHECK(result == HeapObject::IsUniqueName());
   return result;
 }
+bool Name::IsUniqueName(ROOT_PARAM) const {
+  uint32_t type = map(ROOT_VALUE).instance_type();
+  bool result = (type & (kIsNotStringMask | kIsNotInternalizedMask)) !=
+                (kStringTag | kNotInternalizedTag);
+  SLOW_DCHECK(result == HeapObject::IsUniqueName());
+  return result;
+}
 
 uint32_t Name::hash_field() { return ReadField<uint32_t>(kHashFieldOffset); }
 
@@ -94,14 +101,26 @@ uint32_t Name::Hash() {
 bool Name::IsInterestingSymbol() const {
   return IsSymbol() && Symbol::cast(*this).is_interesting_symbol();
 }
+bool Name::IsInterestingSymbol(ROOT_PARAM) const {
+  return IsSymbol(ROOT_VALUE) && Symbol::cast(*this).is_interesting_symbol();
+}
 
 bool Name::IsPrivate() {
   return this->IsSymbol() && Symbol::cast(*this).is_private();
+}
+bool Name::IsPrivate(ROOT_PARAM) {
+  return this->IsSymbol(ROOT_VALUE) && Symbol::cast(*this).is_private();
 }
 
 bool Name::IsPrivateName() {
   bool is_private_name =
       this->IsSymbol() && Symbol::cast(*this).is_private_name();
+  DCHECK_IMPLIES(is_private_name, IsPrivate());
+  return is_private_name;
+}
+bool Name::IsPrivateName(ROOT_PARAM) {
+  bool is_private_name =
+      this->IsSymbol(ROOT_VALUE) && Symbol::cast(*this).is_private_name();
   DCHECK_IMPLIES(is_private_name, IsPrivate());
   return is_private_name;
 }

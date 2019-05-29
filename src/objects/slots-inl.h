@@ -12,11 +12,63 @@
 #include "src/objects/heap-object.h"
 #include "src/objects/maybe-object.h"
 #include "src/objects/objects.h"
+#include "src/objects/tagged-value.h"
 #include "src/ptr-compr-inl.h"
 #include "src/utils/memcopy.h"
 
 namespace v8 {
 namespace internal {
+
+//
+// TaggedValueSlotImpl implementation.
+//
+
+// template <typename TStrongTaggedValue>
+// bool TaggedValueSlotImpl<TStrongTaggedValue>::contains_value(Address
+// raw_value) const {
+//   Tagged_t value = AsAtomicTagged::Relaxed_Load(location());
+//   return value == raw_value;
+// }
+
+template <typename TStrongTaggedValue>
+TStrongTaggedValue TaggedValueSlotImpl<TStrongTaggedValue>::operator*() const {
+  Tagged_t value = *Super::location();
+  return TStrongTaggedValue(value);
+}
+
+template <typename TStrongTaggedValue>
+void TaggedValueSlotImpl<TStrongTaggedValue>::store(
+    TStrongTaggedValue value) const {
+  *Super::location() = value.ptr();
+}
+
+template <typename TStrongTaggedValue>
+TStrongTaggedValue TaggedValueSlotImpl<TStrongTaggedValue>::Acquire_Load()
+    const {
+  AtomicTagged_t value = AsAtomicTagged::Acquire_Load(Super::location());
+  return TStrongTaggedValue(value);
+}
+
+template <typename TStrongTaggedValue>
+TStrongTaggedValue TaggedValueSlotImpl<TStrongTaggedValue>::Relaxed_Load()
+    const {
+  AtomicTagged_t value = AsAtomicTagged::Relaxed_Load(Super::location());
+  return TStrongTaggedValue(value);
+}
+
+template <typename TStrongTaggedValue>
+void TaggedValueSlotImpl<TStrongTaggedValue>::Relaxed_Store(
+    TStrongTaggedValue value) const {
+  Tagged_t ptr = value.ptr();
+  AsAtomicTagged::Relaxed_Store(Super::location(), ptr);
+}
+
+template <typename TStrongTaggedValue>
+void TaggedValueSlotImpl<TStrongTaggedValue>::Release_Store(
+    TStrongTaggedValue value) const {
+  Tagged_t ptr = value.ptr();
+  AsAtomicTagged::Release_Store(Super::location(), ptr);
+}
 
 //
 // FullObjectSlot implementation.
@@ -30,6 +82,9 @@ bool FullObjectSlot::contains_value(Address raw_value) const {
 }
 
 const Object FullObjectSlot::operator*() const { return Object(*location()); }
+const Object FullObjectSlot::load(ROOT_PARAM) const {
+  return Object(*location());
+}
 
 void FullObjectSlot::store(Object value) const { *location() = value.ptr(); }
 
@@ -37,7 +92,14 @@ Object FullObjectSlot::Acquire_Load() const {
   return Object(base::AsAtomicPointer::Acquire_Load(location()));
 }
 
+Smi FullObjectSlot::Relaxed_LoadSmi() const {
+  return Smi(base::AsAtomicPointer::Relaxed_Load(location()));
+}
+
 Object FullObjectSlot::Relaxed_Load() const {
+  return Object(base::AsAtomicPointer::Relaxed_Load(location()));
+}
+Object FullObjectSlot::Relaxed_Load(ROOT_PARAM) const {
   return Object(base::AsAtomicPointer::Relaxed_Load(location()));
 }
 
@@ -62,12 +124,18 @@ Object FullObjectSlot::Release_CompareAndSwap(Object old, Object target) const {
 const MaybeObject FullMaybeObjectSlot::operator*() const {
   return MaybeObject(*location());
 }
+const MaybeObject FullMaybeObjectSlot::load(ROOT_PARAM) const {
+  return MaybeObject(*location());
+}
 
 void FullMaybeObjectSlot::store(MaybeObject value) const {
   *location() = value.ptr();
 }
 
 MaybeObject FullMaybeObjectSlot::Relaxed_Load() const {
+  return MaybeObject(base::AsAtomicPointer::Relaxed_Load(location()));
+}
+MaybeObject FullMaybeObjectSlot::Relaxed_Load(ROOT_PARAM) const {
   return MaybeObject(base::AsAtomicPointer::Relaxed_Load(location()));
 }
 

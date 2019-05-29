@@ -81,6 +81,8 @@ class AtomicSlot : public SlotBase<AtomicSlot, Tagged_t> {
   explicit AtomicSlot(Address address) : SlotBase(address) {}
   explicit AtomicSlot(ObjectSlot slot) : SlotBase(slot.address()) {}
   explicit AtomicSlot(MaybeObjectSlot slot) : SlotBase(slot.address()) {}
+  explicit AtomicSlot(StrongTaggedValueSlot slot) : SlotBase(slot.address()) {}
+  explicit AtomicSlot(TaggedValueSlot slot) : SlotBase(slot.address()) {}
 
   Reference operator*() const {
     return Reference(reinterpret_cast<Tagged_t*>(address()));

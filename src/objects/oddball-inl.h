@@ -42,6 +42,10 @@ bool HeapObject::IsBoolean() const {
   return IsOddball() &&
          ((Oddball::cast(*this).kind() & Oddball::kNotBooleanMask) == 0);
 }
+bool HeapObject::IsBoolean(ROOT_PARAM) const {
+  return IsOddball(ROOT_VALUE) &&
+         ((Oddball::cast(*this).kind() & Oddball::kNotBooleanMask) == 0);
+}
 
 }  // namespace internal
 }  // namespace v8

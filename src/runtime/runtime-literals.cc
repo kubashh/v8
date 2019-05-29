@@ -33,10 +33,6 @@ void PreInitializeLiteralSite(Handle<FeedbackVector> vector,
   vector->Set(slot, Smi::FromInt(1));
 }
 
-Handle<Object> InnerCreateBoilerplate(Isolate* isolate,
-                                      Handle<Object> description,
-                                      AllocationType allocation);
-
 enum DeepCopyHints { kNoHints = 0, kObjectIsShallow = 1 };
 
 template <class ContextObject>
@@ -324,156 +320,203 @@ MaybeHandle<JSObject> DeepCopy(Handle<JSObject> object,
   return copy;
 }
 
+Handle<JSObject> CreateArrayLiteral(
+    Isolate* isolate,
+    Handle<ArrayBoilerplateDescription> array_boilerplate_description,
+    AllocationType allocation);
+
+Handle<JSObject> CreateObjectLiteral(
+    Isolate* isolate,
+    Handle<ObjectBoilerplateDescription> object_boilerplate_description,
+    int flags, AllocationType allocation) {
+  Handle<NativeContext> native_context = isolate->native_context();
+  bool use_fast_elements = (flags & ObjectLiteral::kFastElements) != 0;
+  bool has_null_prototype = (flags & ObjectLiteral::kHasNullPrototype) != 0;
+
+  RuntimeCallTimerScope runtimeTimer(isolate,
+                                     RuntimeCallCounterId::kPtrComprCounter1);
+
+  // In case we have function literals, we want the object to be in
+  // slow properties mode for now. We don't go in the map cache because
+  // maps with constant functions can't be shared if the functions are
+  // not the same (which is the common case).
+  int number_of_properties =
+      object_boilerplate_description->backing_store_size();
+
+  // Ignoring number_of_properties for force dictionary map with
+  // __proto__:null.
+  Handle<Map> map =
+      has_null_prototype
+          ? handle(native_context->slow_object_with_null_prototype_map(),
+                   isolate)
+          : isolate->factory()->ObjectLiteralMapFromCache(native_context,
+                                                          number_of_properties);
+
+  Handle<JSObject> boilerplate =
+      map->is_dictionary_map()
+          ? isolate->factory()->NewSlowJSObjectFromMap(
+                map, number_of_properties, allocation)
+          : isolate->factory()->NewJSObjectFromMap(map, allocation);
+
+  // Normalize the elements of the boilerplate to save space if needed.
+  if (!use_fast_elements) {
+    RuntimeCallTimerScope runtimeTimer(isolate,
+                                       RuntimeCallCounterId::kPtrComprCounter3);
+    JSObject::NormalizeElements(boilerplate);
+  }
+
+  DEFINE_ROOT_VALUE(isolate);
+  // Add the constant properties to the boilerplate.
+  int length = object_boilerplate_description->size();
+  // TODO(verwaest): Support tracking representations in the boilerplate.
+  for (int index = 0; index < length; index++) {
+    HandleScope sub_scope(isolate);
+    Handle<Object> key(object_boilerplate_description->name(index), isolate);
+    Handle<Object> value(object_boilerplate_description->value(index), isolate);
+
+    if (value->IsHeapObject()) {
+      if (HeapObject::cast(*value).IsArrayBoilerplateDescription(
+              WITH_ROOT_VALUE())) {
+        Handle<ArrayBoilerplateDescription> boilerplate =
+            Handle<ArrayBoilerplateDescription>::cast(value);
+        value = CreateArrayLiteral(isolate, boilerplate, allocation);
+
+      } else if (HeapObject::cast(*value).IsObjectBoilerplateDescription(
+                     WITH_ROOT_VALUE())) {
+        Handle<ObjectBoilerplateDescription> boilerplate =
+            Handle<ObjectBoilerplateDescription>::cast(value);
+        value = CreateObjectLiteral(isolate, boilerplate, boilerplate->flags(),
+                                    allocation);
+      }
+    }
+
+    uint32_t element_index = 0;
+    if (key->ToArrayIndex(&element_index)) {
+      // Array index (uint32).
+      if (value->IsUninitialized(isolate)) {
+        value = handle(Smi::kZero, isolate);
+      }
+      RuntimeCallTimerScope runtimeTimer(
+          isolate, RuntimeCallCounterId::kPtrComprCounter5);
+      JSObject::SetOwnElementIgnoreAttributes(isolate, boilerplate,
+                                              element_index, value, NONE)
+          .Check();
+    } else {
+      Handle<String> name = Handle<String>::cast(key);
+      DCHECK(!name->AsArrayIndex(&element_index));
+      RuntimeCallTimerScope runtimeTimer(
+          isolate, RuntimeCallCounterId::kPtrComprCounter7);
+      JSObject::SetOwnPropertyIgnoreAttributes(boilerplate, name, value, NONE)
+          .Check();
+    }
+  }
+
+  if (map->is_dictionary_map() && !has_null_prototype) {
+    // TODO(cbruni): avoid making the boilerplate fast again, the clone stub
+    // supports dict-mode objects directly.
+    RuntimeCallTimerScope runtimeTimer(isolate,
+                                       RuntimeCallCounterId::kPtrComprCounter9);
+    JSObject::MigrateSlowToFast(
+        boilerplate, boilerplate->map().UnusedPropertyFields(), "FastLiteral");
+  }
+  return boilerplate;
+}
+
+Handle<JSObject> CreateArrayLiteral(
+    Isolate* isolate,
+    Handle<ArrayBoilerplateDescription> array_boilerplate_description,
+    AllocationType allocation) {
+  RuntimeCallTimerScope runtimeTimer(isolate,
+                                     RuntimeCallCounterId::kPtrComprCounterA);
+  ElementsKind constant_elements_kind =
+      array_boilerplate_description->elements_kind();
+
+  Handle<FixedArrayBase> constant_elements_values(
+      array_boilerplate_description->constant_elements(), isolate);
+
+  // Create the JSArray.
+  Handle<FixedArrayBase> copied_elements_values;
+  if (IsDoubleElementsKind(constant_elements_kind)) {
+    copied_elements_values = isolate->factory()->CopyFixedDoubleArray(
+        Handle<FixedDoubleArray>::cast(constant_elements_values));
+  } else {
+    DCHECK(IsSmiOrObjectElementsKind(constant_elements_kind));
+    const bool is_cow = (constant_elements_values->map() ==
+                         ReadOnlyRoots(isolate).fixed_cow_array_map());
+    if (is_cow) {
+      copied_elements_values = constant_elements_values;
+#if DEBUG
+      Handle<FixedArray> fixed_array_values =
+          Handle<FixedArray>::cast(copied_elements_values);
+      for (int i = 0; i < fixed_array_values->length(); i++) {
+        DCHECK(!fixed_array_values->get(i).IsFixedArray());
+      }
+#endif
+    } else {
+      RuntimeCallTimerScope runtimeTimer(
+          isolate, RuntimeCallCounterId::kPtrComprCounterC);
+      Handle<FixedArray> fixed_array_values =
+          Handle<FixedArray>::cast(constant_elements_values);
+      Handle<FixedArray> fixed_array_values_copy =
+          isolate->factory()->CopyFixedArray(fixed_array_values);
+      DEFINE_ROOT_VALUE(isolate);
+      copied_elements_values = fixed_array_values_copy;
+      for (int i = 0; i < fixed_array_values->length(); i++) {
+        StrongTaggedValueSlot slot(fixed_array_values->RawFieldOfElementAt(i));
+        StrongTaggedValue tagged_value = slot.Relaxed_Load();
+        HeapObject value_heap_object;
+        if (tagged_value.GetHeapObject(WITH_ROOT_VALUE(&value_heap_object))) {
+          if (value_heap_object.IsArrayBoilerplateDescription(
+                  WITH_ROOT_VALUE())) {
+            HandleScope sub_scope(isolate);
+            Handle<ArrayBoilerplateDescription> boilerplate(
+                ArrayBoilerplateDescription::cast(value_heap_object), isolate);
+            Handle<JSObject> result =
+                CreateArrayLiteral(isolate, boilerplate, allocation);
+            fixed_array_values_copy->set(i, *result);
+
+          } else if (value_heap_object.IsObjectBoilerplateDescription(
+                         WITH_ROOT_VALUE())) {
+            HandleScope sub_scope(isolate);
+            Handle<ObjectBoilerplateDescription> boilerplate(
+                ObjectBoilerplateDescription::cast(value_heap_object), isolate);
+            Handle<JSObject> result = CreateObjectLiteral(
+                isolate, boilerplate, boilerplate->flags(), allocation);
+            fixed_array_values_copy->set(i, *result);
+          }
+        }
+      }
+    }
+  }
+
+  RuntimeCallTimerScope runtimeTimer1(isolate,
+                                      RuntimeCallCounterId::kPtrComprCounterE);
+  return isolate->factory()->NewJSArrayWithElements(
+      copied_elements_values, constant_elements_kind,
+      copied_elements_values->length(), allocation);
+}
+
 struct ObjectLiteralHelper {
-  static Handle<JSObject> Create(Isolate* isolate,
-                                 Handle<HeapObject> description, int flags,
-                                 AllocationType allocation) {
-    Handle<NativeContext> native_context = isolate->native_context();
+  static inline Handle<JSObject> Create(Isolate* isolate,
+                                        Handle<HeapObject> description,
+                                        int flags, AllocationType allocation) {
     Handle<ObjectBoilerplateDescription> object_boilerplate_description =
         Handle<ObjectBoilerplateDescription>::cast(description);
-    bool use_fast_elements = (flags & ObjectLiteral::kFastElements) != 0;
-    bool has_null_prototype = (flags & ObjectLiteral::kHasNullPrototype) != 0;
-
-    // In case we have function literals, we want the object to be in
-    // slow properties mode for now. We don't go in the map cache because
-    // maps with constant functions can't be shared if the functions are
-    // not the same (which is the common case).
-    int number_of_properties =
-        object_boilerplate_description->backing_store_size();
-
-    // Ignoring number_of_properties for force dictionary map with
-    // __proto__:null.
-    Handle<Map> map =
-        has_null_prototype
-            ? handle(native_context->slow_object_with_null_prototype_map(),
-                     isolate)
-            : isolate->factory()->ObjectLiteralMapFromCache(
-                  native_context, number_of_properties);
-
-    Handle<JSObject> boilerplate =
-        map->is_dictionary_map()
-            ? isolate->factory()->NewSlowJSObjectFromMap(
-                  map, number_of_properties, allocation)
-            : isolate->factory()->NewJSObjectFromMap(map, allocation);
-
-    // Normalize the elements of the boilerplate to save space if needed.
-    if (!use_fast_elements) JSObject::NormalizeElements(boilerplate);
-
-    // Add the constant properties to the boilerplate.
-    int length = object_boilerplate_description->size();
-    // TODO(verwaest): Support tracking representations in the boilerplate.
-    for (int index = 0; index < length; index++) {
-      Handle<Object> key(object_boilerplate_description->name(index), isolate);
-      Handle<Object> value(object_boilerplate_description->value(index),
-                           isolate);
-
-      if (value->IsObjectBoilerplateDescription() ||
-          value->IsArrayBoilerplateDescription()) {
-        value = InnerCreateBoilerplate(isolate, value, allocation);
-      }
-      uint32_t element_index = 0;
-      if (key->ToArrayIndex(&element_index)) {
-        // Array index (uint32).
-        if (value->IsUninitialized(isolate)) {
-          value = handle(Smi::kZero, isolate);
-        }
-        JSObject::SetOwnElementIgnoreAttributes(boilerplate, element_index,
-                                                value, NONE)
-            .Check();
-      } else {
-        Handle<String> name = Handle<String>::cast(key);
-        DCHECK(!name->AsArrayIndex(&element_index));
-        JSObject::SetOwnPropertyIgnoreAttributes(boilerplate, name, value, NONE)
-            .Check();
-      }
-    }
-
-    if (map->is_dictionary_map() && !has_null_prototype) {
-      // TODO(cbruni): avoid making the boilerplate fast again, the clone stub
-      // supports dict-mode objects directly.
-      JSObject::MigrateSlowToFast(boilerplate,
-                                  boilerplate->map().UnusedPropertyFields(),
-                                  "FastLiteral");
-    }
-    return boilerplate;
+    return CreateObjectLiteral(isolate, object_boilerplate_description, flags,
+                               allocation);
   }
 };
 
 struct ArrayLiteralHelper {
-  static Handle<JSObject> Create(Isolate* isolate,
-                                 Handle<HeapObject> description, int flags,
-                                 AllocationType allocation) {
+  static inline Handle<JSObject> Create(Isolate* isolate,
+                                        Handle<HeapObject> description, int,
+                                        AllocationType allocation) {
     Handle<ArrayBoilerplateDescription> array_boilerplate_description =
         Handle<ArrayBoilerplateDescription>::cast(description);
-
-    ElementsKind constant_elements_kind =
-        array_boilerplate_description->elements_kind();
-
-    Handle<FixedArrayBase> constant_elements_values(
-        array_boilerplate_description->constant_elements(), isolate);
-
-    // Create the JSArray.
-    Handle<FixedArrayBase> copied_elements_values;
-    if (IsDoubleElementsKind(constant_elements_kind)) {
-      copied_elements_values = isolate->factory()->CopyFixedDoubleArray(
-          Handle<FixedDoubleArray>::cast(constant_elements_values));
-    } else {
-      DCHECK(IsSmiOrObjectElementsKind(constant_elements_kind));
-      const bool is_cow = (constant_elements_values->map() ==
-                           ReadOnlyRoots(isolate).fixed_cow_array_map());
-      if (is_cow) {
-        copied_elements_values = constant_elements_values;
-#if DEBUG
-        Handle<FixedArray> fixed_array_values =
-            Handle<FixedArray>::cast(copied_elements_values);
-        for (int i = 0; i < fixed_array_values->length(); i++) {
-          DCHECK(!fixed_array_values->get(i).IsFixedArray());
-        }
-#endif
-      } else {
-        Handle<FixedArray> fixed_array_values =
-            Handle<FixedArray>::cast(constant_elements_values);
-        Handle<FixedArray> fixed_array_values_copy =
-            isolate->factory()->CopyFixedArray(fixed_array_values);
-        copied_elements_values = fixed_array_values_copy;
-        FOR_WITH_HANDLE_SCOPE(
-            isolate, int, i = 0, i, i < fixed_array_values->length(), i++, {
-              Handle<Object> value(fixed_array_values->get(i), isolate);
-
-              if (value->IsArrayBoilerplateDescription() ||
-                  value->IsObjectBoilerplateDescription()) {
-                Handle<Object> result =
-                    InnerCreateBoilerplate(isolate, value, allocation);
-                fixed_array_values_copy->set(i, *result);
-              }
-            });
-      }
-    }
-
-    return isolate->factory()->NewJSArrayWithElements(
-        copied_elements_values, constant_elements_kind,
-        copied_elements_values->length(), allocation);
+    return CreateArrayLiteral(isolate, array_boilerplate_description,
+                              allocation);
   }
 };
-
-Handle<Object> InnerCreateBoilerplate(Isolate* isolate,
-                                      Handle<Object> description,
-                                      AllocationType allocation) {
-  if (description->IsObjectBoilerplateDescription()) {
-    Handle<ObjectBoilerplateDescription> object_boilerplate_description =
-        Handle<ObjectBoilerplateDescription>::cast(description);
-    return ObjectLiteralHelper::Create(isolate, object_boilerplate_description,
-                                       object_boilerplate_description->flags(),
-                                       allocation);
-  } else {
-    DCHECK(description->IsArrayBoilerplateDescription());
-    Handle<ArrayBoilerplateDescription> array_boilerplate_description =
-        Handle<ArrayBoilerplateDescription>::cast(description);
-    return ArrayLiteralHelper::Create(
-        isolate, array_boilerplate_description,
-        array_boilerplate_description->elements_kind(), allocation);
-  }
-}
 
 inline DeepCopyHints DecodeCopyHints(int flags) {
   DeepCopyHints copy_hints =
