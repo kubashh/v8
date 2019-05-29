@@ -65,7 +65,8 @@ config("inspector_config") {
   visibility = [ ":*" ]  # Only targets in this file can depend on this.
 
   configs = [ "../../:internal_config" ]
-  include_dirs = [ "../../include" ]
+  include_dirs = [ "../../include",
+                   "../../third_party/inspector_protocol/encoding" ]
 }
 
 v8_header_set("inspector_test_headers") {
