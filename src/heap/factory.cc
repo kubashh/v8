@@ -1783,8 +1783,8 @@ Handle<ByteArray> Factory::NewByteArray(int length, AllocationType allocation) {
 }
 
 Handle<BytecodeArray> Factory::NewBytecodeArray(
-    int length, const byte* raw_bytecodes, int frame_size, int parameter_count,
-    Handle<FixedArray> constant_pool) {
+    int length, const byte* raw_bytecodes, int frame_size,
+    int parameter_count, Handle<FixedArray> constant_pool) {
   DCHECK_LE(0, length);
   if (length > BytecodeArray::kMaxLength) {
     isolate()->heap()->FatalProcessOutOfMemory("invalid array length");
