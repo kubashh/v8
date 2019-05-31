@@ -166,6 +166,7 @@ bool PagedSpace::Contains(Address addr) {
 
 bool PagedSpace::Contains(Object o) {
   if (!o.IsHeapObject()) return false;
+  DCHECK_NE(identity(), RO_SPACE);
   return Page::FromAddress(o.ptr())->owner() == this;
 }
 
@@ -240,8 +241,13 @@ void MemoryChunk::MoveExternalBackingStoreBytes(ExternalBackingStoreType type,
                                        amount);
 }
 
+AllocationSpace MemoryChunk::identity() const {
+  if (IsReadOnly()) return RO_SPACE;
+  return owner()->identity();
+}
+
 void Page::MarkNeverAllocateForTesting() {
-  DCHECK(this->owner()->identity() != NEW_SPACE);
+  DCHECK(this->identity() != NEW_SPACE);
   DCHECK(!IsFlagSet(NEVER_ALLOCATE_ON_PAGE));
   SetFlag(NEVER_ALLOCATE_ON_PAGE);
   SetFlag(NEVER_EVACUATE);
@@ -376,7 +382,7 @@ HeapObject PagedSpace::TryAllocateLinearlyAligned(
 }
 
 AllocationResult PagedSpace::AllocateRawUnaligned(int size_in_bytes) {
-  DCHECK_IMPLIES(identity() == RO_SPACE, heap()->CanAllocateInReadOnlySpace());
+  DCHECK_IMPLIES(identity() == RO_SPACE, !IsDetached());
   if (!EnsureLinearAllocationArea(size_in_bytes)) {
     return AllocationResult::Retry(identity());
   }
@@ -389,7 +395,7 @@ AllocationResult PagedSpace::AllocateRawUnaligned(int size_in_bytes) {
 AllocationResult PagedSpace::AllocateRawAligned(int size_in_bytes,
                                                 AllocationAlignment alignment) {
   DCHECK(identity() == OLD_SPACE || identity() == RO_SPACE);
-  DCHECK_IMPLIES(identity() == RO_SPACE, heap()->CanAllocateInReadOnlySpace());
+  DCHECK_IMPLIES(identity() == RO_SPACE, !IsDetached());
   int allocation_size = size_in_bytes;
   HeapObject object = TryAllocateLinearlyAligned(&allocation_size, alignment);
   if (object.is_null()) {

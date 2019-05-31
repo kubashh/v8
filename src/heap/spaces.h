@@ -339,7 +339,11 @@ class MemoryChunk {
 
     // The memory chunk freeing bookkeeping has been performed but the chunk has
     // not yet been freed.
-    UNREGISTERED = 1u << 20
+    UNREGISTERED = 1u << 20,
+
+    // The memory chunk belongs to read-only heap and does not participate in
+    // garbage collection.
+    READ_ONLY = 1u << 21
   };
 
   using Flags = uintptr_t;
@@ -606,7 +610,7 @@ class MemoryChunk {
   }
 
   template <AccessMode access_mode = AccessMode::NON_ATOMIC>
-  bool IsFlagSet(Flag flag) {
+  bool IsFlagSet(Flag flag) const {
     return (GetFlags<access_mode>() & flag) != 0;
   }
 
@@ -619,7 +623,7 @@ class MemoryChunk {
 
   // Return all current flags.
   template <AccessMode access_mode = AccessMode::NON_ATOMIC>
-  uintptr_t GetFlags() {
+  uintptr_t GetFlags() const {
     if (access_mode == AccessMode::NON_ATOMIC) {
       return flags_;
     } else {
@@ -667,9 +671,19 @@ class MemoryChunk {
   bool InOldSpace() const;
   V8_EXPORT_PRIVATE bool InLargeObjectSpace() const;
 
-  Space* owner() const { return owner_; }
+  Space* owner() const {
+    DCHECK_NOT_NULL(owner_);
+    return owner_;
+  }
 
   void set_owner(Space* space) { owner_ = space; }
+
+  bool IsReadOnly() const { return IsFlagSet(MemoryChunk::READ_ONLY); }
+  // Sealing the read-only space clears heap_. Use this to test if it's
+  // writable.
+  bool IsWritable() const { return !IsReadOnly() || heap_ != nullptr; }
+
+  inline AllocationSpace identity() const;
 
   static inline bool HasHeaderSentinel(Address slot_addr);
 
@@ -1023,6 +1037,8 @@ class V8_EXPORT_PRIVATE Space : public Malloced {
     DCHECK_NOT_NULL(heap_);
     return heap_;
   }
+
+  bool IsDetached() const { return heap_ == nullptr; }
 
   // Identity used in error reporting.
   AllocationSpace identity() { return id_; }
@@ -2949,6 +2965,9 @@ class ReadOnlySpace : public PagedSpace {
   ~ReadOnlySpace() override { Unseal(); }
 
   bool writable() const { return !is_marked_read_only_; }
+
+  bool Contains(Address a) = delete;
+  bool Contains(Object o) = delete;
 
   V8_EXPORT_PRIVATE void ClearStringPaddingIfNeeded();
 
