@@ -65,15 +65,14 @@ HeapObjectIterator::HeapObjectIterator(Page* page)
       page_range_(page),
       current_page_(page_range_.begin()) {
 #ifdef DEBUG
-  Space* owner = page->owner();
+#ifdef V8_SHARED_RO_HEAP
   // TODO(v8:7464): Always enforce this once PagedSpace::Verify is no longer
   // used to verify read-only space for non-shared builds.
-#ifdef V8_SHARED_RO_HEAP
-  DCHECK_NE(owner->identity(), RO_SPACE);
-#endif
-  // Do not access the heap of the read-only space.
-  DCHECK(owner->identity() == RO_SPACE || owner->identity() == OLD_SPACE ||
-         owner->identity() == MAP_SPACE || owner->identity() == CODE_SPACE);
+  DCHECK(!page->IsReadOnly());
+#endif  // V8_SHARED_RO_HEAP
+  AllocationSpace owner = page->identity();
+  DCHECK(owner == RO_SPACE || owner == OLD_SPACE || owner == MAP_SPACE ||
+         owner == CODE_SPACE);
 #endif  // DEBUG
 }
 
@@ -562,8 +561,7 @@ void MemoryChunk::DecrementWriteUnprotectCounterAndMaybeSetPermissions(
   DCHECK(permission == PageAllocator::kRead ||
          permission == PageAllocator::kReadExecute);
   DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
-  DCHECK(owner()->identity() == CODE_SPACE ||
-         owner()->identity() == CODE_LO_SPACE);
+  DCHECK(identity() == CODE_SPACE || identity() == CODE_LO_SPACE);
   // Decrementing the write_unprotect_counter_ and changing the page
   // protection mode has to be atomic.
   base::MutexGuard guard(page_protection_change_mutex_);
@@ -597,8 +595,7 @@ void MemoryChunk::SetReadAndExecutable() {
 
 void MemoryChunk::SetReadAndWritable() {
   DCHECK(IsFlagSet(MemoryChunk::IS_EXECUTABLE));
-  DCHECK(owner()->identity() == CODE_SPACE ||
-         owner()->identity() == CODE_LO_SPACE);
+  DCHECK(identity() == CODE_SPACE || identity() == CODE_LO_SPACE);
   // Incrementing the write_unprotect_counter_ and changing the page
   // protection mode has to be atomic.
   base::MutexGuard guard(page_protection_change_mutex_);
@@ -735,6 +732,7 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
         ->non_atomic_marking_state()
         ->bitmap(chunk)
         ->MarkAllBits();
+    chunk->SetFlag(READ_ONLY);
   } else {
     heap->incremental_marking()->non_atomic_marking_state()->SetLiveBytes(chunk,
                                                                           0);
@@ -771,8 +769,7 @@ MemoryChunk* MemoryChunk::Initialize(Heap* heap, Address base, size_t size,
 
 Page* PagedSpace::InitializePage(MemoryChunk* chunk) {
   Page* page = static_cast<Page*>(chunk);
-  DCHECK_EQ(MemoryChunkLayout::AllocatableMemoryInMemoryChunk(
-                page->owner()->identity()),
+  DCHECK_EQ(MemoryChunkLayout::AllocatableMemoryInMemoryChunk(page->identity()),
             page->area_size());
   // Make sure that categories are initialized before freeing the area.
   page->ResetAllocationStatistics();
@@ -862,18 +859,13 @@ Page* Page::ConvertNewToOld(Page* old_page) {
 }
 
 size_t MemoryChunk::CommittedPhysicalMemory() {
-  if (!base::OS::HasLazyCommits() || owner()->identity() == LO_SPACE)
-    return size();
+  if (!base::OS::HasLazyCommits() || identity() == LO_SPACE) return size();
   return high_water_mark_;
 }
 
-bool MemoryChunk::InOldSpace() const {
-  return owner()->identity() == OLD_SPACE;
-}
+bool MemoryChunk::InOldSpace() const { return identity() == OLD_SPACE; }
 
-bool MemoryChunk::InLargeObjectSpace() const {
-  return owner()->identity() == LO_SPACE;
-}
+bool MemoryChunk::InLargeObjectSpace() const { return identity() == LO_SPACE; }
 
 MemoryChunk* MemoryAllocator::AllocateChunk(size_t reserve_area_size,
                                             size_t commit_area_size,
@@ -1191,7 +1183,7 @@ void MemoryAllocator::PerformFreeMemory(MemoryChunk* chunk) {
       reservation->Free();
     } else {
       // Only read-only pages can have non-initialized reservation object.
-      DCHECK_EQ(RO_SPACE, chunk->owner()->identity());
+      DCHECK_EQ(RO_SPACE, chunk->identity());
       FreeMemory(page_allocator(chunk->executable()), chunk->address(),
                  chunk->size());
     }
@@ -1547,8 +1539,6 @@ void MemoryChunk::ReleaseMarkingBitmap() {
 // PagedSpace implementation
 
 void Space::CheckOffsetsAreConsistent() const {
-  static_assert(Space::kIdOffset == heap_internals::Space::kIdOffset,
-                "ID offset inconsistent");
   DCHECK_EQ(Space::kIdOffset, OFFSET_OF(Space, id_));
 }
 
@@ -2071,8 +2061,8 @@ void PagedSpace::Verify(Isolate* isolate, ObjectVisitor* visitor) {
       // be in map space.
       Map map = object.map();
       CHECK(map.IsMap());
-      CHECK(isolate->heap()->map_space()->Contains(map) ||
-            ReadOnlyHeap::Contains(map));
+      CHECK(ReadOnlyHeap::Contains(map) ||
+            isolate->heap()->map_space()->Contains(map));
 
       // Perform space-specific object verification.
       VerifyObject(object);
@@ -2565,7 +2555,7 @@ void NewSpace::Verify(Isolate* isolate) {
       // be in map space or read-only space.
       Map map = object.map();
       CHECK(map.IsMap());
-      CHECK(heap()->map_space()->Contains(map) || ReadOnlyHeap::Contains(map));
+      CHECK(ReadOnlyHeap::Contains(map) || heap()->map_space()->Contains(map));
 
       // The object should not be code or a map.
       CHECK(!object.IsMap());
@@ -2960,7 +2950,7 @@ FreeSpace FreeListCategory::SearchForNodeInList(size_t minimum_size,
       }
       if (!prev_non_evac_node.is_null()) {
         MemoryChunk* chunk = MemoryChunk::FromHeapObject(prev_non_evac_node);
-        if (chunk->owner()->identity() == CODE_SPACE) {
+        if (chunk->identity() == CODE_SPACE) {
           chunk->heap()->UnprotectAndRegisterMemoryChunk(chunk);
         }
         prev_non_evac_node.set_next(cur_node.next());
@@ -3383,6 +3373,7 @@ void ReadOnlyPage::MakeHeaderRelocatable() {
     LSAN_IGNORE_OBJECT(categories_[i]);
   }
   heap_ = nullptr;
+  owner_ = nullptr;
 }
 
 void ReadOnlySpace::SetPermissionsForPages(MemoryAllocator* memory_allocator,
@@ -3619,7 +3610,7 @@ void CodeLargeObjectSpace::RemoveChunkMapEntries(LargePage* page) {
 }
 
 void LargeObjectSpace::PromoteNewLargeObject(LargePage* page) {
-  DCHECK_EQ(page->owner()->identity(), NEW_LO_SPACE);
+  DCHECK_EQ(page->identity(), NEW_LO_SPACE);
   DCHECK(page->IsLargePage());
   DCHECK(page->IsFlagSet(MemoryChunk::FROM_PAGE));
   DCHECK(!page->IsFlagSet(MemoryChunk::TO_PAGE));
@@ -3727,7 +3718,7 @@ void LargeObjectSpace::Verify(Isolate* isolate) {
     // in map space or read-only space.
     Map map = object.map();
     CHECK(map.IsMap());
-    CHECK(heap()->map_space()->Contains(map) || ReadOnlyHeap::Contains(map));
+    CHECK(ReadOnlyHeap::Contains(map) || heap()->map_space()->Contains(map));
 
     // We have only the following types in the large object space:
     if (!(object.IsAbstractCode() || object.IsSeqString() ||
@@ -3860,7 +3851,7 @@ AllocationResult NewLargeObjectSpace::AllocateRaw(int object_size) {
 #endif  // ENABLE_MINOR_MC
   page->InitializationMemoryFence();
   DCHECK(page->IsLargePage());
-  DCHECK_EQ(page->owner()->identity(), NEW_LO_SPACE);
+  DCHECK_EQ(page->identity(), NEW_LO_SPACE);
   AllocationStep(object_size, result.address(), object_size);
   return result;
 }

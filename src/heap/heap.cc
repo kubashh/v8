@@ -3704,6 +3704,9 @@ const char* Heap::GarbageCollectionReasonToString(
 }
 
 bool Heap::Contains(HeapObject value) {
+  if (ReadOnlyHeap::Contains(value)) {
+    return false;
+  }
   if (memory_allocator()->IsOutsideAllocatedSpace(value.address())) {
     return false;
   }
@@ -5309,7 +5312,7 @@ void Heap::ClearRecordedSlot(HeapObject object, ObjectSlot slot) {
   DCHECK(!IsLargeObject(object));
   Page* page = Page::FromAddress(slot.address());
   if (!page->InYoungGeneration()) {
-    DCHECK_EQ(page->owner()->identity(), OLD_SPACE);
+    DCHECK_EQ(page->identity(), OLD_SPACE);
     store_buffer()->DeleteEntry(slot.address());
   }
 }
@@ -5319,7 +5322,7 @@ void Heap::VerifyClearedSlot(HeapObject object, ObjectSlot slot) {
   DCHECK(!IsLargeObject(object));
   if (InYoungGeneration(object)) return;
   Page* page = Page::FromAddress(slot.address());
-  DCHECK_EQ(page->owner()->identity(), OLD_SPACE);
+  DCHECK_EQ(page->identity(), OLD_SPACE);
   store_buffer()->MoveAllEntriesToRememberedSet();
   CHECK(!RememberedSet<OLD_TO_NEW>::Contains(page, slot.address()));
   // Old to old slots are filtered with invalidated slots.
@@ -5332,7 +5335,7 @@ void Heap::ClearRecordedSlotRange(Address start, Address end) {
   Page* page = Page::FromAddress(start);
   DCHECK(!page->IsLargePage());
   if (!page->InYoungGeneration()) {
-    DCHECK_EQ(page->owner()->identity(), OLD_SPACE);
+    DCHECK_EQ(page->identity(), OLD_SPACE);
     store_buffer()->DeleteEntry(start, end);
   }
 }
@@ -5842,7 +5845,7 @@ bool Heap::AllowedToBeMigrated(Map map, HeapObject obj, AllocationSpace dst) {
   if (map == ReadOnlyRoots(this).one_pointer_filler_map()) return false;
   InstanceType type = map.instance_type();
   MemoryChunk* chunk = MemoryChunk::FromHeapObject(obj);
-  AllocationSpace src = chunk->owner()->identity();
+  AllocationSpace src = chunk->identity();
   switch (src) {
     case NEW_SPACE:
       return dst == NEW_SPACE || dst == OLD_SPACE;
@@ -6131,16 +6134,16 @@ bool Heap::PageFlagsAreConsistent(HeapObject object) {
   CHECK_EQ(chunk->IsFlagSet(MemoryChunk::INCREMENTAL_MARKING),
            slim_chunk->IsMarking());
 
-  Space* chunk_owner = chunk->owner();
-  AllocationSpace identity = chunk_owner->identity();
+  AllocationSpace identity = chunk->identity();
 
   // Generation consistency.
   CHECK_EQ(identity == NEW_SPACE || identity == NEW_LO_SPACE,
            slim_chunk->InYoungGeneration());
+  // Read-only consistency.
+  CHECK_EQ(chunk->IsReadOnly(), slim_chunk->IsReadOnly());
 
   // Marking consistency.
-  if (identity != RO_SPACE ||
-      static_cast<ReadOnlySpace*>(chunk->owner())->writable()) {
+  if (chunk->IsWritable()) {
     // RO_SPACE can be shared between heaps, so we can't use RO_SPACE objects to
     // find a heap. The exception is when the ReadOnlySpace is writeable, during
     // bootstrapping, so explicitly allow this case.
@@ -6168,9 +6171,6 @@ static_assert(MemoryChunk::kFlagsOffset ==
 static_assert(MemoryChunk::kHeapOffset ==
                   heap_internals::MemoryChunk::kHeapOffset,
               "Heap offset inconsistent");
-static_assert(MemoryChunk::kOwnerOffset ==
-                  heap_internals::MemoryChunk::kOwnerOffset,
-              "Owner offset inconsistent");
 
 void Heap::SetEmbedderStackStateForNextFinalizaton(
     EmbedderHeapTracer::EmbedderStackState stack_state) {
