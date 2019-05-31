@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "301e84b8_59763aef",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-31T09:04:16Z",
+      "side": 1,
+      "message": "Thanks, fixed.",
+      "parentUuid": "72042419_0b814062",
+      "range": {
+        "startLine": 2041,
+        "startChar": 25,
+        "endLine": 2041,
+        "endChar": 36
+      },
+      "revId": "cf618cd0921a9fded72119b14e75efa631f1a301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b0c79520_2e2f4430",
         "filename": "src/wasm/baseline/liftoff-compiler.cc",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "cf618cd0921a9fded72119b14e75efa631f1a301",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f03926f_27b7a0a7",
+        "filename": "src/wasm/baseline/liftoff-compiler.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-31T09:04:16Z",
+      "side": 1,
+      "message": "Thanks, fixed.",
+      "parentUuid": "b0c79520_2e2f4430",
+      "range": {
+        "startLine": 2045,
+        "startChar": 25,
+        "endLine": 2045,
+        "endChar": 42
+      },
+      "revId": "cf618cd0921a9fded72119b14e75efa631f1a301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f44f77cb_22cdd90a",
+        "filename": "src/wasm/baseline/liftoff-compiler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-31T09:04:16Z",
+      "side": 1,
+      "message": "Ack, clarified this comment.",
+      "parentUuid": "f4bb6dcd_625a920f",
+      "range": {
+        "startLine": 25,
+        "startChar": 37,
+        "endLine": 25,
+        "endChar": 74
+      },
+      "revId": "cf618cd0921a9fded72119b14e75efa631f1a301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b979fd4d_484df3fa",
         "filename": "src/wasm/baseline/liftoff-compiler.h",
         "patchSetId": 4
@@ -91,6 +163,30 @@
       "revId": "cf618cd0921a9fded72119b14e75efa631f1a301",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73c4ce46_b85834e2",
+        "filename": "src/wasm/baseline/liftoff-compiler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1177599
+      },
+      "writtenOn": "2019-05-31T09:04:16Z",
+      "side": 1,
+      "message": "As discussed offline, each additional bucket has *some* cost, but not too much. Added four more unused reasons now.",
+      "parentUuid": "b979fd4d_484df3fa",
+      "range": {
+        "startLine": 48,
+        "startChar": 17,
+        "endLine": 48,
+        "endChar": 19
+      },
+      "revId": "cf618cd0921a9fded72119b14e75efa631f1a301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
