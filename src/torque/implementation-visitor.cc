@@ -2612,6 +2612,7 @@ void ImplementationVisitor::Visit(Declarable* declarable) {
     case Declarable::kExternConstant:
     case Declarable::kNamespace:
     case Declarable::kGeneric:
+    case Declarable::kGenericType:
       return;
   }
 }

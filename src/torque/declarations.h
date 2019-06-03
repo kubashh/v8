@@ -70,6 +70,8 @@ class Declarations {
 
   static std::vector<Generic*> LookupGeneric(const std::string& name);
   static Generic* LookupUniqueGeneric(const QualifiedName& name);
+  static std::vector<GenericType*> LookupGenericType(const std::string& name);
+  static GenericType* LookupUniqueGenericType(const QualifiedName& name);
 
   static Namespace* DeclareNamespace(const std::string& name);
   static TypeAlias* DeclareType(const Identifier* name, const Type* type);
@@ -124,6 +126,8 @@ class Declarations {
 
   static Generic* DeclareGeneric(const std::string& name,
                                  GenericDeclaration* generic);
+  static GenericType* DeclareGenericType(const std::string& name,
+                                         AbstractTypeDeclaration* generic);
 
   template <class T>
   static T* Declare(const std::string& name, T* d) {

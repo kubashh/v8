@@ -16,8 +16,9 @@ namespace torque {
 
 class TypeVisitor {
  public:
-  static TypeVector ComputeTypeVector(const std::vector<TypeExpression*>& v) {
-    TypeVector result;
+  static std::vector<const Type*> ComputeTypeVector(
+      const std::vector<TypeExpression*>& v) {
+    std::vector<const Type*> result;
     for (TypeExpression* t : v) {
       result.push_back(ComputeType(t));
     }
@@ -32,7 +33,9 @@ class TypeVisitor {
  private:
   friend class TypeAlias;
   static const Type* ComputeType(TypeDeclaration* decl);
-  static const AbstractType* ComputeType(AbstractTypeDeclaration* decl);
+  static const AbstractType* ComputeType(
+      AbstractTypeDeclaration* decl, const std::vector<const Type*>& args = {},
+      const GenericType* generic = nullptr);
   static const Type* ComputeType(TypeAliasDeclaration* decl);
   static const StructType* ComputeType(StructDeclaration* decl);
   static const ClassType* ComputeType(ClassDeclaration* decl);

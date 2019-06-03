@@ -50,6 +50,7 @@ class Declarable {
     kRuntimeFunction,
     kIntrinsic,
     kGeneric,
+    kGenericType,
     kTypeAlias,
     kExternConstant,
     kNamespaceConstant
@@ -64,6 +65,7 @@ class Declarable {
   bool IsBuiltin() const { return kind() == kBuiltin; }
   bool IsRuntimeFunction() const { return kind() == kRuntimeFunction; }
   bool IsGeneric() const { return kind() == kGeneric; }
+  bool IsGenericType() const { return kind() == kGenericType; }
   bool IsTypeAlias() const { return kind() == kTypeAlias; }
   bool IsExternConstant() const { return kind() == kExternConstant; }
   bool IsNamespaceConstant() const { return kind() == kNamespaceConstant; }
@@ -489,6 +491,42 @@ class Generic : public Declarable {
 struct SpecializationKey {
   Generic* generic;
   TypeVector specialized_types;
+};
+
+class GenericType : public Declarable {
+ public:
+  DECLARE_DECLARABLE_BOILERPLATE(GenericType, generic_type)
+  const std::string& name() const { return name_; }
+  AbstractTypeDeclaration* decl() const { return decl_; }
+  const std::vector<GenericParameter>& generic_parameters() const {
+    return decl_->generic_parameters;
+  }
+
+  void AddSpecialization(const std::vector<const Type*>& type_arguments,
+                         const Type* specialization) {
+    DCHECK_EQ(0, specializations_.count(type_arguments));
+    specializations_[type_arguments] = specialization;
+  }
+
+  base::Optional<const Type*> GetSpecialization(
+      const std::vector<const Type*>& type_arguments) const {
+    auto it = specializations_.find(type_arguments);
+    if (it != specializations_.end()) return it->second;
+    return base::nullopt;
+  }
+
+ private:
+  friend class Declarations;
+  GenericType(const std::string& name, AbstractTypeDeclaration* decl)
+      : Declarable(Declarable::kGenericType), name_(name), decl_(decl) {
+    DCHECK_GT(decl->generic_parameters.size(), 0);
+  }
+
+  std::string name_;
+  AbstractTypeDeclaration* decl_;
+  std::unordered_map<const std::vector<const Type*>, const Type*,
+                     base::hash<const std::vector<const Type*>>>
+      specializations_;
 };
 
 class TypeAlias : public Declarable {
