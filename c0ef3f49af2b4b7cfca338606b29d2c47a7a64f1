@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "021b9003_1c7b9e29",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115935
+      },
+      "writtenOn": "2019-06-03T11:55:02Z",
+      "side": 1,
+      "message": "Please make the message a little more descriptive, e.g.:\n\nDrop now-unused \"flags\" field from JSNumberFormat",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "c0ef3f49af2b4b7cfca338606b29d2c47a7a64f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
