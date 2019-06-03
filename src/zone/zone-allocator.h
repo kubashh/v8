@@ -26,10 +26,6 @@ class ZoneAllocator {
     using other = ZoneAllocator<O>;
   };
 
-#ifdef V8_CC_MSVC
-  // MSVS unfortunately requires the default constructor to be defined.
-  ZoneAllocator() : ZoneAllocator(nullptr) { UNREACHABLE(); }
-#endif
   explicit ZoneAllocator(Zone* zone) : zone_(zone) {}
   template <typename U>
   ZoneAllocator(const ZoneAllocator<U>& other) V8_NOEXCEPT
@@ -84,13 +80,6 @@ class RecyclingZoneAllocator : public ZoneAllocator<T> {
     using other = RecyclingZoneAllocator<O>;
   };
 
-#ifdef V8_CC_MSVC
-  // MSVS unfortunately requires the default constructor to be defined.
-  RecyclingZoneAllocator()
-      : ZoneAllocator(nullptr, nullptr), free_list_(nullptr) {
-    UNREACHABLE();
-  }
-#endif
   explicit RecyclingZoneAllocator(Zone* zone)
       : ZoneAllocator<T>(zone), free_list_(nullptr) {}
   template <typename U>
