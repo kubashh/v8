@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d591d62_b0f41079",
+        "filename": "test/js-perf-test/BigInt/add.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-03T11:55:42Z",
+      "side": 1,
+      "message": "This should work without an IIFE",
+      "range": {
+        "startLine": 31,
+        "startChar": 1,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "635c2aa4f2c0fc6644d8691faf144399220c4021",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5e705c5_6233eec4",
+        "filename": "test/js-perf-test/BigInt/add.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-03T11:55:42Z",
+      "side": 1,
+      "message": "Can we save some iterations here?",
+      "range": {
+        "startLine": 51,
+        "startChar": 22,
+        "endLine": 51,
+        "endChar": 37
+      },
+      "revId": "635c2aa4f2c0fc6644d8691faf144399220c4021",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e10e7c83_01f49d24",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-03T11:55:42Z",
+      "side": 1,
+      "message": "Not all machines are 64 bit. Why is this necessary? We could phrase N in terms of BigInt bits instead of digits, then we would not need the distinction.",
+      "range": {
+        "startLine": 8,
+        "startChar": 6,
+        "endLine": 8,
+        "endChar": 13
+      },
+      "revId": "635c2aa4f2c0fc6644d8691faf144399220c4021",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36959248_470ee9dc",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-03T11:55:42Z",
+      "side": 1,
+      "message": "Indent",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 45,
+        "endChar": 4
+      },
+      "revId": "635c2aa4f2c0fc6644d8691faf144399220c4021",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c75cf1d3_e2be0552",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-03T11:55:42Z",
+      "side": 1,
+      "message": "This function seems to be unused?",
+      "range": {
+        "startLine": 48,
+        "startChar": 9,
+        "endLine": 48,
+        "endChar": 31
+      },
+      "revId": "635c2aa4f2c0fc6644d8691faf144399220c4021",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0244683_d1792682",
+        "filename": "test/js-perf-test/BigInt/bigint-util.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1119600
+      },
+      "writtenOn": "2019-06-03T11:55:42Z",
+      "side": 1,
+      "message": "nit: use { } for multi-line if, also elsewhere in the file",
+      "range": {
+        "startLine": 49,
+        "startChar": 17,
+        "endLine": 49,
+        "endChar": 18
+      },
+      "revId": "635c2aa4f2c0fc6644d8691faf144399220c4021",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
