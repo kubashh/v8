@@ -83,6 +83,9 @@
   'intl402/supportedLocalesOf-consistent-with-resolvedOptions': [FAIL],
   'intl402/fallback-locales-are-supported': [FAIL],
 
+  # https://bugs.chromium.org/p/v8/issues/detail?id=9319
+  'intl402/NumberFormat/prototype/resolvedOptions/order': [FAIL],
+
   # https://code.google.com/p/v8/issues/detail?id=4251
   'language/expressions/postfix-increment/S11.3.1_A5_T1': [FAIL],
   'language/expressions/postfix-increment/S11.3.1_A5_T2': [FAIL],

@@ -1911,7 +1911,6 @@ USE_TORQUE_VERIFIER(JSLocale)
 
 void JSNumberFormat::JSNumberFormatVerify(Isolate* isolate) {
   TorqueGeneratedClassVerifiers::JSNumberFormatVerify(*this, isolate);
-  VerifySmiField(kFlagsOffset);
 }
 
 void JSPluralRules::JSPluralRulesVerify(Isolate* isolate) {

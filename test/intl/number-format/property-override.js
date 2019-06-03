@@ -58,8 +58,8 @@ for (var prop in options) {
 var expectedProperties = [
   'style', 'locale', 'numberingSystem',
   'currency', 'currencyDisplay', 'useGrouping',
-  'minimumIntegerDigits', 'minimumFractionDigits',
-  'maximumFractionDigits', 'minimumSignificantDigits',
+  'minimumIntegerDigits',
+  'minimumSignificantDigits',
   'maximumSignificantDigits'
 ];
 
