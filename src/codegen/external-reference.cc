@@ -671,6 +671,18 @@ static Address LexicographicCompareWrapper(Isolate* isolate, Address smi_x,
 FUNCTION_REFERENCE(smi_lexicographic_compare_function,
                    LexicographicCompareWrapper)
 
+FUNCTION_REFERENCE(mutable_big_int_make_immutable_function,
+                   MutableBigInt_MakeImmutable)
+
+FUNCTION_REFERENCE(mutable_big_int_absolute_add_function,
+                   MutableBigInt_AbsoluteAdd)
+
+FUNCTION_REFERENCE(mutable_big_int_absolute_compare_function,
+                   MutableBigInt_AbsoluteCompare)
+
+FUNCTION_REFERENCE(mutable_big_int_absolute_sub_function,
+                   MutableBigInt_AbsoluteSub)
+
 FUNCTION_REFERENCE(check_object_type, CheckObjectType)
 
 #ifdef V8_INTL_SUPPORT
