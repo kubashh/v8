@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b162857d_140c4117",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-06-03T15:46:21Z",
+      "side": 1,
+      "message": "Can you wrap the code here in a separate function to document that this code implements importing a constructed WebAssembly.Function? First I thought of a comment, but if you find a good function name, then that would be a better kind of documentation.",
+      "revId": "ead2e0072e3d0163a67b1190d1366c86b658142e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4b652d9_1646f0f5",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 942,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-06-03T15:46:21Z",
+      "side": 1,
+      "message": "Do you not have to handle the {kind \u003d\u003d compiler::WasmImportCallKind::kLinkError} case here? If not, can you add a DCHECK that {kind} is not {compiler::WasmImportCallKind::kLinkError}?\n\nUpdate: I saw now that such a DCHECK already exists in CompileWasmImportCallWrapper. Maybe that\u0027s enough.",
+      "range": {
+        "startLine": 942,
+        "startChar": 35,
+        "endLine": 942,
+        "endChar": 39
+      },
+      "revId": "ead2e0072e3d0163a67b1190d1366c86b658142e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "908fe931_b291d1c2",
+        "filename": "src/wasm/module-instantiate.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1141154
+      },
+      "writtenOn": "2019-06-03T15:46:21Z",
+      "side": 1,
+      "message": "Can we do the signature check before compiling the wrapper? Do we even need the wrapper if {sig_id \u003c 0}?",
+      "range": {
+        "startLine": 954,
+        "startChar": 11,
+        "endLine": 954,
+        "endChar": 17
+      },
+      "revId": "ead2e0072e3d0163a67b1190d1366c86b658142e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
