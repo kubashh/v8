@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e841344f_bdd81d99",
+        "filename": "src/heap/heap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1327466
+      },
+      "writtenOn": "2019-06-03T14:08:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afd585c9_2e869c0a",
+      "range": {
+        "startLine": 993,
+        "startChar": 23,
+        "endLine": 993,
+        "endChar": 44
+      },
+      "revId": "aebc886cd446f2ee86d1aaabb7601a13c8e747e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "96c8134d_e8e1981a",
         "filename": "src/heap/spaces-inl.h",
         "patchSetId": 7
@@ -36,6 +60,30 @@
       "writtenOn": "2019-06-03T13:52:32Z",
       "side": 1,
       "message": "maybe we should just store the AllocationSpace in the Page itself?",
+      "range": {
+        "startLine": 246,
+        "startChar": 2,
+        "endLine": 247,
+        "endChar": 29
+      },
+      "revId": "aebc886cd446f2ee86d1aaabb7601a13c8e747e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ec3f67c_ec2b5d01",
+        "filename": "src/heap/spaces-inl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1327466
+      },
+      "writtenOn": "2019-06-03T14:08:11Z",
+      "side": 1,
+      "message": "I think it would be better to avoid duplicating data between spaces and pages. Open to doing this if it effects performance .",
+      "parentUuid": "96c8134d_e8e1981a",
       "range": {
         "startLine": 246,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b7d0a78e_e880fecf",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1327466
+      },
+      "writtenOn": "2019-06-03T14:08:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0867db84_adfd2bd8",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 12
+      },
+      "revId": "aebc886cd446f2ee86d1aaabb7601a13c8e747e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a566739_11d7aa42",
         "filename": "src/heap/spaces.cc",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "1f94aa9b_3dd4a6a8",
+        "filename": "src/heap/spaces.cc",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1327466
+      },
+      "writtenOn": "2019-06-03T14:08:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a566739_11d7aa42",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 58
+      },
+      "revId": "aebc886cd446f2ee86d1aaabb7601a13c8e747e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ecc6bef7_d070b830",
         "filename": "src/heap/spaces.h",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "aebc886cd446f2ee86d1aaabb7601a13c8e747e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39e5d0bc_98502872",
+        "filename": "src/heap/spaces.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1327466
+      },
+      "writtenOn": "2019-06-03T14:08:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecc6bef7_d070b830",
+      "range": {
+        "startLine": 347,
+        "startChar": 27,
+        "endLine": 347,
+        "endChar": 29
+      },
+      "revId": "aebc886cd446f2ee86d1aaabb7601a13c8e747e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
