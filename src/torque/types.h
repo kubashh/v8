@@ -188,7 +188,9 @@ class TopType final : public Type {
   const Type* source_type_;
 };
 
-class AbstractType final : public Type {
+class GenericType;
+
+class AbstractType : public Type {
  public:
   DECLARE_TYPE_BOILERPLATE(AbstractType)
   const std::string& name() const { return name_; }
@@ -221,23 +223,22 @@ class AbstractType final : public Type {
     return nullptr;
   }
 
+  bool IsGeneric() const { return type_arguments_.size(); }
+
+  bool IsSubtypeOf(const Type* supertype) const override;
+
   std::vector<std::string> GetRuntimeTypes() const override { return {name()}; }
 
  private:
+  static std::string ComputeName(const std::string& basename,
+                                 const std::vector<const Type*>& args);
+
   friend class TypeOracle;
   AbstractType(const Type* parent, bool transient, const std::string& name,
                const std::string& generated_type,
-               const Type* non_constexpr_version)
-      : Type(Kind::kAbstractType, parent),
-        transient_(transient),
-        name_(name),
-        generated_type_(generated_type),
-        non_constexpr_version_(non_constexpr_version) {
-    if (parent) DCHECK(parent->IsConstexpr() == IsConstexpr());
-    DCHECK_EQ(!IsConstexprName(name), non_constexpr_version == nullptr);
-    DCHECK_IMPLIES(IsConstexprName(name),
-                   !non_constexpr_version->IsConstexpr());
-  }
+               const Type* non_constexpr_version,
+               const std::vector<const Type*>& args,
+               const GenericType* generic);
 
   void SetConstexprVersion(const AbstractType* type) const {
     DCHECK_EQ(GetConstexprName(name()), type->name());
@@ -251,6 +252,9 @@ class AbstractType final : public Type {
   const std::string generated_type_;
   const Type* non_constexpr_version_;
   mutable const AbstractType* constexpr_version_ = nullptr;
+
+  std::vector<const Type*> type_arguments_;
+  const GenericType* generic_;
 };
 
 // For now, builtin pointers are restricted to Torque-defined builtins.

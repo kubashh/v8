@@ -445,14 +445,17 @@ struct BasicTypeExpression : TypeExpression {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(BasicTypeExpression)
   BasicTypeExpression(SourcePosition pos,
                       std::vector<std::string> namespace_qualification,
-                      std::string name)
+                      std::string name,
+                      std::vector<TypeExpression*> generic_arguments)
       : TypeExpression(kKind, pos),
         namespace_qualification(std::move(namespace_qualification)),
         is_constexpr(IsConstexprName(name)),
-        name(std::move(name)) {}
+        name(std::move(name)),
+        generic_arguments(generic_arguments) {}
   std::vector<std::string> namespace_qualification;
   bool is_constexpr;
   std::string name;
+  std::vector<TypeExpression*> generic_arguments;
 };
 
 struct FunctionTypeExpression : TypeExpression {
@@ -681,20 +684,29 @@ struct TypeDeclaration : Declaration {
   Identifier* name;
 };
 
+struct GenericParameter {
+  enum class Variance { kInvariant, kCovariant };
+  Variance variance;
+  Identifier* name;
+};
+
 struct AbstractTypeDeclaration : TypeDeclaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(AbstractTypeDeclaration)
   AbstractTypeDeclaration(SourcePosition pos, Identifier* name, bool transient,
-                          base::Optional<Identifier*> extends,
-                          base::Optional<std::string> generates)
+                          base::Optional<TypeExpression*> extends,
+                          base::Optional<std::string> generates,
+                          std::vector<GenericParameter> generic_parameters)
       : TypeDeclaration(kKind, pos, name),
         is_constexpr(IsConstexprName(name->value)),
         transient(transient),
         extends(extends),
-        generates(std::move(generates)) {}
+        generates(std::move(generates)),
+        generic_parameters(std::move(generic_parameters)) {}
   bool is_constexpr;
   bool transient;
-  base::Optional<Identifier*> extends;
+  base::Optional<TypeExpression*> extends;
   base::Optional<std::string> generates;
+  std::vector<GenericParameter> generic_parameters;
 };
 
 struct TypeAliasDeclaration : TypeDeclaration {
@@ -877,15 +889,17 @@ struct StandardDeclaration : Declaration {
 struct GenericDeclaration : Declaration {
   DEFINE_AST_NODE_LEAF_BOILERPLATE(GenericDeclaration)
   GenericDeclaration(SourcePosition pos, CallableNode* callable,
-                     std::vector<Identifier*> generic_parameters,
+                     std::vector<GenericParameter> generic_parameters,
                      base::Optional<Statement*> body = base::nullopt)
-      : Declaration(kKind, pos),
-        callable(callable),
-        generic_parameters(std::move(generic_parameters)),
-        body(body) {}
+      : Declaration(kKind, pos), callable(callable), body(body) {
+    for (auto p : generic_parameters) {
+      DCHECK(p.variance == GenericParameter::Variance::kInvariant);
+      this->generic_parameters.push_back(p.name);
+    }
+  }
   CallableNode* callable;
-  std::vector<Identifier*> generic_parameters;
   base::Optional<Statement*> body;
+  std::vector<Identifier*> generic_parameters;
 };
 
 struct SpecializationDeclaration : Declaration {

@@ -7,6 +7,7 @@
 #include "src/torque/global-context.h"
 #include "src/torque/server-data.h"
 #include "src/torque/type-oracle.h"
+#include "src/torque/type-visitor.h"
 
 namespace v8 {
 namespace internal {
@@ -131,6 +132,18 @@ std::vector<Generic*> Declarations::LookupGeneric(const std::string& name) {
 Generic* Declarations::LookupUniqueGeneric(const QualifiedName& name) {
   return EnsureUnique(FilterDeclarables<Generic>(Lookup(name)), name,
                       "generic");
+}
+
+std::vector<GenericType*> Declarations::LookupGenericType(
+    const std::string& name) {
+  return EnsureNonempty(
+      FilterDeclarables<GenericType>(Lookup(QualifiedName(name))), name,
+      "generic type");
+}
+
+GenericType* Declarations::LookupUniqueGenericType(const QualifiedName& name) {
+  return EnsureUnique(FilterDeclarables<GenericType>(Lookup(name)), name,
+                      "generic type");
 }
 
 Namespace* Declarations::DeclareNamespace(const std::string& name) {
@@ -276,6 +289,12 @@ NamespaceConstant* Declarations::DeclareNamespaceConstant(Identifier* name,
 Generic* Declarations::DeclareGeneric(const std::string& name,
                                       GenericDeclaration* generic) {
   return Declare(name, std::unique_ptr<Generic>(new Generic(name, generic)));
+}
+
+GenericType* Declarations::DeclareGenericType(
+    const std::string& name, AbstractTypeDeclaration* generic) {
+  return Declare(name,
+                 std::unique_ptr<GenericType>(new GenericType(name, generic)));
 }
 
 std::string Declarations::GetGeneratedCallableName(

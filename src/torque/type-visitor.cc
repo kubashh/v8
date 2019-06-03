@@ -50,13 +50,20 @@ std::string ComputeGeneratesType(base::Optional<std::string> opt_gen,
 }
 }  // namespace
 
-const AbstractType* TypeVisitor::ComputeType(AbstractTypeDeclaration* decl) {
+const AbstractType* TypeVisitor::ComputeType(
+    AbstractTypeDeclaration* decl, const std::vector<const Type*>& args,
+    const GenericType* generic) {
+  DCHECK_EQ(decl->generic_parameters.size(), args.size());
+  DCHECK_EQ(generic == nullptr, decl->generic_parameters.size() == 0);
   std::string generates =
       ComputeGeneratesType(decl->generates, !decl->is_constexpr);
 
   const Type* parent_type = nullptr;
   if (decl->extends) {
-    parent_type = Declarations::LookupType(*decl->extends);
+    parent_type = ComputeType(*decl->extends);
+    if (decl->is_constexpr) {
+      parent_type = parent_type->ConstexprVersion();
+    }
   }
 
   if (generates == "" && parent_type) {
@@ -78,7 +85,7 @@ const AbstractType* TypeVisitor::ComputeType(AbstractTypeDeclaration* decl) {
 
   return TypeOracle::GetAbstractType(parent_type, decl->name->value,
                                      decl->transient, generates,
-                                     non_constexpr_version);
+                                     non_constexpr_version, args, generic);
 }
 
 void DeclareMethods(AggregateType* container_type,
@@ -169,8 +176,43 @@ const ClassType* TypeVisitor::ComputeType(ClassDeclaration* decl) {
   return new_class;
 }
 
+namespace {
+void DeclareSpecializedTypes(const std::vector<GenericParameter>& names,
+                             const std::vector<const Type*>& types) {
+  if (names.size() != types.size()) {
+    Error("wrong number of generic arguments");
+  }
+
+  for (size_t i = 0; i < names.size(); ++i) {
+    Identifier* generic_type_name = names[i++].name;
+    const Type* type = types[i];
+    TypeAlias* alias = Declarations::DeclareType(generic_type_name, type);
+    alias->SetIsUserDefined(false);
+  }
+}
+}  // namespace
+
 const Type* TypeVisitor::ComputeType(TypeExpression* type_expression) {
-  if (auto* basic = BasicTypeExpression::DynamicCast(type_expression)) {
+  if (const auto* basic = BasicTypeExpression::DynamicCast(type_expression)) {
+    if (basic->generic_arguments.size()) {
+      std::vector<const Type*> types =
+          ComputeTypeVector(basic->generic_arguments);
+      GenericType* generic = Declarations::LookupUniqueGenericType(
+          QualifiedName{basic->namespace_qualification, basic->name});
+      auto specialization = generic->GetSpecialization(types);
+      if (specialization) {
+        return *specialization;
+      }
+      CurrentScope::Scope generic_scope(generic->ParentScope());
+      // Create a temporary fake-namespace just to temporarily declare the
+      // specialization aliases for the generic types to create a signature.
+      Namespace tmp_namespace("_tmp");
+      CurrentScope::Scope tmp_namespace_scope(&tmp_namespace);
+      DeclareSpecializedTypes(generic->generic_parameters(), types);
+      const AbstractType* type = ComputeType(generic->decl(), types, generic);
+      generic->AddSpecialization(types, type);
+      return type;
+    }
     const TypeAlias* alias = Declarations::LookupTypeAlias(
         QualifiedName{basic->namespace_qualification, basic->name});
     if (GlobalContext::collect_language_server_data()) {

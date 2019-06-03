@@ -57,6 +57,11 @@ type Code extends HeapObject generates 'TNode<Code>';
 type BuiltinPtr extends Smi generates 'TNode<BuiltinPtr>';
 type Context extends HeapObject generates 'TNode<Context>';
 type NativeContext extends Context;
+intrinsic %FromConstexpr<To: type, From: type>(b: From): To;
+macro FromConstexpr<To: type, From: type>(o: From): To;
+FromConstexpr<Smi, constexpr int31>(i: constexpr int31): Smi {
+  return %FromConstexpr<Smi>(i);
+}
 )";
 
 TorqueCompilerResult TestCompileTorque(std::string source) {
@@ -213,6 +218,34 @@ TEST(Torque, ConstexprLetBindingDoesNotCrash) {
       HasSubstr("Use 'const' instead of 'let' for variable 'foo'"));
 }
 
+TEST(Torque, TorqueMaybeObjectCovariant) {
+  ExpectSuccessfulCompilation(
+      R"(type MaybeObject<covariant O: type> extends Tagged;
+      macro Foo(x: MaybeObject<JSObject>): Smi {
+        return 2;
+      }
+      macro Foo(x: MaybeObject<Tagged>): Smi {
+        return 1;
+      }
+      builtin Bar(context: Context, y: MaybeObject<HeapObject>): Smi {
+        return Foo(y);
+      })");
+}
+
+TEST(Torque, TorqueMaybeObjectInvariant) {
+  ExpectFailingCompilation(
+      R"(type MaybeObject<O: type> extends Tagged;
+      macro Foo(x: MaybeObject<JSObject>): Smi {
+        return 2;
+      }
+      macro Foo(x: MaybeObject<Tagged>): Smi {
+        return 1;
+      }
+      builtin Bar(context: Context, y: MaybeObject<HeapObject>): Smi {
+        return Foo(y);
+      })",
+      HasSubstr("find suitable callable with name"));
+}
 }  // namespace torque
 }  // namespace internal
 }  // namespace v8
