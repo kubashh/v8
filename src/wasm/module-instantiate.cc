@@ -919,15 +919,43 @@ bool InstanceBuilder::InitializeImportedIndirectFunctionTable(
     bool is_null;
     MaybeHandle<WasmInstanceObject> maybe_target_instance;
     int function_index;
+    MaybeHandle<WasmJSFunction> maybe_js_function;
     WasmTableObject::GetFunctionTableEntry(isolate_, table_object, i, &is_valid,
                                            &is_null, &maybe_target_instance,
-                                           &function_index);
+                                           &function_index, &maybe_js_function);
     if (!is_valid) {
       thrower_->LinkError("table import %d[%d] is not a wasm function",
                           import_index, i);
       return false;
     }
     if (is_null) continue;
+    Handle<WasmJSFunction> js_function;
+    if (maybe_js_function.ToHandle(&js_function)) {
+      Zone zone(isolate_->allocator(), ZONE_NAME);
+      wasm::FunctionSig* sig = js_function->GetSignature(&zone);
+      Handle<JSReceiver> callable(js_function->GetCallable(), isolate_);
+      // TODO(mstarzinger): Cache and reuse wrapper code. Also, unify this with
+      // the code in {WasmTableObject::UpdateDispatchTables} eventually.
+      wasm::NativeModule* native_module =
+          instance->module_object().native_module();
+      wasm::WasmCodeRefScope code_ref_scope;
+      compiler::WasmImportCallKind kind =
+          compiler::GetWasmImportCallKind(callable, sig, enabled_.bigint);
+      wasm::WasmCode* wasm_code = compiler::CompileWasmImportCallWrapper(
+          isolate_->wasm_engine(), native_module, kind, sig, false);
+      isolate_->counters()->wasm_generated_code_size()->Increment(
+          wasm_code->instructions().length());
+      isolate_->counters()->wasm_reloc_size()->Increment(
+          wasm_code->reloc_info().length());
+      Handle<Tuple2> tuple = isolate_->factory()->NewTuple2(
+          instance, callable, AllocationType::kOld);
+      // Note that {SignatureMap::Find} may return {-1} if the signature is
+      // not found; it will simply never match any check.
+      auto sig_id = instance->module()->signature_map.Find(*sig);
+      IndirectFunctionTableEntry(instance, i)
+          .Set(sig_id, wasm_code->instruction_start(), *tuple);
+      continue;
+    }
 
     Handle<WasmInstanceObject> target_instance =
         maybe_target_instance.ToHandleChecked();
