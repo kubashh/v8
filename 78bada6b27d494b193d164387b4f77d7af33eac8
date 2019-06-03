@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ccb93f8_64bb2845",
+        "filename": "test/unittests/torque/torque-unittest.cc",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1180419
+      },
+      "writtenOn": "2019-06-03T13:42:36Z",
+      "side": 1,
+      "message": "I think it\u0027s more readable with a newline here.",
+      "range": {
+        "startLine": 223,
+        "startChar": 9,
+        "endLine": 223,
+        "endChar": 10
+      },
+      "revId": "78bada6b27d494b193d164387b4f77d7af33eac8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
