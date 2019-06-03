@@ -3649,6 +3649,10 @@ Handle<StackFrameInfo> Factory::NewStackFrameInfo() {
   stack_frame_info->set_script_name(*null_value());
   stack_frame_info->set_script_name_or_source_url(*null_value());
   stack_frame_info->set_function_name(*null_value());
+  stack_frame_info->set_method_name(*null_value());
+  stack_frame_info->set_type_name(*null_value());
+  stack_frame_info->set_eval_origin(*null_value());
+  stack_frame_info->set_wasm_module_name(*null_value());
   stack_frame_info->set_flag(0);
   return stack_frame_info;
 }
@@ -3663,38 +3667,47 @@ Handle<StackFrameInfo> Factory::NewStackFrameInfo(
 
   const bool is_wasm = frame_array->IsAnyWasmFrame(index);
   info->set_is_wasm(is_wasm);
+  info->set_is_asmjs_wasm(frame_array->IsAsmJsWasmFrame(index));
 
   // Line numbers are 1-based, for Wasm we need to adjust.
   int line = it.Frame()->GetLineNumber();
-  if (is_wasm && line >= 0) line++;
   info->set_line_number(line);
 
   // Column numbers are 1-based. For Wasm we use the position
   // as the iterator does not currently provide a column number.
-  const int column =
-      is_wasm ? it.Frame()->GetPosition() + 1 : it.Frame()->GetColumnNumber();
+  const int column = (is_wasm && !info->is_asmjs_wasm())
+                         ? it.Frame()->GetPosition() + 1
+                         : it.Frame()->GetColumnNumber();
   info->set_column_number(column);
 
   info->set_script_id(it.Frame()->GetScriptId());
-  info->set_script_name(*it.Frame()->GetFileName());
-  info->set_script_name_or_source_url(*it.Frame()->GetScriptNameOrSourceUrl());
+  Handle<Object> script_name = it.Frame()->GetFileName();
+  info->set_script_name(*script_name);
+  Handle<Object> script_or_url = it.Frame()->GetScriptNameOrSourceUrl();
+  info->set_script_name_or_source_url(*script_or_url);
 
   // TODO(szuend): Adjust this, once it is decided what name to use in both
   //               "simple" and "detailed" stack traces. This code is for
   //               backwards compatibility to fullfill test expectations.
-  auto function_name = it.Frame()->GetFunctionName();
   if (!is_wasm) {
     Handle<Object> function = it.Frame()->GetFunction();
     if (function->IsJSFunction()) {
       Handle<JSFunction> fun = Handle<JSFunction>::cast(function);
-      function_name = JSFunction::GetDebugName(fun);
 
       const bool is_user_java_script = fun->shared().IsUserJavaScript();
       info->set_is_user_java_script(is_user_java_script);
     }
   }
+  Handle<Object> function_name = it.Frame()->GetFunctionName();
   info->set_function_name(*function_name);
-  info->set_wasm_module_name(*it.Frame()->GetWasmModuleName());
+  Handle<Object> method_name = it.Frame()->GetMethodName();
+  info->set_method_name(*method_name);
+  Handle<Object> type_name = it.Frame()->GetTypeName();
+  info->set_type_name(*type_name);
+  Handle<Object> eval_origin = it.Frame()->GetEvalOrigin();
+  info->set_eval_origin(*eval_origin);
+  Handle<Object> wasm_module_name = it.Frame()->GetWasmModuleName();
+  info->set_wasm_module_name(*wasm_module_name);
   info->set_is_eval(it.Frame()->IsEval());
   info->set_is_constructor(it.Frame()->IsConstructor());
   info->set_is_toplevel(it.Frame()->IsToplevel());
