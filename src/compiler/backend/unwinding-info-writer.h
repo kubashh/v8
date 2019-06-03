@@ -23,6 +23,7 @@ namespace v8 {
 namespace internal {
 
 class EhFrameWriter;
+class Zone;
 
 namespace compiler {
 
@@ -30,7 +31,7 @@ class InstructionBlock;
 
 class UnwindingInfoWriter {
  public:
-  explicit UnwindingInfoWriter(Zone* zone) {}
+  explicit UnwindingInfoWriter(Zone*) {}
 
   void SetNumberOfInstructionBlocks(int number) {
     if (FLAG_perf_prof_unwinding_info) UNIMPLEMENTED();
