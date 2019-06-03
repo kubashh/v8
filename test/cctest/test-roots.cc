@@ -15,9 +15,7 @@ namespace internal {
 namespace {
 AllocationSpace GetSpaceFromObject(Object object) {
   DCHECK(object.IsHeapObject());
-  return MemoryChunk::FromHeapObject(HeapObject::cast(object))
-      ->owner()
-      ->identity();
+  return MemoryChunk::FromHeapObject(HeapObject::cast(object))->identity();
 }
 }  // namespace
 
