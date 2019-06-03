@@ -214,8 +214,7 @@ bool Scavenger::HandleLargeObject(Map map, HeapObject object, int object_size,
   if (V8_UNLIKELY(
           FLAG_young_generation_large_objects &&
           MemoryChunk::FromHeapObject(object)->InNewLargeObjectSpace())) {
-    DCHECK_EQ(NEW_LO_SPACE,
-              MemoryChunk::FromHeapObject(object)->owner()->identity());
+    DCHECK_EQ(NEW_LO_SPACE, MemoryChunk::FromHeapObject(object)->identity());
     if (object.map_slot().Release_CompareAndSwap(
             map, MapWord::FromForwardingAddress(object).ToMap()) == map) {
       surviving_new_large_objects_.insert({object, map});
