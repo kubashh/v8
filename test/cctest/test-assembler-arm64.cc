@@ -6779,7 +6779,7 @@ static void LdrLiteralRangeHelper(size_t range, LiteralPoolEmitOutcome outcome,
 
   int pc_offset_before_emission = -1;
   // Emit NOPs up to 'range'.
-  while (code_size < range) {
+  while (code_size + PoolSizeAt(__ pc_offset() + kInstrSize) <= range) {
     pc_offset_before_emission = __ pc_offset() + kInstrSize;
     __ Nop();
     code_size += kInstrSize;
@@ -15090,7 +15090,7 @@ TEST(call_no_relocation) {
   __ Mov(x0, 0x0);
   __ Push(lr, xzr);
   {
-    Assembler::BlockConstPoolScope scope(&masm);
+    ConstantPool::BlockScope scope(&masm);
     call_start = buf_addr + __ pc_offset();
     __ Call(buf_addr + function.pos(), RelocInfo::NONE);
     return_address = buf_addr + __ pc_offset();

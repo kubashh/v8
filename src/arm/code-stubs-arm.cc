@@ -119,7 +119,7 @@ void JSEntryStub::Generate(MacroAssembler* masm) {
   // entry. This avoids making the assumption that literal pools are always
   // emitted after an instruction is emitted, rather than before.
   {
-    Assembler::BlockConstPoolScope block_const_pool(masm);
+    ConstantPool::BlockScope block_const_pool(masm);
     __ bind(&handler_entry);
     handler_offset_ = handler_entry.pos();
     // Caught exception: Store result (exception) in the pending exception

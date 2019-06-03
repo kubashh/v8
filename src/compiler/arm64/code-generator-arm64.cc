@@ -2334,12 +2334,11 @@ void CodeGenerator::AssembleArchTableSwitch(Instruction* instr) {
   __ Adr(temp, &table);
   __ Add(temp, temp, Operand(input, UXTW, 2));
   __ Br(temp);
-  __ StartBlockPools();
+  InstructionAccurateScope accurate_scope(tasm(), case_count);
   __ Bind(&table);
   for (size_t index = 0; index < case_count; ++index) {
     __ B(GetLabel(i.InputRpo(index + 2)));
   }
-  __ EndBlockPools();
 }
 
 void CodeGenerator::FinishFrame(Frame* frame) {

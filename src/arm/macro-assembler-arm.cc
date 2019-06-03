@@ -221,7 +221,7 @@ void TurboAssembler::Jump(Handle<Code> code, RelocInfo::Mode rmode,
 
 void TurboAssembler::Call(Register target, Condition cond) {
   // Block constant pool for the call instruction sequence.
-  BlockConstPoolScope block_const_pool(this);
+  ConstantPool::BlockScope block_const_pool(this);
   blx(target, cond);
 }
 
@@ -231,7 +231,7 @@ void TurboAssembler::Call(Address target, RelocInfo::Mode rmode, Condition cond,
   // Check if we have to emit the constant pool before we block it.
   if (check_constant_pool) MaybeCheckConstPool();
   // Block constant pool for the call instruction sequence.
-  BlockConstPoolScope block_const_pool(this);
+  ConstantPool::BlockScope block_const_pool(this);
 
   bool old_predictable_code_size = predictable_code_size();
   if (mode == NEVER_INLINE_TARGET_ADDRESS) {
@@ -1663,7 +1663,7 @@ void TurboAssembler::CallStubDelayed(CodeStub* stub) {
   DCHECK(AllowThisStubCall(stub));  // Stub calls are not allowed in some stubs.
 
   // Block constant pool for the call instruction sequence.
-  BlockConstPoolScope block_const_pool(this);
+  ConstantPool::BlockScope block_const_pool(this);
 
 #ifdef DEBUG
   Label start;

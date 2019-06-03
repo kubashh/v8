@@ -2321,7 +2321,7 @@ void Builtins::Generate_CEntry(MacroAssembler* masm, int result_size,
   // instructions so add another 4 to pc to get the return address.
   {
     // Prevent literal pool emission before return address.
-    Assembler::BlockConstPoolScope block_const_pool(masm);
+    ConstantPool::BlockScope block_const_pool(masm);
     __ add(lr, pc, Operand(4));
     __ str(lr, MemOperand(sp));
     __ Call(r5);

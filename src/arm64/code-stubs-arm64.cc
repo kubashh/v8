@@ -220,7 +220,7 @@ static const unsigned int kProfileEntryHookCallSize =
 void ProfileEntryHookStub::MaybeCallEntryHookDelayed(TurboAssembler* tasm,
                                                      Zone* zone) {
   if (tasm->isolate()->function_entry_hook() != nullptr) {
-    Assembler::BlockConstPoolScope no_const_pools(tasm);
+    ConstantPool::BlockScope no_const_pools(tasm);
     DontEmitDebugCodeScope no_debug_code(tasm);
     Label entry_hook_call_start;
     tasm->Bind(&entry_hook_call_start);
@@ -235,7 +235,7 @@ void ProfileEntryHookStub::MaybeCallEntryHookDelayed(TurboAssembler* tasm,
 void ProfileEntryHookStub::MaybeCallEntryHook(MacroAssembler* masm) {
   if (masm->isolate()->function_entry_hook() != nullptr) {
     ProfileEntryHookStub stub(masm->isolate());
-    Assembler::BlockConstPoolScope no_const_pools(masm);
+    ConstantPool::BlockScope no_const_pools(masm);
     DontEmitDebugCodeScope no_debug_code(masm);
     Label entry_hook_call_start;
     __ Bind(&entry_hook_call_start);

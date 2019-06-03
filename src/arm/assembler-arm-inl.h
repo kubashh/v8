@@ -223,7 +223,7 @@ void Assembler::CheckBuffer() {
   if (buffer_space() <= kGap) {
     GrowBuffer();
   }
-  MaybeCheckConstPool();
+  constpool_.MaybeCheck();
 }
 
 
