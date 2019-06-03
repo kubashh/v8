@@ -87,6 +87,24 @@
       "revId": "7f342dab5ad562d1106cfebde2c894c4cccb1332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2f246b04_b633ec41",
+        "filename": "src/builtins/base.tq",
+        "patchSetId": 5
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1162439
+      },
+      "writtenOn": "2019-06-03T06:52:35Z",
+      "side": 1,
+      "message": "Personally I\u0027d leave the accessor signature untouched and moved the static_cast inside the accessors, but I don\u0027t think it matters too much. Thanks!",
+      "parentUuid": "aaaa7db7_126dd356",
+      "revId": "7f342dab5ad562d1106cfebde2c894c4cccb1332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
