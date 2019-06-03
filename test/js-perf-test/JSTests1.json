@@ -50,14 +50,34 @@
       "path": ["BigInt"],
       "main": "run.js",
       "resources": [
-        "to-boolean.js"
+        "bigint-util.js",
+        "to-boolean.js",
+        "add.js"
       ],
       "results_regexp": "^%s\\-BigInt\\(Score\\): (.+)$",
       "tests": [
         { "name": "BigInt-ToBoolean" },
         { "name": "BigInt-BooleanConstructor" },
-        { "name": "BigInt-NewBooleanConstructor" }
-      ]
+        { "name": "BigInt-NewBooleanConstructor" },
+        { "name": "Add-TypeError" },
+        { "name": "Add-Zero" },
+        { "name": "Add-SameSign-1" },
+        { "name": "Add-DifferentSign-1" },
+        { "name": "Add-SameSign-2" },
+        { "name": "Add-DifferentSign-2" },
+        { "name": "Add-SameSign-4" },
+        { "name": "Add-DifferentSign-4" },
+        { "name": "Add-SameSign-8" },
+        { "name": "Add-DifferentSign-8" },
+        { "name": "Add-SameSign-16" },
+        { "name": "Add-DifferentSign-16" },
+        { "name": "Add-SameSign-32" },
+        { "name": "Add-DifferentSign-32" },
+        { "name": "Add-SameSign-64" },
+        { "name": "Add-DifferentSign-64" },
+        { "name": "Add-SameSign-128" },
+        { "name": "Add-DifferentSign-128" }
+    ]
     },
     {
       "name": "BigInt-Jitless",
