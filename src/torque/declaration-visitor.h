@@ -37,6 +37,13 @@ class PredeclarationVisitor {
   static void Predeclare(TypeDeclaration* decl) {
     Declarations::PredeclareTypeAlias(decl->name, decl, false);
   }
+  static void Predeclare(AbstractTypeDeclaration* decl) {
+    if (decl->generic_parameters.size()) {
+      Declarations::DeclareGenericType(decl->name->value, decl);
+    } else {
+      Declarations::PredeclareTypeAlias(decl->name, decl, false);
+    }
+  }
   static void Predeclare(GenericDeclaration* decl) {
     Declarations::DeclareGeneric(decl->callable->name, decl);
   }
@@ -58,6 +65,14 @@ class DeclarationVisitor {
     // Looking up the type will trigger type computation; this ensures errors
     // are reported even if the type is unused.
     Declarations::LookupType(decl->name);
+  }
+
+  static void Visit(AbstractTypeDeclaration* decl) {
+    // Looking up the type will trigger type computation; this ensures errors
+    // are reported even if the type is unused.
+    if (decl->generic_parameters.size() == 0) {
+      Declarations::LookupType(decl->name);
+    }
   }
 
   static Builtin* CreateBuiltin(BuiltinDeclaration* decl,

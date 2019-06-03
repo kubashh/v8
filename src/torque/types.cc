@@ -106,6 +106,55 @@ std::string AbstractType::GetGeneratedTNodeTypeNameImpl() const {
   return generated_type_;
 }
 
+// static
+std::string AbstractType::ComputeName(const std::string& basename,
+                                      const std::vector<const Type*>& args) {
+  if (args.size() == 0) return basename;
+  std::stringstream s;
+  s << basename << "<";
+  bool first = true;
+  for (auto t : args) {
+    if (!first) {
+      s << ", ";
+    }
+    s << t->ToString();
+    first = false;
+  }
+  s << ">";
+  return s.str();
+}
+
+namespace {
+bool IsSubtypeVectorOf(const std::vector<GenericParameter>& generic_parameters,
+                       const std::vector<const Type*>& a,
+                       const std::vector<const Type*>& b) {
+  DCHECK_EQ(generic_parameters.size(), a.size());
+  if (a.size() != b.size()) return false;
+  for (size_t i = 0; i < a.size(); ++i) {
+    switch (generic_parameters[i].variance) {
+      case GenericParameter::Variance::kInvariant:
+        if (a[i] != b[i]) return false;
+        break;
+      case GenericParameter::Variance::kCovariant:
+        if (!a[i]->IsSubtypeOf(b[i])) return false;
+        break;
+    }
+  }
+  return true;
+}
+}  // namespace
+
+bool AbstractType::IsSubtypeOf(const Type* supertype) const {
+  if (IsGeneric()) {
+    const AbstractType* t = AbstractType::DynamicCast(supertype);
+    if (t && generic_ == t->generic_ && t->IsGeneric()) {
+      return IsSubtypeVectorOf(generic_->generic_parameters(), type_arguments_,
+                               t->type_arguments_);
+    }
+  }
+  return Type::IsSubtypeOf(supertype);
+}
+
 std::string BuiltinPointerType::ToExplicitString() const {
   std::stringstream result;
   result << "builtin (";
@@ -283,11 +332,7 @@ std::vector<Method*> AggregateType::Methods(const std::string& name) const {
   return result;
 }
 
-std::string StructType::ToExplicitString() const {
-  std::stringstream result;
-  result << "struct " << name();
-  return result.str();
-}
+std::string StructType::ToExplicitString() const { return name(); }
 
 constexpr ClassFlags ClassType::kInternalFlags;
 
@@ -318,11 +363,7 @@ std::string ClassType::GetGeneratedTypeNameImpl() const {
                        : "compiler::TNode<" + GetGeneratedTNodeTypeName() + ">";
 }
 
-std::string ClassType::ToExplicitString() const {
-  std::stringstream result;
-  result << "class " << name();
-  return result.str();
-}
+std::string ClassType::ToExplicitString() const { return name(); }
 
 bool ClassType::AllowInstantiation() const {
   return (!IsExtern() || nspace()->IsDefaultNamespace()) &&

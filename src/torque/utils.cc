@@ -123,10 +123,11 @@ std::string CurrentPositionAsString() {
   return PositionAsString(CurrentSourcePosition::Get());
 }
 
-void NamingConventionError(const std::string& type, const std::string& name,
-                           const std::string& convention) {
-  Lint(type, " \"", name, "\" does not follow \"", convention,
-       "\" naming convention.");
+MessageBuilder NamingConventionError(const std::string& type,
+                                     const std::string& name,
+                                     const std::string& convention) {
+  return Lint(type, " \"", name, "\" does not follow \"", convention,
+              "\" naming convention.");
 }
 
 MessageBuilder::MessageBuilder(const std::string& message,

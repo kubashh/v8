@@ -217,8 +217,8 @@ bool TryNumberToSize(Object number, size_t* result) {
   // the function can be used concurrently.
   if (number.IsSmi()) {
     int value = Smi::ToInt(number);
-    DCHECK(static_cast<unsigned>(Smi::kMaxValue) <=
-           std::numeric_limits<size_t>::max());
+    STATIC_ASSERT(static_cast<unsigned>(Smi::kMaxValue) <=
+                  std::numeric_limits<size_t>::max());
     if (value >= 0) {
       *result = static_cast<size_t>(value);
       return true;

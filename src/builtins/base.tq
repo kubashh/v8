@@ -37,6 +37,9 @@ extern class HeapObject extends Tagged {
   map: Map;
 }
 
+type MaybeObject<covariant ObjectType: type> extends Tagged
+    generates 'TNode<MaybeObject>' constexpr 'MaybeObject';
+
 type Object = Smi | HeapObject;
 
 type int32 generates 'TNode<Int32T>' constexpr 'int32_t';

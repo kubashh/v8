@@ -83,8 +83,9 @@ MessageBuilder Lint(Args&&... args) {
 
 // Report a LintError with the format "{type} '{name}' doesn't follow
 // '{convention}' naming convention".
-void NamingConventionError(const std::string& type, const std::string& name,
-                           const std::string& convention);
+MessageBuilder NamingConventionError(const std::string& type,
+                                     const std::string& name,
+                                     const std::string& convention);
 
 bool IsLowerCamelCase(const std::string& s);
 bool IsUpperCamelCase(const std::string& s);
